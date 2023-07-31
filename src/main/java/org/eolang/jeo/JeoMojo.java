@@ -32,6 +32,10 @@ import org.apache.maven.plugins.annotations.Mojo;
  * Goal which touches a timestamp file.
  *
  * @since 0.1.0
+ * @todo #5:30min Add logging for the plugin entry point.
+ *  The plugin should log the entry point of the plugin. Maybe it should log the
+ *  list of already compiled classes. When it will be done, remove that
+ *  puzzle.
  */
 @Mojo(name = "optimize", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
 public final class JeoMojo extends AbstractMojo {
