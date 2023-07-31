@@ -22,9 +22,7 @@
  * SOFTWARE.
  */
 /**
- * The main classes of the jeo-maven-plugin.
- * jeo is a maven plugin dedicated to optimizing java bytecode.
- * It is a root package of the project where you can find the main classes of the plugin.
+ * Test cases for the main classes of the plugin.
  *
  * @since 0.1.0
  */

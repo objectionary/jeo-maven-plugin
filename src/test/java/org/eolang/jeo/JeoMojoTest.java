@@ -1,4 +1,4 @@
-package org.eolang.jeo;/*
+/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2016-2023 Objectionary.com
@@ -21,6 +21,7 @@ package org.eolang.jeo;/*
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.eolang.jeo;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;

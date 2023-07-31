@@ -66,12 +66,6 @@ SOFTWARE.
       <!-- version from the parent pom -->
     </dependency>
     <dependency>
-      <groupId>org.cactoos</groupId>
-      <artifactId>cactoos</artifactId>
-      <version>0.55.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <!-- version from the parent pom -->
@@ -96,4 +90,48 @@ SOFTWARE.
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <profiles>
+    <profile>
+      <id>qulice</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.qulice</groupId>
+            <artifactId>qulice-maven-plugin</artifactId>
+            <version>0.22.0</version>
+            <configuration>
+              <license>file:${basedir}/LICENSE.txt</license>
+              <excludes>
+                <exclude>pmd:/src/test/resources/.*</exclude>
+                <exclude>pmd:/src/it/.*</exclude>
+                <exclude>checkstyle:/src/test/resources/.*</exclude>
+                <exclude>checkstyle:/src/it/.*</exclude>
+                <exclude>duplicatefinder:.*</exclude>
+              </excludes>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>com.github.volodya-lombrozo</groupId>
+            <artifactId>jtcop-maven-plugin</artifactId>
+            <version>1.0.0</version>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

@@ -34,8 +34,11 @@ import org.apache.maven.plugins.annotations.Mojo;
  * @since 0.1.0
  */
 @Mojo(name = "optimize", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
-public class JeoMojo extends AbstractMojo {
+public final class JeoMojo extends AbstractMojo {
 
+    /**
+     * The main entry point of the plugin.
+     */
     public void execute() {
         Logger.info(this, "The first dummy implementation of jeo-maven-plugin");
     }
