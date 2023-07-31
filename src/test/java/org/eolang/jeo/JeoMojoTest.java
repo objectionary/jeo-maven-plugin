@@ -1,4 +1,4 @@
-/*
+package org.eolang.jeo;/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2016-2023 Objectionary.com
@@ -21,22 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
 
-import com.jcabi.log.Logger;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
 /**
- * Goal which touches a timestamp file.
+ * Test case for {@link JeoMojo}.
  *
  * @since 0.1.0
  */
-@Mojo(name = "optimize", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
-public class JeoMojo extends AbstractMojo {
+final class JeoMojoTest {
 
-    public void execute() {
-        Logger.info(this, "The first dummy implementation of jeo-maven-plugin");
+    @Test
+    void createsJeoMojo() {
+        MatcherAssert.assertThat(
+            "We expect that JeoMojo is created successfully without exceptions",
+            new JeoMojo(),
+            Matchers.notNullValue()
+        );
     }
 }
