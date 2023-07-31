@@ -24,7 +24,7 @@
 package org.eolang.jeo;
 
 
-import java.util.logging.Logger;
+import com.jcabi.log.Logger;
 import org.apache.maven.plugin.AbstractMojo;
 
 /**
@@ -35,6 +35,6 @@ import org.apache.maven.plugin.AbstractMojo;
 public class JeoMojo extends AbstractMojo {
 
     public void execute() {
-        Logger.getLogger("JeoMojo").info("Hello, world!");
+        Logger.info(this, "Hello, world!");
     }
 }
