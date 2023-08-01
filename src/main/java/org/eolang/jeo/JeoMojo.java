@@ -29,9 +29,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -48,17 +51,17 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "optimize", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
 public final class JeoMojo extends AbstractMojo {
 
-    @Parameter(property = "${project.build.outputDirectory}")
+    @Parameter(defaultValue = "${project.build.outputDirectory}")
     private File classes;
 
     /**
      * The main entry point of the plugin.
      */
-    public void execute() {
+    public void execute() throws MojoExecutionException {
         try {
             this.tryExecute();
-        } catch (final IOException exception) {
-            throw new RuntimeException(exception);
+        } catch (final IllegalStateException | IOException exception) {
+            throw new MojoExecutionException(exception);
         }
     }
 
@@ -68,7 +71,9 @@ public final class JeoMojo extends AbstractMojo {
      */
     private void tryExecute() throws IOException {
         Logger.info(this, "The first dummy implementation of jeo-maven-plugin");
-        this.bytecode().forEach(path -> Logger.info(this, "Found class: %s", path));
+        this.bytecode().forEach(
+            path -> Logger.info(this, "Optimization candidate: %s", path.getFileName())
+        );
         Logger.info(this, "jeo optimization is finished successfully!");
     }
 
@@ -78,6 +83,11 @@ public final class JeoMojo extends AbstractMojo {
      * @throws IOException If some I/O problem arises
      */
     private Collection<Path> bytecode() throws IOException {
+        if (Objects.isNull(this.classes)) {
+            throw new IllegalStateException(
+                "The classes directory is not set, jeo-maven-plugin does not know where to look for classes."
+            );
+        }
         try (final Stream<Path> walk = Files.walk(this.classes.toPath())) {
             return walk.filter(path -> path.toString().endsWith(".class"))
                 .collect(Collectors.toList());
