@@ -23,4 +23,5 @@
  */
 String log = new File(basedir, 'build.log').text;
 log.contains("BUILD SUCCESS")
+log.contains("jeo optimization is finished successfully!")
 true

@@ -45,5 +45,6 @@ public final class JeoMojo extends AbstractMojo {
      */
     public void execute() {
         Logger.info(this, "The first dummy implementation of jeo-maven-plugin");
+        Logger.info(this, "jeo optimization is finished successfully!");
     }
 }
