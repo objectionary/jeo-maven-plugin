@@ -24,9 +24,17 @@
 package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Goal which touches a timestamp file.
@@ -40,11 +48,39 @@ import org.apache.maven.plugins.annotations.Mojo;
 @Mojo(name = "optimize", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
 public final class JeoMojo extends AbstractMojo {
 
+    @Parameter(property = "${project.build.outputDirectory}")
+    private File classes;
+
     /**
      * The main entry point of the plugin.
      */
     public void execute() {
+        try {
+            this.tryExecute();
+        } catch (final IOException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    /**
+     * Try to execute the plugin.
+     * @throws IOException If some I/O problem arises
+     */
+    private void tryExecute() throws IOException {
         Logger.info(this, "The first dummy implementation of jeo-maven-plugin");
+        this.bytecode().forEach(path -> Logger.info(this, "Found class: %s", path));
         Logger.info(this, "jeo optimization is finished successfully!");
+    }
+
+    /**
+     * Find all bytecode files.
+     * @return Collection of bytecode files
+     * @throws IOException If some I/O problem arises
+     */
+    private Collection<Path> bytecode() throws IOException {
+        try (final Stream<Path> walk = Files.walk(this.classes.toPath())) {
+            return walk.filter(path -> path.toString().endsWith(".class"))
+                .collect(Collectors.toList());
+        }
     }
 }
