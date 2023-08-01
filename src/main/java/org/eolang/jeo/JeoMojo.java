@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -43,19 +42,21 @@ import org.apache.maven.plugins.annotations.Parameter;
  * Goal which touches a timestamp file.
  *
  * @since 0.1.0
- * @todo #5:30min Add logging for the plugin entry point.
- *  The plugin should log the entry point of the plugin. Maybe it should log the
- *  list of already compiled classes. When it will be done, remove that
- *  puzzle.
  */
 @Mojo(name = "optimize", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
 public final class JeoMojo extends AbstractMojo {
 
+    /**
+     * Project compiled classes.
+     * @since 0.1.0
+     */
     @Parameter(defaultValue = "${project.build.outputDirectory}")
     private File classes;
 
     /**
      * The main entry point of the plugin.
+     *
+     * @throws MojoExecutionException If some execution problem arises
      */
     public void execute() throws MojoExecutionException {
         try {
@@ -88,7 +89,7 @@ public final class JeoMojo extends AbstractMojo {
                 "The classes directory is not set, jeo-maven-plugin does not know where to look for classes."
             );
         }
-        try (final Stream<Path> walk = Files.walk(this.classes.toPath())) {
+        try (Stream<Path> walk = Files.walk(this.classes.toPath())) {
             return walk.filter(path -> path.toString().endsWith(".class"))
                 .collect(Collectors.toList());
         }
