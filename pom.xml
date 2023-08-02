@@ -35,7 +35,7 @@ SOFTWARE.
   <version>1.0-SNAPSHOT</version>
   <name>jeo</name>
   <url>https://github.com/objectionary/jeo-maven-plugin</url>
-  <description>Java bytecode optimizations by EO</description>
+  <description>Optimisation of Java Bytecode via EOLANG</description>
   <inceptionYear>2023</inceptionYear>
   <organization>
     <name>EO</name>
