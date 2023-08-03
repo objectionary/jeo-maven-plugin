@@ -11,8 +11,9 @@ merge:
 release:
   pre: false
   script: |-
+    echo "Master branch"
     [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
     mvn versions:set "-DnewVersion=${tag}" 
     git commit -am "${tag}"
     mvn clean install -Pqulice --errors --batch-mode -Dinvoker.skip -DskipITs
-    mvn clean deploy -Psonatype --errors --settings ../settings.xml -Dstyle.color=never
+    mvn clean deploy -Pobjectionary -Psonatype --errors --settings ../settings.xml -Dstyle.color=never
