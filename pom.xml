@@ -33,25 +33,71 @@ SOFTWARE.
   <artifactId>jeo-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>jeo-maven-plugin Maven Mojo</name>
-  <url>http://maven.apache.org</url>
+  <name>jeo</name>
+  <url>https://github.com/objectionary/jeo-maven-plugin</url>
+  <description>Optimisation of Java Bytecode via EOLANG</description>
+  <inceptionYear>2023</inceptionYear>
+  <organization>
+    <name>EO</name>
+    <url>https://github.com/objectionary/eo</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>MIT</name>
+      <url>https://www.eolang.org/LICENSE.txt</url>
+      <distribution>site</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>1</id>
+      <name>Volodya Lombrozo</name>
+      <email>volodya.lombrozo@gmail.com</email>
+      <organization>open-source</organization>
+      <roles>
+        <role>Architect</role>
+        <role>Developer</role>
+      </roles>
+      <timezone>+3</timezone>
+    </developer>
+  </developers>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/objectionary/jeo-maven-plugin/issues</url>
+  </issueManagement>
+  <scm>
+    <connection>scm:git:git@github.com:objectionary/jeo-maven-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:objectionary/jeo-maven-plugin.git
+    </developerConnection>
+    <url>https://github.com/objectionary/jeo-maven-plugin</url>
+  </scm>
+  <ciManagement>
+    <system>rultor</system>
+    <url>https://www.rultor.com</url>
+  </ciManagement>
+  <distributionManagement>
+    <site>
+      <id>github-pages</id>
+      <url>https://github.com/objectionary/jeo-maven-plugin</url>
+    </site>
+  </distributionManagement>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
-      <version>3.9.3</version>
+      <version>3.9.4</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-model</artifactId>
-      <version>3.9.3</version>
+      <version>3.9.4</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
-      <version>3.9.3</version>
+      <version>3.9.4</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -120,7 +166,7 @@ SOFTWARE.
           <plugin>
             <groupId>com.github.volodya-lombrozo</groupId>
             <artifactId>jtcop-maven-plugin</artifactId>
-            <version>1.0.1</version>
+            <version>1.1.0</version>
             <executions>
               <execution>
                 <phase>verify</phase>
