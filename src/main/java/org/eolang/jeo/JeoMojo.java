@@ -35,12 +35,6 @@ import org.apache.maven.plugins.annotations.Parameter;
  * Goal which touches a timestamp file.
  *
  * @since 0.1.0
- * @todo #9:90min Implement the optimization skeleton.
- *  The optimization skeleton should be implemented without details. Just a sketch.
- *  The skeleton should contain the next steps:
- *  - Transpile all bytecode files to the eolang files (XMIR I guess).
- *  - Invoke some XMIR optimizations (dummy for now).
- *  - Transpile all XMIR files back to the bytecode.
  */
 @Mojo(name = "optimize", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
 public final class JeoMojo extends AbstractMojo {

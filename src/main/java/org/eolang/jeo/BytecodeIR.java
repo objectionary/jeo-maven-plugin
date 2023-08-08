@@ -30,7 +30,7 @@ import lombok.ToString;
  * Intermediate representation of a class files which can be optimized from bytecode.
  *
  * @since 0.1.0
- * @todo 13:90min Implement BytecodeIR class.
+ * @todo #13:90min Implement BytecodeIR class.
  *  The class should implement IR interface and represent a class file.
  *  It should be able to read the class file and provide access to its bytecode.
  *  Also we have to define methods which we need from IR to provide future optimizations.
