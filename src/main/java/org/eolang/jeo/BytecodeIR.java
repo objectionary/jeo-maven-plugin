@@ -35,13 +35,22 @@ import lombok.ToString;
  *  It should be able to read the class file and provide access to its bytecode.
  *  Also we have to define methods which we need from IR to provide future optimizations.
  *  When the class is ready, just remove that puzzle.
+ *  Also remove SuppressWarnings annotation from the class.
  */
 @ToString
+@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 final class BytecodeIR implements IR {
 
+    /**
+     * Path to the class file.
+     */
     private final Path klass;
 
-    BytecodeIR(final Path klass) {
-        this.klass = klass;
+    /**
+     * Constructor.
+     * @param clazz Path to the class file
+     */
+    BytecodeIR(final Path clazz) {
+        this.klass = clazz;
     }
 }

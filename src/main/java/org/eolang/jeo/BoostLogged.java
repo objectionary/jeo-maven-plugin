@@ -36,7 +36,7 @@ import java.util.Collections;
  *  - The BoostLogged class should return the same IRs as it gets.
  *  When the unit tests are ready, remove that puzzle.
  */
-public class BoostLogged implements Boost {
+final class BoostLogged implements Boost {
     @Override
     public Collection<IR> apply(final Collection<? extends IR> representations) {
         representations.forEach(

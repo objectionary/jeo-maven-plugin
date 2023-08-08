@@ -51,7 +51,14 @@ import java.util.stream.Stream;
  */
 final class Optimization {
 
+    /**
+     * Project compiled classes.
+     */
     private final Path classes;
+
+    /**
+     * Improvements to apply.
+     */
     private final Boost boosts;
 
     /**
@@ -69,10 +76,12 @@ final class Optimization {
      * @throws IOException If some I/O problem arises.
      */
     void apply() throws IOException {
-        this.boosts.apply(this.bytecode()
-            .stream()
-            .map(BytecodeIR::new)
-            .collect(Collectors.toList()));
+        this.boosts.apply(
+            this.bytecode()
+                .stream()
+                .map(BytecodeIR::new)
+                .collect(Collectors.toList())
+        );
     }
 
     /**
