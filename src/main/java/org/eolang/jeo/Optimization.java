@@ -3,34 +3,26 @@ package org.eolang.jeo;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Optimization {
+final class Optimization {
 
     private final Path classes;
-    private final Collection<Boost> boosts;
+    private final Boost boosts;
 
-    public Optimization(final Path classes, Boost... boosts) {
-        this(classes, Arrays.asList(boosts));
-    }
-
-    public Optimization(final Path classes, final Collection<Boost> boosts) {
+    Optimization(final Path classes, final Boost boosts) {
         this.classes = classes;
         this.boosts = boosts;
     }
 
     void apply() throws IOException {
-        this.bytecode()
-            .stream()
-            .map(BytecodeIR::new);
-    }
-
-    private void apply(final IR ir) {
-        this.boosts.forEach(boost -> boost.apply(ir));
+        this.boosts.apply(this.bytecode()
+                .stream()
+                .map(BytecodeIR::new)
+                .collect(Collectors.toList()));
     }
 
     /**

@@ -66,38 +66,9 @@ public final class JeoMojo extends AbstractMojo {
      */
     public void execute() throws MojoExecutionException {
         try {
-            this.tryExecute();
+            new Optimization(this.classes.toPath(), new BoostLogged()).apply();
         } catch (final IllegalStateException | IOException exception) {
             throw new MojoExecutionException(exception);
-        }
-    }
-
-    /**
-     * Try to execute the plugin.
-     * @throws IOException If some I/O problem arises
-     */
-    private void tryExecute() throws IOException {
-        Logger.info(this, "The first dummy implementation of jeo-maven-plugin");
-        this.bytecode().forEach(
-            path -> Logger.info(this, "Optimization candidate: %s", path.getFileName())
-        );
-        Logger.info(this, "jeo optimization is finished successfully!");
-    }
-
-    /**
-     * Find all bytecode files.
-     * @return Collection of bytecode files
-     * @throws IOException If some I/O problem arises
-     */
-    private Collection<Path> bytecode() throws IOException {
-        if (Objects.isNull(this.classes)) {
-            throw new IllegalStateException(
-                "The classes directory is not set, jeo-maven-plugin does not know where to look for classes."
-            );
-        }
-        try (Stream<Path> walk = Files.walk(this.classes.toPath())) {
-            return walk.filter(path -> path.toString().endsWith(".class"))
-                .collect(Collectors.toList());
         }
     }
 }
