@@ -23,8 +23,13 @@
  */
 package org.eolang.jeo;
 
+import java.io.InputStream;
 import java.nio.file.Path;
 import lombok.ToString;
+import org.cactoos.Input;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Intermediate representation of a class files which can be optimized from bytecode.
@@ -41,16 +46,64 @@ import lombok.ToString;
 @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 final class BytecodeIR implements IR {
 
-    /**
-     * Path to the class file.
-     */
-    private final Path klass;
+    private final Input input;
 
     /**
      * Constructor.
      * @param clazz Path to the class file
      */
     BytecodeIR(final Path clazz) {
-        this.klass = clazz;
+        //todo
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    BytecodeIR(final Input input) {
+        this.input = input;
+    }
+
+    public void parse() {
+        try (InputStream stream = input.stream()) {
+            new ClassReader(stream)
+                .accept(new ClassPrinter(), 0);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private class ClassPrinter extends ClassVisitor {
+
+        protected ClassPrinter() {
+            super(Opcodes.V16);
+        }
+
+//        @Override
+//        public void visit(final int version,
+//            final int access,
+//            final String name,
+//            final String signature,
+//            final String superName,
+//            final String[] interfaces
+//        ) {
+//            System.out.printf("%s{%n", name);
+//            super.visit(version, access, name, signature, superName, interfaces);
+//        }
+//
+//        @Override
+//        public MethodVisitor visitMethod(
+//            final int access,
+//            final String name,
+//            final String descriptor,
+//            final String signature,
+//            final String[] exceptions
+//        ) {
+//            System.out.println(String.format("%s %s", descriptor, name));
+//            return super.visitMethod(access, name, descriptor, signature, exceptions);
+//        }
+//
+//        @Override
+//        public void visitEnd() {
+//            System.out.println("}");
+//            super.visitEnd();
+//        }
     }
 }
