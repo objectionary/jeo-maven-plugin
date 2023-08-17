@@ -45,12 +45,12 @@ import org.xembly.Xembler;
  * Intermediate representation of a class files which can be optimized from bytecode.
  *
  * @since 0.1.0
- * @todo #13:90min Implement BytecodeIR class.
+ * @todo #26:90min Continue implementing BytecodeIR class.
  *  The class should implement IR interface and represent a class file.
  *  It should be able to read the class file and provide access to its bytecode.
- *  Also we have to define methods which we need from IR to provide future optimizations.
- *  When the class is ready, just remove that puzzle.
- *  Also remove SuppressWarnings annotation from the class.
+ *  We have to provide the simplest implementation of the next chain:
+ *  bytecode -> XMIR -> bytecode
+ *  Input and output bytecode should be the same.
  */
 @ToString
 @SuppressWarnings({

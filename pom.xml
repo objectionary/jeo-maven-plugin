@@ -201,6 +201,13 @@ SOFTWARE.
                 <exclude>checkstyle:/src/it/.*</exclude>
                 <exclude>duplicatefinder:.*</exclude>
               </excludes>
+              <!--
+                @todo #26:90min Enable qulice check.
+                 Currently, qulice check is disabled because it throws
+                 IllegalArgumentException. This is a bug in qulice which
+                 should be fixed. When it is fixed, enable qulice check.
+                 Do not forget to remove this puzzle.
+              -->
               <skip>true</skip>
             </configuration>
             <executions>
