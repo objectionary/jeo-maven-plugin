@@ -79,7 +79,7 @@ final class Optimization {
         this.boosts.apply(
             this.bytecode()
                 .stream()
-                .map(BytecodeIR::new)
+                .map(BytecodeIr::new)
                 .collect(Collectors.toList())
         );
     }

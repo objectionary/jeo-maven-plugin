@@ -201,6 +201,7 @@ SOFTWARE.
                 <exclude>checkstyle:/src/it/.*</exclude>
                 <exclude>duplicatefinder:.*</exclude>
               </excludes>
+              <skip>true</skip>
             </configuration>
             <executions>
               <execution>

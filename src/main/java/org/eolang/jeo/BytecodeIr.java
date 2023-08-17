@@ -53,20 +53,31 @@ import org.xembly.Xembler;
  *  Also remove SuppressWarnings annotation from the class.
  */
 @ToString
-@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-final class BytecodeIR implements IR {
+@SuppressWarnings({
+    "PMD.UnusedPrivateField",
+    "PMD.SingularField",
+    "PMD.UseObjectForClearerAPI"
+})
+final class BytecodeIr implements IR {
 
+    /**
+     * Input source.
+     */
     private final Input input;
 
     /**
      * Constructor.
      * @param clazz Path to the class file
      */
-    BytecodeIR(final Path clazz) {
+    BytecodeIr(final Path clazz) {
         this(new InputOf(clazz));
     }
 
-    BytecodeIR(final Input input) {
+    /**
+     * Constructor.
+     * @param input Input source
+     */
+    BytecodeIr(final Input input) {
         this.input = input;
     }
 
@@ -76,12 +87,12 @@ final class BytecodeIR implements IR {
             final ClassPrinter printer = new ClassPrinter();
             new ClassReader(stream).accept(printer, 0);
             return new XMLDocument(new Xembler(printer.directives).xml());
-        } catch (IOException exception) {
+        } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't read input source %s", this.input),
                 exception
             );
-        } catch (ImpossibleModificationException exception) {
+        } catch (final ImpossibleModificationException exception) {
             throw new IllegalStateException(
                 String.format("Can't build XML from %s", this.input),
                 exception
@@ -101,13 +112,14 @@ final class BytecodeIR implements IR {
      * - https://github.com/yegor256/xembly
      * - https://www.xembly.org
      * Firther all this directives will be used to build XML representation of the class.
+     * @since 0.1
      */
     private class ClassPrinter extends ClassVisitor {
 
         /**
          * Xembly directives.
          */
-        final Directives directives;
+        private final Directives directives;
 
         /**
          * Constructor.
@@ -135,11 +147,11 @@ final class BytecodeIR implements IR {
             final int access,
             final String name,
             final String signature,
-            final String superName,
+            final String supername,
             final String[] interfaces
         ) {
             this.directives.add("o").attr("name", name);
-            super.visit(version, access, name, signature, superName, interfaces);
+            super.visit(version, access, name, signature, supername, interfaces);
         }
     }
 }

@@ -32,8 +32,16 @@ import com.jcabi.xml.XML;
  */
 public interface IR {
 
+    /**
+     * Convert to EOlang XML representation (XMIR).
+     * @return XML.
+     */
     XML toEO();
 
+    /**
+     * Convert to bytecode.
+     * @return Array of bytes.
+     */
     byte[] toBytecode();
 
 }
