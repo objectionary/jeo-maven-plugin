@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import lombok.ToString;
 import org.cactoos.Input;
+import org.cactoos.io.InputOf;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Opcodes;
@@ -53,8 +54,7 @@ final class BytecodeIR implements IR {
      * @param clazz Path to the class file
      */
     BytecodeIR(final Path clazz) {
-        //todo
-        throw new UnsupportedOperationException("Not implemented yet");
+        this(new InputOf(clazz));
     }
 
     BytecodeIR(final Input input) {
@@ -73,37 +73,7 @@ final class BytecodeIR implements IR {
     private class ClassPrinter extends ClassVisitor {
 
         protected ClassPrinter() {
-            super(Opcodes.V16);
+            super(Opcodes.ASM9);
         }
-
-//        @Override
-//        public void visit(final int version,
-//            final int access,
-//            final String name,
-//            final String signature,
-//            final String superName,
-//            final String[] interfaces
-//        ) {
-//            System.out.printf("%s{%n", name);
-//            super.visit(version, access, name, signature, superName, interfaces);
-//        }
-//
-//        @Override
-//        public MethodVisitor visitMethod(
-//            final int access,
-//            final String name,
-//            final String descriptor,
-//            final String signature,
-//            final String[] exceptions
-//        ) {
-//            System.out.println(String.format("%s %s", descriptor, name));
-//            return super.visitMethod(access, name, descriptor, signature, exceptions);
-//        }
-//
-//        @Override
-//        public void visitEnd() {
-//            System.out.println("}");
-//            super.visitEnd();
-//        }
     }
 }
