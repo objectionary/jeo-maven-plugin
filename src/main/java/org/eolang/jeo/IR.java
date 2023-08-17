@@ -23,10 +23,17 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.xml.XML;
+
 /**
  * Intermediate representation of a class files which can be optimized.
  *
  * @since 0.1.0
  */
 public interface IR {
+
+    XML toEO();
+
+    byte[] toBytecode();
+
 }

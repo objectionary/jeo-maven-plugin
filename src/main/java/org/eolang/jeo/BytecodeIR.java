@@ -23,14 +23,23 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import lombok.ToString;
 import org.cactoos.Input;
+import org.cactoos.bytes.BytesOf;
+import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
+import org.cactoos.io.UncheckedInput;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Opcodes;
+import org.xembly.Directives;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Intermediate representation of a class files which can be optimized from bytecode.
@@ -61,19 +70,76 @@ final class BytecodeIR implements IR {
         this.input = input;
     }
 
-    public void parse() {
-        try (InputStream stream = input.stream()) {
-            new ClassReader(stream)
-                .accept(new ClassPrinter(), 0);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+    @Override
+    public XML toEO() {
+        try (InputStream stream = new UncheckedInput(this.input).stream()) {
+            final ClassPrinter printer = new ClassPrinter();
+            new ClassReader(stream).accept(printer, 0);
+            return new XMLDocument(new Xembler(printer.directives).xml());
+        } catch (IOException exception) {
+            throw new IllegalStateException(
+                String.format("Can't read input source %s", this.input),
+                exception
+            );
+        } catch (ImpossibleModificationException exception) {
+            throw new IllegalStateException(
+                String.format("Can't build XML from %s", this.input),
+                exception
+            );
         }
     }
 
+    @Override
+    public byte[] toBytecode() {
+        return new UncheckedBytes(new BytesOf(this.input)).asBytes();
+    }
+
+    /**
+     * Class printer.
+     * ASM class visitor which scans the class and builds Xembly directives.
+     * You can read more about Xembly right here:
+     * - https://github.com/yegor256/xembly
+     * - https://www.xembly.org
+     * Firther all this directives will be used to build XML representation of the class.
+     */
     private class ClassPrinter extends ClassVisitor {
 
-        protected ClassPrinter() {
-            super(Opcodes.ASM9);
+        /**
+         * Xembly directives.
+         */
+        final Directives directives;
+
+        /**
+         * Constructor.
+         */
+        ClassPrinter() {
+            this(Opcodes.ASM9, new Directives());
+        }
+
+        /**
+         * Constructor.
+         * @param api ASM API version.
+         * @param directives Xembly directives.
+         */
+        private ClassPrinter(
+            final int api,
+            final Directives directives
+        ) {
+            super(api);
+            this.directives = directives;
+        }
+
+        @Override
+        public void visit(
+            final int version,
+            final int access,
+            final String name,
+            final String signature,
+            final String superName,
+            final String[] interfaces
+        ) {
+            this.directives.add("o").attr("name", name);
+            super.visit(version, access, name, signature, superName, interfaces);
         }
     }
 }
