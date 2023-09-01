@@ -58,7 +58,6 @@ public final class Schema {
      * Check and crash if mistakes.
      */
     public void check() {
-        Logger.info(this, "Check");
         final Collection<SAXParseException> violations = new XSDDocument(
             new UncheckedText(new TextOf(new ResourceOf("XMIR.xsd"))).asString()
         ).validate(new DOMSource(this.xmir.node()));

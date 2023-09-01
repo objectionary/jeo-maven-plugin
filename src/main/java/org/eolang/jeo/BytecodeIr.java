@@ -28,6 +28,9 @@ import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.ToString;
 import org.cactoos.Input;
 import org.cactoos.bytes.BytesOf;
@@ -152,7 +155,23 @@ final class BytecodeIr implements IR {
             final String supername,
             final String[] interfaces
         ) {
-            this.directives.add("o").attr("name", name);
+            final String now = ZonedDateTime.now(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ISO_INSTANT);
+            this.directives.add("program")
+                .attr("name", "Unknown")
+                .attr("version", "0.0.0")
+                .attr("revision", "0.0.0")
+                .attr("dob", now)
+                .attr("time", now)
+                .add("listing").up()
+                .add("errors").up()
+                .add("sheets").up()
+                .add("license").up()
+                .add("metas").up()
+                .attr("ms", System.currentTimeMillis())
+                .add("objects")
+                .add("o")
+                .attr("name", name);
             super.visit(version, access, name, signature, supername, interfaces);
         }
     }

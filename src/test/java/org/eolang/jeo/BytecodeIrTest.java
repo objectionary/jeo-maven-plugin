@@ -47,7 +47,7 @@ class BytecodeIrTest {
         MatcherAssert.assertThat(
             "The simplest class should contain the object with MethodByte name",
             new BytecodeIr(new ResourceOf(BytecodeIrTest.METHOD_BYTE))
-                .toEO().xpath("/o/@name").get(0),
+                .toEO().xpath("/program/objects/o/@name").get(0),
             Matchers.equalTo("org/eolang/jeo/MethodByte")
         );
     }
