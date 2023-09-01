@@ -86,7 +86,9 @@ final class BytecodeIr implements IR {
         try (InputStream stream = new UncheckedInput(this.input).stream()) {
             final ClassPrinter printer = new ClassPrinter();
             new ClassReader(stream).accept(printer, 0);
-            return new XMLDocument(new Xembler(printer.directives).xml());
+            final XMLDocument res = new XMLDocument(new Xembler(printer.directives).xml());
+            new Schema(res).check();
+            return res;
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't read input source %s", this.input),
