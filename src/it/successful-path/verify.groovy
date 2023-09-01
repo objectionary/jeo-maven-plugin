@@ -23,12 +23,22 @@
  */
 //Check logs first.
 String log = new File(basedir, 'build.log').text;
-log.contains("BUILD SUCCESS")
-log.contains("jeo optimization is finished successfully!")
-log.contains("Optimization candidate: Application.class")
-log.contains("Hello, World!")
+assert log.contains("BUILD SUCCESS")
+assert log.contains("Hello, World!")
 //Check that we have generated XMIR object file.
-//todo
-new File(basedir, 'target/it/successful-path/Application.xmir').exists()
+/**
+ * @todo #34:90min Implement XMIR generation.
+ *   XMIR generation is not implemented yet, so we can't check it.
+ *   Invert the followed assertion when XMIR generation will be implemented.
+ */
+assert !new File(basedir, 'target/jeo/objects/org/eolang/jeo/Application.xmir').exists()
 //Check that class file was changed
+/**
+ * @todo #34:90min Implement class recompilation.
+ *   Class recompilation is not implemented yet, so we can't check it.
+ *   Invert the followed assertion when class recompilation will be implemented.
+ *   Under recompilation we mean that class file should be compiled from
+ *   XMIR object file.
+ */
+assert !log.contains("Application.class was recompiled successfully.")
 true
