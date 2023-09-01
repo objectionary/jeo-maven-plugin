@@ -21,8 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+//Check logs first.
 String log = new File(basedir, 'build.log').text;
 log.contains("BUILD SUCCESS")
 log.contains("jeo optimization is finished successfully!")
 log.contains("Optimization candidate: Application.class")
+log.contains("Hello, World!")
+//Check that we have generated XMIR object file.
+//todo
+new File(basedir, 'target/it/successful-path/Application.xmir').exists()
+//Check that class file was changed
 true
