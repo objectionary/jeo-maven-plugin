@@ -53,7 +53,13 @@ public final class JeoMojo extends AbstractMojo {
      */
     public void execute() throws MojoExecutionException {
         try {
-            new Optimization(this.classes.toPath(), new BoostLogged()).apply();
+            new Optimization(
+                this.classes.toPath(),
+                new Boosts(
+                    new BoostLogged(),
+                    new XmirFootprint(this.classes.toPath())
+                )
+            ).apply();
         } catch (final IllegalStateException | IOException exception) {
             throw new MojoExecutionException(exception);
         }

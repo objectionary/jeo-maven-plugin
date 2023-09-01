@@ -36,6 +36,6 @@ public interface Boost {
      * @param representations IRs to optimize.
      * @return Optimized IRs.
      */
-    Collection<IR> apply(Collection<? extends IR> representations);
+    Collection<IR> apply(Collection<IR> representations);
 
 }
