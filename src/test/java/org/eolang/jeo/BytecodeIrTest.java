@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 0.1
  */
-class BytecodeIrTest {
+final class BytecodeIrTest {
 
     /**
      * The name of the resource with the simplest class.

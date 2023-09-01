@@ -43,6 +43,10 @@ final class XmirFootprint implements Boost {
      */
     private final Path target;
 
+    /**
+     * Constructor.
+     * @param home Where to save the Xmir.
+     */
     XmirFootprint(final Path home) {
         this.target = home;
     }
@@ -57,12 +61,12 @@ final class XmirFootprint implements Boost {
      * Try to save XML to the target folder.
      * @param xml XML to save.
      * @todo #36:90min Hardcoded XMIR path.
-     *   The XMIR path is hardcoded in the tryToSave method.
-     *   It should be flexible and related to the Java class name.
-     *   For example, if the class is org.eolang.jeo.Dummy,
-     *   the XMIR path should be org/eolang/jeo/Dummy.xmir.
-     *   if the class is org.eolang.jeo.Fake, the XMIR path should be
-     *   org/eolang/jeo/Fake.xmir and so on.
+     *  The XMIR path is hardcoded in the tryToSave method.
+     *  It should be flexible and related to the Java class name.
+     *  For example, if the class is org.eolang.jeo.Dummy,
+     *  the XMIR path should be org/eolang/jeo/Dummy.xmir.
+     *  if the class is org.eolang.jeo.Fake, the XMIR path should be
+     *  org/eolang/jeo/Fake.xmir and so on.
      */
     private void tryToSave(final XML xml) {
         final Path path = this.target.resolve("jeo")
@@ -78,10 +82,10 @@ final class XmirFootprint implements Boost {
                 xml.toString().getBytes(StandardCharsets.UTF_8),
                 StandardOpenOption.CREATE_NEW
             );
-        } catch (IOException ex) {
+        } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't save XML to %s", path),
-                ex
+                exception
             );
         }
     }

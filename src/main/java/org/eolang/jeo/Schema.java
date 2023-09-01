@@ -26,7 +26,6 @@ package org.eolang.jeo;
 import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XSDDocument;
-import java.io.IOException;
 import java.util.Collection;
 import javax.xml.transform.dom.DOMSource;
 import org.cactoos.io.ResourceOf;
