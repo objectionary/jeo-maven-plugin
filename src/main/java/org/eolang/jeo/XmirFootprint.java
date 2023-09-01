@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -23,14 +24,22 @@ public class XmirFootprint implements Boost {
     }
 
     private void tryToSave(final XML xml) {
+        final Path path = this.home.resolve("jeo")
+            .resolve("xmir")
+            .resolve("org")
+            .resolve("eolang")
+            .resolve("jeo")
+            .resolve("Application.xmir");
         try {
+            Files.createDirectories(path.getParent());
             Files.write(
-                this.home.resolve(String.format("%s.xml", UUID.randomUUID())),
-                xml.toString().getBytes(StandardCharsets.UTF_8)
+                path,
+                xml.toString().getBytes(StandardCharsets.UTF_8),
+                StandardOpenOption.CREATE_NEW
             );
         } catch (IOException ex) {
             throw new IllegalStateException(
-                String.format("Can't save XML to %s", this.home),
+                String.format("Can't save XML to %s", path),
                 ex
             );
         }

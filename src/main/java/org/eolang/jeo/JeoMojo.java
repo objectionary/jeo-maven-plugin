@@ -47,6 +47,13 @@ public final class JeoMojo extends AbstractMojo {
     private File classes;
 
     /**
+     * Project default target directory.
+     * @since 0.1.0
+     */
+    @Parameter(defaultValue = "${project.build.directory}")
+    private File target;
+
+    /**
      * The main entry point of the plugin.
      *
      * @throws MojoExecutionException If some execution problem arises
@@ -57,7 +64,7 @@ public final class JeoMojo extends AbstractMojo {
                 this.classes.toPath(),
                 new Boosts(
                     new BoostLogged(),
-                    new XmirFootprint(this.classes.toPath())
+                    new XmirFootprint(this.target.toPath())
                 )
             ).apply();
         } catch (final IllegalStateException | IOException exception) {

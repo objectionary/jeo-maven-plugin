@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.Collections;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.hamcrest.io.FileMatchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -29,8 +30,13 @@ class XmirFootprintTest {
         );
         MatcherAssert.assertThat(
             "XML file was not saved",
-            temp.toFile().listFiles().length,
-            Matchers.equalTo(1)
+            temp.resolve("jeo")
+                .resolve("xmir")
+                .resolve("org")
+                .resolve("eolang")
+                .resolve("jeo")
+                .resolve("Application.xmir").toFile(),
+            FileMatchers.anExistingFile()
         );
     }
 
