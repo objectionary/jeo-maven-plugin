@@ -24,6 +24,9 @@
 package org.eolang.jeo;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Optimization boost.
@@ -38,4 +41,45 @@ public interface Boost {
      */
     Collection<IR> apply(Collection<IR> representations);
 
+    /**
+     * Mock boost.
+     *
+     * @since 0.1.0
+     */
+    final class Mock implements Boost {
+
+        /**
+         * All IRs that were applied.
+         */
+        private final Queue<IR> all;
+
+        /**
+         * Constructor.
+         */
+        Mock() {
+            this(new LinkedList<>());
+        }
+
+        /**
+         * Constructor.
+         * @param all All IRs that were applied.
+         */
+        Mock(final Queue<IR> all) {
+            this.all = all;
+        }
+
+        @Override
+        public Collection<IR> apply(final Collection<IR> representations) {
+            this.all.addAll(representations);
+            return Collections.unmodifiableCollection(representations);
+        }
+
+        /**
+         * Check if the boost was applied.
+         * @return True if the boost was applied.
+         */
+        boolean isApplied() {
+            return !this.all.isEmpty();
+        }
+    }
 }
