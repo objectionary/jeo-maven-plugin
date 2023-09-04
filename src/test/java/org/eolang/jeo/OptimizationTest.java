@@ -39,6 +39,14 @@ import org.junit.jupiter.api.io.TempDir;
  * Test case for {@link Optimization}.
  *
  * @since 0.1.0
+ * @todo #24:90min Add unit tests for Optimization class.
+ *  We still have to add the next unit tests:
+ *  - The classes directory is empty.
+ *  - The classes directory does not exist.
+ *  - The classes directory has some clases.
+ *  - The classes directory has some classes and some subdirectories.
+ *  - The classes directory has some classes and some garbage.
+ *  When the unit tests are ready, remove that puzzle.
  */
 class OptimizationTest {
 

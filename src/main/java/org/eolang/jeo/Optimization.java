@@ -36,14 +36,6 @@ import java.util.stream.Stream;
  * The entrypoint class for the optimization.
  *
  * @since 0.1.0
- * @todo #13:90min Add unit tests for Optimization class.
- *  The unit tests should cover the next cases:
- *  - The classes directory is empty.
- *  - The classes directory does not exist.
- *  - The classes directory has some clases.
- *  - The classes directory has some classes and some subdirectories.
- *  - The classes directory has some classes and some garbage.
- *  When the unit tests are ready, remove that puzzle.
  * @todo #13:90min Implement back transformation to bytecode.
  *  The Optimization class should transform the IRs back to bytecode.
  *  When the back transformation is ready, remove that puzzle.
