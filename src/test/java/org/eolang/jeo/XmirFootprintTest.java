@@ -23,8 +23,6 @@
  */
 package org.eolang.jeo;
 
-import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import java.nio.file.Path;
 import java.util.Collections;
 import org.hamcrest.MatcherAssert;
@@ -36,31 +34,13 @@ import org.junit.jupiter.api.io.TempDir;
  * Test case for {@link XmirFootprint}.
  *
  * @since 0.1.0
- * @todo #36:90min Replace anonymous class with a Fake class.
- *  We need to replace anonymous class in savesXml test method with a Fake class.
- *  For example, we can create a Fake class that implements IR interface and
- *  returns a fake XMLDocument in toEO method and an empty byte array in toBytecode method.
- *  Then we can use this Fake class in the test method and in other tests too.
  */
 final class XmirFootprintTest {
 
     @Test
     void savesXml(@TempDir final Path temp) {
         final XmirFootprint footprint = new XmirFootprint(temp);
-        footprint.apply(
-            Collections.singleton(
-                new IR() {
-                    @Override
-                    public XML toEO() {
-                        return new XMLDocument("<test/>");
-                    }
-
-                    @Override
-                    public byte[] toBytecode() {
-                        return new byte[0];
-                    }
-                })
-        );
+        footprint.apply(Collections.singleton(new XmlIR()));
         MatcherAssert.assertThat(
             "XML file was not saved",
             temp.resolve("jeo")
