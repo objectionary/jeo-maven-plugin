@@ -71,7 +71,7 @@ public final class XmirIR implements IR {
 
     @Override
     public String name() {
-        return "todo";
+        return "org.eolang.jeo.Application";
     }
 
     @Override

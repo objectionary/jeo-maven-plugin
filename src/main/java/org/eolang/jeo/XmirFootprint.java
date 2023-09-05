@@ -23,7 +23,7 @@
  */
 package org.eolang.jeo;
 
-import com.jcabi.xml.XML;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -53,33 +53,24 @@ final class XmirFootprint implements Boost {
 
     @Override
     public Collection<IR> apply(final Collection<IR> representations) {
-        representations.stream().map(IR::toEO).forEach(this::tryToSave);
+        representations.stream().forEach(this::tryToSave);
         return representations;
     }
 
     /**
      * Try to save XML to the target folder.
-     * @param xml XML to save.
-     * @todo #36:90min Hardcoded XMIR path.
-     *  The XMIR path is hardcoded in the tryToSave method.
-     *  It should be flexible and related to the Java class name.
-     *  For example, if the class is org.eolang.jeo.Dummy,
-     *  the XMIR path should be org/eolang/jeo/Dummy.xmir.
-     *  if the class is org.eolang.jeo.Fake, the XMIR path should be
-     *  org/eolang/jeo/Fake.xmir and so on.
+     * @param representation XML to save.
      */
-    private void tryToSave(final XML xml) {
+    private void tryToSave(final IR representation) {
+        final String name = representation.name();
         final Path path = this.target.resolve("jeo")
             .resolve("xmir")
-            .resolve("org")
-            .resolve("eolang")
-            .resolve("jeo")
-            .resolve("Application.xmir");
+            .resolve(String.format("%s.xmir", name.replace('.', File.separatorChar)));
         try {
             Files.createDirectories(path.getParent());
             Files.write(
                 path,
-                xml.toString().getBytes(StandardCharsets.UTF_8),
+                representation.toString().getBytes(StandardCharsets.UTF_8),
                 StandardOpenOption.CREATE_NEW
             );
         } catch (final IOException exception) {
