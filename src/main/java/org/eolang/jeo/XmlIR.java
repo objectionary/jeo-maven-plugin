@@ -23,33 +23,43 @@
  */
 package org.eolang.jeo;
 
-import java.nio.file.Path;
-import java.util.Collections;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.io.FileMatchers;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 
 /**
- * Test case for {@link XmirFootprint}.
+ * Intermediate representation of a class files from XMIR.
  *
  * @since 0.1.0
  */
-final class XmirFootprintTest {
+public final class XmlIR implements IR {
 
-    @Test
-    void savesXml(@TempDir final Path temp) {
-        final XmirFootprint footprint = new XmirFootprint(temp);
-        footprint.apply(Collections.singleton(new XmlIR()));
-        MatcherAssert.assertThat(
-            "XML file was not saved",
-            temp.resolve("jeo")
-                .resolve("xmir")
-                .resolve("org")
-                .resolve("eolang")
-                .resolve("jeo")
-                .resolve("Application.xmir").toFile(),
-            FileMatchers.anExistingFile()
-        );
+    /**
+     * XML.
+     */
+    private final XML xml;
+
+    /**
+     * Constructor.
+     */
+    XmlIR() {
+        this(new XMLDocument("<test/>"));
+    }
+
+    /**
+     * Constructor.
+     * @param xml XML.
+     */
+    private XmlIR(final XML xml) {
+        this.xml = xml;
+    }
+
+    @Override
+    public XML toEO() {
+        return this.xml;
+    }
+
+    @Override
+    public byte[] toBytecode() {
+        return new byte[0];
     }
 }
