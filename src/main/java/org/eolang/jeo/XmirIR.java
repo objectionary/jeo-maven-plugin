@@ -25,6 +25,12 @@ package org.eolang.jeo;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import org.xembly.Directives;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Intermediate representation of a class files from XMIR.
@@ -52,7 +58,7 @@ public final class XmirIR implements IR {
      * Constructor.
      */
     XmirIR() {
-        this(new XMLDocument("<xmir/>"));
+        this(XmirIR.fake());
     }
 
     /**
@@ -78,9 +84,47 @@ public final class XmirIR implements IR {
         return new byte[0];
     }
 
-
+    /**
+     * Validate XMIR.
+     * @param xml XML.
+     * @return XMIR.
+     */
     private static XML xmir(final XML xml) {
         new Schema(xml).check();
         return xml;
     }
+
+    /**
+     * Fake XMIR.
+     * @return XMIR.
+     */
+    private static XML fake() {
+        try {
+            final String now = ZonedDateTime.now(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ISO_INSTANT);
+            return new XMLDocument(
+                new Xembler(
+                    new Directives()
+                        .add("program")
+                        .attr("name", "Unknown")
+                        .attr("version", "0.0.0")
+                        .attr("revision", "0.0.0")
+                        .attr("dob", now)
+                        .attr("time", now)
+                        .add("listing").up()
+                        .add("errors").up()
+                        .add("sheets").up()
+                        .add("license").up()
+                        .add("metas").up()
+                        .attr("ms", System.currentTimeMillis())
+                        .add("objects")
+                        .add("o")
+                        .attr("name", "test")
+                ).xml()
+            );
+        } catch (final ImpossibleModificationException exception) {
+            throw new IllegalStateException("Can't create fake XML", exception);
+        }
+    }
+
 }
