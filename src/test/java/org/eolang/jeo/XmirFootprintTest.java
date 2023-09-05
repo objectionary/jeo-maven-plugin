@@ -40,7 +40,7 @@ final class XmirFootprintTest {
     @Test
     void savesXml(@TempDir final Path temp) {
         final XmirFootprint footprint = new XmirFootprint(temp);
-        footprint.apply(Collections.singleton(new XmlIR()));
+        footprint.apply(Collections.singleton(new XmirIR()));
         MatcherAssert.assertThat(
             "XML file was not saved",
             temp.resolve("jeo")

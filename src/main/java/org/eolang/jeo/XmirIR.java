@@ -30,8 +30,18 @@ import com.jcabi.xml.XMLDocument;
  * Intermediate representation of a class files from XMIR.
  *
  * @since 0.1.0
+ * @todo #39:90min Add unit test for XmirIR class.
+ *  The test should check all the methods of the {@link org.eolang.jeo.XmirIR} class.
+ *  Don't forget to test corner cases.
+ *  When the test is ready, remove this puzzle.
+ * @todo #39:90min Implement XmirIR#name() method.
+ *  The method should return the name of the object from XMIR.
+ *  We have to parse the XML and extract the name from it.
+ *  You can find examples for XMIR in the EOlang repository:
+ *  https://github.com/objectionary/eo
+ *  When the method is ready, remove this puzzle.
  */
-public final class XmlIR implements IR {
+public final class XmirIR implements IR {
 
     /**
      * XML.
@@ -41,16 +51,21 @@ public final class XmlIR implements IR {
     /**
      * Constructor.
      */
-    XmlIR() {
-        this(new XMLDocument("<test/>"));
+    XmirIR() {
+        this(new XMLDocument("<xmir/>"));
     }
 
     /**
      * Constructor.
      * @param xml XML.
      */
-    private XmlIR(final XML xml) {
-        this.xml = xml;
+    private XmirIR(final XML xml) {
+        this.xml = XmirIR.xmir(xml);
+    }
+
+    @Override
+    public String name() {
+        return "todo";
     }
 
     @Override
@@ -61,5 +76,11 @@ public final class XmlIR implements IR {
     @Override
     public byte[] toBytecode() {
         return new byte[0];
+    }
+
+
+    private static XML xmir(final XML xml) {
+        new Schema(xml).check();
+        return xml;
     }
 }

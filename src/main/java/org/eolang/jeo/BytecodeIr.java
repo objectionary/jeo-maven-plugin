@@ -85,6 +85,12 @@ final class BytecodeIr implements IR {
     }
 
     @Override
+    public String name() {
+        //todo;
+        return null;
+    }
+
+    @Override
     public XML toEO() {
         try (InputStream stream = new UncheckedInput(this.input).stream()) {
             final ClassPrinter printer = new ClassPrinter();

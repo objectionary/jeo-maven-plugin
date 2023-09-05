@@ -33,6 +33,12 @@ import com.jcabi.xml.XML;
 public interface IR {
 
     /**
+     * Name of the class or an object.
+     * @return Name.
+     */
+    String name();
+
+    /**
      * Convert to EOlang XML representation (XMIR).
      * @return XML.
      */
