@@ -98,7 +98,7 @@ final class BytecodeIr implements IR {
             final ClassName name = new ClassName();
             new ClassReader(new UncheckedInput(this.input).stream()).accept(name, 0);
             return name.asString();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             throw new IllegalStateException(
                 String.format("Can't parse bytecode '%s'", this.input),
                 ex
@@ -132,33 +132,60 @@ final class BytecodeIr implements IR {
         return new UncheckedBytes(new BytesOf(this.input)).asBytes();
     }
 
+    /**
+     * Class name.
+     *
+     * @since 0.1.0
+     */
     private class ClassName extends ClassVisitor {
 
+        /**
+         * Atomic reference to store class name.
+         */
         private final AtomicReference<String> bag;
 
+        /**
+         * Constructor.
+         */
         ClassName() {
             this(new AtomicReference<>());
         }
 
-
+        /**
+         * Constructor.
+         * @param bag Atomic reference to store class name.
+         */
         ClassName(final AtomicReference<String> bag) {
             this(Opcodes.ASM9, bag);
         }
 
+        /**
+         * Constructor.
+         * @param api ASM API version.
+         * @param bag Atomic reference to store class name.
+         */
         private ClassName(final int api, final AtomicReference<String> bag) {
             super(api);
             this.bag = bag;
         }
 
         @Override
-        public void visit(final int version, final int access, final String name,
-            final String signature, final String superName,
+        public void visit(
+            final int version,
+            final int access,
+            final String name,
+            final String signature,
+            final String supername,
             final String[] interfaces
         ) {
             this.bag.set(name.replace('/', '.'));
-            super.visit(version, access, name, signature, superName, interfaces);
+            super.visit(version, access, name, signature, supername, interfaces);
         }
 
+        /**
+         * Get class name.
+         * @return Class name.
+         */
         String asString() {
             final String last = this.bag.get();
             if (Objects.isNull(last)) {
