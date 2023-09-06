@@ -56,13 +56,6 @@ public final class XmirIR implements IR {
 
     /**
      * Constructor.
-     */
-    XmirIR() {
-        this(XmirIR.fake());
-    }
-
-    /**
-     * Constructor.
      * @param xml XML.
      */
     XmirIR(final XML xml) {
@@ -71,7 +64,7 @@ public final class XmirIR implements IR {
 
     @Override
     public String name() {
-        return "org.eolang.jeo.Application";
+        return this.xml.xpath("/program/@name").get(0);
     }
 
     @Override
@@ -127,13 +120,4 @@ public final class XmirIR implements IR {
         new Schema(xml).check();
         return xml;
     }
-
-    /**
-     * Fake XMIR.
-     * @return XMIR.
-     */
-    private static XML fake() {
-        return fake("Unknown");
-    }
-
 }
