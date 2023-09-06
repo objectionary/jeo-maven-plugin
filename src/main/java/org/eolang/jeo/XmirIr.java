@@ -37,17 +37,11 @@ import org.xembly.Xembler;
  *
  * @since 0.1.0
  * @todo #39:90min Add unit test for XmirIR class.
- *  The test should check all the methods of the {@link org.eolang.jeo.XmirIR} class.
+ *  The test should check all the methods of the {@link XmirIr} class.
  *  Don't forget to test corner cases.
  *  When the test is ready, remove this puzzle.
- * @todo #39:90min Implement XmirIR#name() method.
- *  The method should return the name of the object from XMIR.
- *  We have to parse the XML and extract the name from it.
- *  You can find examples for XMIR in the EOlang repository:
- *  https://github.com/objectionary/eo
- *  When the method is ready, remove this puzzle.
  */
-public final class XmirIR implements IR {
+public final class XmirIr implements IR {
 
     /**
      * XML.
@@ -58,8 +52,8 @@ public final class XmirIR implements IR {
      * Constructor.
      * @param xml XML.
      */
-    XmirIR(final XML xml) {
-        this.xml = XmirIR.xmir(xml);
+    XmirIr(final XML xml) {
+        this.xml = XmirIr.xmir(xml);
     }
 
     @Override
