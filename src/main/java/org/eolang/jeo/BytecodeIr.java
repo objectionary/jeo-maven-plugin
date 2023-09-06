@@ -31,6 +31,8 @@ import java.nio.file.Path;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import lombok.ToString;
 import org.cactoos.Input;
 import org.cactoos.bytes.BytesOf;
@@ -92,7 +94,16 @@ final class BytecodeIr implements IR {
 
     @Override
     public String name() {
-        return "org.eolang.jeo.Application";
+        try {
+            final ClassName name = new ClassName();
+            new ClassReader(new UncheckedInput(this.input).stream()).accept(name, 0);
+            return name.asString();
+        } catch (IOException ex) {
+            throw new IllegalStateException(
+                String.format("Can't parse bytecode '%s'", this.input),
+                ex
+            );
+        }
     }
 
     @Override
@@ -119,6 +130,44 @@ final class BytecodeIr implements IR {
     @Override
     public byte[] toBytecode() {
         return new UncheckedBytes(new BytesOf(this.input)).asBytes();
+    }
+
+    private class ClassName extends ClassVisitor {
+
+        private final AtomicReference<String> bag;
+
+        ClassName() {
+            this(new AtomicReference<>());
+        }
+
+
+        ClassName(final AtomicReference<String> bag) {
+            this(Opcodes.ASM9, bag);
+        }
+
+        private ClassName(final int api, final AtomicReference<String> bag) {
+            super(api);
+            this.bag = bag;
+        }
+
+        @Override
+        public void visit(final int version, final int access, final String name,
+            final String signature, final String superName,
+            final String[] interfaces
+        ) {
+            this.bag.set(name.replace('/', '.'));
+            super.visit(version, access, name, signature, superName, interfaces);
+        }
+
+        String asString() {
+            final String last = this.bag.get();
+            if (Objects.isNull(last)) {
+                throw new IllegalStateException(
+                    "Class name is not set, bug is empty. Use #visit() method to set it."
+                );
+            }
+            return last;
+        }
     }
 
     /**
