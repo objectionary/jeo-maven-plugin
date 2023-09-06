@@ -63,4 +63,19 @@ final class BytecodeIrTest {
             Matchers.equalTo(actual)
         );
     }
+
+    @Test
+    void retrievesName() {
+        final ResourceOf input = new ResourceOf(BytecodeIrTest.METHOD_BYTE);
+        final String actual = new BytecodeIr(input).name();
+        final String expected = "org.eolang.jeo.MethodByte";
+        MatcherAssert.assertThat(
+            String.format(
+                "The name should be retrieved without exceptions and equal to the expected '%s'",
+                expected
+            ),
+            actual,
+            Matchers.equalTo(expected)
+        );
+    }
 }
