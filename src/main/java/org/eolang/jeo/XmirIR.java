@@ -65,7 +65,7 @@ public final class XmirIR implements IR {
      * Constructor.
      * @param xml XML.
      */
-    private XmirIR(final XML xml) {
+    XmirIR(final XML xml) {
         this.xml = XmirIR.xmir(xml);
     }
 
@@ -85,20 +85,11 @@ public final class XmirIR implements IR {
     }
 
     /**
-     * Validate XMIR.
-     * @param xml XML.
-     * @return XMIR.
-     */
-    private static XML xmir(final XML xml) {
-        new Schema(xml).check();
-        return xml;
-    }
-
-    /**
      * Fake XMIR.
+     * @param name Name of an object.
      * @return XMIR.
      */
-    private static XML fake() {
+    static XML fake(final String name) {
         try {
             final String now = ZonedDateTime.now(ZoneOffset.UTC)
                 .format(DateTimeFormatter.ISO_INSTANT);
@@ -106,7 +97,7 @@ public final class XmirIR implements IR {
                 new Xembler(
                     new Directives()
                         .add("program")
-                        .attr("name", "Unknown")
+                        .attr("name", name)
                         .attr("version", "0.0.0")
                         .attr("revision", "0.0.0")
                         .attr("dob", now)
@@ -125,6 +116,24 @@ public final class XmirIR implements IR {
         } catch (final ImpossibleModificationException exception) {
             throw new IllegalStateException("Can't create fake XML", exception);
         }
+    }
+
+    /**
+     * Validate XMIR.
+     * @param xml XML.
+     * @return XMIR.
+     */
+    private static XML xmir(final XML xml) {
+        new Schema(xml).check();
+        return xml;
+    }
+
+    /**
+     * Fake XMIR.
+     * @return XMIR.
+     */
+    private static XML fake() {
+        return fake("Unknown");
     }
 
 }
