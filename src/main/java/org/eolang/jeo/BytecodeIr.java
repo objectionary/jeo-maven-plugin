@@ -56,12 +56,6 @@ import org.xembly.Xembler;
  *  We have to provide the simplest implementation of the next chain:
  *  bytecode -> XMIR -> bytecode
  *  Input and output bytecode should be the same.
- * @todo #39:90min Implement BytecodeIR#name() method.
- *  The method should return the name of the object from Bytecode.
- *  We have to parse the Bytecode and extract the name from it.
- *  Moreover we have to add package name to the name of the object.
- *  Remove this puzzle when the method is ready.
- *  Don't forget about unit tests.
  */
 @ToString
 @SuppressWarnings({
