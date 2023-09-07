@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -75,7 +76,7 @@ final class Optimization {
                 .stream()
                 .map(BytecodeIr::new)
                 .collect(Collectors.toList())
-        ).stream().forEach(this::recompile);
+        ).forEach(this::recompile);
     }
 
     private void recompile(final IR ir) {
@@ -85,8 +86,15 @@ final class Optimization {
             final String[] subpath = name.split("\\.");
             subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
             final Path path = Paths.get(this.classes.toString(), subpath);
+            Logger.info(
+                this,
+                "Recompiling '%s', bytecode instance '%s', bytes to save '%s'",
+                path,
+                ir.getClass(),
+                bytecode.length
+            );
             Files.createDirectories(path.getParent());
-            Files.write(path, bytecode, StandardOpenOption.CREATE);
+            Files.write(path, bytecode);
         } catch (final IOException exception) {
             throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
         }
