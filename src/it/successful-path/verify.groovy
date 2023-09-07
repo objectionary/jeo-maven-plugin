@@ -28,12 +28,5 @@ assert log.contains("Hello, World!")
 //Check that we have generated XMIR object file.
 assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/Application.xmir').exists()
 //Check that class file was changed
-/**
- * @todo #34:90min Implement class recompilation.
- *   Class recompilation is not implemented yet, so we can't check it.
- *   Invert the followed assertion when class recompilation will be implemented.
- *   Under recompilation we mean that class file should be compiled from
- *   XMIR object file.
- */
-assert !log.contains("Application.class was recompiled successfully.")
+assert log.contains("Application.class was recompiled successfully.")
 true

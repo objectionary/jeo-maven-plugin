@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -79,10 +78,14 @@ final class Optimization {
         ).forEach(this::recompile);
     }
 
-    private void recompile(final IR ir) {
-        final String name = ir.name();
+    /**
+     * Recompile the Intermediate Representation.
+     * @param representation Intermediate Representation to recompile.
+     */
+    private void recompile(final IR representation) {
+        final String name = representation.name();
         try {
-            final byte[] bytecode = ir.toBytecode();
+            final byte[] bytecode = representation.toBytecode();
             final String[] subpath = name.split("\\.");
             subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
             final Path path = Paths.get(this.classes.toString(), subpath);
@@ -90,11 +93,16 @@ final class Optimization {
                 this,
                 "Recompiling '%s', bytecode instance '%s', bytes to save '%s'",
                 path,
-                ir.getClass(),
+                representation.getClass(),
                 bytecode.length
             );
             Files.createDirectories(path.getParent());
             Files.write(path, bytecode);
+            Logger.info(
+                this,
+                "%s was recompiled successfully.",
+                path.getFileName().toString()
+            );
         } catch (final IOException exception) {
             throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
         }
