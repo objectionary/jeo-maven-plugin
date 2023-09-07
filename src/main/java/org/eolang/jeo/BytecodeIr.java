@@ -239,7 +239,7 @@ final class BytecodeIr implements IR {
             final String now = ZonedDateTime.now(ZoneOffset.UTC)
                 .format(DateTimeFormatter.ISO_INSTANT);
             this.directives.add("program")
-                .attr("name", "Unknown")
+                .attr("name", name.replace('/', '.'))
                 .attr("version", "0.0.0")
                 .attr("revision", "0.0.0")
                 .attr("dob", now)
@@ -251,8 +251,7 @@ final class BytecodeIr implements IR {
                 .add("metas").up()
                 .attr("ms", System.currentTimeMillis())
                 .add("objects")
-                .add("o")
-                .attr("name", name);
+                .add("o");
             super.visit(version, access, name, signature, supername, interfaces);
         }
     }

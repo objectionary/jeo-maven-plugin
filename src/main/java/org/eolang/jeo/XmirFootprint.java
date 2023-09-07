@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Footprint of the Xmir.
@@ -53,8 +54,11 @@ final class XmirFootprint implements Boost {
 
     @Override
     public Collection<IR> apply(final Collection<IR> representations) {
-        representations.stream().forEach(this::tryToSave);
-        return representations;
+        return representations.stream()
+            .map(IR::toEO)
+            .map(XmirIr::new)
+            .peek(this::tryToSave)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -70,7 +74,7 @@ final class XmirFootprint implements Boost {
             Files.createDirectories(path.getParent());
             Files.write(
                 path,
-                representation.toString().getBytes(StandardCharsets.UTF_8),
+                representation.toEO().toString().getBytes(StandardCharsets.UTF_8),
                 StandardOpenOption.CREATE_NEW
             );
         } catch (final IOException exception) {

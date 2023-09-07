@@ -68,7 +68,7 @@ final class Optimization {
      * @throws IOException If some I/O problem arises.
      */
     void apply() throws IOException {
-        this.boosts.apply(
+        final Collection<IR> apply = this.boosts.apply(
             this.bytecode()
                 .stream()
                 .map(BytecodeIr::new)
