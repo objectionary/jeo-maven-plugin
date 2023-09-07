@@ -26,6 +26,8 @@ package org.eolang.jeo;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -68,12 +70,26 @@ final class Optimization {
      * @throws IOException If some I/O problem arises.
      */
     void apply() throws IOException {
-        final Collection<IR> apply = this.boosts.apply(
+        this.boosts.apply(
             this.bytecode()
                 .stream()
                 .map(BytecodeIr::new)
                 .collect(Collectors.toList())
-        );
+        ).stream().forEach(this::recompile);
+    }
+
+    private void recompile(final IR ir) {
+        final String name = ir.name();
+        try {
+            final byte[] bytecode = ir.toBytecode();
+            final String[] subpath = name.split("\\.");
+            subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
+            final Path path = Paths.get(this.classes.toString(), subpath);
+            Files.createDirectories(path.getParent());
+            Files.write(path, bytecode, StandardOpenOption.CREATE_NEW);
+        } catch (final IOException exception) {
+            throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
+        }
     }
 
     /**

@@ -32,6 +32,7 @@ import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.hamcrest.io.FileMatchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -64,6 +65,15 @@ class OptimizationTest {
             "Boost was not applied",
             boost.isApplied(),
             Matchers.equalTo(true)
+        );
+        MatcherAssert.assertThat(
+            "Optimization should save final bytecode into appropriate directory",
+            classes.resolve("org")
+                .resolve("eolang")
+                .resolve("jeo")
+                .resolve("MethodByte.class")
+                .toFile(),
+            FileMatchers.anExistingFile()
         );
     }
 }
