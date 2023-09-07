@@ -28,6 +28,7 @@ import com.jcabi.xml.XMLDocument;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -68,7 +69,7 @@ public final class XmirIr implements IR {
 
     @Override
     public byte[] toBytecode() {
-        return new byte[0];
+        return Base64.getDecoder().decode(this.xml.xpath("/program/listing/text()").get(0));
     }
 
     /**
