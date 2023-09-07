@@ -24,8 +24,10 @@
 package org.eolang.jeo;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
@@ -33,6 +35,7 @@ import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.io.FileMatchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -53,9 +56,14 @@ class OptimizationTest {
 
     @Test
     void appliesAllBoosts(@TempDir final Path classes) throws IOException {
+        final Path directory = Paths.get("org")
+            .resolve("eolang")
+            .resolve("jeo");
         final String name = "MethodByte.class";
+        final Path clazz = classes.resolve(directory).resolve(name);
+        Files.createDirectories(clazz.getParent());
         Files.write(
-            classes.resolve(name),
+            clazz,
             new UncheckedBytes(new BytesOf(new ResourceOf(name))).asBytes(),
             StandardOpenOption.CREATE_NEW
         );
@@ -68,11 +76,7 @@ class OptimizationTest {
         );
         MatcherAssert.assertThat(
             "Optimization should save final bytecode into appropriate directory",
-            classes.resolve("org")
-                .resolve("eolang")
-                .resolve("jeo")
-                .resolve("MethodByte.class")
-                .toFile(),
+            clazz.toFile(),
             FileMatchers.anExistingFile()
         );
     }

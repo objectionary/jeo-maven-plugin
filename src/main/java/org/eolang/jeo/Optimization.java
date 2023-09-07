@@ -86,7 +86,7 @@ final class Optimization {
             subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
             final Path path = Paths.get(this.classes.toString(), subpath);
             Files.createDirectories(path.getParent());
-            Files.write(path, bytecode, StandardOpenOption.CREATE_NEW);
+            Files.write(path, bytecode, StandardOpenOption.CREATE);
         } catch (final IOException exception) {
             throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
         }
