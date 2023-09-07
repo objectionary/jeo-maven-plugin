@@ -25,9 +25,6 @@ package org.eolang.jeo;
 
 import java.util.Arrays;
 import java.util.Base64;
-import org.cactoos.Input;
-import org.cactoos.bytes.BytesOf;
-import org.cactoos.bytes.UncheckedBytes;
 
 /**
  * Base64 bytecode.
@@ -48,17 +45,9 @@ public class Base64Bytecode {
 
     /**
      * Constructor.
-     * @param input Input.
-     */
-    Base64Bytecode(final Input input) {
-        this(new UncheckedBytes(new BytesOf(input)).asBytes());
-    }
-
-    /**
-     * Constructor.
      * @param bytes Bytecode.
      */
-    private Base64Bytecode(final byte[] bytes) {
+    Base64Bytecode(final byte[] bytes) {
         this.bytes = Arrays.copyOf(bytes, bytes.length);
     }
 

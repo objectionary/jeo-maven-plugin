@@ -25,12 +25,11 @@ package org.eolang.jeo;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.ToString;
@@ -38,7 +37,6 @@ import org.cactoos.Input;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
-import org.cactoos.io.UncheckedInput;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Opcodes;
@@ -68,7 +66,7 @@ final class BytecodeIr implements IR {
     /**
      * Input source.
      */
-    private final Input input;
+    private final byte[] input;
 
     /**
      * Constructor.
@@ -83,36 +81,32 @@ final class BytecodeIr implements IR {
      * @param input Input source
      */
     BytecodeIr(final Input input) {
-        this.input = input;
+        this(new UncheckedBytes(new BytesOf(input)).asBytes());
+    }
+
+    /**
+     * Constructor.
+     * @param input Input source.
+     */
+    private BytecodeIr(final byte[] input) {
+        this.input = Arrays.copyOf(input, input.length);
     }
 
     @Override
     public String name() {
-        try {
-            final ClassName name = new ClassName();
-            new ClassReader(new UncheckedInput(this.input).stream()).accept(name, 0);
-            return name.asString();
-        } catch (final IOException ex) {
-            throw new IllegalStateException(
-                String.format("Can't parse bytecode '%s'", this.input),
-                ex
-            );
-        }
+        final ClassName name = new ClassName();
+        new ClassReader(this.input).accept(name, 0);
+        return name.asString();
     }
 
     @Override
     public XML toEO() {
-        try (InputStream stream = new UncheckedInput(this.input).stream()) {
+        try {
             final ClassPrinter printer = new ClassPrinter();
-            new ClassReader(stream).accept(printer, 0);
+            new ClassReader(this.input).accept(printer, 0);
             final XMLDocument res = new XMLDocument(new Xembler(printer.directives).xml());
             new Schema(res).check();
             return res;
-        } catch (final IOException exception) {
-            throw new IllegalStateException(
-                String.format("Can't read input source %s", this.input),
-                exception
-            );
         } catch (final ImpossibleModificationException exception) {
             throw new IllegalStateException(
                 String.format("Can't build XML from %s", this.input),
