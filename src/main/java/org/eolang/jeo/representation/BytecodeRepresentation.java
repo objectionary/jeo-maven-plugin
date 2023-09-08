@@ -49,19 +49,9 @@ import org.xembly.Xembler;
  * Intermediate representation of a class files which can be optimized from bytecode.
  *
  * @since 0.1.0
- * @todo #26:90min Continue implementing BytecodeIR class.
- *  The class should implement IR interface and represent a class file.
- *  It should be able to read the class file and provide access to its bytecode.
- *  We have to provide the simplest implementation of the next chain:
- *  bytecode -> XMIR -> bytecode
- *  Input and output bytecode should be the same.
  */
 @ToString
-@SuppressWarnings({
-    "PMD.UnusedPrivateField",
-    "PMD.SingularField",
-    "PMD.UseObjectForClearerAPI"
-})
+@SuppressWarnings("PMD.UseObjectForClearerAPI")
 public final class BytecodeRepresentation implements Representation {
 
     /**
