@@ -35,7 +35,9 @@ import org.eolang.jeo.improvement.Improvements;
 import org.eolang.jeo.improvement.XmirFootprint;
 
 /**
- * Goal which touches a timestamp file.
+ * Default optimization mojo.
+ * This mojo transforms bytecode into eo code, then applies all improvements and
+ * converts it back to bytecode.
  *
  * @since 0.1.0
  */
