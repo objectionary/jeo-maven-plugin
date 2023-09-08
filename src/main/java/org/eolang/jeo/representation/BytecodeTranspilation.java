@@ -31,8 +31,7 @@ public class BytecodeTranspilation {
     }
 
     public void transpile() throws IOException {
-        new XmirFootprint(
-            this.target)
+        new XmirFootprint(this.target)
             .apply(
                 this.bytecode()
                     .stream()
@@ -50,6 +49,14 @@ public class BytecodeTranspilation {
         if (Objects.isNull(this.classes)) {
             throw new IllegalStateException(
                 "The classes directory is not set, jeo-maven-plugin does not know where to look for classes."
+            );
+        }
+        if (!Files.exists(this.classes)) {
+            throw new IllegalStateException(
+                String.format(
+                    "The classes directory '%s' does not exist, jeo-maven-plugin does not know where to look for classes.",
+                    this.classes
+                )
             );
         }
         try (Stream<Path> walk = Files.walk(this.classes)) {
