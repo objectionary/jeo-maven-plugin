@@ -30,7 +30,7 @@ import com.jcabi.xml.XML;
  *
  * @since 0.1.0
  */
-public interface IR {
+public interface Representation {
 
     /**
      * Name of the class or an object.

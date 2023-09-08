@@ -69,7 +69,7 @@ final class Optimization {
         this.boosts.apply(
             this.bytecode()
                 .stream()
-                .map(BytecodeIr::new)
+                .map(BytecodeRepresentation::new)
                 .collect(Collectors.toList())
         ).forEach(this::recompile);
     }
@@ -78,7 +78,7 @@ final class Optimization {
      * Recompile the Intermediate Representation.
      * @param representation Intermediate Representation to recompile.
      */
-    private void recompile(final IR representation) {
+    private void recompile(final Representation representation) {
         final String name = representation.name();
         try {
             final byte[] bytecode = representation.toBytecode();

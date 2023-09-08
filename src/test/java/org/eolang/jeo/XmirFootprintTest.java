@@ -42,8 +42,8 @@ final class XmirFootprintTest {
         final XmirFootprint footprint = new XmirFootprint(temp);
         footprint.apply(
             Collections.singleton(
-                new XmirIr(
-                    XmirIr.fake("org.eolang.jeo.Application")
+                new XmirRepresentation(
+                    XmirRepresentation.fake("org.eolang.jeo.Application")
                 )
             )
         );

@@ -38,11 +38,11 @@ import org.xembly.Xembler;
  *
  * @since 0.1.0
  * @todo #39:90min Add unit test for XmirIR class.
- *  The test should check all the methods of the {@link XmirIr} class.
+ *  The test should check all the methods of the {@link XmirRepresentation} class.
  *  Don't forget to test corner cases.
  *  When the test is ready, remove this puzzle.
  */
-public final class XmirIr implements IR {
+public final class XmirRepresentation implements Representation {
 
     /**
      * XML.
@@ -53,8 +53,8 @@ public final class XmirIr implements IR {
      * Constructor.
      * @param xml XML.
      */
-    XmirIr(final XML xml) {
-        this.xml = XmirIr.xmir(xml);
+    XmirRepresentation(final XML xml) {
+        this.xml = XmirRepresentation.xmir(xml);
     }
 
     @Override

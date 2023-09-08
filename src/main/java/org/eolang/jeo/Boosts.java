@@ -57,12 +57,12 @@ final class Boosts implements Boost {
     }
 
     @Override
-    public Collection<IR> apply(final Collection<IR> representations) {
-        final Collection<IR> result;
+    public Collection<Representation> apply(final Collection<Representation> representations) {
+        final Collection<Representation> result;
         if (this.all.isEmpty()) {
             result = Collections.emptyList();
         } else {
-            Collection<IR> res = representations;
+            Collection<Representation> res = representations;
             for (final Boost current : this.all) {
                 res = current.apply(res);
             }

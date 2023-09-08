@@ -31,7 +31,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link BytecodeIr}.
+ * Test case for {@link BytecodeRepresentation}.
  *
  * @since 0.1
  */
@@ -46,7 +46,7 @@ final class BytecodeIrTest {
     void parsesBytecode() {
         MatcherAssert.assertThat(
             "The simplest class should contain the object with MethodByte name",
-            new BytecodeIr(new ResourceOf(BytecodeIrTest.METHOD_BYTE))
+            new BytecodeRepresentation(new ResourceOf(BytecodeIrTest.METHOD_BYTE))
                 .toEO().xpath("/program/@name").get(0),
             Matchers.equalTo("org.eolang.jeo.MethodByte")
         );
@@ -56,7 +56,7 @@ final class BytecodeIrTest {
     void returnsTheSameBytes() {
         final ResourceOf input = new ResourceOf(BytecodeIrTest.METHOD_BYTE);
         final byte[] expected = new UncheckedBytes(new BytesOf(input)).asBytes();
-        final byte[] actual = new BytecodeIr(input).toBytecode();
+        final byte[] actual = new BytecodeRepresentation(input).toBytecode();
         MatcherAssert.assertThat(
             "The bytes should be the same",
             expected,
@@ -67,7 +67,7 @@ final class BytecodeIrTest {
     @Test
     void retrievesName() {
         final ResourceOf input = new ResourceOf(BytecodeIrTest.METHOD_BYTE);
-        final String actual = new BytecodeIr(input).name();
+        final String actual = new BytecodeRepresentation(input).name();
         final String expected = "org.eolang.jeo.MethodByte";
         MatcherAssert.assertThat(
             String.format(

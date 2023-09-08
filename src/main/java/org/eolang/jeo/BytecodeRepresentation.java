@@ -61,7 +61,7 @@ import org.xembly.Xembler;
     "PMD.SingularField",
     "PMD.UseObjectForClearerAPI"
 })
-final class BytecodeIr implements IR {
+final class BytecodeRepresentation implements Representation {
 
     /**
      * Input source.
@@ -72,7 +72,7 @@ final class BytecodeIr implements IR {
      * Constructor.
      * @param clazz Path to the class file
      */
-    BytecodeIr(final Path clazz) {
+    BytecodeRepresentation(final Path clazz) {
         this(new InputOf(clazz));
     }
 
@@ -80,7 +80,7 @@ final class BytecodeIr implements IR {
      * Constructor.
      * @param input Input source
      */
-    BytecodeIr(final Input input) {
+    BytecodeRepresentation(final Input input) {
         this(new UncheckedBytes(new BytesOf(input)).asBytes());
     }
 
@@ -88,7 +88,7 @@ final class BytecodeIr implements IR {
      * Constructor.
      * @param input Input source.
      */
-    private BytecodeIr(final byte[] input) {
+    private BytecodeRepresentation(final byte[] input) {
         this.input = Arrays.copyOf(input, input.length);
     }
 
@@ -239,7 +239,7 @@ final class BytecodeIr implements IR {
                 .attr("dob", now)
                 .attr("time", now)
                 .add("listing")
-                .set(new Base64Bytecode(BytecodeIr.this.input).asString())
+                .set(new Base64Bytecode(BytecodeRepresentation.this.input).asString())
                 .up()
                 .add("errors").up()
                 .add("sheets").up()

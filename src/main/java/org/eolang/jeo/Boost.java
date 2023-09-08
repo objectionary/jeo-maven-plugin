@@ -39,7 +39,7 @@ public interface Boost {
      * @param representations IRs to optimize.
      * @return Optimized IRs.
      */
-    Collection<IR> apply(Collection<IR> representations);
+    Collection<Representation> apply(Collection<Representation> representations);
 
     /**
      * Mock boost.
@@ -51,7 +51,7 @@ public interface Boost {
         /**
          * All IRs that were applied.
          */
-        private final Queue<IR> all;
+        private final Queue<Representation> all;
 
         /**
          * Constructor.
@@ -64,12 +64,12 @@ public interface Boost {
          * Constructor.
          * @param all All IRs that were applied.
          */
-        Mock(final Queue<IR> all) {
+        Mock(final Queue<Representation> all) {
             this.all = all;
         }
 
         @Override
-        public Collection<IR> apply(final Collection<IR> representations) {
+        public Collection<Representation> apply(final Collection<Representation> representations) {
             this.all.addAll(representations);
             return Collections.unmodifiableCollection(representations);
         }
@@ -91,7 +91,7 @@ public interface Boost {
      */
     class Dummy implements Boost {
         @Override
-        public Collection<IR> apply(final Collection<IR> representations) {
+        public Collection<Representation> apply(final Collection<Representation> representations) {
             return Collections.unmodifiableCollection(representations);
         }
     }

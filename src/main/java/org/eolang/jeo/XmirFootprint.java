@@ -53,10 +53,10 @@ final class XmirFootprint implements Boost {
     }
 
     @Override
-    public Collection<IR> apply(final Collection<IR> representations) {
+    public Collection<Representation> apply(final Collection<Representation> representations) {
         return representations.stream()
-            .map(IR::toEO)
-            .map(XmirIr::new)
+            .map(Representation::toEO)
+            .map(XmirRepresentation::new)
             .peek(this::tryToSave)
             .collect(Collectors.toList());
     }
@@ -65,7 +65,7 @@ final class XmirFootprint implements Boost {
      * Try to save XML to the target folder.
      * @param representation XML to save.
      */
-    private void tryToSave(final IR representation) {
+    private void tryToSave(final Representation representation) {
         final String name = representation.name();
         final Path path = this.target.resolve("jeo")
             .resolve("xmir")

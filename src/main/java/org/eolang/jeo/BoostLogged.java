@@ -38,7 +38,7 @@ import java.util.Collections;
  */
 final class BoostLogged implements Boost {
     @Override
-    public Collection<IR> apply(final Collection<IR> representations) {
+    public Collection<Representation> apply(final Collection<Representation> representations) {
         representations.forEach(
             ir -> Logger.info(this, "Optimization candidate: %s", ir)
         );

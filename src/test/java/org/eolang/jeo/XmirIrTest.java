@@ -28,7 +28,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link XmirIr}.
+ * Test case for {@link XmirRepresentation}.
  *
  * @since 0.1.0
  */
@@ -37,7 +37,7 @@ class XmirIrTest {
     @Test
     void retrievesName() {
         final String expected = "org.eolang.foo.Math";
-        final String actual = new XmirIr(XmirIr.fake(expected)).name();
+        final String actual = new XmirRepresentation(XmirRepresentation.fake(expected)).name();
         MatcherAssert.assertThat(
             String.format(
                 "The name of the class is not retrieved correctly, we expected '%s', but got '%s'",
