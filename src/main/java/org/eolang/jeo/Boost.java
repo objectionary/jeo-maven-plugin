@@ -82,4 +82,17 @@ public interface Boost {
             return !this.all.isEmpty();
         }
     }
+
+    /**
+     * Dummy boost.
+     * Returns the same IRs.
+     *
+     * @since 0.1.0
+     */
+    class Dummy implements Boost {
+        @Override
+        public Collection<IR> apply(final Collection<IR> representations) {
+            return Collections.unmodifiableCollection(representations);
+        }
+    }
 }

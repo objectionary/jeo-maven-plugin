@@ -38,10 +38,6 @@ import java.util.stream.Stream;
  * The entrypoint class for the optimization.
  *
  * @since 0.1.0
- * @todo #13:90min Implement back transformation to bytecode.
- *  The Optimization class should transform the IRs back to bytecode.
- *  When the back transformation is ready, remove that puzzle.
- *  Don't forget to add unit tests for the back transformation.
  */
 final class Optimization {
 

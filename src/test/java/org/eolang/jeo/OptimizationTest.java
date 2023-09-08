@@ -78,4 +78,14 @@ class OptimizationTest {
             FileMatchers.anExistingFile()
         );
     }
+
+    @Test
+    void appliesOptimizationForEmptyFolder(@TempDir final Path empty) throws IOException {
+        new Optimization(empty, new Boost.Dummy()).apply();
+        MatcherAssert.assertThat(
+            "Optimization should not create any files",
+            Files.list(empty).count(),
+            Matchers.equalTo(0L)
+        );
+    }
 }
