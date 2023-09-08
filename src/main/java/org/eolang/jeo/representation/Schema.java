@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
+package org.eolang.jeo.representation;
 
 import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
@@ -38,7 +38,7 @@ import org.xml.sax.SAXParseException;
  *
  * @since 0.1
  */
-public final class Schema {
+final class Schema {
 
     /**
      * The XML.
@@ -49,14 +49,14 @@ public final class Schema {
      * Ctor.
      * @param xml The XMIR
      */
-    public Schema(final XML xml) {
+    Schema(final XML xml) {
         this.xmir = xml;
     }
 
     /**
      * Check and crash if mistakes.
      */
-    public void check() {
+    void check() {
         final Collection<SAXParseException> violations = new XSDDocument(
             new UncheckedText(new TextOf(new ResourceOf("XMIR.xsd"))).asString()
         ).validate(new DOMSource(this.xmir.node()));

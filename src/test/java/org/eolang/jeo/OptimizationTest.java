@@ -65,7 +65,7 @@ class OptimizationTest {
             new UncheckedBytes(new BytesOf(new ResourceOf(name))).asBytes(),
             StandardOpenOption.CREATE_NEW
         );
-        final Boost.Mock boost = new Boost.Mock();
+        final Improvement.Mock boost = new Improvement.Mock();
         new Optimization(classes, boost).apply();
         MatcherAssert.assertThat(
             "Boost was not applied",
@@ -81,7 +81,7 @@ class OptimizationTest {
 
     @Test
     void appliesOptimizationForEmptyFolder(@TempDir final Path empty) throws IOException {
-        new Optimization(empty, new Boost.Dummy()).apply();
+        new Optimization(empty, new Improvement.Dummy()).apply();
         MatcherAssert.assertThat(
             "Optimization should not create any files",
             Files.list(empty).count(),

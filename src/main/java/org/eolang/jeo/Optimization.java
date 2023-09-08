@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.BytecodeRepresentation;
 
 /**
  * Optimization by using the EO language.
@@ -49,16 +50,16 @@ final class Optimization {
     /**
      * Improvements to apply.
      */
-    private final Boost boosts;
+    private final Improvement improvements;
 
     /**
      * Ctor.
      * @param classes Project compiled classes.
-     * @param boost Improvements to apply.
+     * @param improvement Improvements to apply.
      */
-    Optimization(final Path classes, final Boost boost) {
+    Optimization(final Path classes, final Improvement improvement) {
         this.classes = classes;
-        this.boosts = boost;
+        this.improvements = improvement;
     }
 
     /**
@@ -66,7 +67,7 @@ final class Optimization {
      * @throws IOException If some I/O problem arises.
      */
     void apply() throws IOException {
-        this.boosts.apply(
+        this.improvements.apply(
             this.bytecode()
                 .stream()
                 .map(BytecodeRepresentation::new)

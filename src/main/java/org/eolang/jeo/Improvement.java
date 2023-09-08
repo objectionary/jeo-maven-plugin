@@ -29,24 +29,24 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Optimization boost.
+ * Optimization improvement.
  * @since 0.1.0
  */
-public interface Boost {
+public interface Improvement {
 
     /**
-     * Apply the boost.
+     * Apply the improvement.
      * @param representations IRs to optimize.
      * @return Optimized IRs.
      */
     Collection<Representation> apply(Collection<Representation> representations);
 
     /**
-     * Mock boost.
+     * Mock improvement.
      *
      * @since 0.1.0
      */
-    final class Mock implements Boost {
+    final class Mock implements Improvement {
 
         /**
          * All IRs that were applied.
@@ -84,12 +84,12 @@ public interface Boost {
     }
 
     /**
-     * Dummy boost.
+     * Dummy improvement.
      * Returns the same IRs.
      *
      * @since 0.1.0
      */
-    class Dummy implements Boost {
+    class Dummy implements Improvement {
         @Override
         public Collection<Representation> apply(final Collection<Representation> representations) {
             return Collections.unmodifiableCollection(representations);

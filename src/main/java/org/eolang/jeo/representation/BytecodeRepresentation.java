@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
+package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
@@ -37,6 +37,7 @@ import org.cactoos.Input;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
+import org.eolang.jeo.Representation;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Opcodes;
@@ -61,7 +62,7 @@ import org.xembly.Xembler;
     "PMD.SingularField",
     "PMD.UseObjectForClearerAPI"
 })
-final class BytecodeRepresentation implements Representation {
+public final class BytecodeRepresentation implements Representation {
 
     /**
      * Input source.
@@ -72,7 +73,7 @@ final class BytecodeRepresentation implements Representation {
      * Constructor.
      * @param clazz Path to the class file
      */
-    BytecodeRepresentation(final Path clazz) {
+    public BytecodeRepresentation(final Path clazz) {
         this(new InputOf(clazz));
     }
 

@@ -21,31 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
-
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
-
 /**
- * Test case for {@link XmirRepresentation}.
+ * Package for the representations.
  *
  * @since 0.1.0
  */
-class XmirIrTest {
-
-    @Test
-    void retrievesName() {
-        final String expected = "org.eolang.foo.Math";
-        final String actual = new XmirRepresentation(XmirRepresentation.fake(expected)).name();
-        MatcherAssert.assertThat(
-            String.format(
-                "The name of the class is not retrieved correctly, we expected '%s', but got '%s'",
-                expected,
-                actual
-            ),
-            expected,
-            Matchers.equalTo(actual)
-        );
-    }
-}
+package org.eolang.jeo.representation;

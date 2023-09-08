@@ -21,27 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
+package org.eolang.jeo.representation;
 
-import com.jcabi.log.Logger;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.Base64;
 
 /**
- * Logged optimization.
+ * Base64 bytecode.
+ * Converts bytecode to Base64 string.
+ *
  * @since 0.1.0
- * @todo #13:30min Add unit tests for BoostLogged class.
- *  The unit tests should cover the next cases:
- *  - The BoostLogged class should log all IRs passed to it.
- *  - The BoostLogged class should return the same IRs as it gets.
- *  When the unit tests are ready, remove that puzzle.
+ * @todo #37:90min Add unit test for Base64Bytecode class.
+ *  The test should check all the methods of the {@link Base64Bytecode} class.
+ *  Don't forget to test corner cases.
+ *  When the test is ready, remove this puzzle.
  */
-final class BoostLogged implements Boost {
-    @Override
-    public Collection<Representation> apply(final Collection<Representation> representations) {
-        representations.forEach(
-            ir -> Logger.info(this, "Optimization candidate: %s", ir)
-        );
-        return Collections.unmodifiableCollection(representations);
+class Base64Bytecode {
+
+    /**
+     * Bytecode.
+     */
+    private final byte[] bytes;
+
+    /**
+     * Constructor.
+     * @param bytes Bytecode.
+     */
+    Base64Bytecode(final byte[] bytes) {
+        this.bytes = Arrays.copyOf(bytes, bytes.length);
+    }
+
+    /**
+     * Convert to string.
+     * @return String.
+     */
+    String asString() {
+        return Base64.getEncoder().encodeToString(this.bytes);
     }
 }

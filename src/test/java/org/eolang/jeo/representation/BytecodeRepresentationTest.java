@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
+package org.eolang.jeo.representation;
 
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 0.1
  */
-final class BytecodeIrTest {
+final class BytecodeRepresentationTest {
 
     /**
      * The name of the resource with the simplest class.
@@ -46,7 +46,7 @@ final class BytecodeIrTest {
     void parsesBytecode() {
         MatcherAssert.assertThat(
             "The simplest class should contain the object with MethodByte name",
-            new BytecodeRepresentation(new ResourceOf(BytecodeIrTest.METHOD_BYTE))
+            new BytecodeRepresentation(new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE))
                 .toEO().xpath("/program/@name").get(0),
             Matchers.equalTo("org.eolang.jeo.MethodByte")
         );
@@ -54,7 +54,7 @@ final class BytecodeIrTest {
 
     @Test
     void returnsTheSameBytes() {
-        final ResourceOf input = new ResourceOf(BytecodeIrTest.METHOD_BYTE);
+        final ResourceOf input = new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE);
         final byte[] expected = new UncheckedBytes(new BytesOf(input)).asBytes();
         final byte[] actual = new BytecodeRepresentation(input).toBytecode();
         MatcherAssert.assertThat(
@@ -66,7 +66,7 @@ final class BytecodeIrTest {
 
     @Test
     void retrievesName() {
-        final ResourceOf input = new ResourceOf(BytecodeIrTest.METHOD_BYTE);
+        final ResourceOf input = new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE);
         final String actual = new BytecodeRepresentation(input).name();
         final String expected = "org.eolang.jeo.MethodByte";
         MatcherAssert.assertThat(

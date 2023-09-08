@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
+package org.eolang.jeo.improvement;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,13 +31,16 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.stream.Collectors;
+import org.eolang.jeo.Improvement;
+import org.eolang.jeo.Representation;
+import org.eolang.jeo.representation.XmirRepresentation;
 
 /**
  * Footprint of the Xmir.
  *
  * @since 0.1.0
  */
-final class XmirFootprint implements Boost {
+public final class XmirFootprint implements Improvement {
 
     /**
      * Where to save the Xmir.
@@ -48,7 +51,7 @@ final class XmirFootprint implements Boost {
      * Constructor.
      * @param home Where to save the Xmir.
      */
-    XmirFootprint(final Path home) {
+    public XmirFootprint(final Path home) {
         this.target = home;
     }
 

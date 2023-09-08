@@ -21,30 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
+package org.eolang.jeo.improvement;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import org.eolang.jeo.Improvement;
+import org.eolang.jeo.Representation;
 
 /**
- * Boosts.
- * A list of boosts to apply.
+ * Improvements.
+ * A list of improvements to apply.
  *
  * @since 0.1.0
  */
-final class Boosts implements Boost {
+public final class Improvements implements Improvement {
 
     /**
      * All boosts.
      */
-    private final Collection<? extends Boost> all;
+    private final Collection<? extends Improvement> all;
 
     /**
      * Constructor.
      * @param arr Array of boosts.
      */
-    Boosts(final Boost... arr) {
+    public Improvements(final Improvement... arr) {
         this(Arrays.asList(arr));
     }
 
@@ -52,7 +54,7 @@ final class Boosts implements Boost {
      * Constructor.
      * @param boosts Collection of boosts.
      */
-    private Boosts(final Collection<? extends Boost> boosts) {
+    private Improvements(final Collection<? extends Improvement> boosts) {
         this.all = boosts;
     }
 
@@ -63,7 +65,7 @@ final class Boosts implements Boost {
             result = Collections.emptyList();
         } else {
             Collection<Representation> res = representations;
-            for (final Boost current : this.all) {
+            for (final Improvement current : this.all) {
                 res = current.apply(res);
             }
             result = res;

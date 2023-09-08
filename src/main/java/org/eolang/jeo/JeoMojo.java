@@ -30,6 +30,9 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.eolang.jeo.improvement.ImprovementLogged;
+import org.eolang.jeo.improvement.Improvements;
+import org.eolang.jeo.improvement.XmirFootprint;
 
 /**
  * Goal which touches a timestamp file.
@@ -62,8 +65,8 @@ public final class JeoMojo extends AbstractMojo {
         try {
             new Optimization(
                 this.classes.toPath(),
-                new Boosts(
-                    new BoostLogged(),
+                new Improvements(
+                    new ImprovementLogged(),
                     new XmirFootprint(this.target.toPath())
                 )
             ).apply();

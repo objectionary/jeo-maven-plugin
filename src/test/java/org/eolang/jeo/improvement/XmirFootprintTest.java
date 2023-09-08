@@ -21,17 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
+package org.eolang.jeo.improvement;
 
 import java.nio.file.Path;
 import java.util.Collections;
+import org.eolang.jeo.representation.XmirObject;
+import org.eolang.jeo.representation.XmirRepresentation;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.io.FileMatchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link XmirFootprint}.
+ * Test case for {@link org.eolang.jeo.improvement.XmirFootprint}.
  *
  * @since 0.1.0
  */
@@ -43,7 +45,7 @@ final class XmirFootprintTest {
         footprint.apply(
             Collections.singleton(
                 new XmirRepresentation(
-                    XmirRepresentation.fake("org.eolang.jeo.Application")
+                    new XmirObject("org.eolang.jeo.Application")
                 )
             )
         );

@@ -21,17 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
+package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Base64;
-import org.xembly.Directives;
-import org.xembly.ImpossibleModificationException;
-import org.xembly.Xembler;
+import org.eolang.jeo.Representation;
 
 /**
  * Intermediate representation of a class files from XMIR.
@@ -51,9 +45,17 @@ public final class XmirRepresentation implements Representation {
 
     /**
      * Constructor.
+     * @param object EO object as XML.
+     */
+    public XmirRepresentation(final XmirObject object) {
+        this(object.xml());
+    }
+
+    /**
+     * Constructor.
      * @param xml XML.
      */
-    XmirRepresentation(final XML xml) {
+    public XmirRepresentation(final XML xml) {
         this.xml = XmirRepresentation.xmir(xml);
     }
 
@@ -70,40 +72,6 @@ public final class XmirRepresentation implements Representation {
     @Override
     public byte[] toBytecode() {
         return Base64.getDecoder().decode(this.xml.xpath("/program/listing/text()").get(0));
-    }
-
-    /**
-     * Fake XMIR.
-     * @param name Name of an object.
-     * @return XMIR.
-     */
-    static XML fake(final String name) {
-        try {
-            final String now = ZonedDateTime.now(ZoneOffset.UTC)
-                .format(DateTimeFormatter.ISO_INSTANT);
-            return new XMLDocument(
-                new Xembler(
-                    new Directives()
-                        .add("program")
-                        .attr("name", name)
-                        .attr("version", "0.0.0")
-                        .attr("revision", "0.0.0")
-                        .attr("dob", now)
-                        .attr("time", now)
-                        .add("listing").up()
-                        .add("errors").up()
-                        .add("sheets").up()
-                        .add("license").up()
-                        .add("metas").up()
-                        .attr("ms", System.currentTimeMillis())
-                        .add("objects")
-                        .add("o")
-                        .attr("name", "test")
-                ).xml()
-            );
-        } catch (final ImpossibleModificationException exception) {
-            throw new IllegalStateException("Can't create fake XML", exception);
-        }
     }
 
     /**
