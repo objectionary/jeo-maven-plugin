@@ -59,12 +59,14 @@ public final class Improvements implements Improvement {
     }
 
     @Override
-    public Collection<Representation> apply(final Collection<Representation> representations) {
-        final Collection<Representation> result;
+    public Collection<? extends Representation> apply(
+        final Collection<? extends Representation> representations
+    ) {
+        final Collection<? extends Representation> result;
         if (this.all.isEmpty()) {
             result = Collections.emptyList();
         } else {
-            Collection<Representation> res = representations;
+            Collection<? extends Representation> res = representations;
             for (final Improvement current : this.all) {
                 res = current.apply(res);
             }

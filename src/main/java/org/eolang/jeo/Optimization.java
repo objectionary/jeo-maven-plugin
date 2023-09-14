@@ -28,11 +28,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import org.eolang.jeo.representation.BytecodeRepresentation;
 
 /**
  * Optimization by using the EO language.
@@ -68,10 +63,7 @@ final class Optimization {
      */
     void apply() throws IOException {
         this.improvements.apply(
-            this.bytecode()
-                .stream()
-                .map(BytecodeRepresentation::new)
-                .collect(Collectors.toList())
+            new BytecodeClasses(this.classes).bytecode()
         ).forEach(this::recompile);
     }
 
@@ -102,23 +94,6 @@ final class Optimization {
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
-        }
-    }
-
-    /**
-     * Find all bytecode files.
-     * @return Collection of bytecode files
-     * @throws IOException If some I/O problem arises
-     */
-    private Collection<Path> bytecode() throws IOException {
-        if (Objects.isNull(this.classes)) {
-            throw new IllegalStateException(
-                "The classes directory is not set, jeo-maven-plugin does not know where to look for classes."
-            );
-        }
-        try (Stream<Path> walk = Files.walk(this.classes)) {
-            return walk.filter(path -> path.toString().endsWith(".class"))
-                .collect(Collectors.toList());
         }
     }
 }

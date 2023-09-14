@@ -39,7 +39,9 @@ public interface Improvement {
      * @param representations IRs to optimize.
      * @return Optimized IRs.
      */
-    Collection<Representation> apply(Collection<Representation> representations);
+    Collection<? extends Representation> apply(
+        Collection<? extends Representation> representations
+    );
 
     /**
      * Mock improvement.
@@ -69,7 +71,9 @@ public interface Improvement {
         }
 
         @Override
-        public Collection<Representation> apply(final Collection<Representation> representations) {
+        public Collection<Representation> apply(
+            final Collection<? extends Representation> representations
+        ) {
             this.all.addAll(representations);
             return Collections.unmodifiableCollection(representations);
         }
@@ -91,7 +95,9 @@ public interface Improvement {
      */
     class Dummy implements Improvement {
         @Override
-        public Collection<Representation> apply(final Collection<Representation> representations) {
+        public Collection<Representation> apply(
+            final Collection<? extends Representation> representations
+        ) {
             return Collections.unmodifiableCollection(representations);
         }
     }

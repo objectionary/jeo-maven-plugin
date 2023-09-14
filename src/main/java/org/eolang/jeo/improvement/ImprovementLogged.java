@@ -40,7 +40,9 @@ import org.eolang.jeo.Representation;
  */
 public final class ImprovementLogged implements Improvement {
     @Override
-    public Collection<Representation> apply(final Collection<Representation> representations) {
+    public Collection<Representation> apply(
+        final Collection<? extends Representation> representations
+    ) {
         representations.forEach(
             ir -> Logger.info(this, "Optimization candidate: %s", ir)
         );
