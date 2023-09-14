@@ -32,12 +32,6 @@ import org.eolang.jeo.improvement.XmirFootprint;
  * Transpilation of the bytecode to the EO.
  *
  * @since 0.1.0
- * @todo #58:30min Duplicate between BytecodeTranspilation and Optimization.
- *  Both classes do the same thing, but in different ways. We need to
- *  refactor them to use the same approach. When it's done, remove this
- *  puzzle. Classes:
- *  - {@link org.eolang.jeo.representation.BytecodeTranspilation}
- *  - {@link org.eolang.jeo.Optimization}
  */
 public class BytecodeTranspilation {
 
