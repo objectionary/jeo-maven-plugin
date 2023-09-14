@@ -56,7 +56,9 @@ public final class XmirFootprint implements Improvement {
     }
 
     @Override
-    public Collection<Representation> apply(final Collection<? extends Representation> representations) {
+    public Collection<Representation> apply(
+        final Collection<? extends Representation> representations
+    ) {
         return representations.stream()
             .map(Representation::toEO)
             .map(XmirRepresentation::new)
