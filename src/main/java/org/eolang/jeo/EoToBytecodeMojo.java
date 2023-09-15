@@ -23,16 +23,12 @@
  */
 package org.eolang.jeo;
 
-import com.jcabi.log.Logger;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.eolang.jeo.improvement.BytecodeFootprint;
 
 /**
  * Converts EO to bytecode.
@@ -64,38 +60,7 @@ public final class EoToBytecodeMojo extends AbstractMojo {
 
     @Override
     public void execute() {
-        new EoObjects(this.target.toPath())
-            .objects()
-            .forEach(this::recompile);
-    }
-
-    /**
-     * Recompile the Intermediate Representation.
-     * @param representation Intermediate Representation to recompile.
-     */
-    private void recompile(final Representation representation) {
-        final String name = representation.name();
-        try {
-            final byte[] bytecode = representation.toBytecode();
-            final String[] subpath = name.split("\\.");
-            subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
-            final Path path = Paths.get(this.classes.toString(), subpath);
-            Logger.info(
-                this,
-                "Recompiling '%s', bytecode instance '%s', bytes to save '%s'",
-                path,
-                representation.getClass(),
-                bytecode.length
-            );
-            Files.createDirectories(path.getParent());
-            Files.write(path, bytecode);
-            Logger.info(
-                this,
-                "%s was recompiled successfully.",
-                path.getFileName().toString()
-            );
-        } catch (final IOException exception) {
-            throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
-        }
+        new BytecodeFootprint(this.classes.toPath())
+            .apply(new EoObjects(this.target.toPath()).objects());
     }
 }
