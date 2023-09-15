@@ -30,6 +30,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.eolang.jeo.improvement.BytecodeFootprint;
 import org.eolang.jeo.improvement.ImprovementLogged;
 import org.eolang.jeo.improvement.Improvements;
 import org.eolang.jeo.improvement.XmirFootprint;
@@ -69,7 +70,8 @@ public final class JeoMojo extends AbstractMojo {
                 this.classes.toPath(),
                 new Improvements(
                     new ImprovementLogged(),
-                    new XmirFootprint(this.target.toPath())
+                    new XmirFootprint(this.target.toPath()),
+                    new BytecodeFootprint(this.classes.toPath())
                 )
             ).apply();
         } catch (final IllegalStateException | IOException exception) {
