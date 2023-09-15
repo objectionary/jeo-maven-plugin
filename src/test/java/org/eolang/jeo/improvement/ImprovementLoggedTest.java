@@ -58,5 +58,4 @@ class ImprovementLoggedTest {
             Matchers.containsString(expected)
         );
     }
-
 }

@@ -43,14 +43,16 @@ public final class ImprovementLogged implements Improvement {
 
     /**
      * Constructor.
+     * @since 0.1.0
      */
     public ImprovementLogged() {
-        this((msg) -> Logger.info(ImprovementLogged.class, msg));
+        this(msg -> Logger.info(ImprovementLogged.class, msg));
     }
 
     /**
      * Constructor.
      * @param logger Logger.
+     * @since 0.1.0
      */
     ImprovementLogged(final Consumer<String> logger) {
         this.logger = logger;

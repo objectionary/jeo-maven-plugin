@@ -50,11 +50,22 @@ public interface Representation {
      */
     byte[] toBytecode();
 
-
+    /**
+     * Named representation.
+     *
+     * @since 0.1.0
+     */
     class Named implements Representation {
 
+        /**
+         * Name of representation.
+         */
         private final String name;
 
+        /**
+         * Constructor.
+         * @param name Name of representation.
+         */
         public Named(final String name) {
             this.name = name;
         }
