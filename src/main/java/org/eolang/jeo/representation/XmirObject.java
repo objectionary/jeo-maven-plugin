@@ -69,7 +69,7 @@ public final class XmirObject {
                         .attr("revision", "0.0.0")
                         .attr("dob", now)
                         .attr("time", now)
-                        .add("listing").set(this.base64MockListing()).up()
+                        .add("listing").set(this.mockListing()).up()
                         .add("errors").up()
                         .add("sheets").up()
                         .add("license").up()
@@ -89,7 +89,19 @@ public final class XmirObject {
      * Bytecode listing in Base64.
      * @return Base64 listing.
      */
-    private String base64MockListing() {
-        return "yv66vgAAADQAIgoAAgADBwAEDAAFAAYBABBqYXZhL2xhbmcvT2JqZWN0AQAGPGluaXQ+AQADKClWCQAIAAkHAAoMAAsADAEAEGphdmEvbGFuZy9TeXN0ZW0BAANvdXQBABVMamF2YS9pby9QcmludFN0cmVhbTsIAA4BAA1IZWxsbywgV29ybGQhCgAQABEHABIMABMAFAEAE2phdmEvaW8vUHJpbnRTdHJlYW0BAAdwcmludGxuAQAVKExqYXZhL2xhbmcvU3RyaW5nOylWBwAWAQAab3JnL2VvbGFuZy9qZW8vQXBwbGljYXRpb24BAARDb2RlAQAPTGluZU51bWJlclRhYmxlAQASTG9jYWxWYXJpYWJsZVRhYmxlAQAEdGhpcwEAHExvcmcvZW9sYW5nL2plby9BcHBsaWNhdGlvbjsBAARtYWluAQAWKFtMamF2YS9sYW5nL1N0cmluZzspVgEABGFyZ3MBABNbTGphdmEvbGFuZy9TdHJpbmc7AQAKU291cmNlRmlsZQEAEEFwcGxpY2F0aW9uLmphdmEAIQAVAAIAAAAAAAIAAQAFAAYAAQAXAAAALwABAAEAAAAFKrcAAbEAAAACABgAAAAGAAEAAAADABkAAAAMAAEAAAAFABoAGwAAAAkAHAAdAAEAFwAAADcAAgABAAAACbIABxINtgAPsQAAAAIAGAAAAAoAAgAAAAUACAAGABkAAAAMAAEAAAAJAB4AHwAAAAEAIAAAAAIAIQ==";
+    private static String mockListing() {
+        return String.join(
+            "",
+            "yv66vgAAADQAIgoAAgADBwAEDAAFAAYBABBqYXZhL2xhbmcvT2JqZWN0AQAGPGluaXQ+AQADKClWCQAIAAk",
+            "HAAoMAAsADAEAEGphdmEvbGFuZy9TeXN0ZW0BAANvdXQBABVMamF2YS9pby9QcmludFN0cmVhbTsIAA4BAA1",
+            "IZWxsbywgV29ybGQhCgAQABEHABIMABMAFAEAE2phdmEvaW8vUHJpbnRTdHJlYW0BAAdwcmludGxuAQAVKEx",
+            "qYXZhL2xhbmcvU3RyaW5nOylWBwAWAQAab3JnL2VvbGFuZy9qZW8vQXBwbGljYXRpb24BAARDb2RlAQAPTGl",
+            "uZU51bWJlclRhYmxlAQASTG9jYWxWYXJpYWJsZVRhYmxlAQAEdGhpcwEAHExvcmcvZW9sYW5nL2plby9BcHB",
+            "saWNhdGlvbjsBAARtYWluAQAWKFtMamF2YS9sYW5nL1N0cmluZzspVgEABGFyZ3MBABNbTGphdmEvbGFuZy9",
+            "TdHJpbmc7AQAKU291cmNlRmlsZQEAEEFwcGxpY2F0aW9uLmphdmEAIQAVAAIAAAAAAAIAAQAFAAYAAQAXAAA",
+            "ALwABAAEAAAAFKrcAAbEAAAACABgAAAAGAAEAAAADABkAAAAMAAEAAAAFABoAGwAAAAkAHAAdAAEAFwAAADc",
+            "AAgABAAAACbIABxINtgAPsQAAAAIAGAAAAAoAAgAAAAUACAAGABkAAAAMAAEAAAAJAB4AHwAAAAEAIAAAAAI",
+            "AIQ=="
+        );
     }
 }

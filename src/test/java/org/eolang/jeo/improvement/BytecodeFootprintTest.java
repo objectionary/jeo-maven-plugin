@@ -25,7 +25,6 @@ package org.eolang.jeo.improvement;
 
 import java.nio.file.Path;
 import java.util.Collections;
-import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.XmirObject;
 import org.eolang.jeo.representation.XmirRepresentation;
 import org.hamcrest.MatcherAssert;
@@ -41,14 +40,11 @@ import org.junit.jupiter.api.io.TempDir;
 class BytecodeFootprintTest {
 
     @Test
-    void appliesSuccessfully(@TempDir Path temp) {
+    void appliesSuccessfully(@TempDir final Path temp) {
         final String expected = "jeo.xmir.Fake";
-        new BytecodeFootprint(temp)
-            .apply(
-                Collections.singleton(
-                    new XmirRepresentation(new XmirObject(expected))
-                )
-            );
+        new BytecodeFootprint(temp).apply(
+            Collections.singleton(new XmirRepresentation(new XmirObject(expected)))
+        );
         MatcherAssert.assertThat(
             String.format(
                 "Bytecode file was not saved for the representation with the name '%s'",

@@ -38,10 +38,17 @@ import org.eolang.jeo.Representation;
  *
  * @since 0.1.0
  */
-public class BytecodeFootprint implements Improvement {
+public final class BytecodeFootprint implements Improvement {
 
+    /**
+     * Where to save the bytecode classes.
+     */
     private final Path classes;
 
+    /**
+     * Constructor.
+     * @param target Where to save the bytecode classes.
+     */
     public BytecodeFootprint(final Path target) {
         this.classes = target;
     }
