@@ -33,11 +33,6 @@ import org.eolang.jeo.Representation;
 /**
  * Logged improvement.
  * @since 0.1.0
- * @todo #13:30min Add unit tests for BoostLogged class.
- *  The unit tests should cover the next cases:
- *  - The BoostLogged class should log all IRs passed to it.
- *  - The BoostLogged class should return the same IRs as it gets.
- *  When the unit tests are ready, remove that puzzle.
  */
 public final class ImprovementLogged implements Improvement {
 
