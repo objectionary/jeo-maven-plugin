@@ -38,9 +38,6 @@ import org.eolang.jeo.representation.BytecodeTranspilation;
  * It does not apply any improvements. It does not convert EO to bytecode back.
  *
  * @since 0.1.0
- * @todo #58:30min Add documentation to the README.md about the new mojo.
- *  The documentation should explain how to use the {@link BytecodeToEoMojo}.
- *  When the documentation is ready, remove this puzzle.
  */
 @Mojo(name = "bytecode-to-eo", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
 public final class BytecodeToEoMojo extends AbstractMojo {
