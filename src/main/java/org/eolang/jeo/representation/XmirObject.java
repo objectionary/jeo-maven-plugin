@@ -69,7 +69,7 @@ public final class XmirObject {
                         .attr("revision", "0.0.0")
                         .attr("dob", now)
                         .attr("time", now)
-                        .add("listing").set(this.mockListing()).up()
+                        .add("listing").set(XmirObject.mockListing()).up()
                         .add("errors").up()
                         .add("sheets").up()
                         .add("license").up()
