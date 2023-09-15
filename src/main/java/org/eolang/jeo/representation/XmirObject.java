@@ -69,7 +69,7 @@ public final class XmirObject {
                         .attr("revision", "0.0.0")
                         .attr("dob", now)
                         .attr("time", now)
-                        .add("listing").up()
+                        .add("listing").set(this.base64MockListing()).up()
                         .add("errors").up()
                         .add("sheets").up()
                         .add("license").up()
@@ -83,5 +83,13 @@ public final class XmirObject {
         } catch (final ImpossibleModificationException exception) {
             throw new IllegalStateException("Can't create fake XML", exception);
         }
+    }
+
+    /**
+     * Bytecode listing in Base64.
+     * @return Base64 listing.
+     */
+    private String base64MockListing() {
+        return "yv66vgAAADQAIgoAAgADBwAEDAAFAAYBABBqYXZhL2xhbmcvT2JqZWN0AQAGPGluaXQ+AQADKClWCQAIAAkHAAoMAAsADAEAEGphdmEvbGFuZy9TeXN0ZW0BAANvdXQBABVMamF2YS9pby9QcmludFN0cmVhbTsIAA4BAA1IZWxsbywgV29ybGQhCgAQABEHABIMABMAFAEAE2phdmEvaW8vUHJpbnRTdHJlYW0BAAdwcmludGxuAQAVKExqYXZhL2xhbmcvU3RyaW5nOylWBwAWAQAab3JnL2VvbGFuZy9qZW8vQXBwbGljYXRpb24BAARDb2RlAQAPTGluZU51bWJlclRhYmxlAQASTG9jYWxWYXJpYWJsZVRhYmxlAQAEdGhpcwEAHExvcmcvZW9sYW5nL2plby9BcHBsaWNhdGlvbjsBAARtYWluAQAWKFtMamF2YS9sYW5nL1N0cmluZzspVgEABGFyZ3MBABNbTGphdmEvbGFuZy9TdHJpbmc7AQAKU291cmNlRmlsZQEAEEFwcGxpY2F0aW9uLmphdmEAIQAVAAIAAAAAAAIAAQAFAAYAAQAXAAAALwABAAEAAAAFKrcAAbEAAAACABgAAAAGAAEAAAADABkAAAAMAAEAAAAFABoAGwAAAAkAHAAdAAEAFwAAADcAAgABAAAACbIABxINtgAPsQAAAAIAGAAAAAoAAgAAAAUACAAGABkAAAAMAAEAAAAJAB4AHwAAAAEAIAAAAAIAIQ==";
     }
 }
