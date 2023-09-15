@@ -21,62 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
+package org.eolang.jeo.improvement;
 
-import com.jcabi.xml.XML;
+import java.util.Collections;
+import java.util.concurrent.atomic.AtomicReference;
+import org.eolang.jeo.Representation;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
 /**
- * Intermediate representation of a class files which can be optimized.
+ * Test case for {@link ImprovementLogged}.
  *
  * @since 0.1.0
  */
-public interface Representation {
+class ImprovementLoggedTest {
 
-    /**
-     * Name of the class or an object.
-     * @return Name.
-     */
-    String name();
+    @Test
+    void createsWithDefaultLogger() {
+        MatcherAssert.assertThat(
+            "Must create with default logger without any exceptions",
+            new ImprovementLogged(),
+            Matchers.notNullValue()
+        );
+    }
 
-    /**
-     * Convert to EOlang XML representation (XMIR).
-     * @return XML.
-     */
-    XML toEO();
-
-    /**
-     * Convert to bytecode.
-     * @return Array of bytes.
-     */
-    byte[] toBytecode();
-
-
-    class Named implements Representation {
-
-        private final String name;
-
-        public Named(final String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String name() {
-            return this.name;
-        }
-
-        @Override
-        public XML toEO() {
-            throw new UnsupportedOperationException(
-                String.format("toEO() not implemented for %s", this.getClass().getName())
-            );
-        }
-
-        @Override
-        public byte[] toBytecode() {
-            throw new UnsupportedOperationException(
-                String.format("toBytecode() not implemented for %s", this.getClass().getName())
-            );
-        }
+    @Test
+    void printsInformationAboutRepresentation() {
+        final AtomicReference<String> log = new AtomicReference<>();
+        final ImprovementLogged logged = new ImprovementLogged(log::set);
+        final String expected = "foo";
+        logged.apply(Collections.singleton(new Representation.Named(expected)));
+        MatcherAssert.assertThat(
+            "Must print information about representation",
+            log.get(),
+            Matchers.containsString(expected)
+        );
     }
 
 }

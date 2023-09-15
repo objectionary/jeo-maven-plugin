@@ -26,11 +26,12 @@ package org.eolang.jeo.improvement;
 import com.jcabi.log.Logger;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.Consumer;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
 
 /**
- * Logged optimization.
+ * Logged improvement.
  * @since 0.1.0
  * @todo #13:30min Add unit tests for BoostLogged class.
  *  The unit tests should cover the next cases:
@@ -39,13 +40,40 @@ import org.eolang.jeo.Representation;
  *  When the unit tests are ready, remove that puzzle.
  */
 public final class ImprovementLogged implements Improvement {
+
+    /**
+     * Logger.
+     */
+    private final Consumer<String> logger;
+
+    /**
+     * Constructor.
+     */
+    public ImprovementLogged() {
+        this((msg) -> Logger.info(ImprovementLogged.class, msg));
+    }
+
+    /**
+     * Constructor.
+     * @param logger Logger.
+     */
+    ImprovementLogged(final Consumer<String> logger) {
+        this.logger = logger;
+    }
+
     @Override
     public Collection<Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        representations.forEach(
-            ir -> Logger.info(this, "Optimization candidate: %s", ir)
-        );
+        representations.forEach(this::log);
         return Collections.unmodifiableCollection(representations);
+    }
+
+    /**
+     * Log the representation.
+     * @param representation Representation to log.
+     */
+    private void log(final Representation representation) {
+        this.logger.accept(String.format("Optimization candidate: %s", representation.name()));
     }
 }
