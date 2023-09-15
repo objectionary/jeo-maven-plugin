@@ -23,7 +23,7 @@ use the both goals in the following order:
 * Provide your optimizations are applied to the EOlang files
   in the `target/jeo` directory.
 * `eo-to-bytecode` scans the `target/jeo` directory for EOlang files and
-  converts them back to Java bytecode. 
+  converts them back to Java bytecode.
 
 ## Invoke the plugin from the command line
 
@@ -50,7 +50,7 @@ configuration to your `pom.xml` file:
 <build>
   <plugins>
     <plugin>
-      <groupId>com.github.objectionary</groupId>
+      <groupId>org.eolang</groupId>
       <artifactId>jeo-maven-plugin</artifactId>
       <version>1.0.0-SNAPSHOT</version>
       <executions>
@@ -73,3 +73,16 @@ configuration to your `pom.xml` file:
   </plugins>
 </build>
 ```
+## How to Contribute
+
+Fork repository, make changes, then send us a [pull request](https://www.yegor256.com/2014/04/15/github-guidelines.html).
+We will review your changes and apply them to the `master` branch shortly,
+provided they don't violate our quality standards. To avoid frustration,
+before sending us your pull request please run full Maven build:
+
+```bash
+$ mvn clean install -Pqulice
+```
+
+You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
+
