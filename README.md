@@ -1,4 +1,12 @@
 # jeo
+[![Maven Central](https://img.shields.io/maven-central/v/org.eolang/jeo-maven-plugin.svg)](https://maven-badges.herokuapp.com/maven-central/org.eolang/jeo-maven-plugin)
+[![Javadoc](http://www.javadoc.io/badge/org.eolang/jeo-maven-plugin.svg)](http://www.javadoc.io/doc/org.eolang/jeo-maven-plugin)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.txt)
+[![Hits-of-Code](https://hitsofcode.com/github/objectionary/jeo-maven-plugin?branch=master&label=Hits-of-Code)](https://hitsofcode.com/github/volodya-lombrozo/jtcop/view?branch=main&label=Hits-of-Code)
+![Lines of code](https://sloc.xyz/github/objectionary/jeo-maven-plugin)
+
+
+
 
 **jeo** stands for "Java EOlang Optimizations". **jeo-maven-plugin** is a Maven
 plugin dedicated to optimizing Java bytecode. The process involves translating
