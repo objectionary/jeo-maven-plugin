@@ -21,31 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation;
+package org.eolang.jeo;
 
+import java.nio.file.Path;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link XmirRepresentation}.
+ * Test case for {@link EoDefaultDirectory}.
  *
  * @since 0.1.0
  */
-class XmirRepresentationTest {
+final class EoDefaultDirectoryTest {
 
     @Test
-    void retrievesName() {
-        final String expected = "org.eolang.foo.Math";
-        final String actual = new XmirRepresentation(new Xmir(expected)).name();
+    void returnsDefaultDirectory() {
+        final Path actual = new EoDefaultDirectory().toPath();
+        final Path expected = Path.of("jeo", "xmir");
         MatcherAssert.assertThat(
             String.format(
-                "The name of the class is not retrieved correctly, we expected '%s', but got '%s'",
+                "We expect the default directory to be '%s', but was '%s'",
                 expected,
                 actual
             ),
-            expected,
-            Matchers.equalTo(actual)
+            actual,
+            Matchers.equalTo(
+                expected
+            )
         );
     }
 }

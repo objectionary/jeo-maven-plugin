@@ -33,26 +33,26 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.XmirDefaultDirectory;
-import org.eolang.jeo.representation.XmirRepresentation;
+import org.eolang.jeo.EoDefaultDirectory;
+import org.eolang.jeo.representation.EoRepresentation;
 
 /**
- * Footprint of the Xmir.
+ * Footprint of the EO's.
  *
  * @since 0.1.0
  */
-public final class XmirFootprint implements Improvement {
+public final class EoFootprint implements Improvement {
 
     /**
-     * Where to save the Xmir.
+     * Where to save the EO.
      */
     private final Path target;
 
     /**
      * Constructor.
-     * @param home Where to save the Xmir.
+     * @param home Where to save the EO.
      */
-    public XmirFootprint(final Path home) {
+    public EoFootprint(final Path home) {
         this.target = home;
     }
 
@@ -62,7 +62,7 @@ public final class XmirFootprint implements Improvement {
     ) {
         return representations.stream()
             .map(Representation::toEO)
-            .map(XmirRepresentation::new)
+            .map(EoRepresentation::new)
             .peek(this::tryToSave)
             .collect(Collectors.toList());
     }
@@ -73,7 +73,7 @@ public final class XmirFootprint implements Improvement {
      */
     private void tryToSave(final Representation representation) {
         final String name = representation.name();
-        final Path path = this.target.resolve(new XmirDefaultDirectory().toPath())
+        final Path path = this.target.resolve(new EoDefaultDirectory().toPath())
             .resolve(String.format("%s.xmir", name.replace('.', File.separatorChar)));
         try {
             Files.createDirectories(path.getParent());

@@ -31,7 +31,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.XmirRepresentation;
+import org.eolang.jeo.representation.EoRepresentation;
 
 /**
  * EO objects.
@@ -58,12 +58,12 @@ final class EoObjects {
      * Read all objects.
      * @return All objects.
      */
-    Collection<XmirRepresentation> objects() {
-        final Path path = this.objectspath.resolve(new XmirDefaultDirectory().toPath());
+    Collection<EoRepresentation> objects() {
+        final Path path = this.objectspath.resolve(new EoDefaultDirectory().toPath());
         try (Stream<Path> walk = Files.walk(path)) {
             return walk.filter(Files::isRegularFile)
                 .map(EoObjects::xml)
-                .map(XmirRepresentation::new)
+                .map(EoRepresentation::new)
                 .collect(Collectors.toList());
         } catch (final IOException exception) {
             throw new IllegalStateException(

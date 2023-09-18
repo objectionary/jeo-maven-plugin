@@ -25,8 +25,8 @@ package org.eolang.jeo.improvement;
 
 import java.nio.file.Path;
 import java.util.Collections;
-import org.eolang.jeo.representation.Xmir;
-import org.eolang.jeo.representation.XmirRepresentation;
+import org.eolang.jeo.representation.Eo;
+import org.eolang.jeo.representation.EoRepresentation;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.io.FileMatchers;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ class BytecodeFootprintTest {
     void appliesSuccessfully(@TempDir final Path temp) {
         final String expected = "jeo.xmir.Fake";
         new BytecodeFootprint(temp).apply(
-            Collections.singleton(new XmirRepresentation(new Xmir(expected)))
+            Collections.singleton(new EoRepresentation(new Eo(expected)))
         );
         MatcherAssert.assertThat(
             String.format(

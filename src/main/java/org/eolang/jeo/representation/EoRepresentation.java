@@ -32,11 +32,11 @@ import org.eolang.jeo.Representation;
  *
  * @since 0.1.0
  * @todo #39:90min Add unit test for XmirIR class.
- *  The test should check all the methods of the {@link XmirRepresentation} class.
+ *  The test should check all the methods of the {@link EoRepresentation} class.
  *  Don't forget to test corner cases.
  *  When the test is ready, remove this puzzle.
  */
-public final class XmirRepresentation implements Representation {
+public final class EoRepresentation implements Representation {
 
     /**
      * XML.
@@ -47,7 +47,7 @@ public final class XmirRepresentation implements Representation {
      * Constructor.
      * @param object EO object as XML.
      */
-    public XmirRepresentation(final Xmir object) {
+    public EoRepresentation(final Eo object) {
         this(object.xml());
     }
 
@@ -55,8 +55,8 @@ public final class XmirRepresentation implements Representation {
      * Constructor.
      * @param xml XML.
      */
-    public XmirRepresentation(final XML xml) {
-        this.xml = XmirRepresentation.xmir(xml);
+    public EoRepresentation(final XML xml) {
+        this.xml = EoRepresentation.xmir(xml);
     }
 
     @Override

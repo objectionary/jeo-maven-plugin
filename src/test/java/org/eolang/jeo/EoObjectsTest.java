@@ -26,7 +26,7 @@ package org.eolang.jeo;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.eolang.jeo.representation.Xmir;
+import org.eolang.jeo.representation.Eo;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -43,10 +43,10 @@ final class EoObjectsTest {
     @Test
     void retrievesObjectsSuccessfully(@TempDir final Path temp) throws IOException {
         final int expected = 2;
-        final Path directory = temp.resolve(new XmirDefaultDirectory().toPath());
+        final Path directory = temp.resolve(new EoDefaultDirectory().toPath());
         Files.createDirectories(directory);
-        Files.write(directory.resolve("first.xmir"), new Xmir().bytes());
-        Files.write(directory.resolve("second.xmir"), new Xmir().bytes());
+        Files.write(directory.resolve("first.xmir"), new Eo().bytes());
+        Files.write(directory.resolve("second.xmir"), new Eo().bytes());
         MatcherAssert.assertThat(
             String.format("Objects were not retrieved, we expected '%d' objects", expected),
             new EoObjects(temp).objects(),
@@ -56,7 +56,7 @@ final class EoObjectsTest {
 
     @Test
     void retrievesEmptyObjectsIfFolderIsEmpty(@TempDir final Path temp) throws IOException {
-        Files.createDirectories(temp.resolve(new XmirDefaultDirectory().toPath()));
+        Files.createDirectories(temp.resolve(new EoDefaultDirectory().toPath()));
         MatcherAssert.assertThat(
             "Objects were not retrieved, we expected empty list",
             new EoObjects(temp).objects(),

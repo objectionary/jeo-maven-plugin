@@ -39,7 +39,7 @@ import org.xembly.Xembler;
  *
  * @since 0.1.0
  */
-public final class Xmir {
+public final class Eo {
 
     /**
      * Object name.
@@ -49,7 +49,7 @@ public final class Xmir {
     /**
      * Constructor.
      */
-    public Xmir() {
+    public Eo() {
         this(UUID.randomUUID().toString());
     }
 
@@ -57,7 +57,7 @@ public final class Xmir {
      * Constructor.
      * @param name Object name.
      */
-    public Xmir(final String name) {
+    public Eo(final String name) {
         this.name = name;
     }
 
@@ -86,7 +86,7 @@ public final class Xmir {
                         .attr("revision", "0.0.0")
                         .attr("dob", now)
                         .attr("time", now)
-                        .add("listing").set(Xmir.mockListing()).up()
+                        .add("listing").set(Eo.mockListing()).up()
                         .add("errors").up()
                         .add("sheets").up()
                         .add("license").up()
