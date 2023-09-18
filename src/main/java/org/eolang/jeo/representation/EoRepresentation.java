@@ -31,10 +31,6 @@ import org.eolang.jeo.Representation;
  * Intermediate representation of a class files from XMIR.
  *
  * @since 0.1.0
- * @todo #39:90min Add unit test for XmirIR class.
- *  The test should check all the methods of the {@link EoRepresentation} class.
- *  Don't forget to test corner cases.
- *  When the test is ready, remove this puzzle.
  */
 public final class EoRepresentation implements Representation {
 
