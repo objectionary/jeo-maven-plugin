@@ -38,12 +38,6 @@ import org.eolang.jeo.representation.XmirRepresentation;
  * Reads all EO objects from the folder.
  *
  * @since 0.1.0
- * @todo #59:30min Add unit tests for EoObjects class.
- *  The unit tests should cover the next cases:
- *  - The EoObjects class should read all XML files from the folder.
- *  - The EoObjects class should return empty list if folder is empty.
- *  - The EoObjects class should throw IllegalStateException if folder doesn't exist.
- *  When the unit tests are ready, remove that puzzle.
  */
 final class EoObjects {
 

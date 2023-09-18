@@ -25,9 +25,11 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.nio.charset.StandardCharsets;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -37,19 +39,27 @@ import org.xembly.Xembler;
  *
  * @since 0.1.0
  */
-public final class XmirObject {
+public final class Xmir {
 
     /**
      * Object name.
      */
     private final String name;
 
+    public Xmir() {
+        this(UUID.randomUUID().toString());
+    }
+
     /**
      * Constructor.
      * @param name Object name.
      */
-    public XmirObject(final String name) {
+    public Xmir(final String name) {
         this.name = name;
+    }
+
+    public byte[] bytes() {
+        return this.xml().toString().getBytes(StandardCharsets.UTF_8);
     }
 
     /**
@@ -69,7 +79,7 @@ public final class XmirObject {
                         .attr("revision", "0.0.0")
                         .attr("dob", now)
                         .attr("time", now)
-                        .add("listing").set(XmirObject.mockListing()).up()
+                        .add("listing").set(Xmir.mockListing()).up()
                         .add("errors").up()
                         .add("sheets").up()
                         .add("license").up()

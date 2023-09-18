@@ -25,7 +25,7 @@ package org.eolang.jeo.improvement;
 
 import java.nio.file.Path;
 import java.util.Collections;
-import org.eolang.jeo.representation.XmirObject;
+import org.eolang.jeo.representation.Xmir;
 import org.eolang.jeo.representation.XmirRepresentation;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.io.FileMatchers;
@@ -45,7 +45,7 @@ final class XmirFootprintTest {
         footprint.apply(
             Collections.singleton(
                 new XmirRepresentation(
-                    new XmirObject("org.eolang.jeo.Application")
+                    new Xmir("org.eolang.jeo.Application")
                 )
             )
         );

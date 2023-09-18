@@ -37,7 +37,7 @@ class XmirRepresentationTest {
     @Test
     void retrievesName() {
         final String expected = "org.eolang.foo.Math";
-        final String actual = new XmirRepresentation(new XmirObject(expected)).name();
+        final String actual = new XmirRepresentation(new Xmir(expected)).name();
         MatcherAssert.assertThat(
             String.format(
                 "The name of the class is not retrieved correctly, we expected '%s', but got '%s'",

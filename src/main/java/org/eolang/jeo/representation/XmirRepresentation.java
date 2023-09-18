@@ -47,7 +47,7 @@ public final class XmirRepresentation implements Representation {
      * Constructor.
      * @param object EO object as XML.
      */
-    public XmirRepresentation(final XmirObject object) {
+    public XmirRepresentation(final Xmir object) {
         this(object.xml());
     }
 
