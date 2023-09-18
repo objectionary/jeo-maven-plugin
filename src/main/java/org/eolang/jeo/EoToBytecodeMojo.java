@@ -61,6 +61,6 @@ public final class EoToBytecodeMojo extends AbstractMojo {
     @Override
     public void execute() {
         new BytecodeFootprint(this.classes.toPath())
-            .apply(new EoObjects(this.target.toPath()).objects());
+            .apply(new EoRepresentations(this.target.toPath()).objects());
     }
 }

@@ -39,7 +39,7 @@ import org.eolang.jeo.representation.EoRepresentation;
  *
  * @since 0.1.0
  */
-final class EoObjects {
+final class EoRepresentations {
 
     /**
      * Where to read objects from.
@@ -50,7 +50,7 @@ final class EoObjects {
      * Constructor.
      * @param objects Where to read objects from.
      */
-    EoObjects(final Path objects) {
+    EoRepresentations(final Path objects) {
         this.objectspath = objects;
     }
 
@@ -62,7 +62,7 @@ final class EoObjects {
         final Path path = this.objectspath.resolve(new EoDefaultDirectory().toPath());
         try (Stream<Path> walk = Files.walk(path)) {
             return walk.filter(Files::isRegularFile)
-                .map(EoObjects::xml)
+                .map(EoRepresentations::xml)
                 .map(EoRepresentation::new)
                 .collect(Collectors.toList());
         } catch (final IOException exception) {

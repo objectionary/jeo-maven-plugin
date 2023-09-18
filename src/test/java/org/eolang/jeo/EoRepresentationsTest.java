@@ -34,11 +34,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link EoObjects}.
+ * Test case for {@link EoRepresentations}.
  *
  * @since 0.1.0
  */
-final class EoObjectsTest {
+final class EoRepresentationsTest {
 
     @Test
     void retrievesObjectsSuccessfully(@TempDir final Path temp) throws IOException {
@@ -49,7 +49,7 @@ final class EoObjectsTest {
         Files.write(directory.resolve("second.xmir"), new Eo().bytes());
         MatcherAssert.assertThat(
             String.format("Objects were not retrieved, we expected '%d' objects", expected),
-            new EoObjects(temp).objects(),
+            new EoRepresentations(temp).objects(),
             Matchers.hasSize(expected)
         );
     }
@@ -59,7 +59,7 @@ final class EoObjectsTest {
         Files.createDirectories(temp.resolve(new EoDefaultDirectory().toPath()));
         MatcherAssert.assertThat(
             "Objects were not retrieved, we expected empty list",
-            new EoObjects(temp).objects(),
+            new EoRepresentations(temp).objects(),
             Matchers.empty()
         );
     }
@@ -68,7 +68,7 @@ final class EoObjectsTest {
     void throwsExceptionIfFolderDoesNotExist(@TempDir final Path temp) {
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> new EoObjects(temp).objects(),
+            () -> new EoRepresentations(temp).objects(),
             "Exception was not thrown when folder does not exist"
         );
     }
