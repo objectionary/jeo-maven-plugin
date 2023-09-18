@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,24 @@ class EoRepresentationTest {
             ),
             expected,
             Matchers.equalTo(actual)
+        );
+    }
+
+    @Test
+    void returnsXmlRepresentationOfEo() {
+        MatcherAssert.assertThat(
+            "The XML representation of the EO object is not correct",
+            new EoRepresentation(new Eo("org.eolang.foo.Math")).toEO(),
+            XhtmlMatchers.hasXPath("/program[@name='org.eolang.foo.Math']")
+        );
+    }
+
+    @Test
+    void returnsBytecodeRepresentationOfEo() {
+        MatcherAssert.assertThat(
+            "The bytecode representation of the EO object is not correct",
+            new EoRepresentation(new Eo("org.eolang.foo.Bar")).toBytecode(),
+            Matchers.equalTo(new HelloWorldBytecode().bytes())
         );
     }
 }
