@@ -31,9 +31,9 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eolang.jeo.improvement.BytecodeFootprint;
+import org.eolang.jeo.improvement.EoFootprint;
 import org.eolang.jeo.improvement.ImprovementLogged;
 import org.eolang.jeo.improvement.Improvements;
-import org.eolang.jeo.improvement.EoFootprint;
 
 /**
  * Default optimization mojo.
