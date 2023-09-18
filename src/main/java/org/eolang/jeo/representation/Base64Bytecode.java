@@ -31,10 +31,6 @@ import java.util.Base64;
  * Converts bytecode to Base64 string.
  *
  * @since 0.1.0
- * @todo #37:90min Add unit test for Base64Bytecode class.
- *  The test should check all the methods of the {@link Base64Bytecode} class.
- *  Don't forget to test corner cases.
- *  When the test is ready, remove this puzzle.
  */
 class Base64Bytecode {
 
