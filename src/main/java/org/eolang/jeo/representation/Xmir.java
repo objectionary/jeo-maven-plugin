@@ -46,6 +46,9 @@ public final class Xmir {
      */
     private final String name;
 
+    /**
+     * Constructor.
+     */
     public Xmir() {
         this(UUID.randomUUID().toString());
     }
@@ -58,6 +61,10 @@ public final class Xmir {
         this.name = name;
     }
 
+    /**
+     * Convert EO object to a byte array.
+     * @return Byte array.
+     */
     public byte[] bytes() {
         return this.xml().toString().getBytes(StandardCharsets.UTF_8);
     }
