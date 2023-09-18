@@ -56,7 +56,7 @@ public final class XmirObject {
      * Convert to XML.
      * @return XML representation of XMIR.
      */
-    XML xml() {
+    public XML xml() {
         try {
             final String now = ZonedDateTime.now(ZoneOffset.UTC)
                 .format(DateTimeFormatter.ISO_INSTANT);

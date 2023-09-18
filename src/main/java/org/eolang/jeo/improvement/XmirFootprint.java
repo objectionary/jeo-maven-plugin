@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
+import org.eolang.jeo.XmirDefaultDirectory;
 import org.eolang.jeo.representation.XmirRepresentation;
 
 /**
@@ -72,8 +73,7 @@ public final class XmirFootprint implements Improvement {
      */
     private void tryToSave(final Representation representation) {
         final String name = representation.name();
-        final Path path = this.target.resolve("jeo")
-            .resolve("xmir")
+        final Path path = this.target.resolve(new XmirDefaultDirectory().toPath())
             .resolve(String.format("%s.xmir", name.replace('.', File.separatorChar)));
         try {
             Files.createDirectories(path.getParent());
