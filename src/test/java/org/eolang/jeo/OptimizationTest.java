@@ -24,6 +24,7 @@
 package org.eolang.jeo;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,6 +35,7 @@ import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.io.FileMatchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -41,14 +43,6 @@ import org.junit.jupiter.api.io.TempDir;
  * Test case for {@link Optimization}.
  *
  * @since 0.1.0
- * @todo #24:90min Add unit tests for Optimization class.
- *  We still have to add the next unit tests:
- *  - The classes directory is empty.
- *  - The classes directory does not exist.
- *  - The classes directory has some clases.
- *  - The classes directory has some classes and some subdirectories.
- *  - The classes directory has some classes and some garbage.
- *  When the unit tests are ready, remove that puzzle.
  */
 class OptimizationTest {
 
@@ -86,6 +80,35 @@ class OptimizationTest {
             "Optimization should not create any files",
             Files.list(empty).count(),
             Matchers.equalTo(0L)
+        );
+    }
+
+    @Test
+    void appliesOptimizationForFolderWithGarbage(@TempDir final Path temp) throws IOException {
+        Files.write(temp.resolve("garbadge.txt"), "garbage".getBytes(StandardCharsets.UTF_8));
+        final Improvement.Mock boost = new Improvement.Mock();
+        new Optimization(temp, boost).apply();
+        MatcherAssert.assertThat(
+            "Optimization should not be applied",
+            boost.isApplied(),
+            Matchers.is(false)
+        );
+    }
+
+    @Test
+    void throwsExceptionIfFolderDoesNotExist(@TempDir final Path temp) {
+        final String folder = "unexists";
+        MatcherAssert.assertThat(
+            "Exception message should contain the name of the folder",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new Optimization(temp.resolve(folder), new Improvement.Dummy()).apply(),
+                "We expect that Optimization will throw IllegalStateException if folder does not exist"
+            ).getMessage(),
+            Matchers.allOf(
+                Matchers.containsString(folder),
+                Matchers.containsString("does not exist")
+            )
         );
     }
 }
