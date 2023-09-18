@@ -38,10 +38,6 @@ import org.xembly.Xembler;
  * XMIR representation of an EO object.
  *
  * @since 0.1.0
- * @todo #69:30min Rename Xmir to EO.
- *  The name Xmir is confusing. It's not clear what it means in this context.
- *  Actually XMIR and EO interchangeably mean the same thing. So, we have to rename
- *  Xmir to EO. When the renaming is done, remove this puzzle.
  */
 public final class Xmir {
 
