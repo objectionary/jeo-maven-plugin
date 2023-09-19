@@ -3,7 +3,7 @@ name: codecov
 on:
   push:
     branches:
-      - main
+      - master
 jobs:
   codecov:
     name: Upload coverage reports to Codecov
