@@ -248,13 +248,6 @@ SOFTWARE.
               </execution>
             </executions>
           </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>coverage</id>
-      <build>
-        <plugins>
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
@@ -263,11 +256,6 @@ SOFTWARE.
               <output>
                 file
               </output>
-              <excludes>
-                <exclude>
-                  com/github/lombrozo/testnames/rules/ml/*
-                </exclude>
-              </excludes>
             </configuration>
             <executions>
               <execution>
@@ -295,32 +283,32 @@ SOFTWARE.
                         <limit>
                           <counter>INSTRUCTION</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.67</minimum>
+                          <minimum>0.73</minimum>
                         </limit>
                         <limit>
                           <counter>LINE</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.84</minimum>
+                          <minimum>0.76</minimum>
                         </limit>
                         <limit>
                           <counter>BRANCH</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.47</minimum>
+                          <minimum>0.43</minimum>
                         </limit>
                         <limit>
                           <counter>COMPLEXITY</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.57</minimum>
+                          <minimum>0.79</minimum>
                         </limit>
                         <limit>
                           <counter>METHOD</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.76</minimum>
+                          <minimum>0.84</minimum>
                         </limit>
                         <limit>
                           <counter>CLASS</counter>
                           <value>MISSEDCOUNT</value>
-                          <maximum>2</maximum>
+                          <maximum>3</maximum>
                         </limit>
                       </limits>
                     </rule>
