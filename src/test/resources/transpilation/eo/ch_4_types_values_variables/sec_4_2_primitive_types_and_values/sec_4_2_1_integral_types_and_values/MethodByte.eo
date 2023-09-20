@@ -1,0 +1,64 @@
+# 2022-07-18T16:12:48.858039327
+# j2eo team
++alias stdlib.lang.class__System
++alias stdlib.lang.class__Object
++alias stdlib.lang.class__String
++alias stdlib.primitives.prim__byte
+
+[] > class__MethodByte
+  class__Object > super
+  super > @
+  [] > new
+    class__Object.new > super
+    super > @
+    "class__MethodByte" > className
+    1 > address
+    [this] > init
+      seq > @
+        TRUE
+  # main :: String[] -> void
+  [args] > main
+    seq > @
+      statementExpression_1
+      statementExpression_2
+    [] > statementExpression_1
+      class__System.out.println > @
+        class__System.out
+        methodInvocation_1
+    [] > methodInvocation_1
+      this.method > @
+        this
+    [] > statementExpression_2
+      class__System.out.println > @
+        class__System.out
+        literal_1
+    [] > literal_1
+      class__String.constructor_2 > @
+        class__String.new
+        "passed"
+  # method :: null -> byte
+  [] > method
+    seq > @
+      return_1
+    [] > return_1
+      literal_2 > @
+    [] > literal_2
+      prim__int.constructor_2 > @
+        prim__int.new
+        52
+  # null :: null -> void
+  [this] > constructor
+    seq > @
+      initialization
+      statementExpression_3
+      this
+    [] > initialization
+      this.init > @
+        this
+    [] > statementExpression_3
+      this.super.constructor > @
+        this.super
+
+[args...] > main
+  class__MethodByte.main > @
+    *
