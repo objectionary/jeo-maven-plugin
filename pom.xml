@@ -160,7 +160,7 @@ SOFTWARE.
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.29.6</version>
+      <version>0.31.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
