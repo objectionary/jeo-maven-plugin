@@ -1,5 +1,6 @@
 package it;
 
+import com.jcabi.xml.XML;
 import org.cactoos.io.OutputTo;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
@@ -14,12 +15,10 @@ public class JavaToEoTest {
         final ResourceOf resourceOf = new ResourceOf(
             "transpilation/eo/ch_4_types_values_variables/sec_4_2_primitive_types_and_values/sec_4_2_1_integral_types_and_values/MethodByte.eo"
         );
-        System.out.println(new TextOf(resourceOf).asString());
-        new Syntax(
-            "scenario",
-            resourceOf,
-            new OutputTo(System.out)
-        ).parse();
+        final XMLOutput output = new XMLOutput();
+        new Syntax("scenario", resourceOf, output).parse();
+        final XML xml = output.xml();
+        System.out.println(xml.toString());
         Assertions.assertTrue(true);
     }
 }
