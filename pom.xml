@@ -158,6 +158,12 @@ SOFTWARE.
       <!-- version from the parent pom -->
     </dependency>
     <dependency>
+      <groupId>org.eolang</groupId>
+      <artifactId>eo-parser</artifactId>
+      <version>0.29.6</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-matchers</artifactId>
       <!-- version from the parent pom -->
@@ -195,6 +201,8 @@ SOFTWARE.
         <filtering>false</filtering>
         <includes>
           <include>**/*.class</include>
+          <include>**/*.java</include>
+          <include>**/*.eo</include>
         </includes>
       </testResource>
     </testResources>
