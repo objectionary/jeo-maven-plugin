@@ -69,18 +69,18 @@ public final class BytecodeRepresentation implements Representation {
 
     /**
      * Constructor.
-     * @param input Input source
+     * @param input Input source.
      */
-    BytecodeRepresentation(final Input input) {
-        this(new UncheckedBytes(new BytesOf(input)).asBytes());
+    public BytecodeRepresentation(final byte[] input) {
+        this.input = Arrays.copyOf(input, input.length);
     }
 
     /**
      * Constructor.
-     * @param input Input source.
+     * @param input Input source
      */
-    private BytecodeRepresentation(final byte[] input) {
-        this.input = Arrays.copyOf(input, input.length);
+    BytecodeRepresentation(final Input input) {
+        this(new UncheckedBytes(new BytesOf(input)).asBytes());
     }
 
     @Override

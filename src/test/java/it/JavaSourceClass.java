@@ -23,34 +23,23 @@
  */
 package it;
 
-import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import org.cactoos.Output;
+import org.cactoos.Input;
+import org.cactoos.io.ResourceOf;
 
-/**
- * XML output.
- */
-public class XMLOutput implements Output {
+public class JavaSourceClass {
 
-    final ByteArrayOutputStream baos;
+    private final Input java;
 
-    public XMLOutput() {
-        this(new ByteArrayOutputStream());
+    JavaSourceClass(final String resource) {
+        this(new ResourceOf(resource));
     }
 
-    private XMLOutput(final ByteArrayOutputStream baos) {
-        this.baos = baos;
+    JavaSourceClass(final Input java) {
+        this.java = java;
     }
 
-
-    @Override
-    public OutputStream stream() {
-        return this.baos;
+    byte[] compile() {
+        return new byte[0];
     }
 
-    public XML xml() {
-        return new XMLDocument(this.baos.toByteArray());
-    }
 }
