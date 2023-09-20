@@ -33,7 +33,10 @@ import org.eolang.parser.Syntax;
 
 /**
  * EO source.
+ *
+ * @since 0.1
  */
+@SuppressWarnings("JTCOP.RuleCorrectTestName")
 final class EoSource {
 
     /**
@@ -54,26 +57,28 @@ final class EoSource {
      * @return XMIR.
      */
     XML parse() {
-        final ResourceOf eo = new ResourceOf(this.resource);
-        final XMLOutput output = new XMLOutput();
-        new Syntax("scenario", eo, output);
+        final ResourceOf eolang = new ResourceOf(this.resource);
+        final XmlOutput output = new XmlOutput();
+        new Syntax("scenario", eolang, output);
         return output.xml();
     }
 
     /**
      * XML output.
+     *
+     * @since 0.1.0
      */
-    private static class XMLOutput implements Output {
+    private static final class XmlOutput implements Output {
 
         /**
          * Output stream.
          */
-        final ByteArrayOutputStream baos;
+        private final ByteArrayOutputStream baos;
 
         /**
          * Constructor.
          */
-        private XMLOutput() {
+        private XmlOutput() {
             this(new ByteArrayOutputStream());
         }
 
@@ -81,10 +86,9 @@ final class EoSource {
          * Constructor.
          * @param baos Output stream.
          */
-        private XMLOutput(final ByteArrayOutputStream baos) {
+        private XmlOutput(final ByteArrayOutputStream baos) {
             this.baos = baos;
         }
-
 
         @Override
         public OutputStream stream() {

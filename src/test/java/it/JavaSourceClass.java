@@ -33,6 +33,7 @@ import org.cactoos.io.ResourceOf;
  *
  * @since 0.1
  */
+@SuppressWarnings("JTCOP.RuleCorrectTestName")
 final class JavaSourceClass {
 
     /**
