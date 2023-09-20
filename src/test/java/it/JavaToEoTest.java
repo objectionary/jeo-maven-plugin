@@ -155,5 +155,4 @@ final class JavaToEoTest {
             return String.format("%s.eo and %1$s.java", this.filename);
         }
     }
-
 }

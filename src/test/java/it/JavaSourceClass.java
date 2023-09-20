@@ -24,22 +24,49 @@
 package it;
 
 import org.cactoos.Input;
+import org.cactoos.bytes.BytesOf;
+import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
 
-public class JavaSourceClass {
+/**
+ * Java source class with ".java" extension.
+ *
+ * @since 0.1
+ */
+final class JavaSourceClass {
 
+    /**
+     * Source of Java class.
+     */
     private final Input java;
 
+    /**
+     * Constructor.
+     * @param resource Resource of Java class.
+     */
     JavaSourceClass(final String resource) {
         this(new ResourceOf(resource));
     }
 
-    JavaSourceClass(final Input java) {
+    /**
+     * Constructor.
+     * @param java Source of Java class.
+     */
+    private JavaSourceClass(final Input java) {
         this.java = java;
     }
 
+    /**
+     * Compile the Java class.
+     * @return Bytecode of compiled class.
+     * @todo #81:30min Compile Java class dynamically.
+     *  Currently, we don't compile Java classes dynamically.
+     *  Instead, we pass the source code directly.
+     *  This is a temporary solution. We need to compile the Java class
+     *  dynamically and pass the bytecode to the test.
+     *  When this is done, remove that puzzle from this method.
+     */
     byte[] compile() {
-        return new byte[0];
+        return new UncheckedBytes(new BytesOf(this.java)).asBytes();
     }
-
 }
