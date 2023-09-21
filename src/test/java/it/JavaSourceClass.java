@@ -49,6 +49,9 @@ import org.cactoos.text.UncheckedText;
 @SuppressWarnings("JTCOP.RuleCorrectTestName")
 final class JavaSourceClass {
 
+    /**
+     * Name of Java class.
+     */
     private final String name;
 
     /**
@@ -66,6 +69,7 @@ final class JavaSourceClass {
 
     /**
      * Constructor.
+     * @param filename Name of Java class.
      * @param java Source of Java class.
      */
     private JavaSourceClass(final String filename, final Input java) {
@@ -76,17 +80,11 @@ final class JavaSourceClass {
     /**
      * Compile the Java class.
      * @return Bytecode of compiled class.
-     * @todo #81:30min Compile Java class dynamically.
-     * Currently, we don't compile Java classes dynamically.
-     * Instead, we pass the source code directly.
-     * This is a temporary solution. We need to compile the Java class
-     * dynamically and pass the bytecode to the test.
-     * When this is done, remove that puzzle from this method.
      */
     byte[] compile() {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        BytecodeManager manager = new BytecodeManager(compiler);
-        boolean successful = compiler.getTask(
+        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        final BytecodeManager manager = new BytecodeManager(compiler);
+        final boolean successful = compiler.getTask(
             null,
             manager,
             null,
@@ -97,55 +95,92 @@ final class JavaSourceClass {
         if (successful) {
             return manager.bytecode();
         } else {
-            throw new IllegalStateException("Compilation failed.");
+            throw new IllegalStateException(
+                String.format("Compilation failed for class %s", this.name)
+            );
         }
     }
 
+    /**
+     * Name of Java class.
+     * @param resource Resource of Java class (full path in resources).
+     * @return Name of Java class.
+     */
     private static String filename(final String resource) {
         return resource.substring(resource.lastIndexOf('/') + 1);
     }
 
+    /**
+     * Compilation manager that stores the bytecode during compilation.
+     * @since 0.1.0
+     */
     private static final class BytecodeManager
         extends ForwardingJavaFileManager<StandardJavaFileManager> {
-        private AtomicReference<Bytecode> output;
 
-        private BytecodeManager(JavaCompiler compiler) {
+        /**
+         * Bytecode.
+         */
+        private final AtomicReference<Bytecode> output;
+
+        /**
+         * Constructor.
+         * @param compiler Java compiler.
+         */
+        private BytecodeManager(final JavaCompiler compiler) {
             this(
                 compiler.getStandardFileManager(
                     null,
                     Locale.getDefault(),
                     Charset.defaultCharset()
-                ));
+                )
+            );
         }
 
-        private BytecodeManager(StandardJavaFileManager manager) {
+        /**
+         * Constructor.
+         * @param manager Standard Java file manager.
+         */
+        private BytecodeManager(final StandardJavaFileManager manager) {
             super(manager);
             this.output = new AtomicReference<>();
         }
 
         @Override
         public JavaFileObject getJavaFileForOutput(
-            Location location,
-            String className,
-            JavaFileObject.Kind kind,
-            FileObject sibling
+            final Location location,
+            final String classname,
+            final JavaFileObject.Kind kind,
+            final FileObject sibling
         ) {
-            this.output.set(new Bytecode(className));
+            this.output.set(new Bytecode(classname));
             return this.output.get();
         }
 
+        /**
+         * Get the bytecode.
+         * @return Bytecode.
+         */
         byte[] bytecode() {
             return this.output.get().bytecode();
         }
     }
 
+    /**
+     * Java source code.
+     * @since 0.1.0
+     */
     private static final class SourceCode extends SimpleJavaFileObject {
 
+        /**
+         * Source code.
+         */
         private final Input src;
 
         /**
          * Construct a SimpleJavaFileObject of the given kind and with the
          * given URI.
+         * @param name Name of Java class.
+         * @param input Source of Java class.
          */
         SourceCode(final String name, final Input input) {
             super(URI.create(name), Kind.SOURCE);
@@ -153,15 +188,27 @@ final class JavaSourceClass {
         }
 
         @Override
-        public CharSequence getCharContent(final boolean ignoreEncodingErrors) {
+        public CharSequence getCharContent(final boolean ignore) {
             return new UncheckedText(new TextOf(this.src)).asString();
         }
     }
 
+    /**
+     * Bytecode of compiled class.
+     * @since 0.1.0
+     */
     private static final class Bytecode extends SimpleJavaFileObject {
+
+        /**
+         * Output stream.
+         */
         private final ByteArrayOutputStream output;
 
-        Bytecode(String name) {
+        /**
+         * Constructor.
+         * @param name Name of Java class.
+         */
+        Bytecode(final String name) {
             super(URI.create(String.format("%s%s", name, Kind.CLASS.extension)), Kind.CLASS);
             this.output = new ByteArrayOutputStream();
         }
@@ -171,6 +218,10 @@ final class JavaSourceClass {
             return this.output;
         }
 
+        /**
+         * Get the bytecode.
+         * @return Bytecode.
+         */
         byte[] bytecode() {
             return this.output.toByteArray();
         }
