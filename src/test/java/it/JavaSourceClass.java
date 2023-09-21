@@ -44,11 +44,12 @@ import org.cactoos.text.UncheckedText;
 
 /**
  * Java source class with ".java" extension.
- *
  * @since 0.1
  */
 @SuppressWarnings("JTCOP.RuleCorrectTestName")
 final class JavaSourceClass {
+
+    private final String name;
 
     /**
      * Source of Java class.
@@ -60,14 +61,15 @@ final class JavaSourceClass {
      * @param resource Resource of Java class.
      */
     JavaSourceClass(final String resource) {
-        this(new ResourceOf(resource));
+        this(JavaSourceClass.filename(resource), new ResourceOf(resource));
     }
 
     /**
      * Constructor.
      * @param java Source of Java class.
      */
-    private JavaSourceClass(final Input java) {
+    private JavaSourceClass(final String filename, final Input java) {
+        this.name = filename;
         this.java = java;
     }
 
@@ -75,11 +77,11 @@ final class JavaSourceClass {
      * Compile the Java class.
      * @return Bytecode of compiled class.
      * @todo #81:30min Compile Java class dynamically.
-     *  Currently, we don't compile Java classes dynamically.
-     *  Instead, we pass the source code directly.
-     *  This is a temporary solution. We need to compile the Java class
-     *  dynamically and pass the bytecode to the test.
-     *  When this is done, remove that puzzle from this method.
+     * Currently, we don't compile Java classes dynamically.
+     * Instead, we pass the source code directly.
+     * This is a temporary solution. We need to compile the Java class
+     * dynamically and pass the bytecode to the test.
+     * When this is done, remove that puzzle from this method.
      */
     byte[] compile() {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -90,13 +92,17 @@ final class JavaSourceClass {
             null,
             null,
             null,
-            Collections.singleton(new SourceCode(this.java))
+            Collections.singleton(new SourceCode(this.name, this.java))
         ).call();
         if (successful) {
             return manager.bytecode();
         } else {
             throw new IllegalStateException("Compilation failed.");
         }
+    }
+
+    private static String filename(final String resource) {
+        return resource.substring(resource.lastIndexOf('/') + 1);
     }
 
     private static final class BytecodeManager
@@ -106,10 +112,10 @@ final class JavaSourceClass {
         private BytecodeManager(JavaCompiler compiler) {
             this(
                 compiler.getStandardFileManager(
-                null,
-                Locale.getDefault(),
-                Charset.defaultCharset()
-            ));
+                    null,
+                    Locale.getDefault(),
+                    Charset.defaultCharset()
+                ));
         }
 
         private BytecodeManager(StandardJavaFileManager manager) {
@@ -141,11 +147,8 @@ final class JavaSourceClass {
          * Construct a SimpleJavaFileObject of the given kind and with the
          * given URI.
          */
-        SourceCode(final Input input) {
-            super(
-                URI.create(String.format("%s%s", "MethodByte", Kind.SOURCE.extension)),
-                Kind.SOURCE
-            );
+        SourceCode(final String name, final Input input) {
+            super(URI.create(name), Kind.SOURCE);
             this.src = input;
         }
 
