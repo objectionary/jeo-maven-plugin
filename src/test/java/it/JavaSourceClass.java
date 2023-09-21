@@ -82,19 +82,9 @@ final class JavaSourceClass {
      *  When this is done, remove that puzzle from this method.
      */
     byte[] compile() {
-        return this.compileCode();
-    }
-
-    private byte[] compileCode() {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        BytecodeFileManager manager = new BytecodeFileManager(
-            compiler.getStandardFileManager(
-                null,
-                Locale.getDefault(),
-                Charset.defaultCharset()
-            )
-        );
-        boolean compiledSuccessfully = compiler.getTask(
+        BytecodeManager manager = new BytecodeManager(compiler);
+        boolean successful = compiler.getTask(
             null,
             manager,
             null,
@@ -102,19 +92,27 @@ final class JavaSourceClass {
             null,
             Collections.singleton(new SourceCode(this.java))
         ).call();
-        if (compiledSuccessfully) {
-            final byte[] bytecode = manager.bytecode();
-            return bytecode;
+        if (successful) {
+            return manager.bytecode();
         } else {
             throw new IllegalStateException("Compilation failed.");
         }
     }
 
-    private static final class BytecodeFileManager
+    private static final class BytecodeManager
         extends ForwardingJavaFileManager<StandardJavaFileManager> {
         private AtomicReference<Bytecode> output;
 
-        BytecodeFileManager(StandardJavaFileManager manager) {
+        private BytecodeManager(JavaCompiler compiler) {
+            this(
+                compiler.getStandardFileManager(
+                null,
+                Locale.getDefault(),
+                Charset.defaultCharset()
+            ));
+        }
+
+        private BytecodeManager(StandardJavaFileManager manager) {
             super(manager);
             this.output = new AtomicReference<>();
         }
