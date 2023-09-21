@@ -23,10 +23,24 @@
  */
 package it;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.util.Collections;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
+import javax.tools.FileObject;
+import javax.tools.ForwardingJavaFileManager;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.SimpleJavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 import org.cactoos.Input;
-import org.cactoos.bytes.BytesOf;
-import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 
 /**
  * Java source class with ".java" extension.
@@ -68,6 +82,96 @@ final class JavaSourceClass {
      *  When this is done, remove that puzzle from this method.
      */
     byte[] compile() {
-        return new UncheckedBytes(new BytesOf(this.java)).asBytes();
+        return this.compileCode();
+    }
+
+    private byte[] compileCode() {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        BytecodeFileManager manager = new BytecodeFileManager(
+            compiler.getStandardFileManager(
+                null,
+                Locale.getDefault(),
+                Charset.defaultCharset()
+            )
+        );
+        boolean compiledSuccessfully = compiler.getTask(
+            null,
+            manager,
+            null,
+            null,
+            null,
+            Collections.singleton(new SourceCode(this.java))
+        ).call();
+        if (compiledSuccessfully) {
+            final byte[] bytecode = manager.bytecode();
+            return bytecode;
+        } else {
+            throw new IllegalStateException("Compilation failed.");
+        }
+    }
+
+    private static final class BytecodeFileManager
+        extends ForwardingJavaFileManager<StandardJavaFileManager> {
+        private AtomicReference<Bytecode> output;
+
+        BytecodeFileManager(StandardJavaFileManager manager) {
+            super(manager);
+            this.output = new AtomicReference<>();
+        }
+
+        @Override
+        public JavaFileObject getJavaFileForOutput(
+            Location location,
+            String className,
+            JavaFileObject.Kind kind,
+            FileObject sibling
+        ) {
+            this.output.set(new Bytecode(className));
+            return this.output.get();
+        }
+
+        byte[] bytecode() {
+            return this.output.get().bytecode();
+        }
+    }
+
+    private static final class SourceCode extends SimpleJavaFileObject {
+
+        private final Input src;
+
+        /**
+         * Construct a SimpleJavaFileObject of the given kind and with the
+         * given URI.
+         */
+        SourceCode(final Input input) {
+            super(
+                URI.create(String.format("%s%s", "MethodByte", Kind.SOURCE.extension)),
+                Kind.SOURCE
+            );
+            this.src = input;
+        }
+
+        @Override
+        public CharSequence getCharContent(final boolean ignoreEncodingErrors) {
+            return new UncheckedText(new TextOf(this.src)).asString();
+        }
+    }
+
+    private static final class Bytecode extends SimpleJavaFileObject {
+        private final ByteArrayOutputStream output;
+
+        Bytecode(String name) {
+            super(URI.create(String.format("%s%s", name, Kind.CLASS.extension)), Kind.CLASS);
+            this.output = new ByteArrayOutputStream();
+        }
+
+        @Override
+        public OutputStream openOutputStream() {
+            return this.output;
+        }
+
+        byte[] bytecode() {
+            return this.output.toByteArray();
+        }
     }
 }

@@ -30,6 +30,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+import org.cactoos.bytes.BytesOf;
+import org.cactoos.bytes.UncheckedBytes;
+import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -57,7 +60,6 @@ final class JavaToEoTest {
 
     @ParameterizedTest(name = "{index} => {0}")
     @MethodSource("arguments")
-    @Disabled("The test is disabled because it is not ready yet, see the puzzle description above")
     void compilesJavaAndTranspilesBytecodeToEo(final Resource resource) {
         final String eolang = resource.eolang();
         final String java = resource.java();
