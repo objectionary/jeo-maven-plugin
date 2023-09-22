@@ -23,6 +23,7 @@
  */
 package it;
 
+import com.jcabi.xml.XML;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -39,7 +40,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Integration test that checks that the Java code is transpiled to EO code correctly.
- *
  * @since 0.1
  */
 final class JavaToEoTest {
@@ -54,13 +54,15 @@ final class JavaToEoTest {
     void compilesJavaAndTranspilesBytecodeToEo(final Resource resource) {
         final String eolang = resource.eolang();
         final String java = resource.java();
+        final XML actual = new BytecodeRepresentation(new JavaSourceClass(java).compile()).toEO();
         MatcherAssert.assertThat(
             String.format(
-                "The transpiled EO code is not as expected, we compared the next files:%n%s%n%s",
+                "The transpiled EO code is not as expected, we compared the next files:%n%s%n%s%nReceived XML:%n%n%s%n",
                 eolang,
-                java
+                java,
+                actual
             ),
-            new BytecodeRepresentation(new JavaSourceClass(java).compile()).toEO(),
+            actual,
             Matchers.equalTo(new EoSource(eolang).parse())
         );
     }

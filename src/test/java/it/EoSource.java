@@ -26,6 +26,7 @@ package it;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import org.cactoos.Output;
 import org.cactoos.io.ResourceOf;
@@ -33,7 +34,6 @@ import org.eolang.parser.Syntax;
 
 /**
  * EO source.
- *
  * @since 0.1
  */
 @SuppressWarnings("JTCOP.RuleCorrectTestName")
@@ -57,15 +57,21 @@ final class EoSource {
      * @return XMIR.
      */
     XML parse() {
-        final ResourceOf eolang = new ResourceOf(this.resource);
-        final XmlOutput output = new XmlOutput();
-        new Syntax("scenario", eolang, output);
-        return output.xml();
+        try {
+            final ResourceOf eolang = new ResourceOf(this.resource);
+            final XmlOutput output = new XmlOutput();
+            new Syntax("scenario", eolang, output).parse();
+            return output.xml();
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format("Can't parse '%s'", this.resource),
+                exception
+            );
+        }
     }
 
     /**
      * XML output.
-     *
      * @since 0.1.0
      */
     private static final class XmlOutput implements Output {
