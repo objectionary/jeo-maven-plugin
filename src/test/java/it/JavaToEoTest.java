@@ -33,7 +33,6 @@ import java.util.stream.Stream;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -42,11 +41,6 @@ import org.junit.jupiter.params.provider.MethodSource;
  * Integration test that checks that the Java code is transpiled to EO code correctly.
  *
  * @since 0.1
- * @todo #81:30min Enable the test in JavaToEoTest.
- *  The test is disabled because we didn't implemented correct transpilation of the Java code
- *  to EO code. When it is done, the test should be enabled and should pass.
- *  The test should check that the Java code is transpiled to EO code correctly.
- *  Remove that puzzle when the test is enabled.
  */
 final class JavaToEoTest {
 
@@ -57,7 +51,6 @@ final class JavaToEoTest {
 
     @ParameterizedTest(name = "{index} => {0}")
     @MethodSource("arguments")
-    @Disabled
     void compilesJavaAndTranspilesBytecodeToEo(final Resource resource) {
         final String eolang = resource.eolang();
         final String java = resource.java();
