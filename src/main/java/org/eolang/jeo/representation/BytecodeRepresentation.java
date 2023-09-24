@@ -25,6 +25,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -40,6 +41,7 @@ import org.cactoos.io.InputOf;
 import org.eolang.jeo.Representation;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
@@ -47,7 +49,6 @@ import org.xembly.Xembler;
 
 /**
  * Intermediate representation of a class files which can be optimized from bytecode.
- *
  * @since 0.1.0
  */
 @ToString
@@ -113,7 +114,6 @@ public final class BytecodeRepresentation implements Representation {
 
     /**
      * Class name.
-     *
      * @since 0.1.0
      */
     private class ClassName extends ClassVisitor {
@@ -237,9 +237,42 @@ public final class BytecodeRepresentation implements Representation {
                 .add("license").up()
                 .add("metas").up()
                 .attr("ms", System.currentTimeMillis())
-                .add("objects")
-                .add("o");
+                .add("objects");
+            this.clazz(name);
             super.visit(version, access, name, signature, supername, interfaces);
+        }
+
+        @Override
+        public MethodVisitor visitMethod(final int access, final String name,
+            final String descriptor,
+            final String signature, final String[] exceptions
+        ) {
+            this.method(name);
+            return super.visitMethod(access, name, descriptor, signature, exceptions);
+        }
+
+
+        @Override
+        public void visitEnd() {
+            this.directives.up();
+            super.visitEnd();
+        }
+
+        private void clazz(final String name) {
+            this.directives.add("o")
+                .attr("abstract", "")
+                .attr("name", String.format("class__%s", name));
+        }
+
+        //todo: init
+        private void method(final String name) {
+            if (!name.equals("<init>")) {
+                this.directives.add("o")
+                    .attr("abstract", "")
+                    .attr("name", name)
+                    .up();
+
+            }
         }
     }
 }
