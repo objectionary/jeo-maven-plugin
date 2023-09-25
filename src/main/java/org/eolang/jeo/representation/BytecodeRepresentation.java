@@ -315,13 +315,13 @@ public final class BytecodeRepresentation implements Representation {
         public void visitFieldInsn(final int opcode, final String owner, final String name,
             final String descriptor
         ) {
-            this.opcode(opcode);
+            this.opcode(opcode, String.format("%s.%s", owner, name));
             super.visitFieldInsn(opcode, owner, name, descriptor);
         }
 
         @Override
         public void visitIntInsn(final int opcode, final int operand) {
-            this.opcode(opcode);
+            this.opcode(opcode, operand);
             super.visitIntInsn(opcode, operand);
         }
 
@@ -333,13 +333,13 @@ public final class BytecodeRepresentation implements Representation {
 
         @Override
         public void visitTypeInsn(final int opcode, final String type) {
-            this.opcode(opcode);
+            this.opcode(opcode, type);
             super.visitTypeInsn(opcode, type);
         }
 
         @Override
         public void visitVarInsn(final int opcode, final int varIndex) {
-            this.opcode(opcode);
+            this.opcode(opcode, varIndex);
             super.visitVarInsn(opcode, varIndex);
         }
 
@@ -351,23 +351,37 @@ public final class BytecodeRepresentation implements Representation {
             final String descriptor,
             final boolean isInterface
         ) {
-            this.opcode(opcode);
+            this.opcode(opcode, String.format("%s.%s", owner, name));
             super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
         }
 
         @Override
         public void visitLdcInsn(final Object value) {
-            this.opcode(Opcodes.LDC);
+            this.opcode(Opcodes.LDC, value);
             super.visitLdcInsn(value);
         }
 
-        private void opcode(final int opcode) {
+        private void opcode(final int opcode, final Object... operands) {
             this.directives.add("o")
                 .attr("name", new OpcodeName(opcode).asString())
-                .attr("base", "opcode")
-                .up();
+                .attr("base", "opcode");
+            for (final Object operand : operands) {
+                if (operand instanceof String) {
+                    this.directives.add("o")
+                        .attr("base", "string")
+                        .attr("data", "bytes")
+                        .set(((String) operand).replace('/', '.'))
+                        .up();
+                } else {
+                    this.directives.add("o")
+                        .attr("base", "int")
+                        .attr("data", "bytes")
+                        .set(operand)
+                        .up();
+                }
+            }
+            this.directives.up();
         }
-
 
         @Override
         public void visitEnd() {
@@ -375,6 +389,4 @@ public final class BytecodeRepresentation implements Representation {
             super.visitEnd();
         }
     }
-
-
 }
