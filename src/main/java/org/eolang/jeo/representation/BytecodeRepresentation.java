@@ -25,7 +25,6 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -39,10 +38,13 @@ import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
 import org.eolang.jeo.Representation;
+import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -242,12 +244,36 @@ public final class BytecodeRepresentation implements Representation {
             super.visit(version, access, name, signature, supername, interfaces);
         }
 
+        //todo: init
+        //todo: method parameters
         @Override
-        public MethodVisitor visitMethod(final int access, final String name,
+        public MethodVisitor visitMethod(
+            final int access,
+            final String name,
             final String descriptor,
-            final String signature, final String[] exceptions
+            final String signature,
+            final String[] exceptions
         ) {
-            this.method(name);
+            if (!name.equals("<init>")) {
+                final Type type = Type.getMethodType(descriptor);
+                final Type[] argumentTypes = type.getArgumentTypes();
+                this.directives.add("o")
+                    .attr("abstract", "")
+                    .attr("name", name);
+                if (argumentTypes.length > 0) {
+                    this.directives.add("o")
+                        .attr("name", "args")
+                        .up();
+                }
+                this.directives.add("o")
+                    .attr("base", "seq")
+                    .attr("name", "@");
+                final MethodPrinter methodPrinter = new MethodPrinter(
+                    this.directives,
+                    super.visitMethod(access, name, descriptor, signature, exceptions)
+                );
+                return methodPrinter;
+            }
             return super.visitMethod(access, name, descriptor, signature, exceptions);
         }
 
@@ -263,16 +289,84 @@ public final class BytecodeRepresentation implements Representation {
                 .attr("abstract", "")
                 .attr("name", String.format("class__%s", name));
         }
+    }
 
-        //todo: init
-        private void method(final String name) {
-            if (!name.equals("<init>")) {
-                this.directives.add("o")
-                    .attr("abstract", "")
-                    .attr("name", name)
-                    .up();
 
-            }
+    private final static class MethodPrinter extends MethodVisitor {
+
+        private final Directives directives;
+
+        MethodPrinter(
+            final Directives directives,
+            final MethodVisitor visitor
+        ) {
+            super(Opcodes.ASM9, visitor);
+            this.directives = directives;
+        }
+
+        @Override
+        public void visitInsn(final int opcode) {
+            this.opcode(opcode);
+            super.visitInsn(opcode);
+        }
+
+        @Override
+        public void visitFieldInsn(final int opcode, final String owner, final String name,
+            final String descriptor
+        ) {
+            this.opcode(opcode);
+            super.visitFieldInsn(opcode, owner, name, descriptor);
+        }
+
+        @Override
+        public void visitIntInsn(final int opcode, final int operand) {
+            this.opcode(opcode);
+            super.visitIntInsn(opcode, operand);
+        }
+
+        @Override
+        public void visitJumpInsn(final int opcode, final Label label) {
+            this.opcode(opcode);
+            super.visitJumpInsn(opcode, label);
+        }
+
+        @Override
+        public void visitTypeInsn(final int opcode, final String type) {
+            this.opcode(opcode);
+            super.visitTypeInsn(opcode, type);
+        }
+
+        @Override
+        public void visitVarInsn(final int opcode, final int varIndex) {
+            this.opcode(opcode);
+            super.visitVarInsn(opcode, varIndex);
+        }
+
+        @Override
+        public void visitMethodInsn(
+            final int opcode,
+            final String owner,
+            final String name,
+            final String descriptor,
+            final boolean isInterface
+        ) {
+            this.opcode(opcode);
+            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+        }
+
+
+        private void opcode(final int opcode) {
+            this.directives.add("o")
+                .attr("name", "opcode")
+                .attr("base", opcode)
+                .up();
+        }
+
+
+        @Override
+        public void visitEnd() {
+            this.directives.up().up();
+            super.visitEnd();
         }
     }
 }
