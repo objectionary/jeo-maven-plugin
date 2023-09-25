@@ -38,7 +38,6 @@ import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
 import org.eolang.jeo.Representation;
-import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
@@ -51,6 +50,8 @@ import org.xembly.Xembler;
 
 /**
  * Intermediate representation of a class files which can be optimized from bytecode.
+ * In order to implement this class you can also use that site to check if bytecode is correct:
+ * <a href="https://godbolt.org">https://godbolt.org/</a>
  * @since 0.1.0
  */
 @ToString
@@ -354,11 +355,16 @@ public final class BytecodeRepresentation implements Representation {
             super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
         }
 
+        @Override
+        public void visitLdcInsn(final Object value) {
+            this.opcode(Opcodes.LDC);
+            super.visitLdcInsn(value);
+        }
 
         private void opcode(final int opcode) {
             this.directives.add("o")
-                .attr("name", "opcode")
-                .attr("base", opcode)
+                .attr("name", new OpcodeName(opcode).asString())
+                .attr("base", "opcode")
                 .up();
         }
 
@@ -369,4 +375,6 @@ public final class BytecodeRepresentation implements Representation {
             super.visitEnd();
         }
     }
+
+
 }
