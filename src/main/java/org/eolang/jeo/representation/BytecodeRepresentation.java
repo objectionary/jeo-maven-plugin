@@ -123,6 +123,14 @@ public final class BytecodeRepresentation implements Representation {
     /**
      * Class name.
      * @since 0.1.0
+     * @todo #84:30min Handle constructors in classes.
+     *  Right now we just skip constructors. We should handle them in order to
+     *  build correct XML representation of the class. When the method is ready
+     *  remove that puzzle.
+     * @todo #84:30min Handle method parameters.
+     *  Right now we just skip method parameters. We should handle them in order to
+     *  build correct XML representation of the class. When the method is ready
+     *  remove that puzzle.
      */
     private class ClassName extends ClassVisitor {
 
@@ -252,27 +260,6 @@ public final class BytecodeRepresentation implements Representation {
             super.visit(version, access, name, signature, supername, interfaces);
         }
 
-        /**
-         * Visit Method.
-         * @param access the method's access flags (see {@link Opcodes}). This parameter also indicates if
-         * the method is synthetic and/or deprecated.
-         * @param name the method's name.
-         * @param descriptor the method's descriptor (see {@link Type}).
-         * @param signature the method's signature. May be {@literal null} if the method parameters,
-         * return type and exceptions do not use generic types.
-         * @param exceptions the internal names of the method's exception classes (see {@link
-         * Type#getInternalName()}). May be {@literal null}.
-         * @return an object to visit the byte code of the method.
-         * @todo #84:30min Handle constructors in classes.
-         *  Right now we just skip constructors. We should handle them in order to
-         *  build correct XML representation of the class. When the method is ready
-         *  remove that puzzle.
-         * @todo #84:30min Handle method parameters.
-         *  Right now we just skip method parameters. We should handle them in order to
-         *  build correct XML representation of the class. When the method is ready
-         *  remove that puzzle.
-         */
-        //todo: method parameters
         @Override
         public MethodVisitor visitMethod(
             final int access,

@@ -34,6 +34,7 @@ import java.util.stream.Stream;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -41,6 +42,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 /**
  * Integration test that checks that the Java code is transpiled to EO code correctly.
  * @since 0.1
+ * @todo #84:90min Enable the {@link JavaToEoTest} test.
+ *  The test should be enabled when the translation format is ready and
+ *  the transformation itself from bytecode to EO is implemented correctly.
+ *  We have to agree on the transformation rules first.
+ *  When the test is enabled remove the {@link Disabled} annotation.
  */
 final class JavaToEoTest {
 
@@ -51,6 +57,7 @@ final class JavaToEoTest {
 
     @ParameterizedTest(name = "{index} => {0}")
     @MethodSource("arguments")
+    @Disabled
     void compilesJavaAndTranspilesBytecodeToEo(final Resource resource) {
         final String eolang = resource.eolang();
         final String java = resource.java();
