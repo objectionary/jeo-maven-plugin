@@ -55,7 +55,7 @@ import org.xembly.Xembler;
  * @since 0.1.0
  */
 @ToString
-@SuppressWarnings("PMD.UseObjectForClearerAPI")
+@SuppressWarnings({"PMD.UseObjectForClearerAPI", "PMD.AvoidDuplicateLiterals"})
 public final class BytecodeRepresentation implements Representation {
 
     /**
@@ -241,7 +241,9 @@ public final class BytecodeRepresentation implements Representation {
                 .add("metas").up()
                 .attr("ms", System.currentTimeMillis())
                 .add("objects");
-            this.clazz(name);
+            this.directives.add("o")
+                .attr("abstract", "")
+                .attr("name", String.format("class__%s", name));
             super.visit(version, access, name, signature, supername, interfaces);
         }
 
@@ -255,13 +257,14 @@ public final class BytecodeRepresentation implements Representation {
             final String signature,
             final String[] exceptions
         ) {
-            if (!name.equals("<init>")) {
-                final Type type = Type.getMethodType(descriptor);
-                final Type[] argumentTypes = type.getArgumentTypes();
+            final MethodVisitor result;
+            if (name.equals("<init>")) {
+                result = super.visitMethod(access, name, descriptor, signature, exceptions);
+            } else {
                 this.directives.add("o")
                     .attr("abstract", "")
                     .attr("name", name);
-                if (argumentTypes.length > 0) {
+                if (Type.getMethodType(descriptor).getArgumentTypes().length > 0) {
                     this.directives.add("o")
                         .attr("name", "args")
                         .up();
@@ -269,34 +272,38 @@ public final class BytecodeRepresentation implements Representation {
                 this.directives.add("o")
                     .attr("base", "seq")
                     .attr("name", "@");
-                final MethodPrinter methodPrinter = new MethodPrinter(
+                result = new MethodPrinter(
                     this.directives,
                     super.visitMethod(access, name, descriptor, signature, exceptions)
                 );
-                return methodPrinter;
             }
-            return super.visitMethod(access, name, descriptor, signature, exceptions);
+            return result;
         }
-
 
         @Override
         public void visitEnd() {
             this.directives.up();
             super.visitEnd();
         }
-
-        private void clazz(final String name) {
-            this.directives.add("o")
-                .attr("abstract", "")
-                .attr("name", String.format("class__%s", name));
-        }
     }
 
+    /**
+     * Method printer.
+     * ASM method visitor which scans the method and builds Xembly directives.
+     * @since 0.1
+     */
+    private static final class MethodPrinter extends MethodVisitor {
 
-    private final static class MethodPrinter extends MethodVisitor {
-
+        /**
+         * Xembly directives.
+         */
         private final Directives directives;
 
+        /**
+         * Constructor.
+         * @param directives Xembly directives
+         * @param visitor Method visitor
+         */
         MethodPrinter(
             final Directives directives,
             final MethodVisitor visitor
@@ -312,7 +319,10 @@ public final class BytecodeRepresentation implements Representation {
         }
 
         @Override
-        public void visitFieldInsn(final int opcode, final String owner, final String name,
+        public void visitFieldInsn(
+            final int opcode,
+            final String owner,
+            final String name,
             final String descriptor
         ) {
             this.opcode(opcode, String.format("%s.%s", owner, name));
@@ -338,9 +348,9 @@ public final class BytecodeRepresentation implements Representation {
         }
 
         @Override
-        public void visitVarInsn(final int opcode, final int varIndex) {
-            this.opcode(opcode, varIndex);
-            super.visitVarInsn(opcode, varIndex);
+        public void visitVarInsn(final int opcode, final int varindex) {
+            this.opcode(opcode, varindex);
+            super.visitVarInsn(opcode, varindex);
         }
 
         @Override
@@ -349,10 +359,10 @@ public final class BytecodeRepresentation implements Representation {
             final String owner,
             final String name,
             final String descriptor,
-            final boolean isInterface
+            final boolean isinterface
         ) {
             this.opcode(opcode, String.format("%s.%s", owner, name));
-            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+            super.visitMethodInsn(opcode, owner, name, descriptor, isinterface);
         }
 
         @Override
@@ -361,6 +371,17 @@ public final class BytecodeRepresentation implements Representation {
             super.visitLdcInsn(value);
         }
 
+        @Override
+        public void visitEnd() {
+            this.directives.up().up();
+            super.visitEnd();
+        }
+
+        /**
+         * Add opcode to the directives.
+         * @param opcode Opcode
+         * @param operands Operands
+         */
         private void opcode(final int opcode, final Object... operands) {
             this.directives.add("o")
                 .attr("name", new OpcodeName(opcode).asString())
@@ -381,12 +402,6 @@ public final class BytecodeRepresentation implements Representation {
                 }
             }
             this.directives.up();
-        }
-
-        @Override
-        public void visitEnd() {
-            this.directives.up().up();
-            super.visitEnd();
         }
     }
 }
