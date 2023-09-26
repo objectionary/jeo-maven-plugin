@@ -43,11 +43,6 @@ import org.xembly.Xembler;
  * Intermediate representation of a class files which can be optimized from bytecode.
  * In order to implement this class you can also use that site to check if bytecode is correct:
  * <a href="https://godbolt.org">https://godbolt.org/</a>
- * @todo #84:90min Refactor BytecodeRepresentation class.
- * The class is too big and it's hard to understand what it does. It's better to split it
- * into smaller classes. The class should be refactored in order to be more readable.
- * Maybe it makes sense to move all ASM visitors into a separate package.
- * When the class is refactored remove that puzzle.
  * @since 0.1.0
  */
 @ToString
