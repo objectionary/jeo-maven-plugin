@@ -35,14 +35,6 @@ import org.xembly.Xembler;
 /**
  * Test case for {@link ClassDirectives}.
  * @since 0.1.0
- * @todo #95:30min Simplify bytecode generation for tests.
- *  Right now we use ASM to generate bytecode for tests, which is not very
- *  convenient. We should simplify it by using some kind of programmable API or DSL
- *  to generate bytecode. For example, we can create several utility classes and use them in:
- *  - {@link ClassDirectivesTest}
- *  - {@link ClassNameTest}
- *  And others.
- *  When we have this, we can remove that puzzle.
  */
 class ClassDirectivesTest {
 
