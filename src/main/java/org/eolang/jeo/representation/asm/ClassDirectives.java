@@ -1,3 +1,26 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2016-2023 Objectionary.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package org.eolang.jeo.representation.asm;
 
 import java.time.ZoneOffset;
@@ -24,7 +47,8 @@ import org.xembly.Directives;
  *  build correct XML representation of the class. When the method is ready
  *  remove that puzzle.
  */
-public class ClassDirectives extends ClassVisitor implements Iterable<Directive> {
+@SuppressWarnings({"PMD.UseObjectForClearerAPI", "PMD.AvoidDuplicateLiterals"})
+public final class ClassDirectives extends ClassVisitor implements Iterable<Directive> {
 
     /**
      * Bytecode listing.
@@ -38,6 +62,7 @@ public class ClassDirectives extends ClassVisitor implements Iterable<Directive>
 
     /**
      * Constructor.
+     * @param listing Bytecode listing.
      */
     public ClassDirectives(final String listing) {
         this(Opcodes.ASM9, new Directives(), listing);
@@ -47,6 +72,7 @@ public class ClassDirectives extends ClassVisitor implements Iterable<Directive>
      * Constructor.
      * @param api ASM API version.
      * @param directives Xembly directives.
+     * @param listing Bytecode listing.
      */
     private ClassDirectives(
         final int api,

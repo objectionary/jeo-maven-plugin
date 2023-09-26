@@ -46,7 +46,7 @@ import org.xembly.Xembler;
  * @since 0.1.0
  */
 @ToString
-@SuppressWarnings({"PMD.UseObjectForClearerAPI", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings("PMD.UseObjectForClearerAPI")
 public final class BytecodeRepresentation implements Representation {
 
     /**
@@ -107,5 +107,4 @@ public final class BytecodeRepresentation implements Representation {
     public byte[] toBytecode() {
         return new UncheckedBytes(new BytesOf(this.input)).asBytes();
     }
-
 }
