@@ -50,17 +50,8 @@ class ClassDirectivesTest {
 
     @Test
     void parsesSimpleClassWithoutConstructor() throws ImpossibleModificationException {
-        final ClassWriter writer = new ClassWriter(0);
-        writer.visit(
-            Opcodes.ASM9,
-            Opcodes.ACC_PUBLIC,
-            "Simple",
-            null,
-            "java/lang/Object",
-            null
-        );
         final ClassDirectives directives = new ClassDirectives();
-        new ClassReader(writer.toByteArray()).accept(directives, 0);
+        new ClassReader(new BytecodeClass().bytes()).accept(directives, 0);
         MatcherAssert.assertThat(
             "Can't parse simple class without constructor",
             new XMLDocument(new Xembler(directives).xml()),
@@ -70,24 +61,9 @@ class ClassDirectivesTest {
 
     @Test
     void parsesSimpleClassWithMethod() throws ImpossibleModificationException {
-        final ClassWriter writer = new ClassWriter(0);
-        writer.visit(
-            Opcodes.ASM9,
-            Opcodes.ACC_PUBLIC,
-            "WithMethod",
-            null,
-            "java/lang/Object",
-            null
-        );
-        writer.visitMethod(
-            Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
-            "main",
-            "([Ljava/lang/String;)V",
-            null,
-            null
-        );
         final ClassDirectives directives = new ClassDirectives();
-        new ClassReader(writer.toByteArray()).accept(directives, 0);
+        new ClassReader(new BytecodeClass("WithMethod").withMethod("main").bytes())
+            .accept(directives, 0);
         MatcherAssert.assertThat(
             "Can't parse simple class with method",
             new XMLDocument(new Xembler(directives).xml()),
