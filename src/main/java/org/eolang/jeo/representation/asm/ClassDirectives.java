@@ -71,6 +71,10 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
         this(Opcodes.ASM9, new Directives(), listing);
     }
 
+    ClassDirectives() {
+        this("");
+    }
+
     /**
      * Constructor.
      * @param api ASM API version.
