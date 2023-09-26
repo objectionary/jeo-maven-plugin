@@ -32,7 +32,7 @@ import org.objectweb.asm.Opcodes;
  * Class useful for generating bytecode for testing purposes.
  * @since 0.1.0
  */
-@SuppressWarnings("JTCOP")
+@SuppressWarnings({"JTCOP.RuleAllTestsHaveProductionClass", "JTCOP.RuleCorrectTestName"})
 final class BytecodeClass {
 
     /**
