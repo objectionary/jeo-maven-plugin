@@ -42,7 +42,7 @@ class ClassDirectivesTest {
 
     @Test
     void parsesSimpleClassWithoutConstructor() throws ImpossibleModificationException {
-        ClassWriter writer = new ClassWriter(0);
+        final ClassWriter writer = new ClassWriter(0);
         writer.visit(
             Opcodes.ASM9,
             Opcodes.ACC_PUBLIC,
@@ -62,7 +62,7 @@ class ClassDirectivesTest {
 
     @Test
     void parsesSimpleClassWithMethod() throws ImpossibleModificationException {
-        ClassWriter writer = new ClassWriter(0);
+        final ClassWriter writer = new ClassWriter(0);
         writer.visit(
             Opcodes.ASM9,
             Opcodes.ACC_PUBLIC,
