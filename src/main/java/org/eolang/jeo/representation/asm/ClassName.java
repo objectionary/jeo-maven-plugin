@@ -31,6 +31,9 @@ import org.objectweb.asm.Opcodes;
 /**
  * Class name.
  * @since 0.1.0
+ * @todo #89:30min Add unit test for ClassName class.
+ *  The unit test should check that the class name is correct.
+ *  When the unit test is ready remove that puzzle.
  */
 @SuppressWarnings("PMD.UseObjectForClearerAPI")
 public final class ClassName extends ClassVisitor {

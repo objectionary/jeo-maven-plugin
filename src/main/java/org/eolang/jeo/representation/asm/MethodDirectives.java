@@ -36,6 +36,9 @@ import org.xembly.Directives;
  *  Right now we just skip method parameters. We should handle them in order to
  *  build correct XML representation of the class. When the method is ready
  *  remove that puzzle.
+ * @todo #89:30min Add unit test for MethodDirectives class.
+ *  The unit test should check that the directives are correct.
+ *  When the unit test is ready remove that puzzle.
  */
 public final class MethodDirectives extends MethodVisitor {
 

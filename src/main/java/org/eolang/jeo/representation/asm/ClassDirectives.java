@@ -46,6 +46,9 @@ import org.xembly.Directives;
  *  Right now we just skip constructors. We should handle them in order to
  *  build correct XML representation of the class. When the method is ready
  *  remove that puzzle.
+ * @todo #89:30min Add unit test for ClassDirectives class.
+ *  The unit test should check that the directives are correct.
+ *  When the unit test is ready remove that puzzle.
  */
 @SuppressWarnings({"PMD.UseObjectForClearerAPI", "PMD.AvoidDuplicateLiterals"})
 public final class ClassDirectives extends ClassVisitor implements Iterable<Directive> {
