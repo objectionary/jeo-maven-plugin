@@ -23,9 +23,6 @@
  */
 package org.eolang.jeo.representation.asm;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.util.StringJoiner;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -138,42 +135,9 @@ public final class MethodDirectives extends MethodVisitor {
             .attr("name", new OpcodeName(opcode).asString())
             .attr("base", "opcode");
         for (final Object operand : operands) {
-            if (operand instanceof String) {
-                this.directives.add("o")
-                    .attr("base", "string")
-                    .attr("data", "bytes")
-                    .set(
-                        MethodDirectives.bytesToHex(
-                            ((String) operand).replace('/', '.')
-                                .getBytes(StandardCharsets.UTF_8)
-                        )
-                    )
-                    .up();
-            } else {
-                this.directives.add("o")
-                    .attr("base", "int")
-                    .attr("data", "bytes")
-                    .set(bytesToHex(ByteBuffer
-                        .allocate(Long.BYTES)
-                        .putLong((int) operand)
-                        .array()))
-                    .up();
-            }
+            this.directives.append(new EoData(operand).directives());
         }
         this.directives.up();
     }
-
-    /**
-     * Bytes to HEX.
-     *
-     * @param bytes Bytes.
-     * @return Hexadecimal value as string.
-     */
-    private static String bytesToHex(final byte... bytes) {
-        final StringJoiner out = new StringJoiner(" ");
-        for (final byte bty : bytes) {
-            out.add(String.format("%02X", bty));
-        }
-        return out.toString();
-    }
 }
+

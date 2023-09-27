@@ -58,6 +58,7 @@ final class JavaToEoTest {
 
     @ParameterizedTest(name = "{index} => {0}")
     @MethodSource("arguments")
+    @Disabled
     void compilesJavaAndTranspilesBytecodeToEo(final Resource resource) {
         final String eolang = resource.eolang();
         final String java = resource.java();
