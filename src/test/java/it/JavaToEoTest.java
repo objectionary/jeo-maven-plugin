@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.BytecodeRepresentation;
+import org.eolang.parser.XMIR;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Disabled;
@@ -57,17 +58,17 @@ final class JavaToEoTest {
 
     @ParameterizedTest(name = "{index} => {0}")
     @MethodSource("arguments")
-    @Disabled
     void compilesJavaAndTranspilesBytecodeToEo(final Resource resource) {
         final String eolang = resource.eolang();
         final String java = resource.java();
         final XML actual = new BytecodeRepresentation(new JavaSourceClass(java).compile()).toEO();
         MatcherAssert.assertThat(
             String.format(
-                "The transpiled EO code is not as expected, we compared the next files:%n%s%n%s%nReceived XML:%n%n%s%n",
+                "The transpiled EO code is not as expected, we compared the next files:%n%s%n%s%nReceived XML:%n%n%s%nEO:%n%s%n",
                 eolang,
                 java,
-                actual
+                actual,
+                new XMIR(actual).toEO()
             ),
             actual,
             Matchers.equalTo(new EoSource(eolang).parse())
