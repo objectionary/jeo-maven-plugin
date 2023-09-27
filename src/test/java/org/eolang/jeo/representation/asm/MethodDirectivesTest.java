@@ -23,17 +23,39 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XMLDocument;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Test;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.xembly.Xembler;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test case for {@link MethodDirectives}.
+ * We create {@link MethodDirectives} only in the context
+ * of using {@link ClassDirectives} in other words, {@link MethodDirectives} can't be createad
+ * without {@link ClassDirectives} and it is the main reason why in all the test we create
+ * {@link ClassDirectives}.
  *
  * @since 0.1.0
  */
 class MethodDirectivesTest {
 
+    @Test
     void parsesMethodInstructions() {
-        fail();
+        final ClassDirectives visitor = new ClassDirectives();
+        new ClassReader(new BytecodeClass()
+            .withMethod("main")
+            .bytes()).accept(visitor, 0);
+        MatcherAssert.assertThat(
+            "Can't find a method in the final XML by using XPath",
+            new XMLDocument(new Xembler(visitor).xmlQuietly()),
+            XhtmlMatchers.hasXPath("/program/objects/o/o[@name='main']")
+        );
     }
 
     void parsesMethodParameters() {
