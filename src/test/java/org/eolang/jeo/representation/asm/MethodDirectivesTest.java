@@ -27,6 +27,7 @@ import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
@@ -41,6 +42,16 @@ import static org.junit.jupiter.api.Assertions.*;
  * {@link ClassDirectives}.
  *
  * @since 0.1.0
+ * @todo #97:60min Add more user-friendly Hamcrest matchers.
+ *  Right now, we have tests with complex XPath strings that check
+ *  the resulting XML, which are hard to read and understand. I believe
+ *  we need to simplify these checks. Perhaps, we should introduce a new
+ *  Hamcrest matcher. Once completed, remove this puzzle.
+ * @todo #97:60min Implement passing parameters to methods.
+ *  Right now, we parse methods without parameters. We need to implement
+ *  parsing of methods with parameters. Once completed, remove this puzzle.
+ *  Don't forget to add unit tests for this feature.
+ *  See {@link org.eolang.jeo.representation.asm.MethodDirectivesTest#parsesMethodParameters()}.
  */
 class MethodDirectivesTest {
 
@@ -71,14 +82,20 @@ class MethodDirectivesTest {
         );
     }
 
+    @Test
+    @Disabled("We have to implement method parameters parsing first")
     void parsesMethodParameters() {
         fail();
     }
 
+    @Test
+    @Disabled("We have to implement constructor parsing first")
     void parsesConstructor() {
         fail();
     }
 
+    @Test
+    @Disabled("We have to implement constructor with parameters parsing first")
     void parsesConstructorWithParameters() {
         fail();
     }
