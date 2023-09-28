@@ -119,7 +119,7 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
             .add("objects");
         this.directives.add("o")
             .attr("abstract", "")
-            .attr("name", String.format("class__%s", name));
+            .attr("name", this.className(access, name));
         super.visit(version, access, name, signature, supername, interfaces);
     }
 
@@ -137,7 +137,7 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
         } else {
             this.directives.add("o")
                 .attr("abstract", "")
-                .attr("name", name);
+                .attr("name", this.methodName(access, name, descriptor));
             if (Type.getMethodType(descriptor).getArgumentTypes().length > 0) {
                 this.directives.add("o")
                     .attr("name", "args")
@@ -163,5 +163,18 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
     @Override
     public Iterator<Directive> iterator() {
         return this.directives.iterator();
+    }
+
+    private String className(final int access, final String name) {
+        return String.format("%d__%s", access, name);
+    }
+
+    private String methodName(final int access, final String name, final String descriptor) {
+        return String.format(
+            "%d__%s__%s",
+            access,
+            name,
+            descriptor
+        );
     }
 }

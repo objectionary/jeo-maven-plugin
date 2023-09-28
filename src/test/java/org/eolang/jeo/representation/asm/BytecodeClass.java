@@ -279,9 +279,9 @@ public final class BytecodeClass {
                     case Opcodes.GETSTATIC:
                         visitor.visitFieldInsn(
                             Opcodes.GETSTATIC,
-                            String.valueOf(this.args.get(0)),
-                            String.valueOf(this.args.get(1)),
-                            String.valueOf(this.args.get(2))
+                            this.args.get(0).toString(),
+                            this.args.get(1).toString(),
+                            this.args.get(2).toString()
                         );
                         break;
                     default:

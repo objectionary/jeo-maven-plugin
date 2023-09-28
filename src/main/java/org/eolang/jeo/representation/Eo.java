@@ -48,6 +48,7 @@ public final class Eo {
      */
     private final String name;
 
+
     /**
      * Constructor.
      */
@@ -120,5 +121,4 @@ public final class Eo {
             throw new IllegalStateException("Can't create fake XML", exception);
         }
     }
-
 }

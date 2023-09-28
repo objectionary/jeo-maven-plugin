@@ -49,13 +49,6 @@ public final class MethodDirectives extends MethodVisitor implements Iterable<Di
 
     /**
      * Constructor.
-     */
-    MethodDirectives() {
-        this(new Directives(), null);
-    }
-
-    /**
-     * Constructor.
      * @param directives Xembly directives
      * @param visitor Method visitor
      */
@@ -80,7 +73,7 @@ public final class MethodDirectives extends MethodVisitor implements Iterable<Di
         final String name,
         final String descriptor
     ) {
-        this.opcode(opcode, String.format("%s.%s", owner, name));
+        this.opcode(opcode, owner, name, descriptor);
         super.visitFieldInsn(opcode, owner, name, descriptor);
     }
 
@@ -92,7 +85,7 @@ public final class MethodDirectives extends MethodVisitor implements Iterable<Di
 
     @Override
     public void visitJumpInsn(final int opcode, final Label label) {
-        this.opcode(opcode);
+        this.opcode(opcode, label);
         super.visitJumpInsn(opcode, label);
     }
 
@@ -116,8 +109,8 @@ public final class MethodDirectives extends MethodVisitor implements Iterable<Di
         final String descriptor,
         final boolean isinterface
     ) {
-        this.opcode(opcode, String.format("%s.%s", owner, name));
-        super.visitMethodInsn(opcode, owner, name, descriptor, isinterface);
+        this.opcode(opcode, owner, name, descriptor);
+        super.visitMethodInsn(opcode, owner, name, descriptor, false);
     }
 
     @Override
