@@ -24,6 +24,7 @@
 package org.eolang.jeo;
 
 import com.jcabi.xml.XML;
+import org.eolang.jeo.representation.asm.Bytecode;
 
 /**
  * Intermediate representation of a class files which can be optimized.
@@ -48,7 +49,7 @@ public interface Representation {
      * Convert to bytecode.
      * @return Array of bytes.
      */
-    byte[] toBytecode();
+    Bytecode toBytecode();
 
     /**
      * Named representation.
@@ -83,7 +84,7 @@ public interface Representation {
         }
 
         @Override
-        public byte[] toBytecode() {
+        public Bytecode toBytecode() {
             throw new UnsupportedOperationException(
                 String.format("toBytecode() not implemented for %s", this.getClass().getName())
             );

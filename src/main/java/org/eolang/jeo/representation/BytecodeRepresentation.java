@@ -33,6 +33,7 @@ import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
 import org.eolang.jeo.Representation;
+import org.eolang.jeo.representation.asm.Bytecode;
 import org.eolang.jeo.representation.asm.ClassDirectives;
 import org.eolang.jeo.representation.asm.ClassName;
 import org.objectweb.asm.ClassReader;
@@ -104,7 +105,7 @@ public final class BytecodeRepresentation implements Representation {
     }
 
     @Override
-    public byte[] toBytecode() {
-        return new UncheckedBytes(new BytesOf(this.input)).asBytes();
+    public Bytecode toBytecode() {
+        return new Bytecode(new UncheckedBytes(new BytesOf(this.input)).asBytes());
     }
 }

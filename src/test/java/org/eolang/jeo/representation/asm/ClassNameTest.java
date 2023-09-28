@@ -37,7 +37,7 @@ class ClassNameTest {
     @Test
     void retrievesClassName() {
         final ClassName name = new ClassName();
-        new ClassReader(new BytecodeClass("representation/asm/ClassNameTest").bytes())
+        new ClassReader(new BytecodeClass("representation/asm/ClassNameTest").bytecode().asBytes())
             .accept(name, 0);
         MatcherAssert.assertThat(
             "Can't retrieve class name, or it's incorrect",

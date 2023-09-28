@@ -24,15 +24,11 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import org.eolang.jeo.representation.asm.Bytecode;
 import org.eolang.jeo.representation.asm.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.util.Textifier;
-import org.objectweb.asm.util.TraceClassVisitor;
 
 /**
  * Test case for {@link EoRepresentation}.
@@ -67,31 +63,16 @@ class EoRepresentationTest {
 
     @Test
     void returnsBytecodeRepresentationOfEo() {
-        byte[] expected = new BytecodeClass("Bar")
+        Bytecode expected = new BytecodeClass("Bar")
             .withMethod("main")
             .up()
-            .bytes();
-
-        ClassReader classReader = new ClassReader(expected);
-
-        final StringWriter out = new StringWriter();
-        classReader.accept(new TraceClassVisitor(null, new Textifier(), new PrintWriter(out)), 0);
-        final String res = out.toString();
-
-        final byte[] actual = new EoRepresentation(new Eo("Bar")).toBytecode();
-        ClassReader otherReader = new ClassReader(actual);
-        final StringWriter actualOut = new StringWriter();
-        otherReader.accept(new TraceClassVisitor(null, new Textifier(), new PrintWriter(actualOut)),
-            0
-        );
-        final String actualRes = actualOut.toString();
-
-
+            .bytecode();
+        final Bytecode actual = new EoRepresentation(new Eo("Bar")).toBytecode();
         MatcherAssert.assertThat(
             String.format(
                 "The bytecode representation of the EO object is not correct,%nexpected:%n%s%nbut got:%n%s",
-                res,
-                actualRes
+                expected,
+                actual
             ),
             actual,
             Matchers.equalTo(expected)

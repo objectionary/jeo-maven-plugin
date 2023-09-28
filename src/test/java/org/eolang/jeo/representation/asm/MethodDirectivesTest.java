@@ -64,7 +64,8 @@ class MethodDirectivesTest {
                 .instruction(Opcodes.BIPUSH, 28)
                 .instruction(Opcodes.IRETURN)
                 .up()
-                .bytes()
+                .bytecode()
+                .asBytes()
         ).accept(visitor, 0);
         final XMLDocument document = new XMLDocument(new Xembler(visitor).xmlQuietly());
         MatcherAssert.assertThat(

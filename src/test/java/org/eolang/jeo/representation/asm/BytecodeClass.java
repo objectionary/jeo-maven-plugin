@@ -94,7 +94,7 @@ public final class BytecodeClass {
      * Generate bytecode.
      * @return Bytecode.
      */
-    public byte[] bytes() {
+    public Bytecode bytecode() {
         this.writer.visit(
             Opcodes.ASM9,
             Opcodes.ACC_PUBLIC,
@@ -104,7 +104,7 @@ public final class BytecodeClass {
             null
         );
         this.methods.forEach(BytecodeMethod::generate);
-        return this.writer.toByteArray();
+        return new Bytecode(this.writer.toByteArray());
     }
 
     /**

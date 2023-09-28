@@ -41,7 +41,7 @@ class ClassDirectivesTest {
     @Test
     void parsesSimpleClassWithoutConstructor() throws ImpossibleModificationException {
         final ClassDirectives directives = new ClassDirectives();
-        new ClassReader(new BytecodeClass().bytes()).accept(directives, 0);
+        new ClassReader(new BytecodeClass().bytecode().asBytes()).accept(directives, 0);
         MatcherAssert.assertThat(
             "Can't parse simple class without constructor",
             new XMLDocument(new Xembler(directives).xml()),
@@ -56,7 +56,8 @@ class ClassDirectivesTest {
             new BytecodeClass("WithMethod")
                 .withMethod("main")
                 .up()
-                .bytes()
+                .bytecode()
+                .asBytes()
         ).accept(directives, 0);
         MatcherAssert.assertThat(
             "Can't parse simple class with method",

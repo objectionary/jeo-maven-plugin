@@ -26,6 +26,7 @@ package org.eolang.jeo.representation;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
+import org.eolang.jeo.representation.asm.Bytecode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -55,8 +56,8 @@ final class BytecodeRepresentationTest {
     @Test
     void returnsTheSameBytes() {
         final ResourceOf input = new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE);
-        final byte[] expected = new UncheckedBytes(new BytesOf(input)).asBytes();
-        final byte[] actual = new BytecodeRepresentation(input).toBytecode();
+        final Bytecode expected = new Bytecode(new UncheckedBytes(new BytesOf(input)).asBytes());
+        final Bytecode actual = new BytecodeRepresentation(input).toBytecode();
         MatcherAssert.assertThat(
             "The bytes should be the same",
             expected,

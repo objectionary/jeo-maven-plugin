@@ -18,8 +18,6 @@ public class XmlBytecode extends ClassWriter {
 
     @Override
     public byte[] toByteArray() {
-        final String name = this.xml.xpath("/program/@name").get(0);
-
         this.travers(this.xml.node());
         return super.toByteArray();
     }

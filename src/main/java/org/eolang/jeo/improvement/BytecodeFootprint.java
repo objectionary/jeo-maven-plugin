@@ -68,7 +68,7 @@ public final class BytecodeFootprint implements Improvement {
     private void recompile(final Representation representation) {
         final String name = representation.name();
         try {
-            final byte[] bytecode = representation.toBytecode();
+            final byte[] bytecode = representation.toBytecode().asBytes();
             final String[] subpath = name.split("\\.");
             subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
             final Path path = Paths.get(this.classes.toString(), subpath);
