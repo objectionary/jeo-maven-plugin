@@ -24,8 +24,11 @@
 package org.eolang.jeo.representation.asm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 /**
@@ -125,6 +128,9 @@ final class BytecodeClass {
          */
         private final BytecodeClass clazz;
 
+
+        private final List<BytecodeInstruction> instructions;
+
         /**
          * Constructor.
          * @param name Method name.
@@ -138,6 +144,12 @@ final class BytecodeClass {
             this.name = name;
             this.writer = writer;
             this.clazz = clazz;
+            this.instructions = new ArrayList<>(0);
+        }
+
+        BytecodeMethod instruction(final int opcode, Object... args) {
+            this.instructions.add(new BytecodeInstruction(opcode, args));
+            return this;
         }
 
         BytecodeClass up() {
@@ -148,13 +160,60 @@ final class BytecodeClass {
          * Generate bytecode.
          */
         private void generate() {
-            this.writer.visitMethod(
+            final MethodVisitor visitor = this.writer.visitMethod(
                 Opcodes.ACC_PUBLIC,
                 this.name,
                 "()V",
                 null,
                 null
             );
+            this.instructions.forEach(instruction -> instruction.generate(visitor));
         }
+
+
+        static final class BytecodeInstruction {
+
+            private final int opcode;
+            private final List<Object> args;
+
+            BytecodeInstruction(
+                final int opcode,
+                final Object... args
+            ) {
+                this(opcode, Arrays.asList(args));
+            }
+
+            BytecodeInstruction(
+                final int opcode,
+                final List<Object> args
+            ) {
+                this.opcode = opcode;
+                this.args = args;
+            }
+
+            void generate(MethodVisitor visitor) {
+                switch (this.opcode) {
+                    case Opcodes.LDC:
+                        visitor.visitLdcInsn(this.args.get(0));
+                        break;
+                    case Opcodes.INVOKEVIRTUAL:
+                        visitor.visitMethodInsn(
+                            this.opcode,
+                            String.valueOf(this.args.get(0)),
+                            String.valueOf(this.args.get(1)),
+                            String.valueOf(this.args.get(2)),
+                            false
+                        );
+                        break;
+                    case Opcodes.IRETURN:
+                        visitor.visitInsn(Opcodes.IRETURN);
+                        break;
+                    case Opcodes.BIPUSH:
+                        visitor.visitIntInsn(Opcodes.BIPUSH, (Integer) this.args.get(0));
+                        break;
+                }
+            }
+        }
+
     }
 }

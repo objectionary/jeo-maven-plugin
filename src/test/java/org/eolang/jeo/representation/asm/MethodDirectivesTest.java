@@ -26,8 +26,10 @@ package org.eolang.jeo.representation.asm;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Opcodes;
 import org.xembly.Xembler;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,14 +47,27 @@ class MethodDirectivesTest {
     @Test
     void parsesMethodInstructions() {
         final ClassDirectives visitor = new ClassDirectives();
-        new ClassReader(new BytecodeClass()
-            .withMethod("main")
-            .up()
-            .bytes()).accept(visitor, 0);
+        new ClassReader(
+            new BytecodeClass()
+                .withMethod("main")
+                .instruction(Opcodes.BIPUSH, 28)
+                .instruction(Opcodes.IRETURN)
+                .up()
+                .bytes()
+        ).accept(visitor, 0);
+        final XMLDocument document = new XMLDocument(new Xembler(visitor).xmlQuietly());
         MatcherAssert.assertThat(
             "Can't find a method in the final XML by using XPath",
-            new XMLDocument(new Xembler(visitor).xmlQuietly()),
-            XhtmlMatchers.hasXPath("/program/objects/o/o[@name='main']")
+            document,
+            Matchers.allOf(
+                XhtmlMatchers.hasXPath("/program/objects/o/o[@name='main']"),
+                XhtmlMatchers.hasXPath(
+                    "/program/objects/o/o[@name='main']/o[@base='seq']/o[@base='opcode' and @name='BIPUSH-16-1']/o[@base='int' and @data='bytes' and text()='00 00 00 00 00 00 00 1C']"
+                ),
+                XhtmlMatchers.hasXPath(
+                    "/program/objects/o/o[@name='main']/o[@base='seq']/o[@base='opcode' and @name='IRETURN-172-2']"
+                )
+            )
         );
     }
 
