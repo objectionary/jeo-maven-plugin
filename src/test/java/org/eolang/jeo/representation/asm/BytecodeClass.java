@@ -81,9 +81,10 @@ final class BytecodeClass {
      * @param mname Method name.
      * @return This object.
      */
-    BytecodeClass withMethod(final String mname) {
-        this.methods.add(new BytecodeMethod(mname, this.writer));
-        return this;
+    BytecodeMethod withMethod(final String mname) {
+        final BytecodeMethod method = new BytecodeMethod(mname, this.writer, this);
+        this.methods.add(method);
+        return method;
     }
 
     /**
@@ -107,7 +108,7 @@ final class BytecodeClass {
      * Bytecode method.
      * @since 0.1.0
      */
-    private static final class BytecodeMethod {
+    static final class BytecodeMethod {
 
         /**
          * Method name.
@@ -120,19 +121,33 @@ final class BytecodeClass {
         private final ClassWriter writer;
 
         /**
+         * Original class.
+         */
+        private final BytecodeClass clazz;
+
+        /**
          * Constructor.
          * @param name Method name.
          * @param writer ASM class writer.
          */
-        private BytecodeMethod(final String name, final ClassWriter writer) {
+        private BytecodeMethod(
+            final String name,
+            final ClassWriter writer,
+            final BytecodeClass clazz
+        ) {
             this.name = name;
             this.writer = writer;
+            this.clazz = clazz;
+        }
+
+        BytecodeClass up() {
+            return this.clazz;
         }
 
         /**
          * Generate bytecode.
          */
-        void generate() {
+        private void generate() {
             this.writer.visitMethod(
                 Opcodes.ACC_PUBLIC,
                 this.name,

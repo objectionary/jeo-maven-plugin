@@ -52,8 +52,12 @@ class ClassDirectivesTest {
     @Test
     void parsesSimpleClassWithMethod() throws ImpossibleModificationException {
         final ClassDirectives directives = new ClassDirectives();
-        new ClassReader(new BytecodeClass("WithMethod").withMethod("main").bytes())
-            .accept(directives, 0);
+        new ClassReader(
+            new BytecodeClass("WithMethod")
+                .withMethod("main")
+                .up()
+                .bytes()
+        ).accept(directives, 0);
         MatcherAssert.assertThat(
             "Can't parse simple class with method",
             new XMLDocument(new Xembler(directives).xml()),

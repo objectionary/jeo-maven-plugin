@@ -28,9 +28,6 @@ import com.jcabi.xml.XMLDocument;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 import org.xembly.Xembler;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -50,6 +47,7 @@ class MethodDirectivesTest {
         final ClassDirectives visitor = new ClassDirectives();
         new ClassReader(new BytecodeClass()
             .withMethod("main")
+            .up()
             .bytes()).accept(visitor, 0);
         MatcherAssert.assertThat(
             "Can't find a method in the final XML by using XPath",
