@@ -128,13 +128,16 @@ final class BytecodeClass {
          */
         private final BytecodeClass clazz;
 
-
+        /**
+         * Method Instructions.
+         */
         private final List<BytecodeInstruction> instructions;
 
         /**
          * Constructor.
          * @param name Method name.
          * @param writer ASM class writer.
+         * @param clazz Original class.
          */
         private BytecodeMethod(
             final String name,
@@ -147,11 +150,23 @@ final class BytecodeClass {
             this.instructions = new ArrayList<>(0);
         }
 
-        BytecodeMethod instruction(final int opcode, Object... args) {
+        /**
+         * Add instruction.
+         * @param opcode Opcode.
+         * @param args Arguments.
+         * @return This object.
+         */
+        BytecodeMethod instruction(final int opcode, final Object... args) {
             this.instructions.add(new BytecodeInstruction(opcode, args));
             return this;
         }
 
+        /**
+         * Return to the original class.
+         * @return Original class.
+         * @checkstyle MethodNameCheck (3 lines)
+         */
+        @SuppressWarnings("PMD.ShortMethodName")
         BytecodeClass up() {
             return this.clazz;
         }
@@ -170,12 +185,27 @@ final class BytecodeClass {
             this.instructions.forEach(instruction -> instruction.generate(visitor));
         }
 
-
+        /**
+         * Bytecode instruction.
+         * @since 0.1.0
+         */
         static final class BytecodeInstruction {
 
+            /**
+             * Opcode.
+             */
             private final int opcode;
+
+            /**
+             * Arguments.
+             */
             private final List<Object> args;
 
+            /**
+             * Constructor.
+             * @param opcode Opcode.
+             * @param args Arguments.
+             */
             BytecodeInstruction(
                 final int opcode,
                 final Object... args
@@ -183,6 +213,11 @@ final class BytecodeClass {
                 this(opcode, Arrays.asList(args));
             }
 
+            /**
+             * Constructor.
+             * @param opcode Opcode.
+             * @param args Arguments.
+             */
             BytecodeInstruction(
                 final int opcode,
                 final List<Object> args
@@ -191,7 +226,11 @@ final class BytecodeClass {
                 this.args = args;
             }
 
-            void generate(MethodVisitor visitor) {
+            /**
+             * Generate bytecode.
+             * @param visitor Method visitor.
+             */
+            void generate(final MethodVisitor visitor) {
                 switch (this.opcode) {
                     case Opcodes.LDC:
                         visitor.visitLdcInsn(this.args.get(0));
@@ -211,9 +250,12 @@ final class BytecodeClass {
                     case Opcodes.BIPUSH:
                         visitor.visitIntInsn(Opcodes.BIPUSH, (Integer) this.args.get(0));
                         break;
+                    default:
+                        throw new IllegalStateException(
+                            String.format("Unexpected value: %d", this.opcode)
+                        );
                 }
             }
         }
-
     }
 }

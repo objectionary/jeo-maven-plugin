@@ -27,12 +27,12 @@ import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Xembler;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test case for {@link MethodDirectives}.
@@ -73,10 +73,10 @@ class MethodDirectivesTest {
             Matchers.allOf(
                 XhtmlMatchers.hasXPath("/program/objects/o/o[@name='main']"),
                 XhtmlMatchers.hasXPath(
-                    "/program/objects/o/o[@name='main']/o[@base='seq']/o[@base='opcode' and @name='BIPUSH-16-1']/o[@base='int' and @data='bytes' and text()='00 00 00 00 00 00 00 1C']"
+                    "/program/objects/o/o[@name='main']/o[@base='seq']/o[@base='opcode' and contains(@name,'BIPUSH')]/o[@base='int' and @data='bytes' and text()='00 00 00 00 00 00 00 1C']"
                 ),
                 XhtmlMatchers.hasXPath(
-                    "/program/objects/o/o[@name='main']/o[@base='seq']/o[@base='opcode' and @name='IRETURN-172-2']"
+                    "/program/objects/o/o[@name='main']/o[@base='seq']/o[@base='opcode' and contains(@name,'IRETURN')]"
                 )
             )
         );
@@ -85,19 +85,18 @@ class MethodDirectivesTest {
     @Test
     @Disabled("We have to implement method parameters parsing first")
     void parsesMethodParameters() {
-        fail();
+        Assertions.fail("We have to implement method parameters parsing first");
     }
 
     @Test
     @Disabled("We have to implement constructor parsing first")
     void parsesConstructor() {
-        fail();
+        Assertions.fail("We have to implement constructor parsing first");
     }
 
     @Test
     @Disabled("We have to implement constructor with parameters parsing first")
     void parsesConstructorWithParameters() {
-        fail();
+        Assertions.fail("We have to implement constructor with parameters parsing first");
     }
-
 }

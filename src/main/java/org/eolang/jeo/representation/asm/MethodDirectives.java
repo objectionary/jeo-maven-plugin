@@ -42,6 +42,7 @@ import org.xembly.Directives;
  *  The unit test should check that the directives are correct.
  *  When the unit test is ready remove that puzzle.
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class MethodDirectives extends MethodVisitor implements Iterable<Directive> {
 
     /**
@@ -68,8 +69,6 @@ public final class MethodDirectives extends MethodVisitor implements Iterable<Di
         super(Opcodes.ASM9, visitor);
         this.directives = directives;
     }
-
-
 
     @Override
     public void visitInsn(final int opcode) {
@@ -136,6 +135,11 @@ public final class MethodDirectives extends MethodVisitor implements Iterable<Di
         super.visitEnd();
     }
 
+    @Override
+    public Iterator<Directive> iterator() {
+        return this.directives.iterator();
+    }
+
     /**
      * Add opcode to the directives.
      * @param opcode Opcode
@@ -150,10 +154,4 @@ public final class MethodDirectives extends MethodVisitor implements Iterable<Di
         }
         this.directives.up();
     }
-
-    @Override
-    public Iterator<Directive> iterator() {
-        return this.directives.iterator();
-    }
 }
-
