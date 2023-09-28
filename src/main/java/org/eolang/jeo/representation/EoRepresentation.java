@@ -24,8 +24,8 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
-import java.util.Base64;
 import org.eolang.jeo.Representation;
+import org.eolang.jeo.representation.asm.XmlBytecode;
 
 /**
  * Intermediate representation of a class files from XMIR.
@@ -52,7 +52,8 @@ public final class EoRepresentation implements Representation {
      * @param xml XML.
      */
     public EoRepresentation(final XML xml) {
-        this.xml = EoRepresentation.xmir(xml);
+        new Schema(xml).check();
+        this.xml = xml;
     }
 
     @Override
@@ -67,16 +68,7 @@ public final class EoRepresentation implements Representation {
 
     @Override
     public byte[] toBytecode() {
-        return Base64.getDecoder().decode(this.xml.xpath("/program/listing/text()").get(0));
+        return new XmlBytecode(this.xml).toByteArray();
     }
 
-    /**
-     * Validate XMIR.
-     * @param xml XML.
-     * @return XMIR.
-     */
-    private static XML xmir(final XML xml) {
-        new Schema(xml).check();
-        return xml;
-    }
 }

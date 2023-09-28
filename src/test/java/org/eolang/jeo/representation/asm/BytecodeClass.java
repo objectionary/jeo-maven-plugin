@@ -36,7 +36,7 @@ import org.objectweb.asm.Opcodes;
  * @since 0.1.0
  */
 @SuppressWarnings({"JTCOP.RuleAllTestsHaveProductionClass", "JTCOP.RuleCorrectTestName"})
-final class BytecodeClass {
+public final class BytecodeClass {
 
     /**
      * Class name.
@@ -64,7 +64,7 @@ final class BytecodeClass {
      * Constructor.
      * @param name Class name.
      */
-    BytecodeClass(final String name) {
+    public BytecodeClass(final String name) {
         this(name, new ClassWriter(0));
     }
 
@@ -84,7 +84,7 @@ final class BytecodeClass {
      * @param mname Method name.
      * @return This object.
      */
-    BytecodeMethod withMethod(final String mname) {
+    public BytecodeMethod withMethod(final String mname) {
         final BytecodeMethod method = new BytecodeMethod(mname, this.writer, this);
         this.methods.add(method);
         return method;
@@ -94,7 +94,7 @@ final class BytecodeClass {
      * Generate bytecode.
      * @return Bytecode.
      */
-    byte[] bytes() {
+    public byte[] bytes() {
         this.writer.visit(
             Opcodes.ASM9,
             Opcodes.ACC_PUBLIC,
@@ -111,7 +111,7 @@ final class BytecodeClass {
      * Bytecode method.
      * @since 0.1.0
      */
-    static final class BytecodeMethod {
+    public static final class BytecodeMethod {
 
         /**
          * Method name.
@@ -151,6 +151,16 @@ final class BytecodeClass {
         }
 
         /**
+         * Return to the original class.
+         * @return Original class.
+         * @checkstyle MethodNameCheck (3 lines)
+         */
+        @SuppressWarnings("PMD.ShortMethodName")
+        public BytecodeClass up() {
+            return this.clazz;
+        }
+
+        /**
          * Add instruction.
          * @param opcode Opcode.
          * @param args Arguments.
@@ -159,16 +169,6 @@ final class BytecodeClass {
         BytecodeMethod instruction(final int opcode, final Object... args) {
             this.instructions.add(new BytecodeInstruction(opcode, args));
             return this;
-        }
-
-        /**
-         * Return to the original class.
-         * @return Original class.
-         * @checkstyle MethodNameCheck (3 lines)
-         */
-        @SuppressWarnings("PMD.ShortMethodName")
-        BytecodeClass up() {
-            return this.clazz;
         }
 
         /**

@@ -97,6 +97,12 @@ SOFTWARE.
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm-util</artifactId>
+      <version>9.5</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>com.jcabi.incubator</groupId>
       <artifactId>xembly</artifactId>
       <version>0.28.1</version>

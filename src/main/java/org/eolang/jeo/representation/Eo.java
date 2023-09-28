@@ -94,7 +94,9 @@ public final class Eo {
                         .attr("ms", System.currentTimeMillis())
                         .add("objects")
                         .add("o")
-                        .attr("name", "test")
+                        .attr("name", this.name)
+                        .add("o")
+                        .attr("name", "main")
                 ).xml()
             );
         } catch (final ImpossibleModificationException exception) {
