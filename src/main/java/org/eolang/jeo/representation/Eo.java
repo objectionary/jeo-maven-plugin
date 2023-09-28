@@ -29,7 +29,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
+import org.objectweb.asm.Opcodes;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -94,13 +96,29 @@ public final class Eo {
                         .attr("ms", System.currentTimeMillis())
                         .add("objects")
                         .add("o")
-                        .attr("name", this.name)
+                        .attr(
+                            "name",
+                            String.format(
+                                "%d__%s",
+                                Opcodes.ACC_PUBLIC,
+                                this.name
+                            )
+                        )
                         .add("o")
-                        .attr("name", "main")
+                        .attr(
+                            "name",
+                            String.format(
+                                "%d__%s__%s",
+                                Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
+                                "main",
+                                "([Ljava/lang/String;)V"
+                            )
+                        )
                 ).xml()
             );
         } catch (final ImpossibleModificationException exception) {
             throw new IllegalStateException("Can't create fake XML", exception);
         }
     }
+
 }

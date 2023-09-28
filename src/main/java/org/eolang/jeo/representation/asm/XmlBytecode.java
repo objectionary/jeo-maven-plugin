@@ -27,16 +27,26 @@ public class XmlBytecode extends ClassWriter {
         if (this.isClass(node)) {
             final Node name = node.getAttributes().getNamedItem("name");
             final String content = name.getTextContent();
+            final String[] split = content.split("__");
             this.visit(
                 Opcodes.ASM9,
-                Opcodes.ACC_PUBLIC,
-                content,
+                Integer.parseInt(split[0]),
+                String.valueOf(split[1]),
                 null,
                 "java/lang/Object",
                 null
             );
         } else if (this.isMethod(node)) {
-            this.visitMethod(Opcodes.ACC_PUBLIC, "main", "()V", null, null);
+            final Node name = node.getAttributes().getNamedItem("name");
+            final String content = name.getTextContent();
+            final String[] split = content.split("__");
+            this.visitMethod(
+                Integer.parseInt(split[0]),
+                String.valueOf(split[1]),
+                String.valueOf(split[2]),
+                null,
+                null
+            );
         } else {
             Logger.warn(this, String.format("Skip node: %s", node));
         }

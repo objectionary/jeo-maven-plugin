@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -84,8 +85,8 @@ public final class BytecodeClass {
      * @param mname Method name.
      * @return This object.
      */
-    public BytecodeMethod withMethod(final String mname) {
-        final BytecodeMethod method = new BytecodeMethod(mname, this.writer, this);
+    public BytecodeMethod withMethod(final String mname, int... modifiers) {
+        final BytecodeMethod method = new BytecodeMethod(mname, this.writer, this, modifiers);
         this.methods.add(method);
         return method;
     }
@@ -134,6 +135,14 @@ public final class BytecodeClass {
         private final List<BytecodeInstruction> instructions;
 
         /**
+         * Access.
+         */
+        private final int access;
+
+
+        private final AtomicReference<String> descriptor;
+
+        /**
          * Constructor.
          * @param name Method name.
          * @param writer ASM class writer.
@@ -142,12 +151,19 @@ public final class BytecodeClass {
         private BytecodeMethod(
             final String name,
             final ClassWriter writer,
-            final BytecodeClass clazz
+            final BytecodeClass clazz,
+            final int... modifiers
         ) {
             this.name = name;
             this.writer = writer;
             this.clazz = clazz;
             this.instructions = new ArrayList<>(0);
+            int mod = 0;
+            for (final int modifier : modifiers) {
+                mod |= modifier;
+            }
+            this.access = mod;
+            this.descriptor = new AtomicReference<>("()V");
         }
 
         /**
@@ -166,8 +182,18 @@ public final class BytecodeClass {
          * @param args Arguments.
          * @return This object.
          */
-        BytecodeMethod instruction(final int opcode, final Object... args) {
+        public BytecodeMethod instruction(final int opcode, final Object... args) {
             this.instructions.add(new BytecodeInstruction(opcode, args));
+            return this;
+        }
+
+        /**
+         * Set method descriptor.
+         * @param descriptor Descriptor.
+         * @return This object.
+         */
+        public BytecodeMethod descriptor(final String descriptor) {
+            this.descriptor.set(descriptor);
             return this;
         }
 
@@ -176,9 +202,9 @@ public final class BytecodeClass {
          */
         private void generate() {
             final MethodVisitor visitor = this.writer.visitMethod(
-                Opcodes.ACC_PUBLIC,
+                this.access,
                 this.name,
-                "()V",
+                this.descriptor.get(),
                 null,
                 null
             );
@@ -249,6 +275,14 @@ public final class BytecodeClass {
                         break;
                     case Opcodes.BIPUSH:
                         visitor.visitIntInsn(Opcodes.BIPUSH, (Integer) this.args.get(0));
+                        break;
+                    case Opcodes.GETSTATIC:
+                        visitor.visitFieldInsn(
+                            Opcodes.GETSTATIC,
+                            String.valueOf(this.args.get(0)),
+                            String.valueOf(this.args.get(1)),
+                            String.valueOf(this.args.get(2))
+                        );
                         break;
                     default:
                         throw new IllegalStateException(

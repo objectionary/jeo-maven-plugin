@@ -29,6 +29,7 @@ import org.eolang.jeo.representation.asm.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Test case for {@link EoRepresentation}.
@@ -64,10 +65,39 @@ class EoRepresentationTest {
     @Test
     void returnsBytecodeRepresentationOfEo() {
         Bytecode expected = new BytecodeClass("Bar")
-            .withMethod("main")
+            .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
+            .descriptor("([Ljava/lang/String;)V")
             .up()
             .bytecode();
         final Bytecode actual = new EoRepresentation(new Eo("Bar")).toBytecode();
+        MatcherAssert.assertThat(
+            String.format(
+                "The bytecode representation of the EO object is not correct,%nexpected:%n%s%nbut got:%n%s",
+                expected,
+                actual
+            ),
+            actual,
+            Matchers.equalTo(expected)
+        );
+    }
+
+
+    @Test
+    void convertsHelloWordEoRepresentationIntoBytecode() {
+        final String name = "org/eolang/jeo/Application";
+        final Bytecode expected = new BytecodeClass(name)
+            .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
+            .descriptor("([Ljava/lang/String;)V")
+            .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+            .instruction(Opcodes.LDC, "Hello, world!")
+            .instruction(
+                Opcodes.INVOKEVIRTUAL,
+                "java/io/PrintStream",
+                "println",
+                "(Ljava/lang/String;)V"
+            ).up()
+            .bytecode();
+        final Bytecode actual = new EoRepresentation(new Eo(name)).toBytecode();
         MatcherAssert.assertThat(
             String.format(
                 "The bytecode representation of the EO object is not correct,%nexpected:%n%s%nbut got:%n%s",
