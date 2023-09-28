@@ -58,7 +58,7 @@ public interface Improvement {
         /**
          * Constructor.
          */
-        Mock() {
+        public Mock() {
             this(new LinkedList<>());
         }
 
@@ -82,7 +82,7 @@ public interface Improvement {
          * Check if the boost was applied.
          * @return True if the boost was applied.
          */
-        boolean isApplied() {
+        public boolean isApplied() {
             return !this.all.isEmpty();
         }
     }
