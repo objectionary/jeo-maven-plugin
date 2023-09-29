@@ -29,7 +29,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -65,7 +64,7 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
      * @param listing Bytecode listing.
      */
     public ClassDirectives(final String listing) {
-        this(Opcodes.ASM9, new Directives(), listing);
+        this(new AsmVersion().api(), new Directives(), listing);
     }
 
     /**

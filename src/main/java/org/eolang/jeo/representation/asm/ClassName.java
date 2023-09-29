@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.asm;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.Opcodes;
 
 /**
  * Class name.
@@ -52,7 +51,7 @@ public final class ClassName extends ClassVisitor {
      * @param bag Atomic reference to store class name.
      */
     private ClassName(final AtomicReference<String> bag) {
-        this(Opcodes.ASM9, bag);
+        this(new AsmVersion().api(), bag);
     }
 
     /**

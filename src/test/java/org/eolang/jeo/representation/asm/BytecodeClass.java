@@ -97,7 +97,7 @@ public final class BytecodeClass {
      */
     public Bytecode bytecode() {
         this.writer.visit(
-            Opcodes.ASM9,
+            new AsmVersion().java(),
             Opcodes.ACC_PUBLIC,
             this.name,
             null,

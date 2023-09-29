@@ -32,7 +32,7 @@ public class XmlBytecode extends ClassWriter {
             final String content = name.getTextContent();
             final String[] split = content.split("__");
             this.visit(
-                Opcodes.ASM9,
+                new AsmVersion().java(),
                 Integer.parseInt(split[0]),
                 String.valueOf(split[1]),
                 null,
