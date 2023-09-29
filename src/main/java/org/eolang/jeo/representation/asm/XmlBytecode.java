@@ -120,6 +120,9 @@ public class XmlBytecode extends ClassWriter {
                                 false
                             );
                             break;
+                        case Opcodes.RETURN:
+                            visitor.visitInsn(Opcodes.RETURN);
+                            break;
                         default:
                             throw new IllegalStateException(
                                 String.format("Unexpected value: %d", code)

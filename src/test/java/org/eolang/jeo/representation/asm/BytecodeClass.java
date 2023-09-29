@@ -284,6 +284,9 @@ public final class BytecodeClass {
                             this.args.get(2).toString()
                         );
                         break;
+                    case Opcodes.RETURN:
+                        visitor.visitInsn(Opcodes.RETURN);
+                        break;
                     default:
                         throw new IllegalStateException(
                             String.format("Unexpected value: %d", this.opcode)

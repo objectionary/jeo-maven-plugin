@@ -97,6 +97,7 @@ class EoRepresentationTest {
                 "println",
                 "(Ljava/lang/String;)V"
             )
+            .instruction(Opcodes.RETURN)
             .up()
             .bytecode();
         final XML eo = new BytecodeRepresentation(expected.asBytes()).toEO();
