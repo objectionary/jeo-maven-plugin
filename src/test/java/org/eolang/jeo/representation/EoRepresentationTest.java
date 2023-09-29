@@ -100,6 +100,7 @@ class EoRepresentationTest {
             .up()
             .bytecode();
         final XML eo = new BytecodeRepresentation(expected.asBytes()).toEO();
+        System.out.println(eo);
         final Bytecode actual = new EoRepresentation(
             eo
         ).toBytecode();

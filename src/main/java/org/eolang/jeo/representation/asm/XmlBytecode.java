@@ -101,12 +101,11 @@ public class XmlBytecode extends ClassWriter {
                     final Object[] arguments = XmlBytecode.arguments(opcode);
                     switch (code) {
                         case Opcodes.GETSTATIC:
-                            visitor.visitMethodInsn(
+                            visitor.visitFieldInsn(
                                 code,
                                 String.valueOf(arguments[0]),
                                 String.valueOf(arguments[1]),
-                                String.valueOf(arguments[2]),
-                                false
+                                String.valueOf(arguments[2])
                             );
                             break;
                         case Opcodes.LDC:
