@@ -23,14 +23,17 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.util.CheckClassAdapter;
 
 /**
  * Class useful for generating bytecode for testing purposes.
@@ -66,7 +69,7 @@ public final class BytecodeClass {
      * @param name Class name.
      */
     public BytecodeClass(final String name) {
-        this(name, new ClassWriter(0));
+        this(name, new ClassWriter(ClassWriter.COMPUTE_MAXS));
     }
 
     /**
@@ -105,7 +108,12 @@ public final class BytecodeClass {
             null
         );
         this.methods.forEach(BytecodeMethod::generate);
-        return new Bytecode(this.writer.toByteArray());
+        this.writer.visitEnd();
+        //Check bytes if everything is ok
+        final byte[] bytes = this.writer.toByteArray();
+        PrintWriter pw = new PrintWriter(System.out);
+        CheckClassAdapter.verify(new ClassReader(bytes), true, pw);
+        return new Bytecode(bytes);
     }
 
     /**
@@ -209,6 +217,8 @@ public final class BytecodeClass {
                 null
             );
             this.instructions.forEach(instruction -> instruction.generate(visitor));
+            visitor.visitMaxs(0, 0);
+            visitor.visitEnd();
         }
 
         /**

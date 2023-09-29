@@ -16,7 +16,7 @@ public class XmlBytecode extends ClassWriter {
     private final XML xml;
 
     public XmlBytecode(final XML xml) {
-        super(0);
+        super(ClassWriter.COMPUTE_MAXS);
         this.xml = xml;
     }
 
@@ -43,14 +43,16 @@ public class XmlBytecode extends ClassWriter {
             final Node name = node.getAttributes().getNamedItem("name");
             final String content = name.getTextContent();
             final String[] split = content.split("__");
-            final MethodVisitor methodVisitor = this.visitMethod(
+            final MethodVisitor visitor = this.visitMethod(
                 Integer.parseInt(split[0]),
                 String.valueOf(split[1]),
                 String.valueOf(split[2]),
                 null,
                 null
             );
-            XmlBytecode.visitMethod(methodVisitor, node);
+            XmlBytecode.visitMethod(visitor, node);
+            visitor.visitMaxs(0, 0);
+            visitor.visitEnd();
         } else {
             Logger.warn(this, String.format("Skip node: %s", node));
         }
