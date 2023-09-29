@@ -118,7 +118,7 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
             .add("objects");
         this.directives.add("o")
             .attr("abstract", "")
-            .attr("name", this.className(access, name));
+            .attr("name", ClassDirectives.className(access, name));
         super.visit(version, access, name, signature, supername, interfaces);
     }
 
@@ -136,7 +136,7 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
         } else {
             this.directives.add("o")
                 .attr("abstract", "")
-                .attr("name", this.methodName(access, name, descriptor));
+                .attr("name", ClassDirectives.methodName(access, name, descriptor));
             if (Type.getMethodType(descriptor).getArgumentTypes().length > 0) {
                 this.directives.add("o")
                     .attr("name", "args")
@@ -164,11 +164,34 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
         return this.directives.iterator();
     }
 
-    private String className(final int access, final String name) {
+    /**
+     * Class name.
+     * @param access Access.
+     * @param name Name.
+     * @return Class name.
+     * @todo #108:90min Implement different way to generate class name.
+     *  Right now we use class name and access to generate class name and insert it as a name
+     *  attribute of the class. This is not a good way to do it. At least it looks ugly.
+     *  We should find a better way to generate class name and place it somewhere in the XML
+     *  representation of the class.
+     */
+    private static String className(final int access, final String name) {
         return String.format("%d__%s", access, name);
     }
 
-    private String methodName(final int access, final String name, final String descriptor) {
+    /**
+     * Method name.
+     * @param access Access.
+     * @param name Name.
+     * @param descriptor Descriptor.
+     * @return Method name.
+     * @todo #108:90min Implement different way to generate method name.
+     *  Right now we use method name, access and descriptor to generate method name
+     *  and insert it as a name attribute of the method. This is not a good way to do it.
+     *  At least it looks ugly. We should find a better way to generate method name and place
+     *  it somewhere in the XML representation of the class.
+     */
+    private static String methodName(final int access, final String name, final String descriptor) {
         return String.format(
             "%d__%s__%s",
             access,

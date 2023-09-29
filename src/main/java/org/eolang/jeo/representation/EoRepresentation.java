@@ -53,7 +53,6 @@ public final class EoRepresentation implements Representation {
      * @param xml XML.
      */
     public EoRepresentation(final XML xml) {
-        new Schema(xml).check();
         this.xml = xml;
     }
 
@@ -69,7 +68,7 @@ public final class EoRepresentation implements Representation {
 
     @Override
     public Bytecode toBytecode() {
+        new Schema(this.xml).check();
         return new Bytecode(new XmlBytecode(this.xml).toByteArray());
     }
-
 }

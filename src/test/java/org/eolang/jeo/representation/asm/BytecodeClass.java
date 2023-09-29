@@ -38,6 +38,11 @@ import org.objectweb.asm.util.CheckClassAdapter;
 /**
  * Class useful for generating bytecode for testing purposes.
  * @since 0.1.0
+ * @todo #108:90min Refactor BytecodeClass.
+ *  The class is too big and has too many responsibilities.
+ *  It should be refactored to be more readable and maintainable.
+ *  Maybe it makes sence to split it into several classes and put all
+ *  of them into the separate package.
  */
 @SuppressWarnings({"JTCOP.RuleAllTestsHaveProductionClass", "JTCOP.RuleCorrectTestName"})
 public final class BytecodeClass {
@@ -86,9 +91,10 @@ public final class BytecodeClass {
     /**
      * Add method.
      * @param mname Method name.
+     * @param modifiers Access modifiers.
      * @return This object.
      */
-    public BytecodeMethod withMethod(final String mname, int... modifiers) {
+    public BytecodeMethod withMethod(final String mname, final int... modifiers) {
         final BytecodeMethod method = new BytecodeMethod(mname, this.writer, this, modifiers);
         this.methods.add(method);
         return method;
@@ -109,10 +115,8 @@ public final class BytecodeClass {
         );
         this.methods.forEach(BytecodeMethod::generate);
         this.writer.visitEnd();
-        //Check bytes if everything is ok
         final byte[] bytes = this.writer.toByteArray();
-        PrintWriter pw = new PrintWriter(System.out);
-        CheckClassAdapter.verify(new ClassReader(bytes), true, pw);
+        CheckClassAdapter.verify(new ClassReader(bytes), true, new PrintWriter(System.out));
         return new Bytecode(bytes);
     }
 
@@ -145,16 +149,20 @@ public final class BytecodeClass {
         /**
          * Access.
          */
-        private final int access;
+        private final int[] modifiers;
 
-
-        private final AtomicReference<String> descriptor;
+        /**
+         * Method Descriptor.
+         */
+        private final AtomicReference<String> descr;
 
         /**
          * Constructor.
          * @param name Method name.
          * @param writer ASM class writer.
          * @param clazz Original class.
+         * @param modifiers Access modifiers.
+         * @checkstyle ParameterNumberCheck (5 lines)
          */
         private BytecodeMethod(
             final String name,
@@ -166,12 +174,8 @@ public final class BytecodeClass {
             this.writer = writer;
             this.clazz = clazz;
             this.instructions = new ArrayList<>(0);
-            int mod = 0;
-            for (final int modifier : modifiers) {
-                mod |= modifier;
-            }
-            this.access = mod;
-            this.descriptor = new AtomicReference<>("()V");
+            this.modifiers = Arrays.copyOf(modifiers, modifiers.length);
+            this.descr = new AtomicReference<>("()V");
         }
 
         /**
@@ -201,7 +205,7 @@ public final class BytecodeClass {
          * @return This object.
          */
         public BytecodeMethod descriptor(final String descriptor) {
-            this.descriptor.set(descriptor);
+            this.descr.set(descriptor);
             return this;
         }
 
@@ -209,10 +213,14 @@ public final class BytecodeClass {
          * Generate bytecode.
          */
         private void generate() {
+            int access = 0;
+            for (final int modifier : this.modifiers) {
+                access |= modifier;
+            }
             final MethodVisitor visitor = this.writer.visitMethod(
-                this.access,
+                access,
                 this.name,
-                this.descriptor.get(),
+                this.descr.get(),
                 null,
                 null
             );
