@@ -56,7 +56,7 @@ public final class MethodDirectives extends MethodVisitor implements Iterable<Di
         final Directives directives,
         final MethodVisitor visitor
     ) {
-        super(new AsmVersion().api(), visitor);
+        super(new DefaultVersion().api(), visitor);
         this.directives = directives;
     }
 

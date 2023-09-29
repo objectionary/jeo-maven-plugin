@@ -51,7 +51,7 @@ public final class ClassName extends ClassVisitor {
      * @param bag Atomic reference to store class name.
      */
     private ClassName(final AtomicReference<String> bag) {
-        this(new AsmVersion().api(), bag);
+        this(new DefaultVersion().api(), bag);
     }
 
     /**

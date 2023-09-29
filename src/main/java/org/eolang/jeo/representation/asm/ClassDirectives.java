@@ -64,7 +64,7 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
      * @param listing Bytecode listing.
      */
     public ClassDirectives(final String listing) {
-        this(new AsmVersion().api(), new Directives(), listing);
+        this(new DefaultVersion().api(), new Directives(), listing);
     }
 
     /**

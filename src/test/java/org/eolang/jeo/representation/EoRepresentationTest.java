@@ -36,6 +36,11 @@ import org.objectweb.asm.Opcodes;
  * Test case for {@link EoRepresentation}.
  *
  * @since 0.1.0
+ * @todo #108:90min Replace Eo class usage with BytecodeRepresentation.
+ *  Currently we have unnecessary class Eo that represents XML of EO object.
+ *  We can use {@link org.eolang.jeo.representation.BytecodeRepresentation#toEO()} instead.
+ *  This will simplify the code and make it more readable.
+ *  Also, we need to remove Eo class from the project.
  */
 class EoRepresentationTest {
 
@@ -65,7 +70,7 @@ class EoRepresentationTest {
 
     @Test
     void returnsBytecodeRepresentationOfEo() {
-        Bytecode expected = new BytecodeClass("Bar")
+        final Bytecode expected = new BytecodeClass("Bar")
             .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
             .descriptor("([Ljava/lang/String;)V")
             .up()
@@ -81,7 +86,6 @@ class EoRepresentationTest {
             Matchers.equalTo(expected)
         );
     }
-
 
     @Test
     void convertsHelloWordEoRepresentationIntoBytecode() {
@@ -100,9 +104,8 @@ class EoRepresentationTest {
             .instruction(Opcodes.RETURN)
             .up()
             .bytecode();
-        final XML eo = new BytecodeRepresentation(expected.asBytes()).toEO();
         final Bytecode actual = new EoRepresentation(
-            eo
+            new BytecodeRepresentation(expected.asBytes()).toEO()
         ).toBytecode();
         MatcherAssert.assertThat(
             String.format(
