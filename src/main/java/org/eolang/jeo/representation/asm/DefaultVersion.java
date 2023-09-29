@@ -53,7 +53,7 @@ public final class DefaultVersion {
      * @param java Java bytecode version.
      * @param api ASM API version.
      */
-    private DefaultVersion(int java, int api) {
+    private DefaultVersion(final int java, final int api) {
         this.bytecode = java;
         this.asm = api;
     }
@@ -70,7 +70,7 @@ public final class DefaultVersion {
      * ASM API version.
      * @return ASM API version.
      */
-    public int api(){
+    public int api() {
         return this.asm;
     }
 }

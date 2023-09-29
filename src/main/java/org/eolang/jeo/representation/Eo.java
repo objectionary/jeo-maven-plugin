@@ -29,7 +29,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.UUID;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directives;
@@ -47,7 +46,6 @@ public final class Eo {
      * Object name.
      */
     private final String name;
-
 
     /**
      * Constructor.
