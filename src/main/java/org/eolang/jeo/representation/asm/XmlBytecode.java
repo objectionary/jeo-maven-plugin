@@ -26,7 +26,7 @@ package org.eolang.jeo.representation.asm;
 import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -37,6 +37,10 @@ import org.w3c.dom.NodeList;
 /**
  * XML to Java bytecode.
  * @since 0.1.0
+ * @todo #108:90min Refactor XmlBytecode class.
+ *  XmlBytecode class is too big and complex. It should be refactored
+ *  to be more readable and maintainable. Pay attention to checkstyle
+ *  warnings. When refactoring, make sure that all tests are passing.
  */
 public final class XmlBytecode extends ClassWriter {
 
@@ -60,8 +64,12 @@ public final class XmlBytecode extends ClassWriter {
         return super.toByteArray();
     }
 
-    private void travers(Node node) {
-        if (this.isClass(node)) {
+    /**
+     * Traverse XML.
+     * @param node XML node.
+     */
+    private void travers(final Node node) {
+        if (XmlBytecode.isClass(node)) {
             final Node name = node.getAttributes().getNamedItem("name");
             final String content = name.getTextContent();
             final String[] split = content.split("__");
@@ -91,18 +99,29 @@ public final class XmlBytecode extends ClassWriter {
             Logger.warn(this, String.format("Skip node: %s", node));
         }
         final NodeList children = node.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            this.travers(children.item(i));
+        for (int child = 0; child < children.getLength(); ++child) {
+            this.travers(children.item(child));
         }
     }
 
-    private boolean isClass(final Node node) {
+    /**
+     * Check if the node is a class.
+     * @param node Node.
+     * @return True if the node is a class.
+     */
+    private static boolean isClass(final Node node) {
         return node.getNodeName().equals("o")
             && node.getParentNode().getNodeName().equals("objects");
     }
 
-    private boolean isMethod(final Node node) {
-        return !isOpcode(node) && node.getNodeName().equals("o")
+    /**
+     * Check if the node is a method.
+     * @param node Node.
+     * @return True if the node is a method.
+     * @checkstyle BooleanExpressionComplexityCheck (10 lines)
+     */
+    private static boolean isMethod(final Node node) {
+        return !XmlBytecode.isOpcode(node) && node.getNodeName().equals("o")
             && node.getAttributes().getNamedItem("name") != null
             && !(node.getAttributes().getNamedItem("name") != null
             && node.getAttributes().getNamedItem("name").getNodeValue().equals("args"))
@@ -111,10 +130,15 @@ public final class XmlBytecode extends ClassWriter {
             && node.getAttributes().getNamedItem("base").getNodeValue().equals("seq"));
     }
 
-
-    private static void visitMethod(MethodVisitor visitor, Node node) {
-        for (int i = 0; i < node.getChildNodes().getLength(); i++) {
-            Node item = node.getChildNodes().item(i);
+    /**
+     * Visit method.
+     * @param visitor Method visitor.
+     * @param node XML Node.
+     * @checkstyle CyclomaticComplexityCheck (100 lines)
+     */
+    private static void visitMethod(final MethodVisitor visitor, final Node node) {
+        for (int index = 0; index < node.getChildNodes().getLength(); ++index) {
+            final Node item = node.getChildNodes().item(index);
             final NamedNodeMap attributes = item.getAttributes();
             if (attributes == null) {
                 continue;
@@ -125,8 +149,8 @@ public final class XmlBytecode extends ClassWriter {
             }
             if (base.getNodeValue().equals("seq")) {
                 final NodeList opcodes = item.getChildNodes();
-                for (int j = 0; j < opcodes.getLength(); j++) {
-                    final Node opcode = opcodes.item(j);
+                for (int instruction = 0; instruction < opcodes.getLength(); ++instruction) {
+                    final Node opcode = opcodes.item(instruction);
                     final NamedNodeMap attrs = opcode.getAttributes();
                     if (attrs == null) {
                         continue;
@@ -169,11 +193,16 @@ public final class XmlBytecode extends ClassWriter {
         }
     }
 
+    /**
+     * Get opcode arguments.
+     * @param node Node.
+     * @return Arguments.
+     */
     private static Object[] arguments(final Node node) {
         final NodeList children = node.getChildNodes();
-        List<Object> res = new ArrayList<>(children.getLength());
-        for (int i = 0; i < children.getLength(); i++) {
-            final Node child = children.item(i);
+        final Collection<Object> res = new ArrayList<>(children.getLength());
+        for (int index = 0; index < children.getLength(); ++index) {
+            final Node child = children.item(index);
             if (child.getNodeName().equals("o")) {
                 res.add(XmlBytecode.hexToString(child.getTextContent()));
             }
@@ -181,31 +210,35 @@ public final class XmlBytecode extends ClassWriter {
         return res.toArray();
     }
 
-    public static String hexToString(String hex) {
-        StringBuilder output = new StringBuilder();
-        String[] hexValues = hex.split(" ");
-        for (String hexValue : hexValues) {
-            int charCode = Integer.parseInt(hexValue, 16);
-            output.append((char) charCode);
+    /**
+     * Convert hex string to human-readable string.
+     * @param hex Hex string.
+     * @return Human-readable string.
+     */
+    private static String hexToString(final String hex) {
+        final StringBuilder output = new StringBuilder();
+        for (final String value : hex.split(" ")) {
+            output.append((char) Integer.parseInt(value, 16));
         }
-
         return output.toString();
     }
 
-    private boolean isOpcode(final Node node) {
-        final Node parentNode = node.getParentNode();
-        if (parentNode == null) {
-            return false;
-        } else {
-            final NamedNodeMap attributes = parentNode.getAttributes();
-            if (attributes == null) {
-                return false;
+    /**
+     * Check if the node is an opcode.
+     * @param node Node.
+     * @return True if the node is an opcode.
+     */
+    private static boolean isOpcode(final Node node) {
+        boolean result = false;
+        final Node parent = node.getParentNode();
+        if (parent != null) {
+            final NamedNodeMap attributes = parent.getAttributes();
+            if (attributes != null && attributes.getNamedItem("base") != null) {
+                result = attributes.getNamedItem("base")
+                    .getNodeValue()
+                    .equals("seq");
             }
-            final Node base = attributes.getNamedItem("base");
-            if (base == null) {
-                return false;
-            }
-            return base.getNodeValue().equals("seq");
         }
+        return result;
     }
 }
