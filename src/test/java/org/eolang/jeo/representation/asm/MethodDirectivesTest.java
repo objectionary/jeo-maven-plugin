@@ -72,12 +72,12 @@ class MethodDirectivesTest {
             "Can't find a method in the final XML by using XPath",
             document,
             Matchers.allOf(
-                XhtmlMatchers.hasXPath("/program/objects/o/o[@name='main']"),
+                XhtmlMatchers.hasXPath("/program/objects/o/o[contains(@name,'main')]"),
                 XhtmlMatchers.hasXPath(
-                    "/program/objects/o/o[@name='main']/o[@base='seq']/o[@base='opcode' and contains(@name,'BIPUSH')]/o[@base='int' and @data='bytes' and text()='00 00 00 00 00 00 00 1C']"
+                    "/program/objects/o/o[contains(@name,'main')]/o[@base='seq']/o[@base='opcode' and contains(@name,'BIPUSH')]/o[@base='int' and @data='bytes' and text()='00 00 00 00 00 00 00 1C']"
                 ),
                 XhtmlMatchers.hasXPath(
-                    "/program/objects/o/o[@name='main']/o[@base='seq']/o[@base='opcode' and contains(@name,'IRETURN')]"
+                    "/program/objects/o/o[contains(@name,'main')]/o[@base='seq']/o[@base='opcode' and contains(@name,'IRETURN')]"
                 )
             )
         );

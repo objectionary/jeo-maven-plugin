@@ -45,7 +45,7 @@ class ClassDirectivesTest {
         MatcherAssert.assertThat(
             "Can't parse simple class without constructor",
             new XMLDocument(new Xembler(directives).xml()),
-            XhtmlMatchers.hasXPath("/program/objects/o[@name='class__Simple']")
+            XhtmlMatchers.hasXPath("/program/objects/o[@name='1__Simple']")
         );
     }
 
@@ -64,10 +64,10 @@ class ClassDirectivesTest {
             new XMLDocument(new Xembler(directives).xml()),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath(
-                    "/program/objects/o[@name='class__WithMethod']/o[@name='main']"
+                    "/program/objects/o[@name='1__WithMethod']/o[contains(@name,'main')]"
                 ),
                 XhtmlMatchers.hasXPath(
-                    "/program/objects/o[@name='class__WithMethod']/o[@name='main']/o[@base='seq']"
+                    "/program/objects/o[@name='1__WithMethod']/o[contains(@name,'main')]/o[@base='seq']"
                 )
             )
         );
