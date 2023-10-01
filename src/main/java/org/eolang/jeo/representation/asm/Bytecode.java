@@ -33,9 +33,6 @@ import org.objectweb.asm.util.TraceClassVisitor;
 /**
  * Java bytecode.
  * @since 0.1.0
- * @todo #108:60min Add unit tests for Bytecode class.
- *  Bytecode class is not covered by unit tests.
- *  Add unit tests for Bytecode class and then remove this puzzle.
  */
 public final class Bytecode {
 
