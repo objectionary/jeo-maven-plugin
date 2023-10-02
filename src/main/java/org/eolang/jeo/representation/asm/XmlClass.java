@@ -65,8 +65,28 @@ final class XmlClass {
         return Integer.parseInt(this.nameAttribute()[0]);
     }
 
+    /**
+     * Class name.
+     * @return Name.
+     */
     String name() {
         return String.valueOf(this.nameAttribute()[1]);
+    }
+
+    /**
+     * Methods.
+     * @return Class methods.
+     */
+    List<XmlMethod> methods() {
+        final List<XmlMethod> res = new ArrayList<>(0);
+        final NodeList children = this.node.getChildNodes();
+        for (int child = 0; child < children.getLength(); ++child) {
+            final Node item = children.item(child);
+            if (item.getNodeName().equals("o")) {
+                res.add(new XmlMethod(item));
+            }
+        }
+        return res;
     }
 
     /**
@@ -80,32 +100,17 @@ final class XmlClass {
     }
 
     /**
-     * Methods.
-     * @return Class methods.
-     */
-    List<XmlMethod> methods() {
-        List<XmlMethod> res = new ArrayList<>();
-        final NodeList children = this.node.getChildNodes();
-        for (int child = 0; child < children.getLength(); ++child) {
-            final Node item = children.item(child);
-            if (item.getNodeName().equals("o")) {
-                res.add(new XmlMethod(item));
-            }
-        }
-        return res;
-    }
-
-    /**
      * Find class node in entire XML.
      * @param xml Entire XML.
      * @return Class node.
      */
-    private static Node findClass(XML xml) {
+    private static Node findClass(final XML xml) {
+        final Node result;
         final Node root = xml.node();
         if (XmlClass.isClass(root)) {
-            return root;
+            result = root;
         } else {
-            return XmlClass.findClass(root)
+            result = XmlClass.findClass(root)
                 .orElseThrow(
                     () -> new IllegalStateException(
                         String.format(
@@ -115,6 +120,7 @@ final class XmlClass {
                     )
                 );
         }
+        return result;
     }
 
     /**
@@ -122,13 +128,13 @@ final class XmlClass {
      * @param node Current node.
      * @return Class node.
      */
-    private static Optional<Node> findClass(Node node) {
+    private static Optional<Node> findClass(final Node node) {
         Optional<Node> res = Optional.empty();
         if (XmlClass.isClass(node)) {
             res = Optional.of(node);
         } else {
             final NodeList children = node.getChildNodes();
-            for (int index = 0; index < children.getLength(); index++) {
+            for (int index = 0; index < children.getLength(); ++index) {
                 final Optional<Node> child = XmlClass.findClass(children.item(index));
                 if (child.isPresent()) {
                     res = child;

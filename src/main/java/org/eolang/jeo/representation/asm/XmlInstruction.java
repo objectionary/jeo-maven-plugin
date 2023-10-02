@@ -24,11 +24,16 @@
 package org.eolang.jeo.representation.asm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import org.w3c.dom.NamedNodeMap;
+import java.util.stream.Collectors;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * Bytecode instruction from XML.
+ * @since 0.1
+ */
 final class XmlInstruction {
 
     /**
@@ -52,7 +57,8 @@ final class XmlInstruction {
         return Integer.parseInt(
             this.node.getAttributes()
                 .getNamedItem("name")
-                .getNodeValue().split("-")[1]);
+                .getNodeValue().split("-")[1]
+        );
     }
 
     /**
@@ -86,10 +92,9 @@ final class XmlInstruction {
      * @return Human-readable string.
      */
     private static String hexToString(final String hex) {
-        final StringBuilder output = new StringBuilder();
-        for (final String value : hex.split(" ")) {
-            output.append((char) Integer.parseInt(value, 16));
-        }
-        return output.toString();
+        return Arrays.stream(hex.split(" "))
+            .map(ch -> (char) Integer.parseInt(ch, 16))
+            .map(String::valueOf)
+            .collect(Collectors.joining());
     }
 }

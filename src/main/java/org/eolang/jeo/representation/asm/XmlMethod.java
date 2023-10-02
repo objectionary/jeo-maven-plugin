@@ -75,16 +75,6 @@ final class XmlMethod {
     }
 
     /**
-     * Method 'name' attribute.
-     * @return 'name' attribute value.
-     */
-    private String[] nameAttribute() {
-        final Node name = this.node.getAttributes().getNamedItem("name");
-        final String content = name.getTextContent();
-        return content.split("__");
-    }
-
-    /**
      * Method instructions.
      * @return Instructions.
      */
@@ -93,7 +83,7 @@ final class XmlMethod {
         final Optional<Node> sequence = this.sequence();
         if (sequence.isPresent()) {
             final Node seq = sequence.get();
-            final List<XmlInstruction> instructions = new ArrayList<>();
+            final List<XmlInstruction> instructions = new ArrayList<>(0);
             for (int index = 0; index < seq.getChildNodes().getLength(); ++index) {
                 final Node instruction = seq.getChildNodes().item(index);
                 if (XmlMethod.isInstruction(instruction)) {
@@ -108,13 +98,23 @@ final class XmlMethod {
     }
 
     /**
+     * Method 'name' attribute.
+     * @return Attribute value.
+     */
+    private String[] nameAttribute() {
+        final Node name = this.node.getAttributes().getNamedItem("name");
+        final String content = name.getTextContent();
+        return content.split("__");
+    }
+
+    /**
      * Find sequence node.
      * @return Sequence node.
      */
     private Optional<Node> sequence() {
         Optional<Node> result = Optional.empty();
         final NodeList children = this.node.getChildNodes();
-        for (int index = 0; index < children.getLength(); index++) {
+        for (int index = 0; index < children.getLength(); ++index) {
             final Node item = children.item(index);
             final NamedNodeMap attributes = item.getAttributes();
             if (attributes == null) {
