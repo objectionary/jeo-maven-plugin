@@ -78,7 +78,7 @@ public final class XmlBytecodeClass extends ClassWriter {
                 null
             );
 
-            for (final XmlMethod xmlMethod : this.methods()) {
+            for (final XmlMethod xmlMethod : this.methods(node)) {
                 final MethodVisitor visitor = this.visitMethod(
                     xmlMethod.access(),
                     xmlMethod.name(),
@@ -86,7 +86,7 @@ public final class XmlBytecodeClass extends ClassWriter {
                     null,
                     null
                 );
-                XmlBytecodeClass.visitMethod(visitor, node);
+                XmlBytecodeClass.visitMethod(visitor, xmlMethod);
                 visitor.visitMaxs(0, 0);
                 visitor.visitEnd();
             }
@@ -106,17 +106,20 @@ public final class XmlBytecodeClass extends ClassWriter {
 //        } else {
 //            Logger.warn(this, String.format("Skip node: %s", node));
 //        }
-//        final NodeList children = node.getChildNodes();
-//        for (int child = 0; child < children.getLength(); ++child) {
-//            this.travers(children.item(child));
-//        }
+        final NodeList children = node.getChildNodes();
+        for (int child = 0; child < children.getLength(); ++child) {
+            this.travers(children.item(child));
+        }
     }
 
-    private List<XmlMethod> methods() {
+    private List<XmlMethod> methods(final Node node) {
         List<XmlMethod> res = new ArrayList<>();
-        final NodeList children = this.xml.node().getChildNodes();
+        final NodeList children = node.getChildNodes();
         for (int child = 0; child < children.getLength(); ++child) {
-            res.add(new XmlMethod(children.item(child)));
+            final Node item = children.item(child);
+            if (item.getNodeName().equals("o")) {
+                res.add(new XmlMethod(item));
+            }
         }
         return res;
     }
@@ -137,8 +140,8 @@ public final class XmlBytecodeClass extends ClassWriter {
      * @param node XML Node.
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
-    private static void visitMethod(final MethodVisitor visitor, final Node node) {
-        final List<XmlInstruction> instructions = new XmlMethod(node).instructions();
+    private static void visitMethod(final MethodVisitor visitor, final XmlMethod node) {
+        final List<XmlInstruction> instructions = node.instructions();
         for (int i = 0; i < instructions.size(); i++) {
 
             final XmlInstruction instruction = instructions.get(i);

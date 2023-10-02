@@ -1,7 +1,9 @@
 package org.eolang.jeo.representation.asm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -51,7 +53,11 @@ final class XmlMethod {
     }
 
     List<XmlInstruction> instructions() {
-        final Node seq = this.sequence();
+        final Optional<Node> sequence = this.sequence();
+        if (!sequence.isPresent()) {
+            return Collections.emptyList();
+        }
+        final Node seq = sequence.get();
         final List<XmlInstruction> instructions = new ArrayList<>();
         for (int index = 0; index < seq.getChildNodes().getLength(); ++index) {
             final Node instruction = seq.getChildNodes().item(index);
@@ -71,7 +77,8 @@ final class XmlMethod {
         return result;
     }
 
-    private Node sequence() {
+    private Optional<Node> sequence() {
+        Optional<Node> result = Optional.empty();
         final NodeList children = this.node.getChildNodes();
         for (int index = 0; index < children.getLength(); index++) {
             final Node item = children.item(index);
@@ -84,15 +91,11 @@ final class XmlMethod {
                 continue;
             }
             if (base.getNodeValue().equals("seq")) {
-                return item;
+                result = Optional.of(item);
+                break;
             }
         }
-        throw new IllegalStateException(
-            String.format(
-                "Can't find seq node. Each method has to have seq node, but '%s' doesn't have it.",
-                this.node
-            )
-        );
+        return result;
     }
 
     /**
