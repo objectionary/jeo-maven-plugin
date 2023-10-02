@@ -25,8 +25,8 @@ package org.eolang.jeo.improvement;
 
 import java.nio.file.Path;
 import java.util.Collections;
-import org.eolang.jeo.representation.Eo;
 import org.eolang.jeo.representation.EoRepresentation;
+import org.eolang.jeo.representation.asm.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.io.FileMatchers;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ final class ImprovementEoFootprintTest {
         footprint.apply(
             Collections.singleton(
                 new EoRepresentation(
-                    new Eo("org.eolang.jeo.Application")
+                    new BytecodeClass("org.eolang.jeo.Application").xml()
                 )
             )
         );

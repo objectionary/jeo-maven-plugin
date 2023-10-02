@@ -24,9 +24,10 @@
 package org.eolang.jeo;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.eolang.jeo.representation.Eo;
+import org.eolang.jeo.representation.asm.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -45,8 +46,14 @@ final class EoRepresentationsTest {
         final int expected = 2;
         final Path directory = temp.resolve(new EoDefaultDirectory().toPath());
         Files.createDirectories(directory);
-        Files.write(directory.resolve("first.xmir"), new Eo().bytes());
-        Files.write(directory.resolve("second.xmir"), new Eo().bytes());
+        Files.write(
+            directory.resolve("first.xmir"),
+            new BytecodeClass("First").xml().toString().getBytes(StandardCharsets.UTF_8)
+        );
+        Files.write(
+            directory.resolve("second.xmir"),
+            new BytecodeClass("Second").xml().toString().getBytes(StandardCharsets.UTF_8)
+        );
         MatcherAssert.assertThat(
             String.format("Objects were not retrieved, we expected '%d' objects", expected),
             new EoRepresentations(temp).objects(),

@@ -23,12 +23,14 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import com.jcabi.xml.XML;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
@@ -65,7 +67,7 @@ public final class BytecodeClass {
     /**
      * Constructor.
      */
-    BytecodeClass() {
+    public BytecodeClass() {
         this("Simple");
     }
 
@@ -74,7 +76,7 @@ public final class BytecodeClass {
      * @param name Class name.
      */
     public BytecodeClass(final String name) {
-        this(name, new ClassWriter(ClassWriter.COMPUTE_MAXS));
+        this(name.replace(".", "/"), new ClassWriter(ClassWriter.COMPUTE_MAXS));
     }
 
     /**
@@ -88,6 +90,21 @@ public final class BytecodeClass {
         this.methods = new ArrayList<>(0);
     }
 
+    public BytecodeClass helloWorld() {
+        return this.withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
+            .descriptor("([Ljava/lang/String;)V")
+            .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+            .instruction(Opcodes.LDC, "Hello, world!")
+            .instruction(
+                Opcodes.INVOKEVIRTUAL,
+                "java/io/PrintStream",
+                "println",
+                "(Ljava/lang/String;)V"
+            )
+            .instruction(Opcodes.RETURN)
+            .up();
+    }
+
     /**
      * Add method.
      * @param mname Method name.
@@ -98,6 +115,10 @@ public final class BytecodeClass {
         final BytecodeMethod method = new BytecodeMethod(mname, this.writer, this, modifiers);
         this.methods.add(method);
         return method;
+    }
+
+    public XML xml() {
+        return new BytecodeRepresentation(this.bytecode().asBytes()).toEO();
     }
 
     /**

@@ -42,14 +42,6 @@ public final class EoRepresentation implements Representation {
 
     /**
      * Constructor.
-     * @param object EO object as XML.
-     */
-    public EoRepresentation(final Eo object) {
-        this(object.xml());
-    }
-
-    /**
-     * Constructor.
      * @param xml XML.
      */
     public EoRepresentation(final XML xml) {

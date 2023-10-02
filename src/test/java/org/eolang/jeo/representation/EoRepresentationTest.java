@@ -46,15 +46,15 @@ class EoRepresentationTest {
     @Test
     void retrievesName() {
         final String expected = "org.eolang.foo.Math";
-        final String actual = new EoRepresentation(new Eo(expected)).name();
+        final String actual = new EoRepresentation(new BytecodeClass(expected).xml()).name();
         MatcherAssert.assertThat(
             String.format(
                 "The name of the class is not retrieved correctly, we expected '%s', but got '%s'",
                 expected,
                 actual
             ),
-            expected,
-            Matchers.equalTo(actual)
+            actual,
+            Matchers.equalTo(expected)
         );
     }
 
@@ -62,19 +62,16 @@ class EoRepresentationTest {
     void returnsXmlRepresentationOfEo() {
         MatcherAssert.assertThat(
             "The XML representation of the EO object is not correct",
-            new EoRepresentation(new Eo("org.eolang.foo.Math")).toEO(),
+            new EoRepresentation(new BytecodeClass("org.eolang.foo.Math").xml()).toEO(),
             XhtmlMatchers.hasXPath("/program[@name='org.eolang.foo.Math']")
         );
     }
 
     @Test
     void returnsBytecodeRepresentationOfEo() {
-        final Bytecode expected = new BytecodeClass("Bar")
-            .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
-            .descriptor("([Ljava/lang/String;)V")
-            .up()
-            .bytecode();
-        final Bytecode actual = new EoRepresentation(new Eo("Bar")).toBytecode();
+        final BytecodeClass clazz = new BytecodeClass("Bar");
+        final Bytecode expected = clazz.bytecode();
+        final Bytecode actual = new EoRepresentation(clazz.xml()).toBytecode();
         MatcherAssert.assertThat(
             String.format(
                 "The bytecode representation of the EO object is not correct,%nexpected:%n%s%nbut got:%n%s",
@@ -90,18 +87,7 @@ class EoRepresentationTest {
     void convertsHelloWordEoRepresentationIntoBytecode() {
         final String name = "org/eolang/jeo/Application";
         final Bytecode expected = new BytecodeClass(name)
-            .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
-            .descriptor("([Ljava/lang/String;)V")
-            .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-            .instruction(Opcodes.LDC, "Hello, world!")
-            .instruction(
-                Opcodes.INVOKEVIRTUAL,
-                "java/io/PrintStream",
-                "println",
-                "(Ljava/lang/String;)V"
-            )
-            .instruction(Opcodes.RETURN)
-            .up()
+            .helloWorld()
             .bytecode();
         final Bytecode actual = new EoRepresentation(
             new BytecodeRepresentation(expected.asBytes()).toEO()
