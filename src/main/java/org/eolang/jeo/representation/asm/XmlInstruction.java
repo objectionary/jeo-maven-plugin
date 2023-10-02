@@ -6,11 +6,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class XmlInstruction {
+final class XmlInstruction {
 
     private final Node node;
 
-    public XmlInstruction(final Node node) {
+    XmlInstruction(final Node node) {
         this.node = node;
     }
 
@@ -22,7 +22,7 @@ public class XmlInstruction {
                 .getNodeValue().split("-")[1]);
     }
 
-    public Object[] arguments() {
+    Object[] arguments() {
         return XmlInstruction.arguments(this.node);
     }
 
