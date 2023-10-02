@@ -29,17 +29,11 @@ import org.eolang.jeo.representation.asm.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.Opcodes;
 
 /**
  * Test case for {@link EoRepresentation}.
  *
  * @since 0.1.0
- * @todo #108:90min Replace Eo class usage with BytecodeRepresentation.
- *  Currently we have unnecessary class Eo that represents XML of EO object.
- *  We can use {@link org.eolang.jeo.representation.BytecodeRepresentation#toEO()} instead.
- *  This will simplify the code and make it more readable.
- *  Also, we need to remove Eo class from the project.
  */
 class EoRepresentationTest {
 

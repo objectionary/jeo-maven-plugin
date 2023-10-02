@@ -90,6 +90,10 @@ public final class BytecodeClass {
         this.methods = new ArrayList<>(0);
     }
 
+    /**
+     * Hello world bytecode.
+     * @return The same class with the hello world method.
+     */
     public BytecodeClass helloWorld() {
         return this.withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
             .descriptor("([Ljava/lang/String;)V")
@@ -117,6 +121,10 @@ public final class BytecodeClass {
         return method;
     }
 
+    /**
+     * Converts bytecode into XML.
+     * @return XML representation of bytecode.
+     */
     public XML xml() {
         return new BytecodeRepresentation(this.bytecode().asBytes()).toEO();
     }
