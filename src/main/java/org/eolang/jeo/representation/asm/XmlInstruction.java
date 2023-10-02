@@ -31,20 +31,34 @@ import org.w3c.dom.NodeList;
 
 final class XmlInstruction {
 
+    /**
+     * Instruction node.
+     */
     private final Node node;
 
+    /**
+     * Constructor.
+     * @param node Instruction node.
+     */
     XmlInstruction(final Node node) {
         this.node = node;
     }
 
-
-    public int code() {
+    /**
+     * Instruction code.
+     * @return Code.
+     */
+    int code() {
         return Integer.parseInt(
             this.node.getAttributes()
                 .getNamedItem("name")
                 .getNodeValue().split("-")[1]);
     }
 
+    /**
+     * Instruction arguments.
+     * @return Arguments.
+     */
     Object[] arguments() {
         return XmlInstruction.arguments(this.node);
     }
@@ -65,7 +79,6 @@ final class XmlInstruction {
         }
         return res.toArray();
     }
-
 
     /**
      * Convert hex string to human-readable string.
