@@ -21,57 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.improvement;
+package org.eolang.jeo.representation;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import org.eolang.jeo.Improvement;
-import org.eolang.jeo.Representation;
+import java.io.IOException;
+import java.nio.file.Path;
+import org.eolang.jeo.BytecodeClasses;
+import org.eolang.jeo.improvement.ImprovementEoFootprint;
 
 /**
- * Improvements.
- * A list of improvements to apply.
+ * Transpilation of the bytecode to the EO.
  *
  * @since 0.1.0
  */
-public final class Improvements implements Improvement {
+public class BytecodeTransformation {
 
     /**
-     * All boosts.
+     * Project compiled classes.
      */
-    private final Collection<? extends Improvement> all;
+    private final Path classes;
 
     /**
-     * Constructor.
-     * @param arr Array of boosts.
+     * Project default target directory.
      */
-    public Improvements(final Improvement... arr) {
-        this(Arrays.asList(arr));
-    }
+    private final Path target;
 
     /**
      * Constructor.
-     * @param boosts Collection of boosts.
+     * @param classes Project compiled classes.
+     * @param target Project default target directory.
      */
-    private Improvements(final Collection<? extends Improvement> boosts) {
-        this.all = boosts;
-    }
-
-    @Override
-    public Collection<? extends Representation> apply(
-        final Collection<? extends Representation> representations
+    public BytecodeTransformation(
+        final Path classes,
+        final Path target
     ) {
-        final Collection<? extends Representation> result;
-        if (this.all.isEmpty()) {
-            result = Collections.emptyList();
-        } else {
-            Collection<? extends Representation> res = representations;
-            for (final Improvement current : this.all) {
-                res = current.apply(res);
-            }
-            result = res;
-        }
-        return result;
+        this.classes = classes;
+        this.target = target;
+    }
+
+    /**
+     * Transpile all bytecode files.
+     * @throws IOException If some I/O problem arises.
+     */
+    public void transpile() throws IOException {
+        new ImprovementEoFootprint(this.target).apply(
+            new BytecodeClasses(this.classes).bytecode()
+        );
     }
 }

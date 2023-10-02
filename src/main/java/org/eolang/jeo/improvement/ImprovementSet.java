@@ -23,30 +23,55 @@
  */
 package org.eolang.jeo.improvement;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link Improvements}.
+ * Improvements.
+ * A list of improvements to apply.
+ *
  * @since 0.1.0
  */
-class ImprovementsTest {
+public final class ImprovementSet implements Improvement {
 
-    @Test
-    void appliesAllImprovements() {
-        final Improvement.Mock first = new Improvement.Mock();
-        final Improvement.Mock second = new Improvement.Mock();
-        new Improvements(first, second).apply(
-            Collections.singleton(new Representation.Named("foo"))
-        );
-        MatcherAssert.assertThat(
-            "Both improvements should be applied",
-            first.isApplied() && second.isApplied(),
-            Matchers.is(true)
-        );
+    /**
+     * All boosts.
+     */
+    private final Collection<? extends Improvement> all;
+
+    /**
+     * Constructor.
+     * @param arr Array of boosts.
+     */
+    public ImprovementSet(final Improvement... arr) {
+        this(Arrays.asList(arr));
+    }
+
+    /**
+     * Constructor.
+     * @param boosts Collection of boosts.
+     */
+    private ImprovementSet(final Collection<? extends Improvement> boosts) {
+        this.all = boosts;
+    }
+
+    @Override
+    public Collection<? extends Representation> apply(
+        final Collection<? extends Representation> representations
+    ) {
+        final Collection<? extends Representation> result;
+        if (this.all.isEmpty()) {
+            result = Collections.emptyList();
+        } else {
+            Collection<? extends Representation> res = representations;
+            for (final Improvement current : this.all) {
+                res = current.apply(res);
+            }
+            result = res;
+        }
+        return result;
     }
 }

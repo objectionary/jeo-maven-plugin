@@ -28,7 +28,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eolang.jeo.improvement.BytecodeFootprint;
+import org.eolang.jeo.improvement.ImprovementBytecodeFootprint;
 
 /**
  * Converts EO to bytecode.
@@ -60,7 +60,7 @@ public final class EoToBytecodeMojo extends AbstractMojo {
 
     @Override
     public void execute() {
-        new BytecodeFootprint(this.classes.toPath())
+        new ImprovementBytecodeFootprint(this.classes.toPath())
             .apply(new EoRepresentations(this.target.toPath()).objects());
     }
 }

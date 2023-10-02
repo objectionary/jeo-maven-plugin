@@ -23,70 +23,71 @@
  */
 package org.eolang.jeo.improvement;
 
-import java.io.File;
+import com.jcabi.log.Logger;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.stream.Collectors;
-import org.eolang.jeo.EoDefaultDirectory;
+import java.util.Collections;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.representation.EoRepresentation;
 
 /**
- * Footprint of the EO's.
+ * Footprint of the representations as bytecode classes.
  *
  * @since 0.1.0
  */
-public final class EoFootprint implements Improvement {
+public final class ImprovementBytecodeFootprint implements Improvement {
 
     /**
-     * Where to save the EO.
+     * Where to save the bytecode classes.
      */
-    private final Path target;
+    private final Path classes;
 
     /**
      * Constructor.
-     * @param home Where to save the EO.
+     * @param target Where to save the bytecode classes.
      */
-    public EoFootprint(final Path home) {
-        this.target = home;
+    public ImprovementBytecodeFootprint(final Path target) {
+        this.classes = target;
     }
 
     @Override
-    public Collection<Representation> apply(
+    public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        return representations.stream()
-            .map(Representation::toEO)
-            .map(EoRepresentation::new)
-            .peek(this::tryToSave)
-            .collect(Collectors.toList());
+        representations.forEach(this::recompile);
+        return Collections.unmodifiableCollection(representations);
     }
 
     /**
-     * Try to save XML to the target folder.
-     * @param representation XML to save.
+     * Recompile the Intermediate Representation.
+     * @param representation Intermediate Representation to recompile.
      */
-    private void tryToSave(final Representation representation) {
+    private void recompile(final Representation representation) {
         final String name = representation.name();
-        final Path path = this.target.resolve(new EoDefaultDirectory().toPath())
-            .resolve(String.format("%s.xmir", name.replace('.', File.separatorChar)));
         try {
-            Files.createDirectories(path.getParent());
-            Files.write(
+            final byte[] bytecode = representation.toBytecode().asBytes();
+            final String[] subpath = name.split("\\.");
+            subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
+            final Path path = Paths.get(this.classes.toString(), subpath);
+            Logger.info(
+                this,
+                "Recompiling '%s', bytecode instance '%s', bytes to save '%s'",
                 path,
-                representation.toEO().toString().getBytes(StandardCharsets.UTF_8),
-                StandardOpenOption.CREATE_NEW
+                representation.getClass(),
+                bytecode.length
+            );
+            Files.createDirectories(path.getParent());
+            Files.write(path, bytecode);
+            Logger.info(
+                this,
+                "%s was recompiled successfully.",
+                path.getFileName().toString()
             );
         } catch (final IOException exception) {
-            throw new IllegalStateException(
-                String.format("Can't save XML to %s", path),
-                exception
-            );
+            throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
         }
     }
 }

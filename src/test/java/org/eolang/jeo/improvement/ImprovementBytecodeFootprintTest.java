@@ -21,45 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation;
+package org.eolang.jeo.improvement;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import org.cactoos.bytes.BytesOf;
-import org.cactoos.bytes.UncheckedBytes;
-import org.cactoos.io.ResourceOf;
+import java.util.Collections;
+import org.eolang.jeo.representation.Eo;
+import org.eolang.jeo.representation.EoRepresentation;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+import org.hamcrest.io.FileMatchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Tests for {@link BytecodeTranspilation}.
+ * Test case for {@link ImprovementBytecodeFootprint}.
  *
  * @since 0.1.0
  */
-class BytecodeTranspilationTest {
+class ImprovementBytecodeFootprintTest {
 
     @Test
-    void transpilesSuccessfully(@TempDir final Path temp) throws IOException {
-        final String name = "MethodByte.class";
-        Files.write(
-            temp.resolve(name),
-            new UncheckedBytes(new BytesOf(new ResourceOf(name))).asBytes()
+    void appliesSuccessfully(@TempDir final Path temp) {
+        final String expected = "jeo.xmir.Fake";
+        new ImprovementBytecodeFootprint(temp).apply(
+            Collections.singleton(new EoRepresentation(new Eo(expected)))
         );
-        new BytecodeTranspilation(temp, temp).transpile();
         MatcherAssert.assertThat(
-            String.format("Can't find the transpiled file for the class '%s'.", name),
-            Files.exists(
-                temp.resolve("jeo")
-                    .resolve("xmir")
-                    .resolve("org")
-                    .resolve("eolang")
-                    .resolve("jeo")
-                    .resolve("MethodByte.xmir")
+            String.format(
+                "Bytecode file was not saved for the representation with the name '%s'",
+                expected
             ),
-            Matchers.is(true)
+            temp.resolve("jeo")
+                .resolve("xmir")
+                .resolve("Fake.class")
+                .toFile(),
+            FileMatchers.anExistingFile()
         );
     }
 }

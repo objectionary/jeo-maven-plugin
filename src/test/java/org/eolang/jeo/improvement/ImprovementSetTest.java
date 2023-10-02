@@ -23,41 +23,30 @@
  */
 package org.eolang.jeo.improvement;
 
-import java.nio.file.Path;
 import java.util.Collections;
-import org.eolang.jeo.representation.Eo;
-import org.eolang.jeo.representation.EoRepresentation;
+import org.eolang.jeo.Improvement;
+import org.eolang.jeo.Representation;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.io.FileMatchers;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link EoFootprint}.
- *
+ * Test case for {@link ImprovementSet}.
  * @since 0.1.0
  */
-final class EoFootprintTest {
+class ImprovementSetTest {
 
     @Test
-    void savesXml(@TempDir final Path temp) {
-        final EoFootprint footprint = new EoFootprint(temp);
-        footprint.apply(
-            Collections.singleton(
-                new EoRepresentation(
-                    new Eo("org.eolang.jeo.Application")
-                )
-            )
+    void appliesAllImprovements() {
+        final Improvement.Mock first = new Improvement.Mock();
+        final Improvement.Mock second = new Improvement.Mock();
+        new ImprovementSet(first, second).apply(
+            Collections.singleton(new Representation.Named("foo"))
         );
         MatcherAssert.assertThat(
-            "XML file was not saved",
-            temp.resolve("jeo")
-                .resolve("xmir")
-                .resolve("org")
-                .resolve("eolang")
-                .resolve("jeo")
-                .resolve("Application.xmir").toFile(),
-            FileMatchers.anExistingFile()
+            "Both improvements should be applied",
+            first.isApplied() && second.isApplied(),
+            Matchers.is(true)
         );
     }
 }

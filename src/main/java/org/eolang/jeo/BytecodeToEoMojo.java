@@ -30,7 +30,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eolang.jeo.representation.BytecodeTranspilation;
+import org.eolang.jeo.representation.BytecodeTransformation;
 
 /**
  * Converts bytecode to EO.
@@ -59,7 +59,7 @@ public final class BytecodeToEoMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException {
         try {
-            new BytecodeTranspilation(this.classes.toPath(), this.target.toPath()).transpile();
+            new BytecodeTransformation(this.classes.toPath(), this.target.toPath()).transpile();
         } catch (final IOException exception) {
             throw new MojoExecutionException(
                 String.format(

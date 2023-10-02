@@ -30,10 +30,10 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eolang.jeo.improvement.BytecodeFootprint;
-import org.eolang.jeo.improvement.EoFootprint;
+import org.eolang.jeo.improvement.ImprovementBytecodeFootprint;
+import org.eolang.jeo.improvement.ImprovementEoFootprint;
 import org.eolang.jeo.improvement.ImprovementLogged;
-import org.eolang.jeo.improvement.Improvements;
+import org.eolang.jeo.improvement.ImprovementSet;
 
 /**
  * Default optimization mojo.
@@ -68,10 +68,10 @@ public final class JeoMojo extends AbstractMojo {
         try {
             new Optimization(
                 this.classes.toPath(),
-                new Improvements(
+                new ImprovementSet(
                     new ImprovementLogged(),
-                    new EoFootprint(this.target.toPath()),
-                    new BytecodeFootprint(this.classes.toPath())
+                    new ImprovementEoFootprint(this.target.toPath()),
+                    new ImprovementBytecodeFootprint(this.classes.toPath())
                 )
             ).apply();
         } catch (final IllegalStateException | IOException exception) {

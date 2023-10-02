@@ -21,50 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation;
+package org.eolang.jeo.improvement;
 
-import java.io.IOException;
 import java.nio.file.Path;
-import org.eolang.jeo.BytecodeClasses;
-import org.eolang.jeo.improvement.EoFootprint;
+import java.util.Collections;
+import org.eolang.jeo.representation.Eo;
+import org.eolang.jeo.representation.EoRepresentation;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.io.FileMatchers;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Transpilation of the bytecode to the EO.
+ * Test case for {@link ImprovementEoFootprint}.
  *
  * @since 0.1.0
  */
-public class BytecodeTranspilation {
+final class ImprovementEoFootprintTest {
 
-    /**
-     * Project compiled classes.
-     */
-    private final Path classes;
-
-    /**
-     * Project default target directory.
-     */
-    private final Path target;
-
-    /**
-     * Constructor.
-     * @param classes Project compiled classes.
-     * @param target Project default target directory.
-     */
-    public BytecodeTranspilation(
-        final Path classes,
-        final Path target
-    ) {
-        this.classes = classes;
-        this.target = target;
-    }
-
-    /**
-     * Transpile all bytecode files.
-     * @throws IOException If some I/O problem arises.
-     */
-    public void transpile() throws IOException {
-        new EoFootprint(this.target).apply(
-            new BytecodeClasses(this.classes).bytecode()
+    @Test
+    void savesXml(@TempDir final Path temp) {
+        final ImprovementEoFootprint footprint = new ImprovementEoFootprint(temp);
+        footprint.apply(
+            Collections.singleton(
+                new EoRepresentation(
+                    new Eo("org.eolang.jeo.Application")
+                )
+            )
+        );
+        MatcherAssert.assertThat(
+            "XML file was not saved",
+            temp.resolve("jeo")
+                .resolve("xmir")
+                .resolve("org")
+                .resolve("eolang")
+                .resolve("jeo")
+                .resolve("Application.xmir").toFile(),
+            FileMatchers.anExistingFile()
         );
     }
 }
