@@ -15,7 +15,7 @@ public class XmlClass {
     private final Node node;
 
     public XmlClass(final XML xml) {
-        this(XmlClass.findTopLevelClass(xml));
+        this(XmlClass.findClass(xml));
     }
 
     private XmlClass(final Node xml) {
@@ -49,29 +49,35 @@ public class XmlClass {
     }
 
 
-    private static Node findTopLevelClass(XML xml) {
+    private static Node findClass(XML xml) {
         final Node root = xml.node();
         if (XmlClass.isClass(root)) {
             return root;
         } else {
-            return XmlClass.findClass(root).orElseThrow(
-                () -> new IllegalStateException("No top-level class found")
-            );
+            return XmlClass.findClass(root)
+                .orElseThrow(
+                    () -> new IllegalStateException(
+                        String.format(
+                            "No top-level class found in '%s'",
+                            xml
+                        )
+                    )
+                );
         }
     }
 
     private static Optional<Node> findClass(Node node) {
         Optional<Node> res = Optional.empty();
         if (XmlClass.isClass(node)) {
-            return Optional.of(node);
-        }
-        final NodeList children = node.getChildNodes();
-        for (int index = 0; index < children.getLength(); index++) {
-            final Optional<Node> aClass = XmlClass.findClass(children.item(index));
-            if (aClass.isPresent()) {
-                res = aClass;
+            res = Optional.of(node);
+        } else {
+            final NodeList children = node.getChildNodes();
+            for (int index = 0; index < children.getLength(); index++) {
+                final Optional<Node> child = XmlClass.findClass(children.item(index));
+                if (child.isPresent()) {
+                    res = child;
+                }
             }
-
         }
         return res;
     }

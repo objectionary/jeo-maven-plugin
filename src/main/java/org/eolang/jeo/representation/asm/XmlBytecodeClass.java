@@ -64,16 +64,16 @@ public final class XmlBytecodeClass extends ClassWriter {
      * Traverse XML.
      */
     private void travers() {
-        final XmlClass aClass = new XmlClass(this.xml);
+        final XmlClass clazz = new XmlClass(this.xml);
         this.visit(
             new DefaultVersion().java(),
-            aClass.access(),
-            aClass.name(),
+            clazz.access(),
+            clazz.name(),
             null,
             "java/lang/Object",
             null
         );
-        for (final XmlMethod method : aClass.methods()) {
+        for (final XmlMethod method : clazz.methods()) {
             final MethodVisitor visitor = this.visitMethod(
                 method.access(),
                 method.name(),
@@ -85,60 +85,6 @@ public final class XmlBytecodeClass extends ClassWriter {
             visitor.visitMaxs(0, 0);
             visitor.visitEnd();
         }
-
-
-//        if (XmlBytecodeClass.isClass(node)) {
-//            final Node name = node.getAttributes().getNamedItem("name");
-//            final String content = name.getTextContent();
-//            final String[] split = content.split("__");
-//            this.visit(
-//                new DefaultVersion().java(),
-//                Integer.parseInt(split[0]),
-//                String.valueOf(split[1]),
-//                null,
-//                "java/lang/Object",
-//                null
-//            );
-//            for (final XmlMethod xmlMethod : this.methods(node)) {
-//                final MethodVisitor visitor = this.visitMethod(
-//                    xmlMethod.access(),
-//                    xmlMethod.name(),
-//                    xmlMethod.descriptor(),
-//                    null,
-//                    null
-//                );
-//                XmlBytecodeClass.visitMethod(visitor, xmlMethod);
-//                visitor.visitMaxs(0, 0);
-//                visitor.visitEnd();
-//            }
-//
-//        }
-//        final NodeList children = node.getChildNodes();
-//        for (int child = 0; child < children.getLength(); ++child) {
-//            this.travers(children.item(child));
-//        }
-    }
-
-    private List<XmlMethod> methods(final Node node) {
-        List<XmlMethod> res = new ArrayList<>();
-        final NodeList children = node.getChildNodes();
-        for (int child = 0; child < children.getLength(); ++child) {
-            final Node item = children.item(child);
-            if (item.getNodeName().equals("o")) {
-                res.add(new XmlMethod(item));
-            }
-        }
-        return res;
-    }
-
-    /**
-     * Check if the node is a class.
-     * @param node Node.
-     * @return True if the node is a class.
-     */
-    private static boolean isClass(final Node node) {
-        return node.getNodeName().equals("o")
-            && node.getParentNode().getNodeName().equals("objects");
     }
 
     /**
@@ -148,9 +94,7 @@ public final class XmlBytecodeClass extends ClassWriter {
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
     private static void visitMethod(final MethodVisitor visitor, final XmlMethod node) {
-        final List<XmlInstruction> instructions = node.instructions();
-        for (int i = 0; i < instructions.size(); i++) {
-            final XmlInstruction instruction = instructions.get(i);
+        for (final XmlInstruction instruction : node.instructions()) {
             final int code = instruction.code();
             final Object[] arguments = instruction.arguments();
             switch (code) {
