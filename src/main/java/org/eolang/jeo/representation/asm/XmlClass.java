@@ -1,3 +1,26 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2016-2023 Objectionary.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package org.eolang.jeo.representation.asm;
 
 import com.jcabi.xml.XML;
@@ -7,35 +30,59 @@ import java.util.Optional;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class XmlClass {
+/**
+ * XML class.
+ * @since 0.1
+ */
+final class XmlClass {
 
     /**
-     * XML.
+     * Class node from entire XML.
      */
     private final Node node;
 
-    public XmlClass(final XML xml) {
+    /**
+     * Constructor.
+     * @param xml Entire XML.
+     */
+    XmlClass(final XML xml) {
         this(XmlClass.findClass(xml));
     }
 
+    /**
+     * Constructor.
+     * @param xml Class node.
+     */
     private XmlClass(final Node xml) {
         this.node = xml;
     }
 
+    /**
+     * Class access modifiers.
+     * @return Access modifiers.
+     */
     int access() {
-        final Node name = this.node.getAttributes().getNamedItem("name");
-        final String content = name.getTextContent();
-        final String[] split = content.split("__");
-        return Integer.parseInt(split[0]);
+        return Integer.parseInt(this.nameAttribute()[0]);
     }
 
     String name() {
-        final Node name = this.node.getAttributes().getNamedItem("name");
-        final String content = name.getTextContent();
-        final String[] split = content.split("__");
-        return String.valueOf(split[1]);
+        return String.valueOf(this.nameAttribute()[1]);
     }
 
+    /**
+     * Name attribute.
+     * @return Name attribute.
+     */
+    private String[] nameAttribute() {
+        final Node name = this.node.getAttributes().getNamedItem("name");
+        final String content = name.getTextContent();
+        return content.split("__");
+    }
+
+    /**
+     * Methods.
+     * @return Class methods.
+     */
     List<XmlMethod> methods() {
         List<XmlMethod> res = new ArrayList<>();
         final NodeList children = this.node.getChildNodes();
@@ -48,7 +95,11 @@ public class XmlClass {
         return res;
     }
 
-
+    /**
+     * Find class node in entire XML.
+     * @param xml Entire XML.
+     * @return Class node.
+     */
     private static Node findClass(XML xml) {
         final Node root = xml.node();
         if (XmlClass.isClass(root)) {
@@ -66,6 +117,11 @@ public class XmlClass {
         }
     }
 
+    /**
+     * Find class node in the current node.
+     * @param node Current node.
+     * @return Class node.
+     */
     private static Optional<Node> findClass(Node node) {
         Optional<Node> res = Optional.empty();
         if (XmlClass.isClass(node)) {
@@ -81,7 +137,6 @@ public class XmlClass {
         }
         return res;
     }
-
 
     /**
      * Check if the node is a class.

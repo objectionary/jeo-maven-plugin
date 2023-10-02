@@ -26,7 +26,7 @@ package org.eolang.jeo.representation;
 import com.jcabi.xml.XML;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.asm.Bytecode;
-import org.eolang.jeo.representation.asm.XmlBytecodeClass;
+import org.eolang.jeo.representation.asm.XmlBytecode;
 
 /**
  * Intermediate representation of a class files from XMIR.
@@ -69,6 +69,6 @@ public final class EoRepresentation implements Representation {
     @Override
     public Bytecode toBytecode() {
         new Schema(this.xml).check();
-        return new Bytecode(new XmlBytecodeClass(this.xml).toByteArray());
+        return new Bytecode(new XmlBytecode(this.xml).toByteArray());
     }
 }

@@ -24,21 +24,16 @@
 package org.eolang.jeo.representation.asm;
 
 import com.jcabi.xml.XML;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * XML to Java bytecode.
  * @since 0.1.0
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class XmlBytecodeClass extends ClassWriter {
+public final class XmlBytecode extends ClassWriter {
 
     /**
      * XML.
@@ -49,7 +44,7 @@ public final class XmlBytecodeClass extends ClassWriter {
      * Constructor.
      * @param xml XML.
      */
-    public XmlBytecodeClass(final XML xml) {
+    public XmlBytecode(final XML xml) {
         super(ClassWriter.COMPUTE_MAXS);
         this.xml = xml;
     }
@@ -81,7 +76,7 @@ public final class XmlBytecodeClass extends ClassWriter {
                 null,
                 null
             );
-            XmlBytecodeClass.visitMethod(visitor, method);
+            XmlBytecode.visitMethod(visitor, method);
             visitor.visitMaxs(0, 0);
             visitor.visitEnd();
         }
