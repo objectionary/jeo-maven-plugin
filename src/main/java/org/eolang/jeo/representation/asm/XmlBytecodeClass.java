@@ -77,7 +77,6 @@ public final class XmlBytecodeClass extends ClassWriter {
                 "java/lang/Object",
                 null
             );
-
             for (final XmlMethod xmlMethod : this.methods(node)) {
                 final MethodVisitor visitor = this.visitMethod(
                     xmlMethod.access(),
@@ -92,20 +91,6 @@ public final class XmlBytecodeClass extends ClassWriter {
             }
 
         }
-//        else if (method.isMethod()) {
-//            final MethodVisitor visitor = this.visitMethod(
-//                method.access(),
-//                method.name(),
-//                method.descriptor(),
-//                null,
-//                null
-//            );
-//            XmlBytecodeClass.visitMethod(visitor, node);
-//            visitor.visitMaxs(0, 0);
-//            visitor.visitEnd();
-//        } else {
-//            Logger.warn(this, String.format("Skip node: %s", node));
-//        }
         final NodeList children = node.getChildNodes();
         for (int child = 0; child < children.getLength(); ++child) {
             this.travers(children.item(child));
@@ -143,21 +128,9 @@ public final class XmlBytecodeClass extends ClassWriter {
     private static void visitMethod(final MethodVisitor visitor, final XmlMethod node) {
         final List<XmlInstruction> instructions = node.instructions();
         for (int i = 0; i < instructions.size(); i++) {
-
             final XmlInstruction instruction = instructions.get(i);
-
             final int code = instruction.code();
             final Object[] arguments = instruction.arguments();
-
-//            final Node opcode = opcodes.item(instruction);
-//            final NamedNodeMap attrs = opcode.getAttributes();
-//            if (attrs == null) {
-//                continue;
-//            }
-//            final String name = attrs.getNamedItem("name").getNodeValue();
-//            final String[] split = name.split("-");
-//            final int code = Integer.parseInt(split[1]);
-//            final Object[] arguments = XmlBytecodeClass.arguments(opcode);
             switch (code) {
                 case Opcodes.GETSTATIC:
                     visitor.visitFieldInsn(
@@ -187,93 +160,6 @@ public final class XmlBytecodeClass extends ClassWriter {
                         String.format("Unexpected value: %d", code)
                     );
             }
-
         }
-
-//        for (int index = 0; index < node.getChildNodes().getLength(); ++index) {
-//            final Node item = node.getChildNodes().item(index);
-//            final NamedNodeMap attributes = item.getAttributes();
-//            if (attributes == null) {
-//                continue;
-//            }
-//            final Node base = attributes.getNamedItem("base");
-//            if (base == null) {
-//                continue;
-//            }
-//            if (base.getNodeValue().equals("seq")) {
-//                final NodeList opcodes = item.getChildNodes();
-//                for (int instruction = 0; instruction < opcodes.getLength(); ++instruction) {
-//                    final Node opcode = opcodes.item(instruction);
-//                    final NamedNodeMap attrs = opcode.getAttributes();
-//                    if (attrs == null) {
-//                        continue;
-//                    }
-//                    final String name = attrs.getNamedItem("name").getNodeValue();
-//                    final String[] split = name.split("-");
-//                    final int code = Integer.parseInt(split[1]);
-//                    final Object[] arguments = XmlBytecodeClass.arguments(opcode);
-//                    switch (code) {
-//                        case Opcodes.GETSTATIC:
-//                            visitor.visitFieldInsn(
-//                                code,
-//                                String.valueOf(arguments[0]),
-//                                String.valueOf(arguments[1]),
-//                                String.valueOf(arguments[2])
-//                            );
-//                            break;
-//                        case Opcodes.LDC:
-//                            visitor.visitLdcInsn(arguments[0]);
-//                            break;
-//                        case Opcodes.INVOKEVIRTUAL:
-//                            visitor.visitMethodInsn(
-//                                code,
-//                                String.valueOf(arguments[0]),
-//                                String.valueOf(arguments[1]),
-//                                String.valueOf(arguments[2]),
-//                                false
-//                            );
-//                            break;
-//                        case Opcodes.RETURN:
-//                            visitor.visitInsn(Opcodes.RETURN);
-//                            break;
-//                        default:
-//                            throw new IllegalStateException(
-//                                String.format("Unexpected value: %d", code)
-//                            );
-//                    }
-//                }
-//            }
-//        }
     }
-
-    /**
-     * Get opcode arguments.
-     * @param node Node.
-     * @return Arguments.
-     */
-    private static Object[] arguments(final Node node) {
-        final NodeList children = node.getChildNodes();
-        final Collection<Object> res = new ArrayList<>(children.getLength());
-        for (int index = 0; index < children.getLength(); ++index) {
-            final Node child = children.item(index);
-            if (child.getNodeName().equals("o")) {
-                res.add(XmlBytecodeClass.hexToString(child.getTextContent()));
-            }
-        }
-        return res.toArray();
-    }
-
-    /**
-     * Convert hex string to human-readable string.
-     * @param hex Hex string.
-     * @return Human-readable string.
-     */
-    private static String hexToString(final String hex) {
-        final StringBuilder output = new StringBuilder();
-        for (final String value : hex.split(" ")) {
-            output.append((char) Integer.parseInt(value, 16));
-        }
-        return output.toString();
-    }
-
 }

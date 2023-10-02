@@ -16,21 +16,6 @@ final class XmlMethod {
         this.node = node;
     }
 
-    /**
-     * Check if the node is a method.
-     * @return True if the node is a method.
-     * @checkstyle BooleanExpressionComplexityCheck (10 lines)
-     */
-    boolean isMethod() {
-        return !XmlMethod.isOpcode(this.node) && this.node.getNodeName().equals("o")
-            && this.node.getAttributes().getNamedItem("name") != null
-            && !(this.node.getAttributes().getNamedItem("name") != null
-            && this.node.getAttributes().getNamedItem("name").getNodeValue().equals("args"))
-            && !this.node.getParentNode().getNodeName().equals("objects")
-            && !(this.node.getAttributes().getNamedItem("base") != null
-            && this.node.getAttributes().getNamedItem("base").getNodeValue().equals("seq"));
-    }
-
     int access() {
         final Node name = this.node.getAttributes().getNamedItem("name");
         final String content = name.getTextContent();
@@ -93,25 +78,6 @@ final class XmlMethod {
             if (base.getNodeValue().equals("seq")) {
                 result = Optional.of(item);
                 break;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Check if the node is an opcode.
-     * @param node Node.
-     * @return True if the node is an opcode.
-     */
-    private static boolean isOpcode(final Node node) {
-        boolean result = false;
-        final Node parent = node.getParentNode();
-        if (parent != null) {
-            final NamedNodeMap attributes = parent.getAttributes();
-            if (attributes != null && attributes.getNamedItem("base") != null) {
-                result = attributes.getNamedItem("base")
-                    .getNodeValue()
-                    .equals("seq");
             }
         }
         return result;
