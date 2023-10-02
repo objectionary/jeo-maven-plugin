@@ -37,11 +37,6 @@ import org.w3c.dom.NodeList;
 /**
  * XML to Java bytecode.
  * @since 0.1.0
- * @todo #108:90min Refactor XmlBytecode class.
- *  XmlBytecode class is too big and complex. It should be refactored
- *  to be more readable and maintainable. Pay attention to checkstyle
- *  and PMD warnings. When refactoring, make sure that all tests are
- *  passing, especially integration tests.
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class XmlBytecode extends ClassWriter {
