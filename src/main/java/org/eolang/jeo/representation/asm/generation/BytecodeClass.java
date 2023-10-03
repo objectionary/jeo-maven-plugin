@@ -38,13 +38,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
 /**
  * Class useful for generating bytecode for testing purposes.
  * @since 0.1.0
- * @todo #108:90min Refactor BytecodeClass.
- *  The class is too big and has too many responsibilities.
- *  It should be refactored to be more readable and maintainable.
- *  Maybe it makes sence to split it into several classes and put all
- *  of them into the separate package.
  */
-@SuppressWarnings({"JTCOP.RuleAllTestsHaveProductionClass", "JTCOP.RuleCorrectTestName"})
 public final class BytecodeClass {
 
     /**
