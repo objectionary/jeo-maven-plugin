@@ -90,6 +90,11 @@ final class XmlInstruction {
      * Convert hex string to human-readable string.
      * @param hex Hex string.
      * @return Human-readable string.
+     * @todo #122:90min Replace hexToString method with XmlData class.
+     *  Right now we have some duplication among XmlInstruction and XmlData.
+     *  They both implement the same logic of converting hex string to
+     *  human-readable string. We should refactor this code and remove
+     *  duplication.
      */
     private static String hexToString(final String hex) {
         return Arrays.stream(hex.split(" "))
