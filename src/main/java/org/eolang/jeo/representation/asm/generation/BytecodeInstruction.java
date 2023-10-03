@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.asm.generation;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -74,40 +75,61 @@ final class BytecodeInstruction {
      * @param visitor Method visitor.
      */
     void generate(final MethodVisitor visitor) {
-        switch (this.opcode) {
-            case Opcodes.LDC:
-                visitor.visitLdcInsn(this.args.get(0));
-                break;
-            case Opcodes.INVOKEVIRTUAL:
-                visitor.visitMethodInsn(
-                    this.opcode,
-                    String.valueOf(this.args.get(0)),
-                    String.valueOf(this.args.get(1)),
-                    String.valueOf(this.args.get(2)),
-                    false
-                );
-                break;
-            case Opcodes.IRETURN:
-                visitor.visitInsn(Opcodes.IRETURN);
-                break;
-            case Opcodes.BIPUSH:
-                visitor.visitIntInsn(Opcodes.BIPUSH, (Integer) this.args.get(0));
-                break;
-            case Opcodes.GETSTATIC:
-                visitor.visitFieldInsn(
-                    Opcodes.GETSTATIC,
-                    this.args.get(0).toString(),
-                    this.args.get(1).toString(),
-                    this.args.get(2).toString()
-                );
-                break;
-            case Opcodes.RETURN:
-                visitor.visitInsn(Opcodes.RETURN);
-                break;
-            default:
-                throw new IllegalStateException(
-                    String.format("Unexpected value: %d", this.opcode)
-                );
+        Instructions.of(this.opcode).generate(visitor, this.args);
+    }
+
+    private enum Instructions {
+
+        BIPUSH(
+            Opcodes.BIPUSH,
+            (visitor, args) -> visitor.visitIntInsn(Opcodes.BIPUSH, (Integer) args.get(0))
+        ),
+        LDC(
+            Opcodes.LDC,
+            (visitor, args) -> visitor.visitLdcInsn(args.get(0))
+        ),
+        IRETURN(
+            Opcodes.IRETURN,
+            (visitor, args) -> visitor.visitInsn(Opcodes.IRETURN)
+        ),
+        RETURN(
+            Opcodes.RETURN,
+            (visitor, args) -> visitor.visitInsn(Opcodes.RETURN)
+        ),
+        INVOKEVIRTUAL(
+            Opcodes.INVOKEVIRTUAL,
+            (visitor, args) -> visitor.visitMethodInsn(
+                Opcodes.INVOKEVIRTUAL,
+                String.valueOf(args.get(0)),
+                String.valueOf(args.get(1)),
+                String.valueOf(args.get(2)),
+                false
+            )
+        );
+
+        private final int opcode;
+        private BiConsumer<MethodVisitor, List<Object>> visit;
+
+        Instructions(final int opcode,
+            final BiConsumer<MethodVisitor, List<Object>> visit
+        ) {
+            this.opcode = opcode;
+            this.visit = visit;
+        }
+
+        void generate(final MethodVisitor visitor, final List<Object> args) {
+            this.visit.accept(visitor, args);
+        }
+
+        static Instructions of(final int opcode) {
+            for (final Instructions instruction : Instructions.values()) {
+                if (instruction.opcode == opcode) {
+                    return instruction;
+                }
+            }
+            throw new IllegalStateException(
+                String.format("Unexpected value: %d", opcode)
+            );
         }
     }
 }
