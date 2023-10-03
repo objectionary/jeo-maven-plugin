@@ -33,7 +33,7 @@ import org.xembly.Directives;
  *
  * @since 0.1.0
  */
-final class EoData {
+final class XmlData {
 
     /**
      * Data.
@@ -44,7 +44,7 @@ final class EoData {
      * Constructor.
      * @param data Data.
      */
-    EoData(final Object data) {
+    XmlData(final Object data) {
         this.data = data;
     }
 
@@ -74,7 +74,7 @@ final class EoData {
                 .putLong((int) this.data)
                 .array();
         }
-        return EoData.bytesToHex(res);
+        return XmlData.bytesToHex(res);
     }
 
     /**
