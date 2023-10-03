@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import org.eolang.jeo.representation.asm.generation.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

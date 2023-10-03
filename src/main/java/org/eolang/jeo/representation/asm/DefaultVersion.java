@@ -44,7 +44,7 @@ public final class DefaultVersion {
     /**
      * Default constructor.
      */
-    DefaultVersion() {
+    public DefaultVersion() {
         this(Opcodes.V11, Opcodes.ASM9);
     }
 

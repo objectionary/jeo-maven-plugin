@@ -25,7 +25,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import org.eolang.jeo.representation.asm.Bytecode;
-import org.eolang.jeo.representation.asm.BytecodeClass;
+import org.eolang.jeo.representation.asm.generation.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -81,7 +81,7 @@ class EoRepresentationTest {
     void convertsHelloWordEoRepresentationIntoBytecode() {
         final String name = "org/eolang/jeo/Application";
         final Bytecode expected = new BytecodeClass(name)
-            .helloWorld()
+            .helloWorldMethod()
             .bytecode();
         final Bytecode actual = new EoRepresentation(
             new BytecodeRepresentation(expected.asBytes()).toEO()
