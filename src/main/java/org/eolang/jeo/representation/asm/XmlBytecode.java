@@ -24,6 +24,8 @@
 package org.eolang.jeo.representation.asm;
 
 import com.jcabi.xml.XML;
+import org.eolang.jeo.representation.asm.generation.BytecodeClass;
+import org.eolang.jeo.representation.asm.generation.BytecodeMethod;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -55,35 +57,48 @@ public final class XmlBytecode extends ClassWriter {
 
     @Override
     public byte[] toByteArray() {
-        this.travers();
-        return super.toByteArray();
+        return this.travers().asBytes();
+//        return super.toByteArray();
     }
 
     /**
      * Traverse XML.
      */
-    private void travers() {
+    private Bytecode travers() {
         final XmlClass clazz = new XmlClass(this.xml);
-        this.visit(
-            new DefaultVersion().java(),
-            clazz.access(),
-            clazz.name(),
-            null,
-            "java/lang/Object",
-            null
-        );
+        final BytecodeClass bytecode = new BytecodeClass(clazz.name(), clazz.access());
+
+//        this.visit(
+//            new DefaultVersion().java(),
+//            clazz.access(),
+//            clazz.name(),
+//            null,
+//            "java/lang/Object",
+//            null
+//        );
         for (final XmlMethod method : clazz.methods()) {
-            final MethodVisitor visitor = this.visitMethod(
-                method.access(),
+            final BytecodeMethod bytecodeMethod = bytecode.withMethod(
                 method.name(),
                 method.descriptor(),
-                null,
-                null
+                method.access()
             );
-            XmlBytecode.visitMethod(visitor, method);
-            visitor.visitMaxs(0, 0);
-            visitor.visitEnd();
+            for (final XmlInstruction instruction : method.instructions()) {
+                bytecodeMethod.instruction(instruction.code(), instruction.arguments());
+            }
+//            final MethodVisitor visitor = this.visitMethod(
+//                method.access(),
+//                method.name(),
+//                method.descriptor(),
+//                null,
+//                null
+//            );
+//            XmlBytecode.visitMethod(visitor, method);
+//            visitor.visitMaxs(0, 0);
+//            visitor.visitEnd();
         }
+
+        return bytecode.bytecode();
+
     }
 
     /**

@@ -56,6 +56,8 @@ public final class BytecodeClass {
      */
     private final Collection<BytecodeMethod> methods;
 
+    private final int access;
+
     /**
      * Constructor.
      */
@@ -68,18 +70,89 @@ public final class BytecodeClass {
      * @param name Class name.
      */
     public BytecodeClass(final String name) {
-        this(name.replace(".", "/"), new ClassWriter(ClassWriter.COMPUTE_MAXS));
+        this(name, Opcodes.ACC_PUBLIC);
     }
 
     /**
      * Constructor.
      * @param name Class name.
+     * @param access Access modifiers.
+     */
+    public BytecodeClass(final String name, final int access) {
+        this(name.replace(".", "/"), access, new ClassWriter(ClassWriter.COMPUTE_MAXS));
+    }
+
+    /**
+     * Constructor.
+     * @param name Class name.
+     * @param access Access modifiers.
      * @param writer ASM class writer.
      */
-    private BytecodeClass(final String name, final ClassWriter writer) {
+    private BytecodeClass(
+        final String name,
+        final int access,
+        final ClassWriter writer
+    ) {
         this.name = name;
         this.writer = writer;
         this.methods = new ArrayList<>(0);
+        this.access = access;
+    }
+
+    /**
+     * Converts bytecode into XML.
+     * @return XML representation of bytecode.
+     */
+    public XML xml() {
+        return new BytecodeRepresentation(this.bytecode().asBytes()).toEO();
+    }
+
+    /**
+     * Generate bytecode.
+     * @return Bytecode.
+     */
+    public Bytecode bytecode() {
+        this.writer.visit(
+            new DefaultVersion().java(),
+            this.access,
+            this.name,
+            null,
+            "java/lang/Object",
+            null
+        );
+        this.methods.forEach(BytecodeMethod::generate);
+        this.writer.visitEnd();
+        final byte[] bytes = this.writer.toByteArray();
+        CheckClassAdapter.verify(new ClassReader(bytes), true, new PrintWriter(System.out));
+        return new Bytecode(bytes);
+    }
+
+    /**
+     * Add method.
+     * @param mname Method name.
+     * @param modifiers Access modifiers.
+     * @return This object.
+     */
+    public BytecodeMethod withMethod(final String mname, final int... modifiers) {
+        final BytecodeMethod method = new BytecodeMethod(mname, this.writer, this, modifiers);
+        this.methods.add(method);
+        return method;
+    }
+
+    /**
+     * Add method.
+     * @param mname Method name.
+     * @param modifiers Access modifiers.
+     * @return This object.
+     */
+    public BytecodeMethod withMethod(
+        final String mname,
+        final String descriptor,
+        final int... modifiers
+    ) {
+        final BytecodeMethod method = new BytecodeMethod(mname, this.writer, this, modifiers);
+        this.methods.add(method.descriptor(descriptor));
+        return method;
     }
 
     /**
@@ -99,46 +172,6 @@ public final class BytecodeClass {
             )
             .instruction(Opcodes.RETURN)
             .up();
-    }
-
-    /**
-     * Add method.
-     * @param mname Method name.
-     * @param modifiers Access modifiers.
-     * @return This object.
-     */
-    public BytecodeMethod withMethod(final String mname, final int... modifiers) {
-        final BytecodeMethod method = new BytecodeMethod(mname, this.writer, this, modifiers);
-        this.methods.add(method);
-        return method;
-    }
-
-    /**
-     * Converts bytecode into XML.
-     * @return XML representation of bytecode.
-     */
-    public XML xml() {
-        return new BytecodeRepresentation(this.bytecode().asBytes()).toEO();
-    }
-
-    /**
-     * Generate bytecode.
-     * @return Bytecode.
-     */
-    public Bytecode bytecode() {
-        this.writer.visit(
-            new DefaultVersion().java(),
-            Opcodes.ACC_PUBLIC,
-            this.name,
-            null,
-            "java/lang/Object",
-            null
-        );
-        this.methods.forEach(BytecodeMethod::generate);
-        this.writer.visitEnd();
-        final byte[] bytes = this.writer.toByteArray();
-        CheckClassAdapter.verify(new ClassReader(bytes), true, new PrintWriter(System.out));
-        return new Bytecode(bytes);
     }
 
 }
