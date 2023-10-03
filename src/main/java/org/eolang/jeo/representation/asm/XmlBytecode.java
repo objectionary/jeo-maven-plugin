@@ -31,6 +31,10 @@ import org.objectweb.asm.Opcodes;
 /**
  * XML to Java bytecode.
  * @since 0.1.0
+ * @todo #115:90min Use BytecodeClass instead of ASM library.
+ *  Right now we are using ASM library to generate bytecode from XML.
+ *  We should use BytecodeClass instead in order to reduce code duplication between
+ *  XmlBytecode and BytecodeClass implementations.
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class XmlBytecode extends ClassWriter {
