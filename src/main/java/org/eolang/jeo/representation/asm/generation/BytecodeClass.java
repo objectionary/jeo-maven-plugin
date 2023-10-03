@@ -56,6 +56,9 @@ public final class BytecodeClass {
      */
     private final Collection<BytecodeMethod> methods;
 
+    /**
+     * Access modifiers.
+     */
     private final int access;
 
     /**
@@ -174,5 +177,4 @@ public final class BytecodeClass {
             .instruction(Opcodes.RETURN)
             .up();
     }
-
 }

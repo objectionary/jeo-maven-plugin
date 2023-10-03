@@ -30,10 +30,6 @@ import org.eolang.jeo.representation.asm.generation.BytecodeMethod;
 /**
  * XML to Java bytecode.
  * @since 0.1.0
- * @todo #115:90min Use BytecodeClass instead of ASM library.
- *  Right now we are using ASM library to generate bytecode from XML.
- *  We should use BytecodeClass instead in order to reduce code duplication between
- *  XmlBytecode and BytecodeClass implementations.
  */
 public final class XmlBytecode {
 
@@ -52,19 +48,20 @@ public final class XmlBytecode {
 
     /**
      * Traverse XML and build bytecode class.
+     * @return Bytecode.
      */
     public Bytecode bytecode() {
         final XmlClass clazz = new XmlClass(this.xml);
         final BytecodeClass bytecode = new BytecodeClass(clazz.name(), clazz.access());
-        for (final XmlMethod method : clazz.methods()) {
-            final BytecodeMethod bytecodeMethod = bytecode.withMethod(
-                method.name(),
-                method.descriptor(),
-                method.access()
+        for (final XmlMethod xmlmethod : clazz.methods()) {
+            final BytecodeMethod method = bytecode.withMethod(
+                xmlmethod.name(),
+                xmlmethod.descriptor(),
+                xmlmethod.access()
             );
-            for (final XmlInstruction instruction : method.instructions()) {
-                bytecodeMethod.instruction(instruction.code(), instruction.arguments());
-            }
+            xmlmethod.instructions()
+                .stream()
+                .forEach(inst -> method.instruction(inst.code(), inst.arguments()));
         }
         return bytecode.bytecode();
     }
