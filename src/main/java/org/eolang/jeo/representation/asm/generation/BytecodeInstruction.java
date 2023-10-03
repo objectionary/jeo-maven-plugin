@@ -82,7 +82,7 @@ final class BytecodeInstruction {
 
         BIPUSH(
             Opcodes.BIPUSH,
-            (visitor, args) -> visitor.visitIntInsn(Opcodes.BIPUSH, (Integer) args.get(0))
+            (visitor, args) -> visitor.visitIntInsn(Opcodes.BIPUSH, (int) args.get(0))
         ),
         LDC(
             Opcodes.LDC,
@@ -95,6 +95,15 @@ final class BytecodeInstruction {
         RETURN(
             Opcodes.RETURN,
             (visitor, args) -> visitor.visitInsn(Opcodes.RETURN)
+        ),
+        GETSTATIC(
+            Opcodes.GETSTATIC,
+            (visitor, args) -> visitor.visitFieldInsn(
+                Opcodes.GETSTATIC,
+                String.valueOf(args.get(0)),
+                String.valueOf(args.get(1)),
+                String.valueOf(args.get(2))
+            )
         ),
         INVOKEVIRTUAL(
             Opcodes.INVOKEVIRTUAL,
