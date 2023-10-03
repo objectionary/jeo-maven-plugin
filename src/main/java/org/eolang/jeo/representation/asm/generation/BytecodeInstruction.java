@@ -75,69 +75,117 @@ final class BytecodeInstruction {
      * @param visitor Method visitor.
      */
     void generate(final MethodVisitor visitor) {
-        Instructions.of(this.opcode).generate(visitor, this.args);
+        Instruction.find(this.opcode).generate(visitor, this.args);
     }
 
-    private enum Instructions {
+    /**
+     * Bytecode Instruction.
+     * @since 0.1.0
+     */
+    private enum Instruction {
 
-        BIPUSH(
-            Opcodes.BIPUSH,
-            (visitor, args) -> visitor.visitIntInsn(Opcodes.BIPUSH, (int) args.get(0))
+        /**
+         * Push a byte onto the stack as an integer value.
+         */
+        BIPUSH(Opcodes.BIPUSH, (visitor, arguments) ->
+            visitor.visitIntInsn(Opcodes.BIPUSH, (int) arguments.get(0))
         ),
-        LDC(
-            Opcodes.LDC,
-            (visitor, args) -> visitor.visitLdcInsn(args.get(0))
+
+        /**
+         * Push a constant #index from a constant pool onto the stack.
+         */
+        LDC(Opcodes.LDC, (visitor, arguments) ->
+            visitor.visitLdcInsn(arguments.get(0))
         ),
-        IRETURN(
-            Opcodes.IRETURN,
-            (visitor, args) -> visitor.visitInsn(Opcodes.IRETURN)
+
+        /**
+         * Return an integer from a method.
+         */
+        IRETURN(Opcodes.IRETURN, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.IRETURN)
         ),
-        RETURN(
-            Opcodes.RETURN,
-            (visitor, args) -> visitor.visitInsn(Opcodes.RETURN)
+
+        /**
+         * Return void from a method.
+         */
+        RETURN(Opcodes.RETURN, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.RETURN)
         ),
-        GETSTATIC(
-            Opcodes.GETSTATIC,
-            (visitor, args) -> visitor.visitFieldInsn(
+
+        /**
+         * Get a static field value of a class, where the field is
+         * identified by field reference in the constant pool index.
+         */
+        GETSTATIC(Opcodes.GETSTATIC, (visitor, arguments) ->
+            visitor.visitFieldInsn(
                 Opcodes.GETSTATIC,
-                String.valueOf(args.get(0)),
-                String.valueOf(args.get(1)),
-                String.valueOf(args.get(2))
+                String.valueOf(arguments.get(0)),
+                String.valueOf(arguments.get(1)),
+                String.valueOf(arguments.get(2))
             )
         ),
-        INVOKEVIRTUAL(
-            Opcodes.INVOKEVIRTUAL,
-            (visitor, args) -> visitor.visitMethodInsn(
+
+        /**
+         * Invoke virtual method.
+         * Invoke virtual method on object objectref and puts the result on the
+         * stack (might be void); the method is identified by method reference
+         * index in constant pool
+         */
+        INVOKEVIRTUAL(Opcodes.INVOKEVIRTUAL, (visitor, arguments) ->
+            visitor.visitMethodInsn(
                 Opcodes.INVOKEVIRTUAL,
-                String.valueOf(args.get(0)),
-                String.valueOf(args.get(1)),
-                String.valueOf(args.get(2)),
+                String.valueOf(arguments.get(0)),
+                String.valueOf(arguments.get(1)),
+                String.valueOf(arguments.get(2)),
                 false
             )
         );
 
+        /**
+         * Opcode.
+         */
         private final int opcode;
-        private BiConsumer<MethodVisitor, List<Object>> visit;
 
-        Instructions(final int opcode,
+        /**
+         * Bytecode generation function.
+         */
+        private BiConsumer<MethodVisitor, List<Object>> generator;
+
+        /**
+         * Constructor.
+         * @param opcode Opcode.
+         * @param visit Bytecode generation function.
+         */
+        Instruction(
+            final int opcode,
             final BiConsumer<MethodVisitor, List<Object>> visit
         ) {
             this.opcode = opcode;
-            this.visit = visit;
+            this.generator = visit;
         }
 
-        void generate(final MethodVisitor visitor, final List<Object> args) {
-            this.visit.accept(visitor, args);
+        /**
+         * Generate bytecode.
+         * @param visitor Method visitor.
+         * @param arguments Arguments.
+         */
+        void generate(final MethodVisitor visitor, final List<Object> arguments) {
+            this.generator.accept(visitor, arguments);
         }
 
-        static Instructions of(final int opcode) {
-            for (final Instructions instruction : Instructions.values()) {
+        /**
+         * Get instruction by opcode.
+         * @param opcode Opcode.
+         * @return Instruction.
+         */
+        static Instruction find(final int opcode) {
+            for (final Instruction instruction : Instruction.values()) {
                 if (instruction.opcode == opcode) {
                     return instruction;
                 }
             }
             throw new IllegalStateException(
-                String.format("Unexpected value: %d", opcode)
+                String.format("Unexpected instruction with opcode: %d", opcode)
             );
         }
     }
