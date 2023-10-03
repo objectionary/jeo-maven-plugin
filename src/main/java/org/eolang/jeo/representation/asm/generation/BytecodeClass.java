@@ -142,6 +142,7 @@ public final class BytecodeClass {
     /**
      * Add method.
      * @param mname Method name.
+     * @param descriptor Method descriptor.
      * @param modifiers Access modifiers.
      * @return This object.
      */

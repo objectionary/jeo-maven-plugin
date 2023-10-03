@@ -61,6 +61,6 @@ public final class EoRepresentation implements Representation {
     @Override
     public Bytecode toBytecode() {
         new Schema(this.xml).check();
-        return new Bytecode(new XmlBytecode(this.xml).toByteArray());
+        return new XmlBytecode(this.xml).bytecode();
     }
 }

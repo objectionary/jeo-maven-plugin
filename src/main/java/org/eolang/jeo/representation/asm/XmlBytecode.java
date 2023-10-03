@@ -26,9 +26,6 @@ package org.eolang.jeo.representation.asm;
 import com.jcabi.xml.XML;
 import org.eolang.jeo.representation.asm.generation.BytecodeClass;
 import org.eolang.jeo.representation.asm.generation.BytecodeMethod;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 
 /**
  * XML to Java bytecode.
@@ -38,8 +35,7 @@ import org.objectweb.asm.Opcodes;
  *  We should use BytecodeClass instead in order to reduce code duplication between
  *  XmlBytecode and BytecodeClass implementations.
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class XmlBytecode extends ClassWriter {
+public final class XmlBytecode {
 
     /**
      * XML.
@@ -51,31 +47,15 @@ public final class XmlBytecode extends ClassWriter {
      * @param xml XML.
      */
     public XmlBytecode(final XML xml) {
-        super(ClassWriter.COMPUTE_MAXS);
         this.xml = xml;
     }
 
-    @Override
-    public byte[] toByteArray() {
-        return this.travers().asBytes();
-//        return super.toByteArray();
-    }
-
     /**
-     * Traverse XML.
+     * Traverse XML and build bytecode class.
      */
-    private Bytecode travers() {
+    public Bytecode bytecode() {
         final XmlClass clazz = new XmlClass(this.xml);
         final BytecodeClass bytecode = new BytecodeClass(clazz.name(), clazz.access());
-
-//        this.visit(
-//            new DefaultVersion().java(),
-//            clazz.access(),
-//            clazz.name(),
-//            null,
-//            "java/lang/Object",
-//            null
-//        );
         for (final XmlMethod method : clazz.methods()) {
             final BytecodeMethod bytecodeMethod = bytecode.withMethod(
                 method.name(),
@@ -85,61 +65,7 @@ public final class XmlBytecode extends ClassWriter {
             for (final XmlInstruction instruction : method.instructions()) {
                 bytecodeMethod.instruction(instruction.code(), instruction.arguments());
             }
-//            final MethodVisitor visitor = this.visitMethod(
-//                method.access(),
-//                method.name(),
-//                method.descriptor(),
-//                null,
-//                null
-//            );
-//            XmlBytecode.visitMethod(visitor, method);
-//            visitor.visitMaxs(0, 0);
-//            visitor.visitEnd();
         }
-
         return bytecode.bytecode();
-
-    }
-
-    /**
-     * Visit method.
-     * @param visitor Method visitor.
-     * @param node XML Node.
-     * @checkstyle CyclomaticComplexityCheck (100 lines)
-     */
-    private static void visitMethod(final MethodVisitor visitor, final XmlMethod node) {
-        for (final XmlInstruction instruction : node.instructions()) {
-            final int code = instruction.code();
-            final Object[] arguments = instruction.arguments();
-            switch (code) {
-                case Opcodes.GETSTATIC:
-                    visitor.visitFieldInsn(
-                        code,
-                        String.valueOf(arguments[0]),
-                        String.valueOf(arguments[1]),
-                        String.valueOf(arguments[2])
-                    );
-                    break;
-                case Opcodes.LDC:
-                    visitor.visitLdcInsn(arguments[0]);
-                    break;
-                case Opcodes.INVOKEVIRTUAL:
-                    visitor.visitMethodInsn(
-                        code,
-                        String.valueOf(arguments[0]),
-                        String.valueOf(arguments[1]),
-                        String.valueOf(arguments[2]),
-                        false
-                    );
-                    break;
-                case Opcodes.RETURN:
-                    visitor.visitInsn(Opcodes.RETURN);
-                    break;
-                default:
-                    throw new IllegalStateException(
-                        String.format("Unexpected value: %d", code)
-                    );
-            }
-        }
     }
 }
