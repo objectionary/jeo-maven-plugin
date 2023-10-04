@@ -23,20 +23,21 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import com.jcabi.log.Logger;
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
 /**
  * Class properties as Xembly directives.
  *
- * @since 0.1.0.
+ * @since 0.1.0
  * @todo #112:60min Convert array into data or tuple object.
  *  Right now we just skip array of interfaces. We should convert it into
  *  data or tuple object. When the method is ready remove that puzzle.
  */
-public class DirectivesClassProperties implements Iterable<Directive> {
+final class DirectivesClassProperties implements Iterable<Directive> {
 
     /**
      * Access modifiers.
@@ -51,12 +52,12 @@ public class DirectivesClassProperties implements Iterable<Directive> {
     /**
      * Class supername.
      */
-    final String supername;
+    private final String supername;
 
     /**
      * Class interfaces.
      */
-    final String[] interfaces;
+    private final String[] interfaces;
 
     /**
      * Constructor.
@@ -64,6 +65,7 @@ public class DirectivesClassProperties implements Iterable<Directive> {
      * @param signature Class Signature.
      * @param supername Class supername.
      * @param interfaces Class interfaces.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     DirectivesClassProperties(
         final int access,
@@ -87,6 +89,13 @@ public class DirectivesClassProperties implements Iterable<Directive> {
         if (this.supername != null) {
             directives.append(new XmlData(this.supername, "supername").directives());
         }
+        Logger.warn(
+            this,
+            String.format(
+                "Interfaces mapping is not implemented yet. Interfaces '%s' was skipped",
+                Arrays.toString(this.interfaces)
+            )
+        );
         return directives.iterator();
     }
 }

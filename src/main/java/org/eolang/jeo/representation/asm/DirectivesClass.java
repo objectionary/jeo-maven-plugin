@@ -166,21 +166,6 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
     }
 
     /**
-     * Class name.
-     * @param access Access.
-     * @param name Name.
-     * @return Class name.
-     * @todo #108:90min Implement different way to generate class name.
-     *  Right now we use class name and access to generate class name and insert it as a name
-     *  attribute of the class. This is not a good way to do it. At least it looks ugly.
-     *  We should find a better way to generate class name and place it somewhere in the XML
-     *  representation of the class.
-     */
-    private static String className(final int access, final String name) {
-        return String.format("%d__%s", access, name);
-    }
-
-    /**
      * Method name.
      * @param access Access.
      * @param name Name.
