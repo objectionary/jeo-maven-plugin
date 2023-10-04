@@ -27,6 +27,7 @@ import com.jcabi.xml.XML;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -58,19 +59,19 @@ final class XmlClass {
     }
 
     /**
-     * Class access modifiers.
-     * @return Access modifiers.
-     */
-    int access() {
-        return Integer.parseInt(this.nameAttribute()[0]);
-    }
-
-    /**
      * Class name.
      * @return Name.
      */
     String name() {
-        return String.valueOf(this.nameAttribute()[1]);
+        return String.valueOf(this.node.getAttributes().getNamedItem("name").getTextContent());
+    }
+
+    /**
+     * Class properties.
+     * @return Class properties.
+     */
+    XmlClassProperties properties() {
+        return new XmlClassProperties(this.node);
     }
 
     /**
@@ -82,21 +83,12 @@ final class XmlClass {
         final NodeList children = this.node.getChildNodes();
         for (int child = 0; child < children.getLength(); ++child) {
             final Node item = children.item(child);
-            if (item.getNodeName().equals("o")) {
+            final NamedNodeMap attrs = item.getAttributes();
+            if (item.getNodeName().equals("o") && attrs.getNamedItem("base") == null) {
                 res.add(new XmlMethod(item));
             }
         }
         return res;
-    }
-
-    /**
-     * Name attribute.
-     * @return Name attribute.
-     */
-    private String[] nameAttribute() {
-        final Node name = this.node.getAttributes().getNamedItem("name");
-        final String content = name.getTextContent();
-        return content.split("__");
     }
 
     /**
@@ -153,5 +145,4 @@ final class XmlClass {
         return node.getNodeName().equals("o")
             && node.getParentNode().getNodeName().equals("objects");
     }
-
 }

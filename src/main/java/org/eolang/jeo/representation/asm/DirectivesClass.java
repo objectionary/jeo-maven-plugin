@@ -118,7 +118,8 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
             .add("objects");
         this.directives.add("o")
             .attr("abstract", "")
-            .attr("name", DirectivesClass.className(access, name));
+            .attr("name", name)
+            .append(new DirectivesClassProperties(access, signature, supername, interfaces));
         super.visit(version, access, name, signature, supername, interfaces);
     }
 

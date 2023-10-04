@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XML;
 import org.eolang.jeo.representation.asm.Bytecode;
 import org.eolang.jeo.representation.asm.generation.BytecodeClass;
 import org.hamcrest.MatcherAssert;
@@ -65,7 +66,9 @@ class EoRepresentationTest {
     void returnsBytecodeRepresentationOfEo() {
         final BytecodeClass clazz = new BytecodeClass("Bar");
         final Bytecode expected = clazz.bytecode();
-        final Bytecode actual = new EoRepresentation(clazz.xml()).toBytecode();
+        final XML xml = clazz.xml();
+        System.out.println(xml);
+        final Bytecode actual = new EoRepresentation(xml).toBytecode();
         MatcherAssert.assertThat(
             String.format(
                 "The bytecode representation of the EO object is not correct,%nexpected:%n%s%nbut got:%n%s",

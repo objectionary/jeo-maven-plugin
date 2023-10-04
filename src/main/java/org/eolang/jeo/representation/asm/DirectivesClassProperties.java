@@ -79,10 +79,14 @@ public class DirectivesClassProperties implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives()
-            .append(new XmlData(this.access, "access").directives())
-            .append(new XmlData(this.signature, "signature").directives())
-            .append(new XmlData(this.supername, "supername").directives())
-            .iterator();
+        final Directives directives = new Directives()
+            .append(new XmlData(this.access, "access").directives());
+        if (this.signature != null) {
+            directives.append(new XmlData(this.signature, "signature").directives());
+        }
+        if (this.supername != null) {
+            directives.append(new XmlData(this.supername, "supername").directives());
+        }
+        return directives.iterator();
     }
 }
