@@ -24,7 +24,9 @@
 package org.eolang.jeo.representation.asm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -78,9 +80,23 @@ final class XmlInstruction {
         for (int index = 0; index < children.getLength(); ++index) {
             final Node child = children.item(index);
             if (child.getNodeName().equals("o")) {
-                res.add(XmlData.encodeHexString(child.getTextContent()));
+                res.add(decodeHexString(child.getTextContent()));
             }
         }
         return res.toArray();
+    }
+
+    /**
+     * Convert hex string to human-readable string.
+     * Example:
+     *  "48 65 6C 6C 6F 20 57 6F 72 6C 64 21" -> "Hello World!"
+     * @param hex Hex string.
+     * @return Human-readable string.
+     */
+    private static String decodeHexString(final String hex) {
+        return Arrays.stream(hex.split(" "))
+            .map(ch -> (char) Integer.parseInt(ch, 16))
+            .map(String::valueOf)
+            .collect(Collectors.joining());
     }
 }

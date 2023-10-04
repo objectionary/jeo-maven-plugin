@@ -25,9 +25,7 @@ package org.eolang.jeo.representation.asm;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 import org.xembly.Directives;
 
 /**
@@ -105,17 +103,5 @@ final class XmlData {
             out.add(String.format("%02X", bty));
         }
         return out.toString();
-    }
-
-    /**
-     * Convert hex string to human-readable string.
-     * @param hex Hex string.
-     * @return Human-readable string.
-     */
-    static String encodeHexString(final String hex) {
-        return Arrays.stream(hex.split(" "))
-            .map(ch -> (char) Integer.parseInt(ch, 16))
-            .map(String::valueOf)
-            .collect(Collectors.joining());
     }
 }
