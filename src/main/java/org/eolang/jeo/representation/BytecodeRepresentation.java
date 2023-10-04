@@ -34,7 +34,7 @@ import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.asm.Bytecode;
-import org.eolang.jeo.representation.asm.ClassDirectives;
+import org.eolang.jeo.representation.asm.DirectivesClass;
 import org.eolang.jeo.representation.asm.ClassName;
 import org.objectweb.asm.ClassReader;
 import org.xembly.ImpossibleModificationException;
@@ -89,7 +89,7 @@ public final class BytecodeRepresentation implements Representation {
     @Override
     public XML toEO() {
         try {
-            final ClassDirectives directives = new ClassDirectives(
+            final DirectivesClass directives = new DirectivesClass(
                 new Base64Bytecode(this.input).asString()
             );
             new ClassReader(this.input).accept(directives, 0);

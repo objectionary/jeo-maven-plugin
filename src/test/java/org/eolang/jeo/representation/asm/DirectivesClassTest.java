@@ -34,14 +34,14 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link ClassDirectives}.
+ * Test case for {@link DirectivesClass}.
  * @since 0.1.0
  */
-class ClassDirectivesTest {
+class DirectivesClassTest {
 
     @Test
     void parsesSimpleClassWithoutConstructor() throws ImpossibleModificationException {
-        final ClassDirectives directives = new ClassDirectives();
+        final DirectivesClass directives = new DirectivesClass();
         new ClassReader(new BytecodeClass().bytecode().asBytes()).accept(directives, 0);
         MatcherAssert.assertThat(
             "Can't parse simple class without constructor",
@@ -52,7 +52,7 @@ class ClassDirectivesTest {
 
     @Test
     void parsesSimpleClassWithMethod() throws ImpossibleModificationException {
-        final ClassDirectives directives = new ClassDirectives();
+        final DirectivesClass directives = new DirectivesClass();
         new ClassReader(
             new BytecodeClass("WithMethod")
                 .withMethod("main")

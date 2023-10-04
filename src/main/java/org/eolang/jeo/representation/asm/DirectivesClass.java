@@ -47,7 +47,7 @@ import org.xembly.Directives;
  *  remove that puzzle.
  */
 @SuppressWarnings({"PMD.UseObjectForClearerAPI", "PMD.AvoidDuplicateLiterals"})
-public final class ClassDirectives extends ClassVisitor implements Iterable<Directive> {
+public final class DirectivesClass extends ClassVisitor implements Iterable<Directive> {
 
     /**
      * Bytecode listing.
@@ -63,14 +63,14 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
      * Constructor.
      * @param listing Bytecode listing.
      */
-    public ClassDirectives(final String listing) {
+    public DirectivesClass(final String listing) {
         this(new DefaultVersion().api(), new Directives(), listing);
     }
 
     /**
      * Constructor.
      */
-    ClassDirectives() {
+    DirectivesClass() {
         this("");
     }
 
@@ -80,7 +80,7 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
      * @param directives Xembly directives.
      * @param listing Bytecode listing.
      */
-    private ClassDirectives(
+    private DirectivesClass(
         final int api,
         final Directives directives,
         final String listing
@@ -118,7 +118,7 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
             .add("objects");
         this.directives.add("o")
             .attr("abstract", "")
-            .attr("name", ClassDirectives.className(access, name));
+            .attr("name", DirectivesClass.className(access, name));
         super.visit(version, access, name, signature, supername, interfaces);
     }
 
@@ -136,7 +136,7 @@ public final class ClassDirectives extends ClassVisitor implements Iterable<Dire
         } else {
             this.directives.add("o")
                 .attr("abstract", "")
-                .attr("name", ClassDirectives.methodName(access, name, descriptor));
+                .attr("name", DirectivesClass.methodName(access, name, descriptor));
             if (Type.getMethodType(descriptor).getArgumentTypes().length > 0) {
                 this.directives.add("o")
                     .attr("name", "args")

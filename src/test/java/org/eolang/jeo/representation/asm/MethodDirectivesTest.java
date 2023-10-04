@@ -38,9 +38,9 @@ import org.xembly.Xembler;
 /**
  * Test case for {@link MethodDirectives}.
  * We create {@link MethodDirectives} only in the context
- * of using {@link ClassDirectives} in other words, {@link MethodDirectives} can't be createad
- * without {@link ClassDirectives} and it is the main reason why in all the test we create
- * {@link ClassDirectives}.
+ * of using {@link DirectivesClass} in other words, {@link MethodDirectives} can't be createad
+ * without {@link DirectivesClass} and it is the main reason why in all the test we create
+ * {@link DirectivesClass}.
  *
  * @since 0.1.0
  * @todo #97:60min Add more user-friendly Hamcrest matchers.
@@ -58,7 +58,7 @@ class MethodDirectivesTest {
 
     @Test
     void parsesMethodInstructions() {
-        final ClassDirectives visitor = new ClassDirectives();
+        final DirectivesClass visitor = new DirectivesClass();
         new ClassReader(
             new BytecodeClass()
                 .withMethod("main")
