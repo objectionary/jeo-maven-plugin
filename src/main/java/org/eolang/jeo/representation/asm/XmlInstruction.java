@@ -24,9 +24,7 @@
 package org.eolang.jeo.representation.asm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.Collectors;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -80,26 +78,9 @@ final class XmlInstruction {
         for (int index = 0; index < children.getLength(); ++index) {
             final Node child = children.item(index);
             if (child.getNodeName().equals("o")) {
-                res.add(XmlInstruction.hexToString(child.getTextContent()));
+                res.add(XmlData.encodeHexString(child.getTextContent()));
             }
         }
         return res.toArray();
-    }
-
-    /**
-     * Convert hex string to human-readable string.
-     * @param hex Hex string.
-     * @return Human-readable string.
-     * @todo #122:90min Replace hexToString method with XmlData class.
-     *  Right now we have some duplication among XmlInstruction and XmlData.
-     *  They both implement the same logic of converting hex string to
-     *  human-readable string. We should refactor this code and remove
-     *  duplication.
-     */
-    private static String hexToString(final String hex) {
-        return Arrays.stream(hex.split(" "))
-            .map(ch -> (char) Integer.parseInt(ch, 16))
-            .map(String::valueOf)
-            .collect(Collectors.joining());
     }
 }
