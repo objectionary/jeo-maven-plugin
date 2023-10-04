@@ -1,0 +1,88 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2016-2023 Objectionary.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+package org.eolang.jeo.representation.asm;
+
+import java.util.Iterator;
+import java.util.List;
+import org.xembly.Directive;
+import org.xembly.Directives;
+
+/**
+ * Class properties as Xembly directives.
+ *
+ * @since 0.1.0.
+ * @todo #112:60min Convert array into data or tuple object.
+ *  Right now we just skip array of interfaces. We should convert it into
+ *  data or tuple object. When the method is ready remove that puzzle.
+ */
+public class DirectivesClassProperties implements Iterable<Directive> {
+
+    /**
+     * Access modifiers.
+     */
+    private final int access;
+
+    /**
+     * Class Signature.
+     */
+    private final String signature;
+
+    /**
+     * Class supername.
+     */
+    final String supername;
+
+    /**
+     * Class interfaces.
+     */
+    final String[] interfaces;
+
+    /**
+     * Constructor.
+     * @param access Access modifiers.
+     * @param signature Class Signature.
+     * @param supername Class supername.
+     * @param interfaces Class interfaces.
+     */
+    DirectivesClassProperties(
+        final int access,
+        final String signature,
+        final String supername,
+        final String... interfaces
+    ) {
+        this.access = access;
+        this.signature = signature;
+        this.supername = supername;
+        this.interfaces = interfaces.clone();
+    }
+
+    @Override
+    public Iterator<Directive> iterator() {
+        return new Directives()
+            .append(new XmlData(this.access, "access").directives())
+            .append(new XmlData(this.signature, "signature").directives())
+            .append(new XmlData(this.supername, "supername").directives())
+            .iterator();
+    }
+}

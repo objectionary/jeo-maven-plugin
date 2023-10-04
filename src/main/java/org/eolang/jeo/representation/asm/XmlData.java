@@ -41,11 +41,26 @@ final class XmlData {
     private final Object data;
 
     /**
+     * Name.
+     */
+    private final String name;
+
+    /**
      * Constructor.
      * @param data Data.
      */
     XmlData(final Object data) {
+        this(data, "");
+    }
+
+    /**
+     * Constructor.
+     * @param data Data.
+     * @param name Name.
+     */
+    XmlData(final Object data, final String name) {
         this.data = data;
+        this.name = name;
     }
 
     /**
@@ -53,11 +68,13 @@ final class XmlData {
      * @return Directives
      */
     Directives directives() {
-        return new Directives().add("o")
+        final Directives directives = new Directives().add("o")
             .attr("base", this.type())
-            .attr("data", "bytes")
-            .set(this.value())
-            .up();
+            .attr("data", "bytes");
+        if (!this.name.isEmpty()) {
+            directives.attr("name", this.name);
+        }
+        return directives.set(this.value()).up();
     }
 
     /**
