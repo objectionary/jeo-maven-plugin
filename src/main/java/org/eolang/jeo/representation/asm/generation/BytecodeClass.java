@@ -38,6 +38,13 @@ import org.objectweb.asm.util.CheckClassAdapter;
 /**
  * Class useful for generating bytecode for testing purposes.
  * @since 0.1.0
+ * @todo #112:90min Add support of additional class properties.
+ *  Right now we just ignore the next class properties:
+ *  - signature,
+ *  - supername,
+ *  - interfaces.
+ *  We have to implement that part, otherwise we will have many problems with bytecode
+ *  transformation.
  */
 public final class BytecodeClass {
 
