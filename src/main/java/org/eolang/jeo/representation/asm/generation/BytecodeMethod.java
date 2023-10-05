@@ -122,7 +122,7 @@ public final class BytecodeMethod {
     /**
      * Generate bytecode.
      */
-    void generate() {
+    void write() {
         int access = 0;
         for (final int modifier : this.modifiers) {
             access |= modifier;
