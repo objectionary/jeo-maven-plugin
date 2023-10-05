@@ -45,6 +45,13 @@ import org.xembly.Directives;
  *  Right now we just skip constructors. We should handle them in order to
  *  build correct XML representation of the class. When the method is ready
  *  remove that puzzle.
+ * @todo #107:30min Change method argument naming strategy.
+ *  Right now we use method argument type and index to generate method argument name.
+ *  For example for method with signature `void foo(int a, String b)` we generate
+ *  method argument names `arg__I__0` and `arg__Ljava/lang/String__1`. This is not a good way
+ *  to do it. At least it leads to errors when argument type is an array or class.
+ *  So we have to test this cases and maybe create a better strategy for arguments naming.
+ *
  */
 @SuppressWarnings({"PMD.UseObjectForClearerAPI", "PMD.AvoidDuplicateLiterals"})
 public final class DirectivesClass extends ClassVisitor implements Iterable<Directive> {
