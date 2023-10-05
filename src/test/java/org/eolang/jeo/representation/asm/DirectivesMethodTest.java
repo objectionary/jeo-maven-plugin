@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.asm;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.asm.generation.BytecodeClass;
 import org.hamcrest.MatcherAssert;
@@ -86,7 +85,7 @@ class DirectivesMethodTest {
     }
 
     /**
-     * In this test we parse the next java code (but represented as bytecode.)
+     * In this test we parse the next java code (but represented as bytecode).
      *
      * <p>
      *     {@code

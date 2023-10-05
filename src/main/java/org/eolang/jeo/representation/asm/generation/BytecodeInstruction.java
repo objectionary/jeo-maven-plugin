@@ -120,7 +120,7 @@ final class BytecodeInstruction {
         ),
 
         /**
-         * Store int value into variable #index
+         * Store int value into variable #index.
          */
         ISTORE(Opcodes.ISTORE, (visitor, arguments) ->
             visitor.visitVarInsn(Opcodes.ISTORE, (int) arguments.get(0))
@@ -139,7 +139,6 @@ final class BytecodeInstruction {
         DUP(Opcodes.DUP, (visitor, arguments) ->
             visitor.visitInsn(Opcodes.DUP)
         ),
-
 
         /**
          * Return an integer from a method.
@@ -185,8 +184,8 @@ final class BytecodeInstruction {
         ),
 
         /**
-         * Invoke instance method on object objectref and puts the result on the stack
-         * (might be void); the method is identified by method reference index in constant pool
+         * Invoke instance method on object objectref and puts the result on the stack.
+         * Might be void. The method is identified by method reference index in constant pool.
          */
         INCOKESPECIAL(Opcodes.INVOKESPECIAL, (visitor, arguments) ->
             visitor.visitMethodInsn(
@@ -198,9 +197,8 @@ final class BytecodeInstruction {
             )
         ),
 
-
         /**
-         * Create new object of type identified by class reference in constant pool index
+         * Create new object of type identified by class reference in constant pool index.
          */
         NEW(Opcodes.NEW, (visitor, arguments) ->
             visitor.visitTypeInsn(

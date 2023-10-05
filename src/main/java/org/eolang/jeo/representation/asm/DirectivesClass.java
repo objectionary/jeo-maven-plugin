@@ -51,7 +51,6 @@ import org.xembly.Directives;
  *  method argument names `arg__I__0` and `arg__Ljava/lang/String__1`. This is not a good way
  *  to do it. At least it leads to errors when argument type is an array or class.
  *  So we have to test this cases and maybe create a better strategy for arguments naming.
- *
  */
 @SuppressWarnings({"PMD.UseObjectForClearerAPI", "PMD.AvoidDuplicateLiterals"})
 public final class DirectivesClass extends ClassVisitor implements Iterable<Directive> {
@@ -151,10 +150,10 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
                     .up();
             }
             final Type[] arguments = Type.getArgumentTypes(descriptor);
-            for (int i = 0; i < arguments.length; i++) {
+            for (int index = 0; index < arguments.length; ++index) {
                 this.directives.add("o")
                     .attr("abstract", "")
-                    .attr("name", String.format("arg__%s__%d", arguments[i], i))
+                    .attr("name", String.format("arg__%s__%d", arguments[index], index))
                     .up();
             }
             this.directives
