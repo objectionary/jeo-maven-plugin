@@ -33,9 +33,6 @@ import org.xembly.Directives;
  * Class properties as Xembly directives.
  *
  * @since 0.1.0
- * @todo #112:60min Convert array into data or tuple object.
- *  Right now we just skip array of interfaces. We should convert it into
- *  data or tuple object. When the method is ready remove that puzzle.
  */
 final class DirectivesClassProperties implements Iterable<Directive> {
 
