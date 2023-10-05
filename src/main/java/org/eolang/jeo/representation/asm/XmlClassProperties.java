@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.asm;
 
 import com.jcabi.xml.XMLDocument;
+import org.eolang.jeo.representation.asm.generation.BytecodeClassProperties;
 import org.w3c.dom.Node;
 
 /**
@@ -52,6 +53,27 @@ final class XmlClassProperties {
      */
     int access() {
         return new HexString(this.clazz.xpath("//o[@name='access']/text()").get(0)).decodeAsInt();
+    }
+
+    String signature() {
+        return new HexString(this.clazz.xpath("//o[@name='signature']/text()").get(0)).decode();
+    }
+
+    private String supername() {
+        return new HexString(this.clazz.xpath("//o[@name='supername']/text()").get(0)).decode();
+    }
+
+    private String[] interfaces() {
+        return new String[0];
+    }
+
+    BytecodeClassProperties toBytecodeProperties() {
+        return new BytecodeClassProperties(
+            this.access(),
+            this.signature(),
+            this.supername(),
+            this.interfaces()
+        );
     }
 }
 

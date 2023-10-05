@@ -31,7 +31,7 @@ import org.objectweb.asm.ClassWriter;
  *
  * @since 0.1.0
  */
-final class BytecodeClassProperties {
+public final class BytecodeClassProperties {
 
     /**
      * Access modifiers.
@@ -57,7 +57,7 @@ final class BytecodeClassProperties {
      * Constructor.
      * @param access Access modifiers.
      */
-    BytecodeClassProperties(final int access) {
+    public BytecodeClassProperties(final int access) {
         this(access, null, "java/lang/Object", new String[0]);
     }
 
@@ -69,7 +69,7 @@ final class BytecodeClassProperties {
      * @param interfaces Interfaces.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    private BytecodeClassProperties(
+    public BytecodeClassProperties(
         final int access,
         final String signature,
         final String supername,

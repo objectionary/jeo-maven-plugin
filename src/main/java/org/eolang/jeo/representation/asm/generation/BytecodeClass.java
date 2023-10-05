@@ -84,6 +84,15 @@ public final class BytecodeClass {
         this(name.replace(".", "/"), access, new ClassWriter(ClassWriter.COMPUTE_MAXS));
     }
 
+    public BytecodeClass(final String name, final BytecodeClassProperties properties) {
+        this(
+            name.replace(".", "/"),
+            new ClassWriter(ClassWriter.COMPUTE_MAXS),
+            new ArrayList<>(0),
+            properties
+        );
+    }
+
     /**
      * Constructor.
      * @param name Class name.
@@ -95,10 +104,26 @@ public final class BytecodeClass {
         final int access,
         final ClassWriter writer
     ) {
+        this(name, writer, new ArrayList<>(0), new BytecodeClassProperties(access));
+    }
+
+    /**
+     * Constructor.
+     * @param name Class name.
+     * @param writer ASM class writer.
+     * @param methods Methods.
+     * @param properties Class properties.
+     */
+    public BytecodeClass(
+        final String name,
+        final ClassWriter writer,
+        final Collection<BytecodeMethod> methods,
+        final BytecodeClassProperties properties
+    ) {
         this.name = name;
         this.writer = writer;
-        this.methods = new ArrayList<>(0);
-        this.properties = new BytecodeClassProperties(access);
+        this.methods = methods;
+        this.properties = properties;
     }
 
     /**

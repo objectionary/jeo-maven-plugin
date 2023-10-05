@@ -52,7 +52,10 @@ public final class XmlBytecode {
      */
     public Bytecode bytecode() {
         final XmlClass clazz = new XmlClass(this.xml);
-        final BytecodeClass bytecode = new BytecodeClass(clazz.name(), clazz.properties().access());
+        final BytecodeClass bytecode = new BytecodeClass(
+            clazz.name(),
+            clazz.properties().toBytecodeProperties()
+        );
         for (final XmlMethod xmlmethod : clazz.methods()) {
             final BytecodeMethod method = bytecode.withMethod(
                 xmlmethod.name(),
