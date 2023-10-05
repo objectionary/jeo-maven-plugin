@@ -33,7 +33,7 @@ import org.xembly.Directives;
  *
  * @since 0.1.0
  */
-final class XmlData {
+final class DirectivesData {
 
     /**
      * Data.
@@ -49,7 +49,7 @@ final class XmlData {
      * Constructor.
      * @param data Data.
      */
-    XmlData(final Object data) {
+    DirectivesData(final Object data) {
         this(data, "");
     }
 
@@ -58,7 +58,7 @@ final class XmlData {
      * @param data Data.
      * @param name Name.
      */
-    XmlData(final Object data, final String name) {
+    DirectivesData(final Object data, final String name) {
         this.data = data;
         this.name = name;
     }
@@ -91,7 +91,7 @@ final class XmlData {
                 .putLong((int) this.data)
                 .array();
         }
-        return XmlData.bytesToHex(res);
+        return DirectivesData.bytesToHex(res);
     }
 
     /**

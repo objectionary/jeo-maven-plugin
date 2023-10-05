@@ -79,12 +79,12 @@ final class DirectivesClassProperties implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives()
-            .append(new XmlData(this.access, "access").directives());
+            .append(new DirectivesData(this.access, "access").directives());
         if (this.signature != null) {
-            directives.append(new XmlData(this.signature, "signature").directives());
+            directives.append(new DirectivesData(this.signature, "signature").directives());
         }
         if (this.supername != null) {
-            directives.append(new XmlData(this.supername, "supername").directives());
+            directives.append(new DirectivesData(this.supername, "supername").directives());
         }
         if (this.interfaces != null) {
             final Directives tuple = new Directives().add("o")
@@ -92,7 +92,7 @@ final class DirectivesClassProperties implements Iterable<Directive> {
                 .attr("data", "tuple")
                 .attr("name", "interfaces");
             for (final String interf : this.interfaces) {
-                tuple.append(new XmlData(interf).directives());
+                tuple.append(new DirectivesData(interf).directives());
             }
             tuple.up();
             directives.append(tuple);
