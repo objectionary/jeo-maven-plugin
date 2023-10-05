@@ -84,6 +84,11 @@ public final class BytecodeClass {
         this(name.replace(".", "/"), access, new ClassWriter(ClassWriter.COMPUTE_MAXS));
     }
 
+    /**
+     * Constructor.
+     * @param name Class name.
+     * @param properties Class properties.
+     */
     public BytecodeClass(final String name, final BytecodeClassProperties properties) {
         this(
             name.replace(".", "/"),
@@ -113,6 +118,7 @@ public final class BytecodeClass {
      * @param writer ASM class writer.
      * @param methods Methods.
      * @param properties Class properties.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeClass(
         final String name,
