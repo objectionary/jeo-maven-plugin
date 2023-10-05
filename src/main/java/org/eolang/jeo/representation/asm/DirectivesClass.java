@@ -143,7 +143,15 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
                     .attr("name", "args")
                     .up();
             }
-            this.directives.add("o")
+            final Type[] arguments = Type.getArgumentTypes(descriptor);
+            for (int i = 0; i < arguments.length; i++) {
+                this.directives.add("o")
+                    .attr("abstract", "")
+                    .attr("name", String.format("arg__%s__%d", arguments[i], i))
+                    .up();
+            }
+            this.directives
+                .add("o")
                 .attr("base", "seq")
                 .attr("name", "@");
             result = new DirectivesMethod(

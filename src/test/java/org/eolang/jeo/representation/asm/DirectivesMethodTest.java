@@ -112,7 +112,7 @@ class DirectivesMethodTest {
                 "\n",
                 "Currently we don't save method parameters as separate objects in the XML.",
                 "Method parameters implemented through opcodes.",
-                "I don't know if we need to change this behavior."
+                "I don't know if we need to change this behavior.\n\n"
             ),
             new BytecodeClass("ParametersExample")
                 .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
@@ -141,10 +141,10 @@ class DirectivesMethodTest {
                 .xml(),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath(
-                    "/program/objects/o/o[contains(@name,'1__printSum__(II)V')]/o[@name='x_int_1']"
+                    "/program/objects/o/o[contains(@name,'1__printSum__(II)V')]/o[@name='arg__I__0']"
                 ),
                 XhtmlMatchers.hasXPath(
-                    "/program/objects/o/o[contains(@name,'1__printSum__(II)V')]/o[@name='x_int_2']"
+                    "/program/objects/o/o[contains(@name,'1__printSum__(II)V')]/o[@name='arg__I__1']"
                 )
             )
         );
