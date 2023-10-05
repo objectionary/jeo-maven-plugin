@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.asm;
 
 import com.jcabi.xml.XMLDocument;
+import java.util.Optional;
 import org.eolang.jeo.representation.asm.generation.BytecodeClassProperties;
 import org.w3c.dom.Node;
 
@@ -55,23 +56,34 @@ final class XmlClassProperties {
         return new HexString(this.clazz.xpath("//o[@name='access']/text()").get(0)).decodeAsInt();
     }
 
-    String signature() {
-        return new HexString(this.clazz.xpath("//o[@name='signature']/text()").get(0)).decode();
+    Optional<String> signature() {
+        return this.clazz.xpath("//o[@name='signature']/text()")
+            .stream()
+            .map(HexString::new)
+            .map(HexString::decode)
+            .findFirst();
     }
 
-    private String supername() {
-        return new HexString(this.clazz.xpath("//o[@name='supername']/text()").get(0)).decode();
+    Optional<String> supername() {
+        return this.clazz.xpath("//o[@name='supername']/text()")
+            .stream()
+            .map(HexString::new)
+            .map(HexString::decode)
+            .findFirst();
     }
 
-    private String[] interfaces() {
-        return new String[0];
+    String[] interfaces() {
+        return this.clazz.xpath("//o[@name='interfaces']/o/text()")
+            .stream()
+            .map(HexString::new)
+            .map(HexString::decode).toArray(String[]::new);
     }
 
     BytecodeClassProperties toBytecodeProperties() {
         return new BytecodeClassProperties(
             this.access(),
-            this.signature(),
-            this.supername(),
+            this.signature().orElse(null),
+            this.supername().orElse(null),
             this.interfaces()
         );
     }
