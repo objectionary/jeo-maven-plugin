@@ -99,6 +99,49 @@ final class BytecodeInstruction {
         ),
 
         /**
+         * Load an int value from a local variable #index.
+         */
+        ILOAD(Opcodes.ILOAD, (visitor, arguments) ->
+            visitor.visitVarInsn(Opcodes.ILOAD, (int) arguments.get(0))
+        ),
+
+        /**
+         * Load a reference onto the stack from a local variable #index.
+         */
+        ALOAD(Opcodes.ALOAD, (visitor, arguments) ->
+            visitor.visitVarInsn(Opcodes.ALOAD, (int) arguments.get(0))
+        ),
+
+        /**
+         * Add two integers.
+         */
+        IADD(Opcodes.IADD, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.IADD)
+        ),
+
+        /**
+         * Store int value into variable #index
+         */
+        ISTORE(Opcodes.ISTORE, (visitor, arguments) ->
+            visitor.visitVarInsn(Opcodes.ISTORE, (int) arguments.get(0))
+        ),
+
+        /**
+         * Store a reference into a local variable #index.
+         */
+        ASTORE(Opcodes.ASTORE, (visitor, arguments) ->
+            visitor.visitVarInsn(Opcodes.ASTORE, (int) arguments.get(0))
+        ),
+
+        /**
+         * Duplicate the value on top of the stack.
+         */
+        DUP(Opcodes.DUP, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.DUP)
+        ),
+
+
+        /**
          * Return an integer from a method.
          */
         IRETURN(Opcodes.IRETURN, (visitor, arguments) ->
@@ -138,6 +181,31 @@ final class BytecodeInstruction {
                 String.valueOf(arguments.get(1)),
                 String.valueOf(arguments.get(2)),
                 false
+            )
+        ),
+
+        /**
+         * Invoke instance method on object objectref and puts the result on the stack
+         * (might be void); the method is identified by method reference index in constant pool
+         */
+        INCOKESPECIAL(Opcodes.INVOKESPECIAL, (visitor, arguments) ->
+            visitor.visitMethodInsn(
+                Opcodes.INVOKESPECIAL,
+                String.valueOf(arguments.get(0)),
+                String.valueOf(arguments.get(1)),
+                String.valueOf(arguments.get(2)),
+                false
+            )
+        ),
+
+
+        /**
+         * Create new object of type identified by class reference in constant pool index
+         */
+        NEW(Opcodes.NEW, (visitor, arguments) ->
+            visitor.visitTypeInsn(
+                Opcodes.NEW,
+                String.valueOf(arguments.get(0))
             )
         );
 

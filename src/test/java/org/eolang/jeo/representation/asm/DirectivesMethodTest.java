@@ -107,9 +107,31 @@ class DirectivesMethodTest {
      */
     @Test
     void parsesMethodParameters() {
-        final XML xml = new BytecodeClass("ParametersExample").xml();
-
-        System.out.println(xml);
+        final XML xml = new BytecodeClass("ParametersExample")
+            .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
+            .descriptor("([Ljava/lang/String;)V")
+            .instruction(Opcodes.NEW, "ParametersExample")
+            .instruction(Opcodes.DUP)
+            .instruction(Opcodes.INVOKESPECIAL, "ParametersExample", "<init>", "()V")
+            .instruction(Opcodes.ASTORE, 1)
+            .instruction(Opcodes.ALOAD, 1)
+            .instruction(Opcodes.BIPUSH, 10)
+            .instruction(Opcodes.BIPUSH, 20)
+            .instruction(Opcodes.INVOKEVIRTUAL, "ParametersExample", "printSum", "(II)V")
+            .instruction(Opcodes.RETURN)
+            .up()
+            .withMethod("printSum", Opcodes.ACC_PUBLIC)
+            .descriptor("(II)V")
+            .instruction(Opcodes.ILOAD, 1)
+            .instruction(Opcodes.ILOAD, 2)
+            .instruction(Opcodes.IADD)
+            .instruction(Opcodes.ISTORE, 3)
+            .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+            .instruction(Opcodes.ILOAD, 3)
+            .instruction(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V")
+            .instruction(Opcodes.RETURN)
+            .up()
+            .xml();
     }
 
     @Test
