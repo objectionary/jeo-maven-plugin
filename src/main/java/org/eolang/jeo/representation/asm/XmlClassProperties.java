@@ -83,7 +83,7 @@ final class XmlClassProperties {
         return new BytecodeClassProperties(
             this.access(),
             this.signature().orElse(null),
-            this.supername().orElse(null),
+            this.supername().orElse("java/lang/Object"),
             this.interfaces()
         );
     }
