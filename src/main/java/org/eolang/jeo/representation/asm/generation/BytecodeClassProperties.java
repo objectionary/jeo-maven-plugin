@@ -26,6 +26,11 @@ package org.eolang.jeo.representation.asm.generation;
 import org.eolang.jeo.representation.asm.DefaultVersion;
 import org.objectweb.asm.ClassWriter;
 
+/**
+ * Class properties.
+ *
+ * @since 0.1.0
+ */
 final class BytecodeClassProperties {
 
     /**
@@ -53,7 +58,7 @@ final class BytecodeClassProperties {
      * @param access Access modifiers.
      */
     BytecodeClassProperties(final int access) {
-        this(access, null, "java/lang/Object", null);
+        this(access, null, "java/lang/Object", new String[0]);
     }
 
     /**
@@ -62,17 +67,18 @@ final class BytecodeClassProperties {
      * @param signature Signature.
      * @param supername Supername.
      * @param interfaces Interfaces.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     private BytecodeClassProperties(
         final int access,
         final String signature,
         final String supername,
-        final String[] interfaces
+        final String... interfaces
     ) {
         this.access = access;
         this.signature = signature;
         this.supername = supername;
-        this.interfaces = interfaces;
+        this.interfaces = interfaces.clone();
     }
 
     /**
