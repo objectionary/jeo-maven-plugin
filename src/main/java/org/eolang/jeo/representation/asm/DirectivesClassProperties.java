@@ -23,8 +23,6 @@
  */
 package org.eolang.jeo.representation.asm;
 
-import com.jcabi.log.Logger;
-import java.util.Arrays;
 import java.util.Iterator;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -97,13 +95,6 @@ final class DirectivesClassProperties implements Iterable<Directive> {
             tuple.up();
             directives.append(tuple);
         }
-        Logger.warn(
-            this,
-            String.format(
-                "Interfaces mapping is not implemented yet. Interfaces '%s' was skipped",
-                Arrays.toString(this.interfaces)
-            )
-        );
         return directives.iterator();
     }
 }
