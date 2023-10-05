@@ -48,11 +48,6 @@ import org.xembly.Xembler;
  *  the resulting XML, which are hard to read and understand. I believe
  *  we need to simplify these checks. Perhaps, we should introduce a new
  *  Hamcrest matcher. Once completed, remove this puzzle.
- * @todo #97:60min Implement passing parameters to methods.
- *  Right now, we parse methods without parameters. We need to implement
- *  parsing of methods with parameters. Once completed, remove this puzzle.
- *  Don't forget to add unit tests for this feature.
- *  See {@link DirectivesMethodTest#parsesMethodParameters()}.
  */
 class DirectivesMethodTest {
 
