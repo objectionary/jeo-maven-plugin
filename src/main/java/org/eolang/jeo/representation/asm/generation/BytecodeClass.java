@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.asm.Bytecode;
-import org.eolang.jeo.representation.asm.DefaultVersion;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -38,13 +37,6 @@ import org.objectweb.asm.util.CheckClassAdapter;
 /**
  * Class useful for generating bytecode for testing purposes.
  * @since 0.1.0
- * @todo #112:90min Add support of additional class properties.
- *  Right now we just ignore the next class properties:
- *  - signature,
- *  - supername,
- *  - interfaces.
- *  We have to implement that part, otherwise we will have many problems with bytecode
- *  transformation.
  */
 public final class BytecodeClass {
 
@@ -64,9 +56,9 @@ public final class BytecodeClass {
     private final Collection<BytecodeMethod> methods;
 
     /**
-     * Access modifiers.
+     * Class properties (access, signature, supername, interfaces).
      */
-    private final int access;
+    private final BytecodeClassProperties properties;
 
     /**
      * Constructor.
@@ -106,7 +98,7 @@ public final class BytecodeClass {
         this.name = name;
         this.writer = writer;
         this.methods = new ArrayList<>(0);
-        this.access = access;
+        this.properties = new BytecodeClassProperties(access);
     }
 
     /**
@@ -122,15 +114,8 @@ public final class BytecodeClass {
      * @return Bytecode.
      */
     public Bytecode bytecode() {
-        this.writer.visit(
-            new DefaultVersion().java(),
-            this.access,
-            this.name,
-            null,
-            "java/lang/Object",
-            null
-        );
-        this.methods.forEach(BytecodeMethod::generate);
+        this.properties.write(this.writer, this.name);
+        this.methods.forEach(BytecodeMethod::write);
         this.writer.visitEnd();
         final byte[] bytes = this.writer.toByteArray();
         CheckClassAdapter.verify(new ClassReader(bytes), true, new PrintWriter(System.out));
