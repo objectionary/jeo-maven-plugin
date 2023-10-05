@@ -36,9 +36,9 @@ import org.objectweb.asm.Opcodes;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link MethodDirectives}.
- * We create {@link MethodDirectives} only in the context
- * of using {@link DirectivesClass} in other words, {@link MethodDirectives} can't be createad
+ * Test case for {@link DirectivesMethod}.
+ * We create {@link DirectivesMethod} only in the context
+ * of using {@link DirectivesClass} in other words, {@link DirectivesMethod} can't be createad
  * without {@link DirectivesClass} and it is the main reason why in all the test we create
  * {@link DirectivesClass}.
  *
@@ -52,9 +52,9 @@ import org.xembly.Xembler;
  *  Right now, we parse methods without parameters. We need to implement
  *  parsing of methods with parameters. Once completed, remove this puzzle.
  *  Don't forget to add unit tests for this feature.
- *  See {@link org.eolang.jeo.representation.asm.MethodDirectivesTest#parsesMethodParameters()}.
+ *  See {@link DirectivesMethodTest#parsesMethodParameters()}.
  */
-class MethodDirectivesTest {
+class DirectivesMethodTest {
 
     @Test
     void parsesMethodInstructions() {

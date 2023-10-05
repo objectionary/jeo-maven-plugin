@@ -146,7 +146,7 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
             this.directives.add("o")
                 .attr("base", "seq")
                 .attr("name", "@");
-            result = new MethodDirectives(
+            result = new DirectivesMethod(
                 this.directives,
                 super.visitMethod(access, name, descriptor, signature, exceptions)
             );

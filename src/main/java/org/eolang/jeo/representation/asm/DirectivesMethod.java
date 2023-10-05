@@ -40,7 +40,7 @@ import org.xembly.Directives;
  *  remove that puzzle.
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public final class MethodDirectives extends MethodVisitor implements Iterable<Directive> {
+public final class DirectivesMethod extends MethodVisitor implements Iterable<Directive> {
 
     /**
      * Xembly directives.
@@ -52,7 +52,7 @@ public final class MethodDirectives extends MethodVisitor implements Iterable<Di
      * @param directives Xembly directives
      * @param visitor Method visitor
      */
-    MethodDirectives(
+    DirectivesMethod(
         final Directives directives,
         final MethodVisitor visitor
     ) {
