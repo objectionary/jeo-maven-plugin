@@ -85,15 +85,7 @@ final class DirectivesClassProperties implements Iterable<Directive> {
             directives.append(new DirectivesData(this.supername, "supername").directives());
         }
         if (this.interfaces != null) {
-            final Directives tuple = new Directives().add("o")
-                .attr("base", "tuple")
-                .attr("data", "tuple")
-                .attr("name", "interfaces");
-            for (final String interf : this.interfaces) {
-                tuple.append(new DirectivesData(interf).directives());
-            }
-            tuple.up();
-            directives.append(tuple);
+            directives.append(new DirectivesTuple("interfaces", this.interfaces));
         }
         return directives.iterator();
     }

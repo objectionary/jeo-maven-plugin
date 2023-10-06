@@ -85,32 +85,9 @@ final class DirectivesMethodProperties implements Iterable<Directive> {
             .append(new DirectivesData(this.access, "access").directives())
             .append(new DirectivesData(this.descriptor, "descriptor").directives())
             .append(new DirectivesData(this.signature, "signature").directives())
-            .append(this.exceptionsDirectives())
+            .append(new DirectivesTuple("exceptions", this.exceptions))
             .append(this.arguments())
             .iterator();
-    }
-
-    /**
-     * Method exceptions.
-     * @return Exceptions.
-     * @todo #91:60min Create DirectivesTuple class.
-     *  Replace DirectivesMethodProperties.exceptions() with DirectivesTuple.
-     *  Right now we have the code duplication between two methods:
-     *  - DirectivesMethodProperties.exceptions()
-     *  - DirectivesClassProperties.interfaces()
-     *  We need to create DirectivesTuple class and use it in both methods instead.
-     */
-    private Directives exceptionsDirectives() {
-        final Directives tuple = new Directives()
-            .add("o")
-            .attr("base", "tuple")
-            .attr("data", "tuple")
-            .attr("name", "exceptions");
-        for (final String exception : this.exceptions) {
-            tuple.append(new DirectivesData(exception).directives());
-        }
-        tuple.up();
-        return tuple;
     }
 
     /**
