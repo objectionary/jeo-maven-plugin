@@ -34,10 +34,6 @@ import org.xembly.Directives;
  * Method printer.
  * ASM method visitor which scans the method and builds Xembly directives.
  * @since 0.1
- * @todo #84:30min Handle method parameters.
- *  Right now we just skip method parameters. We should handle them in order to
- *  build correct XML representation of the class. When the method is ready
- *  remove that puzzle.
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class DirectivesMethod extends MethodVisitor implements Iterable<Directive> {
