@@ -25,15 +25,15 @@ package org.eolang.jeo.representation.asm;
 
 import java.util.Iterator;
 import java.util.Optional;
+import org.objectweb.asm.Type;
 import org.xembly.Directive;
 import org.xembly.Directives;
-import org.objectweb.asm.Type;
 
 /**
  * Method properties as Xembly directives.
  * @since 0.1.0
  */
-public class DirectivesMethodProperties implements Iterable<Directive> {
+final class DirectivesMethodProperties implements Iterable<Directive> {
 
     /**
      * Method access modifiers.
@@ -61,6 +61,7 @@ public class DirectivesMethodProperties implements Iterable<Directive> {
      * @param descriptor Method descriptor.
      * @param signature Method signature.
      * @param exceptions Method exceptions.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     DirectivesMethodProperties(
         final int access,
@@ -80,7 +81,7 @@ public class DirectivesMethodProperties implements Iterable<Directive> {
             .append(new DirectivesData(this.access, "access").directives())
             .append(new DirectivesData(this.descriptor, "descriptor").directives())
             .append(new DirectivesData(this.signature, "signature").directives())
-            .append(this.exceptions())
+            .append(this.exceptionsDirectives())
             .append(this.arguments())
             .iterator();
     }
@@ -88,8 +89,14 @@ public class DirectivesMethodProperties implements Iterable<Directive> {
     /**
      * Method exceptions.
      * @return Exceptions.
+     * @todo #91:60min Create DirectivesTuple class.
+     *  Replace DirectivesMethodProperties.exceptions() with DirectivesTuple.
+     *  Right now we have the code duplication between two methods:
+     *  - DirectivesMethodProperties.exceptions()
+     *  - DirectivesClassProperties.interfaces()
+     *  We need to create DirectivesTuple class and use it in both methods instead.
      */
-    private Directives exceptions() {
+    private Directives exceptionsDirectives() {
         final Directives tuple = new Directives()
             .add("o")
             .attr("base", "tuple")
@@ -107,7 +114,7 @@ public class DirectivesMethodProperties implements Iterable<Directive> {
      * @return Arguments.
      */
     private Directives arguments() {
-        Directives directives = new Directives();
+        final Directives directives = new Directives();
         final Type[] arguments = Type.getArgumentTypes(this.descriptor);
         for (int index = 0; index < arguments.length; ++index) {
             directives.add("o")

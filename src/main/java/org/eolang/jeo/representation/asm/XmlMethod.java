@@ -98,7 +98,6 @@ final class XmlMethod {
         return result;
     }
 
-
     /**
      * Find sequence node.
      * @return Sequence node.

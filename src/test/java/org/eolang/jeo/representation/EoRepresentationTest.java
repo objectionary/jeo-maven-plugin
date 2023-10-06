@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import com.jcabi.xml.XML;
 import org.eolang.jeo.representation.asm.Bytecode;
 import org.eolang.jeo.representation.asm.generation.BytecodeClass;
 import org.hamcrest.MatcherAssert;

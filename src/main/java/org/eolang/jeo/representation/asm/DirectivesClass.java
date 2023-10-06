@@ -165,20 +165,4 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
     public Iterator<Directive> iterator() {
         return this.directives.iterator();
     }
-
-    /**
-     * Method name.
-     * @param access Access.
-     * @param name Name.
-     * @param descriptor Descriptor.
-     * @return Method name.
-     */
-    private static String methodName(final int access, final String name, final String descriptor) {
-        return String.format(
-            "%d__%s__%s",
-            access,
-            name,
-            descriptor
-        );
-    }
 }
