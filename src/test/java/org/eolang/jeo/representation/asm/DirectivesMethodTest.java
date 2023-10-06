@@ -134,10 +134,14 @@ class DirectivesMethodTest {
                 .up()
                 .xml(),
             Matchers.allOf(
-                XhtmlMatchers.hasXPath(
-                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='arg__I__0']"
+                XhtmlMatchers.hasXPaths(
+                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='access']",
+                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='descriptor']",
+                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='signature']",
+                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='exceptions']"
                 ),
-                XhtmlMatchers.hasXPath(
+                XhtmlMatchers.hasXPaths(
+                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='arg__I__0']",
                     "/program/objects/o/o[contains(@name,'printSum')]/o[@name='arg__I__1']"
                 )
             )
