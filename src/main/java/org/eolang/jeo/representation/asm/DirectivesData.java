@@ -50,15 +50,15 @@ final class DirectivesData {
      * @param data Data.
      */
     DirectivesData(final Object data) {
-        this(data, "");
+        this("", data);
     }
 
     /**
      * Constructor.
-     * @param data Data.
      * @param name Name.
+     * @param data Data.
      */
-    DirectivesData(final Object data, final String name) {
+    DirectivesData(final String name, final Object data) {
         this.data = data;
         this.name = name;
     }
