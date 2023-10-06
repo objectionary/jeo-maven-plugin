@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.asm;
+package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
+import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.generation.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -34,7 +35,7 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesClass}.
+ * Test case for {@link org.eolang.jeo.representation.directives.DirectivesClass}.
  * @since 0.1.0
  */
 class DirectivesClassTest {

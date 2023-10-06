@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.asm;
+package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
+import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.generation.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -36,11 +37,11 @@ import org.objectweb.asm.Opcodes;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesMethod}.
- * We create {@link DirectivesMethod} only in the context
- * of using {@link DirectivesClass} in other words, {@link DirectivesMethod} can't be createad
- * without {@link DirectivesClass} and it is the main reason why in all the test we create
- * {@link DirectivesClass}.
+ * Test case for {@link org.eolang.jeo.representation.directives.DirectivesMethod}.
+ * We create {@link org.eolang.jeo.representation.directives.DirectivesMethod} only in the context
+ * of using {@link org.eolang.jeo.representation.directives.DirectivesClass} in other words, {@link org.eolang.jeo.representation.directives.DirectivesMethod} can't be createad
+ * without {@link org.eolang.jeo.representation.directives.DirectivesClass} and it is the main reason why in all the test we create
+ * {@link org.eolang.jeo.representation.directives.DirectivesClass}.
  *
  * @since 0.1.0
  * @todo #97:60min Add more user-friendly Hamcrest matchers.

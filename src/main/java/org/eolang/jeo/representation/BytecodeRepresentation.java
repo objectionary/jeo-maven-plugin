@@ -35,7 +35,7 @@ import org.cactoos.io.InputOf;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.asm.Bytecode;
 import org.eolang.jeo.representation.asm.ClassName;
-import org.eolang.jeo.representation.asm.DirectivesClass;
+import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.objectweb.asm.ClassReader;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
