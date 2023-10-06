@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,22 +41,14 @@ final class XmlMethod {
     /**
      * Method node.
      */
-    private final Node node;
+    private final XMLDocument node;
 
     /**
      * Constructor.
      * @param node Method node.
      */
     XmlMethod(final Node node) {
-        this.node = node;
-    }
-
-    /**
-     * Method access modifiers.
-     * @return Access modifiers.
-     */
-    int access() {
-        return Integer.parseInt(this.nameAttribute()[0]);
+        this.node = new XMLDocument(node);
     }
 
     /**
@@ -63,7 +56,15 @@ final class XmlMethod {
      * @return Name.
      */
     String name() {
-        return String.valueOf(this.nameAttribute()[1]);
+        return String.valueOf(this.node.xpath("./@name").get(0));
+    }
+
+    /**
+     * Method access modifiers.
+     * @return Access modifiers.
+     */
+    int access() {
+        return new HexString(this.node.xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
     }
 
     /**
@@ -71,7 +72,7 @@ final class XmlMethod {
      * @return Descriptor.
      */
     String descriptor() {
-        return String.valueOf(this.nameAttribute()[2]);
+        return new HexString(this.node.xpath("./o[@name='descriptor']/text()").get(0)).decode();
     }
 
     /**
@@ -97,15 +98,6 @@ final class XmlMethod {
         return result;
     }
 
-    /**
-     * Method 'name' attribute.
-     * @return Attribute value.
-     */
-    private String[] nameAttribute() {
-        final Node name = this.node.getAttributes().getNamedItem("name");
-        final String content = name.getTextContent();
-        return content.split("__");
-    }
 
     /**
      * Find sequence node.
@@ -113,7 +105,7 @@ final class XmlMethod {
      */
     private Optional<Node> sequence() {
         Optional<Node> result = Optional.empty();
-        final NodeList children = this.node.getChildNodes();
+        final NodeList children = this.node.node().getChildNodes();
         for (int index = 0; index < children.getLength(); ++index) {
             final Node item = children.item(index);
             final NamedNodeMap attributes = item.getAttributes();

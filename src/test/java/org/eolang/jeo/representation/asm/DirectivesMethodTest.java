@@ -135,10 +135,10 @@ class DirectivesMethodTest {
                 .xml(),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath(
-                    "/program/objects/o/o[contains(@name,'1__printSum__(II)V')]/o[@name='arg__I__0']"
+                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='arg__I__0']"
                 ),
                 XhtmlMatchers.hasXPath(
-                    "/program/objects/o/o[contains(@name,'1__printSum__(II)V')]/o[@name='arg__I__1']"
+                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='arg__I__1']"
                 )
             )
         );
