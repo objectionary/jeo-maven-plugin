@@ -13,18 +13,18 @@ public class DirectivesMethodProperties implements Iterable<Directive> {
 
     private final String signature;
 
-    private final String[] interfaces;
+    private final String[] exceptions;
 
-    public DirectivesMethodProperties(
+    DirectivesMethodProperties(
         final int access,
         final String desciptor,
         final String signature,
-        final String... interfaces
+        final String... exceptions
     ) {
         this.access = access;
         this.desciptor = Optional.ofNullable(desciptor).orElse("");
         this.signature = Optional.ofNullable(signature).orElse("");
-        this.interfaces = Optional.ofNullable(interfaces).orElse(new String[0]).clone();
+        this.exceptions = Optional.ofNullable(exceptions).orElse(new String[0]).clone();
     }
 
     @Override
@@ -33,9 +33,22 @@ public class DirectivesMethodProperties implements Iterable<Directive> {
             .append(new DirectivesData(this.access, "access").directives())
             .append(new DirectivesData(this.desciptor, "descriptor").directives())
             .append(new DirectivesData(this.signature, "signature").directives())
-//            .append(new DirectivesData(this.interfaces, "interfaces").directives())
+            .append(this.exceptions())
             .append(this.arguments())
             .iterator();
+    }
+
+    private Directives exceptions() {
+        final Directives tuple = new Directives()
+            .add("o")
+            .attr("base", "tuple")
+            .attr("data", "tuple")
+            .attr("name", "exceptions");
+        for (final String exception : this.exceptions) {
+            tuple.append(new DirectivesData(exception).directives());
+        }
+        tuple.up();
+        return tuple;
     }
 
     private Directives arguments() {
