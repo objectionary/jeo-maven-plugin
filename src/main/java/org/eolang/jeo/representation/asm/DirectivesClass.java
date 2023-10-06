@@ -185,11 +185,6 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
      * @param name Name.
      * @param descriptor Descriptor.
      * @return Method name.
-     * @todo #108:90min Implement different way to generate method name.
-     *  Right now we use method name, access and descriptor to generate method name
-     *  and insert it as a name attribute of the method. This is not a good way to do it.
-     *  At least it looks ugly. We should find a better way to generate method name and place
-     *  it somewhere in the XML representation of the class.
      */
     private static String methodName(final int access, final String name, final String descriptor) {
         return String.format(
