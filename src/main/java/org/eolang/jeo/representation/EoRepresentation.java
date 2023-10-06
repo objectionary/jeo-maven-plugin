@@ -25,7 +25,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.representation.generation.Bytecode;
+import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.XmlBytecode;
 
 /**

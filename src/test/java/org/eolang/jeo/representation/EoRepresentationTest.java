@@ -24,8 +24,8 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import org.eolang.jeo.representation.generation.Bytecode;
-import org.eolang.jeo.representation.generation.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.Bytecode;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

@@ -24,9 +24,9 @@
 package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
-import org.eolang.jeo.representation.generation.Bytecode;
-import org.eolang.jeo.representation.generation.BytecodeClass;
-import org.eolang.jeo.representation.generation.BytecodeMethod;
+import org.eolang.jeo.representation.bytecode.Bytecode;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 
 /**
  * XML to Java bytecode.

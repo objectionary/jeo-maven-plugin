@@ -29,4 +29,4 @@
  *
  * @since 0.1.0
  */
-package org.eolang.jeo.representation.generation;
+package org.eolang.jeo.representation.bytecode;

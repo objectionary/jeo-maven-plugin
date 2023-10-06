@@ -25,7 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.Optional;
-import org.eolang.jeo.representation.generation.BytecodeClassProperties;
+import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.w3c.dom.Node;
 
 /**

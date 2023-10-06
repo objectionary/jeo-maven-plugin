@@ -33,7 +33,7 @@ import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.representation.generation.Bytecode;
+import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.objectweb.asm.ClassReader;
 import org.xembly.ImpossibleModificationException;

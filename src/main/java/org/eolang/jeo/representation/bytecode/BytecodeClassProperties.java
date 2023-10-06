@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.generation;
+package org.eolang.jeo.representation.bytecode;
 
 import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.ClassWriter;

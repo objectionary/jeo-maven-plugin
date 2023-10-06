@@ -24,7 +24,7 @@
 /**
  * Package for reading XMIR files and converting them into bytecode.
  * This package contains classes that read XMIR files and convert them into
- * bytecode by using classes from{@link org.eolang.jeo.representation.generation} package.
+ * bytecode by using classes from{@link org.eolang.jeo.representation.bytecode} package.
  *
  * @since 0.1.0
  */
