@@ -24,7 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import org.eolang.jeo.representation.asm.DefaultVersion;
+import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;

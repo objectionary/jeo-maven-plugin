@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.asm;
+package org.eolang.jeo.representation;
 
+import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.generation.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -30,7 +31,7 @@ import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 
 /**
- * Test case for {@link ClassName}.
+ * Test case for {@link org.eolang.jeo.representation.ClassName}.
  * @since 0.1.0
  */
 class ClassNameTest {

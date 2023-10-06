@@ -23,7 +23,7 @@
  */
 package org.eolang.jeo.representation.generation;
 
-import org.eolang.jeo.representation.asm.DefaultVersion;
+import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.ClassWriter;
 
 /**

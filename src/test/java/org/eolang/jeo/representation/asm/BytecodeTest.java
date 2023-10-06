@@ -23,13 +23,14 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import org.eolang.jeo.representation.generation.Bytecode;
 import org.eolang.jeo.representation.generation.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link Bytecode}.
+ * Test case for {@link org.eolang.jeo.representation.generation.Bytecode}.
  *
  * @since 0.1.0
  */

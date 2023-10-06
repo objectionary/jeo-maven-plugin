@@ -24,7 +24,7 @@
 package org.eolang.jeo;
 
 import com.jcabi.xml.XML;
-import org.eolang.jeo.representation.asm.Bytecode;
+import org.eolang.jeo.representation.generation.Bytecode;
 
 /**
  * Intermediate representation of a class files which can be optimized.

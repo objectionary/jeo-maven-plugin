@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.asm;
+package org.eolang.jeo.representation;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;

@@ -26,7 +26,7 @@ package org.eolang.jeo.representation;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
-import org.eolang.jeo.representation.asm.Bytecode;
+import org.eolang.jeo.representation.generation.Bytecode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
