@@ -21,52 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.asm;
+package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XML;
-import org.eolang.jeo.representation.generation.Bytecode;
-import org.eolang.jeo.representation.generation.BytecodeClass;
-import org.eolang.jeo.representation.generation.BytecodeMethod;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
- * XML to Java bytecode.
+ * Hex string.
  * @since 0.1.0
  */
-public final class XmlBytecode {
+final class HexString {
 
     /**
-     * XML.
+     * Hex radix.
      */
-    private final XML xml;
+    private static final int RADIX = 16;
+
+    /**
+     * Hex string.
+     * Example:
+     * - "48 65 6C 6C 6F 20 57 6F 72 6C 64 21"
+     */
+    private final String hex;
 
     /**
      * Constructor.
-     * @param xml XML.
+     * @param hex Hex string.
      */
-    public XmlBytecode(final XML xml) {
-        this.xml = xml;
+    HexString(final String hex) {
+        this.hex = hex;
     }
 
     /**
-     * Traverse XML and build bytecode class.
-     * @return Bytecode.
+     * Convert hex string to human-readable string.
+     * Example:
+     *  "48 65 6C 6C 6F 20 57 6F 72 6C 64 21" -> "Hello World!"
+     * @return Human-readable string.
      */
-    public Bytecode bytecode() {
-        final XmlClass clazz = new XmlClass(this.xml);
-        final BytecodeClass bytecode = new BytecodeClass(
-            clazz.name(),
-            clazz.properties().toBytecodeProperties()
-        );
-        for (final XmlMethod xmlmethod : clazz.methods()) {
-            final BytecodeMethod method = bytecode.withMethod(
-                xmlmethod.name(),
-                xmlmethod.descriptor(),
-                xmlmethod.access()
-            );
-            xmlmethod.instructions()
-                .stream()
-                .forEach(inst -> method.instruction(inst.code(), inst.arguments()));
-        }
-        return bytecode.bytecode();
+    String decode() {
+        return Arrays.stream(this.hex.split(" "))
+            .map(ch -> (char) Integer.parseInt(ch, HexString.RADIX))
+            .map(String::valueOf)
+            .collect(Collectors.joining());
+    }
+
+    /**
+     * Convert hex string to integer.
+     * @return Integer.
+     */
+    int decodeAsInt() {
+        return Arrays.stream(this.hex.split(" "))
+            .mapToInt(ch -> Integer.parseInt(ch, HexString.RADIX))
+            .sum();
     }
 }

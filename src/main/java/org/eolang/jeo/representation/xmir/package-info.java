@@ -21,57 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.asm;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 /**
- * Hex string.
+ * Package for reading XMIR files and converting them into bytecode.
+ * This package contains classes that read XMIR files and convert them into
+ * bytecode by using classes from{@link org.eolang.jeo.representation.generation} package.
+ *
  * @since 0.1.0
  */
-final class HexString {
-
-    /**
-     * Hex radix.
-     */
-    private static final int RADIX = 16;
-
-    /**
-     * Hex string.
-     * Example:
-     * - "48 65 6C 6C 6F 20 57 6F 72 6C 64 21"
-     */
-    private final String hex;
-
-    /**
-     * Constructor.
-     * @param hex Hex string.
-     */
-    HexString(final String hex) {
-        this.hex = hex;
-    }
-
-    /**
-     * Convert hex string to human-readable string.
-     * Example:
-     *  "48 65 6C 6C 6F 20 57 6F 72 6C 64 21" -> "Hello World!"
-     * @return Human-readable string.
-     */
-    String decode() {
-        return Arrays.stream(this.hex.split(" "))
-            .map(ch -> (char) Integer.parseInt(ch, HexString.RADIX))
-            .map(String::valueOf)
-            .collect(Collectors.joining());
-    }
-
-    /**
-     * Convert hex string to integer.
-     * @return Integer.
-     */
-    int decodeAsInt() {
-        return Arrays.stream(this.hex.split(" "))
-            .mapToInt(ch -> Integer.parseInt(ch, HexString.RADIX))
-            .sum();
-    }
-}
+package org.eolang.jeo.representation.xmir;

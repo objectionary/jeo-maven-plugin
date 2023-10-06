@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.asm;
+package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.Optional;

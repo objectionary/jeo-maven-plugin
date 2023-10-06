@@ -21,19 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation;
+package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
-import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.generation.Bytecode;
-import org.eolang.jeo.representation.xmir.XmlBytecode;
+import org.eolang.jeo.representation.generation.BytecodeClass;
+import org.eolang.jeo.representation.generation.BytecodeMethod;
 
 /**
- * Intermediate representation of a class files from XMIR.
- *
+ * XML to Java bytecode.
  * @since 0.1.0
  */
-public final class EoRepresentation implements Representation {
+public final class XmlBytecode {
 
     /**
      * XML.
@@ -44,23 +43,30 @@ public final class EoRepresentation implements Representation {
      * Constructor.
      * @param xml XML.
      */
-    public EoRepresentation(final XML xml) {
+    public XmlBytecode(final XML xml) {
         this.xml = xml;
     }
 
-    @Override
-    public String name() {
-        return this.xml.xpath("/program/@name").get(0);
-    }
-
-    @Override
-    public XML toEO() {
-        return this.xml;
-    }
-
-    @Override
-    public Bytecode toBytecode() {
-        new Schema(this.xml).check();
-        return new XmlBytecode(this.xml).bytecode();
+    /**
+     * Traverse XML and build bytecode class.
+     * @return Bytecode.
+     */
+    public Bytecode bytecode() {
+        final XmlClass clazz = new XmlClass(this.xml);
+        final BytecodeClass bytecode = new BytecodeClass(
+            clazz.name(),
+            clazz.properties().toBytecodeProperties()
+        );
+        for (final XmlMethod xmlmethod : clazz.methods()) {
+            final BytecodeMethod method = bytecode.withMethod(
+                xmlmethod.name(),
+                xmlmethod.descriptor(),
+                xmlmethod.access()
+            );
+            xmlmethod.instructions()
+                .stream()
+                .forEach(inst -> method.instruction(inst.code(), inst.arguments()));
+        }
+        return bytecode.bytecode();
     }
 }
