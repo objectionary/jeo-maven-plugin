@@ -32,6 +32,10 @@ import org.xembly.Directives;
 /**
  * Method properties as Xembly directives.
  * @since 0.1.0
+ * @todo #91:60min Move all Directives* classes to a separate package.
+ *  Right now they are in the same package as Xml* classes.
+ *  We need to move them to a separate package. It will make it possible to hide
+ *  some classes and probably remove prefixes like Directives*.
  */
 final class DirectivesMethodProperties implements Iterable<Directive> {
 
