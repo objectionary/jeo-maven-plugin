@@ -25,7 +25,7 @@ package org.eolang.jeo.representation.asm;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.Optional;
-import org.eolang.jeo.representation.asm.generation.BytecodeClassProperties;
+import org.eolang.jeo.representation.generation.BytecodeClassProperties;
 import org.w3c.dom.Node;
 
 /**

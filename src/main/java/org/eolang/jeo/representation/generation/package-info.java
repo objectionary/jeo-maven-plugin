@@ -24,4 +24,4 @@
 /**
  * Contains classes for generating bytecode in the form of Java classes.
  */
-package org.eolang.jeo.representation.asm.generation;
+package org.eolang.jeo.representation.generation;

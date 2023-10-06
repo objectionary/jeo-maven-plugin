@@ -26,7 +26,7 @@ package org.eolang.jeo.improvement;
 import java.nio.file.Path;
 import java.util.Collections;
 import org.eolang.jeo.representation.EoRepresentation;
-import org.eolang.jeo.representation.asm.generation.BytecodeClass;
+import org.eolang.jeo.representation.generation.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.io.FileMatchers;
 import org.junit.jupiter.api.Test;
