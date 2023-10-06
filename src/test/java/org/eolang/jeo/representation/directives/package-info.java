@@ -21,40 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
-
-import org.eolang.jeo.representation.bytecode.Bytecode;
-import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
-
 /**
- * Test case for {@link org.eolang.jeo.representation.bytecode.Bytecode}.
- *
- * @since 0.1.0
+ * Package for testing classes from {@link org.eolang.jeo.representation.directives} package.
  */
-class BytecodeTest {
-
-    @Test
-    void retrievesTheSameBytes() {
-        final byte[] expected = {1, 2, 3};
-        MatcherAssert.assertThat(
-            "Bytecode should remain the same as we pass to the constructor",
-            new Bytecode(expected).asBytes(),
-            Matchers.equalTo(expected)
-        );
-    }
-
-    @Test
-    void printsHumanReadableBytecodeDescription() {
-        MatcherAssert.assertThat(
-            "We expect correct and human-readable class description",
-            new BytecodeClass("Classname").bytecode().toString(),
-            Matchers.allOf(
-                Matchers.containsString("class version"),
-                Matchers.containsString("public class Classname")
-            )
-        );
-    }
-}
+package org.eolang.jeo.representation.directives;

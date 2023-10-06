@@ -21,14 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.eolang.jeo.representation.bytecode;
+
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+
 /**
- * Package for generating XMIR by using ASM library.
- * This package contains different visitors that are used to build XML directives.
- * In other words all classes in this package scan bytecode by using ASM library
- * (<a href="https://asm.ow2.io/">https://asm.ow2.io/</a>) and build XML directives
- * by using Xembly library (<a href="https://www.xembly.org">https://www.xembly.org</a>).
- * Later on these directives are used to build XML representation of the bytecode class.
+ * Test case for {@link org.eolang.jeo.representation.bytecode.Bytecode}.
  *
  * @since 0.1.0
  */
-package org.eolang.jeo.representation.directives;
+class BytecodeTest {
+
+    @Test
+    void retrievesTheSameBytes() {
+        final byte[] expected = {1, 2, 3};
+        MatcherAssert.assertThat(
+            "Bytecode should remain the same as we pass to the constructor",
+            new Bytecode(expected).asBytes(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void printsHumanReadableBytecodeDescription() {
+        MatcherAssert.assertThat(
+            "We expect correct and human-readable class description",
+            new BytecodeClass("Classname").bytecode().toString(),
+            Matchers.allOf(
+                Matchers.containsString("class version"),
+                Matchers.containsString("public class Classname")
+            )
+        );
+    }
+}

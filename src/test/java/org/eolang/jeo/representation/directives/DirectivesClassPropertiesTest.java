@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import org.eolang.jeo.representation.directives.DirectivesClassProperties;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

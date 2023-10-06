@@ -22,6 +22,6 @@
  * SOFTWARE.
  */
 /**
- * This package contains tests for classes in {@link org.eolang.jeo.representation.xmir} package.
+ * Tests for classes in {@link org.eolang.jeo.representation.bytecode} package.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.bytecode;
