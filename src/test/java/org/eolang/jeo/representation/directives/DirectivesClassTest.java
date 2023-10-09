@@ -60,7 +60,8 @@ class DirectivesClassTest {
         ).accept(directives, 0);
         final String xml = new Xembler(directives).xml();
         MatcherAssert.assertThat(
-            String.format("Can't parse simple class with method, result is: '%s'",
+            String.format(
+                "Can't parse simple class with method, result is: '%s'",
                 new XMLDocument(xml)
             ),
             xml,

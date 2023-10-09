@@ -47,7 +47,7 @@ final class HasClass extends TypeSafeMatcher<String> {
     }
 
     @Override
-    protected boolean matchesSafely(final String item) {
+    public boolean matchesSafely(final String item) {
         return !new XMLDocument(item).xpath(
             String.format("/program/objects/o[@name='%s']/text()", this.name)
         ).isEmpty();

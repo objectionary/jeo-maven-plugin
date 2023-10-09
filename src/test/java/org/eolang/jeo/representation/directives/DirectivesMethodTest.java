@@ -45,11 +45,6 @@ import org.xembly.Xembler;
  * {@link org.eolang.jeo.representation.directives.DirectivesClass}.
  *
  * @since 0.1.0
- * @todo #97:60min Add more user-friendly Hamcrest matchers.
- *  Right now, we have tests with complex XPath strings that check
- *  the resulting XML, which are hard to read and understand. I believe
- *  we need to simplify these checks. Perhaps, we should introduce a new
- *  Hamcrest matcher. Once completed, remove this puzzle.
  */
 class DirectivesMethodTest {
 

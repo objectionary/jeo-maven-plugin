@@ -35,7 +35,7 @@ import org.hamcrest.TypeSafeMatcher;
  * Matcher to check if the received XMIR document has a method inside a class with a given name.
  * @since 0.1.0
  */
-public class HasMethod extends TypeSafeMatcher<String> {
+final class HasMethod extends TypeSafeMatcher<String> {
 
     /**
      * Class name.
@@ -45,10 +45,12 @@ public class HasMethod extends TypeSafeMatcher<String> {
     /**
      * Method name.
      */
-    private final String method;
+    private final String name;
 
-
-    private final List<String> arguments;
+    /**
+     * Method parameters.
+     */
+    private final List<String> params;
 
     /**
      * Constructor.
@@ -65,17 +67,32 @@ public class HasMethod extends TypeSafeMatcher<String> {
      */
     private HasMethod(final String clazz, final String method) {
         this.clazz = clazz;
-        this.method = method;
-        this.arguments = new ArrayList<>();
+        this.name = method;
+        this.params = new ArrayList<>(0);
+    }
+
+    @Override
+    public boolean matchesSafely(final String item) {
+        final XMLDocument document = new XMLDocument(item);
+        return this.checks().stream().map(document::xpath).noneMatch(List::isEmpty);
+    }
+
+    @Override
+    public void describeTo(final Description description) {
+        final Description descr = description.appendText(
+            "Received XMIR document doesn't comply with the following XPaths: "
+        );
+        this.checks().forEach(xpath -> descr.appendText("\n").appendText(xpath));
+        descr.appendText("\nPlease, check the received XMIR document.");
     }
 
     /**
      * Inside a class.
-     * @param clazz Class name.
+     * @param klass Class name.
      * @return New matcher that checks class.
      */
-    HasMethod inside(final String clazz) {
-        return new HasMethod(clazz, this.method);
+    HasMethod inside(final String klass) {
+        return new HasMethod(klass, this.name);
     }
 
     /**
@@ -84,22 +101,8 @@ public class HasMethod extends TypeSafeMatcher<String> {
      * @return The same matcher that checks parameter.
      */
     HasMethod withParameter(final String parameter) {
-        this.arguments.add(parameter);
+        this.params.add(parameter);
         return this;
-    }
-
-    @Override
-    protected boolean matchesSafely(final String item) {
-        final XMLDocument document = new XMLDocument(item);
-        return this.checks().stream().map(document::xpath).noneMatch(List::isEmpty);
-    }
-
-    @Override
-    public void describeTo(final Description description) {
-        final Description descr = description.appendText(
-            "Received XMIR document doesn't comply with the following XPaths: ");
-        this.checks().forEach(xpath -> descr.appendText("\n").appendText(xpath));
-        descr.appendText("\nPlease, check the received XMIR document.");
     }
 
     /**
@@ -113,6 +116,10 @@ public class HasMethod extends TypeSafeMatcher<String> {
         ).collect(Collectors.toList());
     }
 
+    /**
+     * Definition xpaths.
+     * @return List of XPaths to check.
+     */
     private Stream<String> definition() {
         final String root = this.root();
         return Stream.of(
@@ -125,16 +132,25 @@ public class HasMethod extends TypeSafeMatcher<String> {
         );
     }
 
+    /**
+     * Parameters xpaths.
+     * @return List of XPaths to check.
+     */
     private Stream<String> parameters() {
         final String root = this.root();
-        return this.arguments.stream().map(name -> String.format("%s/o[@name='%s']/@name", root, name));
+        return this.params.stream()
+            .map(param -> String.format("%s/o[@name='%s']/@name", root, param));
     }
 
+    /**
+     * Root XPath.
+     * @return XPath.
+     */
     private String root() {
         return String.format(
             "/program/objects/o[@name='%s']/o[@name='%s']",
             this.clazz,
-            this.method
+            this.name
         );
     }
 }
