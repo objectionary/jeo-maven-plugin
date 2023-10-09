@@ -23,11 +23,9 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.xembly.ImpossibleModificationException;
@@ -53,23 +51,20 @@ class DirectivesClassTest {
     @Test
     void parsesSimpleClassWithMethod() throws ImpossibleModificationException {
         final DirectivesClass directives = new DirectivesClass();
+        final String clazz = "WithMethod";
         new ClassReader(
-            new BytecodeClass("WithMethod")
+            new BytecodeClass(clazz)
                 .helloWorldMethod()
                 .bytecode()
                 .asBytes()
         ).accept(directives, 0);
+        final String xml = new Xembler(directives).xml();
         MatcherAssert.assertThat(
-            "Can't parse simple class with method",
-            new XMLDocument(new Xembler(directives).xml()),
-            Matchers.allOf(
-                XhtmlMatchers.hasXPath(
-                    "/program/objects/o[@name='WithMethod']/o[contains(@name,'main')]"
-                ),
-                XhtmlMatchers.hasXPath(
-                    "/program/objects/o[@name='WithMethod']/o[contains(@name,'main')]/o[@base='seq']"
-                )
-            )
+            String.format("Can't parse simple class with method, result is: '%s'",
+                new XMLDocument(xml)
+            ),
+            xml,
+            new HasMethod("main").inside(clazz)
         );
     }
 }
