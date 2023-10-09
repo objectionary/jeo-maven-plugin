@@ -167,7 +167,6 @@ SOFTWARE.
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
       <version>0.32.0</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.jcabi</groupId>

@@ -25,6 +25,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import lombok.ToString;
@@ -35,6 +36,7 @@ import org.cactoos.io.InputOf;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.directives.DirectivesClass;
+import org.eolang.parser.Schema;
 import org.objectweb.asm.ClassReader;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -87,18 +89,30 @@ public final class BytecodeRepresentation implements Representation {
 
     @Override
     public XML toEO() {
+        final DirectivesClass directives = new DirectivesClass(
+            new Base64Bytecode(this.input).asString()
+        );
         try {
-            final DirectivesClass directives = new DirectivesClass(
-                new Base64Bytecode(this.input).asString()
-            );
             new ClassReader(this.input).accept(directives, 0);
             final XMLDocument res = new XMLDocument(new Xembler(directives).xml());
             new Schema(res).check();
             return res;
         } catch (final ImpossibleModificationException exception) {
             throw new IllegalStateException(
-                String.format("Can't build XML from %s", this.input),
+                String.format(
+                    "Can't build XML from %s by using directives %s",
+                    Arrays.toString(this.input),
+                    directives
+                ),
                 exception
+            );
+        } catch (final IOException ioexception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Can't build XML from %s, since the resulting XMIR is invalid",
+                    Arrays.toString(this.input)
+                ),
+                ioexception
             );
         }
     }

@@ -24,9 +24,11 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
+import java.io.IOException;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.XmlBytecode;
+import org.eolang.parser.Schema;
 
 /**
  * Intermediate representation of a class files from XMIR.
@@ -60,7 +62,14 @@ public final class EoRepresentation implements Representation {
 
     @Override
     public Bytecode toBytecode() {
-        new Schema(this.xml).check();
-        return new XmlBytecode(this.xml).bytecode();
+        try {
+            new Schema(this.xml).check();
+            return new XmlBytecode(this.xml).bytecode();
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format("The XMIR is invalid: %s", this.xml),
+                exception
+            );
+        }
     }
 }
