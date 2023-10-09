@@ -34,7 +34,13 @@ import org.hamcrest.TypeSafeMatcher;
 /**
  * Matcher to check if the received XMIR document has a method inside a class with a given name.
  * @since 0.1.0
+ * @todo #106:30min Implement instructions check.
+ *  The matcher should check if the received XMIR document has a method with a given bytecode
+ *  instructions. When it is done, apply the matcher to the test case in
+ *  {@link org.eolang.jeo.representation.directives.DirectivesMethodTest#parsesMethodInstructions()}
+ *  and don't forget to remove that puzzle.
  */
+@SuppressWarnings({"JTCOP.RuleAllTestsHaveProductionClass", "JTCOP.RuleCorrectTestName"})
 final class HasMethod extends TypeSafeMatcher<String> {
 
     /**
