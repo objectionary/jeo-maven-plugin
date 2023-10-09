@@ -55,8 +55,7 @@ class DirectivesClassTest {
         final DirectivesClass directives = new DirectivesClass();
         new ClassReader(
             new BytecodeClass("WithMethod")
-                .withMethod("main")
-                .up()
+                .helloWorldMethod()
                 .bytecode()
                 .asBytes()
         ).accept(directives, 0);
