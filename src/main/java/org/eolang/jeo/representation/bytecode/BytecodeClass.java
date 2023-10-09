@@ -148,7 +148,7 @@ public final class BytecodeClass {
         this.methods.forEach(BytecodeMethod::write);
         this.writer.visitEnd();
         final byte[] bytes = this.writer.toByteArray();
-        CheckClassAdapter.verify(new ClassReader(bytes), true, new PrintWriter(System.out));
+        CheckClassAdapter.verify(new ClassReader(bytes), false, new PrintWriter(System.err));
         return new Bytecode(bytes);
     }
 

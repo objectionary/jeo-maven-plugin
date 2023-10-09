@@ -59,6 +59,7 @@ class DirectivesMethodTest {
         new ClassReader(
             new BytecodeClass()
                 .withMethod("main")
+                .descriptor("()I")
                 .instruction(Opcodes.BIPUSH, 28)
                 .instruction(Opcodes.IRETURN)
                 .up()
