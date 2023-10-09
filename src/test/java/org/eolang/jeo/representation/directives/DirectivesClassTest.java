@@ -45,8 +45,8 @@ class DirectivesClassTest {
         new ClassReader(new BytecodeClass().bytecode().asBytes()).accept(directives, 0);
         MatcherAssert.assertThat(
             "Can't parse simple class without constructor",
-            new XMLDocument(new Xembler(directives).xml()),
-            XhtmlMatchers.hasXPath("/program/objects/o[@name='Simple']")
+            new Xembler(directives).xml(),
+            new HasClass("Simple")
         );
     }
 
