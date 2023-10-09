@@ -104,50 +104,44 @@ class DirectivesMethodTest {
      */
     @Test
     void parsesMethodParameters() {
+        final String clazz = "ParametersExample";
+        final String method = "printSum";
+        final String xml = new BytecodeClass(clazz)
+            .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
+            .descriptor("([Ljava/lang/String;)V")
+            .instruction(Opcodes.NEW, clazz)
+            .instruction(Opcodes.DUP)
+            .instruction(Opcodes.INVOKESPECIAL, clazz, "<init>", "()V")
+            .instruction(Opcodes.ASTORE, 1)
+            .instruction(Opcodes.ALOAD, 1)
+            .instruction(Opcodes.BIPUSH, 10)
+            .instruction(Opcodes.BIPUSH, 20)
+            .instruction(Opcodes.INVOKEVIRTUAL, clazz, method, "(II)V")
+            .instruction(Opcodes.RETURN)
+            .up()
+            .withMethod(method, Opcodes.ACC_PUBLIC)
+            .descriptor("(II)V")
+            .instruction(Opcodes.ILOAD, 1)
+            .instruction(Opcodes.ILOAD, 2)
+            .instruction(Opcodes.IADD)
+            .instruction(Opcodes.ISTORE, 3)
+            .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+            .instruction(Opcodes.ILOAD, 3)
+            .instruction(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V")
+            .instruction(Opcodes.RETURN)
+            .up()
+            .xml()
+            .toString();
         MatcherAssert.assertThat(
-            String.join(
-                "\n",
-                "Currently we don't save method parameters as separate objects in the XML.",
-                "Method parameters implemented through opcodes.",
-                "I don't know if we need to change this behavior.\n\n"
+            String.format(
+                "DirectivesMethod doesn't parse method parameters correctly. Please, check the resulting XMIR: \n%s\n",
+                xml
             ),
-            new BytecodeClass("ParametersExample")
-                .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
-                .descriptor("([Ljava/lang/String;)V")
-                .instruction(Opcodes.NEW, "ParametersExample")
-                .instruction(Opcodes.DUP)
-                .instruction(Opcodes.INVOKESPECIAL, "ParametersExample", "<init>", "()V")
-                .instruction(Opcodes.ASTORE, 1)
-                .instruction(Opcodes.ALOAD, 1)
-                .instruction(Opcodes.BIPUSH, 10)
-                .instruction(Opcodes.BIPUSH, 20)
-                .instruction(Opcodes.INVOKEVIRTUAL, "ParametersExample", "printSum", "(II)V")
-                .instruction(Opcodes.RETURN)
-                .up()
-                .withMethod("printSum", Opcodes.ACC_PUBLIC)
-                .descriptor("(II)V")
-                .instruction(Opcodes.ILOAD, 1)
-                .instruction(Opcodes.ILOAD, 2)
-                .instruction(Opcodes.IADD)
-                .instruction(Opcodes.ISTORE, 3)
-                .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-                .instruction(Opcodes.ILOAD, 3)
-                .instruction(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V")
-                .instruction(Opcodes.RETURN)
-                .up()
-                .xml(),
-            Matchers.allOf(
-                XhtmlMatchers.hasXPaths(
-                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='access']",
-                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='descriptor']",
-                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='signature']",
-                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='exceptions']"
-                ),
-                XhtmlMatchers.hasXPaths(
-                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='arg__I__0']",
-                    "/program/objects/o/o[contains(@name,'printSum')]/o[@name='arg__I__1']"
-                )
-            )
+            xml,
+            new HasMethod(method)
+                .inside(clazz)
+                .withParameter("arg__I__0")
+                .withParameter("arg__I__1")
         );
     }
 

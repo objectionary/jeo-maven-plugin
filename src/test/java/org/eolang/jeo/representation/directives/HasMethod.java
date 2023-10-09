@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.xml.XMLDocument;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,6 +47,9 @@ public class HasMethod extends TypeSafeMatcher<String> {
      */
     private final String method;
 
+
+    private final List<String> arguments;
+
     /**
      * Constructor.
      * @param method Method name.
@@ -62,6 +66,7 @@ public class HasMethod extends TypeSafeMatcher<String> {
     private HasMethod(final String clazz, final String method) {
         this.clazz = clazz;
         this.method = method;
+        this.arguments = new ArrayList<>();
     }
 
     /**
@@ -71,6 +76,16 @@ public class HasMethod extends TypeSafeMatcher<String> {
      */
     HasMethod inside(final String clazz) {
         return new HasMethod(clazz, this.method);
+    }
+
+    /**
+     * With parameter.
+     * @param parameter Parameter name.
+     * @return The same matcher that checks parameter.
+     */
+    HasMethod withParameter(final String parameter) {
+        this.arguments.add(parameter);
+        return this;
     }
 
     @Override
@@ -92,18 +107,34 @@ public class HasMethod extends TypeSafeMatcher<String> {
      * @return List of XPaths to check.
      */
     private List<String> checks() {
-        final String main = String.format(
+        return Stream.concat(
+            this.definition(),
+            this.parameters()
+        ).collect(Collectors.toList());
+    }
+
+    private Stream<String> definition() {
+        final String root = this.root();
+        return Stream.of(
+            root.concat("/text()"),
+            root.concat("/o[@base='seq']/text()"),
+            root.concat("/o[@name='access']/@name"),
+            root.concat("/o[@name='descriptor']/@name"),
+            root.concat("/o[@name='signature']/@name"),
+            root.concat("/o[@name='exceptions']/@name")
+        );
+    }
+
+    private Stream<String> parameters() {
+        final String root = this.root();
+        return this.arguments.stream().map(name -> String.format("%s/o[@name='%s']/@name", root, name));
+    }
+
+    private String root() {
+        return String.format(
             "/program/objects/o[@name='%s']/o[@name='%s']",
             this.clazz,
             this.method
         );
-        return Stream.of(
-            main.concat("/text()"),
-            main.concat("/o[@base='seq']/text()"),
-            main.concat("/o[@name='access']/@base"),
-            main.concat("/o[@name='descriptor']/@base"),
-            main.concat("/o[@name='signature']/@base"),
-            main.concat("/o[@name='exceptions']/@base")
-        ).collect(Collectors.toList());
     }
 }
