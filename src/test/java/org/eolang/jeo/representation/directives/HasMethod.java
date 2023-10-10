@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.HexData;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -59,6 +60,11 @@ final class HasMethod extends TypeSafeMatcher<String> {
     private final List<String> params;
 
     /**
+     * Method instructions.
+     */
+    private final List<HasInstruction> instructions;
+
+    /**
      * Constructor.
      * @param method Method name.
      */
@@ -75,6 +81,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
         this.clazz = clazz;
         this.name = method;
         this.params = new ArrayList<>(0);
+        this.instructions = new ArrayList<>(0);
     }
 
     @Override
@@ -112,13 +119,27 @@ final class HasMethod extends TypeSafeMatcher<String> {
     }
 
     /**
+     * With instruction.
+     * @param opcode Opcode.
+     * @param args Arguments.
+     * @return The same matcher that checks instruction.
+     */
+    HasMethod withInstruction(final int opcode, final Object... args) {
+        this.instructions.add(new HasInstruction(opcode, args));
+        return this;
+    }
+
+    /**
      * Checks.
      * @return List of XPaths to check.
      */
     private List<String> checks() {
         return Stream.concat(
-            this.definition(),
-            this.parameters()
+            Stream.concat(
+                this.definition(),
+                this.parameters()
+            ),
+            this.instructions()
         ).collect(Collectors.toList());
     }
 
@@ -149,6 +170,16 @@ final class HasMethod extends TypeSafeMatcher<String> {
     }
 
     /**
+     * Instructions xpaths.
+     * @return List of XPaths to check.
+     */
+    private Stream<String> instructions() {
+        final String root = this.root();
+        return this.instructions.stream()
+            .flatMap(instruction -> instruction.checks(root));
+    }
+
+    /**
      * Root XPath.
      * @return XPath.
      */
@@ -158,5 +189,47 @@ final class HasMethod extends TypeSafeMatcher<String> {
             this.clazz,
             this.name
         );
+    }
+
+    private static final class HasInstruction {
+
+        private final int opcode;
+        private final List<Object> args;
+
+        HasInstruction(final int opcode, final Object... args) {
+            this(opcode, List.of(args));
+        }
+
+        HasInstruction(final int opcode, final List<Object> args) {
+            this.opcode = opcode;
+            this.args = args;
+        }
+
+        Stream<String> checks(final String root) {
+            final String instruction = String.format(
+                "%s/o[@base='seq']/o[@base='opcode' and contains(@name,'%s')]",
+                root,
+                this.opcode
+            );
+            return Stream.concat(
+                Stream.of(instruction.concat("/@base")),
+                this.arguments(instruction)
+            );
+        }
+
+        private Stream<String> arguments(final String instruction) {
+            return this.args.stream()
+                .map(
+                    arg -> {
+                        final HexData hex = new HexData(arg);
+                        return String.format(
+                            "%s/o[@base='%s' and @data='bytes' and text()='%s']/@data",
+                            instruction,
+                            hex.type(),
+                            hex.value()
+                        );
+                    }
+                );
+        }
     }
 }
