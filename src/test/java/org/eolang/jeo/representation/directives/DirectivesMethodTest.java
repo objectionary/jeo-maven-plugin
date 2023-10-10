@@ -23,16 +23,14 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import com.jcabi.matchers.XhtmlMatchers;
-import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
+import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
@@ -49,7 +47,7 @@ import org.xembly.Xembler;
 class DirectivesMethodTest {
 
     @Test
-    void parsesMethodInstructions() {
+    void parsesMethodInstructions() throws ImpossibleModificationException {
         final DirectivesClass visitor = new DirectivesClass();
         new ClassReader(
             new BytecodeClass()
@@ -61,19 +59,17 @@ class DirectivesMethodTest {
                 .bytecode()
                 .asBytes()
         ).accept(visitor, 0);
-        final XMLDocument document = new XMLDocument(new Xembler(visitor).xmlQuietly());
+        final String xml = new Xembler(visitor).xml();
         MatcherAssert.assertThat(
-            "Can't find a method in the final XML by using XPath",
-            document,
-            Matchers.allOf(
-                XhtmlMatchers.hasXPath("/program/objects/o/o[contains(@name,'main')]"),
-                XhtmlMatchers.hasXPath(
-                    "/program/objects/o/o[contains(@name,'main')]/o[@base='seq']/o[@base='opcode' and contains(@name,'BIPUSH')]/o[@base='int' and @data='bytes' and text()='00 00 00 00 00 00 00 1C']"
-                ),
-                XhtmlMatchers.hasXPath(
-                    "/program/objects/o/o[contains(@name,'main')]/o[@base='seq']/o[@base='opcode' and contains(@name,'IRETURN')]"
-                )
-            )
+            String.format(
+                "Can't find a method in the final XML by using XPath. Please, check the resulting XMIR: \n%s\n",
+                xml
+            ),
+            xml,
+            new HasMethod("main")
+                .inside("Simple")
+                .withInstruction(Opcodes.BIPUSH, 28)
+                .withInstruction(Opcodes.IRETURN)
         );
     }
 
