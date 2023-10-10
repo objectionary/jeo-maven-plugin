@@ -35,11 +35,6 @@ import org.hamcrest.TypeSafeMatcher;
 /**
  * Matcher to check if the received XMIR document has a method inside a class with a given name.
  * @since 0.1.0
- * @todo #106:30min Implement instructions check.
- *  The matcher should check if the received XMIR document has a method with a given bytecode
- *  instructions. When it is done, apply the matcher to the test case in
- *  {@link org.eolang.jeo.representation.directives.DirectivesMethodTest#parsesMethodInstructions()}
- *  and don't forget to remove that puzzle.
  */
 @SuppressWarnings({"JTCOP.RuleAllTestsHaveProductionClass", "JTCOP.RuleCorrectTestName"})
 final class HasMethod extends TypeSafeMatcher<String> {
@@ -62,7 +57,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
     /**
      * Method instructions.
      */
-    private final List<HasInstruction> instructions;
+    private final List<HasInstruction> instr;
 
     /**
      * Constructor.
@@ -81,7 +76,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
         this.clazz = clazz;
         this.name = method;
         this.params = new ArrayList<>(0);
-        this.instructions = new ArrayList<>(0);
+        this.instr = new ArrayList<>(0);
     }
 
     @Override
@@ -125,7 +120,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
      * @return The same matcher that checks instruction.
      */
     HasMethod withInstruction(final int opcode, final Object... args) {
-        this.instructions.add(new HasInstruction(opcode, args));
+        this.instr.add(new HasInstruction(opcode, args));
         return this;
     }
 
@@ -175,7 +170,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
      */
     private Stream<String> instructions() {
         final String root = this.root();
-        return this.instructions.stream()
+        return this.instr.stream()
             .flatMap(instruction -> instruction.checks(root));
     }
 

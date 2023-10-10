@@ -23,9 +23,6 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.util.StringJoiner;
 import org.eolang.jeo.representation.HexData;
 import org.xembly.Directives;
 
@@ -69,7 +66,7 @@ final class DirectivesData {
      * @return Directives
      */
     Directives directives() {
-        final HexData hex = new HexData(data);
+        final HexData hex = new HexData(this.data);
         final Directives directives = new Directives().add("o")
             .attr("base", hex.type())
             .attr("data", "bytes");
