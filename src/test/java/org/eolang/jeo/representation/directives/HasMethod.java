@@ -191,20 +191,47 @@ final class HasMethod extends TypeSafeMatcher<String> {
         );
     }
 
+    /**
+     * Instruction checks.
+     *
+     * @since 0.1.0
+     */
     private static final class HasInstruction {
 
+        /**
+         * Opcode.
+         */
         private final int opcode;
+
+        /**
+         * Arguments.
+         */
         private final List<Object> args;
 
+        /**
+         * Constructor.
+         * @param opcode Opcode.
+         * @param args Arguments.
+         */
         HasInstruction(final int opcode, final Object... args) {
             this(opcode, List.of(args));
         }
 
+        /**
+         * Constructor.
+         * @param opcode Opcode.
+         * @param args Arguments.
+         */
         HasInstruction(final int opcode, final List<Object> args) {
             this.opcode = opcode;
             this.args = args;
         }
 
+        /**
+         * Checks of instruction.
+         * @param root Root Method XPath.
+         * @return List of XPaths to check.
+         */
         Stream<String> checks(final String root) {
             final String instruction = String.format(
                 "%s/o[@base='seq']/o[@base='opcode' and contains(@name,'%s')]",
@@ -217,6 +244,11 @@ final class HasMethod extends TypeSafeMatcher<String> {
             );
         }
 
+        /**
+         * Checks of arguments.
+         * @param instruction Root Instruction XPath.
+         * @return List of XPaths to check.
+         */
         private Stream<String> arguments(final String instruction) {
             return this.args.stream()
                 .map(
