@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
@@ -78,7 +79,6 @@ class DirectivesMethodTest {
      *
      * <p>
      *     {@code
-     *
      *     public class ParamsExample {
      *       public static void main(String[] args) {
      *         ParamsExample pe = new ParamsExample();
@@ -89,7 +89,6 @@ class DirectivesMethodTest {
      *         System.out.println(sum);
      *       }
      *     }
-     *
      *     }
      * </p>
      */
@@ -136,14 +135,86 @@ class DirectivesMethodTest {
         );
     }
 
+    /**
+     * In this test we parse the next java code.
+     *
+     * <p>
+     *     {@code
+     *     public class ConstructorExample {
+     *       public ConstructorExample() {
+     *           System.out.println("Hello, constructor!");
+     *       }
+     *       public static void main(String[] args) {
+     *         new ConstructorExample();
+     *       }
+     *     }
+     *     }
+     * </p>
+     */
     @Test
-    @Disabled("We have to implement constructor parsing first")
     void parsesConstructor() {
-        Assertions.fail("We have to implement constructor parsing first");
+        final String xml = new BytecodeClass("ConstructorExample")
+            .withMethod("<init>", Opcodes.ACC_PUBLIC)
+            .descriptor("()V")
+            .instruction(Opcodes.LDC, "Hello, constructor!")
+            .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+            .instruction(Opcodes.INVOKEVIRTUAL,
+                "java/io/PrintStream",
+                "println",
+                "(Ljava/lang/String;)V"
+            )
+            .instruction(Opcodes.RETURN)
+            .up()
+            .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
+            .descriptor("([Ljava/lang/String;)V")
+            .instruction(Opcodes.NEW, "ConstructorExample")
+            .instruction(Opcodes.DUP)
+            .instruction(Opcodes.INVOKESPECIAL, "ConstructorExample", "<init>", "()V")
+            .instruction(Opcodes.RETURN)
+            .up()
+            .xml()
+            .toString();
+        MatcherAssert.assertThat(String.format(
+                "Constructor wasn't parsed correctly, please, check the resulting XMIR: \n%s\n",
+                new XMLDocument(xml)
+            ),
+            xml,
+            new HasMethod("new")
+                .inside("ConstructorExample")
+                .withInstruction(Opcodes.LDC, "Hello, constructor!")
+                .withInstruction(
+                    Opcodes.GETSTATIC,
+                    "java/lang/System",
+                    "out",
+                    "Ljava/io/PrintStream;"
+                )
+                .withInstruction(Opcodes.INVOKEVIRTUAL,
+                    "java/io/PrintStream",
+                    "println",
+                    "(Ljava/lang/String;)V"
+                )
+                .withInstruction(Opcodes.RETURN)
+        );
+
     }
 
+    /**
+     * In this test we parse the next java code.
+     *
+     * <p>
+     *     {@code
+     *     public class ConstructorExample {
+     *       public ConstructorExample(int a, int b)
+     *           System.out.println(a + b);
+     *       }
+     *       public static void main(String[] args) {
+     *         new ConstructorExample(11, 22);
+     *       }
+     *     }
+     *     }
+     * </p>
+     */
     @Test
-    @Disabled("We have to implement constructor with parameters parsing first")
     void parsesConstructorWithParameters() {
         Assertions.fail("We have to implement constructor with parameters parsing first");
     }
