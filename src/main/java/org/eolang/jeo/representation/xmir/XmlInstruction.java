@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -78,7 +79,12 @@ final class XmlInstruction {
         for (int index = 0; index < children.getLength(); ++index) {
             final Node child = children.item(index);
             if (child.getNodeName().equals("o")) {
-                res.add(new HexString(child.getTextContent()).decode());
+                final NamedNodeMap attributes = child.getAttributes();
+                if (attributes.getNamedItem("base").getNodeValue().equals("int")) {
+                    res.add(new HexString(child.getTextContent()).decodeAsInt());
+                } else {
+                    res.add(new HexString(child.getTextContent()).decode());
+                }
             }
         }
         return res.toArray();
