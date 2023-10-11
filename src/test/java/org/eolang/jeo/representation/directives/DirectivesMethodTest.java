@@ -27,7 +27,6 @@ import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
@@ -156,9 +155,12 @@ class DirectivesMethodTest {
         final String xml = new BytecodeClass("ConstructorExample")
             .withMethod("<init>", Opcodes.ACC_PUBLIC)
             .descriptor("()V")
-            .instruction(Opcodes.LDC, "Hello, constructor!")
+            .instruction(Opcodes.ALOAD, 0)
+            .instruction(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V")
             .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-            .instruction(Opcodes.INVOKEVIRTUAL,
+            .instruction(Opcodes.LDC, "Hello, constructor!")
+            .instruction(
+                Opcodes.INVOKEVIRTUAL,
                 "java/io/PrintStream",
                 "println",
                 "(Ljava/lang/String;)V"
@@ -170,6 +172,7 @@ class DirectivesMethodTest {
             .instruction(Opcodes.NEW, "ConstructorExample")
             .instruction(Opcodes.DUP)
             .instruction(Opcodes.INVOKESPECIAL, "ConstructorExample", "<init>", "()V")
+            .instruction(Opcodes.POP)
             .instruction(Opcodes.RETURN)
             .up()
             .xml()

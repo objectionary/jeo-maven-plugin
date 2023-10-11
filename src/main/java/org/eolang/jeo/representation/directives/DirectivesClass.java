@@ -139,7 +139,17 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
     ) {
         final MethodVisitor result;
         if (name.equals("<init>")) {
-            result = super.visitMethod(access, name, descriptor, signature, exceptions);
+            this.directives.add("o")
+                .attr("abstract", "")
+                .attr("name", "new")
+                .append(new DirectivesMethodProperties(access, descriptor, signature, exceptions))
+                .add("o")
+                .attr("base", "seq")
+                .attr("name", "@");
+            result = new DirectivesMethod(
+                this.directives,
+                super.visitMethod(access, name, descriptor, signature, exceptions)
+            );
         } else {
             this.directives.add("o")
                 .attr("abstract", "")

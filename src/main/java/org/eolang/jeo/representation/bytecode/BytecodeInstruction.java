@@ -134,6 +134,13 @@ final class BytecodeInstruction {
         ),
 
         /**
+         * Discard the top value on the stack.
+         */
+        POP(Opcodes.POP, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.POP)
+        ),
+
+        /**
          * Duplicate the value on top of the stack.
          */
         DUP(Opcodes.DUP, (visitor, arguments) ->
