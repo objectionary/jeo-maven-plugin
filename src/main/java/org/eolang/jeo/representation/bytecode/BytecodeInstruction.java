@@ -108,8 +108,19 @@ final class BytecodeInstruction {
         /**
          * Load a reference onto the stack from a local variable #index.
          */
-        ALOAD(Opcodes.ALOAD, (visitor, arguments) ->
-            visitor.visitVarInsn(Opcodes.ALOAD, (int) arguments.get(0))
+        ALOAD(Opcodes.ALOAD, (visitor, arguments) -> {
+            final Object argument = arguments.get(0);
+            if (!(argument instanceof Integer)) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Unexpected argument type for ALOAD instruction: %s, value: %s",
+                        argument.getClass().getName(),
+                        argument
+                    )
+                );
+            }
+            visitor.visitVarInsn(Opcodes.ALOAD, (int) argument);
+        }
         ),
 
         /**
