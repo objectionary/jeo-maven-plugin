@@ -43,6 +43,7 @@ import org.xembly.Xembler;
  *
  * @since 0.1.0
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 class DirectivesMethodTest {
 
     @Test
@@ -176,7 +177,8 @@ class DirectivesMethodTest {
             .up()
             .xml()
             .toString();
-        MatcherAssert.assertThat(String.format(
+        MatcherAssert.assertThat(
+            String.format(
                 "Constructor wasn't parsed correctly, please, check the resulting XMIR: \n%s\n",
                 new XMLDocument(xml)
             ),
@@ -185,7 +187,6 @@ class DirectivesMethodTest {
                 .inside("ConstructorExample")
                 .withInstruction(Opcodes.LDC, "Hello, constructor!")
         );
-
     }
 
     /**
@@ -231,7 +232,8 @@ class DirectivesMethodTest {
             .up()
             .xml()
             .toString();
-        MatcherAssert.assertThat(String.format(
+        MatcherAssert.assertThat(
+            String.format(
                 "Constructor wasn't parsed correctly, please, check the resulting XMIR: \n%s\n",
                 new XMLDocument(xml)
             ),

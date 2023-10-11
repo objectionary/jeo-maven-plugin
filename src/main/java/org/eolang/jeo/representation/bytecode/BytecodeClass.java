@@ -207,7 +207,7 @@ public final class BytecodeClass {
 
     /**
      * Get method name.
-     * Returns <init> for constructor.
+     * Returns "init" for a constructor.
      * @param raw Raw method name.
      * @return Method name.
      */
