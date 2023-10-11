@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.directives;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
@@ -185,18 +184,6 @@ class DirectivesMethodTest {
             new HasMethod("new")
                 .inside("ConstructorExample")
                 .withInstruction(Opcodes.LDC, "Hello, constructor!")
-                .withInstruction(
-                    Opcodes.GETSTATIC,
-                    "java/lang/System",
-                    "out",
-                    "Ljava/io/PrintStream;"
-                )
-                .withInstruction(Opcodes.INVOKEVIRTUAL,
-                    "java/io/PrintStream",
-                    "println",
-                    "(Ljava/lang/String;)V"
-                )
-                .withInstruction(Opcodes.RETURN)
         );
 
     }
@@ -206,8 +193,8 @@ class DirectivesMethodTest {
      *
      * <p>
      *     {@code
-     *     public class ConstructorExample {
-     *       public ConstructorExample(int a, int b)
+     *     public class ConstructorParams {
+     *       public ConstructorParams(int a, int b)
      *           System.out.println(a + b);
      *       }
      *       public static void main(String[] args) {
@@ -219,6 +206,41 @@ class DirectivesMethodTest {
      */
     @Test
     void parsesConstructorWithParameters() {
-        Assertions.fail("We have to implement constructor with parameters parsing first");
+        final String clazz = "ConstructorParams";
+        final String xml = new BytecodeClass(clazz)
+            .withMethod("<init>", Opcodes.ACC_PUBLIC)
+            .descriptor("(II)V")
+            .instruction(Opcodes.ALOAD, 0)
+            .instruction(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V")
+            .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+            .instruction(Opcodes.ILOAD, 1)
+            .instruction(Opcodes.ILOAD, 2)
+            .instruction(Opcodes.IADD)
+            .instruction(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V")
+            .instruction(Opcodes.RETURN)
+            .up()
+            .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
+            .descriptor("([Ljava/lang/String;)V")
+            .instruction(Opcodes.NEW, clazz)
+            .instruction(Opcodes.DUP)
+            .instruction(Opcodes.BIPUSH, 11)
+            .instruction(Opcodes.BIPUSH, 22)
+            .instruction(Opcodes.INVOKESPECIAL, clazz, "<init>", "(II)V")
+            .instruction(Opcodes.POP)
+            .instruction(Opcodes.RETURN)
+            .up()
+            .xml()
+            .toString();
+        MatcherAssert.assertThat(String.format(
+                "Constructor wasn't parsed correctly, please, check the resulting XMIR: \n%s\n",
+                new XMLDocument(xml)
+            ),
+            xml,
+            new HasMethod("new")
+                .inside(clazz)
+                .withInstruction(Opcodes.ILOAD, 1)
+                .withInstruction(Opcodes.ILOAD, 2)
+                .withInstruction(Opcodes.IADD)
+        );
     }
 }
