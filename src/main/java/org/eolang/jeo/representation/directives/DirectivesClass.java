@@ -41,10 +41,6 @@ import org.xembly.Directives;
  * - https://www.xembly.org
  * Firther all this directives will be used to build XML representation of the class.
  * @since 0.1
- * @todo #84:30min Handle constructors in classes.
- *  Right now we just skip constructors. We should handle them in order to
- *  build correct XML representation of the class. When the method is ready
- *  remove that puzzle.
  * @todo #107:30min Change method argument naming strategy.
  *  Right now we use method argument type and index to generate method argument name.
  *  For example for method with signature `void foo(int a, String b)` we generate
