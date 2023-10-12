@@ -85,6 +85,48 @@ final class BytecodeInstruction {
     private enum Instruction {
 
         /**
+         * Load the int value 0 onto the stack.
+         */
+        ICONST_0(Opcodes.ICONST_0, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.ICONST_0)
+        ),
+
+        /**
+         * Load the int value 1 onto the stack.
+         */
+        ICONST_1(Opcodes.ICONST_1, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.ICONST_1)
+        ),
+
+        /**
+         * Load the int value 2 onto the stack.
+         */
+        ICONST_2(Opcodes.ICONST_2, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.ICONST_2)
+        ),
+
+        /**
+         * Load the int value 3 onto the stack.
+         */
+        ICONST_3(Opcodes.ICONST_3, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.ICONST_3)
+        ),
+
+        /**
+         * Load the int value 4 onto the stack.
+         */
+        ICONST_4(Opcodes.ICONST_4, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.ICONST_4)
+        ),
+
+        /**
+         * Load the int value 5 onto the stack.
+         */
+        ICONST_5(Opcodes.ICONST_5, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.ICONST_5)
+        ),
+
+        /**
          * Push a byte onto the stack as an integer value.
          */
         BIPUSH(Opcodes.BIPUSH, (visitor, arguments) ->
@@ -179,6 +221,34 @@ final class BytecodeInstruction {
         GETSTATIC(Opcodes.GETSTATIC, (visitor, arguments) ->
             visitor.visitFieldInsn(
                 Opcodes.GETSTATIC,
+                String.valueOf(arguments.get(0)),
+                String.valueOf(arguments.get(1)),
+                String.valueOf(arguments.get(2))
+            )
+        ),
+
+        /**
+         * Get a field.
+         * Get a field value of an object objectref, where the field is
+         * identified by field reference in the constant pool index.
+         */
+        GETFIELD(Opcodes.GETFIELD, (visitor, arguments) ->
+            visitor.visitFieldInsn(
+                Opcodes.GETFIELD,
+                String.valueOf(arguments.get(0)),
+                String.valueOf(arguments.get(1)),
+                String.valueOf(arguments.get(2))
+            )
+        ),
+
+        /**
+         * Set field to value.
+         * Set field to value in an object objectref, where the field
+         * is identified by a field reference index in constant pool.
+         */
+        PUTFIELD(Opcodes.PUTFIELD, (visitor, arguments) ->
+            visitor.visitFieldInsn(
+                Opcodes.PUTFIELD,
                 String.valueOf(arguments.get(0)),
                 String.valueOf(arguments.get(1)),
                 String.valueOf(arguments.get(2))
