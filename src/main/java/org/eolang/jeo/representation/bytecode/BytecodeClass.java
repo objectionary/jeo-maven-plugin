@@ -187,6 +187,34 @@ public final class BytecodeClass {
     }
 
     /**
+     * Add field.
+     * @param name Field name.
+     * @param descriptor Field descriptor.
+     * @param modifiers Access modifiers.
+     * @return This object.
+     */
+    public BytecodeClass withField(
+        final String name,
+        final String descriptor,
+        final String signature,
+        final Object value,
+        final int... modifiers
+    ) {
+        int access = 0;
+        for (final int modifier : modifiers) {
+            access |= modifier;
+        }
+        this.writer.visitField(
+            access,
+            name,
+            descriptor,
+            signature,
+            value
+        );
+        return this;
+    }
+
+    /**
      * Hello world bytecode.
      * @return The same class with the hello world method.
      */

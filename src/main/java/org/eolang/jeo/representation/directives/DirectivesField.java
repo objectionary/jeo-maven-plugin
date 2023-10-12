@@ -23,19 +23,49 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
+/**
+ * Field directives.
+ * @since 0.1
+ */
 final class DirectivesField implements Iterable<Directive> {
 
+    /**
+     * Access.
+     */
     private final int access;
+
+    /**
+     * Name.
+     */
     private final String name;
+
+    /**
+     * Descriptor.
+     */
     private final String descriptor;
+
+    /**
+     * Signature.
+     */
     private final String signature;
+
+    /**
+     * Initial value.
+     */
     private final Object value;
 
+    /**
+     * Constructor.
+     * @param access Access
+     * @param name Name
+     * @param descriptor Descriptor
+     * @param signature Signature
+     * @param value Initial value
+     */
     DirectivesField(
         final int access,
         final String name,
@@ -52,8 +82,14 @@ final class DirectivesField implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final List<Directive> directives = new ArrayList<>();
-        //todo #150:30min Add field directives.
-        return directives.iterator();
+        final Directives directives = new Directives();
+        directives.add("o")
+            .attr("base", "field")
+            .attr("name", this.name)
+            .add(new DirectivesData("access", this.access))
+            .add(new DirectivesData("descriptor", this.descriptor))
+            .add(new DirectivesData("signature", this.signature))
+            .add(new DirectivesData("value", this.value));
+        return directives.up().iterator();
     }
 }

@@ -27,6 +27,8 @@ import com.jcabi.xml.XML;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -79,16 +81,38 @@ final class XmlClass {
      * @return Class methods.
      */
     List<XmlMethod> methods() {
-        final List<XmlMethod> res = new ArrayList<>(0);
+        return this.objects()
+            .filter(o -> o.getAttributes().getNamedItem("base") == null)
+            .map(XmlMethod::new)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Fields.
+     * @return Class fields.
+     */
+    List<XmlField> fields() {
+        return this.objects()
+            .filter(o -> o.getAttributes().getNamedItem("base") != null)
+            .filter(o -> "field".equals(o.getAttributes().getNamedItem("base").getNodeValue()))
+            .map(XmlField::new)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Objects.
+     * @return Stream of class objects.
+     */
+    private Stream<Node> objects() {
         final NodeList children = this.node.getChildNodes();
-        for (int child = 0; child < children.getLength(); ++child) {
-            final Node item = children.item(child);
-            final NamedNodeMap attrs = item.getAttributes();
-            if (item.getNodeName().equals("o") && attrs.getNamedItem("base") == null) {
-                res.add(new XmlMethod(item));
+        final List<Node> res = new ArrayList<>(children.getLength());
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (child.getNodeName().equals("o")) {
+                res.add(child);
             }
         }
-        return res;
+        return res.stream();
     }
 
     /**

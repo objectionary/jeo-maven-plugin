@@ -57,6 +57,16 @@ public final class XmlBytecode {
             clazz.name(),
             clazz.properties().toBytecodeProperties()
         );
+
+        for (final XmlField field : clazz.fields()) {
+            bytecode.withField(
+                field.name(),
+                field.descriptor(),
+                field.signature(),
+                field.value(),
+                field.access()
+            );
+        }
         for (final XmlMethod xmlmethod : clazz.methods()) {
             final BytecodeMethod method = bytecode.withMethod(
                 xmlmethod.name(),
