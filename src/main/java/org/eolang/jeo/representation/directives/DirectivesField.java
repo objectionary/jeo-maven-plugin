@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Optional;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -75,9 +76,9 @@ final class DirectivesField implements Iterable<Directive> {
     ) {
         this.access = access;
         this.name = name;
-        this.descriptor = descriptor;
-        this.signature = signature;
-        this.value = value;
+        this.descriptor = Optional.ofNullable(descriptor).orElse("");
+        this.signature = Optional.ofNullable(signature).orElse("");
+        this.value = Optional.ofNullable(value).orElse("");
     }
 
     @Override
