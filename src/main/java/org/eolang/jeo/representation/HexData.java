@@ -25,7 +25,6 @@ package org.eolang.jeo.representation;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 import java.util.StringJoiner;
 
 /**

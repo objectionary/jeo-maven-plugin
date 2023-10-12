@@ -57,7 +57,6 @@ public final class XmlBytecode {
             clazz.name(),
             clazz.properties().toBytecodeProperties()
         );
-
         for (final XmlField field : clazz.fields()) {
             bytecode.withField(
                 field.name(),

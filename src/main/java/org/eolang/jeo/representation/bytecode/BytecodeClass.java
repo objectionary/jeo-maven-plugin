@@ -188,12 +188,12 @@ public final class BytecodeClass {
 
     /**
      * Add field.
-     * @param name Field name.
+     * @param fname Field name.
      * @return This object.
      */
-    public BytecodeClass withField(final String name) {
+    public BytecodeClass withField(final String fname) {
         return this.withField(
-            name,
+            fname,
             "Ljava/lang/String;",
             null,
             "bar",
@@ -203,13 +203,16 @@ public final class BytecodeClass {
 
     /**
      * Add field.
-     * @param name Field name.
+     * @param fname Field name.
      * @param descriptor Field descriptor.
+     * @param signature Field signature.
+     * @param value Field value.
      * @param modifiers Access modifiers.
      * @return This object.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeClass withField(
-        final String name,
+        final String fname,
         final String descriptor,
         final String signature,
         final Object value,
@@ -221,7 +224,7 @@ public final class BytecodeClass {
         }
         this.writer.visitField(
             access,
-            name,
+            fname,
             descriptor,
             signature,
             value

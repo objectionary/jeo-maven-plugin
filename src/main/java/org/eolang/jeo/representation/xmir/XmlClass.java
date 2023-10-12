@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -106,8 +105,8 @@ final class XmlClass {
     private Stream<Node> objects() {
         final NodeList children = this.node.getChildNodes();
         final List<Node> res = new ArrayList<>(children.getLength());
-        for (int i = 0; i < children.getLength(); i++) {
-            final Node child = children.item(i);
+        for (int index = 0; index < children.getLength(); ++index) {
+            final Node child = children.item(index);
             if (child.getNodeName().equals("o")) {
                 res.add(child);
             }

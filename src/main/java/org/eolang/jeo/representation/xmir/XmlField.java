@@ -120,10 +120,11 @@ public class XmlField {
      */
     private String find(final String key) {
         return this.children()
-            .filter(node -> node.getAttributes()
-                .getNamedItem("name")
-                .getNodeValue()
-                .equals(key)
+            .filter(
+                object -> object.getAttributes()
+                    .getNamedItem("name")
+                    .getNodeValue()
+                    .equals(key)
             )
             .findFirst()
             .orElseThrow(() -> new IllegalStateException(String.format("No such key: %s", key)))
@@ -137,7 +138,7 @@ public class XmlField {
     private Stream<Node> children() {
         final NodeList childs = this.node.getChildNodes();
         final List<Node> res = new ArrayList<>(childs.getLength());
-        for (int identifier = 0; identifier < childs.getLength(); identifier++) {
+        for (int identifier = 0; identifier < childs.getLength(); ++identifier) {
             final Node child = childs.item(identifier);
             if (child.getNodeName().equals("o")) {
                 res.add(child);
