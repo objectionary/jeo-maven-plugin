@@ -32,6 +32,10 @@ import org.w3c.dom.NodeList;
 /**
  * XML field.
  * @since 0.1
+ * @todo #150:30min Refactor XmlField code.
+ *  Right now it has many redundant and repeatable code, especially
+ *  when we handle default values for signature, descriptor and value.
+ *  After refactoring, we should remove that puzzle.
  */
 public class XmlField {
 
@@ -48,40 +52,88 @@ public class XmlField {
         this.node = node;
     }
 
+    /**
+     * Field name.
+     * @return Name.
+     */
     public String name() {
         return this.node.getAttributes().getNamedItem("name").getNodeValue();
     }
 
-    public String descriptor() {
-        return this.find("descriptor").decode();
-    }
-
+    /**
+     * Field access modifiers.
+     * @return Access modifiers.
+     */
     public int access() {
-        return this.find("access").decodeAsInt();
+        return new HexString(this.find("access")).decodeAsInt();
     }
 
+    /**
+     * Field descriptor.
+     * @return Descriptor.
+     */
+    public String descriptor() {
+        final String result;
+        final String descriptor = this.find("descriptor");
+        if (descriptor.isEmpty()) {
+            result = null;
+        } else {
+            result = new HexString(descriptor).decode();
+        }
+        return result;
+    }
+
+    /**
+     * Field signature.
+     * @return Signature.
+     */
     public String signature() {
-        return this.find("signature").decode();
+        final String result;
+        final String signature = this.find("signature");
+        if (signature.isEmpty()) {
+            result = null;
+        } else {
+            result = new HexString(signature).decode();
+        }
+        return result;
     }
 
+    /**
+     * Field value.
+     * @return Value.
+     */
     public Object value() {
-        return this.find("value").decode();
+        final Object result;
+        final String value = this.find("value");
+        if (value.isEmpty()) {
+            result = null;
+        } else {
+            result = new HexString(value).decode();
+        }
+        return result;
     }
 
-    private HexString find(final String key) {
-        return new HexString(
-            this.children()
-                .filter(node -> node.getAttributes()
-                    .getNamedItem("name")
-                    .getNodeValue()
-                    .equals(key)
-                )
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException(String.format("No such key: %s", key)))
-                .getTextContent()
-        );
+    /**
+     * Find node text by key.
+     * @param key Key.
+     * @return Text.
+     */
+    private String find(final String key) {
+        return this.children()
+            .filter(node -> node.getAttributes()
+                .getNamedItem("name")
+                .getNodeValue()
+                .equals(key)
+            )
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException(String.format("No such key: %s", key)))
+            .getTextContent();
     }
 
+    /**
+     * Current node child objects.
+     * @return Child objects.
+     */
     private Stream<Node> children() {
         final NodeList childs = this.node.getChildNodes();
         final List<Node> res = new ArrayList<>(childs.getLength());
@@ -93,5 +145,4 @@ public class XmlField {
         }
         return res.stream();
     }
-
 }
