@@ -195,7 +195,7 @@ public final class BytecodeClass {
         return this.withField(
             name,
             "Ljava/lang/String;",
-            null,
+            "Ljava/lang/String;",
             "bar",
             Opcodes.ACC_PUBLIC
         );

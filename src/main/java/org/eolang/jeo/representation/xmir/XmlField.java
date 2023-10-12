@@ -49,35 +49,47 @@ public class XmlField {
     }
 
     public String name() {
-        return node.getAttributes().getNamedItem("name").getNodeValue();
+        return this.node.getAttributes().getNamedItem("name").getNodeValue();
     }
 
     public String descriptor() {
-        return new HexString(
-            children()
-                .filter(n -> n.getAttributes().getNamedItem("name").getNodeValue().equals("descriptor"))
-                .findFirst()
-                .orElseThrow(IllegalStateException::new)
-                .getTextContent()).decode();
+        return this.find("descriptor").decode();
     }
 
     public int access() {
-        return 0;
+        return this.find("access").decodeAsInt();
     }
 
     public String signature() {
-        return "null";
+        return this.find("signature").decode();
     }
 
     public Object value() {
-        return "null";
+        return this.find("value").decode();
+    }
+
+    private HexString find(final String key) {
+        return new HexString(
+            this.children()
+                .filter(node -> node.getAttributes()
+                    .getNamedItem("name")
+                    .getNodeValue()
+                    .equals(key)
+                )
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException(String.format("No such key: %s", key)))
+                .getTextContent()
+        );
     }
 
     private Stream<Node> children() {
         final NodeList childs = this.node.getChildNodes();
         final List<Node> res = new ArrayList<>(childs.getLength());
         for (int identifier = 0; identifier < childs.getLength(); identifier++) {
-            res.add(childs.item(identifier));
+            final Node child = childs.item(identifier);
+            if (child.getNodeName().equals("o")) {
+                res.add(child);
+            }
         }
         return res.stream();
     }
