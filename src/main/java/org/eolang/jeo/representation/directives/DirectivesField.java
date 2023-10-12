@@ -86,10 +86,10 @@ final class DirectivesField implements Iterable<Directive> {
         directives.add("o")
             .attr("base", "field")
             .attr("name", this.name)
-            .add(new DirectivesData("access", this.access))
-            .add(new DirectivesData("descriptor", this.descriptor))
-            .add(new DirectivesData("signature", this.signature))
-            .add(new DirectivesData("value", this.value));
+            .append(new DirectivesData("access", this.access))
+            .append(new DirectivesData("descriptor", this.descriptor))
+            .append(new DirectivesData("signature", this.signature))
+            .append(new DirectivesData("value", this.value));
         return directives.up().iterator();
     }
 }

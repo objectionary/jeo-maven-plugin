@@ -137,7 +137,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
             .attr("name", new OpcodeName(opcode).asString())
             .attr("base", "opcode");
         for (final Object operand : operands) {
-            this.directives.append(new DirectivesData(operand).directives());
+            this.directives.append(new DirectivesData(operand));
         }
         this.directives.up();
     }

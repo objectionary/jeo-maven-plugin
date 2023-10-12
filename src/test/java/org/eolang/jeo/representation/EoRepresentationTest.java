@@ -37,6 +37,8 @@ import org.junit.jupiter.api.Test;
  */
 class EoRepresentationTest {
 
+    private static final String MESSAGE = "The bytecode representation of the EO object is not correct,%nexpected:%n%s%nbut got:%n%s";
+
     @Test
     void retrievesName() {
         final String expected = "org.eolang.foo.Math";
@@ -67,11 +69,21 @@ class EoRepresentationTest {
         final Bytecode expected = clazz.bytecode();
         final Bytecode actual = new EoRepresentation(clazz.xml()).toBytecode();
         MatcherAssert.assertThat(
-            String.format(
-                "The bytecode representation of the EO object is not correct,%nexpected:%n%s%nbut got:%n%s",
-                expected,
-                actual
-            ),
+            String.format(EoRepresentationTest.MESSAGE, expected, actual),
+            actual,
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void returnsBytecodeRepresentationOfEoObjectWithFields() {
+        final Bytecode expected = new BytecodeClass("Fields")
+            .withField("foo")
+            .bytecode();
+        final Bytecode actual = new EoRepresentation(
+            new BytecodeRepresentation(expected.asBytes()).toEO()).toBytecode();
+        MatcherAssert.assertThat(
+            String.format(EoRepresentationTest.MESSAGE, expected, actual),
             actual,
             Matchers.equalTo(expected)
         );
@@ -87,11 +99,7 @@ class EoRepresentationTest {
             new BytecodeRepresentation(expected.asBytes()).toEO()
         ).toBytecode();
         MatcherAssert.assertThat(
-            String.format(
-                "The bytecode representation of the EO object is not correct,%nexpected:%n%s%nbut got:%n%s",
-                expected,
-                actual
-            ),
+            String.format(EoRepresentationTest.MESSAGE, expected, actual),
             actual,
             Matchers.equalTo(expected)
         );

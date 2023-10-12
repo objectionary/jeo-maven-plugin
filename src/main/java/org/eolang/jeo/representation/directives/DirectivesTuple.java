@@ -65,7 +65,7 @@ final class DirectivesTuple implements Iterable<Directive> {
             .attr("data", "tuple")
             .attr("name", this.name);
         for (final String exception : this.values) {
-            tuple.append(new DirectivesData(exception).directives());
+            tuple.append(new DirectivesData(exception));
         }
         tuple.up();
         return tuple.iterator();

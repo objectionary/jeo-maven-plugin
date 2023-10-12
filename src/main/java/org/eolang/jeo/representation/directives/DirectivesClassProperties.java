@@ -77,12 +77,12 @@ final class DirectivesClassProperties implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives()
-            .append(new DirectivesData("access", this.access).directives());
+            .append(new DirectivesData("access", this.access));
         if (this.signature != null) {
-            directives.append(new DirectivesData("signature", this.signature).directives());
+            directives.append(new DirectivesData("signature", this.signature));
         }
         if (this.supername != null) {
-            directives.append(new DirectivesData("supername", this.supername).directives());
+            directives.append(new DirectivesData("supername", this.supername));
         }
         if (this.interfaces != null) {
             directives.append(new DirectivesTuple("interfaces", this.interfaces));

@@ -189,6 +189,21 @@ public final class BytecodeClass {
     /**
      * Add field.
      * @param name Field name.
+     * @return This object.
+     */
+    public BytecodeClass withField(final String name) {
+        return this.withField(
+            name,
+            "Ljava/lang/String;",
+            null,
+            "bar",
+            Opcodes.ACC_PUBLIC
+        );
+    }
+
+    /**
+     * Add field.
+     * @param name Field name.
      * @param descriptor Field descriptor.
      * @param modifiers Access modifiers.
      * @return This object.

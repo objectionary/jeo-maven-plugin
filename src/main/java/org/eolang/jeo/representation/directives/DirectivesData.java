@@ -23,7 +23,9 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.Iterator;
 import org.eolang.jeo.representation.HexData;
+import org.xembly.Directive;
 import org.xembly.Directives;
 
 /**
@@ -31,7 +33,7 @@ import org.xembly.Directives;
  *
  * @since 0.1.0
  */
-final class DirectivesData {
+final class DirectivesData implements Iterable<Directive> {
 
     /**
      * Data.
@@ -61,11 +63,8 @@ final class DirectivesData {
         this.name = name;
     }
 
-    /**
-     * Directives.
-     * @return Directives
-     */
-    Directives directives() {
+    @Override
+    public Iterator<Directive> iterator() {
         final HexData hex = new HexData(this.data);
         final Directives directives = new Directives().add("o")
             .attr("base", hex.type())
@@ -73,6 +72,6 @@ final class DirectivesData {
         if (!this.name.isEmpty()) {
             directives.attr("name", this.name);
         }
-        return directives.set(hex.value()).up();
+        return directives.set(hex.value()).up().iterator();
     }
 }
