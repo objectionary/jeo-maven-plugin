@@ -29,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -160,6 +161,18 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
             );
         }
         return result;
+    }
+
+    @Override
+    public FieldVisitor visitField(
+        final int access,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final Object value
+    ) {
+        this.directives.append(new DirectivesField(access, name, descriptor, signature, value));
+        return super.visitField(access, name, descriptor, signature, value);
     }
 
     @Override
