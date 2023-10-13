@@ -29,14 +29,8 @@ assert log.contains("Result: 31")
 assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/Main.xmir').exists()
 assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/A.xmir').exists()
 assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/B.xmir').exists()
-/**
- * @todo #150:90min Implement generation of AB class.
- *  Currently, AB class is not generated, because optimization is not
- *  implemented yet. We also have to check that we generate AB class
- *  after optimization application. When optimization is implemented,
- *  we should uncomment the following line.
- */
-//assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/AB.xmir').exists()
+assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/BA.xmir').exists()
+assert new File(basedir, 'target/classes/org/eolang/jeo/BA.class').exists()
 //Check that class file was changed
 assert log.contains("Main.class was recompiled successfully.")
 true
