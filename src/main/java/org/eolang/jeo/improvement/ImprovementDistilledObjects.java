@@ -48,7 +48,7 @@ public class ImprovementDistilledObjects implements Improvement {
         final List<XML> eobjects = representations.stream()
             .map(Representation::toEO)
             .collect(Collectors.toList());
-        final List<EoRepresentation> additional = this.findDecorators(eobjects)
+        final List<EoRepresentation> additional = ImprovementDistilledObjects.decorators(eobjects)
             .stream()
             .map(DecoratorPair::combine)
             .map(EoRepresentation::new)
@@ -67,17 +67,35 @@ public class ImprovementDistilledObjects implements Improvement {
         ).collect(Collectors.toList());
     }
 
-    private Collection<DecoratorPair> findDecorators(List<XML> eobjects) {
-        return Collections.emptyList();
+    /**
+     * Find decorators.
+     * @param eobjects EObjects.
+     * @return Decorators.
+     * @todo #152:90min Implement decorator search.
+     *  Right now we just return the first two EObjects as decorators which is not correct.
+     *  We need to implement a proper decorator search. When it's done, remove that puzzle.
+     */
+    private static Collection<DecoratorPair> decorators(List<? extends XML> eobjects) {
+        final Collection<DecoratorPair> result;
+        if (eobjects.isEmpty() || eobjects.size() < 2) {
+            result = Collections.emptyList();
+        } else {
+            result = Collections.singleton(new DecoratorPair(eobjects.get(0), eobjects.get(1)));
+        }
+        return result;
     }
 
-
-    private class DecoratorPair {
-        private final XML xml;
+    /**
+     * Decorator pair.
+     * Pair of XMIR files where the first one is a decorator and the second one is a decorated object.
+     * @since 0.1.0
+     */
+    private static class DecoratorPair {
+        private final XML decorated;
         private final XML decorator;
 
-        DecoratorPair(XML xml, XML decorator) {
-            this.xml = xml;
+        DecoratorPair(XML decorated, XML decorator) {
+            this.decorated = decorated;
             this.decorator = decorator;
         }
 
