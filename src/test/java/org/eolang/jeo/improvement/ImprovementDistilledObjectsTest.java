@@ -38,7 +38,7 @@ import org.objectweb.asm.Opcodes;
  * Test case for {@link ImprovementDistilledObjects}.
  * @since 0.1.0
  */
-class ImprovementDistilledObjectsTest {
+final class ImprovementDistilledObjectsTest {
 
     @Test
     void appliesSuccessfully() {
@@ -152,5 +152,4 @@ class ImprovementDistilledObjectsTest {
                 .asBytes()
         );
     }
-
 }

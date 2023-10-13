@@ -42,7 +42,7 @@ import org.objectweb.asm.Opcodes;
  * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/102">here</a>
  * @since 0.1.0
  */
-public class ImprovementDistilledObjects implements Improvement {
+public final class ImprovementDistilledObjects implements Improvement {
     @Override
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
@@ -74,7 +74,9 @@ public class ImprovementDistilledObjects implements Improvement {
      *  Right now we just return the first two EObjects as decorators which is not correct.
      *  We need to implement a proper decorator search. When it's done, remove that puzzle.
      */
-    private static Collection<DecoratorPair> decorators(List<? extends Representation> eobjects) {
+    private static Collection<DecoratorPair> decorators(
+        final List<? extends Representation> eobjects
+    ) {
         final Collection<DecoratorPair> result;
         if (eobjects.isEmpty() || eobjects.size() < 2) {
             result = Collections.emptyList();
@@ -86,7 +88,8 @@ public class ImprovementDistilledObjects implements Improvement {
 
     /**
      * Decorator pair.
-     * Pair of XMIR files where the first one is a decorator and the second one is a decorated object.
+     * Pair of XMIR files where the first one is a decorator and
+     * the second one is a decorated object.
      * @since 0.1.0
      */
     private static class DecoratorPair {
@@ -106,7 +109,7 @@ public class ImprovementDistilledObjects implements Improvement {
          * @param decorated Decorated object.
          * @param decorator Object that decorates.
          */
-        DecoratorPair(Representation decorated, Representation decorator) {
+        DecoratorPair(final Representation decorated, final Representation decorator) {
             this.decorated = decorated;
             this.decorator = decorator;
         }
@@ -133,5 +136,4 @@ public class ImprovementDistilledObjects implements Improvement {
             );
         }
     }
-
 }
