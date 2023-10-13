@@ -29,8 +29,8 @@ assert log.contains("Result: 31")
 assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/Main.xmir').exists()
 assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/A.xmir').exists()
 assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/B.xmir').exists()
-assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/BA.xmir').exists()
-assert new File(basedir, 'target/classes/org/eolang/jeo/BA.class').exists()
+assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/AB.xmir').exists()
+assert new File(basedir, 'target/classes/org/eolang/jeo/AB.class').exists()
 //Check that class file was changed
 assert log.contains("Main.class was recompiled successfully.")
 true

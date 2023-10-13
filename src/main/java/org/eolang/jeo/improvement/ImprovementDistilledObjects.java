@@ -24,9 +24,9 @@
 package org.eolang.jeo.improvement;
 
 import com.jcabi.log.Logger;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,8 +48,11 @@ public final class ImprovementDistilledObjects implements Improvement {
         final Collection<? extends Representation> representations
     ) {
         final List<Representation> additional = ImprovementDistilledObjects
-            .decorators(new ArrayList<Representation>(representations))
-            .stream()
+            .decorators(
+                representations.stream()
+                    .sorted(Comparator.comparing((Representation ir) -> ir.name()))
+                    .collect(Collectors.toList())
+            ).stream()
             .map(DecoratorPair::combine)
             .collect(Collectors.toList());
         Logger.info(
