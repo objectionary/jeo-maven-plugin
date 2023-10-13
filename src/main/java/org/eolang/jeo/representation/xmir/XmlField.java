@@ -33,10 +33,6 @@ import org.w3c.dom.NodeList;
 /**
  * XML field.
  * @since 0.1
- * @todo #150:30min Refactor XmlField code.
- *  Right now it has many redundant and repeatable code, especially
- *  when we handle default values for signature, descriptor and value.
- *  After refactoring, we should remove that puzzle.
  */
 public class XmlField {
 
