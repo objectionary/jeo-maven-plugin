@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -65,7 +66,7 @@ public class XmlField {
      * @return Access modifiers.
      */
     public int access() {
-        return new HexString(this.find("access")).decodeAsInt();
+        return this.find("access").map(HexString::decodeAsInt).orElse(0);
     }
 
     /**
@@ -73,14 +74,7 @@ public class XmlField {
      * @return Descriptor.
      */
     public String descriptor() {
-        final String result;
-        final String descriptor = this.find("descriptor");
-        if (descriptor.isEmpty()) {
-            result = null;
-        } else {
-            result = new HexString(descriptor).decode();
-        }
-        return result;
+        return this.find("descriptor").map(HexString::decode).orElse(null);
     }
 
     /**
@@ -88,14 +82,7 @@ public class XmlField {
      * @return Signature.
      */
     public String signature() {
-        final String result;
-        final String signature = this.find("signature");
-        if (signature.isEmpty()) {
-            result = null;
-        } else {
-            result = new HexString(signature).decode();
-        }
-        return result;
+        return this.find("signature").map(HexString::decode).orElse(null);
     }
 
     /**
@@ -103,14 +90,7 @@ public class XmlField {
      * @return Value.
      */
     public Object value() {
-        final Object result;
-        final String value = this.find("value");
-        if (value.isEmpty()) {
-            result = null;
-        } else {
-            result = new HexString(value).decode();
-        }
-        return result;
+        return this.find("value").map(HexString::decode).orElse(null);
     }
 
     /**
@@ -118,7 +98,7 @@ public class XmlField {
      * @param key Key.
      * @return Text.
      */
-    private String find(final String key) {
+    private Optional<HexString> find(final String key) {
         return this.children()
             .filter(
                 object -> object.getAttributes()
@@ -127,8 +107,9 @@ public class XmlField {
                     .equals(key)
             )
             .findFirst()
-            .orElseThrow(() -> new IllegalStateException(String.format("No such key: %s", key)))
-            .getTextContent();
+            .map(Node::getTextContent)
+            .filter(text -> !text.isEmpty())
+            .map(HexString::new);
     }
 
     /**
