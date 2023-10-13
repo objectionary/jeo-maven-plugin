@@ -56,7 +56,7 @@ class ImprovementDistilledObjectsTest {
         MatcherAssert.assertThat(
             "We expect the names of the generated IRs to be A, B and AB",
             res.stream().map(Representation::name).collect(Collectors.toList()),
-            Matchers.hasItem("AB")
+            Matchers.hasItem("org.eolang.jeo.AB")
         );
     }
 

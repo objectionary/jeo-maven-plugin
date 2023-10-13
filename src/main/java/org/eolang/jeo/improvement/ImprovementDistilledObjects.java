@@ -24,7 +24,7 @@
 package org.eolang.jeo.improvement;
 
 import com.jcabi.log.Logger;
-import com.jcabi.xml.XML;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +32,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.representation.EoRepresentation;
+import org.eolang.jeo.representation.BytecodeRepresentation;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Distilled objects improvement.
@@ -45,20 +47,17 @@ public class ImprovementDistilledObjects implements Improvement {
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        final List<XML> eobjects = representations.stream()
-            .map(Representation::toEO)
-            .collect(Collectors.toList());
-        final List<EoRepresentation> additional = ImprovementDistilledObjects.decorators(eobjects)
+        final List<Representation> additional = ImprovementDistilledObjects
+            .decorators(new ArrayList<Representation>(representations))
             .stream()
             .map(DecoratorPair::combine)
-            .map(EoRepresentation::new)
             .collect(Collectors.toList());
         Logger.info(
             this,
             String.format(
                 "Distilled objects improvement is successfully applied. Generated classes: %s, total %d",
                 additional.stream().map(Representation::name).collect(Collectors.toList()),
-                eobjects.size()
+                additional.size()
             )
         );
         return Stream.concat(
@@ -75,7 +74,7 @@ public class ImprovementDistilledObjects implements Improvement {
      *  Right now we just return the first two EObjects as decorators which is not correct.
      *  We need to implement a proper decorator search. When it's done, remove that puzzle.
      */
-    private static Collection<DecoratorPair> decorators(List<? extends XML> eobjects) {
+    private static Collection<DecoratorPair> decorators(List<? extends Representation> eobjects) {
         final Collection<DecoratorPair> result;
         if (eobjects.isEmpty() || eobjects.size() < 2) {
             result = Collections.emptyList();
@@ -91,16 +90,47 @@ public class ImprovementDistilledObjects implements Improvement {
      * @since 0.1.0
      */
     private static class DecoratorPair {
-        private final XML decorated;
-        private final XML decorator;
 
-        DecoratorPair(XML decorated, XML decorator) {
+        /**
+         * Decorated object.
+         */
+        private final Representation decorated;
+
+        /**
+         * Object that decorates.
+         */
+        private final Representation decorator;
+
+        /**
+         * Constructor.
+         * @param decorated Decorated object.
+         * @param decorator Object that decorates.
+         */
+        DecoratorPair(Representation decorated, Representation decorator) {
             this.decorated = decorated;
             this.decorator = decorator;
         }
 
-        XML combine() {
-            throw new UnsupportedOperationException("Not implemented yet");
+        /**
+         * Combine two representations into one.
+         * @return Combined representation.
+         * @todo #152:90min Implement decorator combination.
+         *  Right now we just return dummy object which is empty.
+         *  We need to implement a proper decorator combination.
+         *  Don't forget to add unit tests for the method.
+         */
+        private Representation combine() {
+            final String second = this.decorator.name();
+            return new BytecodeRepresentation(
+                new BytecodeClass(
+                    String.format(
+                        "%s%s",
+                        this.decorated.name(),
+                        second.substring(second.lastIndexOf('.') + 1)
+                    ),
+                    Opcodes.ACC_PUBLIC
+                ).bytecode().asBytes()
+            );
         }
     }
 
