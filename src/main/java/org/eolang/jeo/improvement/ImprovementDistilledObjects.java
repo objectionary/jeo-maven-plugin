@@ -120,10 +120,6 @@ public final class ImprovementDistilledObjects implements Improvement {
         /**
          * Combine two representations into one.
          * @return Combined representation.
-         * @todo #152:90min Implement decorator combination.
-         *  Right now we just return dummy object which is empty.
-         *  We need to implement a proper decorator combination.
-         *  Don't forget to add unit tests for the method.
          */
         private Representation combine() {
             final String second = this.decorator.name();
