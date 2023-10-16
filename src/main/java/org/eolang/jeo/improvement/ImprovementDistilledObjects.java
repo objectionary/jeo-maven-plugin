@@ -24,6 +24,10 @@
 package org.eolang.jeo.improvement;
 
 import com.jcabi.log.Logger;
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,8 +37,13 @@ import java.util.stream.Stream;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.BytecodeRepresentation;
+import org.eolang.jeo.representation.EoRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.objectweb.asm.Opcodes;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Distilled objects improvement.
@@ -123,16 +132,52 @@ public final class ImprovementDistilledObjects implements Improvement {
          */
         private Representation combine() {
             final String second = this.decorator.name();
-            return new BytecodeRepresentation(
-                new BytecodeClass(
-                    String.format(
-                        "%s%s",
-                        this.decorated.name(),
-                        second.substring(second.lastIndexOf('.') + 1)
-                    ),
-                    Opcodes.ACC_PUBLIC
-                ).bytecode().asBytes()
+            final XML original = this.decorated.toEO();
+            final XML decor = this.decorator.toEO();
+            final String name = String.format(
+                "%s%s",
+                this.decorated.name(),
+                second.substring(second.lastIndexOf('.') + 1)
             );
+            return new EoRepresentation(this.skeleton(decor, name));
+        }
+
+        private XML skeleton(final XML decor, final String name) {
+            final List<XML> roots = decor.nodes("/program");
+            final Node root = roots.get(0).node();
+            final NamedNodeMap attributes = root.getAttributes();
+            attributes.getNamedItem("name").setNodeValue(name);
+            attributes.getNamedItem("time").setTextContent(
+                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
+            );
+            final NodeList children = root.getChildNodes();
+            for (int index = 0; index < children.getLength(); index++) {
+                final Node item = children.item(index);
+                if (item.getNodeName().equals("listing")) {
+                    item.setTextContent("");
+                }
+                if (item.getNodeName().equals("objects")) {
+                    this.handleObjects(item, name);
+                }
+            }
+            return new XMLDocument(root);
+        }
+
+        private void handleObjects(final Node root, final String name) {
+            final NodeList children = root.getChildNodes();
+            for (int index = 0; index < children.getLength(); index++) {
+                final Node item = children.item(index);
+                if (item.getNodeName().equals("o")) {
+                    item.getAttributes().getNamedItem("name").setNodeValue(
+                        name.replaceAll("\\.", "/")
+                    );
+                    handleRootObject(item);
+                }
+            }
+        }
+
+        private void handleRootObject(final Node root) {
+
         }
     }
 }
