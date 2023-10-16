@@ -88,6 +88,7 @@ final class ImprovementDistilledObjectsTest {
                 )
             );
         final String combined = repr.toEO().toString();
+        System.out.println(combined);
         MatcherAssert.assertThat(
             String.format(
                 "Can't find the constructor in new generated class. Here is the XMIR:%n%s%n",

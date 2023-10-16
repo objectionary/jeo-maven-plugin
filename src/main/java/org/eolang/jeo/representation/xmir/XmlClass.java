@@ -36,7 +36,7 @@ import org.w3c.dom.NodeList;
  * XML class.
  * @since 0.1
  */
-final class XmlClass {
+public final class XmlClass {
 
     /**
      * Class node from entire XML.
@@ -47,7 +47,7 @@ final class XmlClass {
      * Constructor.
      * @param xml Entire XML.
      */
-    XmlClass(final XML xml) {
+    public XmlClass(final XML xml) {
         this(XmlClass.findClass(xml));
     }
 
@@ -79,7 +79,7 @@ final class XmlClass {
      * Methods.
      * @return Class methods.
      */
-    List<XmlMethod> methods() {
+    public List<XmlMethod> methods() {
         return this.objects()
             .filter(o -> o.getAttributes().getNamedItem("base") == null)
             .map(XmlMethod::new)

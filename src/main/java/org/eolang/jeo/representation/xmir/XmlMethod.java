@@ -36,7 +36,7 @@ import org.w3c.dom.NodeList;
  * XML method.
  * @since 0.1
  */
-final class XmlMethod {
+public final class XmlMethod {
 
     /**
      * Method node.
@@ -73,6 +73,22 @@ final class XmlMethod {
      */
     String descriptor() {
         return new HexString(this.node.xpath("./o[@name='descriptor']/text()").get(0)).decode();
+    }
+
+    /**
+     * XML node.
+     * @return XML node.
+     */
+    public Node node() {
+        return this.node.node();
+    }
+
+    /**
+     * Checks if method is a constructor.
+     * @return True if method is a constructor.
+     */
+    public boolean isConstructor() {
+        return this.node.node().getAttributes().getNamedItem("name").getNodeValue().equals("new");
     }
 
     /**

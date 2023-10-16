@@ -39,6 +39,8 @@ import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.EoRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.xmir.XmlClass;
+import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.objectweb.asm.Opcodes;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -132,7 +134,6 @@ public final class ImprovementDistilledObjects implements Improvement {
          */
         private Representation combine() {
             final String second = this.decorator.name();
-            final XML original = this.decorated.toEO();
             final XML decor = this.decorator.toEO();
             final String name = String.format(
                 "%s%s",
@@ -171,13 +172,19 @@ public final class ImprovementDistilledObjects implements Improvement {
                     item.getAttributes().getNamedItem("name").setNodeValue(
                         name.replaceAll("\\.", "/")
                     );
-                    handleRootObject(item);
+                    this.handleRootObject(item);
                 }
             }
         }
 
         private void handleRootObject(final Node root) {
-
+            final XML original = this.decorated.toEO();
+            for (final XmlMethod method : new XmlClass(original).methods()) {
+                if (method.isConstructor()) {
+                    final Node node = method.node();
+                    root.appendChild(root.getOwnerDocument().adoptNode(node.cloneNode(true)));
+                }
+            }
         }
     }
 }
