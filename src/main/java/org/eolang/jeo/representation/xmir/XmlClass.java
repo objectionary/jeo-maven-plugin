@@ -90,7 +90,7 @@ public final class XmlClass {
      * Fields.
      * @return Class fields.
      */
-    List<XmlField> fields() {
+    public List<XmlField> fields() {
         return this.objects()
             .filter(o -> o.getAttributes().getNamedItem("base") != null)
             .filter(o -> "field".equals(o.getAttributes().getNamedItem("base").getNodeValue()))

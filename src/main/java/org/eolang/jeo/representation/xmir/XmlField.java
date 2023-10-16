@@ -90,6 +90,14 @@ public class XmlField {
     }
 
     /**
+     * XML node.
+     * @return Node node.
+     */
+    public Node node() {
+        return this.node;
+    }
+
+    /**
      * Find node text by key.
      * @param key Key.
      * @return Text.

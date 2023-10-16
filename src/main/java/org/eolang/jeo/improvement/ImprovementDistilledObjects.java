@@ -40,8 +40,10 @@ import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.EoRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.xmir.XmlClass;
+import org.eolang.jeo.representation.xmir.XmlField;
 import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.objectweb.asm.Opcodes;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -178,12 +180,17 @@ public final class ImprovementDistilledObjects implements Improvement {
         }
 
         private void handleRootObject(final Node root) {
+            final Document owner = root.getOwnerDocument();
             final XML original = this.decorated.toEO();
-            for (final XmlMethod method : new XmlClass(original).methods()) {
+            final XmlClass xmlClass = new XmlClass(original);
+            for (final XmlMethod method : xmlClass.methods()) {
                 if (method.isConstructor()) {
                     final Node node = method.node();
-                    root.appendChild(root.getOwnerDocument().adoptNode(node.cloneNode(true)));
+                    root.appendChild(owner.adoptNode(node.cloneNode(true)));
                 }
+            }
+            for (final XmlField field : xmlClass.fields()) {
+                root.appendChild(owner.adoptNode(field.node().cloneNode(true)));
             }
         }
     }
