@@ -216,9 +216,9 @@ public final class ImprovementDistilledObjects implements Improvement {
                         final List<XmlInstruction> tadam = method.instructions();
                         final List<XmlInstruction> filtered = new ArrayList<>(0);
                         for (final XmlInstruction xmlInstruction : tadam) {
-                            final int code1 = xmlInstruction.code();
-                            if (code1 != Opcodes.RETURN && code1 != Opcodes.IRETURN
-                                && code1 != Opcodes.ALOAD) {
+                            final int codee = xmlInstruction.code();
+                            if (codee != Opcodes.RETURN && codee != Opcodes.IRETURN
+                                && codee != Opcodes.ALOAD) {
                                 filtered.add(xmlInstruction);
                             }
                         }
@@ -298,7 +298,7 @@ public final class ImprovementDistilledObjects implements Improvement {
             final List<XmlInstruction> instructions = new ArrayList<>(0);
             for (int index = 0; index < seq.getChildNodes().getLength(); ++index) {
                 final Node instruction = seq.getChildNodes().item(index);
-                if (isInstruction(instruction)) {
+                if (ImprovementDistilledObjects.isInstruction(instruction)) {
                     instructions.add(new XmlInstruction(instruction));
                 }
             }
