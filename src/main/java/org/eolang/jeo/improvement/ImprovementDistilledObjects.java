@@ -28,10 +28,12 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.Improvement;
@@ -41,6 +43,7 @@ import org.eolang.jeo.representation.EoRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlField;
+import org.eolang.jeo.representation.xmir.XmlInstruction;
 import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.objectweb.asm.Opcodes;
 import org.w3c.dom.Document;
@@ -183,15 +186,167 @@ public final class ImprovementDistilledObjects implements Improvement {
             final Document owner = root.getOwnerDocument();
             final XML original = this.decorated.toEO();
             final XmlClass xmlClass = new XmlClass(original);
+            for (final XmlField field : xmlClass.fields()) {
+                root.appendChild(owner.adoptNode(field.node().cloneNode(true)));
+            }
             for (final XmlMethod method : xmlClass.methods()) {
                 if (method.isConstructor()) {
                     final Node node = method.node();
                     root.appendChild(owner.adoptNode(node.cloneNode(true)));
+                } else {
+                    this.replaceMethodContent(root, method);
                 }
             }
-            for (final XmlField field : xmlClass.fields()) {
-                root.appendChild(owner.adoptNode(field.node().cloneNode(true)));
+        }
+
+        private void replaceMethodContent(final Node root, final XmlMethod method) {
+            final List<Node> methods = this.methods(root);
+            final String descriptor = method.descriptor();
+            final int access = method.access();
+            final String name = method.name();
+            for (final Node high : methods) {
+                final List<XmlInstruction> instructions = instructions(high);
+                List<XmlInstruction> res = new ArrayList<>(0);
+                for (final XmlInstruction instruction : instructions) {
+                    final int code = instruction.code();
+                    final Object[] arguments = instruction.arguments();
+                    if (code == Opcodes.GETFIELD) {
+                        continue;
+                    } else if (code == Opcodes.INVOKEVIRTUAL) {
+                        final List<XmlInstruction> tadam = method.instructions();
+                        final List<XmlInstruction> filtered = new ArrayList<>(0);
+                        for (final XmlInstruction xmlInstruction : tadam) {
+                            final int code1 = xmlInstruction.code();
+                            if (code1 != Opcodes.RETURN && code1 != Opcodes.IRETURN
+                                && code1 != Opcodes.ALOAD) {
+                                filtered.add(xmlInstruction);
+                            }
+                        }
+                        res.addAll(filtered);
+                    } else {
+                        res.add(instruction);
+                    }
+                }
+                this.setInstructions(high, res);
+            }
+
+        }
+
+        private void setInstructions(final Node method, final List<XmlInstruction> res) {
+            final NodeList children = method.getChildNodes();
+            for (int index = 0; index < children.getLength(); ++index) {
+                final Node seq = children.item(index);
+                if (seq.getNodeName().equals("o")) {
+                    final NamedNodeMap attributes = seq.getAttributes();
+                    if (attributes != null) {
+                        final Node base = attributes.getNamedItem("base");
+                        if (base != null) {
+                            if (base.getNodeValue().equals("seq")) {
+                                while (seq.hasChildNodes()) {
+                                    seq.removeChild(seq.getFirstChild());
+                                }
+                                for (final XmlInstruction instruction : res) {
+                                    final Node node = instruction.node();
+                                    System.out.println(new XMLDocument(node));
+                                    seq.appendChild(
+                                        seq.getOwnerDocument().adoptNode(node.cloneNode(true)));
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
+
+        /**
+         * Methods.
+         * @return Class methods.
+         */
+        public List<Node> methods(final Node root) {
+            return this.objects(root)
+                .filter(o -> o.getAttributes().getNamedItem("base") == null)
+                .filter(method -> !new XmlMethod(method).isConstructor())
+                .collect(Collectors.toList());
+        }
+
+        /**
+         * Objects.
+         * @return Stream of class objects.
+         */
+        private Stream<Node> objects(final Node root) {
+            final NodeList children = root.getChildNodes();
+            final List<Node> res = new ArrayList<>(children.getLength());
+            for (int index = 0; index < children.getLength(); ++index) {
+                final Node child = children.item(index);
+                if (child.getNodeName().equals("o")) {
+                    res.add(child);
+                }
+            }
+            return res.stream();
+        }
+    }
+
+    /**
+     * Method instructions.
+     * @return Instructions.
+     */
+    public static List<XmlInstruction> instructions(final Node node) {
+        final List<XmlInstruction> result;
+        final Optional<Node> sequence = sequence(node);
+        if (sequence.isPresent()) {
+            final Node seq = sequence.get();
+            final List<XmlInstruction> instructions = new ArrayList<>(0);
+            for (int index = 0; index < seq.getChildNodes().getLength(); ++index) {
+                final Node instruction = seq.getChildNodes().item(index);
+                if (isInstruction(instruction)) {
+                    instructions.add(new XmlInstruction(instruction));
+                }
+            }
+            result = instructions;
+        } else {
+            result = Collections.emptyList();
+        }
+        return result;
+    }
+
+    /**
+     * Find sequence node.
+     * @return Sequence node.
+     */
+    private static Optional<Node> sequence(final Node node) {
+        Optional<Node> result = Optional.empty();
+        final NodeList children = node.getChildNodes();
+        for (int index = 0; index < children.getLength(); ++index) {
+            final Node item = children.item(index);
+            final NamedNodeMap attributes = item.getAttributes();
+            if (attributes == null) {
+                continue;
+            }
+            final Node base = attributes.getNamedItem("base");
+            if (base == null) {
+                continue;
+            }
+            if (base.getNodeValue().equals("seq")) {
+                result = Optional.of(item);
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Check if node is an instruction.
+     * @param node Node.
+     * @return True if node is an instruction.
+     */
+    private static boolean isInstruction(final Node node) {
+        final boolean result;
+        final NamedNodeMap attrs = node.getAttributes();
+        if (attrs == null || attrs.getNamedItem("name") == null) {
+            result = false;
+        } else {
+            result = true;
+        }
+        return result;
     }
 }

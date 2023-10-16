@@ -47,7 +47,7 @@ public final class XmlMethod {
      * Constructor.
      * @param node Method node.
      */
-    XmlMethod(final Node node) {
+    public XmlMethod(final Node node) {
         this.node = new XMLDocument(node);
     }
 
@@ -55,7 +55,7 @@ public final class XmlMethod {
      * Method name.
      * @return Name.
      */
-    String name() {
+    public String name() {
         return String.valueOf(this.node.xpath("./@name").get(0));
     }
 
@@ -63,7 +63,7 @@ public final class XmlMethod {
      * Method access modifiers.
      * @return Access modifiers.
      */
-    int access() {
+    public int access() {
         return new HexString(this.node.xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
     }
 
@@ -71,7 +71,7 @@ public final class XmlMethod {
      * Method descriptor.
      * @return Descriptor.
      */
-    String descriptor() {
+    public String descriptor() {
         return new HexString(this.node.xpath("./o[@name='descriptor']/text()").get(0)).decode();
     }
 
@@ -95,7 +95,7 @@ public final class XmlMethod {
      * Method instructions.
      * @return Instructions.
      */
-    List<XmlInstruction> instructions() {
+    public List<XmlInstruction> instructions() {
         final List<XmlInstruction> result;
         final Optional<Node> sequence = this.sequence();
         if (sequence.isPresent()) {
