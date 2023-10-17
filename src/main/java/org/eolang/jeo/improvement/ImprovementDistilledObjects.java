@@ -39,6 +39,7 @@ import java.util.stream.Stream;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.EoRepresentation;
+import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlField;
 import org.eolang.jeo.representation.xmir.XmlInstruction;
@@ -174,15 +175,14 @@ public final class ImprovementDistilledObjects implements Improvement {
             for (int index = 0; index < children.getLength(); index++) {
                 final Node item = children.item(index);
                 if (item.getNodeName().equals("o")) {
-                    item.getAttributes().getNamedItem("name").setNodeValue(
-                        name.replaceAll("\\.", "/")
-                    );
-                    this.handleRootObject(item);
+                    final String bytename = name.replaceAll("\\.", "/");
+                    item.getAttributes().getNamedItem("name").setNodeValue(bytename);
+                    this.handleRootObject(item, bytename);
                 }
             }
         }
 
-        private void handleRootObject(final Node root) {
+        private void handleRootObject(final Node root, final String bytename) {
             final Document owner = root.getOwnerDocument();
             this.removeOldFields(root);
             this.removeOldConstructors(root);
@@ -194,9 +194,30 @@ public final class ImprovementDistilledObjects implements Improvement {
             for (final XmlMethod method : xmlClass.methods()) {
                 if (method.isConstructor()) {
                     final Node node = method.node();
+                    final NodeList children = node.getChildNodes();
+                    for (int index = 0; index < children.getLength(); ++index) {
+                        final Node item = children.item(index);
+                        final NamedNodeMap attrs = item.getAttributes();
+                        if (attrs != null) {
+                            final Node base = attrs.getNamedItem("base");
+                            if (base != null) {
+                                if (base.getNodeValue().equals("seq")) {
+                                    final NodeList instructions = item.getChildNodes();
+                                    for (int inst = 0; inst < instructions.getLength(); ++inst) {
+                                        this.replaceArguments(
+                                            instructions.item(inst),
+                                            this.decorated.name().replace('.', '/'),
+                                            bytename
+                                        );
+                                    }
+
+                                }
+                            }
+                        }
+                    }
                     root.appendChild(owner.adoptNode(node.cloneNode(true)));
                 } else {
-                    this.replaceMethodContent(root, method);
+                    this.replaceMethodContent(root, method, bytename);
                 }
             }
         }
@@ -236,13 +257,20 @@ public final class ImprovementDistilledObjects implements Improvement {
             ).forEach(root::removeChild);
         }
 
-        private void replaceMethodContent(final Node root, final XmlMethod method) {
+        private void replaceMethodContent(
+            final Node root,
+            final XmlMethod method,
+            final String bytename
+        ) {
             final List<Node> methods = this.methods(root);
             final String descriptor = method.descriptor();
             final int access = method.access();
             final String name = method.name();
+            final String old = this.decorated.name().replace('.', '/');
             for (final Node high : methods) {
-                final List<XmlInstruction> instructions = instructions(high);
+                final List<XmlInstruction> instructions = ImprovementDistilledObjects.instructions(
+                    high
+                );
                 List<XmlInstruction> res = new ArrayList<>(0);
                 for (final XmlInstruction instruction : instructions) {
                     final int code = instruction.code();
@@ -254,6 +282,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                         final List<XmlInstruction> filtered = new ArrayList<>(0);
                         for (final XmlInstruction xmlInstruction : tadam) {
                             final int codee = xmlInstruction.code();
+                            this.replaceArguments(xmlInstruction.node(), old, bytename);
                             if (codee != Opcodes.RETURN && codee != Opcodes.IRETURN
                                 && codee != Opcodes.ALOAD) {
                                 filtered.add(xmlInstruction);
@@ -267,6 +296,33 @@ public final class ImprovementDistilledObjects implements Improvement {
                 this.setInstructions(high, res);
             }
 
+        }
+
+        /**
+         * Replace arguments.
+         * @param node Instruction.
+         * @param oldname  Old class name.
+         * @param bytename New class name.
+         * #todo #157:90min Handle arguments correctly during inlining optimization.
+         *  Right now we just replace all arguments with the new class name.
+         *  It's not correct, because we need to handle arguments correctly.
+         */
+        private void replaceArguments(
+            final Node node,
+            final String oldname,
+            final String bytename
+        ) {
+            final NodeList children = node.getChildNodes();
+            for (int index = 0; index < children.getLength(); ++index) {
+                final Node child = children.item(index);
+                if (child.getNodeName().equals("o")) {
+                    final String old = new HexData(oldname).value();
+                    final String content = child.getTextContent();
+                    if (old.equals(content)) {
+                        child.setTextContent(new HexData(bytename).value());
+                    }
+                }
+            }
         }
 
         private void setInstructions(final Node method, final List<XmlInstruction> res) {
