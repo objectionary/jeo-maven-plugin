@@ -41,6 +41,7 @@ public final class XmlMethod {
     /**
      * Method node.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final XMLDocument node;
 
     /**
@@ -78,7 +79,12 @@ public final class XmlMethod {
     /**
      * XML node.
      * @return XML node.
+     * @todo #157:90min Hide internal node representation in XmlMethod.
+     *  This class should not expose internal node representation.
+     *  We have to consider to add methods or classes in order to avoid
+     *  exposing internal node representation.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public Node node() {
         return this.node.node();
     }

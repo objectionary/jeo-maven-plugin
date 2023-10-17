@@ -38,6 +38,7 @@ public final class XmlInstruction {
     /**
      * Instruction node.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
 
     /**
@@ -71,7 +72,12 @@ public final class XmlInstruction {
     /**
      * XML node.
      * @return XML node.
+     * @todo #157:90min Hide internal node representation in XmlInstruction.
+     *  This class should not expose internal node representation.
+     *  We have to consider to add methods or classes in order to avoid
+     *  exposing internal node representation.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public Node node() {
         return this.node;
     }

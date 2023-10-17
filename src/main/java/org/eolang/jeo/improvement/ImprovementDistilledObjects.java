@@ -62,6 +62,7 @@ import org.w3c.dom.NodeList;
  *  Right now it's a big class with a lot of methods, repetition and high complexity.
  *  We need to refactor it into a set of smaller classes and remove all
  *  linter warnings.
+ * @checkstyle NestedIfDepthCheck (500 lines)
  */
 public final class ImprovementDistilledObjects implements Improvement {
     @Override
@@ -309,7 +310,7 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  Right now we just replace all arguments with the new class name.
          *  It's not correct, because we need to handle arguments correctly.
          */
-        private void replaceArguments(
+        private static void replaceArguments(
             final Node node,
             final String oldname,
             final String bytename
@@ -332,7 +333,7 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @param method Method.
          * @param res Instructions.
          */
-        private void setInstructions(final Node method, final List<XmlInstruction> res) {
+        private static void setInstructions(final Node method, final List<XmlInstruction> res) {
             final NodeList children = method.getChildNodes();
             for (int index = 0; index < children.getLength(); ++index) {
                 final Node seq = children.item(index);
@@ -365,8 +366,8 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  ImprovementDistilledObjects and XmlClass.
          *  We need to extract the common code into a separate class or just to use XmlClass.
          */
-        private List<Node> methods(final Node root) {
-            return this.objects(root)
+        private static List<Node> methods(final Node root) {
+            return DecoratorPair.objects(root)
                 .filter(o -> o.getAttributes().getNamedItem("base") == null)
                 .filter(method -> !new XmlMethod(method).isConstructor())
                 .collect(Collectors.toList());
@@ -376,7 +377,7 @@ public final class ImprovementDistilledObjects implements Improvement {
          * Objects.
          * @return Stream of class objects.
          */
-        private Stream<Node> objects(final Node root) {
+        private static Stream<Node> objects(final Node root) {
             final NodeList children = root.getChildNodes();
             final List<Node> res = new ArrayList<>(children.getLength());
             for (int index = 0; index < children.getLength(); ++index) {
@@ -393,7 +394,7 @@ public final class ImprovementDistilledObjects implements Improvement {
      * Method instructions.
      * @return Instructions.
      */
-    public static List<XmlInstruction> instructions(final Node node) {
+    private static List<XmlInstruction> instructions(final Node node) {
         final List<XmlInstruction> result;
         final Optional<Node> sequence = ImprovementDistilledObjects.sequence(node);
         if (sequence.isPresent()) {

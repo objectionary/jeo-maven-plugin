@@ -23,8 +23,6 @@
  */
 package org.eolang.jeo.improvement;
 
-import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -40,6 +38,9 @@ import org.objectweb.asm.Opcodes;
 /**
  * Test case for {@link ImprovementDistilledObjects}.
  * @since 0.1.0
+ * @todo #157:90min Implement more comprehensive tests for the optimization.
+ *  The current test is very basic and doesn't cover all the cases. We need to add more tests
+ *  to cover all the cases. Moreover, it makes sense to enforce combinesRepresentations() test.
  */
 final class ImprovementDistilledObjectsTest {
 
@@ -88,7 +89,6 @@ final class ImprovementDistilledObjectsTest {
                 )
             );
         final String combined = repr.toEO().toString();
-        System.out.println(combined);
         MatcherAssert.assertThat(
             String.format(
                 "Can't find the constructor in new generated class. Here is the XMIR:%n%s%n",

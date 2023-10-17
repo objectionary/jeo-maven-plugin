@@ -60,22 +60,6 @@ public final class XmlClass {
     }
 
     /**
-     * Class name.
-     * @return Name.
-     */
-    String name() {
-        return String.valueOf(this.node.getAttributes().getNamedItem("name").getTextContent());
-    }
-
-    /**
-     * Class properties.
-     * @return Class properties.
-     */
-    XmlClassProperties properties() {
-        return new XmlClassProperties(this.node);
-    }
-
-    /**
      * Methods.
      * @return Class methods.
      */
@@ -96,6 +80,22 @@ public final class XmlClass {
             .filter(o -> "field".equals(o.getAttributes().getNamedItem("base").getNodeValue()))
             .map(XmlField::new)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Class name.
+     * @return Name.
+     */
+    String name() {
+        return String.valueOf(this.node.getAttributes().getNamedItem("name").getTextContent());
+    }
+
+    /**
+     * Class properties.
+     * @return Class properties.
+     */
+    XmlClassProperties properties() {
+        return new XmlClassProperties(this.node);
     }
 
     /**
