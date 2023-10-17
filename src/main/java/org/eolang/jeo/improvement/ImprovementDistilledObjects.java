@@ -38,16 +38,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.EoRepresentation;
-import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlField;
 import org.eolang.jeo.representation.xmir.XmlInstruction;
 import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.objectweb.asm.Opcodes;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -136,6 +133,9 @@ public final class ImprovementDistilledObjects implements Improvement {
         /**
          * Combine two representations into one.
          * @return Combined representation.
+         * @todo #157:90min Implement name generation for new combined representation.
+         *  Right now we just concatenate the names of the two representations.
+         *  Maybe we can leave the same scheme, but it's better to move into a separate class.
          */
         private Representation combine() {
             final String second = this.decorator.name();
@@ -184,6 +184,8 @@ public final class ImprovementDistilledObjects implements Improvement {
 
         private void handleRootObject(final Node root) {
             final Document owner = root.getOwnerDocument();
+            this.removeOldFields(root);
+            this.removeOldConstructors(root);
             final XML original = this.decorated.toEO();
             final XmlClass xmlClass = new XmlClass(original);
             for (final XmlField field : xmlClass.fields()) {
@@ -197,6 +199,41 @@ public final class ImprovementDistilledObjects implements Improvement {
                     this.replaceMethodContent(root, method);
                 }
             }
+        }
+
+        /**
+         * Remove old constructors.
+         * @param root Root node.
+         * #todo #157:90min Handle constructors correctly during inlining optimization.
+         *  Right now we just remove all constructors from the decorated object.
+         *  It's not correct, because we need to handle constructors correctly.
+         */
+        private void removeOldConstructors(final Node root) {
+            this.objects(root).filter(
+                node -> {
+                    final NamedNodeMap attributes = node.getAttributes();
+                    final Node base = attributes.getNamedItem("name");
+                    return base != null && base.getNodeValue().equals("new");
+                }
+            ).forEach(root::removeChild);
+        }
+
+        /**
+         * Remove old fields.
+         * @param root Root node.
+         * #todo #157:90min Handle fields correctly during inlining optimization.
+         *  Right now we just remove all fields from the decorated object.
+         *  It's not correct, because we need to handle fields correctly and probably remove only
+         *  those fields that are used in the decorator.
+         */
+        private void removeOldFields(final Node root) {
+            this.objects(root).filter(
+                node -> {
+                    final NamedNodeMap attributes = node.getAttributes();
+                    final Node base = attributes.getNamedItem("base");
+                    return base != null && base.getNodeValue().equals("field");
+                }
+            ).forEach(root::removeChild);
         }
 
         private void replaceMethodContent(final Node root, final XmlMethod method) {
@@ -262,7 +299,7 @@ public final class ImprovementDistilledObjects implements Improvement {
          * Methods.
          * @return Class methods.
          */
-        public List<Node> methods(final Node root) {
+        private List<Node> methods(final Node root) {
             return this.objects(root)
                 .filter(o -> o.getAttributes().getNamedItem("base") == null)
                 .filter(method -> !new XmlMethod(method).isConstructor())
