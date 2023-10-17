@@ -33,18 +33,19 @@ import org.w3c.dom.NodeList;
  * Bytecode instruction from XML.
  * @since 0.1
  */
-final class XmlInstruction {
+public final class XmlInstruction {
 
     /**
      * Instruction node.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
 
     /**
      * Constructor.
      * @param node Instruction node.
      */
-    XmlInstruction(final Node node) {
+    public XmlInstruction(final Node node) {
         this.node = node;
     }
 
@@ -52,7 +53,7 @@ final class XmlInstruction {
      * Instruction code.
      * @return Code.
      */
-    int code() {
+    public int code() {
         return Integer.parseInt(
             this.node.getAttributes()
                 .getNamedItem("name")
@@ -64,8 +65,21 @@ final class XmlInstruction {
      * Instruction arguments.
      * @return Arguments.
      */
-    Object[] arguments() {
+    public Object[] arguments() {
         return XmlInstruction.arguments(this.node);
+    }
+
+    /**
+     * XML node.
+     * @return XML node.
+     * @todo #157:90min Hide internal node representation in XmlInstruction.
+     *  This class should not expose internal node representation.
+     *  We have to consider to add methods or classes in order to avoid
+     *  exposing internal node representation.
+     */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+    public Node node() {
+        return this.node;
     }
 
     /**

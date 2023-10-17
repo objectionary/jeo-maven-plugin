@@ -37,7 +37,7 @@ import org.hamcrest.TypeSafeMatcher;
  * @since 0.1.0
  */
 @SuppressWarnings({"JTCOP.RuleAllTestsHaveProductionClass", "JTCOP.RuleCorrectTestName"})
-final class HasMethod extends TypeSafeMatcher<String> {
+public final class HasMethod extends TypeSafeMatcher<String> {
 
     /**
      * Class name.
@@ -63,7 +63,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
      * Constructor.
      * @param method Method name.
      */
-    HasMethod(final String method) {
+    public HasMethod(final String method) {
         this("", method);
     }
 
@@ -99,7 +99,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
      * @param klass Class name.
      * @return New matcher that checks class.
      */
-    HasMethod inside(final String klass) {
+    public HasMethod inside(final String klass) {
         return new HasMethod(klass, this.name);
     }
 
@@ -108,7 +108,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
      * @param parameter Parameter name.
      * @return The same matcher that checks parameter.
      */
-    HasMethod withParameter(final String parameter) {
+    public HasMethod withParameter(final String parameter) {
         this.params.add(parameter);
         return this;
     }
@@ -119,7 +119,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
      * @param args Arguments.
      * @return The same matcher that checks instruction.
      */
-    HasMethod withInstruction(final int opcode, final Object... args) {
+    public HasMethod withInstruction(final int opcode, final Object... args) {
         this.instr.add(new HasInstruction(opcode, args));
         return this;
     }

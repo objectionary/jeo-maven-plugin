@@ -36,7 +36,7 @@ import org.w3c.dom.NodeList;
  * XML class.
  * @since 0.1
  */
-final class XmlClass {
+public final class XmlClass {
 
     /**
      * Class node from entire XML.
@@ -47,7 +47,7 @@ final class XmlClass {
      * Constructor.
      * @param xml Entire XML.
      */
-    XmlClass(final XML xml) {
+    public XmlClass(final XML xml) {
         this(XmlClass.findClass(xml));
     }
 
@@ -57,6 +57,29 @@ final class XmlClass {
      */
     private XmlClass(final Node xml) {
         this.node = xml;
+    }
+
+    /**
+     * Methods.
+     * @return Class methods.
+     */
+    public List<XmlMethod> methods() {
+        return this.objects()
+            .filter(o -> o.getAttributes().getNamedItem("base") == null)
+            .map(XmlMethod::new)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Fields.
+     * @return Class fields.
+     */
+    public List<XmlField> fields() {
+        return this.objects()
+            .filter(o -> o.getAttributes().getNamedItem("base") != null)
+            .filter(o -> "field".equals(o.getAttributes().getNamedItem("base").getNodeValue()))
+            .map(XmlField::new)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -73,29 +96,6 @@ final class XmlClass {
      */
     XmlClassProperties properties() {
         return new XmlClassProperties(this.node);
-    }
-
-    /**
-     * Methods.
-     * @return Class methods.
-     */
-    List<XmlMethod> methods() {
-        return this.objects()
-            .filter(o -> o.getAttributes().getNamedItem("base") == null)
-            .map(XmlMethod::new)
-            .collect(Collectors.toList());
-    }
-
-    /**
-     * Fields.
-     * @return Class fields.
-     */
-    List<XmlField> fields() {
-        return this.objects()
-            .filter(o -> o.getAttributes().getNamedItem("base") != null)
-            .filter(o -> "field".equals(o.getAttributes().getNamedItem("base").getNodeValue()))
-            .map(XmlField::new)
-            .collect(Collectors.toList());
     }
 
     /**

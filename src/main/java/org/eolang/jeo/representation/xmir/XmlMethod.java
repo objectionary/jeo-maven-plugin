@@ -36,18 +36,19 @@ import org.w3c.dom.NodeList;
  * XML method.
  * @since 0.1
  */
-final class XmlMethod {
+public final class XmlMethod {
 
     /**
      * Method node.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final XMLDocument node;
 
     /**
      * Constructor.
      * @param node Method node.
      */
-    XmlMethod(final Node node) {
+    public XmlMethod(final Node node) {
         this.node = new XMLDocument(node);
     }
 
@@ -55,7 +56,7 @@ final class XmlMethod {
      * Method name.
      * @return Name.
      */
-    String name() {
+    public String name() {
         return String.valueOf(this.node.xpath("./@name").get(0));
     }
 
@@ -63,7 +64,7 @@ final class XmlMethod {
      * Method access modifiers.
      * @return Access modifiers.
      */
-    int access() {
+    public int access() {
         return new HexString(this.node.xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
     }
 
@@ -71,15 +72,36 @@ final class XmlMethod {
      * Method descriptor.
      * @return Descriptor.
      */
-    String descriptor() {
+    public String descriptor() {
         return new HexString(this.node.xpath("./o[@name='descriptor']/text()").get(0)).decode();
+    }
+
+    /**
+     * XML node.
+     * @return XML node.
+     * @todo #157:90min Hide internal node representation in XmlMethod.
+     *  This class should not expose internal node representation.
+     *  We have to consider to add methods or classes in order to avoid
+     *  exposing internal node representation.
+     */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+    public Node node() {
+        return this.node.node();
+    }
+
+    /**
+     * Checks if method is a constructor.
+     * @return True if method is a constructor.
+     */
+    public boolean isConstructor() {
+        return this.node.node().getAttributes().getNamedItem("name").getNodeValue().equals("new");
     }
 
     /**
      * Method instructions.
      * @return Instructions.
      */
-    List<XmlInstruction> instructions() {
+    public List<XmlInstruction> instructions() {
         final List<XmlInstruction> result;
         final Optional<Node> sequence = this.sequence();
         if (sequence.isPresent()) {

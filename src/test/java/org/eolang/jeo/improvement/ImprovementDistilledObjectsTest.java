@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.directives.HasMethod;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -37,8 +38,16 @@ import org.objectweb.asm.Opcodes;
 /**
  * Test case for {@link ImprovementDistilledObjects}.
  * @since 0.1.0
+ * @todo #157:90min Implement more comprehensive tests for the optimization.
+ *  The current test is very basic and doesn't cover all the cases. We need to add more tests
+ *  to cover all the cases. Moreover, it makes sense to enforce combinesRepresentations() test.
  */
 final class ImprovementDistilledObjectsTest {
+
+    /**
+     * Name of the combined class.
+     */
+    private static final String COMBINED = "org.eolang.jeo.AB";
 
     @Test
     void appliesSuccessfully() {
@@ -56,7 +65,40 @@ final class ImprovementDistilledObjectsTest {
         MatcherAssert.assertThat(
             "We expect the names of the generated IRs to be A, B and AB",
             res.stream().map(Representation::name).collect(Collectors.toList()),
-            Matchers.hasItem("org.eolang.jeo.AB")
+            Matchers.hasItem(ImprovementDistilledObjectsTest.COMBINED)
+        );
+    }
+
+    @Test
+    void combinesRepresentations() {
+        final Representation repr = new ImprovementDistilledObjects()
+            .apply(
+                Arrays.asList(
+                    ImprovementDistilledObjectsTest.classA(),
+                    ImprovementDistilledObjectsTest.classB()
+                )
+            ).stream()
+            .filter(
+                representation -> ImprovementDistilledObjectsTest.COMBINED
+                    .equals(representation.name())
+            )
+            .findFirst()
+            .orElseThrow(
+                () -> new IllegalStateException(
+                    String.format(
+                        "Can't find representation for '%s'",
+                        ImprovementDistilledObjectsTest.COMBINED
+                    )
+                )
+            );
+        final String combined = repr.toEO().toString();
+        MatcherAssert.assertThat(
+            String.format(
+                "Can't find the constructor in new generated class. Here is the XMIR:%n%s%n",
+                combined
+            ),
+            combined,
+            new HasMethod("new").inside("org/eolang/jeo/AB")
         );
     }
 
