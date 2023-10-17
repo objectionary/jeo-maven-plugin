@@ -63,7 +63,9 @@ import org.w3c.dom.NodeList;
  *  We need to refactor it into a set of smaller classes and remove all
  *  linter warnings.
  * @checkstyle NestedIfDepthCheck (500 lines)
+ * @checkstyle NestedForDepthCheck (500 lines)
  */
+@SuppressWarnings({"PMD.CollapsibleIfStatements", "PMD.AvoidDuplicateLiterals"})
 public final class ImprovementDistilledObjects implements Improvement {
     @Override
     public Collection<? extends Representation> apply(
@@ -117,6 +119,7 @@ public final class ImprovementDistilledObjects implements Improvement {
      * the second one is a decorated object.
      * @since 0.1.0
      */
+    @SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods"})
     private static class DecoratorPair {
 
         /**
@@ -157,6 +160,12 @@ public final class ImprovementDistilledObjects implements Improvement {
             return new EoRepresentation(this.skeleton(decor, name));
         }
 
+        /**
+         * Skeleton.
+         * @param decor Decorator.
+         * @param name Class name.
+         * @return Combined XMIR representation.
+         */
         private XML skeleton(final XML decor, final String name) {
             final List<XML> roots = decor.nodes("/program");
             final Node root = roots.get(0).node();
@@ -166,7 +175,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                 LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
             );
             final NodeList children = root.getChildNodes();
-            for (int index = 0; index < children.getLength(); index++) {
+            for (int index = 0; index < children.getLength(); ++index) {
                 final Node item = children.item(index);
                 if (item.getNodeName().equals("listing")) {
                     item.setTextContent("");
@@ -178,9 +187,14 @@ public final class ImprovementDistilledObjects implements Improvement {
             return new XMLDocument(root);
         }
 
+        /**
+         * Handle all objects.
+         * @param root Root node.
+         * @param name Class name.
+         */
         private void handleObjects(final Node root, final String name) {
             final NodeList children = root.getChildNodes();
-            for (int index = 0; index < children.getLength(); index++) {
+            for (int index = 0; index < children.getLength(); ++index) {
                 final Node item = children.item(index);
                 if (item.getNodeName().equals("o")) {
                     final String bytename = name.replaceAll("\\.", "/");
@@ -190,16 +204,21 @@ public final class ImprovementDistilledObjects implements Improvement {
             }
         }
 
+        /**
+         * Handle root object.
+         * @param root Root node.
+         * @param bytename Class name.
+         */
         private void handleRootObject(final Node root, final String bytename) {
             final Document owner = root.getOwnerDocument();
             this.removeOldFields(root);
             this.removeOldConstructors(root);
             final XML original = this.decorated.toEO();
-            final XmlClass xmlClass = new XmlClass(original);
-            for (final XmlField field : xmlClass.fields()) {
+            final XmlClass clazz = new XmlClass(original);
+            for (final XmlField field : clazz.fields()) {
                 root.appendChild(owner.adoptNode(field.node().cloneNode(true)));
             }
-            for (final XmlMethod method : xmlClass.methods()) {
+            for (final XmlMethod method : clazz.methods()) {
                 if (method.isConstructor()) {
                     final Node node = method.node();
                     final NodeList children = node.getChildNodes();
@@ -212,13 +231,12 @@ public final class ImprovementDistilledObjects implements Improvement {
                                 if (base.getNodeValue().equals("seq")) {
                                     final NodeList instructions = item.getChildNodes();
                                     for (int inst = 0; inst < instructions.getLength(); ++inst) {
-                                        this.replaceArguments(
+                                        DecoratorPair.replaceArguments(
                                             instructions.item(inst),
                                             this.decorated.name().replace('.', '/'),
                                             bytename
                                         );
                                     }
-
                                 }
                             }
                         }
@@ -265,6 +283,12 @@ public final class ImprovementDistilledObjects implements Improvement {
             ).forEach(root::removeChild);
         }
 
+        /**
+         * Replace method content.
+         * @param root Original method.
+         * @param method Inlined method.
+         * @param bytename Class name.
+         */
         private void replaceMethodContent(
             final Node root,
             final XmlMethod method,
@@ -273,22 +297,24 @@ public final class ImprovementDistilledObjects implements Improvement {
             final List<Node> methods = this.methods(root);
             final String old = this.decorated.name().replace('.', '/');
             for (final Node high : methods) {
-                final List<XmlInstruction> instructions = ImprovementDistilledObjects.instructions(
-                    high
-                );
-                List<XmlInstruction> res = new ArrayList<>(0);
+                final List<XmlInstruction> instructions = DecoratorPair.instructions(high);
+                final List<XmlInstruction> res = new ArrayList<>(0);
                 for (final XmlInstruction instruction : instructions) {
                     final int code = instruction.code();
                     if (code != Opcodes.GETFIELD) {
                         if (code == Opcodes.INVOKEVIRTUAL) {
                             final List<XmlInstruction> tadam = method.instructions();
-                            final List<XmlInstruction> filtered = new ArrayList<>(0);
-                            for (final XmlInstruction xmlInstruction : tadam) {
-                                final int codee = xmlInstruction.code();
-                                this.replaceArguments(xmlInstruction.node(), old, bytename);
+                            final Collection<XmlInstruction> filtered = new ArrayList<>(0);
+                            for (final XmlInstruction xmlinstr : tadam) {
+                                final int codee = xmlinstr.code();
+                                DecoratorPair.replaceArguments(
+                                    xmlinstr.node(),
+                                    old,
+                                    bytename
+                                );
                                 if (codee != Opcodes.RETURN && codee != Opcodes.IRETURN
                                     && codee != Opcodes.ALOAD) {
-                                    filtered.add(xmlInstruction);
+                                    filtered.add(xmlinstr);
                                 }
                             }
                             res.addAll(filtered);
@@ -304,7 +330,7 @@ public final class ImprovementDistilledObjects implements Improvement {
         /**
          * Replace arguments.
          * @param node Instruction.
-         * @param oldname  Old class name.
+         * @param oldname Old class name.
          * @param bytename New class name.
          * @todo #157:90min Handle arguments correctly during inlining optimization.
          *  Right now we just replace all arguments with the new class name.
@@ -349,7 +375,8 @@ public final class ImprovementDistilledObjects implements Improvement {
                                 for (final XmlInstruction instruction : res) {
                                     final Node node = instruction.node();
                                     seq.appendChild(
-                                        seq.getOwnerDocument().adoptNode(node.cloneNode(true)));
+                                        seq.getOwnerDocument().adoptNode(node.cloneNode(true))
+                                    );
                                 }
                             }
                         }
@@ -360,6 +387,7 @@ public final class ImprovementDistilledObjects implements Improvement {
 
         /**
          * Methods.
+         * @param root Root node.
          * @return Class methods.
          * @todo #157:90min Code duplication.
          *  There is a code duplication between classes:
@@ -375,6 +403,7 @@ public final class ImprovementDistilledObjects implements Improvement {
 
         /**
          * Objects.
+         * @param root Root node.
          * @return Stream of class objects.
          */
         private static Stream<Node> objects(final Node root) {
@@ -388,71 +417,73 @@ public final class ImprovementDistilledObjects implements Improvement {
             }
             return res.stream();
         }
-    }
 
-    /**
-     * Method instructions.
-     * @return Instructions.
-     */
-    private static List<XmlInstruction> instructions(final Node node) {
-        final List<XmlInstruction> result;
-        final Optional<Node> sequence = ImprovementDistilledObjects.sequence(node);
-        if (sequence.isPresent()) {
-            final Node seq = sequence.get();
-            final List<XmlInstruction> instructions = new ArrayList<>(0);
-            final NodeList children = seq.getChildNodes();
-            final int length = children.getLength();
-            for (int index = 0; index < length; ++index) {
-                final Node instruction = children.item(index);
-                if (ImprovementDistilledObjects.isInstruction(instruction)) {
-                    instructions.add(new XmlInstruction(instruction));
+        /**
+         * Method instructions.
+         * @param node Node.
+         * @return Instructions.
+         */
+        private static List<XmlInstruction> instructions(final Node node) {
+            final List<XmlInstruction> result;
+            final Optional<Node> sequence = DecoratorPair.sequence(node);
+            if (sequence.isPresent()) {
+                final Node seq = sequence.get();
+                final List<XmlInstruction> instructions = new ArrayList<>(0);
+                final NodeList children = seq.getChildNodes();
+                final int length = children.getLength();
+                for (int index = 0; index < length; ++index) {
+                    final Node instruction = children.item(index);
+                    if (DecoratorPair.isInstruction(instruction)) {
+                        instructions.add(new XmlInstruction(instruction));
+                    }
+                }
+                result = instructions;
+            } else {
+                result = Collections.emptyList();
+            }
+            return result;
+        }
+
+        /**
+         * Find sequence node.
+         * @param node Node.
+         * @return Sequence node.
+         */
+        private static Optional<Node> sequence(final Node node) {
+            Optional<Node> result = Optional.empty();
+            final NodeList children = node.getChildNodes();
+            for (int index = 0; index < children.getLength(); ++index) {
+                final Node item = children.item(index);
+                final NamedNodeMap attributes = item.getAttributes();
+                if (attributes == null) {
+                    continue;
+                }
+                final Node base = attributes.getNamedItem("base");
+                if (base == null) {
+                    continue;
+                }
+                if (base.getNodeValue().equals("seq")) {
+                    result = Optional.of(item);
+                    break;
                 }
             }
-            result = instructions;
-        } else {
-            result = Collections.emptyList();
+            return result;
         }
-        return result;
-    }
 
-    /**
-     * Find sequence node.
-     * @return Sequence node.
-     */
-    private static Optional<Node> sequence(final Node node) {
-        Optional<Node> result = Optional.empty();
-        final NodeList children = node.getChildNodes();
-        for (int index = 0; index < children.getLength(); ++index) {
-            final Node item = children.item(index);
-            final NamedNodeMap attributes = item.getAttributes();
-            if (attributes == null) {
-                continue;
+        /**
+         * Check if node is an instruction.
+         * @param node Node.
+         * @return True if node is an instruction.
+         */
+        private static boolean isInstruction(final Node node) {
+            final boolean result;
+            final NamedNodeMap attrs = node.getAttributes();
+            if (attrs == null || attrs.getNamedItem("name") == null) {
+                result = false;
+            } else {
+                result = true;
             }
-            final Node base = attributes.getNamedItem("base");
-            if (base == null) {
-                continue;
-            }
-            if (base.getNodeValue().equals("seq")) {
-                result = Optional.of(item);
-                break;
-            }
+            return result;
         }
-        return result;
-    }
-
-    /**
-     * Check if node is an instruction.
-     * @param node Node.
-     * @return True if node is an instruction.
-     */
-    private static boolean isInstruction(final Node node) {
-        final boolean result;
-        final NamedNodeMap attrs = node.getAttributes();
-        if (attrs == null || attrs.getNamedItem("name") == null) {
-            result = false;
-        } else {
-            result = true;
-        }
-        return result;
     }
 }

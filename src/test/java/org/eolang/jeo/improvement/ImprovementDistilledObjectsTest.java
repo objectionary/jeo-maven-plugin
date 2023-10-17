@@ -44,6 +44,9 @@ import org.objectweb.asm.Opcodes;
  */
 final class ImprovementDistilledObjectsTest {
 
+    /**
+     * Name of the combined class.
+     */
     private static final String COMBINED = "org.eolang.jeo.AB";
 
     @Test
