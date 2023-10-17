@@ -211,8 +211,8 @@ public final class ImprovementDistilledObjects implements Improvement {
          */
         private void handleRootObject(final Node root, final String bytename) {
             final Document owner = root.getOwnerDocument();
-            this.removeOldFields(root);
-            this.removeOldConstructors(root);
+            DecoratorPair.removeOldFields(root);
+            DecoratorPair.removeOldConstructors(root);
             final XML original = this.decorated.toEO();
             final XmlClass clazz = new XmlClass(original);
             for (final XmlField field : clazz.fields()) {
@@ -255,8 +255,8 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  Right now we just remove all constructors from the decorated object.
          *  It's not correct, because we need to handle constructors correctly.
          */
-        private void removeOldConstructors(final Node root) {
-            this.objects(root).filter(
+        private static void removeOldConstructors(final Node root) {
+            DecoratorPair.objects(root).filter(
                 node -> {
                     final NamedNodeMap attributes = node.getAttributes();
                     final Node base = attributes.getNamedItem("name");
@@ -273,8 +273,8 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  It's not correct, because we need to handle fields correctly and probably remove only
          *  those fields that are used in the decorator.
          */
-        private void removeOldFields(final Node root) {
-            this.objects(root).filter(
+        private static void removeOldFields(final Node root) {
+            DecoratorPair.objects(root).filter(
                 node -> {
                     final NamedNodeMap attributes = node.getAttributes();
                     final Node base = attributes.getNamedItem("base");
@@ -294,7 +294,7 @@ public final class ImprovementDistilledObjects implements Improvement {
             final XmlMethod method,
             final String bytename
         ) {
-            final List<Node> methods = this.methods(root);
+            final List<Node> methods = DecoratorPair.methods(root);
             final String old = this.decorated.name().replace('.', '/');
             for (final Node high : methods) {
                 final List<XmlInstruction> instructions = DecoratorPair.instructions(high);
@@ -323,7 +323,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                         }
                     }
                 }
-                this.setInstructions(high, res);
+                DecoratorPair.setInstructions(high, res);
             }
         }
 
