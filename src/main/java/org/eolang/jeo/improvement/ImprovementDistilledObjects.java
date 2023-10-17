@@ -55,6 +55,13 @@ import org.w3c.dom.NodeList;
  * You can find the description of the optimization right
  * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/102">here</a>
  * @since 0.1.0
+ * @todo #157:90min Replace new B(new A()) with new AB().
+ *  Right now we just compose a new object with name AB. But it's not enough.
+ *  We have to replace all the old objects created with new B(new A()) with new AB().
+ * @todo #157:90min ImprovementDistilledObjects is needed to be refactored.
+ *  Right now it's a big class with a lot of methods, repetition and high complexity.
+ *  We need to refactor it into a set of smaller classes and remove all
+ *  linter warnings.
  */
 public final class ImprovementDistilledObjects implements Improvement {
     @Override
@@ -225,7 +232,7 @@ public final class ImprovementDistilledObjects implements Improvement {
         /**
          * Remove old constructors.
          * @param root Root node.
-         * #todo #157:90min Handle constructors correctly during inlining optimization.
+         * @todo #157:90min Handle constructors correctly during inlining optimization.
          *  Right now we just remove all constructors from the decorated object.
          *  It's not correct, because we need to handle constructors correctly.
          */
@@ -242,7 +249,7 @@ public final class ImprovementDistilledObjects implements Improvement {
         /**
          * Remove old fields.
          * @param root Root node.
-         * #todo #157:90min Handle fields correctly during inlining optimization.
+         * @todo #157:90min Handle fields correctly during inlining optimization.
          *  Right now we just remove all fields from the decorated object.
          *  It's not correct, because we need to handle fields correctly and probably remove only
          *  those fields that are used in the decorator.
@@ -263,9 +270,6 @@ public final class ImprovementDistilledObjects implements Improvement {
             final String bytename
         ) {
             final List<Node> methods = this.methods(root);
-            final String descriptor = method.descriptor();
-            final int access = method.access();
-            final String name = method.name();
             final String old = this.decorated.name().replace('.', '/');
             for (final Node high : methods) {
                 final List<XmlInstruction> instructions = ImprovementDistilledObjects.instructions(
@@ -274,28 +278,26 @@ public final class ImprovementDistilledObjects implements Improvement {
                 List<XmlInstruction> res = new ArrayList<>(0);
                 for (final XmlInstruction instruction : instructions) {
                     final int code = instruction.code();
-                    final Object[] arguments = instruction.arguments();
-                    if (code == Opcodes.GETFIELD) {
-                        continue;
-                    } else if (code == Opcodes.INVOKEVIRTUAL) {
-                        final List<XmlInstruction> tadam = method.instructions();
-                        final List<XmlInstruction> filtered = new ArrayList<>(0);
-                        for (final XmlInstruction xmlInstruction : tadam) {
-                            final int codee = xmlInstruction.code();
-                            this.replaceArguments(xmlInstruction.node(), old, bytename);
-                            if (codee != Opcodes.RETURN && codee != Opcodes.IRETURN
-                                && codee != Opcodes.ALOAD) {
-                                filtered.add(xmlInstruction);
+                    if (code != Opcodes.GETFIELD) {
+                        if (code == Opcodes.INVOKEVIRTUAL) {
+                            final List<XmlInstruction> tadam = method.instructions();
+                            final List<XmlInstruction> filtered = new ArrayList<>(0);
+                            for (final XmlInstruction xmlInstruction : tadam) {
+                                final int codee = xmlInstruction.code();
+                                this.replaceArguments(xmlInstruction.node(), old, bytename);
+                                if (codee != Opcodes.RETURN && codee != Opcodes.IRETURN
+                                    && codee != Opcodes.ALOAD) {
+                                    filtered.add(xmlInstruction);
+                                }
                             }
+                            res.addAll(filtered);
+                        } else {
+                            res.add(instruction);
                         }
-                        res.addAll(filtered);
-                    } else {
-                        res.add(instruction);
                     }
                 }
                 this.setInstructions(high, res);
             }
-
         }
 
         /**
@@ -303,7 +305,7 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @param node Instruction.
          * @param oldname  Old class name.
          * @param bytename New class name.
-         * #todo #157:90min Handle arguments correctly during inlining optimization.
+         * @todo #157:90min Handle arguments correctly during inlining optimization.
          *  Right now we just replace all arguments with the new class name.
          *  It's not correct, because we need to handle arguments correctly.
          */
@@ -325,6 +327,11 @@ public final class ImprovementDistilledObjects implements Improvement {
             }
         }
 
+        /**
+         * Set instructions.
+         * @param method Method.
+         * @param res Instructions.
+         */
         private void setInstructions(final Node method, final List<XmlInstruction> res) {
             final NodeList children = method.getChildNodes();
             for (int index = 0; index < children.getLength(); ++index) {
@@ -340,7 +347,6 @@ public final class ImprovementDistilledObjects implements Improvement {
                                 }
                                 for (final XmlInstruction instruction : res) {
                                     final Node node = instruction.node();
-                                    System.out.println(new XMLDocument(node));
                                     seq.appendChild(
                                         seq.getOwnerDocument().adoptNode(node.cloneNode(true)));
                                 }
@@ -354,6 +360,10 @@ public final class ImprovementDistilledObjects implements Improvement {
         /**
          * Methods.
          * @return Class methods.
+         * @todo #157:90min Code duplication.
+         *  There is a code duplication between classes:
+         *  ImprovementDistilledObjects and XmlClass.
+         *  We need to extract the common code into a separate class or just to use XmlClass.
          */
         private List<Node> methods(final Node root) {
             return this.objects(root)
@@ -385,12 +395,14 @@ public final class ImprovementDistilledObjects implements Improvement {
      */
     public static List<XmlInstruction> instructions(final Node node) {
         final List<XmlInstruction> result;
-        final Optional<Node> sequence = sequence(node);
+        final Optional<Node> sequence = ImprovementDistilledObjects.sequence(node);
         if (sequence.isPresent()) {
             final Node seq = sequence.get();
             final List<XmlInstruction> instructions = new ArrayList<>(0);
-            for (int index = 0; index < seq.getChildNodes().getLength(); ++index) {
-                final Node instruction = seq.getChildNodes().item(index);
+            final NodeList children = seq.getChildNodes();
+            final int length = children.getLength();
+            for (int index = 0; index < length; ++index) {
+                final Node instruction = children.item(index);
                 if (ImprovementDistilledObjects.isInstruction(instruction)) {
                     instructions.add(new XmlInstruction(instruction));
                 }
