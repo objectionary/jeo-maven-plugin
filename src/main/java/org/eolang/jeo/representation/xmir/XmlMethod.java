@@ -132,7 +132,8 @@ public final class XmlMethod {
             root.removeChild(root.getFirstChild());
         }
         for (final XmlInstruction instruction : updated) {
-            root.appendChild(owner.adoptNode(instruction.node()));
+            final Node node1 = instruction.node();
+            root.appendChild(owner.adoptNode(node1));
         }
     }
 

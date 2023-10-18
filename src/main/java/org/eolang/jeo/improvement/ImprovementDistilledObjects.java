@@ -26,8 +26,6 @@ package org.eolang.jeo.improvement;
 import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.io.IOException;
-import java.io.StringReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -37,12 +35,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.EoRepresentation;
@@ -56,8 +50,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * Distilled objects improvement.
@@ -218,61 +210,38 @@ public final class ImprovementDistilledObjects implements Improvement {
                     .append("</o>")
                     .toString()
             ).node().getFirstChild();
-            final Node dup = new XMLDocument("<o base=\"opcode\" name=\"DUP-89-53\"/>").node();
-            return Arrays.asList(
+            final Node dup = new XMLDocument("<o base=\"opcode\" name=\"DUP-89-53\"/>")
+                .node()
+                .getFirstChild();
+            final List<XmlInstruction> list = Arrays.asList(
                 new XmlInstruction(first),
                 new XmlInstruction(dup),
                 new XmlInstruction(second),
                 new XmlInstruction(dup)
             );
-        }
-
-        DocumentBuilder builder;
-
-        {
-            try {
-                builder = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder();
-            } catch (ParserConfigurationException ex) {
-                throw new RuntimeException(ex);
-            }
+            return list;
         }
 
 
         private List<XmlInstruction> replacement() {
             final String newname = this.newname();
-            final Node second;
-            try {
-                second = this.builder.parse(
-                    new InputSource(
-                        new StringReader(
-                            new StringBuilder()
-                                .append("<o base=\"opcode\" name=\"NEW-187-50\">")
-                                .append("<o base=\"string\" data=\"bytes\">")
-                                .append(newname)
-                                .append("</o>")
-                                .append("</o>")
-                                .toString()
-                        )
-                    )
-                );
-            } catch (SAXException ex) {
-                throw new RuntimeException(ex);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            final Node dup;
-            try {
-                dup = this.builder.parse(
-                    new InputSource(new StringReader("<o base=\"opcode\" name=\"DUP-89-53\"/>")));
-            } catch (SAXException ex) {
-                throw new RuntimeException(ex);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            return Arrays.asList(
+            final Node second = new XMLDocument(
+                new StringBuilder()
+                    .append("<o base=\"opcode\" name=\"NEW-187-50\">")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(newname)
+                    .append("</o>")
+                    .append("</o>")
+                    .toString()
+            ).node().getFirstChild();
+            final Node dup = new XMLDocument("<o base=\"opcode\" name=\"DUP-89-53\"/>")
+                .node()
+                .getFirstChild();
+            final List<XmlInstruction> list = Arrays.asList(
                 new XmlInstruction(second),
                 new XmlInstruction(dup)
             );
+            return list;
         }
 
         /**
