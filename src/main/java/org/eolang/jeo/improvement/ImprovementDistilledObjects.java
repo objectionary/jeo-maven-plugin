@@ -29,11 +29,13 @@ import com.jcabi.xml.XMLDocument;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.Improvement;
@@ -71,12 +73,15 @@ public final class ImprovementDistilledObjects implements Improvement {
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        final List<Representation> additional = ImprovementDistilledObjects
+        final List<DecoratorPair> decorators = ImprovementDistilledObjects
             .decorators(
                 representations.stream()
                     .sorted(Comparator.comparing((Representation ir) -> ir.name()))
                     .collect(Collectors.toList())
-            ).stream()
+            )
+            .stream()
+            .collect(Collectors.toList());
+        final List<Representation> additional = decorators.stream()
             .map(DecoratorPair::combine)
             .collect(Collectors.toList());
         Logger.info(
@@ -88,9 +93,44 @@ public final class ImprovementDistilledObjects implements Improvement {
             )
         );
         return Stream.concat(
-            representations.stream(),
+            representations.stream()
+                .map(repr -> ImprovementDistilledObjects.replaceConstructors(decorators, repr)),
             additional.stream()
         ).collect(Collectors.toList());
+    }
+
+    private static Representation replaceConstructors(
+        final List<DecoratorPair> decorators,
+        final Representation representation
+    ) {
+        final XML xmir = representation.toEO();
+        final XmlClass clazz = new XmlClass(xmir);
+        for (final DecoratorPair decorator : decorators) {
+            final List<XmlInstruction> target = decorator.target();
+            final List<XmlInstruction> replacement = decorator.replacement();
+            for (final XmlMethod method : clazz.methods()) {
+                final List<XmlInstruction> instructions = method.instructions();
+                final List<XmlInstruction> updated = new ArrayList<>(0);
+                final int size = target.size();
+                for (int i = 0; i < instructions.size(); i += size) {
+                    boolean replace = true;
+                    List<XmlInstruction> window = new ArrayList<>(0);
+                    for (int j = 0; j < size && i + j < instructions.size(); j++) {
+                        final XmlInstruction instruction = instructions.get(i + j);
+                        window.add(instruction);
+                        final XmlInstruction repl = target.get(j);
+                        replace = instruction.equals(repl);
+                    }
+                    if (replace && window.size() == size) {
+                        updated.addAll(replacement);
+                    } else {
+                        updated.addAll(window);
+                    }
+                }
+                method.setInstructions(updated);
+            }
+        }
+        return new EoRepresentation(xmir);
     }
 
     /**
@@ -142,6 +182,63 @@ public final class ImprovementDistilledObjects implements Improvement {
             this.decorator = decorator;
         }
 
+        private List<XmlInstruction> target() {
+//              <o base="opcode" name="NEW-187-50">
+//                  <o base="string" data="bytes">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 42</o>
+//               </o>
+//               <o base="opcode" name="DUP-89-51"/>
+//               <o base="opcode" name="NEW-187-52">
+//                  <o base="string" data="bytes">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41</o>
+//               </o>
+//               <o base="opcode" name="DUP-89-53"/>
+            final String firstName = this.decorated.name();
+            final Node first = new XMLDocument(
+                new StringBuilder()
+                    .append("<o base=\"opcode\" name=\"NEW-187-50\">")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(firstName)
+                    .append("</o>")
+                    .append("</o>")
+                    .toString()
+            ).node();
+            final String secondName = this.decorator.name();
+            final Node second = new XMLDocument(
+                new StringBuilder()
+                    .append("<o base=\"opcode\" name=\"NEW-187-50\">")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(secondName)
+                    .append("</o>")
+                    .append("</o>")
+                    .toString()
+            ).node();
+            final Node dup = new XMLDocument("<o base=\"opcode\" name=\"DUP-89-53\"/>").node();
+            return Arrays.asList(
+                new XmlInstruction(first),
+                new XmlInstruction(dup),
+                new XmlInstruction(second),
+                new XmlInstruction(dup)
+            );
+        }
+
+
+        private List<XmlInstruction> replacement() {
+            final String newname = this.newname();
+            final Node second = new XMLDocument(
+                new StringBuilder()
+                    .append("<o base=\"opcode\" name=\"NEW-187-50\">")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(newname)
+                    .append("</o>")
+                    .append("</o>")
+                    .toString()
+            ).node();
+            final Node dup = new XMLDocument("<o base=\"opcode\" name=\"DUP-89-53\"/>").node();
+            return Arrays.asList(
+                new XmlInstruction(second),
+                new XmlInstruction(dup)
+            );
+        }
+
         /**
          * Combine two representations into one.
          * @return Combined representation.
@@ -150,14 +247,20 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  Maybe we can leave the same scheme, but it's better to move into a separate class.
          */
         private Representation combine() {
+            return new EoRepresentation(this.skeleton(this.decorator.toEO(), this.newname()));
+        }
+
+        /**
+         * New name of the combined class.
+         * @return New name.
+         */
+        private String newname() {
             final String second = this.decorator.name();
-            final XML decor = this.decorator.toEO();
-            final String name = String.format(
+            return String.format(
                 "%s%s",
                 this.decorated.name(),
                 second.substring(second.lastIndexOf('.') + 1)
             );
-            return new EoRepresentation(this.skeleton(decor, name));
         }
 
         /**

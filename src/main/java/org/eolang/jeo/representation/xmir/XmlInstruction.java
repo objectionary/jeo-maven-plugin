@@ -23,8 +23,10 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -102,5 +104,63 @@ public final class XmlInstruction {
             }
         }
         return res.toArray();
+    }
+
+    private boolean nodesAreEqual(Node first, Node second) {
+        if (first.getNodeType() != second.getNodeType()) {
+            return false;
+        }
+        if (!first.getNodeName().equals(second.getNodeName())) {
+            return false;
+        }
+        if (!first.getTextContent().trim().equals(second.getTextContent().trim())) {
+            return false;
+        }
+        if (first.getAttributes().getLength() != second.getAttributes().getLength()) {
+            return false;
+        }
+        for (int i = 0; i < first.getAttributes().getLength(); i++) {
+            Node attr1 = first.getAttributes().item(i);
+            Node attr2 = second.getAttributes().getNamedItem(attr1.getNodeName());
+            if (attr1.getNodeName().equals("name")) {
+                continue;
+            }
+            if (attr2 == null || !attr1.getNodeValue().equals(attr2.getNodeValue())) {
+                return false;
+            }
+        }
+        NodeList firstChildren = first.getChildNodes();
+        NodeList secondChildren = second.getChildNodes();
+        if (firstChildren.getLength() != secondChildren.getLength()) {
+            return false;
+        }
+        for (int i = 0; i < firstChildren.getLength(); i++) {
+            if (!this.nodesAreEqual(firstChildren.item(i), secondChildren.item(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null || this.getClass() != other.getClass()) {
+            return false;
+        }
+        final XmlInstruction that = (XmlInstruction) other;
+        return this.nodesAreEqual(this.node, that.node);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.node);
+    }
+
+    @Override
+    public String toString() {
+        return new XMLDocument(this.node).toString();
     }
 }

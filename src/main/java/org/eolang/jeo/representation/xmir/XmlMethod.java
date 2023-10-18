@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -118,6 +119,21 @@ public final class XmlMethod {
             result = Collections.emptyList();
         }
         return result;
+    }
+
+    /**
+     * Set instructions for method
+     * @param updated New instructions.
+     */
+    public void setInstructions(final List<XmlInstruction> updated) {
+        final Node root = this.node.node();
+        final Document owner = root.getOwnerDocument();
+        while (root.hasChildNodes()) {
+            root.removeChild(root.getFirstChild());
+        }
+        for (final XmlInstruction instruction : updated) {
+            root.appendChild(owner.adoptNode(instruction.node()));
+        }
     }
 
     /**
