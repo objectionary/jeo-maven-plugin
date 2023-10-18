@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.log.Logger;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -107,39 +108,52 @@ public final class XmlInstruction {
     }
 
     private boolean nodesAreEqual(Node first, Node second) {
+        boolean result = true;
         if (first.getNodeType() != second.getNodeType()) {
-            return false;
-        }
-        if (!first.getNodeName().equals(second.getNodeName())) {
-            return false;
-        }
-        if (!first.getTextContent().trim().equals(second.getTextContent().trim())) {
-            return false;
-        }
-        if (first.getAttributes().getLength() != second.getAttributes().getLength()) {
-            return false;
-        }
-        for (int i = 0; i < first.getAttributes().getLength(); i++) {
-            Node attr1 = first.getAttributes().item(i);
-            Node attr2 = second.getAttributes().getNamedItem(attr1.getNodeName());
-            if (attr1.getNodeName().equals("name")) {
-                continue;
+            result = false;
+        } else if (!first.getNodeName().equals(second.getNodeName())) {
+            result = false;
+        } else if (!first.getTextContent().trim().equals(second.getTextContent().trim())) {
+            result = false;
+        } else if (first.getAttributes().getLength() != second.getAttributes().getLength()) {
+            result = false;
+        } else {
+            for (int i = 0; i < first.getAttributes().getLength(); i++) {
+                Node attr1 = first.getAttributes().item(i);
+                Node attr2 = second.getAttributes().getNamedItem(attr1.getNodeName());
+                if (attr1.getNodeName().equals("name")) {
+                    continue;
+                }
+                if (attr2 == null || !attr1.getNodeValue().equals(attr2.getNodeValue())) {
+                    result = false;
+                    break;
+                }
             }
-            if (attr2 == null || !attr1.getNodeValue().equals(attr2.getNodeValue())) {
-                return false;
+            if (result) {
+                NodeList firstChildren = first.getChildNodes();
+                NodeList secondChildren = second.getChildNodes();
+                if (firstChildren.getLength() != secondChildren.getLength()) {
+                    result = false;
+                } else {
+                    for (int i = 0; i < firstChildren.getLength(); i++) {
+                        if (!this.nodesAreEqual(firstChildren.item(i), secondChildren.item(i))) {
+                            result = false;
+                            break;
+                        }
+                    }
+                }
             }
         }
-        NodeList firstChildren = first.getChildNodes();
-        NodeList secondChildren = second.getChildNodes();
-        if (firstChildren.getLength() != secondChildren.getLength()) {
-            return false;
-        }
-        for (int i = 0; i < firstChildren.getLength(); i++) {
-            if (!this.nodesAreEqual(firstChildren.item(i), secondChildren.item(i))) {
-                return false;
-            }
-        }
-        return true;
+        Logger.info(
+            this,
+            String.format(
+                "COMPARE %n%s%n VS %n%s%n RESULT: %s",
+                new XMLDocument(first),
+                new XMLDocument(second),
+                result
+            )
+        );
+        return result;
     }
 
     @Override
