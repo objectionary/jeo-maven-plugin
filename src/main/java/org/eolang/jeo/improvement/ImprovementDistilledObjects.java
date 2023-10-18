@@ -213,13 +213,12 @@ public final class ImprovementDistilledObjects implements Improvement {
             final Node dup = new XMLDocument("<o base=\"opcode\" name=\"DUP-89-53\"/>")
                 .node()
                 .getFirstChild();
-            final List<XmlInstruction> list = Arrays.asList(
+            return Arrays.asList(
                 new XmlInstruction(first),
                 new XmlInstruction(dup),
                 new XmlInstruction(second),
                 new XmlInstruction(dup)
             );
-            return list;
         }
 
 
@@ -237,11 +236,10 @@ public final class ImprovementDistilledObjects implements Improvement {
             final Node dup = new XMLDocument("<o base=\"opcode\" name=\"DUP-89-53\"/>")
                 .node()
                 .getFirstChild();
-            final List<XmlInstruction> list = Arrays.asList(
+            return Arrays.asList(
                 new XmlInstruction(second),
                 new XmlInstruction(dup)
             );
-            return list;
         }
 
         /**

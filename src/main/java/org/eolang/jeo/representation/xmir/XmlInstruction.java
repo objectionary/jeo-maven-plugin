@@ -122,7 +122,10 @@ public final class XmlInstruction {
                 Node attr1 = first.getAttributes().item(i);
                 Node attr2 = second.getAttributes().getNamedItem(attr1.getNodeName());
                 if (attr1.getNodeName().equals("name")) {
-                    continue;
+                    if (attr1.getNodeValue().split("-")[0]
+                        .equals(attr2.getNodeValue().split("-")[0])) {
+                        continue;
+                    }
                 }
                 if (attr2 == null || !attr1.getNodeValue().equals(attr2.getNodeValue())) {
                     result = false;
