@@ -121,6 +121,10 @@ public final class ImprovementDistilledObjects implements Improvement {
                         replace = instruction.equals(repl);
                     }
                     if (replace && window.size() == size) {
+                        Logger.info(
+                            ImprovementDistilledObjects.class,
+                            "Constructor inlining happened"
+                        );
                         updated.addAll(replacement);
                     } else {
                         updated.addAll(window);
@@ -195,7 +199,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                 new StringBuilder()
                     .append("<o base=\"opcode\" name=\"NEW-187-50\">")
                     .append("<o base=\"string\" data=\"bytes\">")
-                    .append(firstName)
+                    .append(new HexData(firstName.replace('.', '/')).value())
                     .append("</o>")
                     .append("</o>")
                     .toString()
@@ -205,7 +209,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                 new StringBuilder()
                     .append("<o base=\"opcode\" name=\"NEW-187-50\">")
                     .append("<o base=\"string\" data=\"bytes\">")
-                    .append(secondName)
+                    .append(new HexData(secondName.replace('.', '/')).value())
                     .append("</o>")
                     .append("</o>")
                     .toString()
@@ -214,9 +218,9 @@ public final class ImprovementDistilledObjects implements Improvement {
                 .node()
                 .getFirstChild();
             return Arrays.asList(
-                new XmlInstruction(first),
-                new XmlInstruction(dup),
                 new XmlInstruction(second),
+                new XmlInstruction(dup),
+                new XmlInstruction(first),
                 new XmlInstruction(dup)
             );
         }
@@ -228,7 +232,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                 new StringBuilder()
                     .append("<o base=\"opcode\" name=\"NEW-187-50\">")
                     .append("<o base=\"string\" data=\"bytes\">")
-                    .append(newname)
+                    .append(new HexData(newname.replace('.', '/')).value())
                     .append("</o>")
                     .append("</o>")
                     .toString()

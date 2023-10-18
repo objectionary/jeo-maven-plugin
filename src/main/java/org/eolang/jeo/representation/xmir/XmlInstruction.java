@@ -27,6 +27,7 @@ import com.jcabi.log.Logger;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -133,13 +134,13 @@ public final class XmlInstruction {
                 }
             }
             if (result) {
-                NodeList firstChildren = first.getChildNodes();
-                NodeList secondChildren = second.getChildNodes();
-                if (firstChildren.getLength() != secondChildren.getLength()) {
+                final List<Node> firstChildren = XmlInstruction.children(first);
+                final List<Node> secondChildren = XmlInstruction.children(second);
+                if (firstChildren.size() != secondChildren.size()) {
                     result = false;
                 } else {
-                    for (int i = 0; i < firstChildren.getLength(); i++) {
-                        if (!this.nodesAreEqual(firstChildren.item(i), secondChildren.item(i))) {
+                    for (int i = 0; i < firstChildren.size(); i++) {
+                        if (!this.nodesAreEqual(firstChildren.get(i), secondChildren.get(i))) {
                             result = false;
                             break;
                         }
@@ -157,6 +158,18 @@ public final class XmlInstruction {
             )
         );
         return result;
+    }
+
+    private static List<Node> children(final Node root) {
+        final NodeList all = root.getChildNodes();
+        final List<Node> res = new ArrayList<>();
+        for (int index = 0; index < all.getLength(); ++index) {
+            final Node item = all.item(index);
+            if (item.getNodeType() == Node.ELEMENT_NODE) {
+                res.add(item);
+            }
+        }
+        return res;
     }
 
     @Override
