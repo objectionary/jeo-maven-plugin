@@ -83,6 +83,14 @@ public final class XmlClass {
     }
 
     /**
+     * Internal XML node.
+     * @return Internal XML node.
+     */
+    public Node node() {
+        return this.node;
+    }
+
+    /**
      * Class name.
      * @return Name.
      */

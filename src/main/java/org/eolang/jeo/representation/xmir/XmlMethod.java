@@ -23,11 +23,13 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.log.Logger;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -128,12 +130,18 @@ public final class XmlMethod {
     public void setInstructions(final List<XmlInstruction> updated) {
         final Node root = this.node.node();
         final Document owner = root.getOwnerDocument();
+        Logger.info(
+            this,
+            String.format("Set new method instructions %n%s%n",
+                updated.stream().map(XmlInstruction::toString)
+                    .collect(Collectors.joining("\n"))
+            )
+        );
         while (root.hasChildNodes()) {
             root.removeChild(root.getFirstChild());
         }
         for (final XmlInstruction instruction : updated) {
-            final Node node1 = instruction.node();
-            root.appendChild(owner.adoptNode(node1));
+            root.appendChild(owner.adoptNode(instruction.node()));
         }
     }
 
