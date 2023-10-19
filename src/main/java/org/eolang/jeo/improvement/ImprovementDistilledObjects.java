@@ -106,68 +106,16 @@ public final class ImprovementDistilledObjects implements Improvement {
         final XML xmir = representation.toEO();
         final XmlClass clazz = new XmlClass(xmir);
         for (final DecoratorPair decorator : decorators) {
-            final List<XmlInstruction> target = decorator.target();
-            final List<XmlInstruction> replacement = decorator.replacement();
-            for (final XmlMethod method : clazz.methods()) {
-                final List<XmlInstruction> instructions = method.instructions();
-                final List<XmlInstruction> updated = new ArrayList<>(0);
-                final int size = target.size();
-                for (int index = 0; index < instructions.size(); index++) {
-                    final List<XmlInstruction> stack = new ArrayList<>(0);
-                    for (
-                        int inner = 0;
-                        inner < size && index < instructions.size();
-                        ++inner
-                    ) {
-                        final XmlInstruction targeted = target.get(inner);
-                        final XmlInstruction current = instructions.get(index);
-                        if (current.equals(targeted)) {
-                            if (inner == size - 1) {
-                                Logger.info(
-                                    ImprovementDistilledObjects.class,
-                                    "Constructor inlining happened"
-                                );
-                                updated.addAll(replacement);
-                                stack.clear();
-                            } else {
-                                stack.add(current);
-                                index++;
-                            }
-                        } else {
-                            updated.addAll(stack);
-                            updated.add(current);
-                            break;
-                        }
-                    }
-                }
-
-//
-//                for (int index = 0; index < instructions.size(); index += size) {
-//                    boolean replace = true;
-//                    List<XmlInstruction> window = new ArrayList<>(0);
-//                    for (
-//                        int inner = 0;
-//                        inner < size && index + inner < instructions.size();
-//                        inner++
-//                    ) {
-//                        final XmlInstruction instruction = instructions.get(index + inner);
-//                        window.add(instruction);
-//                        final XmlInstruction repl = target.get(inner);
-//                        replace = instruction.equals(repl);
-//                    }
-//                    if (replace && window.size() == size) {
-//                        Logger.info(
-//                            ImprovementDistilledObjects.class,
-//                            "Constructor inlining happened"
-//                        );
-//                        updated.addAll(replacement);
-//                    } else {
-//                        updated.addAll(window);
-//                    }
-//                }
-
-                method.setInstructions(updated);
-            }
+            ImprovementDistilledObjects.replace(
+                clazz,
+                decorator.targetNew(),
+                decorator.replacementNew()
+            );
+            ImprovementDistilledObjects.replace(
+                clazz,
+                decorator.targetSpecial(),
+                decorator.replacementSpecial()
+            );
         }
         final Node replacement = clazz.node();
         final Node program = xmir.node();
@@ -190,6 +138,45 @@ public final class ImprovementDistilledObjects implements Improvement {
             }
         }
         return new EoRepresentation(new XMLDocument(program));
+    }
+
+    private static void replace(final XmlClass clazz, final List<XmlInstruction> target,
+        final List<XmlInstruction> replacement
+    ) {
+        for (final XmlMethod method : clazz.methods()) {
+            final List<XmlInstruction> instructions = method.instructions();
+            final List<XmlInstruction> updated = new ArrayList<>(0);
+            final int size = target.size();
+            for (int index = 0; index < instructions.size(); index++) {
+                final List<XmlInstruction> stack = new ArrayList<>(0);
+                for (
+                    int inner = 0;
+                    inner < size && index < instructions.size();
+                    ++inner
+                ) {
+                    final XmlInstruction targeted = target.get(inner);
+                    final XmlInstruction current = instructions.get(index);
+                    if (current.equals(targeted)) {
+                        if (inner == size - 1) {
+                            Logger.info(
+                                ImprovementDistilledObjects.class,
+                                "Constructor inlining happened"
+                            );
+                            updated.addAll(replacement);
+                            stack.clear();
+                        } else {
+                            stack.add(current);
+                            index++;
+                        }
+                    } else {
+                        updated.addAll(stack);
+                        updated.add(current);
+                        break;
+                    }
+                }
+            }
+            method.setInstructions(updated);
+        }
     }
 
     /**
@@ -241,7 +228,7 @@ public final class ImprovementDistilledObjects implements Improvement {
             this.decorator = decorator;
         }
 
-        private List<XmlInstruction> target() {
+        private List<XmlInstruction> targetNew() {
             final String firstName = this.decorated.name();
             final Node first = new XMLDocument(
                 new StringBuilder()
@@ -274,7 +261,7 @@ public final class ImprovementDistilledObjects implements Improvement {
         }
 
 
-        private List<XmlInstruction> replacement() {
+        private List<XmlInstruction> replacementNew() {
             final String newname = this.newname();
             final Node second = new XMLDocument(
                 new StringBuilder()
@@ -293,6 +280,67 @@ public final class ImprovementDistilledObjects implements Improvement {
                 new XmlInstruction(dup)
             );
         }
+
+        List<XmlInstruction> targetSpecial() {
+            final String firstName = this.decorated.name();
+            final Node first = new XMLDocument(
+                new StringBuilder()
+                    .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(new HexData(firstName.replace('.', '/')).value())
+                    .append("</o>")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(new HexData("<init>").value())
+                    .append("</o>")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(new HexData("(I)V").value())
+                    .append("</o>")
+                    .append("</o>")
+                    .toString()
+            ).node().getFirstChild();
+            final String secondName = this.decorator.name();
+            final Node second = new XMLDocument(
+                new StringBuilder()
+                    .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(new HexData(secondName.replace('.', '/')).value())
+                    .append("</o>")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(new HexData("<init>").value())
+                    .append("</o>")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(new HexData("(Lorg/eolang/jeo/A;)V").value())
+                    .append("</o>")
+                    .append("</o>")
+                    .toString()
+            ).node().getFirstChild();
+            return Arrays.asList(
+                new XmlInstruction(first),
+                new XmlInstruction(second)
+            );
+        }
+
+        List<XmlInstruction> replacementSpecial() {
+            return Collections.singletonList(
+                new XmlInstruction(new XMLDocument(
+                    new StringBuilder()
+                        .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
+                        .append("<o base=\"string\" data=\"bytes\">")
+                        .append(new HexData(this.newname().replace('.', '/')).value())
+                        .append("</o>")
+                        .append("<o base=\"string\" data=\"bytes\">")
+                        .append(new HexData("<init>").value())
+                        .append("</o>")
+                        .append("<o base=\"string\" data=\"bytes\">")
+                        .append(new HexData("(I)V").value())
+                        .append("</o>")
+                        .append("</o>")
+                        .toString()
+                ).node().getFirstChild()
+                )
+            );
+        }
+
 
         /**
          * Combine two representations into one.
