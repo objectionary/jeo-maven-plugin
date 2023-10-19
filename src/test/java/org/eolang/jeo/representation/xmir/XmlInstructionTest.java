@@ -28,7 +28,11 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
-class XmlInstructionTest {
+/**
+ * Test case for {@link XmlInstruction}.
+ * @since 0.1
+ */
+final class XmlInstructionTest {
 
     @Test
     void comparesSuccessfully() {
@@ -58,5 +62,4 @@ class XmlInstructionTest {
             )
         );
     }
-
 }

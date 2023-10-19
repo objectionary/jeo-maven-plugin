@@ -69,7 +69,8 @@ public final class XmlMethod {
      */
     public int access() {
         return new HexString(
-            new XMLDocument(this.node).xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
+            new XMLDocument(this.node).xpath("./o[@name='access']/text()").get(0)
+        ).decodeAsInt();
     }
 
     /**
@@ -78,7 +79,8 @@ public final class XmlMethod {
      */
     public String descriptor() {
         return new HexString(
-            new XMLDocument(this.node).xpath("./o[@name='descriptor']/text()").get(0)).decode();
+            new XMLDocument(this.node).xpath("./o[@name='descriptor']/text()").get(0)
+        ).decode();
     }
 
     /**
@@ -126,7 +128,7 @@ public final class XmlMethod {
     }
 
     /**
-     * Set instructions for method
+     * Set instructions for method.
      * @param updated New instructions.
      */
     public void setInstructions(final List<XmlInstruction> updated) {
@@ -136,9 +138,9 @@ public final class XmlMethod {
         final Document owner = root.getOwnerDocument();
         Logger.info(
             this,
-            String.format("Set new method instructions %n%s%n",
-                updated.stream().map(XmlInstruction::toString)
-                    .collect(Collectors.joining("\n"))
+            String.format(
+                "Set new method instructions %n%s%n",
+                updated.stream().map(XmlInstruction::toString).collect(Collectors.joining("\n"))
             )
         );
         while (root.hasChildNodes()) {

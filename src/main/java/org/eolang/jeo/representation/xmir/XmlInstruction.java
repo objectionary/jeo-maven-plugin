@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.log.Logger;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -86,6 +85,30 @@ public final class XmlInstruction {
         return this.node;
     }
 
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other == null || this.getClass() != other.getClass()) {
+            result = false;
+        } else {
+            final XmlInstruction that = (XmlInstruction) other;
+            result = this.nodesAreEqual(this.node, that.node);
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.node);
+    }
+
+    @Override
+    public String toString() {
+        return new XMLDocument(this.node).toString();
+    }
+
     /**
      * Get opcode arguments.
      * @param node Node.
@@ -108,21 +131,53 @@ public final class XmlInstruction {
         return res.toArray();
     }
 
-    private boolean nodesAreEqual(Node first, Node second) {
+    /**
+     * Get children nodes.
+     * @param root Root node.
+     * @return Children nodes.
+     */
+    private static List<Node> children(final Node root) {
+        final NodeList all = root.getChildNodes();
+        final List<Node> res = new ArrayList<>(0);
+        for (int index = 0; index < all.getLength(); ++index) {
+            final Node item = all.item(index);
+            if (item.getNodeType() == Node.ELEMENT_NODE) {
+                res.add(item);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Check if two nodes are equal.
+     * @param first First node.
+     * @param second Second node.
+     * @return True if nodes are equal.
+     * @todo #161:60min Refactor XmlInstruction#nodesAreEqual() method.
+     *  This method is too complex and it is hard to understand.
+     *  We have to refactor this method in order to make it more readable.
+     *  Don't forget to write test and remove suppressed checks.
+     * @checkstyle LocalFinalVariableNameCheck (100 lines)
+     * @checkstyle NestedIfDepthCheck (100 lines)
+     * @checkstyle CyclomaticComplexityCheck (100 lines)
+     * @checkstyle LocalVariableNameCheck (100 lines)
+     */
+    @SuppressWarnings({"PMD.ConfusingTernary", "PMD.CollapsibleIfStatements"})
+    private boolean nodesAreEqual(final Node first, final Node second) {
         boolean result = true;
         if (first.getNodeType() != second.getNodeType()) {
             result = false;
         } else if (!first.getNodeName().equals(second.getNodeName())) {
             result = false;
-        } else if (first.getNodeType() == Node.TEXT_NODE && !first.getTextContent().trim().equals(
-            second.getTextContent().trim())) {
+        } else if (first.getNodeType() == Node.TEXT_NODE && !first.getTextContent()
+            .trim().equals(second.getTextContent().trim())) {
             result = false;
         } else if (first.getAttributes().getLength() != second.getAttributes().getLength()) {
             result = false;
         } else {
-            for (int i = 0; i < first.getAttributes().getLength(); i++) {
-                Node attr1 = first.getAttributes().item(i);
-                Node attr2 = second.getAttributes().getNamedItem(attr1.getNodeName());
+            for (int index = 0; index < first.getAttributes().getLength(); ++index) {
+                final Node attr1 = first.getAttributes().item(index);
+                final Node attr2 = second.getAttributes().getNamedItem(attr1.getNodeName());
                 if (attr1.getNodeName().equals("name")) {
                     if (attr1.getNodeValue().split("-")[0]
                         .equals(attr2.getNodeValue().split("-")[0])) {
@@ -135,13 +190,13 @@ public final class XmlInstruction {
                 }
             }
             if (result) {
-                final List<Node> firstChildren = XmlInstruction.children(first);
-                final List<Node> secondChildren = XmlInstruction.children(second);
-                if (firstChildren.size() != secondChildren.size()) {
+                final List<Node> firstchildren = XmlInstruction.children(first);
+                final List<Node> secondchildren = XmlInstruction.children(second);
+                if (firstchildren.size() != secondchildren.size()) {
                     result = false;
                 } else {
-                    for (int i = 0; i < firstChildren.size(); i++) {
-                        if (!this.nodesAreEqual(firstChildren.get(i), secondChildren.get(i))) {
+                    for (int i = 0; i < firstchildren.size(); ++i) {
+                        if (!this.nodesAreEqual(firstchildren.get(i), secondchildren.get(i))) {
                             result = false;
                             break;
                         }
@@ -149,49 +204,6 @@ public final class XmlInstruction {
                 }
             }
         }
-        Logger.info(
-            this,
-            String.format(
-                "COMPARE %n%s%n VS %n%s%n RESULT: %s",
-                new XMLDocument(first),
-                new XMLDocument(second),
-                result
-            )
-        );
         return result;
-    }
-
-    private static List<Node> children(final Node root) {
-        final NodeList all = root.getChildNodes();
-        final List<Node> res = new ArrayList<>();
-        for (int index = 0; index < all.getLength(); ++index) {
-            final Node item = all.item(index);
-            if (item.getNodeType() == Node.ELEMENT_NODE) {
-                res.add(item);
-            }
-        }
-        return res;
-    }
-
-    @Override
-    public boolean equals(final Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (other == null || this.getClass() != other.getClass()) {
-            return false;
-        }
-        final XmlInstruction that = (XmlInstruction) other;
-        return this.nodesAreEqual(this.node, that.node);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.node);
-    }
-
-    @Override
-    public String toString() {
-        return new XMLDocument(this.node).toString();
     }
 }
