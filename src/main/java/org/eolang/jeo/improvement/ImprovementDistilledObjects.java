@@ -133,7 +133,6 @@ public final class ImprovementDistilledObjects implements Improvement {
                 method.setInstructions(updated);
             }
         }
-
         return new EoRepresentation(xmir);
     }
 
