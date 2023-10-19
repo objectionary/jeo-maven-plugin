@@ -114,7 +114,8 @@ public final class XmlInstruction {
             result = false;
         } else if (!first.getNodeName().equals(second.getNodeName())) {
             result = false;
-        } else if (!first.getTextContent().trim().equals(second.getTextContent().trim())) {
+        } else if (first.getNodeType() == Node.TEXT_NODE && !first.getTextContent().trim().equals(
+            second.getTextContent().trim())) {
             result = false;
         } else if (first.getAttributes().getLength() != second.getAttributes().getLength()) {
             result = false;
