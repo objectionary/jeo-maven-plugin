@@ -56,9 +56,6 @@ import org.w3c.dom.NodeList;
  * You can find the description of the optimization right
  * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/102">here</a>
  * @since 0.1.0
- * @todo #157:90min Replace new B(new A()) with new AB().
- *  Right now we just compose a new object with name AB. But it's not enough.
- *  We have to replace all the old objects created with new B(new A()) with new AB().
  * @todo #157:90min ImprovementDistilledObjects is needed to be refactored.
  *  Right now it's a big class with a lot of methods, repetition and high complexity.
  *  We need to refactor it into a set of smaller classes and remove all
