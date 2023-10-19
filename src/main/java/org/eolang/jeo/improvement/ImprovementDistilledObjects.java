@@ -112,25 +112,60 @@ public final class ImprovementDistilledObjects implements Improvement {
                 final List<XmlInstruction> instructions = method.instructions();
                 final List<XmlInstruction> updated = new ArrayList<>(0);
                 final int size = target.size();
-                for (int i = 0; i < instructions.size(); i += size) {
-                    boolean replace = true;
-                    List<XmlInstruction> window = new ArrayList<>(0);
-                    for (int j = 0; j < size && i + j < instructions.size(); j++) {
-                        final XmlInstruction instruction = instructions.get(i + j);
-                        window.add(instruction);
-                        final XmlInstruction repl = target.get(j);
-                        replace = instruction.equals(repl);
-                    }
-                    if (replace && window.size() == size) {
-                        Logger.info(
-                            ImprovementDistilledObjects.class,
-                            "Constructor inlining happened"
-                        );
-                        updated.addAll(replacement);
-                    } else {
-                        updated.addAll(window);
+                for (int index = 0; index < instructions.size(); index++) {
+                    final List<XmlInstruction> stack = new ArrayList<>(0);
+                    for (
+                        int inner = 0;
+                        inner < size && index < instructions.size();
+                        ++inner
+                    ) {
+                        final XmlInstruction targeted = target.get(inner);
+                        final XmlInstruction current = instructions.get(index);
+                        if (current.equals(targeted)) {
+                            if (inner == size - 1) {
+                                Logger.info(
+                                    ImprovementDistilledObjects.class,
+                                    "Constructor inlining happened"
+                                );
+                                updated.addAll(replacement);
+                                stack.clear();
+                            } else {
+                                stack.add(current);
+                                index++;
+                            }
+                        } else {
+                            updated.addAll(stack);
+                            updated.add(current);
+                            break;
+                        }
                     }
                 }
+
+//
+//                for (int index = 0; index < instructions.size(); index += size) {
+//                    boolean replace = true;
+//                    List<XmlInstruction> window = new ArrayList<>(0);
+//                    for (
+//                        int inner = 0;
+//                        inner < size && index + inner < instructions.size();
+//                        inner++
+//                    ) {
+//                        final XmlInstruction instruction = instructions.get(index + inner);
+//                        window.add(instruction);
+//                        final XmlInstruction repl = target.get(inner);
+//                        replace = instruction.equals(repl);
+//                    }
+//                    if (replace && window.size() == size) {
+//                        Logger.info(
+//                            ImprovementDistilledObjects.class,
+//                            "Constructor inlining happened"
+//                        );
+//                        updated.addAll(replacement);
+//                    } else {
+//                        updated.addAll(window);
+//                    }
+//                }
+
                 method.setInstructions(updated);
             }
         }
