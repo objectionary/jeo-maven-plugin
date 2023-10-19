@@ -93,8 +93,7 @@ public final class ImprovementDistilledObjects implements Improvement {
         );
         return Stream.concat(
             representations.stream()
-                .map(repr -> ImprovementDistilledObjects.replaceConstructors(decorators, repr))
-            ,
+                .map(repr -> ImprovementDistilledObjects.replaceConstructors(decorators, repr)),
             additional.stream()
         ).collect(Collectors.toList());
     }
@@ -140,7 +139,9 @@ public final class ImprovementDistilledObjects implements Improvement {
         return new EoRepresentation(new XMLDocument(program));
     }
 
-    private static void replace(final XmlClass clazz, final List<XmlInstruction> target,
+    private static void replace(
+        final XmlClass clazz,
+        final List<XmlInstruction> target,
         final List<XmlInstruction> replacement
     ) {
         for (final XmlMethod method : clazz.methods()) {
@@ -174,6 +175,13 @@ public final class ImprovementDistilledObjects implements Improvement {
                         break;
                     }
                 }
+            }
+            for (final XmlInstruction instruction : method.instructions()) {
+                DecoratorPair.replaceArguments(
+                    instruction.node(),
+                    "org/eolang/jeo/B",
+                    "org/eolang/jeo/AB"
+                );
             }
             method.setInstructions(updated);
         }
@@ -538,7 +546,7 @@ public final class ImprovementDistilledObjects implements Improvement {
          * Replace arguments.
          * @param node Instruction.
          * @param oldname Old class name.
-         * @param bytename New class name.
+         * @param newname New class name.
          * @todo #157:90min Handle arguments correctly during inlining optimization.
          *  Right now we just replace all arguments with the new class name.
          *  It's not correct, because we need to handle arguments correctly.
@@ -546,7 +554,7 @@ public final class ImprovementDistilledObjects implements Improvement {
         private static void replaceArguments(
             final Node node,
             final String oldname,
-            final String bytename
+            final String newname
         ) {
             final NodeList children = node.getChildNodes();
             for (int index = 0; index < children.getLength(); ++index) {
@@ -555,7 +563,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                     final String old = new HexData(oldname).value();
                     final String content = child.getTextContent();
                     if (old.equals(content)) {
-                        child.setTextContent(new HexData(bytename).value());
+                        child.setTextContent(new HexData(newname).value());
                     }
                 }
             }
