@@ -98,6 +98,16 @@ public final class ImprovementDistilledObjects implements Improvement {
         ).collect(Collectors.toList());
     }
 
+    /**
+     * Replace constructor invocations.
+     * @param decorators Decorators.
+     * @param representation Representation.
+     * @return Representation with replaced constructors.
+     * @todo #161:90min Refactor replaceConstructors method.
+     *  Right now it's a big method with a lot of repetition and high complexity.
+     *  We have to simplify it and remove all linter warnings.
+     * @checkstyle NestedIfDepthCheck (200 lines)
+     */
     private static Representation replaceConstructors(
         final List<DecoratorPair> decorators,
         final Representation representation
@@ -139,6 +149,17 @@ public final class ImprovementDistilledObjects implements Improvement {
         return new EoRepresentation(new XMLDocument(program));
     }
 
+    /**
+     * Replace instructions.
+     * @param clazz Class where to replace.
+     * @param target What should be replaced.
+     * @param replacement Replacement.
+     * @todo #161:90min Refactor replace method.
+     *  Right now it's a big method with a lot of repetition and high complexity.
+     *  Moreover, some constants are hardcoded and it's not good.
+     *  We need to refactor it into a set of smaller methods and remove all linter warnings.
+     * @checkstyle ModifiedControlVariableCheck (200 lines)
+     */
     private static void replace(
         final XmlClass clazz,
         final List<XmlInstruction> target,
@@ -148,7 +169,7 @@ public final class ImprovementDistilledObjects implements Improvement {
             final List<XmlInstruction> instructions = method.instructions();
             final List<XmlInstruction> updated = new ArrayList<>(0);
             final int size = target.size();
-            for (int index = 0; index < instructions.size(); index++) {
+            for (int index = 0; index < instructions.size(); ++index) {
                 final List<XmlInstruction> stack = new ArrayList<>(0);
                 for (
                     int inner = 0;
@@ -167,7 +188,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                             stack.clear();
                         } else {
                             stack.add(current);
-                            index++;
+                            ++index;
                         }
                     } else {
                         updated.addAll(stack);
@@ -236,23 +257,27 @@ public final class ImprovementDistilledObjects implements Improvement {
             this.decorator = decorator;
         }
 
+        /**
+         * List of NEW instructions that should be replaced.
+         * @return List of NEW instructions.
+         */
         private List<XmlInstruction> targetNew() {
-            final String firstName = this.decorated.name();
+            final String firstname = this.decorated.name();
             final Node first = new XMLDocument(
                 new StringBuilder()
                     .append("<o base=\"opcode\" name=\"NEW-187-50\">")
                     .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData(firstName.replace('.', '/')).value())
+                    .append(new HexData(firstname.replace('.', '/')).value())
                     .append("</o>")
                     .append("</o>")
                     .toString()
             ).node().getFirstChild();
-            final String secondName = this.decorator.name();
+            final String secondname = this.decorator.name();
             final Node second = new XMLDocument(
                 new StringBuilder()
                     .append("<o base=\"opcode\" name=\"NEW-187-50\">")
                     .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData(secondName.replace('.', '/')).value())
+                    .append(new HexData(secondname.replace('.', '/')).value())
                     .append("</o>")
                     .append("</o>")
                     .toString()
@@ -268,7 +293,10 @@ public final class ImprovementDistilledObjects implements Improvement {
             );
         }
 
-
+        /**
+         * Replacement for NEW instruction.
+         * @return Replacement.
+         */
         private List<XmlInstruction> replacementNew() {
             final String newname = this.newname();
             final Node second = new XMLDocument(
@@ -289,7 +317,11 @@ public final class ImprovementDistilledObjects implements Improvement {
             );
         }
 
-        List<XmlInstruction> targetSpecial() {
+        /**
+         * List of INVOKESPECIAL instructions that should be replaced.
+         * @return List of INVOKESPECIAL instructions.
+         */
+        private List<XmlInstruction> targetSpecial() {
             return Arrays.asList(
                 new XmlInstruction(
                     new XMLDocument(
@@ -328,7 +360,11 @@ public final class ImprovementDistilledObjects implements Improvement {
             );
         }
 
-        List<XmlInstruction> replacementSpecial() {
+        /**
+         * Replacement for INVOKESPECIAL instruction.
+         * @return Replacement.
+         */
+        private List<XmlInstruction> replacementSpecial() {
             return Collections.singletonList(
                 new XmlInstruction(
                     new XMLDocument(
@@ -349,7 +385,6 @@ public final class ImprovementDistilledObjects implements Improvement {
                 )
             );
         }
-
 
         /**
          * Combine two representations into one.
@@ -573,6 +608,11 @@ public final class ImprovementDistilledObjects implements Improvement {
          * Set instructions.
          * @param method Method.
          * @param res Instructions.
+         * @todo #161:90min Move setInstructions method.
+         *  Right now we implemented this method inside ImprovementDistilledObjects class.
+         *  But it's better to move it into a XmlMethod class. Moreover, this method is
+         *  overcomplicated, so it makes sense to refactor it and remove all linter warnings.
+         * @checkstyle NestedIfDepthCheck (100 lines)
          */
         private static void setInstructions(final Node method, final List<XmlInstruction> res) {
             final NodeList children = method.getChildNodes();
