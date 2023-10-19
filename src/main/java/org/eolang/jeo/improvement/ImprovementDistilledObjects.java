@@ -29,6 +29,7 @@ import com.jcabi.xml.XMLDocument;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -55,9 +56,6 @@ import org.w3c.dom.NodeList;
  * You can find the description of the optimization right
  * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/102">here</a>
  * @since 0.1.0
- * @todo #157:90min Replace new B(new A()) with new AB().
- *  Right now we just compose a new object with name AB. But it's not enough.
- *  We have to replace all the old objects created with new B(new A()) with new AB().
  * @todo #157:90min ImprovementDistilledObjects is needed to be refactored.
  *  Right now it's a big class with a lot of methods, repetition and high complexity.
  *  We need to refactor it into a set of smaller classes and remove all
@@ -71,12 +69,15 @@ public final class ImprovementDistilledObjects implements Improvement {
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        final List<Representation> additional = ImprovementDistilledObjects
+        final List<DecoratorPair> decorators = ImprovementDistilledObjects
             .decorators(
                 representations.stream()
                     .sorted(Comparator.comparing((Representation ir) -> ir.name()))
                     .collect(Collectors.toList())
-            ).stream()
+            )
+            .stream()
+            .collect(Collectors.toList());
+        final List<Representation> additional = decorators.stream()
             .map(DecoratorPair::combine)
             .collect(Collectors.toList());
         Logger.info(
@@ -88,9 +89,120 @@ public final class ImprovementDistilledObjects implements Improvement {
             )
         );
         return Stream.concat(
-            representations.stream(),
+            representations.stream()
+                .map(repr -> ImprovementDistilledObjects.replaceConstructors(decorators, repr)),
             additional.stream()
         ).collect(Collectors.toList());
+    }
+
+    /**
+     * Replace constructor invocations.
+     * @param decorators Decorators.
+     * @param representation Representation.
+     * @return Representation with replaced constructors.
+     * @todo #161:90min Refactor replaceConstructors method.
+     *  Right now it's a big method with a lot of repetition and high complexity.
+     *  We have to simplify it and remove all linter warnings.
+     * @checkstyle NestedIfDepthCheck (200 lines)
+     */
+    private static Representation replaceConstructors(
+        final List<DecoratorPair> decorators,
+        final Representation representation
+    ) {
+        final XML xmir = representation.toEO();
+        final XmlClass clazz = new XmlClass(xmir);
+        for (final DecoratorPair decorator : decorators) {
+            ImprovementDistilledObjects.replace(
+                clazz,
+                decorator.targetNew(),
+                decorator.replacementNew()
+            );
+            ImprovementDistilledObjects.replace(
+                clazz,
+                decorator.targetSpecial(),
+                decorator.replacementSpecial()
+            );
+        }
+        final Node replacement = clazz.node();
+        final Node program = xmir.node();
+        final NodeList top = program.getChildNodes();
+        for (int index = 0; index < top.getLength(); ++index) {
+            final Node current = top.item(index);
+            if (current.getNodeName().equals("program")) {
+                final NodeList subchildren = current.getChildNodes();
+                for (int indexnext = 0; indexnext < subchildren.getLength(); ++indexnext) {
+                    final Node next = subchildren.item(indexnext);
+                    if (next.getNodeName().equals("objects")) {
+                        while (next.hasChildNodes()) {
+                            next.removeChild(next.getFirstChild());
+                        }
+                        next.appendChild(
+                            next.getOwnerDocument().adoptNode(replacement.cloneNode(true))
+                        );
+                    }
+                }
+            }
+        }
+        return new EoRepresentation(new XMLDocument(program));
+    }
+
+    /**
+     * Replace instructions.
+     * @param clazz Class where to replace.
+     * @param target What should be replaced.
+     * @param replacement Replacement.
+     * @todo #161:90min Refactor replace method.
+     *  Right now it's a big method with a lot of repetition and high complexity.
+     *  Moreover, some constants are hardcoded and it's not good.
+     *  We need to refactor it into a set of smaller methods and remove all linter warnings.
+     * @checkstyle ModifiedControlVariableCheck (200 lines)
+     */
+    private static void replace(
+        final XmlClass clazz,
+        final List<XmlInstruction> target,
+        final List<XmlInstruction> replacement
+    ) {
+        for (final XmlMethod method : clazz.methods()) {
+            final List<XmlInstruction> instructions = method.instructions();
+            final List<XmlInstruction> updated = new ArrayList<>(0);
+            final int size = target.size();
+            for (int index = 0; index < instructions.size(); ++index) {
+                final List<XmlInstruction> stack = new ArrayList<>(0);
+                for (
+                    int inner = 0;
+                    inner < size && index < instructions.size();
+                    ++inner
+                ) {
+                    final XmlInstruction targeted = target.get(inner);
+                    final XmlInstruction current = instructions.get(index);
+                    if (current.equals(targeted)) {
+                        if (inner == size - 1) {
+                            Logger.info(
+                                ImprovementDistilledObjects.class,
+                                "Constructor inlining happened"
+                            );
+                            updated.addAll(replacement);
+                            stack.clear();
+                        } else {
+                            stack.add(current);
+                            ++index;
+                        }
+                    } else {
+                        updated.addAll(stack);
+                        updated.add(current);
+                        break;
+                    }
+                }
+            }
+            for (final XmlInstruction instruction : method.instructions()) {
+                DecoratorPair.replaceArguments(
+                    instruction.node(),
+                    "org/eolang/jeo/B",
+                    "org/eolang/jeo/AB"
+                );
+            }
+            method.setInstructions(updated);
+        }
     }
 
     /**
@@ -143,6 +255,135 @@ public final class ImprovementDistilledObjects implements Improvement {
         }
 
         /**
+         * List of NEW instructions that should be replaced.
+         * @return List of NEW instructions.
+         */
+        private List<XmlInstruction> targetNew() {
+            final String firstname = this.decorated.name();
+            final Node first = new XMLDocument(
+                new StringBuilder()
+                    .append("<o base=\"opcode\" name=\"NEW-187-50\">")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(new HexData(firstname.replace('.', '/')).value())
+                    .append("</o>")
+                    .append("</o>")
+                    .toString()
+            ).node().getFirstChild();
+            final String secondname = this.decorator.name();
+            final Node second = new XMLDocument(
+                new StringBuilder()
+                    .append("<o base=\"opcode\" name=\"NEW-187-50\">")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(new HexData(secondname.replace('.', '/')).value())
+                    .append("</o>")
+                    .append("</o>")
+                    .toString()
+            ).node().getFirstChild();
+            final Node dup = new XMLDocument("<o base=\"opcode\" name=\"DUP-89-53\"/>")
+                .node()
+                .getFirstChild();
+            return Arrays.asList(
+                new XmlInstruction(second),
+                new XmlInstruction(dup),
+                new XmlInstruction(first),
+                new XmlInstruction(dup)
+            );
+        }
+
+        /**
+         * Replacement for NEW instruction.
+         * @return Replacement.
+         */
+        private List<XmlInstruction> replacementNew() {
+            final String newname = this.newname();
+            final Node second = new XMLDocument(
+                new StringBuilder()
+                    .append("<o base=\"opcode\" name=\"NEW-187-50\">")
+                    .append("<o base=\"string\" data=\"bytes\">")
+                    .append(new HexData(newname.replace('.', '/')).value())
+                    .append("</o>")
+                    .append("</o>")
+                    .toString()
+            ).node().getFirstChild();
+            final Node dup = new XMLDocument("<o base=\"opcode\" name=\"DUP-89-53\"/>")
+                .node()
+                .getFirstChild();
+            return Arrays.asList(
+                new XmlInstruction(second),
+                new XmlInstruction(dup)
+            );
+        }
+
+        /**
+         * List of INVOKESPECIAL instructions that should be replaced.
+         * @return List of INVOKESPECIAL instructions.
+         */
+        private List<XmlInstruction> targetSpecial() {
+            return Arrays.asList(
+                new XmlInstruction(
+                    new XMLDocument(
+                        new StringBuilder()
+                            .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData(this.decorated.name().replace('.', '/')).value())
+                            .append("</o>")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData("<init>").value())
+                            .append("</o>")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData("(I)V").value())
+                            .append("</o>")
+                            .append("</o>")
+                            .toString()
+                    ).node().getFirstChild()
+                ),
+                new XmlInstruction(
+                    new XMLDocument(
+                        new StringBuilder()
+                            .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData(this.decorator.name().replace('.', '/')).value())
+                            .append("</o>")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData("<init>").value())
+                            .append("</o>")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData("(Lorg/eolang/jeo/A;)V").value())
+                            .append("</o>")
+                            .append("</o>")
+                            .toString()
+                    ).node().getFirstChild()
+                )
+            );
+        }
+
+        /**
+         * Replacement for INVOKESPECIAL instruction.
+         * @return Replacement.
+         */
+        private List<XmlInstruction> replacementSpecial() {
+            return Collections.singletonList(
+                new XmlInstruction(
+                    new XMLDocument(
+                        new StringBuilder()
+                            .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData(this.newname().replace('.', '/')).value())
+                            .append("</o>")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData("<init>").value())
+                            .append("</o>")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData("(I)V").value())
+                            .append("</o>")
+                            .append("</o>")
+                            .toString()
+                    ).node().getFirstChild()
+                )
+            );
+        }
+
+        /**
          * Combine two representations into one.
          * @return Combined representation.
          * @todo #157:90min Implement name generation for new combined representation.
@@ -150,14 +391,20 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  Maybe we can leave the same scheme, but it's better to move into a separate class.
          */
         private Representation combine() {
+            return new EoRepresentation(this.skeleton(this.decorator.toEO(), this.newname()));
+        }
+
+        /**
+         * New name of the combined class.
+         * @return New name.
+         */
+        private String newname() {
             final String second = this.decorator.name();
-            final XML decor = this.decorator.toEO();
-            final String name = String.format(
+            return String.format(
                 "%s%s",
                 this.decorated.name(),
                 second.substring(second.lastIndexOf('.') + 1)
             );
-            return new EoRepresentation(this.skeleton(decor, name));
         }
 
         /**
@@ -331,7 +578,7 @@ public final class ImprovementDistilledObjects implements Improvement {
          * Replace arguments.
          * @param node Instruction.
          * @param oldname Old class name.
-         * @param bytename New class name.
+         * @param newname New class name.
          * @todo #157:90min Handle arguments correctly during inlining optimization.
          *  Right now we just replace all arguments with the new class name.
          *  It's not correct, because we need to handle arguments correctly.
@@ -339,7 +586,7 @@ public final class ImprovementDistilledObjects implements Improvement {
         private static void replaceArguments(
             final Node node,
             final String oldname,
-            final String bytename
+            final String newname
         ) {
             final NodeList children = node.getChildNodes();
             for (int index = 0; index < children.getLength(); ++index) {
@@ -348,7 +595,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                     final String old = new HexData(oldname).value();
                     final String content = child.getTextContent();
                     if (old.equals(content)) {
-                        child.setTextContent(new HexData(bytename).value());
+                        child.setTextContent(new HexData(newname).value());
                     }
                 }
             }
@@ -358,6 +605,11 @@ public final class ImprovementDistilledObjects implements Improvement {
          * Set instructions.
          * @param method Method.
          * @param res Instructions.
+         * @todo #161:90min Move setInstructions method.
+         *  Right now we implemented this method inside ImprovementDistilledObjects class.
+         *  But it's better to move it into a XmlMethod class. Moreover, this method is
+         *  overcomplicated, so it makes sense to refactor it and remove all linter warnings.
+         * @checkstyle NestedIfDepthCheck (100 lines)
          */
         private static void setInstructions(final Node method, final List<XmlInstruction> res) {
             final NodeList children = method.getChildNodes();

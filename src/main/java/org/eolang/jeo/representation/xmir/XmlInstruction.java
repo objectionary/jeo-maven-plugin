@@ -23,8 +23,11 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -82,6 +85,30 @@ public final class XmlInstruction {
         return this.node;
     }
 
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other == null || this.getClass() != other.getClass()) {
+            result = false;
+        } else {
+            final XmlInstruction that = (XmlInstruction) other;
+            result = this.nodesAreEqual(this.node, that.node);
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.node);
+    }
+
+    @Override
+    public String toString() {
+        return new XMLDocument(this.node).toString();
+    }
+
     /**
      * Get opcode arguments.
      * @param node Node.
@@ -102,5 +129,81 @@ public final class XmlInstruction {
             }
         }
         return res.toArray();
+    }
+
+    /**
+     * Get children nodes.
+     * @param root Root node.
+     * @return Children nodes.
+     */
+    private static List<Node> children(final Node root) {
+        final NodeList all = root.getChildNodes();
+        final List<Node> res = new ArrayList<>(0);
+        for (int index = 0; index < all.getLength(); ++index) {
+            final Node item = all.item(index);
+            if (item.getNodeType() == Node.ELEMENT_NODE) {
+                res.add(item);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Check if two nodes are equal.
+     * @param first First node.
+     * @param second Second node.
+     * @return True if nodes are equal.
+     * @todo #161:60min Refactor XmlInstruction#nodesAreEqual() method.
+     *  This method is too complex and it is hard to understand.
+     *  We have to refactor this method in order to make it more readable.
+     *  Don't forget to write test and remove suppressed checks.
+     * @checkstyle LocalFinalVariableNameCheck (100 lines)
+     * @checkstyle NestedIfDepthCheck (100 lines)
+     * @checkstyle CyclomaticComplexityCheck (100 lines)
+     * @checkstyle LocalVariableNameCheck (100 lines)
+     */
+    @SuppressWarnings({"PMD.ConfusingTernary", "PMD.CollapsibleIfStatements"})
+    private boolean nodesAreEqual(final Node first, final Node second) {
+        boolean result = true;
+        if (first.getNodeType() != second.getNodeType()) {
+            result = false;
+        } else if (!first.getNodeName().equals(second.getNodeName())) {
+            result = false;
+        } else if (first.getNodeType() == Node.TEXT_NODE && !first.getTextContent()
+            .trim().equals(second.getTextContent().trim())) {
+            result = false;
+        } else if (first.getAttributes().getLength() != second.getAttributes().getLength()) {
+            result = false;
+        } else {
+            for (int index = 0; index < first.getAttributes().getLength(); ++index) {
+                final Node attr1 = first.getAttributes().item(index);
+                final Node attr2 = second.getAttributes().getNamedItem(attr1.getNodeName());
+                if (attr1.getNodeName().equals("name")) {
+                    if (attr1.getNodeValue().split("-")[0]
+                        .equals(attr2.getNodeValue().split("-")[0])) {
+                        continue;
+                    }
+                }
+                if (attr2 == null || !attr1.getNodeValue().equals(attr2.getNodeValue())) {
+                    result = false;
+                    break;
+                }
+            }
+            if (result) {
+                final List<Node> firstchildren = XmlInstruction.children(first);
+                final List<Node> secondchildren = XmlInstruction.children(second);
+                if (firstchildren.size() != secondchildren.size()) {
+                    result = false;
+                } else {
+                    for (int i = 0; i < firstchildren.size(); ++i) {
+                        if (!this.nodesAreEqual(firstchildren.get(i), secondchildren.get(i))) {
+                            result = false;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 }

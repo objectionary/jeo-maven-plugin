@@ -23,11 +23,14 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.log.Logger;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -42,14 +45,14 @@ public final class XmlMethod {
      * Method node.
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    private final XMLDocument node;
+    private final Node node;
 
     /**
      * Constructor.
      * @param node Method node.
      */
     public XmlMethod(final Node node) {
-        this.node = new XMLDocument(node);
+        this.node = node;
     }
 
     /**
@@ -57,7 +60,7 @@ public final class XmlMethod {
      * @return Name.
      */
     public String name() {
-        return String.valueOf(this.node.xpath("./@name").get(0));
+        return String.valueOf(new XMLDocument(this.node).xpath("./@name").get(0));
     }
 
     /**
@@ -65,7 +68,9 @@ public final class XmlMethod {
      * @return Access modifiers.
      */
     public int access() {
-        return new HexString(this.node.xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
+        return new HexString(
+            new XMLDocument(this.node).xpath("./o[@name='access']/text()").get(0)
+        ).decodeAsInt();
     }
 
     /**
@@ -73,7 +78,9 @@ public final class XmlMethod {
      * @return Descriptor.
      */
     public String descriptor() {
-        return new HexString(this.node.xpath("./o[@name='descriptor']/text()").get(0)).decode();
+        return new HexString(
+            new XMLDocument(this.node).xpath("./o[@name='descriptor']/text()").get(0)
+        ).decode();
     }
 
     /**
@@ -86,7 +93,7 @@ public final class XmlMethod {
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public Node node() {
-        return this.node.node();
+        return this.node;
     }
 
     /**
@@ -94,7 +101,7 @@ public final class XmlMethod {
      * @return True if method is a constructor.
      */
     public boolean isConstructor() {
-        return this.node.node().getAttributes().getNamedItem("name").getNodeValue().equals("new");
+        return this.node.getAttributes().getNamedItem("name").getNodeValue().equals("new");
     }
 
     /**
@@ -121,12 +128,36 @@ public final class XmlMethod {
     }
 
     /**
+     * Set instructions for method.
+     * @param updated New instructions.
+     */
+    public void setInstructions(final List<XmlInstruction> updated) {
+        final Node root = this.sequence().orElseThrow(
+            () -> new IllegalStateException("Can't find bytecode of the method")
+        );
+        final Document owner = root.getOwnerDocument();
+        Logger.info(
+            this,
+            String.format(
+                "Set new method instructions %n%s%n",
+                updated.stream().map(XmlInstruction::toString).collect(Collectors.joining("\n"))
+            )
+        );
+        while (root.hasChildNodes()) {
+            root.removeChild(root.getFirstChild());
+        }
+        for (final XmlInstruction instruction : updated) {
+            root.appendChild(owner.adoptNode(instruction.node()));
+        }
+    }
+
+    /**
      * Find sequence node.
      * @return Sequence node.
      */
     private Optional<Node> sequence() {
         Optional<Node> result = Optional.empty();
-        final NodeList children = this.node.node().getChildNodes();
+        final NodeList children = this.node.getChildNodes();
         for (int index = 0; index < children.getLength(); ++index) {
             final Node item = children.item(index);
             final NamedNodeMap attributes = item.getAttributes();
