@@ -93,7 +93,8 @@ public final class ImprovementDistilledObjects implements Improvement {
         );
         return Stream.concat(
             representations.stream()
-                .map(repr -> ImprovementDistilledObjects.replaceConstructors(decorators, repr)),
+                .map(repr -> ImprovementDistilledObjects.replaceConstructors(decorators, repr))
+            ,
             additional.stream()
         ).collect(Collectors.toList());
     }
@@ -206,14 +207,6 @@ public final class ImprovementDistilledObjects implements Improvement {
         }
 
         private List<XmlInstruction> target() {
-//              <o base="opcode" name="NEW-187-50">
-//                  <o base="string" data="bytes">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 42</o>
-//               </o>
-//               <o base="opcode" name="DUP-89-51"/>
-//               <o base="opcode" name="NEW-187-52">
-//                  <o base="string" data="bytes">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41</o>
-//               </o>
-//               <o base="opcode" name="DUP-89-53"/>
             final String firstName = this.decorated.name();
             final Node first = new XMLDocument(
                 new StringBuilder()

@@ -130,7 +130,9 @@ public final class XmlMethod {
      * @param updated New instructions.
      */
     public void setInstructions(final List<XmlInstruction> updated) {
-        final Node root = this.node;
+        final Node root = this.sequence().orElseThrow(
+            () -> new IllegalStateException("Can't find bytecode of the method")
+        );
         final Document owner = root.getOwnerDocument();
         Logger.info(
             this,
