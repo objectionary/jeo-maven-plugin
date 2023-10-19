@@ -282,61 +282,62 @@ public final class ImprovementDistilledObjects implements Improvement {
         }
 
         List<XmlInstruction> targetSpecial() {
-            final String firstName = this.decorated.name();
-            final Node first = new XMLDocument(
-                new StringBuilder()
-                    .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
-                    .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData(firstName.replace('.', '/')).value())
-                    .append("</o>")
-                    .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData("<init>").value())
-                    .append("</o>")
-                    .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData("(I)V").value())
-                    .append("</o>")
-                    .append("</o>")
-                    .toString()
-            ).node().getFirstChild();
-            final String secondName = this.decorator.name();
-            final Node second = new XMLDocument(
-                new StringBuilder()
-                    .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
-                    .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData(secondName.replace('.', '/')).value())
-                    .append("</o>")
-                    .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData("<init>").value())
-                    .append("</o>")
-                    .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData("(Lorg/eolang/jeo/A;)V").value())
-                    .append("</o>")
-                    .append("</o>")
-                    .toString()
-            ).node().getFirstChild();
             return Arrays.asList(
-                new XmlInstruction(first),
-                new XmlInstruction(second)
+                new XmlInstruction(
+                    new XMLDocument(
+                        new StringBuilder()
+                            .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData(this.decorated.name().replace('.', '/')).value())
+                            .append("</o>")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData("<init>").value())
+                            .append("</o>")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData("(I)V").value())
+                            .append("</o>")
+                            .append("</o>")
+                            .toString()
+                    ).node().getFirstChild()
+                ),
+                new XmlInstruction(
+                    new XMLDocument(
+                        new StringBuilder()
+                            .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData(this.decorator.name().replace('.', '/')).value())
+                            .append("</o>")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData("<init>").value())
+                            .append("</o>")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData("(Lorg/eolang/jeo/A;)V").value())
+                            .append("</o>")
+                            .append("</o>")
+                            .toString()
+                    ).node().getFirstChild()
+                )
             );
         }
 
         List<XmlInstruction> replacementSpecial() {
             return Collections.singletonList(
-                new XmlInstruction(new XMLDocument(
-                    new StringBuilder()
-                        .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
-                        .append("<o base=\"string\" data=\"bytes\">")
-                        .append(new HexData(this.newname().replace('.', '/')).value())
-                        .append("</o>")
-                        .append("<o base=\"string\" data=\"bytes\">")
-                        .append(new HexData("<init>").value())
-                        .append("</o>")
-                        .append("<o base=\"string\" data=\"bytes\">")
-                        .append(new HexData("(I)V").value())
-                        .append("</o>")
-                        .append("</o>")
-                        .toString()
-                ).node().getFirstChild()
+                new XmlInstruction(
+                    new XMLDocument(
+                        new StringBuilder()
+                            .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData(this.newname().replace('.', '/')).value())
+                            .append("</o>")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData("<init>").value())
+                            .append("</o>")
+                            .append("<o base=\"string\" data=\"bytes\">")
+                            .append(new HexData("(I)V").value())
+                            .append("</o>")
+                            .append("</o>")
+                            .toString()
+                    ).node().getFirstChild()
                 )
             );
         }
