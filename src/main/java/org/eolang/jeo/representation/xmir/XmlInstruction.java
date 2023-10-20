@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.IntStream;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -144,18 +145,24 @@ public final class XmlInstruction {
         } else if (first.getNodeType() == Node.TEXT_NODE) {
             result = first.getTextContent().trim().equals(second.getTextContent().trim());
         } else {
-            result = this.elementEquals(first, second);
+            result = this.isElementEquals(first, second);
         }
         return result;
     }
 
-    private boolean elementEquals(final Node first, final Node second) {
+    /**
+     * Check if two elements are equal.
+     * @param first First element.
+     * @param second Second element.
+     * @return True if elements are equal.
+     */
+    private boolean isElementEquals(final Node first, final Node second) {
         return first.getNodeName().equals(second.getNodeName())
-            && XmlInstruction.sameAttributes(first, second)
-            && this.sameChildren(first, second);
+            && XmlInstruction.isSameAttributes(first, second)
+            && this.isSameChildren(first, second);
     }
 
-    private static boolean sameAttributes(final Node first, final Node second) {
+    private static boolean isSameAttributes(final Node first, final Node second) {
         boolean result = true;
         if (first.getAttributes().getLength() != second.getAttributes().getLength()) {
             result = false;
@@ -178,21 +185,18 @@ public final class XmlInstruction {
         return result;
     }
 
-    private boolean sameChildren(final Node first, final Node second) {
-        boolean result = true;
-        final List<Node> firstchildren = XmlInstruction.children(first);
-        final List<Node> secondchildren = XmlInstruction.children(second);
-        if (firstchildren.size() != secondchildren.size()) {
-            result = false;
-        } else {
-            for (int i = 0; i < firstchildren.size(); ++i) {
-                if (!this.equals(firstchildren.get(i), secondchildren.get(i))) {
-                    result = false;
-                    break;
-                }
-            }
-        }
-        return result;
+    /**
+     * Check if two nodes have the same children.
+     * @param left Left node.
+     * @param right Right node.
+     * @return True if nodes have the same children.
+     */
+    private boolean isSameChildren(final Node left, final Node right) {
+        final List<Node> first = XmlInstruction.children(left);
+        final List<Node> second = XmlInstruction.children(right);
+        return first.size() == second.size()
+            && IntStream.range(0, first.size())
+            .allMatch(index -> this.equals(first.get(index), second.get(index)));
     }
 
     /**
