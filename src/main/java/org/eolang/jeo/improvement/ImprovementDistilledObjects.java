@@ -122,6 +122,9 @@ public final class ImprovementDistilledObjects implements Improvement {
                 decorator.targetSpecial(),
                 decorator.replacementSpecial()
             );
+            ImprovementDistilledObjects.replaceArguments(
+                clazz
+            );
         }
         final Node replacement = clazz.node();
         final Node program = xmir.node();
@@ -194,6 +197,12 @@ public final class ImprovementDistilledObjects implements Improvement {
                     }
                 }
             }
+            method.setInstructions(updated);
+        }
+    }
+
+    private static void replaceArguments(final XmlClass clazz) {
+        for (final XmlMethod method : clazz.methods()) {
             for (final XmlInstruction instruction : method.instructions()) {
                 DecoratorPair.replaceArguments(
                     instruction.node(),
@@ -201,7 +210,6 @@ public final class ImprovementDistilledObjects implements Improvement {
                     "org/eolang/jeo/AB"
                 );
             }
-            method.setInstructions(updated);
         }
     }
 
