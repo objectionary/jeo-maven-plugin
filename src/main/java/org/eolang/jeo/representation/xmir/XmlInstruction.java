@@ -187,20 +187,25 @@ public final class XmlInstruction {
         return result;
     }
 
+    /**
+     * Check if two attributes are equal.
+     * @param first First attribute.
+     * @param second Second attribute.
+     * @return True if attributes are equal.
+     */
     private static boolean areAttributesEqual(final Node first, final Node second) {
-        if (first == null || second == null) {
-            return false;
+        boolean result = false;
+        if (first != null && second != null) {
+            if (first.getNodeName().equals(second.getNodeName())) {
+                if (first.getNodeName().equals("name")) {
+                    result = first.getNodeValue().split("-")[0]
+                        .equals(second.getNodeValue().split("-")[0]);
+                } else {
+                    result = first.getNodeValue().equals(second.getNodeValue());
+                }
+            }
         }
-        if (!first.getNodeName().equals(second.getNodeName())) {
-            return false;
-        }
-        if (first.getNodeName().equals("name")) {
-            return first.getNodeValue().split("-")[0]
-                .equals(second.getNodeValue().split("-")[0]);
-        } else {
-            return first.getNodeValue().equals(second.getNodeValue());
-        }
-
+        return result;
     }
 
     /**
