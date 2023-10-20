@@ -201,6 +201,10 @@ public final class ImprovementDistilledObjects implements Improvement {
         }
     }
 
+    /**
+     * Replace arguments.
+     * @param clazz Class where to replace.
+     */
     private static void replaceArguments(final XmlClass clazz) {
         for (final XmlMethod method : clazz.methods()) {
             for (final XmlInstruction instruction : method.instructions()) {
@@ -543,6 +547,8 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @param root Original method.
          * @param method Inlined method.
          * @param bytename Class name.
+         * @checkstyle NestedIfDepthCheck (100 lines)
+         * @checkstyle NestedForDepthCheck (100 lines)
          */
         private void replaceMethodContent(
             final Node root,
