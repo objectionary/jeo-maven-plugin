@@ -34,14 +34,51 @@ import org.junit.jupiter.api.Test;
  */
 final class XmlInstructionTest {
 
+    /**
+     * Default instruction which we use for testing.
+     * This XML is compare with all other XMLs.
+     */
+    private static final String DEFAULT_INSTRUCTION = new StringBuilder()
+        .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
+        .append("<o base=\"string\" data=\"bytes\">1</o>")
+        .append("<o base=\"string\" data=\"bytes\">2</o>")
+        .append("<o base=\"string\" data=\"bytes\">3</o>")
+        .append("</o>")
+        .toString();
+
     @Test
-    void comparesSuccessfully() {
+    void comparesSuccessfullyWithSpaces() {
         MatcherAssert.assertThat(
-            "Xml Instruction nodes with different empty spaces, but with the same content should be the same, but they weren't",
+            "Xml Instruction nodes with different empty spaces, but with the same content should be the same, but it wasn't",
             new XmlInstruction(
                 new XMLDocument(
                     new StringBuilder()
                         .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">\n")
+                        .append("   <o base=\"string\" data=\"bytes\">1</o>\n")
+                        .append("   <o base=\"string\" data=\"bytes\">2</o>\n")
+                        .append("   <o base=\"string\" data=\"bytes\">3</o>\n")
+                        .append("</o>")
+                        .toString()
+                ).node().getFirstChild()
+            ),
+            Matchers.equalTo(
+                new XmlInstruction(
+                    new XMLDocument(
+                        XmlInstructionTest.DEFAULT_INSTRUCTION
+                    ).node().getFirstChild()
+                )
+            )
+        );
+    }
+
+    @Test
+    void comparesSuccessfullyWithDifferentOpcodeNumber() {
+        MatcherAssert.assertThat(
+            "Xml Instruction nodes with different opcode number in name, but with the same content should be the same, but it wasn't",
+            new XmlInstruction(
+                new XMLDocument(
+                    new StringBuilder()
+                        .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-66\">\n")
                         .append("   <o base=\"string\" data=\"bytes\">1</o>\n")
                         .append("   <o base=\"string\" data=\"bytes\">2</o>\n")
                         .append("   <o base=\"string\" data=\"bytes\">3</o>\n")
@@ -51,13 +88,54 @@ final class XmlInstructionTest {
             Matchers.equalTo(
                 new XmlInstruction(
                     new XMLDocument(
-                        new StringBuilder()
-                            .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">\n")
-                            .append("<o base=\"string\" data=\"bytes\">1</o>\n")
-                            .append("<o base=\"string\" data=\"bytes\">2</o>\n")
-                            .append("<o base=\"string\" data=\"bytes\">3</o>\n")
-                            .append("</o>").toString()
+                        XmlInstructionTest.DEFAULT_INSTRUCTION
                     ).node().getFirstChild()
+                )
+            )
+        );
+    }
+
+    @Test
+    void comparesDeeply() {
+        MatcherAssert.assertThat(
+            "Xml Instruction with different child content should not be equal, but it was",
+            new XmlInstruction(
+                new XMLDocument(
+                    new StringBuilder()
+                        .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">\n")
+                        .append("</o>")
+                        .toString())
+                    .node()
+                    .getFirstChild()
+            ),
+            Matchers.not(
+                Matchers.equalTo(
+                    new XmlInstruction(
+                        new XMLDocument(
+                            XmlInstructionTest.DEFAULT_INSTRUCTION
+                        ).node().getFirstChild()
+                    )
+                )
+            )
+        );
+    }
+
+    @Test
+    void comparesDifferentInstructions() {
+        MatcherAssert.assertThat(
+            "Xml Instruction with different content should not be equal, but it was",
+            new XmlInstruction(
+                new XMLDocument("<o base=\"opcode\" name=\"DUP-89-55\"/>\n")
+                    .node()
+                    .getFirstChild()
+            ),
+            Matchers.not(
+                Matchers.equalTo(
+                    new XmlInstruction(
+                        new XMLDocument(
+                            XmlInstructionTest.DEFAULT_INSTRUCTION
+                        ).node().getFirstChild()
+                    )
                 )
             )
         );
