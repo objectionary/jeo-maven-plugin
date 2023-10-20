@@ -145,7 +145,7 @@ public final class XmlInstruction {
         } else if (first.getNodeType() == Node.TEXT_NODE) {
             result = first.getTextContent().trim().equals(second.getTextContent().trim());
         } else {
-            result = this.isElementEquals(first, second);
+            result = this.areElementsEquals(first, second);
         }
         return result;
     }
@@ -156,33 +156,51 @@ public final class XmlInstruction {
      * @param second Second element.
      * @return True if elements are equal.
      */
-    private boolean isElementEquals(final Node first, final Node second) {
+    private boolean areElementsEquals(final Node first, final Node second) {
         return first.getNodeName().equals(second.getNodeName())
-            && XmlInstruction.isSameAttributes(first, second)
-            && this.isSameChildren(first, second);
+            && XmlInstruction.hasSameAttributes(first, second)
+            && this.hasSameChildren(first, second);
     }
 
-    private static boolean isSameAttributes(final Node first, final Node second) {
+    /**
+     * Check if two nodes have the same attributes.
+     * @param first First node.
+     * @param second Second node.
+     * @return True if nodes have the same attributes.
+     */
+    private static boolean hasSameAttributes(final Node first, final Node second) {
         boolean result = true;
-        if (first.getAttributes().getLength() != second.getAttributes().getLength()) {
-            result = false;
-            return result;
-        }
-        for (int index = 0; index < first.getAttributes().getLength(); ++index) {
-            final Node attr1 = first.getAttributes().item(index);
-            final Node attr2 = second.getAttributes().getNamedItem(attr1.getNodeName());
-            if (attr1.getNodeName().equals("name")) {
-                if (attr1.getNodeValue().split("-")[0]
-                    .equals(attr2.getNodeValue().split("-")[0])) {
-                    continue;
+        final NamedNodeMap attributes = first.getAttributes();
+        final int length = attributes.getLength();
+        if (length == second.getAttributes().getLength()) {
+            for (int index = 0; index < length; ++index) {
+                final Node left = attributes.item(index);
+                final Node right = second.getAttributes().getNamedItem(left.getNodeName());
+                if (!XmlInstruction.areAttributesEqual(left, right)) {
+                    result = false;
+                    break;
                 }
             }
-            if (attr2 == null || !attr1.getNodeValue().equals(attr2.getNodeValue())) {
-                result = false;
-                break;
-            }
+        } else {
+            result = false;
         }
         return result;
+    }
+
+    private static boolean areAttributesEqual(final Node first, final Node second) {
+        if (first == null || second == null) {
+            return false;
+        }
+        if (!first.getNodeName().equals(second.getNodeName())) {
+            return false;
+        }
+        if (first.getNodeName().equals("name")) {
+            return first.getNodeValue().split("-")[0]
+                .equals(second.getNodeValue().split("-")[0]);
+        } else {
+            return first.getNodeValue().equals(second.getNodeValue());
+        }
+
     }
 
     /**
@@ -191,7 +209,7 @@ public final class XmlInstruction {
      * @param right Right node.
      * @return True if nodes have the same children.
      */
-    private boolean isSameChildren(final Node left, final Node right) {
+    private boolean hasSameChildren(final Node left, final Node right) {
         final List<Node> first = XmlInstruction.children(left);
         final List<Node> second = XmlInstruction.children(right);
         return first.size() == second.size()
