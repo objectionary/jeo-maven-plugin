@@ -37,6 +37,7 @@ import org.w3c.dom.NodeList;
  * Bytecode instruction from XML.
  * @since 0.1
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class XmlInstruction {
 
     /**
@@ -140,12 +141,14 @@ public final class XmlInstruction {
      */
     private boolean equals(final Node first, final Node second) {
         final boolean result;
-        if (first.getNodeType() != second.getNodeType()) {
-            result = false;
-        } else if (first.getNodeType() == Node.TEXT_NODE) {
-            result = first.getTextContent().trim().equals(second.getTextContent().trim());
+        if (first.getNodeType() == second.getNodeType()) {
+            if (first.getNodeType() == Node.TEXT_NODE) {
+                result = first.getTextContent().trim().equals(second.getTextContent().trim());
+            } else {
+                result = this.areElementsEqual(first, second);
+            }
         } else {
-            result = this.areElementsEquals(first, second);
+            result = false;
         }
         return result;
     }
@@ -156,7 +159,7 @@ public final class XmlInstruction {
      * @param second Second element.
      * @return True if elements are equal.
      */
-    private boolean areElementsEquals(final Node first, final Node second) {
+    private boolean areElementsEqual(final Node first, final Node second) {
         return first.getNodeName().equals(second.getNodeName())
             && XmlInstruction.hasSameAttributes(first, second)
             && this.hasSameChildren(first, second);
@@ -194,16 +197,16 @@ public final class XmlInstruction {
      * @return True if attributes are equal.
      */
     private static boolean areAttributesEqual(final Node first, final Node second) {
-        boolean result = false;
-        if (first != null && second != null) {
-            if (first.getNodeName().equals(second.getNodeName())) {
-                if (first.getNodeName().equals("name")) {
-                    result = first.getNodeValue().split("-")[0]
-                        .equals(second.getNodeValue().split("-")[0]);
-                } else {
-                    result = first.getNodeValue().equals(second.getNodeValue());
-                }
+        final boolean result;
+        if (first != null && second != null && first.getNodeName().equals(second.getNodeName())) {
+            if (first.getNodeName().equals("name")) {
+                result = first.getNodeValue().split("-")[0]
+                    .equals(second.getNodeValue().split("-")[0]);
+            } else {
+                result = first.getNodeValue().equals(second.getNodeValue());
             }
+        } else {
+            result = false;
         }
         return result;
     }
@@ -232,11 +235,11 @@ public final class XmlInstruction {
         final List<Node> res = new ArrayList<>(0);
         for (int index = 0; index < all.getLength(); ++index) {
             final Node item = all.item(index);
-            final short type = item.getNodeType();
+            final int type = item.getNodeType();
             if (type == Node.ELEMENT_NODE) {
                 res.add(item);
             }
-            if (type == Node.TEXT_NODE && !item.getTextContent().trim().isEmpty()) {
+            if (type == Node.TEXT_NODE && !item.getTextContent().isBlank()) {
                 res.add(item);
             }
         }
