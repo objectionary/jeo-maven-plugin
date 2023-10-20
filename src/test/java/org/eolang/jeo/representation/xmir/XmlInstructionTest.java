@@ -38,7 +38,7 @@ final class XmlInstructionTest {
      * Default instruction which we use for testing.
      * This XML is compare with all other XMLs.
      */
-    private static final String DEFAULT_INSTRUCTION = new StringBuilder()
+    private static final String INSTRUCTION = new StringBuilder()
         .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
         .append("<o base=\"string\" data=\"bytes\">1</o>")
         .append("<o base=\"string\" data=\"bytes\">2</o>")
@@ -56,15 +56,14 @@ final class XmlInstructionTest {
                         .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">\n")
                         .append("   <o base=\"string\" data=\"bytes\">1</o>\n")
                         .append("   <o base=\"string\" data=\"bytes\">2</o>\n")
-                        .append("   <o base=\"string\" data=\"bytes\">3</o>\n")
-                        .append("</o>")
+                        .append("   <o base=\"string\" data=\"bytes\">3</o></o>")
                         .toString()
                 ).node().getFirstChild()
             ),
             Matchers.equalTo(
                 new XmlInstruction(
                     new XMLDocument(
-                        XmlInstructionTest.DEFAULT_INSTRUCTION
+                        XmlInstructionTest.INSTRUCTION
                     ).node().getFirstChild()
                 )
             )
@@ -81,14 +80,14 @@ final class XmlInstructionTest {
                         .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-66\">\n")
                         .append("   <o base=\"string\" data=\"bytes\">1</o>\n")
                         .append("   <o base=\"string\" data=\"bytes\">2</o>\n")
-                        .append("   <o base=\"string\" data=\"bytes\">3</o>\n")
-                        .append("</o>").toString()
+                        .append("   <o base=\"string\" data=\"bytes\">3</o></o>")
+                        .toString()
                 ).node().getFirstChild()
             ),
             Matchers.equalTo(
                 new XmlInstruction(
                     new XMLDocument(
-                        XmlInstructionTest.DEFAULT_INSTRUCTION
+                        XmlInstructionTest.INSTRUCTION
                     ).node().getFirstChild()
                 )
             )
@@ -102,18 +101,18 @@ final class XmlInstructionTest {
             new XmlInstruction(
                 new XMLDocument(
                     new StringBuilder()
-                        .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-66\">\n")
-                        .append("   <o base=\"string\" data=\"bytes\">32</o>\n")
-                        .append("   <o base=\"string\" data=\"bytes\">23</o>\n")
-                        .append("   <o base=\"string\" data=\"bytes\">14</o>\n")
-                        .append("</o>").toString()
+                        .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-66\">")
+                        .append("   <o base=\"string\" data=\"bytes\">32</o>")
+                        .append("   <o base=\"string\" data=\"bytes\">23</o>")
+                        .append("   <o base=\"string\" data=\"bytes\">14</o></o>")
+                        .toString()
                 ).node().getFirstChild()
             ),
             Matchers.not(
                 Matchers.equalTo(
                     new XmlInstruction(
                         new XMLDocument(
-                            XmlInstructionTest.DEFAULT_INSTRUCTION
+                            XmlInstructionTest.INSTRUCTION
                         ).node().getFirstChild()
                     )
                 )
@@ -127,18 +126,14 @@ final class XmlInstructionTest {
             "Xml Instruction with different child content should not be equal, but it was",
             new XmlInstruction(
                 new XMLDocument(
-                    new StringBuilder()
-                        .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">\n")
-                        .append("</o>")
-                        .toString())
-                    .node()
-                    .getFirstChild()
+                    "<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\"></o>"
+                ).node().getFirstChild()
             ),
             Matchers.not(
                 Matchers.equalTo(
                     new XmlInstruction(
                         new XMLDocument(
-                            XmlInstructionTest.DEFAULT_INSTRUCTION
+                            XmlInstructionTest.INSTRUCTION
                         ).node().getFirstChild()
                     )
                 )
@@ -159,7 +154,7 @@ final class XmlInstructionTest {
                 Matchers.equalTo(
                     new XmlInstruction(
                         new XMLDocument(
-                            XmlInstructionTest.DEFAULT_INSTRUCTION
+                            XmlInstructionTest.INSTRUCTION
                         ).node().getFirstChild()
                     )
                 )
