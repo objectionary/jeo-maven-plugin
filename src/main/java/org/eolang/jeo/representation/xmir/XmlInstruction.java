@@ -141,10 +141,9 @@ public final class XmlInstruction {
         final boolean result;
         if (first.getNodeType() != second.getNodeType()) {
             result = false;
+        } else if (first.getNodeType() == Node.TEXT_NODE) {
+            result = first.getTextContent().trim().equals(second.getTextContent().trim());
         } else if (!first.getNodeName().equals(second.getNodeName())) {
-            result = false;
-        } else if (first.getNodeType() == Node.TEXT_NODE && !first.getTextContent()
-            .trim().equals(second.getTextContent().trim())) {
             result = false;
         } else if (first.getAttributes().getLength() != second.getAttributes().getLength()) {
             result = false;
@@ -154,6 +153,14 @@ public final class XmlInstruction {
             result = this.sameChildren(first, second);
         }
         return result;
+    }
+
+    private static boolean sameType(final Node first, final Node second) {
+        if (first.getNodeType() == Node.TEXT_NODE && second.getNodeType() == Node.TEXT_NODE) {
+            return first.getTextContent().trim().equals(second.getTextContent().trim());
+        } else {
+            return first.getNodeType() == second.getNodeType();
+        }
     }
 
     private static boolean sameAttributes(final Node first, final Node second) {
@@ -202,7 +209,11 @@ public final class XmlInstruction {
         final List<Node> res = new ArrayList<>(0);
         for (int index = 0; index < all.getLength(); ++index) {
             final Node item = all.item(index);
-            if (item.getNodeType() == Node.ELEMENT_NODE) {
+            final short type = item.getNodeType();
+            if (type == Node.ELEMENT_NODE) {
+                res.add(item);
+            }
+            if (type == Node.TEXT_NODE && !item.getTextContent().trim().isEmpty()) {
                 res.add(item);
             }
         }

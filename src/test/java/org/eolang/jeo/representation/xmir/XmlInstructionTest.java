@@ -96,6 +96,32 @@ final class XmlInstructionTest {
     }
 
     @Test
+    void comparesSuccessfullyWithDifferentTextNodes() {
+        MatcherAssert.assertThat(
+            "Xml Instruction with different arguments should not be equal, but it was",
+            new XmlInstruction(
+                new XMLDocument(
+                    new StringBuilder()
+                        .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-66\">\n")
+                        .append("   <o base=\"string\" data=\"bytes\">32</o>\n")
+                        .append("   <o base=\"string\" data=\"bytes\">23</o>\n")
+                        .append("   <o base=\"string\" data=\"bytes\">14</o>\n")
+                        .append("</o>").toString()
+                ).node().getFirstChild()
+            ),
+            Matchers.not(
+                Matchers.equalTo(
+                    new XmlInstruction(
+                        new XMLDocument(
+                            XmlInstructionTest.DEFAULT_INSTRUCTION
+                        ).node().getFirstChild()
+                    )
+                )
+            )
+        );
+    }
+
+    @Test
     void comparesDeeply() {
         MatcherAssert.assertThat(
             "Xml Instruction with different child content should not be equal, but it was",
