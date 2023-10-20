@@ -94,7 +94,7 @@ public final class XmlInstruction {
             result = false;
         } else {
             final XmlInstruction that = (XmlInstruction) other;
-            result = this.nodesAreEqual(this.node, that.node);
+            result = this.equals(this.node, that.node);
         }
         return result;
     }
@@ -132,6 +132,67 @@ public final class XmlInstruction {
     }
 
     /**
+     * Check if two nodes are equal.
+     * @param first First node.
+     * @param second Second node.
+     * @return True if nodes are equal.
+     */
+    private boolean equals(final Node first, final Node second) {
+        final boolean result;
+        if (first.getNodeType() != second.getNodeType()) {
+            result = false;
+        } else if (!first.getNodeName().equals(second.getNodeName())) {
+            result = false;
+        } else if (first.getNodeType() == Node.TEXT_NODE && !first.getTextContent()
+            .trim().equals(second.getTextContent().trim())) {
+            result = false;
+        } else if (first.getAttributes().getLength() != second.getAttributes().getLength()) {
+            result = false;
+        } else if (!XmlInstruction.sameAttributes(first, second)) {
+            result = false;
+        } else {
+            result = this.sameChildren(first, second);
+        }
+        return result;
+    }
+
+    private static boolean sameAttributes(final Node first, final Node second) {
+        boolean result = true;
+        for (int index = 0; index < first.getAttributes().getLength(); ++index) {
+            final Node attr1 = first.getAttributes().item(index);
+            final Node attr2 = second.getAttributes().getNamedItem(attr1.getNodeName());
+            if (attr1.getNodeName().equals("name")) {
+                if (attr1.getNodeValue().split("-")[0]
+                    .equals(attr2.getNodeValue().split("-")[0])) {
+                    continue;
+                }
+            }
+            if (attr2 == null || !attr1.getNodeValue().equals(attr2.getNodeValue())) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
+    private boolean sameChildren(final Node first, final Node second) {
+        boolean result = true;
+        final List<Node> firstchildren = XmlInstruction.children(first);
+        final List<Node> secondchildren = XmlInstruction.children(second);
+        if (firstchildren.size() != secondchildren.size()) {
+            result = false;
+        } else {
+            for (int i = 0; i < firstchildren.size(); ++i) {
+                if (!this.equals(firstchildren.get(i), secondchildren.get(i))) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
      * Get children nodes.
      * @param root Root node.
      * @return Children nodes.
@@ -146,64 +207,5 @@ public final class XmlInstruction {
             }
         }
         return res;
-    }
-
-    /**
-     * Check if two nodes are equal.
-     * @param first First node.
-     * @param second Second node.
-     * @return True if nodes are equal.
-     * @todo #161:60min Refactor XmlInstruction#nodesAreEqual() method.
-     *  This method is too complex and it is hard to understand.
-     *  We have to refactor this method in order to make it more readable.
-     *  Don't forget to write test and remove suppressed checks.
-     * @checkstyle LocalFinalVariableNameCheck (100 lines)
-     * @checkstyle NestedIfDepthCheck (100 lines)
-     * @checkstyle CyclomaticComplexityCheck (100 lines)
-     * @checkstyle LocalVariableNameCheck (100 lines)
-     */
-    @SuppressWarnings({"PMD.ConfusingTernary", "PMD.CollapsibleIfStatements"})
-    private boolean nodesAreEqual(final Node first, final Node second) {
-        boolean result = true;
-        if (first.getNodeType() != second.getNodeType()) {
-            result = false;
-        } else if (!first.getNodeName().equals(second.getNodeName())) {
-            result = false;
-        } else if (first.getNodeType() == Node.TEXT_NODE && !first.getTextContent()
-            .trim().equals(second.getTextContent().trim())) {
-            result = false;
-        } else if (first.getAttributes().getLength() != second.getAttributes().getLength()) {
-            result = false;
-        } else {
-            for (int index = 0; index < first.getAttributes().getLength(); ++index) {
-                final Node attr1 = first.getAttributes().item(index);
-                final Node attr2 = second.getAttributes().getNamedItem(attr1.getNodeName());
-                if (attr1.getNodeName().equals("name")) {
-                    if (attr1.getNodeValue().split("-")[0]
-                        .equals(attr2.getNodeValue().split("-")[0])) {
-                        continue;
-                    }
-                }
-                if (attr2 == null || !attr1.getNodeValue().equals(attr2.getNodeValue())) {
-                    result = false;
-                    break;
-                }
-            }
-            if (result) {
-                final List<Node> firstchildren = XmlInstruction.children(first);
-                final List<Node> secondchildren = XmlInstruction.children(second);
-                if (firstchildren.size() != secondchildren.size()) {
-                    result = false;
-                } else {
-                    for (int i = 0; i < firstchildren.size(); ++i) {
-                        if (!this.nodesAreEqual(firstchildren.get(i), secondchildren.get(i))) {
-                            result = false;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        return result;
     }
 }
