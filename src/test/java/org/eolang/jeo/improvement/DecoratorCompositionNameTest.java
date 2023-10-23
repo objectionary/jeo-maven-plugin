@@ -23,14 +23,73 @@
  */
 package org.eolang.jeo.improvement;
 
-import org.junit.jupiter.api.Test;
+import org.eolang.jeo.Representation;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
+/**
+ * Test case for {@link DecoratorCompositionName}.
+ * @since 0.1
+ */
 class DecoratorCompositionNameTest {
 
-
-    @Test
-    void retrivesCombinedName() {
-
+    @ParameterizedTest
+    @CsvSource({
+        "A, B, AB",
+        "Foo, Bar, FooBar",
+        "org.eolang.A, org.eolang.B, org/eolang/AB",
+        "a.Foo, b.Bar, b/FooBar"
+    })
+    void retrivesCombinedName(
+        final String decorated,
+        final String decorator,
+        final String expected
+    ) {
+        final String actual = new DecoratorCompositionName(
+            new Representation.Named(decorated),
+            new Representation.Named(decorator)
+        ).value();
+        MatcherAssert.assertThat(
+            String.format(
+                "Generated name '%s' is not as expected '%s' for decorated class '%s' and its decorator '%s'",
+                actual,
+                expected,
+                decorated,
+                decorator
+            ),
+            actual,
+            Matchers.equalTo(expected)
+        );
     }
 
+    @ParameterizedTest
+    @CsvSource({
+        "A, B, 41 42",
+        "Foo, Bar, 46 6F 6F 42 61 72",
+        "org.eolang.A, org.eolang.B, 6F 72 67 2F 65 6F 6C 61 6E 67 2F 41 42",
+        "a.Foo, b.Bar, 62 2F 46 6F 6F 42 61 72"
+    })
+    void retrievesHexDecimalRepresentation(
+        final String decorated,
+        final String decorator,
+        final String expected
+    ) {
+        final String actual = new DecoratorCompositionName(
+            new Representation.Named(decorated),
+            new Representation.Named(decorator)
+        ).hex();
+        MatcherAssert.assertThat(
+            String.format(
+                "Generated name '%s' in hex form is not as expected '%s' for decorated class '%s' and its decorator '%s'",
+                actual,
+                expected,
+                decorated,
+                decorator
+            ),
+            actual,
+            Matchers.equalTo(expected)
+        );
+    }
 }
