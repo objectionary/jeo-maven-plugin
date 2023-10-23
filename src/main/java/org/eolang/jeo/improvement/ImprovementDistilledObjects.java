@@ -544,27 +544,27 @@ public final class ImprovementDistilledObjects implements Improvement {
 
         /**
          * Replace method content.
-         * @param root Original method.
-         * @param method Inlined method.
+         * @param clazz Original class where to inline methods.
+         * @param inlined Inlined method.
          * @param bytename Class name.
          * @checkstyle NestedIfDepthCheck (100 lines)
          * @checkstyle NestedForDepthCheck (100 lines)
          */
         private void replaceMethodContent(
-            final Node root,
-            final XmlMethod method,
+            final Node clazz,
+            final XmlMethod inlined,
             final String bytename
         ) {
-            final List<Node> methods = DecoratorPair.methods(root);
+            final List<XmlMethod> methods = new XmlClass(clazz).methods();
             final String old = this.decorated.name().replace('.', '/');
-            for (final Node high : methods) {
-                final List<XmlInstruction> instructions = DecoratorPair.instructions(high);
+            for (final XmlMethod candidate : methods) {
+                final List<XmlInstruction> instructions = candidate.instructions();
                 final List<XmlInstruction> res = new ArrayList<>(0);
                 for (final XmlInstruction instruction : instructions) {
                     final int code = instruction.code();
                     if (code != Opcodes.GETFIELD) {
                         if (code == Opcodes.INVOKEVIRTUAL) {
-                            final List<XmlInstruction> tadam = method.instructions();
+                            final List<XmlInstruction> tadam = inlined.instructions();
                             final Collection<XmlInstruction> filtered = new ArrayList<>(0);
                             for (final XmlInstruction xmlinstr : tadam) {
                                 final int codee = xmlinstr.code();
@@ -584,7 +584,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                         }
                     }
                 }
-                DecoratorPair.setInstructions(high, res);
+                DecoratorPair.setInstructions(candidate.node(), res);
             }
         }
 
@@ -652,22 +652,6 @@ public final class ImprovementDistilledObjects implements Improvement {
         }
 
         /**
-         * Methods.
-         * @param root Root node.
-         * @return Class methods.
-         * @todo #157:90min Code duplication.
-         *  There is a code duplication between classes:
-         *  ImprovementDistilledObjects and XmlClass.
-         *  We need to extract the common code into a separate class or just to use XmlClass.
-         */
-        private static List<Node> methods(final Node root) {
-            return DecoratorPair.objects(root)
-                .filter(o -> o.getAttributes().getNamedItem("base") == null)
-                .filter(method -> !new XmlMethod(method).isConstructor())
-                .collect(Collectors.toList());
-        }
-
-        /**
          * Objects.
          * @param root Root node.
          * @return Stream of class objects.
@@ -682,32 +666,6 @@ public final class ImprovementDistilledObjects implements Improvement {
                 }
             }
             return res.stream();
-        }
-
-        /**
-         * Method instructions.
-         * @param node Node.
-         * @return Instructions.
-         */
-        private static List<XmlInstruction> instructions(final Node node) {
-            final List<XmlInstruction> result;
-            final Optional<Node> sequence = DecoratorPair.sequence(node);
-            if (sequence.isPresent()) {
-                final Node seq = sequence.get();
-                final List<XmlInstruction> instructions = new ArrayList<>(0);
-                final NodeList children = seq.getChildNodes();
-                final int length = children.getLength();
-                for (int index = 0; index < length; ++index) {
-                    final Node instruction = children.item(index);
-                    if (DecoratorPair.isInstruction(instruction)) {
-                        instructions.add(new XmlInstruction(instruction));
-                    }
-                }
-                result = instructions;
-            } else {
-                result = Collections.emptyList();
-            }
-            return result;
         }
 
         /**

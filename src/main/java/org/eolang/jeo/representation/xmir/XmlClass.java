@@ -56,7 +56,7 @@ public final class XmlClass {
      * Constructor.
      * @param xml Class node.
      */
-    private XmlClass(final Node xml) {
+    public XmlClass(final Node xml) {
         this.node = xml;
     }
 
