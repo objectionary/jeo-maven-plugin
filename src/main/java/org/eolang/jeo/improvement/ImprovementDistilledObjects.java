@@ -667,47 +667,5 @@ public final class ImprovementDistilledObjects implements Improvement {
             }
             return res.stream();
         }
-
-        /**
-         * Find sequence node.
-         * @param node Node.
-         * @return Sequence node.
-         */
-        private static Optional<Node> sequence(final Node node) {
-            Optional<Node> result = Optional.empty();
-            final NodeList children = node.getChildNodes();
-            for (int index = 0; index < children.getLength(); ++index) {
-                final Node item = children.item(index);
-                final NamedNodeMap attributes = item.getAttributes();
-                if (attributes == null) {
-                    continue;
-                }
-                final Node base = attributes.getNamedItem("base");
-                if (base == null) {
-                    continue;
-                }
-                if (base.getNodeValue().equals("seq")) {
-                    result = Optional.of(item);
-                    break;
-                }
-            }
-            return result;
-        }
-
-        /**
-         * Check if node is an instruction.
-         * @param node Node.
-         * @return True if node is an instruction.
-         */
-        private static boolean isInstruction(final Node node) {
-            final boolean result;
-            final NamedNodeMap attrs = node.getAttributes();
-            if (attrs == null || attrs.getNamedItem("name") == null) {
-                result = false;
-            } else {
-                result = true;
-            }
-            return result;
-        }
     }
 }
