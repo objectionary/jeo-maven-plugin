@@ -64,6 +64,10 @@ final class DecoratorCompositionName {
         this.decorator = decorator;
     }
 
+    /**
+     * Generated name for the decorator composition.
+     * @return Name.
+     */
     String value() {
         final String left = this.decorated.name();
         final String right = this.decorator.name();
@@ -81,7 +85,11 @@ final class DecoratorCompositionName {
         ).replace('.', '/');
     }
 
-    String hex(){
+    /**
+     * Hexadecimal representation of the generated name.
+     * @return Hexadecimal representation of the name.
+     */
+    String hex() {
         return new HexData(this.value()).value();
     }
 }
