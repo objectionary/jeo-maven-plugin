@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,10 +61,14 @@ public final class XmlClass {
         this.node = xml;
     }
 
+    /**
+     * Retrieve all constructors from XMIR.
+     * @return List of constructors.
+     */
     public List<XmlMethod> constructors() {
         return this.objects().filter(
-            node -> {
-                final NamedNodeMap attributes = node.getAttributes();
+            xmirnode -> {
+                final NamedNodeMap attributes = xmirnode.getAttributes();
                 final Node base = attributes.getNamedItem("name");
                 return base != null && "new".equals(base.getNodeValue());
             }
