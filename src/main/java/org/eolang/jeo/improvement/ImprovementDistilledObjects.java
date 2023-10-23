@@ -643,22 +643,5 @@ public final class ImprovementDistilledObjects implements Improvement {
                 }
             }
         }
-
-        /**
-         * Objects.
-         * @param root Root node.
-         * @return Stream of class objects.
-         */
-        private static Stream<Node> objects(final Node root) {
-            final NodeList children = root.getChildNodes();
-            final List<Node> res = new ArrayList<>(children.getLength());
-            for (int index = 0; index < children.getLength(); ++index) {
-                final Node child = children.item(index);
-                if (child.getNodeName().equals("o")) {
-                    res.add(child);
-                }
-            }
-            return res.stream();
-        }
     }
 }
