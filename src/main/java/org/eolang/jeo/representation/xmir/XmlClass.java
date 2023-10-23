@@ -23,12 +23,14 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -58,6 +60,16 @@ public final class XmlClass {
      */
     public XmlClass(final Node xml) {
         this.node = xml;
+    }
+
+    public List<XmlMethod> constructors() {
+        return this.objects().filter(
+            node -> {
+                final NamedNodeMap attributes = node.getAttributes();
+                final Node base = attributes.getNamedItem("name");
+                return base != null && "new".equals(base.getNodeValue());
+            }
+        ).map(XmlMethod::new).collect(Collectors.toList());
     }
 
     /**

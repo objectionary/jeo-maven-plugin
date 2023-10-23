@@ -514,13 +514,10 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  It's not correct, because we need to handle constructors correctly.
          */
         private static void removeOldConstructors(final Node root) {
-            DecoratorPair.objects(root).filter(
-                node -> {
-                    final NamedNodeMap attributes = node.getAttributes();
-                    final Node base = attributes.getNamedItem("name");
-                    return base != null && base.getNodeValue().equals("new");
-                }
-            ).forEach(root::removeChild);
+            new XmlClass(root).constructors()
+                .stream()
+                .map(XmlMethod::node)
+                .forEach(root::removeChild);
         }
 
         /**
@@ -532,7 +529,10 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  those fields that are used in the decorator.
          */
         private static void removeOldFields(final Node root) {
-            new XmlClass(root).fields().stream().map(XmlField::node).forEach(root::removeChild);
+            new XmlClass(root).fields()
+                .stream()
+                .map(XmlField::node)
+                .forEach(root::removeChild);
         }
 
         /**
