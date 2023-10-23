@@ -532,13 +532,7 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  those fields that are used in the decorator.
          */
         private static void removeOldFields(final Node root) {
-            DecoratorPair.objects(root).filter(
-                node -> {
-                    final NamedNodeMap attributes = node.getAttributes();
-                    final Node base = attributes.getNamedItem("base");
-                    return base != null && base.getNodeValue().equals("field");
-                }
-            ).forEach(root::removeChild);
+            new XmlClass(root).fields().stream().map(XmlField::node).forEach(root::removeChild);
         }
 
         /**
