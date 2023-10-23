@@ -398,9 +398,6 @@ public final class ImprovementDistilledObjects implements Improvement {
         /**
          * Combine two representations into one.
          * @return Combined representation.
-         * @todo #157:90min Implement name generation for new combined representation.
-         *  Right now we just concatenate the names of the two representations.
-         *  Maybe we can leave the same scheme, but it's better to move into a separate class.
          */
         private Representation combine() {
             return new EoRepresentation(this.skeleton(this.decorator.toEO(), this.newname()));

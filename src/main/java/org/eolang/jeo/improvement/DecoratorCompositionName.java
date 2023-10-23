@@ -38,6 +38,10 @@ import org.eolang.jeo.representation.HexData;
  * Pay attention that we replace periods with slashes. This class also can convert the final name
  * into hexadecimal representation.
  * @since 0.1
+ * @todo #163:30min Replace newname method usage with DecoratorCompositionName.
+ *  Right now we use {@link ImprovementDistilledObjects.DecoratorPair#newname()} method
+ *  in {@link ImprovementDistilledObjects} class. We should use {@link DecoratorCompositionName}
+ *  instead. Don't forget to remove the old method from {@link ImprovementDistilledObjects} class.
  */
 final class DecoratorCompositionName {
 
