@@ -52,7 +52,7 @@ public final class XmlBytecode {
      * @return Bytecode.
      */
     public Bytecode bytecode() {
-        final XmlClass clazz = new XmlClass(this.xml);
+        final XmlClass clazz = new XmlProgram(this.xml).topClass();
         final BytecodeClass bytecode = new BytecodeClass(
             clazz.name(),
             clazz.properties().toBytecodeProperties()
