@@ -30,10 +30,10 @@ import org.eolang.jeo.representation.HexData;
  * The name of a decorator composition.
  * <p>Example:</p>
  * <ul>
- *     <li>decorated: A, decorator: B => name: AB</li>
- *     <li>decorated: Foo, decorator: Bar => name: FooBar</li>
- *     <li>decorated: org.eolang.Foo, decorator: org.eolang.Bar => name: org/eolang/FooBar</li>
- *     <li>decorated: a.Foo, decorator: b.Bar => name: b/FooBar</li>
+ *     <li>decorated: A, decorator: B => name: A$B</li>
+ *     <li>decorated: Foo, decorator: Bar => name: Foo$Bar</li>
+ *     <li>decorated: org.eolang.Foo, decorator: org.eolang.Bar => name: org/eolang/Foo$Bar</li>
+ *     <li>decorated: a.Foo, decorator: b.Bar => name: b/Foo$Bar</li>
  * </ul>
  * Pay attention that we replace periods with slashes. This class also can convert the final name
  * into hexadecimal representation.
@@ -82,7 +82,7 @@ final class DecoratorCompositionName {
             prefix = "";
         }
         return String.format(
-            "%s%s%s",
+            "%s%s$%s",
             prefix,
             left.substring(left.lastIndexOf('.') + 1),
             right.substring(right.lastIndexOf('.') + 1)

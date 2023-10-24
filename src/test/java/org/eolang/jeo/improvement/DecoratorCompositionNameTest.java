@@ -37,10 +37,10 @@ class DecoratorCompositionNameTest {
 
     @ParameterizedTest
     @CsvSource({
-        "A, B, AB",
-        "Foo, Bar, FooBar",
-        "org.eolang.A, org.eolang.B, org/eolang/AB",
-        "a.Foo, b.Bar, b/FooBar"
+        "A, B, A$B",
+        "Foo, Bar, Foo$Bar",
+        "org.eolang.A, org.eolang.B, org/eolang/A$B",
+        "a.Foo, b.Bar, b/Foo$Bar"
     })
     void retrivesCombinedName(
         final String decorated,
@@ -66,10 +66,10 @@ class DecoratorCompositionNameTest {
 
     @ParameterizedTest
     @CsvSource({
-        "A, B, 41 42",
-        "Foo, Bar, 46 6F 6F 42 61 72",
-        "org.eolang.A, org.eolang.B, 6F 72 67 2F 65 6F 6C 61 6E 67 2F 41 42",
-        "a.Foo, b.Bar, 62 2F 46 6F 6F 42 61 72"
+        "A, B, 41 24 42",
+        "Foo, Bar, 46 6F 6F 24 42 61 72",
+        "org.eolang.A, org.eolang.B, 6F 72 67 2F 65 6F 6C 61 6E 67 2F 41 24 42",
+        "a.Foo, b.Bar, 62 2F 46 6F 6F 24 42 61 72"
     })
     void retrievesHexDecimalRepresentation(
         final String decorated,
