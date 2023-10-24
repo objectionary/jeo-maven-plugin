@@ -100,20 +100,11 @@ public final class ImprovementDistilledObjects implements Improvement {
      * @param decorators Decorators.
      * @param representation Representation.
      * @return Representation with replaced constructors.
-     * @todo #161:90min Refactor replaceConstructors method.
-     *  Right now it's a big method with a lot of repetition and high complexity.
-     *  We have to simplify it and remove all linter warnings.
-     * @checkstyle NestedIfDepthCheck (200 lines)
      */
     private static Representation replaceConstructors(
-        final List<DecoratorPair> decorators,
+        final List<? extends DecoratorPair> decorators,
         final Representation representation
     ) {
-//        final XML xmir = representation.toEO();
-//        new XmlProgram(xmir).topClass();
-//
-//        final XmlClass clazz = new XmlClass(xmir);
-
         final XML xmir = representation.toEO();
         final XmlClass clazz = new XmlProgram(xmir).topClass();
         for (final DecoratorPair decorator : decorators) {
@@ -127,18 +118,9 @@ public final class ImprovementDistilledObjects implements Improvement {
                 decorator.targetSpecial(),
                 decorator.replacementSpecial()
             );
-            ImprovementDistilledObjects.replaceArguments(
-                clazz
-            );
+            ImprovementDistilledObjects.replaceArguments(clazz);
         }
-//        final Node replacement = clazz.node();
-//        final Node program = xmir.node();
-//        final NodeList top = program.getChildNodes();
-        return new EoRepresentation(
-            new XmlProgram(xmir)
-                .withTopClass(clazz)
-                .toXMIR()
-        );
+        return new EoRepresentation(new XmlProgram(xmir).withTopClass(clazz).toXMIR());
     }
 
     /**
