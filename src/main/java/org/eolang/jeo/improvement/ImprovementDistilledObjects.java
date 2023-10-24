@@ -34,7 +34,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.Improvement;
@@ -512,13 +511,10 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  It's not correct, because we need to handle constructors correctly.
          */
         private static void removeOldConstructors(final Node root) {
-            DecoratorPair.objects(root).filter(
-                node -> {
-                    final NamedNodeMap attributes = node.getAttributes();
-                    final Node base = attributes.getNamedItem("name");
-                    return base != null && base.getNodeValue().equals("new");
-                }
-            ).forEach(root::removeChild);
+            new XmlClass(root).constructors()
+                .stream()
+                .map(XmlMethod::node)
+                .forEach(root::removeChild);
         }
 
         /**
@@ -530,38 +526,35 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  those fields that are used in the decorator.
          */
         private static void removeOldFields(final Node root) {
-            DecoratorPair.objects(root).filter(
-                node -> {
-                    final NamedNodeMap attributes = node.getAttributes();
-                    final Node base = attributes.getNamedItem("base");
-                    return base != null && base.getNodeValue().equals("field");
-                }
-            ).forEach(root::removeChild);
+            new XmlClass(root).fields()
+                .stream()
+                .map(XmlField::node)
+                .forEach(root::removeChild);
         }
 
         /**
          * Replace method content.
-         * @param root Original method.
-         * @param method Inlined method.
+         * @param clazz Original class where to inline methods.
+         * @param inlined Inlined method.
          * @param bytename Class name.
          * @checkstyle NestedIfDepthCheck (100 lines)
          * @checkstyle NestedForDepthCheck (100 lines)
          */
         private void replaceMethodContent(
-            final Node root,
-            final XmlMethod method,
+            final Node clazz,
+            final XmlMethod inlined,
             final String bytename
         ) {
-            final List<Node> methods = DecoratorPair.methods(root);
+            final List<XmlMethod> methods = new XmlClass(clazz).methods();
             final String old = this.decorated.name().replace('.', '/');
-            for (final Node high : methods) {
-                final List<XmlInstruction> instructions = DecoratorPair.instructions(high);
+            for (final XmlMethod candidate : methods) {
+                final List<XmlInstruction> instructions = candidate.instructions();
                 final List<XmlInstruction> res = new ArrayList<>(0);
                 for (final XmlInstruction instruction : instructions) {
                     final int code = instruction.code();
                     if (code != Opcodes.GETFIELD) {
                         if (code == Opcodes.INVOKEVIRTUAL) {
-                            final List<XmlInstruction> tadam = method.instructions();
+                            final List<XmlInstruction> tadam = inlined.instructions();
                             final Collection<XmlInstruction> filtered = new ArrayList<>(0);
                             for (final XmlInstruction xmlinstr : tadam) {
                                 final int codee = xmlinstr.code();
@@ -581,7 +574,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                         }
                     }
                 }
-                DecoratorPair.setInstructions(high, res);
+                DecoratorPair.setInstructions(candidate.node(), res);
             }
         }
 
@@ -646,107 +639,6 @@ public final class ImprovementDistilledObjects implements Improvement {
                     }
                 }
             }
-        }
-
-        /**
-         * Methods.
-         * @param root Root node.
-         * @return Class methods.
-         * @todo #157:90min Code duplication.
-         *  There is a code duplication between classes:
-         *  ImprovementDistilledObjects and XmlClass.
-         *  We need to extract the common code into a separate class or just to use XmlClass.
-         */
-        private static List<Node> methods(final Node root) {
-            return DecoratorPair.objects(root)
-                .filter(o -> o.getAttributes().getNamedItem("base") == null)
-                .filter(method -> !new XmlMethod(method).isConstructor())
-                .collect(Collectors.toList());
-        }
-
-        /**
-         * Objects.
-         * @param root Root node.
-         * @return Stream of class objects.
-         */
-        private static Stream<Node> objects(final Node root) {
-            final NodeList children = root.getChildNodes();
-            final List<Node> res = new ArrayList<>(children.getLength());
-            for (int index = 0; index < children.getLength(); ++index) {
-                final Node child = children.item(index);
-                if (child.getNodeName().equals("o")) {
-                    res.add(child);
-                }
-            }
-            return res.stream();
-        }
-
-        /**
-         * Method instructions.
-         * @param node Node.
-         * @return Instructions.
-         */
-        private static List<XmlInstruction> instructions(final Node node) {
-            final List<XmlInstruction> result;
-            final Optional<Node> sequence = DecoratorPair.sequence(node);
-            if (sequence.isPresent()) {
-                final Node seq = sequence.get();
-                final List<XmlInstruction> instructions = new ArrayList<>(0);
-                final NodeList children = seq.getChildNodes();
-                final int length = children.getLength();
-                for (int index = 0; index < length; ++index) {
-                    final Node instruction = children.item(index);
-                    if (DecoratorPair.isInstruction(instruction)) {
-                        instructions.add(new XmlInstruction(instruction));
-                    }
-                }
-                result = instructions;
-            } else {
-                result = Collections.emptyList();
-            }
-            return result;
-        }
-
-        /**
-         * Find sequence node.
-         * @param node Node.
-         * @return Sequence node.
-         */
-        private static Optional<Node> sequence(final Node node) {
-            Optional<Node> result = Optional.empty();
-            final NodeList children = node.getChildNodes();
-            for (int index = 0; index < children.getLength(); ++index) {
-                final Node item = children.item(index);
-                final NamedNodeMap attributes = item.getAttributes();
-                if (attributes == null) {
-                    continue;
-                }
-                final Node base = attributes.getNamedItem("base");
-                if (base == null) {
-                    continue;
-                }
-                if (base.getNodeValue().equals("seq")) {
-                    result = Optional.of(item);
-                    break;
-                }
-            }
-            return result;
-        }
-
-        /**
-         * Check if node is an instruction.
-         * @param node Node.
-         * @return True if node is an instruction.
-         */
-        private static boolean isInstruction(final Node node) {
-            final boolean result;
-            final NamedNodeMap attrs = node.getAttributes();
-            if (attrs == null || attrs.getNamedItem("name") == null) {
-                result = false;
-            } else {
-                result = true;
-            }
-            return result;
         }
     }
 }

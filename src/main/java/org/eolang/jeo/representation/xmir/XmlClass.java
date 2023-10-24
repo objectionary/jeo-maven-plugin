@@ -56,8 +56,24 @@ public final class XmlClass {
      * Constructor.
      * @param xml Class node.
      */
-    private XmlClass(final Node xml) {
+    public XmlClass(final Node xml) {
         this.node = xml;
+    }
+
+    /**
+     * Retrieve all constructors from XMIR.
+     * @return List of constructors.
+     * @todo #167:60min Add unit tests for 'constructors' method.
+     *  Currently we don't have unit tests for that method. So, it makes sense to add
+     *  them to keep code safe and clear.
+     */
+    public List<XmlMethod> constructors() {
+        return this.objects().filter(
+            xmirnode -> {
+                final Node base = xmirnode.getAttributes().getNamedItem("name");
+                return base != null && "new".equals(base.getNodeValue());
+            }
+        ).map(XmlMethod::new).collect(Collectors.toList());
     }
 
     /**
