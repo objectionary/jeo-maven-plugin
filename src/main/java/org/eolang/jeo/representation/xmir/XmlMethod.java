@@ -130,6 +130,9 @@ public final class XmlMethod {
     /**
      * Set instructions for method.
      * @param updated New instructions.
+     * @todo #176:60min Add unit test for 'setInstructions' method.
+     *  Currently we don't have a unit test for XmlMethod. We should create a testing class
+     *  and test 'setInstructions' method. Don't forget to remove the puzzle for that method.
      */
     public void setInstructions(final List<XmlInstruction> updated) {
         final Node root = this.sequence().orElseThrow(
