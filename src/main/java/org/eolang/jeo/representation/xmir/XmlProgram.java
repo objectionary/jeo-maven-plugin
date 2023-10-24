@@ -32,16 +32,25 @@ import org.w3c.dom.NodeList;
 /**
  * XMIR Program.
  * @since 0.1
+ * @todo #174:90min Add unit tests for XmlProgram.
+ *  Currently we don't have unit tests for XmlProgram. So, it makes sense to add
+ *  them to keep code safe and clear.
+ * @todo #174:90min Refactor XmlProgram.
+ *  Currently some methods of XmlProgram have high code complexity. It makes sense to
+ *  simplify this code in order to make it more readable and maintainable.
  */
 public class XmlProgram {
 
+    /**
+     * Root node.
+     */
     private final Node root;
 
     /**
      * Constructor.
      * @param xml Raw XMIR.
      */
-    public XmlProgram(XML xml) {
+    public XmlProgram(final XML xml) {
         this(xml.node());
     }
 
@@ -80,7 +89,7 @@ public class XmlProgram {
      * @param clazz Class.
      * @return New XmlProgram.
      */
-    public XmlProgram withTopClass(XmlClass clazz) {
+    public XmlProgram withTopClass(final XmlClass clazz) {
         final Node res = new XMLDocument(this.root).node();
         final NodeList top = res.getChildNodes();
         for (int index = 0; index < top.getLength(); ++index) {
@@ -107,7 +116,7 @@ public class XmlProgram {
      * Convert to XMIR .
      * @return XMIR.
      */
-    public XML toXMIR() {
+    public XML toXmir() {
         return new XMLDocument(this.root);
     }
 
@@ -132,7 +141,6 @@ public class XmlProgram {
         return res;
     }
 
-
     /**
      * Check if the node is a class.
      * @param node Node.
@@ -142,5 +150,4 @@ public class XmlProgram {
         return node.getNodeName().equals("o")
             && node.getParentNode().getNodeName().equals("objects");
     }
-
 }

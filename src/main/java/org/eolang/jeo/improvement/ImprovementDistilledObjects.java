@@ -120,7 +120,7 @@ public final class ImprovementDistilledObjects implements Improvement {
             );
             ImprovementDistilledObjects.replaceArguments(clazz);
         }
-        return new EoRepresentation(new XmlProgram(xmir).withTopClass(clazz).toXMIR());
+        return new EoRepresentation(new XmlProgram(xmir).withTopClass(clazz).toXmir());
     }
 
     /**
