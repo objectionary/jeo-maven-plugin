@@ -1,3 +1,26 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2016-2023 Objectionary.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
@@ -6,18 +29,34 @@ import java.util.Optional;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * XMIR Program.
+ * @since 0.1
+ */
 public class XmlProgram {
 
     private final Node root;
 
+    /**
+     * Constructor.
+     * @param xml Raw XMIR.
+     */
     public XmlProgram(XML xml) {
         this(xml.node());
     }
 
+    /**
+     * Constructor.
+     * @param root Root node.
+     */
     private XmlProgram(final Node root) {
         this.root = root;
     }
 
+    /**
+     * Find top-level class.
+     * @return Class.
+     */
     public XmlClass topClass() {
         final Node result;
         if (XmlProgram.isClass(this.root)) {
@@ -36,8 +75,14 @@ public class XmlProgram {
         return new XmlClass(result);
     }
 
+    /**
+     * Set top-level class and return new XmlProgram.
+     * @param clazz Class.
+     * @return New XmlProgram.
+     */
     public XmlProgram withTopClass(XmlClass clazz) {
-        final NodeList top = this.root.getChildNodes();
+        final Node res = new XMLDocument(this.root).node();
+        final NodeList top = res.getChildNodes();
         for (int index = 0; index < top.getLength(); ++index) {
             final Node current = top.item(index);
             if (current.getNodeName().equals("program")) {
@@ -55,36 +100,15 @@ public class XmlProgram {
                 }
             }
         }
-        return this;
+        return new XmlProgram(res);
     }
-
-    public XML toXMIR() {
-        return new XMLDocument(this.root);
-    }
-
 
     /**
-     * Find class node in entire XML.
-     * @param xml Entire XML.
-     * @return Class node.
+     * Convert to XMIR .
+     * @return XMIR.
      */
-    private static Node findClass(final XML xml) {
-        final Node result;
-        final Node root = xml.node();
-        if (XmlProgram.isClass(root)) {
-            result = root;
-        } else {
-            result = XmlProgram.findClass(root)
-                .orElseThrow(
-                    () -> new IllegalStateException(
-                        String.format(
-                            "No top-level class found in '%s'",
-                            xml
-                        )
-                    )
-                );
-        }
-        return result;
+    public XML toXMIR() {
+        return new XMLDocument(this.root);
     }
 
     /**
