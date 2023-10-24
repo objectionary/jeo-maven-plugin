@@ -435,8 +435,7 @@ public final class ImprovementDistilledObjects implements Improvement {
             final Document owner = root.getOwnerDocument();
             DecoratorPair.removeOldFields(root);
             DecoratorPair.removeOldConstructors(root);
-            final XML original = this.decorated.toEO();
-            final XmlClass clazz = new XmlClass(original);
+            final XmlClass clazz = new XmlProgram(this.decorated.toEO()).topClass();
             for (final XmlField field : clazz.fields()) {
                 root.appendChild(owner.adoptNode(field.node().cloneNode(true)));
             }
