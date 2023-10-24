@@ -46,6 +46,11 @@ final class ImprovementDistilledObjectsTest {
 
     /**
      * Name of the combined class.
+     * @todo #183:90min Use / instead of . in class names.
+     *  Currently we use . and / in different places for class names. It's much easier
+     *  to use just / everywhere, then we will be able to avoid the usage of the next statements:
+     *  ".replace('.', '/')" and ".replace('/', '.')" - now we have lot's of places where we use
+     *  them (~16 times).
      */
     private static final String COMBINED = "org.eolang.jeo.A$B";
 
