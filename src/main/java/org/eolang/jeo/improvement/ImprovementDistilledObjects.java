@@ -574,7 +574,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                         }
                     }
                 }
-                DecoratorPair.setInstructions(candidate.node(), res);
+                candidate.setInstructions(res);
             }
         }
 
@@ -600,42 +600,6 @@ public final class ImprovementDistilledObjects implements Improvement {
                     final String content = child.getTextContent();
                     if (old.equals(content)) {
                         child.setTextContent(new HexData(newname).value());
-                    }
-                }
-            }
-        }
-
-        /**
-         * Set instructions.
-         * @param method Method.
-         * @param res Instructions.
-         * @todo #161:90min Move setInstructions method.
-         *  Right now we implemented this method inside ImprovementDistilledObjects class.
-         *  But it's better to move it into a XmlMethod class. Moreover, this method is
-         *  overcomplicated, so it makes sense to refactor it and remove all linter warnings.
-         * @checkstyle NestedIfDepthCheck (100 lines)
-         */
-        private static void setInstructions(final Node method, final List<XmlInstruction> res) {
-            final NodeList children = method.getChildNodes();
-            for (int index = 0; index < children.getLength(); ++index) {
-                final Node seq = children.item(index);
-                if (seq.getNodeName().equals("o")) {
-                    final NamedNodeMap attributes = seq.getAttributes();
-                    if (attributes != null) {
-                        final Node base = attributes.getNamedItem("base");
-                        if (base != null) {
-                            if (base.getNodeValue().equals("seq")) {
-                                while (seq.hasChildNodes()) {
-                                    seq.removeChild(seq.getFirstChild());
-                                }
-                                for (final XmlInstruction instruction : res) {
-                                    final Node node = instruction.node();
-                                    seq.appendChild(
-                                        seq.getOwnerDocument().adoptNode(node.cloneNode(true))
-                                    );
-                                }
-                            }
-                        }
                     }
                 }
             }
