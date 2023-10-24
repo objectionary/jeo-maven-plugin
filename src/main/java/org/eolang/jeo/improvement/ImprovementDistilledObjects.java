@@ -445,9 +445,8 @@ public final class ImprovementDistilledObjects implements Improvement {
             for (int index = 0; index < children.getLength(); ++index) {
                 final Node item = children.item(index);
                 if (item.getNodeName().equals("o")) {
-                    final String bytename = name.replaceAll("\\.", "/");
-                    item.getAttributes().getNamedItem("name").setNodeValue(bytename);
-                    this.handleRootObject(item, bytename);
+                    item.getAttributes().getNamedItem("name").setNodeValue(name);
+                    this.handleRootObject(item, name);
                 }
             }
         }
