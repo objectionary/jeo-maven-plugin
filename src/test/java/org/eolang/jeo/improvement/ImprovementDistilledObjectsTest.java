@@ -47,7 +47,7 @@ final class ImprovementDistilledObjectsTest {
     /**
      * Name of the combined class.
      */
-    private static final String COMBINED = "org/eolang/jeo/A$B";
+    private static final String COMBINED = "org.eolang.jeo.A$B";
 
     @Test
     void appliesSuccessfully() {
