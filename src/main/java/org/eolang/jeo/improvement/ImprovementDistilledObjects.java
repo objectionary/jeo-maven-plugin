@@ -44,6 +44,7 @@ import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlField;
 import org.eolang.jeo.representation.xmir.XmlInstruction;
 import org.eolang.jeo.representation.xmir.XmlMethod;
+import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.objectweb.asm.Opcodes;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -125,27 +126,33 @@ public final class ImprovementDistilledObjects implements Improvement {
                 clazz
             );
         }
-        final Node replacement = clazz.node();
-        final Node program = xmir.node();
-        final NodeList top = program.getChildNodes();
-        for (int index = 0; index < top.getLength(); ++index) {
-            final Node current = top.item(index);
-            if (current.getNodeName().equals("program")) {
-                final NodeList subchildren = current.getChildNodes();
-                for (int indexnext = 0; indexnext < subchildren.getLength(); ++indexnext) {
-                    final Node next = subchildren.item(indexnext);
-                    if (next.getNodeName().equals("objects")) {
-                        while (next.hasChildNodes()) {
-                            next.removeChild(next.getFirstChild());
-                        }
-                        next.appendChild(
-                            next.getOwnerDocument().adoptNode(replacement.cloneNode(true))
-                        );
-                    }
-                }
-            }
-        }
-        return new EoRepresentation(new XMLDocument(program));
+//        final Node replacement = clazz.node();
+//        final Node program = xmir.node();
+//        final NodeList top = program.getChildNodes();
+        return new EoRepresentation(
+            new XmlProgram(xmir)
+                .withTopClass(clazz)
+                .toXMIR()
+        );
+//
+//        for (int index = 0; index < top.getLength(); ++index) {
+//            final Node current = top.item(index);
+//            if (current.getNodeName().equals("program")) {
+//                final NodeList subchildren = current.getChildNodes();
+//                for (int indexnext = 0; indexnext < subchildren.getLength(); ++indexnext) {
+//                    final Node next = subchildren.item(indexnext);
+//                    if (next.getNodeName().equals("objects")) {
+//                        while (next.hasChildNodes()) {
+//                            next.removeChild(next.getFirstChild());
+//                        }
+//                        next.appendChild(
+//                            next.getOwnerDocument().adoptNode(replacement.cloneNode(true))
+//                        );
+//                    }
+//                }
+//            }
+//        }
+//        return new EoRepresentation(new XMLDocument(program));
     }
 
     /**
