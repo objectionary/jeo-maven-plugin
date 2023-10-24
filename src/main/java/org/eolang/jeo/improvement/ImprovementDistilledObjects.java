@@ -306,12 +306,11 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @return Replacement.
          */
         private List<XmlInstruction> replacementNew() {
-            final String newname = this.newname();
             final Node second = new XMLDocument(
                 new StringBuilder()
                     .append("<o base=\"opcode\" name=\"NEW-187-50\">")
                     .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData(newname.replace('.', '/')).value())
+                    .append(new DecoratorCompositionName(this.decorated, this.decorator).hex())
                     .append("</o>")
                     .append("</o>")
                     .toString()
@@ -379,7 +378,9 @@ public final class ImprovementDistilledObjects implements Improvement {
                         new StringBuilder()
                             .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
                             .append("<o base=\"string\" data=\"bytes\">")
-                            .append(new HexData(this.newname().replace('.', '/')).value())
+                            .append(
+                                new DecoratorCompositionName(this.decorated, this.decorator).hex()
+                            )
                             .append("</o>")
                             .append("<o base=\"string\" data=\"bytes\">")
                             .append(new HexData("<init>").value())
@@ -399,19 +400,11 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @return Combined representation.
          */
         private Representation combine() {
-            return new EoRepresentation(this.skeleton(this.decorator.toEO(), this.newname()));
-        }
-
-        /**
-         * New name of the combined class.
-         * @return New name.
-         */
-        private String newname() {
-            final String second = this.decorator.name();
-            return String.format(
-                "%s%s",
-                this.decorated.name(),
-                second.substring(second.lastIndexOf('.') + 1)
+            return new EoRepresentation(
+                this.skeleton(
+                    this.decorator.toEO(),
+                    new DecoratorCompositionName(this.decorated, this.decorator).value()
+                )
             );
         }
 
