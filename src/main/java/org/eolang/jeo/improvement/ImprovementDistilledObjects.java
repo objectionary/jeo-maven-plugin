@@ -210,7 +210,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                 DecoratorPair.replaceArguments(
                     instruction.node(),
                     "org/eolang/jeo/B",
-                    "org/eolang/jeo/AB"
+                    "org/eolang/jeo/A$B"
                 );
             }
         }

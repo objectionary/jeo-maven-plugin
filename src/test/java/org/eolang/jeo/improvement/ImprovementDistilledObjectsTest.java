@@ -47,7 +47,7 @@ final class ImprovementDistilledObjectsTest {
     /**
      * Name of the combined class.
      */
-    private static final String COMBINED = "org.eolang.jeo.AB";
+    private static final String COMBINED = "org/eolang/jeo/A$B";
 
     @Test
     void appliesSuccessfully() {
@@ -98,7 +98,7 @@ final class ImprovementDistilledObjectsTest {
                 combined
             ),
             combined,
-            new HasMethod("new").inside("org/eolang/jeo/AB")
+            new HasMethod("new").inside("org/eolang/jeo/A$B")
         );
     }
 
