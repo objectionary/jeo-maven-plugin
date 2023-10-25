@@ -393,7 +393,7 @@ public final class ImprovementDistilledObjects implements Improvement {
             final List<XML> roots = decor.nodes("/program");
             final Node root = roots.get(0).node();
             final NamedNodeMap attributes = root.getAttributes();
-            attributes.getNamedItem("name").setNodeValue(name.replace('/', '.'));
+            attributes.getNamedItem("name").setNodeValue(name);
             attributes.getNamedItem("time").setTextContent(
                 LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
             );
