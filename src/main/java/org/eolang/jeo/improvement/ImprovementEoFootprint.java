@@ -74,7 +74,7 @@ public final class ImprovementEoFootprint implements Improvement {
     private void tryToSave(final Representation representation) {
         final String name = representation.name();
         final Path path = this.target.resolve(new EoDefaultDirectory().toPath())
-            .resolve(String.format("%s.xmir", name.replace('.', File.separatorChar)));
+            .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
         try {
             Files.createDirectories(path.getParent());
             Files.write(

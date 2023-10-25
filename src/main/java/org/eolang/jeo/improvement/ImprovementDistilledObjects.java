@@ -250,7 +250,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                 new StringBuilder()
                     .append("<o base=\"opcode\" name=\"NEW-187-50\">")
                     .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData(firstname.replace('.', '/')).value())
+                    .append(new HexData(firstname).value())
                     .append("</o>")
                     .append("</o>")
                     .toString()
@@ -260,7 +260,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                 new StringBuilder()
                     .append("<o base=\"opcode\" name=\"NEW-187-50\">")
                     .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData(secondname.replace('.', '/')).value())
+                    .append(new HexData(secondname).value())
                     .append("</o>")
                     .append("</o>")
                     .toString()
@@ -310,7 +310,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                         new StringBuilder()
                             .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
                             .append("<o base=\"string\" data=\"bytes\">")
-                            .append(new HexData(this.decorated.name().replace('.', '/')).value())
+                            .append(new HexData(this.decorated.name()).value())
                             .append("</o>")
                             .append("<o base=\"string\" data=\"bytes\">")
                             .append(new HexData("<init>").value())
@@ -327,7 +327,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                         new StringBuilder()
                             .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
                             .append("<o base=\"string\" data=\"bytes\">")
-                            .append(new HexData(this.decorator.name().replace('.', '/')).value())
+                            .append(new HexData(this.decorator.name()).value())
                             .append("</o>")
                             .append("<o base=\"string\" data=\"bytes\">")
                             .append(new HexData("<init>").value())
@@ -454,7 +454,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                                     for (int inst = 0; inst < instructions.getLength(); ++inst) {
                                         DecoratorPair.replaceArguments(
                                             instructions.item(inst),
-                                            this.decorated.name().replace('.', '/'),
+                                            this.decorated.name(),
                                             bytename
                                         );
                                     }
@@ -512,7 +512,7 @@ public final class ImprovementDistilledObjects implements Improvement {
             final String bytename
         ) {
             final List<XmlMethod> methods = new XmlClass(clazz).methods();
-            final String old = this.decorated.name().replace('.', '/');
+            final String old = this.decorated.name();
             for (final XmlMethod candidate : methods) {
                 final List<XmlInstruction> instructions = candidate.instructions();
                 final List<XmlInstruction> res = new ArrayList<>(0);
