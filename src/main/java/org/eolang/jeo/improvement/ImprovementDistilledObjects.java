@@ -106,7 +106,7 @@ public final class ImprovementDistilledObjects implements Improvement {
         final Representation representation
     ) {
         final XML xmir = representation.toEO();
-        final XmlClass clazz = new XmlProgram(xmir).topClass();
+        final XmlClass clazz = new XmlProgram(xmir).top();
         for (final DecoratorPair decorator : decorators) {
             ImprovementDistilledObjects.replace(
                 clazz,
@@ -120,7 +120,7 @@ public final class ImprovementDistilledObjects implements Improvement {
             );
             ImprovementDistilledObjects.replaceArguments(clazz);
         }
-        return new EoRepresentation(new XmlProgram(xmir).withTopClass(clazz).toXmir());
+        return new EoRepresentation(new XmlProgram(xmir).with(clazz).toXmir());
     }
 
     /**
@@ -435,7 +435,7 @@ public final class ImprovementDistilledObjects implements Improvement {
             final Document owner = root.getOwnerDocument();
             DecoratorPair.removeOldFields(root);
             DecoratorPair.removeOldConstructors(root);
-            final XmlClass clazz = new XmlProgram(this.decorated.toEO()).topClass();
+            final XmlClass clazz = new XmlProgram(this.decorated.toEO()).top();
             for (final XmlField field : clazz.fields()) {
                 root.appendChild(owner.adoptNode(field.node().cloneNode(true)));
             }

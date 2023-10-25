@@ -66,22 +66,8 @@ public class XmlProgram {
      * Find top-level class.
      * @return Class.
      */
-    public XmlClass topClass() {
-        final Node result;
-        if (XmlProgram.isClass(this.root)) {
-            result = this.root;
-        } else {
-            result = XmlProgram.findClass(this.root)
-                .orElseThrow(
-                    () -> new IllegalStateException(
-                        String.format(
-                            "No top-level class found in '%s'",
-                            this.root
-                        )
-                    )
-                );
-        }
-        return new XmlClass(result);
+    public XmlClass top() {
+        return new XmlClass(XmlProgram.findClass(this.root).orElseThrow(this::notFound));
     }
 
     /**
@@ -89,7 +75,7 @@ public class XmlProgram {
      * @param clazz Class.
      * @return New XmlProgram.
      */
-    public XmlProgram withTopClass(final XmlClass clazz) {
+    public XmlProgram with(final XmlClass clazz) {
         final Node res = new XMLDocument(this.root).node();
         final NodeList top = res.getChildNodes();
         for (int index = 0; index < top.getLength(); ++index) {
@@ -149,5 +135,18 @@ public class XmlProgram {
     private static boolean isClass(final Node node) {
         return node.getNodeName().equals("o")
             && node.getParentNode().getNodeName().equals("objects");
+    }
+
+    /**
+     * Create exception if top-level class wasn't found.
+     * @return IllegalStateException exception.
+     */
+    private IllegalStateException notFound() {
+        return new IllegalStateException(
+            String.format(
+                "No top-level class found in '%s'",
+                this.root
+            )
+        );
     }
 }
