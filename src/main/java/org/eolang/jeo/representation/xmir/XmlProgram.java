@@ -67,7 +67,12 @@ public class XmlProgram {
      * @return Class.
      */
     public XmlClass top() {
-        return new XmlClass(XmlProgram.findClass(this.root).orElseThrow(this::notFound));
+        return new XmlNode(this.root)
+            .child("program")
+            .child("objects")
+            .child("o")
+            .toClass();
+//        return new XmlClass(XmlProgram.findClass(this.root).orElseThrow(this::notFound));
     }
 
     /**
@@ -77,25 +82,43 @@ public class XmlProgram {
      */
     public XmlProgram with(final XmlClass clazz) {
         final Node res = new XMLDocument(this.root).node();
-        final NodeList top = res.getChildNodes();
-        for (int index = 0; index < top.getLength(); ++index) {
-            final Node current = top.item(index);
-            if (current.getNodeName().equals("program")) {
-                final NodeList subchildren = current.getChildNodes();
-                for (int indexnext = 0; indexnext < subchildren.getLength(); ++indexnext) {
-                    final Node next = subchildren.item(indexnext);
-                    if (next.getNodeName().equals("objects")) {
-                        while (next.hasChildNodes()) {
-                            next.removeChild(next.getFirstChild());
-                        }
-                        next.appendChild(
-                            next.getOwnerDocument().adoptNode(clazz.node().cloneNode(true))
-                        );
-                    }
-                }
-            }
-        }
+        new XmlNode(res)
+            .child("program")
+            .child("objects")
+            .clean()
+            .append(clazz.node());
         return new XmlProgram(res);
+
+//        final Node next = new XmlNode(
+//            new XmlNode(res, "program").child(),
+//            "objects"
+//        ).child();
+//
+//        while (next.hasChildNodes()) {
+//            next.removeChild(next.getFirstChild());
+//        }
+//        next.appendChild(
+//            next.getOwnerDocument().adoptNode(clazz.node().cloneNode(true))
+//        );
+//
+//        final NodeList top = res.getChildNodes();
+//        for (int index = 0; index < top.getLength(); ++index) {
+//            final Node current = top.item(index);
+//            if (current.getNodeName().equals("program")) {
+//                final NodeList subchildren = current.getChildNodes();
+//                for (int indexnext = 0; indexnext < subchildren.getLength(); ++indexnext) {
+//                    final Node next = subchildren.item(indexnext);
+//                    if (next.getNodeName().equals("objects")) {
+//                        while (next.hasChildNodes()) {
+//                            next.removeChild(next.getFirstChild());
+//                        }
+//                        next.appendChild(
+//                            next.getOwnerDocument().adoptNode(clazz.node().cloneNode(true))
+//                        );
+//                    }
+//                }
+//            }
+//        }
     }
 
     /**
