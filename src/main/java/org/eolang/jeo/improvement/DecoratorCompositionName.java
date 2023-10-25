@@ -38,7 +38,7 @@ import org.eolang.jeo.representation.HexData;
  * Pay attention that we replace periods with slashes. This class also can convert the final name
  * into hexadecimal representation.
  * @since 0.1
- * */
+ */
 final class DecoratorCompositionName {
 
     /**
