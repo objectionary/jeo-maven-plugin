@@ -25,9 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.util.Optional;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * XMIR Program.
@@ -35,9 +33,6 @@ import org.w3c.dom.NodeList;
  * @todo #174:90min Add unit tests for XmlProgram.
  *  Currently we don't have unit tests for XmlProgram. So, it makes sense to add
  *  them to keep code safe and clear.
- * @todo #174:90min Refactor XmlProgram.
- *  Currently some methods of XmlProgram have high code complexity. It makes sense to
- *  simplify this code in order to make it more readable and maintainable.
  */
 public class XmlProgram {
 
@@ -72,7 +67,6 @@ public class XmlProgram {
             .child("objects")
             .child("o")
             .toClass();
-//        return new XmlClass(XmlProgram.findClass(this.root).orElseThrow(this::notFound));
     }
 
     /**
@@ -88,37 +82,6 @@ public class XmlProgram {
             .clean()
             .append(clazz.node());
         return new XmlProgram(res);
-
-//        final Node next = new XmlNode(
-//            new XmlNode(res, "program").child(),
-//            "objects"
-//        ).child();
-//
-//        while (next.hasChildNodes()) {
-//            next.removeChild(next.getFirstChild());
-//        }
-//        next.appendChild(
-//            next.getOwnerDocument().adoptNode(clazz.node().cloneNode(true))
-//        );
-//
-//        final NodeList top = res.getChildNodes();
-//        for (int index = 0; index < top.getLength(); ++index) {
-//            final Node current = top.item(index);
-//            if (current.getNodeName().equals("program")) {
-//                final NodeList subchildren = current.getChildNodes();
-//                for (int indexnext = 0; indexnext < subchildren.getLength(); ++indexnext) {
-//                    final Node next = subchildren.item(indexnext);
-//                    if (next.getNodeName().equals("objects")) {
-//                        while (next.hasChildNodes()) {
-//                            next.removeChild(next.getFirstChild());
-//                        }
-//                        next.appendChild(
-//                            next.getOwnerDocument().adoptNode(clazz.node().cloneNode(true))
-//                        );
-//                    }
-//                }
-//            }
-//        }
     }
 
     /**
@@ -127,49 +90,5 @@ public class XmlProgram {
      */
     public XML toXmir() {
         return new XMLDocument(this.root);
-    }
-
-    /**
-     * Find class node in the current node.
-     * @param node Current node.
-     * @return Class node.
-     */
-    private static Optional<Node> findClass(final Node node) {
-        Optional<Node> res = Optional.empty();
-        if (XmlProgram.isClass(node)) {
-            res = Optional.of(node);
-        } else {
-            final NodeList children = node.getChildNodes();
-            for (int index = 0; index < children.getLength(); ++index) {
-                final Optional<Node> child = XmlProgram.findClass(children.item(index));
-                if (child.isPresent()) {
-                    res = child;
-                }
-            }
-        }
-        return res;
-    }
-
-    /**
-     * Check if the node is a class.
-     * @param node Node.
-     * @return True if the node is a class.
-     */
-    private static boolean isClass(final Node node) {
-        return node.getNodeName().equals("o")
-            && node.getParentNode().getNodeName().equals("objects");
-    }
-
-    /**
-     * Create exception if top-level class wasn't found.
-     * @return IllegalStateException exception.
-     */
-    private IllegalStateException notFound() {
-        return new IllegalStateException(
-            String.format(
-                "No top-level class found in '%s'",
-                this.root
-            )
-        );
     }
 }

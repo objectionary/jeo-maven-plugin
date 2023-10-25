@@ -375,13 +375,13 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @return Combined representation.
          */
         private Representation combine() {
-            final XML skeleton = this.skeleton(
-                this.decorator.toEO(),
-                new DecoratorCompositionName(this.decorated, this.decorator).value()
-            );
-            Logger.info(this, String.format("Skeleton is created %s", skeleton));
             return new EoRepresentation(
-              new XMLDocument(skeleton.toString())
+                new XMLDocument(
+                    this.skeleton(
+                        this.decorator.toEO(),
+                        new DecoratorCompositionName(this.decorated, this.decorator).value()
+                    ).toString()
+                )
             );
         }
 
