@@ -80,7 +80,7 @@ public final class BytecodeClass {
      * @param access Access modifiers.
      */
     public BytecodeClass(final String name, final int access) {
-        this(name.replace(".", "/"), access, new ClassWriter(ClassWriter.COMPUTE_FRAMES));
+        this(name, access, new ClassWriter(ClassWriter.COMPUTE_FRAMES));
     }
 
     /**
@@ -90,7 +90,7 @@ public final class BytecodeClass {
      */
     public BytecodeClass(final String name, final BytecodeClassProperties properties) {
         this(
-            name.replace(".", "/"),
+            name,
             new ClassWriter(ClassWriter.COMPUTE_FRAMES),
             new ArrayList<>(0),
             properties

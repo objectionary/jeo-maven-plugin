@@ -38,12 +38,13 @@ class ClassNameTest {
     @Test
     void retrievesClassName() {
         final ClassName name = new ClassName();
-        new ClassReader(new BytecodeClass("representation/asm/ClassNameTest").bytecode().asBytes())
+        final String expected = "representation/asm/ClassNameTest";
+        new ClassReader(new BytecodeClass(expected).bytecode().asBytes())
             .accept(name, 0);
         MatcherAssert.assertThat(
             "Can't retrieve class name, or it's incorrect",
             name.asString(),
-            Matchers.equalTo("representation.asm.ClassNameTest")
+            Matchers.equalTo(expected)
         );
     }
 }

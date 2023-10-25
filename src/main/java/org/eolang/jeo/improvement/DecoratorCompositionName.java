@@ -32,17 +32,13 @@ import org.eolang.jeo.representation.HexData;
  * <ul>
  *     <li>decorated: A, decorator: B => name: A$B</li>
  *     <li>decorated: Foo, decorator: Bar => name: Foo$Bar</li>
- *     <li>decorated: org.eolang.Foo, decorator: org.eolang.Bar => name: org/eolang/Foo$Bar</li>
- *     <li>decorated: a.Foo, decorator: b.Bar => name: b/Foo$Bar</li>
+ *     <li>decorated: org/eolang/Foo, decorator: org/eolang/Bar => name: org/eolang/Foo$Bar</li>
+ *     <li>decorated: a/Foo, decorator: b/Bar => name: b/Foo$Bar</li>
  * </ul>
  * Pay attention that we replace periods with slashes. This class also can convert the final name
  * into hexadecimal representation.
  * @since 0.1
- * @todo #163:30min Replace newname method usage with DecoratorCompositionName.
- *  Right now we use {@link ImprovementDistilledObjects.DecoratorPair#newname()} method
- *  in {@link ImprovementDistilledObjects} class. We should use {@link DecoratorCompositionName}
- *  instead. Don't forget to remove the old method from {@link ImprovementDistilledObjects} class.
- */
+ * */
 final class DecoratorCompositionName {
 
     /**
@@ -76,17 +72,17 @@ final class DecoratorCompositionName {
         final String left = this.decorated.name();
         final String right = this.decorator.name();
         final String prefix;
-        if (right.contains(".")) {
-            prefix = right.substring(0, right.lastIndexOf('.') + 1);
+        if (right.contains("/")) {
+            prefix = right.substring(0, right.lastIndexOf('/') + 1);
         } else {
             prefix = "";
         }
         return String.format(
             "%s%s$%s",
             prefix,
-            left.substring(left.lastIndexOf('.') + 1),
-            right.substring(right.lastIndexOf('.') + 1)
-        ).replace('.', '/');
+            left.substring(left.lastIndexOf('/') + 1),
+            right.substring(right.lastIndexOf('/') + 1)
+        );
     }
 
     /**

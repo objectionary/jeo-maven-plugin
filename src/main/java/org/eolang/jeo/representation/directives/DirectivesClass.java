@@ -105,7 +105,7 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
         final String now = ZonedDateTime.now(ZoneOffset.UTC)
             .format(DateTimeFormatter.ISO_INSTANT);
         this.directives.add("program")
-            .attr("name", name.replace('/', '.'))
+            .attr("name", name)
             .attr("version", "0.0.0")
             .attr("revision", "0.0.0")
             .attr("dob", now)

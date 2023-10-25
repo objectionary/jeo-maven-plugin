@@ -49,7 +49,7 @@ final class BytecodeRepresentationTest {
             "The simplest class should contain the object with MethodByte name",
             new BytecodeRepresentation(new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE))
                 .toEO().xpath("/program/@name").get(0),
-            Matchers.equalTo("org.eolang.jeo.MethodByte")
+            Matchers.equalTo("org/eolang/jeo/MethodByte")
         );
     }
 
@@ -69,7 +69,7 @@ final class BytecodeRepresentationTest {
     void retrievesName() {
         final ResourceOf input = new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE);
         final String actual = new BytecodeRepresentation(input).name();
-        final String expected = "org.eolang.jeo.MethodByte";
+        final String expected = "org/eolang/jeo/MethodByte";
         MatcherAssert.assertThat(
             String.format(
                 "The name should be retrieved without exceptions and equal to the expected '%s'",

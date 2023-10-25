@@ -52,7 +52,7 @@ final class ImprovementDistilledObjectsTest {
      *  ".replace('.', '/')" and ".replace('/', '.')" - now we have lot's of places where we use
      *  them (~16 times).
      */
-    private static final String COMBINED = "org.eolang.jeo.A$B";
+    private static final String COMBINED = "org/eolang/jeo/A$B";
 
     @Test
     void appliesSuccessfully() {
@@ -103,7 +103,7 @@ final class ImprovementDistilledObjectsTest {
                 combined
             ),
             combined,
-            new HasMethod("new").inside("org/eolang/jeo/A$B")
+            new HasMethod("new").inside(ImprovementDistilledObjectsTest.COMBINED)
         );
     }
 

@@ -45,7 +45,7 @@ final class ImprovementEoFootprintTest {
         footprint.apply(
             Collections.singleton(
                 new EoRepresentation(
-                    new BytecodeClass("org.eolang.jeo.Application").xml()
+                    new BytecodeClass("org/eolang/jeo/Application").xml()
                 )
             )
         );

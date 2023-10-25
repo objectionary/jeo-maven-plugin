@@ -73,7 +73,7 @@ public final class ClassName extends ClassVisitor {
         final String supername,
         final String[] interfaces
     ) {
-        this.bag.set(name.replace('/', '.'));
+        this.bag.set(name);
         super.visit(version, access, name, signature, supername, interfaces);
     }
 
