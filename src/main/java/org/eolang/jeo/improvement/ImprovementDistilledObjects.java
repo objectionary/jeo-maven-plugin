@@ -178,17 +178,20 @@ public final class ImprovementDistilledObjects implements Improvement {
     /**
      * Replace arguments.
      * @param clazz Class where to replace.
+     * @todo #157:90min Handle arguments correctly during inlining optimization.
+     *  Right now we just replace all arguments with the new class name.
+     *  It's not correct, because we need to handle arguments correctly.
      */
     private static void replaceArguments(final XmlClass clazz) {
-        for (final XmlMethod method : clazz.methods()) {
-            for (final XmlInstruction instruction : method.instructions()) {
-                DecoratorPair.replaceArguments(
-                    instruction.node(),
+        clazz.methods().stream()
+            .map(XmlMethod::instructions)
+            .flatMap(Collection::stream)
+            .forEach(
+                instruction -> instruction.replaceArguementsValues(
                     "org/eolang/jeo/B",
                     "org/eolang/jeo/A$B"
-                );
-            }
-        }
+                )
+            );
     }
 
     /**
@@ -442,11 +445,11 @@ public final class ImprovementDistilledObjects implements Improvement {
                                 if (base.getNodeValue().equals("seq")) {
                                     final NodeList instructions = item.getChildNodes();
                                     for (int inst = 0; inst < instructions.getLength(); ++inst) {
-                                        DecoratorPair.replaceArguments(
-                                            instructions.item(inst),
-                                            this.decorated.name(),
-                                            bytename
-                                        );
+                                        new XmlInstruction(instructions.item(inst))
+                                            .replaceArguementsValues(
+                                                this.decorated.name(),
+                                                bytename
+                                            );
                                     }
                                 }
                             }
@@ -514,11 +517,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                             final Collection<XmlInstruction> filtered = new ArrayList<>(0);
                             for (final XmlInstruction xmlinstr : tadam) {
                                 final int codee = xmlinstr.code();
-                                DecoratorPair.replaceArguments(
-                                    xmlinstr.node(),
-                                    old,
-                                    bytename
-                                );
+                                xmlinstr.replaceArguementsValues(old, bytename);
                                 if (codee != Opcodes.RETURN && codee != Opcodes.IRETURN
                                     && codee != Opcodes.ALOAD) {
                                     filtered.add(xmlinstr);
@@ -531,33 +530,6 @@ public final class ImprovementDistilledObjects implements Improvement {
                     }
                 }
                 candidate.setInstructions(res);
-            }
-        }
-
-        /**
-         * Replace arguments.
-         * @param node Instruction.
-         * @param oldname Old class name.
-         * @param newname New class name.
-         * @todo #157:90min Handle arguments correctly during inlining optimization.
-         *  Right now we just replace all arguments with the new class name.
-         *  It's not correct, because we need to handle arguments correctly.
-         */
-        private static void replaceArguments(
-            final Node node,
-            final String oldname,
-            final String newname
-        ) {
-            final NodeList children = node.getChildNodes();
-            for (int index = 0; index < children.getLength(); ++index) {
-                final Node child = children.item(index);
-                if (child.getNodeName().equals("o")) {
-                    final String old = new HexData(oldname).value();
-                    final String content = child.getTextContent();
-                    if (old.equals(content)) {
-                        child.setTextContent(new HexData(newname).value());
-                    }
-                }
             }
         }
     }

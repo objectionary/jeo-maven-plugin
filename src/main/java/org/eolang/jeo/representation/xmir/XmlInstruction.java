@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
+import org.eolang.jeo.representation.HexData;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -81,6 +82,21 @@ public final class XmlInstruction {
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public Node node() {
         return this.node;
+    }
+
+
+    public void replaceArguementsValues(final String old, final String replacement) {
+        final NodeList children = this.node.getChildNodes();
+        for (int index = 0; index < children.getLength(); ++index) {
+            final Node child = children.item(index);
+            if (child.getNodeName().equals("o")) {
+                final String oldname = new HexData(old).value();
+                final String content = child.getTextContent();
+                if (oldname.equals(content)) {
+                    child.setTextContent(new HexData(replacement).value());
+                }
+            }
+        }
     }
 
     /**
