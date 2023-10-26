@@ -72,31 +72,20 @@ public final class XmlInstruction {
     }
 
     /**
-     * XML node.
-     * @return XML node.
-     * @todo #157:90min Hide internal node representation in XmlInstruction.
-     *  This class should not expose internal node representation.
-     *  We have to consider to add methods or classes in order to avoid
-     *  exposing internal node representation.
+     * Replace values of instruction arguments.
+     * @param old Old value.
+     * @param replacement Which value to set instead.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    public Node node() {
-        return this.node;
-    }
-
-
     public void replaceArguementsValues(final String old, final String replacement) {
-        final NodeList children = this.node.getChildNodes();
-        for (int index = 0; index < children.getLength(); ++index) {
-            final Node child = children.item(index);
-            if (child.getNodeName().equals("o")) {
-                final String oldname = new HexData(old).value();
-                final String content = child.getTextContent();
+        final String oldname = new HexData(old).value();
+        new XmlNode(this.node).children().forEach(
+            child -> {
+                final String content = child.text();
                 if (oldname.equals(content)) {
-                    child.setTextContent(new HexData(replacement).value());
+                    child.withText(new HexData(replacement).value());
                 }
             }
-        }
+        );
     }
 
     /**
@@ -105,6 +94,19 @@ public final class XmlInstruction {
      */
     public Object[] arguments() {
         return XmlInstruction.arguments(this.node);
+    }
+
+    /**
+     * XML node.
+     * @return XML node.
+     * @todo #157:90min Hide internal node representation in XmlInstruction.
+     *  This class should not expose internal node representation.
+     *  We have to consider to add methods or classes in order to avoid
+     *  exposing internal node representation.
+     */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+    Node node() {
+        return this.node;
     }
 
     @Override
