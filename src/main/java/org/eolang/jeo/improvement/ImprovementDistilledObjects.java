@@ -128,10 +128,6 @@ public final class ImprovementDistilledObjects implements Improvement {
      * @param clazz Class where to replace.
      * @param target What should be replaced.
      * @param replacement Replacement.
-     * @todo #161:90min Refactor replace method.
-     *  Right now it's a big method with a lot of repetition and high complexity.
-     *  Moreover, some constants are hardcoded and it's not good.
-     *  We need to refactor it into a set of smaller methods and remove all linter warnings.
      * @checkstyle ModifiedControlVariableCheck (200 lines)
      */
     private static void replace(
