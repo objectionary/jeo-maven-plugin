@@ -245,34 +245,28 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @return List of NEW instructions.
          */
         private List<XmlInstruction> targetNew() {
-            final Node dup = new XMLDocument("<o base='opcode' name='DUP-89-53'/>")
-                .node()
-                .getFirstChild();
+            final String dup = "<o base='opcode' name='DUP-89-53'/>";
             return Arrays.asList(
                 new XmlInstruction(
-                    new XMLDocument(
-                        String.join(
-                            "",
-                            "<o base='opcode' name='NEW-187-50'>",
-                            "<o base='string' data='bytes'>",
-                            new HexData(this.decorator.name()).value(),
-                            "</o>",
-                            "</o>"
-                        )
-                    ).node().getFirstChild()
+                    String.join(
+                        "",
+                        "<o base='opcode' name='NEW-187-50'>",
+                        "<o base='string' data='bytes'>",
+                        new HexData(this.decorator.name()).value(),
+                        "</o>",
+                        "</o>"
+                    )
                 ),
                 new XmlInstruction(dup),
                 new XmlInstruction(
-                    new XMLDocument(
-                        String.join(
-                            "",
-                            "<o base='opcode' name='NEW-187-50'>",
-                            "<o base='string' data='bytes'>",
-                            new HexData(this.decorated.name()).value(),
-                            "</o>",
-                            "</o>"
-                        )
-                    ).node().getFirstChild()
+                    String.join(
+                        "",
+                        "<o base='opcode' name='NEW-187-50'>",
+                        "<o base='string' data='bytes'>",
+                        new HexData(this.decorated.name()).value(),
+                        "</o>",
+                        "</o>"
+                    )
                 ),
                 new XmlInstruction(dup)
             );
@@ -283,21 +277,18 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @return Replacement.
          */
         private List<XmlInstruction> replacementNew() {
-            final Node second = new XMLDocument(
-                new StringBuilder()
-                    .append("<o base=\"opcode\" name=\"NEW-187-50\">")
-                    .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new DecoratorCompositionName(this.decorated, this.decorator).hex())
-                    .append("</o>")
-                    .append("</o>")
-                    .toString()
-            ).node().getFirstChild();
-            final Node dup = new XMLDocument("<o base=\"opcode\" name=\"DUP-89-53\"/>")
-                .node()
-                .getFirstChild();
             return Arrays.asList(
-                new XmlInstruction(second),
-                new XmlInstruction(dup)
+                new XmlInstruction(
+                    String.join(
+                        "",
+                        "<o base='opcode' name='NEW-187-50'>",
+                        "<o base='string' data='bytes'>",
+                        new DecoratorCompositionName(this.decorated, this.decorator).hex(),
+                        "</o>",
+                        "</o>"
+                    )
+                ),
+                new XmlInstruction("<o base='opcode' name='DUP-89-53'/>")
             );
         }
 

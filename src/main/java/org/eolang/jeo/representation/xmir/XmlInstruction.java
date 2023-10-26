@@ -46,6 +46,10 @@ public final class XmlInstruction {
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
 
+    public XmlInstruction(final String xml) {
+        this(new XMLDocument(xml).node().getFirstChild());
+    }
+
     /**
      * Constructor.
      * @param node Instruction node.
