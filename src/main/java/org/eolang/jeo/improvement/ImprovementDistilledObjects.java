@@ -179,14 +179,13 @@ public final class ImprovementDistilledObjects implements Improvement {
      *  It's not correct, because we need to handle arguments correctly.
      */
     private static void replaceArguments(final XmlClass clazz) {
-        clazz.methods().stream()
+        clazz.methods()
+            .stream()
             .map(XmlMethod::instructions)
             .flatMap(Collection::stream)
             .forEach(
-                instruction -> instruction.replaceArguementsValues(
-                    "org/eolang/jeo/B",
-                    "org/eolang/jeo/A$B"
-                )
+                instruction ->
+                    instruction.replaceArguementsValues("org/eolang/jeo/B", "org/eolang/jeo/A$B")
             );
     }
 
@@ -441,11 +440,9 @@ public final class ImprovementDistilledObjects implements Improvement {
                                 if (base.getNodeValue().equals("seq")) {
                                     final NodeList instructions = item.getChildNodes();
                                     for (int inst = 0; inst < instructions.getLength(); ++inst) {
-                                        new XmlInstruction(instructions.item(inst))
-                                            .replaceArguementsValues(
-                                                this.decorated.name(),
-                                                bytename
-                                            );
+                                        new XmlInstruction(
+                                            instructions.item(inst)
+                                        ).replaceArguementsValues(this.decorated.name(), bytename);
                                     }
                                 }
                             }

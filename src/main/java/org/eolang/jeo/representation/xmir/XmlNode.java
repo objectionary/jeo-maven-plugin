@@ -69,6 +69,10 @@ final class XmlNode {
         throw this.notFound(name);
     }
 
+    /**
+     * Get all child nodes.
+     * @return Child nodes.
+     */
     Stream<XmlNode> children() {
         return this.objects().map(XmlNode::new);
     }
@@ -81,10 +85,18 @@ final class XmlNode {
         return new XmlClass(this.node);
     }
 
+    /**
+     * Retrieve node text content.
+     * @return Text content.
+     */
     String text() {
         return this.node.getTextContent();
     }
 
+    /**
+     * Set node text content.
+     * @param text Text content.
+     */
     void withText(final String text) {
         this.node.setTextContent(text);
     }

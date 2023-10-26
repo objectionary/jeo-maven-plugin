@@ -47,6 +47,10 @@ public final class XmlInstruction {
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
 
+    /**
+     * Constructor.
+     * @param xml XML node as String.
+     */
     public XmlInstruction(final String xml) {
         this(new XMLDocument(xml).node().getFirstChild());
     }
@@ -96,19 +100,6 @@ public final class XmlInstruction {
         return XmlInstruction.arguments(this.node);
     }
 
-    /**
-     * XML node.
-     * @return XML node.
-     * @todo #157:90min Hide internal node representation in XmlInstruction.
-     *  This class should not expose internal node representation.
-     *  We have to consider to add methods or classes in order to avoid
-     *  exposing internal node representation.
-     */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    Node node() {
-        return this.node;
-    }
-
     @Override
     public boolean equals(final Object other) {
         final boolean result;
@@ -131,6 +122,19 @@ public final class XmlInstruction {
     @Override
     public String toString() {
         return new XMLDocument(this.node).toString();
+    }
+
+    /**
+     * XML node.
+     * @return XML node.
+     * @todo #157:90min Hide internal node representation in XmlInstruction.
+     *  This class should not expose internal node representation.
+     *  We have to consider to add methods or classes in order to avoid
+     *  exposing internal node representation.
+     */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+    Node node() {
+        return this.node;
     }
 
     /**
