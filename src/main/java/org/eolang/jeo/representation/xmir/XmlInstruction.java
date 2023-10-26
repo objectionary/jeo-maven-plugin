@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
+import org.eolang.jeo.representation.HexData;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -45,6 +46,14 @@ public final class XmlInstruction {
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
+
+    /**
+     * Constructor.
+     * @param xml XML node as String.
+     */
+    public XmlInstruction(final String xml) {
+        this(new XMLDocument(xml).node().getFirstChild());
+    }
 
     /**
      * Constructor.
@@ -67,24 +76,28 @@ public final class XmlInstruction {
     }
 
     /**
+     * Replace values of instruction arguments.
+     * @param old Old value.
+     * @param replacement Which value to set instead.
+     */
+    public void replaceArguementsValues(final String old, final String replacement) {
+        final String oldname = new HexData(old).value();
+        new XmlNode(this.node).children().forEach(
+            child -> {
+                final String content = child.text();
+                if (oldname.equals(content)) {
+                    child.withText(new HexData(replacement).value());
+                }
+            }
+        );
+    }
+
+    /**
      * Instruction arguments.
      * @return Arguments.
      */
     public Object[] arguments() {
         return XmlInstruction.arguments(this.node);
-    }
-
-    /**
-     * XML node.
-     * @return XML node.
-     * @todo #157:90min Hide internal node representation in XmlInstruction.
-     *  This class should not expose internal node representation.
-     *  We have to consider to add methods or classes in order to avoid
-     *  exposing internal node representation.
-     */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    public Node node() {
-        return this.node;
     }
 
     @Override
@@ -109,6 +122,19 @@ public final class XmlInstruction {
     @Override
     public String toString() {
         return new XMLDocument(this.node).toString();
+    }
+
+    /**
+     * XML node.
+     * @return XML node.
+     * @todo #157:90min Hide internal node representation in XmlInstruction.
+     *  This class should not expose internal node representation.
+     *  We have to consider to add methods or classes in order to avoid
+     *  exposing internal node representation.
+     */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+    Node node() {
+        return this.node;
     }
 
     /**

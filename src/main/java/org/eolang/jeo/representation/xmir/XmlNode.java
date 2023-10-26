@@ -24,6 +24,9 @@
 package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -67,11 +70,35 @@ final class XmlNode {
     }
 
     /**
+     * Get all child nodes.
+     * @return Child nodes.
+     */
+    Stream<XmlNode> children() {
+        return this.objects().map(XmlNode::new);
+    }
+
+    /**
      * Convert to class.
      * @return Class.
      */
     XmlClass toClass() {
         return new XmlClass(this.node);
+    }
+
+    /**
+     * Retrieve node text content.
+     * @return Text content.
+     */
+    String text() {
+        return this.node.getTextContent();
+    }
+
+    /**
+     * Set node text content.
+     * @param text Text content.
+     */
+    void withText(final String text) {
+        this.node.setTextContent(text);
     }
 
     /**
@@ -108,5 +135,21 @@ final class XmlNode {
                 new XMLDocument(this.node)
             )
         );
+    }
+
+    /**
+     * Objects.
+     * @return Stream of class objects.
+     */
+    private Stream<Node> objects() {
+        final NodeList children = this.node.getChildNodes();
+        final List<Node> res = new ArrayList<>(children.getLength());
+        for (int index = 0; index < children.getLength(); ++index) {
+            final Node child = children.item(index);
+            if (child.getNodeName().equals("o")) {
+                res.add(child);
+            }
+        }
+        return res.stream();
     }
 }
