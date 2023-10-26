@@ -2,7 +2,7 @@ package org.eolang.jeo;
 
 public class Application {
     public static void main(String[] args) {
-        new Developer(
+        new Developer<>(
             "Yegor",
             new Language() {
                 public String name() {
@@ -10,25 +10,28 @@ public class Application {
                 }
             }
         ).writeCode();
-        new Developer(
+        new Developer<>(
             "Lev",
             new Language() {
+                @Override
                 public String name() {
                     return "Rust";
                 }
             }
         ).writeCode();
-        new Developer(
+        new Developer<>(
             "Maxim",
             new Language() {
+                @Override
                 public String name() {
                     return "PHP";
                 }
             }
         ).writeCode();
-        new Developer(
+        new Developer<>(
             "Roman",
             new Language() {
+                @Override
                 public String name() {
                     return "Kotlin";
                 }
