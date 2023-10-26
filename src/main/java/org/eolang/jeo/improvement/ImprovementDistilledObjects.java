@@ -245,33 +245,35 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @return List of NEW instructions.
          */
         private List<XmlInstruction> targetNew() {
-            final String firstname = this.decorated.name();
-            final Node first = new XMLDocument(
-                new StringBuilder()
-                    .append("<o base=\"opcode\" name=\"NEW-187-50\">")
-                    .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData(firstname).value())
-                    .append("</o>")
-                    .append("</o>")
-                    .toString()
-            ).node().getFirstChild();
-            final String secondname = this.decorator.name();
-            final Node second = new XMLDocument(
-                new StringBuilder()
-                    .append("<o base=\"opcode\" name=\"NEW-187-50\">")
-                    .append("<o base=\"string\" data=\"bytes\">")
-                    .append(new HexData(secondname).value())
-                    .append("</o>")
-                    .append("</o>")
-                    .toString()
-            ).node().getFirstChild();
-            final Node dup = new XMLDocument("<o base=\"opcode\" name=\"DUP-89-53\"/>")
+            final Node dup = new XMLDocument("<o base='opcode' name='DUP-89-53'/>")
                 .node()
                 .getFirstChild();
             return Arrays.asList(
-                new XmlInstruction(second),
+                new XmlInstruction(
+                    new XMLDocument(
+                        String.join(
+                            "",
+                            "<o base='opcode' name='NEW-187-50'>",
+                            "<o base='string' data='bytes'>",
+                            new HexData(this.decorator.name()).value(),
+                            "</o>",
+                            "</o>"
+                        )
+                    ).node().getFirstChild()
+                ),
                 new XmlInstruction(dup),
-                new XmlInstruction(first),
+                new XmlInstruction(
+                    new XMLDocument(
+                        String.join(
+                            "",
+                            "<o base='opcode' name='NEW-187-50'>",
+                            "<o base='string' data='bytes'>",
+                            new HexData(this.decorated.name()).value(),
+                            "</o>",
+                            "</o>"
+                        )
+                    ).node().getFirstChild()
+                ),
                 new XmlInstruction(dup)
             );
         }

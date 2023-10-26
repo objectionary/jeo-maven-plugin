@@ -67,14 +67,6 @@ public final class XmlInstruction {
     }
 
     /**
-     * Instruction arguments.
-     * @return Arguments.
-     */
-    public Object[] arguments() {
-        return XmlInstruction.arguments(this.node);
-    }
-
-    /**
      * XML node.
      * @return XML node.
      * @todo #157:90min Hide internal node representation in XmlInstruction.
@@ -85,6 +77,14 @@ public final class XmlInstruction {
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public Node node() {
         return this.node;
+    }
+
+    /**
+     * Instruction arguments.
+     * @return Arguments.
+     */
+    public Object[] arguments() {
+        return XmlInstruction.arguments(this.node);
     }
 
     @Override
