@@ -299,38 +299,36 @@ public final class ImprovementDistilledObjects implements Improvement {
         private List<XmlInstruction> targetSpecial() {
             return Arrays.asList(
                 new XmlInstruction(
-                    new XMLDocument(
-                        new StringBuilder()
-                            .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
-                            .append("<o base=\"string\" data=\"bytes\">")
-                            .append(new HexData(this.decorated.name()).value())
-                            .append("</o>")
-                            .append("<o base=\"string\" data=\"bytes\">")
-                            .append(new HexData("<init>").value())
-                            .append("</o>")
-                            .append("<o base=\"string\" data=\"bytes\">")
-                            .append(new HexData("(I)V").value())
-                            .append("</o>")
-                            .append("</o>")
-                            .toString()
-                    ).node().getFirstChild()
+                    String.join(
+                        "",
+                        "<o base='opcode' name='INVOKESPECIAL-183-55'>",
+                        "<o base='string' data='bytes'>",
+                        new HexData(this.decorated.name()).value(),
+                        "</o>",
+                        "<o base='string' data='bytes'>",
+                        new HexData("<init>").value(),
+                        "</o>",
+                        "<o base='string' data='bytes'>",
+                        new HexData("(I)V").value(),
+                        "</o>",
+                        "</o>"
+                    )
                 ),
                 new XmlInstruction(
-                    new XMLDocument(
-                        new StringBuilder()
-                            .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
-                            .append("<o base=\"string\" data=\"bytes\">")
-                            .append(new HexData(this.decorator.name()).value())
-                            .append("</o>")
-                            .append("<o base=\"string\" data=\"bytes\">")
-                            .append(new HexData("<init>").value())
-                            .append("</o>")
-                            .append("<o base=\"string\" data=\"bytes\">")
-                            .append(new HexData("(Lorg/eolang/jeo/A;)V").value())
-                            .append("</o>")
-                            .append("</o>")
-                            .toString()
-                    ).node().getFirstChild()
+                    String.join(
+                        "",
+                        "<o base='opcode' name='INVOKESPECIAL-183-55'>",
+                        "<o base='string' data='bytes'>",
+                        new HexData(this.decorator.name()).value(),
+                        "</o>",
+                        "<o base='string' data='bytes'>",
+                        new HexData("<init>").value(),
+                        "</o>",
+                        "<o base='string' data='bytes'>",
+                        new HexData("(Lorg/eolang/jeo/A;)V").value(),
+                        "</o>",
+                        "</o>"
+                    )
                 )
             );
         }
@@ -342,23 +340,20 @@ public final class ImprovementDistilledObjects implements Improvement {
         private List<XmlInstruction> replacementSpecial() {
             return Collections.singletonList(
                 new XmlInstruction(
-                    new XMLDocument(
-                        new StringBuilder()
-                            .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
-                            .append("<o base=\"string\" data=\"bytes\">")
-                            .append(
-                                new DecoratorCompositionName(this.decorated, this.decorator).hex()
-                            )
-                            .append("</o>")
-                            .append("<o base=\"string\" data=\"bytes\">")
-                            .append(new HexData("<init>").value())
-                            .append("</o>")
-                            .append("<o base=\"string\" data=\"bytes\">")
-                            .append(new HexData("(I)V").value())
-                            .append("</o>")
-                            .append("</o>")
-                            .toString()
-                    ).node().getFirstChild()
+                    String.join(
+                        "",
+                        "<o base='opcode' name='INVOKESPECIAL-183-55'>",
+                        "<o base='string' data='bytes'>",
+                        new DecoratorCompositionName(this.decorated, this.decorator).hex(),
+                        "</o>",
+                        "<o base='string' data='bytes'>",
+                        new HexData("<init>").value(),
+                        "</o>",
+                        "<o base='string' data='bytes'>",
+                        new HexData("(I)V").value(),
+                        "</o>",
+                        "</o>"
+                    )
                 )
             );
         }
