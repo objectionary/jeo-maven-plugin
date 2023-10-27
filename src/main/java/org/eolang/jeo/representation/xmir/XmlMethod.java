@@ -26,9 +26,11 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.log.Logger;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -108,7 +110,8 @@ public final class XmlMethod {
      * Method instructions.
      * @return Instructions.
      */
-    public List<XmlInstruction> instructions() {
+    @SafeVarargs
+    public final List<XmlInstruction> instructions(Predicate<XmlInstruction>... predicates) {
         final List<XmlInstruction> result;
         final Optional<Node> sequence = this.sequence();
         if (sequence.isPresent()) {
@@ -117,7 +120,10 @@ public final class XmlMethod {
             for (int index = 0; index < seq.getChildNodes().getLength(); ++index) {
                 final Node instruction = seq.getChildNodes().item(index);
                 if (XmlMethod.isInstruction(instruction)) {
-                    instructions.add(new XmlInstruction(instruction));
+                    if (Arrays.stream(predicates).allMatch(
+                        predicate -> predicate.test(new XmlInstruction(instruction)))) {
+                        instructions.add(new XmlInstruction(instruction));
+                    }
                 }
             }
             result = instructions;

@@ -44,10 +44,7 @@ import org.eolang.jeo.representation.xmir.XmlInstruction;
 import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.objectweb.asm.Opcodes;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Distilled objects improvement.
@@ -385,7 +382,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                     }
                     decorator.withConstructor(method);
                 } else {
-                    this.replaceMethodContent(root, method, combined);
+                    this.replaceMethodContent(decorator, method, combined);
                 }
             }
         }
@@ -419,42 +416,32 @@ public final class ImprovementDistilledObjects implements Improvement {
                 .forEach(root::removeChild);
         }
 
-        /**
-         * Replace method content.
-         * @param clazz Original class where to inline methods.
-         * @param inlined Inlined method.
-         * @param combined Class name.
-         * @checkstyle NestedIfDepthCheck (100 lines)
-         * @checkstyle NestedForDepthCheck (100 lines)
-         */
+
         private void replaceMethodContent(
-            final Node clazz,
+            final XmlClass decorator,
             final XmlMethod inlined,
             final String combined
         ) {
-            final List<XmlMethod> methods = new XmlClass(clazz).methods();
             final String old = this.decorated.name();
-            for (final XmlMethod candidate : methods) {
-                final List<XmlInstruction> instructions = candidate.instructions();
+            for (final XmlMethod candidate : decorator.methods()) {
                 final List<XmlInstruction> res = new ArrayList<>(0);
-                for (final XmlInstruction instruction : instructions) {
+                for (final XmlInstruction instruction : candidate.instructions(
+                    instr -> instr.code() != Opcodes.GETFIELD
+                )) {
                     final int code = instruction.code();
-                    if (code != Opcodes.GETFIELD) {
-                        if (code == Opcodes.INVOKEVIRTUAL) {
-                            final List<XmlInstruction> tadam = inlined.instructions();
-                            final Collection<XmlInstruction> filtered = new ArrayList<>(0);
-                            for (final XmlInstruction xmlinstr : tadam) {
-                                final int codee = xmlinstr.code();
-                                xmlinstr.replaceArguementsValues(old, combined);
-                                if (codee != Opcodes.RETURN && codee != Opcodes.IRETURN
-                                    && codee != Opcodes.ALOAD) {
-                                    filtered.add(xmlinstr);
-                                }
+                    if (code == Opcodes.INVOKEVIRTUAL) {
+                        final Collection<XmlInstruction> filtered = new ArrayList<>(0);
+                        for (final XmlInstruction xmlinstr : inlined.instructions()) {
+                            final int codee = xmlinstr.code();
+                            xmlinstr.replaceArguementsValues(old, combined);
+                            if (codee != Opcodes.RETURN && codee != Opcodes.IRETURN
+                                && codee != Opcodes.ALOAD) {
+                                filtered.add(xmlinstr);
                             }
-                            res.addAll(filtered);
-                        } else {
-                            res.add(instruction);
                         }
+                        res.addAll(filtered);
+                    } else {
+                        res.add(instruction);
                     }
                 }
                 candidate.setInstructions(res);
