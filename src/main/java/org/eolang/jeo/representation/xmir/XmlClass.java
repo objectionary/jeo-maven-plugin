@@ -53,9 +53,6 @@ public final class XmlClass {
     /**
      * Retrieve all constructors from XMIR.
      * @return List of constructors.
-     * @todo #167:60min Add unit tests for 'constructors' method.
-     *  Currently we don't have unit tests for that method. So, it makes sense to add
-     *  them to keep code safe and clear.
      */
     public List<XmlMethod> constructors() {
         return this.objects().filter(
