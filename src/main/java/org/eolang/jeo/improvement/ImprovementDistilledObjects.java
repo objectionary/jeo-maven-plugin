@@ -361,23 +361,10 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @return Combined representation.
          */
         private Representation combine() {
-            return new EoRepresentation(
-                new XMLDocument(
-                    this.combine(
-                        this.decorator.toEO(),
-                        new DecoratorCompositionName(this.decorated, this.decorator).value()
-                    ).toString()
-                )
-            );
-        }
-
-        /**
-         * Skeleton.
-         * @param skeleton Decorator.
-         * @param name Class name.
-         * @return Combined XMIR representation.
-         */
-        private XML combine(final XML skeleton, final String name) {
+            final XML skeleton = this.decorator.toEO();
+            final String name = new DecoratorCompositionName(this.decorated,
+                this.decorator
+            ).value();
             final List<XML> roots = skeleton.nodes("/program");
             final Node root = roots.get(0).node();
             final NamedNodeMap attributes = root.getAttributes();
@@ -395,7 +382,11 @@ public final class ImprovementDistilledObjects implements Improvement {
                     this.handleObjects(item, name);
                 }
             }
-            return new XMLDocument(root);
+            return new EoRepresentation(
+                new XMLDocument(
+                    new XMLDocument(root).toString()
+                )
+            );
         }
 
         /**
