@@ -372,45 +372,20 @@ public final class ImprovementDistilledObjects implements Improvement {
             return new EoRepresentation(program.toXmir());
         }
 
-        private void handleRootObject(final XmlClass decorator, final String bytename) {
+        private void handleRootObject(final XmlClass decorator, final String combined) {
             final Node root = decorator.node();
-            final Document owner = root.getOwnerDocument();
             DecoratorPair.removeOldFields(root);
             DecoratorPair.removeOldConstructors(root);
             final XmlClass clazz = new XmlProgram(this.decorated.toEO()).top();
-//            for (final XmlField field : clazz.fields()) {
-//                root.appendChild(owner.adoptNode(field.node().cloneNode(true)));
-//            }
-
             clazz.fields().forEach(decorator::withField);
             for (final XmlMethod method : clazz.methods()) {
                 if (method.isConstructor()) {
                     for (final XmlInstruction instruction : method.instructions()) {
-                        instruction.replaceArguementsValues(this.decorated.name(), bytename);
+                        instruction.replaceArguementsValues(this.decorated.name(), combined);
                     }
                     decorator.withConstructor(method);
-//                    final Node node = method.node();
-//                    final NodeList children = node.getChildNodes();
-//                    for (int index = 0; index < children.getLength(); ++index) {
-//                        final Node item = children.item(index);
-//                        final NamedNodeMap attrs = item.getAttributes();
-//                        if (attrs != null) {
-//                            final Node base = attrs.getNamedItem("base");
-//                            if (base != null) {
-//                                if (base.getNodeValue().equals("seq")) {
-//                                    final NodeList instructions = item.getChildNodes();
-//                                    for (int inst = 0; inst < instructions.getLength(); ++inst) {
-//                                        new XmlInstruction(
-//                                            instructions.item(inst)
-//                                        ).replaceArguementsValues(this.decorated.name(), bytename);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                    root.appendChild(owner.adoptNode(node.cloneNode(true)));
                 } else {
-                    this.replaceMethodContent(root, method, bytename);
+                    this.replaceMethodContent(root, method, combined);
                 }
             }
         }
@@ -448,14 +423,14 @@ public final class ImprovementDistilledObjects implements Improvement {
          * Replace method content.
          * @param clazz Original class where to inline methods.
          * @param inlined Inlined method.
-         * @param bytename Class name.
+         * @param combined Class name.
          * @checkstyle NestedIfDepthCheck (100 lines)
          * @checkstyle NestedForDepthCheck (100 lines)
          */
         private void replaceMethodContent(
             final Node clazz,
             final XmlMethod inlined,
-            final String bytename
+            final String combined
         ) {
             final List<XmlMethod> methods = new XmlClass(clazz).methods();
             final String old = this.decorated.name();
@@ -470,7 +445,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                             final Collection<XmlInstruction> filtered = new ArrayList<>(0);
                             for (final XmlInstruction xmlinstr : tadam) {
                                 final int codee = xmlinstr.code();
-                                xmlinstr.replaceArguementsValues(old, bytename);
+                                xmlinstr.replaceArguementsValues(old, combined);
                                 if (codee != Opcodes.RETURN && codee != Opcodes.IRETURN
                                     && codee != Opcodes.ALOAD) {
                                     filtered.add(xmlinstr);
