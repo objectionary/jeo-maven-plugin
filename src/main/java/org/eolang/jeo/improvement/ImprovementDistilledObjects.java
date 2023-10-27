@@ -95,6 +95,9 @@ public final class ImprovementDistilledObjects implements Improvement {
      * @param decorators Decorators.
      * @param representation Representation.
      * @return Representation with replaced constructors.
+     * @todo #162:90min Refactor replaceConstructors method.
+     *  Right now it's a method with high complexity and it's hard to read it.
+     *  We need to refactor it or just simplify somehow.
      */
     private static Representation replaceConstructors(
         final List<? extends DecoratorPair> decorators,
@@ -365,24 +368,32 @@ public final class ImprovementDistilledObjects implements Improvement {
                 .withName(name)
                 .withTime(LocalDateTime.now())
                 .withListing("");
-            this.handleRootObject(program.top().withName(name), name);
+            this.handleClass(program.top().withName(name), name);
             return new EoRepresentation(program.toXmir());
         }
 
-        private void handleRootObject(final XmlClass decorator, final String combined) {
-            final Node root = decorator.node();
+        /**
+         * Handle decorator class
+         * @param decor Decorator.
+         * @param combined Combined name.
+         * @todo #162:90min Refactor handleClass method.
+         *  Right now it's a method with high complexity and it's hard to read it.
+         *  We need to refactor it or inline into some other method.
+         */
+        private void handleClass(final XmlClass decor, final String combined) {
+            final Node root = decor.node();
             DecoratorPair.removeOldFields(root);
             DecoratorPair.removeOldConstructors(root);
             final XmlClass clazz = new XmlProgram(this.decorated.toEO()).top();
-            clazz.fields().forEach(decorator::withField);
+            clazz.fields().forEach(decor::withField);
             for (final XmlMethod method : clazz.methods()) {
                 if (method.isConstructor()) {
                     for (final XmlInstruction instruction : method.instructions()) {
                         instruction.replaceArguementsValues(this.decorated.name(), combined);
                     }
-                    decorator.withConstructor(method);
+                    decor.withConstructor(method);
                 } else {
-                    this.replaceMethodContent(decorator, method, combined);
+                    this.replaceMethodContent(decor, method, combined);
                 }
             }
         }
@@ -417,13 +428,22 @@ public final class ImprovementDistilledObjects implements Improvement {
         }
 
 
+        /**
+         * Replace method content.
+         * @param decor Decorator.
+         * @param inlined Inlined method.
+         * @param combined Combined name.
+         * @todo #162:90min Refactor replaceMethodContent method.
+         *  Right now it's a method with high complexity and it's hard to read it.
+         *  We need to refactor it or inline into some other method.
+         */
         private void replaceMethodContent(
-            final XmlClass decorator,
+            final XmlClass decor,
             final XmlMethod inlined,
             final String combined
         ) {
             final String old = this.decorated.name();
-            for (final XmlMethod candidate : decorator.methods()) {
+            for (final XmlMethod candidate : decor.methods()) {
                 final List<XmlInstruction> res = new ArrayList<>(0);
                 for (final XmlInstruction instruction :
                     candidate.instructionsWithout(Opcodes.GETFIELD)) {
