@@ -89,7 +89,7 @@ public final class XmlClass {
 
     /**
      * Set class name in XML.
-     * @param name of the Class.
+     * @param name Name of the Class.
      * @return Class.
      */
     public XmlClass withName(final String name) {

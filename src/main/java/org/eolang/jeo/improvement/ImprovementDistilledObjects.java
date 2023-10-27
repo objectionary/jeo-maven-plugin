@@ -373,7 +373,7 @@ public final class ImprovementDistilledObjects implements Improvement {
         }
 
         /**
-         * Handle decorator class
+         * Handle decorator class.
          * @param decor Decorator.
          * @param combined Combined name.
          * @todo #162:90min Refactor handleClass method.
@@ -427,7 +427,6 @@ public final class ImprovementDistilledObjects implements Improvement {
                 .forEach(root::removeChild);
         }
 
-
         /**
          * Replace method content.
          * @param decor Decorator.
@@ -445,8 +444,8 @@ public final class ImprovementDistilledObjects implements Improvement {
             final String old = this.decorated.name();
             for (final XmlMethod candidate : decor.methods()) {
                 final List<XmlInstruction> res = new ArrayList<>(0);
-                for (final XmlInstruction instruction :
-                    candidate.instructionsWithout(Opcodes.GETFIELD)) {
+                for (final XmlInstruction instruction
+                    : candidate.instructionsWithout(Opcodes.GETFIELD)) {
                     if (instruction.code() == Opcodes.INVOKEVIRTUAL) {
                         inlined.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
                             .stream()

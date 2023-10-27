@@ -106,6 +106,11 @@ public final class XmlMethod {
         return this.node.getAttributes().getNamedItem("name").getNodeValue().equals("new");
     }
 
+    /**
+     * Retrieves instructions except for the ones with the given opcodes.
+     * @param opcodes Opcodes to exclude.
+     * @return Instructions.
+     */
     public List<XmlInstruction> instructionsWithout(final int... opcodes) {
         return this.instructions(
             instruction -> Arrays.stream(opcodes).noneMatch(
@@ -114,13 +119,13 @@ public final class XmlMethod {
         );
     }
 
-
     /**
      * Method instructions.
+     * @param predicates Filters.
      * @return Instructions.
      */
     @SafeVarargs
-    public final List<XmlInstruction> instructions(Predicate<XmlInstruction>... predicates) {
+    public final List<XmlInstruction> instructions(final Predicate<XmlInstruction>... predicates) {
         final List<XmlInstruction> result;
         final Optional<Node> sequence = this.sequence();
         if (sequence.isPresent()) {
@@ -128,11 +133,9 @@ public final class XmlMethod {
             final List<XmlInstruction> instructions = new ArrayList<>(0);
             for (int index = 0; index < seq.getChildNodes().getLength(); ++index) {
                 final Node instruction = seq.getChildNodes().item(index);
-                if (XmlMethod.isInstruction(instruction)) {
-                    if (Arrays.stream(predicates).allMatch(
-                        predicate -> predicate.test(new XmlInstruction(instruction)))) {
-                        instructions.add(new XmlInstruction(instruction));
-                    }
+                if (XmlMethod.isInstruction(instruction) && Arrays.stream(predicates)
+                    .allMatch(predicate -> predicate.test(new XmlInstruction(instruction)))) {
+                    instructions.add(new XmlInstruction(instruction));
                 }
             }
             result = instructions;

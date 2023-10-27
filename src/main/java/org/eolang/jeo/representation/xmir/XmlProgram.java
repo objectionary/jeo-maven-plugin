@@ -39,6 +39,11 @@ import org.w3c.dom.Node;
 public class XmlProgram {
 
     /**
+     * Program node name.
+     */
+    private static final String PROGRAM = "program";
+
+    /**
      * Root node.
      */
     private final Node root;
@@ -55,7 +60,7 @@ public class XmlProgram {
      * Constructor.
      * @param root Root node.
      */
-    public XmlProgram(final Node root) {
+    private XmlProgram(final Node root) {
         this.root = root;
     }
 
@@ -73,7 +78,7 @@ public class XmlProgram {
      */
     public XmlClass top() {
         return new XmlNode(this.root)
-            .child("program")
+            .child(XmlProgram.PROGRAM)
             .child("objects")
             .child("o")
             .toClass();
@@ -87,7 +92,7 @@ public class XmlProgram {
     public XmlProgram with(final XmlClass clazz) {
         final Node res = new XMLDocument(this.root).node();
         new XmlNode(res)
-            .child("program")
+            .child(XmlProgram.PROGRAM)
             .child("objects")
             .clean()
             .append(clazz.node());
@@ -102,23 +107,38 @@ public class XmlProgram {
         return new XMLDocument(this.root);
     }
 
+    /**
+     * Set program name.
+     * @param name Name.
+     * @return The same program.
+     */
     public XmlProgram withName(final String name) {
         new XmlNode(this.root)
-            .child("program")
+            .child(XmlProgram.PROGRAM)
             .withAttribute("name", name);
         return this;
     }
 
+    /**
+     * Set program time.
+     * @param time Time.
+     * @return The same program.
+     */
     public XmlProgram withTime(final LocalDateTime time) {
         new XmlNode(this.root)
-            .child("program")
+            .child(XmlProgram.PROGRAM)
             .withAttribute("time", time.format(DateTimeFormatter.ISO_DATE_TIME));
         return this;
     }
 
+    /**
+     * Set listing.
+     * @param listing Listing.
+     * @return The same program.
+     */
     public XmlProgram withListing(final String listing) {
         new XmlNode(this.root)
-            .child("program")
+            .child(XmlProgram.PROGRAM)
             .child("listing")
             .withText(listing);
         return this;
