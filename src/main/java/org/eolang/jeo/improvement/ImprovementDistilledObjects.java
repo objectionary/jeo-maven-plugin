@@ -428,20 +428,10 @@ public final class ImprovementDistilledObjects implements Improvement {
                 for (final XmlInstruction instruction :
                     candidate.instructionsWithout(Opcodes.GETFIELD)) {
                     if (instruction.code() == Opcodes.INVOKEVIRTUAL) {
-                        final Collection<XmlInstruction> filtered = new ArrayList<>(0);
-                        for (final XmlInstruction xmlinstr : inlined.instructionsWithout(
-                            Opcodes.RETURN,
-                            Opcodes.IRETURN,
-                            Opcodes.ALOAD
-                        )) {
-//                            final int codee = xmlinstr.code();
-//                            if (codee != Opcodes.RETURN && codee != Opcodes.IRETURN
-//                                && codee != Opcodes.ALOAD) {
-                            xmlinstr.replaceArguementsValues(old, combined);
-                            filtered.add(xmlinstr);
-//                            }
-                        }
-                        res.addAll(filtered);
+                        inlined.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
+                            .stream()
+                            .peek(instr -> instr.replaceArguementsValues(old, combined))
+                            .forEach(res::add);
                     } else {
                         res.add(instruction);
                     }
