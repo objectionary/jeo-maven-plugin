@@ -369,52 +369,19 @@ public final class ImprovementDistilledObjects implements Improvement {
                 .withName(name)
                 .withTime(LocalDateTime.now())
                 .withListing("");
-            this.handleObjects(program.top().node(), name);
+
+            this.handleObjects(program.top(), name);
             return new EoRepresentation(
                 program.toXmir()
             );
-//            final List<XML> roots = skeleton.nodes("/program");
-//            final Node root = roots.get(0).node();
-//            final NamedNodeMap attributes = root.getAttributes();
-//            attributes.getNamedItem("name").setNodeValue(name);
-//            attributes.getNamedItem("time").setTextContent(
-//                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
-//            );
-//            final NodeList children = root.getChildNodes();
-//            for (int index = 0; index < children.getLength(); ++index) {
-//                final Node item = children.item(index);
-//                if (item.getNodeName().equals("listing")) {
-//                    item.setTextContent("");
-//                }
-//                if (item.getNodeName().equals("objects")) {
-//                    this.handleObjects(item, name);
-//                }
-//            }
-//            return new EoRepresentation(
-//                new XMLDocument(
-//                    new XMLDocument(root).toString()
-//                )
-//            );
         }
 
-        /**
-         * Handle all objects.
-         * @param root Root node.
-         * @param name Class name.
-         */
-        private void handleObjects(final Node root, final String name) {
-//            final NodeList children = root.getChildNodes();
-//            for (int index = 0; index < children.getLength(); ++index) {
-//                final Node item = children.item(index);
-//                if (item.getNodeName().equals("o")) {
-//                    item.getAttributes().getNamedItem("name").setNodeValue(name);
-//                    this.handleRootObject(item, name);
-//                }
+        private void handleObjects(final XmlClass clazz, final String name) {
+            this.handleRootObject(clazz.withName(name).node(), name);
+//            if (root.getNodeName().equals("o")) {
+//                root.getAttributes().getNamedItem("name").setNodeValue(name);
+//                this.handleRootObject(root, name);
 //            }
-            if (root.getNodeName().equals("o")) {
-                root.getAttributes().getNamedItem("name").setNodeValue(name);
-                this.handleRootObject(root, name);
-            }
         }
 
         /**

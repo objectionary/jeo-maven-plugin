@@ -87,6 +87,16 @@ public final class XmlClass {
     }
 
     /**
+     * Set class name in XML.
+     * @param name of the Class.
+     * @return Class.
+     */
+    public XmlClass withName(final String name) {
+        new XmlNode(this.node).withAttribute("name", name);
+        return this;
+    }
+
+    /**
      * Internal XML node.
      * @return Internal XML node.
      * @todo #161:30min Hide internal node representation in XmlClass.
