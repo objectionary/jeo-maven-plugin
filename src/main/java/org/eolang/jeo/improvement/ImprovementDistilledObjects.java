@@ -51,14 +51,8 @@ import org.w3c.dom.Node;
  * You can find the description of the optimization right
  * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/102">here</a>
  * @since 0.1.0
- * @todo #157:90min ImprovementDistilledObjects is needed to be refactored.
- *  Right now it's a big class with a lot of methods, repetition and high complexity.
- *  We need to refactor it into a set of smaller classes and remove all
- *  linter warnings.
- * @checkstyle NestedIfDepthCheck (500 lines)
- * @checkstyle NestedForDepthCheck (500 lines)
  */
-@SuppressWarnings({"PMD.CollapsibleIfStatements", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class ImprovementDistilledObjects implements Improvement {
     @Override
     public Collection<? extends Representation> apply(
@@ -127,6 +121,7 @@ public final class ImprovementDistilledObjects implements Improvement {
      * @param target What should be replaced.
      * @param replacement Replacement.
      * @checkstyle ModifiedControlVariableCheck (200 lines)
+     * @checkstyle NestedForDepthCheck (200 lines)
      */
     private static void replace(
         final XmlClass clazz,

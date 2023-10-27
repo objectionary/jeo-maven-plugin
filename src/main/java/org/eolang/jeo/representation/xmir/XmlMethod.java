@@ -123,6 +123,10 @@ public final class XmlMethod {
      * Method instructions.
      * @param predicates Filters.
      * @return Instructions.
+     * @todo #162:30min Simplify instructions method.
+     *  This method is too complex. We should simplify it.
+     *  In order to do so we can use {@link XmlNode} class.
+     *  Don't forget to remove the puzzle.
      */
     @SafeVarargs
     public final List<XmlInstruction> instructions(final Predicate<XmlInstruction>... predicates) {
