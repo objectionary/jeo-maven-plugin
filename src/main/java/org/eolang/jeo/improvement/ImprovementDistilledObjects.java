@@ -369,19 +369,8 @@ public final class ImprovementDistilledObjects implements Improvement {
                 .withName(name)
                 .withTime(LocalDateTime.now())
                 .withListing("");
-
-            this.handleObjects(program.top(), name);
-            return new EoRepresentation(
-                program.toXmir()
-            );
-        }
-
-        private void handleObjects(final XmlClass clazz, final String name) {
-            this.handleRootObject(clazz.withName(name).node(), name);
-//            if (root.getNodeName().equals("o")) {
-//                root.getAttributes().getNamedItem("name").setNodeValue(name);
-//                this.handleRootObject(root, name);
-//            }
+            this.handleRootObject(program.top().withName(name).node(), name);
+            return new EoRepresentation(program.toXmir());
         }
 
         /**
