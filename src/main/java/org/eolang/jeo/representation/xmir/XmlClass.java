@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -93,6 +94,17 @@ public final class XmlClass {
      */
     public XmlClass withName(final String name) {
         new XmlNode(this.node).withAttribute("name", name);
+        return this;
+    }
+
+    /**
+     * Add field.
+     * @param field Field.
+     * @return The same class.
+     */
+    public XmlClass withField(final XmlField field) {
+        final Document owner = this.node.getOwnerDocument();
+        this.node.appendChild(owner.adoptNode(field.node().cloneNode(true)));
         return this;
     }
 

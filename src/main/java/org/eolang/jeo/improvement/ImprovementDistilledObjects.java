@@ -359,33 +359,30 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @return Combined representation.
          */
         private Representation combine() {
-            final XML skeleton = this.decorator.toEO();
             final String name = new DecoratorCompositionName(
                 this.decorated,
                 this.decorator
             ).value();
-            final XmlProgram program = new XmlProgram(skeleton)
+            final XmlProgram program = new XmlProgram(this.decorator.toEO())
                 .copy()
                 .withName(name)
                 .withTime(LocalDateTime.now())
                 .withListing("");
-            this.handleRootObject(program.top().withName(name).node(), name);
+            this.handleRootObject(program.top().withName(name), name);
             return new EoRepresentation(program.toXmir());
         }
 
-        /**
-         * Handle root object.
-         * @param root Root node.
-         * @param bytename Class name.
-         */
-        private void handleRootObject(final Node root, final String bytename) {
+        private void handleRootObject(final XmlClass decorator, final String bytename) {
+            final Node root = decorator.node();
             final Document owner = root.getOwnerDocument();
             DecoratorPair.removeOldFields(root);
             DecoratorPair.removeOldConstructors(root);
             final XmlClass clazz = new XmlProgram(this.decorated.toEO()).top();
-            for (final XmlField field : clazz.fields()) {
-                root.appendChild(owner.adoptNode(field.node().cloneNode(true)));
-            }
+//            for (final XmlField field : clazz.fields()) {
+//                root.appendChild(owner.adoptNode(field.node().cloneNode(true)));
+//            }
+
+            clazz.fields().forEach(decorator::withField);
             for (final XmlMethod method : clazz.methods()) {
                 if (method.isConstructor()) {
                     final Node node = method.node();
