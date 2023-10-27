@@ -25,9 +25,7 @@ package org.eolang.jeo.improvement;
 
 import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -362,31 +360,41 @@ public final class ImprovementDistilledObjects implements Improvement {
          */
         private Representation combine() {
             final XML skeleton = this.decorator.toEO();
-            final String name = new DecoratorCompositionName(this.decorated,
+            final String name = new DecoratorCompositionName(
+                this.decorated,
                 this.decorator
             ).value();
-            final List<XML> roots = skeleton.nodes("/program");
-            final Node root = roots.get(0).node();
-            final NamedNodeMap attributes = root.getAttributes();
-            attributes.getNamedItem("name").setNodeValue(name);
-            attributes.getNamedItem("time").setTextContent(
-                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
-            );
-            final NodeList children = root.getChildNodes();
-            for (int index = 0; index < children.getLength(); ++index) {
-                final Node item = children.item(index);
-                if (item.getNodeName().equals("listing")) {
-                    item.setTextContent("");
-                }
-                if (item.getNodeName().equals("objects")) {
-                    this.handleObjects(item, name);
-                }
-            }
+            final XmlProgram program = new XmlProgram(skeleton)
+                .copy()
+                .withName(name)
+                .withTime(LocalDateTime.now())
+                .withListing("");
+            this.handleObjects(program.top().node(), name);
             return new EoRepresentation(
-                new XMLDocument(
-                    new XMLDocument(root).toString()
-                )
+                program.toXmir()
             );
+//            final List<XML> roots = skeleton.nodes("/program");
+//            final Node root = roots.get(0).node();
+//            final NamedNodeMap attributes = root.getAttributes();
+//            attributes.getNamedItem("name").setNodeValue(name);
+//            attributes.getNamedItem("time").setTextContent(
+//                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
+//            );
+//            final NodeList children = root.getChildNodes();
+//            for (int index = 0; index < children.getLength(); ++index) {
+//                final Node item = children.item(index);
+//                if (item.getNodeName().equals("listing")) {
+//                    item.setTextContent("");
+//                }
+//                if (item.getNodeName().equals("objects")) {
+//                    this.handleObjects(item, name);
+//                }
+//            }
+//            return new EoRepresentation(
+//                new XMLDocument(
+//                    new XMLDocument(root).toString()
+//                )
+//            );
         }
 
         /**
@@ -395,13 +403,17 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @param name Class name.
          */
         private void handleObjects(final Node root, final String name) {
-            final NodeList children = root.getChildNodes();
-            for (int index = 0; index < children.getLength(); ++index) {
-                final Node item = children.item(index);
-                if (item.getNodeName().equals("o")) {
-                    item.getAttributes().getNamedItem("name").setNodeValue(name);
-                    this.handleRootObject(item, name);
-                }
+//            final NodeList children = root.getChildNodes();
+//            for (int index = 0; index < children.getLength(); ++index) {
+//                final Node item = children.item(index);
+//                if (item.getNodeName().equals("o")) {
+//                    item.getAttributes().getNamedItem("name").setNodeValue(name);
+//                    this.handleRootObject(item, name);
+//                }
+//            }
+            if (root.getNodeName().equals("o")) {
+                root.getAttributes().getNamedItem("name").setNodeValue(name);
+                this.handleRootObject(root, name);
             }
         }
 

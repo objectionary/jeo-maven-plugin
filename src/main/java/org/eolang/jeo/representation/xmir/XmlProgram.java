@@ -25,6 +25,8 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import org.w3c.dom.Node;
 
 /**
@@ -53,8 +55,16 @@ public class XmlProgram {
      * Constructor.
      * @param root Root node.
      */
-    private XmlProgram(final Node root) {
+    public XmlProgram(final Node root) {
         this.root = root;
+    }
+
+    /**
+     * Create a copy of this program.
+     * @return Copy of this program.
+     */
+    public XmlProgram copy() {
+        return new XmlProgram(this.root);
     }
 
     /**
@@ -90,5 +100,27 @@ public class XmlProgram {
      */
     public XML toXmir() {
         return new XMLDocument(this.root);
+    }
+
+    public XmlProgram withName(final String name) {
+        new XmlNode(this.root)
+            .child("program")
+            .withAttribute("name", name);
+        return this;
+    }
+
+    public XmlProgram withTime(final LocalDateTime time) {
+        new XmlNode(this.root)
+            .child("program")
+            .withAttribute("time", time.format(DateTimeFormatter.ISO_DATE_TIME));
+        return this;
+    }
+
+    public XmlProgram withListing(final String listing) {
+        new XmlNode(this.root)
+            .child("program")
+            .child("listing")
+            .withText(listing);
+        return this;
     }
 }

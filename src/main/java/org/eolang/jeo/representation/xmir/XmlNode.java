@@ -27,6 +27,7 @@ import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -99,6 +100,20 @@ final class XmlNode {
      */
     void withText(final String text) {
         this.node.setTextContent(text);
+    }
+
+    /**
+     * Set node attribute.
+     * @param name Attribute name.
+     * @param value Attribute value.
+     */
+    void withAttribute(final String name, final String value) {
+        final NamedNodeMap attributes = this.node.getAttributes();
+        if (null == attributes.getNamedItem(name)) {
+            attributes.setNamedItem(this.node.getOwnerDocument().createAttribute(name));
+        }
+        attributes.getNamedItem(name).setNodeValue(value);
+        this.node.getAttributes().getNamedItem(name).setNodeValue(value);
     }
 
     /**

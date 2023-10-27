@@ -136,7 +136,9 @@ public final class XmlMethod {
      */
     public void setInstructions(final List<XmlInstruction> updated) {
         final Node root = this.sequence().orElseThrow(
-            () -> new IllegalStateException("Can't find bytecode of the method")
+            () -> new IllegalStateException(
+                String.format("Can't find bytecode of the method %s", new XMLDocument(this.node))
+            )
         );
         final Document owner = root.getOwnerDocument();
         Logger.info(
