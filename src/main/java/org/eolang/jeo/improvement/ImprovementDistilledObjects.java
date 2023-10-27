@@ -425,19 +425,21 @@ public final class ImprovementDistilledObjects implements Improvement {
             final String old = this.decorated.name();
             for (final XmlMethod candidate : decorator.methods()) {
                 final List<XmlInstruction> res = new ArrayList<>(0);
-                final List<XmlInstruction> instructions = candidate.instructions(
-                    instr -> instr.code() != Opcodes.GETFIELD
-                );
-                for (final XmlInstruction instruction : instructions) {
+                for (final XmlInstruction instruction :
+                    candidate.instructionsWithout(Opcodes.GETFIELD)) {
                     if (instruction.code() == Opcodes.INVOKEVIRTUAL) {
                         final Collection<XmlInstruction> filtered = new ArrayList<>(0);
-                        for (final XmlInstruction xmlinstr : inlined.instructions()) {
-                            final int codee = xmlinstr.code();
-                            if (codee != Opcodes.RETURN && codee != Opcodes.IRETURN
-                                && codee != Opcodes.ALOAD) {
-                                xmlinstr.replaceArguementsValues(old, combined);
-                                filtered.add(xmlinstr);
-                            }
+                        for (final XmlInstruction xmlinstr : inlined.instructionsWithout(
+                            Opcodes.RETURN,
+                            Opcodes.IRETURN,
+                            Opcodes.ALOAD
+                        )) {
+//                            final int codee = xmlinstr.code();
+//                            if (codee != Opcodes.RETURN && codee != Opcodes.IRETURN
+//                                && codee != Opcodes.ALOAD) {
+                            xmlinstr.replaceArguementsValues(old, combined);
+                            filtered.add(xmlinstr);
+//                            }
                         }
                         res.addAll(filtered);
                     } else {

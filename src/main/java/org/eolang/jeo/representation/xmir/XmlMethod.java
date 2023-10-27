@@ -106,6 +106,15 @@ public final class XmlMethod {
         return this.node.getAttributes().getNamedItem("name").getNodeValue().equals("new");
     }
 
+    public List<XmlInstruction> instructionsWithout(final int... opcodes) {
+        return this.instructions(
+            instruction -> Arrays.stream(opcodes).noneMatch(
+                opcode -> instruction.code() == opcode
+            )
+        );
+    }
+
+
     /**
      * Method instructions.
      * @return Instructions.
