@@ -67,14 +67,14 @@ public final class ImprovementDistilledObjects implements Improvement {
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        final List<DecoratorPair> decorators = ImprovementDistilledObjects
-            .decorators(
-                representations.stream()
-                    .sorted(Comparator.comparing((Representation ir) -> ir.name()))
-                    .collect(Collectors.toList())
-            )
-            .stream()
-            .collect(Collectors.toList());
+        final List<DecoratorPair> decorators = new ArrayList<>(
+            ImprovementDistilledObjects
+                .decorators(
+                    representations.stream()
+                        .sorted(Comparator.comparing((Representation ir) -> ir.name()))
+                        .collect(Collectors.toList())
+                )
+        );
         final List<Representation> additional = decorators.stream()
             .map(DecoratorPair::combine)
             .collect(Collectors.toList());
@@ -385,26 +385,30 @@ public final class ImprovementDistilledObjects implements Improvement {
             clazz.fields().forEach(decorator::withField);
             for (final XmlMethod method : clazz.methods()) {
                 if (method.isConstructor()) {
-                    final Node node = method.node();
-                    final NodeList children = node.getChildNodes();
-                    for (int index = 0; index < children.getLength(); ++index) {
-                        final Node item = children.item(index);
-                        final NamedNodeMap attrs = item.getAttributes();
-                        if (attrs != null) {
-                            final Node base = attrs.getNamedItem("base");
-                            if (base != null) {
-                                if (base.getNodeValue().equals("seq")) {
-                                    final NodeList instructions = item.getChildNodes();
-                                    for (int inst = 0; inst < instructions.getLength(); ++inst) {
-                                        new XmlInstruction(
-                                            instructions.item(inst)
-                                        ).replaceArguementsValues(this.decorated.name(), bytename);
-                                    }
-                                }
-                            }
-                        }
+                    for (final XmlInstruction instruction : method.instructions()) {
+                        instruction.replaceArguementsValues(this.decorated.name(), bytename);
                     }
-                    root.appendChild(owner.adoptNode(node.cloneNode(true)));
+                    decorator.withConstructor(method);
+//                    final Node node = method.node();
+//                    final NodeList children = node.getChildNodes();
+//                    for (int index = 0; index < children.getLength(); ++index) {
+//                        final Node item = children.item(index);
+//                        final NamedNodeMap attrs = item.getAttributes();
+//                        if (attrs != null) {
+//                            final Node base = attrs.getNamedItem("base");
+//                            if (base != null) {
+//                                if (base.getNodeValue().equals("seq")) {
+//                                    final NodeList instructions = item.getChildNodes();
+//                                    for (int inst = 0; inst < instructions.getLength(); ++inst) {
+//                                        new XmlInstruction(
+//                                            instructions.item(inst)
+//                                        ).replaceArguementsValues(this.decorated.name(), bytename);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                    root.appendChild(owner.adoptNode(node.cloneNode(true)));
                 } else {
                     this.replaceMethodContent(root, method, bytename);
                 }

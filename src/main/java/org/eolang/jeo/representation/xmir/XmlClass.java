@@ -109,6 +109,15 @@ public final class XmlClass {
     }
 
     /**
+     * Add constructor.
+     * @param method Constructor.
+     */
+    public void withConstructor(final XmlMethod method) {
+        final Document owner = this.node.getOwnerDocument();
+        this.node.appendChild(owner.adoptNode(method.node().cloneNode(true)));
+    }
+
+    /**
      * Internal XML node.
      * @return Internal XML node.
      * @todo #161:30min Hide internal node representation in XmlClass.
