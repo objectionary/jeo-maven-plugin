@@ -130,23 +130,28 @@ public final class XmlMethod {
      */
     @SafeVarargs
     public final List<XmlInstruction> instructions(final Predicate<XmlInstruction>... predicates) {
-        final List<XmlInstruction> result;
-        final Optional<Node> sequence = this.sequence();
-        if (sequence.isPresent()) {
-            final Node seq = sequence.get();
-            final List<XmlInstruction> instructions = new ArrayList<>(0);
-            for (int index = 0; index < seq.getChildNodes().getLength(); ++index) {
-                final Node instruction = seq.getChildNodes().item(index);
-                if (XmlMethod.isInstruction(instruction) && Arrays.stream(predicates)
-                    .allMatch(predicate -> predicate.test(new XmlInstruction(instruction)))) {
-                    instructions.add(new XmlInstruction(instruction));
-                }
-            }
-            result = instructions;
-        } else {
-            result = Collections.emptyList();
-        }
-        return result;
+//        final List<XmlInstruction> result;
+        return new XmlNode(this.node).child("seq").children()
+            .filter(XmlMethod::isInstruction)
+            .map(XmlNode::toInstruction)
+            .filter(instr -> Arrays.stream(predicates).allMatch(predicate -> predicate.test(instr)))
+            .collect(Collectors.toList());
+//        final Optional<Node> sequence = this.sequence();
+//        if (sequence.isPresent()) {
+//            final Node seq = sequence.get();
+//            final List<XmlInstruction> instructions = new ArrayList<>(0);
+//            for (int index = 0; index < seq.getChildNodes().getLength(); ++index) {
+//                final Node instruction = seq.getChildNodes().item(index);
+//                if (XmlMethod.isInstruction(instruction) && Arrays.stream(predicates)
+//                    .allMatch(predicate -> predicate.test(new XmlInstruction(instruction)))) {
+//                    instructions.add(new XmlInstruction(instruction));
+//                }
+//            }
+//            result = instructions;
+//        } else {
+//            result = Collections.emptyList();
+//        }
+//        return result;
     }
 
     /**
@@ -201,6 +206,24 @@ public final class XmlMethod {
             }
         }
         return result;
+    }
+
+    /**
+     * Check if node is an instruction.
+     * @param node Node.
+     * @return True if node is an instruction.
+     */
+    private static boolean isInstruction(final XmlNode node) {
+        return node.attribute("name").isPresent();
+
+//        final boolean result;
+//        final NamedNodeMap attrs = node.getAttributes();
+//        if (attrs == null || attrs.getNamedItem("name") == null) {
+//            result = false;
+//        } else {
+//            result = true;
+//        }
+//        return result;
     }
 
     /**

@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -71,6 +72,19 @@ final class XmlNode {
     }
 
     /**
+     * Get child node by attribute
+     */
+    XmlNode child(final String attribute, final String value) {
+        return this.children()
+            .map(child -> child.attribute(attribute))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .filter(child -> child.equals(value))
+            .findFirst()
+            .orElseThrow(() -> this.notFound(String.format("%s:%s", attribute, value)));
+    }
+
+    /**
      * Get all child nodes.
      * @return Child nodes.
      */
@@ -84,6 +98,14 @@ final class XmlNode {
      */
     XmlClass toClass() {
         return new XmlClass(this.node);
+    }
+
+    /**
+     * Convert to an instruction.
+     * @return Instruction.
+     */
+    XmlInstruction toInstruction() {
+        return new XmlInstruction(this.node);
     }
 
     /**
@@ -145,11 +167,27 @@ final class XmlNode {
     private IllegalStateException notFound(final String name) {
         return new IllegalStateException(
             String.format(
-                "Can't find '%s' element in '%s'",
+                "Can't find %s in '%s'",
                 name,
                 new XMLDocument(this.node)
             )
         );
+    }
+
+    /**
+     * Get attribute.
+     * @param name Attribute name.
+     * @return Attribute.
+     */
+    Optional<Object> attribute(final String name) {
+        final Optional<Object> result;
+        final NamedNodeMap attrs = this.node.getAttributes();
+        if (attrs == null) {
+            result = Optional.empty();
+        } else {
+            result = Optional.ofNullable(attrs.getNamedItem(name));
+        }
+        return result;
     }
 
     /**
