@@ -145,19 +145,11 @@ public final class XmlMethod {
                 String.format("Can't find bytecode of the method %s", new XMLDocument(this.node))
             )
         );
-        final Document owner = root.getOwnerDocument();
-        Logger.info(
-            this,
-            String.format(
-                "Set new method instructions %n%s%n",
-                updated.stream().map(XmlInstruction::toString).collect(Collectors.joining("\n"))
-            )
-        );
         while (root.hasChildNodes()) {
             root.removeChild(root.getFirstChild());
         }
         for (final XmlInstruction instruction : updated) {
-            root.appendChild(owner.adoptNode(instruction.node()));
+            root.appendChild(root.getOwnerDocument().adoptNode(instruction.node()));
         }
     }
 

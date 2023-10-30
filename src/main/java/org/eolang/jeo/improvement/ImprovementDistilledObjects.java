@@ -153,10 +153,6 @@ public final class ImprovementDistilledObjects implements Improvement {
                     final XmlInstruction current = instructions.get(index);
                     if (current.equals(targeted)) {
                         if (inner == size - 1) {
-                            Logger.info(
-                                ImprovementDistilledObjects.class,
-                                "Constructor inlining happened"
-                            );
                             updated.addAll(replacement);
                             stack.clear();
                         } else {
