@@ -23,14 +23,12 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.log.Logger;
 import com.jcabi.xml.XMLDocument;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

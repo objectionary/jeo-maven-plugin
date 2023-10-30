@@ -337,10 +337,18 @@ public final class ImprovementDistilledObjects implements Improvement {
             );
         }
 
+        /**
+         * Original decorator name.
+         * @return Decorator name.
+         */
         private String originalDecoratorName() {
             return this.decorator.name();
         }
 
+        /**
+         * Combined name.
+         * @return Name of combined class.
+         */
         private String combinedName() {
             return new DecoratorCompositionName(this.decorated, this.decorator).value();
         }
