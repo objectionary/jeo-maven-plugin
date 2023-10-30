@@ -110,7 +110,18 @@ public final class ImprovementDistilledObjects implements Improvement {
                 decorator.targetSpecial(),
                 decorator.replacementSpecial()
             );
-            ImprovementDistilledObjects.replaceArguments(clazz);
+
+            clazz.methods()
+                .stream()
+                .map(XmlMethod::instructions)
+                .flatMap(Collection::stream)
+                .forEach(
+                    instruction ->
+                        instruction.replaceArguementsValues(
+                            "org/eolang/jeo/B",
+                            "org/eolang/jeo/A$B"
+                        )
+                );
         }
         return new EoRepresentation(new XmlProgram(xmir).with(clazz).toXmir());
     }
@@ -162,24 +173,6 @@ public final class ImprovementDistilledObjects implements Improvement {
             }
             method.setInstructions(updated);
         }
-    }
-
-    /**
-     * Replace arguments.
-     * @param clazz Class where to replace.
-     * @todo #157:90min Handle arguments correctly during inlining optimization.
-     *  Right now we just replace all arguments with the new class name.
-     *  It's not correct, because we need to handle arguments correctly.
-     */
-    private static void replaceArguments(final XmlClass clazz) {
-        clazz.methods()
-            .stream()
-            .map(XmlMethod::instructions)
-            .flatMap(Collection::stream)
-            .forEach(
-                instruction ->
-                    instruction.replaceArguementsValues("org/eolang/jeo/B", "org/eolang/jeo/A$B")
-            );
     }
 
     /**
