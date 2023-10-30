@@ -100,6 +100,9 @@ public final class ImprovementDistilledObjects implements Improvement {
         final XML xmir = representation.toEO();
         final XmlClass clazz = new XmlProgram(xmir).top();
         for (final DecoratorPair decorator : decorators) {
+            if (representation.name().equals(decorator.originalDecoratorName())) {
+                continue;
+            }
             ImprovementDistilledObjects.replace(
                 clazz,
                 decorator.targetNew(),
