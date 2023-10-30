@@ -40,6 +40,7 @@ import org.w3c.dom.NodeList;
  *  Currently we don't have unit tests for XmlNode. So, it makes sense to add
  *  them to keep code safe and clear.
  */
+@SuppressWarnings("PMD.TooManyMethods")
 final class XmlNode {
 
     /**
@@ -72,14 +73,19 @@ final class XmlNode {
     }
 
     /**
-     * Get child node by attribute
+     * Get child node by attribute.
+     * @param attribute Attribute name.
+     * @param value Attribute value.
+     * @return Child node.
      */
     XmlNode child(final String attribute, final String value) {
         return this.children()
             .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
             .findFirst()
-            .orElseThrow(() -> this.notFound(
-                String.format("object with attribute %s='%s'", attribute, value))
+            .orElseThrow(
+                () -> this.notFound(
+                    String.format("object with attribute %s='%s'", attribute, value)
+                )
             );
     }
 
@@ -159,6 +165,22 @@ final class XmlNode {
     }
 
     /**
+     * Get attribute.
+     * @param name Attribute name.
+     * @return Attribute.
+     */
+    Optional<String> attribute(final String name) {
+        final Optional<String> result;
+        final NamedNodeMap attrs = this.node.getAttributes();
+        if (attrs == null) {
+            result = Optional.empty();
+        } else {
+            result = Optional.ofNullable(attrs.getNamedItem(name)).map(Node::getTextContent);
+        }
+        return result;
+    }
+
+    /**
      * Generate exception if element not found.
      * @param name Element name.
      * @return Exception.
@@ -173,29 +195,17 @@ final class XmlNode {
         );
     }
 
-    boolean hasAttribute(final String name, final String value) {
-        XMLDocument doc = new XMLDocument(this.node);
-        System.out.println(doc);
+    /**
+     * Check if attribute exists.
+     * @param name Attribute name.
+     * @param value Attribute value.
+     * @return True if attribute with specified value exists.
+     */
+    private boolean hasAttribute(final String name, final String value) {
         return this.attribute(name)
             .map(String::valueOf)
             .map(val -> val.equals(value))
             .orElse(false);
-    }
-
-    /**
-     * Get attribute.
-     * @param name Attribute name.
-     * @return Attribute.
-     */
-    Optional<String> attribute(final String name) {
-        final Optional<String> result;
-        final NamedNodeMap attrs = this.node.getAttributes();
-        if (attrs == null) {
-            result = Optional.empty();
-        } else {
-            result = Optional.ofNullable(attrs.getNamedItem(name)).map(Node::getTextContent);
-        }
-        return result;
     }
 
     /**
