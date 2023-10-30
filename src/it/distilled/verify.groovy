@@ -25,6 +25,7 @@
 String log = new File(basedir, 'build.log').text;
 assert log.contains("BUILD SUCCESS")
 assert log.contains("Result: 31")
+assert !log.contains("java.lang.ClassNotFoundException")
 //Check that we have generated all the required XMIR object files.
 assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/Main.xmir').exists()
 assert new File(basedir, 'target/jeo/xmir/org/eolang/jeo/A.xmir').exists()
