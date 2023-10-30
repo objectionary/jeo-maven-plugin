@@ -27,10 +27,6 @@ import com.jcabi.xml.XML;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -152,13 +148,7 @@ public final class BytecodeClass {
         this.methods.forEach(BytecodeMethod::write);
         this.writer.visitEnd();
         final byte[] bytes = this.writer.toByteArray();
-        verification.defineClass(name, bytes);
-        CheckClassAdapter.verify(
-            new ClassReader(bytes),
-            verification,
-            false,
-            new PrintWriter(System.err)
-        );
+        CheckClassAdapter.verify(new ClassReader(bytes), false, new PrintWriter(System.err));
         return new Bytecode(bytes);
     }
 
@@ -275,28 +265,5 @@ public final class BytecodeClass {
             result = raw;
         }
         return result;
-    }
-
-
-    private static DynamicClassLoader verification = new DynamicClassLoader();
-
-    private static class DynamicClassLoader extends ClassLoader {
-
-        private Set<String> defined = Collections.synchronizedSet(new HashSet<>());
-
-        synchronized Class<?> defineClass(String name, byte[] b) {
-            try {
-                if (this.defined.contains(name.replace('/', '.'))
-                    || this.findLoadedClass(name.replace('/', '.')) != null) {
-                    return loadClass(name.replace('/', '.'));
-                }
-            } catch (ClassNotFoundException ex) {
-                this.defined.add(name.replace('/', '.'));
-                return this.defineClass(name.replace('/', '.'), b, 0, b.length);
-            }
-            this.defined.add(name.replace('/', '.'));
-            return this.defineClass(name.replace('/', '.'), b, 0, b.length);
-
-        }
     }
 }
