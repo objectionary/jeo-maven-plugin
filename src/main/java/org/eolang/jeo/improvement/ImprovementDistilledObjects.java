@@ -110,7 +110,6 @@ public final class ImprovementDistilledObjects implements Improvement {
                 decorator.targetSpecial(),
                 decorator.replacementSpecial()
             );
-
             clazz.methods()
                 .stream()
                 .map(XmlMethod::instructions)
@@ -118,8 +117,8 @@ public final class ImprovementDistilledObjects implements Improvement {
                 .forEach(
                     instruction ->
                         instruction.replaceArguementsValues(
-                            "org/eolang/jeo/B",
-                            "org/eolang/jeo/A$B"
+                            decorator.originalDecoratorName(),
+                            decorator.combinedName()
                         )
                 );
         }
@@ -342,15 +341,20 @@ public final class ImprovementDistilledObjects implements Improvement {
             );
         }
 
+        private String originalDecoratorName() {
+            return this.decorator.name();
+        }
+
+        private String combinedName() {
+            return new DecoratorCompositionName(this.decorated, this.decorator).value();
+        }
+
         /**
          * Combine two representations into one.
          * @return Combined representation.
          */
         private Representation combine() {
-            final String name = new DecoratorCompositionName(
-                this.decorated,
-                this.decorator
-            ).value();
+            final String name = this.combinedName();
             final XmlProgram program = new XmlProgram(this.decorator.toEO())
                 .copy()
                 .withName(name)
