@@ -131,7 +131,7 @@ public final class XmlMethod {
     @SafeVarargs
     public final List<XmlInstruction> instructions(final Predicate<XmlInstruction>... predicates) {
 //        final List<XmlInstruction> result;
-        return new XmlNode(this.node).child("seq").children()
+        return new XmlNode(this.node).child("base", "seq").children()
             .filter(XmlMethod::isInstruction)
             .map(XmlNode::toInstruction)
             .filter(instr -> Arrays.stream(predicates).allMatch(predicate -> predicate.test(instr)))
