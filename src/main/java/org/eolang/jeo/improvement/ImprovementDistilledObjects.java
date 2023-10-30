@@ -66,21 +66,21 @@ public final class ImprovementDistilledObjects implements Improvement {
                         .collect(Collectors.toList())
                 )
         );
-        final List<Representation> additional = decorators.stream()
+        final List<Representation> generated = decorators.stream()
             .map(DecoratorPair::combine)
             .collect(Collectors.toList());
         Logger.info(
             this,
             String.format(
                 "Distilled objects improvement is successfully applied. Generated classes: %s, total %d",
-                additional.stream().map(Representation::name).collect(Collectors.toList()),
-                additional.size()
+                generated.stream().map(Representation::name).collect(Collectors.toList()),
+                generated.size()
             )
         );
         return Stream.concat(
+            generated.stream(),
             representations.stream()
-                .map(repr -> ImprovementDistilledObjects.replaceConstructors(decorators, repr)),
-            additional.stream()
+                .map(repr -> ImprovementDistilledObjects.replaceConstructors(decorators, repr))
         ).collect(Collectors.toList());
     }
 
