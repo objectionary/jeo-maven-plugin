@@ -55,12 +55,12 @@ public final class EoToBytecodeMojo extends AbstractMojo {
      * Project default target directory.
      * @since 0.1.0
      */
-    @Parameter(defaultValue = "${project.build.directory}")
-    private File target;
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources")
+    private File generated;
 
     @Override
     public void execute() {
         new ImprovementBytecodeFootprint(this.classes.toPath())
-            .apply(new EoRepresentations(this.target.toPath()).objects());
+            .apply(new EoRepresentations(this.generated.toPath()).objects());
     }
 }

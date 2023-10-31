@@ -42,7 +42,7 @@ public class EoDefaultDirectory {
      * Constructor.
      */
     public EoDefaultDirectory() {
-        this("jeo", "xmir");
+        this("xmir");
     }
 
     /**

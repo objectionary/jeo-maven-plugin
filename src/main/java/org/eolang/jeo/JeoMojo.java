@@ -57,8 +57,8 @@ public final class JeoMojo extends AbstractMojo {
      * Project default target directory.
      * @since 0.1.0
      */
-    @Parameter(defaultValue = "${project.build.directory}")
-    private File target;
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources")
+    private File generated;
 
     /**
      * The main entry point of the plugin.
@@ -72,7 +72,7 @@ public final class JeoMojo extends AbstractMojo {
                 new ImprovementSet(
                     new ImprovementLogged(),
                     new ImprovementDistilledObjects(),
-                    new ImprovementEoFootprint(this.target.toPath()),
+                    new ImprovementEoFootprint(this.generated.toPath()),
                     new ImprovementBytecodeFootprint(this.classes.toPath())
                 )
             ).apply();

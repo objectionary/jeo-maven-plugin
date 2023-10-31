@@ -53,19 +53,19 @@ public final class BytecodeToEoMojo extends AbstractMojo {
      * Project default target directory.
      * @since 0.1.0
      */
-    @Parameter(defaultValue = "${project.build.directory}")
-    private File target;
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources")
+    private File generated;
 
     @Override
     public void execute() throws MojoExecutionException {
         try {
-            new BytecodeTransformation(this.classes.toPath(), this.target.toPath()).transpile();
+            new BytecodeTransformation(this.classes.toPath(), this.generated.toPath()).transpile();
         } catch (final IOException exception) {
             throw new MojoExecutionException(
                 String.format(
                     "Can't transpile bytecode from '%s' to EO. Output directory: '%s'.",
                     this.classes.toPath(),
-                    this.target.toPath()
+                    this.generated.toPath()
                 ),
                 exception
             );

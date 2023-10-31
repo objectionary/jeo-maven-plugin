@@ -38,7 +38,7 @@ final class EoDefaultDirectoryTest {
     @Test
     void returnsDefaultDirectory() {
         final Path actual = new EoDefaultDirectory().toPath();
-        final Path expected = Path.of("jeo", "xmir");
+        final Path expected = Path.of("xmir");
         MatcherAssert.assertThat(
             String.format(
                 "We expect the default directory to be '%s', but was '%s'",

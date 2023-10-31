@@ -51,8 +51,7 @@ final class ImprovementEoFootprintTest {
         );
         MatcherAssert.assertThat(
             "XML file was not saved",
-            temp.resolve("jeo")
-                .resolve("xmir")
+            temp.resolve("xmir")
                 .resolve("org")
                 .resolve("eolang")
                 .resolve("jeo")

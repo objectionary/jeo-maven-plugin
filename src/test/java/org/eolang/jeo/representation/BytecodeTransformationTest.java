@@ -52,8 +52,7 @@ class BytecodeTransformationTest {
         MatcherAssert.assertThat(
             String.format("Can't find the transpiled file for the class '%s'.", name),
             Files.exists(
-                temp.resolve("jeo")
-                    .resolve("xmir")
+                temp.resolve("xmir")
                     .resolve("org")
                     .resolve("eolang")
                     .resolve("jeo")
