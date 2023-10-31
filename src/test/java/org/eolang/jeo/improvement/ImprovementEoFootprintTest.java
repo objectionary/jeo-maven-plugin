@@ -23,12 +23,18 @@
  */
 package org.eolang.jeo.improvement;
 
-import com.jcabi.xml.XMLDocument;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.Collection;
 import java.util.Collections;
+import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.EoRepresentation;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.hamcrest.io.FileMatchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -40,12 +46,8 @@ class ImprovementEoFootprintTest {
 
     @Test
     void savesSuccessfully(@TempDir final Path temp) {
-        new ImprovementEoFootprint(temp).apply(
-            Collections.singleton(new EoRepresentation(new XMLDocument("")))
-        );
-        final Path expected = temp.resolve(
-            "generated-sources/eo/org/eolang/jeo/EoRepresentation.eo"
-        );
+        new ImprovementEoFootprint(temp).apply(ImprovementEoFootprintTest.input());
+        final Path expected = temp.resolve("eo/org/eolang/jeo/EoRepresentation.eo");
         MatcherAssert.assertThat(
             String.format("The EO file was not saved to the expected location '%s'", expected),
             expected.toFile(),
@@ -53,4 +55,43 @@ class ImprovementEoFootprintTest {
         );
     }
 
+    @Test
+    void failsOnIoException(@TempDir final Path temp) throws IOException {
+        Files.setPosixFilePermissions(temp, Collections.singleton(PosixFilePermission.OTHERS_READ));
+        final String expected = String.format(
+            "Can't save org/eolang/jeo/EoRepresentation representation into %s",
+            temp.resolve("eo/org/eolang/jeo/EoRepresentation.eo")
+        );
+        MatcherAssert.assertThat(
+            "The exception message is not as expected",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new ImprovementEoFootprint(temp).apply(
+                    ImprovementEoFootprintTest.input()
+                )
+            ).getMessage(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    /**
+     * Xmir representation content.
+     * @return Single Representation in a Set.
+     */
+    private static Collection<Representation> input() {
+        return Collections.singleton(
+            new EoRepresentation(
+                "<program name='org/eolang/jeo/EoRepresentation'>",
+                "  <listing/>",
+                "  <errors/>",
+                "  <sheets/>",
+                "  <license/>",
+                "  <metas/>",
+                "  <objects>",
+                "    <o abstract='' name='org/eolang/jeo/EoRepresentation'/>",
+                "  </objects>",
+                "</program>"
+            )
+        );
+    }
 }

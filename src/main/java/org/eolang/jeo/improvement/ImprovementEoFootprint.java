@@ -61,6 +61,7 @@ public class ImprovementEoFootprint implements Improvement {
         final Path path = this.target.resolve("eo")
             .resolve(String.format("%s.eo", representation.name()));
         try {
+            Files.createDirectories(path.getParent());
             Files.write(
                 path,
                 new XMIR(representation.toEO()).toEO().getBytes(StandardCharsets.UTF_8)

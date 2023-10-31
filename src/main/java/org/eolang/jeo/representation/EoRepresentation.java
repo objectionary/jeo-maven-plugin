@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
@@ -41,6 +42,14 @@ public final class EoRepresentation implements Representation {
      * XML.
      */
     private final XML xml;
+
+    /**
+     * Constructor.
+     * @param lines Xml document lines.
+     */
+    public EoRepresentation(String... lines) {
+        this(new XMLDocument(String.join("\n", lines)));
+    }
 
     /**
      * Constructor.
