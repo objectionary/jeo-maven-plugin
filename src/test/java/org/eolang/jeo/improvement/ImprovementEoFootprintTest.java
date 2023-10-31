@@ -36,6 +36,8 @@ import org.hamcrest.Matchers;
 import org.hamcrest.io.FileMatchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
@@ -56,6 +58,7 @@ class ImprovementEoFootprintTest {
     }
 
     @Test
+    @DisabledOnOs(OS.WINDOWS)
     void failsOnIoException(@TempDir final Path temp) throws IOException {
         Files.setPosixFilePermissions(temp, Collections.singleton(PosixFilePermission.OTHERS_READ));
         final String expected = String.format(
