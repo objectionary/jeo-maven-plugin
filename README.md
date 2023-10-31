@@ -26,11 +26,12 @@ is [process-classes](https://maven.apache.org/guides/introduction/introduction-t
 If you are a developer of optimizations in EOlang you probably need to
 use the both goals in the following order:
 
-* `bytecode-to-eo` create EOlang files in the `target/jeo` directory.
+* `bytecode-to-eo` create EOlang files in the `target/generated-sources`
+  directory.
 * Provide your optimizations are applied to the EOlang files
-  in the `target/jeo` directory.
-* `eo-to-bytecode` scans the `target/jeo` directory for EOlang files and
-  converts them back to Java bytecode.
+  in the `target/generated-sources` directory.
+* `eo-to-bytecode` scans the `target/generated-sources` directory for EOlang
+  files and converts them back to Java bytecode.
 
 ## Invoke the plugin from the command line
 
