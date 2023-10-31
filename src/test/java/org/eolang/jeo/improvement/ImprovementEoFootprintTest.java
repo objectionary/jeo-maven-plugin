@@ -66,9 +66,8 @@ class ImprovementEoFootprintTest {
             "The exception message is not as expected",
             Assertions.assertThrows(
                 IllegalStateException.class,
-                () -> new ImprovementEoFootprint(temp).apply(
-                    ImprovementEoFootprintTest.input()
-                )
+                () -> new ImprovementEoFootprint(temp)
+                    .apply(ImprovementEoFootprintTest.input())
             ).getMessage(),
             Matchers.equalTo(expected)
         );

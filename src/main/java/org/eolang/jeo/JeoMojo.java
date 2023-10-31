@@ -32,9 +32,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eolang.jeo.improvement.ImprovementBytecodeFootprint;
 import org.eolang.jeo.improvement.ImprovementDistilledObjects;
-import org.eolang.jeo.improvement.ImprovementXmirFootprint;
 import org.eolang.jeo.improvement.ImprovementLogged;
 import org.eolang.jeo.improvement.ImprovementSet;
+import org.eolang.jeo.improvement.ImprovementXmirFootprint;
 
 /**
  * Default optimization mojo.

@@ -47,7 +47,7 @@ public final class EoRepresentation implements Representation {
      * Constructor.
      * @param lines Xml document lines.
      */
-    public EoRepresentation(String... lines) {
+    public EoRepresentation(final String... lines) {
         this(new XMLDocument(String.join("\n", lines)));
     }
 

@@ -37,11 +37,18 @@ import org.eolang.parser.XMIR;
  * It's just a class that prints all the generated .xmir files as .eo files for convenience.
  * @since 0.1
  */
-public class ImprovementEoFootprint implements Improvement {
+public final class ImprovementEoFootprint implements Improvement {
 
+    /**
+     * Where to save the EO.
+     */
     private final Path target;
 
-    public ImprovementEoFootprint(final Path generated) {
+    /**
+     * Constructor.
+     * @param generated Where to save the EO, usually it's target/generated-sources folder.
+     */
+    ImprovementEoFootprint(final Path generated) {
         this.target = generated;
     }
 
@@ -68,7 +75,8 @@ public class ImprovementEoFootprint implements Improvement {
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(
-                String.format("Can't save %s representation into %s",
+                String.format(
+                    "Can't save %s representation into %s",
                     representation.name(),
                     path
                 ),

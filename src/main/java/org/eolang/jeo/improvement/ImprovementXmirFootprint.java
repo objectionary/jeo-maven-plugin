@@ -31,9 +31,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.stream.Collectors;
-import org.eolang.jeo.XmirDefaultDirectory;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
+import org.eolang.jeo.XmirDefaultDirectory;
 import org.eolang.jeo.representation.EoRepresentation;
 
 /**
