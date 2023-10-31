@@ -41,7 +41,7 @@ import org.eolang.jeo.representation.EoRepresentation;
  *
  * @since 0.1.0
  */
-public final class ImprovementEoFootprint implements Improvement {
+public final class ImprovementXmirFootprint implements Improvement {
 
     /**
      * Where to save the EO.
@@ -52,7 +52,7 @@ public final class ImprovementEoFootprint implements Improvement {
      * Constructor.
      * @param home Where to save the EO.
      */
-    public ImprovementEoFootprint(final Path home) {
+    public ImprovementXmirFootprint(final Path home) {
         this.target = home;
     }
 

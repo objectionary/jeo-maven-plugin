@@ -33,15 +33,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link ImprovementEoFootprint}.
+ * Test case for {@link ImprovementXmirFootprint}.
  *
  * @since 0.1.0
  */
-final class ImprovementEoFootprintTest {
+final class ImprovementXmirFootprintTest {
 
     @Test
     void savesXml(@TempDir final Path temp) {
-        final ImprovementEoFootprint footprint = new ImprovementEoFootprint(temp);
+        final ImprovementXmirFootprint footprint = new ImprovementXmirFootprint(temp);
         footprint.apply(
             Collections.singleton(
                 new EoRepresentation(
