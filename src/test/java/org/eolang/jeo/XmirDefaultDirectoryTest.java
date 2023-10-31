@@ -29,15 +29,15 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link EoDefaultDirectory}.
+ * Test case for {@link XmirDefaultDirectory}.
  *
  * @since 0.1.0
  */
-final class EoDefaultDirectoryTest {
+final class XmirDefaultDirectoryTest {
 
     @Test
     void returnsDefaultDirectory() {
-        final Path actual = new EoDefaultDirectory().toPath();
+        final Path actual = new XmirDefaultDirectory().toPath();
         final Path expected = Path.of("xmir");
         MatcherAssert.assertThat(
             String.format(

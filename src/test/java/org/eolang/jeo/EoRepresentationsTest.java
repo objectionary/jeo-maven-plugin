@@ -44,7 +44,7 @@ final class EoRepresentationsTest {
     @Test
     void retrievesObjectsSuccessfully(@TempDir final Path temp) throws IOException {
         final int expected = 2;
-        final Path directory = temp.resolve(new EoDefaultDirectory().toPath());
+        final Path directory = temp.resolve(new XmirDefaultDirectory().toPath());
         Files.createDirectories(directory);
         Files.write(
             directory.resolve("first.xmir"),
@@ -63,7 +63,7 @@ final class EoRepresentationsTest {
 
     @Test
     void retrievesEmptyObjectsIfFolderIsEmpty(@TempDir final Path temp) throws IOException {
-        Files.createDirectories(temp.resolve(new EoDefaultDirectory().toPath()));
+        Files.createDirectories(temp.resolve(new XmirDefaultDirectory().toPath()));
         MatcherAssert.assertThat(
             "Objects were not retrieved, we expected empty list",
             new EoRepresentations(temp).objects(),

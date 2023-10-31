@@ -31,7 +31,7 @@ import java.util.Arrays;
  *
  * @since 0.1.0
  */
-public class EoDefaultDirectory {
+public class XmirDefaultDirectory {
 
     /**
      * Relative folders.
@@ -41,7 +41,7 @@ public class EoDefaultDirectory {
     /**
      * Constructor.
      */
-    public EoDefaultDirectory() {
+    public XmirDefaultDirectory() {
         this("xmir");
     }
 
@@ -49,7 +49,7 @@ public class EoDefaultDirectory {
      * Constructor.
      * @param relative Relative folders.
      */
-    private EoDefaultDirectory(final String... relative) {
+    private XmirDefaultDirectory(final String... relative) {
         this.folders = Arrays.copyOf(relative, relative.length);
     }
 

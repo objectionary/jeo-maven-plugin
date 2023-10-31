@@ -59,7 +59,7 @@ final class EoRepresentations {
      * @return All objects.
      */
     Collection<EoRepresentation> objects() {
-        final Path path = this.objectspath.resolve(new EoDefaultDirectory().toPath());
+        final Path path = this.objectspath.resolve(new XmirDefaultDirectory().toPath());
         try (Stream<Path> walk = Files.walk(path)) {
             return walk.filter(Files::isRegularFile)
                 .map(EoRepresentations::xml)
