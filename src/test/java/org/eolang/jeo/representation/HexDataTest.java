@@ -32,7 +32,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Test cases for {@link org.eolang.jeo.representation.HexData}.
- * @since 0.1.
+ * @since 0.1
  */
 class HexDataTest {
 
@@ -94,5 +94,4 @@ class HexDataTest {
             Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A")
         );
     }
-
 }

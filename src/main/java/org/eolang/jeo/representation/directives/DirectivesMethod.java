@@ -82,7 +82,15 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
 
     @Override
     public void visitJumpInsn(final int opcode, final Label label) {
-        this.opcode(opcode, label);
+        // @checkstyle MethodBodyCommentsCheck (10 lines)
+        // @todo #217:90min Save correct label value into XMIR.
+        //  Currently we just save hardcoded value about label to the XMIR, which is wrong,
+        //  of course. The problem here is that we can't directly use Label#getOffset() method
+        //  since label offset will be set later (not here). So we have to handle that problem
+        //  somehow and save correct Label value. Don't forget to write integration tests
+        //  for if/else and loops control-flow statements. The tests should check correct
+        //  transformation bytecode -> XMIR -> bytecode.
+        this.opcode(opcode, 0);
         super.visitJumpInsn(opcode, label);
     }
 
