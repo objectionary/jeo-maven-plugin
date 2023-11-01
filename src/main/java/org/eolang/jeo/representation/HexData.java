@@ -71,8 +71,14 @@ public final class HexData {
         final String res;
         if (this.data instanceof String) {
             res = "string";
-        } else {
+        } else if (this.data instanceof Integer) {
             res = "int";
+        } else if (this.data instanceof Float || this.data instanceof Double) {
+            res = "float";
+        } else if (this.data instanceof Boolean) {
+            res = "bool";
+        } else {
+            res = "bytes";
         }
         return res;
     }
