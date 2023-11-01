@@ -29,8 +29,6 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test cases for {@link org.eolang.jeo.representation.HexData}.
@@ -52,6 +50,22 @@ class HexDataTest {
         );
     }
 
+    @MethodSource("values")
+    @ParameterizedTest
+    void convertsRawDataIntoHexString(final Object data, final String hex) {
+        MatcherAssert.assertThat(
+            String.format(
+                String.format(
+                    "Expected and actual hex values differ, the value for '%s' should be '%s'",
+                    data,
+                    hex
+                )
+            ),
+            new HexData(data).value(),
+            Matchers.equalTo(hex)
+        );
+    }
+
     /**
      * Arguments for {@link HexDataTest#determinesTypeCorrectly(Object, String)} test.
      * @return Stream of arguments.
@@ -63,6 +77,21 @@ class HexDataTest {
             Arguments.of(new byte[]{1, 2, 3}, "bytes"),
             Arguments.of(true, "bool"),
             Arguments.of(0.1d, "float")
+        );
+    }
+
+    /**
+     * Arguments for {@link HexDataTest#convertsRawDataIntoHexString(Object, String)}.
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> values() {
+        return Stream.of(
+            Arguments.of(10, "00 00 00 00 00 00 00 0A"),
+            Arguments.of("Hello!", "48 65 6C 6C 6F 21"),
+            Arguments.of(new byte[]{1, 2, 3}, "01 02 03"),
+            Arguments.of(true, "01"),
+            Arguments.of(false, "00"),
+            Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A")
         );
     }
 
