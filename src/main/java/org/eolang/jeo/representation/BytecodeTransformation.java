@@ -25,7 +25,6 @@ package org.eolang.jeo.representation;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import org.eolang.jeo.BytecodeClasses;
 import org.eolang.jeo.improvement.ImprovementEoFootprint;
 import org.eolang.jeo.improvement.ImprovementSet;

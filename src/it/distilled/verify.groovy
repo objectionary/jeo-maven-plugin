@@ -31,6 +31,10 @@ assert new File(basedir, 'target/generated-sources/xmir/org/eolang/jeo/Main.xmir
 assert new File(basedir, 'target/generated-sources/xmir/org/eolang/jeo/A.xmir').exists()
 assert new File(basedir, 'target/generated-sources/xmir/org/eolang/jeo/B.xmir').exists()
 assert new File(basedir, 'target/generated-sources/xmir/org/eolang/jeo/A$B.xmir').exists()
+assert new File(basedir, 'target/generated-sources/eo/org/eolang/jeo/Main.eo').exists()
+assert new File(basedir, 'target/generated-sources/eo/org/eolang/jeo/A.eo').exists()
+assert new File(basedir, 'target/generated-sources/eo/org/eolang/jeo/B.eo').exists()
+assert new File(basedir, 'target/generated-sources/eo/org/eolang/jeo/A$B.eo').exists()
 assert new File(basedir, 'target/classes/org/eolang/jeo/A$B.class').exists()
 //Check that class file was changed
 assert log.contains("Main.class was recompiled successfully.")
