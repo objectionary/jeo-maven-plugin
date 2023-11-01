@@ -21,43 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
+package org.eolang.jeo.improvement;
 
 import java.nio.file.Path;
-import java.util.Arrays;
+import java.util.Collections;
+import org.eolang.jeo.representation.EoRepresentation;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.io.FileMatchers;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Default directory for XMIR.
+ * Test case for {@link ImprovementXmirFootprint}.
  *
  * @since 0.1.0
  */
-public class EoDefaultDirectory {
+final class ImprovementXmirFootprintTest {
 
-    /**
-     * Relative folders.
-     */
-    private final String[] folders;
-
-    /**
-     * Constructor.
-     */
-    public EoDefaultDirectory() {
-        this("jeo", "xmir");
-    }
-
-    /**
-     * Constructor.
-     * @param relative Relative folders.
-     */
-    private EoDefaultDirectory(final String... relative) {
-        this.folders = Arrays.copyOf(relative, relative.length);
-    }
-
-    /**
-     * Convert to path.
-     * @return Relative Path.
-     */
-    public Path toPath() {
-        return Path.of("", this.folders);
+    @Test
+    void savesXml(@TempDir final Path temp) {
+        final ImprovementXmirFootprint footprint = new ImprovementXmirFootprint(temp);
+        footprint.apply(
+            Collections.singleton(
+                new EoRepresentation(
+                    new BytecodeClass("org/eolang/jeo/Application").xml()
+                )
+            )
+        );
+        MatcherAssert.assertThat(
+            "XML file was not saved",
+            temp.resolve("xmir")
+                .resolve("org")
+                .resolve("eolang")
+                .resolve("jeo")
+                .resolve("Application.xmir").toFile(),
+            FileMatchers.anExistingFile()
+        );
     }
 }

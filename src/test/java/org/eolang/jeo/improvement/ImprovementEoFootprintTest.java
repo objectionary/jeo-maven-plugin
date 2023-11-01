@@ -23,41 +23,77 @@
  */
 package org.eolang.jeo.improvement;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.Collection;
 import java.util.Collections;
+import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.EoRepresentation;
-import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.hamcrest.io.FileMatchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link ImprovementEoFootprint}.
- *
- * @since 0.1.0
+ * @since 0.1
  */
-final class ImprovementEoFootprintTest {
+class ImprovementEoFootprintTest {
 
     @Test
-    void savesXml(@TempDir final Path temp) {
-        final ImprovementEoFootprint footprint = new ImprovementEoFootprint(temp);
-        footprint.apply(
-            Collections.singleton(
-                new EoRepresentation(
-                    new BytecodeClass("org/eolang/jeo/Application").xml()
-                )
-            )
+    void savesSuccessfully(@TempDir final Path temp) {
+        new ImprovementEoFootprint(temp).apply(ImprovementEoFootprintTest.input());
+        final Path expected = temp.resolve("eo/org/eolang/jeo/EoRepresentation.eo");
+        MatcherAssert.assertThat(
+            String.format("The EO file was not saved to the expected location '%s'", expected),
+            expected.toFile(),
+            FileMatchers.anExistingFile()
+        );
+    }
+
+    @Test
+    @DisabledOnOs(OS.WINDOWS)
+    void failsOnIoException(@TempDir final Path temp) throws IOException {
+        Files.setPosixFilePermissions(temp, Collections.singleton(PosixFilePermission.OTHERS_READ));
+        final String expected = String.format(
+            "Can't save org/eolang/jeo/EoRepresentation representation into %s",
+            temp.resolve("eo/org/eolang/jeo/EoRepresentation.eo")
         );
         MatcherAssert.assertThat(
-            "XML file was not saved",
-            temp.resolve("jeo")
-                .resolve("xmir")
-                .resolve("org")
-                .resolve("eolang")
-                .resolve("jeo")
-                .resolve("Application.xmir").toFile(),
-            FileMatchers.anExistingFile()
+            "The exception message is not as expected",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new ImprovementEoFootprint(temp)
+                    .apply(ImprovementEoFootprintTest.input())
+            ).getMessage(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    /**
+     * Xmir representation content.
+     * @return Single Representation in a Set.
+     */
+    private static Collection<Representation> input() {
+        return Collections.singleton(
+            new EoRepresentation(
+                "<program name='org/eolang/jeo/EoRepresentation'>",
+                "  <listing/>",
+                "  <errors/>",
+                "  <sheets/>",
+                "  <license/>",
+                "  <metas/>",
+                "  <objects>",
+                "    <o abstract='' name='org/eolang/jeo/EoRepresentation'/>",
+                "  </objects>",
+                "</program>"
+            )
         );
     }
 }

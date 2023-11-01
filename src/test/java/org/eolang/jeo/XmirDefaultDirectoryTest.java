@@ -21,50 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation;
+package org.eolang.jeo;
 
-import java.io.IOException;
 import java.nio.file.Path;
-import org.eolang.jeo.BytecodeClasses;
-import org.eolang.jeo.improvement.ImprovementXmirFootprint;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
 /**
- * Transpilation of the bytecode to the EO.
+ * Test case for {@link XmirDefaultDirectory}.
  *
  * @since 0.1.0
  */
-public class BytecodeTransformation {
+final class XmirDefaultDirectoryTest {
 
-    /**
-     * Project compiled classes.
-     */
-    private final Path classes;
-
-    /**
-     * Project default target directory.
-     */
-    private final Path target;
-
-    /**
-     * Constructor.
-     * @param classes Project compiled classes.
-     * @param target Project default target directory.
-     */
-    public BytecodeTransformation(
-        final Path classes,
-        final Path target
-    ) {
-        this.classes = classes;
-        this.target = target;
-    }
-
-    /**
-     * Transpile all bytecode files.
-     * @throws IOException If some I/O problem arises.
-     */
-    public void transpile() throws IOException {
-        new ImprovementXmirFootprint(this.target).apply(
-            new BytecodeClasses(this.classes).bytecode()
+    @Test
+    void returnsDefaultDirectory() {
+        final Path actual = new XmirDefaultDirectory().toPath();
+        final Path expected = Path.of("xmir");
+        MatcherAssert.assertThat(
+            String.format(
+                "We expect the default directory to be '%s', but was '%s'",
+                expected,
+                actual
+            ),
+            actual,
+            Matchers.equalTo(
+                expected
+            )
         );
     }
 }

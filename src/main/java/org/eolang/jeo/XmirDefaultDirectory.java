@@ -24,31 +24,40 @@
 package org.eolang.jeo;
 
 import java.nio.file.Path;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
+import java.util.Arrays;
 
 /**
- * Test case for {@link EoDefaultDirectory}.
+ * Default directory for XMIR.
  *
  * @since 0.1.0
  */
-final class EoDefaultDirectoryTest {
+public class XmirDefaultDirectory {
 
-    @Test
-    void returnsDefaultDirectory() {
-        final Path actual = new EoDefaultDirectory().toPath();
-        final Path expected = Path.of("jeo", "xmir");
-        MatcherAssert.assertThat(
-            String.format(
-                "We expect the default directory to be '%s', but was '%s'",
-                expected,
-                actual
-            ),
-            actual,
-            Matchers.equalTo(
-                expected
-            )
-        );
+    /**
+     * Relative folders.
+     */
+    private final String[] folders;
+
+    /**
+     * Constructor.
+     */
+    public XmirDefaultDirectory() {
+        this("xmir");
+    }
+
+    /**
+     * Constructor.
+     * @param relative Relative folders.
+     */
+    private XmirDefaultDirectory(final String... relative) {
+        this.folders = Arrays.copyOf(relative, relative.length);
+    }
+
+    /**
+     * Convert to path.
+     * @return Relative Path.
+     */
+    public Path toPath() {
+        return Path.of("", this.folders);
     }
 }

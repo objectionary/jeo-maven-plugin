@@ -23,26 +23,25 @@
  */
 package org.eolang.jeo.improvement;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
-import org.eolang.parser.XMIR;
+import org.eolang.jeo.XmirDefaultDirectory;
+import org.eolang.jeo.representation.EoRepresentation;
 
 /**
- * It's not actually an improvement.
- * It's just a class that prints all the generated .xmir files as .eo files for convenience.
- * @since 0.1
- * @todo #215:60min Apply ImprovementEoFootprint.
- *  Currently we don't use ImprovementEoFootprint. We have to add it to the next classes:
- *  - {@link org.eolang.jeo.BytecodeToEoMojo}
- *  - {@link org.eolang.jeo.JeoMojo}
- *  Don't forget to add checks for integration tests.
+ * Footprint of the EO's.
+ *
+ * @since 0.1.0
  */
-public final class ImprovementEoFootprint implements Improvement {
+public final class ImprovementXmirFootprint implements Improvement {
 
     /**
      * Where to save the EO.
@@ -51,40 +50,41 @@ public final class ImprovementEoFootprint implements Improvement {
 
     /**
      * Constructor.
-     * @param generated Where to save the EO, usually it's target/generated-sources folder.
+     * @param home Where to save the EO.
      */
-    ImprovementEoFootprint(final Path generated) {
-        this.target = generated;
+    public ImprovementXmirFootprint(final Path home) {
+        this.target = home;
     }
 
     @Override
-    public Collection<? extends Representation> apply(
+    public Collection<Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        representations.forEach(this::saveEo);
-        return representations;
+        return representations.stream()
+            .map(Representation::toEO)
+            .map(EoRepresentation::new)
+            .peek(this::tryToSave)
+            .collect(Collectors.toList());
     }
 
     /**
-     * Save the EO representation into the 'target/generated-sources/eo' folder.
-     * @param representation EO representation as XMIR.
+     * Try to save XML to the target folder.
+     * @param representation XML to save.
      */
-    private void saveEo(final Representation representation) {
-        final Path path = this.target.resolve("eo")
-            .resolve(String.format("%s.eo", representation.name()));
+    private void tryToSave(final Representation representation) {
+        final String name = representation.name();
+        final Path path = this.target.resolve(new XmirDefaultDirectory().toPath())
+            .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
         try {
             Files.createDirectories(path.getParent());
             Files.write(
                 path,
-                new XMIR(representation.toEO()).toEO().getBytes(StandardCharsets.UTF_8)
+                representation.toEO().toString().getBytes(StandardCharsets.UTF_8),
+                StandardOpenOption.CREATE_NEW
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(
-                String.format(
-                    "Can't save %s representation into %s",
-                    representation.name(),
-                    path
-                ),
+                String.format("Can't save XML to %s", path),
                 exception
             );
         }
