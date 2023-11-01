@@ -25,7 +25,10 @@ package org.eolang.jeo.representation;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import org.eolang.jeo.BytecodeClasses;
+import org.eolang.jeo.improvement.ImprovementEoFootprint;
+import org.eolang.jeo.improvement.ImprovementSet;
 import org.eolang.jeo.improvement.ImprovementXmirFootprint;
 
 /**
@@ -63,8 +66,9 @@ public class BytecodeTransformation {
      * @throws IOException If some I/O problem arises.
      */
     public void transpile() throws IOException {
-        new ImprovementXmirFootprint(this.target).apply(
-            new BytecodeClasses(this.classes).bytecode()
-        );
+        new ImprovementSet(
+            new ImprovementEoFootprint(this.target),
+            new ImprovementXmirFootprint(this.target)
+        ).apply(new BytecodeClasses(this.classes).bytecode());
     }
 }

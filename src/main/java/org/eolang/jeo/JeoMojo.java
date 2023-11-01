@@ -32,6 +32,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eolang.jeo.improvement.ImprovementBytecodeFootprint;
 import org.eolang.jeo.improvement.ImprovementDistilledObjects;
+import org.eolang.jeo.improvement.ImprovementEoFootprint;
 import org.eolang.jeo.improvement.ImprovementLogged;
 import org.eolang.jeo.improvement.ImprovementSet;
 import org.eolang.jeo.improvement.ImprovementXmirFootprint;
@@ -73,6 +74,7 @@ public final class JeoMojo extends AbstractMojo {
                     new ImprovementLogged(),
                     new ImprovementDistilledObjects(),
                     new ImprovementXmirFootprint(this.generated.toPath()),
+                    new ImprovementEoFootprint(this.generated.toPath()),
                     new ImprovementBytecodeFootprint(this.classes.toPath())
                 )
             ).apply();

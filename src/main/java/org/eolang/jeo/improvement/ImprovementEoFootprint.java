@@ -53,7 +53,7 @@ public final class ImprovementEoFootprint implements Improvement {
      * Constructor.
      * @param generated Where to save the EO, usually it's target/generated-sources folder.
      */
-    ImprovementEoFootprint(final Path generated) {
+    public ImprovementEoFootprint(final Path generated) {
         this.target = generated;
     }
 
