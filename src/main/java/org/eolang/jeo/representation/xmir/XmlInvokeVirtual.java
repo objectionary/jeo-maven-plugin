@@ -32,19 +32,31 @@ import java.util.List;
  */
 public class XmlInvokeVirtual {
 
+    private final List<XmlInstruction> instructions;
+
+    public XmlInvokeVirtual(final List<XmlInstruction> instructions) {
+        this.instructions = instructions;
+    }
+
     public String fieldName() {
-        return "";
+        return String.valueOf(this.instructions.get(0).arguments()[1]);
     }
 
     public String fieldType() {
-        return "";
+        return String.valueOf(this.instructions.get(0).arguments()[2]);
     }
 
     public String methodName() {
-        return "";
+        return String.valueOf(this.instructions.get(this.instructions.size() - 1).arguments()[1]);
     }
 
     public List<XmlInstruction> arguments() {
-        return Collections.emptyList();
+        final List<XmlInstruction> result;
+        if (this.instructions.size() < 3) {
+            result = Collections.emptyList();
+        } else {
+            result = this.instructions.subList(1, this.instructions.size() - 1);
+        }
+        return result;
     }
 }

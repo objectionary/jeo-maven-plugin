@@ -35,11 +35,11 @@ import org.junit.jupiter.api.Test;
 class XmlMethodTest {
 
     @Test
-    public void retrievesSimpleInvokeVirtualCalls() {
+    void retrievesSimpleInvokeVirtualCalls() {
         MatcherAssert.assertThat(
-            "Excatly one invoke virtual call is expected",
+            "Exactly one invoke virtual call is expected",
             new XmlMethod(
-                "<o>",
+                "<o base='seq'>",
                 "<o base='opcode' name='GETFIELD-180-31'>",
                 "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 42</o>\n",
                 "  <o base='string' data='bytes'>61</o>\n",
@@ -58,7 +58,7 @@ class XmlMethodTest {
     @Test
     void retrievesInvokeVirtualCallsWithArguments() {
         final List<XmlInvokeVirtual> all = new XmlMethod(
-            "<o>",
+            "<o base='seq'>",
             "<o base='opcode' name='GETFIELD-180-31'>",
             "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 42</o>",
             "  <o base='string' data='bytes'>61</o>",
@@ -73,23 +73,24 @@ class XmlMethodTest {
         ).invokeVirtuals();
         final XmlInvokeVirtual call = all.get(0);
         MatcherAssert.assertThat(
+            "Exactly one invoke argument is expected",
             call.arguments(),
             Matchers.hasSize(1)
         );
         MatcherAssert.assertThat(
             "Field name should be 'a' in hex",
             call.fieldName(),
-            Matchers.equalTo("61")
+            Matchers.equalTo("a")
         );
         MatcherAssert.assertThat(
             "Field type should be 'Lorg/eolang/jeo/A;' in hex",
             call.fieldType(),
-            Matchers.equalTo("4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 3B")
+            Matchers.equalTo("Lorg/eolang/jeo/A;")
         );
         MatcherAssert.assertThat(
             "Method name should be 'foo' in hex",
             call.methodName(),
-            Matchers.equalTo("66 6F 6F")
+            Matchers.equalTo("foo")
         );
     }
 
@@ -98,7 +99,7 @@ class XmlMethodTest {
         MatcherAssert.assertThat(
             "No invoke virtual calls are expected",
             new XmlMethod(
-                "<o>",
+                "<o base='seq'>",
                 "<o base='opcode' name='GETFIELD-180-31'>",
                 "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 42</o>",
                 "  <o base='string' data='bytes'>61</o>",

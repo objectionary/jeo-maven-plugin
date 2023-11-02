@@ -24,12 +24,14 @@
 package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import org.objectweb.asm.Opcodes;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -146,8 +148,21 @@ public final class XmlMethod {
      * foo.bar(a, b);
      * @return List of invocations.
      */
-    public List<XmlInvokeVirtual> invokeVirtuals() {
-        return Collections.emptyList();
+    List<XmlInvokeVirtual> invokeVirtuals() {
+        final List<XmlInstruction> all = this.instructions();
+        final List<XmlInvokeVirtual> res = new ArrayList<>();
+        for (int index = 0; index < all.size(); ++index) {
+            final XmlInstruction top = all.get(index);
+            if (top.code() == Opcodes.GETFIELD) {
+                for (int inner = index + 1; inner < all.size(); ++inner) {
+                    final XmlInstruction bottom = all.get(inner);
+                    if (bottom.code() == Opcodes.INVOKEVIRTUAL) {
+                        res.add(new XmlInvokeVirtual(all.subList(index, inner + 1)));
+                    }
+                }
+            }
+        }
+        return res;
     }
 
     /**
