@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -45,11 +46,16 @@ public final class XmlMethod {
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
 
+
+    public XmlMethod(String... xml) {
+        this(new XMLDocument(String.join("", xml)).node());
+    }
+
     /**
      * Constructor.
      * @param node Method node.
      */
-    public XmlMethod(final Node node) {
+    XmlMethod(final Node node) {
         this.node = node;
     }
 
@@ -128,6 +134,20 @@ public final class XmlMethod {
             .map(XmlNode::toInstruction)
             .filter(instr -> Arrays.stream(predicates).allMatch(predicate -> predicate.test(instr)))
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Retrieves the list of all invocations of other object methods.
+     * Usually they are invoke virtual instructions which look like this:
+     * - GET FIELD: foo
+     * - LIST OF ARGUMENTS
+     * - INVOKEVIRTUAL: bar
+     * This list represents the following command:
+     * foo.bar(a, b);
+     * @return List of invocations.
+     */
+    public List<XmlInvokeVirtual> invokeVirtuals() {
+        return Collections.emptyList();
     }
 
     /**

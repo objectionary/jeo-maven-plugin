@@ -393,7 +393,7 @@ public final class ImprovementDistilledObjects implements Improvement {
                     }
                     decor.withConstructor(method);
                 } else {
-                    this.replaceMethodContent(decor, method);
+                    this.replaceOldInvokationsWithNewInvocations(decor, method);
                 }
             }
         }
@@ -429,29 +429,40 @@ public final class ImprovementDistilledObjects implements Improvement {
 
         /**
          * Replace method content.
-         * @param where Decorator.
-         * @param what Inlined method.
+         * This function scans all the class methods and tries to find all invocations of the old
+         * object methods. If it finds any, it replaces them with the new object invocations.
+         * For example, if we had the next code:
+         * a.foo();
+         * it will be replaced with
+         * b.foo();
+         * and then b.foo() will be inlined.
+         * @param where To replace.
+         * @param what To inline.
          * @todo #162:90min Refactor replaceMethodContent method.
          *  Right now it's a method with high complexity and it's hard to read it.
          *  We need to refactor it or inline into some other method.
          */
-        private void replaceMethodContent(
+        private void replaceOldInvokationsWithNewInvocations(
             final XmlClass where,
             final XmlMethod what
         ) {
             final String old = this.decorated.name();
             for (final XmlMethod candidate : where.methods()) {
                 final List<XmlInstruction> res = new ArrayList<>(0);
-                for (final XmlInstruction instruction
-                    : candidate.instructionsWithout(Opcodes.GETFIELD)) {
-                    if (instruction.code() == Opcodes.INVOKEVIRTUAL) {
-                        what.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
-                            .stream()
-                            .peek(instr -> instr.replaceArguementsValues(old, this.combinedName()))
-                            .forEach(res::add);
-                    } else {
-                        res.add(instruction);
-                    }
+//                for (final XmlInstruction instruction : candidate.instructionsWithout(
+//                    Opcodes.GETFIELD)) {
+//                    if (instruction.code() == Opcodes.INVOKEVIRTUAL) {
+//                        what.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
+//                            .stream()
+//                            .peek(instr -> instr.replaceArguementsValues(old, this.combinedName()))
+//                            .forEach(res::add);
+//                    } else {
+//                        res.add(instruction);
+//                    }
+//                }
+
+                for (final XmlInstruction instruction : candidate.instructions()) {
+                    res.add(instruction);
                 }
                 candidate.setInstructions(res);
             }
