@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.Collections;
 import java.util.List;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Abstraction over invoke virtual call.
@@ -38,16 +39,24 @@ public class XmlInvokeVirtual {
         this.instructions = instructions;
     }
 
-    public String fieldName() {
-        return String.valueOf(this.instructions.get(0).arguments()[1]);
+    XmlInstruction field() {
+        return this.instructions.get(0);
     }
 
-    public String fieldType() {
-        return String.valueOf(this.instructions.get(0).arguments()[2]);
+    XmlInstruction invocation() {
+        return this.instructions.get(this.instructions.size() - 1);
     }
 
-    public String methodName() {
-        return String.valueOf(this.instructions.get(this.instructions.size() - 1).arguments()[1]);
+    String fieldName() {
+        return String.valueOf(this.field().arguments()[1]);
+    }
+
+    String fieldType() {
+        return String.valueOf(this.field().arguments()[2]);
+    }
+
+    String methodName() {
+        return String.valueOf(this.invocation().arguments()[1]);
     }
 
     public List<XmlInstruction> arguments() {

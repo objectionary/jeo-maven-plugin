@@ -28,7 +28,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.objectweb.asm.Opcodes;
@@ -139,6 +141,14 @@ public final class XmlMethod {
     }
 
     /**
+     * Copy method node.
+     * @return Instructions.
+     */
+    public XmlMethod copy() {
+        return new XmlMethod(this.node.cloneNode(true));
+    }
+
+    /**
      * Retrieves the list of all invocations of other object methods.
      * Usually they are invoke virtual instructions which look like this:
      * - GET FIELD: foo
@@ -148,7 +158,7 @@ public final class XmlMethod {
      * foo.bar(a, b);
      * @return List of invocations.
      */
-    List<XmlInvokeVirtual> invokeVirtuals() {
+    public List<XmlInvokeVirtual> invokeVirtuals() {
         final List<XmlInstruction> all = this.instructions();
         final List<XmlInvokeVirtual> res = new ArrayList<>();
         for (int index = 0; index < all.size(); ++index) {
@@ -163,6 +173,43 @@ public final class XmlMethod {
             }
         }
         return res;
+    }
+
+
+    public void inline(XmlMethod inline, final String old, final String combined) {
+        final List<XmlInvokeVirtual> virtuals = this.invokeVirtuals();
+        Set<XmlInstruction> ignored = virtuals.stream().map(XmlInvokeVirtual::field)
+            .collect(Collectors.toSet());
+        Set<XmlInstruction> aims = virtuals.stream().map(XmlInvokeVirtual::invocation)
+            .collect(Collectors.toSet());
+        List<XmlInstruction> body = new ArrayList<>();
+
+        for (final XmlInstruction instruction : this.instructions()) {
+            if (ignored.contains(instruction)) {
+                continue;
+            } else if (aims.contains(instruction)) {
+//                body.add(instruction);
+//                body.addAll(
+                inline.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
+                    .stream()
+                    .peek(instr -> instr.replaceArguementsValues(old, combined))
+                    .forEach(body::add);
+//                final Node aim = instruction.node();
+//                for (final XmlInstruction inner : inline.instructionsWithout(
+//                    Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)) {
+//                    this.node.insertBefore(inner.node().cloneNode(true), aim);
+//
+//                }
+//                this.node.removeChild(aim);
+            } else {
+                body.add(instruction);
+            }
+            this.setInstructions(body);
+        }
+//        what.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
+//                            .stream()
+//                            .peek(instr -> instr.replaceArguementsValues(old, this.combinedName()))
+//                            .forEach(res::add);
     }
 
     /**

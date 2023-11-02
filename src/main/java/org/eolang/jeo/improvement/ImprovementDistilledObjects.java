@@ -41,6 +41,7 @@ import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlField;
 import org.eolang.jeo.representation.xmir.XmlInstruction;
+import org.eolang.jeo.representation.xmir.XmlInvokeVirtual;
 import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.objectweb.asm.Opcodes;
@@ -448,7 +449,9 @@ public final class ImprovementDistilledObjects implements Improvement {
         ) {
             final String old = this.decorated.name();
             for (final XmlMethod candidate : where.methods()) {
-                final List<XmlInstruction> res = new ArrayList<>(0);
+//                final List<XmlInstruction> res = new ArrayList<>(0);
+//                final List<XmlInvokeVirtual> calls = candidate.copy().invokeVirtuals();
+                candidate.inline(what, old, this.combinedName());
 //                for (final XmlInstruction instruction : candidate.instructionsWithout(
 //                    Opcodes.GETFIELD)) {
 //                    if (instruction.code() == Opcodes.INVOKEVIRTUAL) {
@@ -461,10 +464,10 @@ public final class ImprovementDistilledObjects implements Improvement {
 //                    }
 //                }
 
-                for (final XmlInstruction instruction : candidate.instructions()) {
-                    res.add(instruction);
-                }
-                candidate.setInstructions(res);
+//                for (final XmlInstruction instruction : candidate.instructions()) {
+//                    res.add(instruction);
+//                }
+//                candidate.setInstructions(res);
             }
         }
     }
