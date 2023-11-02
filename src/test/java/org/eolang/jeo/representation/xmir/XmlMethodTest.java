@@ -60,15 +60,15 @@ class XmlMethodTest {
         final List<XmlInvokeVirtual> all = new XmlMethod(
             "<o>",
             "<o base='opcode' name='GETFIELD-180-31'>",
-            "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 42</o>\n",
-            "  <o base='string' data='bytes'>61</o>\n",
-            "  <o base='string' data='bytes'>4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 3B</o>\n",
-            "</o>\n",
-            "<o base='opcode' name='ICONST_1-4-32'",
-            "<o base='opcode' name='INVOKEVIRTUAL-182-33'>\n",
-            "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41</o>\n",
-            "  <o base='string' data='bytes'>66 6F 6F</o>\n",
-            "  <o base='string' data='bytes'>28 29 49</o>\n",
+            "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 42</o>",
+            "  <o base='string' data='bytes'>61</o>",
+            "  <o base='string' data='bytes'>4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 3B</o>",
+            "</o>",
+            "<o base='opcode' name='ICONST_1-4-32'/>",
+            "<o base='opcode' name='INVOKEVIRTUAL-182-33'>",
+            "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41</o>",
+            "  <o base='string' data='bytes'>66 6F 6F</o>",
+            "  <o base='string' data='bytes'>28 29 49</o>",
             "</o></o>"
         ).invokeVirtuals();
         final XmlInvokeVirtual call = all.get(0);
@@ -100,10 +100,9 @@ class XmlMethodTest {
             new XmlMethod(
                 "<o>",
                 "<o base='opcode' name='GETFIELD-180-31'>",
-                "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 42</o>\n",
-                "  <o base='string' data='bytes'>61</o>\n",
-                "  <o base='string' data='bytes'>4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 3B</o>\n",
-                "</o>\n",
+                "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 42</o>",
+                "  <o base='string' data='bytes'>61</o>",
+                "  <o base='string' data='bytes'>4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 3B</o>",
                 "</o></o>"
             ).invokeVirtuals(),
             Matchers.empty()
