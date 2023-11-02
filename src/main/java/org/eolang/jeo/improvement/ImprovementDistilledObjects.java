@@ -367,19 +367,18 @@ public final class ImprovementDistilledObjects implements Improvement {
                 .withName(name)
                 .withTime(LocalDateTime.now())
                 .withListing("");
-            this.handleClass(program.top().withName(name), name);
+            this.handleClass(program.top().withName(name));
             return new EoRepresentation(program.toXmir());
         }
 
         /**
          * Handle decorator class.
          * @param decor Decorator.
-         * @param combined Combined name.
          * @todo #162:90min Refactor handleClass method.
          *  Right now it's a method with high complexity and it's hard to read it.
          *  We need to refactor it or inline into some other method.
          */
-        private void handleClass(final XmlClass decor, final String combined) {
+        private void handleClass(final XmlClass decor) {
             final Node root = decor.node();
             DecoratorPair.removeOldFields(root);
             DecoratorPair.removeOldConstructors(root);
@@ -388,11 +387,13 @@ public final class ImprovementDistilledObjects implements Improvement {
             for (final XmlMethod method : clazz.methods()) {
                 if (method.isConstructor()) {
                     for (final XmlInstruction instruction : method.instructions()) {
-                        instruction.replaceArguementsValues(this.decorated.name(), combined);
+                        instruction.replaceArguementsValues(this.decorated.name(),
+                            this.combinedName()
+                        );
                     }
                     decor.withConstructor(method);
                 } else {
-                    this.replaceMethodContent(decor, method, combined);
+                    this.replaceMethodContent(decor, method);
                 }
             }
         }
@@ -428,27 +429,25 @@ public final class ImprovementDistilledObjects implements Improvement {
 
         /**
          * Replace method content.
-         * @param decor Decorator.
-         * @param inlined Inlined method.
-         * @param combined Combined name.
+         * @param where Decorator.
+         * @param what Inlined method.
          * @todo #162:90min Refactor replaceMethodContent method.
          *  Right now it's a method with high complexity and it's hard to read it.
          *  We need to refactor it or inline into some other method.
          */
         private void replaceMethodContent(
-            final XmlClass decor,
-            final XmlMethod inlined,
-            final String combined
+            final XmlClass where,
+            final XmlMethod what
         ) {
             final String old = this.decorated.name();
-            for (final XmlMethod candidate : decor.methods()) {
+            for (final XmlMethod candidate : where.methods()) {
                 final List<XmlInstruction> res = new ArrayList<>(0);
                 for (final XmlInstruction instruction
                     : candidate.instructionsWithout(Opcodes.GETFIELD)) {
                     if (instruction.code() == Opcodes.INVOKEVIRTUAL) {
-                        inlined.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
+                        what.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
                             .stream()
-                            .peek(instr -> instr.replaceArguementsValues(old, combined))
+                            .peek(instr -> instr.replaceArguementsValues(old, this.combinedName()))
                             .forEach(res::add);
                     } else {
                         res.add(instruction);
