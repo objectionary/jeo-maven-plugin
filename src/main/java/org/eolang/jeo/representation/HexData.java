@@ -54,11 +54,28 @@ public final class HexData {
         final byte[] res;
         if (this.data instanceof String) {
             res = ((String) this.data).getBytes(StandardCharsets.UTF_8);
-        } else {
+        } else if (this.data instanceof Integer) {
             res = ByteBuffer
                 .allocate(Long.BYTES)
                 .putLong((int) this.data)
                 .array();
+        } else if (this.data instanceof Float || this.data instanceof Double) {
+            res = ByteBuffer
+                .allocate(Long.BYTES)
+                .putDouble((double) this.data)
+                .array();
+        } else if (this.data instanceof Boolean) {
+            if ((boolean) this.data) {
+                res = new byte[]{0x01};
+            } else {
+                res = new byte[]{0x00};
+            }
+        } else if (this.data instanceof byte[]) {
+            res = (byte[]) this.data;
+        } else {
+            throw new IllegalStateException(
+                String.format("Can't convert '%s' into hex string", this.data)
+            );
         }
         return HexData.bytesToHex(res);
     }
@@ -71,8 +88,14 @@ public final class HexData {
         final String res;
         if (this.data instanceof String) {
             res = "string";
-        } else {
+        } else if (this.data instanceof Integer) {
             res = "int";
+        } else if (this.data instanceof Float || this.data instanceof Double) {
+            res = "float";
+        } else if (this.data instanceof Boolean) {
+            res = "bool";
+        } else {
+            res = "bytes";
         }
         return res;
     }
