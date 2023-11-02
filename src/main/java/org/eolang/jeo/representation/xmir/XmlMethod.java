@@ -176,40 +176,41 @@ public final class XmlMethod {
     }
 
 
+    /**
+     * Inline all method invocations.
+     * @param inline Method to inline.
+     * @param old Old name.
+     * @param combined Combined name.
+     * @todo #206:60min Simplify 'inline' method.
+     *  Right now we use raw "inline" method instructions and trying to filter instructions
+     *  that we don't need to inline. Like:
+     *  - RETURN
+     *  - IRETURN
+     *  - ALOAD
+     *  We have to move it into a separate method and use it in 'inline' method.
+     */
     public void inline(XmlMethod inline, final String old, final String combined) {
-        final List<XmlInvokeVirtual> virtuals = this.invokeVirtuals();
-        Set<XmlInstruction> ignored = virtuals.stream().map(XmlInvokeVirtual::field)
+        final List<XmlInvokeVirtual> invocations = this.invokeVirtuals();
+        final Set<XmlInstruction> ignored = invocations.stream()
+            .map(XmlInvokeVirtual::field)
             .collect(Collectors.toSet());
-        Set<XmlInstruction> aims = virtuals.stream().map(XmlInvokeVirtual::invocation)
+        final Set<XmlInstruction> where = invocations.stream()
+            .map(XmlInvokeVirtual::invocation)
             .collect(Collectors.toSet());
-        List<XmlInstruction> body = new ArrayList<>();
-
+        final List<XmlInstruction> body = new ArrayList<>(0);
         for (final XmlInstruction instruction : this.instructions()) {
-            if (ignored.contains(instruction)) {
-                continue;
-            } else if (aims.contains(instruction)) {
-//                body.add(instruction);
-//                body.addAll(
-                inline.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
-                    .stream()
-                    .peek(instr -> instr.replaceArguementsValues(old, combined))
-                    .forEach(body::add);
-//                final Node aim = instruction.node();
-//                for (final XmlInstruction inner : inline.instructionsWithout(
-//                    Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)) {
-//                    this.node.insertBefore(inner.node().cloneNode(true), aim);
-//
-//                }
-//                this.node.removeChild(aim);
-            } else {
-                body.add(instruction);
+            if (!ignored.contains(instruction)) {
+                if (where.contains(instruction)) {
+                    inline.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
+                        .stream()
+                        .peek(instr -> instr.replaceArguementsValues(old, combined))
+                        .forEach(body::add);
+                } else {
+                    body.add(instruction);
+                }
             }
-            this.setInstructions(body);
         }
-//        what.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
-//                            .stream()
-//                            .peek(instr -> instr.replaceArguementsValues(old, this.combinedName()))
-//                            .forEach(res::add);
+        this.setInstructions(body);
     }
 
     /**

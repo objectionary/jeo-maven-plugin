@@ -41,10 +41,8 @@ import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlField;
 import org.eolang.jeo.representation.xmir.XmlInstruction;
-import org.eolang.jeo.representation.xmir.XmlInvokeVirtual;
 import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.eolang.jeo.representation.xmir.XmlProgram;
-import org.objectweb.asm.Opcodes;
 import org.w3c.dom.Node;
 
 /**

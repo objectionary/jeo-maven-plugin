@@ -33,32 +33,63 @@ import org.objectweb.asm.Opcodes;
  */
 public class XmlInvokeVirtual {
 
+    /**
+     * Instructions.
+     */
     private final List<XmlInstruction> instructions;
 
-    public XmlInvokeVirtual(final List<XmlInstruction> instructions) {
+    /**
+     * Constructor.
+     * @param instructions Instructions.
+     */
+    XmlInvokeVirtual(final List<XmlInstruction> instructions) {
         this.instructions = instructions;
     }
 
+    /**
+     * GETFIELD instruction.
+     * @return Instruction.
+     */
     XmlInstruction field() {
         return this.instructions.get(0);
     }
 
+    /**
+     * INVOKEVIRTUAL instruction.
+     * @return Instruction.
+     */
     XmlInstruction invocation() {
         return this.instructions.get(this.instructions.size() - 1);
     }
 
+    /**
+     * Get field name.
+     * @return Field name.
+     */
     String fieldName() {
         return String.valueOf(this.field().arguments()[1]);
     }
 
+    /**
+     * Get field type.
+     * @return Field type.
+     */
     String fieldType() {
         return String.valueOf(this.field().arguments()[2]);
     }
 
+    /**
+     * Get method name.
+     * @return Method name.
+     */
     String methodName() {
         return String.valueOf(this.invocation().arguments()[1]);
     }
 
+    /**
+     * Get method arguments.
+     * @return Method arguments.
+     */
     public List<XmlInstruction> arguments() {
         final List<XmlInstruction> result;
         if (this.instructions.size() < 3) {
