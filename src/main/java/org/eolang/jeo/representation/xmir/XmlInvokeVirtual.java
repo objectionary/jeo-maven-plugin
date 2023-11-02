@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.Collections;
 import java.util.List;
-import org.objectweb.asm.Opcodes;
 
 /**
  * Abstraction over invoke virtual call.
@@ -90,7 +89,7 @@ public class XmlInvokeVirtual {
      * Get method arguments.
      * @return Method arguments.
      */
-    public List<XmlInstruction> arguments() {
+    List<XmlInstruction> arguments() {
         final List<XmlInstruction> result;
         if (this.instructions.size() < 3) {
             result = Collections.emptyList();

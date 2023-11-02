@@ -386,7 +386,8 @@ public final class ImprovementDistilledObjects implements Improvement {
             for (final XmlMethod method : clazz.methods()) {
                 if (method.isConstructor()) {
                     for (final XmlInstruction instruction : method.instructions()) {
-                        instruction.replaceArguementsValues(this.decorated.name(),
+                        instruction.replaceArguementsValues(
+                            this.decorated.name(),
                             this.combinedName()
                         );
                     }

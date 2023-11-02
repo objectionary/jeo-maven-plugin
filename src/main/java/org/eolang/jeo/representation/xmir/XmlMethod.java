@@ -26,9 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -50,8 +48,11 @@ public final class XmlMethod {
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
 
-
-    public XmlMethod(String... xml) {
+    /**
+     * Constructor.
+     * @param xml XML node as String.
+     */
+    XmlMethod(final String... xml) {
         this(new XMLDocument(String.join("", xml)).node());
     }
 
@@ -160,7 +161,7 @@ public final class XmlMethod {
      */
     public List<XmlInvokeVirtual> invokeVirtuals() {
         final List<XmlInstruction> all = this.instructions();
-        final List<XmlInvokeVirtual> res = new ArrayList<>();
+        final List<XmlInvokeVirtual> res = new ArrayList<>(0);
         for (int index = 0; index < all.size(); ++index) {
             final XmlInstruction top = all.get(index);
             if (top.code() == Opcodes.GETFIELD) {
@@ -175,7 +176,6 @@ public final class XmlMethod {
         return res;
     }
 
-
     /**
      * Inline all method invocations.
      * @param inline Method to inline.
@@ -189,7 +189,7 @@ public final class XmlMethod {
      *  - ALOAD
      *  We have to move it into a separate method and use it in 'inline' method.
      */
-    public void inline(XmlMethod inline, final String old, final String combined) {
+    public void inline(final XmlMethod inline, final String old, final String combined) {
         final List<XmlInvokeVirtual> invocations = this.invokeVirtuals();
         final Set<XmlInstruction> ignored = invocations.stream()
             .map(XmlInvokeVirtual::field)
