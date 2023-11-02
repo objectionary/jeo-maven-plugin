@@ -439,9 +439,6 @@ public final class ImprovementDistilledObjects implements Improvement {
          * and then b.foo() will be inlined.
          * @param where To replace.
          * @param what To inline.
-         * @todo #162:90min Refactor replaceMethodContent method.
-         *  Right now it's a method with high complexity and it's hard to read it.
-         *  We need to refactor it or inline into some other method.
          */
         private void replaceOldInvokationsWithNewInvocations(
             final XmlClass where,
@@ -449,25 +446,7 @@ public final class ImprovementDistilledObjects implements Improvement {
         ) {
             final String old = this.decorated.name();
             for (final XmlMethod candidate : where.methods()) {
-//                final List<XmlInstruction> res = new ArrayList<>(0);
-//                final List<XmlInvokeVirtual> calls = candidate.copy().invokeVirtuals();
                 candidate.inline(what, old, this.combinedName());
-//                for (final XmlInstruction instruction : candidate.instructionsWithout(
-//                    Opcodes.GETFIELD)) {
-//                    if (instruction.code() == Opcodes.INVOKEVIRTUAL) {
-//                        what.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
-//                            .stream()
-//                            .peek(instr -> instr.replaceArguementsValues(old, this.combinedName()))
-//                            .forEach(res::add);
-//                    } else {
-//                        res.add(instruction);
-//                    }
-//                }
-
-//                for (final XmlInstruction instruction : candidate.instructions()) {
-//                    res.add(instruction);
-//                }
-//                candidate.setInstructions(res);
             }
         }
     }
