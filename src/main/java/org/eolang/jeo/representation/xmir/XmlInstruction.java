@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 import org.eolang.jeo.representation.HexData;
+import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -73,6 +74,10 @@ public final class XmlInstruction {
                 .getNamedItem("name")
                 .getNodeValue().split("-")[1]
         );
+    }
+
+    public void writeInto(BytecodeMethod method) {
+        method.instruction(this.code(), this.arguments());
     }
 
     /**

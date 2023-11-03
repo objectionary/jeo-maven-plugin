@@ -133,7 +133,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
 
     @Override
     public void visitLabel(final Label label) {
-        this.label(this.labels.get(label));
+        this.label(this.labels.getOrDefault(label, UUID.randomUUID().toString()));
         super.visitLabel(label);
     }
 
@@ -150,9 +150,6 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
     }
 
     private void label(final String id) {
-        if (id == null || id.isBlank()) {
-            throw new IllegalStateException("Label id is null or blank");
-        }
         this.directives.add("o")
             .attr("base", "label")
             .append(new DirectivesData(id))
