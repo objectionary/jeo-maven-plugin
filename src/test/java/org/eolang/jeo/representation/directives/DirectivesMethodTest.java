@@ -285,7 +285,8 @@ class DirectivesMethodTest {
             ),
             xml,
             new HasMethod("bar")
-                .withInstruction(Opcodes.IFLE)
+                .inside("Foo")
+                .withInstruction(Opcodes.IFLE, "12345")
         );
     }
 }
