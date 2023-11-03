@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -128,6 +129,27 @@ public final class XmlClass {
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public Node node() {
         return this.node;
+    }
+
+    /**
+     * Try to inline method into all possible places.
+     * @param method Other method.
+     */
+    public void inline(XmlMethod method) {
+        this.methods().forEach(inner -> inner.inline(method));
+    }
+
+    /**
+     * Replace all instruction arguments that have "old" value with "replacement".
+     * @param old Old value.
+     * @param replacement Replacement value.
+     */
+    public void replaceArguments(final String old, final String replacement) {
+        this.methods()
+            .stream()
+            .map(XmlMethod::instructions)
+            .flatMap(Collection::stream)
+            .forEach(instruction -> instruction.replaceArguementsValues(old, replacement));
     }
 
     /**

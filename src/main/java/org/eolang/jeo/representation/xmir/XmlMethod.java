@@ -180,8 +180,6 @@ public final class XmlMethod {
     /**
      * Inline all method invocations.
      * @param inline Method to inline.
-     * @param old Old name.
-     * @param combined Combined name.
      * @todo #206:60min Simplify 'inline' method.
      *  Right now we use raw "inline" method instructions and trying to filter instructions
      *  that we don't need to inline. Like:

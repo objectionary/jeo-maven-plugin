@@ -385,26 +385,12 @@ public final class ImprovementDistilledObjects implements Improvement {
             clazz.fields().forEach(decor::withField);
             for (final XmlMethod method : clazz.methods()) {
                 if (method.isConstructor()) {
-                    for (final XmlInstruction instruction : method.instructions()) {
-                        instruction.replaceArguementsValues(
-                            this.decorated.name(),
-                            this.combinedName()
-                        );
-                    }
                     decor.withConstructor(method);
                 } else {
-                    this.replaceOldInvokationsWithNewInvocations(decor, method);
+                    decor.inline(method);
                 }
             }
-
-            for (final XmlMethod method : decor.methods()) {
-                for (final XmlInstruction instruction : method.instructions()) {
-                    instruction.replaceArguementsValues(
-                        this.decorated.name(),
-                        this.combinedName()
-                    );
-                }
-            }
+            decor.replaceArguments(this.decorated.name(), this.combinedName());
         }
 
         /**
@@ -434,27 +420,6 @@ public final class ImprovementDistilledObjects implements Improvement {
                 .stream()
                 .map(XmlField::node)
                 .forEach(root::removeChild);
-        }
-
-        /**
-         * Replace method content.
-         * This function scans all the class methods and tries to find all invocations of the old
-         * object methods. If it finds any, it replaces them with the new object invocations.
-         * For example, if we had the next code:
-         * a.foo();
-         * it will be replaced with
-         * b.foo();
-         * and then b.foo() will be inlined.
-         * @param where To replace.
-         * @param what To inline.
-         */
-        private void replaceOldInvokationsWithNewInvocations(
-            final XmlClass where,
-            final XmlMethod what
-        ) {
-            for (final XmlMethod candidate : where.methods()) {
-                candidate.inline(what);
-            }
         }
     }
 }
