@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
 /**
@@ -98,6 +99,12 @@ public final class BytecodeMethod {
         return this.clazz;
     }
 
+
+    public BytecodeMethod markLabel(final Label label) {
+        this.instructions.add(new MarkLabelInstruction(label));
+        return this;
+    }
+
     /**
      * Add instruction.
      * @param opcode Opcode.
@@ -105,7 +112,7 @@ public final class BytecodeMethod {
      * @return This object.
      */
     public BytecodeMethod instruction(final int opcode, final Object... args) {
-        this.instructions.add(new BytecodeInstruction(opcode, args));
+        this.instructions.add(new CommandInstruction(opcode, args));
         return this;
     }
 

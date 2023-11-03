@@ -28,6 +28,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -243,6 +244,48 @@ class DirectivesMethodTest {
                 .withInstruction(Opcodes.ILOAD, 1)
                 .withInstruction(Opcodes.ILOAD, 2)
                 .withInstruction(Opcodes.IADD)
+        );
+    }
+
+    /**
+     * In this class we parse the next java code.
+     * <p>
+     * {@code
+     *     class Foo {
+     *       int bar(double x) {
+     *         if (x > 0.0d) {
+     *           return 5;
+     *         }
+     *         return 8;
+     *       }
+     *     }
+     * }
+     * </p>
+     */
+    @Test
+    void parsesIfStatementCorrectly() {
+        final Label label = new Label();
+        final String xml = new BytecodeClass("Foo")
+            .withMethod("bar", "(D)I", 0)
+            .instruction(Opcodes.DLOAD, 1)
+            .instruction(Opcodes.DCONST_0)
+            .instruction(Opcodes.DCMPL)
+            .instruction(Opcodes.IFLE, label)
+            .instruction(Opcodes.ICONST_5)
+            .instruction(Opcodes.IRETURN)
+            .markLabel(label)
+            .instruction(Opcodes.BIPUSH, 8)
+            .instruction(Opcodes.IRETURN).up()
+            .xml()
+            .toString();
+        MatcherAssert.assertThat(
+            String.format(
+                "If statement wasn't parsed correctly, please, check the resulting XMIR: \n%s\n",
+                xml
+            ),
+            xml,
+            new HasMethod("bar")
+                .withInstruction(Opcodes.IFLE)
         );
     }
 }
