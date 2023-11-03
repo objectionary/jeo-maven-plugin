@@ -70,10 +70,6 @@ final class CommandInstruction implements BytecodeInstruction {
         this.args = args;
     }
 
-    /**
-     * Generate bytecode.
-     * @param visitor Method visitor.
-     */
     @Override
     public void generate(final MethodVisitor visitor) {
         Instruction.find(this.opcode).generate(visitor, this.args);
@@ -222,6 +218,9 @@ final class CommandInstruction implements BytecodeInstruction {
             visitor.visitInsn(Opcodes.DCMPL)
         ),
 
+        /**
+         * If value is less than or equal to 0, branch to instruction at branchoffset.
+         */
         IFLE(Opcodes.IFLE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFLE,

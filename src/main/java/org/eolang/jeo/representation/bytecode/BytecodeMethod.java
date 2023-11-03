@@ -99,7 +99,11 @@ public final class BytecodeMethod {
         return this.clazz;
     }
 
-
+    /**
+     * Add label.
+     * @param label Label.
+     * @return This object.
+     */
     public BytecodeMethod markLabel(final Label label) {
         this.instructions.add(new MarkLabelInstruction(label));
         return this;

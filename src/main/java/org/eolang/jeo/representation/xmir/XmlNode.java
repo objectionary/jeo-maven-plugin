@@ -110,11 +110,13 @@ final class XmlNode {
      * @return Command.
      */
     XmlCommand toCommand() {
+        final XmlCommand result;
         if (this.attribute("name").isPresent()) {
-            return new XmlInstruction(this.node);
+            result = new XmlInstruction(this.node);
         } else {
-            return new XmlLabel(this);
+            result = new XmlLabel(this);
         }
+        return result;
     }
 
     /**

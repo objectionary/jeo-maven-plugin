@@ -42,7 +42,10 @@ import org.xembly.Directives;
 @SuppressWarnings("PMD.TooManyMethods")
 public final class DirectivesMethod extends MethodVisitor implements Iterable<Directive> {
 
-    private final Map<Label, String> labels = new HashMap<>(0);
+    /**
+     * All labels inside a method.
+     */
+    private final Map<Label, String> labels;
 
     /**
      * Xembly directives.
@@ -60,6 +63,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
     ) {
         super(new DefaultVersion().api(), visitor);
         this.directives = directives;
+        this.labels = new HashMap<>(0);
     }
 
     @Override
@@ -135,12 +139,15 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
         super.visitEnd();
     }
 
-
     @Override
     public Iterator<Directive> iterator() {
         return this.directives.iterator();
     }
 
+    /**
+     * Add label to the directives.
+     * @param id Label id.
+     */
     private void label(final String id) {
         this.directives.add("o")
             .attr("base", "label")

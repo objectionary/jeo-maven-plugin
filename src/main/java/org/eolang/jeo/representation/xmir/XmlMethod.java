@@ -128,6 +128,14 @@ public final class XmlMethod {
         );
     }
 
+    /**
+     * All method instructions.
+     * @return Instructions.
+     * @todo #226:90min Code duplication with 'instructions' method.
+     *  Currently we have two methods that return instructions. They are 'instructions' and
+     *  'commads'. We have to remove code duplication between them. Maybe it makes sense to
+     *  leave only one method and remove the other one.
+     */
     public List<XmlCommand> commands() {
         return new XmlNode(this.node).child("base", "seq")
             .children()

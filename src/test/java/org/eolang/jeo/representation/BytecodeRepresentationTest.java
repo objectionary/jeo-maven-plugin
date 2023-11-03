@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation;
 
-import com.jcabi.xml.XML;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
@@ -46,12 +45,10 @@ final class BytecodeRepresentationTest {
 
     @Test
     void parsesBytecode() {
-        final XML eo = new BytecodeRepresentation(
-            new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE))
-            .toEO();
         MatcherAssert.assertThat(
             "The simplest class should contain the object with MethodByte name",
-            eo.xpath("/program/@name").get(0),
+            new BytecodeRepresentation(new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE))
+                .toEO().xpath("/program/@name").get(0),
             Matchers.equalTo("org/eolang/jeo/MethodByte")
         );
     }

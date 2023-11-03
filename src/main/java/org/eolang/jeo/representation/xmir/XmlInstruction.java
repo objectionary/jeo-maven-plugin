@@ -40,7 +40,7 @@ import org.w3c.dom.NodeList;
  * @since 0.1
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public final class XmlInstruction implements XmlCommand{
+public final class XmlInstruction implements XmlCommand {
 
     /**
      * Instruction node.
@@ -77,7 +77,7 @@ public final class XmlInstruction implements XmlCommand{
     }
 
     @Override
-    public void writeTo(BytecodeMethod method) {
+    public void writeTo(final BytecodeMethod method) {
         method.instruction(this.code(), this.arguments());
     }
 
