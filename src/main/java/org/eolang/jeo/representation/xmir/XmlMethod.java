@@ -180,13 +180,6 @@ public final class XmlMethod {
     /**
      * Inline all method invocations.
      * @param inline Method to inline.
-     * @todo #206:60min Simplify 'inline' method.
-     *  Right now we use raw "inline" method instructions and trying to filter instructions
-     *  that we don't need to inline. Like:
-     *  - RETURN
-     *  - IRETURN
-     *  - ALOAD
-     *  We have to move it into a separate method and use it in 'inline' method.
      */
     public void inline(final XmlMethod inline) {
         final List<XmlInvokeVirtual> invocations = this.invokeVirtuals();
@@ -209,6 +202,15 @@ public final class XmlMethod {
         this.setInstructions(body);
     }
 
+    /**
+     * Method instructions that might be inlined.
+     * @return Instructions.
+     * @todo #228:90min. Create more suitable method for determining instructions to inline.
+     *  Currently we are using a method that returns all instructions except return statements,
+     *  which is working for simple examples, but might fail on more complex cases.
+     *  We have to write more tests and create a more suitable method for determining instructions
+     *  to inline.
+     */
     private Stream<XmlInstruction> instructionsToInline() {
         return this.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD).stream();
     }
