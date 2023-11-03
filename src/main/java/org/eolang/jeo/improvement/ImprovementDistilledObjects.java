@@ -396,6 +396,15 @@ public final class ImprovementDistilledObjects implements Improvement {
                     this.replaceOldInvokationsWithNewInvocations(decor, method);
                 }
             }
+
+            for (final XmlMethod method : decor.methods()) {
+                for (final XmlInstruction instruction : method.instructions()) {
+                    instruction.replaceArguementsValues(
+                        this.decorated.name(),
+                        this.combinedName()
+                    );
+                }
+            }
         }
 
         /**
@@ -443,9 +452,8 @@ public final class ImprovementDistilledObjects implements Improvement {
             final XmlClass where,
             final XmlMethod what
         ) {
-            final String old = this.decorated.name();
             for (final XmlMethod candidate : where.methods()) {
-                candidate.inline(what, old, this.combinedName());
+                candidate.inline(what);
             }
         }
     }

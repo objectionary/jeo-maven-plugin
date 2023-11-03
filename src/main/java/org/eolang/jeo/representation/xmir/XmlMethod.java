@@ -31,6 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.objectweb.asm.Opcodes;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -189,7 +190,7 @@ public final class XmlMethod {
      *  - ALOAD
      *  We have to move it into a separate method and use it in 'inline' method.
      */
-    public void inline(final XmlMethod inline, final String old, final String combined) {
+    public void inline(final XmlMethod inline) {
         final List<XmlInvokeVirtual> invocations = this.invokeVirtuals();
         final Set<XmlInstruction> ignored = invocations.stream()
             .map(XmlInvokeVirtual::field)
@@ -201,16 +202,17 @@ public final class XmlMethod {
         for (final XmlInstruction instruction : this.instructions()) {
             if (!ignored.contains(instruction)) {
                 if (where.contains(instruction)) {
-                    inline.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)
-                        .stream()
-                        .peek(instr -> instr.replaceArguementsValues(old, combined))
-                        .forEach(body::add);
+                    inline.instructionsToInline().forEach(body::add);
                 } else {
                     body.add(instruction);
                 }
             }
         }
         this.setInstructions(body);
+    }
+
+    private Stream<XmlInstruction> instructionsToInline() {
+        return this.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD).stream();
     }
 
     /**
