@@ -41,6 +41,7 @@ import org.w3c.dom.NodeList;
  * XML method.
  * @since 0.1
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class XmlMethod {
 
     /**
@@ -203,19 +204,6 @@ public final class XmlMethod {
     }
 
     /**
-     * Method instructions that might be inlined.
-     * @return Instructions.
-     * @todo #228:90min. Create more suitable method for determining instructions to inline.
-     *  Currently we are using a method that returns all instructions except return statements,
-     *  which is working for simple examples, but might fail on more complex cases.
-     *  We have to write more tests and create a more suitable method for determining instructions
-     *  to inline.
-     */
-    private Stream<XmlInstruction> instructionsToInline() {
-        return this.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD).stream();
-    }
-
-    /**
      * Set instructions for method.
      * @param updated New instructions.
      * @todo #176:60min Add unit test for 'setInstructions' method.
@@ -234,6 +222,19 @@ public final class XmlMethod {
         for (final XmlInstruction instruction : updated) {
             root.appendChild(root.getOwnerDocument().adoptNode(instruction.node()));
         }
+    }
+
+    /**
+     * Method instructions that might be inlined.
+     * @return Instructions.
+     * @todo #228:90min. Create more suitable method for determining instructions to inline.
+     *  Currently we are using a method that returns all instructions except return statements,
+     *  which is working for simple examples, but might fail on more complex cases.
+     *  We have to write more tests and create a more suitable method for determining instructions
+     *  to inline.
+     */
+    private Stream<XmlInstruction> instructionsToInline() {
+        return this.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD).stream();
     }
 
     /**

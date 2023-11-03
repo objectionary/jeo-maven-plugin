@@ -36,6 +36,7 @@ import org.w3c.dom.NodeList;
  * XML class.
  * @since 0.1
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class XmlClass {
 
     /**
@@ -135,7 +136,7 @@ public final class XmlClass {
      * Try to inline method into all possible places.
      * @param method Other method.
      */
-    public void inline(XmlMethod method) {
+    public void inline(final XmlMethod method) {
         this.methods().forEach(inner -> inner.inline(method));
     }
 
