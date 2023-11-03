@@ -163,6 +163,15 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
         this.directives.up();
     }
 
+    /**
+     * Add opcode with label to the directives.
+     * @param opcode Opcode
+     * @param label Label
+     * @todo #226:90min Code duplication in DirectivesMethod.opcodeWithLabel.
+     *  This method is almost the same as DirectivesMethod.opcode.
+     *  We have to consider to refactor this code in order to avoid
+     *  code duplication.
+     */
     private void opcodeWithLabel(final int opcode, final String label) {
         this.directives.add("o")
             .attr("name", new OpcodeName(opcode).asString())

@@ -11,5 +11,9 @@ import org.eolang.jeo.representation.bytecode.BytecodeMethod;
  */
 public interface XmlCommand {
 
+    /**
+     * Write instruction to the bytecode method.
+     * @param method Bytecode Method where instruction should be written.
+     */
     void writeTo(BytecodeMethod method);
 }
