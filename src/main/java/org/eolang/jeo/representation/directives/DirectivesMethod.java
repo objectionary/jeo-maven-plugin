@@ -97,7 +97,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
         //  transformation bytecode -> XMIR -> bytecode.
         final String id = UUID.randomUUID().toString();
         this.labels.putIfAbsent(label, id);
-        this.opcode(opcode, id);
+        this.opcodeWithLabel(opcode, id);
         super.visitJumpInsn(opcode, label);
     }
 
@@ -168,6 +168,14 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
         for (final Object operand : operands) {
             this.directives.append(new DirectivesData(operand));
         }
+        this.directives.up();
+    }
+
+    private void opcodeWithLabel(final int opcode, final String label) {
+        this.directives.add("o")
+            .attr("name", new OpcodeName(opcode).asString())
+            .attr("base", "opcode");
+        this.label(label);
         this.directives.up();
     }
 }
