@@ -106,6 +106,18 @@ final class XmlNode {
     }
 
     /**
+     * Convert to a command.
+     * @return Command.
+     */
+    XmlCommand toCommand() {
+        if (this.attribute("name").isPresent()) {
+            return new XmlInstruction(this.node);
+        } else {
+            return new XmlLabel(this);
+        }
+    }
+
+    /**
      * Convert to an instruction.
      * @return Instruction.
      */

@@ -128,6 +128,14 @@ public final class XmlMethod {
         );
     }
 
+    public List<XmlCommand> commands() {
+        return new XmlNode(this.node).child("base", "seq")
+            .children()
+            .filter(element -> element.attribute("base").isPresent())
+            .map(XmlNode::toCommand)
+            .collect(Collectors.toList());
+    }
+
     /**
      * Method instructions.
      * @param predicates Filters.

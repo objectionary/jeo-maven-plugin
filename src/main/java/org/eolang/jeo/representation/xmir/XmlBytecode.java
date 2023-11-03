@@ -72,8 +72,8 @@ public final class XmlBytecode {
                 xmlmethod.descriptor(),
                 xmlmethod.access()
             );
-            xmlmethod.instructions()
-                .forEach(inst -> inst.writeInto(method));
+            xmlmethod.commands()
+                .forEach(inst -> inst.writeTo(method));
         }
         return bytecode.bytecode();
     }
