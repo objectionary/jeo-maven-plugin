@@ -261,6 +261,10 @@ class DirectivesMethodTest {
      *     }
      * }
      * </p>
+     * @todo #226:90min Check Labels.
+     *  In this test we don't check that labels are parsed correctly, but we should.
+     *  Moreover, we have to check that IFLE bytecode instruction has correct label pointer
+     *  to the existing label.
      */
     @Test
     void parsesIfStatementCorrectly() {
@@ -286,7 +290,7 @@ class DirectivesMethodTest {
             xml,
             new HasMethod("bar")
                 .inside("Foo")
-                .withInstruction(Opcodes.IFLE, "12345")
+                .withInstruction(Opcodes.IFLE)
         );
     }
 }

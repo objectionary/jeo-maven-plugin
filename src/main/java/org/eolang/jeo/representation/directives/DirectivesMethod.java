@@ -23,7 +23,10 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -38,6 +41,8 @@ import org.xembly.Directives;
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class DirectivesMethod extends MethodVisitor implements Iterable<Directive> {
+
+    private final Map<Label, String> labels = new HashMap<>(0);
 
     /**
      * Xembly directives.
@@ -90,7 +95,9 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
         //  somehow and save correct Label value. Don't forget to write integration tests
         //  for if/else and loops control-flow statements. The tests should check correct
         //  transformation bytecode -> XMIR -> bytecode.
-        this.opcode(opcode, 0);
+        final String id = UUID.randomUUID().toString();
+        this.labels.putIfAbsent(label, id);
+        this.opcode(opcode, id);
         super.visitJumpInsn(opcode, label);
     }
 
@@ -125,14 +132,31 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
     }
 
     @Override
+    public void visitLabel(final Label label) {
+        this.label(this.labels.get(label));
+        super.visitLabel(label);
+    }
+
+    @Override
     public void visitEnd() {
         this.directives.up().up();
         super.visitEnd();
     }
 
+
     @Override
     public Iterator<Directive> iterator() {
         return this.directives.iterator();
+    }
+
+    private void label(final String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalStateException("Label id is null or blank");
+        }
+        this.directives.add("o")
+            .attr("base", "label")
+            .append(new DirectivesData(id))
+            .up();
     }
 
     /**
