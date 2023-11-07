@@ -28,7 +28,12 @@ SOFTWARE.
   <artifactId>jeo-it</artifactId>
   <version>@project.version@</version>
   <packaging>jar</packaging>
-  <description>Integration test</description>
+  <description>Integration test that tries to transform simple java program
+    into XMIR and back. The integration test also checks that program can run
+    successfully and the plugin didn't break anything.
+    If you need to run only this test, use the following command:
+    "mvn clean integration-test invoker:run -Dinvoker.test=optimization -DskipTests"
+  </description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
