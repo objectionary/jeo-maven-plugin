@@ -61,8 +61,6 @@ final class HexString {
     String decode() {
         try {
             return Arrays.stream(this.hex.split(" "))
-                .filter(s -> !s.isBlank())
-                .filter(s -> !s.isEmpty())
                 .map(ch -> (char) Integer.parseInt(ch, HexString.RADIX))
                 .map(String::valueOf)
                 .collect(Collectors.joining());
