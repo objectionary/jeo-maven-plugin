@@ -43,7 +43,7 @@ public final class XmlLabel implements XmlCommand {
      *  Moreover, we have to remove static field LABELS and use different approach to find labels.
      * @checkstyle StaticVariableNameCheck (3 lines)
      */
-    private static final Map<String, Label> LABELS = new ConcurrentHashMap<>();
+    public static final Map<String, Label> LABELS = new ConcurrentHashMap<>();
 
     /**
      * Label node.

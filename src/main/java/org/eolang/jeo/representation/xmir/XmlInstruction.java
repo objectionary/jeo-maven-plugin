@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.log.Logger;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -159,7 +160,29 @@ public final class XmlInstruction implements XmlCommand {
                 if (attributes.getNamedItem("base").getNodeValue().equals("int")) {
                     res.add(new HexString(child.getTextContent()).decodeAsInt());
                 } else if (attributes.getNamedItem("base").getNodeValue().equals("label")) {
-                    res.add(new XmlLabel(new XmlNode(child)));
+                    final String strip = child.getTextContent().strip().replace("\n","");
+//                    Logger.info(XmlInstruction.class, "Label raw: %s", strip);
+//                    final String decoded = new HexString(strip).decode();
+//                    Logger.info(XmlInstruction.class, "Label decoded: %s", decoded);
+//                    if (XmlLabel.LABELS.containsKey(decoded)) {
+//                        Logger.info(XmlInstruction.class, "Label found: %s", decoded);
+//                        res.add(XmlLabel.LABELS.get(decoded));
+//                    } else {
+//                        Logger.info(XmlInstruction.class, "This label we will create: %s", decoded);
+//                        final Label value = new Label();
+//                        XmlLabel.LABELS.put(decoded, value);
+//                        res.add(value);
+//                    }
+                    Logger.info(XmlInstruction.class, "Label raw: %s", strip);
+                    if (XmlLabel.LABELS.containsKey(strip)) {
+                        Logger.info(XmlInstruction.class, "Label found: %s", strip);
+                        res.add(XmlLabel.LABELS.get(strip));
+                    } else {
+                        Logger.info(XmlInstruction.class, "This label we will create: %s", strip);
+                        final Label value = new Label();
+                        XmlLabel.LABELS.put(strip, value);
+                        res.add(value);
+                    }
                 } else {
                     res.add(new HexString(child.getTextContent()).decode());
                 }

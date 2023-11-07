@@ -236,11 +236,31 @@ final class CommandInstruction implements BytecodeInstruction {
         ),
 
         /**
+         * If value1 is greater than or equal to value2, branch to instruction at branchoffset.
+         */
+        IF_ICMPGE(Opcodes.IF_ICMPGE, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ICMPGE,
+                (org.objectweb.asm.Label) arguments.get(0)
+            )
+        ),
+
+        /**
          * If value1 is less than or equal to value2, branch to instruction at branchoffset.
          */
         IF_ICMPLE(Opcodes.IF_ICMPLE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IF_ICMPLE,
+                (org.objectweb.asm.Label) arguments.get(0)
+            )
+        ),
+
+        /**
+         * Goes to another instruction at branchoffset.
+         */
+        GOTO(Opcodes.GOTO, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.GOTO,
                 (org.objectweb.asm.Label) arguments.get(0)
             )
         ),
