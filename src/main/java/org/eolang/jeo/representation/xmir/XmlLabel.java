@@ -36,6 +36,10 @@ public final class XmlLabel implements XmlCommand {
 
     /**
      * All Labels.
+     * @todo #234:90min Hide LABELS Public Static Variable.
+     *  It is not a good idea to expose LABELS and use static variable in general.
+     *  We definitely have to hide this variable or, what is even better, get rid of it and create
+     *  one more class that will encapsulate the LABELS logic.
      * @checkstyle StaticVariableNameCheck (3 lines)
      */
     public static final Map<String, Label> LABELS = new ConcurrentHashMap<>();
