@@ -36,14 +36,13 @@ public final class XmlLabel implements XmlCommand {
 
     /**
      * All Labels.
-     * @todo #226:90min Continue implementation of conditional instructions transformation.
-     *  Currently we parse bytecode and correctly save all labels into XMIR. Although the back
-     *  transformation is not implemented yet. We need to implement it and add or change integration
-     *  tests to check that conditional instructions are correctly transformed.
-     *  Moreover, we have to remove static field LABELS and use different approach to find labels.
+     * @todo #234:90min Hide LABELS Public Static Variable.
+     *  It is not a good idea to expose LABELS and use static variable in general.
+     *  We definitely have to hide this variable or, what is even better, get rid of it and create
+     *  one more class that will encapsulate the LABELS logic.
      * @checkstyle StaticVariableNameCheck (3 lines)
      */
-    private static final Map<String, Label> LABELS = new ConcurrentHashMap<>();
+    public static final Map<String, Label> LABELS = new ConcurrentHashMap<>();
 
     /**
      * Label node.

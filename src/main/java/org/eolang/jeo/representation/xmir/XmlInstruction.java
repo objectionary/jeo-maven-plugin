@@ -31,6 +31,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.objectweb.asm.Label;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -147,6 +148,12 @@ public final class XmlInstruction implements XmlCommand {
      * Get opcode arguments.
      * @param node Node.
      * @return Arguments.
+     * @todo #234:90min Refactor XmlInstruction#arguments method.
+     *  This method is too complex and has too many responsibilities.
+     *  Moreover, it uses static field LABELS. We have to refactor this method in order
+     *  to avoid all that problems. Don't forget to remove PMD and checkstyle comments about
+     *  suppressed warnings.
+     * @checkstyle NestedIfDepthCheck (100 lines)
      */
     private static Object[] arguments(final Node node) {
         final NodeList children = node.getChildNodes();
@@ -157,6 +164,15 @@ public final class XmlInstruction implements XmlCommand {
                 final NamedNodeMap attributes = child.getAttributes();
                 if (attributes.getNamedItem("base").getNodeValue().equals("int")) {
                     res.add(new HexString(child.getTextContent()).decodeAsInt());
+                } else if (attributes.getNamedItem("base").getNodeValue().equals("label")) {
+                    final String uid = child.getTextContent().strip().replace("\n", "");
+                    if (XmlLabel.LABELS.containsKey(uid)) {
+                        res.add(XmlLabel.LABELS.get(uid));
+                    } else {
+                        final Label value = new Label();
+                        XmlLabel.LABELS.put(uid, value);
+                        res.add(value);
+                    }
                 } else {
                     res.add(new HexString(child.getTextContent()).decode());
                 }

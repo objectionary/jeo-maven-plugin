@@ -59,10 +59,17 @@ final class HexString {
      * @return Human-readable string.
      */
     String decode() {
-        return Arrays.stream(this.hex.split(" "))
-            .map(ch -> (char) Integer.parseInt(ch, HexString.RADIX))
-            .map(String::valueOf)
-            .collect(Collectors.joining());
+        try {
+            return Arrays.stream(this.hex.split(" "))
+                .map(ch -> (char) Integer.parseInt(ch, HexString.RADIX))
+                .map(String::valueOf)
+                .collect(Collectors.joining());
+        } catch (final NumberFormatException exception) {
+            throw new IllegalArgumentException(
+                String.format("Invalid hex string: %s", this.hex),
+                exception
+            );
+        }
     }
 
     /**
