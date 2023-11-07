@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.log.Logger;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -154,6 +153,7 @@ public final class XmlInstruction implements XmlCommand {
      *  Moreover, it uses static field LABELS. We have to refactor this method in order
      *  to avoid all that problems. Don't forget to remove PMD and checkstyle comments about
      *  suppressed warnings.
+     * @checkstyle NestedIfDepthCheck (100 lines)
      */
     private static Object[] arguments(final Node node) {
         final NodeList children = node.getChildNodes();
