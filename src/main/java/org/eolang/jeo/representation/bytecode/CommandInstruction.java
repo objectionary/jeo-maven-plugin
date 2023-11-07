@@ -131,6 +131,13 @@ final class CommandInstruction implements BytecodeInstruction {
         ),
 
         /**
+         * Load the double value 1 onto the stack.
+         */
+        DCONST_1(Opcodes.DCONST_1, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.DCONST_1)
+        ),
+
+        /**
          * Push a byte onto the stack as an integer value.
          */
         BIPUSH(Opcodes.BIPUSH, (visitor, arguments) ->
@@ -229,6 +236,16 @@ final class CommandInstruction implements BytecodeInstruction {
         ),
 
         /**
+         * If value1 is less than or equal to value2, branch to instruction at branchoffset.
+         */
+        IF_ICMPLE(Opcodes.IF_ICMPLE, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ICMPLE,
+                (org.objectweb.asm.Label) arguments.get(0)
+            )
+        ),
+
+        /**
          * Return an integer from a method.
          */
         IRETURN(Opcodes.IRETURN, (visitor, arguments) ->
@@ -303,9 +320,22 @@ final class CommandInstruction implements BytecodeInstruction {
          * Invoke instance method on object objectref and puts the result on the stack.
          * Might be void. The method is identified by method reference index in constant pool.
          */
-        INCOKESPECIAL(Opcodes.INVOKESPECIAL, (visitor, arguments) ->
+        INVOKESPECIAL(Opcodes.INVOKESPECIAL, (visitor, arguments) ->
             visitor.visitMethodInsn(
                 Opcodes.INVOKESPECIAL,
+                String.valueOf(arguments.get(0)),
+                String.valueOf(arguments.get(1)),
+                String.valueOf(arguments.get(2)),
+                false
+            )
+        ),
+
+        /**
+         * Invoke a class (static) method.
+         */
+        INVOKESTATIC(Opcodes.INVOKESTATIC, (visitor, arguments) ->
+            visitor.visitMethodInsn(
+                Opcodes.INVOKESTATIC,
                 String.valueOf(arguments.get(0)),
                 String.valueOf(arguments.get(1)),
                 String.valueOf(arguments.get(2)),

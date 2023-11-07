@@ -31,6 +31,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.objectweb.asm.Label;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -157,6 +158,8 @@ public final class XmlInstruction implements XmlCommand {
                 final NamedNodeMap attributes = child.getAttributes();
                 if (attributes.getNamedItem("base").getNodeValue().equals("int")) {
                     res.add(new HexString(child.getTextContent()).decodeAsInt());
+                } else if (attributes.getNamedItem("base").getNodeValue().equals("label")) {
+                    res.add(new XmlLabel(new XmlNode(child)));
                 } else {
                     res.add(new HexString(child.getTextContent()).decode());
                 }
