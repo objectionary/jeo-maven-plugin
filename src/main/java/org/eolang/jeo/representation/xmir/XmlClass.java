@@ -157,7 +157,7 @@ public final class XmlClass {
      * Class name.
      * @return Name.
      */
-    String name() {
+    public String name() {
         return String.valueOf(this.node.getAttributes().getNamedItem("name").getTextContent());
     }
 

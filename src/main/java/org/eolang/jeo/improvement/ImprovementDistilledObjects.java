@@ -43,6 +43,7 @@ import org.eolang.jeo.representation.xmir.XmlField;
 import org.eolang.jeo.representation.xmir.XmlInstruction;
 import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.eolang.jeo.representation.xmir.XmlProgram;
+import org.objectweb.asm.Opcodes;
 import org.w3c.dom.Node;
 
 /**
@@ -379,7 +380,8 @@ public final class ImprovementDistilledObjects implements Improvement {
          */
         private void handleClass(final XmlClass decor) {
             final Node root = decor.node();
-            DecoratorPair.removeOldFields(root);
+            this.removeOldFields(root);
+            decor.replaceArguments(this.decorator.name(), this.combinedName());
             DecoratorPair.removeOldConstructors(root);
             final XmlClass clazz = new XmlProgram(this.decorated.toEO()).top();
             clazz.fields().forEach(decor::withField);
@@ -415,11 +417,31 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  It's not correct, because we need to handle fields correctly and probably remove only
          *  those fields that are used in the decorator.
          */
-        private static void removeOldFields(final Node root) {
+        private void removeOldFields(final Node root) {
             new XmlClass(root).fields()
                 .stream()
-                .map(XmlField::node)
-                .forEach(root::removeChild);
+                .forEach(field -> this.handleField(root, field));
+        }
+
+        private void handleField(final Node root, final XmlField field) {
+            if (this.isInlinedField(field)) {
+                root.removeChild(field.node());
+            }
+        }
+
+        private boolean isInlinedField(final XmlField field) {
+            boolean inner = field.access() == (Opcodes.ACC_PRIVATE | Opcodes.ACC_FINAL);
+            final String descriptor = field.descriptor();
+            final String name = String.format("L%s;", this.decorated.name());
+            Logger.info(
+                this,
+                "Compare %s and %s, access modifier %d",
+                descriptor,
+                name,
+                field.access()
+            );
+            boolean same = descriptor.equals(name);
+            return inner && same;
         }
     }
 }
