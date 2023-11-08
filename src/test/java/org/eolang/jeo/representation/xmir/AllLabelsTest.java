@@ -23,35 +23,42 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import java.util.UUID;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Label;
 
 /**
- * XML representation of bytecode label.
+ * Test case for {@link AllLabels}.
  * @since 0.1
  */
-public final class XmlLabel implements XmlCommand {
+class AllLabelsTest {
 
-    /**
-     * Label node.
-     */
-    private final XmlNode node;
-
-    /**
-     * All found labels.
-     */
-    private final AllLabels labels;
-
-    /**
-     * Constructor.
-     * @param node Label node.
-     */
-    XmlLabel(final XmlNode node) {
-        this.node = node;
-        this.labels = new AllLabels();
+    @Test
+    void retrievesLabelIfItAbsent() {
+        final String id = UUID.randomUUID().toString();
+        MatcherAssert.assertThat(
+            String.format("Label with id '%s' was not retrieved", id),
+            new AllLabels().label(id),
+            Matchers.notNullValue()
+        );
     }
 
-    @Override
-    public void writeTo(final BytecodeMethod method) {
-        method.markLabel(this.labels.label(this.node.child("base", "string").text()));
+    @Test
+    void retrievesTheSameLabelIfItExists() {
+        final String id = UUID.randomUUID().toString();
+        final AllLabels all = new AllLabels();
+        final Label first = all.label(id);
+        final Label second = all.label(id);
+        MatcherAssert.assertThat(
+            String.format(
+                "We should retrieve the same label if it exists, but labels '%s' and '%s' are different",
+                first,
+                second
+            ),
+            first,
+            Matchers.sameInstance(second)
+        );
     }
 }
