@@ -49,18 +49,19 @@ public final class XmlLabel implements XmlCommand {
      */
     private final XmlNode node;
 
+    private final AllLabels labels;
+
     /**
      * Constructor.
      * @param node Label node.
      */
     XmlLabel(final XmlNode node) {
         this.node = node;
+        this.labels = new AllLabels();
     }
 
     @Override
     public void writeTo(final BytecodeMethod method) {
-        final String id = this.node.child("base", "string").text();
-        XmlLabel.LABELS.putIfAbsent(id, new Label());
-        method.markLabel(XmlLabel.LABELS.get(id));
+        method.markLabel(this.labels.label(this.node.child("base", "string").text()));
     }
 }
