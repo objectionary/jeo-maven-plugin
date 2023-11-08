@@ -380,7 +380,7 @@ public final class ImprovementDistilledObjects implements Improvement {
          */
         private void handleClass(final XmlClass decor) {
             final Node root = decor.node();
-            this.removeOldFields(root);
+            this.removeFieldsThatWillBeInlined(root);
             decor.replaceArguments(this.decorator.name(), this.combinedName());
             DecoratorPair.removeOldConstructors(root);
             final XmlClass clazz = new XmlProgram(this.decorated.toEO()).top();
@@ -412,36 +412,23 @@ public final class ImprovementDistilledObjects implements Improvement {
         /**
          * Remove old fields.
          * @param root Root node.
-         * @todo #157:90min Handle fields correctly during inlining optimization.
-         *  Right now we just remove all fields from the decorated object.
-         *  It's not correct, because we need to handle fields correctly and probably remove only
-         *  those fields that are used in the decorator.
          */
-        private void removeOldFields(final Node root) {
+        private void removeFieldsThatWillBeInlined(final Node root) {
             new XmlClass(root).fields()
                 .stream()
-                .forEach(field -> this.handleField(root, field));
+                .filter(this::isInlined)
+                .map(XmlField::node)
+                .forEach(root::removeChild);
         }
 
-        private void handleField(final Node root, final XmlField field) {
-            if (this.isInlinedField(field)) {
-                root.removeChild(field.node());
-            }
-        }
-
-        private boolean isInlinedField(final XmlField field) {
-            boolean inner = field.access() == (Opcodes.ACC_PRIVATE | Opcodes.ACC_FINAL);
-            final String descriptor = field.descriptor();
-            final String name = String.format("L%s;", this.decorated.name());
-            Logger.info(
-                this,
-                "Compare %s and %s, access modifier %d",
-                descriptor,
-                name,
-                field.access()
-            );
-            boolean same = descriptor.equals(name);
-            return inner && same;
+        /**
+         * Check if field will be inlined.
+         * @param field Field.
+         * @return True if field will be inlined.
+         */
+        private boolean isInlined(final XmlField field) {
+            return field.access() == (Opcodes.ACC_PRIVATE | Opcodes.ACC_FINAL)
+                && field.descriptor().equals(String.format("L%s;", this.decorated.name()));
         }
     }
 }

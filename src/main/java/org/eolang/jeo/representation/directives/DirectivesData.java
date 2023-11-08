@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import com.jcabi.log.Logger;
 import java.util.Iterator;
 import org.eolang.jeo.representation.HexData;
 import org.xembly.Directive;
@@ -72,15 +71,6 @@ final class DirectivesData implements Iterable<Directive> {
             .attr("data", "bytes");
         if (!this.name.isEmpty()) {
             directives.attr("name", this.name);
-            if (name.equals("value")) {
-                Logger.info(this,
-                    String.format(
-                        "We are trying to save the next value into XMIR: '%s' with type '%s'",
-                        this.data,
-                        this.data.getClass().getSimpleName()
-                    )
-                );
-            }
         }
         return directives.set(hex.value()).up().iterator();
     }
