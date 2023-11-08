@@ -115,7 +115,7 @@ public final class XmlInstruction implements XmlCommand {
      * @checkstyle NestedIfDepthCheck (100 lines)
      */
     public Object[] arguments() {
-        final NodeList children = node.getChildNodes();
+        final NodeList children = this.node.getChildNodes();
         final Collection<Object> res = new ArrayList<>(children.getLength());
         for (int index = 0; index < children.getLength(); ++index) {
             final Node child = children.item(index);

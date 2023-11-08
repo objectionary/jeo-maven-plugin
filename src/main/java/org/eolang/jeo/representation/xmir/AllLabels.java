@@ -73,7 +73,7 @@ final class AllLabels {
      * @return Label.
      */
     Label label(final String uid) {
-        return this.labels.computeIfAbsent(this.clean(uid), id -> new Label());
+        return this.labels.computeIfAbsent(AllLabels.clean(uid), id -> new Label());
     }
 
     /**
@@ -81,7 +81,7 @@ final class AllLabels {
      * @param uid UID with new lines and spaces.
      * @return Cleaned UID.
      */
-    private String clean(final String uid) {
+    private static String clean(final String uid) {
         return uid.strip().replace("\n", "");
     }
 }
