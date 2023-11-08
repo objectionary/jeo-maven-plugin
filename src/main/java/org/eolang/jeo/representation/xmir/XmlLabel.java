@@ -36,6 +36,9 @@ public final class XmlLabel implements XmlCommand {
      */
     private final XmlNode node;
 
+    /**
+     * All found labels.
+     */
     private final AllLabels labels;
 
     /**

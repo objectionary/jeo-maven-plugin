@@ -31,7 +31,6 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
-import org.objectweb.asm.Label;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -49,6 +48,9 @@ public final class XmlInstruction implements XmlCommand {
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
 
+    /**
+     * All found labels.
+     */
     private final AllLabels labels;
 
     /**
@@ -105,9 +107,30 @@ public final class XmlInstruction implements XmlCommand {
     /**
      * Instruction arguments.
      * @return Arguments.
+     * @todo #234:90min Refactor XmlInstruction#arguments method.
+     *  This method is too complex and has too many responsibilities.
+     *  Moreover, it uses static field LABELS. We have to refactor this method in order
+     *  to avoid all that problems. Don't forget to remove PMD and checkstyle comments about
+     *  suppressed warnings.
+     * @checkstyle NestedIfDepthCheck (100 lines)
      */
     public Object[] arguments() {
-        return this.arguments(this.node);
+        final NodeList children = node.getChildNodes();
+        final Collection<Object> res = new ArrayList<>(children.getLength());
+        for (int index = 0; index < children.getLength(); ++index) {
+            final Node child = children.item(index);
+            if (child.getNodeName().equals("o")) {
+                final NamedNodeMap attributes = child.getAttributes();
+                if (attributes.getNamedItem("base").getNodeValue().equals("int")) {
+                    res.add(new HexString(child.getTextContent()).decodeAsInt());
+                } else if (attributes.getNamedItem("base").getNodeValue().equals("label")) {
+                    res.add(this.labels.label(child.getTextContent()));
+                } else {
+                    res.add(new HexString(child.getTextContent()).decode());
+                }
+            }
+        }
+        return res.toArray();
     }
 
     @Override
@@ -145,36 +168,6 @@ public final class XmlInstruction implements XmlCommand {
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     Node node() {
         return this.node;
-    }
-
-    /**
-     * Get opcode arguments.
-     * @param node Node.
-     * @return Arguments.
-     * @todo #234:90min Refactor XmlInstruction#arguments method.
-     *  This method is too complex and has too many responsibilities.
-     *  Moreover, it uses static field LABELS. We have to refactor this method in order
-     *  to avoid all that problems. Don't forget to remove PMD and checkstyle comments about
-     *  suppressed warnings.
-     * @checkstyle NestedIfDepthCheck (100 lines)
-     */
-    private Object[] arguments(final Node node) {
-        final NodeList children = node.getChildNodes();
-        final Collection<Object> res = new ArrayList<>(children.getLength());
-        for (int index = 0; index < children.getLength(); ++index) {
-            final Node child = children.item(index);
-            if (child.getNodeName().equals("o")) {
-                final NamedNodeMap attributes = child.getAttributes();
-                if (attributes.getNamedItem("base").getNodeValue().equals("int")) {
-                    res.add(new HexString(child.getTextContent()).decodeAsInt());
-                } else if (attributes.getNamedItem("base").getNodeValue().equals("label")) {
-                    res.add(this.labels.label(child.getTextContent()));
-                } else {
-                    res.add(new HexString(child.getTextContent()).decode());
-                }
-            }
-        }
-        return res.toArray();
     }
 
     /**
