@@ -61,4 +61,30 @@ class AllLabelsTest {
             Matchers.sameInstance(second)
         );
     }
+
+    @Test
+    void generatesUidForNewLabel() {
+        MatcherAssert.assertThat(
+            "We should generate uid for new label",
+            new AllLabels().uid(new Label()),
+            Matchers.notNullValue()
+        );
+    }
+
+    @Test
+    void retrievesSameUidForSameLabel() {
+        final AllLabels all = new AllLabels();
+        final Label label = new Label();
+        final String first = all.uid(label);
+        final String second = all.uid(label);
+        MatcherAssert.assertThat(
+            String.format(
+                "We should retrieve the same uid for the same label, but we got %s and %s",
+                first,
+                second
+            ),
+            first,
+            Matchers.equalTo(second)
+        );
+    }
 }
