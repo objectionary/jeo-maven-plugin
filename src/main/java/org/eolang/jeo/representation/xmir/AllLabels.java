@@ -85,16 +85,13 @@ public final class AllLabels {
      * @return UID.
      */
     public String uid(final Label label) {
-        final Optional<Map.Entry<String, Label>> found = this.labels.entrySet().stream()
+        return this.labels.entrySet().stream()
             .filter(e -> e.getValue().equals(label))
-            .findFirst();
-        if (found.isPresent()) {
-            return found.get().getKey();
-        } else {
-            final String generated = UUID.randomUUID().toString();
-            this.labels.put(generated, label);
-            return generated;
-        }
+            .findFirst().orElseGet(() -> {
+                final String generated = UUID.randomUUID().toString();
+                this.labels.put(generated, label);
+                return Map.entry(generated, label);
+            }).getKey();
     }
 
     /**
