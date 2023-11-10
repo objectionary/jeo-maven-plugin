@@ -29,8 +29,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.HexData;
+import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
+import org.objectweb.asm.Label;
 
 /**
  * Matcher to check if the received XMIR document has a method inside a class with a given name.
@@ -60,6 +62,11 @@ public final class HasMethod extends TypeSafeMatcher<String> {
     private final List<HasInstruction> instr;
 
     /**
+     * Method labels.
+     */
+    private final List<HasLabel> labels;
+
+    /**
      * Constructor.
      * @param method Method name.
      */
@@ -77,6 +84,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         this.name = method;
         this.params = new ArrayList<>(0);
         this.instr = new ArrayList<>(0);
+        this.labels = new ArrayList<>(0);
     }
 
     @Override
@@ -125,6 +133,15 @@ public final class HasMethod extends TypeSafeMatcher<String> {
     }
 
     /**
+     * With label.
+     * @return The same matcher that checks label.
+     */
+    public HasMethod withLabel() {
+        this.labels.add(new HasLabel());
+        return this;
+    }
+
+    /**
      * Checks.
      * @return List of XPaths to check.
      */
@@ -134,7 +151,10 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 this.definition(),
                 this.parameters()
             ),
-            this.instructions()
+            Stream.concat(
+                this.instructions(),
+                this.labels()
+            )
         ).collect(Collectors.toList());
     }
 
@@ -172,6 +192,16 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         final String root = this.root();
         return this.instr.stream()
             .flatMap(instruction -> instruction.checks(root));
+    }
+
+    /**
+     * Labels xpaths
+     * @return List of XPaths to check.
+     */
+    private Stream<String> labels() {
+        final String root = this.root();
+        return this.labels.stream()
+            .flatMap(label -> label.checks(root));
     }
 
     /**
@@ -248,15 +278,50 @@ public final class HasMethod extends TypeSafeMatcher<String> {
             return this.args.stream()
                 .map(
                     arg -> {
-                        final HexData hex = new HexData(arg);
-                        return String.format(
-                            "%s/o[@base='%s' and @data='bytes' and text()='%s']/@data",
-                            instruction,
-                            hex.type(),
-                            hex.value()
-                        );
+                        if (arg instanceof Label) {
+                            final String uid = new AllLabels().uid((Label) arg);
+                            final HexData data = new HexData(uid);
+                            return String.format(
+                                "%s/o[@base='label']/o[@base='%s' and @data='bytes' and text()]/@data",
+                                instruction,
+                                data.type()
+                            );
+                        } else {
+                            final HexData hex = new HexData(arg);
+                            return String.format(
+                                "%s/o[@base='%s' and @data='bytes' and text()='%s']/@data",
+                                instruction,
+                                hex.type(),
+                                hex.value()
+                            );
+                        }
                     }
                 );
+        }
+
+    }
+
+    /**
+     * Checks that Xmir contains at least one label in the method.
+     * Pay Attention! That we just can't verify exact id's of labels since ASM library doesn't
+     * allow it. Hence, we can just check the presence of a label.
+     * @since 0.1
+     */
+    private static class HasLabel {
+
+
+        /**
+         * Checks of label.
+         * @param root Root Method XPath.
+         * @return List of XPaths to check.
+         */
+        Stream<String> checks(final String root) {
+            return Stream.of(
+                String.format(
+                    "%s/o[@base='seq']/o[@base='label']/o[@base='string' and @data='bytes']/@data",
+                    root
+                )
+            );
         }
     }
 }

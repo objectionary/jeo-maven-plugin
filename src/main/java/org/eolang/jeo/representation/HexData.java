@@ -26,6 +26,8 @@ package org.eolang.jeo.representation;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.StringJoiner;
+import org.eolang.jeo.representation.xmir.AllLabels;
+import org.objectweb.asm.Label;
 
 /**
  * Hexadecimal data.
@@ -94,6 +96,8 @@ public final class HexData {
             res = "float";
         } else if (this.data instanceof Boolean) {
             res = "bool";
+        } else if (this.data instanceof Label) {
+            res = "label";
         } else {
             res = "bytes";
         }

@@ -24,7 +24,9 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.xml.XMLDocument;
+import java.util.UUID;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
@@ -261,14 +263,13 @@ class DirectivesMethodTest {
      *     }
      * }
      * </p>
-     * @todo #226:90min Check Labels.
-     *  In this test we don't check that labels are parsed correctly, but we should.
-     *  Moreover, we have to check that IFLE bytecode instruction has correct label pointer
-     *  to the existing label.
+     * Pay Attention! That we just can't verify exact id's of labels since ASM library doesn't
+     * allow it. Hence, we can just check the presence of a label.
      */
     @Test
     void parsesIfStatementCorrectly() {
-        final Label label = new Label();
+        final AllLabels labels = new AllLabels();
+        final Label label = labels.label(UUID.randomUUID().toString());
         final String xml = new BytecodeClass("Foo")
             .withMethod("bar", "(D)I", 0)
             .instruction(Opcodes.DLOAD, 1)
@@ -290,7 +291,8 @@ class DirectivesMethodTest {
             xml,
             new HasMethod("bar")
                 .inside("Foo")
-                .withInstruction(Opcodes.IFLE)
+                .withInstruction(Opcodes.IFLE, label)
+                .withLabel()
         );
     }
 }

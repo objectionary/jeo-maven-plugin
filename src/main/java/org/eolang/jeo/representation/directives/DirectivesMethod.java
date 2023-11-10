@@ -23,11 +23,9 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
 import org.eolang.jeo.representation.DefaultVersion;
+import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -45,7 +43,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
     /**
      * All labels inside a method.
      */
-    private final Map<Label, String> labels;
+    private final AllLabels labels;
 
     /**
      * Xembly directives.
@@ -63,7 +61,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
     ) {
         super(new DefaultVersion().api(), visitor);
         this.directives = directives;
-        this.labels = new HashMap<>(0);
+        this.labels = new AllLabels();
     }
 
     @Override
@@ -91,8 +89,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
 
     @Override
     public void visitJumpInsn(final int opcode, final Label label) {
-        final String id = UUID.randomUUID().toString();
-        this.labels.putIfAbsent(label, id);
+        final String id = this.labels.uid(label);
         this.opcodeWithLabel(opcode, id);
         super.visitJumpInsn(opcode, label);
     }
@@ -129,7 +126,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
 
     @Override
     public void visitLabel(final Label label) {
-        this.label(this.labels.getOrDefault(label, UUID.randomUUID().toString()));
+        this.label(this.labels.uid(label));
         super.visitLabel(label);
     }
 

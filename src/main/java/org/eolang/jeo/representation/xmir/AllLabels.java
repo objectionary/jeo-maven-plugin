@@ -24,14 +24,17 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import org.objectweb.asm.Label;
 
 /**
  * All the labels that have been found in bytecode.
  * @since 0.1
  */
-final class AllLabels {
+public final class AllLabels {
 
     /**
      * The common cache for all the labels.
@@ -55,7 +58,7 @@ final class AllLabels {
     /**
      * Constructor.
      */
-    AllLabels() {
+    public AllLabels() {
         this(AllLabels.CACHE);
     }
 
@@ -72,8 +75,26 @@ final class AllLabels {
      * @param uid UID.
      * @return Label.
      */
-    Label label(final String uid) {
+    public Label label(final String uid) {
         return this.labels.computeIfAbsent(AllLabels.clean(uid), id -> new Label());
+    }
+
+    /**
+     * Find UID of Label
+     * @param label Label.
+     * @return UID.
+     */
+    public String uid(final Label label) {
+        final Optional<Map.Entry<String, Label>> found = this.labels.entrySet().stream()
+            .filter(e -> e.getValue().equals(label))
+            .findFirst();
+        if (found.isPresent()) {
+            return found.get().getKey();
+        } else {
+            final String generated = UUID.randomUUID().toString();
+            this.labels.put(generated, label);
+            return generated;
+        }
     }
 
     /**
