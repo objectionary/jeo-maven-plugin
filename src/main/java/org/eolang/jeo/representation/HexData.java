@@ -26,7 +26,6 @@ package org.eolang.jeo.representation;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.StringJoiner;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 
 /**

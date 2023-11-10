@@ -38,7 +38,11 @@ import org.objectweb.asm.Label;
  * Matcher to check if the received XMIR document has a method inside a class with a given name.
  * @since 0.1.0
  */
-@SuppressWarnings({"JTCOP.RuleAllTestsHaveProductionClass", "JTCOP.RuleCorrectTestName"})
+@SuppressWarnings({
+    "PMD.TooManyMethods",
+    "JTCOP.RuleAllTestsHaveProductionClass",
+    "JTCOP.RuleCorrectTestName"
+})
 public final class HasMethod extends TypeSafeMatcher<String> {
 
     /**
@@ -64,7 +68,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
     /**
      * Method labels.
      */
-    private final List<HasLabel> labels;
+    private final List<HasLabel> lbls;
 
     /**
      * Constructor.
@@ -84,7 +88,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         this.name = method;
         this.params = new ArrayList<>(0);
         this.instr = new ArrayList<>(0);
-        this.labels = new ArrayList<>(0);
+        this.lbls = new ArrayList<>(0);
     }
 
     @Override
@@ -137,7 +141,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * @return The same matcher that checks label.
      */
     public HasMethod withLabel() {
-        this.labels.add(new HasLabel());
+        this.lbls.add(new HasLabel());
         return this;
     }
 
@@ -195,13 +199,13 @@ public final class HasMethod extends TypeSafeMatcher<String> {
     }
 
     /**
-     * Labels xpaths
+     * Labels xpaths.
      * @return List of XPaths to check.
      */
     private Stream<String> labels() {
         final String root = this.root();
-        return this.labels.stream()
-            .flatMap(label -> label.checks(root));
+        return this.lbls.stream()
+            .flatMap(label -> HasLabel.checks(root));
     }
 
     /**
@@ -278,23 +282,25 @@ public final class HasMethod extends TypeSafeMatcher<String> {
             return this.args.stream()
                 .map(
                     arg -> {
+                        final String result;
                         if (arg instanceof Label) {
                             final String uid = new AllLabels().uid((Label) arg);
                             final HexData data = new HexData(uid);
-                            return String.format(
+                            result = String.format(
                                 "%s/o[@base='label']/o[@base='%s' and @data='bytes' and text()]/@data",
                                 instruction,
                                 data.type()
                             );
                         } else {
                             final HexData hex = new HexData(arg);
-                            return String.format(
+                            result = String.format(
                                 "%s/o[@base='%s' and @data='bytes' and text()='%s']/@data",
                                 instruction,
                                 hex.type(),
                                 hex.value()
                             );
                         }
+                        return result;
                     }
                 );
         }
@@ -307,15 +313,15 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * allow it. Hence, we can just check the presence of a label.
      * @since 0.1
      */
-    private static class HasLabel {
-
+    @SuppressWarnings("PMD.UseUtilityClass")
+    private static final class HasLabel {
 
         /**
          * Checks of label.
          * @param root Root Method XPath.
          * @return List of XPaths to check.
          */
-        Stream<String> checks(final String root) {
+        static Stream<String> checks(final String root) {
             return Stream.of(
                 String.format(
                     "%s/o[@base='seq']/o[@base='label']/o[@base='string' and @data='bytes']/@data",

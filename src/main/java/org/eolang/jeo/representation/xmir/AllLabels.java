@@ -24,10 +24,8 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import org.objectweb.asm.Label;
 
 /**
@@ -80,18 +78,20 @@ public final class AllLabels {
     }
 
     /**
-     * Find UID of Label
+     * Find UID of Label.
      * @param label Label.
      * @return UID.
      */
     public String uid(final Label label) {
         return this.labels.entrySet().stream()
             .filter(e -> e.getValue().equals(label))
-            .findFirst().orElseGet(() -> {
-                final String generated = UUID.randomUUID().toString();
-                this.labels.put(generated, label);
-                return Map.entry(generated, label);
-            }).getKey();
+            .findFirst().orElseGet(
+                () -> {
+                    final String generated = UUID.randomUUID().toString();
+                    this.labels.put(generated, label);
+                    return Map.entry(generated, label);
+                }
+            ).getKey();
     }
 
     /**
