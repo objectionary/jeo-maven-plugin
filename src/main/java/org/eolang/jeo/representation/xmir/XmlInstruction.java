@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
@@ -115,22 +116,20 @@ public final class XmlInstruction implements XmlCommand {
      * @checkstyle NestedIfDepthCheck (100 lines)
      */
     public Object[] arguments() {
-        final NodeList children = this.node.getChildNodes();
-        final Collection<Object> res = new ArrayList<>(children.getLength());
-        for (int index = 0; index < children.getLength(); ++index) {
-            final Node child = children.item(index);
-            if (child.getNodeName().equals("o")) {
-                final NamedNodeMap attributes = child.getAttributes();
-                if (attributes.getNamedItem("base").getNodeValue().equals("int")) {
-                    res.add(new HexString(child.getTextContent()).decodeAsInt());
-                } else if (attributes.getNamedItem("base").getNodeValue().equals("label")) {
-                    res.add(this.labels.label(child.getTextContent()));
-                } else {
-                    res.add(new HexString(child.getTextContent()).decode());
+        return new XmlNode(this.node)
+            .children()
+            .map(xmlnode -> {
+                final Optional<String> base = xmlnode.attribute("base");
+                if (base.isPresent()) {
+                    final String data = base.get();
+                    if (data.equals("int")) {
+                        return new HexString(xmlnode.text()).decodeAsInt();
+                    } else if (data.equals("label")) {
+                        return this.labels.label(xmlnode.text());
+                    }
                 }
-            }
-        }
-        return res.toArray();
+                return new HexString(xmlnode.text()).decode();
+            }).toArray();
     }
 
     @Override
