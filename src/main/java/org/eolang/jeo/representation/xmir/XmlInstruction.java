@@ -118,18 +118,32 @@ public final class XmlInstruction implements XmlCommand {
     public Object[] arguments() {
         return new XmlNode(this.node)
             .children()
-            .map(xmlnode -> {
-                final Optional<String> base = xmlnode.attribute("base");
-                if (base.isPresent()) {
-                    final String data = base.get();
-                    if (data.equals("int")) {
-                        return new HexString(xmlnode.text()).decodeAsInt();
-                    } else if (data.equals("label")) {
-                        return this.labels.label(xmlnode.text());
-                    }
-                }
-                return new HexString(xmlnode.text()).decode();
-            }).toArray();
+            .map(this::argument)
+            .toArray();
+    }
+
+    /**
+     * Extract argument value from XmlNode.
+     * @param node XmlNode with argument value.
+     * @return Argument value.
+     */
+    private Object argument(final XmlNode node) {
+        final String attr = node.attribute("base")
+            .orElseThrow(
+                () -> new IllegalStateException(
+                    String.format(
+                        "'%s' is not an argument because it doesn't have 'base' attribute",
+                        node
+                    )
+                )
+            );
+        if (attr.equals("int")) {
+            return new HexString(node.text()).decodeAsInt();
+        } else if (attr.equals("label")) {
+            return this.labels.label(node.text());
+        } else {
+            return new HexString(node.text()).decode();
+        }
     }
 
     @Override
