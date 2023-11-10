@@ -108,12 +108,6 @@ public final class XmlInstruction implements XmlCommand {
     /**
      * Instruction arguments.
      * @return Arguments.
-     * @todo #234:90min Refactor XmlInstruction#arguments method.
-     *  This method is too complex and has too many responsibilities.
-     *  Moreover, it uses static field LABELS. We have to refactor this method in order
-     *  to avoid all that problems. Don't forget to remove PMD and checkstyle comments about
-     *  suppressed warnings.
-     * @checkstyle NestedIfDepthCheck (100 lines)
      */
     public Object[] arguments() {
         return new XmlNode(this.node)
