@@ -25,10 +25,8 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.IntStream;
 import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
@@ -116,30 +114,6 @@ public final class XmlInstruction implements XmlCommand {
             .toArray();
     }
 
-    /**
-     * Extract argument value from XmlNode.
-     * @param node XmlNode with argument value.
-     * @return Argument value.
-     */
-    private Object argument(final XmlNode node) {
-        final String attr = node.attribute("base")
-            .orElseThrow(
-                () -> new IllegalStateException(
-                    String.format(
-                        "'%s' is not an argument because it doesn't have 'base' attribute",
-                        node
-                    )
-                )
-            );
-        if (attr.equals("int")) {
-            return new HexString(node.text()).decodeAsInt();
-        } else if (attr.equals("label")) {
-            return this.labels.label(node.text());
-        } else {
-            return new HexString(node.text()).decode();
-        }
-    }
-
     @Override
     public boolean equals(final Object other) {
         final boolean result;
@@ -175,6 +149,32 @@ public final class XmlInstruction implements XmlCommand {
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     Node node() {
         return this.node;
+    }
+
+    /**
+     * Extract argument value from XmlNode.
+     * @param argument XmlNode with argument value.
+     * @return Argument value.
+     */
+    private Object argument(final XmlNode argument) {
+        final String attr = argument.attribute("base")
+            .orElseThrow(
+                () -> new IllegalStateException(
+                    String.format(
+                        "'%s' is not an argument because it doesn't have 'base' attribute",
+                        argument
+                    )
+                )
+            );
+        final Object result;
+        if (attr.equals("int")) {
+            result = new HexString(argument.text()).decodeAsInt();
+        } else if (attr.equals("label")) {
+            result = this.labels.label(argument.text());
+        } else {
+            result = new HexString(argument.text()).decode();
+        }
+        return result;
     }
 
     /**
