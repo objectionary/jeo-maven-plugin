@@ -23,17 +23,30 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
 /**
- * Bytecode instruction.
- * Might be a label, a jump, a method call, etc.
+ * Mark label instruction.
  * @since 0.1
  */
-public interface BytecodeInstruction {
+public final class BytecodeLabelEntry implements BytecodeEntry {
+
     /**
-     * Write instruction to the method visitor.
-     * @param visitor Method visitor.
+     * Label.
      */
-    void generate(MethodVisitor visitor);
+    private final Label label;
+
+    /**
+     * Constructor.
+     * @param label Label.
+     */
+    BytecodeLabelEntry(final Label label) {
+        this.label = label;
+    }
+
+    @Override
+    public void generate(final MethodVisitor visitor) {
+        visitor.visitLabel(this.label);
+    }
 }

@@ -33,7 +33,7 @@ import org.objectweb.asm.Opcodes;
  * Bytecode instruction.
  * @since 0.1.0
  */
-final class CommandInstruction implements BytecodeInstruction {
+final class BytecodeInstructionEntry implements BytecodeEntry {
 
     /**
      * Opcode.
@@ -50,7 +50,7 @@ final class CommandInstruction implements BytecodeInstruction {
      * @param opcode Opcode.
      * @param args Arguments.
      */
-    CommandInstruction(
+    BytecodeInstructionEntry(
         final int opcode,
         final Object... args
     ) {
@@ -62,7 +62,7 @@ final class CommandInstruction implements BytecodeInstruction {
      * @param opcode Opcode.
      * @param args Arguments.
      */
-    CommandInstruction(
+    BytecodeInstructionEntry(
         final int opcode,
         final List<Object> args
     ) {

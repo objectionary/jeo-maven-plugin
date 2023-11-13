@@ -55,7 +55,7 @@ public final class BytecodeMethod {
     /**
      * Method Instructions.
      */
-    private final List<BytecodeInstruction> instructions;
+    private final List<BytecodeEntry> instructions;
 
     /**
      * Access.
@@ -105,7 +105,7 @@ public final class BytecodeMethod {
      * @return This object.
      */
     public BytecodeMethod markLabel(final Label label) {
-        this.instructions.add(new MarkLabelInstruction(label));
+        this.instructions.add(new BytecodeLabelEntry(label));
         return this;
     }
 
@@ -116,7 +116,7 @@ public final class BytecodeMethod {
      * @return This object.
      */
     public BytecodeMethod instruction(final int opcode, final Object... args) {
-        this.instructions.add(new CommandInstruction(opcode, args));
+        this.instructions.add(new BytecodeInstructionEntry(opcode, args));
         return this;
     }
 
