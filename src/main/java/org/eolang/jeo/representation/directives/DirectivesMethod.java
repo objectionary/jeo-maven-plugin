@@ -125,7 +125,6 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
 
     @Override
     public void visitLabel(final Label label) {
-//        this.label(this.labels.uid(label));
         this.directives.append(new Operand(label));
         super.visitLabel(label);
     }
@@ -157,27 +156,20 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
     }
 
     /**
-     * Add opcode with label to the directives.
-     * @param opcode Opcode
-     * @param label Label
-     * @todo #226:90min Code duplication in DirectivesMethod.opcodeWithLabel.
-     *  This method is almost the same as DirectivesMethod.opcode.
-     *  We have to consider to refactor this code in order to avoid
-     *  code duplication.
+     * Operand XML directives.
+     * @since 0.1
      */
-    private void opcodeWithLabel(final int opcode, final Label label) {
-        this.directives.add("o")
-            .attr("name", new OpcodeName(opcode).asString())
-            .attr("base", "opcode");
-        this.directives.append(new DirectivesLabel(label));
-        this.directives.up();
-    }
-
-
     private static final class Operand implements Iterable<Directive> {
 
+        /**
+         * Raw operand.
+         */
         private final Object operand;
 
+        /**
+         * Constructor.
+         * @param operand Raw operand.
+         */
         private Operand(final Object operand) {
             this.operand = operand;
         }
