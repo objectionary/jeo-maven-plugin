@@ -30,6 +30,26 @@ import org.xembly.Directives;
 
 /**
  * Field directives.
+ * Any java field will be transformed into the following EO object.
+ *  <p>
+ *     {@code
+ *       [access descriptor signature value] > field
+ *     }
+ * </p>
+ * The name of the "field" object is a name of the field in Java class.
+ * For example, the following Java field
+ * <p>
+ *     {@code
+ *        private final int bar = 1;
+ *     }
+ * </p>
+ * will be transformed into the following EO object:
+ * <p>
+ *     {@code
+ *       field 18 "I" "" "01" > bar
+ *     }
+ * </p>
+ *
  * @since 0.1
  */
 final class DirectivesField implements Iterable<Directive> {
@@ -88,10 +108,10 @@ final class DirectivesField implements Iterable<Directive> {
         directives.add("o")
             .attr("base", "field")
             .attr("name", this.name)
-            .append(new DirectivesData("access", this.access))
-            .append(new DirectivesData("descriptor", this.descriptor))
-            .append(new DirectivesData("signature", this.signature))
-            .append(new DirectivesData("value", this.value));
+            .append(new DirectivesData(this.access))
+            .append(new DirectivesData(this.descriptor))
+            .append(new DirectivesData(this.signature))
+            .append(new DirectivesData(this.value));
         return directives.up().iterator();
     }
 }
