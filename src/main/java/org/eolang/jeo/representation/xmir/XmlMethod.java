@@ -118,13 +118,9 @@ public final class XmlMethod {
     /**
      * All method instructions.
      * @return Instructions.
-     * @todo #226:90min Code duplication with 'instructions' method.
-     *  Currently we have two methods that return instructions. They are 'instructions' and
-     *  'commads'. We have to remove code duplication between them. Maybe it makes sense to
-     *  leave only one method and remove the other one.
      */
     @SafeVarargs
-    public final List<XmlCommand> commands(final Predicate<XmlCommand>... predicates) {
+    public final List<XmlCommand> instructions(final Predicate<XmlCommand>... predicates) {
         return new XmlNode(this.node).child("base", "seq")
             .children()
             .filter(element -> element.attribute("base").isPresent())
@@ -152,7 +148,7 @@ public final class XmlMethod {
      * @return List of invocations.
      */
     public List<XmlInvokeVirtual> invokeVirtuals() {
-        final List<XmlCommand> all = this.commands();
+        final List<XmlCommand> all = this.instructions();
         final List<XmlInvokeVirtual> res = new ArrayList<>(0);
         for (int index = 0; index < all.size(); ++index) {
             final XmlCommand top = all.get(index);
@@ -181,7 +177,7 @@ public final class XmlMethod {
             .map(XmlInvokeVirtual::invocation)
             .collect(Collectors.toSet());
         final List<XmlCommand> body = new ArrayList<>(0);
-        for (final XmlCommand instruction : this.commands()) {
+        for (final XmlCommand instruction : this.instructions()) {
             if (!ignored.contains(instruction)) {
                 if (where.contains(instruction)) {
                     inline.instructionsToInline().forEach(body::add);
@@ -224,7 +220,7 @@ public final class XmlMethod {
      *  to inline.
      */
     private Stream<XmlCommand> instructionsToInline() {
-        return this.commands(new Without(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)).stream();
+        return this.instructions(new Without(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)).stream();
     }
 
     /**

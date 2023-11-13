@@ -116,7 +116,7 @@ public final class ImprovementDistilledObjects implements Improvement {
             );
             clazz.methods()
                 .stream()
-                .map(XmlMethod::commands)
+                .map(XmlMethod::instructions)
                 .flatMap(Collection::stream)
                 .forEach(
                     instruction ->
@@ -143,7 +143,7 @@ public final class ImprovementDistilledObjects implements Improvement {
         final List<XmlInstruction> replacement
     ) {
         for (final XmlMethod method : clazz.methods()) {
-            final List<XmlCommand> instructions = method.commands();
+            final List<XmlCommand> instructions = method.instructions();
             final List<XmlCommand> updated = new ArrayList<>(0);
             final int size = target.size();
             for (int index = 0; index < instructions.size(); ++index) {
