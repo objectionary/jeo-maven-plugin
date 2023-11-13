@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -63,7 +64,7 @@ public class XmlField {
      * @return Access modifiers.
      */
     public int access() {
-        return this.find("access").map(HexString::decodeAsInt).orElse(0);
+        return this.find(Attribute.ACCESS).map(HexString::decodeAsInt).orElse(0);
     }
 
     /**
@@ -71,7 +72,7 @@ public class XmlField {
      * @return Descriptor.
      */
     public String descriptor() {
-        return this.find("descriptor").map(HexString::decode).orElse(null);
+        return this.find(Attribute.DESCRIPTOR).map(HexString::decode).orElse(null);
     }
 
     /**
@@ -79,7 +80,7 @@ public class XmlField {
      * @return Signature.
      */
     public String signature() {
-        return this.find("signature").map(HexString::decode).orElse(null);
+        return this.find(Attribute.SIGNATURE).map(HexString::decode).orElse(null);
     }
 
     /**
@@ -87,7 +88,7 @@ public class XmlField {
      * @return Value.
      */
     public Object value() {
-        return this.find("value").map(HexString::decode).orElse(null);
+        return this.find(Attribute.VALUE).map(HexString::decode).orElse(null);
     }
 
     /**
@@ -122,6 +123,19 @@ public class XmlField {
             .map(HexString::new);
     }
 
+    private Optional<HexString> find(final Attribute attribute) {
+        final int position = attribute.ordinal();
+        final String s = new XmlNode(this.node).children()
+            .map(XmlNode::text)
+            .collect(Collectors.toList())
+            .get(position);
+        if (s.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(new HexString(s));
+        }
+    }
+
     /**
      * Current node child objects.
      * @return Child objects.
@@ -136,5 +150,13 @@ public class XmlField {
             }
         }
         return res.stream();
+    }
+
+    private enum Attribute {
+        ACCESS,
+        DESCRIPTOR,
+        SIGNATURE,
+        VALUE;
+
     }
 }
