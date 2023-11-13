@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import org.eolang.jeo.representation.DefaultVersion;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -39,11 +38,6 @@ import org.xembly.Directives;
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class DirectivesMethod extends MethodVisitor implements Iterable<Directive> {
-
-    /**
-     * All labels inside a method.
-     */
-    private final AllLabels labels;
 
     /**
      * Xembly directives.
@@ -61,7 +55,6 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
     ) {
         super(new DefaultVersion().api(), visitor);
         this.directives = directives;
-        this.labels = new AllLabels();
     }
 
     @Override
@@ -164,23 +157,25 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
         /**
          * Raw operand.
          */
-        private final Object operand;
+        private final Object raw;
 
         /**
          * Constructor.
          * @param operand Raw operand.
          */
         private Operand(final Object operand) {
-            this.operand = operand;
+            this.raw = operand;
         }
 
         @Override
         public Iterator<Directive> iterator() {
-            if (this.operand instanceof Label) {
-                return new DirectivesLabel((Label) this.operand).iterator();
+            final Iterator<Directive> result;
+            if (this.raw instanceof Label) {
+                result = new DirectivesLabel((Label) this.raw).iterator();
             } else {
-                return new DirectivesData(this.operand).iterator();
+                result = new DirectivesData(this.raw).iterator();
             }
+            return result;
         }
     }
 }
