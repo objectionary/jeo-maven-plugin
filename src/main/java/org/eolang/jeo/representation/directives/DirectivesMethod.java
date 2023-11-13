@@ -89,7 +89,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
 
     @Override
     public void visitJumpInsn(final int opcode, final Label label) {
-        this.opcodeWithLabel(opcode, label);
+        this.opcode(opcode, label);
         super.visitJumpInsn(opcode, label);
     }
 
@@ -126,7 +126,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
     @Override
     public void visitLabel(final Label label) {
 //        this.label(this.labels.uid(label));
-        this.directives.append(new DirectivesLabel(label));
+        this.directives.append(new Operand(label));
         super.visitLabel(label);
     }
 
@@ -151,7 +151,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
             .attr("name", new OpcodeName(opcode).asString())
             .attr("base", "opcode");
         for (final Object operand : operands) {
-            this.directives.append(new DirectivesData(operand));
+            this.directives.append(new Operand(operand));
         }
         this.directives.up();
     }
@@ -184,7 +184,11 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
 
         @Override
         public Iterator<Directive> iterator() {
-            return null;
+            if (this.operand instanceof Label) {
+                return new DirectivesLabel((Label) this.operand).iterator();
+            } else {
+                return new DirectivesData(this.operand).iterator();
+            }
         }
     }
 }
