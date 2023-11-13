@@ -35,13 +35,13 @@ public class XmlInvokeVirtual {
     /**
      * Instructions.
      */
-    private final List<XmlInstruction> instructions;
+    private final List<XmlCommand> instructions;
 
     /**
      * Constructor.
      * @param instructions Instructions.
      */
-    XmlInvokeVirtual(final List<XmlInstruction> instructions) {
+    XmlInvokeVirtual(final List<XmlCommand> instructions) {
         this.instructions = instructions;
     }
 
@@ -49,7 +49,7 @@ public class XmlInvokeVirtual {
      * GETFIELD instruction.
      * @return Instruction.
      */
-    XmlInstruction field() {
+    XmlCommand field() {
         return this.instructions.get(0);
     }
 
@@ -57,40 +57,16 @@ public class XmlInvokeVirtual {
      * INVOKEVIRTUAL instruction.
      * @return Instruction.
      */
-    XmlInstruction invocation() {
+    XmlCommand invocation() {
         return this.instructions.get(this.instructions.size() - 1);
-    }
-
-    /**
-     * Get field name.
-     * @return Field name.
-     */
-    String fieldName() {
-        return String.valueOf(this.field().arguments()[1]);
-    }
-
-    /**
-     * Get field type.
-     * @return Field type.
-     */
-    String fieldType() {
-        return String.valueOf(this.field().arguments()[2]);
-    }
-
-    /**
-     * Get method name.
-     * @return Method name.
-     */
-    String methodName() {
-        return String.valueOf(this.invocation().arguments()[1]);
     }
 
     /**
      * Get method arguments.
      * @return Method arguments.
      */
-    List<XmlInstruction> arguments() {
-        final List<XmlInstruction> result;
+    List<XmlCommand> arguments() {
+        final List<XmlCommand> result;
         if (this.instructions.size() < 3) {
             result = Collections.emptyList();
         } else {

@@ -42,6 +42,12 @@ public interface XmlCommand {
      */
     void writeTo(BytecodeMethod method);
 
+    /**
+     * Check if instruction has opcode.
+     * @param opcode Opcode comparing with.
+     * @return True if instruction has opcode.
+     */
+    boolean hasOpcode(int opcode);
 
     Node node();
 }

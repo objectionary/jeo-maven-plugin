@@ -77,21 +77,6 @@ class XmlMethodTest {
             call.arguments(),
             Matchers.hasSize(1)
         );
-        MatcherAssert.assertThat(
-            "Field name should be 'a' in hex",
-            call.fieldName(),
-            Matchers.equalTo("a")
-        );
-        MatcherAssert.assertThat(
-            "Field type should be 'Lorg/eolang/jeo/A;' in hex",
-            call.fieldType(),
-            Matchers.equalTo("Lorg/eolang/jeo/A;")
-        );
-        MatcherAssert.assertThat(
-            "Method name should be 'foo' in hex",
-            call.methodName(),
-            Matchers.equalTo("foo")
-        );
     }
 
     @Test

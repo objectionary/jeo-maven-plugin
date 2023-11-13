@@ -86,6 +86,11 @@ public final class XmlInstruction implements XmlCommand {
         method.instruction(this.code(), this.arguments());
     }
 
+    @Override
+    public boolean hasOpcode(final int opcode) {
+        return this.code() == opcode;
+    }
+
     /**
      * Replace values of instruction arguments.
      * @param old Old value.

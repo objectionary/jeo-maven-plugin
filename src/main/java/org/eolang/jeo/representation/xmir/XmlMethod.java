@@ -180,14 +180,14 @@ public final class XmlMethod {
      * @return List of invocations.
      */
     public List<XmlInvokeVirtual> invokeVirtuals() {
-        final List<XmlInstruction> all = this.instructions();
+        final List<XmlCommand> all = this.commands();
         final List<XmlInvokeVirtual> res = new ArrayList<>(0);
         for (int index = 0; index < all.size(); ++index) {
-            final XmlInstruction top = all.get(index);
-            if (top.code() == Opcodes.GETFIELD) {
+            final XmlCommand top = all.get(index);
+            if (top.hasOpcode(Opcodes.GETFIELD)) {
                 for (int inner = index + 1; inner < all.size(); ++inner) {
-                    final XmlInstruction bottom = all.get(inner);
-                    if (bottom.code() == Opcodes.INVOKEVIRTUAL) {
+                    final XmlCommand bottom = all.get(inner);
+                    if (bottom.hasOpcode(Opcodes.INVOKEVIRTUAL)) {
                         res.add(new XmlInvokeVirtual(all.subList(index, inner + 1)));
                     }
                 }
