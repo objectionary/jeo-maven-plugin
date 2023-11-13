@@ -147,7 +147,8 @@ public final class XmlInstruction implements XmlCommand {
      *  exposing internal node representation.
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    Node node() {
+    @Override
+    public Node node() {
         return this.node;
     }
 

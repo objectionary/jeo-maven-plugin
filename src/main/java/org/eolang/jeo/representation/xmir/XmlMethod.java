@@ -136,11 +136,13 @@ public final class XmlMethod {
      *  'commads'. We have to remove code duplication between them. Maybe it makes sense to
      *  leave only one method and remove the other one.
      */
-    public List<XmlCommand> commands() {
+    @SafeVarargs
+    public final List<XmlCommand> commands(final Predicate<XmlCommand>... predicates) {
         return new XmlNode(this.node).child("base", "seq")
             .children()
             .filter(element -> element.attribute("base").isPresent())
             .map(XmlNode::toCommand)
+            .filter(instr -> Arrays.stream(predicates).allMatch(predicate -> predicate.test(instr)))
             .collect(Collectors.toList());
     }
 
@@ -200,14 +202,14 @@ public final class XmlMethod {
      */
     public void inline(final XmlMethod inline) {
         final List<XmlInvokeVirtual> invocations = this.invokeVirtuals();
-        final Set<XmlInstruction> ignored = invocations.stream()
+        final Set<XmlCommand> ignored = invocations.stream()
             .map(XmlInvokeVirtual::field)
             .collect(Collectors.toSet());
-        final Set<XmlInstruction> where = invocations.stream()
+        final Set<XmlCommand> where = invocations.stream()
             .map(XmlInvokeVirtual::invocation)
             .collect(Collectors.toSet());
-        final List<XmlInstruction> body = new ArrayList<>(0);
-        for (final XmlInstruction instruction : this.instructions()) {
+        final List<XmlCommand> body = new ArrayList<>(0);
+        for (final XmlCommand instruction : this.commands()) {
             if (!ignored.contains(instruction)) {
                 if (where.contains(instruction)) {
                     inline.instructionsToInline().forEach(body::add);
@@ -226,7 +228,7 @@ public final class XmlMethod {
      *  Currently we don't have a unit test for XmlMethod. We should create a testing class
      *  and test 'setInstructions' method. Don't forget to remove the puzzle for that method.
      */
-    public void setInstructions(final List<XmlInstruction> updated) {
+    public void setInstructions(final List<XmlCommand> updated) {
         final Node root = this.sequence().orElseThrow(
             () -> new IllegalStateException(
                 String.format("Can't find bytecode of the method %s", new XMLDocument(this.node))
@@ -235,7 +237,7 @@ public final class XmlMethod {
         while (root.hasChildNodes()) {
             root.removeChild(root.getFirstChild());
         }
-        for (final XmlInstruction instruction : updated) {
+        for (final XmlCommand instruction : updated) {
             root.appendChild(root.getOwnerDocument().adoptNode(instruction.node()));
         }
     }

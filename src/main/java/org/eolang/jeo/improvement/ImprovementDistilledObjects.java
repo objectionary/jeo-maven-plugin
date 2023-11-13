@@ -39,6 +39,7 @@ import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.EoRepresentation;
 import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.xmir.XmlClass;
+import org.eolang.jeo.representation.xmir.XmlCommand;
 import org.eolang.jeo.representation.xmir.XmlField;
 import org.eolang.jeo.representation.xmir.XmlInstruction;
 import org.eolang.jeo.representation.xmir.XmlMethod;
@@ -142,18 +143,18 @@ public final class ImprovementDistilledObjects implements Improvement {
         final List<XmlInstruction> replacement
     ) {
         for (final XmlMethod method : clazz.methods()) {
-            final List<XmlInstruction> instructions = method.instructions();
-            final List<XmlInstruction> updated = new ArrayList<>(0);
+            final List<XmlCommand> instructions = method.commands();
+            final List<XmlCommand> updated = new ArrayList<>(0);
             final int size = target.size();
             for (int index = 0; index < instructions.size(); ++index) {
-                final List<XmlInstruction> stack = new ArrayList<>(0);
+                final List<XmlCommand> stack = new ArrayList<>(0);
                 for (
                     int inner = 0;
                     inner < size && index < instructions.size();
                     ++inner
                 ) {
                     final XmlInstruction targeted = target.get(inner);
-                    final XmlInstruction current = instructions.get(index);
+                    final XmlCommand current = instructions.get(index);
                     if (current.equals(targeted)) {
                         if (inner == size - 1) {
                             updated.addAll(replacement);

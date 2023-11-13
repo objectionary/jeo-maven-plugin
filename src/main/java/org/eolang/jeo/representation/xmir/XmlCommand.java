@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.w3c.dom.Node;
 
 /**
  * XML representation of bytecode instruction or a label.
@@ -40,4 +41,7 @@ public interface XmlCommand {
      * @param method Bytecode Method where instruction should be written.
      */
     void writeTo(BytecodeMethod method);
+
+
+    Node node();
 }

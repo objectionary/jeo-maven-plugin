@@ -57,6 +57,14 @@ final class XmlNode {
     }
 
     /**
+     * To XML node.
+     * @return Xml node
+     */
+    public Node node() {
+        return this.node;
+    }
+
+    /**
      * Get child node.
      * @param name Child node name.
      * @return Child node.
