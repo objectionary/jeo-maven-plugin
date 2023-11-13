@@ -28,13 +28,11 @@ import org.w3c.dom.Node;
 
 /**
  * XML representation of bytecode instruction or a label.
+ * Usually each method in bytecode contains a list of bytecode entries.
+ * Since they aren't always instructions, we call them entries.
  * @since 0.1
- * @todo #226:90min Rename XmlCommand to XmlInstruction.
- *  XmlCommand is a bad name for this class. It is not a command, it is an instruction in general.
- *  Since instruction could be a label or a bytecode instruction, it is better to rename this class
- *  to XmlInstruction. After that, rename all usages of the old XmlInstruction to XmlCommand.
  */
-public interface XmlCommand {
+public interface XmlBytecodeEntry {
 
     /**
      * Write instruction to the bytecode method.

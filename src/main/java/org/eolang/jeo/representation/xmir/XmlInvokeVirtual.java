@@ -35,13 +35,13 @@ public class XmlInvokeVirtual {
     /**
      * Instructions.
      */
-    private final List<XmlCommand> instructions;
+    private final List<XmlBytecodeEntry> instructions;
 
     /**
      * Constructor.
      * @param instructions Instructions.
      */
-    XmlInvokeVirtual(final List<XmlCommand> instructions) {
+    XmlInvokeVirtual(final List<XmlBytecodeEntry> instructions) {
         this.instructions = instructions;
     }
 
@@ -49,7 +49,7 @@ public class XmlInvokeVirtual {
      * GETFIELD instruction.
      * @return Instruction.
      */
-    XmlCommand field() {
+    XmlBytecodeEntry field() {
         return this.instructions.get(0);
     }
 
@@ -57,7 +57,7 @@ public class XmlInvokeVirtual {
      * INVOKEVIRTUAL instruction.
      * @return Instruction.
      */
-    XmlCommand invocation() {
+    XmlBytecodeEntry invocation() {
         return this.instructions.get(this.instructions.size() - 1);
     }
 
@@ -65,8 +65,8 @@ public class XmlInvokeVirtual {
      * Get method arguments.
      * @return Method arguments.
      */
-    List<XmlCommand> arguments() {
-        final List<XmlCommand> result;
+    List<XmlBytecodeEntry> arguments() {
+        final List<XmlBytecodeEntry> result;
         if (this.instructions.size() < 3) {
             result = Collections.emptyList();
         } else {

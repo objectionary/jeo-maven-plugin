@@ -30,7 +30,7 @@ import org.w3c.dom.Node;
  * XML representation of bytecode label.
  * @since 0.1
  */
-public final class XmlLabel implements XmlCommand {
+public final class XmlLabel implements XmlBytecodeEntry {
 
     /**
      * Label node.

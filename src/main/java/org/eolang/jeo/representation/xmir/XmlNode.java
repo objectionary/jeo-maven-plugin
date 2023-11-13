@@ -118,8 +118,8 @@ final class XmlNode {
      * Convert to a command.
      * @return Command.
      */
-    XmlCommand toCommand() {
-        final XmlCommand result;
+    XmlBytecodeEntry toCommand() {
+        final XmlBytecodeEntry result;
         if (this.attribute("name").isPresent()) {
             result = new XmlInstruction(this.node);
         } else {

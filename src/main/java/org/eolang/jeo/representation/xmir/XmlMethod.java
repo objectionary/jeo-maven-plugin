@@ -121,7 +121,9 @@ public final class XmlMethod {
      * @return Instructions.
      */
     @SafeVarargs
-    public final List<XmlCommand> instructions(final Predicate<XmlCommand>... predicates) {
+    public final List<XmlBytecodeEntry> instructions(
+        final Predicate<XmlBytecodeEntry>... predicates
+    ) {
         return new XmlNode(this.node).child("base", "seq")
             .children()
             .filter(element -> element.attribute("base").isPresent())
@@ -149,13 +151,13 @@ public final class XmlMethod {
      * @return List of invocations.
      */
     public List<XmlInvokeVirtual> invokeVirtuals() {
-        final List<XmlCommand> all = this.instructions();
+        final List<XmlBytecodeEntry> all = this.instructions();
         final List<XmlInvokeVirtual> res = new ArrayList<>(0);
         for (int index = 0; index < all.size(); ++index) {
-            final XmlCommand top = all.get(index);
+            final XmlBytecodeEntry top = all.get(index);
             if (top.hasOpcode(Opcodes.GETFIELD)) {
                 for (int inner = index + 1; inner < all.size(); ++inner) {
-                    final XmlCommand bottom = all.get(inner);
+                    final XmlBytecodeEntry bottom = all.get(inner);
                     if (bottom.hasOpcode(Opcodes.INVOKEVIRTUAL)) {
                         res.add(new XmlInvokeVirtual(all.subList(index, inner + 1)));
                     }
@@ -171,14 +173,14 @@ public final class XmlMethod {
      */
     public void inline(final XmlMethod inline) {
         final List<XmlInvokeVirtual> invocations = this.invokeVirtuals();
-        final Set<XmlCommand> ignored = invocations.stream()
+        final Set<XmlBytecodeEntry> ignored = invocations.stream()
             .map(XmlInvokeVirtual::field)
             .collect(Collectors.toSet());
-        final Set<XmlCommand> where = invocations.stream()
+        final Set<XmlBytecodeEntry> where = invocations.stream()
             .map(XmlInvokeVirtual::invocation)
             .collect(Collectors.toSet());
-        final List<XmlCommand> body = new ArrayList<>(0);
-        for (final XmlCommand instruction : this.instructions()) {
+        final List<XmlBytecodeEntry> body = new ArrayList<>(0);
+        for (final XmlBytecodeEntry instruction : this.instructions()) {
             if (!ignored.contains(instruction)) {
                 if (where.contains(instruction)) {
                     inline.instructionsToInline().forEach(body::add);
@@ -197,7 +199,7 @@ public final class XmlMethod {
      *  Currently we don't have a unit test for XmlMethod. We should create a testing class
      *  and test 'setInstructions' method. Don't forget to remove the puzzle for that method.
      */
-    public void setInstructions(final List<XmlCommand> updated) {
+    public void setInstructions(final List<XmlBytecodeEntry> updated) {
         final Node root = this.sequence().orElseThrow(
             () -> new IllegalStateException(
                 String.format("Can't find bytecode of the method %s", new XMLDocument(this.node))
@@ -206,7 +208,7 @@ public final class XmlMethod {
         while (root.hasChildNodes()) {
             root.removeChild(root.getFirstChild());
         }
-        for (final XmlCommand instruction : updated) {
+        for (final XmlBytecodeEntry instruction : updated) {
             root.appendChild(root.getOwnerDocument().adoptNode(instruction.node()));
         }
     }
@@ -220,7 +222,7 @@ public final class XmlMethod {
      *  We have to write more tests and create a more suitable method for determining instructions
      *  to inline.
      */
-    private Stream<XmlCommand> instructionsToInline() {
+    private Stream<XmlBytecodeEntry> instructionsToInline() {
         return this.instructions(new Without(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD))
             .stream();
     }
@@ -255,7 +257,7 @@ public final class XmlMethod {
      * Filters commands that have specified opcodes.
      * @since 0.1
      */
-    private static final class Without implements Predicate<XmlCommand> {
+    private static final class Without implements Predicate<XmlBytecodeEntry> {
 
         /**
          * Opcodes to exclude.
@@ -271,7 +273,7 @@ public final class XmlMethod {
         }
 
         @Override
-        public boolean test(final XmlCommand instr) {
+        public boolean test(final XmlBytecodeEntry instr) {
             return Arrays.stream(this.opcodes).noneMatch(instr::hasOpcode);
         }
     }

@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
  *  exposing internal node representation.
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public final class XmlInstruction implements XmlCommand {
+public final class XmlInstruction implements XmlBytecodeEntry {
 
     /**
      * Instruction node.
