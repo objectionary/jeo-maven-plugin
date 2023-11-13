@@ -116,7 +116,7 @@ public final class ImprovementDistilledObjects implements Improvement {
             );
             clazz.methods()
                 .stream()
-                .map(XmlMethod::instructions)
+                .map(XmlMethod::commands)
                 .flatMap(Collection::stream)
                 .forEach(
                     instruction ->

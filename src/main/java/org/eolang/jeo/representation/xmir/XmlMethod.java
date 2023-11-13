@@ -134,21 +134,6 @@ public final class XmlMethod {
     }
 
     /**
-     * Method instructions.
-     * @param predicates Filters.
-     * @return Instructions.
-     */
-    @SafeVarargs
-    public final List<XmlInstruction> instructions(final Predicate<XmlInstruction>... predicates) {
-        return new XmlNode(this.node).child("base", "seq")
-            .children()
-            .filter(element -> element.attribute("name").isPresent())
-            .map(XmlNode::toInstruction)
-            .filter(instr -> Arrays.stream(predicates).allMatch(predicate -> predicate.test(instr)))
-            .collect(Collectors.toList());
-    }
-
-    /**
      * Copy method node.
      * @return Instructions.
      */

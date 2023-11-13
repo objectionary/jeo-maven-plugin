@@ -148,7 +148,7 @@ public final class XmlClass {
     public void replaceArguments(final String old, final String replacement) {
         this.methods()
             .stream()
-            .map(XmlMethod::instructions)
+            .map(XmlMethod::commands)
             .flatMap(Collection::stream)
             .forEach(instruction -> instruction.replaceArguementsValues(old, replacement));
     }

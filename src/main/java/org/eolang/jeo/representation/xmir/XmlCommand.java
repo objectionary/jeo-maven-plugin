@@ -49,5 +49,16 @@ public interface XmlCommand {
      */
     boolean hasOpcode(int opcode);
 
+    /**
+     * Replace values of instruction arguments.
+     * @param old Old value.
+     * @param replacement Which value to set instead.
+     */
+    void replaceArguementsValues(String old, String replacement);
+
+    /**
+     * Xml node.
+     * @return Xml node.
+     */
     Node node();
 }

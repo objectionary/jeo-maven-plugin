@@ -62,6 +62,11 @@ public final class XmlLabel implements XmlCommand {
     }
 
     @Override
+    public void replaceArguementsValues(final String old, final String replacement) {
+
+    }
+
+    @Override
     public Node node() {
         return this.node.node();
     }

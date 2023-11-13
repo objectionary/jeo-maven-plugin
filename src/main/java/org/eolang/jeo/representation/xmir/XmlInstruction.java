@@ -91,11 +91,7 @@ public final class XmlInstruction implements XmlCommand {
         return this.code() == opcode;
     }
 
-    /**
-     * Replace values of instruction arguments.
-     * @param old Old value.
-     * @param replacement Which value to set instead.
-     */
+    @Override
     public void replaceArguementsValues(final String old, final String replacement) {
         final String oldname = new HexData(old).value();
         new XmlNode(this.node).children().forEach(
