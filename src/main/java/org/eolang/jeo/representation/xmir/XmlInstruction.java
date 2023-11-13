@@ -37,6 +37,10 @@ import org.w3c.dom.NodeList;
 /**
  * Bytecode instruction from XML.
  * @since 0.1
+ * @todo #157:90min Hide internal node representation in XmlInstruction.
+ *  This class should not expose internal node representation.
+ *  We have to consider to add methods or classes in order to avoid
+ *  exposing internal node representation.
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class XmlInstruction implements XmlCommand {
@@ -67,18 +71,6 @@ public final class XmlInstruction implements XmlCommand {
     XmlInstruction(final Node node) {
         this.node = node;
         this.labels = new AllLabels();
-    }
-
-    /**
-     * Instruction code.
-     * @return Code.
-     */
-    public int code() {
-        return Integer.parseInt(
-            this.node.getAttributes()
-                .getNamedItem("name")
-                .getNodeValue().split("-")[1]
-        );
     }
 
     @Override
@@ -139,18 +131,22 @@ public final class XmlInstruction implements XmlCommand {
         return new XMLDocument(this.node).toString();
     }
 
-    /**
-     * XML node.
-     * @return XML node.
-     * @todo #157:90min Hide internal node representation in XmlInstruction.
-     *  This class should not expose internal node representation.
-     *  We have to consider to add methods or classes in order to avoid
-     *  exposing internal node representation.
-     */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     @Override
     public Node node() {
         return this.node;
+    }
+
+    /**
+     * Instruction code.
+     * @return Code.
+     */
+    private int code() {
+        return Integer.parseInt(
+            this.node.getAttributes()
+                .getNamedItem("name")
+                .getNodeValue().split("-")[1]
+        );
     }
 
     /**

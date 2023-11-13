@@ -35,6 +35,7 @@ public final class XmlLabel implements XmlCommand {
     /**
      * Label node.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final XmlNode node;
 
     /**
@@ -63,7 +64,7 @@ public final class XmlLabel implements XmlCommand {
 
     @Override
     public void replaceArguementsValues(final String old, final String replacement) {
-
+        // Nothing to replace
     }
 
     @Override

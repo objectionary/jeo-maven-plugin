@@ -46,6 +46,7 @@ final class XmlNode {
     /**
      * Parent node.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
 
     /**
@@ -125,14 +126,6 @@ final class XmlNode {
             result = new XmlLabel(this);
         }
         return result;
-    }
-
-    /**
-     * Convert to an instruction.
-     * @return Instruction.
-     */
-    XmlInstruction toInstruction() {
-        return new XmlInstruction(this.node);
     }
 
     /**

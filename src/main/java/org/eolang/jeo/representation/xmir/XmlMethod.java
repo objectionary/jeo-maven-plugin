@@ -117,6 +117,7 @@ public final class XmlMethod {
 
     /**
      * All method instructions.
+     * @param predicates Predicates to filter instructions.
      * @return Instructions.
      */
     @SafeVarargs
@@ -220,7 +221,8 @@ public final class XmlMethod {
      *  to inline.
      */
     private Stream<XmlCommand> instructionsToInline() {
-        return this.instructions(new Without(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)).stream();
+        return this.instructions(new Without(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD))
+            .stream();
     }
 
     /**
@@ -251,7 +253,7 @@ public final class XmlMethod {
     /**
      * Predicated for filtering commands.
      * Filters commands that have specified opcodes.
-     * @since 0.1.
+     * @since 0.1
      */
     private static final class Without implements Predicate<XmlCommand> {
 
@@ -265,12 +267,12 @@ public final class XmlMethod {
          * @param opcodes Opcodes to exclude.
          */
         private Without(final int... opcodes) {
-            this.opcodes = opcodes;
+            this.opcodes = Arrays.copyOf(opcodes, opcodes.length);
         }
 
         @Override
-        public boolean test(final XmlCommand xmlCommand) {
-            return Arrays.stream(this.opcodes).noneMatch(xmlCommand::hasOpcode);
+        public boolean test(final XmlCommand instr) {
+            return Arrays.stream(this.opcodes).noneMatch(instr::hasOpcode);
         }
     }
 }
