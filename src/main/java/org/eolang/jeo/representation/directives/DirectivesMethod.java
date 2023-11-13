@@ -89,8 +89,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
 
     @Override
     public void visitJumpInsn(final int opcode, final Label label) {
-        final String id = this.labels.uid(label);
-        this.opcodeWithLabel(opcode, id);
+        this.opcodeWithLabel(opcode, label);
         super.visitJumpInsn(opcode, label);
     }
 
@@ -126,7 +125,8 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
 
     @Override
     public void visitLabel(final Label label) {
-        this.label(this.labels.uid(label));
+//        this.label(this.labels.uid(label));
+        this.directives.append(new DirectivesLabel(label));
         super.visitLabel(label);
     }
 
@@ -139,17 +139,6 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
     @Override
     public Iterator<Directive> iterator() {
         return this.directives.iterator();
-    }
-
-    /**
-     * Add label to the directives.
-     * @param id Label id.
-     */
-    private void label(final String id) {
-        this.directives.add("o")
-            .attr("base", "label")
-            .append(new DirectivesData(id))
-            .up();
     }
 
     /**
@@ -176,11 +165,26 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
      *  We have to consider to refactor this code in order to avoid
      *  code duplication.
      */
-    private void opcodeWithLabel(final int opcode, final String label) {
+    private void opcodeWithLabel(final int opcode, final Label label) {
         this.directives.add("o")
             .attr("name", new OpcodeName(opcode).asString())
             .attr("base", "opcode");
-        this.label(label);
+        this.directives.append(new DirectivesLabel(label));
         this.directives.up();
+    }
+
+
+    private static final class Operand implements Iterable<Directive> {
+
+        private final Object operand;
+
+        private Operand(final Object operand) {
+            this.operand = operand;
+        }
+
+        @Override
+        public Iterator<Directive> iterator() {
+            return null;
+        }
     }
 }
