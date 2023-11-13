@@ -23,13 +23,9 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * XML field.
@@ -105,58 +101,55 @@ public class XmlField {
     }
 
     /**
-     * Find node text by key.
-     * @param key Key.
+     * Find node text by attribute.
+     * @param attribute Attribute.
      * @return Text.
      */
-    private Optional<HexString> find(final String key) {
-        return this.children()
-            .filter(
-                object -> object.getAttributes()
-                    .getNamedItem("name")
-                    .getNodeValue()
-                    .equals(key)
-            )
-            .findFirst()
-            .map(Node::getTextContent)
-            .filter(text -> !text.isEmpty())
-            .map(HexString::new);
-    }
-
     private Optional<HexString> find(final Attribute attribute) {
-        final int position = attribute.ordinal();
-        final String s = new XmlNode(this.node).children()
+        final String text = new XmlNode(this.node).children()
             .map(XmlNode::text)
             .collect(Collectors.toList())
-            .get(position);
-        if (s.isEmpty()) {
-            return Optional.empty();
+            .get(attribute.ordinal());
+        final Optional<HexString> result;
+        if (text.isEmpty()) {
+            result = Optional.empty();
         } else {
-            return Optional.of(new HexString(s));
+            result = Optional.of(new HexString(text));
         }
+        return result;
     }
 
     /**
-     * Current node child objects.
-     * @return Child objects.
+     * Field attribute.
+     * Pay attention that the order of the attributes is important.
+     * They should be in the same order as in the XML representation.
+     * @since 0.1
      */
-    private Stream<Node> children() {
-        final NodeList childs = this.node.getChildNodes();
-        final List<Node> res = new ArrayList<>(childs.getLength());
-        for (int identifier = 0; identifier < childs.getLength(); ++identifier) {
-            final Node child = childs.item(identifier);
-            if (child.getNodeName().equals("o")) {
-                res.add(child);
-            }
-        }
-        return res.stream();
-    }
-
     private enum Attribute {
-        ACCESS,
-        DESCRIPTOR,
-        SIGNATURE,
-        VALUE;
 
+        /**
+         * Access modifier.
+         * It's a number that represents sum of access modifiers.
+         * For example, if the field is public and static, then the value will be 9.
+         * See {@link org.objectweb.asm.Opcodes} for more details.
+         */
+        ACCESS,
+
+        /**
+         * Field descriptor.
+         * For example, for field of type int the descriptor will be "I".
+         */
+        DESCRIPTOR,
+
+        /**
+         * Field signature.
+         */
+        SIGNATURE,
+
+        /**
+         * Initial field value.
+         * May not be set.
+         */
+        VALUE;
     }
 }
