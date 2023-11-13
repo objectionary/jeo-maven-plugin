@@ -116,19 +116,6 @@ public final class XmlMethod {
     }
 
     /**
-     * Retrieves instructions except for the ones with the given opcodes.
-     * @param opcodes Opcodes to exclude.
-     * @return Instructions.
-     */
-    public List<XmlInstruction> instructionsWithout(final int... opcodes) {
-        return this.instructions(
-            instruction -> Arrays.stream(opcodes).noneMatch(
-                opcode -> instruction.code() == opcode
-            )
-        );
-    }
-
-    /**
      * All method instructions.
      * @return Instructions.
      * @todo #226:90min Code duplication with 'instructions' method.
@@ -251,8 +238,8 @@ public final class XmlMethod {
      *  We have to write more tests and create a more suitable method for determining instructions
      *  to inline.
      */
-    private Stream<XmlInstruction> instructionsToInline() {
-        return this.instructionsWithout(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD).stream();
+    private Stream<XmlCommand> instructionsToInline() {
+        return this.commands(new Without(Opcodes.RETURN, Opcodes.IRETURN, Opcodes.ALOAD)).stream();
     }
 
     /**
@@ -278,5 +265,31 @@ public final class XmlMethod {
             }
         }
         return result;
+    }
+
+    /**
+     * Predicated for filtering commands.
+     * Filters commands that have specified opcodes.
+     * @since 0.1.
+     */
+    private static final class Without implements Predicate<XmlCommand> {
+
+        /**
+         * Opcodes to exclude.
+         */
+        private final int[] opcodes;
+
+        /**
+         * Constructor.
+         * @param opcodes Opcodes to exclude.
+         */
+        private Without(final int... opcodes) {
+            this.opcodes = opcodes;
+        }
+
+        @Override
+        public boolean test(final XmlCommand xmlCommand) {
+            return Arrays.stream(this.opcodes).noneMatch(xmlCommand::hasOpcode);
+        }
     }
 }
