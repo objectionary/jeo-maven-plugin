@@ -143,11 +143,38 @@ public class XmlField {
 
         /**
          * Field signature.
+         * The field signature is used for defining generic types.
+         * Signature grammar:
+         * <p>
+         * {@code
+         * TypeSignature: Z|C|B|S|I|F|J|D|FieldTypeSignature
+         * FieldTypeSignature: ClassTypeSignature | [ TypeSignature | TypeVar
+         * ClassTypeSignature: L Id ( / Id )* TypeArgs? ( . Id TypeArgs? )* ;
+         * TypeArgs: < TypeArg+ >
+         * TypeArg: * | ( + | - )? FieldTypeSignature
+         * TypeVar: T Id ;
+         * }
+         * </p>
+         * Examples:
+         * <p>
+         * {@code
+         * List<E> -> Ljava/util/List<TE;>;
+         * List<?> -> Ljava/util/List<*>;
+         * List<? extends Number> -> Ljava/util/List<+Ljava/lang/Number;>;
+         * List<? super Integer> -> Ljava/util/List<-Ljava/lang/Integer;>;
+         * List<List<String>[]> -> Ljava/util/List<[Ljava/util/List<Ljava/lang/String;>;>;
+         * HashMap<K, V>.HashIterator<K> -> Ljava/util/HashMap<TK;TV;>.HashIterator<TK;>;
+         * }
+         * </p>
+         * You can read more in 4.1.1 section of the ASM
+         * <a href="https://asm.ow2.io/asm4-guide.pdf">manual </a>
          */
         SIGNATURE,
 
         /**
          * Initial field value.
+         * For example for field of type int with value 19 the value will be "13".
+         * Any data type will be represented as hex string.
          * May not be set.
          */
         VALUE;
