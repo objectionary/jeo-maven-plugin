@@ -2,19 +2,19 @@ package org.eolang.jeo.improvement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.xmir.XmlBytecodeEntry;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlMethod;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
 /**
  * This class tries to combine constructors of the decorated class and the decorator.
  * @since 0.1
  */
-public class DecoratorConstructors {
+class DecoratorConstructors {
 
     /**
      * Decorated class.
@@ -31,7 +31,7 @@ public class DecoratorConstructors {
      * @param decorated Decorated class.
      * @param decorator Class that decorates {@link #decorated}.
      */
-    public DecoratorConstructors(
+    DecoratorConstructors(
         final XmlClass decorated,
         final XmlClass decorator
     ) {
@@ -43,25 +43,18 @@ public class DecoratorConstructors {
      * Returns a list of constructors of the decorator class.
      * @return List of constructors.
      */
-    public List<XmlMethod> constructors() {
+    List<XmlMethod> constructors() {
         final List<XmlMethod> alldecorated = this.decorated.constructors();
         final List<XmlMethod> alldecoratee = this.decorator.constructors();
         final List<XmlMethod> result = new ArrayList<>(alldecorated.size() + alldecoratee.size());
         for (final XmlMethod origin : alldecorated) {
             for (final XmlMethod upper : alldecoratee) {
-                final List<XmlBytecodeEntry> top = origin.instructions();
-                final List<XmlBytecodeEntry> bottom = upper.instructions();
                 result.add(
                     new XmlMethod(
                         upper.name(),
                         upper.access(),
-                        this.combineDescriptors(
-                            origin.descriptor(),
-                            upper.descriptor()
-                        ),
-                        DecoratorConstructors.combineInstructions(origin.instructions(),
-                            upper.instructions()
-                        )
+                        this.combineDescriptors(origin.descriptor(), upper.descriptor()),
+                        DecoratorConstructors.combineInstructions(origin, upper)
                     )
                 );
             }
@@ -86,10 +79,13 @@ public class DecoratorConstructors {
     }
 
     private static XmlBytecodeEntry[] combineInstructions(
-        final List<XmlBytecodeEntry> top,
-        final List<XmlBytecodeEntry> bottom
+        final XmlMethod decorated,
+        final XmlMethod decorator
     ) {
-        return Collections.emptyList().toArray(new XmlBytecodeEntry[0]);
+        return Stream.concat(
+            decorated.instructions(new XmlMethod.Without(Opcodes.RETURN)).stream(),
+            decorator.instructions().stream()
+        ).toArray(XmlBytecodeEntry[]::new);
     }
 
 }

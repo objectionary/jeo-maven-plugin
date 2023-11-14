@@ -81,10 +81,10 @@ public final class XmlMethod {
                     "<o base='string' data='bytes' name='signature'/>",
                     "<o base='tuple' data='tuple' name='exceptions'/>",
                     "<o base='seq' name='@'>",
-                    "</o>",
                     Arrays.stream(entries)
-                        .map(e -> e.node().toString())
+                        .map(e -> new XMLDocument(e.node()).toString())
                         .collect(Collectors.joining()),
+                    "</o>",
                     "</o>"
                 )
             ).node().getFirstChild()
@@ -303,7 +303,7 @@ public final class XmlMethod {
      * Filters commands that have specified opcodes.
      * @since 0.1
      */
-    private static final class Without implements Predicate<XmlBytecodeEntry> {
+    public static final class Without implements Predicate<XmlBytecodeEntry> {
 
         /**
          * Opcodes to exclude.
@@ -314,7 +314,7 @@ public final class XmlMethod {
          * Constructor.
          * @param opcodes Opcodes to exclude.
          */
-        private Without(final int... opcodes) {
+        public Without(final int... opcodes) {
             this.opcodes = Arrays.copyOf(opcodes, opcodes.length);
         }
 
