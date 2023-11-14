@@ -404,10 +404,10 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  It's not correct, because we need to handle constructors correctly.
          */
         private static void removeOldConstructors(final Node root) {
-            new XmlClass(root).constructors()
-                .stream()
-                .map(XmlMethod::node)
-                .forEach(root::removeChild);
+//            new XmlClass(root).constructors()
+//                .stream()
+//                .map(XmlMethod::node)
+//                .forEach(root::removeChild);
         }
 
         /**

@@ -127,7 +127,7 @@ final class ImprovementDistilledObjectsTest {
         return new BytecodeRepresentation(
             new BytecodeClass("org/eolang/jeo/A")
                 .withField("d", "I", null, null, Opcodes.ACC_PRIVATE)
-                .withMethod("<init>", "(I)V", Opcodes.ACC_PUBLIC)
+                .withConstructor("(I)V", Opcodes.ACC_PUBLIC)
                 .instruction(Opcodes.ALOAD, 0)
                 .instruction(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V")
                 .instruction(Opcodes.ALOAD, 0)
@@ -174,7 +174,7 @@ final class ImprovementDistilledObjectsTest {
                     null,
                     Opcodes.ACC_PRIVATE | Opcodes.ACC_FINAL
                 )
-                .withMethod("<init>", "(Lorg/eolang/jeo/A;)V", Opcodes.ACC_PUBLIC)
+                .withConstructor("(Lorg/eolang/jeo/A;)V", Opcodes.ACC_PUBLIC)
                 .instruction(Opcodes.ALOAD, 0)
                 .instruction(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V")
                 .instruction(Opcodes.ALOAD, 0)

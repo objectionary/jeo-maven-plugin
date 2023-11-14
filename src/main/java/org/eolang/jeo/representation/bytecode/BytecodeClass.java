@@ -153,6 +153,15 @@ public final class BytecodeClass {
     }
 
     /**
+     * Add constructor.
+     * @param modifiers Constructor modifiers.
+     * @return This object.
+     */
+    public BytecodeMethod withConstructor(final int... modifiers) {
+        return this.withMethod("<init>", modifiers);
+    }
+
+    /**
      * Add method.
      * @param mname Method name.
      * @param modifiers Access modifiers.
@@ -162,6 +171,16 @@ public final class BytecodeClass {
         final BytecodeMethod method = new BytecodeMethod(mname, this.writer, this, modifiers);
         this.methods.add(method);
         return method;
+    }
+
+    /**
+     * Add constructor.
+     * @param descriptor Constructor descriptor.
+     * @param modifiers Constructor modifiers.
+     * @return This object.
+     */
+    public BytecodeMethod withConstructor(final String descriptor, int... modifiers) {
+        return this.withMethod("<init>", descriptor, modifiers);
     }
 
     /**

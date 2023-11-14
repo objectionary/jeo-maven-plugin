@@ -156,7 +156,7 @@ class DirectivesMethodTest {
     @Test
     void parsesConstructor() {
         final String xml = new BytecodeClass("ConstructorExample")
-            .withMethod("<init>", Opcodes.ACC_PUBLIC)
+            .withConstructor(Opcodes.ACC_PUBLIC)
             .descriptor("()V")
             .instruction(Opcodes.ALOAD, 0)
             .instruction(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V")
@@ -212,7 +212,7 @@ class DirectivesMethodTest {
     void parsesConstructorWithParameters() {
         final String clazz = "ConstructorParams";
         final String xml = new BytecodeClass(clazz)
-            .withMethod("<init>", Opcodes.ACC_PUBLIC)
+            .withConstructor(Opcodes.ACC_PUBLIC)
             .descriptor("(II)V")
             .instruction(Opcodes.ALOAD, 0)
             .instruction(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V")
