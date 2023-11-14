@@ -1,11 +1,14 @@
 package org.eolang.jeo.improvement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 import org.eolang.jeo.representation.xmir.XmlBytecodeEntry;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlMethod;
+import org.objectweb.asm.Type;
 
 /**
  * This class tries to combine constructors of the decorated class and the decorator.
@@ -52,7 +55,7 @@ public class DecoratorConstructors {
                     new XmlMethod(
                         upper.name(),
                         upper.access(),
-                        DecoratorConstructors.combineDescriptors(
+                        this.combineDescriptors(
                             origin.descriptor(),
                             upper.descriptor()
                         ),
@@ -66,10 +69,20 @@ public class DecoratorConstructors {
         return result;
     }
 
-    private static String combineDescriptors(
-        final String top, final String bottom
+    private String combineDescriptors(
+        final String decorated, final String decorator
     ) {
-        return "";
+        final String aim = this.decorated.name();
+        final Type[] replacement = Type.getType(decorated).getArgumentTypes();
+        final Type[] array = Arrays.stream(Type.getType(decorator).getArgumentTypes())
+            .flatMap(type -> {
+                if (type.getClassName().equals(aim)) {
+                    return Arrays.stream(replacement);
+                } else {
+                    return Stream.of(type);
+                }
+            }).toArray(Type[]::new);
+        return Type.getMethodType(Type.VOID_TYPE, array).getDescriptor();
     }
 
     private static XmlBytecodeEntry[] combineInstructions(
