@@ -94,4 +94,27 @@ class XmlMethodTest {
             Matchers.empty()
         );
     }
+
+    @Test
+    void createsMethodByValues(){
+        final String name = "name";
+        final int access = 0;
+        final String descriptor = "()V";
+        final XmlMethod method = new XmlMethod(name, access, descriptor);
+        MatcherAssert.assertThat(
+            "Method name is not equal to expected",
+            method.name(),
+            Matchers.equalTo(name)
+        );
+        MatcherAssert.assertThat(
+            "Method access is not equal to expected",
+            method.access(),
+            Matchers.equalTo(access)
+        );
+        MatcherAssert.assertThat(
+            "Method descriptor is not equal to expected",
+            method.descriptor(),
+            Matchers.equalTo(descriptor)
+        );
+    }
 }

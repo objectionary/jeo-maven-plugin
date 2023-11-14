@@ -32,6 +32,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.ToString;
+import org.eolang.jeo.representation.HexData;
 import org.objectweb.asm.Opcodes;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -49,6 +51,45 @@ public final class XmlMethod {
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
+
+    /**
+     * Constructor.
+     * @param name Method name.
+     * @param access Access modifiers.
+     * @param descriptor Method descriptor.
+     * @param entries Method instructions.
+     */
+    public XmlMethod(
+        final String name,
+        final int access,
+        final String descriptor,
+        final XmlBytecodeEntry... entries
+    ) {
+        this(
+            new XMLDocument(
+                String.join(
+                    "",
+                    String.format("<o name='%s'>", name),
+                    String.format(
+                        "<o base='int' data='bytes' name='access'>%s</o>",
+                        new HexData(access).value()
+                    ),
+                    String.format(
+                        "<o base='string' data='bytes' name='descriptor'>%s</o>",
+                        new HexData(descriptor).value()
+                    ),
+                    "<o base='string' data='bytes' name='signature'/>",
+                    "<o base='tuple' data='tuple' name='exceptions'/>",
+                    "<o base='seq' name='@'>",
+                    "</o>",
+                    Arrays.stream(entries)
+                        .map(e -> e.node().toString())
+                        .collect(Collectors.joining()),
+                    "</o>"
+                )
+            ).node().getFirstChild()
+        );
+    }
 
     /**
      * Constructor.
@@ -211,6 +252,11 @@ public final class XmlMethod {
         for (final XmlBytecodeEntry instruction : updated) {
             root.appendChild(root.getOwnerDocument().adoptNode(instruction.node()));
         }
+    }
+
+    @Override
+    public String toString() {
+        return new XMLDocument(this.node).toString();
     }
 
     /**
