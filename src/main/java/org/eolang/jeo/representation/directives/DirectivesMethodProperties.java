@@ -86,7 +86,7 @@ final class DirectivesMethodProperties implements Iterable<Directive> {
             .append(new DirectivesData("descriptor", this.descriptor))
             .append(new DirectivesData("signature", this.signature))
             .append(new DirectivesTuple("exceptions", this.exceptions))
-            .append(this.arguments())
+            .append(new DirectivesMethodParams(this.descriptor))
             .iterator();
     }
 

@@ -33,11 +33,15 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.ToString;
+import org.cactoos.list.ListOf;
 import org.eolang.jeo.representation.HexData;
+import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.objectweb.asm.Opcodes;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xembly.Directives;
+import org.xembly.Xembler;
 
 /**
  * XML method.
@@ -67,6 +71,40 @@ public final class XmlMethod {
     ) {
         this(
             new XMLDocument(
+//                new Xembler(
+//                    new Directives()
+//                        .add("o").attr("name", name)
+//                        .add("o")
+//                        .attr("base", "int")
+//                        .attr("data", "bytes")
+//                        .attr("name", "access")
+//                        .set(new HexData(access).value())
+//                        .up()
+//                        .add("o")
+//                        .attr("base", "string")
+//                        .attr("data", "bytes")
+//                        .attr("name", "descriptor")
+//                        .set(new HexData(descriptor).value())
+//                        .up()
+//                        .add("o")
+//                        .attr("base", "string")
+//                        .attr("data", "bytes")
+//                        .attr("name", "signature")
+//                        .up()
+//                        .add("o")
+//                        .attr("base", "tuple")
+//                        .attr("data", "tuple")
+//                        .attr("name", "exceptions")
+//                        .up()
+//                        .append(new DirectivesMethodParams(descriptor))
+//                        .add("o")
+//                        .attr("base", "seq")
+//                        .attr("name", "@")
+//                        .append(XmlMethod.methodInstructions(entries))
+//                        .up()
+//                        .up()
+//                ).xmlQuietly()
+//
                 String.join(
                     "",
                     String.format("<o name='%s'>", name),
@@ -80,6 +118,7 @@ public final class XmlMethod {
                     ),
                     "<o base='string' data='bytes' name='signature'/>",
                     "<o base='tuple' data='tuple' name='exceptions'/>",
+                    XmlMethod.params(descriptor),
                     "<o base='seq' name='@'>",
                     Arrays.stream(entries)
                         .map(e -> new XMLDocument(e.node()).toString())
@@ -90,6 +129,23 @@ public final class XmlMethod {
             ).node().getFirstChild()
         );
     }
+
+    /**
+     * Extracts method params from descriptor.
+     * @param descriptor Descriptor.
+     * @return Method params as XML.
+     * @todo #164:90min Refactor params method in XmlMethod.
+     *  Currently we are using a method that returns method params as XML.
+     *  Thic method is not very readable and it is hard to understand what it does.
+     *  It's better to use Xembler to create XML instead of concatenating strings.
+     */
+    private static String params(final String descriptor) {
+        return new XmlNode(new XMLDocument(new Xembler(new Directives().add("o").append(
+            new DirectivesMethodParams(descriptor))).xmlQuietly()).node().getLastChild())
+            .children().map(XmlNode::node).map(XMLDocument::new).map(XMLDocument::toString)
+            .collect(Collectors.joining());
+    }
+
 
     /**
      * Constructor.
