@@ -71,40 +71,6 @@ public final class XmlMethod {
     ) {
         this(
             new XMLDocument(
-//                new Xembler(
-//                    new Directives()
-//                        .add("o").attr("name", name)
-//                        .add("o")
-//                        .attr("base", "int")
-//                        .attr("data", "bytes")
-//                        .attr("name", "access")
-//                        .set(new HexData(access).value())
-//                        .up()
-//                        .add("o")
-//                        .attr("base", "string")
-//                        .attr("data", "bytes")
-//                        .attr("name", "descriptor")
-//                        .set(new HexData(descriptor).value())
-//                        .up()
-//                        .add("o")
-//                        .attr("base", "string")
-//                        .attr("data", "bytes")
-//                        .attr("name", "signature")
-//                        .up()
-//                        .add("o")
-//                        .attr("base", "tuple")
-//                        .attr("data", "tuple")
-//                        .attr("name", "exceptions")
-//                        .up()
-//                        .append(new DirectivesMethodParams(descriptor))
-//                        .add("o")
-//                        .attr("base", "seq")
-//                        .attr("name", "@")
-//                        .append(XmlMethod.methodInstructions(entries))
-//                        .up()
-//                        .up()
-//                ).xmlQuietly()
-//
                 String.join(
                     "",
                     String.format("<o name='%s'>", name),
