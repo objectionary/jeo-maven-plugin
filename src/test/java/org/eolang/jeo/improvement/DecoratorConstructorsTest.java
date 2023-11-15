@@ -70,9 +70,9 @@ class DecoratorConstructorsTest {
                 .xml()
         ).top().constructors();
         //@checkstyle MethodBodyCommentsCheck (5 lines)
-        //@todo #164:90min Check content of each constructor.
-        // Currently we only check the size of the list. We need to check the content of each
-        // constructor to be sure that each constructor contains the same instructions as expected.
+        // @todo #164:90min Check content of each constructor.
+        //  Currently we only check the size of the list. We need to check the content of each
+        //  constructor to be sure that each constructor contains the same instructions as expected.
         MatcherAssert.assertThat(
             "DecoratorConstructors should combine constructors from decorated and decorator classes, but it didn't",
             res,
