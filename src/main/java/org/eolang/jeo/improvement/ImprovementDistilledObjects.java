@@ -383,13 +383,14 @@ public final class ImprovementDistilledObjects implements Improvement {
             final Node root = decor.node();
             this.removeFieldsThatWillBeInlined(root);
             decor.replaceArguments(this.decorator.name(), this.combinedName());
-            DecoratorPair.removeOldConstructors(root);
             final XmlClass clazz = new XmlProgram(this.decorated.toEO()).top();
             clazz.fields().forEach(decor::withField);
+            DecoratorPair.removeOldConstructors(root);
+            new DecoratorConstructors(clazz, decor)
+                .constructors()
+                .forEach(decor::withConstructor);
             for (final XmlMethod method : clazz.methods()) {
-                if (method.isConstructor()) {
-                    decor.withConstructor(method);
-                } else {
+                if (!method.isConstructor()) {
                     decor.inline(method);
                 }
             }

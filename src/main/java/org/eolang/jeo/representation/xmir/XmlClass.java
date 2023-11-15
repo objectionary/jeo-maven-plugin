@@ -58,12 +58,10 @@ public final class XmlClass {
      * @return List of constructors.
      */
     public List<XmlMethod> constructors() {
-        return this.objects().filter(
-            xmirnode -> {
-                final Node base = xmirnode.getAttributes().getNamedItem("name");
-                return base != null && "new".equals(base.getNodeValue());
-            }
-        ).map(XmlMethod::new).collect(Collectors.toList());
+        return this.methods()
+            .stream()
+            .filter(XmlMethod::isConstructor)
+            .collect(Collectors.toList());
     }
 
     /**
