@@ -385,10 +385,10 @@ public final class ImprovementDistilledObjects implements Improvement {
             decor.replaceArguments(this.decorator.name(), this.combinedName());
             final XmlClass clazz = new XmlProgram(this.decorated.toEO()).top();
             clazz.fields().forEach(decor::withField);
+            final List<XmlMethod> constructors = new DecoratorConstructors(clazz, decor)
+                .constructors();
             DecoratorPair.removeOldConstructors(root);
-            new DecoratorConstructors(clazz, decor)
-                .constructors()
-                .forEach(decor::withConstructor);
+            constructors.forEach(decor::withConstructor);
             for (final XmlMethod method : clazz.methods()) {
                 if (!method.isConstructor()) {
                     decor.inline(method);
@@ -405,10 +405,10 @@ public final class ImprovementDistilledObjects implements Improvement {
          *  It's not correct, because we need to handle constructors correctly.
          */
         private static void removeOldConstructors(final Node root) {
-//            new XmlClass(root).constructors()
-//                .stream()
-//                .map(XmlMethod::node)
-//                .forEach(root::removeChild);
+            new XmlClass(root).constructors()
+                .stream()
+                .map(XmlMethod::node)
+                .forEach(root::removeChild);
         }
 
         /**
