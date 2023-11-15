@@ -73,7 +73,6 @@ class DecoratorConstructorsTest {
         //@todo #164:90min Check content of each constructor.
         // Currently we only check the size of the list. We need to check the content of each
         // constructor to be sure that each constructor contains the same instructions as expected.
-        // Use #expected methods.
         MatcherAssert.assertThat(
             "DecoratorConstructors should combine constructors from decorated and decorator classes, but it didn't",
             res,
