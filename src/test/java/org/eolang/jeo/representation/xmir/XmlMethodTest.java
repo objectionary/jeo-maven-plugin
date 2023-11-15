@@ -96,7 +96,7 @@ class XmlMethodTest {
     }
 
     @Test
-    void createsMethodByValues(){
+    void createsMethodByValues() {
         final String name = "name";
         final int access = 0;
         final String descriptor = "()V";

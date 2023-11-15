@@ -1,3 +1,26 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2016-2023 Objectionary.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package org.eolang.jeo.improvement;
 
 import java.util.ArrayList;
@@ -62,30 +85,45 @@ class DecoratorConstructors {
         return result;
     }
 
+    /**
+     * Combines descriptors of the decorated and decorator constructors.
+     * @param decored Decorated constructor descriptor.
+     * @param decoror Decorator constructor descriptor.
+     * @return Combined descriptor.
+     */
     private String combineDescriptors(
-        final String decorated, final String decorator
+        final String decored, final String decoror
     ) {
         final String aim = this.decorated.name();
-        final Type[] replacement = Type.getType(decorated).getArgumentTypes();
-        final Type[] array = Arrays.stream(Type.getType(decorator).getArgumentTypes())
-            .flatMap(type -> {
-                if (type.getClassName().equals(aim)) {
-                    return Arrays.stream(replacement);
-                } else {
-                    return Stream.of(type);
+        final Type[] replacement = Type.getType(decored).getArgumentTypes();
+        final Type[] array = Arrays.stream(Type.getType(decoror).getArgumentTypes())
+            .flatMap(
+                type -> {
+                    final Stream<? extends Type> result;
+                    if (type.getClassName().equals(aim)) {
+                        result = Arrays.stream(replacement);
+                    } else {
+                        result = Stream.of(type);
+                    }
+                    return result;
                 }
-            }).toArray(Type[]::new);
+            ).toArray(Type[]::new);
         return Type.getMethodType(Type.VOID_TYPE, array).getDescriptor();
     }
 
+    /**
+     * Combines instructions of the decorated and decorator constructors.
+     * @param decored Decorated constructor.
+     * @param decoror Decorator constructor.
+     * @return Combined instructions.
+     */
     private static XmlBytecodeEntry[] combineInstructions(
-        final XmlMethod decorated,
-        final XmlMethod decorator
+        final XmlMethod decored,
+        final XmlMethod decoror
     ) {
         return Stream.concat(
-            decorated.instructions(new XmlMethod.Without(Opcodes.RETURN)).stream(),
-            decorator.instructions().stream()
+            decored.instructions(new XmlMethod.Without(Opcodes.RETURN)).stream(),
+            decoror.instructions().stream()
         ).toArray(XmlBytecodeEntry[]::new);
     }
-
 }

@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import java.util.Optional;
-import org.objectweb.asm.Type;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -88,21 +87,5 @@ final class DirectivesMethodProperties implements Iterable<Directive> {
             .append(new DirectivesTuple("exceptions", this.exceptions))
             .append(new DirectivesMethodParams(this.descriptor))
             .iterator();
-    }
-
-    /**
-     * Method arguments.
-     * @return Arguments.
-     */
-    private Directives arguments() {
-        final Directives directives = new Directives();
-        final Type[] arguments = Type.getArgumentTypes(this.descriptor);
-        for (int index = 0; index < arguments.length; ++index) {
-            directives.add("o")
-                .attr("abstract", "")
-                .attr("name", String.format("arg__%s__%d", arguments[index], index))
-                .up();
-        }
-        return directives;
     }
 }

@@ -389,10 +389,6 @@ public final class ImprovementDistilledObjects implements Improvement {
             decor.replaceArguments(this.decorator.name(), this.combinedName());
             final XmlClass clazz = new XmlProgram(this.decorated.toEO()).top();
             clazz.fields().forEach(decor::withField);
-//            final List<XmlMethod> constructors = new DecoratorConstructors(clazz, decor)
-//                .constructors();
-//            DecoratorPair.removeOldConstructors(root);
-//            constructors.forEach(decor::withConstructor);
             DecoratorPair.removeOldConstructors(root);
             for (final XmlMethod method : clazz.methods()) {
                 if (method.isConstructor()) {

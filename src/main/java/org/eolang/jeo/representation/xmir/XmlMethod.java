@@ -32,8 +32,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.ToString;
-import org.cactoos.list.ListOf;
 import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.objectweb.asm.Opcodes;
@@ -62,6 +60,7 @@ public final class XmlMethod {
      * @param access Access modifiers.
      * @param descriptor Method descriptor.
      * @param entries Method instructions.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public XmlMethod(
         final String name,
@@ -95,23 +94,6 @@ public final class XmlMethod {
             ).node().getFirstChild()
         );
     }
-
-    /**
-     * Extracts method params from descriptor.
-     * @param descriptor Descriptor.
-     * @return Method params as XML.
-     * @todo #164:90min Refactor params method in XmlMethod.
-     *  Currently we are using a method that returns method params as XML.
-     *  Thic method is not very readable and it is hard to understand what it does.
-     *  It's better to use Xembler to create XML instead of concatenating strings.
-     */
-    private static String params(final String descriptor) {
-        return new XmlNode(new XMLDocument(new Xembler(new Directives().add("o").append(
-            new DirectivesMethodParams(descriptor))).xmlQuietly()).node().getLastChild())
-            .children().map(XmlNode::node).map(XMLDocument::new).map(XMLDocument::toString)
-            .collect(Collectors.joining());
-    }
-
 
     /**
      * Constructor.
@@ -279,6 +261,29 @@ public final class XmlMethod {
     @Override
     public String toString() {
         return new XMLDocument(this.node).toString();
+    }
+
+    /**
+     * Extracts method params from descriptor.
+     * @param descriptor Descriptor.
+     * @return Method params as XML.
+     * @todo #164:90min Refactor params method in XmlMethod.
+     *  Currently we are using a method that returns method params as XML.
+     *  Thic method is not very readable and it is hard to understand what it does.
+     *  It's better to use Xembler to create XML instead of concatenating strings.
+     */
+    private static String params(final String descriptor) {
+        return new XmlNode(
+            new XMLDocument(
+                new Xembler(
+                    new Directives().add("o")
+                        .append(new DirectivesMethodParams(descriptor))
+                ).xmlQuietly()
+            ).node().getLastChild()
+        ).children().map(XmlNode::node)
+            .map(XMLDocument::new)
+            .map(XMLDocument::toString)
+            .collect(Collectors.joining());
     }
 
     /**

@@ -45,6 +45,7 @@ import org.objectweb.asm.Opcodes;
 class DecoratorConstructorsTest {
 
     @Test
+    @SuppressWarnings("PMD.UnusedLocalVariable")
     void combinesConstructors() {
         final XmlClass decorated = new XmlProgram(
             new BytecodeClass("Foo")
@@ -66,10 +67,9 @@ class DecoratorConstructorsTest {
                 .withConstructor("(I)V").instruction(Opcodes.RETURN).up()
                 .withConstructor("(Ljava/lang/String;D)V").instruction(Opcodes.RETURN).up()
                 .withConstructor("(Ljava/lang/String;)V").instruction(Opcodes.RETURN).up()
-                .xml())
-            .top()
-            .constructors();
-        //@checkstyle
+                .xml()
+        ).top().constructors();
+        //@checkstyle MethodBodyCommentsCheck (5 lines)
         //@todo #164:90min Check content of each constructor.
         // Currently we only check the size of the list. We need to check the content of each
         // constructor to be sure that each constructor contains the same instructions as expected.

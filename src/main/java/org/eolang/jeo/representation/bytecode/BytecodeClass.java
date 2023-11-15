@@ -179,7 +179,7 @@ public final class BytecodeClass {
      * @param modifiers Constructor modifiers.
      * @return This object.
      */
-    public BytecodeMethod withConstructor(final String descriptor, int... modifiers) {
+    public BytecodeMethod withConstructor(final String descriptor, final int... modifiers) {
         return this.withMethod("<init>", descriptor, modifiers);
     }
 
