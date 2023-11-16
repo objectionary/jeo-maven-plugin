@@ -47,7 +47,7 @@ public final class XmlLabel implements XmlBytecodeEntry {
      * Constructor.
      * @param node Label node.
      */
-    XmlLabel(final XmlNode node) {
+    public XmlLabel(final XmlNode node) {
         this.node = node;
         this.labels = new AllLabels();
     }

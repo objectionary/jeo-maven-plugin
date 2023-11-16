@@ -59,7 +59,7 @@ class DecoratorConstructorsTest {
                 .withConstructor("(LFoo;)V").instruction(Opcodes.RETURN).up()
                 .xml()
         ).top();
-        final List<XmlMethod> res = new DecoratorConstructors(decorated, decorator)
+        final List<XmlMethod> res = new DecoratorConstructors(decorated, decorator, "Foo$Bar")
             .constructors();
         final List<XmlMethod> expected = new XmlProgram(
             new BytecodeClass("Expected")

@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.xmir.XmlBytecodeEntry;
 import org.eolang.jeo.representation.xmir.XmlClass;
+import org.eolang.jeo.representation.xmir.XmlInstruction;
+import org.eolang.jeo.representation.xmir.XmlLabel;
 import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -49,17 +51,22 @@ class DecoratorConstructors {
      */
     private final XmlClass decorator;
 
+    private final String combined;
+
     /**
      * Constructor.
      * @param decorated Decorated class.
      * @param decorator Class that decorates {@link #decorated}.
+     * @param combined
      */
     DecoratorConstructors(
         final XmlClass decorated,
-        final XmlClass decorator
+        final XmlClass decorator,
+        final String combined
     ) {
         this.decorated = decorated;
         this.decorator = decorator;
+        this.combined = combined;
     }
 
     /**
@@ -77,7 +84,7 @@ class DecoratorConstructors {
                         upper.name(),
                         upper.access(),
                         this.combineDescriptors(origin.descriptor(), upper.descriptor()),
-                        DecoratorConstructors.combineInstructions(origin, upper)
+                        this.combineInstructions(origin, upper)
                     )
                 );
             }
@@ -100,7 +107,7 @@ class DecoratorConstructors {
             .flatMap(
                 type -> {
                     final Stream<? extends Type> result;
-                    if (type.getClassName().equals(aim)) {
+                    if (type.getClassName().replace('.', '/').equals(aim)) {
                         result = Arrays.stream(replacement);
                     } else {
                         result = Stream.of(type);
@@ -117,13 +124,57 @@ class DecoratorConstructors {
      * @param decoror Decorator constructor.
      * @return Combined instructions.
      */
-    private static XmlBytecodeEntry[] combineInstructions(
+    private XmlBytecodeEntry[] combineInstructions(
         final XmlMethod decored,
         final XmlMethod decoror
     ) {
         return Stream.concat(
             decored.instructions(new XmlMethod.Without(Opcodes.RETURN)).stream(),
-            decoror.instructions().stream()
+            this.decoratorInstructions(decoror)
         ).toArray(XmlBytecodeEntry[]::new);
     }
+
+    private Stream<XmlBytecodeEntry> decoratorInstructions(final XmlMethod decoror) {
+        return decoror.instructions()
+            .stream()
+            .filter(instruction -> {
+                if (instruction instanceof XmlInstruction) {
+                    final XmlInstruction xmlinstr = (XmlInstruction) instruction;
+                    if (xmlinstr.hasOpcode(Opcodes.PUTFIELD)) {
+                        final Object what = xmlinstr.arguments()[2];
+                        return !this.decorated.name().equals(
+                            Type.getType((String) what).getClassName().replace('.', '/')
+                        );
+                    }
+                }
+                return true;
+            })
+            .map(instruction -> {
+                    if (instruction instanceof XmlInstruction) {
+                        final XmlInstruction xmlinstr = (XmlInstruction) instruction;
+                        if (xmlinstr.hasOpcode(Opcodes.ALOAD)) {
+                            final Object argument = xmlinstr.arguments()[0];
+                            if (argument instanceof Integer) {
+                                if ((int) argument > 0) {
+                                    return new XmlInstruction(Opcodes.ILOAD, argument);
+                                }
+                            }
+                        }
+                        List<Object> newargs = new ArrayList<>(xmlinstr.arguments().length);
+                        for (final Object argument : xmlinstr.arguments()) {
+                            if (argument instanceof String) {
+                                final String sarg = (String) argument;
+                                newargs.add(sarg.replace("L" + this.decorated.name() + ";", "I"));
+                            } else {
+                                newargs.add(argument);
+                            }
+                        }
+                        return new XmlInstruction(xmlinstr.code(), newargs.toArray());
+                    } else {
+                        return instruction;
+                    }
+                }
+            );
+    }
+
 }

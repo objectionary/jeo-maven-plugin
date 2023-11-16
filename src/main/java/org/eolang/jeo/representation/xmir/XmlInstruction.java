@@ -30,9 +30,12 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xembly.Transformers;
+import org.xembly.Xembler;
 
 /**
  * Bytecode instruction from XML.
@@ -55,6 +58,16 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * All found labels.
      */
     private final AllLabels labels;
+
+
+    public XmlInstruction(final int opcode, Object... arguments) {
+        this(
+            new Xembler(
+                new DirectivesInstruction(opcode, arguments),
+                new Transformers.Node()
+            ).xmlQuietly()
+        );
+    }
 
     /**
      * Constructor.
@@ -97,6 +110,18 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     }
 
     /**
+     * Instruction code.
+     * @return Code.
+     */
+    public int code() {
+        return Integer.parseInt(
+            this.node.getAttributes()
+                .getNamedItem("name")
+                .getNodeValue().split("-")[1]
+        );
+    }
+
+    /**
      * Instruction arguments.
      * @return Arguments.
      */
@@ -135,18 +160,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     @Override
     public Node node() {
         return this.node;
-    }
-
-    /**
-     * Instruction code.
-     * @return Code.
-     */
-    private int code() {
-        return Integer.parseInt(
-            this.node.getAttributes()
-                .getNamedItem("name")
-                .getNodeValue().split("-")[1]
-        );
     }
 
     /**
