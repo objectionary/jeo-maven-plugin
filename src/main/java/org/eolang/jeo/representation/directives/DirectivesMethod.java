@@ -140,13 +140,6 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
      */
     private void opcode(final int opcode, final Object... operands) {
         this.directives.append(new DirectivesInstruction(opcode, operands));
-//        this.directives.add("o")
-//            .attr("name", new OpcodeName(opcode).asString())
-//            .attr("base", "opcode");
-//        for (final Object operand : operands) {
-//            this.directives.append(new DirectivesOperand(operand));
-//        }
-//        this.directives.up();
     }
 
 }

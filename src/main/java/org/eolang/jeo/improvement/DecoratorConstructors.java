@@ -35,6 +35,7 @@ import org.eolang.jeo.representation.xmir.XmlMethod;
  *  account the order of arguments and the order of instructions in the constructor.
  *  Sine we decided to implement inlining using high-level XML representation, maybe it makes sence
  *  just remove all the related classes to this optimization.
+ *  see https://github.com/objectionary/jeo-maven-plugin/issues/259
  */
 class DecoratorConstructors {
 
