@@ -391,10 +391,8 @@ public final class ImprovementDistilledObjects implements Improvement {
             clazz.fields().forEach(decor::withField);
             final List<XmlMethod> constructors = new DecoratorConstructors(
                 clazz,
-                decor,
-                this.combinedName()
-            )
-                .constructors();
+                decor
+            ).constructors();
             DecoratorPair.removeOldConstructors(root);
             constructors.forEach(decor::withConstructor);
             for (final XmlMethod method : clazz.methods()) {

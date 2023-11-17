@@ -59,7 +59,7 @@ class DecoratorConstructorsTest {
                 .withConstructor("(LFoo;)V").instruction(Opcodes.RETURN).up()
                 .xml()
         ).top();
-        final List<XmlMethod> res = new DecoratorConstructors(decorated, decorator, "Foo$Bar")
+        final List<XmlMethod> res = new DecoratorConstructors(decorated, decorator)
             .constructors();
         final List<XmlMethod> expected = new XmlProgram(
             new BytecodeClass("Expected")
@@ -76,7 +76,7 @@ class DecoratorConstructorsTest {
         MatcherAssert.assertThat(
             "DecoratorConstructors should combine constructors from decorated and decorator classes, but it didn't",
             res,
-            Matchers.hasSize(4)
+            Matchers.hasSize(2)
         );
     }
 }

@@ -51,22 +51,17 @@ class DecoratorConstructors {
      */
     private final XmlClass decorator;
 
-    private final String combined;
-
     /**
      * Constructor.
      * @param decorated Decorated class.
      * @param decorator Class that decorates {@link #decorated}.
-     * @param combined
      */
     DecoratorConstructors(
         final XmlClass decorated,
-        final XmlClass decorator,
-        final String combined
+        final XmlClass decorator
     ) {
         this.decorated = decorated;
         this.decorator = decorator;
-        this.combined = combined;
     }
 
     /**
@@ -75,21 +70,22 @@ class DecoratorConstructors {
      */
     List<XmlMethod> constructors() {
         final List<XmlMethod> alldecorated = this.decorated.constructors();
-        final List<XmlMethod> alldecoratee = this.decorator.constructors();
-        final List<XmlMethod> result = new ArrayList<>(alldecorated.size() + alldecoratee.size());
-        for (final XmlMethod origin : alldecorated) {
-            for (final XmlMethod upper : alldecoratee) {
-                result.add(
-                    new XmlMethod(
-                        upper.name(),
-                        upper.access(),
-                        this.combineDescriptors(origin.descriptor(), upper.descriptor()),
-                        this.combineInstructions(origin, upper)
-                    )
-                );
-            }
-        }
-        return result;
+//        final List<XmlMethod> alldecoratee = this.decorator.constructors();
+//        final List<XmlMethod> result = new ArrayList<>(alldecorated.size() + alldecoratee.size());
+//        for (final XmlMethod origin : alldecorated) {
+//            for (final XmlMethod upper : alldecoratee) {
+//                result.add(
+//                    new XmlMethod(
+//                        upper.name(),
+//                        upper.access(),
+//                        this.combineDescriptors(origin.descriptor(), upper.descriptor()),
+//                        this.combineInstructions(origin, upper)
+//                    )
+//                );
+//            }
+//        }
+//        return result;
+        return alldecorated;
     }
 
     /**
