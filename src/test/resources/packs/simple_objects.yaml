@@ -43,7 +43,7 @@ eo:
         seq > @
           x.write xa 
       [] > foo
-        x * 2 > @
+        times x 2 > @
   B.eo: |
     package com.example
     [] > B
@@ -52,4 +52,4 @@ eo:
         seq > @
           a.write aa
       [] > bar
-        (a.foo + 1) > @
+        plus a.foo 1 > @
