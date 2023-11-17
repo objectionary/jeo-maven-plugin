@@ -198,6 +198,12 @@ SOFTWARE.
       <!-- version from the parent pom -->
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.eolang</groupId>
+      <artifactId>jucs</artifactId>
+      <version>0.2.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <testResources>
@@ -208,6 +214,7 @@ SOFTWARE.
           <include>**/*.class</include>
           <include>**/*.java</include>
           <include>**/*.eo</include>
+          <include>**/*.yaml</include>
         </includes>
       </testResource>
     </testResources>
