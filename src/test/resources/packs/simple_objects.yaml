@@ -34,7 +34,7 @@ eo:
     [] > Application
       [args...] > main
         seq > @
-          (b (a 42).new).new.bar
+          (b.new (a.new 42)).bar
   A.eo: |
     package com.example
     [] > A
