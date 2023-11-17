@@ -30,6 +30,11 @@ import org.eolang.jeo.representation.xmir.XmlMethod;
 /**
  * This class tries to combine constructors of the decorated class and the decorator.
  * @since 0.1
+ * @todo #252:90min The first attempt to inline constructors is failed.
+ *  The constructor inlining is not a straightforward task, since we need to take into
+ *  account the order of arguments and the order of instructions in the constructor.
+ *  Sine we decided to implement inlining using high-level XML representation, maybe it makes sence
+ *  just remove all the related classes to this optimization.
  */
 class DecoratorConstructors {
 
