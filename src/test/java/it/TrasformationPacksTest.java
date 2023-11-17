@@ -35,13 +35,14 @@ import org.junit.jupiter.params.ParameterizedTest;
  * 2. Transform bytecode into XMIR
  * 3. Compile expected EO into XMIR
  * 4. Compare XMIRs
+ * @since 0.1
  */
 final class TrasformationPacksTest {
 
     @ParameterizedTest
     @ClasspathSource(value = "packs", glob = "**.yaml")
     void checksPack(final String pack) {
-        //@checkstyle MethodBodyCommentsCheck (5 lines)
+        //@checkstyle MethodBodyCommentsCheck (10 lines)
         // @todo #260:90min Implement primitive transformation test.
         //  Currently we just get the pack name from the test and check that it is not null.
         //  We have to implement proper transformation test. It will consist of the following steps:
