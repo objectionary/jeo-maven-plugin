@@ -38,7 +38,7 @@ eo:
   A.eo: |
     package com.example
     [] > A
-      cage x   
+      cage > x   
       [xa] > new
         seq > @
           x.write xa 
@@ -47,7 +47,7 @@ eo:
   B.eo: |
     package com.example
     [] > B
-      cage a
+      cage > a
       [aa] > new
         seq > @
           a.write aa
