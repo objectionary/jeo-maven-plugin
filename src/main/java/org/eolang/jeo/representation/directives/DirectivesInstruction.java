@@ -21,54 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.directives;
 
-import org.eolang.jeo.representation.bytecode.BytecodeMethod;
-import org.w3c.dom.Node;
+import java.util.Iterator;
+import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
- * XML representation of bytecode label.
+ * Instruction directives.
+ * Parses bytecode instruction and transforms it into Xembly directives that further
+ * will be converted into XML.
  * @since 0.1
  */
-public final class XmlLabel implements XmlBytecodeEntry {
+final class DirectivesInstruction implements Iterable<Directive> {
 
     /**
-     * Label node.
+     * Opcode.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    private final XmlNode node;
+    private final int opcode;
 
     /**
-     * All found labels.
+     * Instruction arguments.
      */
-    private final AllLabels labels;
+    private final Object[] arguments;
 
     /**
      * Constructor.
-     * @param node Label node.
+     * @param opcode Opcode
+     * @param arguments Instruction arguments
      */
-    public XmlLabel(final XmlNode node) {
-        this.node = node;
-        this.labels = new AllLabels();
+    DirectivesInstruction(final int opcode, final Object... arguments) {
+        this.opcode = opcode;
+        this.arguments = arguments.clone();
     }
 
     @Override
-    public void writeTo(final BytecodeMethod method) {
-        method.markLabel(this.labels.label(this.node.child("base", "string").text()));
-    }
-
-    @Override
-    public boolean hasOpcode(final int opcode) {
-        return false;
-    }
-
-    @Override
-    public void replaceArguementsValues(final String old, final String replacement) {
-        // Nothing to replace
-    }
-
-    @Override
-    public Node node() {
-        return this.node.node();
+    public Iterator<Directive> iterator() {
+        final Directives directives = new Directives();
+        directives.add("o")
+            .attr("name", new OpcodeName(this.opcode).asString())
+            .attr("base", "opcode");
+        for (final Object operand : this.arguments) {
+            directives.append(new DirectivesOperand(operand));
+        }
+        directives.up();
+        return directives.iterator();
     }
 }

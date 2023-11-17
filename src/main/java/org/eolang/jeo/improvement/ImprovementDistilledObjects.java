@@ -378,10 +378,6 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @todo #162:90min Refactor handleClass method.
          *  Right now it's a method with high complexity and it's hard to read it.
          *  We need to refactor it or inline into some other method.
-         * @todo #164:90min Use DecoratorConstructors instead of simple copy-paste.
-         *  Currently we use copy-paste constructors from the decorated object.
-         *  We should use DecoratorConstructors instead. In order to apply the solution,
-         *  uncomment the code below and remove the copy-paste code.
          */
         private void handleClass(final XmlClass decor) {
             final Node root = decor.node();
@@ -389,11 +385,11 @@ public final class ImprovementDistilledObjects implements Improvement {
             decor.replaceArguments(this.decorator.name(), this.combinedName());
             final XmlClass clazz = new XmlProgram(this.decorated.toEO()).top();
             clazz.fields().forEach(decor::withField);
+            final List<XmlMethod> constructors = new DecoratorConstructors(clazz).constructors();
             DecoratorPair.removeOldConstructors(root);
+            constructors.forEach(decor::withConstructor);
             for (final XmlMethod method : clazz.methods()) {
-                if (method.isConstructor()) {
-                    decor.withConstructor(method);
-                } else {
+                if (!method.isConstructor()) {
                     decor.inline(method);
                 }
             }

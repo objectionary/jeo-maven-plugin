@@ -118,7 +118,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
 
     @Override
     public void visitLabel(final Label label) {
-        this.directives.append(new Operand(label));
+        this.directives.append(new DirectivesOperand(label));
         super.visitLabel(label);
     }
 
@@ -139,43 +139,7 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
      * @param operands Operands
      */
     private void opcode(final int opcode, final Object... operands) {
-        this.directives.add("o")
-            .attr("name", new OpcodeName(opcode).asString())
-            .attr("base", "opcode");
-        for (final Object operand : operands) {
-            this.directives.append(new Operand(operand));
-        }
-        this.directives.up();
+        this.directives.append(new DirectivesInstruction(opcode, operands));
     }
 
-    /**
-     * Operand XML directives.
-     * @since 0.1
-     */
-    private static final class Operand implements Iterable<Directive> {
-
-        /**
-         * Raw operand.
-         */
-        private final Object raw;
-
-        /**
-         * Constructor.
-         * @param operand Raw operand.
-         */
-        private Operand(final Object operand) {
-            this.raw = operand;
-        }
-
-        @Override
-        public Iterator<Directive> iterator() {
-            final Iterator<Directive> result;
-            if (this.raw instanceof Label) {
-                result = new DirectivesLabel((Label) this.raw).iterator();
-            } else {
-                result = new DirectivesData(this.raw).iterator();
-            }
-            return result;
-        }
-    }
 }

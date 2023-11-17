@@ -23,19 +23,19 @@
  */
 package org.eolang.jeo.improvement;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
-import org.eolang.jeo.representation.xmir.XmlBytecodeEntry;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlMethod;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
 
 /**
  * This class tries to combine constructors of the decorated class and the decorator.
  * @since 0.1
+ * @todo #252:90min The first attempt to inline constructors is failed.
+ *  The constructor inlining is not a straightforward task, since we need to take into
+ *  account the order of arguments and the order of instructions in the constructor.
+ *  Sine we decided to implement inlining using high-level XML representation, maybe it makes sence
+ *  just remove all the related classes to this optimization.
+ *  see https://github.com/objectionary/jeo-maven-plugin/issues/259
  */
 class DecoratorConstructors {
 
@@ -45,21 +45,13 @@ class DecoratorConstructors {
     private final XmlClass decorated;
 
     /**
-     * Class that decorates {@link #decorated}.
-     */
-    private final XmlClass decorator;
-
-    /**
      * Constructor.
      * @param decorated Decorated class.
-     * @param decorator Class that decorates {@link #decorated}.
      */
     DecoratorConstructors(
-        final XmlClass decorated,
-        final XmlClass decorator
+        final XmlClass decorated
     ) {
         this.decorated = decorated;
-        this.decorator = decorator;
     }
 
     /**
@@ -67,63 +59,6 @@ class DecoratorConstructors {
      * @return List of constructors.
      */
     List<XmlMethod> constructors() {
-        final List<XmlMethod> alldecorated = this.decorated.constructors();
-        final List<XmlMethod> alldecoratee = this.decorator.constructors();
-        final List<XmlMethod> result = new ArrayList<>(alldecorated.size() + alldecoratee.size());
-        for (final XmlMethod origin : alldecorated) {
-            for (final XmlMethod upper : alldecoratee) {
-                result.add(
-                    new XmlMethod(
-                        upper.name(),
-                        upper.access(),
-                        this.combineDescriptors(origin.descriptor(), upper.descriptor()),
-                        DecoratorConstructors.combineInstructions(origin, upper)
-                    )
-                );
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Combines descriptors of the decorated and decorator constructors.
-     * @param decored Decorated constructor descriptor.
-     * @param decoror Decorator constructor descriptor.
-     * @return Combined descriptor.
-     */
-    private String combineDescriptors(
-        final String decored, final String decoror
-    ) {
-        final String aim = this.decorated.name();
-        final Type[] replacement = Type.getType(decored).getArgumentTypes();
-        final Type[] array = Arrays.stream(Type.getType(decoror).getArgumentTypes())
-            .flatMap(
-                type -> {
-                    final Stream<? extends Type> result;
-                    if (type.getClassName().equals(aim)) {
-                        result = Arrays.stream(replacement);
-                    } else {
-                        result = Stream.of(type);
-                    }
-                    return result;
-                }
-            ).toArray(Type[]::new);
-        return Type.getMethodType(Type.VOID_TYPE, array).getDescriptor();
-    }
-
-    /**
-     * Combines instructions of the decorated and decorator constructors.
-     * @param decored Decorated constructor.
-     * @param decoror Decorator constructor.
-     * @return Combined instructions.
-     */
-    private static XmlBytecodeEntry[] combineInstructions(
-        final XmlMethod decored,
-        final XmlMethod decoror
-    ) {
-        return Stream.concat(
-            decored.instructions(new XmlMethod.Without(Opcodes.RETURN)).stream(),
-            decoror.instructions().stream()
-        ).toArray(XmlBytecodeEntry[]::new);
+        return this.decorated.constructors();
     }
 }

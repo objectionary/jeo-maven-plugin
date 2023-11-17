@@ -21,54 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.directives;
 
-import org.eolang.jeo.representation.bytecode.BytecodeMethod;
-import org.w3c.dom.Node;
+import java.util.Iterator;
+import org.objectweb.asm.Label;
+import org.xembly.Directive;
 
 /**
- * XML representation of bytecode label.
+ * Operand XML directives.
  * @since 0.1
  */
-public final class XmlLabel implements XmlBytecodeEntry {
+final class DirectivesOperand implements Iterable<Directive> {
 
     /**
-     * Label node.
+     * Raw operand.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    private final XmlNode node;
-
-    /**
-     * All found labels.
-     */
-    private final AllLabels labels;
+    private final Object raw;
 
     /**
      * Constructor.
-     * @param node Label node.
+     * @param operand Raw operand.
      */
-    public XmlLabel(final XmlNode node) {
-        this.node = node;
-        this.labels = new AllLabels();
+    DirectivesOperand(final Object operand) {
+        this.raw = operand;
     }
 
     @Override
-    public void writeTo(final BytecodeMethod method) {
-        method.markLabel(this.labels.label(this.node.child("base", "string").text()));
-    }
-
-    @Override
-    public boolean hasOpcode(final int opcode) {
-        return false;
-    }
-
-    @Override
-    public void replaceArguementsValues(final String old, final String replacement) {
-        // Nothing to replace
-    }
-
-    @Override
-    public Node node() {
-        return this.node.node();
+    public Iterator<Directive> iterator() {
+        final Iterator<Directive> result;
+        if (this.raw instanceof Label) {
+            result = new DirectivesLabel((Label) this.raw).iterator();
+        } else {
+            result = new DirectivesData(this.raw).iterator();
+        }
+        return result;
     }
 }

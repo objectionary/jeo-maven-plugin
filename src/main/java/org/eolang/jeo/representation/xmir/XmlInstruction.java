@@ -138,18 +138,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     }
 
     /**
-     * Instruction code.
-     * @return Code.
-     */
-    private int code() {
-        return Integer.parseInt(
-            this.node.getAttributes()
-                .getNamedItem("name")
-                .getNodeValue().split("-")[1]
-        );
-    }
-
-    /**
      * Extract argument value from XmlNode.
      * @param argument XmlNode with argument value.
      * @return Argument value.
@@ -173,6 +161,18 @@ public final class XmlInstruction implements XmlBytecodeEntry {
             result = new HexString(argument.text()).decode();
         }
         return result;
+    }
+
+    /**
+     * Instruction code.
+     * @return Code.
+     */
+    private int code() {
+        return Integer.parseInt(
+            this.node.getAttributes()
+                .getNamedItem("name")
+                .getNodeValue().split("-")[1]
+        );
     }
 
     /**
