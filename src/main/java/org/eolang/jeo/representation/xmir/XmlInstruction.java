@@ -30,9 +30,12 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xembly.Transformers;
+import org.xembly.Xembler;
 
 /**
  * Bytecode instruction from XML.
@@ -62,6 +65,21 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      */
     public XmlInstruction(final String xml) {
         this(new XMLDocument(xml).node().getFirstChild());
+    }
+
+    /**
+     * Constructor.
+     * @param opcode Opcode.
+     * @param args Arguments.
+     */
+    public XmlInstruction(final int opcode, Object... args) {
+        this(
+            new Xembler(new DirectivesInstruction(
+                opcode,
+                args
+            ), new Transformers.Node()).xmlQuietly()
+
+        );
     }
 
     /**

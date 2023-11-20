@@ -33,7 +33,7 @@ import org.xembly.Directives;
  * will be converted into XML.
  * @since 0.1
  */
-final class DirectivesInstruction implements Iterable<Directive> {
+public final class DirectivesInstruction implements Iterable<Directive> {
 
     /**
      * Opcode.
@@ -50,7 +50,7 @@ final class DirectivesInstruction implements Iterable<Directive> {
      * @param opcode Opcode
      * @param arguments Instruction arguments
      */
-    DirectivesInstruction(final int opcode, final Object... arguments) {
+    public DirectivesInstruction(final int opcode, final Object... arguments) {
         this.opcode = opcode;
         this.arguments = arguments.clone();
     }
