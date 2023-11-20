@@ -69,12 +69,13 @@ final class OpcodeName {
      * @return String representation of a bytecode.
      */
     String asString() {
-        return String.format(
-            "%s-%d-%d",
-            OpcodeName.NAMES.getOrDefault(this.opcode, "UNKNOWN"),
-            this.opcode,
-            OpcodeName.COUNTER.incrementAndGet()
-        );
+        return OpcodeName.NAMES.getOrDefault(this.opcode, "UNKNOWN");
+//        return String.format(
+//            "%s-%d-%d",
+//            OpcodeName.NAMES.getOrDefault(this.opcode, "UNKNOWN"),
+//            this.opcode,
+//            OpcodeName.COUNTER.incrementAndGet()
+//        );
     }
 
     /**

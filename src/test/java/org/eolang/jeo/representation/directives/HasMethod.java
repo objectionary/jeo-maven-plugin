@@ -169,8 +169,8 @@ public final class HasMethod extends TypeSafeMatcher<String> {
     private Stream<String> definition() {
         final String root = this.root();
         return Stream.of(
-            root.concat("/text()"),
-            root.concat("/o[@base='seq']/text()"),
+            root.concat("/@name"),
+            root.concat("/o[@base='seq']/@base"),
             root.concat("/o[@name='access']/@name"),
             root.concat("/o[@name='descriptor']/@name"),
             root.concat("/o[@name='signature']/@name"),
@@ -263,12 +263,19 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          */
         Stream<String> checks(final String root) {
             final String instruction = String.format(
-                "%s/o[@base='seq']/o[@base='opcode' and contains(@name,'%s')]",
+                "%s/o[@base='seq']/o[@base='opcode' and @name='%s']",
                 root,
-                this.opcode
+                new OpcodeName(this.opcode).asString()
             );
             return Stream.concat(
-                Stream.of(instruction.concat("/@base")),
+                Stream.of(
+                    instruction.concat("/@base"),
+                    String.format(
+                        "%s/o[@base='int' and @data='bytes' and text()='%s']/@base",
+                        instruction,
+                        new HexData(this.opcode).value()
+                    )
+                ),
                 this.arguments(instruction)
             );
         }

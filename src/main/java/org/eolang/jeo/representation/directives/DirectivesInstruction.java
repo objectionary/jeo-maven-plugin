@@ -61,6 +61,7 @@ final class DirectivesInstruction implements Iterable<Directive> {
         directives.add("o")
             .attr("name", new OpcodeName(this.opcode).asString())
             .attr("base", "opcode");
+        directives.append(new DirectivesOperand(this.opcode));
         for (final Object operand : this.arguments) {
             directives.append(new DirectivesOperand(operand));
         }
