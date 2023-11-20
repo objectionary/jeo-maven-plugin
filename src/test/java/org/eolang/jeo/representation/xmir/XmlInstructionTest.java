@@ -39,7 +39,7 @@ final class XmlInstructionTest {
      * This XML is compare with all other XMLs.
      */
     private static final String INSTRUCTION = new StringBuilder()
-        .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">")
+        .append("<o base=\"opcode\" name=\"INVOKESPECIAL\">")//183
         .append("<o base=\"string\" data=\"bytes\">1</o>")
         .append("<o base=\"string\" data=\"bytes\">2</o>")
         .append("<o base=\"string\" data=\"bytes\">3</o>")
@@ -53,7 +53,7 @@ final class XmlInstructionTest {
             new XmlInstruction(
                 new XMLDocument(
                     new StringBuilder()
-                        .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-55\">\n")
+                        .append("<o base=\"opcode\" name=\"INVOKESPECIAL\">\n")
                         .append("   <o base=\"string\" data=\"bytes\">1</o>\n")
                         .append("   <o base=\"string\" data=\"bytes\">2</o>\n")
                         .append("   <o base=\"string\" data=\"bytes\">3</o></o>")
@@ -77,7 +77,7 @@ final class XmlInstructionTest {
             new XmlInstruction(
                 new XMLDocument(
                     new StringBuilder()
-                        .append("<o base=\"opcode\" name=\"INVOKESPECIAL-183-66\">\n")
+                        .append("<o base=\"opcode\" name=\"INVOKESPECIAL\">\n")
                         .append("   <o base=\"string\" data=\"bytes\">1</o>\n")
                         .append("   <o base=\"string\" data=\"bytes\">2</o>\n")
                         .append("   <o base=\"string\" data=\"bytes\">3</o></o>")

@@ -116,8 +116,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
         } else if (other == null || this.getClass() != other.getClass()) {
             result = false;
         } else {
-            final XmlInstruction that = (XmlInstruction) other;
-            result = this.equals(this.node, that.node);
+            result = this.equals(this.node, ((XmlInstruction) other).node);
         }
         return result;
     }
@@ -238,12 +237,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     private static boolean areAttributesEqual(final Node first, final Node second) {
         final boolean result;
         if (first != null && second != null && first.getNodeName().equals(second.getNodeName())) {
-            if (first.getNodeName().equals("name")) {
-                result = first.getNodeValue().split("-")[0]
-                    .equals(second.getNodeValue().split("-")[0]);
-            } else {
-                result = first.getNodeValue().equals(second.getNodeValue());
-            }
+            result = first.getNodeValue().equals(second.getNodeValue());
         } else {
             result = false;
         }
