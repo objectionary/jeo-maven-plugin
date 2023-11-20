@@ -37,7 +37,6 @@ import java.util.stream.Stream;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.EoRepresentation;
-import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.xmir.XmlBytecodeEntry;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlField;
@@ -228,30 +227,17 @@ public final class ImprovementDistilledObjects implements Improvement {
          * @return List of NEW instructions.
          */
         private List<XmlInstruction> targetNew() {
-            final String dup = "<o base='opcode' name='DUP-89-53'/>";
             return Arrays.asList(
                 new XmlInstruction(
-                    String.join(
-                        "",
-                        "<o base='opcode' name='NEW-187-50'>",
-                        "<o base='string' data='bytes'>",
-                        new HexData(this.decorator.name()).value(),
-                        "</o>",
-                        "</o>"
-                    )
+                    Opcodes.NEW,
+                    this.decorator.name()
                 ),
-                new XmlInstruction(dup),
+                new XmlInstruction(Opcodes.DUP),
                 new XmlInstruction(
-                    String.join(
-                        "",
-                        "<o base='opcode' name='NEW-187-50'>",
-                        "<o base='string' data='bytes'>",
-                        new HexData(this.decorated.name()).value(),
-                        "</o>",
-                        "</o>"
-                    )
+                    Opcodes.NEW,
+                    this.decorated.name()
                 ),
-                new XmlInstruction(dup)
+                new XmlInstruction(Opcodes.DUP)
             );
         }
 
@@ -262,16 +248,10 @@ public final class ImprovementDistilledObjects implements Improvement {
         private List<XmlInstruction> replacementNew() {
             return Arrays.asList(
                 new XmlInstruction(
-                    String.join(
-                        "",
-                        "<o base='opcode' name='NEW-187-50'>",
-                        "<o base='string' data='bytes'>",
-                        new DecoratorCompositionName(this.decorated, this.decorator).hex(),
-                        "</o>",
-                        "</o>"
-                    )
+                    Opcodes.NEW,
+                    new DecoratorCompositionName(this.decorated, this.decorator).value()
                 ),
-                new XmlInstruction("<o base='opcode' name='DUP-89-53'/>")
+                new XmlInstruction(Opcodes.DUP)
             );
         }
 
@@ -282,36 +262,16 @@ public final class ImprovementDistilledObjects implements Improvement {
         private List<XmlInstruction> targetSpecial() {
             return Arrays.asList(
                 new XmlInstruction(
-                    String.join(
-                        "",
-                        "<o base='opcode' name='INVOKESPECIAL-183-55'>",
-                        "<o base='string' data='bytes'>",
-                        new HexData(this.decorated.name()).value(),
-                        "</o>",
-                        "<o base='string' data='bytes'>",
-                        new HexData("<init>").value(),
-                        "</o>",
-                        "<o base='string' data='bytes'>",
-                        new HexData("(I)V").value(),
-                        "</o>",
-                        "</o>"
-                    )
+                    Opcodes.INVOKESPECIAL,
+                    this.decorated.name(),
+                    "<init>",
+                    "(I)V"
                 ),
                 new XmlInstruction(
-                    String.join(
-                        "",
-                        "<o base='opcode' name='INVOKESPECIAL-183-55'>",
-                        "<o base='string' data='bytes'>",
-                        new HexData(this.decorator.name()).value(),
-                        "</o>",
-                        "<o base='string' data='bytes'>",
-                        new HexData("<init>").value(),
-                        "</o>",
-                        "<o base='string' data='bytes'>",
-                        new HexData("(Lorg/eolang/jeo/A;)V").value(),
-                        "</o>",
-                        "</o>"
-                    )
+                    Opcodes.INVOKESPECIAL,
+                    this.decorator.name(),
+                    "<init>",
+                    "(Lorg/eolang/jeo/A;)V"
                 )
             );
         }
@@ -323,20 +283,10 @@ public final class ImprovementDistilledObjects implements Improvement {
         private List<XmlInstruction> replacementSpecial() {
             return Collections.singletonList(
                 new XmlInstruction(
-                    String.join(
-                        "",
-                        "<o base='opcode' name='INVOKESPECIAL-183-55'>",
-                        "<o base='string' data='bytes'>",
-                        new DecoratorCompositionName(this.decorated, this.decorator).hex(),
-                        "</o>",
-                        "<o base='string' data='bytes'>",
-                        new HexData("<init>").value(),
-                        "</o>",
-                        "<o base='string' data='bytes'>",
-                        new HexData("(I)V").value(),
-                        "</o>",
-                        "</o>"
-                    )
+                    Opcodes.INVOKESPECIAL,
+                    new DecoratorCompositionName(this.decorated, this.decorator).value(),
+                    "<init>",
+                    "(I)V"
                 )
             );
         }
