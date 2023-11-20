@@ -33,10 +33,6 @@ import org.objectweb.asm.Opcodes;
  * The name of bytecode instruction. The name combined with unique number in order to
  * avoid name collisions.
  * @since 0.1.0
- * @todo #84:30min Add unit test for OpcodeName class.
- *  The unit test should check that the name of opcode is correct.
- *  The name should be the same as in {@link Opcodes} class.
- *  When the unit test is ready remove that puzzle.
  */
 final class OpcodeName {
 
