@@ -63,33 +63,4 @@ class DecoratorCompositionNameTest {
             Matchers.equalTo(expected)
         );
     }
-
-    @ParameterizedTest
-    @CsvSource({
-        "A, B, 41 24 42",
-        "Foo, Bar, 46 6F 6F 24 42 61 72",
-        "org/eolang/A, org/eolang/B, 6F 72 67 2F 65 6F 6C 61 6E 67 2F 41 24 42",
-        "a/Foo, b/Bar, 62 2F 46 6F 6F 24 42 61 72"
-    })
-    void retrievesHexDecimalRepresentation(
-        final String decorated,
-        final String decorator,
-        final String expected
-    ) {
-        final String actual = new DecoratorCompositionName(
-            new Representation.Named(decorated),
-            new Representation.Named(decorator)
-        ).hex();
-        MatcherAssert.assertThat(
-            String.format(
-                "Generated name '%s' in hex form is not as expected '%s' for decorated class '%s' and its decorator '%s'",
-                actual,
-                expected,
-                decorated,
-                decorator
-            ),
-            actual,
-            Matchers.equalTo(expected)
-        );
-    }
 }

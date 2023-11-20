@@ -84,12 +84,4 @@ final class DecoratorCompositionName {
             right.substring(right.lastIndexOf('/') + 1)
         );
     }
-
-    /**
-     * Hexadecimal representation of the generated name.
-     * @return Hexadecimal representation of the name.
-     */
-    String hex() {
-        return new HexData(this.value()).value();
-    }
 }
