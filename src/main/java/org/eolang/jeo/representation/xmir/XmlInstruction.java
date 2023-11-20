@@ -103,6 +103,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     public Object[] arguments() {
         return new XmlNode(this.node)
             .children()
+            .skip(1)
             .map(this::argument)
             .toArray();
     }
@@ -168,11 +169,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @return Code.
      */
     private int code() {
-        return Integer.parseInt(
-            this.node.getAttributes()
-                .getNamedItem("name")
-                .getNodeValue().split("-")[1]
-        );
+        return new HexString(new XmlNode(this.node).firstChild().text()).decodeAsInt();
     }
 
     /**

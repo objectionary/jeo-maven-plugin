@@ -98,6 +98,23 @@ final class XmlNode {
             );
     }
 
+
+    /**
+     * Get first child.
+     * @return First child node.
+     */
+    XmlNode firstChild() {
+        return this.children().findFirst()
+            .orElseThrow(
+                () -> new IllegalStateException(
+                    String.format(
+                        "Can't find any child nodes in '%s'",
+                        new XMLDocument(this.node)
+                    )
+                )
+            );
+    }
+
     /**
      * Get all child nodes.
      * @return Child nodes.
