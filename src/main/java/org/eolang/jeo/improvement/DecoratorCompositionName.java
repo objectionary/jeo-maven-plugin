@@ -24,7 +24,6 @@
 package org.eolang.jeo.improvement;
 
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.representation.HexData;
 
 /**
  * The name of a decorator composition.

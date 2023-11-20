@@ -98,7 +98,6 @@ final class XmlNode {
             );
     }
 
-
     /**
      * Get first child.
      * @return First child node.

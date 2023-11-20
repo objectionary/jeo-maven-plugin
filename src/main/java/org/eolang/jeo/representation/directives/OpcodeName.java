@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.directives;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.objectweb.asm.Opcodes;
 
 /**
@@ -47,11 +46,6 @@ final class OpcodeName {
     private static final Map<Integer, String> NAMES = OpcodeName.init();
 
     /**
-     * Opcode counter.
-     */
-    private static final AtomicInteger COUNTER = new AtomicInteger(0);
-
-    /**
      * Bytecode operation code.
      */
     private final int opcode;
@@ -70,12 +64,6 @@ final class OpcodeName {
      */
     String asString() {
         return OpcodeName.NAMES.getOrDefault(this.opcode, "UNKNOWN");
-//        return String.format(
-//            "%s-%d-%d",
-//            OpcodeName.NAMES.getOrDefault(this.opcode, "UNKNOWN"),
-//            this.opcode,
-//            OpcodeName.COUNTER.incrementAndGet()
-//        );
     }
 
     /**

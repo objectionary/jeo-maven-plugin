@@ -72,13 +72,12 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @param opcode Opcode.
      * @param args Arguments.
      */
-    public XmlInstruction(final int opcode, Object... args) {
+    public XmlInstruction(final int opcode, final Object... args) {
         this(
-            new Xembler(new DirectivesInstruction(
-                opcode,
-                args
-            ), new Transformers.Node()).xmlQuietly()
-
+            new Xembler(
+                new DirectivesInstruction(opcode, args),
+                new Transformers.Node()
+            ).xmlQuietly()
         );
     }
 
