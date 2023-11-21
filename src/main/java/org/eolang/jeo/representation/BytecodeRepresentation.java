@@ -70,6 +70,10 @@ public final class BytecodeRepresentation implements Representation {
         this(new InputOf(clazz), clazz.getFileName().toString());
     }
 
+    /**
+     * Constructor.
+     * @param bytecode Bytecode
+     */
     public BytecodeRepresentation(final Bytecode bytecode) {
         this(bytecode.asBytes());
     }
@@ -85,6 +89,7 @@ public final class BytecodeRepresentation implements Representation {
     /**
      * Constructor.
      * @param input Input source
+     * @param source The source of the input
      */
     private BytecodeRepresentation(final Input input, final String source) {
         this(new UncheckedBytes(new BytesOf(input)).asBytes(), source);

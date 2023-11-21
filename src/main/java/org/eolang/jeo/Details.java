@@ -36,7 +36,7 @@ public class Details {
     /**
      * Name of the class or an object.
      */
-    private static final String NAME = "name";
+    private static final String NAME_KEY = "name";
 
     /**
      * Original source of the representation.
@@ -44,7 +44,7 @@ public class Details {
      * - Application.java
      * - Application.xmir
      */
-    private static final String SOURCE = "source";
+    private static final String SOURCE_KEY = "source";
 
     /**
      * Storage with all the details.
@@ -57,7 +57,7 @@ public class Details {
      * @param source Original source of the representation.
      */
     public Details(final String name, final String source) {
-        this(Details.NAME, name, Details.SOURCE, source);
+        this(Details.NAME_KEY, name, Details.SOURCE_KEY, source);
     }
 
     /**
@@ -89,7 +89,7 @@ public class Details {
      * @return Name.
      */
     public String name() {
-        return this.storage.get(Details.NAME);
+        return this.storage.get(Details.NAME_KEY);
     }
 
     /**
@@ -98,7 +98,7 @@ public class Details {
      * @return Source.
      */
     public String source() {
-        return this.storage.get(Details.SOURCE);
+        return this.storage.get(Details.SOURCE_KEY);
     }
 
     /**
@@ -106,14 +106,14 @@ public class Details {
      * @param pairs Pairs of key-value.
      * @return Map with all the details.
      */
-    private static Map<String, String> initial(String... pairs) {
+    private static Map<String, String> initial(final String... pairs) {
         final int length = pairs.length;
         if (length % 2 == 1) {
             throw new IllegalArgumentException("Must have an even number of arguments");
         }
-        Map<String, String> map = new HashMap<>(pairs.length / 2);
-        for (int i = 0; i < length; i += 2) {
-            map.put(pairs[i], pairs[i + 1]);
+        final Map<String, String> map = new HashMap<>(pairs.length / 2);
+        for (int index = 0; index < length; index += 2) {
+            map.put(pairs[index], pairs[index + 1]);
         }
         return map;
     }

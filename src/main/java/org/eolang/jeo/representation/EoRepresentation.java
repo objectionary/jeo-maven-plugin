@@ -46,10 +46,17 @@ public final class EoRepresentation implements Representation {
      */
     private final XML xml;
 
+    /**
+     * Source of the XML.
+     */
     private final String source;
 
+    /**
+     * Constructor.
+     * @param path Path to XML file.
+     */
     public EoRepresentation(final Path path) {
-        this(EoRepresentation.xml(path), path.getFileName().toString());
+        this(EoRepresentation.open(path), path.getFileName().toString());
     }
 
     /**
@@ -114,7 +121,7 @@ public final class EoRepresentation implements Representation {
      * @param path Path to XML file.
      * @return XML.
      */
-    private static XML xml(final Path path) {
+    private static XML open(final Path path) {
         try {
             return new XMLDocument(path.toFile());
         } catch (final FileNotFoundException exception) {
