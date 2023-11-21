@@ -67,6 +67,11 @@ public final class ImprovementXmirFootprint implements Improvement {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Transform representations.
+     * @param representation Representation to transform.
+     * @return Transformed representation.
+     */
     private static Representation transform(final Representation representation) {
         return new EoRepresentation(
             representation.toEO(),
