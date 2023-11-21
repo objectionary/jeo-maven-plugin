@@ -57,6 +57,9 @@ public final class BytecodeRepresentation implements Representation {
      */
     private final byte[] input;
 
+    /**
+     * The source of the input.
+     */
     private final String source;
 
     /**
@@ -64,16 +67,11 @@ public final class BytecodeRepresentation implements Representation {
      * @param clazz Path to the class file
      */
     public BytecodeRepresentation(final Path clazz) {
-        this(new InputOf(clazz));
+        this(new InputOf(clazz), clazz.getFileName().toString());
     }
 
-    /**
-     * Constructor.
-     * @param input Input source.
-     */
-    public BytecodeRepresentation(final byte[] input) {
-        this.input = Arrays.copyOf(input, input.length);
-        this.source = "bytecode";
+    public BytecodeRepresentation(final Bytecode bytecode) {
+        this(bytecode.asBytes());
     }
 
     /**
@@ -82,6 +80,35 @@ public final class BytecodeRepresentation implements Representation {
      */
     BytecodeRepresentation(final Input input) {
         this(new UncheckedBytes(new BytesOf(input)).asBytes());
+    }
+
+    /**
+     * Constructor.
+     * @param input Input source
+     */
+    private BytecodeRepresentation(final Input input, final String source) {
+        this(new UncheckedBytes(new BytesOf(input)).asBytes(), source);
+    }
+
+    /**
+     * Constructor.
+     * @param input Input source.
+     */
+    private BytecodeRepresentation(final byte[] input) {
+        this(input, "bytecode");
+    }
+
+    /**
+     * Constructor.
+     * @param input Input.
+     * @param source The source of the input.
+     */
+    private BytecodeRepresentation(
+        final byte[] input,
+        final String source
+    ) {
+        this.input = input.clone();
+        this.source = source;
     }
 
     @Override

@@ -25,7 +25,9 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
@@ -46,6 +48,10 @@ public final class EoRepresentation implements Representation {
 
     private final String source;
 
+    public EoRepresentation(final Path path) {
+        this(EoRepresentation.xml(path), path.getFileName().toString());
+    }
+
     /**
      * Constructor.
      * @param lines Xml document lines.
@@ -59,8 +65,20 @@ public final class EoRepresentation implements Representation {
      * @param xml XML.
      */
     public EoRepresentation(final XML xml) {
+        this(xml, "Unknown");
+    }
+
+    /**
+     * Constructor.
+     * @param xml XML.
+     * @param source Source of the XML.
+     */
+    public EoRepresentation(
+        final XML xml,
+        final String source
+    ) {
         this.xml = xml;
-        this.source = "XMIR";
+        this.source = source;
     }
 
     @Override
@@ -86,6 +104,22 @@ public final class EoRepresentation implements Representation {
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("The XMIR is invalid: %s", this.xml),
+                exception
+            );
+        }
+    }
+
+    /**
+     * Convert path to XML.
+     * @param path Path to XML file.
+     * @return XML.
+     */
+    private static XML xml(final Path path) {
+        try {
+            return new XMLDocument(path.toFile());
+        } catch (final FileNotFoundException exception) {
+            throw new IllegalStateException(
+                String.format("Can't find file '%s'", path),
                 exception
             );
         }

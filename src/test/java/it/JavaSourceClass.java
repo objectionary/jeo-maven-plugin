@@ -41,6 +41,7 @@ import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
+import org.eolang.jeo.representation.bytecode.Bytecode;
 
 /**
  * Java source class with ".java" extension.
@@ -81,7 +82,7 @@ final class JavaSourceClass {
      * Compile the Java class.
      * @return Bytecode of compiled class.
      */
-    byte[] compile() {
+    Bytecode compile() {
         final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         final BytecodeManager manager = new BytecodeManager(compiler);
         final boolean successful = compiler.getTask(
@@ -93,7 +94,7 @@ final class JavaSourceClass {
             Collections.singleton(new SourceCode(this.name, this.java))
         ).call();
         if (successful) {
-            return manager.bytecode();
+            return new Bytecode(manager.bytecode());
         } else {
             throw new IllegalStateException(
                 String.format("Compilation failed for class %s", this.name)
@@ -120,7 +121,7 @@ final class JavaSourceClass {
         /**
          * Bytecode.
          */
-        private final AtomicReference<Bytecode> output;
+        private final AtomicReference<BytecodeOutput> output;
 
         /**
          * Constructor.
@@ -152,7 +153,7 @@ final class JavaSourceClass {
             final JavaFileObject.Kind kind,
             final FileObject sibling
         ) {
-            this.output.set(new Bytecode(classname));
+            this.output.set(new BytecodeOutput(classname));
             return this.output.get();
         }
 
@@ -197,7 +198,7 @@ final class JavaSourceClass {
      * Bytecode of compiled class.
      * @since 0.1.0
      */
-    private static final class Bytecode extends SimpleJavaFileObject {
+    private static final class BytecodeOutput extends SimpleJavaFileObject {
 
         /**
          * Output stream.
@@ -208,7 +209,7 @@ final class JavaSourceClass {
          * Constructor.
          * @param name Name of Java class.
          */
-        Bytecode(final String name) {
+        BytecodeOutput(final String name) {
             super(URI.create(String.format("%s%s", name, Kind.CLASS.extension)), Kind.CLASS);
             this.output = new ByteArrayOutputStream();
         }

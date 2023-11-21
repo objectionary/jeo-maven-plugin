@@ -62,10 +62,16 @@ public final class ImprovementXmirFootprint implements Improvement {
         final Collection<? extends Representation> representations
     ) {
         return representations.stream()
-            .map(Representation::toEO)
-            .map(EoRepresentation::new)
+            .map(ImprovementXmirFootprint::transform)
             .peek(this::tryToSave)
             .collect(Collectors.toList());
+    }
+
+    private static Representation transform(final Representation representation) {
+        return new EoRepresentation(
+            representation.toEO(),
+            representation.details().source()
+        );
     }
 
     /**
@@ -88,7 +94,7 @@ public final class ImprovementXmirFootprint implements Improvement {
                 String.format(
                     "%s translated into %s (%d bytes)",
                     representation.details().source(),
-                    path,
+                    path.getFileName().toString(),
                     Files.size(path)
                 )
             );

@@ -136,7 +136,7 @@ public final class BytecodeClass {
      * @return XML representation of bytecode.
      */
     public XML xml() {
-        return new BytecodeRepresentation(this.bytecode().asBytes()).toEO();
+        return new BytecodeRepresentation(this.bytecode()).toEO();
     }
 
     /**

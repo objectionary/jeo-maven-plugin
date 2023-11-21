@@ -143,7 +143,6 @@ final class ImprovementDistilledObjectsTest {
                 .instruction(Opcodes.IRETURN)
                 .up()
                 .bytecode()
-                .asBytes()
         );
     }
 
@@ -191,7 +190,6 @@ final class ImprovementDistilledObjectsTest {
                 .instruction(Opcodes.IRETURN)
                 .up()
                 .bytecode()
-                .asBytes()
         );
     }
 }

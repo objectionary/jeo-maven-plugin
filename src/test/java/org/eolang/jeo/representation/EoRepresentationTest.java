@@ -85,7 +85,7 @@ class EoRepresentationTest {
             .withField("foo")
             .bytecode();
         final Bytecode actual = new EoRepresentation(
-            new BytecodeRepresentation(expected.asBytes()).toEO()
+            new BytecodeRepresentation(expected).toEO()
         ).toBytecode();
         MatcherAssert.assertThat(
             String.format(EoRepresentationTest.MESSAGE, expected, actual),
@@ -101,7 +101,7 @@ class EoRepresentationTest {
             .helloWorldMethod()
             .bytecode();
         final Bytecode actual = new EoRepresentation(
-            new BytecodeRepresentation(expected.asBytes()).toEO()
+            new BytecodeRepresentation(expected).toEO()
         ).toBytecode();
         MatcherAssert.assertThat(
             String.format(EoRepresentationTest.MESSAGE, expected, actual),
