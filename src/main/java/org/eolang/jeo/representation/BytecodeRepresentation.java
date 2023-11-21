@@ -33,6 +33,7 @@ import org.cactoos.Input;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
+import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.directives.DirectivesClass;
@@ -56,6 +57,8 @@ public final class BytecodeRepresentation implements Representation {
      */
     private final byte[] input;
 
+    private final String source;
+
     /**
      * Constructor.
      * @param clazz Path to the class file
@@ -70,6 +73,7 @@ public final class BytecodeRepresentation implements Representation {
      */
     public BytecodeRepresentation(final byte[] input) {
         this.input = Arrays.copyOf(input, input.length);
+        this.source = "bytecode";
     }
 
     /**
@@ -78,6 +82,11 @@ public final class BytecodeRepresentation implements Representation {
      */
     BytecodeRepresentation(final Input input) {
         this(new UncheckedBytes(new BytesOf(input)).asBytes());
+    }
+
+    @Override
+    public Details details() {
+        return new Details(this.name(), this.source);
     }
 
     @Override

@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.improvement;
 
+import com.jcabi.log.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -81,6 +82,15 @@ public final class ImprovementXmirFootprint implements Improvement {
                 path,
                 representation.toEO().toString().getBytes(StandardCharsets.UTF_8),
                 StandardOpenOption.CREATE_NEW
+            );
+            Logger.info(
+                this,
+                String.format(
+                    "%s translated into %s (%d bytes)",
+                    representation.details().source(),
+                    path,
+                    Files.size(path)
+                )
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(

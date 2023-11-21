@@ -26,6 +26,7 @@ package org.eolang.jeo.representation;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
+import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.XmlBytecode;
@@ -43,6 +44,8 @@ public final class EoRepresentation implements Representation {
      */
     private final XML xml;
 
+    private final String source;
+
     /**
      * Constructor.
      * @param lines Xml document lines.
@@ -57,6 +60,12 @@ public final class EoRepresentation implements Representation {
      */
     public EoRepresentation(final XML xml) {
         this.xml = xml;
+        this.source = "XMIR";
+    }
+
+    @Override
+    public Details details() {
+        return new Details(this.name(), this.source);
     }
 
     @Override

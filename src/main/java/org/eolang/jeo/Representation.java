@@ -34,8 +34,19 @@ import org.eolang.jeo.representation.bytecode.Bytecode;
 public interface Representation {
 
     /**
+     * Details of representation.
+     * Additional info about representation.
+     * @return Representation details instance.
+     */
+    Details details();
+
+    /**
      * Name of the class or an object.
      * @return Name.
+     * @todo #269:30min Replace `name` method with `details` method.
+     *  Currently we just use `Represenation#name()` method everywhere. We should use
+     *  `Representation#details().name()` method instead.
+     *  When it will be ready, just remove this method.
      */
     String name();
 
@@ -69,6 +80,11 @@ public interface Representation {
          */
         public Named(final String name) {
             this.name = name;
+        }
+
+        @Override
+        public Details details() {
+            return new Details(this.name);
         }
 
         @Override
