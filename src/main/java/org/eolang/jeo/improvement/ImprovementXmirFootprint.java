@@ -24,6 +24,7 @@
 package org.eolang.jeo.improvement;
 
 import com.jcabi.log.Logger;
+import com.jcabi.xml.XML;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -62,47 +63,38 @@ public final class ImprovementXmirFootprint implements Improvement {
         final Collection<? extends Representation> representations
     ) {
         return representations.stream()
-            .map(ImprovementXmirFootprint::transform)
-            .peek(this::tryToSave)
+            .map(this::transform)
             .collect(Collectors.toList());
     }
 
     /**
-     * Transform representations.
-     * @param representation Representation to transform.
-     * @return Transformed representation.
+     * Try to save XMIR to the target folder and return new representation.
+     * @param representation Representation to save.
+     * @return New representation with source attached to the saved file.
      */
-    private static Representation transform(final Representation representation) {
-        return new EoRepresentation(
-            representation.toEO(),
-            representation.details().source()
-        );
-    }
-
-    /**
-     * Try to save XML to the target folder.
-     * @param representation XML to save.
-     */
-    private void tryToSave(final Representation representation) {
+    private Representation transform(final Representation representation) {
         final String name = representation.name();
         final Path path = this.target.resolve(new XmirDefaultDirectory().toPath())
             .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
         try {
             Files.createDirectories(path.getParent());
+            final XML xmir = representation.toEO();
             Files.write(
                 path,
-                representation.toEO().toString().getBytes(StandardCharsets.UTF_8),
+                xmir.toString().getBytes(StandardCharsets.UTF_8),
                 StandardOpenOption.CREATE_NEW
             );
+            final String filename = path.getFileName().toString();
             Logger.info(
                 this,
                 String.format(
                     "%s translated into %s (%d bytes)",
                     representation.details().source(),
-                    path.getFileName().toString(),
+                    filename,
                     Files.size(path)
                 )
             );
+            return new EoRepresentation(xmir, filename);
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't save XML to %s", path),
