@@ -72,13 +72,6 @@ public final class ImprovementBytecodeFootprint implements Improvement {
             final String[] subpath = name.split("\\.");
             subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
             final Path path = Paths.get(this.classes.toString(), subpath);
-            Logger.info(
-                this,
-                "Recompiling '%s', bytecode instance '%s', bytes to save '%s'",
-                path,
-                representation.getClass(),
-                bytecode.length
-            );
             Files.createDirectories(path.getParent());
             Files.write(path, bytecode);
             Logger.info(
