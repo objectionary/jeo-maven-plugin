@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
-import lombok.extern.java.Log;
+import org.eolang.jeo.Details;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
 
@@ -67,7 +67,8 @@ public final class ImprovementBytecodeFootprint implements Improvement {
      * @param representation Intermediate Representation to recompile.
      */
     private void recompile(final Representation representation) {
-        final String name = representation.name();
+        final Details details = representation.details();
+        final String name = details.name();
         try {
             final byte[] bytecode = representation.toBytecode().asBytes();
             final String[] subpath = name.split("\\.");
@@ -79,15 +80,10 @@ public final class ImprovementBytecodeFootprint implements Improvement {
                 this,
                 String.format(
                     "%s compiled into %s (%d bytes)",
-                    representation.details().source(),
+                    details.source(),
                     path.getFileName().toString(),
                     bytecode.length
                 )
-            );
-            Logger.info(
-                this,
-                "%s was recompiled successfully.",
-                path.getFileName().toString()
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
