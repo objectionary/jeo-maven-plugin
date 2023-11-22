@@ -24,11 +24,9 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -99,7 +97,6 @@ public final class XmlClass {
     public Node node() {
         return this.node;
     }
-
 
     /**
      * Class name.
