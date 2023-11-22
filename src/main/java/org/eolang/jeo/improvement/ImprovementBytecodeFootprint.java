@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
+import lombok.extern.java.Log;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
 
@@ -74,6 +75,15 @@ public final class ImprovementBytecodeFootprint implements Improvement {
             final Path path = Paths.get(this.classes.toString(), subpath);
             Files.createDirectories(path.getParent());
             Files.write(path, bytecode);
+            Logger.info(
+                this,
+                String.format(
+                    "%s compiled into %s (%d bytes)",
+                    representation.details().source(),
+                    path.getFileName().toString(),
+                    bytecode.length
+                )
+            );
             Logger.info(
                 this,
                 "%s was recompiled successfully.",
