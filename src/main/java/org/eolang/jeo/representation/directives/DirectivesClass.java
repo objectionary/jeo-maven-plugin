@@ -48,6 +48,13 @@ import org.xembly.Directives;
  *  method argument names `arg__I__0` and `arg__Ljava/lang/String__1`. This is not a good way
  *  to do it. At least it leads to errors when argument type is an array or class.
  *  So we have to test this cases and maybe create a better strategy for arguments naming.
+ * @todo #271:90min Split DirectivesClass into two separate classes.
+ *  Currently {@link DirectivesClass} is responsible for two things:
+ *  - Scanning bytecode class/
+ *  - Building Xembly directives.
+ *  We have to split this class into two separate classes:
+ *  - DirectivesClassVisitor - responsible for scanning bytecode class.
+ *  - DirectivesClass - responsible for building Xembly directives according with scanned bytecode.
  */
 @SuppressWarnings({"PMD.UseObjectForClearerAPI", "PMD.AvoidDuplicateLiterals"})
 public final class DirectivesClass extends ClassVisitor implements Iterable<Directive> {

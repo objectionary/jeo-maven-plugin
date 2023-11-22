@@ -68,4 +68,5 @@ class DirectivesClassTest {
             new HasMethod("main").inside(clazz)
         );
     }
+
 }
