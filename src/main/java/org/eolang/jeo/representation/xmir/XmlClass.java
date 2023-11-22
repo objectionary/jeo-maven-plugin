@@ -88,36 +88,6 @@ public final class XmlClass {
     }
 
     /**
-     * Set class name in XML.
-     * @param name Name of the Class.
-     * @return Class.
-     */
-    public XmlClass withName(final String name) {
-        new XmlNode(this.node).withAttribute("name", name);
-        return this;
-    }
-
-    /**
-     * Add field.
-     * @param field Field.
-     * @return The same class.
-     */
-    public XmlClass withField(final XmlField field) {
-        final Document owner = this.node.getOwnerDocument();
-        this.node.appendChild(owner.adoptNode(field.node().cloneNode(true)));
-        return this;
-    }
-
-    /**
-     * Add constructor.
-     * @param method Constructor.
-     */
-    public void withConstructor(final XmlMethod method) {
-        final Document owner = this.node.getOwnerDocument();
-        this.node.appendChild(owner.adoptNode(method.node().cloneNode(true)));
-    }
-
-    /**
      * Internal XML node.
      * @return Internal XML node.
      * @todo #161:30min Hide internal node representation in XmlClass.
@@ -130,26 +100,6 @@ public final class XmlClass {
         return this.node;
     }
 
-    /**
-     * Try to inline method into all possible places.
-     * @param method Other method.
-     */
-    public void inline(final XmlMethod method) {
-        this.methods().forEach(inner -> inner.inline(method));
-    }
-
-    /**
-     * Replace all instruction arguments that have "old" value with "replacement".
-     * @param old Old value.
-     * @param replacement Replacement value.
-     */
-    public void replaceArguments(final String old, final String replacement) {
-        this.methods()
-            .stream()
-            .map(XmlMethod::instructions)
-            .flatMap(Collection::stream)
-            .forEach(instruction -> instruction.replaceArguementsValues(old, replacement));
-    }
 
     /**
      * Class name.
