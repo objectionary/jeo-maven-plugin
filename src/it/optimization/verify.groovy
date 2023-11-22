@@ -29,5 +29,6 @@ assert log.contains("Hello, World!")
 assert new File(basedir, 'target/generated-sources/xmir/org/eolang/jeo/Application.xmir').exists()
 assert new File(basedir, 'target/generated-sources/eo/org/eolang/jeo/Application.eo').exists()
 //Check that class file was changed
-assert log.contains("Application.class was recompiled successfully.")
+assert log.contains("Application.class translated into Application.xmir (11351 bytes)")
+assert log.contains("Application.class compiled into Application.class (494 bytes)")
 true
