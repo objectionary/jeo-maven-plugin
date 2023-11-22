@@ -69,4 +69,29 @@ class DirectivesClassTest {
         );
     }
 
+    @Test
+    void parsesClassWithPackage() throws ImpossibleModificationException {
+        final DirectivesClass directives = new DirectivesClass();
+        final String clazz = "some/package/ClassInPackage";
+        new ClassReader(
+            new BytecodeClass(clazz)
+                .helloWorldMethod()
+                .bytecode()
+                .asBytes()
+        ).accept(directives, 0);
+        final String xml = new Xembler(directives).xml();
+        final String name = "ClassInPackage";
+        final String pckg = "some/package";
+        MatcherAssert.assertThat(
+            String.format(
+                "Can't parse '%s' class that placed under package '%s', result is: %n%s%n",
+                name,
+                pckg,
+                new XMLDocument(xml)
+            ),
+            xml,
+            new HasClass(name).inside(pckg)
+        );
+    }
+
 }

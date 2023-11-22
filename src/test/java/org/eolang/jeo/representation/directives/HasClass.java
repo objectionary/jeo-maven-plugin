@@ -24,6 +24,8 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.xml.XMLDocument;
+import java.util.ArrayList;
+import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -40,18 +42,36 @@ final class HasClass extends TypeSafeMatcher<String> {
     private final String name;
 
     /**
+     * Additional checks.
+     * List of xpaths that should be checked.
+     */
+    private final List<String> checks;
+
+    /**
      * Constructor.
      * @param name Class name.
      */
     HasClass(final String name) {
         this.name = name;
+        this.checks = new ArrayList<>(0);
+    }
+
+    /**
+     * Add additional check for package.
+     * @param pckg Package name.
+     * @return This matcher.
+     */
+    public HasClass inside(final String pckg) {
+        checks.add(String.format("/program/metas/meta/"));
+        return this;
     }
 
     @Override
     public boolean matchesSafely(final String item) {
-        return !new XMLDocument(item).xpath(
+        final XMLDocument document = new XMLDocument(item);
+        return !document.xpath(
             String.format("/program/objects/o[@name='%s']/text()", this.name)
-        ).isEmpty();
+        ).isEmpty() && this.checks.stream().map(document::xpath).noneMatch(List::isEmpty);
     }
 
     @Override
