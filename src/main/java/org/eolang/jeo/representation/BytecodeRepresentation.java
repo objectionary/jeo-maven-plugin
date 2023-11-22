@@ -25,7 +25,6 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import lombok.ToString;
@@ -146,14 +145,6 @@ public final class BytecodeRepresentation implements Representation {
                     directives
                 ),
                 exception
-            );
-        } catch (final IOException ioexception) {
-            throw new IllegalStateException(
-                String.format(
-                    "Can't build XML from %s, since the resulting XMIR is invalid",
-                    Arrays.toString(this.input)
-                ),
-                ioexception
             );
         }
     }
