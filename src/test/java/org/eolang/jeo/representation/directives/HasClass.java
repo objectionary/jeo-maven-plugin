@@ -26,6 +26,8 @@ package org.eolang.jeo.representation.directives;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -45,7 +47,7 @@ final class HasClass extends TypeSafeMatcher<String> {
      * Additional checks.
      * List of xpaths that should be checked.
      */
-    private final List<String> checks;
+    private final List<String> additional;
 
     /**
      * Constructor.
@@ -53,31 +55,55 @@ final class HasClass extends TypeSafeMatcher<String> {
      */
     HasClass(final String name) {
         this.name = name;
-        this.checks = new ArrayList<>(0);
+        this.additional = new ArrayList<>(0);
     }
 
     /**
      * Add additional check for package.
+     * Package example:
+     * <p>
+     * {@code
+     * <program>
+     *   <metas>
+     *     <meta line="1">
+     *        <head>package</head>
+     *        <tail>a.b.c</tail>
+     *        <part>a.b.c</part>
+     *     </meta>
+     *   </metas>
+     * </program>
+     * }
+     * </p>
      * @param pckg Package name.
      * @return This matcher.
      */
     public HasClass inside(final String pckg) {
-        checks.add(String.format("/program/metas/meta/"));
+        this.additional.add("/program/metas/meta/head[text()='package']/text()");
+        this.additional.add(String.format("/program/metas/meta/tail[text()='%s']/text()", pckg));
+        this.additional.add(String.format("/program/metas/meta/part[text()='%s']/text()", pckg));
         return this;
     }
 
     @Override
     public boolean matchesSafely(final String item) {
         final XMLDocument document = new XMLDocument(item);
-        return !document.xpath(
-            String.format("/program/objects/o[@name='%s']/text()", this.name)
-        ).isEmpty() && this.checks.stream().map(document::xpath).noneMatch(List::isEmpty);
+        return this.checks().stream().map(document::xpath).noneMatch(List::isEmpty);
     }
 
     @Override
     public void describeTo(final Description description) {
-        description.appendText("Received XMIR document doesn't have a class with name '")
-            .appendValue(this.name)
-            .appendText("' in it");
+        description.appendText("XMIR doesn't satisfy the following XPath expressions:\n")
+            .appendValueList("", "\n", "", this.checks());
+    }
+
+    /**
+     * All checks.
+     * @return List of XPath expressions.
+     */
+    private List<String> checks() {
+        return Stream.concat(
+            Stream.of(String.format("/program/objects/o[@name='%s']/text()", this.name)),
+            this.additional.stream()
+        ).collect(Collectors.toList());
     }
 }

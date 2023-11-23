@@ -81,7 +81,7 @@ class DirectivesClassTest {
         ).accept(directives, 0);
         final String xml = new Xembler(directives).xml();
         final String name = "ClassInPackage";
-        final String pckg = "some/package";
+        final String pckg = "some.package";
         MatcherAssert.assertThat(
             String.format(
                 "Can't parse '%s' class that placed under package '%s', result is: %n%s%n",
