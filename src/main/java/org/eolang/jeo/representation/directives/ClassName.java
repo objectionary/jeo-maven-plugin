@@ -10,12 +10,22 @@ public class ClassName {
     }
 
     public String pckg() {
-        return this.name.substring(0, this.name.lastIndexOf(ClassName.DELIMETER))
-            .replace(ClassName.DELIMETER, ".");
+        final String result;
+        final int index = this.name.lastIndexOf(ClassName.DELIMETER);
+        if (index == -1) {
+            result = "";
+        } else {
+            result = this.name.substring(0, index).replace(ClassName.DELIMETER, ".");
+        }
+        return result;
     }
 
     public String name() {
-        final String[] split = this.name.split(ClassName.DELIMETER);
-        return split[split.length - 1];
+        if (this.name.contains(ClassName.DELIMETER)) {
+            final String[] split = this.name.split(ClassName.DELIMETER);
+            return split[split.length - 1];
+        } else {
+            return this.name;
+        }
     }
 }
