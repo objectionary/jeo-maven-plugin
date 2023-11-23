@@ -49,7 +49,7 @@ final class BytecodeRepresentationTest {
             "The simplest class should contain the object with MethodByte name",
             new BytecodeRepresentation(new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE))
                 .toEO().xpath("/program/@name").get(0),
-            Matchers.equalTo("org/eolang/jeo/MethodByte")
+            Matchers.equalTo("MethodByte")
         );
     }
 

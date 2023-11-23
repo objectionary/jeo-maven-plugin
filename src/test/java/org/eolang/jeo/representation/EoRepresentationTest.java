@@ -63,7 +63,7 @@ class EoRepresentationTest {
         MatcherAssert.assertThat(
             "The XML representation of the EO object is not correct",
             new EoRepresentation(new BytecodeClass("org/eolang/foo/Math").xml()).toEO(),
-            XhtmlMatchers.hasXPath("/program[@name='org/eolang/foo/Math']")
+            XhtmlMatchers.hasXPath("/program[@name='Math']")
         );
     }
 

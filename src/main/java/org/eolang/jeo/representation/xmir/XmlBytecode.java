@@ -27,6 +27,7 @@ import com.jcabi.xml.XML;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.eolang.jeo.representation.directives.ClassName;
 
 /**
  * XML to Java bytecode.
@@ -52,9 +53,10 @@ public final class XmlBytecode {
      * @return Bytecode.
      */
     public Bytecode bytecode() {
-        final XmlClass clazz = new XmlProgram(this.xml).top();
+        final XmlProgram program = new XmlProgram(this.xml);
+        final XmlClass clazz = program.top();
         final BytecodeClass bytecode = new BytecodeClass(
-            clazz.name(),
+            new ClassName(program.pckg(), clazz.name()).full(),
             clazz.properties().toBytecodeProperties()
         );
         for (final XmlField field : clazz.fields()) {

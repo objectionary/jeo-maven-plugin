@@ -100,6 +100,19 @@ public class XmlProgram {
     }
 
     /**
+     * Retrieve program package.
+     * @return Package.
+     */
+    public String pckg() {
+        return new XmlNode(this.root)
+            .child(XmlProgram.PROGRAM)
+            .child("metas")
+            .child("meta")
+            .child("tail")
+            .text();
+    }
+
+    /**
      * Convert to XMIR .
      * @return XMIR.
      */

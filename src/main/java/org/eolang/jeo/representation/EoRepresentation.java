@@ -27,6 +27,7 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import java.util.List;
 import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
@@ -94,7 +95,18 @@ public final class EoRepresentation implements Representation {
 
     @Override
     public String name() {
-        return this.xml.xpath("/program/@name").get(0);
+        final String result;
+        final String pckg = this.xml.xpath("/program/metas/meta/tail/text()").stream()
+            .findFirst()
+            .orElse("")
+            .replace(".", "/");
+        final String name = this.xml.xpath("/program/@name").get(0);
+        if (pckg.isEmpty()) {
+            result = name;
+        } else {
+            result = String.format("%s/%s", pckg, name);
+        }
+        return result;
     }
 
     @Override

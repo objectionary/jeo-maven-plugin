@@ -1,12 +1,26 @@
 package org.eolang.jeo.representation.directives;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class ClassName {
 
     private final static String DELIMETER = "/";
     private final String name;
 
+    public ClassName(final String pckg, final String name) {
+        this(Stream.of(pckg, name)
+            .filter(s -> !s.isEmpty())
+            .map(s -> s.replace(".", ClassName.DELIMETER))
+            .collect(Collectors.joining(ClassName.DELIMETER)));
+    }
+
     public ClassName(final String name) {
         this.name = name;
+    }
+
+    public String full() {
+        return this.name;
     }
 
     public String pckg() {
