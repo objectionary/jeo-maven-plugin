@@ -63,15 +63,15 @@ final class HasClass extends TypeSafeMatcher<String> {
      * Package example:
      * <p>
      * {@code
-     * <program>
-     *   <metas>
-     *     <meta line="1">
-     *        <head>package</head>
-     *        <tail>a.b.c</tail>
-     *        <part>a.b.c</part>
-     *     </meta>
-     *   </metas>
-     * </program>
+     * &lt;program&gt;
+     *   &lt;metas&gt;
+     *     &lt;meta line="1"&gt;
+     *        &lt;head&gt;package&lt;/head&gt;
+     *        &lt;tail&gt;a.b.c&lt;/tail&gt;
+     *        &lt;part&gt;a.b.c&lt;/part&gt;
+     *     &lt;/meta&gt;
+     *   &lt;/metas&gt;
+     * &lt;/program&gt;
      * }
      * </p>
      * @param pckg Package name.

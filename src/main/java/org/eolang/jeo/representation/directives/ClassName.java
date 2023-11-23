@@ -43,14 +43,14 @@ public final class ClassName {
      * This delimiter is used to split full class name to package and class name.
      * The field {@code #name} uses this delimiter internally.
      */
-    private final static String DELIMITER = "/";
+    private static final String DELIMITER = "/";
 
     /**
      * Full class name.
      * This field contains full class name including package.
      * Example: {@code org/eolang/jeo/representation/directives/ClassName}.
      */
-    private final String name;
+    private final String fqn;
 
     /**
      * Constructor.
@@ -66,10 +66,10 @@ public final class ClassName {
 
     /**
      * Constructor.
-     * @param name
+     * @param name Full class name.
      */
     public ClassName(final String name) {
-        this.name = name;
+        this.fqn = name;
     }
 
     /**
@@ -77,21 +77,20 @@ public final class ClassName {
      * @return Full class name as is.
      */
     public String full() {
-        return this.name;
+        return this.fqn;
     }
 
     /**
      * Package.
-     * @return Package name in the following format:
-     * {@code org.eolang.jeo.representation.directives}.
+     * @return Package name in the following format: "org.eolang.jeo.representation.directives".
      */
     public String pckg() {
         final String result;
-        final int index = this.name.lastIndexOf(ClassName.DELIMITER);
+        final int index = this.fqn.lastIndexOf(ClassName.DELIMITER);
         if (index == -1) {
             result = "";
         } else {
-            result = this.name.substring(0, index).replace(ClassName.DELIMITER, ".");
+            result = this.fqn.substring(0, index).replace(ClassName.DELIMITER, ".");
         }
         return result;
     }
@@ -101,12 +100,14 @@ public final class ClassName {
      * @return Class name in the following format: {@code ClassName}.
      */
     public String name() {
-        if (this.name.contains(ClassName.DELIMITER)) {
-            final String[] split = this.name.split(ClassName.DELIMITER);
-            return split[split.length - 1];
+        final String result;
+        if (this.fqn.contains(ClassName.DELIMITER)) {
+            final String[] split = this.fqn.split(ClassName.DELIMITER);
+            result = split[split.length - 1];
         } else {
-            return this.name;
+            result = this.fqn;
         }
+        return result;
     }
 }
 
