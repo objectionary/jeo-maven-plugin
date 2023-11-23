@@ -111,8 +111,9 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
     ) {
         final String now = ZonedDateTime.now(ZoneOffset.UTC)
             .format(DateTimeFormatter.ISO_INSTANT);
+        final ClassName clazz = new ClassName(name);
         this.directives.add("program")
-            .attr("name", name)
+            .attr("name", clazz.name())
             .attr("version", "0.0.0")
             .attr("revision", "0.0.0")
             .attr("dob", now)
@@ -123,12 +124,18 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
             .add("errors").up()
             .add("sheets").up()
             .add("license").up()
-            .add("metas").up()
+            .add("metas")
+            .add("meta")
+            .add("head").set("package").up()
+            .add("tail").set(clazz.pckg()).up()
+            .add("part").set(clazz.pckg()).up()
+            .up()
+            .up()
             .attr("ms", System.currentTimeMillis())
             .add("objects");
         this.directives.add("o")
             .attr("abstract", "")
-            .attr("name", name)
+            .attr("name", clazz.name())
             .append(new DirectivesClassProperties(access, signature, supername, interfaces));
         super.visit(version, access, name, signature, supername, interfaces);
     }

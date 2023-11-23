@@ -93,5 +93,4 @@ class DirectivesClassTest {
             new HasClass(name).inside(pckg)
         );
     }
-
 }
