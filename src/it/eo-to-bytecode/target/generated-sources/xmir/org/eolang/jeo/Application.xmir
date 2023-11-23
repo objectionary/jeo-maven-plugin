@@ -11,7 +11,13 @@
 
   <license/>
 
-  <metas/>
+  <metas>
+    <meta>
+      <head>package</head>
+      <tail/>
+      <part/>
+    </meta>
+  </metas>
 
   <objects>
 
