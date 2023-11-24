@@ -30,11 +30,6 @@ import java.util.stream.Stream;
  * Class name.
  * Understands class name and package. Could extract them from full class name.
  * @since 0.1
- * @todo #271:30min Rename ClassName Class.
- *  Currently we have to classes with the same name:
- *  {@link ClassName} and
- *  {@link org.eolang.jeo.representation.ClassNameVisitor}. It makes sense to rename
- *  one of them to avoid confusion.
  */
 public final class ClassName {
 
