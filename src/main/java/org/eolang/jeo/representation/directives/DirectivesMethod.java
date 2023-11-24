@@ -1,136 +1,22 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2023 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 package org.eolang.jeo.representation.directives;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import org.eolang.jeo.representation.DefaultVersion;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+import java.util.List;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
-/**
- * Method printer.
- * ASM method visitor which scans the method and builds Xembly directives.
- * @since 0.1
- */
-@SuppressWarnings("PMD.TooManyMethods")
-public final class DirectivesMethod extends MethodVisitor implements Iterable<Directive> {
+public class DirectivesMethod implements Iterable<Directive> {
 
-    /**
-     * Xembly directives.
-     */
-    private final Directives directives;
+    private final String name;
+    private final DirectivesMethodProperties properties;
 
-    /**
-     * Constructor.
-     * @param directives Xembly directives
-     * @param visitor Method visitor
-     */
-    DirectivesMethod(
-        final Directives directives,
-        final MethodVisitor visitor
-    ) {
-        super(new DefaultVersion().api(), visitor);
-        this.directives = directives;
-    }
+    private final List<DirectivesInstruction> instructions;
 
-    @Override
-    public void visitInsn(final int opcode) {
-        this.opcode(opcode);
-        super.visitInsn(opcode);
-    }
-
-    @Override
-    public void visitFieldInsn(
-        final int opcode,
-        final String owner,
-        final String name,
-        final String descriptor
-    ) {
-        this.opcode(opcode, owner, name, descriptor);
-        super.visitFieldInsn(opcode, owner, name, descriptor);
-    }
-
-    @Override
-    public void visitIntInsn(final int opcode, final int operand) {
-        this.opcode(opcode, operand);
-        super.visitIntInsn(opcode, operand);
-    }
-
-    @Override
-    public void visitJumpInsn(final int opcode, final Label label) {
-        this.opcode(opcode, label);
-        super.visitJumpInsn(opcode, label);
-    }
-
-    @Override
-    public void visitTypeInsn(final int opcode, final String type) {
-        this.opcode(opcode, type);
-        super.visitTypeInsn(opcode, type);
-    }
-
-    @Override
-    public void visitVarInsn(final int opcode, final int varindex) {
-        this.opcode(opcode, varindex);
-        super.visitVarInsn(opcode, varindex);
-    }
-
-    @Override
-    public void visitMethodInsn(
-        final int opcode,
-        final String owner,
-        final String name,
-        final String descriptor,
-        final boolean isinterface
-    ) {
-        this.opcode(opcode, owner, name, descriptor);
-        super.visitMethodInsn(opcode, owner, name, descriptor, false);
-    }
-
-    @Override
-    public void visitLdcInsn(final Object value) {
-        this.opcode(Opcodes.LDC, value);
-        super.visitLdcInsn(value);
-    }
-
-    @Override
-    public void visitLabel(final Label label) {
-        this.directives.append(new DirectivesOperand(label));
-        super.visitLabel(label);
-    }
-
-    @Override
-    public void visitEnd() {
-        this.directives.up().up();
-        super.visitEnd();
-    }
-
-    @Override
-    public Iterator<Directive> iterator() {
-        return this.directives.iterator();
+    public DirectivesMethod(final String name, final DirectivesMethodProperties properties) {
+        this.name = name;
+        this.properties = properties;
+        this.instructions = new ArrayList<>(0);
     }
 
     /**
@@ -138,8 +24,28 @@ public final class DirectivesMethod extends MethodVisitor implements Iterable<Di
      * @param opcode Opcode
      * @param operands Operands
      */
-    private void opcode(final int opcode, final Object... operands) {
-        this.directives.append(new DirectivesInstruction(opcode, operands));
+    public void opcode(final int opcode, final Object... operands) {
+        this.instructions.add(new DirectivesInstruction(opcode, operands));
     }
 
+    @Override
+    public Iterator<Directive> iterator() {
+        Directives directives = new Directives();
+        final String name;
+        if (this.name.equals("<init>")) {
+            name = "new";
+        } else {
+            name = this.name;
+        }
+        directives.add("o")
+            .attr("abstract", "")
+            .attr("name", name)
+            .append(this.properties)
+            .add("o")
+            .attr("base", "seq")
+            .attr("name", "@");
+        this.instructions.forEach(directives::append);
+        directives.up().up();
+        return directives.iterator();
+    }
 }

@@ -79,6 +79,10 @@ final class DirectivesField implements Iterable<Directive> {
      */
     private final Object value;
 
+    public DirectivesField() {
+        this(0, "unknown", "I", "", "0");
+    }
+
     /**
      * Constructor.
      * @param access Access

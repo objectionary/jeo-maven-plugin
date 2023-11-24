@@ -27,6 +27,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicReference;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.ClassVisitor;
@@ -70,6 +71,8 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
      */
     private final Directives directives;
 
+    private final AtomicReference<DirectivesClass> clazz;
+
     /**
      * Constructor.
      * @param listing Bytecode listing.
@@ -99,6 +102,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         super(api);
         this.directives = directives;
         this.listing = listing;
+        this.clazz = new AtomicReference<>();
     }
 
     @Override
@@ -134,10 +138,17 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
             .up()
             .attr("ms", System.currentTimeMillis())
             .add("objects");
+        final DirectivesClassProperties props = new DirectivesClassProperties(
+            access,
+            signature,
+            supername,
+            interfaces
+        );
         this.directives.add("o")
             .attr("abstract", "")
             .attr("name", clazz.name())
-            .append(new DirectivesClassProperties(access, signature, supername, interfaces));
+            .append(props);
+        this.clazz.set(new DirectivesClass(clazz, props));
         super.visit(version, access, name, signature, supername, interfaces);
     }
 
@@ -149,7 +160,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String signature,
         final String[] exceptions
     ) {
-        final MethodVisitor result;
+        final DirectivesMethodVisitor result;
         if (name.equals("<init>")) {
             this.directives.add("o")
                 .attr("abstract", "")
@@ -158,7 +169,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
                 .add("o")
                 .attr("base", "seq")
                 .attr("name", "@");
-            result = new DirectivesMethod(
+            result = new DirectivesMethodVisitor(
                 this.directives,
                 super.visitMethod(access, name, descriptor, signature, exceptions)
             );
@@ -170,11 +181,12 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
                 .add("o")
                 .attr("base", "seq")
                 .attr("name", "@");
-            result = new DirectivesMethod(
+            result = new DirectivesMethodVisitor(
                 this.directives,
                 super.visitMethod(access, name, descriptor, signature, exceptions)
             );
         }
+        this.clazz.get().method(result);
         return result;
     }
 
@@ -186,12 +198,15 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String signature,
         final Object value
     ) {
+        this.clazz.get().field(new DirectivesField(access, name, descriptor, signature, value));
         this.directives.append(new DirectivesField(access, name, descriptor, signature, value));
         return super.visitField(access, name, descriptor, signature, value);
     }
 
     @Override
     public void visitEnd() {
+//        Here we should append the class to the directives.
+//        this.directives.append(this.clazz.get());
         this.directives.up();
         super.visitEnd();
     }

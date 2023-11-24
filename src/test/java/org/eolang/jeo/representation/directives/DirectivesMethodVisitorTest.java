@@ -36,10 +36,10 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link org.eolang.jeo.representation.directives.DirectivesMethod}.
- * We create {@link org.eolang.jeo.representation.directives.DirectivesMethod} only in the context
+ * Test case for {@link DirectivesMethodVisitor}.
+ * We create {@link DirectivesMethodVisitor} only in the context
  * of using {@link DirectivesClassVisitor} in other words,
- * {@link org.eolang.jeo.representation.directives.DirectivesMethod} can't be createad
+ * {@link DirectivesMethodVisitor} can't be createad
  * without {@link DirectivesClassVisitor} and it is the main
  * reason why in all the test we create
  * {@link DirectivesClassVisitor}.
@@ -47,7 +47,7 @@ import org.xembly.Xembler;
  * @since 0.1.0
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-class DirectivesMethodTest {
+class DirectivesMethodVisitorTest {
 
     @Test
     void parsesMethodInstructions() throws ImpossibleModificationException {
