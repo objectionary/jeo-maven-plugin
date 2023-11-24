@@ -50,7 +50,7 @@ import org.xembly.Directives;
  *  to do it. At least it leads to errors when argument type is an array or class.
  *  So we have to test this cases and maybe create a better strategy for arguments naming.
  * @todo #271:90min Split DirectivesClass into two separate classes.
- *  Currently {@link DirectivesClass} is responsible for two things:
+ *  Currently {@link DirectivesClassVisitor} is responsible for two things:
  *  - Scanning bytecode class/
  *  - Building Xembly directives.
  *  We have to split this class into two separate classes:
@@ -58,7 +58,7 @@ import org.xembly.Directives;
  *  - DirectivesClass - responsible for building Xembly directives according with scanned bytecode.
  */
 @SuppressWarnings({"PMD.UseObjectForClearerAPI", "PMD.AvoidDuplicateLiterals"})
-public final class DirectivesClass extends ClassVisitor implements Iterable<Directive> {
+public final class DirectivesClassVisitor extends ClassVisitor implements Iterable<Directive> {
 
     /**
      * Bytecode listing.
@@ -74,14 +74,14 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
      * Constructor.
      * @param listing Bytecode listing.
      */
-    public DirectivesClass(final String listing) {
+    public DirectivesClassVisitor(final String listing) {
         this(new DefaultVersion().api(), new Directives(), listing);
     }
 
     /**
      * Constructor.
      */
-    DirectivesClass() {
+    DirectivesClassVisitor() {
         this("");
     }
 
@@ -91,7 +91,7 @@ public final class DirectivesClass extends ClassVisitor implements Iterable<Dire
      * @param directives Xembly directives.
      * @param listing Bytecode listing.
      */
-    private DirectivesClass(
+    private DirectivesClassVisitor(
         final int api,
         final Directives directives,
         final String listing

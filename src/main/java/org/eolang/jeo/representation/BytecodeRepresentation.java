@@ -35,7 +35,7 @@ import org.cactoos.io.InputOf;
 import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
-import org.eolang.jeo.representation.directives.DirectivesClass;
+import org.eolang.jeo.representation.directives.DirectivesClassVisitor;
 import org.eolang.parser.Schema;
 import org.objectweb.asm.ClassReader;
 import org.xembly.ImpossibleModificationException;
@@ -129,7 +129,7 @@ public final class BytecodeRepresentation implements Representation {
 
     @Override
     public XML toEO() {
-        final DirectivesClass directives = new DirectivesClass(
+        final DirectivesClassVisitor directives = new DirectivesClassVisitor(
             new Base64Bytecode(this.input).asString()
         );
         try {

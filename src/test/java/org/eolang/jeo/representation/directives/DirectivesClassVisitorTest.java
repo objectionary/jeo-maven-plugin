@@ -32,14 +32,14 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link org.eolang.jeo.representation.directives.DirectivesClass}.
+ * Test case for {@link DirectivesClassVisitor}.
  * @since 0.1.0
  */
-class DirectivesClassTest {
+class DirectivesClassVisitorTest {
 
     @Test
     void parsesSimpleClassWithoutConstructor() throws ImpossibleModificationException {
-        final DirectivesClass directives = new DirectivesClass();
+        final DirectivesClassVisitor directives = new DirectivesClassVisitor();
         new ClassReader(new BytecodeClass().bytecode().asBytes()).accept(directives, 0);
         MatcherAssert.assertThat(
             "Can't parse simple class without constructor",
@@ -50,7 +50,7 @@ class DirectivesClassTest {
 
     @Test
     void parsesSimpleClassWithMethod() throws ImpossibleModificationException {
-        final DirectivesClass directives = new DirectivesClass();
+        final DirectivesClassVisitor directives = new DirectivesClassVisitor();
         final String clazz = "WithMethod";
         new ClassReader(
             new BytecodeClass(clazz)
@@ -71,7 +71,7 @@ class DirectivesClassTest {
 
     @Test
     void parsesClassWithPackage() throws ImpossibleModificationException {
-        final DirectivesClass directives = new DirectivesClass();
+        final DirectivesClassVisitor directives = new DirectivesClassVisitor();
         final String clazz = "some/package/ClassInPackage";
         new ClassReader(
             new BytecodeClass(clazz)

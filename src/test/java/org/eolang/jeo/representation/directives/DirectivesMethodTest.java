@@ -38,11 +38,11 @@ import org.xembly.Xembler;
 /**
  * Test case for {@link org.eolang.jeo.representation.directives.DirectivesMethod}.
  * We create {@link org.eolang.jeo.representation.directives.DirectivesMethod} only in the context
- * of using {@link org.eolang.jeo.representation.directives.DirectivesClass} in other words,
+ * of using {@link DirectivesClassVisitor} in other words,
  * {@link org.eolang.jeo.representation.directives.DirectivesMethod} can't be createad
- * without {@link org.eolang.jeo.representation.directives.DirectivesClass} and it is the main
+ * without {@link DirectivesClassVisitor} and it is the main
  * reason why in all the test we create
- * {@link org.eolang.jeo.representation.directives.DirectivesClass}.
+ * {@link DirectivesClassVisitor}.
  *
  * @since 0.1.0
  */
@@ -51,7 +51,7 @@ class DirectivesMethodTest {
 
     @Test
     void parsesMethodInstructions() throws ImpossibleModificationException {
-        final DirectivesClass visitor = new DirectivesClass();
+        final DirectivesClassVisitor visitor = new DirectivesClassVisitor();
         new ClassReader(
             new BytecodeClass()
                 .withMethod("main")
