@@ -27,6 +27,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
+import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;

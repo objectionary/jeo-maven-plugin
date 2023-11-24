@@ -30,14 +30,14 @@ import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 
 /**
- * Test case for {@link org.eolang.jeo.representation.ClassName}.
+ * Test case for {@link ClassNameVisitor}.
  * @since 0.1.0
  */
-class ClassNameTest {
+class ClassNameVisitorTest {
 
     @Test
     void retrievesClassName() {
-        final ClassName name = new ClassName();
+        final ClassNameVisitor name = new ClassNameVisitor();
         final String expected = "representation/asm/ClassNameTest";
         new ClassReader(new BytecodeClass(expected).bytecode().asBytes())
             .accept(name, 0);

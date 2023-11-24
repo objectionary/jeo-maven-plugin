@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
-import org.eolang.jeo.representation.directives.ClassName;
 import org.eolang.jeo.representation.xmir.XmlBytecode;
 import org.eolang.parser.Schema;
 

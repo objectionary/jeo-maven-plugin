@@ -122,7 +122,7 @@ public final class BytecodeRepresentation implements Representation {
 
     @Override
     public String name() {
-        final ClassName name = new ClassName();
+        final ClassNameVisitor name = new ClassNameVisitor();
         new ClassReader(this.input).accept(name, 0);
         return name.asString();
     }

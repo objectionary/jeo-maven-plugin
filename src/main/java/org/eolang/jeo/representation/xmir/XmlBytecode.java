@@ -27,7 +27,7 @@ import com.jcabi.xml.XML;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
-import org.eolang.jeo.representation.directives.ClassName;
+import org.eolang.jeo.representation.ClassName;
 
 /**
  * XML to Java bytecode.

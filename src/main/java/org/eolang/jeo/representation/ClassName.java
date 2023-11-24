@@ -23,71 +23,91 @@
  */
 package org.eolang.jeo.representation;
 
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
-import org.objectweb.asm.ClassVisitor;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Class name.
- * @since 0.1.0
+ * Understands class name and package. Could extract them from full class name.
+ * @since 0.1
+ * @todo #271:30min Rename ClassName Class.
+ *  Currently we have to classes with the same name:
+ *  {@link ClassName} and
+ *  {@link org.eolang.jeo.representation.ClassNameVisitor}. It makes sense to rename
+ *  one of them to avoid confusion.
  */
-@SuppressWarnings("PMD.UseObjectForClearerAPI")
-public final class ClassName extends ClassVisitor {
+public final class ClassName {
 
     /**
-     * Atomic reference to store class name.
+     * Internal delimiter.
+     * This delimiter is used to split full class name to package and class name.
+     * The field {@code #name} uses this delimiter internally.
      */
-    private final AtomicReference<String> bag;
+    private static final String DELIMITER = "/";
 
     /**
-     * Constructor.
+     * Full class name.
+     * This field contains full class name including package.
+     * Example: {@code org/eolang/jeo/representation/directives/ClassName}.
      */
-    public ClassName() {
-        this(new AtomicReference<>());
-    }
-
-    /**
-     * Constructor.
-     * @param bag Atomic reference to store class name.
-     */
-    private ClassName(final AtomicReference<String> bag) {
-        this(new DefaultVersion().api(), bag);
-    }
+    private final String fqn;
 
     /**
      * Constructor.
-     * @param api ASM API version.
-     * @param bag Atomic reference to store class name.
+     * @param pckg Package
+     * @param name Class name
      */
-    private ClassName(final int api, final AtomicReference<String> bag) {
-        super(api);
-        this.bag = bag;
-    }
-
-    @Override
-    public void visit(
-        final int version,
-        final int access,
-        final String name,
-        final String signature,
-        final String supername,
-        final String[] interfaces
-    ) {
-        this.bag.set(name);
-        super.visit(version, access, name, signature, supername, interfaces);
+    public ClassName(final String pckg, final String name) {
+        this(Stream.of(pckg, name)
+            .filter(s -> !s.isEmpty())
+            .map(s -> s.replace(".", ClassName.DELIMITER))
+            .collect(Collectors.joining(ClassName.DELIMITER)));
     }
 
     /**
-     * Get class name.
-     * @return Class name.
+     * Constructor.
+     * @param name Full class name.
      */
-    public String asString() {
-        final String last = this.bag.get();
-        if (Objects.isNull(last)) {
-            throw new IllegalStateException(
-                "Class name is not set, bug is empty. Use #visit() method to set it."
-            );
+    public ClassName(final String name) {
+        this.fqn = name;
+    }
+
+    /**
+     * Full class name.
+     * @return Full class name as is.
+     */
+    public String full() {
+        return this.fqn;
+    }
+
+    /**
+     * Package.
+     * @return Package name in the following format: "org.eolang.jeo.representation.directives".
+     */
+    public String pckg() {
+        final String result;
+        final int index = this.fqn.lastIndexOf(ClassName.DELIMITER);
+        if (index == -1) {
+            result = "";
+        } else {
+            result = this.fqn.substring(0, index).replace(ClassName.DELIMITER, ".");
         }
-        return last;
+        return result;
+    }
+
+    /**
+     * Class name.
+     * @return Class name in the following format: {@code ClassName}.
+     */
+    public String name() {
+        final String result;
+        if (this.fqn.contains(ClassName.DELIMITER)) {
+            final String[] split = this.fqn.split(ClassName.DELIMITER);
+            result = split[split.length - 1];
+        } else {
+            result = this.fqn;
+        }
+        return result;
     }
 }
+
