@@ -41,6 +41,7 @@ class DirectivesClassTest {
     @Test
     void createsWithSimpleConstructor() {
         MatcherAssert.assertThat(
+            "Can't create class with simple constructor",
             new XMLDocument(
                 new Xembler(
                     new DirectivesClass(new ClassName("Neo"), new DirectivesClassProperties()),
@@ -70,7 +71,10 @@ class DirectivesClassTest {
             new Transformers.Node()
         ).xmlQuietly();
         MatcherAssert.assertThat(
-            String.format("Can't append field, result is: '%s'", new XMLDocument(xml)),
+            String.format(
+                "Can't append field to the class; result is: '%s'",
+                new XMLDocument(xml)
+            ),
             xml,
             XhtmlMatchers.hasXPath("/o[@name='Neo']/o[@base='field']")
         );
@@ -83,7 +87,10 @@ class DirectivesClassTest {
             new Transformers.Node()
         ).xmlQuietly();
         MatcherAssert.assertThat(
-            String.format("Can't append method, result is: '%s'", new XMLDocument(xml)),
+            String.format(
+                "Can't append method to the class, or the method is appended wrongly; result is: '%s'",
+                new XMLDocument(xml)
+            ),
             xml,
             XhtmlMatchers.hasXPath("/o[@name='Neo']/o[@name='method']")
         );
