@@ -50,13 +50,6 @@ import org.xembly.Directives;
  *  method argument names `arg__I__0` and `arg__Ljava/lang/String__1`. This is not a good way
  *  to do it. At least it leads to errors when argument type is an array or class.
  *  So we have to test this cases and maybe create a better strategy for arguments naming.
- * @todo #271:90min Split DirectivesClass into two separate classes.
- *  Currently {@link DirectivesClassVisitor} is responsible for two things:
- *  - Scanning bytecode class/
- *  - Building Xembly directives.
- *  We have to split this class into two separate classes:
- *  - DirectivesClassVisitor - responsible for scanning bytecode class.
- *  - DirectivesClass - responsible for building Xembly directives according with scanned bytecode.
  */
 @SuppressWarnings({"PMD.UseObjectForClearerAPI", "PMD.AvoidDuplicateLiterals"})
 public final class DirectivesClassVisitor extends ClassVisitor implements Iterable<Directive> {
@@ -71,6 +64,11 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
      */
     private final Directives directives;
 
+    /**
+     * Class directives.
+     * This field uses atomic reference because the field can't be initialized in the constructor.
+     * It is ASM framework limitation.
+     */
     private final AtomicReference<DirectivesClass> clazz;
 
     /**
@@ -144,10 +142,6 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
             supername,
             interfaces
         );
-//        this.directives.add("o")
-//            .attr("abstract", "")
-//            .attr("name", clazz.name())
-//            .append(props);
         this.clazz.set(new DirectivesClass(clazz, props));
         super.visit(version, access, name, signature, supername, interfaces);
     }
@@ -160,33 +154,8 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String signature,
         final String[] exceptions
     ) {
-//        final DirectivesMethodVisitor result;
-//        if (name.equals("<init>")) {
-//            this.directives.add("o")
-//                .attr("abstract", "")
-//                .attr("name", "new")
-//                .append(new DirectivesMethodProperties(access, descriptor, signature, exceptions))
-//                .add("o")
-//                .attr("base", "seq")
-//                .attr("name", "@");
-//            result = new DirectivesMethodVisitor(
-//                this.directives,
-//                super.visitMethod(access, name, descriptor, signature, exceptions)
-//            );
-//        } else {
-//            this.directives.add("o")
-//                .attr("abstract", "")
-//                .attr("name", name)
-//                .append(new DirectivesMethodProperties(access, descriptor, signature, exceptions))
-//                .add("o")
-//                .attr("base", "seq")
-//                .attr("name", "@");
-//            result = new DirectivesMethodVisitor(
-//                this.directives,
-//                super.visitMethod(access, name, descriptor, signature, exceptions)
-//            );
-//        }
-        final DirectivesMethod method = new DirectivesMethod(name,
+        final DirectivesMethod method = new DirectivesMethod(
+            name,
             new DirectivesMethodProperties(access, descriptor, signature, exceptions)
         );
         this.clazz.get().method(method);
@@ -204,13 +173,11 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final Object value
     ) {
         this.clazz.get().field(new DirectivesField(access, name, descriptor, signature, value));
-//        this.directives.append(new DirectivesField(access, name, descriptor, signature, value));
         return super.visitField(access, name, descriptor, signature, value);
     }
 
     @Override
     public void visitEnd() {
-//        Here we should append the class to the directives.
         this.directives.append(this.clazz.get());
         this.directives.up();
         super.visitEnd();
