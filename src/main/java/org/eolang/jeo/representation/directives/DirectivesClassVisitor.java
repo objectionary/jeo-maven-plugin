@@ -144,10 +144,10 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
             supername,
             interfaces
         );
-        this.directives.add("o")
-            .attr("abstract", "")
-            .attr("name", clazz.name())
-            .append(props);
+//        this.directives.add("o")
+//            .attr("abstract", "")
+//            .attr("name", clazz.name())
+//            .append(props);
         this.clazz.set(new DirectivesClass(clazz, props));
         super.visit(version, access, name, signature, supername, interfaces);
     }
@@ -160,34 +160,39 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String signature,
         final String[] exceptions
     ) {
-        final DirectivesMethodVisitor result;
-        if (name.equals("<init>")) {
-            this.directives.add("o")
-                .attr("abstract", "")
-                .attr("name", "new")
-                .append(new DirectivesMethodProperties(access, descriptor, signature, exceptions))
-                .add("o")
-                .attr("base", "seq")
-                .attr("name", "@");
-            result = new DirectivesMethodVisitor(
-                this.directives,
-                super.visitMethod(access, name, descriptor, signature, exceptions)
-            );
-        } else {
-            this.directives.add("o")
-                .attr("abstract", "")
-                .attr("name", name)
-                .append(new DirectivesMethodProperties(access, descriptor, signature, exceptions))
-                .add("o")
-                .attr("base", "seq")
-                .attr("name", "@");
-            result = new DirectivesMethodVisitor(
-                this.directives,
-                super.visitMethod(access, name, descriptor, signature, exceptions)
-            );
-        }
-        this.clazz.get().method(result);
-        return result;
+//        final DirectivesMethodVisitor result;
+//        if (name.equals("<init>")) {
+//            this.directives.add("o")
+//                .attr("abstract", "")
+//                .attr("name", "new")
+//                .append(new DirectivesMethodProperties(access, descriptor, signature, exceptions))
+//                .add("o")
+//                .attr("base", "seq")
+//                .attr("name", "@");
+//            result = new DirectivesMethodVisitor(
+//                this.directives,
+//                super.visitMethod(access, name, descriptor, signature, exceptions)
+//            );
+//        } else {
+//            this.directives.add("o")
+//                .attr("abstract", "")
+//                .attr("name", name)
+//                .append(new DirectivesMethodProperties(access, descriptor, signature, exceptions))
+//                .add("o")
+//                .attr("base", "seq")
+//                .attr("name", "@");
+//            result = new DirectivesMethodVisitor(
+//                this.directives,
+//                super.visitMethod(access, name, descriptor, signature, exceptions)
+//            );
+//        }
+        final DirectivesMethod method = new DirectivesMethod(name,
+            new DirectivesMethodProperties(access, descriptor, signature, exceptions)
+        );
+        this.clazz.get().method(method);
+        return new DirectivesMethodVisitor(method,
+            super.visitMethod(access, name, descriptor, signature, exceptions)
+        );
     }
 
     @Override
@@ -199,14 +204,14 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final Object value
     ) {
         this.clazz.get().field(new DirectivesField(access, name, descriptor, signature, value));
-        this.directives.append(new DirectivesField(access, name, descriptor, signature, value));
+//        this.directives.append(new DirectivesField(access, name, descriptor, signature, value));
         return super.visitField(access, name, descriptor, signature, value);
     }
 
     @Override
     public void visitEnd() {
 //        Here we should append the class to the directives.
-//        this.directives.append(this.clazz.get());
+        this.directives.append(this.clazz.get());
         this.directives.up();
         super.visitEnd();
     }

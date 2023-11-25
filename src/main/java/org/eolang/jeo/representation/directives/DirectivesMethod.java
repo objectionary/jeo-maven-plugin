@@ -11,12 +11,20 @@ public class DirectivesMethod implements Iterable<Directive> {
     private final String name;
     private final DirectivesMethodProperties properties;
 
-    private final List<DirectivesInstruction> instructions;
+    private final List<Iterable<Directive>> instructions;
+
+    public DirectivesMethod(final String name) {
+        this(name, new DirectivesMethodProperties());
+    }
 
     public DirectivesMethod(final String name, final DirectivesMethodProperties properties) {
         this.name = name;
         this.properties = properties;
         this.instructions = new ArrayList<>(0);
+    }
+
+    public void operand(final DirectivesOperand directives) {
+        this.instructions.add(directives);
     }
 
     /**

@@ -53,13 +53,13 @@ class DirectivesClassTest {
     @Test
     void appendsMethod() {
         final String xml = new Xembler(
-            new DirectivesClass(new ClassName("Neo")).method(new DirectivesMethod()),
+            new DirectivesClass(new ClassName("Neo")).method(new DirectivesMethod("method")),
             new Transformers.Node()
         ).xmlQuietly();
         MatcherAssert.assertThat(
             String.format("Can't append method, result is: '%s'", new XMLDocument(xml)),
             xml,
-            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[@base='method']")
+            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[@name='method']")
         );
     }
 

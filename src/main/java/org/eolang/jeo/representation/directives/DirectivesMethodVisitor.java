@@ -29,7 +29,6 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Method printer.
@@ -40,23 +39,22 @@ import org.xembly.Directives;
 public final class DirectivesMethodVisitor extends MethodVisitor implements Iterable<Directive> {
 
     /**
-     * Xembly directives.
+     * Method directives.
      */
-    private final Directives directives;
-
     private final DirectivesMethod method;
+
 
     /**
      * Constructor.
-     * @param directives Xembly directives
+     * @param method Method
      * @param visitor Method visitor
      */
     DirectivesMethodVisitor(
-        final Directives directives,
+        final DirectivesMethod method,
         final MethodVisitor visitor
     ) {
         super(new DefaultVersion().api(), visitor);
-        this.directives = directives;
+        this.method = method;
     }
 
     @Override
@@ -120,19 +118,18 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
 
     @Override
     public void visitLabel(final Label label) {
-        this.directives.append(new DirectivesOperand(label));
+        this.method.operand(new DirectivesOperand(label));
         super.visitLabel(label);
     }
 
     @Override
     public void visitEnd() {
-        this.directives.up().up();
         super.visitEnd();
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return this.directives.iterator();
+        return this.method.iterator();
     }
 
     /**
@@ -141,7 +138,7 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
      * @param operands Operands
      */
     private void opcode(final int opcode, final Object... operands) {
-        this.directives.append(new DirectivesInstruction(opcode, operands));
+        this.method.opcode(opcode, operands);
     }
 
 }

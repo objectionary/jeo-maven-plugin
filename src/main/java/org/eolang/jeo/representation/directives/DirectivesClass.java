@@ -27,7 +27,7 @@ public class DirectivesClass implements Iterable<Directive> {
     public DirectivesClass(
         final ClassName name,
         final DirectivesClassProperties properties,
-        final List<DirectivesMethodVisitor> methods,
+        final List<DirectivesMethod> methods,
         final List<DirectivesField> fields
     ) {
         this.name = name;

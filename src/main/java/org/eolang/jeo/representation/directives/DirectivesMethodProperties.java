@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import java.util.Optional;
+import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -57,6 +58,10 @@ final class DirectivesMethodProperties implements Iterable<Directive> {
      * Method exceptions.
      */
     private final String[] exceptions;
+
+    public DirectivesMethodProperties() {
+        this(Opcodes.ACC_PUBLIC, "()V", "", "", "");
+    }
 
     /**
      * Constructor.
