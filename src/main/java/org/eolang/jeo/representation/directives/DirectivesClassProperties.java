@@ -54,7 +54,10 @@ final class DirectivesClassProperties implements Iterable<Directive> {
      */
     private final String[] interfaces;
 
-    DirectivesClassProperties(){
+    /**
+     * Constructor.
+     */
+    DirectivesClassProperties() {
         this(0, "", "", new String[0]);
     }
 

@@ -43,7 +43,6 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
      */
     private final DirectivesMethod method;
 
-
     /**
      * Constructor.
      * @param method Method
@@ -123,11 +122,6 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     }
 
     @Override
-    public void visitEnd() {
-        super.visitEnd();
-    }
-
-    @Override
     public Iterator<Directive> iterator() {
         return this.method.iterator();
     }
@@ -140,5 +134,4 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     private void opcode(final int opcode, final Object... operands) {
         this.method.opcode(opcode, operands);
     }
-
 }

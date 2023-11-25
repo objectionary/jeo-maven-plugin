@@ -59,7 +59,10 @@ final class DirectivesMethodProperties implements Iterable<Directive> {
      */
     private final String[] exceptions;
 
-    public DirectivesMethodProperties() {
+    /**
+     * Constructor.
+     */
+    DirectivesMethodProperties() {
         this(Opcodes.ACC_PUBLIC, "()V", "", "", "");
     }
 

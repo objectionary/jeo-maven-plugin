@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import java.util.Optional;
+import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -79,8 +80,11 @@ final class DirectivesField implements Iterable<Directive> {
      */
     private final Object value;
 
-    public DirectivesField() {
-        this(0, "unknown", "I", "", "0");
+    /**
+     * Constructor.
+     */
+    DirectivesField() {
+        this(Opcodes.ACC_PUBLIC, "unknown", "I", "", "0");
     }
 
     /**
@@ -108,14 +112,14 @@ final class DirectivesField implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives();
-        directives.add("o")
+        return new Directives().add("o")
             .attr("base", "field")
             .attr("name", this.name)
             .append(new DirectivesData(this.access))
             .append(new DirectivesData(this.descriptor))
             .append(new DirectivesData(this.signature))
-            .append(new DirectivesData(this.value));
-        return directives.up().iterator();
+            .append(new DirectivesData(this.value))
+            .up()
+            .iterator();
     }
 }

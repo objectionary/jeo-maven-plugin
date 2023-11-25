@@ -114,9 +114,9 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
     ) {
         final String now = ZonedDateTime.now(ZoneOffset.UTC)
             .format(DateTimeFormatter.ISO_INSTANT);
-        final ClassName clazz = new ClassName(name);
+        final ClassName classname = new ClassName(name);
         this.directives.add("program")
-            .attr("name", clazz.name())
+            .attr("name", classname.name())
             .attr("version", "0.0.0")
             .attr("revision", "0.0.0")
             .attr("dob", now)
@@ -130,8 +130,8 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
             .add("metas")
             .add("meta")
             .add("head").set("package").up()
-            .add("tail").set(clazz.pckg()).up()
-            .add("part").set(clazz.pckg()).up()
+            .add("tail").set(classname.pckg()).up()
+            .add("part").set(classname.pckg()).up()
             .up()
             .up()
             .attr("ms", System.currentTimeMillis())
@@ -142,7 +142,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
             supername,
             interfaces
         );
-        this.clazz.set(new DirectivesClass(clazz, props));
+        this.clazz.set(new DirectivesClass(classname, props));
         super.visit(version, access, name, signature, supername, interfaces);
     }
 
@@ -159,7 +159,8 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
             new DirectivesMethodProperties(access, descriptor, signature, exceptions)
         );
         this.clazz.get().method(method);
-        return new DirectivesMethodVisitor(method,
+        return new DirectivesMethodVisitor(
+            method,
             super.visitMethod(access, name, descriptor, signature, exceptions)
         );
     }
