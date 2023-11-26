@@ -30,7 +30,9 @@ SOFTWARE.
   <packaging>jar</packaging>
   <description>
     Integration test that checks correct transformation Java generics from
-    bytecode into EO and back
+    bytecode into EO and back.
+    To run only this test just run the following command:
+    "mvn clean integration-test invoker:run -Dinvoker.test=generics -DskipTests"
   </description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
