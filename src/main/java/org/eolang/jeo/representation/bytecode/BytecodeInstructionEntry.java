@@ -378,6 +378,107 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                 Opcodes.NEW,
                 String.valueOf(arguments.get(0))
             )
+        ),
+
+        /**
+         * Create new array with count elements of primitive type identified by atype.
+         */
+        NEWARRAY(Opcodes.NEWARRAY, (visitor, arguments) ->
+            visitor.visitIntInsn(
+                Opcodes.NEWARRAY,
+                (Integer) arguments.get(0)
+            )
+        ),
+
+        /**
+         * Create new array of reference type identified by class reference in constant pool index.
+         */
+        ANEWARRAY(Opcodes.ANEWARRAY, (visitor, arguments) ->
+            visitor.visitTypeInsn(
+                Opcodes.ANEWARRAY,
+                String.valueOf(arguments.get(0))
+            )
+        ),
+
+        /**
+         * Get the length of an array.
+         */
+        ARRAYLENGTH(Opcodes.ARRAYLENGTH, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.ARRAYLENGTH)
+        ),
+
+        /**
+         * Throws an error or exception.
+         * Notice that the rest of the stack is cleared, leaving only a reference to the Throwable.
+         */
+        ATHROW(Opcodes.ATHROW, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.ATHROW)
+        ),
+
+        /**
+         * Checks whether an objectref is of a certain type.
+         * The class reference of which is in the constant pool at index.
+         */
+        CHECKCAST(Opcodes.CHECKCAST, (visitor, arguments) ->
+            visitor.visitTypeInsn(
+                Opcodes.CHECKCAST,
+                String.valueOf(arguments.get(0))
+            )
+        ),
+
+        /**
+         * Determines if an object objectref is of a given type.
+         * Identified by class reference index in constant pool .
+         */
+        INSTANCEOF(Opcodes.INSTANCEOF, (visitor, arguments) ->
+            visitor.visitTypeInsn(
+                Opcodes.INSTANCEOF,
+                String.valueOf(arguments.get(0))
+            )
+        ),
+
+        /**
+         * Enter monitor for object ("grab the lock" – start of synchronized() section).
+         */
+        MONITORENTER(Opcodes.MONITORENTER, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.MONITORENTER)
+        ),
+
+        /**
+         * Exit monitor for object ("release the lock" – end of synchronized() section).
+         */
+        MONITOREXIT(Opcodes.MONITOREXIT, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.MONITOREXIT)
+        ),
+
+        /**
+         * Create new multidimensional array.
+         */
+        MULTIANEWARRAY(Opcodes.MULTIANEWARRAY, (visitor, arguments) ->
+            visitor.visitMultiANewArrayInsn(
+                String.valueOf(arguments.get(0)),
+                (Integer) arguments.get(1)
+            )
+        ),
+
+        /**
+         * If value is null, branch to instruction at a label.
+         */
+        IFNULL(Opcodes.IFNULL, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IFNULL,
+                (org.objectweb.asm.Label) arguments.get(0)
+            )
+        ),
+
+        /**
+         * If value is not null, branch to instruction at a label.
+         */
+        IFNONNULL(Opcodes.IFNONNULL, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IFNONNULL,
+                (org.objectweb.asm.Label) arguments.get(0)
+            )
         );
 
         /**
