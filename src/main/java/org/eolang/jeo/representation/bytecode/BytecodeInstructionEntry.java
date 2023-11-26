@@ -205,6 +205,62 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
+         * Store int into array.
+         */
+        IASTORE(Opcodes.IASTORE, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.IASTORE)
+        ),
+
+        /**
+         * Store long into array.
+         */
+        LASTORE(Opcodes.LASTORE, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.LASTORE)
+        ),
+
+        /**
+         * Store float into array.
+         */
+        FASTORE(Opcodes.FASTORE, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.FASTORE)
+        ),
+
+        /**
+         * Store double into array.
+         */
+        DASTORE(Opcodes.DASTORE, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.DASTORE)
+        ),
+
+        /**
+         * Store reference into array.
+         */
+        AASTORE(Opcodes.AASTORE, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.AASTORE)
+        ),
+
+        /**
+         * Store byte or boolean into array.
+         */
+        BASTORE(Opcodes.BASTORE, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.BASTORE)
+        ),
+
+        /**
+         * Store char into array.
+         */
+        CASTORE(Opcodes.CASTORE, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.CASTORE)
+        ),
+
+        /**
+         * Store short into array.
+         */
+        SASTORE(Opcodes.SASTORE, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.SASTORE)
+        ),
+
+        /**
          * Discard the top value on the stack.
          */
         POP(Opcodes.POP, (visitor, arguments) ->
