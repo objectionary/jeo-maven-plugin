@@ -273,6 +273,13 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
+         * Return a reference from a method.
+         */
+        ARETURN(Opcodes.ARETURN, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.ARETURN)
+        ),
+
+        /**
          * Return void from a method.
          */
         RETURN(Opcodes.RETURN, (visitor, arguments) ->

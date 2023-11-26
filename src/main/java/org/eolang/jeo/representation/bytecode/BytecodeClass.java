@@ -148,7 +148,18 @@ public final class BytecodeClass {
         this.methods.forEach(BytecodeMethod::write);
         this.writer.visitEnd();
         final byte[] bytes = this.writer.toByteArray();
-        CheckClassAdapter.verify(new ClassReader(bytes), false, new PrintWriter(System.err));
+        try {
+            CheckClassAdapter.verify(
+                new ClassReader(bytes),
+                false,
+                new PrintWriter(System.err)
+            );
+        } catch (final IllegalArgumentException exception) {
+            throw new IllegalArgumentException(
+                String.format("Can't create bytecode for the class '%s' ", this.name),
+                exception
+            );
+        }
         return new Bytecode(bytes);
     }
 
