@@ -386,7 +386,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         NEWARRAY(Opcodes.NEWARRAY, (visitor, arguments) ->
             visitor.visitIntInsn(
                 Opcodes.NEWARRAY,
-                (Integer) arguments.get(0)
+                (int) arguments.get(0)
             )
         ),
 
@@ -457,7 +457,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         MULTIANEWARRAY(Opcodes.MULTIANEWARRAY, (visitor, arguments) ->
             visitor.visitMultiANewArrayInsn(
                 String.valueOf(arguments.get(0)),
-                (Integer) arguments.get(1)
+                (int) arguments.get(1)
             )
         ),
 
