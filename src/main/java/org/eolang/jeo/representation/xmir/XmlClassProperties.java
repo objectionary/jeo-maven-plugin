@@ -42,10 +42,26 @@ final class XmlClassProperties {
 
     /**
      * Constructor.
+     * @param xml XML representation of a class.
+     */
+    XmlClassProperties(final String xml) {
+        this(new XMLDocument(xml));
+    }
+
+    /**
+     * Constructor.
      * @param clazz XMl representation of a class.
      */
     XmlClassProperties(final Node clazz) {
-        this.clazz = new XMLDocument(clazz);
+        this(new XMLDocument(clazz));
+    }
+
+    /**
+     * Constructor.
+     * @param clazz XML representation of a class.
+     */
+    private XmlClassProperties(final XMLDocument clazz) {
+        this.clazz = clazz;
     }
 
     /**
