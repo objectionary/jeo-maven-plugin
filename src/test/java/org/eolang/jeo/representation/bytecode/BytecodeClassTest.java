@@ -46,5 +46,4 @@ class BytecodeClassTest {
             Matchers.notNullValue()
         );
     }
-
 }

@@ -37,7 +37,8 @@ class XmlClassPropertiesTest {
     @Test
     void retrievesAccessModifier() {
         final String xml =
-            String.join("\n",
+            String.join(
+                "\n",
                 "<o abstract='' name='Language'>",
                 "  <o base='int' data='bytes' name='access'>00 00 00 00 00 00 04 21</o>",
                 "  <o base='string' data='bytes' name='supername'>",
@@ -56,6 +57,5 @@ class XmlClassPropertiesTest {
             actual,
             Matchers.is(expected)
         );
-
     }
 }
