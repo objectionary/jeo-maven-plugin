@@ -26,36 +26,27 @@ package org.eolang.jeo.representation.xmir;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.Opcodes;
 
 /**
- * Test case for {@link org.eolang.jeo.representation.xmir.XmlClassProperties}.
+ * Test case for {@link HexString}.
  * @since 0.1
  */
-class XmlClassPropertiesTest {
+class HexStringTest {
 
     @Test
-    void retrievesAccessModifier() {
-        final String xml =
-            String.join("\n",
-                "<o abstract='' name='Language'>",
-                "  <o base='int' data='bytes' name='access'>00 00 00 00 00 00 04 21</o>",
-                "  <o base='string' data='bytes' name='supername'>",
-                "6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>",
-                "  <o base='tuple' data='tuple' name='interfaces'/>",
-                "</o>"
-            );
-        final int actual = new XmlClassProperties(xml).access();
-        final int expected = Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT | Opcodes.ACC_SUPER;
+    void parsesHexStringAsInteger() {
+        final int expected = 1057;
+        final int actual = new HexString(
+            "00 00 00 00 00 00 04 21"
+        ).decodeAsInt();
         MatcherAssert.assertThat(
             String.format(
-                "Can't retrieve access modifier correctly, expected %d (public abstract class), got %d",
+                "Can't parse hex string as integer, or the result is wrong; expected %d, got %d",
                 expected,
                 actual
             ),
             actual,
             Matchers.is(expected)
         );
-
     }
 }

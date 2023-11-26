@@ -77,8 +77,6 @@ final class HexString {
      * @return Integer.
      */
     int decodeAsInt() {
-        return Arrays.stream(this.hex.split(" "))
-            .mapToInt(ch -> Integer.parseInt(ch, HexString.RADIX))
-            .sum();
+        return Integer.parseInt(this.hex.trim().replace(" ", ""), HexString.RADIX);
     }
 }
