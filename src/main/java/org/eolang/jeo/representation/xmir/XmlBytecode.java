@@ -41,7 +41,6 @@ public final class XmlBytecode {
      */
     private final XML xml;
 
-
     /**
      * Constructor.
      * @param xml XML.

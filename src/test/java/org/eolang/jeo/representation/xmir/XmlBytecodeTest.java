@@ -23,12 +23,9 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.Opcodes;
 
 /**
  * Test case for {@link XmlBytecode}.
@@ -71,5 +68,4 @@ class XmlBytecodeTest {
             Matchers.notNullValue()
         );
     }
-
 }

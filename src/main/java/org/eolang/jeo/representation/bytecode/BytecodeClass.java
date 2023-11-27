@@ -57,7 +57,7 @@ public final class BytecodeClass {
     /**
      * Class properties (access, signature, supername, interfaces).
      */
-    private final BytecodeClassProperties properties;
+    private final BytecodeClassProperties props;
 
     /**
      * Constructor.
@@ -128,7 +128,7 @@ public final class BytecodeClass {
         this.name = name;
         this.writer = writer;
         this.methods = methods;
-        this.properties = properties;
+        this.props = properties;
     }
 
     /**
@@ -144,7 +144,7 @@ public final class BytecodeClass {
      * @return Bytecode.
      */
     public Bytecode bytecode() {
-        this.properties.write(this.writer, this.name);
+        this.props.write(this.writer, this.name);
         this.methods.forEach(BytecodeMethod::write);
         this.writer.visitEnd();
         final byte[] bytes = this.writer.toByteArray();
@@ -170,18 +170,6 @@ public final class BytecodeClass {
      */
     public BytecodeMethod withConstructor(final int... modifiers) {
         return this.withConstructor("()V", modifiers);
-    }
-
-    /**
-     * Add method.
-     * @param mname Method name.
-     * @param modifiers Access modifiers.
-     * @return This object.
-     */
-    public BytecodeMethod withMethod(final String mname, final int... modifiers) {
-        final BytecodeMethod method = new BytecodeMethod(mname, this.writer, this, modifiers);
-        this.methods.add(method);
-        return method;
     }
 
     /**
@@ -279,14 +267,13 @@ public final class BytecodeClass {
      * @return The same class with the hello world method.
      */
     public BytecodeClass helloWorldMethod() {
-        return this.withMethod(
-                new BytecodeMethodProperties(
-                    "main",
-                    "([Ljava/lang/String;)V",
-                    Opcodes.ACC_PUBLIC,
-                    Opcodes.ACC_STATIC
-                )
-            )
+        final BytecodeMethodProperties properties = new BytecodeMethodProperties(
+            "main",
+            "([Ljava/lang/String;)V",
+            Opcodes.ACC_PUBLIC,
+            Opcodes.ACC_STATIC
+        );
+        return this.withMethod(properties)
             .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
             .instruction(Opcodes.LDC, "Hello, world!")
             .instruction(

@@ -91,15 +91,6 @@ public class BytecodeMethodProperties {
 
     /**
      * Constructor.
-     * @param name Method name.
-     * @param modifiers Access modifiers.
-     */
-    BytecodeMethodProperties(final String name, final int... modifiers) {
-        this(name, "()V", modifiers);
-    }
-
-    /**
-     * Constructor.
      * @param access Access modifiers.
      * @param name Method name.
      * @param descriptor Method descriptor.
@@ -107,12 +98,13 @@ public class BytecodeMethodProperties {
      * @param exceptions Method exceptions.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
+    @SuppressWarnings("PMD.ArrayIsStoredDirectly")
     private BytecodeMethodProperties(
         final int access,
         final String name,
         final String descriptor,
         final String signature,
-        final String[] exceptions
+        final String... exceptions
     ) {
         this.access = access;
         this.name = name;
@@ -131,8 +123,8 @@ public class BytecodeMethodProperties {
             this.access,
             this.name,
             this.descriptor,
-            null,
-            null
+            this.signature,
+            this.exceptions
         );
     }
 }

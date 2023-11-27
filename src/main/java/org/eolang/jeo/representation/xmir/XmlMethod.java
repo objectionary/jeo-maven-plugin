@@ -161,7 +161,6 @@ public final class XmlMethod {
             .orElse(null);
     }
 
-
     /**
      * Method properties as bytecode.
      * @return Properties.

@@ -60,24 +60,8 @@ public final class BytecodeMethod {
      * @param name Method name.
      * @param writer ASM class writer.
      * @param clazz Original class.
-     * @param modifiers Access modifiers.
-     * @checkstyle ParameterNumberCheck (5 lines)
-     */
-    BytecodeMethod(
-        final String name,
-        final ClassWriter writer,
-        final BytecodeClass clazz,
-        final int... modifiers
-    ) {
-        this(new BytecodeMethodProperties(name, modifiers), writer, clazz);
-    }
-
-    /**
-     * Constructor.
-     * @param name Method name.
-     * @param writer ASM class writer.
-     * @param clazz Original class.
-     * @param modifiers Access modifiers.
+     * @param descriptor Method descriptor.
+     * @param modifiers Method modifiers.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     BytecodeMethod(
@@ -96,12 +80,15 @@ public final class BytecodeMethod {
      * @param writer ASM class writer.
      * @param clazz Original class.
      */
-    BytecodeMethod(BytecodeMethodProperties properties, ClassWriter writer, BytecodeClass clazz) {
+    BytecodeMethod(
+        final BytecodeMethodProperties properties,
+        final ClassWriter writer,
+        final BytecodeClass clazz
+    ) {
         this.properties = properties;
         this.writer = writer;
         this.clazz = clazz;
         this.instructions = new ArrayList<>(0);
-
     }
 
     /**

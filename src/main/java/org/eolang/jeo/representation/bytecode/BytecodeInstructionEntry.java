@@ -451,7 +451,6 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
             )
         ),
 
-
         /**
          * Create new object of type identified by class reference in constant pool index.
          */

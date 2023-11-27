@@ -105,7 +105,6 @@ class DirectivesMethodVisitorTest {
                     "([Ljava/lang/String;)V",
                     Opcodes.ACC_PUBLIC,
                     Opcodes.ACC_STATIC
-
                 )
             )
             .instruction(Opcodes.NEW, clazz)
