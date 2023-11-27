@@ -427,6 +427,32 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
+         * Invoke interface method on object objectref and puts the result on the stack.
+         */
+        INVOKEINTERFACE(Opcodes.INVOKEINTERFACE, (visitor, arguments) ->
+            visitor.visitMethodInsn(
+                Opcodes.INVOKEINTERFACE,
+                String.valueOf(arguments.get(0)),
+                String.valueOf(arguments.get(1)),
+                String.valueOf(arguments.get(2)),
+                false
+            )
+        ),
+
+        /**
+         * Invokes a dynamic method and puts the result on the stack.
+         */
+        INVOKEDYNAMIC(Opcodes.INVOKEDYNAMIC, (visitor, arguments) ->
+            visitor.visitInvokeDynamicInsn(
+                String.valueOf(arguments.get(0)),
+                String.valueOf(arguments.get(1)),
+                (org.objectweb.asm.Handle) arguments.get(2),
+                arguments.subList(3, arguments.size()).toArray()
+            )
+        ),
+
+
+        /**
          * Create new object of type identified by class reference in constant pool index.
          */
         NEW(Opcodes.NEW, (visitor, arguments) ->
