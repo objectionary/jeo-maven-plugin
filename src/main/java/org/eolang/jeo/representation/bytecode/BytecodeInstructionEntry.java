@@ -435,7 +435,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                 String.valueOf(arguments.get(0)),
                 String.valueOf(arguments.get(1)),
                 String.valueOf(arguments.get(2)),
-                false
+                true
             )
         ),
 

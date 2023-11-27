@@ -131,8 +131,8 @@ public class BytecodeMethodProperties {
             this.access,
             this.name,
             this.descriptor,
-            this.signature,
-            this.exceptions
+            null,
+            null
         );
     }
 }

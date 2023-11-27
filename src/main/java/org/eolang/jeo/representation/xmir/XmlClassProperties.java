@@ -32,6 +32,8 @@ import org.w3c.dom.Node;
  * XML representation of a class.
  *
  * @since 0.1.0
+ * @todo #202: XPATH!!!!!
+ * @
  */
 final class XmlClassProperties {
 
@@ -90,7 +92,7 @@ final class XmlClassProperties {
      * @return Signature.
      */
     private Optional<String> signature() {
-        return this.clazz.xpath("//o[@name='signature']/text()")
+        return this.clazz.xpath("./o[@name='signature']/text()")
             .stream()
             .map(HexString::new)
             .map(HexString::decode)
