@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
@@ -40,12 +41,21 @@ public final class XmlBytecode {
      */
     private final XML xml;
 
+
     /**
      * Constructor.
      * @param xml XML.
      */
     public XmlBytecode(final XML xml) {
         this.xml = xml;
+    }
+
+    /**
+     * Constructor.
+     * @param lines Xml document lines.
+     */
+    XmlBytecode(final String... lines) {
+        this(new XMLDocument(String.join("\n", lines)));
     }
 
     /**
