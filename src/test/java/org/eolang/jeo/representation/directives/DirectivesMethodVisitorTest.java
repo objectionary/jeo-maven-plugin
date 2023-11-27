@@ -294,7 +294,7 @@ class DirectivesMethodVisitorTest {
             .instruction(Opcodes.IFLE, label)
             .instruction(Opcodes.ICONST_5)
             .instruction(Opcodes.IRETURN)
-            .markLabel(label)
+            .label(label)
             .instruction(Opcodes.BIPUSH, 8)
             .instruction(Opcodes.IRETURN).up()
             .xml()

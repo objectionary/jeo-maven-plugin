@@ -24,10 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.IntStream;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -78,7 +75,6 @@ public final class BytecodeMethod {
         this.properties = new BytecodeMethodProperties(name, modifiers);
     }
 
-
     /**
      * Constructor.
      * @param name Method name.
@@ -94,12 +90,15 @@ public final class BytecodeMethod {
         final String descriptor,
         final int... modifiers
     ) {
-        this.writer = writer;
-        this.clazz = clazz;
-        this.instructions = new ArrayList<>(0);
-        this.properties = new BytecodeMethodProperties(name, descriptor, modifiers);
+        this(new BytecodeMethodProperties(name, descriptor, modifiers), writer, clazz);
     }
 
+    /**
+     * Constructor.
+     * @param properties Method properties.
+     * @param writer ASM class writer.
+     * @param clazz Original class.
+     */
     BytecodeMethod(BytecodeMethodProperties properties, ClassWriter writer, BytecodeClass clazz) {
         this.properties = properties;
         this.writer = writer;
@@ -123,7 +122,7 @@ public final class BytecodeMethod {
      * @param label Label.
      * @return This object.
      */
-    public BytecodeMethod markLabel(final Label label) {
+    public BytecodeMethod label(final Label label) {
         this.instructions.add(new BytecodeLabelEntry(label));
         return this;
     }
@@ -143,10 +142,6 @@ public final class BytecodeMethod {
      * Generate bytecode.
      */
     void write() {
-//        int access = 0;
-//        for (final int modifier : this.modifiers) {
-//            access |= modifier;
-//        }
         final MethodVisitor visitor = this.properties.addMethod(this.writer);
         this.instructions.forEach(instruction -> instruction.writeTo(visitor));
         visitor.visitMaxs(0, 0);
