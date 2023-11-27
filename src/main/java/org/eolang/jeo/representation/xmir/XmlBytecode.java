@@ -69,13 +69,8 @@ public final class XmlBytecode {
             );
         }
         for (final XmlMethod xmlmethod : clazz.methods()) {
-            final BytecodeMethod method = bytecode.withMethod(
-                xmlmethod.name(),
-                xmlmethod.descriptor(),
-                xmlmethod.access()
-            );
-            xmlmethod.instructions()
-                .forEach(inst -> inst.writeTo(method));
+            final BytecodeMethod method = bytecode.withMethod(xmlmethod.properties());
+            xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
         }
         return bytecode.bytecode();
     }

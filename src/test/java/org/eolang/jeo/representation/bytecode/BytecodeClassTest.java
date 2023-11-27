@@ -48,7 +48,21 @@ class BytecodeClassTest {
     }
 
     @Test
+    void createsBytecodeWithDefaultConstructor() {
+        MatcherAssert.assertThat(
+            "Can't create bytecode with default public constructor",
+            new BytecodeClass("DefaultConstructor")
+                .withConstructor(Opcodes.ACC_PUBLIC)
+                .instruction(Opcodes.RETURN)
+                .up()
+                .bytecode(),
+            Matchers.notNullValue()
+        );
+    }
+
+    @Test
     void parsesSignatureWithoutErrors() {
+        //todo
         new BytecodeClass("ClassWithGenericMethod")
             .withMethod("route")
             .up()

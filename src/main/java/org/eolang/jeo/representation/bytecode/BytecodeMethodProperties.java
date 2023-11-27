@@ -65,11 +65,28 @@ public class BytecodeMethodProperties {
      * @param modifiers Access modifiers.
      */
     public BytecodeMethodProperties(
-        String name,
-        String descriptor,
-        int... modifiers
+        final String name,
+        final String descriptor,
+        final int... modifiers
     ) {
         this(name, descriptor, null, modifiers);
+    }
+
+    /**
+     * Constructor.
+     * @param name Method name.
+     * @param descriptor Method descriptor.
+     * @param signature Method signature.
+     * @param modifiers Access modifiers.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    public BytecodeMethodProperties(
+        final String name,
+        final String descriptor,
+        final String signature,
+        final int... modifiers
+    ) {
+        this(IntStream.of(modifiers).sum(), name, descriptor, signature, null);
     }
 
     /**
@@ -83,28 +100,11 @@ public class BytecodeMethodProperties {
 
     /**
      * Constructor.
+     * @param access Access modifiers.
      * @param name Method name.
      * @param descriptor Method descriptor.
      * @param signature Method signature.
-     * @param modifiers Access modifiers.
-     * @checkstyle ParameterNumberCheck (5 lines)
-     */
-    private BytecodeMethodProperties(
-        String name,
-        String descriptor,
-        String signature,
-        int... modifiers
-    ) {
-        this(IntStream.of(modifiers).sum(), name, descriptor, signature, null);
-    }
-
-    /**
-     * Constructor.
-     * @param access
-     * @param name
-     * @param descriptor
-     * @param signature
-     * @param exceptions
+     * @param exceptions Method exceptions.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     private BytecodeMethodProperties(
@@ -126,7 +126,7 @@ public class BytecodeMethodProperties {
      * @param writer Class writer.
      * @return Method visitor.
      */
-    MethodVisitor addMethod(ClassWriter writer) {
+    MethodVisitor addMethod(final ClassWriter writer) {
         return writer.visitMethod(
             this.access,
             this.name,

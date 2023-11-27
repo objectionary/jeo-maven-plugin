@@ -33,6 +33,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.HexData;
+import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.objectweb.asm.Opcodes;
 import org.w3c.dom.NamedNodeMap;
@@ -137,6 +138,34 @@ public final class XmlMethod {
         return new HexString(
             new XMLDocument(this.node).xpath("./o[@name='descriptor']/text()").get(0)
         ).decode();
+    }
+
+    /**
+     * Method signature.
+     * @return Signature.
+     */
+    public String signature() {
+        return new XMLDocument(this.node).xpath("./o[@name='signature']/text()")
+            .stream()
+            .filter(s -> !s.isBlank())
+            .findFirst()
+            .map(HexString::new)
+            .map(HexString::decode)
+            .orElse(null);
+    }
+
+
+    /**
+     * Method properties as bytecode.
+     * @return Properties.
+     */
+    public BytecodeMethodProperties properties() {
+        return new BytecodeMethodProperties(
+            this.name(),
+            this.descriptor(),
+            this.signature(),
+            this.access()
+        );
     }
 
     /**

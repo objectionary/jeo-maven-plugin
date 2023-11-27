@@ -69,10 +69,7 @@ public final class BytecodeMethod {
         final BytecodeClass clazz,
         final int... modifiers
     ) {
-        this.writer = writer;
-        this.clazz = clazz;
-        this.instructions = new ArrayList<>(0);
-        this.properties = new BytecodeMethodProperties(name, modifiers);
+        this(new BytecodeMethodProperties(name, modifiers), writer, clazz);
     }
 
     /**
