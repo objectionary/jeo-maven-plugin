@@ -27,6 +27,7 @@ import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Test case for {@link XmlMethod}.
@@ -122,6 +123,15 @@ class XmlMethodTest {
             "Method descriptor is not equal to expected",
             method.descriptor(),
             Matchers.equalTo(descriptor)
+        );
+    }
+
+    @Test
+    void createsConstructor() {
+        MatcherAssert.assertThat(
+            "Method name is not equal to expected, it should be <init>",
+            new XmlMethod("new", Opcodes.ACC_PUBLIC, "()V").name(),
+            Matchers.equalTo("<init>")
         );
     }
 }

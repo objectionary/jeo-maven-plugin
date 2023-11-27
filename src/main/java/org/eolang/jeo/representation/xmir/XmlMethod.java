@@ -117,7 +117,14 @@ public final class XmlMethod {
      * @return Name.
      */
     public String name() {
-        return String.valueOf(new XMLDocument(this.node).xpath("./@name").get(0));
+        final String result;
+        final String original = String.valueOf(new XMLDocument(this.node).xpath("./@name").get(0));
+        if ("new".equals(original)) {
+            result = "<init>";
+        } else {
+            result = original;
+        }
+        return result;
     }
 
     /**
