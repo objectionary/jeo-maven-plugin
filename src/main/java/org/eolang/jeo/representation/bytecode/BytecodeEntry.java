@@ -35,5 +35,5 @@ public interface BytecodeEntry {
      * Write instruction to the method visitor.
      * @param visitor Method visitor.
      */
-    void generate(MethodVisitor visitor);
+    void writeTo(MethodVisitor visitor);
 }

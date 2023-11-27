@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -36,11 +37,6 @@ import org.objectweb.asm.MethodVisitor;
  * @since 0.1.0
  */
 public final class BytecodeMethod {
-
-    /**
-     * Method name.
-     */
-    private final String name;
 
     /**
      * ASM class writer.
@@ -58,14 +54,9 @@ public final class BytecodeMethod {
     private final List<BytecodeEntry> instructions;
 
     /**
-     * Access.
+     * Method properties.
      */
-    private final int[] modifiers;
-
-    /**
-     * Method Descriptor.
-     */
-    private final AtomicReference<String> descr;
+    private final BytecodeMethodProperties properties;
 
     /**
      * Constructor.
@@ -81,12 +72,40 @@ public final class BytecodeMethod {
         final BytecodeClass clazz,
         final int... modifiers
     ) {
-        this.name = name;
         this.writer = writer;
         this.clazz = clazz;
         this.instructions = new ArrayList<>(0);
-        this.modifiers = Arrays.copyOf(modifiers, modifiers.length);
-        this.descr = new AtomicReference<>("()V");
+        this.properties = new BytecodeMethodProperties(name, modifiers);
+    }
+
+
+    /**
+     * Constructor.
+     * @param name Method name.
+     * @param writer ASM class writer.
+     * @param clazz Original class.
+     * @param modifiers Access modifiers.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    BytecodeMethod(
+        final String name,
+        final ClassWriter writer,
+        final BytecodeClass clazz,
+        final String descriptor,
+        final int... modifiers
+    ) {
+        this.writer = writer;
+        this.clazz = clazz;
+        this.instructions = new ArrayList<>(0);
+        this.properties = new BytecodeMethodProperties(name, descriptor, modifiers);
+    }
+
+    BytecodeMethod(BytecodeMethodProperties properties, ClassWriter writer, BytecodeClass clazz) {
+        this.properties = properties;
+        this.writer = writer;
+        this.clazz = clazz;
+        this.instructions = new ArrayList<>(0);
+
     }
 
     /**
@@ -121,31 +140,15 @@ public final class BytecodeMethod {
     }
 
     /**
-     * Set method descriptor.
-     * @param descriptor Descriptor.
-     * @return This object.
-     */
-    public BytecodeMethod descriptor(final String descriptor) {
-        this.descr.set(descriptor);
-        return this;
-    }
-
-    /**
      * Generate bytecode.
      */
     void write() {
-        int access = 0;
-        for (final int modifier : this.modifiers) {
-            access |= modifier;
-        }
-        final MethodVisitor visitor = this.writer.visitMethod(
-            access,
-            this.name,
-            this.descr.get(),
-            null,
-            null
-        );
-        this.instructions.forEach(instruction -> instruction.generate(visitor));
+//        int access = 0;
+//        for (final int modifier : this.modifiers) {
+//            access |= modifier;
+//        }
+        final MethodVisitor visitor = this.properties.addMethod(this.writer);
+        this.instructions.forEach(instruction -> instruction.writeTo(visitor));
         visitor.visitMaxs(0, 0);
         visitor.visitEnd();
     }

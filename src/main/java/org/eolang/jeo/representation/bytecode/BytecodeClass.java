@@ -169,7 +169,7 @@ public final class BytecodeClass {
      * @return This object.
      */
     public BytecodeMethod withConstructor(final int... modifiers) {
-        return this.withMethod("<init>", modifiers);
+        return this.withConstructor("()V", modifiers);
     }
 
     /**
@@ -180,6 +180,17 @@ public final class BytecodeClass {
      */
     public BytecodeMethod withMethod(final String mname, final int... modifiers) {
         final BytecodeMethod method = new BytecodeMethod(mname, this.writer, this, modifiers);
+        this.methods.add(method);
+        return method;
+    }
+
+    /**
+     * Add method.
+     * @param properties Method properties.
+     * @return This object.
+     */
+    public BytecodeMethod withMethod(final BytecodeMethodProperties properties) {
+        final BytecodeMethod method = new BytecodeMethod(properties, this.writer, this);
         this.methods.add(method);
         return method;
     }
@@ -210,9 +221,10 @@ public final class BytecodeClass {
             BytecodeClass.methodName(mname),
             this.writer,
             this,
+            descriptor,
             modifiers
         );
-        this.methods.add(method.descriptor(descriptor));
+        this.methods.add(method);
         return method;
     }
 
@@ -267,8 +279,14 @@ public final class BytecodeClass {
      * @return The same class with the hello world method.
      */
     public BytecodeClass helloWorldMethod() {
-        return this.withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
-            .descriptor("([Ljava/lang/String;)V")
+        return this.withMethod(
+                new BytecodeMethodProperties(
+                    "main",
+                    "([Ljava/lang/String;)V",
+                    Opcodes.ACC_PUBLIC,
+                    Opcodes.ACC_STATIC
+                )
+            )
             .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
             .instruction(Opcodes.LDC, "Hello, world!")
             .instruction(

@@ -71,7 +71,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
     }
 
     @Override
-    public void generate(final MethodVisitor visitor) {
+    public void writeTo(final MethodVisitor visitor) {
         Instruction.find(this.opcode).generate(visitor, this.args);
     }
 

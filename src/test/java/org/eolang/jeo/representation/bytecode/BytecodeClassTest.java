@@ -46,4 +46,13 @@ class BytecodeClassTest {
             Matchers.notNullValue()
         );
     }
+
+    @Test
+    void parsesSignatureWithoutErrors() {
+        new BytecodeClass("ClassWithGenericMethod")
+            .withMethod("route")
+            .up()
+            .bytecode();
+    }
+
 }

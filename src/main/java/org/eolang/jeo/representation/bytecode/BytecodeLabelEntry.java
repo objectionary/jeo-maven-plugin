@@ -46,7 +46,7 @@ public final class BytecodeLabelEntry implements BytecodeEntry {
     }
 
     @Override
-    public void generate(final MethodVisitor visitor) {
+    public void writeTo(final MethodVisitor visitor) {
         visitor.visitLabel(this.label);
     }
 }

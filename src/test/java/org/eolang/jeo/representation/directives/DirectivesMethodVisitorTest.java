@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.directives;
 import com.jcabi.xml.XMLDocument;
 import java.util.UUID;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
@@ -54,8 +55,7 @@ class DirectivesMethodVisitorTest {
         final DirectivesClassVisitor visitor = new DirectivesClassVisitor();
         new ClassReader(
             new BytecodeClass()
-                .withMethod("main")
-                .descriptor("()I")
+                .withMethod(new BytecodeMethodProperties("main", "()I"))
                 .instruction(Opcodes.BIPUSH, 28)
                 .instruction(Opcodes.IRETURN)
                 .up()
@@ -99,8 +99,15 @@ class DirectivesMethodVisitorTest {
         final String clazz = "ParametersExample";
         final String method = "printSum";
         final String xml = new BytecodeClass(clazz)
-            .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
-            .descriptor("([Ljava/lang/String;)V")
+            .withMethod(
+                new BytecodeMethodProperties(
+                    "main",
+                    "([Ljava/lang/String;)V",
+                    Opcodes.ACC_PUBLIC,
+                    Opcodes.ACC_STATIC
+
+                )
+            )
             .instruction(Opcodes.NEW, clazz)
             .instruction(Opcodes.DUP)
             .instruction(Opcodes.INVOKESPECIAL, clazz, "<init>", "()V")
@@ -111,8 +118,7 @@ class DirectivesMethodVisitorTest {
             .instruction(Opcodes.INVOKEVIRTUAL, clazz, method, "(II)V")
             .instruction(Opcodes.RETURN)
             .up()
-            .withMethod(method, Opcodes.ACC_PUBLIC)
-            .descriptor("(II)V")
+            .withMethod(new BytecodeMethodProperties(method, "(II)V", Opcodes.ACC_PUBLIC))
             .instruction(Opcodes.ILOAD, 1)
             .instruction(Opcodes.ILOAD, 2)
             .instruction(Opcodes.IADD)
@@ -157,7 +163,6 @@ class DirectivesMethodVisitorTest {
     void parsesConstructor() {
         final String xml = new BytecodeClass("ConstructorExample")
             .withConstructor(Opcodes.ACC_PUBLIC)
-            .descriptor("()V")
             .instruction(Opcodes.ALOAD, 0)
             .instruction(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V")
             .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
@@ -170,8 +175,14 @@ class DirectivesMethodVisitorTest {
             )
             .instruction(Opcodes.RETURN)
             .up()
-            .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
-            .descriptor("([Ljava/lang/String;)V")
+            .withMethod(
+                new BytecodeMethodProperties(
+                    "main",
+                    "([Ljava/lang/String;)V",
+                    Opcodes.ACC_PUBLIC,
+                    Opcodes.ACC_STATIC
+                )
+            )
             .instruction(Opcodes.NEW, "ConstructorExample")
             .instruction(Opcodes.DUP)
             .instruction(Opcodes.INVOKESPECIAL, "ConstructorExample", "<init>", "()V")
@@ -212,8 +223,7 @@ class DirectivesMethodVisitorTest {
     void parsesConstructorWithParameters() {
         final String clazz = "ConstructorParams";
         final String xml = new BytecodeClass(clazz)
-            .withConstructor(Opcodes.ACC_PUBLIC)
-            .descriptor("(II)V")
+            .withConstructor("(II)V", Opcodes.ACC_PUBLIC)
             .instruction(Opcodes.ALOAD, 0)
             .instruction(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V")
             .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
@@ -223,8 +233,14 @@ class DirectivesMethodVisitorTest {
             .instruction(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V")
             .instruction(Opcodes.RETURN)
             .up()
-            .withMethod("main", Opcodes.ACC_PUBLIC, Opcodes.ACC_STATIC)
-            .descriptor("([Ljava/lang/String;)V")
+            .withMethod(
+                new BytecodeMethodProperties(
+                    "main",
+                    "([Ljava/lang/String;)V",
+                    Opcodes.ACC_PUBLIC,
+                    Opcodes.ACC_STATIC
+                )
+            )
             .instruction(Opcodes.NEW, clazz)
             .instruction(Opcodes.DUP)
             .instruction(Opcodes.BIPUSH, 11)
