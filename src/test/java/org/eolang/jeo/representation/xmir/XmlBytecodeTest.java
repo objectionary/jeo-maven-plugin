@@ -31,6 +31,9 @@ import org.junit.jupiter.api.Test;
  * Test case for {@link XmlBytecode}.
  *
  * @since 0.1
+ * @todo #202:90min Fix {@link #convertsGenericsMethodIntoBytecode} test.
+ *  It passes now, but it's not correct. First of all, it prints error message to the console.
+ *  We should fix this error and find a way to create a valid XML for this test more easily.
  */
 class XmlBytecodeTest {
 
