@@ -27,8 +27,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
-import org.antlr.v4.runtime.tree.xpath.XPathTokenElement;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.EoRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
@@ -47,7 +45,7 @@ final class ImprovementXmirFootprintTest {
     /**
      * Representations to test.
      */
-    private final Collection<Representation> representations = Collections.singleton(
+    private final Collection<Representation> objects = Collections.singleton(
         new EoRepresentation(
             new BytecodeClass("org/eolang/jeo/Application").xml()
         )
@@ -66,7 +64,7 @@ final class ImprovementXmirFootprintTest {
     @Test
     void savesXml(@TempDir final Path temp) {
         final ImprovementXmirFootprint footprint = new ImprovementXmirFootprint(temp);
-        footprint.apply(this.representations);
+        footprint.apply(this.objects);
         MatcherAssert.assertThat(
             "XML file was not saved",
             temp.resolve(this.expected).toFile(),
@@ -77,8 +75,8 @@ final class ImprovementXmirFootprintTest {
     @Test
     void overwritesXml(@TempDir final Path temp) {
         final ImprovementXmirFootprint footprint = new ImprovementXmirFootprint(temp);
-        footprint.apply(this.representations);
-        footprint.apply(this.representations);
+        footprint.apply(this.objects);
+        footprint.apply(this.objects);
         MatcherAssert.assertThat(
             "XML file was not successfully overwritten",
             temp.resolve(this.expected).toFile(),
