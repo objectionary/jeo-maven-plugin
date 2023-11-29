@@ -81,8 +81,7 @@ public final class ImprovementXmirFootprint implements Improvement {
             final XML xmir = representation.toEO();
             Files.write(
                 path,
-                xmir.toString().getBytes(StandardCharsets.UTF_8),
-                StandardOpenOption.CREATE_NEW
+                xmir.toString().getBytes(StandardCharsets.UTF_8)
             );
             final String filename = path.getFileName().toString();
             Logger.info(
