@@ -49,6 +49,13 @@ public final class ClassName {
 
     /**
      * Constructor.
+     */
+    public ClassName() {
+        this("HelloWorld");
+    }
+
+    /**
+     * Constructor.
      * @param pckg Package
      * @param name Class name
      */

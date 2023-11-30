@@ -36,20 +36,37 @@ public class DirectivesMetas implements Iterable<Directive> {
 
     private final ClassName name;
 
-    public DirectivesMetas(final ClassName classname) {
+    DirectivesMetas() {
+        this(new ClassName());
+    }
+
+    DirectivesMetas(final ClassName classname) {
         this.name = classname;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives();
-        directives.add("metas")
+        final String opcode = "org.eolang.jeo.opcode";
+        final String label = "org.eolang.jeo.label";
+        final String alias = "alias";
+        return new Directives()
+            .add("metas")
             .add("meta")
             .add("head").set("package").up()
             .add("tail").set(this.name.pckg()).up()
             .add("part").set(this.name.pckg()).up()
             .up()
-            .up();
-        return directives.iterator();
+            .add("meta")
+            .add("head").set(alias).up()
+            .add("tail").set(opcode).up()
+            .add("part").set(opcode).up()
+            .up()
+            .add("meta")
+            .add("head").set(alias).up()
+            .add("tail").set(label).up()
+            .add("part").set(label).up()
+            .up()
+            .up()
+            .iterator();
     }
 }
