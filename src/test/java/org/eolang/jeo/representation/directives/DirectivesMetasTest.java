@@ -35,7 +35,7 @@ import org.xembly.Xembler;
  * Test case for {@link DirectivesMetas}.
  * @since 0.1
  */
-class DirectivesMetasTest {
+final class DirectivesMetasTest {
 
     @Test
     void createsMetasWithPackage() {
@@ -52,7 +52,6 @@ class DirectivesMetasTest {
             )
         );
     }
-
 
     @Test
     void addsInitialAliasesForOpcodes() {
@@ -84,6 +83,4 @@ class DirectivesMetasTest {
             )
         );
     }
-
-
 }

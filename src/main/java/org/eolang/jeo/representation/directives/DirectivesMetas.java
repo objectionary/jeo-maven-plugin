@@ -32,14 +32,24 @@ import org.xembly.Directives;
  * Directives for meta information of a class.
  * @since 0.1
  */
-public class DirectivesMetas implements Iterable<Directive> {
+public final class DirectivesMetas implements Iterable<Directive> {
 
+    /**
+     * Class name.
+     */
     private final ClassName name;
 
+    /**
+     * Constructor.
+     */
     DirectivesMetas() {
         this(new ClassName());
     }
 
+    /**
+     * Constructor.
+     * @param classname Class name.
+     */
     DirectivesMetas(final ClassName classname) {
         this.name = classname;
     }
