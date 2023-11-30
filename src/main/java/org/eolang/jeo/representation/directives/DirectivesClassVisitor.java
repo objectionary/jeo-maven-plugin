@@ -127,13 +127,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
             .add("errors").up()
             .add("sheets").up()
             .add("license").up()
-            .add("metas")
-            .add("meta")
-            .add("head").set("package").up()
-            .add("tail").set(classname.pckg()).up()
-            .add("part").set(classname.pckg()).up()
-            .up()
-            .up()
+            .append(new DirectivesMetas(classname))
             .attr("ms", System.currentTimeMillis())
             .add("objects");
         final DirectivesClassProperties props = new DirectivesClassProperties(
