@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import org.eolang.jeo.Improvement;
@@ -81,8 +80,7 @@ public final class ImprovementXmirFootprint implements Improvement {
             final XML xmir = representation.toEO();
             Files.write(
                 path,
-                xmir.toString().getBytes(StandardCharsets.UTF_8),
-                StandardOpenOption.CREATE_NEW
+                xmir.toString().getBytes(StandardCharsets.UTF_8)
             );
             final String filename = path.getFileName().toString();
             Logger.info(

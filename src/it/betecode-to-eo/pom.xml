@@ -47,6 +47,20 @@ SOFTWARE.
               <goal>bytecode-to-eo</goal>
             </goals>
           </execution>
+          <!--
+            The second run was added in order to check that
+            we successfully overwrite the existing EO files.
+            For example, if a developer call
+            - "mvn test"
+            - "mvn test"
+           then the second run should not fail.
+          -->
+          <execution>
+            <id>bytecode-to-eo-second-time</id>
+            <goals>
+              <goal>bytecode-to-eo</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
     </plugins>

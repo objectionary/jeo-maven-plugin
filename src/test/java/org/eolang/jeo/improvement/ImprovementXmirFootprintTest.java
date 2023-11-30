@@ -24,7 +24,10 @@
 package org.eolang.jeo.improvement;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Collections;
+import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.EoRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
@@ -39,23 +42,44 @@ import org.junit.jupiter.api.io.TempDir;
  */
 final class ImprovementXmirFootprintTest {
 
+    /**
+     * Representations to test.
+     */
+    private final Collection<Representation> objects = Collections.singleton(
+        new EoRepresentation(
+            new BytecodeClass("org/eolang/jeo/Application").xml()
+        )
+    );
+
+    /**
+     * Where the XML file is expected to be saved.
+     */
+    private final Path expected = Paths.get("")
+        .resolve("xmir")
+        .resolve("org")
+        .resolve("eolang")
+        .resolve("jeo")
+        .resolve("Application.xmir");
+
     @Test
     void savesXml(@TempDir final Path temp) {
         final ImprovementXmirFootprint footprint = new ImprovementXmirFootprint(temp);
-        footprint.apply(
-            Collections.singleton(
-                new EoRepresentation(
-                    new BytecodeClass("org/eolang/jeo/Application").xml()
-                )
-            )
-        );
+        footprint.apply(this.objects);
         MatcherAssert.assertThat(
             "XML file was not saved",
-            temp.resolve("xmir")
-                .resolve("org")
-                .resolve("eolang")
-                .resolve("jeo")
-                .resolve("Application.xmir").toFile(),
+            temp.resolve(this.expected).toFile(),
+            FileMatchers.anExistingFile()
+        );
+    }
+
+    @Test
+    void overwritesXml(@TempDir final Path temp) {
+        final ImprovementXmirFootprint footprint = new ImprovementXmirFootprint(temp);
+        footprint.apply(this.objects);
+        footprint.apply(this.objects);
+        MatcherAssert.assertThat(
+            "XML file was not successfully overwritten",
+            temp.resolve(this.expected).toFile(),
             FileMatchers.anExistingFile()
         );
     }
