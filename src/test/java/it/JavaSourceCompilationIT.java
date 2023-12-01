@@ -34,8 +34,8 @@ import org.eolang.jeo.representation.EoRepresentation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
@@ -58,7 +58,7 @@ import org.junit.jupiter.api.io.TempDir;
 class JavaSourceCompilationIT {
 
     @Test
-    @Disabled
+    @EnabledIf(value = "hasJavaCompiler", disabledReason = "Java compiler is not available")
     void transformsRandomJavaSourceCodeIntoEoAndBack(@TempDir final Path temp) throws IOException {
         final Bytecode expected = JavaSourceCompilationIT.compile(temp, new RandomJavaClass());
         MatcherAssert.assertThat(
@@ -86,5 +86,13 @@ class JavaSourceCompilationIT {
         return new Bytecode(
             Files.readAllBytes(where.resolve(String.format("%s.class", clazz.name())))
         );
+    }
+
+    /**
+     * Check if java compiler is available.
+     * @return True if java compiler is available.
+     */
+    private static boolean hasJavaCompiler() {
+        return ToolProvider.getSystemJavaCompiler() != null;
     }
 }
