@@ -100,8 +100,10 @@ class JavaSourceCompilationIT {
 
     /**
      * Check if java compiler is available.
+     * Don't care about PMD warning: this method is used in @EnabledIf annotation.
      * @return True if java compiler is available.
      */
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static boolean hasJavaCompiler() {
         return ToolProvider.getSystemJavaCompiler() != null;
     }
