@@ -46,6 +46,8 @@ import org.junit.jupiter.api.io.TempDir;
  * - Transform bytecode into XMIR
  * - Transform XMIR back into bytecode
  * - Compare the original bytecode with the transformed one.
+ * In this class we compare bytecode as strings because the order of values in
+ * the bytecode constant pool might differ, however the bytecode is still the same.
  * @since 0.1
  * @todo #218:90min Add debug information to bytecode.
  *  Currently we do not add any debug information to the bytecode.
@@ -65,8 +67,8 @@ class JavaSourceCompilationIT {
             "Bytecode is not equal to the original one, check that transformation is correct and does not change the bytecode",
             new EoRepresentation(
                 new BytecodeRepresentation(expected).toEO()
-            ).toBytecode(),
-            Matchers.equalTo(expected)
+            ).toBytecode().toString(),
+            Matchers.equalTo(expected.toString())
         );
     }
 
