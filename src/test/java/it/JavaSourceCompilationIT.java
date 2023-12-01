@@ -47,13 +47,13 @@ import org.junit.jupiter.api.io.TempDir;
  * - Transform XMIR back into bytecode
  * - Compare the original bytecode with the transformed one.
  * @since 0.1
- * @todo #218:90min Enable java compilation test.
- *  Currently, the test is disabled because it fails. The reason is that:
- *  1. We loose some additional information from original code during transformation and bytecode is
- *  not equal to the original one. It's not critical for runtime, but we need to fix it.
- *  2. Some machines might now have java compiler installed.
- *  We need to fix both of these issues and enable the test.
- *  The test is {@link #transformsRandomJavaSourceCodeIntoEoAndBack}.
+ * @todo #218:90min Add debug information to bytecode.
+ *  Currently we do not add any debug information to the bytecode.
+ *  We added -g:none flag to the compiler in order to avoid adding
+ *  any debug information.
+ *  See {@link #transformsRandomJavaSourceCodeIntoEoAndBack(java.nio.file.Path)} for more info.
+ *  We have to add debug information to the bytecode.
+ *  When it is done, we have to remove -g:none flag from the test.
  */
 class JavaSourceCompilationIT {
 
@@ -82,7 +82,13 @@ class JavaSourceCompilationIT {
     ) throws IOException {
         final Path src = where.resolve(String.format("%s.java", clazz.name()));
         Files.write(src, clazz.src().getBytes(StandardCharsets.UTF_8));
-        ToolProvider.getSystemJavaCompiler().run(System.in, System.out, System.err, src.toString());
+        ToolProvider.getSystemJavaCompiler().run(
+            System.in,
+            System.out,
+            System.err,
+            "-g:none",
+            src.toString()
+        );
         return new Bytecode(
             Files.readAllBytes(where.resolve(String.format("%s.class", clazz.name())))
         );
