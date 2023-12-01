@@ -87,6 +87,8 @@ class JavaSourceCompilationIT {
             System.out,
             System.err,
             "-g:none",
+            "-source", "11",
+            "-target", "11",
             src.toString()
         );
         return new Bytecode(
