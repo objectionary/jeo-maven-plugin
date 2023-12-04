@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -37,12 +38,18 @@ import org.objectweb.asm.Opcodes;
  */
 class OpcodeNameTest {
 
+    /**
+     * Opcode counter.
+     */
+    private static final AtomicInteger COUNTER = new AtomicInteger(0);
+
+
     @ParameterizedTest(name = "{0} -> {1}")
     @MethodSource("opcodes")
     void checksOpcodeNames(final int actual, final String expected) {
         MatcherAssert.assertThat(
             "Opcode name is not as expected",
-            new OpcodeName(actual).asString(),
+            new OpcodeName(actual, OpcodeNameTest.COUNTER).asString(),
             Matchers.equalTo(expected)
         );
     }
@@ -56,12 +63,17 @@ class OpcodeNameTest {
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> opcodes() {
         return Stream.of(
-            Arguments.of(Opcodes.INVOKESPECIAL, "INVOKESPECIAL"),
-            Arguments.of(Opcodes.INVOKEVIRTUAL, "INVOKEVIRTUAL"),
-            Arguments.of(Opcodes.INVOKESTATIC, "INVOKESTATIC"),
-            Arguments.of(Opcodes.INVOKEINTERFACE, "INVOKEINTERFACE"),
-            Arguments.of(Opcodes.INVOKEDYNAMIC, "INVOKEDYNAMIC"),
-            Arguments.of(Opcodes.DUP, "DUP")
+            Arguments.of(Opcodes.INVOKESPECIAL, "INVOKESPECIAL-1"),
+            Arguments.of(Opcodes.INVOKEVIRTUAL, "INVOKEVIRTUAL-2"),
+            Arguments.of(Opcodes.INVOKESTATIC, "INVOKESTATIC-3"),
+            Arguments.of(Opcodes.INVOKEINTERFACE, "INVOKEINTERFACE-4"),
+            Arguments.of(Opcodes.INVOKEDYNAMIC, "INVOKEDYNAMIC-5"),
+            Arguments.of(Opcodes.DUP, "DUP-6"),
+            Arguments.of(Opcodes.LDC, "LDC-7"),
+            Arguments.of(Opcodes.ALOAD, "ALOAD-8"),
+            Arguments.of(Opcodes.ASTORE, "ASTORE-9"),
+            Arguments.of(Opcodes.ILOAD, "ILOAD-A"),
+            Arguments.of(Opcodes.ISTORE, "ISTORE-B")
         );
     }
 }
