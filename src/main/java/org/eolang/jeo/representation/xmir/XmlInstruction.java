@@ -254,7 +254,12 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     private static boolean areAttributesEqual(final Node first, final Node second) {
         final boolean result;
         if (first != null && second != null && first.getNodeName().equals(second.getNodeName())) {
-            result = first.getNodeValue().equals(second.getNodeValue());
+            if (first.getNodeName().equals("name")) {
+                result = first.getNodeValue().split("-")[0]
+                    .equals(second.getNodeValue().split("-")[0]);
+            } else {
+                result = first.getNodeValue().equals(second.getNodeValue());
+            }
         } else {
             result = false;
         }
