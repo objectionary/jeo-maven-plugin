@@ -34,8 +34,8 @@ import org.eolang.jeo.representation.EoRepresentation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
@@ -46,27 +46,29 @@ import org.junit.jupiter.api.io.TempDir;
  * - Transform bytecode into XMIR
  * - Transform XMIR back into bytecode
  * - Compare the original bytecode with the transformed one.
+ * In this class we compare bytecode as strings because the order of values in
+ * the bytecode constant pool might differ, however the bytecode is still the same.
  * @since 0.1
- * @todo #218:90min Enable java compilation test.
- *  Currently, the test is disabled because it fails. The reason is that:
- *  1. We loose some additional information from original code during transformation and bytecode is
- *  not equal to the original one. It's not critical for runtime, but we need to fix it.
- *  2. Some machines might now have java compiler installed.
- *  We need to fix both of these issues and enable the test.
- *  The test is {@link #transformsRandomJavaSourceCodeIntoEoAndBack}.
+ * @todo #218:90min Add debug information to bytecode.
+ *  Currently we do not add any debug information to the bytecode.
+ *  We added -g:none flag to the compiler in order to avoid adding
+ *  any debug information.
+ *  See {@link #transformsRandomJavaSourceCodeIntoEoAndBack(java.nio.file.Path)} for more info.
+ *  We have to add debug information to the bytecode.
+ *  When it is done, we have to remove -g:none flag from the test.
  */
 class JavaSourceCompilationIT {
 
     @Test
-    @Disabled
+    @EnabledIf(value = "hasJavaCompiler", disabledReason = "Java compiler is not available")
     void transformsRandomJavaSourceCodeIntoEoAndBack(@TempDir final Path temp) throws IOException {
         final Bytecode expected = JavaSourceCompilationIT.compile(temp, new RandomJavaClass());
         MatcherAssert.assertThat(
             "Bytecode is not equal to the original one, check that transformation is correct and does not change the bytecode",
             new EoRepresentation(
                 new BytecodeRepresentation(expected).toEO()
-            ).toBytecode(),
-            Matchers.equalTo(expected)
+            ).toBytecode().toString(),
+            Matchers.equalTo(expected.toString())
         );
     }
 
@@ -82,9 +84,27 @@ class JavaSourceCompilationIT {
     ) throws IOException {
         final Path src = where.resolve(String.format("%s.java", clazz.name()));
         Files.write(src, clazz.src().getBytes(StandardCharsets.UTF_8));
-        ToolProvider.getSystemJavaCompiler().run(System.in, System.out, System.err, src.toString());
+        ToolProvider.getSystemJavaCompiler().run(
+            System.in,
+            System.out,
+            System.err,
+            "-g:none",
+            "-source", "11",
+            "-target", "11",
+            src.toString()
+        );
         return new Bytecode(
             Files.readAllBytes(where.resolve(String.format("%s.class", clazz.name())))
         );
+    }
+
+    /**
+     * Check if java compiler is available.
+     * Don't care about PMD warning: this method is used in @EnabledIf annotation.
+     * @return True if java compiler is available.
+     */
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private static boolean hasJavaCompiler() {
+        return ToolProvider.getSystemJavaCompiler() != null;
     }
 }
