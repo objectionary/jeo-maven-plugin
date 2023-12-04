@@ -43,7 +43,6 @@ class OpcodeNameTest {
      */
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
 
-
     @ParameterizedTest(name = "{0} -> {1}")
     @MethodSource("opcodes")
     void checksOpcodeNames(final int actual, final String expected) {

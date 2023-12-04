@@ -47,7 +47,6 @@ final class OpcodeName {
      */
     private static final AtomicInteger DEFAULT = new AtomicInteger(0);
 
-
     /**
      * Bytecode operation code.
      */
