@@ -77,6 +77,14 @@ final class OpcodeName {
     }
 
     /**
+     * Get simplified opcode name without counter.
+     * @return Simplified opcode name.
+     */
+    String simplified() {
+        return OpcodeName.NAMES.getOrDefault(this.opcode, "UNKNOWN");
+    }
+
+    /**
      * Get string representation of a bytecode.
      * @return String representation of a bytecode.
      */
