@@ -23,18 +23,13 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicReference;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Class printer.
@@ -60,10 +55,8 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
     private final String listing;
 
     /**
-     * Xembly directives.
+     * Program directives.
      */
-    private final Directives directives;
-
     private final DirectivesProgram program;
 
 
@@ -72,7 +65,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
      * @param listing Bytecode listing.
      */
     public DirectivesClassVisitor(final String listing) {
-        this(new DefaultVersion().api(), new Directives(), listing);
+        this(new DefaultVersion().api(), listing);
     }
 
     /**
@@ -85,16 +78,13 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
     /**
      * Constructor.
      * @param api ASM API version.
-     * @param directives Xembly directives.
      * @param listing Bytecode listing.
      */
     private DirectivesClassVisitor(
         final int api,
-        final Directives directives,
         final String listing
     ) {
         super(api);
-        this.directives = directives;
         this.listing = listing;
         this.program = new DirectivesProgram(this.listing);
     }
