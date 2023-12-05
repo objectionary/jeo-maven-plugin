@@ -60,29 +60,6 @@ public final class XmlProgram {
     }
 
     /**
-     * Create a copy of this program.
-     * @return Copy of this program.
-     */
-    public XmlProgram copy() {
-        return new XmlProgram(this.root);
-    }
-
-    /**
-     * Set top-level class and return new XmlProgram.
-     * @param clazz Class.
-     * @return New XmlProgram.
-     */
-    public XmlProgram with(final XmlClass clazz) {
-        final Node res = new XMLDocument(this.root).node();
-        new XmlNode(res)
-            .child(XmlProgram.PROGRAM)
-            .child("objects")
-            .clean()
-            .append(clazz.node());
-        return new XmlProgram(res);
-    }
-
-    /**
      * Find top-level class.
      * @return Class.
      */
