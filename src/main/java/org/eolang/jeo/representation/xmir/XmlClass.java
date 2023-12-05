@@ -72,6 +72,53 @@ public final class XmlClass {
     }
 
     /**
+     * Internal XML node.
+     * @return Internal XML node.
+     * @todo #161:30min Hide internal node representation in XmlClass.
+     *  This class should not expose internal node representation.
+     *  We have to consider to add methods or classes in order to avoid
+     *  exposing internal node representation.
+     */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+    public Node node() {
+        return this.node;
+    }
+
+    /**
+     * Class name.
+     * @return Name.
+     */
+    public String name() {
+        return String.valueOf(this.node.getAttributes().getNamedItem("name").getTextContent());
+    }
+
+    @Override
+    public String toString() {
+        return new XMLDocument(this.node).toString();
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other == null || this.getClass() != other.getClass()) {
+            result = false;
+        } else {
+            result = Objects.equals(
+                new XMLDocument(this.node),
+                new XMLDocument(((XmlClass) other).node)
+            );
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.node);
+    }
+
+    /**
      * Retrieve all constructors from XMIR.
      * @return List of constructors.
      */
@@ -106,27 +153,6 @@ public final class XmlClass {
     }
 
     /**
-     * Internal XML node.
-     * @return Internal XML node.
-     * @todo #161:30min Hide internal node representation in XmlClass.
-     *  This class should not expose internal node representation.
-     *  We have to consider to add methods or classes in order to avoid
-     *  exposing internal node representation.
-     */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    public Node node() {
-        return this.node;
-    }
-
-    /**
-     * Class name.
-     * @return Name.
-     */
-    public String name() {
-        return String.valueOf(this.node.getAttributes().getNamedItem("name").getTextContent());
-    }
-
-    /**
      * Class properties.
      * @return Class properties.
      */
@@ -148,23 +174,5 @@ public final class XmlClass {
             }
         }
         return res.stream();
-    }
-
-    @Override
-    public String toString() {
-        return new XMLDocument(this.node).toString();
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
-        final XmlClass xmlClass = (XmlClass) o;
-        return Objects.equals(new XMLDocument(this.node), new XMLDocument(xmlClass.node));
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.node);
     }
 }

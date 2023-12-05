@@ -50,15 +50,16 @@ import org.xembly.Directive;
 public final class DirectivesClassVisitor extends ClassVisitor implements Iterable<Directive> {
 
     /**
-     * Bytecode listing.
-     */
-    private final String listing;
-
-    /**
      * Program directives.
      */
     private final DirectivesProgram program;
 
+    /**
+     * Constructor.
+     */
+    DirectivesClassVisitor() {
+        this("");
+    }
 
     /**
      * Constructor.
@@ -66,13 +67,6 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
      */
     public DirectivesClassVisitor(final String listing) {
         this(new DefaultVersion().api(), listing);
-    }
-
-    /**
-     * Constructor.
-     */
-    DirectivesClassVisitor() {
-        this("");
     }
 
     /**
@@ -85,8 +79,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String listing
     ) {
         super(api);
-        this.listing = listing;
-        this.program = new DirectivesProgram(this.listing);
+        this.program = new DirectivesProgram(listing);
     }
 
     @Override

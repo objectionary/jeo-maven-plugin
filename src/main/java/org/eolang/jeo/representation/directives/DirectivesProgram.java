@@ -37,7 +37,7 @@ import org.xembly.Directives;
  * Program representation as Xembly directives.
  * @since 0.1
  */
-public class DirectivesProgram implements Iterable<Directive> {
+public final class DirectivesProgram implements Iterable<Directive> {
 
     /**
      * Program listing.
@@ -67,58 +67,45 @@ public class DirectivesProgram implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param listing Program listing.
+     * @param code Program listing.
      */
-    DirectivesProgram(final String listing) {
-        this(listing, new AtomicReference<>(), new AtomicReference<>());
+    DirectivesProgram(final String code) {
+        this(code, new AtomicReference<>(), new AtomicReference<>());
     }
 
     /**
      * Constructor.
-     * @param listing Program listing.
-     * @param klass Class.
-     * @param classname Classname.
+     * @param code Program listing.
+     * @param clazz Class.
+     * @param name Classname.
      */
     private DirectivesProgram(
-        final String listing,
-        final AtomicReference<DirectivesClass> klass,
-        final AtomicReference<ClassName> classname
+        final String code,
+        final AtomicReference<DirectivesClass> clazz,
+        final AtomicReference<ClassName> name
     ) {
-        this.listing = listing;
-        this.klass = klass;
-        this.classname = classname;
+        this.listing = code;
+        this.klass = clazz;
+        this.classname = name;
     }
 
     /**
      * Append top-level class.
      * @param name Class Name.
-     * @param klass Top-level class.
+     * @param clazz Top-level class.
      * @return The same instance.
      */
-    public DirectivesProgram withClass(ClassName name, DirectivesClass klass) {
+    public DirectivesProgram withClass(final ClassName name, final DirectivesClass clazz) {
         this.classname.set(name);
-        this.klass.set(klass);
+        this.klass.set(clazz);
         return this;
-    }
-
-    /**
-     * Retrieve top-level class.
-     * @return Top-level class.
-     */
-    DirectivesClass top() {
-        if (Objects.isNull(this.klass.get())) {
-            throw new IllegalStateException(
-                String.format("Class is not initialized here %s", this)
-            );
-        }
-        return this.klass.get();
     }
 
     @Override
     public Iterator<Directive> iterator() {
         final String now = ZonedDateTime.now(ZoneOffset.UTC)
             .format(DateTimeFormatter.ISO_INSTANT);
-        Directives directives = new Directives();
+        final Directives directives = new Directives();
         directives.add("program")
             .attr("name", this.classname.get().name())
             .attr("version", "0.0.0")
@@ -137,5 +124,18 @@ public class DirectivesProgram implements Iterable<Directive> {
         directives.append(this.klass.get());
         directives.up();
         return directives.iterator();
+    }
+
+    /**
+     * Retrieve top-level class.
+     * @return Top-level class.
+     */
+    DirectivesClass top() {
+        if (Objects.isNull(this.klass.get())) {
+            throw new IllegalStateException(
+                String.format("Class is not initialized here %s", this)
+            );
+        }
+        return this.klass.get();
     }
 }

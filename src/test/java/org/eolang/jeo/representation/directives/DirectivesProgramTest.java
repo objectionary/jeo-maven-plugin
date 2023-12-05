@@ -33,6 +33,7 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link DirectivesProgram}.
+ * @since 0.1
  */
 class DirectivesProgramTest {
 
