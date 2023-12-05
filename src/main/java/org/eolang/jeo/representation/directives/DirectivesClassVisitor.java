@@ -157,6 +157,6 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
 
     @Override
     public Iterator<Directive> iterator() {
-        return this.directives.iterator();
+        return this.program.iterator();
     }
 }

@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
@@ -38,13 +39,17 @@ class DirectivesProgramTest {
     @Test
     void createsCorrectDirectives() {
         final ClassName name = new ClassName("Foo");
+        final String actual = new Xembler(
+            new DirectivesProgram()
+                .withClass(name, new DirectivesClass(name)),
+            new Transformers.Node()
+        ).xmlQuietly();
         MatcherAssert.assertThat(
-            "Can't correctly and without errors create program directives",
-            new Xembler(
-                new DirectivesProgram()
-                    .withClass(name, new DirectivesClass(name)),
-                new Transformers.Node()
-            ).xmlQuietly(),
+            String.format(
+                "Can't correctly and without errors create program directives, received XML: %n%s",
+                new XMLDocument(actual)
+            ),
+            actual,
             XhtmlMatchers.hasXPath("/program/objects/o[@name='Foo']")
         );
     }
