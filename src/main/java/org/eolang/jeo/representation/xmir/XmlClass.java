@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.directives.DirectivesClass;
@@ -152,5 +153,18 @@ public final class XmlClass {
     @Override
     public String toString() {
         return new XMLDocument(this.node).toString();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        final XmlClass xmlClass = (XmlClass) o;
+        return Objects.equals(new XMLDocument(this.node), new XMLDocument(xmlClass.node));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.node);
     }
 }

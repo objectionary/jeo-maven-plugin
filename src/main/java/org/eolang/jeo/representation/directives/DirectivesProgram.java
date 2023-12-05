@@ -61,7 +61,7 @@ public class DirectivesProgram implements Iterable<Directive> {
     /**
      * Simple constructor with empty listing.
      */
-    DirectivesProgram() {
+    public DirectivesProgram() {
         this("");
     }
 
@@ -95,7 +95,7 @@ public class DirectivesProgram implements Iterable<Directive> {
      * @param klass Top-level class.
      * @return The same instance.
      */
-    DirectivesProgram withClass(ClassName name, DirectivesClass klass) {
+    public DirectivesProgram withClass(ClassName name, DirectivesClass klass) {
         this.classname.set(name);
         this.klass.set(klass);
         return this;

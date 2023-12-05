@@ -23,7 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XMLDocument;
+import org.eolang.jeo.representation.ClassName;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -36,9 +36,10 @@ class XmlProgramTest {
 
     @Test
     void retrievesTopClass() {
-        final XmlProgram program = new XmlProgram(new XMLDocument(""));
+        final String bar = "Bar";
+        final XmlProgram program = new XmlProgram(new ClassName(bar));
         final XmlClass actual = program.top();
-        final XmlClass expected = new XmlClass(new XMLDocument("").node());
+        final XmlClass expected = new XmlClass(bar);
         MatcherAssert.assertThat(
             String.format(
                 "Can't retrieve top-level class from program %s. Expected %s%n Actual %s%n",
@@ -54,7 +55,7 @@ class XmlProgramTest {
     @Test
     void retrievesPackage() {
         final String expected = "com.matrix.foobar";
-        final String actual = new XmlProgram(expected).pckg();
+        final String actual = new XmlProgram(new ClassName(expected, "FooBar")).pckg();
         MatcherAssert.assertThat(
             String.format(
                 "Can't retrieve package from program %s. Expected %s%n Actual %s%n",

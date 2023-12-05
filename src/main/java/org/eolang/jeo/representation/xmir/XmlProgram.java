@@ -25,7 +25,11 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.directives.DirectivesClass;
+import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.w3c.dom.Node;
+import org.xembly.Xembler;
 
 /**
  * XMIR Program.
@@ -45,19 +49,16 @@ final class XmlProgram {
 
     /**
      * Constructor.
-     * @param pkcg Package.
+     * @param name Class name.
      */
-    XmlProgram(final String pkcg) {
+    XmlProgram(final ClassName name) {
         this(
-
             new XMLDocument(
-            String.format(
-                "<%s><metas><meta><tail>%s</tail></meta></metas></%s>",
-                XmlProgram.PROGRAM,
-                pkcg,
-                XmlProgram.PROGRAM
-            )
-        ));
+                new Xembler(
+                    new DirectivesProgram().withClass(name, new DirectivesClass(name))
+                ).xmlQuietly()
+            ).node()
+        );
     }
 
     /**
