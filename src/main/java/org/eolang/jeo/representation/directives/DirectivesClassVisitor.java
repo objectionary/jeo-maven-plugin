@@ -64,12 +64,8 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
      */
     private final Directives directives;
 
-    /**
-     * Class directives.
-     * This field uses atomic reference because the field can't be initialized in the constructor.
-     * It is ASM framework limitation.
-     */
-    private final AtomicReference<DirectivesClass> clazz;
+    private final DirectivesProgram program;
+
 
     /**
      * Constructor.
@@ -100,7 +96,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         super(api);
         this.directives = directives;
         this.listing = listing;
-        this.clazz = new AtomicReference<>();
+        this.program = new DirectivesProgram(this.listing);
     }
 
     @Override
@@ -112,25 +108,9 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String supername,
         final String[] interfaces
     ) {
-        final String now = ZonedDateTime.now(ZoneOffset.UTC)
-            .format(DateTimeFormatter.ISO_INSTANT);
         final ClassName classname = new ClassName(name);
-        this.directives.add("program")
-            .attr("name", classname.name())
-            .attr("version", "0.0.0")
-            .attr("revision", "0.0.0")
-            .attr("dob", now)
-            .attr("time", now)
-            .add("listing")
-            .set(this.listing)
-            .up()
-            .add("errors").up()
-            .add("sheets").up()
-            .add("license").up()
-            .append(new DirectivesMetas(classname))
-            .attr("ms", System.currentTimeMillis())
-            .add("objects");
-        this.clazz.set(
+        this.program.withClass(
+            classname,
             new DirectivesClass(
                 classname,
                 new DirectivesClassProperties(
@@ -156,7 +136,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
             name,
             new DirectivesMethodProperties(access, descriptor, signature, exceptions)
         );
-        this.clazz.get().method(method);
+        this.program.top().method(method);
         return new DirectivesMethodVisitor(
             method,
             super.visitMethod(access, name, descriptor, signature, exceptions)
@@ -171,15 +151,8 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String signature,
         final Object value
     ) {
-        this.clazz.get().field(new DirectivesField(access, name, descriptor, signature, value));
+        this.program.top().field(new DirectivesField(access, name, descriptor, signature, value));
         return super.visitField(access, name, descriptor, signature, value);
-    }
-
-    @Override
-    public void visitEnd() {
-        this.directives.append(this.clazz.get());
-        this.directives.up();
-        super.visitEnd();
     }
 
     @Override
