@@ -25,15 +25,13 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import org.w3c.dom.Node;
 
 /**
  * XMIR Program.
  * @since 0.1
  */
-public class XmlProgram {
+public final class XmlProgram {
 
     /**
      * Program node name.
@@ -49,7 +47,7 @@ public class XmlProgram {
      * Constructor.
      * @param xml Raw XMIR.
      */
-    public XmlProgram(final XML xml) {
+    XmlProgram(final XML xml) {
         this(xml.node());
     }
 
@@ -70,18 +68,6 @@ public class XmlProgram {
     }
 
     /**
-     * Find top-level class.
-     * @return Class.
-     */
-    public XmlClass top() {
-        return new XmlNode(this.root)
-            .child(XmlProgram.PROGRAM)
-            .child("objects")
-            .child("o")
-            .toClass();
-    }
-
-    /**
      * Set top-level class and return new XmlProgram.
      * @param clazz Class.
      * @return New XmlProgram.
@@ -97,60 +83,27 @@ public class XmlProgram {
     }
 
     /**
+     * Find top-level class.
+     * @return Class.
+     */
+    XmlClass top() {
+        return new XmlNode(this.root)
+            .child(XmlProgram.PROGRAM)
+            .child("objects")
+            .child("o")
+            .toClass();
+    }
+
+    /**
      * Retrieve program package.
      * @return Package.
      */
-    public String pckg() {
+    String pckg() {
         return new XmlNode(this.root)
             .child(XmlProgram.PROGRAM)
             .child("metas")
             .child("meta")
             .child("tail")
             .text();
-    }
-
-    /**
-     * Convert to XMIR .
-     * @return XMIR.
-     */
-    public XML toXmir() {
-        return new XMLDocument(this.root);
-    }
-
-    /**
-     * Set program name.
-     * @param name Name.
-     * @return The same program.
-     */
-    public XmlProgram withName(final String name) {
-        new XmlNode(this.root)
-            .child(XmlProgram.PROGRAM)
-            .withAttribute("name", name);
-        return this;
-    }
-
-    /**
-     * Set program time.
-     * @param time Time.
-     * @return The same program.
-     */
-    public XmlProgram withTime(final LocalDateTime time) {
-        new XmlNode(this.root)
-            .child(XmlProgram.PROGRAM)
-            .withAttribute("time", time.format(DateTimeFormatter.ISO_DATE_TIME));
-        return this;
-    }
-
-    /**
-     * Set listing.
-     * @param listing Listing.
-     * @return The same program.
-     */
-    public XmlProgram withListing(final String listing) {
-        new XmlNode(this.root)
-            .child(XmlProgram.PROGRAM)
-            .child("listing")
-            .withText(listing);
-        return this;
     }
 }
