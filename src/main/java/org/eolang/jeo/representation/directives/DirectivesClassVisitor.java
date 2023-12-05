@@ -130,13 +130,17 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
             .append(new DirectivesMetas(classname))
             .attr("ms", System.currentTimeMillis())
             .add("objects");
-        final DirectivesClassProperties props = new DirectivesClassProperties(
-            access,
-            signature,
-            supername,
-            interfaces
+        this.clazz.set(
+            new DirectivesClass(
+                classname,
+                new DirectivesClassProperties(
+                    access,
+                    signature,
+                    supername,
+                    interfaces
+                )
+            )
         );
-        this.clazz.set(new DirectivesClass(classname, props));
         super.visit(version, access, name, signature, supername, interfaces);
     }
 

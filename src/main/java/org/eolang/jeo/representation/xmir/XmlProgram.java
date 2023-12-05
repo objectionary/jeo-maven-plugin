@@ -45,6 +45,23 @@ final class XmlProgram {
 
     /**
      * Constructor.
+     * @param pkcg Package.
+     */
+    XmlProgram(final String pkcg) {
+        this(
+
+            new XMLDocument(
+            String.format(
+                "<%s><metas><meta><tail>%s</tail></meta></metas></%s>",
+                XmlProgram.PROGRAM,
+                pkcg,
+                XmlProgram.PROGRAM
+            )
+        ));
+    }
+
+    /**
+     * Constructor.
      * @param xml Raw XMIR.
      */
     XmlProgram(final XML xml) {
@@ -57,17 +74,6 @@ final class XmlProgram {
      */
     private XmlProgram(final Node root) {
         this.root = root;
-    }
-
-    public XmlProgram(final String pkcg) {
-        this(new XMLDocument(
-            String.format(
-                "<%s><metas><meta><tail>%s</tail></meta></metas></%s>",
-                XmlProgram.PROGRAM,
-                pkcg,
-                XmlProgram.PROGRAM
-            )
-        ));
     }
 
     /**
