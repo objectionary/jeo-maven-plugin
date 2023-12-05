@@ -32,9 +32,6 @@ import org.w3c.dom.Node;
 /**
  * XMIR Program.
  * @since 0.1
- * @todo #174:90min Add unit tests for XmlProgram.
- *  Currently we don't have unit tests for XmlProgram. So, it makes sense to add
- *  them to keep code safe and clear.
  */
 public class XmlProgram {
 
