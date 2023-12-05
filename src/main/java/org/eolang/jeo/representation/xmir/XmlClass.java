@@ -23,12 +23,16 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xembly.Transformers;
+import org.xembly.Xembler;
 
 /**
  * XML class.
@@ -45,9 +49,24 @@ public final class XmlClass {
 
     /**
      * Constructor.
+     * @param classname Class name.
+     */
+    XmlClass(final String classname) {
+        this(
+            new XMLDocument(
+                new Xembler(
+                    new DirectivesClass(classname),
+                    new Transformers.Node()
+                ).xmlQuietly()
+            ).node().getFirstChild()
+        );
+    }
+
+    /**
+     * Constructor.
      * @param xml Class node.
      */
-    public XmlClass(final Node xml) {
+    XmlClass(final Node xml) {
         this.node = xml;
     }
 
@@ -55,7 +74,7 @@ public final class XmlClass {
      * Retrieve all constructors from XMIR.
      * @return List of constructors.
      */
-    public List<XmlMethod> constructors() {
+    List<XmlMethod> constructors() {
         return this.methods()
             .stream()
             .filter(XmlMethod::isConstructor)
@@ -66,7 +85,7 @@ public final class XmlClass {
      * Methods.
      * @return Class methods.
      */
-    public List<XmlMethod> methods() {
+    List<XmlMethod> methods() {
         return this.objects()
             .filter(o -> o.getAttributes().getNamedItem("base") == null)
             .map(XmlMethod::new)
@@ -77,7 +96,7 @@ public final class XmlClass {
      * Fields.
      * @return Class fields.
      */
-    public List<XmlField> fields() {
+    List<XmlField> fields() {
         return this.objects()
             .filter(o -> o.getAttributes().getNamedItem("base") != null)
             .filter(o -> "field".equals(o.getAttributes().getNamedItem("base").getNodeValue()))
@@ -128,5 +147,10 @@ public final class XmlClass {
             }
         }
         return res.stream();
+    }
+
+    @Override
+    public String toString() {
+        return new XMLDocument(this.node).toString();
     }
 }

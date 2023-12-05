@@ -31,7 +31,7 @@ import org.w3c.dom.Node;
  * XMIR Program.
  * @since 0.1
  */
-public final class XmlProgram {
+final class XmlProgram {
 
     /**
      * Program node name.
@@ -57,6 +57,17 @@ public final class XmlProgram {
      */
     private XmlProgram(final Node root) {
         this.root = root;
+    }
+
+    public XmlProgram(final String pkcg) {
+        this(new XMLDocument(
+            String.format(
+                "<%s><metas><meta><tail>%s</tail></meta></metas></%s>",
+                XmlProgram.PROGRAM,
+                pkcg,
+                XmlProgram.PROGRAM
+            )
+        ));
     }
 
     /**

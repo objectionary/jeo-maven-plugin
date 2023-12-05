@@ -36,6 +36,21 @@ import org.junit.jupiter.api.Test;
 class XmlClassTest {
 
     @Test
+    void createsByName() {
+        final String expected = "FooClass";
+        final XmlClass klass = new XmlClass(expected);
+        MatcherAssert.assertThat(
+            String.format(
+                "%s should create a class with name %s%n",
+                klass,
+                expected
+            ),
+            klass.name(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
     void retrievesConstructor() {
         final XML doc = new XMLDocument(
             String.join(
