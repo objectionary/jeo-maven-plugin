@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.w3c.dom.NamedNodeMap;
@@ -79,6 +80,11 @@ final class XmlNode {
             res = false;
         }
         return res;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.node);
     }
 
     @Override

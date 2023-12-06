@@ -1,8 +1,8 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -44,9 +44,15 @@ class XmlNodeTest {
 
     @Test
     void retrievesAttribute() {
+        final Optional<String> attribute = new XmlNode("<o name='some'/>").attribute("name");
         MatcherAssert.assertThat(
-            "Can't retrieve the attribute, or the attribute is not the expected one",
-            new XmlNode("<o name='some'/>").attribute("name"),
+            "Can't retrieve the attribute",
+            attribute.isPresent(),
+            Matchers.is(true)
+        );
+        MatcherAssert.assertThat(
+            "he attribute is not the expected one",
+            attribute.get(),
             Matchers.equalTo("some")
         );
     }

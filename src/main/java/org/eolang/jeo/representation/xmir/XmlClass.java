@@ -165,14 +165,6 @@ public final class XmlClass {
      * @return Stream of class objects.
      */
     private Stream<Node> objects() {
-        final NodeList children = this.node.getChildNodes();
-        final List<Node> res = new ArrayList<>(children.getLength());
-        for (int index = 0; index < children.getLength(); ++index) {
-            final Node child = children.item(index);
-            if (child.getNodeName().equals("o")) {
-                res.add(child);
-            }
-        }
-        return res.stream();
+        return new XmlNode(this.node).children().map(XmlNode::node);
     }
 }
