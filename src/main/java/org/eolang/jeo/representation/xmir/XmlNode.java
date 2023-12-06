@@ -48,6 +48,14 @@ final class XmlNode {
 
     /**
      * Constructor.
+     * @param xml XML string.
+     */
+    XmlNode(String xml) {
+        this(new XMLDocument(xml).node().getFirstChild());
+    }
+
+    /**
+     * Constructor.
      * @param parent Parent node.
      */
     XmlNode(final Node parent) {
@@ -60,6 +68,22 @@ final class XmlNode {
      */
     public Node node() {
         return this.node;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        final boolean res;
+        if (obj instanceof XmlNode) {
+            res = new XMLDocument(this.node).equals(new XMLDocument(((XmlNode) obj).node));
+        } else {
+            res = false;
+        }
+        return res;
+    }
+
+    @Override
+    public String toString() {
+        return new XMLDocument(this.node).toString();
     }
 
     /**
@@ -147,49 +171,6 @@ final class XmlNode {
      */
     String text() {
         return this.node.getTextContent();
-    }
-
-    /**
-     * Set node text content.
-     * @param text Text content.
-     */
-    void withText(final String text) {
-        this.node.setTextContent(text);
-    }
-
-    /**
-     * Set node attribute.
-     * @param name Attribute name.
-     * @param value Attribute value.
-     */
-    void withAttribute(final String name, final String value) {
-        final NamedNodeMap attributes = this.node.getAttributes();
-        if (null == attributes.getNamedItem(name)) {
-            attributes.setNamedItem(this.node.getOwnerDocument().createAttribute(name));
-        }
-        attributes.getNamedItem(name).setNodeValue(value);
-        this.node.getAttributes().getNamedItem(name).setNodeValue(value);
-    }
-
-    /**
-     * Clean all child nodes.
-     * @return The same node.
-     */
-    XmlNode clean() {
-        while (this.node.hasChildNodes()) {
-            this.node.removeChild(this.node.getFirstChild());
-        }
-        return this;
-    }
-
-    /**
-     * Append child node.
-     * @param child Node to append.
-     * @return The same node.
-     */
-    XmlNode append(final Node child) {
-        this.node.appendChild(this.node.getOwnerDocument().adoptNode(child.cloneNode(true)));
-        return this;
     }
 
     /**
