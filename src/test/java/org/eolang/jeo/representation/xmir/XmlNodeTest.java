@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 class XmlNodeTest {
 
     @Test
-    void retrieveTheFirstChild() {
+    void retrievesTheFirstChild() {
         MatcherAssert.assertThat(
             "Can't retrieve the first child, or the first child is not the expected one",
             new XmlNode("<o><o name='inner'/></o>").firstChild(),
