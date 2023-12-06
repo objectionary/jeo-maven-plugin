@@ -51,7 +51,7 @@ final class XmlNode {
      * Constructor.
      * @param xml XML string.
      */
-    XmlNode(String xml) {
+    XmlNode(final String xml) {
         this(new XMLDocument(xml).node().getFirstChild());
     }
 

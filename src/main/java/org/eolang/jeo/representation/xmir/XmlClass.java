@@ -24,14 +24,12 @@
 package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -135,7 +133,7 @@ public final class XmlClass {
      */
     List<XmlMethod> methods() {
         return this.objects()
-            .filter(o -> o.getAttributes().getNamedItem("base") == null)
+            .filter(o -> o.attribute("base").isEmpty())
             .map(XmlMethod::new)
             .collect(Collectors.toList());
     }
@@ -146,8 +144,8 @@ public final class XmlClass {
      */
     List<XmlField> fields() {
         return this.objects()
-            .filter(o -> o.getAttributes().getNamedItem("base") != null)
-            .filter(o -> "field".equals(o.getAttributes().getNamedItem("base").getNodeValue()))
+            .filter(o -> o.attribute("base").isPresent())
+            .filter(o -> "field".equals(o.attribute("base").get()))
             .map(XmlField::new)
             .collect(Collectors.toList());
     }
@@ -164,7 +162,7 @@ public final class XmlClass {
      * Objects.
      * @return Stream of class objects.
      */
-    private Stream<Node> objects() {
-        return new XmlNode(this.node).children().map(XmlNode::node);
+    private Stream<XmlNode> objects() {
+        return new XmlNode(this.node).children();
     }
 }

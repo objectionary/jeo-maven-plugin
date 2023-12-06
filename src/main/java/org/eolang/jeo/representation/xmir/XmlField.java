@@ -43,6 +43,14 @@ public class XmlField {
      * Constructor.
      * @param node Field node.
      */
+    XmlField(final XmlNode node) {
+        this(node.node());
+    }
+
+    /**
+     * Constructor.
+     * @param node Field node.
+     */
     XmlField(final Node node) {
         this.node = node;
     }

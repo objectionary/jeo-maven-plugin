@@ -103,6 +103,14 @@ public final class XmlMethod {
      * Constructor.
      * @param node Method node.
      */
+    XmlMethod(final XmlNode node) {
+        this(node.node());
+    }
+
+    /**
+     * Constructor.
+     * @param node Method node.
+     */
     XmlMethod(final Node node) {
         this.node = node;
     }
