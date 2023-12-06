@@ -36,9 +36,6 @@ import org.w3c.dom.NodeList;
  * XML smart element.
  * Utility class that simplifies work with XML.
  * @since 0.1
- * @todo #193:90min Add unit tests for XmlNode.
- *  Currently we don't have unit tests for XmlNode. So, it makes sense to add
- *  them to keep code safe and clear.
  */
 @SuppressWarnings("PMD.TooManyMethods")
 final class XmlNode {

@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
-import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.w3c.dom.NamedNodeMap;
@@ -98,19 +97,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     @Override
     public boolean hasOpcode(final int opcode) {
         return this.code() == opcode;
-    }
-
-    @Override
-    public void replaceArguementsValues(final String old, final String replacement) {
-        final String oldname = new HexData(old).value();
-        new XmlNode(this.node).children().forEach(
-            child -> {
-                final String content = child.text();
-                if (oldname.equals(content)) {
-                    child.withText(new HexData(replacement).value());
-                }
-            }
-        );
     }
 
     /**

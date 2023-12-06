@@ -63,11 +63,6 @@ public final class XmlLabel implements XmlBytecodeEntry {
     }
 
     @Override
-    public void replaceArguementsValues(final String old, final String replacement) {
-        // Nothing to replace
-    }
-
-    @Override
     public Node node() {
         return this.node.node();
     }
