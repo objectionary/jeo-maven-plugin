@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XMLDocument;
 import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
-import org.w3c.dom.Node;
 
 /**
  * XML representation of a class.
@@ -58,8 +57,8 @@ final class XmlClassProperties {
      * Constructor.
      * @param clazz XMl representation of a class.
      */
-    XmlClassProperties(final Node clazz) {
-        this(new XMLDocument(clazz));
+    XmlClassProperties(final XmlNode clazz) {
+        this(clazz.asDocument());
     }
 
     /**

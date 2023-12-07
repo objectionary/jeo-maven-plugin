@@ -196,6 +196,14 @@ final class XmlNode {
     }
 
     /**
+     * Convert to XML document.
+     * @return XML document.
+     */
+    XMLDocument asDocument() {
+        return new XMLDocument(this.node);
+    }
+
+    /**
      * Generate exception if element not found.
      * @param name Element name.
      * @return Exception.

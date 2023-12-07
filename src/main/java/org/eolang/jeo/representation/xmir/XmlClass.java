@@ -91,7 +91,7 @@ public final class XmlClass {
      * @return Class properties.
      */
     XmlClassProperties properties() {
-        return new XmlClassProperties(this.node.node());
+        return new XmlClassProperties(this.node);
     }
 
     /**
