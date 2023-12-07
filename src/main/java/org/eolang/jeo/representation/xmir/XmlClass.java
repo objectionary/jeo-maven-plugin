@@ -56,8 +56,21 @@ public final class XmlClass {
         this(XmlClass.empty(classname));
     }
 
-    XmlClass(final String classname, final int access) {
-        this(XmlClass.withProps(classname, access));
+    /**
+     * Constructor.
+     * @param properties Class properties.
+     */
+    public XmlClass(final DirectivesClassProperties properties) {
+        this("HelloWorld", properties);
+    }
+
+    /**
+     * Constructor.
+     * @param classname Class name.
+     * @param properties Class properties.
+     */
+    XmlClass(final String classname, final DirectivesClassProperties properties) {
+        this(XmlClass.withProps(classname, properties));
     }
 
     /**
@@ -139,19 +152,19 @@ public final class XmlClass {
      * @return Class node.
      */
     private static Node empty(final String classname) {
-        return XmlClass.withProps(classname, 0);
+        return XmlClass.withProps(classname, new DirectivesClassProperties(0));
     }
 
     /**
      * Generate class node with given name and access.
      * @param classname Class name.
-     * @param access Access.
+     * @param props Class properties.
      * @return Class node.
      */
-    private static Node withProps(final String classname, final int access) {
+    private static Node withProps(final String classname, final DirectivesClassProperties props) {
         return new XMLDocument(
             new Xembler(
-                new DirectivesClass(classname, new DirectivesClassProperties(access)),
+                new DirectivesClass(classname, props),
                 new Transformers.Node()
             ).xmlQuietly()
         ).node().getFirstChild();

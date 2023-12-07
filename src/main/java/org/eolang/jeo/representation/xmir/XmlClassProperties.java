@@ -70,23 +70,10 @@ final class XmlClassProperties {
     }
 
     /**
-     * Convert to bytecode properties.
-     * @return Bytecode properties.
-     */
-    BytecodeClassProperties toBytecodeProperties() {
-        return new BytecodeClassProperties(
-            this.access(),
-            this.signature().orElse(null),
-            this.supername(),
-            this.interfaces()
-        );
-    }
-
-    /**
      * Retrieve 'signature' of a class.
      * @return Signature.
      */
-    private Optional<String> signature() {
+    Optional<String> signature() {
         return this.clazz.xpath("./o[@name='signature']/text()")
             .stream()
             .map(HexString::new)
@@ -98,7 +85,7 @@ final class XmlClassProperties {
      * Retrieve 'supername' of a class.
      * @return Supername.
      */
-    private String supername() {
+    String supername() {
         return this.clazz.xpath("//o[@name='supername']/text()")
             .stream()
             .map(HexString::new)
@@ -110,11 +97,24 @@ final class XmlClassProperties {
      * Retrieve 'interfaces' of a class.
      * @return Interfaces.
      */
-    private String[] interfaces() {
+    String[] interfaces() {
         return this.clazz.xpath("//o[@name='interfaces']/o/text()")
             .stream()
             .map(HexString::new)
             .map(HexString::decode).toArray(String[]::new);
+    }
+
+    /**
+     * Convert to bytecode properties.
+     * @return Bytecode properties.
+     */
+    BytecodeClassProperties toBytecodeProperties() {
+        return new BytecodeClassProperties(
+            this.access(),
+            this.signature().orElse(null),
+            this.supername(),
+            this.interfaces()
+        );
     }
 }
 

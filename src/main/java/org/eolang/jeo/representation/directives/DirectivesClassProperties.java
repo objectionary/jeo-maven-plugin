@@ -66,7 +66,16 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
      * @param access Access modifiers.
      */
     public DirectivesClassProperties(final int access) {
-        this(access, "", "", new String[0]);
+        this(access, "");
+    }
+
+    /**
+     * Constructor.
+     * @param access Access modifiers.
+     * @param signature Class Signature.
+     */
+    public DirectivesClassProperties(final int access, final String signature) {
+        this(access, signature, "", new String[0]);
     }
 
     /**
@@ -77,7 +86,7 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
      * @param interfaces Class interfaces.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    DirectivesClassProperties(
+    public DirectivesClassProperties(
         final int access,
         final String signature,
         final String supername,
