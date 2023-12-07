@@ -46,7 +46,6 @@ public final class XmlClass {
      * Class node from entire XML.
      */
     @ToString.Include
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final XmlNode node;
 
     /**
@@ -54,14 +53,7 @@ public final class XmlClass {
      * @param classname Class name.
      */
     XmlClass(final String classname) {
-        this(
-            new XMLDocument(
-                new Xembler(
-                    new DirectivesClass(classname),
-                    new Transformers.Node()
-                ).xmlQuietly()
-            ).node().getFirstChild()
-        );
+        this(XmlClass.empty(classname));
     }
 
     /**
@@ -69,7 +61,15 @@ public final class XmlClass {
      * @param xml Class node.
      */
     XmlClass(final Node xml) {
-        this.node = new XmlNode(xml);
+        this(new XmlNode(xml));
+    }
+
+    /**
+     * Constructor.
+     * @param node Class node.
+     */
+    private XmlClass(final XmlNode node) {
+        this.node = node;
     }
 
     /**
@@ -85,6 +85,14 @@ public final class XmlClass {
                 )
             )
         );
+    }
+
+    /**
+     * Class properties.
+     * @return Class properties.
+     */
+    XmlClassProperties properties() {
+        return new XmlClassProperties(this.node.node());
     }
 
     /**
@@ -122,11 +130,16 @@ public final class XmlClass {
     }
 
     /**
-     * Class properties.
-     * @return Class properties.
+     * Generate empty class node with given name.
+     * @param classname Class name.
+     * @return Class node.
      */
-    XmlClassProperties properties() {
-        return new XmlClassProperties(this.node.node());
+    private static Node empty(final String classname) {
+        return new XMLDocument(
+            new Xembler(
+                new DirectivesClass(classname),
+                new Transformers.Node()
+            ).xmlQuietly()
+        ).node().getFirstChild();
     }
-
 }
