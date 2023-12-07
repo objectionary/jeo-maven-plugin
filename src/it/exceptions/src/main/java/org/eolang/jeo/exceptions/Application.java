@@ -47,7 +47,7 @@ public class Application {
      */
     private static void simpleTryCatch() {
         try {
-            throw new IOException("Exception in try-catch statement.");
+            throw new IOException("Exception in try-catch statement");
         } catch (final IOException exception) {
             System.out.println(exception.getMessage());
         }

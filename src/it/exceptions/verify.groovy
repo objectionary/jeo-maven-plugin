@@ -24,10 +24,18 @@
 //Check logs first.
 String log = new File(basedir, 'build.log').text;
 assert log.contains("BUILD SUCCESS")
+assert log.contains("Exception in try-catch statement")
+assert log.contains("Exception in try-catch-finally statement")
+assert log.contains("Finally block in try-catch-finally statement")
+assert log.contains("Closing 'Resource Without Exception'")
+assert log.contains("Exception in try-catch-with-resources statement")
+assert log.contains("Closing 'Resource With Exception'")
+
+
 //Check that we have generated EO object files.
 //assert new File(basedir, 'target/generated-sources/xmir/org/eolang/jeo/exceptions/Application.xmir').exists()
 /**
- * @todo #189:30min Enable Integration Test for Exceptions.
+ * @todo #320:30min Enable 'exceptions' Integration Test.
  *  First of all, we have to implement all the features required for correct
  *  transformation. Then, we need to add JEO plugin into pom.xml of that test,
  *  the plugin setup you can find below. After that we need to add some
