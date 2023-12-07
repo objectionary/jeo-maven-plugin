@@ -70,19 +70,6 @@ public final class XmlClass {
     }
 
     /**
-     * Internal XML node.
-     * @return Internal XML node.
-     * @todo #161:30min Hide internal node representation in XmlClass.
-     *  This class should not expose internal node representation.
-     *  We have to consider to add methods or classes in order to avoid
-     *  exposing internal node representation.
-     */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    public Node node() {
-        return this.node;
-    }
-
-    /**
      * Class name.
      * @return Name.
      */
