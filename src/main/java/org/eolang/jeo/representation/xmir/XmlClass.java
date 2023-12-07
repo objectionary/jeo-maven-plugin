@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesClass;
+import org.eolang.jeo.representation.directives.DirectivesClassProperties;
 import org.w3c.dom.Node;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
@@ -53,6 +54,10 @@ public final class XmlClass {
      */
     XmlClass(final String classname) {
         this(XmlClass.empty(classname));
+    }
+
+    XmlClass(final String classname, final int access) {
+        this(XmlClass.withProps(classname, access));
     }
 
     /**
@@ -134,9 +139,19 @@ public final class XmlClass {
      * @return Class node.
      */
     private static Node empty(final String classname) {
+        return XmlClass.withProps(classname, 0);
+    }
+
+    /**
+     * Generate class node with given name and access.
+     * @param classname Class name.
+     * @param access Access.
+     * @return Class node.
+     */
+    private static Node withProps(final String classname, final int access) {
         return new XMLDocument(
             new Xembler(
-                new DirectivesClass(classname),
+                new DirectivesClass(classname, new DirectivesClassProperties(access)),
                 new Transformers.Node()
             ).xmlQuietly()
         ).node().getFirstChild();

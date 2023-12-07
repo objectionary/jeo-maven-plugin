@@ -47,14 +47,6 @@ final class XmlClassProperties {
 
     /**
      * Constructor.
-     * @param xml XML representation of a class.
-     */
-    XmlClassProperties(final String xml) {
-        this(new XMLDocument(xml));
-    }
-
-    /**
-     * Constructor.
      * @param clazz XMl representation of a class.
      */
     XmlClassProperties(final XmlNode clazz) {

@@ -32,7 +32,7 @@ import org.xembly.Directives;
  *
  * @since 0.1.0
  */
-final class DirectivesClassProperties implements Iterable<Directive> {
+public final class DirectivesClassProperties implements Iterable<Directive> {
 
     /**
      * Access modifiers.
@@ -58,7 +58,15 @@ final class DirectivesClassProperties implements Iterable<Directive> {
      * Constructor.
      */
     DirectivesClassProperties() {
-        this(0, "", "", new String[0]);
+        this(0);
+    }
+
+    /**
+     * Constructor.
+     * @param access Access modifiers.
+     */
+    public DirectivesClassProperties(final int access) {
+        this(access, "", "", new String[0]);
     }
 
     /**
