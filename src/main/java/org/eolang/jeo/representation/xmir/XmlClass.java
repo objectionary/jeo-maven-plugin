@@ -25,9 +25,9 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.w3c.dom.Node;
 import org.xembly.Transformers;
@@ -38,13 +38,16 @@ import org.xembly.Xembler;
  * @since 0.1
  */
 @SuppressWarnings("PMD.TooManyMethods")
+@ToString
+@EqualsAndHashCode
 public final class XmlClass {
 
     /**
      * Class node from entire XML.
      */
+    @ToString.Include
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    private final Node node;
+    private final XmlNode node;
 
     /**
      * Constructor.
@@ -66,7 +69,7 @@ public final class XmlClass {
      * @param xml Class node.
      */
     XmlClass(final Node xml) {
-        this.node = xml;
+        this.node = new XmlNode(xml);
     }
 
     /**
@@ -74,33 +77,14 @@ public final class XmlClass {
      * @return Name.
      */
     public String name() {
-        return String.valueOf(this.node.getAttributes().getNamedItem("name").getTextContent());
-    }
-
-    @Override
-    public String toString() {
-        return new XMLDocument(this.node).toString();
-    }
-
-    @Override
-    public boolean equals(final Object other) {
-        final boolean result;
-        if (this == other) {
-            result = true;
-        } else if (other == null || this.getClass() != other.getClass()) {
-            result = false;
-        } else {
-            result = Objects.equals(
-                new XMLDocument(this.node),
-                new XMLDocument(((XmlClass) other).node)
-            );
-        }
-        return result;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.node);
+        return this.node.attribute("name").orElseThrow(
+            () -> new IllegalStateException(
+                String.format(
+                    "Class name is not defined, expected attribute 'name' in %s",
+                    this.node
+                )
+            )
+        );
     }
 
     /**
@@ -119,7 +103,7 @@ public final class XmlClass {
      * @return Class methods.
      */
     List<XmlMethod> methods() {
-        return this.objects()
+        return this.node.children()
             .filter(o -> o.attribute("base").isEmpty())
             .map(XmlMethod::new)
             .collect(Collectors.toList());
@@ -130,7 +114,7 @@ public final class XmlClass {
      * @return Class fields.
      */
     List<XmlField> fields() {
-        return this.objects()
+        return this.node.children()
             .filter(o -> o.attribute("base").isPresent())
             .filter(o -> "field".equals(o.attribute("base").get()))
             .map(XmlField::new)
@@ -142,14 +126,7 @@ public final class XmlClass {
      * @return Class properties.
      */
     XmlClassProperties properties() {
-        return new XmlClassProperties(this.node);
+        return new XmlClassProperties(this.node.node());
     }
 
-    /**
-     * Objects.
-     * @return Stream of class objects.
-     */
-    private Stream<XmlNode> objects() {
-        return new XmlNode(this.node).children();
-    }
 }
