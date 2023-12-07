@@ -37,10 +37,11 @@ assert log.contains("Closing 'Resource With Exception'")
 /**
  * @todo #320:30min Enable 'exceptions' Integration Test.
  *  First of all, we have to implement all the features required for correct
- *  transformation. Then, we need to add JEO plugin into pom.xml of that test,
- *  the plugin setup you can find below. After that we need to add some
- *  assertions to this file. For example, we need to check that we have
+ *  transformation of exceptions. Then, we need to add JEO plugin into pom.xml
+ *  of that test. The plugin setup you can find below. After that we need to add
+ *  some assertions to this file. For example, we need to check that we have
  *  generated EO object files (see commented checks above).
+ *  Right now this test just compiles java as is without any transformations.
  *
  * <p>
  * {@code
