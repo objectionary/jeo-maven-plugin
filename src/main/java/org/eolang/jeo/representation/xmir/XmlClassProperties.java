@@ -66,7 +66,7 @@ final class XmlClassProperties {
      * @return Access modifiers.
      */
     int access() {
-        return new HexString(this.clazz.xpath("//o[@name='access']/text()").get(0)).decodeAsInt();
+        return new HexString(this.clazz.xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
     }
 
     /**
@@ -86,7 +86,7 @@ final class XmlClassProperties {
      * @return Supername.
      */
     String supername() {
-        return this.clazz.xpath("//o[@name='supername']/text()")
+        return this.clazz.xpath("./o[@name='supername']/text()")
             .stream()
             .map(HexString::new)
             .map(HexString::decode)
@@ -98,7 +98,7 @@ final class XmlClassProperties {
      * @return Interfaces.
      */
     String[] interfaces() {
-        return this.clazz.xpath("//o[@name='interfaces']/o/text()")
+        return this.clazz.xpath("./o[@name='interfaces']/o/text()")
             .stream()
             .map(HexString::new)
             .map(HexString::decode).toArray(String[]::new);
