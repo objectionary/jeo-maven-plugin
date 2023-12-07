@@ -31,12 +31,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
  * XML representation of a class.
  *
  * @since 0.1.0
- * @todo #202:90min Make Xpaths in XmlClassProperties more precise.
- *  Currently, they are too broad and can lead to incorrect results.
- *  Actually, it already happened with the 'signature' property.
- *  In order to fix this, we need to make Xpaths more precise.
- *  But before doing this, we need to make sure that we have enough
- *  tests for this class.
  */
 final class XmlClassProperties {
 
