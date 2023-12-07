@@ -87,14 +87,13 @@ public class Application {
     }
 
     /**
-     * todo;
+     * @todo #320:30min. Add integration test with suppressed exception.
+     *  In Java, suppressed exceptions refer to exceptions that are thrown
+     *  during the closing of a resource in a try-with-resources statement,
+     *  and these exceptions may occur in addition to the exception thrown in
+     *  the try block itself.
      */
     private static void suppressedException() {
-        try {
-            throw new IOException("Exception in suppressed exception statement");
-        } catch (final IOException exception) {
-            throw new IllegalStateException("Suppressed exception", exception);
-        }
     }
 
     /**

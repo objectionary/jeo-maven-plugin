@@ -32,8 +32,7 @@ SOFTWARE.
     Integration test that checks correct transformation simple Java application
     that utilizes exceptions.
     If you need to run only this test, use the following command:
-    "mvn clean integration-test invoker:run -Dinvoker.test=exceptions
-    -DskipTests"
+    "mvn clean integration-test invoker:run -Dinvoker.test=exceptions -DskipTests"
   </description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
