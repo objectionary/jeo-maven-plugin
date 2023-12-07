@@ -37,7 +37,6 @@ import org.xembly.Xembler;
  * XML class.
  * @since 0.1
  */
-@SuppressWarnings("PMD.TooManyMethods")
 @ToString
 @EqualsAndHashCode
 public final class XmlClass {
