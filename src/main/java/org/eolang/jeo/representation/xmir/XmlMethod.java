@@ -24,19 +24,14 @@
 package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
-import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
-import org.objectweb.asm.Opcodes;
 import org.w3c.dom.Node;
-import org.xembly.Directives;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -44,7 +39,6 @@ import org.xembly.Xembler;
  * XML method.
  * @since 0.1
  */
-@SuppressWarnings("PMD.TooManyMethods")
 public final class XmlMethod {
 
     /**
@@ -66,14 +60,6 @@ public final class XmlMethod {
         final String descriptor
     ) {
         this(XmlMethod.prestructor(name, access, descriptor));
-    }
-
-    /**
-     * Constructor.
-     * @param xml XML node as String.
-     */
-    XmlMethod(final String... xml) {
-        this(new XMLDocument(String.join("", xml)).node());
     }
 
     /**
@@ -192,72 +178,31 @@ public final class XmlMethod {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Copy method node.
-     * @return Instructions.
-     */
-    public XmlMethod copy() {
-        return new XmlMethod(this.node.cloneNode(true));
-    }
-
     @Override
     public String toString() {
         return new XMLDocument(this.node).toString();
     }
 
-    private static XmlNode prestructor(final String name, final int access, final String descriptor
-    ) {
-        final String xmled = new Xembler(new DirectivesMethod(
-            name,
-            new DirectivesMethodProperties(access, descriptor, "", new String[0])
-        ), new Transformers.Node()).xmlQuietly();
-        return new XmlNode(xmled);
-//        return new XMLDocument(
-//            String.join(
-//                "",
-//                String.format("<o name='%s'>", name),
-//                String.format(
-//                    "<o base='int' data='bytes' name='access'>%s</o>",
-//                    new HexData(access).value()
-//                ),
-//                String.format(
-//                    "<o base='string' data='bytes' name='descriptor'>%s</o>",
-//                    new HexData(descriptor).value()
-//                ),
-//                "<o base='string' data='bytes' name='signature'/>",
-//                "<o base='tuple' data='tuple' name='exceptions'/>",
-//                XmlMethod.params(descriptor),
-//                "<o base='seq' name='@'>",
-//                Arrays.stream(entries)
-//                    .map(e -> new XMLDocument(e.node()).toString())
-//                    .collect(Collectors.joining()),
-//                "</o>",
-//                "</o>"
-//            )
-//        ).node().getFirstChild();
-    }
-
-
     /**
-     * Extracts method params from descriptor.
-     * @param descriptor Descriptor.
-     * @return Method params as XML.
-     * @todo #164:90min Refactor params method in XmlMethod.
-     *  Currently we are using a method that returns method params as XML.
-     *  Thic method is not very readable and it is hard to understand what it does.
-     *  It's better to use Xembler to create XML instead of concatenating strings.
+     * Create Method XmlNode by directives.
+     * @param name Method name.
+     * @param access Method access modifiers.
+     * @param descriptor Method descriptor.
+     * @return Method XmlNode.
      */
-    private static String params(final String descriptor) {
+    private static XmlNode prestructor(
+        final String name,
+        final int access,
+        final String descriptor
+    ) {
         return new XmlNode(
-            new XMLDocument(
-                new Xembler(
-                    new Directives().add("o")
-                        .append(new DirectivesMethodParams(descriptor))
-                ).xmlQuietly()
-            ).node().getLastChild()
-        ).children().map(XmlNode::node)
-            .map(XMLDocument::new)
-            .map(XMLDocument::toString)
-            .collect(Collectors.joining());
+            new Xembler(
+                new DirectivesMethod(
+                    name,
+                    new DirectivesMethodProperties(access, descriptor, "")
+                ),
+                new Transformers.Node()
+            ).xmlQuietly()
+        );
     }
 }
