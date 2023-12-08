@@ -31,7 +31,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
+import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
+import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.objectweb.asm.Opcodes;
 import org.w3c.dom.Node;
 import org.xembly.Directives;
@@ -64,31 +66,7 @@ public final class XmlMethod {
         final String descriptor,
         final XmlBytecodeEntry... entries
     ) {
-        this(
-            new XMLDocument(
-                String.join(
-                    "",
-                    String.format("<o name='%s'>", name),
-                    String.format(
-                        "<o base='int' data='bytes' name='access'>%s</o>",
-                        new HexData(access).value()
-                    ),
-                    String.format(
-                        "<o base='string' data='bytes' name='descriptor'>%s</o>",
-                        new HexData(descriptor).value()
-                    ),
-                    "<o base='string' data='bytes' name='signature'/>",
-                    "<o base='tuple' data='tuple' name='exceptions'/>",
-                    XmlMethod.params(descriptor),
-                    "<o base='seq' name='@'>",
-                    Arrays.stream(entries)
-                        .map(e -> new XMLDocument(e.node()).toString())
-                        .collect(Collectors.joining()),
-                    "</o>",
-                    "</o>"
-                )
-            ).node().getFirstChild()
-        );
+        this(XmlMethod.prestructor(name, access, descriptor, entries));
     }
 
     /**
@@ -254,6 +232,46 @@ public final class XmlMethod {
     public String toString() {
         return new XMLDocument(this.node).toString();
     }
+
+    private static Node prestructor(final String name, final int access, final String descriptor,
+        final XmlBytecodeEntry[] entries
+    ) {
+        final DirectivesMethod method = new DirectivesMethod(
+            name,
+            new DirectivesMethodProperties(access, descriptor, "", new String[0])
+        );
+
+        for (final XmlBytecodeEntry entry : entries) {
+            method.opcode(entry.);
+        }
+
+        return method;
+
+//        return new XMLDocument(
+//            String.join(
+//                "",
+//                String.format("<o name='%s'>", name),
+//                String.format(
+//                    "<o base='int' data='bytes' name='access'>%s</o>",
+//                    new HexData(access).value()
+//                ),
+//                String.format(
+//                    "<o base='string' data='bytes' name='descriptor'>%s</o>",
+//                    new HexData(descriptor).value()
+//                ),
+//                "<o base='string' data='bytes' name='signature'/>",
+//                "<o base='tuple' data='tuple' name='exceptions'/>",
+//                XmlMethod.params(descriptor),
+//                "<o base='seq' name='@'>",
+//                Arrays.stream(entries)
+//                    .map(e -> new XMLDocument(e.node()).toString())
+//                    .collect(Collectors.joining()),
+//                "</o>",
+//                "</o>"
+//            )
+//        ).node().getFirstChild();
+    }
+
 
     /**
      * Extracts method params from descriptor.

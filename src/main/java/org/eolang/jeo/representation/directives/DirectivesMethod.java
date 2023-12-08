@@ -63,7 +63,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @param name Method name
      * @param properties Method properties
      */
-    DirectivesMethod(final String name, final DirectivesMethodProperties properties) {
+    public DirectivesMethod(final String name, final DirectivesMethodProperties properties) {
         this.name = name;
         this.properties = properties;
         this.instructions = new ArrayList<>(0);

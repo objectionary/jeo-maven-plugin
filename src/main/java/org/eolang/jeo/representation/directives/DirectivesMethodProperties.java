@@ -37,7 +37,7 @@ import org.xembly.Directives;
  *  We need to move them to a separate package. It will make it possible to hide
  *  some classes and probably remove prefixes like Directives*.
  */
-final class DirectivesMethodProperties implements Iterable<Directive> {
+public final class DirectivesMethodProperties implements Iterable<Directive> {
 
     /**
      * Method access modifiers.
@@ -74,7 +74,7 @@ final class DirectivesMethodProperties implements Iterable<Directive> {
      * @param exceptions Method exceptions.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    DirectivesMethodProperties(
+    public DirectivesMethodProperties(
         final int access,
         final String descriptor,
         final String signature,

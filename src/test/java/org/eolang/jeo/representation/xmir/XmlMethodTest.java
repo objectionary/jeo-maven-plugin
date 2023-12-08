@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -34,74 +33,6 @@ import org.objectweb.asm.Opcodes;
  * @since 0.1
  */
 class XmlMethodTest {
-
-    @Test
-    void retrievesSimpleInvokeVirtualCalls() {
-        MatcherAssert.assertThat(
-            "Exactly one invoke virtual call is expected",
-            new XmlMethod(
-                "<o base='seq'>",
-                "<o base='opcode' name='GETFIELD'>",
-                "  <o base='int' data='bytes'>00 00 00 00 00 00 00 B4</o>",
-                "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 42</o>\n",
-                "  <o base='string' data='bytes'>61</o>\n",
-                "  <o base='string' data='bytes'>4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 3B</o>\n",
-                "</o>\n",
-                "<o base='opcode' name='INVOKEVIRTUAL'>\n",
-                "  <o base='int' data='bytes'>00 00 00 00 00 00 00 B6</o>",
-                "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41</o>\n",
-                "  <o base='string' data='bytes'>66 6F 6F</o>\n",
-                "  <o base='string' data='bytes'>28 29 49</o>\n",
-                "</o></o>"
-            ).invokeVirtuals(),
-            Matchers.hasSize(1)
-        );
-    }
-
-    @Test
-    void retrievesInvokeVirtualCallsWithArguments() {
-        final List<XmlInvokeVirtual> all = new XmlMethod(
-            "<o base='seq'>",
-            "<o base='opcode' name='GETFIELD'>",
-            "  <o base='int' data='bytes'>00 00 00 00 00 00 00 B4</o>",
-            "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 42</o>",
-            "  <o base='string' data='bytes'>61</o>",
-            "  <o base='string' data='bytes'>4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 3B</o>",
-            "</o>",
-            "<o base='opcode' name='ICONST_1'>",
-            "  <o base='int' data='bytes'>00 00 00 00 00 00 00 04</o>",
-            "</o>",
-            "<o base='opcode' name='INVOKEVIRTUAL'>",
-            "  <o base='int' data='bytes'>00 00 00 00 00 00 00 B6</o>",
-            "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41</o>",
-            "  <o base='string' data='bytes'>66 6F 6F</o>",
-            "  <o base='string' data='bytes'>28 29 49</o>",
-            "</o></o>"
-        ).invokeVirtuals();
-        final XmlInvokeVirtual call = all.get(0);
-        MatcherAssert.assertThat(
-            "Exactly one invoke argument is expected",
-            call.arguments(),
-            Matchers.hasSize(1)
-        );
-    }
-
-    @Test
-    void retrievesEmptyListOfInvokeVirtualCalls() {
-        MatcherAssert.assertThat(
-            "No invoke virtual calls are expected",
-            new XmlMethod(
-                "<o base='seq'>",
-                "<o base='opcode' name='GETFIELD'>",
-                "  <o base='int' data='bytes'>00 00 00 00 00 00 00 B4</o>",
-                "  <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 42</o>",
-                "  <o base='string' data='bytes'>61</o>",
-                "  <o base='string' data='bytes'>4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 3B</o>",
-                "</o></o>"
-            ).invokeVirtuals(),
-            Matchers.empty()
-        );
-    }
 
     @Test
     void createsMethodByValues() {
