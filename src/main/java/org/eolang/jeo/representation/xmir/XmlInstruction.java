@@ -94,11 +94,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
         method.instruction(this.code(), this.arguments());
     }
 
-    @Override
-    public boolean hasOpcode(final int opcode) {
-        return this.code() == opcode;
-    }
-
     /**
      * Instruction arguments.
      * @return Arguments.

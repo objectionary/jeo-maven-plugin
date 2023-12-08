@@ -58,11 +58,6 @@ public final class XmlLabel implements XmlBytecodeEntry {
     }
 
     @Override
-    public boolean hasOpcode(final int opcode) {
-        return false;
-    }
-
-    @Override
     public Node node() {
         return this.node.node();
     }

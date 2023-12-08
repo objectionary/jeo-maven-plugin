@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.w3c.dom.Node;
 
@@ -39,13 +40,6 @@ public interface XmlBytecodeEntry {
      * @param method Bytecode Method where instruction should be written.
      */
     void writeTo(BytecodeMethod method);
-
-    /**
-     * Check if instruction has opcode.
-     * @param opcode Opcode comparing with.
-     * @return True if instruction has opcode.
-     */
-    boolean hasOpcode(int opcode);
 
     /**
      * Xml node.

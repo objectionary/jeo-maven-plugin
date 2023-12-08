@@ -37,6 +37,7 @@ import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.objectweb.asm.Opcodes;
 import org.w3c.dom.Node;
 import org.xembly.Directives;
+import org.xembly.Transformers;
 import org.xembly.Xembler;
 
 /**
@@ -57,16 +58,14 @@ public final class XmlMethod {
      * @param name Method name.
      * @param access Access modifiers.
      * @param descriptor Method descriptor.
-     * @param entries Method instructions.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public XmlMethod(
         final String name,
         final int access,
-        final String descriptor,
-        final XmlBytecodeEntry... entries
+        final String descriptor
     ) {
-        this(XmlMethod.prestructor(name, access, descriptor, entries));
+        this(XmlMethod.prestructor(name, access, descriptor));
     }
 
     /**
@@ -201,52 +200,18 @@ public final class XmlMethod {
         return new XmlMethod(this.node.cloneNode(true));
     }
 
-    /**
-     * Retrieves the list of all invocations of other object methods.
-     * Usually they are invoke virtual instructions which look like this:
-     * - GET FIELD: foo
-     * - LIST OF ARGUMENTS
-     * - INVOKEVIRTUAL: bar
-     * This list represents the following command:
-     * foo.bar(a, b);
-     * @return List of invocations.
-     */
-    public List<XmlInvokeVirtual> invokeVirtuals() {
-        final List<XmlBytecodeEntry> all = this.instructions();
-        final List<XmlInvokeVirtual> res = new ArrayList<>(0);
-        for (int index = 0; index < all.size(); ++index) {
-            final XmlBytecodeEntry top = all.get(index);
-            if (top.hasOpcode(Opcodes.GETFIELD)) {
-                for (int inner = index + 1; inner < all.size(); ++inner) {
-                    final XmlBytecodeEntry bottom = all.get(inner);
-                    if (bottom.hasOpcode(Opcodes.INVOKEVIRTUAL)) {
-                        res.add(new XmlInvokeVirtual(all.subList(index, inner + 1)));
-                    }
-                }
-            }
-        }
-        return res;
-    }
-
     @Override
     public String toString() {
         return new XMLDocument(this.node).toString();
     }
 
-    private static Node prestructor(final String name, final int access, final String descriptor,
-        final XmlBytecodeEntry[] entries
+    private static XmlNode prestructor(final String name, final int access, final String descriptor
     ) {
-        final DirectivesMethod method = new DirectivesMethod(
+        final String xmled = new Xembler(new DirectivesMethod(
             name,
             new DirectivesMethodProperties(access, descriptor, "", new String[0])
-        );
-
-        for (final XmlBytecodeEntry entry : entries) {
-            method.opcode(entry.);
-        }
-
-        return method;
-
+        ), new Transformers.Node()).xmlQuietly();
+        return new XmlNode(xmled);
 //        return new XMLDocument(
 //            String.join(
 //                "",
