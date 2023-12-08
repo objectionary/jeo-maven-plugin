@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.w3c.dom.Node;
 
