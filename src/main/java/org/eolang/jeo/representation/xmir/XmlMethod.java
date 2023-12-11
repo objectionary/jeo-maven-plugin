@@ -130,6 +130,18 @@ public final class XmlMethod {
     }
 
     /**
+     * Method trycatch entries.
+     * @return Trycatch entries.
+     */
+    public List<XmlTryCatchEntry> trycatchEntries() {
+        return new XmlNode(this.node)
+            .child("base", "trycatch")
+            .children()
+            .map(XmlTryCatchEntry::new)
+            .collect(Collectors.toList());
+    }
+
+    /**
      * Method exceptions.
      * @return Exceptions.
      */

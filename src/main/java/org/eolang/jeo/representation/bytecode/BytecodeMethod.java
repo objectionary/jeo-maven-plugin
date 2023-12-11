@@ -107,8 +107,7 @@ public final class BytecodeMethod {
      * @return This object.
      */
     public BytecodeMethod label(final Label label) {
-        this.instructions.add(new BytecodeLabelEntry(label));
-        return this;
+        return this.entry(new BytecodeLabelEntry(label));
     }
 
     /**
@@ -117,8 +116,17 @@ public final class BytecodeMethod {
      * @param args Arguments.
      * @return This object.
      */
-    public BytecodeMethod instruction(final int opcode, final Object... args) {
-        this.instructions.add(new BytecodeInstructionEntry(opcode, args));
+    public BytecodeMethod opcode(final int opcode, final Object... args) {
+        return this.entry(new BytecodeInstructionEntry(opcode, args));
+    }
+
+    /**
+     * Add some bytecode entry.
+     * @param entry Entry.
+     * @return This object.
+     */
+    public BytecodeMethod entry(final BytecodeEntry entry) {
+        this.instructions.add(entry);
         return this;
     }
 

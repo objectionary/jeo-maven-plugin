@@ -71,6 +71,11 @@ public final class HasMethod extends TypeSafeMatcher<String> {
     private final List<HasLabel> lbls;
 
     /**
+     * Method try catch entry.
+     */
+    private final List<HasTryCatch> trycatch;
+
+    /**
      * Constructor.
      * @param method Method name.
      */
@@ -89,6 +94,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         this.params = new ArrayList<>(0);
         this.instr = new ArrayList<>(0);
         this.lbls = new ArrayList<>(0);
+        this.trycatch = new ArrayList<>(0);
     }
 
     @Override
@@ -145,6 +151,16 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         return this;
     }
 
+    public HasMethod withTryCatch(
+        final Label start,
+        final Label end,
+        final Label handler,
+        final String type
+    ) {
+        this.trycatch.add(new HasTryCatch(start, end, handler, type));
+        return this;
+    }
+
     /**
      * Checks.
      * @return List of XPaths to check.
@@ -156,8 +172,11 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 this.parameters()
             ),
             Stream.concat(
-                this.instructions(),
-                this.labels()
+                this.trycatch(),
+                Stream.concat(
+                    this.instructions(),
+                    this.labels()
+                )
             )
         ).collect(Collectors.toList());
     }
@@ -196,6 +215,12 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         final String root = this.root();
         return this.instr.stream()
             .flatMap(instruction -> instruction.checks(root));
+    }
+
+    private Stream<String> trycatch() {
+        final String root = this.root();
+        return this.trycatch.stream()
+            .flatMap(trycatch -> trycatch.checks(root));
     }
 
     /**
@@ -312,6 +337,60 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 );
         }
 
+    }
+
+    private static final class HasTryCatch {
+
+        private final Label start;
+        private final Label end;
+        private final Label handler;
+        private final String type;
+
+        public HasTryCatch(
+            final Label start,
+            final Label end,
+            final Label handler,
+            final String type
+        ) {
+            this.start = start;
+            this.end = end;
+            this.handler = handler;
+            this.type = type;
+        }
+
+        Stream<String> checks(final String root) {
+            return Stream.of(
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/@name",
+                    root
+                ),
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/@base",
+                    root
+                ),
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='label' and @name='start']/@name",
+                    root
+                ),
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='label' and @name='end']/@name",
+                    root
+                ),
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='label' and @name='handler']/@name",
+                    root
+                ),
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='string' and @name='type']/@name",
+                    root
+                ),
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='string' and @name='type' and text()='%s']/@data",
+                    root,
+                    new HexData(this.type).value()
+                )
+            );
+        }
     }
 
     /**

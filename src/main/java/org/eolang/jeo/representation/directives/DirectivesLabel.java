@@ -41,6 +41,11 @@ public final class DirectivesLabel implements Iterable<Directive> {
     private final Label label;
 
     /**
+     * Label name.
+     */
+    private final String name;
+
+    /**
      * All labels.
      */
     private final AllLabels all;
@@ -53,21 +58,50 @@ public final class DirectivesLabel implements Iterable<Directive> {
         this(label, new AllLabels());
     }
 
+
     /**
      * Constructor.
      * @param label Bytecode label.
      * @param all All labels.
      */
     private DirectivesLabel(final Label label, final AllLabels all) {
+        this(label, "", all);
+    }
+
+    /**
+     * Constructor.
+     * @param label Bytecode label.
+     * @param name Label name.
+     */
+    public DirectivesLabel(final Label label, final String name) {
+        this(label, name, new AllLabels());
+    }
+
+    /**
+     * Constructor.
+     * @param label Bytecode label.
+     * @param name Label name.
+     * @param all All labels.
+     */
+    public DirectivesLabel(
+        final Label label,
+        final String name,
+        final AllLabels all
+    ) {
         this.label = label;
+        this.name = name;
         this.all = all;
     }
 
     @Override
     public Iterator<Directive> iterator() {
         final String uid = this.all.uid(this.label);
-        return new Directives().add("o")
-            .attr("base", "label")
+        final Directives directives = new Directives().add("o")
+            .attr("base", "label");
+        if (!this.name.isEmpty()) {
+            directives.attr("name", this.name);
+        }
+        return directives
             .append(new DirectivesData(uid))
             .up()
             .iterator();

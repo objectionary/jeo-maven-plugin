@@ -27,6 +27,7 @@ import com.jcabi.xml.XMLDocument;
 import java.util.UUID;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
+import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
@@ -56,8 +57,8 @@ class DirectivesMethodVisitorTest {
         new ClassReader(
             new BytecodeClass()
                 .withMethod(new BytecodeMethodProperties("main", "()I"))
-                .instruction(Opcodes.BIPUSH, 28)
-                .instruction(Opcodes.IRETURN)
+                .opcode(Opcodes.BIPUSH, 28)
+                .opcode(Opcodes.IRETURN)
                 .up()
                 .bytecode()
                 .asBytes()
@@ -107,25 +108,25 @@ class DirectivesMethodVisitorTest {
                     Opcodes.ACC_STATIC
                 )
             )
-            .instruction(Opcodes.NEW, clazz)
-            .instruction(Opcodes.DUP)
-            .instruction(Opcodes.INVOKESPECIAL, clazz, "<init>", "()V")
-            .instruction(Opcodes.ASTORE, 1)
-            .instruction(Opcodes.ALOAD, 1)
-            .instruction(Opcodes.BIPUSH, 10)
-            .instruction(Opcodes.BIPUSH, 20)
-            .instruction(Opcodes.INVOKEVIRTUAL, clazz, method, "(II)V")
-            .instruction(Opcodes.RETURN)
+            .opcode(Opcodes.NEW, clazz)
+            .opcode(Opcodes.DUP)
+            .opcode(Opcodes.INVOKESPECIAL, clazz, "<init>", "()V")
+            .opcode(Opcodes.ASTORE, 1)
+            .opcode(Opcodes.ALOAD, 1)
+            .opcode(Opcodes.BIPUSH, 10)
+            .opcode(Opcodes.BIPUSH, 20)
+            .opcode(Opcodes.INVOKEVIRTUAL, clazz, method, "(II)V")
+            .opcode(Opcodes.RETURN)
             .up()
             .withMethod(new BytecodeMethodProperties(method, "(II)V", Opcodes.ACC_PUBLIC))
-            .instruction(Opcodes.ILOAD, 1)
-            .instruction(Opcodes.ILOAD, 2)
-            .instruction(Opcodes.IADD)
-            .instruction(Opcodes.ISTORE, 3)
-            .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-            .instruction(Opcodes.ILOAD, 3)
-            .instruction(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V")
-            .instruction(Opcodes.RETURN)
+            .opcode(Opcodes.ILOAD, 1)
+            .opcode(Opcodes.ILOAD, 2)
+            .opcode(Opcodes.IADD)
+            .opcode(Opcodes.ISTORE, 3)
+            .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+            .opcode(Opcodes.ILOAD, 3)
+            .opcode(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V")
+            .opcode(Opcodes.RETURN)
             .up()
             .xml()
             .toString();
@@ -162,17 +163,17 @@ class DirectivesMethodVisitorTest {
     void parsesConstructor() {
         final String xml = new BytecodeClass("ConstructorExample")
             .withConstructor(Opcodes.ACC_PUBLIC)
-            .instruction(Opcodes.ALOAD, 0)
-            .instruction(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V")
-            .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-            .instruction(Opcodes.LDC, "Hello, constructor!")
-            .instruction(
+            .opcode(Opcodes.ALOAD, 0)
+            .opcode(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V")
+            .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+            .opcode(Opcodes.LDC, "Hello, constructor!")
+            .opcode(
                 Opcodes.INVOKEVIRTUAL,
                 "java/io/PrintStream",
                 "println",
                 "(Ljava/lang/String;)V"
             )
-            .instruction(Opcodes.RETURN)
+            .opcode(Opcodes.RETURN)
             .up()
             .withMethod(
                 new BytecodeMethodProperties(
@@ -182,11 +183,11 @@ class DirectivesMethodVisitorTest {
                     Opcodes.ACC_STATIC
                 )
             )
-            .instruction(Opcodes.NEW, "ConstructorExample")
-            .instruction(Opcodes.DUP)
-            .instruction(Opcodes.INVOKESPECIAL, "ConstructorExample", "<init>", "()V")
-            .instruction(Opcodes.POP)
-            .instruction(Opcodes.RETURN)
+            .opcode(Opcodes.NEW, "ConstructorExample")
+            .opcode(Opcodes.DUP)
+            .opcode(Opcodes.INVOKESPECIAL, "ConstructorExample", "<init>", "()V")
+            .opcode(Opcodes.POP)
+            .opcode(Opcodes.RETURN)
             .up()
             .xml()
             .toString();
@@ -223,14 +224,14 @@ class DirectivesMethodVisitorTest {
         final String clazz = "ConstructorParams";
         final String xml = new BytecodeClass(clazz)
             .withConstructor("(II)V", Opcodes.ACC_PUBLIC)
-            .instruction(Opcodes.ALOAD, 0)
-            .instruction(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V")
-            .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-            .instruction(Opcodes.ILOAD, 1)
-            .instruction(Opcodes.ILOAD, 2)
-            .instruction(Opcodes.IADD)
-            .instruction(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V")
-            .instruction(Opcodes.RETURN)
+            .opcode(Opcodes.ALOAD, 0)
+            .opcode(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V")
+            .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+            .opcode(Opcodes.ILOAD, 1)
+            .opcode(Opcodes.ILOAD, 2)
+            .opcode(Opcodes.IADD)
+            .opcode(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V")
+            .opcode(Opcodes.RETURN)
             .up()
             .withMethod(
                 new BytecodeMethodProperties(
@@ -240,13 +241,13 @@ class DirectivesMethodVisitorTest {
                     Opcodes.ACC_STATIC
                 )
             )
-            .instruction(Opcodes.NEW, clazz)
-            .instruction(Opcodes.DUP)
-            .instruction(Opcodes.BIPUSH, 11)
-            .instruction(Opcodes.BIPUSH, 22)
-            .instruction(Opcodes.INVOKESPECIAL, clazz, "<init>", "(II)V")
-            .instruction(Opcodes.POP)
-            .instruction(Opcodes.RETURN)
+            .opcode(Opcodes.NEW, clazz)
+            .opcode(Opcodes.DUP)
+            .opcode(Opcodes.BIPUSH, 11)
+            .opcode(Opcodes.BIPUSH, 22)
+            .opcode(Opcodes.INVOKESPECIAL, clazz, "<init>", "(II)V")
+            .opcode(Opcodes.POP)
+            .opcode(Opcodes.RETURN)
             .up()
             .xml()
             .toString();
@@ -287,15 +288,15 @@ class DirectivesMethodVisitorTest {
         final Label label = labels.label(UUID.randomUUID().toString());
         final String xml = new BytecodeClass("Foo")
             .withMethod("bar", "(D)I", 0)
-            .instruction(Opcodes.DLOAD, 1)
-            .instruction(Opcodes.DCONST_0)
-            .instruction(Opcodes.DCMPL)
-            .instruction(Opcodes.IFLE, label)
-            .instruction(Opcodes.ICONST_5)
-            .instruction(Opcodes.IRETURN)
+            .opcode(Opcodes.DLOAD, 1)
+            .opcode(Opcodes.DCONST_0)
+            .opcode(Opcodes.DCMPL)
+            .opcode(Opcodes.IFLE, label)
+            .opcode(Opcodes.ICONST_5)
+            .opcode(Opcodes.IRETURN)
             .label(label)
-            .instruction(Opcodes.BIPUSH, 8)
-            .instruction(Opcodes.IRETURN).up()
+            .opcode(Opcodes.BIPUSH, 8)
+            .opcode(Opcodes.IRETURN).up()
             .xml()
             .toString();
         MatcherAssert.assertThat(
@@ -311,8 +312,52 @@ class DirectivesMethodVisitorTest {
         );
     }
 
+    /**
+     * In this class we parse the next java code.
+     * <p>
+     * {@code
+     *   public class Foo {
+     *     public void bar(){
+     *         try {
+     *           throw new Exception();
+     *         } catch (Exception e) {
+     *         }
+     *     }
+     *   }
+     * }
+     */
     @Test
-    void parsesTryCatchInstructions(){
+    void parsesTryCatchInstructions() {
+        final AllLabels labels = new AllLabels();
+        final Label start = labels.label(UUID.randomUUID().toString());
+        final Label end = labels.label(UUID.randomUUID().toString());
+        final Label handler = labels.label(UUID.randomUUID().toString());
+        final String xml = new BytecodeClass("Foo")
+            .withMethod("bar", "()V", Opcodes.ACC_PUBLIC)
+            .label(start)
+            .opcode(Opcodes.NEW, "java/lang/Exception")
+            .opcode(Opcodes.DUP)
+            .opcode(Opcodes.INVOKESPECIAL, "java/lang/Exception", "<init>", "()V")
+            .opcode(Opcodes.ATHROW)
+            .opcode(Opcodes.ASTORE, 1)
+            .label(end)
+            .label(handler)
+            .opcode(Opcodes.RETURN)
+            .entry(new BytecodeTryCatchBlock(start, end, handler, "java/lang/Exception"))
+            .up()
+            .xml()
+            .toString();
 
+        MatcherAssert.assertThat(
+            String.format(
+                "Exception table wasn't parsed correctly, please, check the resulting XMIR: \n%s\n",
+                xml
+            ),
+            xml,
+            new HasMethod("bar")
+                .inside("Foo")
+                .withTryCatch(start, end, handler, "java/lang/Exception")
+        );
+        System.out.println(xml);
     }
 }

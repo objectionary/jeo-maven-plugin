@@ -77,10 +77,10 @@ public class DirectivesTryCatch implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new Directives().add("o")
             .attr("base", "trycatch")
-            .append(new DirectivesLabel(this.start))
-            .append(new DirectivesLabel(this.end))
-            .append(new DirectivesLabel(this.handler))
-            .append(new DirectivesData(this.type))
+            .append(new DirectivesLabel(this.start, "start"))
+            .append(new DirectivesLabel(this.end, "end"))
+            .append(new DirectivesLabel(this.handler, "handler"))
+            .append(new DirectivesData("type", this.type))
             .up()
             .iterator();
     }
