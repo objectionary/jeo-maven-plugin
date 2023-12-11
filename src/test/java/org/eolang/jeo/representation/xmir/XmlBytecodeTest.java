@@ -23,17 +23,21 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.directives.DirectivesClass;
+import org.eolang.jeo.representation.directives.DirectivesMethod;
+import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
+import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Opcodes;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlBytecode}.
  *
  * @since 0.1
- * @todo #202:90min Fix {@link #convertsGenericsMethodIntoBytecode} test.
- *  It passes now, but it's not correct. First of all, it prints error message to the console.
- *  We should fix this error and find a way to create a valid XML for this test more easily.
  */
 class XmlBytecodeTest {
 
@@ -41,34 +45,58 @@ class XmlBytecodeTest {
     void convertsGenericsMethodIntoBytecode() {
         MatcherAssert.assertThat(
             "Can't convert generics method into bytecode",
-            new XmlBytecode(
-                "<program>",
-                "<metas>",
-                "<meta>",
-                "  <head>package</head>",
-                "  <tail>org.eolang.jeo.takes</tail>",
-                "  <part>org.eolang.jeo.takes</part>",
-                "</meta>",
-                "</metas>",
-                "<objects>",
-                "  <o abstract='' name='StrangeClass'>",
-                "    <o base='int' data='bytes' name='access'>00 00 00 00 00 00 00 20</o>",
-                "    <o base='string' data='bytes' name='supername'>6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>",
-                "    <o abstract='' name='route'>",
-                "      <o base='int' data='bytes' name='access'>00 00 00 00 00 00 00 01</o>",
-                "      <o base='string' data='bytes' name='descriptor'>28 4C 6F 72 67 2F 74 61 6B 65 73 2F 52 65 71 75 65 73 74 3B 29 4C 6F 72 67 2F 74 61 6B 65 73 2F 6D 69 73 63 2F 4F 70 74 3B</o>",
-                "      <o base='string' data='bytes' name='signature'>28 4C 6F 72 67 2F 74 61 6B 65 73 2F 52 65 71 75 65 73 74 3B 29 4C 6F 72 67 2F 74 61 6B 65 73 2F 6D 69 73 63 2F 4F 70 74 3C 4C 6F 72 67 2F 74 61 6B 65 73 2F 52 65 73 70 6F 6E 73 65 3B 3E 3B</o>",
-                "        <o base='seq' name='@'>",
-                "          <o base='opcode' name='ARETURN'>",
-                "            <o base='int' data='bytes'>00 00 00 00 00 00 00 B0</o>",
-                "          </o>",
-                "      </o>",
-                "    </o>",
-                "  </o>",
-                "</objects>",
-                "</program>"
-            ).bytecode(),
+            new XmlBytecode(XmlBytecodeTest.classWithGenericMethod()).bytecode(),
             Matchers.notNullValue()
         );
+    }
+
+    /**
+     * Creates XML with class that contains generic method.
+     * The XML representation of the following java class:
+     * {@code
+     *
+     * package org.eolang.jeo.takes;
+     *
+     * public class StrangeClass {
+     *   public static <T> void printElement(T element) {
+     *     System.out.println(element);
+     *   }
+     * }
+     *
+     * }
+     * @return XML representation of the class.
+     */
+    private static String classWithGenericMethod() {
+        final ClassName name = new ClassName("org.eolang.jeo.takes", "StrangeClass");
+        return new Xembler(
+            new DirectivesProgram()
+                .withClass(
+                    name,
+                    new DirectivesClass(name).method(
+                        new DirectivesMethod(
+                            "printElement",
+                            new DirectivesMethodProperties(
+                                Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
+                                "(Ljava/lang/Object;)V",
+                                "<T:Ljava/lang/Object;>(TT;)V"
+                            )
+                        )
+                            .opcode(
+                                Opcodes.GETSTATIC,
+                                "java/lang/System",
+                                "out",
+                                "Ljava/io/PrintStream;"
+                            )
+                            .opcode(Opcodes.ALOAD, 0)
+                            .opcode(
+                                Opcodes.INVOKEVIRTUAL,
+                                "java/io/PrintStream",
+                                "println",
+                                "(Ljava/lang/Object;)V"
+                            )
+                            .opcode(Opcodes.RETURN)
+                    )
+                )
+        ).xmlQuietly();
     }
 }
