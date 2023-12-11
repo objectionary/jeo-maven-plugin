@@ -30,7 +30,8 @@ assert log.contains("Finally block in try-catch-finally statement")
 assert log.contains("Closing 'Resource Without Exception'")
 assert log.contains("Exception in try-catch-with-resources statement")
 assert log.contains("Closing 'Resource With Exception'")
-
+assert log.contains("Exception in try-catch-with-resources statement with suppressed exception")
+assert log.contains("Exception during closing resource")
 
 //Check that we have generated EO object files.
 //assert new File(basedir, 'target/generated-sources/xmir/org/eolang/jeo/exceptions/Application.xmir').exists()

@@ -87,13 +87,18 @@ public class Application {
     }
 
     /**
-     * @todo #320:30min. Add integration test with suppressed exception.
-     *  In Java, suppressed exceptions refer to exceptions that are thrown
-     *  during the closing of a resource in a try-with-resources statement,
-     *  and these exceptions may occur in addition to the exception thrown in
-     *  the try block itself.
+     * Try-catch-with-resources statement with suppressed exception.
      */
     private static void suppressedException() {
+        try (ResourceWithException resource = new ResourceWithException()) {
+            throw new IllegalStateException(
+                "Exception in try-catch-with-resources statement with suppressed exception");
+        } catch (final IllegalStateException exception) {
+            System.out.println(exception.getMessage());
+            for (final Throwable suppressed : exception.getSuppressed()) {
+                System.out.println(suppressed.getMessage());
+            }
+        }
     }
 
     /**
