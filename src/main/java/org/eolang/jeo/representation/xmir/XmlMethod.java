@@ -27,6 +27,7 @@ import com.jcabi.xml.XMLDocument;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
@@ -136,15 +137,20 @@ public final class XmlMethod {
      */
     public List<XmlTryCatchEntry> trycatchEntries() {
         final XmlNode xmlnode = new XmlNode(this.node);
-        if(xmlnode.hasAttribute("name", "trycatchblocks")) {
-            return xmlnode
-                .child("name", "trycatchblocks")
-                .children()
-                .map(XmlTryCatchEntry::new)
-                .collect(Collectors.toList());
-        } else {
-            return Collections.emptyList();
-        }
+        return xmlnode.children()
+            .filter(element -> element.hasAttribute("name", "trycatchblocks"))
+            .flatMap(XmlNode::children)
+            .map(XmlTryCatchEntry::new)
+            .collect(Collectors.toList());
+//        if (xmlnode.hasAttribute("name", "trycatchblocks") && xmlnode.children().count() > 0) {
+//            return xmlnode
+//                .child("name", "trycatchblocks")
+//                .children()
+//                .map(XmlTryCatchEntry::new)
+//                .collect(Collectors.toList());
+//        } else {
+//            return Collections.emptyList();
+//        }
     }
 
     /**

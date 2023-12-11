@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Objects;
 import org.objectweb.asm.Label;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -75,13 +76,20 @@ public class DirectivesTryCatch implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives().add("o")
-            .attr("base", "trycatch")
-            .append(new DirectivesLabel(this.start, "start"))
-            .append(new DirectivesLabel(this.end, "end"))
-            .append(new DirectivesLabel(this.handler, "handler"))
-            .append(new DirectivesData("type", this.type))
-            .up()
-            .iterator();
+        final Directives directives = new Directives().add("o")
+            .attr("base", "trycatch");
+        if (Objects.nonNull(this.start)) {
+            directives.append(new DirectivesLabel(this.start, "start"));
+        }
+        if (Objects.nonNull(this.end)) {
+            directives.append(new DirectivesLabel(this.end, "end"));
+        }
+        if (Objects.nonNull(this.handler)) {
+            directives.append(new DirectivesLabel(this.handler, "handler"));
+        }
+        if (Objects.nonNull(this.type)) {
+            directives.append(new DirectivesData("type", this.type));
+        }
+        return directives.up().iterator();
     }
 }

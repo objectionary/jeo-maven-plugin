@@ -98,14 +98,25 @@ final class XmlNode {
      * @return Child node.
      */
     XmlNode child(final String name) {
+        return this.optchild(name).orElseThrow(() -> this.notFound(name));
+    }
+
+    /**
+     * Get child node.
+     * @param name Child node name.
+     * @return Child node.
+     */
+    Optional<XmlNode> optchild(final String name) {
+        Optional<XmlNode> result = Optional.empty();
         final NodeList children = this.node.getChildNodes();
         for (int index = 0; index < children.getLength(); ++index) {
             final Node current = children.item(index);
             if (current.getNodeName().equals(name)) {
-                return new XmlNode(current);
+                result = Optional.of(new XmlNode(current));
+                break;
             }
         }
-        throw this.notFound(name);
+        return result;
     }
 
     /**
