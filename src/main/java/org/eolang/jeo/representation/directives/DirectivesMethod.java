@@ -54,7 +54,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * Constructor.
      * @param name Method name
      */
-    DirectivesMethod(final String name) {
+    public DirectivesMethod(final String name) {
         this(name, new DirectivesMethodProperties());
     }
 
@@ -73,9 +73,11 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * Add opcode to the directives.
      * @param opcode Opcode
      * @param operands Operands
+     * @return This object
      */
-    public void opcode(final int opcode, final Object... operands) {
+    public DirectivesMethod opcode(final int opcode, final Object... operands) {
         this.instructions.add(new DirectivesInstruction(opcode, operands));
+        return this;
     }
 
     @Override

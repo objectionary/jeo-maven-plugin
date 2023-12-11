@@ -23,9 +23,16 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.directives.DirectivesClass;
+import org.eolang.jeo.representation.directives.DirectivesMethod;
+import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
+import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Opcodes;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlBytecode}.
@@ -39,6 +46,7 @@ class XmlBytecodeTest {
 
     @Test
     void convertsGenericsMethodIntoBytecode() {
+        final String xml = createXml();
         MatcherAssert.assertThat(
             "Can't convert generics method into bytecode",
             new XmlBytecode(
@@ -70,5 +78,32 @@ class XmlBytecodeTest {
             ).bytecode(),
             Matchers.notNullValue()
         );
+    }
+
+    private String createXml() {
+        final ClassName name = new ClassName("org.eolang.jeo.takes", "StrangeClass");
+        final DirectivesProgram directives = new DirectivesProgram().withClass(
+            name,
+            new DirectivesClass(name).method(
+                new DirectivesMethod("printElement",
+                    new DirectivesMethodProperties(
+                        Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
+                        "(Ljava/lang/Object;)V",
+                        "<T:Ljava/lang/Object;>(TT;)V"
+                    )
+                )
+                    .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+                    .opcode(Opcodes.ALOAD, 0)
+                    .opcode(Opcodes.INVOKEVIRTUAL,
+                        "java/io/PrintStream",
+                        "println",
+                        "(Ljava/lang/Object;)V"
+                    )
+                    .opcode(Opcodes.RETURN)
+            )
+        );
+        final String xml = new Xembler(directives).xmlQuietly();
+        System.out.println(xml);
+        return xml;
     }
 }
