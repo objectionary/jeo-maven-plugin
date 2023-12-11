@@ -24,6 +24,8 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.stream.IntStream;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 
@@ -31,6 +33,8 @@ import org.objectweb.asm.MethodVisitor;
  * Bytecode method properties.
  * @since 0.1
  */
+@EqualsAndHashCode
+@ToString
 public class BytecodeMethodProperties {
 
     /**
@@ -99,7 +103,7 @@ public class BytecodeMethodProperties {
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     @SuppressWarnings("PMD.ArrayIsStoredDirectly")
-    private BytecodeMethodProperties(
+    public BytecodeMethodProperties(
         final int access,
         final String name,
         final String descriptor,

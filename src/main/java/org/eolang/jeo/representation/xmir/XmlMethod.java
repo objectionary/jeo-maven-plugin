@@ -52,14 +52,16 @@ public final class XmlMethod {
      * @param name Method name.
      * @param access Access modifiers.
      * @param descriptor Method descriptor.
+     * @param exceptions Method exceptions.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public XmlMethod(
         final String name,
         final int access,
-        final String descriptor
+        final String descriptor,
+        final String... exceptions
     ) {
-        this(XmlMethod.prestructor(name, access, descriptor));
+        this(XmlMethod.prestructor(name, access, descriptor, exceptions));
     }
 
     /**
@@ -128,15 +130,29 @@ public final class XmlMethod {
     }
 
     /**
+     * Method exceptions.
+     * @return Exceptions.
+     */
+    private String[] exceptions() {
+        return new XMLDocument(this.node)
+            .xpath("./o[@name='exceptions']/o/text()")
+            .stream()
+            .map(HexString::new)
+            .map(HexString::decode)
+            .toArray(String[]::new);
+    }
+
+    /**
      * Method properties as bytecode.
      * @return Properties.
      */
     public BytecodeMethodProperties properties() {
         return new BytecodeMethodProperties(
+            this.access(),
             this.name(),
             this.descriptor(),
             this.signature(),
-            this.access()
+            this.exceptions()
         );
     }
 
@@ -193,13 +209,14 @@ public final class XmlMethod {
     private static XmlNode prestructor(
         final String name,
         final int access,
-        final String descriptor
+        final String descriptor,
+        final String... exceptions
     ) {
         return new XmlNode(
             new Xembler(
                 new DirectivesMethod(
                     name,
-                    new DirectivesMethodProperties(access, descriptor, "")
+                    new DirectivesMethodProperties(access, descriptor, "", exceptions)
                 ),
                 new Transformers.Node()
             ).xmlQuietly()
