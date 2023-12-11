@@ -310,4 +310,9 @@ class DirectivesMethodVisitorTest {
                 .withLabel()
         );
     }
+
+    @Test
+    void parsesTryCatchInstructions(){
+
+    }
 }
