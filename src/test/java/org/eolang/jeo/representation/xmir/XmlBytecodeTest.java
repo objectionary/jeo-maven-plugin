@@ -73,7 +73,8 @@ class XmlBytecodeTest {
                 .withClass(
                     name,
                     new DirectivesClass(name).method(
-                        new DirectivesMethod("printElement",
+                        new DirectivesMethod(
+                            "printElement",
                             new DirectivesMethodProperties(
                                 Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
                                 "(Ljava/lang/Object;)V",
