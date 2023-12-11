@@ -204,6 +204,19 @@ final class XmlNode {
     }
 
     /**
+     * Check if attribute exists.
+     * @param name Attribute name.
+     * @param value Attribute value.
+     * @return True if attribute with specified value exists.
+     */
+    boolean hasAttribute(final String name, final String value) {
+        return this.attribute(name)
+            .map(String::valueOf)
+            .map(val -> val.equals(value))
+            .orElse(false);
+    }
+
+    /**
      * Generate exception if element not found.
      * @param name Element name.
      * @return Exception.
@@ -216,19 +229,6 @@ final class XmlNode {
                 new XMLDocument(this.node)
             )
         );
-    }
-
-    /**
-     * Check if attribute exists.
-     * @param name Attribute name.
-     * @param value Attribute value.
-     * @return True if attribute with specified value exists.
-     */
-    private boolean hasAttribute(final String name, final String value) {
-        return this.attribute(name)
-            .map(String::valueOf)
-            .map(val -> val.equals(value))
-            .orElse(false);
     }
 
     /**

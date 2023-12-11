@@ -347,7 +347,6 @@ class DirectivesMethodVisitorTest {
             .up()
             .xml()
             .toString();
-
         MatcherAssert.assertThat(
             String.format(
                 "Exception table wasn't parsed correctly, please, check the resulting XMIR: \n%s\n",
@@ -358,6 +357,5 @@ class DirectivesMethodVisitorTest {
                 .inside("Foo")
                 .withTryCatch(start, end, handler, "java/lang/Exception")
         );
-        System.out.println(xml);
     }
 }

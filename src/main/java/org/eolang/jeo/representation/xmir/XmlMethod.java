@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -134,11 +135,16 @@ public final class XmlMethod {
      * @return Trycatch entries.
      */
     public List<XmlTryCatchEntry> trycatchEntries() {
-        return new XmlNode(this.node)
-            .child("base", "trycatch")
-            .children()
-            .map(XmlTryCatchEntry::new)
-            .collect(Collectors.toList());
+        final XmlNode xmlnode = new XmlNode(this.node);
+        if(xmlnode.hasAttribute("name", "trycatchblocks")) {
+            return xmlnode
+                .child("name", "trycatchblocks")
+                .children()
+                .map(XmlTryCatchEntry::new)
+                .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     /**
