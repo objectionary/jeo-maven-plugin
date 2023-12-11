@@ -46,64 +46,59 @@ class XmlBytecodeTest {
 
     @Test
     void convertsGenericsMethodIntoBytecode() {
-        final String xml = createXml();
         MatcherAssert.assertThat(
             "Can't convert generics method into bytecode",
-            new XmlBytecode(
-                "<program>",
-                "<metas>",
-                "<meta>",
-                "  <head>package</head>",
-                "  <tail>org.eolang.jeo.takes</tail>",
-                "  <part>org.eolang.jeo.takes</part>",
-                "</meta>",
-                "</metas>",
-                "<objects>",
-                "  <o abstract='' name='StrangeClass'>",
-                "    <o base='int' data='bytes' name='access'>00 00 00 00 00 00 00 20</o>",
-                "    <o base='string' data='bytes' name='supername'>6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>",
-                "    <o abstract='' name='route'>",
-                "      <o base='int' data='bytes' name='access'>00 00 00 00 00 00 00 01</o>",
-                "      <o base='string' data='bytes' name='descriptor'>28 4C 6F 72 67 2F 74 61 6B 65 73 2F 52 65 71 75 65 73 74 3B 29 4C 6F 72 67 2F 74 61 6B 65 73 2F 6D 69 73 63 2F 4F 70 74 3B</o>",
-                "      <o base='string' data='bytes' name='signature'>28 4C 6F 72 67 2F 74 61 6B 65 73 2F 52 65 71 75 65 73 74 3B 29 4C 6F 72 67 2F 74 61 6B 65 73 2F 6D 69 73 63 2F 4F 70 74 3C 4C 6F 72 67 2F 74 61 6B 65 73 2F 52 65 73 70 6F 6E 73 65 3B 3E 3B</o>",
-                "        <o base='seq' name='@'>",
-                "          <o base='opcode' name='ARETURN'>",
-                "            <o base='int' data='bytes'>00 00 00 00 00 00 00 B0</o>",
-                "          </o>",
-                "      </o>",
-                "    </o>",
-                "  </o>",
-                "</objects>",
-                "</program>"
-            ).bytecode(),
+            new XmlBytecode(XmlBytecodeTest.classWithGenericMethod()).bytecode(),
             Matchers.notNullValue()
         );
     }
 
-    private String createXml() {
+    /**
+     * Creates XML with class that contains generic method.
+     * The XML representation of the following java class:
+     * {@code
+     *
+     * package org.eolang.jeo.takes;
+     *
+     * public class StrangeClass {
+     *   public static <T> void printElement(T element) {
+     *     System.out.println(element);
+     *   }
+     * }
+     *
+     * }
+     * @return XML representation of the class.
+     */
+    private static String classWithGenericMethod() {
         final ClassName name = new ClassName("org.eolang.jeo.takes", "StrangeClass");
-        final DirectivesProgram directives = new DirectivesProgram().withClass(
-            name,
-            new DirectivesClass(name).method(
-                new DirectivesMethod("printElement",
-                    new DirectivesMethodProperties(
-                        Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
-                        "(Ljava/lang/Object;)V",
-                        "<T:Ljava/lang/Object;>(TT;)V"
+        return new Xembler(
+            new DirectivesProgram()
+                .withClass(
+                    name,
+                    new DirectivesClass(name).method(
+                        new DirectivesMethod("printElement",
+                            new DirectivesMethodProperties(
+                                Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
+                                "(Ljava/lang/Object;)V",
+                                "<T:Ljava/lang/Object;>(TT;)V"
+                            )
+                        )
+                            .opcode(
+                                Opcodes.GETSTATIC,
+                                "java/lang/System",
+                                "out",
+                                "Ljava/io/PrintStream;"
+                            )
+                            .opcode(Opcodes.ALOAD, 0)
+                            .opcode(
+                                Opcodes.INVOKEVIRTUAL,
+                                "java/io/PrintStream",
+                                "println",
+                                "(Ljava/lang/Object;)V"
+                            )
+                            .opcode(Opcodes.RETURN)
                     )
                 )
-                    .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-                    .opcode(Opcodes.ALOAD, 0)
-                    .opcode(Opcodes.INVOKEVIRTUAL,
-                        "java/io/PrintStream",
-                        "println",
-                        "(Ljava/lang/Object;)V"
-                    )
-                    .opcode(Opcodes.RETURN)
-            )
-        );
-        final String xml = new Xembler(directives).xmlQuietly();
-        System.out.println(xml);
-        return xml;
+        ).xmlQuietly();
     }
 }
