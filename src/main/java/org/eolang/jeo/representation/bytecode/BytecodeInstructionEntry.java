@@ -184,7 +184,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
-         * Load an int from an array
+         * Load an int from an array.
          */
         IALOAD(Opcodes.IALOAD, (visitor, arguments) ->
             visitor.visitInsn(Opcodes.IALOAD)

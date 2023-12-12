@@ -355,7 +355,7 @@ class DirectivesMethodVisitorTest {
             xml,
             new HasMethod("bar")
                 .inside("Foo")
-                .withTryCatch(start, end, handler, "java/lang/Exception")
+                .withTryCatch("java/lang/Exception")
         );
     }
 }

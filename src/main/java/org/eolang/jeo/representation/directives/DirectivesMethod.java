@@ -50,6 +50,9 @@ public final class DirectivesMethod implements Iterable<Directive> {
      */
     private final List<Iterable<Directive>> instructions;
 
+    /**
+     * Method exceptions.
+     */
     private final List<Iterable<Directive>> exceptions;
 
     /**

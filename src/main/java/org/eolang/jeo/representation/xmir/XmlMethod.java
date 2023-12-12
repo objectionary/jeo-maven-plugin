@@ -220,6 +220,7 @@ public final class XmlMethod {
      * @param descriptor Method descriptor.
      * @param exceptions Method exceptions.
      * @return Method XmlNode.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     private static XmlNode prestructor(
         final String name,

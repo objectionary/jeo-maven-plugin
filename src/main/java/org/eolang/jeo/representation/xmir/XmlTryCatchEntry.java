@@ -37,14 +37,14 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
     /**
      * XML node.
      */
-    private final XmlNode node;
+    private final XmlNode xmlnode;
 
     /**
      * Constructor.
      * @param node XML node
      */
     public XmlTryCatchEntry(final XmlNode node) {
-        this.node = node;
+        this.xmlnode = node;
     }
 
     @Override
@@ -60,13 +60,18 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
         );
     }
 
+    @Override
+    public Node node() {
+        return this.xmlnode.node();
+    }
+
     /**
      * Retrieves the label.
      * @param name Label uid.
      * @return Label.
      */
     Optional<String> label(final String name) {
-        return this.node.optchild("name", name)
+        return this.xmlnode.optchild("name", name)
             .map(node -> node.child("base", "string").text());
     }
 
@@ -74,12 +79,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      * Retrieves the exception type.
      * @return Exception type.
      */
-    Optional<String> type(){
-        return this.node.optchild("name", "type").map(XmlNode::text);
-    }
-
-    @Override
-    public Node node() {
-        return this.node.node();
+    Optional<String> type() {
+        return this.xmlnode.optchild("name", "type").map(XmlNode::text);
     }
 }

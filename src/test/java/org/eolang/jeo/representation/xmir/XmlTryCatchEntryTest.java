@@ -60,5 +60,4 @@ class XmlTryCatchEntryTest {
             Matchers.is(true)
         );
     }
-
 }

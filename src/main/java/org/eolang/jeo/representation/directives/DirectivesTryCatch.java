@@ -33,7 +33,7 @@ import org.xembly.Directives;
  * Try catch directives.
  * @since 0.1
  */
-public class DirectivesTryCatch implements Iterable<Directive> {
+public final class DirectivesTryCatch implements Iterable<Directive> {
 
     /**
      * Start label.
@@ -61,6 +61,7 @@ public class DirectivesTryCatch implements Iterable<Directive> {
      * @param end End label
      * @param handler Handler label
      * @param type Exception type
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesTryCatch(
         final Label start,

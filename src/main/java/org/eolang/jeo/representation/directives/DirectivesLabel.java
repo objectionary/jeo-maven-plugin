@@ -58,7 +58,6 @@ public final class DirectivesLabel implements Iterable<Directive> {
         this(label, new AllLabels());
     }
 
-
     /**
      * Constructor.
      * @param label Bytecode label.

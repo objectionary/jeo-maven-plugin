@@ -151,13 +151,13 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         return this;
     }
 
-    public HasMethod withTryCatch(
-        final Label start,
-        final Label end,
-        final Label handler,
-        final String type
-    ) {
-        this.trycatches.add(new HasTryCatch(start, end, handler, type));
+    /**
+     * With try-catch.
+     * @param type Exception type.
+     * @return The same matcher that checks try-catch.
+     */
+    public HasMethod withTryCatch(final String type) {
+        this.trycatches.add(new HasTryCatch(type));
         return this;
     }
 
@@ -217,6 +217,10 @@ public final class HasMethod extends TypeSafeMatcher<String> {
             .flatMap(instruction -> instruction.checks(root));
     }
 
+    /**
+     * Try-catch xpaths.
+     * @return List of XPaths to check.
+     */
     private Stream<String> trycatch() {
         final String root = this.root();
         return this.trycatches.stream()
@@ -336,28 +340,32 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                     }
                 );
         }
-
     }
 
+    /**
+     * Try-catch checks.
+     * @since 0.1
+     */
     private static final class HasTryCatch {
 
-        private final Label start;
-        private final Label end;
-        private final Label handler;
+        /**
+         * Exception type.
+         */
         private final String type;
 
-        public HasTryCatch(
-            final Label start,
-            final Label end,
-            final Label handler,
-            final String type
-        ) {
-            this.start = start;
-            this.end = end;
-            this.handler = handler;
-            this.type = type;
+        /**
+         * Constructor.
+         * @param exception Exception type.
+         */
+        private HasTryCatch(final String exception) {
+            this.type = exception;
         }
 
+        /**
+         * XPaths to check.
+         * @param root Root Method XPath.
+         * @return List of XPaths to check.
+         */
         Stream<String> checks(final String root) {
             return Stream.of(
                 String.format(

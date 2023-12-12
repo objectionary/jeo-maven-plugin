@@ -31,7 +31,7 @@ import org.objectweb.asm.MethodVisitor;
  * Bytecode try-catch block.
  * @since 0.1
  */
-public class BytecodeTryCatchBlock implements BytecodeEntry {
+public final class BytecodeTryCatchBlock implements BytecodeEntry {
 
     /**
      * Start label.
@@ -59,6 +59,7 @@ public class BytecodeTryCatchBlock implements BytecodeEntry {
      * @param endlabel End label.
      * @param handlerlabel Handler label.
      * @param exception Exception type.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeTryCatchBlock(
         final Label startlabel,
