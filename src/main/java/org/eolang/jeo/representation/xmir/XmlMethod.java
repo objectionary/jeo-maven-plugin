@@ -25,9 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
@@ -41,6 +39,7 @@ import org.xembly.Xembler;
  * XML method.
  * @since 0.1
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class XmlMethod {
 
     /**
@@ -142,28 +141,6 @@ public final class XmlMethod {
             .flatMap(XmlNode::children)
             .map(XmlTryCatchEntry::new)
             .collect(Collectors.toList());
-//        if (xmlnode.hasAttribute("name", "trycatchblocks") && xmlnode.children().count() > 0) {
-//            return xmlnode
-//                .child("name", "trycatchblocks")
-//                .children()
-//                .map(XmlTryCatchEntry::new)
-//                .collect(Collectors.toList());
-//        } else {
-//            return Collections.emptyList();
-//        }
-    }
-
-    /**
-     * Method exceptions.
-     * @return Exceptions.
-     */
-    private String[] exceptions() {
-        return new XMLDocument(this.node)
-            .xpath("./o[@name='exceptions']/o/text()")
-            .stream()
-            .map(HexString::new)
-            .map(HexString::decode)
-            .toArray(String[]::new);
     }
 
     /**
@@ -224,10 +201,24 @@ public final class XmlMethod {
     }
 
     /**
+     * Method exceptions.
+     * @return Exceptions.
+     */
+    private String[] exceptions() {
+        return new XMLDocument(this.node)
+            .xpath("./o[@name='exceptions']/o/text()")
+            .stream()
+            .map(HexString::new)
+            .map(HexString::decode)
+            .toArray(String[]::new);
+    }
+
+    /**
      * Create Method XmlNode by directives.
      * @param name Method name.
      * @param access Method access modifiers.
      * @param descriptor Method descriptor.
+     * @param exceptions Method exceptions.
      * @return Method XmlNode.
      */
     private static XmlNode prestructor(

@@ -73,7 +73,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
     /**
      * Method try catch entry.
      */
-    private final List<HasTryCatch> trycatch;
+    private final List<HasTryCatch> trycatches;
 
     /**
      * Constructor.
@@ -94,7 +94,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         this.params = new ArrayList<>(0);
         this.instr = new ArrayList<>(0);
         this.lbls = new ArrayList<>(0);
-        this.trycatch = new ArrayList<>(0);
+        this.trycatches = new ArrayList<>(0);
     }
 
     @Override
@@ -157,7 +157,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         final Label handler,
         final String type
     ) {
-        this.trycatch.add(new HasTryCatch(start, end, handler, type));
+        this.trycatches.add(new HasTryCatch(start, end, handler, type));
         return this;
     }
 
@@ -219,7 +219,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
 
     private Stream<String> trycatch() {
         final String root = this.root();
-        return this.trycatch.stream()
+        return this.trycatches.stream()
             .flatMap(trycatch -> trycatch.checks(root));
     }
 
