@@ -105,10 +105,16 @@ public class Application {
     /**
      * Method that declares exception.
      * @throws Exception Exception.
+     * @todo #325:90min Enable methodThatDeclaresException() method.
+     *  This method is a part of integration test for #325 issue.
+     *  The method checks that declared exceptions handled correctly.
+     *  Currently, if we enable this method, the test will fail.
+     *  We need to understand why it happens and fix it.
+     *  Don't forget to uncomment method in the main method.
      */
 //    private static void methodThatDeclaresException() throws Exception {
 //        Files.walk(Paths.get(".")).forEach(ignore -> {
-            // Do nothing. We just use this method to declare `throws Exception`.
+    // Do nothing. We just use this method to declare `throws Exception`.
 //        });
 //    }
 }
