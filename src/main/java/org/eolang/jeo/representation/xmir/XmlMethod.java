@@ -39,6 +39,7 @@ import org.xembly.Xembler;
  * XML method.
  * @since 0.1
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class XmlMethod {
 
     /**
@@ -52,14 +53,16 @@ public final class XmlMethod {
      * @param name Method name.
      * @param access Access modifiers.
      * @param descriptor Method descriptor.
+     * @param exceptions Method exceptions.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public XmlMethod(
         final String name,
         final int access,
-        final String descriptor
+        final String descriptor,
+        final String... exceptions
     ) {
-        this(XmlMethod.prestructor(name, access, descriptor));
+        this(XmlMethod.prestructor(name, access, descriptor, exceptions));
     }
 
     /**
@@ -128,15 +131,29 @@ public final class XmlMethod {
     }
 
     /**
+     * Method trycatch entries.
+     * @return Trycatch entries.
+     */
+    public List<XmlTryCatchEntry> trycatchEntries() {
+        final XmlNode xmlnode = new XmlNode(this.node);
+        return xmlnode.children()
+            .filter(element -> element.hasAttribute("name", "trycatchblocks"))
+            .flatMap(XmlNode::children)
+            .map(XmlTryCatchEntry::new)
+            .collect(Collectors.toList());
+    }
+
+    /**
      * Method properties as bytecode.
      * @return Properties.
      */
     public BytecodeMethodProperties properties() {
         return new BytecodeMethodProperties(
+            this.access(),
             this.name(),
             this.descriptor(),
             this.signature(),
-            this.access()
+            this.exceptions()
         );
     }
 
@@ -184,22 +201,38 @@ public final class XmlMethod {
     }
 
     /**
+     * Method exceptions.
+     * @return Exceptions.
+     */
+    private String[] exceptions() {
+        return new XMLDocument(this.node)
+            .xpath("./o[@name='exceptions']/o/text()")
+            .stream()
+            .map(HexString::new)
+            .map(HexString::decode)
+            .toArray(String[]::new);
+    }
+
+    /**
      * Create Method XmlNode by directives.
      * @param name Method name.
      * @param access Method access modifiers.
      * @param descriptor Method descriptor.
+     * @param exceptions Method exceptions.
      * @return Method XmlNode.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     private static XmlNode prestructor(
         final String name,
         final int access,
-        final String descriptor
+        final String descriptor,
+        final String... exceptions
     ) {
         return new XmlNode(
             new Xembler(
                 new DirectivesMethod(
                     name,
-                    new DirectivesMethodProperties(access, descriptor, "")
+                    new DirectivesMethodProperties(access, descriptor, "", exceptions)
                 ),
                 new Transformers.Node()
             ).xmlQuietly()

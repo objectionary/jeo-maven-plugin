@@ -274,15 +274,15 @@ public final class BytecodeClass {
             Opcodes.ACC_STATIC
         );
         return this.withMethod(properties)
-            .instruction(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-            .instruction(Opcodes.LDC, "Hello, world!")
-            .instruction(
+            .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+            .opcode(Opcodes.LDC, "Hello, world!")
+            .opcode(
                 Opcodes.INVOKEVIRTUAL,
                 "java/io/PrintStream",
                 "println",
                 "(Ljava/lang/String;)V"
             )
-            .instruction(Opcodes.RETURN)
+            .opcode(Opcodes.RETURN)
             .up();
     }
 

@@ -91,7 +91,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
 
     @Override
     public void writeTo(final BytecodeMethod method) {
-        method.instruction(this.code(), this.arguments());
+        method.opcode(this.code(), this.arguments());
     }
 
     /**

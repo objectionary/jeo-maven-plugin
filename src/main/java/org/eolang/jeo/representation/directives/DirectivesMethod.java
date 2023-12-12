@@ -51,6 +51,11 @@ public final class DirectivesMethod implements Iterable<Directive> {
     private final List<Iterable<Directive>> instructions;
 
     /**
+     * Method exceptions.
+     */
+    private final List<Iterable<Directive>> exceptions;
+
+    /**
      * Constructor.
      * @param name Method name
      */
@@ -67,6 +72,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         this.name = name;
         this.properties = properties;
         this.instructions = new ArrayList<>(0);
+        this.exceptions = new ArrayList<>(0);
     }
 
     /**
@@ -97,7 +103,13 @@ public final class DirectivesMethod implements Iterable<Directive> {
             .attr("base", "seq")
             .attr("name", "@");
         this.instructions.forEach(directives::append);
-        directives.up().up();
+        directives.up();
+        directives.add("o")
+            .attr("base", "tuple")
+            .attr("name", "trycatchblocks");
+        this.exceptions.forEach(directives::append);
+        directives.up();
+        directives.up();
         return directives.iterator();
     }
 
@@ -105,7 +117,15 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * Add operand to the directives.
      * @param directives Operand directives.
      */
-    void operand(final DirectivesOperand directives) {
+    void operand(final Iterable<Directive> directives) {
         this.instructions.add(directives);
+    }
+
+    /**
+     * Add exception to the directives.
+     * @param exception Exception directives.
+     */
+    void exception(final Iterable<Directive> exception) {
+        this.exceptions.add(exception);
     }
 }

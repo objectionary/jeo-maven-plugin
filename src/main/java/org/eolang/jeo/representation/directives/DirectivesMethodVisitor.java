@@ -122,6 +122,17 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     }
 
     @Override
+    public void visitTryCatchBlock(
+        final Label start,
+        final Label end,
+        final Label handler,
+        final String type
+    ) {
+        this.method.exception(new DirectivesTryCatch(start, end, handler, type));
+        super.visitTryCatchBlock(start, end, handler, type);
+    }
+
+    @Override
     public Iterator<Directive> iterator() {
         return this.method.iterator();
     }

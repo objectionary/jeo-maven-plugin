@@ -71,6 +71,11 @@ public final class HasMethod extends TypeSafeMatcher<String> {
     private final List<HasLabel> lbls;
 
     /**
+     * Method try catch entry.
+     */
+    private final List<HasTryCatch> trycatches;
+
+    /**
      * Constructor.
      * @param method Method name.
      */
@@ -89,6 +94,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         this.params = new ArrayList<>(0);
         this.instr = new ArrayList<>(0);
         this.lbls = new ArrayList<>(0);
+        this.trycatches = new ArrayList<>(0);
     }
 
     @Override
@@ -146,6 +152,16 @@ public final class HasMethod extends TypeSafeMatcher<String> {
     }
 
     /**
+     * With try-catch.
+     * @param type Exception type.
+     * @return The same matcher that checks try-catch.
+     */
+    public HasMethod withTryCatch(final String type) {
+        this.trycatches.add(new HasTryCatch(type));
+        return this;
+    }
+
+    /**
      * Checks.
      * @return List of XPaths to check.
      */
@@ -156,8 +172,11 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 this.parameters()
             ),
             Stream.concat(
-                this.instructions(),
-                this.labels()
+                this.trycatch(),
+                Stream.concat(
+                    this.instructions(),
+                    this.labels()
+                )
             )
         ).collect(Collectors.toList());
     }
@@ -196,6 +215,16 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         final String root = this.root();
         return this.instr.stream()
             .flatMap(instruction -> instruction.checks(root));
+    }
+
+    /**
+     * Try-catch xpaths.
+     * @return List of XPaths to check.
+     */
+    private Stream<String> trycatch() {
+        final String root = this.root();
+        return this.trycatches.stream()
+            .flatMap(trycatch -> trycatch.checks(root));
     }
 
     /**
@@ -311,7 +340,65 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                     }
                 );
         }
+    }
 
+    /**
+     * Try-catch checks.
+     * @since 0.1
+     */
+    private static final class HasTryCatch {
+
+        /**
+         * Exception type.
+         */
+        private final String type;
+
+        /**
+         * Constructor.
+         * @param exception Exception type.
+         */
+        private HasTryCatch(final String exception) {
+            this.type = exception;
+        }
+
+        /**
+         * XPaths to check.
+         * @param root Root Method XPath.
+         * @return List of XPaths to check.
+         */
+        Stream<String> checks(final String root) {
+            return Stream.of(
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/@name",
+                    root
+                ),
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/@base",
+                    root
+                ),
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='label' and @name='start']/@name",
+                    root
+                ),
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='label' and @name='end']/@name",
+                    root
+                ),
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='label' and @name='handler']/@name",
+                    root
+                ),
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='string' and @name='type']/@name",
+                    root
+                ),
+                String.format(
+                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='string' and @name='type' and text()='%s']/@data",
+                    root,
+                    new HexData(this.type).value()
+                )
+            );
+        }
     }
 
     /**

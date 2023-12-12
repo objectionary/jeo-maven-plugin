@@ -43,6 +43,9 @@ public interface XmlBytecodeEntry {
     /**
      * Xml node.
      * @return Xml node.
+     * @todo #325:30min Remove 'node' method from XmlBytecodeEntry interface.
+     *  This method isn't used anywhere. So it should be removed.
+     *  Don't forget to remove it from all implementations.
      */
     Node node();
 }

@@ -184,6 +184,62 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
+         * Load an int from an array.
+         */
+        IALOAD(Opcodes.IALOAD, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.IALOAD)
+        ),
+
+        /**
+         * Load a long from an array.
+         */
+        LALOAD(Opcodes.LALOAD, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.LALOAD)
+        ),
+
+        /**
+         * Load a float from an array.
+         */
+        FALOAD(Opcodes.FALOAD, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.FALOAD)
+        ),
+
+        /**
+         * Load a double from an array.
+         */
+        DALOAD(Opcodes.DALOAD, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.DALOAD)
+        ),
+
+        /**
+         * Load an object reference from an array.
+         */
+        AALOAD(Opcodes.AALOAD, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.AALOAD)
+        ),
+
+        /**
+         * Load a byte or Boolean value from an array.
+         */
+        BALOAD(Opcodes.BALOAD, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.BALOAD)
+        ),
+
+        /**
+         * Load a char from an array.
+         */
+        CALOAD(Opcodes.CALOAD, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.CALOAD)
+        ),
+
+        /**
+         * Load a short from an array.
+         */
+        SALOAD(Opcodes.SALOAD, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.SALOAD)
+        ),
+
+        /**
          * Add two integers.
          */
         IADD(Opcodes.IADD, (visitor, arguments) ->

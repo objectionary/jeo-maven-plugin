@@ -53,7 +53,7 @@ class BytecodeClassTest {
             "Can't create bytecode with default public constructor",
             new BytecodeClass("DefaultConstructor")
                 .withConstructor(Opcodes.ACC_PUBLIC)
-                .instruction(Opcodes.RETURN)
+                .opcode(Opcodes.RETURN)
                 .up()
                 .bytecode(),
             Matchers.notNullValue()

@@ -98,14 +98,25 @@ final class XmlNode {
      * @return Child node.
      */
     XmlNode child(final String name) {
+        return this.optchild(name).orElseThrow(() -> this.notFound(name));
+    }
+
+    /**
+     * Get optional child node.
+     * @param name Child node name.
+     * @return Child node.
+     */
+    Optional<XmlNode> optchild(final String name) {
+        Optional<XmlNode> result = Optional.empty();
         final NodeList children = this.node.getChildNodes();
         for (int index = 0; index < children.getLength(); ++index) {
             final Node current = children.item(index);
             if (current.getNodeName().equals(name)) {
-                return new XmlNode(current);
+                result = Optional.of(new XmlNode(current));
+                break;
             }
         }
-        throw this.notFound(name);
+        return result;
     }
 
     /**
@@ -123,6 +134,18 @@ final class XmlNode {
                     String.format("object with attribute %s='%s'", attribute, value)
                 )
             );
+    }
+
+    /**
+     * Get optional child node by attribute.
+     * @param attribute Attribute name.
+     * @param value Attribute value.
+     * @return Child node.
+     */
+    Optional<XmlNode> optchild(final String attribute, final String value) {
+        return this.children()
+            .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
+            .findFirst();
     }
 
     /**
@@ -204,6 +227,19 @@ final class XmlNode {
     }
 
     /**
+     * Check if attribute exists.
+     * @param name Attribute name.
+     * @param value Attribute value.
+     * @return True if attribute with specified value exists.
+     */
+    boolean hasAttribute(final String name, final String value) {
+        return this.attribute(name)
+            .map(String::valueOf)
+            .map(val -> val.equals(value))
+            .orElse(false);
+    }
+
+    /**
      * Generate exception if element not found.
      * @param name Element name.
      * @return Exception.
@@ -216,19 +252,6 @@ final class XmlNode {
                 new XMLDocument(this.node)
             )
         );
-    }
-
-    /**
-     * Check if attribute exists.
-     * @param name Attribute name.
-     * @param value Attribute value.
-     * @return True if attribute with specified value exists.
-     */
-    private boolean hasAttribute(final String name, final String value) {
-        return this.attribute(name)
-            .map(String::valueOf)
-            .map(val -> val.equals(value))
-            .orElse(false);
     }
 
     /**

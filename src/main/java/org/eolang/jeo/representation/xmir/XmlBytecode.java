@@ -80,6 +80,7 @@ public final class XmlBytecode {
         for (final XmlMethod xmlmethod : clazz.methods()) {
             final BytecodeMethod method = bytecode.withMethod(xmlmethod.properties());
             xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
+            xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
         }
         return bytecode.bytecode();
     }

@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -63,6 +64,22 @@ class XmlMethodTest {
             "Method name is not equal to expected, it should be <init>",
             new XmlMethod("new", Opcodes.ACC_PUBLIC, "()V").name(),
             Matchers.equalTo("<init>")
+        );
+    }
+
+    @Test
+    void retrievesMethodProperties() {
+        final String name = "name";
+        final int access = 0;
+        final String descriptor = "()V";
+        final String[] exceptions = {"java/lang/Exception", "java/lang/Throwable"};
+        final XmlMethod method = new XmlMethod(name, access, descriptor, exceptions);
+        MatcherAssert.assertThat(
+            "Method properties are not equal to expected",
+            method.properties(),
+            Matchers.equalTo(
+                new BytecodeMethodProperties(access, name, descriptor, null, exceptions)
+            )
         );
     }
 }

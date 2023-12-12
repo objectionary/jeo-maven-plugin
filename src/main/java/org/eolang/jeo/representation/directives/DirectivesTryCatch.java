@@ -24,85 +24,73 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import org.eolang.jeo.representation.xmir.AllLabels;
+import java.util.Objects;
 import org.objectweb.asm.Label;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
 /**
- * Xml directives for label entry in byrecode.
+ * Try catch directives.
  * @since 0.1
  */
-public final class DirectivesLabel implements Iterable<Directive> {
+public final class DirectivesTryCatch implements Iterable<Directive> {
 
     /**
-     * Bytecode label.
+     * Start label.
      */
-    private final Label label;
+    private final Label start;
 
     /**
-     * Label name.
+     * End label.
      */
-    private final String name;
+    private final Label end;
 
     /**
-     * All labels.
+     * Handler label.
      */
-    private final AllLabels all;
+    private final Label handler;
 
     /**
-     * Constructor.
-     * @param label Bytecode label.
+     * Exception type.
      */
-    DirectivesLabel(final Label label) {
-        this(label, new AllLabels());
-    }
+    private final String type;
 
     /**
      * Constructor.
-     * @param label Bytecode label.
-     * @param all All labels.
+     * @param start Start label
+     * @param end End label
+     * @param handler Handler label
+     * @param type Exception type
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
-    private DirectivesLabel(final Label label, final AllLabels all) {
-        this(label, "", all);
-    }
-
-    /**
-     * Constructor.
-     * @param label Bytecode label.
-     * @param name Label name.
-     */
-    public DirectivesLabel(final Label label, final String name) {
-        this(label, name, new AllLabels());
-    }
-
-    /**
-     * Constructor.
-     * @param label Bytecode label.
-     * @param name Label name.
-     * @param all All labels.
-     */
-    public DirectivesLabel(
-        final Label label,
-        final String name,
-        final AllLabels all
+    public DirectivesTryCatch(
+        final Label start,
+        final Label end,
+        final Label handler,
+        final String type
     ) {
-        this.label = label;
-        this.name = name;
-        this.all = all;
+        this.start = start;
+        this.end = end;
+        this.handler = handler;
+        this.type = type;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        final String uid = this.all.uid(this.label);
         final Directives directives = new Directives().add("o")
-            .attr("base", "label");
-        if (!this.name.isEmpty()) {
-            directives.attr("name", this.name);
+            .attr("base", "trycatch");
+        if (Objects.nonNull(this.start)) {
+            directives.append(new DirectivesLabel(this.start, "start"));
         }
-        return directives
-            .append(new DirectivesData(uid))
-            .up()
-            .iterator();
+        if (Objects.nonNull(this.end)) {
+            directives.append(new DirectivesLabel(this.end, "end"));
+        }
+        if (Objects.nonNull(this.handler)) {
+            directives.append(new DirectivesLabel(this.handler, "handler"));
+        }
+        if (Objects.nonNull(this.type)) {
+            directives.append(new DirectivesData("type", this.type));
+        }
+        return directives.up().iterator();
     }
 }
