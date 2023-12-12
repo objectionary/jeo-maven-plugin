@@ -1,5 +1,6 @@
 package org.eolang.jeo.representation.bytecode;
 
+import com.jcabi.log.Logger;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
@@ -24,6 +25,16 @@ public class BytecodeTryCatchBlock implements BytecodeEntry {
 
     @Override
     public void writeTo(final MethodVisitor visitor) {
+        Logger.info(
+            this,
+            String.format(
+                "Writing try-catch entry into the method with the following values: start=%s, end=%s, handler=%s, type=%s",
+                this.start,
+                this.end,
+                this.handler,
+                this.type
+            )
+        );
         visitor.visitTryCatchBlock(this.start, this.end, this.handler, this.type);
     }
 }

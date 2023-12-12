@@ -102,7 +102,7 @@ final class XmlNode {
     }
 
     /**
-     * Get child node.
+     * Get optional child node.
      * @param name Child node name.
      * @return Child node.
      */
@@ -134,6 +134,18 @@ final class XmlNode {
                     String.format("object with attribute %s='%s'", attribute, value)
                 )
             );
+    }
+
+    /**
+     * Get optional child node by attribute.
+     * @param attribute Attribute name.
+     * @param value Attribute value.
+     * @return Child node.
+     */
+    Optional<XmlNode> optchild(final String attribute, final String value) {
+        return this.children()
+            .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
+            .findFirst();
     }
 
     /**

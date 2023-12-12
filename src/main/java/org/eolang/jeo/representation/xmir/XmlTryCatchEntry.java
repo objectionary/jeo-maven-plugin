@@ -18,17 +18,21 @@ public class XmlTryCatchEntry implements XmlBytecodeEntry {
         final AllLabels labels = new AllLabels();
         method.entry(
             new BytecodeTryCatchBlock(
-                this.element("start").map(labels::label).orElse(null),
-                this.element("end").map(labels::label).orElse(null),
-                this.element("handler").map(labels::label).orElse(null),
-                this.element("type").orElse(null)
+                this.label("start").map(labels::label).orElse(null),
+                this.label("end").map(labels::label).orElse(null),
+                this.label("handler").map(labels::label).orElse(null),
+                this.type().map(HexString::new).map(HexString::decode).orElse(null)
             )
         );
     }
 
-    private Optional<String> element(final String name) {
-        return this.node.optchild(name)
+    Optional<String> label(final String name) {
+        return this.node.optchild("name", name)
             .map(node -> node.child("base", "string").text());
+    }
+
+    Optional<String> type(){
+        return this.node.optchild("name", "type").map(XmlNode::text);
     }
 
     @Override

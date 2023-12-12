@@ -134,9 +134,19 @@ public final class BytecodeMethod {
      * Generate bytecode.
      */
     void write() {
-        final MethodVisitor visitor = this.properties.addMethod(this.writer);
-        this.instructions.forEach(instruction -> instruction.writeTo(visitor));
-        visitor.visitMaxs(0, 0);
-        visitor.visitEnd();
+        try {
+            final MethodVisitor visitor = this.properties.addMethod(this.writer);
+            this.instructions.forEach(instruction -> instruction.writeTo(visitor));
+            visitor.visitMaxs(0, 0);
+            visitor.visitEnd();
+        } catch (final NegativeArraySizeException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Failed to write method %s",
+                    this.properties
+                ),
+                exception
+            );
+        }
     }
 }
