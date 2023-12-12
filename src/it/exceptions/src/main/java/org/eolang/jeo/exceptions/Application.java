@@ -33,8 +33,7 @@ import java.nio.file.Paths;
  */
 public class Application {
 
-    public static void main(String[] args)
-//        throws Exception
+    public static void main(String[] args) // throws Exception
     {
         Application.simpleTryCatch();
         Application.tryCatchWithFinally();
@@ -59,48 +58,48 @@ public class Application {
      * Try-catch-finally statement.
      */
     private static void tryCatchWithFinally() {
-//        try {
-//            throw new IOException("Exception in try-catch-finally statement");
-//        } catch (final IOException exception) {
-//            System.out.println(exception.getMessage());
-//        } finally {
-//            System.out.println("Finally block in try-catch-finally statement");
-//        }
+        try {
+            throw new IOException("Exception in try-catch-finally statement");
+        } catch (final IOException exception) {
+            System.out.println(exception.getMessage());
+        } finally {
+            System.out.println("Finally block in try-catch-finally statement");
+        }
     }
 
     /**
      * Try-with-resources statement.
      */
     private static void tryWithResources() {
-//        try (MyResource resource = new MyResource("Resource Without Exception")) {
-            //Do nothing.
-//        }
+        try (MyResource resource = new MyResource("Resource Without Exception")) {
+//            Do nothing.
+        }
     }
 
     /**
      * Try-catch-with-resources statement.
      */
     private static void tryCatchWithResources() {
-//        try (MyResource resource = new MyResource("Resource With Exception")) {
-//            throw new IllegalStateException("Exception in try-catch-with-resources statement");
-//        } catch (final IllegalStateException exception) {
-//            System.out.println(exception.getMessage());
-//        }
+        try (MyResource resource = new MyResource("Resource With Exception")) {
+            throw new IllegalStateException("Exception in try-catch-with-resources statement");
+        } catch (final IllegalStateException exception) {
+            System.out.println(exception.getMessage());
+        }
     }
 
     /**
      * Try-catch-with-resources statement with suppressed exception.
      */
     private static void suppressedException() {
-//        try (ResourceWithException resource = new ResourceWithException()) {
-//            throw new IllegalStateException(
-//                "Exception in try-catch-with-resources statement with suppressed exception");
-//        } catch (final IllegalStateException exception) {
-//            System.out.println(exception.getMessage());
-//            for (final Throwable suppressed : exception.getSuppressed()) {
-//                System.out.println(suppressed.getMessage());
-//            }
-//        }
+        try (ResourceWithException resource = new ResourceWithException()) {
+            throw new IllegalStateException(
+                "Exception in try-catch-with-resources statement with suppressed exception");
+        } catch (final IllegalStateException exception) {
+            System.out.println(exception.getMessage());
+            for (final Throwable suppressed : exception.getSuppressed()) {
+                System.out.println(suppressed.getMessage());
+            }
+        }
     }
 
     /**
