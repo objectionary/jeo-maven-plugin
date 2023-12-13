@@ -9,7 +9,7 @@ import org.xembly.Directives;
  * Directives Handle.
  * Xmir representation of the Java ASM Handle object.
  * @since 0.1
- * @todo: #329:30min Implement DirectivesHandle class.
+ * @todo #329:30min Implement DirectivesHandle class.
  *  The {@link Handle} class is one of the parameters for INVOKEDYNAMIC instruction.
  *  The class should be implemented in the same way as {@link DirectivesLabel}.
  *  Don't forget to add tests.

@@ -35,6 +35,12 @@ import org.xembly.Directive;
  * Method printer.
  * ASM method visitor which scans the method and builds Xembly directives.
  * @since 0.1
+ * @todo #329:30min Test invokedymanic instruction.
+ *  Add test for parsing of invokedymanic instruction.
+ *  Currently it is not tested and in some cases causes errors.
+ *  Probably in this issue you will need to add some additional
+ *  parsing logic.
+ *  See {@link #visitInvokeDynamicInsn} method.
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class DirectivesMethodVisitor extends MethodVisitor implements Iterable<Directive> {
