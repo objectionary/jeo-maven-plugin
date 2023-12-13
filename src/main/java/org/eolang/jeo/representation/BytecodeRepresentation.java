@@ -120,13 +120,6 @@ public final class BytecodeRepresentation implements Representation {
         return new Details(this.className(), this.source);
     }
 
-    @Override
-    public String name() {
-        final ClassNameVisitor name = new ClassNameVisitor();
-        new ClassReader(this.input).accept(name, 0);
-        return name.asString();
-    }
-
     /**
      * Read class name from bytecode.
      * @return Class name.

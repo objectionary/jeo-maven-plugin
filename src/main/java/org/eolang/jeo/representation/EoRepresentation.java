@@ -93,11 +93,6 @@ public final class EoRepresentation implements Representation {
     }
 
     @Override
-    public String name() {
-        return this.className();
-    }
-
-    @Override
     public XML toEO() {
         return this.xml;
     }

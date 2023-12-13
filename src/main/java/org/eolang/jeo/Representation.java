@@ -41,16 +41,6 @@ public interface Representation {
     Details details();
 
     /**
-     * Name of the class or an object.
-     * @return Name.
-     * @todo #269:30min Replace `name` method with `details` method.
-     *  Currently we just use `Represenation#name()` method everywhere. We should use
-     *  `Representation#details().name()` method instead.
-     *  When it will be ready, just remove this method.
-     */
-    String name();
-
-    /**
      * Convert to EOlang XML representation (XMIR).
      * @return XML.
      */
@@ -85,11 +75,6 @@ public interface Representation {
         @Override
         public Details details() {
             return new Details(this.name);
-        }
-
-        @Override
-        public String name() {
-            return this.name;
         }
 
         @Override
