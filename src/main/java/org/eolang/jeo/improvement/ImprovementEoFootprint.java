@@ -70,8 +70,9 @@ public final class ImprovementEoFootprint implements Improvement {
      * @param representation EO representation as XMIR.
      */
     private void saveEo(final Representation representation) {
+        final String name = representation.details().name();
         final Path path = this.target.resolve("eo")
-            .resolve(String.format("%s.eo", representation.name()));
+            .resolve(String.format("%s.eo", name));
         try {
             Files.createDirectories(path.getParent());
             Files.write(
@@ -82,7 +83,7 @@ public final class ImprovementEoFootprint implements Improvement {
             throw new IllegalStateException(
                 String.format(
                     "Can't save %s representation into %s",
-                    representation.name(),
+                    name,
                     path
                 ),
                 exception

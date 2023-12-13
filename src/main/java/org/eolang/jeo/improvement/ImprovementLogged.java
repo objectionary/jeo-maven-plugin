@@ -71,6 +71,8 @@ public final class ImprovementLogged implements Improvement {
      * @param representation Representation to log.
      */
     private void log(final Representation representation) {
-        this.logger.accept(String.format("Optimization candidate: %s", representation.name()));
+        this.logger.accept(
+            String.format("Optimization candidate: %s", representation.details().name())
+        );
     }
 }

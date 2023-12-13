@@ -72,7 +72,7 @@ public final class ImprovementXmirFootprint implements Improvement {
      * @return New representation with source attached to the saved file.
      */
     private Representation transform(final Representation representation) {
-        final String name = representation.name();
+        final String name = representation.details().name();
         final Path path = this.target.resolve(new XmirDefaultDirectory().toPath())
             .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
         try {

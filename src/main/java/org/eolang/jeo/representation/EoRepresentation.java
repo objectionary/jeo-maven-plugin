@@ -89,15 +89,12 @@ public final class EoRepresentation implements Representation {
 
     @Override
     public Details details() {
-        return new Details(this.name(), this.source);
+        return new Details(this.className(), this.source);
     }
 
     @Override
     public String name() {
-        return new ClassName(
-            this.xml.xpath("/program/metas/meta/tail/text()").stream().findFirst().orElse(""),
-            this.xml.xpath("/program/@name").get(0)
-        ).full();
+        return this.className();
     }
 
     @Override
@@ -109,6 +106,17 @@ public final class EoRepresentation implements Representation {
     public Bytecode toBytecode() {
         new Schema(this.xml).check();
         return new XmlBytecode(this.xml).bytecode();
+    }
+
+    /**
+     * Retrieves class name from XMIR.
+     * @return Class name.
+     */
+    private String className() {
+        return new ClassName(
+            this.xml.xpath("/program/metas/meta/tail/text()").stream().findFirst().orElse(""),
+            this.xml.xpath("/program/@name").get(0)
+        ).full();
     }
 
     /**

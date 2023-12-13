@@ -46,7 +46,9 @@ class EoRepresentationTest {
     @Test
     void retrievesName() {
         final String expected = "org/eolang/foo/Math";
-        final String actual = new EoRepresentation(new BytecodeClass(expected).xml()).name();
+        final String actual = new EoRepresentation(
+            new BytecodeClass(expected).xml()
+        ).details().name();
         MatcherAssert.assertThat(
             String.format(
                 "The name of the class is not retrieved correctly, we expected '%s', but got '%s'",
