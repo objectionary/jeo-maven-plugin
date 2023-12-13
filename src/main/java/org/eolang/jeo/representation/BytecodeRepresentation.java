@@ -120,16 +120,6 @@ public final class BytecodeRepresentation implements Representation {
         return new Details(this.className(), this.source);
     }
 
-    /**
-     * Read class name from bytecode.
-     * @return Class name.
-     */
-    private String className() {
-        final ClassNameVisitor name = new ClassNameVisitor();
-        new ClassReader(this.input).accept(name, 0);
-        return name.asString();
-    }
-
     @Override
     public XML toEO() {
         final DirectivesClassVisitor directives = new DirectivesClassVisitor(
@@ -155,5 +145,15 @@ public final class BytecodeRepresentation implements Representation {
     @Override
     public Bytecode toBytecode() {
         return new Bytecode(new UncheckedBytes(new BytesOf(this.input)).asBytes());
+    }
+
+    /**
+     * Read class name from bytecode.
+     * @return Class name.
+     */
+    private String className() {
+        final ClassNameVisitor name = new ClassNameVisitor();
+        new ClassReader(this.input).accept(name, 0);
+        return name.asString();
     }
 }
