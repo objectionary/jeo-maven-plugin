@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import com.jcabi.log.Logger;
 import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -122,7 +123,11 @@ public class BytecodeMethodProperties {
      * @param writer Class writer.
      * @return Method visitor.
      */
-    MethodVisitor addMethod(final ClassWriter writer) {
+    MethodVisitor writeMethod(final ClassWriter writer) {
+        Logger.debug(
+            this,
+            String.format("Creating method visitor with the following properties %s", this)
+        );
         return writer.visitMethod(
             this.access,
             this.name,

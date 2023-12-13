@@ -75,7 +75,7 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
 
     @Override
     public void writeTo(final MethodVisitor visitor) {
-        Logger.info(
+        Logger.debug(
             this,
             String.format(
                 "Writing try-catch entry into the method with the following values: start=%s, end=%s, handler=%s, type=%s",

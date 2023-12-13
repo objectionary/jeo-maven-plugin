@@ -135,7 +135,7 @@ public final class BytecodeMethod {
      */
     void write() {
         try {
-            final MethodVisitor visitor = this.properties.addMethod(this.writer);
+            final MethodVisitor visitor = this.properties.writeMethod(this.writer);
             this.instructions.forEach(instruction -> instruction.writeTo(visitor));
             visitor.visitMaxs(0, 0);
             visitor.visitEnd();
