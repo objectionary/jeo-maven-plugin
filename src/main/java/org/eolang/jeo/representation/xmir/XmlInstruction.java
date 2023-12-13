@@ -129,12 +129,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
         return new XMLDocument(this.node).toString();
     }
 
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    @Override
-    public Node node() {
-        return this.node;
-    }
-
     /**
      * Extract argument value from XmlNode.
      * @param argument XmlNode with argument value.

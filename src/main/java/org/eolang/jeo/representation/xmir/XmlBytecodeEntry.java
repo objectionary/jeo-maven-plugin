@@ -39,13 +39,4 @@ public interface XmlBytecodeEntry {
      * @param method Bytecode Method where instruction should be written.
      */
     void writeTo(BytecodeMethod method);
-
-    /**
-     * Xml node.
-     * @return Xml node.
-     * @todo #325:30min Remove 'node' method from XmlBytecodeEntry interface.
-     *  This method isn't used anywhere. So it should be removed.
-     *  Don't forget to remove it from all implementations.
-     */
-    Node node();
 }

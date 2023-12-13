@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
-import org.w3c.dom.Node;
 
 /**
  * XML representation of bytecode label.
@@ -55,10 +54,5 @@ public final class XmlLabel implements XmlBytecodeEntry {
     @Override
     public void writeTo(final BytecodeMethod method) {
         method.label(this.labels.label(this.node.child("base", "string").text()));
-    }
-
-    @Override
-    public Node node() {
-        return this.node.node();
     }
 }

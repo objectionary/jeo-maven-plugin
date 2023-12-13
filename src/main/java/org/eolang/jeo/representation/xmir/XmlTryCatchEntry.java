@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
-import org.w3c.dom.Node;
 
 /**
  * XML try-catch entry.
@@ -58,11 +57,6 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
                 this.type().map(HexString::new).map(HexString::decode).orElse(null)
             )
         );
-    }
-
-    @Override
-    public Node node() {
-        return this.xmlnode.node();
     }
 
     /**
