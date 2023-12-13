@@ -60,10 +60,16 @@ final class HexString {
      */
     String decode() {
         try {
-            return Arrays.stream(this.hex.split(" "))
-                .map(ch -> (char) Integer.parseInt(ch, HexString.RADIX))
-                .map(String::valueOf)
-                .collect(Collectors.joining());
+            String result;
+            if (this.hex.isEmpty()) {
+                result = "";
+            } else {
+                result = Arrays.stream(this.hex.split(" "))
+                    .map(ch -> (char) Integer.parseInt(ch, HexString.RADIX))
+                    .map(String::valueOf)
+                    .collect(Collectors.joining());
+            }
+            return result;
         } catch (final NumberFormatException exception) {
             throw new IllegalArgumentException(
                 String.format("Invalid hex string: %s", this.hex),

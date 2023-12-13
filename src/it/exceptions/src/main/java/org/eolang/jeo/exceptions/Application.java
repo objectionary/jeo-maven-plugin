@@ -26,6 +26,7 @@ package org.eolang.jeo.exceptions;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.io.File;
 
 /**
  * Application Entry Point That Uses Different Exception Handlers.
@@ -106,8 +107,6 @@ public class Application {
      * @throws Exception Exception.
      */
     private static void methodThatDeclaresException() throws Exception {
-        Files.walk(Paths.get(".")).forEach(ignore -> {
-//     Do nothing. We just use this method to declare `throws Exception`.
-        });
+        new File("").getCanonicalFile();
     }
 }

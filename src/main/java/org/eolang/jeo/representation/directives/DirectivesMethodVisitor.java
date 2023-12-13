@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.io.File;
 import java.util.Iterator;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.Handle;
@@ -135,13 +136,6 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
         final Handle handler,
         final Object... arguments
     ) {
-        this.method.opcode(
-            Opcodes.INVOKEDYNAMIC,
-            name,
-            descriptor,
-            handler,
-            arguments
-        );
         super.visitInvokeDynamicInsn(
             name,
             descriptor,
