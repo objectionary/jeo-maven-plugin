@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import org.eolang.jeo.representation.DefaultVersion;
+import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -119,6 +120,28 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     public void visitLabel(final Label label) {
         this.method.operand(new DirectivesOperand(label));
         super.visitLabel(label);
+    }
+
+    @Override
+    public void visitInvokeDynamicInsn(
+        final String name,
+        final String descriptor,
+        final Handle handler,
+        final Object... arguments
+    ) {
+        this.method.opcode(
+            Opcodes.INVOKEDYNAMIC,
+            name,
+            descriptor,
+            handler,
+            arguments
+        );
+        super.visitInvokeDynamicInsn(
+            name,
+            descriptor,
+            handler,
+            arguments
+        );
     }
 
     @Override

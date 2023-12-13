@@ -50,6 +50,15 @@ class XmlBytecodeTest {
         );
     }
 
+    @Test
+    void convertsMethodWithExceptionIntoBytecode() {
+        MatcherAssert.assertThat(
+            "Can't convert method with exception into bytecode",
+            new XmlBytecode(XmlBytecodeTest.classWithException()).bytecode(),
+            Matchers.notNullValue()
+        );
+    }
+
     /**
      * Creates XML with class that contains generic method.
      * The XML representation of the following java class:
@@ -96,6 +105,55 @@ class XmlBytecodeTest {
                             )
                             .opcode(Opcodes.RETURN)
                     )
+                )
+        ).xmlQuietly();
+    }
+
+    /**
+     * Creates XML with class that contains method that declares exception.
+     * The XML representation of the following java class:
+     * {@code
+     *
+     * public class Foo {
+     *   public void bar() throws Exception {
+     *     throw new Exception();
+     *   }
+     * }
+     *
+     * }
+     *
+     * @return XML representation of the class.
+     */
+    private static String classWithException() {
+        final ClassName name = new ClassName("Foo");
+        return new Xembler(
+            new DirectivesProgram()
+                .withClass(
+                    name,
+                    new DirectivesClass(name)
+                        .method(
+                            new DirectivesMethod(
+                                "bar",
+                                new DirectivesMethodProperties(
+                                    Opcodes.ACC_PUBLIC,
+                                    "()V",
+                                    null,
+                                    "java/lang/Exception"
+                                )
+                            )
+                                .opcode(
+                                    Opcodes.NEW,
+                                    "java/lang/Exception"
+                                )
+                                .opcode(Opcodes.DUP)
+                                .opcode(
+                                    Opcodes.INVOKESPECIAL,
+                                    "java/lang/Exception",
+                                    "<init>",
+                                    "()V"
+                                )
+                                .opcode(Opcodes.ATHROW)
+                        )
                 )
         ).xmlQuietly();
     }

@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.xembly.Directive;
 
@@ -51,6 +52,8 @@ final class DirectivesOperand implements Iterable<Directive> {
         final Iterator<Directive> result;
         if (this.raw instanceof Label) {
             result = new DirectivesLabel((Label) this.raw).iterator();
+        } else if (this.raw instanceof Handle) {
+            result = new DirectivesHandle((Handle) this.raw).iterator();
         } else {
             result = new DirectivesData(this.raw).iterator();
         }
