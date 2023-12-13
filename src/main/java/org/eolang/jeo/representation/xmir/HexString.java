@@ -60,7 +60,7 @@ final class HexString {
      */
     String decode() {
         try {
-            String result;
+            final String result;
             if (this.hex.isEmpty()) {
                 result = "";
             } else {

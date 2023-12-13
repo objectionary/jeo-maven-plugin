@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.io.File;
 import java.util.Iterator;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.Handle;
