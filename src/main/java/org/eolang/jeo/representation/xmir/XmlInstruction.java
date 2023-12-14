@@ -39,10 +39,6 @@ import org.xembly.Xembler;
 /**
  * Bytecode instruction from XML.
  * @since 0.1
- * @todo #157:90min Hide internal node representation in XmlInstruction.
- *  This class should not expose internal node representation.
- *  We have to consider to add methods or classes in order to avoid
- *  exposing internal node representation.
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class XmlInstruction implements XmlBytecodeEntry {
