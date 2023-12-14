@@ -142,8 +142,7 @@ public final class XmlMethod {
      * @return Trycatch entries.
      */
     public List<XmlTryCatchEntry> trycatchEntries() {
-        final XmlNode xmlnode = new XmlNode(this.node);
-        return xmlnode.children()
+        return this.xmlnode.children()
             .filter(element -> element.hasAttribute("name", "trycatchblocks"))
             .flatMap(XmlNode::children)
             .map(XmlTryCatchEntry::new)
@@ -169,7 +168,7 @@ public final class XmlMethod {
      * @return True if method is a constructor.
      */
     public boolean isConstructor() {
-        return this.node.getAttributes().getNamedItem("name").getNodeValue().equals("new");
+        return this.xmlnode.hasAttribute("name", "new");
     }
 
     /**
@@ -181,7 +180,7 @@ public final class XmlMethod {
     public final List<XmlBytecodeEntry> instructions(
         final Predicate<XmlBytecodeEntry>... predicates
     ) {
-        return new XmlNode(this.node).child("base", "seq")
+        return this.xmlnode.child("base", "seq")
             .child("base", "tuple")
             .children()
             .filter(element -> element.attribute("base").isPresent())
