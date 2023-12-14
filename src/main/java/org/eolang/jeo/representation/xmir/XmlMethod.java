@@ -38,7 +38,7 @@ import org.xembly.Xembler;
  * XML method.
  * @since 0.1
  */
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
 @ToString
 public final class XmlMethod {
 
