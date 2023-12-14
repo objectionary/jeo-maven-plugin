@@ -196,12 +196,18 @@ public final class XmlMethod {
      * @return Exceptions.
      */
     private String[] exceptions() {
-        return new XMLDocument(this.node)
-            .xpath("./o[@name='exceptions']/o/text()")
-            .stream()
+        return this.xmlnode.child("name", "exceptions")
+            .children()
+            .map(XmlNode::text)
             .map(HexString::new)
             .map(HexString::decode)
             .toArray(String[]::new);
+//        return new XMLDocument(this.node)
+//            .xpath("./o[@name='exceptions']/o/text()")
+//            .stream()
+//            .map(HexString::new)
+//            .map(HexString::decode)
+//            .toArray(String[]::new);
     }
 
     /**
