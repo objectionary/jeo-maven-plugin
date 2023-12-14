@@ -23,17 +23,14 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XMLDocument;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
-import org.w3c.dom.Node;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -48,12 +45,8 @@ public final class XmlMethod {
     /**
      * Method node.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    @ToString.Exclude
-    private final Node node;
-
     @ToString.Include
-    private final XmlNode xmlnode;
+    private final XmlNode node;
 
     /**
      * Constructor.
@@ -74,19 +67,10 @@ public final class XmlMethod {
 
     /**
      * Constructor.
-     * @param node Method node.
+     * @param xmlnode Method node.
      */
-    XmlMethod(final XmlNode node) {
-        this(node.node());
-    }
-
-    /**
-     * Constructor.
-     * @param node Method node.
-     */
-    XmlMethod(final Node node) {
-        this.node = node;
-        this.xmlnode = new XmlNode(node);
+    XmlMethod(final XmlNode xmlnode) {
+        this.node = xmlnode;
     }
 
     /**
@@ -95,8 +79,7 @@ public final class XmlMethod {
      */
     public String name() {
         final String result;
-//        final String original = String.valueOf(new XMLDocument(this.node).xpath("./@name").get(0));
-        final String original = this.xmlnode.attribute("name").orElseThrow();
+        final String original = this.node.attribute("name").orElseThrow();
         if ("new".equals(original)) {
             result = "<init>";
         } else {
@@ -110,10 +93,7 @@ public final class XmlMethod {
      * @return Access modifiers.
      */
     public int access() {
-        return new HexString(this.xmlnode.child("name", "access").text()).decodeAsInt();
-//        return new HexString(
-//            new XMLDocument(this.node).xpath("./o[@name='access']/text()").get(0)
-//        ).decodeAsInt();
+        return new HexString(this.node.child("name", "access").text()).decodeAsInt();
     }
 
     /**
@@ -121,10 +101,7 @@ public final class XmlMethod {
      * @return Descriptor.
      */
     public String descriptor() {
-        return new HexString(this.xmlnode.child("name", "descriptor").text()).decode();
-//        return new HexString(
-//            new XMLDocument(this.node).xpath("./o[@name='descriptor']/text()").get(0)
-//        ).decode();
+        return new HexString(this.node.child("name", "descriptor").text()).decode();
     }
 
     /**
@@ -132,19 +109,12 @@ public final class XmlMethod {
      * @return Signature.
      */
     public String signature() {
-        return this.xmlnode.optchild("name", "signature")
+        return this.node.optchild("name", "signature")
             .map(XmlNode::text)
             .filter(s -> !s.isBlank())
             .map(HexString::new)
             .map(HexString::decode)
             .orElse(null);
-//        return new XMLDocument(this.node).xpath("./o[@name='signature']/text()")
-//            .stream()
-//            .filter(s -> !s.isBlank())
-//            .findFirst()
-//            .map(HexString::new)
-//            .map(HexString::decode)
-//            .orElse(null);
     }
 
     /**
@@ -152,7 +122,7 @@ public final class XmlMethod {
      * @return Trycatch entries.
      */
     public List<XmlTryCatchEntry> trycatchEntries() {
-        return this.xmlnode.children()
+        return this.node.children()
             .filter(element -> element.hasAttribute("name", "trycatchblocks"))
             .flatMap(XmlNode::children)
             .map(XmlTryCatchEntry::new)
@@ -178,7 +148,7 @@ public final class XmlMethod {
      * @return True if method is a constructor.
      */
     public boolean isConstructor() {
-        return this.xmlnode.hasAttribute("name", "new");
+        return this.node.hasAttribute("name", "new");
     }
 
     /**
@@ -190,7 +160,7 @@ public final class XmlMethod {
     public final List<XmlBytecodeEntry> instructions(
         final Predicate<XmlBytecodeEntry>... predicates
     ) {
-        return this.xmlnode.child("base", "seq")
+        return this.node.child("base", "seq")
             .child("base", "tuple")
             .children()
             .filter(element -> element.attribute("base").isPresent())
@@ -204,18 +174,12 @@ public final class XmlMethod {
      * @return Exceptions.
      */
     private String[] exceptions() {
-        return this.xmlnode.child("name", "exceptions")
+        return this.node.child("name", "exceptions")
             .children()
             .map(XmlNode::text)
             .map(HexString::new)
             .map(HexString::decode)
             .toArray(String[]::new);
-//        return new XMLDocument(this.node)
-//            .xpath("./o[@name='exceptions']/o/text()")
-//            .stream()
-//            .map(HexString::new)
-//            .map(HexString::decode)
-//            .toArray(String[]::new);
     }
 
     /**
