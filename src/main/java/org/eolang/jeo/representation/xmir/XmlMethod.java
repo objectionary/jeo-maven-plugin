@@ -188,6 +188,7 @@ public final class XmlMethod {
         final Predicate<XmlBytecodeEntry>... predicates
     ) {
         return new XmlNode(this.node).child("base", "seq")
+            .child("base", "tuple")
             .children()
             .filter(element -> element.attribute("base").isPresent())
             .map(XmlNode::toCommand)

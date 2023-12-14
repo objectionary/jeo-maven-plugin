@@ -101,8 +101,11 @@ public final class DirectivesMethod implements Iterable<Directive> {
             .append(this.properties)
             .add("o")
             .attr("base", "seq")
-            .attr("name", "@");
+            .attr("name", "@")
+            .add("o")
+            .attr("base", "tuple");
         this.instructions.forEach(directives::append);
+        directives.up();
         directives.up();
         directives.add("o")
             .attr("base", "tuple")
