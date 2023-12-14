@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XMLDocument;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.ToString;
@@ -94,7 +95,8 @@ public final class XmlMethod {
      */
     public String name() {
         final String result;
-        final String original = String.valueOf(new XMLDocument(this.node).xpath("./@name").get(0));
+//        final String original = String.valueOf(new XMLDocument(this.node).xpath("./@name").get(0));
+        final String original = this.xmlnode.attribute("name").orElseThrow();
         if ("new".equals(original)) {
             result = "<init>";
         } else {
@@ -130,13 +132,19 @@ public final class XmlMethod {
      * @return Signature.
      */
     public String signature() {
-        return new XMLDocument(this.node).xpath("./o[@name='signature']/text()")
-            .stream()
+        return this.xmlnode.optchild("name", "signature")
+            .map(XmlNode::text)
             .filter(s -> !s.isBlank())
-            .findFirst()
             .map(HexString::new)
             .map(HexString::decode)
             .orElse(null);
+//        return new XMLDocument(this.node).xpath("./o[@name='signature']/text()")
+//            .stream()
+//            .filter(s -> !s.isBlank())
+//            .findFirst()
+//            .map(HexString::new)
+//            .map(HexString::decode)
+//            .orElse(null);
     }
 
     /**
