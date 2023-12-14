@@ -108,9 +108,10 @@ public final class XmlMethod {
      * @return Access modifiers.
      */
     public int access() {
-        return new HexString(
-            new XMLDocument(this.node).xpath("./o[@name='access']/text()").get(0)
-        ).decodeAsInt();
+        return new HexString(this.xmlnode.child("name", "access").text()).decodeAsInt();
+//        return new HexString(
+//            new XMLDocument(this.node).xpath("./o[@name='access']/text()").get(0)
+//        ).decodeAsInt();
     }
 
     /**
@@ -118,9 +119,10 @@ public final class XmlMethod {
      * @return Descriptor.
      */
     public String descriptor() {
-        return new HexString(
-            new XMLDocument(this.node).xpath("./o[@name='descriptor']/text()").get(0)
-        ).decode();
+        return new HexString(this.xmlnode.child("name", "descriptor").text()).decode();
+//        return new HexString(
+//            new XMLDocument(this.node).xpath("./o[@name='descriptor']/text()").get(0)
+//        ).decode();
     }
 
     /**
