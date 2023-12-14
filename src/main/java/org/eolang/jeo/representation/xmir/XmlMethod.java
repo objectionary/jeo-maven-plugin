@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
@@ -40,13 +41,18 @@ import org.xembly.Xembler;
  * @since 0.1
  */
 @SuppressWarnings("PMD.TooManyMethods")
+@ToString
 public final class XmlMethod {
 
     /**
      * Method node.
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+    @ToString.Exclude
     private final Node node;
+
+    @ToString.Include
+    private final XmlNode xmlnode;
 
     /**
      * Constructor.
@@ -79,6 +85,7 @@ public final class XmlMethod {
      */
     XmlMethod(final Node node) {
         this.node = node;
+        this.xmlnode = new XmlNode(node);
     }
 
     /**
@@ -181,11 +188,6 @@ public final class XmlMethod {
             .map(XmlNode::toCommand)
             .filter(instr -> Arrays.stream(predicates).allMatch(predicate -> predicate.test(instr)))
             .collect(Collectors.toList());
-    }
-
-    @Override
-    public String toString() {
-        return new XMLDocument(this.node).toString();
     }
 
     /**
