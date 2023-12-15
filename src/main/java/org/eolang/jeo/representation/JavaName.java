@@ -36,7 +36,17 @@ import lombok.ToString;
  * @since 0.1
  */
 @ToString
-public class JavaName {
+public final class JavaName {
+
+    /**
+     * Prefix.
+     */
+    private static final String PREFIX = "j$";
+
+    /**
+     * Blank name error message.
+     */
+    private static final String BLANK = "Name can't be blank";
 
     /**
      * Original name.
@@ -57,7 +67,10 @@ public class JavaName {
      * @return Encoded name.
      */
     public String encode() {
-        return this.origin;
+        if (this.origin.isBlank()) {
+            throw new IllegalArgumentException(JavaName.BLANK);
+        }
+        return String.format("%s%s", JavaName.PREFIX, this.origin);
     }
 
     /**
@@ -65,6 +78,14 @@ public class JavaName {
      * @return Decoded name.
      */
     public String decode() {
-        return this.origin;
+        final String res;
+        if (this.origin.isBlank()) {
+            throw new IllegalArgumentException(JavaName.BLANK);
+        } else if (this.origin.startsWith(JavaName.PREFIX)) {
+            res = this.origin.substring(JavaName.PREFIX.length());
+        } else {
+            res = this.origin;
+        }
+        return res;
     }
 }

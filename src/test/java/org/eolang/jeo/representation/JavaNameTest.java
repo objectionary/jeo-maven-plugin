@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation;
 
-import lombok.ToString;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -58,6 +57,7 @@ class JavaNameTest {
         "j$ClassName, ClassName",
         "j$someLongName, someLongName",
         "j$j$j, j$j",
+        "someName, someName",
     })
     void decodesName(final String encoded, final String origin) {
         MatcherAssert.assertThat(
@@ -70,7 +70,7 @@ class JavaNameTest {
     @Test
     void throwsExceptionWhenEncodingInvalidName() {
         Assertions.assertThrows(
-            IllegalStateException.class,
+            IllegalArgumentException.class,
             () -> new JavaName(" ").encode(),
             "Can't throw exception when encoding invalid name"
         );
@@ -79,7 +79,7 @@ class JavaNameTest {
     @Test
     void throwsExceptionWhenDecodingInvalidName() {
         Assertions.assertThrows(
-            IllegalStateException.class,
+            IllegalArgumentException.class,
             () -> new JavaName(" ").decode(),
             "Can't throw exception when decoding invalid name"
         );
