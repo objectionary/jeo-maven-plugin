@@ -49,6 +49,11 @@ public final class JavaName {
     private static final String BLANK = "Name can't be blank";
 
     /**
+     * Delimiter.
+     */
+    private static final String DELIMITER = "/";
+
+    /**
      * Original name.
      * Might be with 'j' prefix or without it, depending on the context.
      */
@@ -67,10 +72,17 @@ public final class JavaName {
      * @return Encoded name.
      */
     public String encode() {
+        final String res;
         if (this.origin.isBlank()) {
             throw new IllegalArgumentException(JavaName.BLANK);
+        } else if (this.origin.contains(JavaName.DELIMITER)) {
+            final String[] split = this.origin.split(JavaName.DELIMITER);
+            split[split.length - 1] = new JavaName(split[split.length - 1]).encode();
+            res = String.join(JavaName.DELIMITER, split);
+        } else {
+            res = String.format("%s%s", JavaName.PREFIX, this.origin);
         }
-        return String.format("%s%s", JavaName.PREFIX, this.origin);
+        return res;
     }
 
     /**
@@ -83,6 +95,10 @@ public final class JavaName {
             throw new IllegalArgumentException(JavaName.BLANK);
         } else if (this.origin.startsWith(JavaName.PREFIX)) {
             res = this.origin.substring(JavaName.PREFIX.length());
+        } else if (this.origin.contains(JavaName.DELIMITER)) {
+            final String[] split = this.origin.split(JavaName.DELIMITER);
+            split[split.length - 1] = new JavaName(split[split.length - 1]).decode();
+            res = String.join(JavaName.DELIMITER, split);
         } else {
             res = this.origin;
         }

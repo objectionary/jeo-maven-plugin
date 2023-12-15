@@ -27,6 +27,7 @@ import com.jcabi.log.Logger;
 import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.JavaName;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 
@@ -130,7 +131,7 @@ public class BytecodeMethodProperties {
         );
         return writer.visitMethod(
             this.access,
-            this.name,
+            new JavaName(this.name).decode(),
             this.descriptor,
             this.signature,
             this.exceptions

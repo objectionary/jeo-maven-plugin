@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.directives;
 import java.util.Iterator;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.DefaultVersion;
+import org.eolang.jeo.representation.JavaName;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -91,7 +92,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String supername,
         final String[] interfaces
     ) {
-        final ClassName classname = new ClassName(name);
+        final ClassName classname = new ClassName(new JavaName(name).encode());
         this.program.withClass(
             classname,
             new DirectivesClass(
@@ -115,14 +116,15 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String signature,
         final String[] exceptions
     ) {
+        String ename = new JavaName(name).encode();
         final DirectivesMethod method = new DirectivesMethod(
-            name,
+            ename,
             new DirectivesMethodProperties(access, descriptor, signature, exceptions)
         );
         this.program.top().method(method);
         return new DirectivesMethodVisitor(
             method,
-            super.visitMethod(access, name, descriptor, signature, exceptions)
+            super.visitMethod(access, ename, descriptor, signature, exceptions)
         );
     }
 
@@ -134,8 +136,9 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String signature,
         final Object value
     ) {
-        this.program.top().field(new DirectivesField(access, name, descriptor, signature, value));
-        return super.visitField(access, name, descriptor, signature, value);
+        String ename = new JavaName(name).encode();
+        this.program.top().field(new DirectivesField(access, ename, descriptor, signature, value));
+        return super.visitField(access, ename, descriptor, signature, value);
     }
 
     @Override

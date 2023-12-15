@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.JavaName;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
@@ -65,12 +66,13 @@ public final class XmlBytecode {
         final XmlProgram program = new XmlProgram(this.xml);
         final XmlClass clazz = program.top();
         final BytecodeClass bytecode = new BytecodeClass(
-            new ClassName(program.pckg(), clazz.name()).full(),
+            new ClassName(program.pckg(), new JavaName(clazz.name()).decode()).full(),
             clazz.properties().toBytecodeProperties()
         );
         for (final XmlField field : clazz.fields()) {
+            String dfname = new JavaName(field.name()).decode();
             bytecode.withField(
-                field.name(),
+                dfname,
                 field.descriptor(),
                 field.signature(),
                 field.value(),
