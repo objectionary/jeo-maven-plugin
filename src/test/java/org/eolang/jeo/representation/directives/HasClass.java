@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.JavaName;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -54,7 +55,7 @@ final class HasClass extends TypeSafeMatcher<String> {
      * @param name Class name.
      */
     HasClass(final String name) {
-        this.name = name;
+        this.name = new JavaName(name).encode();
         this.additional = new ArrayList<>(0);
     }
 

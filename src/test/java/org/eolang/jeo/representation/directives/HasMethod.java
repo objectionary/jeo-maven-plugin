@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.HexData;
+import org.eolang.jeo.representation.JavaName;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -80,7 +81,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * @param method Method name.
      */
     public HasMethod(final String method) {
-        this("", method);
+        this("", new JavaName(method).encode());
     }
 
     /**
@@ -118,7 +119,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * @return New matcher that checks class.
      */
     public HasMethod inside(final String klass) {
-        return new HasMethod(klass, this.name);
+        return new HasMethod(new JavaName(klass).encode(), this.name);
     }
 
     /**
