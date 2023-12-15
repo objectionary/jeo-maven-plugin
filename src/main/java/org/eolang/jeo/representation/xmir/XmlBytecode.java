@@ -70,9 +70,8 @@ public final class XmlBytecode {
             clazz.properties().toBytecodeProperties()
         );
         for (final XmlField field : clazz.fields()) {
-            String dfname = new JavaName(field.name()).decode();
             bytecode.withField(
-                dfname,
+                new JavaName(field.name()).decode(),
                 field.descriptor(),
                 field.signature(),
                 field.value(),

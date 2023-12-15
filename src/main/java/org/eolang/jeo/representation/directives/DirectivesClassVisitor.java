@@ -116,7 +116,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String signature,
         final String[] exceptions
     ) {
-        String ename = new JavaName(name).encode();
+        final String ename = new JavaName(name).encode();
         final DirectivesMethod method = new DirectivesMethod(
             ename,
             new DirectivesMethodProperties(access, descriptor, signature, exceptions)
@@ -136,7 +136,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String signature,
         final Object value
     ) {
-        String ename = new JavaName(name).encode();
+        final String ename = new JavaName(name).encode();
         this.program.top().field(new DirectivesField(access, ename, descriptor, signature, value));
         return super.visitField(access, ename, descriptor, signature, value);
     }
