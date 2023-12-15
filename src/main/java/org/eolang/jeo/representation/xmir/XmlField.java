@@ -39,6 +39,8 @@ public class XmlField {
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
 
+    private final XmlNode xmlnode;
+
     /**
      * Constructor.
      * @param node Field node.
@@ -53,6 +55,7 @@ public class XmlField {
      */
     XmlField(final Node node) {
         this.node = node;
+        this.xmlnode = new XmlNode(node);
     }
 
     /**
@@ -93,19 +96,6 @@ public class XmlField {
      */
     public Object value() {
         return this.find(Attribute.VALUE).map(HexString::decode).orElse(null);
-    }
-
-    /**
-     * XML node.
-     * @return Node node.
-     * @todo #157:90min Hide internal node representation in XmlField.
-     *  This class should not expose internal node representation.
-     *  We have to consider to add methods or classes in order to avoid
-     *  exposing internal node representation.
-     */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    public Node node() {
-        return this.node;
     }
 
     /**
