@@ -45,9 +45,10 @@ class EoRepresentationTest {
 
     @Test
     void retrievesName() {
-        final String expected = "org/eolang/foo/Math";
+        final String name = "org/eolang/foo/Math";
+        final String expected = new JavaName(name).encode();
         final String actual = new EoRepresentation(
-            new BytecodeClass(expected).xml()
+            new BytecodeClass(name).xml()
         ).details().name();
         MatcherAssert.assertThat(
             String.format(
@@ -65,7 +66,7 @@ class EoRepresentationTest {
         MatcherAssert.assertThat(
             "The XML representation of the EO object is not correct",
             new EoRepresentation(new BytecodeClass("org/eolang/foo/Math").xml()).toEO(),
-            XhtmlMatchers.hasXPath("/program[@name='Math']")
+            XhtmlMatchers.hasXPath("/program[@name='j$Math']")
         );
     }
 

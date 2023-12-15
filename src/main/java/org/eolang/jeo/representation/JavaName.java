@@ -79,6 +79,8 @@ public final class JavaName {
             final String[] split = this.origin.split(JavaName.DELIMITER);
             split[split.length - 1] = new JavaName(split[split.length - 1]).encode();
             res = String.join(JavaName.DELIMITER, split);
+        } else if ("<init>".equals(this.origin) || "new".equals(this.origin)) {
+            res = this.origin;
         } else {
             res = String.format("%s%s", JavaName.PREFIX, this.origin);
         }
@@ -99,6 +101,8 @@ public final class JavaName {
             final String[] split = this.origin.split(JavaName.DELIMITER);
             split[split.length - 1] = new JavaName(split[split.length - 1]).decode();
             res = String.join(JavaName.DELIMITER, split);
+        } else if ("<init>".equals(this.origin) || "new".equals(this.origin)) {
+            res = this.origin;
         } else {
             res = this.origin;
         }

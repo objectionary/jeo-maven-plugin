@@ -206,7 +206,7 @@ public final class BytecodeClass {
         final int... modifiers
     ) {
         final BytecodeMethod method = new BytecodeMethod(
-            BytecodeClass.methodName(mname),
+            mname,
             this.writer,
             this,
             descriptor,
@@ -284,21 +284,5 @@ public final class BytecodeClass {
             )
             .opcode(Opcodes.RETURN)
             .up();
-    }
-
-    /**
-     * Get method name.
-     * Returns "init" for a constructor.
-     * @param raw Raw method name.
-     * @return Method name.
-     */
-    private static String methodName(final String raw) {
-        final String result;
-        if ("new".equals(raw)) {
-            result = "<init>";
-        } else {
-            result = raw;
-        }
-        return result;
     }
 }

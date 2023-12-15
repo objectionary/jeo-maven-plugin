@@ -33,6 +33,7 @@ import java.util.Collections;
 import org.eolang.jeo.Details;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
+import org.eolang.jeo.representation.JavaName;
 
 /**
  * Footprint of the representations as bytecode classes.
@@ -68,7 +69,7 @@ public final class ImprovementBytecodeFootprint implements Improvement {
      */
     private void recompile(final Representation representation) {
         final Details details = representation.details();
-        final String name = details.name();
+        final String name = new JavaName(details.name()).decode();
         try {
             final byte[] bytecode = representation.toBytecode().asBytes();
             final String[] subpath = name.split("\\.");

@@ -36,6 +36,7 @@ import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.XmirDefaultDirectory;
 import org.eolang.jeo.representation.EoRepresentation;
+import org.eolang.jeo.representation.JavaName;
 
 /**
  * Footprint of the EO's.
@@ -72,7 +73,7 @@ public final class ImprovementXmirFootprint implements Improvement {
      * @return New representation with source attached to the saved file.
      */
     private Representation transform(final Representation representation) {
-        final String name = representation.details().name();
+        final String name = new JavaName(representation.details().name()).decode();
         final Path path = this.target.resolve(new XmirDefaultDirectory().toPath())
             .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
         try {

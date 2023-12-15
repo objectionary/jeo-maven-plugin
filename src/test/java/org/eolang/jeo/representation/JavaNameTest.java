@@ -43,6 +43,7 @@ class JavaNameTest {
         "someLongName, j$someLongName",
         "j$j, j$j$j",
         "jeo/xmir/Fake, jeo/xmir/j$Fake",
+        "<init>, <init>",
     })
     void encodesName(final String origin, final String encoded) {
         MatcherAssert.assertThat(
@@ -60,6 +61,7 @@ class JavaNameTest {
         "j$j$j, j$j",
         "someName, someName",
         "jeo/xmir/j$Fake, jeo/xmir/Fake",
+        "<init>, <init>",
     })
     void decodesName(final String encoded, final String origin) {
         MatcherAssert.assertThat(

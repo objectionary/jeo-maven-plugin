@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
+import org.eolang.jeo.representation.JavaName;
 import org.eolang.parser.XMIR;
 
 /**
@@ -70,7 +71,7 @@ public final class ImprovementEoFootprint implements Improvement {
      * @param representation EO representation as XMIR.
      */
     private void saveEo(final Representation representation) {
-        final String name = representation.details().name();
+        final String name = new JavaName(representation.details().name()).decode();
         final Path path = this.target.resolve("eo")
             .resolve(String.format("%s.eo", name));
         try {
