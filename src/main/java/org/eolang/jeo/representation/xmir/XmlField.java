@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.w3c.dom.Node;
 
 /**
  * XML field.
@@ -36,26 +35,14 @@ public class XmlField {
     /**
      * Field node.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    private final Node node;
-
-    private final XmlNode xmlnode;
+    private final XmlNode node;
 
     /**
      * Constructor.
-     * @param node Field node.
+     * @param xmlnode Field node.
      */
-    XmlField(final XmlNode node) {
-        this(node.node());
-    }
-
-    /**
-     * Constructor.
-     * @param node Field node.
-     */
-    XmlField(final Node node) {
-        this.node = node;
-        this.xmlnode = new XmlNode(node);
+    XmlField(final XmlNode xmlnode) {
+        this.node = xmlnode;
     }
 
     /**
@@ -63,9 +50,9 @@ public class XmlField {
      * @return Name.
      */
     public String name() {
-        return this.xmlnode.attribute("name").orElseThrow(
+        return this.node.attribute("name").orElseThrow(
             () -> new IllegalStateException(
-                String.format("Can't find field name in '%s'", this.xmlnode)
+                String.format("Can't find field name in '%s'", this.node)
             )
         );
     }
@@ -108,7 +95,7 @@ public class XmlField {
      * @return Text.
      */
     private Optional<HexString> find(final Attribute attribute) {
-        final String text = this.xmlnode.children()
+        final String text = this.node.children()
             .map(XmlNode::text)
             .collect(Collectors.toList())
             .get(attribute.ordinal());
