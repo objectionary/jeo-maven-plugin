@@ -63,7 +63,11 @@ public class XmlField {
      * @return Name.
      */
     public String name() {
-        return this.node.getAttributes().getNamedItem("name").getNodeValue();
+        return this.xmlnode.attribute("name").orElseThrow(
+            () -> new IllegalStateException(
+                String.format("Can't find field name in '%s'", this.xmlnode)
+            )
+        );
     }
 
     /**
@@ -104,7 +108,7 @@ public class XmlField {
      * @return Text.
      */
     private Optional<HexString> find(final Attribute attribute) {
-        final String text = new XmlNode(this.node).children()
+        final String text = this.xmlnode.children()
             .map(XmlNode::text)
             .collect(Collectors.toList())
             .get(attribute.ordinal());
