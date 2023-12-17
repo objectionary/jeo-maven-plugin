@@ -166,7 +166,7 @@ SOFTWARE.
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.33.0</version>
+      <version>0.34.1</version>
     </dependency>
     <dependency>
       <groupId>com.github.volodya-lombrozo</groupId>
