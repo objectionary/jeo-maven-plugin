@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import org.eolang.jeo.representation.DefaultVersion;
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -152,6 +153,11 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     ) {
         this.method.exception(new DirectivesTryCatch(start, end, handler, type));
         super.visitTryCatchBlock(start, end, handler, type);
+    }
+
+    @Override
+    public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
+        return super.visitAnnotation(descriptor, visible);
     }
 
     @Override

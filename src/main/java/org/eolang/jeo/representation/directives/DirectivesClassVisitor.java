@@ -27,6 +27,7 @@ import java.util.Iterator;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.JavaName;
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -144,5 +145,10 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
     @Override
     public Iterator<Directive> iterator() {
         return this.program.iterator();
+    }
+
+    @Override
+    public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
+        return super.visitAnnotation(descriptor, visible);
     }
 }
