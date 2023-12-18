@@ -30,6 +30,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
+import org.objectweb.asm.Type;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -145,6 +146,8 @@ public final class XmlInstruction implements XmlBytecodeEntry {
             result = new HexString(argument.text()).decodeAsInt();
         } else if (attr.equals("label")) {
             result = this.labels.label(argument.text());
+        } else if (attr.equals("reference")) {
+            result = Type.getType(String.format("L%s;", new HexString(argument.text()).decode()));
         } else {
             result = new HexString(argument.text()).decode();
         }

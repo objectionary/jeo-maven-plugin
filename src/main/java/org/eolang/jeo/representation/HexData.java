@@ -27,6 +27,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.StringJoiner;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.Type;
 
 /**
  * Hexadecimal data.
@@ -75,9 +76,15 @@ public final class HexData {
             res = (byte[]) this.data;
         } else if (this.data instanceof Class<?>) {
             res = ((Class<?>) this.data).getName().getBytes(StandardCharsets.UTF_8);
+        } else if (this.data instanceof Type) {
+            res = ((Type) this.data).getClassName().getBytes(StandardCharsets.UTF_8);
         } else {
             throw new IllegalStateException(
-                String.format("Can't convert '%s' into hex string", this.data)
+                String.format(
+                    "Can't convert '%s' into hex string. The type is '%s'",
+                    this.data,
+                    this.data.getClass()
+                )
             );
         }
         return HexData.bytesToHex(res);
@@ -100,6 +107,8 @@ public final class HexData {
         } else if (this.data instanceof Label) {
             res = "label";
         } else if (this.data instanceof Class<?>) {
+            res = "reference";
+        } else if (this.data instanceof Type) {
             res = "reference";
         } else {
             res = "bytes";
