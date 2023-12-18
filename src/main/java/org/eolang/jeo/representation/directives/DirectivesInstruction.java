@@ -57,15 +57,26 @@ public final class DirectivesInstruction implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives();
-        directives.add("o")
-            .attr("name", new OpcodeName(this.opcode).asString())
-            .attr("base", "opcode");
-        directives.append(new DirectivesOperand(this.opcode));
-        for (final Object operand : this.arguments) {
-            directives.append(new DirectivesOperand(operand));
+        try {
+            final Directives directives = new Directives();
+            directives.add("o")
+                .attr("name", new OpcodeName(this.opcode).asString())
+                .attr("base", "opcode");
+            directives.append(new DirectivesOperand(this.opcode));
+            for (final Object operand : this.arguments) {
+                directives.append(new DirectivesOperand(operand));
+            }
+            directives.up();
+            return directives.iterator();
+        } catch (final IllegalStateException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Failed to convert instruction %s with arguments %s to xembly directives",
+                    this.opcode,
+                    this.arguments
+                ),
+                exception
+            );
         }
-        directives.up();
-        return directives.iterator();
     }
 }
