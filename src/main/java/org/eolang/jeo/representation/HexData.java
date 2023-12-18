@@ -75,9 +75,11 @@ public final class HexData {
         } else if (this.data instanceof byte[]) {
             res = (byte[]) this.data;
         } else if (this.data instanceof Class<?>) {
-            res = ((Class<?>) this.data).getName().getBytes(StandardCharsets.UTF_8);
+            res = ((Class<?>) this.data).getName().replace('.', '/')
+                .getBytes(StandardCharsets.UTF_8);
         } else if (this.data instanceof Type) {
-            res = ((Type) this.data).getClassName().getBytes(StandardCharsets.UTF_8);
+            res = ((Type) this.data).getClassName().replace('.', '/')
+                .getBytes(StandardCharsets.UTF_8);
         } else {
             throw new IllegalStateException(
                 String.format(
