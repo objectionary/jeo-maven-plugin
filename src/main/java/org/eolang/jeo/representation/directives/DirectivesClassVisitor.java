@@ -31,6 +31,7 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.TypePath;
 import org.xembly.Directive;
 
 /**
@@ -130,6 +131,12 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
     }
 
     @Override
+    public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
+        this.program.top().annotation(new DirectivesAnnotation(descriptor, visible));
+        return super.visitAnnotation(descriptor, visible);
+    }
+
+    @Override
     public FieldVisitor visitField(
         final int access,
         final String name,
@@ -145,10 +152,5 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
     @Override
     public Iterator<Directive> iterator() {
         return this.program.iterator();
-    }
-
-    @Override
-    public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
-        return super.visitAnnotation(descriptor, visible);
     }
 }
