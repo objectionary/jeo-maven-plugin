@@ -130,6 +130,15 @@ public final class BytecodeRepresentation implements Representation {
             final XMLDocument res = new XMLDocument(new Xembler(directives).xml());
             new Schema(res).check();
             return res;
+        } catch (final IllegalStateException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Something went wrong during transformation %s into XML by using directives",
+                    this.className(),
+                    directives
+                ),
+                exception
+            );
         } catch (final ImpossibleModificationException exception) {
             throw new IllegalStateException(
                 String.format(
