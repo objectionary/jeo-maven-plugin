@@ -33,6 +33,7 @@ import org.eolang.jeo.Representation;
 /**
  * Logged improvement.
  * @since 0.1.0
+ * @todo - dummy
  */
 public final class ImprovementLogged implements Improvement {
 
