@@ -76,12 +76,14 @@ class HexDataTest {
             Arguments.of("Hello!", "string"),
             Arguments.of(new byte[]{1, 2, 3}, "bytes"),
             Arguments.of(true, "bool"),
-            Arguments.of(0.1d, "float")
+            Arguments.of(0.1d, "float"),
+            Arguments.of(HexDataTest.class, "reference")
         );
     }
 
     /**
      * Arguments for {@link HexDataTest#convertsRawDataIntoHexString(Object, String)}.
+     * Example for reference - {@link HexDataTest} is "org.eolang.jeo.representation.HexDataTest"
      * @return Stream of arguments.
      */
     static Stream<Arguments> values() {
@@ -91,7 +93,11 @@ class HexDataTest {
             Arguments.of(new byte[]{1, 2, 3}, "01 02 03"),
             Arguments.of(true, "01"),
             Arguments.of(false, "00"),
-            Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A")
+            Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A"),
+            Arguments.of(
+                HexDataTest.class,
+                "6F 72 67 2E 65 6F 6C 61 6E 67 2E 6A 65 6F 2E 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2E 48 65 78 44 61 74 61 54 65 73 74"
+            )
         );
     }
 }

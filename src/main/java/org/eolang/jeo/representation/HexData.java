@@ -73,6 +73,8 @@ public final class HexData {
             }
         } else if (this.data instanceof byte[]) {
             res = (byte[]) this.data;
+        } else if (this.data instanceof Class<?>) {
+            res = ((Class<?>) this.data).getName().getBytes(StandardCharsets.UTF_8);
         } else {
             throw new IllegalStateException(
                 String.format("Can't convert '%s' into hex string", this.data)
@@ -97,6 +99,8 @@ public final class HexData {
             res = "bool";
         } else if (this.data instanceof Label) {
             res = "label";
+        } else if (this.data instanceof Class<?>) {
+            res = "reference";
         } else {
             res = "bytes";
         }

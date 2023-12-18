@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -72,8 +73,8 @@ public final class DirectivesInstruction implements Iterable<Directive> {
             throw new IllegalStateException(
                 String.format(
                     "Failed to convert instruction %s with arguments %s to xembly directives",
-                    this.opcode,
-                    this.arguments
+                    new OpcodeName(this.opcode).simplified(),
+                    Arrays.toString(this.arguments)
                 ),
                 exception
             );
