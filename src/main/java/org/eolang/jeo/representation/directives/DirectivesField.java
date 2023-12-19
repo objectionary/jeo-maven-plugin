@@ -81,6 +81,11 @@ final class DirectivesField implements Iterable<Directive> {
     private final Object value;
 
     /**
+     * Annotations.
+     */
+    private final DirectivesAnnotations annotations;
+
+    /**
      * Constructor.
      */
     DirectivesField() {
@@ -108,6 +113,17 @@ final class DirectivesField implements Iterable<Directive> {
         this.descriptor = Optional.ofNullable(descriptor).orElse("");
         this.signature = Optional.ofNullable(signature).orElse("");
         this.value = Optional.ofNullable(value).orElse("");
+        this.annotations = new DirectivesAnnotations();
+    }
+
+    /**
+     * Add annotation.
+     * @param annotation Annotation
+     * @return This object
+     */
+    public DirectivesField annotation(final DirectivesAnnotation annotation) {
+        this.annotations.add(annotation);
+        return this;
     }
 
     @Override
@@ -119,6 +135,7 @@ final class DirectivesField implements Iterable<Directive> {
             .append(new DirectivesData(this.descriptor))
             .append(new DirectivesData(this.signature))
             .append(new DirectivesData(this.value))
+            .append(this.annotations)
             .up()
             .iterator();
     }

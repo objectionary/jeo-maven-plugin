@@ -145,8 +145,18 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final Object value
     ) {
         final String ename = new JavaName(name).encode();
-        this.program.top().field(new DirectivesField(access, ename, descriptor, signature, value));
-        return super.visitField(access, ename, descriptor, signature, value);
+        final DirectivesField field = new DirectivesField(
+            access,
+            ename,
+            descriptor,
+            signature,
+            value
+        );
+        this.program.top().field(field);
+        return new DirectivesFieldVisitor(
+            super.visitField(access, ename, descriptor, signature, value),
+            field
+        );
     }
 
     @Override
