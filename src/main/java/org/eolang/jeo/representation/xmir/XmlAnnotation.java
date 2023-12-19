@@ -23,20 +23,39 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+/**
+ * Xmir representation of an annotation.
+ * @since 0.1
+ */
 public class XmlAnnotation {
 
+    /**
+     * Xmir node.
+     */
     private final XmlNode node;
 
+    /**
+     * Constructor.
+     * @param xmlnode XML node.
+     */
     public XmlAnnotation(final XmlNode xmlnode) {
         this.node = xmlnode;
     }
 
+    /**
+     * Annotation descriptor.
+     * @return Descriptor.
+     */
     public String descriptor() {
         return new HexString(this.node.child("name", "descriptor").text()).decode();
     }
 
+    /**
+     * Annotation visible.
+     * Is it runtime-visible?
+     * @return True if visible at runtime, false otherwise.
+     */
     public boolean visible() {
         return new HexString(this.node.child("name", "visible").text()).decode().equals("true");
     }
-
 }
