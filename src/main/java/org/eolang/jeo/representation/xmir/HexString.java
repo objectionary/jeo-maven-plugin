@@ -85,4 +85,21 @@ final class HexString {
     int decodeAsInt() {
         return Integer.parseInt(this.hex.trim().replace(" ", ""), HexString.RADIX);
     }
+
+    /**
+     * Convert hex string to boolean.
+     * @return Boolean.
+     */
+    boolean decodeAsBoolean() {
+        final String value = this.hex.trim();
+        if (value.length() != 2) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Invalid hex boolean string: %s, the expected size is 2: 01 or 00",
+                    this.hex
+                )
+            );
+        }
+        return value.equals("01");
+    }
 }

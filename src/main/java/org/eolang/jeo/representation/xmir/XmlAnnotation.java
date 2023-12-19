@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.HexData;
+
 /**
  * Xmir representation of an annotation.
  * @since 0.1
@@ -56,6 +58,6 @@ public class XmlAnnotation {
      * @return True if visible at runtime, false otherwise.
      */
     public boolean visible() {
-        return new HexString(this.node.child("name", "visible").text()).decode().equals("true");
+        return new HexString(this.node.child("name", "visible").text()).decodeAsBoolean();
     }
 }
