@@ -50,6 +50,7 @@ public class DirectivesAnnotation implements Iterable<Directive> {
         return new Directives().add("o")
             .append(new DirectivesData("descriptor", this.descriptor))
             .append(new DirectivesData("visible", this.visible))
+            .up()
             .iterator();
     }
 }

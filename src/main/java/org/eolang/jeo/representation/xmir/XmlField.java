@@ -90,6 +90,14 @@ public class XmlField {
     }
 
     /**
+     * Field annotations.
+     * @return Annotations.
+     */
+    public Optional<XmlAnnotations> annotations() {
+        return this.node.optchild("name", "annotations").map(XmlAnnotations::new);
+    }
+
+    /**
      * Find node text by attribute.
      * @param attribute Attribute.
      * @return Text.

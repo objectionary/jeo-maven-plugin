@@ -32,6 +32,7 @@ import org.eolang.jeo.representation.xmir.XmlAnnotation;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.util.CheckClassAdapter;
 
@@ -224,13 +225,14 @@ public final class BytecodeClass {
      * @return This object.
      */
     public BytecodeClass withField(final String fname) {
-        return this.withField(
+        this.withField(
             fname,
             "Ljava/lang/String;",
             null,
             "bar",
             Opcodes.ACC_PUBLIC
         );
+        return this;
     }
 
     /**
@@ -243,7 +245,7 @@ public final class BytecodeClass {
      * @return This object.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    public BytecodeClass withField(
+    public FieldVisitor withField(
         final String fname,
         final String descriptor,
         final String signature,
@@ -254,14 +256,13 @@ public final class BytecodeClass {
         for (final int modifier : modifiers) {
             access |= modifier;
         }
-        this.writer.visitField(
+        return this.writer.visitField(
             access,
             fname,
             descriptor,
             signature,
             value
         );
-        return this;
     }
 
     /**

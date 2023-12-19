@@ -25,11 +25,13 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.util.List;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.JavaName;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.objectweb.asm.FieldVisitor;
 
 /**
  * XML to Java bytecode.
@@ -70,16 +72,28 @@ public final class XmlBytecode {
             clazz.properties().toBytecodeProperties()
         );
         clazz.annotations().ifPresent(bytecode::withAnnotations);
-        for (final XmlField field : clazz.fields()) {
-            bytecode.withField(
+        final List<XmlField> fields = clazz.fields();
+        System.out.println("\nfields size: \n" + fields.size() + "\n");
+        for (final XmlField field : fields) {
+            final FieldVisitor visitor = bytecode.withField(
                 new JavaName(field.name()).decode(),
                 field.descriptor(),
                 field.signature(),
                 field.value(),
                 field.access()
             );
+            field.annotations().ifPresent(annotations -> annotations.all()
+                .forEach(
+                    annotation -> visitor.visitAnnotation(
+                        annotation.descriptor(),
+                        annotation.visible()
+                    )
+                )
+            );
         }
-        for (final XmlMethod xmlmethod : clazz.methods()) {
+        final List<XmlMethod> methods = clazz.methods();
+        System.out.println("\nmethods size: \n" + methods.size() + "\n");
+        for (final XmlMethod xmlmethod : methods) {
             final BytecodeMethod method = bytecode.withMethod(xmlmethod.properties());
             xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
             xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
