@@ -96,7 +96,7 @@ class HexDataTest {
             Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A"),
             Arguments.of(
                 HexDataTest.class,
-                "6F 72 67 2E 65 6F 6C 61 6E 67 2E 6A 65 6F 2E 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2E 48 65 78 44 61 74 61 54 65 73 74"
+                "6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2F 48 65 78 44 61 74 61 54 65 73 74"
             )
         );
     }
