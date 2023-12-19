@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.util.List;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.JavaName;
 import org.eolang.jeo.representation.bytecode.Bytecode;
@@ -80,13 +79,14 @@ public final class XmlBytecode {
                 field.value(),
                 field.access()
             );
-            field.annotations().ifPresent(annotations -> annotations.all()
-                .forEach(
-                    annotation -> visitor.visitAnnotation(
-                        annotation.descriptor(),
-                        annotation.visible()
+            field.annotations().ifPresent(
+                annotations -> annotations.all()
+                    .forEach(
+                        annotation -> visitor.visitAnnotation(
+                            annotation.descriptor(),
+                            annotation.visible()
+                        )
                     )
-                )
             );
         }
         for (final XmlMethod xmlmethod : clazz.methods()) {

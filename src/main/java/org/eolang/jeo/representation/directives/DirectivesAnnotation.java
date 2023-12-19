@@ -31,12 +31,23 @@ import org.xembly.Directives;
  * Directives Annotation.
  * @since 0.1
  */
-public class DirectivesAnnotation implements Iterable<Directive> {
+public final class DirectivesAnnotation implements Iterable<Directive> {
 
+    /**
+     * Annotation descriptor.
+     */
     private final String descriptor;
 
+    /**
+     * Annotation visible.
+     */
     private final boolean visible;
 
+    /**
+     * Constructor.
+     * @param descriptor Descriptor.
+     * @param visible Visible.
+     */
     public DirectivesAnnotation(
         final String descriptor,
         final boolean visible

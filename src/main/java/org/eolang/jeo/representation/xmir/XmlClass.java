@@ -106,6 +106,18 @@ public final class XmlClass {
     }
 
     /**
+     * Annotations.
+     * @return Annotations node.
+     */
+    public Optional<XmlAnnotations> annotations() {
+        return this.node.children()
+            .filter(o -> o.hasAttribute("name", "annotations"))
+            .filter(o -> o.hasAttribute("base", "tuple"))
+            .findFirst()
+            .map(XmlAnnotations::new);
+    }
+
+    /**
      * Class properties.
      * @return Class properties.
      */
@@ -145,18 +157,6 @@ public final class XmlClass {
             .filter(o -> "field".equals(o.attribute("base").get()))
             .map(XmlField::new)
             .collect(Collectors.toList());
-    }
-
-    /**
-     * Annotations.
-     * @return Annotations node.
-     */
-    public Optional<XmlAnnotations> annotations() {
-        return this.node.children()
-            .filter(o -> o.hasAttribute("name", "annotations"))
-            .filter(o -> o.hasAttribute("base", "tuple"))
-            .findFirst()
-            .map(XmlAnnotations::new);
     }
 
     /**

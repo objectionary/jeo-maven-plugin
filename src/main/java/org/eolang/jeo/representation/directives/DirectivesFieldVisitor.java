@@ -31,7 +31,7 @@ import org.objectweb.asm.FieldVisitor;
  * Directives field visitor.
  * @since 0.1
  */
-public class DirectivesFieldVisitor extends FieldVisitor {
+public final class DirectivesFieldVisitor extends FieldVisitor {
 
     /**
      * Field.

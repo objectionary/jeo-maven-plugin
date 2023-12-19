@@ -28,7 +28,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.eolang.jeo.representation.BytecodeRepresentation;
-import org.eolang.jeo.representation.xmir.XmlAnnotation;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;

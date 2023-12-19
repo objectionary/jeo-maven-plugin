@@ -33,7 +33,7 @@ import org.xembly.Directives;
  * Directives Annotation.
  * @since 0.1
  */
-public class DirectivesAnnotations implements Iterable<Directive> {
+public final class DirectivesAnnotations implements Iterable<Directive> {
 
     /**
      * All the annotations.

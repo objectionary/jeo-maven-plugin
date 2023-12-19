@@ -23,8 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.HexData;
-
 /**
  * Xmir representation of an annotation.
  * @since 0.1
