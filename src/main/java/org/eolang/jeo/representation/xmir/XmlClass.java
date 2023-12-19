@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -144,6 +145,18 @@ public final class XmlClass {
             .filter(o -> "field".equals(o.attribute("base").get()))
             .map(XmlField::new)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Annotations.
+     * @return Annotations node.
+     */
+    public Optional<XmlAnnotations> annotations() {
+        return this.node.children()
+            .filter(o -> o.hasAttribute("name", "annotations"))
+            .filter(o -> o.hasAttribute("base", "tuple"))
+            .findFirst()
+            .map(XmlAnnotations::new);
     }
 
     /**

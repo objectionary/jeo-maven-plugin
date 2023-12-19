@@ -28,6 +28,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.eolang.jeo.representation.BytecodeRepresentation;
+import org.eolang.jeo.representation.xmir.XmlAnnotation;
+import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -258,6 +260,21 @@ public final class BytecodeClass {
             descriptor,
             signature,
             value
+        );
+        return this;
+    }
+
+    /**
+     * Add annotations.
+     * @param annotations Annotations.
+     * @return This object.
+     */
+    public BytecodeClass withAnnotations(final XmlAnnotations annotations) {
+        annotations.all().forEach(
+            annotation -> this.writer.visitAnnotation(
+                annotation.descriptor(),
+                annotation.visible()
+            )
         );
         return this;
     }

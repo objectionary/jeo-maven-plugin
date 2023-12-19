@@ -155,6 +155,7 @@ public final class DirectivesClass implements Iterable<Directive> {
             .append(this.properties);
         this.fields.forEach(directives::append);
         this.methods.forEach(directives::append);
+        directives.append(this.annotations);
         return directives.up().iterator();
     }
 }

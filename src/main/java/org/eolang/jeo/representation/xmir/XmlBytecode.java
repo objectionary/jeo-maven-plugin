@@ -69,6 +69,7 @@ public final class XmlBytecode {
             new ClassName(program.pckg(), new JavaName(clazz.name()).decode()).full(),
             clazz.properties().toBytecodeProperties()
         );
+        clazz.annotations().ifPresent(bytecode::withAnnotations);
         for (final XmlField field : clazz.fields()) {
             bytecode.withField(
                 new JavaName(field.name()).decode(),
