@@ -23,8 +23,8 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Xmir annotations.
@@ -54,6 +54,8 @@ public class XmlAnnotations {
      * @return Annotations.
      */
     public List<XmlAnnotation> all() {
-        return Arrays.asList();
+        return this.node.children()
+            .map(XmlAnnotation::new)
+            .collect(Collectors.toList());
     }
 }

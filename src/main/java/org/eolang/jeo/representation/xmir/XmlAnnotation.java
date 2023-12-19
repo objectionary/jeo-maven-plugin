@@ -25,12 +25,18 @@ package org.eolang.jeo.representation.xmir;
 
 public class XmlAnnotation {
 
+    private final XmlNode node;
+
+    public XmlAnnotation(final XmlNode xmlnode) {
+        this.node = xmlnode;
+    }
+
     public String descriptor() {
-        return null;
+        return new HexString(this.node.child("name", "descriptor").text()).decode();
     }
 
     public boolean visible() {
-        return true;
+        return new HexString(this.node.child("name", "visible").text()).decode().equals("true");
     }
 
 }
