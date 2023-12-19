@@ -72,9 +72,7 @@ public final class XmlBytecode {
             clazz.properties().toBytecodeProperties()
         );
         clazz.annotations().ifPresent(bytecode::withAnnotations);
-        final List<XmlField> fields = clazz.fields();
-        System.out.println("\nfields size: \n" + fields.size() + "\n");
-        for (final XmlField field : fields) {
+        for (final XmlField field : clazz.fields()) {
             final FieldVisitor visitor = bytecode.withField(
                 new JavaName(field.name()).decode(),
                 field.descriptor(),
@@ -91,9 +89,7 @@ public final class XmlBytecode {
                 )
             );
         }
-        final List<XmlMethod> methods = clazz.methods();
-        System.out.println("\nmethods size: \n" + methods.size() + "\n");
-        for (final XmlMethod xmlmethod : methods) {
+        for (final XmlMethod xmlmethod : clazz.methods()) {
             final BytecodeMethod method = bytecode.withMethod(xmlmethod.properties());
             xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
             xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
