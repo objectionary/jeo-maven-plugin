@@ -32,7 +32,7 @@ import org.xembly.Directive;
  * Operand XML directives.
  * @since 0.1
  */
-final class DirectivesOperand implements Iterable<Directive> {
+public final class DirectivesOperand implements Iterable<Directive> {
 
     /**
      * Raw operand.
@@ -43,7 +43,7 @@ final class DirectivesOperand implements Iterable<Directive> {
      * Constructor.
      * @param operand Raw operand.
      */
-    DirectivesOperand(final Object operand) {
+    public DirectivesOperand(final Object operand) {
         this.raw = operand;
     }
 

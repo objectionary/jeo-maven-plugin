@@ -32,7 +32,7 @@ import org.xembly.Directives;
  *
  * @since 0.1.0
  */
-final class DirectivesTuple implements Iterable<Directive> {
+public final class DirectivesTuple implements Iterable<Directive> {
 
     /**
      * Tuple name.
@@ -49,7 +49,7 @@ final class DirectivesTuple implements Iterable<Directive> {
      * @param name Tuple name.
      * @param values Tuple values.
      */
-    DirectivesTuple(
+    public DirectivesTuple(
         final String name,
         final String... values
     ) {

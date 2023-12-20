@@ -33,7 +33,7 @@ import org.xembly.Directives;
  *
  * @since 0.1.0
  */
-final class DirectivesData implements Iterable<Directive> {
+public final class DirectivesData implements Iterable<Directive> {
 
     /**
      * Data.
@@ -49,7 +49,7 @@ final class DirectivesData implements Iterable<Directive> {
      * Constructor.
      * @param data Data.
      */
-    DirectivesData(final Object data) {
+    public DirectivesData(final Object data) {
         this("", data);
     }
 
@@ -58,7 +58,7 @@ final class DirectivesData implements Iterable<Directive> {
      * @param name Name.
      * @param data Data.
      */
-    DirectivesData(final String name, final Object data) {
+    public DirectivesData(final String name, final Object data) {
         this.data = data;
         this.name = name;
     }

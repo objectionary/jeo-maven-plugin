@@ -57,7 +57,7 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
     /**
      * Constructor.
      */
-    DirectivesClassProperties() {
+    public DirectivesClassProperties() {
         this(0);
     }
 
