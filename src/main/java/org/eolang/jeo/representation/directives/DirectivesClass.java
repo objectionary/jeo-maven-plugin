@@ -103,7 +103,7 @@ public final class DirectivesClass implements Iterable<Directive> {
      * @param fields Class fields
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    private DirectivesClass(
+    public DirectivesClass(
         final ClassName name,
         final DirectivesClassProperties properties,
         final List<DirectivesMethod> methods,

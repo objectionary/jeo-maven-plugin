@@ -69,7 +69,7 @@ public final class XmlMethod {
      * Constructor.
      * @param xmlnode Method node.
      */
-    XmlMethod(final XmlNode xmlnode) {
+    public XmlMethod(final XmlNode xmlnode) {
         this.node = xmlnode;
     }
 

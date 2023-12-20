@@ -53,7 +53,7 @@ import org.xembly.Directives;
  *
  * @since 0.1
  */
-final class DirectivesField implements Iterable<Directive> {
+public final class DirectivesField implements Iterable<Directive> {
 
     /**
      * Access.
@@ -88,7 +88,7 @@ final class DirectivesField implements Iterable<Directive> {
     /**
      * Constructor.
      */
-    DirectivesField() {
+    public DirectivesField() {
         this(Opcodes.ACC_PUBLIC, "unknown", "I", "", "0");
     }
 
@@ -101,7 +101,7 @@ final class DirectivesField implements Iterable<Directive> {
      * @param value Initial value
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    DirectivesField(
+    public DirectivesField(
         final int access,
         final String name,
         final String descriptor,

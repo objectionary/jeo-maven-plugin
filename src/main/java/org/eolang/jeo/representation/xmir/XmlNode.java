@@ -39,7 +39,7 @@ import org.w3c.dom.NodeList;
  * @since 0.1
  */
 @SuppressWarnings("PMD.TooManyMethods")
-final class XmlNode {
+public final class XmlNode {
 
     /**
      * Parent node.
@@ -51,7 +51,7 @@ final class XmlNode {
      * Constructor.
      * @param xml XML string.
      */
-    XmlNode(final String xml) {
+    public XmlNode(final String xml) {
         this(new XMLDocument(xml).node().getFirstChild());
     }
 
@@ -59,7 +59,7 @@ final class XmlNode {
      * Constructor.
      * @param parent Parent node.
      */
-    XmlNode(final Node parent) {
+    public XmlNode(final Node parent) {
         this.node = parent;
     }
 

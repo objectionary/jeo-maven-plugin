@@ -55,7 +55,7 @@ public final class XmlBytecode {
      * Constructor.
      * @param lines Xml document lines.
      */
-    XmlBytecode(final String... lines) {
+    public XmlBytecode(final String... lines) {
         this(new XMLDocument(String.join("\n", lines)));
     }
 

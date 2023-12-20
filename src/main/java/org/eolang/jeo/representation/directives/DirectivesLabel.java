@@ -54,7 +54,7 @@ public final class DirectivesLabel implements Iterable<Directive> {
      * Constructor.
      * @param label Bytecode label.
      */
-    DirectivesLabel(final Label label) {
+    public DirectivesLabel(final Label label) {
         this(label, new AllLabels());
     }
 
@@ -63,7 +63,7 @@ public final class DirectivesLabel implements Iterable<Directive> {
      * @param label Bytecode label.
      * @param all All labels.
      */
-    private DirectivesLabel(final Label label, final AllLabels all) {
+    public DirectivesLabel(final Label label, final AllLabels all) {
         this(label, "", all);
     }
 

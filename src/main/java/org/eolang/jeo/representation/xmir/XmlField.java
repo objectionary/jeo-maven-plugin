@@ -41,7 +41,7 @@ public class XmlField {
      * Constructor.
      * @param xmlnode Field node.
      */
-    XmlField(final XmlNode xmlnode) {
+    public XmlField(final XmlNode xmlnode) {
         this.node = xmlnode;
     }
 

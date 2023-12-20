@@ -69,7 +69,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
      * Constructor.
      * @param code Program listing.
      */
-    DirectivesProgram(final String code) {
+    public DirectivesProgram(final String code) {
         this(code, new AtomicReference<>(), new AtomicReference<>());
     }
 
@@ -79,7 +79,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
      * @param clazz Class.
      * @param name Classname.
      */
-    private DirectivesProgram(
+    public DirectivesProgram(
         final String code,
         final AtomicReference<DirectivesClass> clazz,
         final AtomicReference<ClassName> name
@@ -130,7 +130,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
      * Retrieve top-level class.
      * @return Top-level class.
      */
-    DirectivesClass top() {
+    public DirectivesClass top() {
         if (Objects.isNull(this.klass.get())) {
             throw new IllegalStateException(
                 String.format("Class is not initialized here %s", this)

@@ -42,7 +42,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
     /**
      * Constructor.
      */
-    DirectivesMetas() {
+    public DirectivesMetas() {
         this(new ClassName());
     }
 
@@ -50,7 +50,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * Constructor.
      * @param classname Class name.
      */
-    DirectivesMetas(final ClassName classname) {
+    public DirectivesMetas(final ClassName classname) {
         this.name = classname;
     }
 

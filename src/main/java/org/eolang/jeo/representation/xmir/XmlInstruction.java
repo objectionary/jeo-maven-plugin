@@ -81,7 +81,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Constructor.
      * @param node Instruction node.
      */
-    XmlInstruction(final Node node) {
+    public XmlInstruction(final Node node) {
         this.node = node;
         this.labels = new AllLabels();
     }
