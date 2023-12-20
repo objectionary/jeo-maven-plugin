@@ -81,7 +81,7 @@ public final class XmlProgram {
      * Find top-level class.
      * @return Class.
      */
-    XmlClass top() {
+    public XmlClass top() {
         return new XmlNode(this.root)
             .child(XmlProgram.PROGRAM)
             .child("objects")

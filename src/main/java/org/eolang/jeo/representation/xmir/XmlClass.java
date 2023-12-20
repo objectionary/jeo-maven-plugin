@@ -121,7 +121,7 @@ public final class XmlClass {
      * Class properties.
      * @return Class properties.
      */
-    XmlClassProperties properties() {
+    public XmlClassProperties properties() {
         return new XmlClassProperties(this.node);
     }
 
@@ -129,7 +129,7 @@ public final class XmlClass {
      * Retrieve all constructors from XMIR.
      * @return List of constructors.
      */
-    List<XmlMethod> constructors() {
+    public List<XmlMethod> constructors() {
         return this.methods()
             .stream()
             .filter(XmlMethod::isConstructor)
@@ -140,7 +140,7 @@ public final class XmlClass {
      * Methods.
      * @return Class methods.
      */
-    List<XmlMethod> methods() {
+    public List<XmlMethod> methods() {
         return this.node.children()
             .filter(o -> o.attribute("base").isEmpty())
             .map(XmlMethod::new)
@@ -151,7 +151,7 @@ public final class XmlClass {
      * Fields.
      * @return Class fields.
      */
-    List<XmlField> fields() {
+    public List<XmlField> fields() {
         return this.node.children()
             .filter(o -> o.attribute("base").isPresent())
             .filter(o -> "field".equals(o.attribute("base").get()))

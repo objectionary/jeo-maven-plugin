@@ -88,14 +88,22 @@ public final class XmlInstruction implements XmlBytecodeEntry {
 
     @Override
     public void writeTo(final BytecodeMethod method) {
-        method.opcode(this.code(), this.arguments());
+        method.opcode(this.opcode(), this.operands());
+    }
+
+    /**
+     * Instruction code.
+     * @return Code.
+     */
+    public int opcode() {
+        return new HexString(new XmlNode(this.node).firstChild().text()).decodeAsInt();
     }
 
     /**
      * Instruction arguments.
      * @return Arguments.
      */
-    public Object[] arguments() {
+    public Object[] operands() {
         return new XmlNode(this.node)
             .children()
             .skip(1)
@@ -152,14 +160,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
             result = new HexString(argument.text()).decode();
         }
         return result;
-    }
-
-    /**
-     * Instruction code.
-     * @return Code.
-     */
-    private int code() {
-        return new HexString(new XmlNode(this.node).firstChild().text()).decodeAsInt();
     }
 
     /**
