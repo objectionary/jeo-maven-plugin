@@ -86,6 +86,14 @@ public final class DirectivesMethod implements Iterable<Directive> {
         return this;
     }
 
+    /**
+     * Add operand to the directives.
+     * @param directives Operand directives.
+     */
+    public void operand(final Iterable<Directive> directives) {
+        this.instructions.add(directives);
+    }
+
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives();
@@ -114,14 +122,6 @@ public final class DirectivesMethod implements Iterable<Directive> {
         directives.up();
         directives.up();
         return directives.iterator();
-    }
-
-    /**
-     * Add operand to the directives.
-     * @param directives Operand directives.
-     */
-    void operand(final Iterable<Directive> directives) {
-        this.instructions.add(directives);
     }
 
     /**

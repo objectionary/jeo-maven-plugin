@@ -111,6 +111,14 @@ public final class XmlInstruction implements XmlBytecodeEntry {
             .toArray();
     }
 
+    /**
+     * Get XML node.
+     * @return XML node.
+     */
+    public XmlNode toNode() {
+        return new XmlNode(this.node);
+    }
+
     @Override
     public boolean equals(final Object other) {
         final boolean result;

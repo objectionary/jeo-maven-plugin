@@ -97,7 +97,7 @@ public final class XmlNode {
      * @param name Child node name.
      * @return Child node.
      */
-    XmlNode child(final String name) {
+    public XmlNode child(final String name) {
         return this.optchild(name).orElseThrow(() -> this.notFound(name));
     }
 
@@ -106,7 +106,7 @@ public final class XmlNode {
      * @param name Child node name.
      * @return Child node.
      */
-    Optional<XmlNode> optchild(final String name) {
+    public Optional<XmlNode> optchild(final String name) {
         Optional<XmlNode> result = Optional.empty();
         final NodeList children = this.node.getChildNodes();
         for (int index = 0; index < children.getLength(); ++index) {
@@ -125,7 +125,7 @@ public final class XmlNode {
      * @param value Attribute value.
      * @return Child node.
      */
-    XmlNode child(final String attribute, final String value) {
+    public XmlNode child(final String attribute, final String value) {
         return this.children()
             .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
             .findFirst()
@@ -142,7 +142,7 @@ public final class XmlNode {
      * @param value Attribute value.
      * @return Child node.
      */
-    Optional<XmlNode> optchild(final String attribute, final String value) {
+    public Optional<XmlNode> optchild(final String attribute, final String value) {
         return this.children()
             .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
             .findFirst();
@@ -152,7 +152,7 @@ public final class XmlNode {
      * Get first child.
      * @return First child node.
      */
-    XmlNode firstChild() {
+    public XmlNode firstChild() {
         return this.children().findFirst()
             .orElseThrow(
                 () -> new IllegalStateException(
@@ -168,8 +168,60 @@ public final class XmlNode {
      * Get all child nodes.
      * @return Child nodes.
      */
-    Stream<XmlNode> children() {
+    public Stream<XmlNode> children() {
         return this.objects().map(XmlNode::new);
+    }
+
+    /**
+     * Retrieve node text content.
+     * @return Text content.
+     */
+    public String text() {
+        return this.node.getTextContent();
+    }
+
+    /**
+     * Get attribute.
+     * @param name Attribute name.
+     * @return Attribute.
+     */
+    public Optional<String> attribute(final String name) {
+        final Optional<String> result;
+        final NamedNodeMap attrs = this.node.getAttributes();
+        if (attrs == null) {
+            result = Optional.empty();
+        } else {
+            result = Optional.ofNullable(attrs.getNamedItem(name)).map(Node::getTextContent);
+        }
+        return result;
+    }
+
+    /**
+     * Check if attribute exists.
+     * @param name Attribute name.
+     * @param value Attribute value.
+     * @return True if attribute with specified value exists.
+     */
+    public boolean hasAttribute(final String name, final String value) {
+        return this.attribute(name)
+            .map(String::valueOf)
+            .map(val -> val.equals(value))
+            .orElse(false);
+    }
+
+    /**
+     * Append entry to the end of the node.
+     * @param entry Entry.
+     */
+    public void append(final XmlNode entry) {
+        this.node.appendChild(this.node.getOwnerDocument().adoptNode(entry.node.cloneNode(true)));
+    }
+
+    /**
+     * Remove this node from parent.
+     */
+    public void erase() {
+        this.node.getParentNode().removeChild(this.node);
     }
 
     /**
@@ -195,48 +247,11 @@ public final class XmlNode {
     }
 
     /**
-     * Retrieve node text content.
-     * @return Text content.
-     */
-    String text() {
-        return this.node.getTextContent();
-    }
-
-    /**
-     * Get attribute.
-     * @param name Attribute name.
-     * @return Attribute.
-     */
-    Optional<String> attribute(final String name) {
-        final Optional<String> result;
-        final NamedNodeMap attrs = this.node.getAttributes();
-        if (attrs == null) {
-            result = Optional.empty();
-        } else {
-            result = Optional.ofNullable(attrs.getNamedItem(name)).map(Node::getTextContent);
-        }
-        return result;
-    }
-
-    /**
      * Convert to XML document.
      * @return XML document.
      */
     XMLDocument asDocument() {
         return new XMLDocument(this.node);
-    }
-
-    /**
-     * Check if attribute exists.
-     * @param name Attribute name.
-     * @param value Attribute value.
-     * @return True if attribute with specified value exists.
-     */
-    boolean hasAttribute(final String name, final String value) {
-        return this.attribute(name)
-            .map(String::valueOf)
-            .map(val -> val.equals(value))
-            .orElse(false);
     }
 
     /**

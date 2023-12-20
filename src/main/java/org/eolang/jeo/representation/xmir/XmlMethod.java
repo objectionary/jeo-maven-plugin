@@ -31,6 +31,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
+import org.objectweb.asm.Opcodes;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -47,6 +48,13 @@ public final class XmlMethod {
      */
     @ToString.Include
     private final XmlNode node;
+
+    /**
+     * Constructor.
+     */
+    public XmlMethod() {
+        this("foo", Opcodes.ACC_PUBLIC, "()V");
+    }
 
     /**
      * Constructor.
@@ -170,6 +178,27 @@ public final class XmlMethod {
     }
 
     /**
+     * Replace instructions.
+     * @param entries Instructions to replace.
+     * @todo #350 Remove mutable method from XmlMethod.
+     *  Here we just remove all instructions and add new ones, this makes XmlMethod class
+     *  mutable, which is a significant architecture flaw. It's much better to
+     *  implement copying of this class with creation of a new XmlMethod, but in order to
+     *  implement this we will have to implement copying all the top level classes like
+     *  XmlProgram, XmlClass and so on, which requires lots of work.
+     */
+    public void replaceInstructions(final XmlNode... entries) {
+        final XmlNode seq = this.node.child("base", "seq")
+            .child("base", "tuple");
+        seq.children()
+            .filter(element -> element.attribute("base").isPresent())
+            .forEach(XmlNode::erase);
+        for (final XmlNode entry : entries) {
+            seq.append(entry);
+        }
+    }
+
+    /**
      * Method exceptions.
      * @return Exceptions.
      */
@@ -195,7 +224,7 @@ public final class XmlMethod {
         final String name,
         final int access,
         final String descriptor,
-        final String... exceptions
+        final String[] exceptions
     ) {
         return new XmlNode(
             new Xembler(

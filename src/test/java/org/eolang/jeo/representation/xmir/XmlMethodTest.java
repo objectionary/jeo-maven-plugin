@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.List;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -80,6 +81,46 @@ class XmlMethodTest {
             Matchers.equalTo(
                 new BytecodeMethodProperties(access, name, descriptor, null, exceptions)
             )
+        );
+    }
+
+    @Test
+    void createsMethodWithoutInstructions() {
+        MatcherAssert.assertThat(
+            "Method instructions are not empty",
+            new XmlMethod().instructions(),
+            Matchers.empty()
+        );
+    }
+
+    @Test
+    void addsInstructions() {
+        final XmlMethod method = new XmlMethod();
+        final XmlInstruction instruction = new XmlInstruction(Opcodes.LDC, "Bye world!");
+        method.replaceInstructions(instruction.toNode());
+        final List<XmlBytecodeEntry> after = method.instructions();
+        MatcherAssert.assertThat(
+            "Exactly one instruction should be added",
+            after,
+            Matchers.contains(instruction)
+        );
+    }
+
+    @Test
+    void replacesInstructions() {
+        final XmlMethod method = new XmlMethod();
+        method.replaceInstructions(new XmlInstruction(Opcodes.LDC, "Bye world!").toNode());
+        final XmlInstruction first = new XmlInstruction(Opcodes.INVOKESPECIAL, 1);
+        final XmlInstruction second = new XmlInstruction(Opcodes.INVOKEVIRTUAL, 2);
+        method.replaceInstructions(
+            first.toNode(),
+            second.toNode()
+        );
+        final List<XmlBytecodeEntry> after = method.instructions();
+        MatcherAssert.assertThat(
+            "Exactly two instruction should be added",
+            after,
+            Matchers.containsInAnyOrder(first, second)
         );
     }
 }
