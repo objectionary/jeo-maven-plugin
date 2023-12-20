@@ -224,7 +224,7 @@ public final class XmlMethod {
         final String name,
         final int access,
         final String descriptor,
-        final String[] exceptions
+        final String... exceptions
     ) {
         return new XmlNode(
             new Xembler(
