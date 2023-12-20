@@ -53,7 +53,7 @@ public final class XmlClass {
      * Constructor.
      * @param classname Class name.
      */
-    XmlClass(final String classname) {
+    public XmlClass(final String classname) {
         this(XmlClass.empty(classname));
     }
 
@@ -70,7 +70,7 @@ public final class XmlClass {
      * @param classname Class name.
      * @param properties Class properties.
      */
-    XmlClass(final String classname, final DirectivesClassProperties properties) {
+    public XmlClass(final String classname, final DirectivesClassProperties properties) {
         this(XmlClass.withProps(classname, properties));
     }
 
@@ -78,7 +78,7 @@ public final class XmlClass {
      * Constructor.
      * @param xml Class node.
      */
-    XmlClass(final Node xml) {
+    public XmlClass(final Node xml) {
         this(new XmlNode(xml));
     }
 
@@ -86,7 +86,7 @@ public final class XmlClass {
      * Constructor.
      * @param node Class node.
      */
-    private XmlClass(final XmlNode node) {
+    public XmlClass(final XmlNode node) {
         this.node = node;
     }
 

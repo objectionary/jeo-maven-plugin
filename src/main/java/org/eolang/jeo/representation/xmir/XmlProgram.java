@@ -35,7 +35,7 @@ import org.xembly.Xembler;
  * XMIR Program.
  * @since 0.1
  */
-final class XmlProgram {
+public final class XmlProgram {
 
     /**
      * Program node name.
@@ -51,7 +51,7 @@ final class XmlProgram {
      * Constructor.
      * @param name Class name.
      */
-    XmlProgram(final ClassName name) {
+    public XmlProgram(final ClassName name) {
         this(
             new XMLDocument(
                 new Xembler(
@@ -65,7 +65,7 @@ final class XmlProgram {
      * Constructor.
      * @param xml Raw XMIR.
      */
-    XmlProgram(final XML xml) {
+    public XmlProgram(final XML xml) {
         this(xml.node());
     }
 
@@ -73,7 +73,7 @@ final class XmlProgram {
      * Constructor.
      * @param root Root node.
      */
-    private XmlProgram(final Node root) {
+    public XmlProgram(final Node root) {
         this.root = root;
     }
 

@@ -32,7 +32,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
  *
  * @since 0.1.0
  */
-final class XmlClassProperties {
+public final class XmlClassProperties {
 
     /**
      * XML representation of a class.
@@ -43,7 +43,7 @@ final class XmlClassProperties {
      * Constructor.
      * @param clazz XMl representation of a class.
      */
-    XmlClassProperties(final XmlNode clazz) {
+    public XmlClassProperties(final XmlNode clazz) {
         this(clazz.asDocument());
     }
 
@@ -51,7 +51,7 @@ final class XmlClassProperties {
      * Constructor.
      * @param clazz XML representation of a class.
      */
-    private XmlClassProperties(final XMLDocument clazz) {
+    public XmlClassProperties(final XMLDocument clazz) {
         this.clazz = clazz;
     }
 
