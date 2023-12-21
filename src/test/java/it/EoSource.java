@@ -24,14 +24,9 @@
 package it;
 
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import org.cactoos.Output;
 import org.cactoos.io.ResourceOf;
 import org.eolang.parser.EoSyntax;
-import org.eolang.parser.Syntax;
 
 /**
  * EO source.
@@ -59,54 +54,12 @@ final class EoSource {
      */
     XML parse() {
         try {
-            final ResourceOf eolang = new ResourceOf(this.resource);
-            final XmlOutput output = new XmlOutput();
-            return new EoSyntax("scenario", eolang).parsed();
+            return new EoSyntax("scenario", new ResourceOf(this.resource)).parsed();
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't parse '%s'", this.resource),
                 exception
             );
-        }
-    }
-
-    /**
-     * XML output.
-     * @since 0.1.0
-     */
-    private static final class XmlOutput implements Output {
-
-        /**
-         * Output stream.
-         */
-        private final ByteArrayOutputStream baos;
-
-        /**
-         * Constructor.
-         */
-        private XmlOutput() {
-            this(new ByteArrayOutputStream());
-        }
-
-        /**
-         * Constructor.
-         * @param baos Output stream.
-         */
-        private XmlOutput(final ByteArrayOutputStream baos) {
-            this.baos = baos;
-        }
-
-        @Override
-        public OutputStream stream() {
-            return this.baos;
-        }
-
-        /**
-         * Convert to XML.
-         * @return XML.
-         */
-        XML xml() {
-            return new XMLDocument(this.baos.toByteArray());
         }
     }
 }
