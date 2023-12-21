@@ -661,9 +661,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                     return instruction;
                 }
             }
-            throw new IllegalStateException(
-                String.format("Unexpected instruction with opcode: %d", opcode)
-            );
+            throw new UnrecognizedOpcode(opcode);
         }
     }
 }

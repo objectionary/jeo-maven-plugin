@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 
@@ -57,6 +58,25 @@ class BytecodeClassTest {
                 .up()
                 .bytecode(),
             Matchers.notNullValue()
+        );
+    }
+
+    @Test
+    void createsClassWithUnknownInstruction() {
+        MatcherAssert.assertThat(
+            "Exception message is not equal to expected",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new BytecodeClass("UnknownInstruction")
+                    .withConstructor()
+                    .opcode(305)
+                    .up()
+                    .bytecode(),
+                "We expect an exception here because 305 is not a valid opcode"
+            ).getMessage(),
+            Matchers.equalTo(
+                "Bytecode creation for the 'UnknownInstruction' class is not possible due to unmet preconditions."
+            )
         );
     }
 }

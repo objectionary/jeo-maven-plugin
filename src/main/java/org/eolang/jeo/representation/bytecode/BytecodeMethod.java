@@ -147,6 +147,14 @@ public final class BytecodeMethod {
                 ),
                 exception
             );
+        } catch (final UnrecognizedOpcode exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Failed to write method %s, because some of the opcodes are not recognized",
+                    this.properties
+                ),
+                exception
+            );
         }
     }
 }
