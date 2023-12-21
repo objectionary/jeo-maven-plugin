@@ -1,0 +1,44 @@
+  ---
+  JEO Maven Plugin
+  ---
+  Yegor Bugayenko
+  ---
+  2023-12-21
+  ---
+
+JEO Maven Plugin
+
+  This {{{http://github.com/objectionary/jeo-maven-plugin}README}}
+  documentation explains it in details.
+
+  Use it like this:
+
++--
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.eolang</groupId>
+      <artifactId>jeo-maven-plugin</artifactId>
+      <version>0.1.5</version>
+      <executions>
+        <execution>
+          <id>bytecode-to-eo</id>
+          <phase>process-classes</phase>
+          <goals>
+            <goal>bytecode-to-eo</goal>
+          </goals>
+        </execution>
+        <execution>
+          <id>eo-to-bytecode</id>
+          <phase>process-classes</phase>
+          <goals>
+            <goal>eo-to-bytecode</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>
++--
+
+  If any questions, submit a {{{http://github.com/objectionary/jeo-maven-plugin/issues}GitHub issue}}.

@@ -34,7 +34,7 @@ SOFTWARE.
   <packaging>maven-plugin</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>jeo</name>
-  <url>https://github.com/objectionary/jeo-maven-plugin</url>
+  <url>https://objectionary.github.io/jeo-maven-plugin</url>
   <description>Optimisation of Java Bytecode via EOLANG</description>
   <inceptionYear>2023</inceptionYear>
   <organization>
@@ -228,6 +228,22 @@ SOFTWARE.
         </includes>
       </testResource>
     </testResources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <configuration>
+          <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+        </configuration>
+        <executions>
+          <execution>
+            <id>mojo-descriptor</id>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
   <profiles>
     <profile>
