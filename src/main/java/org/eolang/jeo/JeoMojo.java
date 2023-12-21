@@ -50,11 +50,7 @@ import org.eolang.jeo.improvement.ImprovementXmirFootprint;
  *
  * @since 0.1.0
  */
-@Mojo(
-    name = "optimize",
-    defaultPhase = LifecyclePhase.PROCESS_CLASSES,
-    requiresDependencyResolution = ResolutionScope.RUNTIME
-)
+@Mojo(name = "optimize", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
 public final class JeoMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project}", required = true, readonly = true)

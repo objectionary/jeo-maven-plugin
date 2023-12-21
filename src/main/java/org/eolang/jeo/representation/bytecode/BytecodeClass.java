@@ -82,7 +82,7 @@ public final class BytecodeClass {
      * @param access Access modifiers.
      */
     public BytecodeClass(final String name, final int access) {
-        this(name, access, new ClassWriter(ClassWriter.COMPUTE_FRAMES));
+        this(name, access, new CustomClassWriter());
     }
 
     /**
@@ -93,7 +93,7 @@ public final class BytecodeClass {
     public BytecodeClass(final String name, final BytecodeClassProperties properties) {
         this(
             name,
-            new ClassWriter(ClassWriter.COMPUTE_FRAMES),
+            new CustomClassWriter(),
             new ArrayList<>(0),
             properties
         );

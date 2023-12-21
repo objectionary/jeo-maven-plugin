@@ -80,17 +80,4 @@ final class EoRepresentationsTest {
             "Exception was not thrown when folder does not exist"
         );
     }
-
-    @Test
-    void test() {
-        final MyClassLoader my = new MyClassLoader();
-        System.out.println("My created classloader: " + my);
-        Thread.currentThread().setContextClassLoader(my);
-        System.out.println("Current classloader: " + getClass().getClassLoader());
-        System.out.println("Thread classloader: " + Thread.currentThread().getContextClassLoader());
-    }
-
-    private static class MyClassLoader extends ClassLoader {
-
-    }
 }

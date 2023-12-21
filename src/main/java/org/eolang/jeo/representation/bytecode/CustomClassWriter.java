@@ -2,8 +2,13 @@ package org.eolang.jeo.representation.bytecode;
 
 import org.objectweb.asm.ClassWriter;
 
+/**
+ * Custom class writer.
+ *
+ * @since 0.1
+ */
 public class CustomClassWriter extends ClassWriter {
-    public CustomClassWriter() {
+    CustomClassWriter() {
         super(ClassWriter.COMPUTE_FRAMES);
     }
 

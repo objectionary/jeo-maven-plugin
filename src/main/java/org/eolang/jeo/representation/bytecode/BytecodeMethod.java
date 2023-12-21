@@ -23,8 +23,6 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import com.jcabi.log.Logger;
-import java.lang.instrument.Instrumentation;
 import java.util.ArrayList;
 import java.util.List;
 import org.objectweb.asm.ClassWriter;
@@ -139,8 +137,6 @@ public final class BytecodeMethod {
     void write() {
         try {
             final MethodVisitor visitor = this.properties.writeMethod(this.writer);
-            Logger.info(this, "Writing method %s%n", this.properties);
-            this.instructions.forEach(inst -> Logger.info(this, "Writing instruction %s%n", inst));
             this.instructions.forEach(instruction -> instruction.writeTo(visitor));
             visitor.visitMaxs(0, 0);
             visitor.visitEnd();

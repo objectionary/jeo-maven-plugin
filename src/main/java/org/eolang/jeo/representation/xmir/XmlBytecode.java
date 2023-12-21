@@ -23,14 +23,12 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.JavaName;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.objectweb.asm.FieldVisitor;
 
@@ -71,11 +69,9 @@ public final class XmlBytecode {
         final String classname = new ClassName(program.pckg(),
             new JavaName(clazz.name()).decode()
         ).full();
-        final BytecodeClassProperties bytecodeProperties = clazz.properties().toBytecodeProperties();
-        Logger.info(this, "Building class %s with props %s", classname, bytecodeProperties);
         final BytecodeClass bytecode = new BytecodeClass(
             classname,
-            bytecodeProperties
+            clazz.properties().toBytecodeProperties()
         );
         clazz.annotations().ifPresent(bytecode::withAnnotations);
         for (final XmlField field : clazz.fields()) {
