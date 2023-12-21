@@ -442,13 +442,11 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         /**
          * Goes to another instruction at branchoffset.
          */
-        GOTO(Opcodes.GOTO, (visitor, arguments) -> {
+        GOTO(Opcodes.GOTO, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.GOTO,
                 (org.objectweb.asm.Label) arguments.get(0)
-            );
-            System.out.println("Writing GOTO: " + arguments.get(0));
-        }
+            )
         ),
 
         /**

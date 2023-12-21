@@ -66,11 +66,8 @@ public final class XmlBytecode {
     public Bytecode bytecode() {
         final XmlProgram program = new XmlProgram(this.xml);
         final XmlClass clazz = program.top();
-        final String classname = new ClassName(program.pckg(),
-            new JavaName(clazz.name()).decode()
-        ).full();
         final BytecodeClass bytecode = new BytecodeClass(
-            classname,
+            new ClassName(program.pckg(), new JavaName(clazz.name()).decode()).full(),
             clazz.properties().toBytecodeProperties()
         );
         clazz.annotations().ifPresent(bytecode::withAnnotations);

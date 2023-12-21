@@ -28,14 +28,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.List;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.eolang.jeo.improvement.ImprovementBytecodeFootprint;
 import org.eolang.jeo.improvement.ImprovementEoFootprint;
@@ -53,6 +51,10 @@ import org.eolang.jeo.improvement.ImprovementXmirFootprint;
 @Mojo(name = "optimize", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
 public final class JeoMojo extends AbstractMojo {
 
+    /**
+     * Maven project.
+     * @since 0.2
+     */
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject project;
 
@@ -87,8 +89,8 @@ public final class JeoMojo extends AbstractMojo {
                     new ImprovementBytecodeFootprint(this.classes.toPath())
                 )
             ).apply();
-        } catch (final IllegalStateException | IOException |
-            DependencyResolutionRequiredException exception) {
+        } catch (final IllegalStateException | IOException
+            | DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);
         }
     }

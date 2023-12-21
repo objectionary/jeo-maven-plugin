@@ -24,7 +24,6 @@
 package org.eolang.jeo;
 
 import java.io.IOException;
-import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
