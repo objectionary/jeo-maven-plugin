@@ -49,6 +49,28 @@ class BytecodeClassTest {
     }
 
     @Test
+    void createsConstructorWithStoreInstructions() {
+        Assertions.assertDoesNotThrow(
+            () -> new BytecodeClass("Store")
+                .withConstructor()
+                .opcode(Opcodes.ICONST_0)
+                .opcode(Opcodes.ISTORE, 1)
+                .opcode(Opcodes.LCONST_0)
+                .opcode(Opcodes.LSTORE, 2)
+                .opcode(Opcodes.FCONST_0)
+                .opcode(Opcodes.FSTORE, 3)
+                .opcode(Opcodes.DCONST_0)
+                .opcode(Opcodes.DSTORE, 4)
+                .opcode(Opcodes.ACONST_NULL)
+                .opcode(Opcodes.ASTORE, 5)
+                .opcode(Opcodes.RETURN)
+                .up()
+                .bytecode(),
+            "We expect no exception here because all instructions are valid"
+        );
+    }
+
+    @Test
     void createsBytecodeWithDefaultConstructor() {
         MatcherAssert.assertThat(
             "Can't create bytecode with default public constructor",
