@@ -146,23 +146,31 @@ public final class BytecodeClass {
      * @return Bytecode.
      */
     public Bytecode bytecode() {
-        this.props.write(this.writer, this.name);
-        this.methods.forEach(BytecodeMethod::write);
-        this.writer.visitEnd();
-        final byte[] bytes = this.writer.toByteArray();
         try {
+            this.props.write(this.writer, this.name);
+            this.methods.forEach(BytecodeMethod::write);
+            this.writer.visitEnd();
+            final byte[] bytes = this.writer.toByteArray();
             CheckClassAdapter.verify(
                 new ClassReader(bytes),
                 false,
                 new PrintWriter(System.err)
             );
+            return new Bytecode(bytes);
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
                 String.format("Can't create bytecode for the class '%s' ", this.name),
                 exception
             );
+        } catch (final IllegalStateException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Bytecode creation for the '%s' class is not possible due to unmet preconditions.",
+                    this.name
+                ),
+                exception
+            );
         }
-        return new Bytecode(bytes);
     }
 
     /**

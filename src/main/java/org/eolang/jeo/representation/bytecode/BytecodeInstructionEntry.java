@@ -82,6 +82,20 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
     private enum Instruction {
 
         /**
+         * Do nothing.
+         */
+        NOP(Opcodes.NOP, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.NOP)
+        ),
+
+        /**
+         * Push null.
+         */
+        ACONST_NULL(Opcodes.ACONST_NULL, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.ACONST_NULL)
+        ),
+
+        /**
          * Load the int value 0 onto the stack.
          */
         ICONST_0(Opcodes.ICONST_0, (visitor, arguments) ->
@@ -121,6 +135,41 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
          */
         ICONST_5(Opcodes.ICONST_5, (visitor, arguments) ->
             visitor.visitInsn(Opcodes.ICONST_5)
+        ),
+
+        /**
+         * Load the long value 0 onto the stack.
+         */
+        LCONST_0(Opcodes.LCONST_0, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.LCONST_0)
+        ),
+
+        /**
+         * Load the long value 1 onto the stack.
+         */
+        LCONST_1(Opcodes.LCONST_1, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.LCONST_1)
+        ),
+
+        /**
+         * Load the float value 0 onto the stack.
+         */
+        FCONST_0(Opcodes.FCONST_0, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.FCONST_0)
+        ),
+
+        /**
+         * Load the float value 1 onto the stack.
+         */
+        FCONST_1(Opcodes.FCONST_1, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.FCONST_1)
+        ),
+
+        /**
+         * Load the float value 2 onto the stack.
+         */
+        FCONST_2(Opcodes.FCONST_2, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.FCONST_2)
         ),
 
         /**
@@ -251,6 +300,27 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
          */
         ISTORE(Opcodes.ISTORE, (visitor, arguments) ->
             visitor.visitVarInsn(Opcodes.ISTORE, (int) arguments.get(0))
+        ),
+
+        /**
+         * Store long value into variable #index.
+         */
+        LSTORE(Opcodes.LSTORE, (visitor, arguments) ->
+            visitor.visitVarInsn(Opcodes.LSTORE, (int) arguments.get(0))
+        ),
+
+        /**
+         * Store float value into variable #index.
+         */
+        FSTORE(Opcodes.FSTORE, (visitor, arguments) ->
+            visitor.visitVarInsn(Opcodes.FSTORE, (int) arguments.get(0))
+        ),
+
+        /**
+         * Store double value into variable #index.
+         */
+        DSTORE(Opcodes.DSTORE, (visitor, arguments) ->
+            visitor.visitVarInsn(Opcodes.DSTORE, (int) arguments.get(0))
         ),
 
         /**
@@ -661,9 +731,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                     return instruction;
                 }
             }
-            throw new IllegalStateException(
-                String.format("Unexpected instruction with opcode: %d", opcode)
-            );
+            throw new UnrecognizedOpcode(opcode);
         }
     }
 }
