@@ -87,28 +87,49 @@ public final class JeoMojo extends AbstractMojo {
                     new ImprovementBytecodeFootprint(this.classes.toPath())
                 )
             ).apply();
-        } catch (final IllegalStateException | IOException exception) {
+        } catch (final IllegalStateException | IOException |
+            DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);
         }
     }
 
-    private void initClassloader() {
+    /**
+     * Initialize classloader.
+     * This method is important to load classes that were compiled on the previous maven
+     * phases. Since the jeo plugin works on the 'process-classes' phase, it might
+     * see classes that were compiled on the 'compile' phase.
+     * We need to have all these classes in the classpath to be able to load them during
+     * the transformation phase.
+     * We need this to solve the problem with computing maxs in ASM library:
+     * - https://gitlab.ow2.org/asm/asm/-/issues/317918
+     * - https://stackoverflow.com/questions/11292701/error-while-instrumenting-class-files-asm-classwriter-getcommonsuperclass
+     * @throws DependencyResolutionRequiredException If a problem happened during loading classes.
+     */
+    private void initClassloader() throws DependencyResolutionRequiredException {
+        Thread.currentThread().setContextClassLoader(
+            new URLClassLoader(
+                this.project.getRuntimeClasspathElements()
+                    .stream()
+                    .map(File::new)
+                    .map(JeoMojo::url).toArray(URL[]::new),
+                Thread.currentThread().getContextClassLoader()
+            )
+        );
+    }
+
+    /**
+     * Convert file to URL.
+     * @param file File.
+     * @return URL.
+     */
+    private static URL url(final File file) {
         try {
-            List<String> classpathElements = this.project.getRuntimeClasspathElements();
-            URL[] urls = new URL[classpathElements.size()];
-            for (int i = 0; i < classpathElements.size(); ++i) {
-                urls[i] = new File(classpathElements.get(i)).toURI().toURL();
-            }
-            Thread.currentThread().setContextClassLoader(
-                new URLClassLoader(
-                    urls,
-                    Thread.currentThread().getContextClassLoader()
-                )
+            return file.toURI().toURL();
+        } catch (final MalformedURLException exception) {
+            throw new IllegalStateException(
+                String.format("Can't convert file %s to URL", file),
+                exception
             );
-        } catch (MalformedURLException ex) {
-            throw new RuntimeException(ex);
-        } catch (DependencyResolutionRequiredException ex) {
-            throw new RuntimeException(ex);
         }
     }
 }
