@@ -27,7 +27,13 @@ SOFTWARE.
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.0</version>
+    <!--
+      The version of 3.2.0 and similar requires rather high java
+      version: 17 or higher. So we intentionally use the version 2.7.18
+      here that requires java 11 since our plugin should be compatible with
+      java 11.
+    -->
+    <version>2.7.18</version>
     <relativePath/>
   </parent>
   <groupId>org.eolang</groupId>
