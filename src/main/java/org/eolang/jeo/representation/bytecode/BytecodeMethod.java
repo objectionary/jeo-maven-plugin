@@ -133,6 +133,7 @@ public final class BytecodeMethod {
     /**
      * Generate bytecode.
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     void write() {
         try {
             final MethodVisitor visitor = this.properties.writeMethod(this.writer);
@@ -151,6 +152,15 @@ public final class BytecodeMethod {
             throw new IllegalStateException(
                 String.format(
                     "Failed to write method %s, because some of the opcodes are not recognized",
+                    this.properties
+                ),
+                exception
+            );
+            // @checkstyle IllegalCatchCheck (1 line)
+        } catch (final Exception exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Failed to generate bytecode method %s due to unexpected exception",
                     this.properties
                 ),
                 exception
