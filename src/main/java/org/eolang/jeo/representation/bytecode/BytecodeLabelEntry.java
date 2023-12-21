@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import lombok.ToString;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
@@ -30,6 +31,7 @@ import org.objectweb.asm.MethodVisitor;
  * Mark label instruction.
  * @since 0.1
  */
+@ToString
 public final class BytecodeLabelEntry implements BytecodeEntry {
 
     /**

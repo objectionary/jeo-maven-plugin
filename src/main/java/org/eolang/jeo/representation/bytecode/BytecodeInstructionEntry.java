@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
+import lombok.ToString;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -33,6 +34,7 @@ import org.objectweb.asm.Opcodes;
  * Bytecode instruction.
  * @since 0.1.0
  */
+@ToString
 final class BytecodeInstructionEntry implements BytecodeEntry {
 
     /**
@@ -440,11 +442,13 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         /**
          * Goes to another instruction at branchoffset.
          */
-        GOTO(Opcodes.GOTO, (visitor, arguments) ->
+        GOTO(Opcodes.GOTO, (visitor, arguments) -> {
             visitor.visitJumpInsn(
                 Opcodes.GOTO,
                 (org.objectweb.asm.Label) arguments.get(0)
-            )
+            );
+            System.out.println("Writing GOTO: " + arguments.get(0));
+        }
         ),
 
         /**
