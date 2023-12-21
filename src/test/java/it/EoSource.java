@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import org.cactoos.Output;
 import org.cactoos.io.ResourceOf;
+import org.eolang.parser.EoSyntax;
 import org.eolang.parser.Syntax;
 
 /**
@@ -60,8 +61,7 @@ final class EoSource {
         try {
             final ResourceOf eolang = new ResourceOf(this.resource);
             final XmlOutput output = new XmlOutput();
-            new Syntax("scenario", eolang, output).parse();
-            return output.xml();
+            return new EoSyntax("scenario", eolang).parsed();
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't parse '%s'", this.resource),
