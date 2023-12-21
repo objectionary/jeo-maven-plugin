@@ -33,6 +33,9 @@ use the both goals in the following order:
 * `eo-to-bytecode` scans the `target/generated-sources` directory for EOlang
   files and converts them back to Java bytecode.
 
+More details about plugin usage you can find in our 
+[Maven site](https://objectionary.github.io/jeo-maven-plugin).
+
 ## Invoke the plugin from the command line
 
 You can run the plugin directly from the command line using the following
