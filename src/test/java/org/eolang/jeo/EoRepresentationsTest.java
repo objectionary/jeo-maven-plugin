@@ -24,6 +24,7 @@
 package org.eolang.jeo;
 
 import java.io.IOException;
+import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -78,5 +79,18 @@ final class EoRepresentationsTest {
             () -> new EoRepresentations(temp).objects(),
             "Exception was not thrown when folder does not exist"
         );
+    }
+
+    @Test
+    void test() {
+        final MyClassLoader my = new MyClassLoader();
+        System.out.println("My created classloader: " + my);
+        Thread.currentThread().setContextClassLoader(my);
+        System.out.println("Current classloader: " + getClass().getClassLoader());
+        System.out.println("Thread classloader: " + Thread.currentThread().getContextClassLoader());
+    }
+
+    private static class MyClassLoader extends ClassLoader {
+
     }
 }

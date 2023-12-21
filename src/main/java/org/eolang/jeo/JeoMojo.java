@@ -25,11 +25,18 @@ package org.eolang.jeo;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.List;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.project.MavenProject;
 import org.eolang.jeo.improvement.ImprovementBytecodeFootprint;
 import org.eolang.jeo.improvement.ImprovementEoFootprint;
 import org.eolang.jeo.improvement.ImprovementLogged;
@@ -43,8 +50,15 @@ import org.eolang.jeo.improvement.ImprovementXmirFootprint;
  *
  * @since 0.1.0
  */
-@Mojo(name = "optimize", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
+@Mojo(
+    name = "optimize",
+    defaultPhase = LifecyclePhase.PROCESS_CLASSES,
+    requiresDependencyResolution = ResolutionScope.RUNTIME
+)
 public final class JeoMojo extends AbstractMojo {
+
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
+    private MavenProject project;
 
     /**
      * Project compiled classes.
@@ -67,6 +81,7 @@ public final class JeoMojo extends AbstractMojo {
      */
     public void execute() throws MojoExecutionException {
         try {
+            this.initClassloader();
             new Optimization(
                 this.classes.toPath(),
                 new ImprovementSet(
@@ -78,6 +93,26 @@ public final class JeoMojo extends AbstractMojo {
             ).apply();
         } catch (final IllegalStateException | IOException exception) {
             throw new MojoExecutionException(exception);
+        }
+    }
+
+    private void initClassloader() {
+        try {
+            List<String> classpathElements = this.project.getRuntimeClasspathElements();
+            URL[] urls = new URL[classpathElements.size()];
+            for (int i = 0; i < classpathElements.size(); ++i) {
+                urls[i] = new File(classpathElements.get(i)).toURI().toURL();
+            }
+            Thread.currentThread().setContextClassLoader(
+                new URLClassLoader(
+                    urls,
+                    Thread.currentThread().getContextClassLoader()
+                )
+            );
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException(ex);
+        } catch (DependencyResolutionRequiredException ex) {
+            throw new RuntimeException(ex);
         }
     }
 }

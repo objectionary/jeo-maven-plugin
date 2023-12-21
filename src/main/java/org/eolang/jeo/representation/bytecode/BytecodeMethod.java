@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.log.Logger;
+import java.lang.instrument.Instrumentation;
 import java.util.ArrayList;
 import java.util.List;
 import org.objectweb.asm.ClassWriter;
