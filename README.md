@@ -85,25 +85,25 @@ configuration to your `pom.xml` file:
 </build>
 ```
 
-## Transformation
+## Transformation method
 
-The plugin can transform Java bytecode into EO and back. Usually the plugin
-transforms each bytecode class file into a separate EO file. The relationship is
-one-to-one. If the Java class is named`Foo.class`, the EO file will be
-named `Foo.eo` (and `Foo.xmir` for XMIR representation of the EO file.)
+The plugin can transform Java bytecode into EO and back. Usually, the plugin
+transforms each bytecode class file into a separate EO file, maintaining a
+one-to-one relationship. If the Java class has name `Foo.class`, the EO file
+will have `Foo.eo` (and Foo.xmir for the XMIR representation of the EO file).
 
 ### Classes
 
-The fist high-level transformation is the transformation of the bytecode class
-into `<program>` and  `<objects><o name = 'Foo'/></objects>` XMIR elements.
-For example, the following Java class:
+The first high-level transformation is the conversion of the bytecode class
+into `<program>` and `<objects><o name='Classname'/></objects>` XMIR elements.
+For example, consider the following Java class:
 
 ```java
 public class Foo {
 }
 ```
 
-will be transformed into the following EO:
+It will be transformed into the following EO:
 
 ```eo
 [] > j$Foo
@@ -112,12 +112,15 @@ will be transformed into the following EO:
   * > interfaces
 ```
 
-`access`, `supername`, and `interfaces` are the attributes of the
-class element that keep the information required for back transformation.
-The `j$*` prefix is used to avoid name conflicts with EO keywords. The same
-prefix is used for all EO elements generated from Java bytecode.
+`access`(class access modifiers like `public`, `static`, `final` and others),
+`supername` (parent class), and `interfaces` (tuple of implemented interfaces)
+are attributes of the class element that retain the information necessary for
+the reverse transformation.
 
-The XMIR representation of the EO file will be:
+The `j$*` prefix is employed to prevent name conflicts with EO keywords.
+This same prefix is utilized for all EO elements generated from Java bytecode.
+
+By the way, the `XMIR` representation of that EO file will be:
 
 ```xml
 
@@ -134,8 +137,8 @@ The XMIR representation of the EO file will be:
 
 ### Methods
 
-The second high-level transformation is the transformation of the bytecode
-method into EO. For example, the following Java method:
+The second high-level transformation involves converting the bytecode method
+into EO. For example, consider the following Java method:
 
 ```java
 public class Bar {
@@ -145,7 +148,7 @@ public class Bar {
 }
 ```
 
-will be transformed into the following EO:
+It will be transformed into the following EO:
 
 ```eo
 [] > j$Bar
@@ -162,13 +165,14 @@ will be transformed into the following EO:
           177
 ```
 
-Pay attention, that the method is a child of the class element and it contains
-bytecode attributes license `access` (access
-modifiers), `descriptor` ([method descriptor](https://stackoverflow.com/questions/7526483/what-is-the-difference-between-descriptor-and-signature)),
-and `exceptions` (list of declared exceptions) along with the `seq` element that
-contains the sequence of the bytecode instructions.
-It worth to mention that Java constructors are treated as methods with the
-name `new`. So the following Java constructor:
+Each method is a child of the [class](#classes) element and contains bytecode
+attributes such as `access` (access
+modifiers), `descriptor` ([method descriptor](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html)),
+and `exceptions` (a tuple of declared exceptions). Additionally, it includes the
+`seq` element containing the sequence of bytecode instructions.
+
+It's worth mentioning that Java constructors are also treated as methods with
+the name `new`. For instance, consider the following Java constructor:
 
 ```java
 public class Bar {
@@ -177,7 +181,7 @@ public class Bar {
 }
 ```
 
-will be transformed into the following EO:
+It will be transformed into the following EO:
 
 ```eo
 [] > j$Bar
