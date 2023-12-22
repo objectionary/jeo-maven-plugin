@@ -199,9 +199,9 @@ It will be transformed into the following EO:
 
 ### Instructions
 
-Each method and constructor contains a sequence of instructions. Each
-instruction might be presented by several different objects: `opcode`
-or `label`. For example the following Java method:
+Each method and constructor contains a sequence of instructions, with each
+instruction represented by either a `opcode` or a `label`. For example, consider
+the following Java method:
 
 ```java
 public class Bar {
@@ -214,8 +214,8 @@ public class Bar {
 }
 ```
 
-will have the following set of instructions after compilation (`javap -v Bar`
-output):
+It will have the following set of instructions after compilation (as shown
+by `javap -v Bar` output):
 
 ```
 0: iload_1
@@ -226,7 +226,8 @@ output):
 7: ireturn
 ```
 
-after the transformation the content of the `bar` method in EO will look like:
+After the transformation provided by `jeo`, the content of the `foo` method in
+EO will look like:
 
 ```eo
 seq > @
@@ -256,10 +257,10 @@ seq > @
 
 #### Opcode
 
-From the examle above ([Methods section](#methods)) you can see that each
-opcode is presented by the `opcode` object. Each `opcode` object has name,
-number argument, and optional operands-arguments. For example, the `ildoad`
-opcode has the following EO representation:
+From the example above (refer to the [Methods](#methods) section), you can
+observe that each opcode is represented by the `opcode` object. Each opcode
+object includes a name, a numerical argument, and optional operand arguments.
+For instance, the `iload` opcode has the following EO representation
 
 ```eo
 opcode > ILOAD-E
@@ -267,25 +268,26 @@ opcode > ILOAD-E
   1
 ```
 
-where `ILOAD-E` is the name of the opcode, `21` is the number of opcode from the
-[java specification](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html),
-and `1` is the operand-argument that in this context means "local variable with
-index 1".
+Here, `ILOAD-E` is the opcode's name, `21` is its number according to the [Java
+specification](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html),
+and `1` represents the opcode argument, indicating the 'local
+variable with index 1' in this context.
 
-`ILOAD-E` is just a name of an `opcode` object. Since it is a name - we don't
-rely on this during transformations, it's just for readability. So if you
-perform some changes on the original `jeo` output, you can change this names as
-you want (`jeo` doesn't use them during parsing.)
+`ILOAD-E` is simply a name assigned to an opcode object. Since it serves a
+descriptive purpose and isn't relied upon during transformations, you have
+flexibility to modify these names as needed when making changes to the original
+`jeo` output (as `jeo` doesn't utilize them during parsing.)
 
-Also it worth mentioning that `opcode` might not have operand-arguments,
-as in case with `IRETURN` opcode:
+Also, it's worth mentioning that an `opcode` might not have operand arguments,
+as is the case with the `IRETURN` opcode:
 
 ```eo
 opcode > IRETURN-11
   172
 ```
 
-Or opcode-argument might be a `label` object, as in case of `IFLE` instruction:
+Alternatively, the opcode argument might be a `label` object, as seen in the
+`IFLE` instruction:
 
 ```eo
 opcode > IFLE-F
@@ -294,7 +296,8 @@ opcode > IFLE-F
     "c361c429-6c81-4b11-9b97-0cbb6e96a2f9"
 ```
 
-In this case `IFLE` opcode has exactly one operand which is `label`.
+In this instance, the `IFLE` opcode has precisely one operand, which is
+a `label`.
 
 #### Labels
 
