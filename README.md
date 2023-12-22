@@ -265,8 +265,33 @@ opcode > ILOAD-E
 
 where `ILOAD-E` is the name of the opcode, `21` is the number of opcode from the
 [java specification](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html),
-and `1` is the operand-argument that means "load the value of the local variable
-with index 1".
+and `1` is the operand-argument that in this context means "local variable with
+index 1".
+
+`ILOAD-E` is just a name of an `opcode` object. Since it is a name - we don't
+rely on this during transformations, it's just for readability. So if you
+perform some changes on the original `jeo` output, you can change this names as
+you want (`jeo` doesn't use them during parsing.)
+
+Also it worth mentioning that `opcode` might not have operand-arguments,
+as in case with `IRETURN` opcode:
+
+```eo
+opcode > IRETURN-11
+  172
+```
+Or opcode-argument might be a `label` object, as in case of `IFLE` instruction:
+```eo
+opcode > IFLE-F
+  158
+  label
+    "c361c429-6c81-4b11-9b97-0cbb6e96a2f9"
+```
+In this case `IFLE` opcode has exactly one operand which is `label`.
+
+#### Labels
+
+
 
 ## How to Contribute
 
