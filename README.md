@@ -156,8 +156,8 @@ will be transformed into the following EO:
     1 > access
     "()V" > descriptor
     * > exceptions
-    [] > seq
-      *
+    seq > @
+      tuple
         opcode > RETURN-1
           177
 ```
@@ -167,6 +167,106 @@ bytecode attributes license `access` (access
 modifiers), `descriptor` ([method descriptor](https://stackoverflow.com/questions/7526483/what-is-the-difference-between-descriptor-and-signature)),
 and `exceptions` (list of declared exceptions) along with the `seq` element that
 contains the sequence of the bytecode instructions.
+It worth to mention that Java constructors are treated as methods with the
+name `new`. So the following Java constructor:
+
+```java
+public class Bar {
+    public Bar() {
+    }
+}
+```
+
+will be transformed into the following EO:
+
+```eo
+[] > j$Bar
+  33 > access
+  "java/lang/Object" > supername
+  * > interfaces
+  [] > new
+    1 > access
+    "()V" > descriptor
+    * > exceptions
+    seq > @
+      tuple
+        // list of instructions
+```
+
+### Instructions
+
+Each method and constructor contains a sequence of instructions. Each
+instruction might be presented by several different objects: `opcode`
+or `label`. For example the following Java method:
+
+```java
+public class Bar {
+    public int foo(int x) {
+        if (x < 0) {
+            return 1;
+        }
+        return 2;
+    }
+}
+```
+
+will have the following set of instructions after compilation (`javap -v Bar`
+output):
+
+```
+0: iload_1
+1: ifle          6
+4: iconst_1
+5: ireturn
+6: iconst_2
+7: ireturn
+```
+
+after the transformation the content of the `bar` method in EO will look like:
+
+```eo
+seq > @
+  tuple
+    label
+      "67b715c8-7d74-413a-9bba-f6920c8ba68b"
+    opcode > ILOAD-E
+       21
+       1
+    opcode > IFLE-F
+      158
+      label
+        "c361c429-6c81-4b11-9b97-0cbb6e96a2f9"
+    opcode > ICONST_1-10
+      4
+    opcode > IRETURN-11
+      172
+    label
+      "c361c429-6c81-4b11-9b97-0cbb6e96a2f9"
+    opcode > ICONST_2-12
+      5
+    opcode > IRETURN-13
+      172
+    label
+      "8f341f7f-e357-4a78-b604-bcaae28e3c1f"
+```
+
+#### Opcode
+
+From the examle above ([Methods section](#methods)) you can see that each
+opcode is presented by the `opcode` object. Each `opcode` object has name,
+number argument, and optional operands-arguments. For example, the `ildoad`
+opcode has the following EO representation:
+
+```eo
+opcode > ILOAD-E
+  21
+  1
+```
+
+where `ILOAD-E` is the name of the opcode, `21` is the number of opcode from the
+[java specification](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html),
+and `1` is the operand-argument that means "load the value of the local variable
+with index 1".
 
 ## How to Contribute
 
