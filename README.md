@@ -280,18 +280,43 @@ as in case with `IRETURN` opcode:
 opcode > IRETURN-11
   172
 ```
+
 Or opcode-argument might be a `label` object, as in case of `IFLE` instruction:
+
 ```eo
 opcode > IFLE-F
   158
   label
     "c361c429-6c81-4b11-9b97-0cbb6e96a2f9"
 ```
+
 In this case `IFLE` opcode has exactly one operand which is `label`.
 
 #### Labels
 
+labels serve as markers or references that indicate specific points in the code
 
+1. They might mark the entry- and exit- points of a method for debugging
+   purposes
+2. They provide jump points in the code. For example, for `if`, `for` statements
+   in the code. The of using labels for `goto` instruction:
+
+```
+GOTO label "dbe5a680-4814-4b19-a8e6-15c3c2db3a83"
+ALOAD 1  //skipped
+label "dbe5a680-4814-4b19-a8e6-15c3c2db3a83"
+RETURN
+```
+
+3. Labels also might be used for exception handling
+
+Of course, it isn't a limited list of `labels` usages. Most of the labels
+as important as opcodes itself and if further transformation loose these labels
+the logic of the program might be corrupted. So it is extremly important to
+keep most of the labels. Althout it's worth mentioning that you can omit some
+labels that used only for debugging purposes if you generate your own
+class by hand (for example, you can omit labels at the start and at the end of a
+method.)
 
 ## How to Contribute
 
