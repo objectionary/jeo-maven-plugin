@@ -301,29 +301,35 @@ a `label`.
 
 #### Labels
 
-labels serve as markers or references that indicate specific points in the code
+Labels serve as markers or references indicating specific points in the code:
 
-1. They might mark the entry- and exit- points of a method for debugging
-   purposes
-2. They provide jump points in the code. For example, for `if`, `for` statements
-   in the code. The of using labels for `goto` instruction:
+1. They might mark the entry- and exit-points of a method for debugging
+   purposes.
+2. They provide jump points in the code, such as for `if` and `for` statements.
+   The example of using labels is in conjunction with the `goto` instruction:
 
 ```
-GOTO label "dbe5a680-4814-4b19-a8e6-15c3c2db3a83"
-ALOAD 1  //skipped
+opcode > GOTO-1
+  167
+  label "dbe5a680-4814-4b19-a8e6-15c3c2db3a83"
+opcode > ALOAD-2 // skiped by goto
+  25             // skiped by goto
+  1              // skiped by goto
 label "dbe5a680-4814-4b19-a8e6-15c3c2db3a83"
-RETURN
+opcode > RETURN-3
+  177
 ```
 
-3. Labels also might be used for exception handling
+3. Labels can also be used for exception handling.
 
-Of course, it isn't a limited list of `labels` usages. Most of the labels
-as important as opcodes itself and if further transformation loose these labels
-the logic of the program might be corrupted. So it is extremly important to
-keep most of the labels. Althout it's worth mentioning that you can omit some
-labels that used only for debugging purposes if you generate your own
-class by hand (for example, you can omit labels at the start and at the end of a
-method.)
+Of course, this isn't an exhaustive list of `label` usages.
+
+What is more important, many labels are as crucial as opcodes themselves, and if
+subsequent transformations lose these labels, the logic of the program might be
+compromised. Therefore, it is extremely important to preserve most of the
+labels. However, it's worth noting that you can omit certain labels used solely
+for debugging purposes when generating your own classes. For instance, you can
+omit labels at the start and end of a method.
 
 ## How to Contribute
 
