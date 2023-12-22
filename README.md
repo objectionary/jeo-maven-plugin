@@ -138,10 +138,35 @@ The second high-level transformation is the transformation of the bytecode
 method into EO. For example, the following Java method:
 
 ```java
-public void foo(){
-    return;
+public class Bar {
+    public void foo() {
+        return;
+    }
 }
 ```
+
+will be transformed into the following EO:
+
+```eo
+[] > j$Bar
+  33 > access
+  "java/lang/Object" > supername
+  * > interfaces
+  [] > j$foo
+    1 > access
+    "()V" > descriptor
+    * > exceptions
+    [] > seq
+      *
+        opcode > RETURN-1
+          177
+```
+
+Pay attention, that the method is a child of the class element and it contains
+bytecode attributes license `access` (access
+modifiers), `descriptor` ([method descriptor](https://stackoverflow.com/questions/7526483/what-is-the-difference-between-descriptor-and-signature)),
+and `exceptions` (list of declared exceptions) along with the `seq` element that
+contains the sequence of the bytecode instructions.
 
 ## How to Contribute
 
