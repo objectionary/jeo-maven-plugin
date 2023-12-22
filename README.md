@@ -33,7 +33,7 @@ use the both goals in the following order:
 * `eo-to-bytecode` scans the `target/generated-sources` directory for EOlang
   files and converts them back to Java bytecode.
 
-More details about plugin usage you can find in our 
+More details about plugin usage you can find in our
 [Maven site](https://objectionary.github.io/jeo-maven-plugin).
 
 ## Invoke the plugin from the command line
@@ -83,6 +83,64 @@ configuration to your `pom.xml` file:
     </plugin>
   </plugins>
 </build>
+```
+
+## Transformation
+
+The plugin can transform Java bytecode into EO and back. Usually the plugin
+transforms each bytecode class file into a separate EO file. The relationship is
+one-to-one. If the Java class is named`Foo.class`, the EO file will be
+named `Foo.eo` (and `Foo.xmir` for XMIR representation of the EO file.)
+
+### Classes
+
+The fist high-level transformation is the transformation of the bytecode class
+into `<program>` and  `<objects><o name = 'Foo'/></objects>` XMIR elements.
+For example, the following Java class:
+
+```java
+public class Foo {
+}
+```
+
+will be transformed into the following EO:
+
+```eo
+[] > j$Foo
+  33 > access
+  "java/lang/Object" > supername
+  * > interfaces
+```
+
+`access`, `supername`, and `interfaces` are the attributes of the
+class element that keep the information required for back transformation.
+The `j$*` prefix is used to avoid name conflicts with EO keywords. The same
+prefix is used for all EO elements generated from Java bytecode.
+
+The XMIR representation of the EO file will be:
+
+```xml
+
+<program>
+  <objects>
+    <o name="j$Foo">
+      <attribute name="access" value="33"/>
+      <attribute name="supername" value="java/lang/Object"/>
+      <attribute name="interfaces" value="*"/>
+    </o>
+  </objects>
+</program>
+```
+
+### Methods
+
+The second high-level transformation is the transformation of the bytecode
+method into EO. For example, the following Java method:
+
+```java
+public void foo(){
+    return;
+}
 ```
 
 ## How to Contribute
