@@ -47,7 +47,7 @@ final class PluginStartup {
      * Constructor.
      * @param project Maven project.
      */
-    PluginStartup(MavenProject project) {
+    PluginStartup(final MavenProject project) {
         this.project = project;
     }
 

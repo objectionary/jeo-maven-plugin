@@ -77,7 +77,7 @@ public final class EoToBytecodeMojo extends AbstractMojo {
             new PluginStartup(this.project).init();
             new ImprovementBytecodeFootprint(this.classes.toPath())
                 .apply(new EoRepresentations(this.generated.toPath()).objects());
-        } catch (DependencyResolutionRequiredException exception) {
+        } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);
         }
     }
