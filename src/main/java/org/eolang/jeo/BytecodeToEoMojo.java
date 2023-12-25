@@ -25,11 +25,13 @@ package org.eolang.jeo;
 
 import java.io.File;
 import java.io.IOException;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 import org.eolang.jeo.representation.BytecodeTransformation;
 
 /**
@@ -43,7 +45,16 @@ import org.eolang.jeo.representation.BytecodeTransformation;
 public final class BytecodeToEoMojo extends AbstractMojo {
 
     /**
+     * Maven project.
+     *
+     * @since 0.2
+     */
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
+    private MavenProject project;
+
+    /**
      * Project compiled classes.
+     *
      * @since 0.1.0
      */
     @Parameter(defaultValue = "${project.build.outputDirectory}")
@@ -51,6 +62,7 @@ public final class BytecodeToEoMojo extends AbstractMojo {
 
     /**
      * Project default target directory.
+     *
      * @since 0.1.0
      */
     @Parameter(defaultValue = "${project.build.directory}/generated-sources")
@@ -59,8 +71,9 @@ public final class BytecodeToEoMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException {
         try {
+            new PluginStartup(this.project).init();
             new BytecodeTransformation(this.classes.toPath(), this.generated.toPath()).transpile();
-        } catch (final IOException exception) {
+        } catch (final IOException | DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(
                 String.format(
                     "Can't transpile bytecode from '%s' to EO. Output directory: '%s'.",
