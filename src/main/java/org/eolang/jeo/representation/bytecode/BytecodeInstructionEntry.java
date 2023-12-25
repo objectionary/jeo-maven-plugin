@@ -719,6 +719,127 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
+         * Increment local variable #index by signed byte const in next byte.
+         */
+        IINC(Opcodes.IINC, (visitor, arguments) ->
+                visitor.visitIincInsn(
+                        (int) arguments.get(0),
+                        (int) arguments.get(1)
+                )
+        ),
+
+        /**
+         * Convert int to long.
+         */
+        I2L(Opcodes.I2L, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.I2L)
+        ),
+
+        /**
+         * Convert int to float.
+         */
+        I2F(Opcodes.I2F, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.I2F)
+        ),
+
+        /**
+         * Convert int to double.
+         */
+        I2D(Opcodes.I2D, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.I2D)
+        ),
+
+        /**
+         * Convert long to int.
+         */
+        L2I(Opcodes.L2I, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.L2I)
+        ),
+
+        /**
+         * Convert long to float.
+         */
+        L2F(Opcodes.L2F, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.L2F)
+        ),
+
+        /**
+         * Convert long to double.
+         */
+        L2D(Opcodes.L2D, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.L2D)
+        ),
+
+        /**
+         * Convert float to int.
+         */
+        F2I(Opcodes.F2I, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.F2I)
+        ),
+
+        /**
+         * Convert float to long.
+         */
+        F2L(Opcodes.F2L, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.F2L)
+        ),
+
+        /**
+         * Convert float to double.
+         */
+        F2D(Opcodes.F2D, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.F2D)
+        ),
+
+        /**
+         * Convert double to int.
+         */
+        D2I(Opcodes.D2I, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.D2I)
+        ),
+
+        /**
+         * Convert double to long.
+         */
+        D2L(Opcodes.D2L, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.D2L)
+        ),
+
+        /**
+         * Convert double to float.
+         */
+        D2F(Opcodes.D2F, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.D2F)
+        ),
+
+        /**
+         * Convert int to byte.
+         */
+        I2B(Opcodes.I2B, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.I2B)
+        ),
+
+        /**
+         * Convert int to char.
+         */
+        I2C(Opcodes.I2C, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.I2C)
+        ),
+
+        /**
+         * Convert int to short.
+         */
+        I2S(Opcodes.I2S, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.I2S)
+        ),
+
+//  int LCMP = 148; // -
+//  int FCMPL = 149; // -
+//  int FCMPG = 150; // -
+//  int DCMPL = 151; // -
+//  int DCMPG = 152; // -
+
+        /**
          * Compare two doubles.
          */
         DCMPL(Opcodes.DCMPL, (visitor, arguments) ->
