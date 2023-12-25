@@ -415,10 +415,307 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
+         * Discard the top two values on the stack.
+         */
+        POP2(Opcodes.POP2, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.POP2)
+        ),
+
+        /**
          * Duplicate the value on top of the stack.
          */
         DUP(Opcodes.DUP, (visitor, arguments) ->
                 visitor.visitInsn(Opcodes.DUP)
+        ),
+
+        /**
+         * Insert a copy of the top value into the stack two values from the top.
+         * value1 and value2 must not be of the type double or long.
+         */
+        DUP_X1(Opcodes.DUP_X1, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.DUP_X1)
+        ),
+
+        /**
+         * Copy the top one or two operand stack values and insert two or three values down.
+         * Insert a copy of the top value into the stack two (if value2 is double or long it takes up the entry
+         * of value3, too) or three values (if value2 is neither double nor long) from the top.
+         */
+        DUP_X2(Opcodes.DUP_X2, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.DUP_X2)
+        ),
+
+        /**
+         * Duplicate top operand stack word or value2 word.
+         */
+        DUP2(Opcodes.DUP2, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.DUP2)
+        ),
+
+        /**
+         * Duplicate two words and insert beneath third word.
+         */
+        DUP2_X1(Opcodes.DUP2_X1, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.DUP2_X1)
+        ),
+
+        /**
+         * Duplicate two words and insert beneath fourth word.
+         */
+        DUP2_X2(Opcodes.DUP2_X2, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.DUP2_X2)
+        ),
+
+        /**
+         * Swap the top two values on the stack (note that value1 and value2 must not be double or long).
+         */
+        SWAP(Opcodes.SWAP, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.SWAP)
+        ),
+
+        /**
+         * Add two longs.
+         */
+        LADD(Opcodes.LADD, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LADD)
+        ),
+
+        /**
+         * Add two floats.
+         */
+        FADD(Opcodes.FADD, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.FADD)
+        ),
+
+        /**
+         * Add two doubles.
+         */
+        DADD(Opcodes.DADD, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.DADD)
+        ),
+
+        /**
+         * Subtract two integers.
+         */
+        ISUB(Opcodes.ISUB, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.ISUB)
+        ),
+
+        /**
+         * Subtract two longs.
+         */
+        LSUB(Opcodes.LSUB, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LSUB)
+        ),
+
+        /**
+         * Subtract two floats.
+         */
+        FSUB(Opcodes.FSUB, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.FSUB)
+        ),
+
+        /**
+         * Subtract two doubles.
+         */
+        DSUB(Opcodes.DSUB, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.DSUB)
+        ),
+
+        /**
+         * Multiply two integers.
+         */
+        IMUL(Opcodes.IMUL, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.IMUL)
+        ),
+
+        /**
+         * Multiply two longs.
+         */
+        LMUL(Opcodes.LMUL, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LMUL)
+        ),
+
+        /**
+         * Multiply two floats.
+         */
+        FMUL(Opcodes.FMUL, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.FMUL)
+        ),
+
+        /**
+         * Multiply two doubles.
+         */
+        DMUL(Opcodes.DMUL, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.DMUL)
+        ),
+
+        /**
+         * Divide two integers.
+         */
+        IDIV(Opcodes.IDIV, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.IDIV)
+        ),
+
+        /**
+         * Divide two longs.
+         */
+        LDIV(Opcodes.LDIV, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LDIV)
+        ),
+
+        /**
+         * Divide two floats.
+         */
+        FDIV(Opcodes.FDIV, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.FDIV)
+        ),
+
+        /**
+         * Divide two doubles.
+         */
+        DDIV(Opcodes.DDIV, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.DDIV)
+        ),
+
+        /**
+         * Remainder of division of two integers.
+         */
+        IREM(Opcodes.IREM, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.IREM)
+        ),
+
+        /**
+         * Remainder of division of two longs.
+         */
+        LREM(Opcodes.LREM, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LREM)
+        ),
+
+        /**
+         * Remainder of division of two floats.
+         */
+        FREM(Opcodes.FREM, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.FREM)
+        ),
+
+        /**
+         * Remainder of division of two doubles.
+         */
+        DREM(Opcodes.DREM, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.DREM)
+        ),
+
+        /**
+         * Negate int.
+         */
+        INEG(Opcodes.INEG, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.INEG)
+        ),
+
+        /**
+         * Negate long.
+         */
+        LNEG(Opcodes.LNEG, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LNEG)
+        ),
+
+        /**
+         * Negate float.
+         */
+        FNEG(Opcodes.FNEG, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.FNEG)
+        ),
+
+        /**
+         * Negate double.
+         */
+        DNEG(Opcodes.DNEG, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.DNEG)
+        ),
+
+        /**
+         * Shift left int.
+         */
+        ISHL(Opcodes.ISHL, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.ISHL)
+        ),
+
+        /**
+         * Shift left long.
+         */
+        LSHL(Opcodes.LSHL, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LSHL)
+        ),
+
+        /**
+         * Arithmetic shift right int.
+         */
+        ISHR(Opcodes.ISHR, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.ISHR)
+        ),
+
+        /**
+         * Arithmetic shift right long.
+         */
+        LSHR(Opcodes.LSHR, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LSHR)
+        ),
+
+        /**
+         * Logical shift right int.
+         */
+        IUSHR(Opcodes.IUSHR, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.IUSHR)
+        ),
+
+        /**
+         * Logical shift right long.
+         */
+        LUSHR(Opcodes.LUSHR, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LUSHR)
+        ),
+
+        /**
+         * Boolean AND int.
+         */
+        IAND(Opcodes.IAND, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.IAND)
+        ),
+
+        /**
+         * Boolean AND long.
+         */
+        LAND(Opcodes.LAND, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LAND)
+        ),
+
+        /**
+         * Boolean OR int.
+         */
+        IOR(Opcodes.IOR, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.IOR)
+        ),
+
+        /**
+         * Boolean OR long.
+         */
+        LOR(Opcodes.LOR, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LOR)
+        ),
+
+        /**
+         * Boolean XOR int.
+         */
+        IXOR(Opcodes.IXOR, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.IXOR)
+        ),
+
+        /**
+         * Boolean XOR long.
+         */
+        LXOR(Opcodes.LXOR, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LXOR)
         ),
 
         /**
