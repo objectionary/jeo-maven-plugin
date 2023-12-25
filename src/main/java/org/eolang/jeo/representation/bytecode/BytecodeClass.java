@@ -27,6 +27,7 @@ import com.jcabi.xml.XML;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import org.eolang.jeo.JeoMojo;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
@@ -37,6 +38,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
 
 /**
  * Class useful for generating bytecode for testing purposes.
+ *
  * @since 0.1.0
  */
 public final class BytecodeClass {
@@ -70,6 +72,7 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
+     *
      * @param name Class name.
      */
     public BytecodeClass(final String name) {
@@ -78,6 +81,7 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
+     *
      * @param name Class name.
      * @param access Access modifiers.
      */
@@ -87,6 +91,7 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
+     *
      * @param name Class name.
      * @param properties Class properties.
      */
@@ -101,6 +106,7 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
+     *
      * @param name Class name.
      * @param access Access modifiers.
      * @param writer ASM class writer.
@@ -115,6 +121,7 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
+     *
      * @param name Class name.
      * @param writer ASM class writer.
      * @param methods Methods.
@@ -135,6 +142,7 @@ public final class BytecodeClass {
 
     /**
      * Converts bytecode into XML.
+     *
      * @return XML representation of bytecode.
      */
     public XML xml() {
@@ -143,6 +151,15 @@ public final class BytecodeClass {
 
     /**
      * Generate bytecode.
+     * <p>
+     * In this method we intentionally use the Thread.currentThread().getContextClassLoader()
+     * for the class loader of the
+     * {@link CheckClassAdapter#verify(ClassReader, ClassLoader, boolean, PrintWriter)}
+     * instead of default implementation. This is because the default class loader doesn't
+     * know about classes compiled on the previous maven step.
+     * You can read more about the problem here:
+     * {@link JeoMojo#initClassloader()}
+     * </p>
      * @return Bytecode.
      */
     public Bytecode bytecode() {
@@ -153,6 +170,7 @@ public final class BytecodeClass {
             final byte[] bytes = this.writer.toByteArray();
             CheckClassAdapter.verify(
                 new ClassReader(bytes),
+                Thread.currentThread().getContextClassLoader(),
                 false,
                 new PrintWriter(System.err)
             );
@@ -175,6 +193,7 @@ public final class BytecodeClass {
 
     /**
      * Add constructor.
+     *
      * @param modifiers Constructor modifiers.
      * @return This object.
      */
@@ -184,6 +203,7 @@ public final class BytecodeClass {
 
     /**
      * Add method.
+     *
      * @param properties Method properties.
      * @return This object.
      */
@@ -195,6 +215,7 @@ public final class BytecodeClass {
 
     /**
      * Add constructor.
+     *
      * @param descriptor Constructor descriptor.
      * @param modifiers Constructor modifiers.
      * @return This object.
@@ -205,6 +226,7 @@ public final class BytecodeClass {
 
     /**
      * Add method.
+     *
      * @param mname Method name.
      * @param descriptor Method descriptor.
      * @param modifiers Access modifiers.
@@ -228,6 +250,7 @@ public final class BytecodeClass {
 
     /**
      * Add field.
+     *
      * @param fname Field name.
      * @return This object.
      */
@@ -244,6 +267,7 @@ public final class BytecodeClass {
 
     /**
      * Add field.
+     *
      * @param fname Field name.
      * @param descriptor Field descriptor.
      * @param signature Field signature.
@@ -274,6 +298,7 @@ public final class BytecodeClass {
 
     /**
      * Add annotations.
+     *
      * @param annotations Annotations.
      * @return This object.
      */
@@ -289,6 +314,7 @@ public final class BytecodeClass {
 
     /**
      * Hello world bytecode.
+     *
      * @return The same class with the hello world method.
      */
     public BytecodeClass helloWorldMethod() {

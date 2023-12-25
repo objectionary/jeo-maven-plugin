@@ -25,8 +25,6 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.nio.file.Path;
-import java.util.Arrays;
 import lombok.ToString;
 import org.cactoos.Input;
 import org.cactoos.bytes.BytesOf;
@@ -40,11 +38,14 @@ import org.eolang.parser.Schema;
 import org.objectweb.asm.ClassReader;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
+import java.nio.file.Path;
+import java.util.Arrays;
 
 /**
  * Intermediate representation of a class files which can be optimized from bytecode.
  * In order to implement this class you can also use that site to check if bytecode is correct:
  * <a href="https://godbolt.org">https://godbolt.org/</a>
+ *
  * @since 0.1.0
  */
 @ToString
@@ -63,6 +64,7 @@ public final class BytecodeRepresentation implements Representation {
 
     /**
      * Constructor.
+     *
      * @param clazz Path to the class file
      */
     public BytecodeRepresentation(final Path clazz) {
@@ -71,6 +73,7 @@ public final class BytecodeRepresentation implements Representation {
 
     /**
      * Constructor.
+     *
      * @param bytecode Bytecode
      */
     public BytecodeRepresentation(final Bytecode bytecode) {
@@ -79,6 +82,7 @@ public final class BytecodeRepresentation implements Representation {
 
     /**
      * Constructor.
+     *
      * @param input Input source
      */
     BytecodeRepresentation(final Input input) {
@@ -87,6 +91,7 @@ public final class BytecodeRepresentation implements Representation {
 
     /**
      * Constructor.
+     *
      * @param input Input source
      * @param source The source of the input
      */
@@ -96,6 +101,7 @@ public final class BytecodeRepresentation implements Representation {
 
     /**
      * Constructor.
+     *
      * @param input Input source.
      */
     private BytecodeRepresentation(final byte[] input) {
@@ -104,6 +110,7 @@ public final class BytecodeRepresentation implements Representation {
 
     /**
      * Constructor.
+     *
      * @param input Input.
      * @param source The source of the input.
      */
@@ -158,6 +165,7 @@ public final class BytecodeRepresentation implements Representation {
 
     /**
      * Read class name from bytecode.
+     *
      * @return Class name.
      */
     private String className() {
