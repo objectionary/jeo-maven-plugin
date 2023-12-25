@@ -855,8 +855,8 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
-        * Push 0 if the two doubles are the same, 1 if value1 is greater than value2, -1 otherwise.
-        */
+         * Push 0 if the two doubles are the same, 1 if value1 is greater than value2, -1 otherwise.
+         */
         DCMPL(Opcodes.DCMPL, (visitor, arguments) ->
                 visitor.visitInsn(Opcodes.DCMPL)
         ),
@@ -866,6 +866,56 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
          */
         DCMPG(Opcodes.DCMPG, (visitor, arguments) ->
                 visitor.visitInsn(Opcodes.DCMPG)
+        ),
+
+        /**
+         * if value is 0, branch to instruction at branchoffset.
+         */
+        IFEQ(Opcodes.IFEQ, (visitor, arguments) ->
+                visitor.visitJumpInsn(
+                        Opcodes.IFEQ,
+                        (org.objectweb.asm.Label) arguments.get(0)
+                )
+        ),
+
+        /**
+         * if value is not 0, branch to instruction at branchoffset.
+         */
+        IFNE(Opcodes.IFNE, (visitor, arguments) ->
+                visitor.visitJumpInsn(
+                        Opcodes.IFNE,
+                        (org.objectweb.asm.Label) arguments.get(0)
+                )
+        ),
+
+        /**
+         * if value is less than 0, branch to instruction at branchoffset.
+         */
+        IFLT(Opcodes.IFLT, (visitor, arguments) ->
+                visitor.visitJumpInsn(
+                        Opcodes.IFLT,
+                        (org.objectweb.asm.Label) arguments.get(0)
+                )
+        ),
+
+        /**
+         * if value is greater than or equal to 0, branch to instruction at branchoffset.
+         */
+        IFGE(Opcodes.IFGE, (visitor, arguments) ->
+                visitor.visitJumpInsn(
+                        Opcodes.IFGE,
+                        (org.objectweb.asm.Label) arguments.get(0)
+                )
+        ),
+
+        /**
+         * if value is greater than 0, branch to instruction at branchoffset.
+         */
+        IFGT(Opcodes.IFGT, (visitor, arguments) ->
+                visitor.visitJumpInsn(
+                        Opcodes.IFGT,
+                        (org.objectweb.asm.Label) arguments.get(0)
+                )
         ),
 
         /**
