@@ -23,8 +23,12 @@
  */
 package org.eolang.benchmark;
 
-class App {
-    int run() {
-        return new B(new A(42)).bar();
+class B {
+    private final F f;
+    B(F f) {
+        this.f = f;
+    }
+    int bar() {
+        return f.foo() + 2;
     }
 }

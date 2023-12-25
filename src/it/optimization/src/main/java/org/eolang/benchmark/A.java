@@ -23,8 +23,12 @@
  */
 package org.eolang.benchmark;
 
-class App {
-    int run() {
-        return new B(new A(42)).bar();
+class A implements F {
+    private int d;
+    A(int d) {
+        this.d = d;
+    }
+    @Override public int foo() {
+        return d + 1;
     }
 }
