@@ -833,17 +833,39 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                 visitor.visitInsn(Opcodes.I2S)
         ),
 
-//  int LCMP = 148; // -
-//  int FCMPL = 149; // -
-//  int FCMPG = 150; // -
-//  int DCMPL = 151; // -
-//  int DCMPG = 152; // -
+        /**
+         * Push 0 if the two longs are the same, 1 if value1 is greater than value2, -1 otherwise
+         */
+        LCMP(Opcodes.LCMP, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.LCMP)
+        ),
 
         /**
-         * Compare two doubles.
+         * Push 0 if the two floats are the same, 1 if value1 is greater than value2, -1 otherwise.
          */
+        FCMPL(Opcodes.FCMPL, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.FCMPL)
+        ),
+
+        /**
+         * Compare two floats, 1 on NaN
+         */
+        FCMPG(Opcodes.FCMPG, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.FCMPG)
+        ),
+
+        /**
+        * Push 0 if the two doubles are the same, 1 if value1 is greater than value2, -1 otherwise.
+        */
         DCMPL(Opcodes.DCMPL, (visitor, arguments) ->
                 visitor.visitInsn(Opcodes.DCMPL)
+        ),
+
+        /**
+         * Compare two doubles, 1 on NaN
+         */
+        DCMPG(Opcodes.DCMPG, (visitor, arguments) ->
+                visitor.visitInsn(Opcodes.DCMPG)
         ),
 
         /**
