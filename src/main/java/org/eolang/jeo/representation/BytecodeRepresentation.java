@@ -25,6 +25,8 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.nio.file.Path;
+import java.util.Arrays;
 import lombok.ToString;
 import org.cactoos.Input;
 import org.cactoos.bytes.BytesOf;
@@ -38,8 +40,6 @@ import org.eolang.parser.Schema;
 import org.objectweb.asm.ClassReader;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
-import java.nio.file.Path;
-import java.util.Arrays;
 
 /**
  * Intermediate representation of a class files which can be optimized from bytecode.
