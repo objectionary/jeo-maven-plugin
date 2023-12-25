@@ -215,6 +215,20 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
+         * Load a long value from a local variable #index.
+         */
+        LLOAD(Opcodes.LLOAD, (visitor, arguments) ->
+                visitor.visitVarInsn(Opcodes.LLOAD, (int) arguments.get(0))
+        ),
+
+        /**
+         * Load a float value from a local variable #index.
+         */
+        FLOAD(Opcodes.FLOAD, (visitor, arguments) ->
+                visitor.visitVarInsn(Opcodes.FLOAD, (int) arguments.get(0))
+        ),
+
+        /**
          * Load a double value from a local variable #index.
          */
         DLOAD(Opcodes.DLOAD, (visitor, arguments) ->
