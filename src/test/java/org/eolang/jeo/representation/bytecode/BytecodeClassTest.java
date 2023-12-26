@@ -23,6 +23,10 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
+import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -98,6 +102,24 @@ class BytecodeClassTest {
             ).getMessage(),
             Matchers.equalTo(
                 "Bytecode creation for the 'UnknownInstruction' class is not possible due to unmet preconditions."
+            )
+        );
+    }
+
+    @Test
+    void transformsBytecodeIntoEoWithoutCountingOpcodes() {
+        MatcherAssert.assertThat(
+            "We expect to get the EO representation of the bytecode where each instruction has a simple name without sequence number",
+            new BytecodeRepresentation(
+                new BytecodeClass("Hello")
+                    .helloWorldMethod()
+                    .bytecode()
+            ).toEO(false).toString(),
+            XhtmlMatchers.hasXPaths(
+                "../o[@base='opcode' and @name='GETSTATIC']",
+                "../o[@base='opcode' and @name='LDC']",
+                "../o[@base='opcode' and @name='INVOKEVIRTUAL']",
+                "../o[@base='opcode' and @name='RETURN']"
             )
         );
     }

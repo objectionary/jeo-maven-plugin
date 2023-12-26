@@ -158,6 +158,36 @@ public final class BytecodeRepresentation implements Representation {
         }
     }
 
+    public XML toEO(final boolean count) {
+        final DirectivesClassVisitor directives = new DirectivesClassVisitor(
+            new Base64Bytecode(this.input).asString()
+        );
+        try {
+            new ClassReader(this.input).accept(directives, 0);
+            final XMLDocument res = new XMLDocument(new Xembler(directives).xml());
+            new Schema(res).check();
+            return res;
+        } catch (final IllegalStateException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Something went wrong during transformation %s into XML by using directives",
+                    this.className(),
+                    directives
+                ),
+                exception
+            );
+        } catch (final ImpossibleModificationException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Can't build XML from %s by using directives %s",
+                    Arrays.toString(this.input),
+                    directives
+                ),
+                exception
+            );
+        }
+    }
+
     @Override
     public Bytecode toBytecode() {
         return new Bytecode(new UncheckedBytes(new BytesOf(this.input)).asBytes());
