@@ -38,12 +38,12 @@ import org.eolang.parser.XMIR;
  * It's not actually an improvement.
  * It's just a class that prints all the generated .xmir files as .eo files for convenience.
  *
+ * @since 0.1
  * @todo #215:60min Apply ImprovementEoFootprint.
  * Currently we don't use ImprovementEoFootprint. We have to add it to the next classes:
  * - {@link org.eolang.jeo.BytecodeToEoMojo}
  * - {@link org.eolang.jeo.JeoMojo}
  * Don't forget to add checks for integration tests.
- * @since 0.1
  */
 public final class ImprovementEoFootprint implements Improvement {
 
