@@ -60,7 +60,7 @@ public final class ImprovementBytecodeFootprint implements Improvement {
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        Logger.info(this, "Writing bytecode classes to %s", this.classes);
+        Logger.info(this, "Writing .class files to %s", this.classes);
         representations.forEach(this::recompile);
         return Collections.unmodifiableCollection(representations);
     }
