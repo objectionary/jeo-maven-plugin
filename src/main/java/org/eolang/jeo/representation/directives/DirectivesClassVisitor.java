@@ -90,7 +90,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
      * @param api ASM API version.
      * @param program Program directives.
      */
-    public DirectivesClassVisitor(int api, String program) {
+    public DirectivesClassVisitor(final int api, final String program) {
         this(api, program, true);
     }
 
@@ -98,6 +98,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
      * Constructor.
      * @param api ASM API version.
      * @param listing Bytecode listing.
+     * @param counting Opcodes counting.
      */
     private DirectivesClassVisitor(
         final int api,
@@ -114,9 +115,9 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
      * @param counting Opcodes counting.
      */
     public DirectivesClassVisitor(
-        int api,
-        DirectivesProgram program,
-        boolean counting
+        final int api,
+        final DirectivesProgram program,
+        final boolean counting
     ) {
         super(api);
         this.program = program;

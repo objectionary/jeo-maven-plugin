@@ -71,7 +71,11 @@ public final class DirectivesInstruction implements Iterable<Directive> {
      * @param counting Opcodes counting
      * @param arguments Instruction arguments
      */
-    public DirectivesInstruction(int opcode, boolean counting, Object... arguments) {
+    public DirectivesInstruction(
+        final int opcode,
+        final boolean counting,
+        final Object... arguments
+    ) {
         this.opcode = opcode;
         this.counting = counting;
         this.arguments = arguments.clone();
