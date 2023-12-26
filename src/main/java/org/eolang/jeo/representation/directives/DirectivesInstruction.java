@@ -47,12 +47,33 @@ public final class DirectivesInstruction implements Iterable<Directive> {
     private final Object[] arguments;
 
     /**
+     * Opcodes counting.
+     * Do we add number to opcode name or not?
+     * if true then we add number to opcode name:
+     *   RETURN -> RETURN-1
+     * if false then we do not add number to opcode name:
+     *   RETURN -> RETURN
+     */
+    private final boolean counting;
+
+    /**
      * Constructor.
      * @param opcode Opcode
      * @param arguments Instruction arguments
      */
     public DirectivesInstruction(final int opcode, final Object... arguments) {
+        this(opcode, true, arguments);
+    }
+
+    /**
+     * Constructor.
+     * @param opcode Opcode
+     * @param counting Opcodes counting
+     * @param arguments Instruction arguments
+     */
+    public DirectivesInstruction(int opcode, boolean counting, Object... arguments) {
         this.opcode = opcode;
+        this.counting = counting;
         this.arguments = arguments.clone();
     }
 
@@ -61,7 +82,7 @@ public final class DirectivesInstruction implements Iterable<Directive> {
         try {
             final Directives directives = new Directives();
             directives.add("o")
-                .attr("name", new OpcodeName(this.opcode).asString())
+                .attr("name", this.name())
                 .attr("base", "opcode");
             directives.append(new DirectivesOperand(this.opcode));
             for (final Object operand : this.arguments) {
@@ -73,11 +94,25 @@ public final class DirectivesInstruction implements Iterable<Directive> {
             throw new IllegalStateException(
                 String.format(
                     "Failed to convert instruction %s with arguments %s to xembly directives",
-                    new OpcodeName(this.opcode).simplified(),
+                    this.name(),
                     Arrays.toString(this.arguments)
                 ),
                 exception
             );
         }
+    }
+
+    /**
+     * Get opcode name.
+     * @return Opcode name.
+     */
+    private String name() {
+        final String result;
+        if (this.counting) {
+            result = new OpcodeName(this.opcode).asString();
+        } else {
+            result = new OpcodeName(this.opcode).simplified();
+        }
+        return result;
     }
 }

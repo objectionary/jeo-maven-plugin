@@ -57,6 +57,11 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
     private final DirectivesProgram program;
 
     /**
+     * Opcodes counting.
+     */
+    private final boolean counting;
+
+    /**
      * Constructor.
      */
     DirectivesClassVisitor() {
@@ -73,15 +78,49 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
 
     /**
      * Constructor.
+     * @param listing Bytecode listing.
+     * @param counting Opcodes counting.
+     */
+    public DirectivesClassVisitor(final String listing, final boolean counting) {
+        this(new DefaultVersion().api(), listing, counting);
+    }
+
+    /**
+     * Constructor.
+     * @param api ASM API version.
+     * @param program Program directives.
+     */
+    public DirectivesClassVisitor(int api, String program) {
+        this(api, program, true);
+    }
+
+    /**
+     * Constructor.
      * @param api ASM API version.
      * @param listing Bytecode listing.
      */
     private DirectivesClassVisitor(
         final int api,
-        final String listing
+        final String listing,
+        final boolean counting
+    ) {
+        this(api, new DirectivesProgram(listing), counting);
+    }
+
+    /**
+     * Constructor.
+     * @param api ASM API version.
+     * @param program Program directives.
+     * @param counting Opcodes counting.
+     */
+    public DirectivesClassVisitor(
+        int api,
+        DirectivesProgram program,
+        boolean counting
     ) {
         super(api);
-        this.program = new DirectivesProgram(listing);
+        this.program = program;
+        this.counting = counting;
     }
 
     @Override
@@ -120,6 +159,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String ename = new JavaName(name).encode();
         final DirectivesMethod method = new DirectivesMethod(
             ename,
+            this.counting,
             new DirectivesMethodProperties(access, descriptor, signature, exceptions)
         );
         this.program.top().method(method);

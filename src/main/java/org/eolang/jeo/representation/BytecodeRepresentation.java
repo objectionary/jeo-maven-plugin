@@ -160,7 +160,8 @@ public final class BytecodeRepresentation implements Representation {
 
     public XML toEO(final boolean count) {
         final DirectivesClassVisitor directives = new DirectivesClassVisitor(
-            new Base64Bytecode(this.input).asString()
+            new Base64Bytecode(this.input).asString(),
+            count
         );
         try {
             new ClassReader(this.input).accept(directives, 0);
