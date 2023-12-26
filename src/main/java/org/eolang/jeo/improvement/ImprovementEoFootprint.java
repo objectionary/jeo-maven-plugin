@@ -85,6 +85,15 @@ public final class ImprovementEoFootprint implements Improvement {
                 path,
                 new XMIR(representation.toEO()).toEO().getBytes(StandardCharsets.UTF_8)
             );
+            Logger.info(
+                this,
+                String.format(
+                    "%s represented as %s (%d bytes)",
+                    representation.details().source(),
+                    path.getFileName().toString(),
+                    Files.size(path)
+                )
+            );
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format(

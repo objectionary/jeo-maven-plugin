@@ -49,6 +49,7 @@ public class BytecodeTransformation {
 
     /**
      * Constructor.
+     *
      * @param classes Project compiled classes.
      * @param target Project default target directory.
      */
@@ -62,12 +63,13 @@ public class BytecodeTransformation {
 
     /**
      * Transpile all bytecode files.
+     *
      * @throws IOException If some I/O problem arises.
      */
     public void transpile() throws IOException {
         new ImprovementSet(
-            new ImprovementEoFootprint(this.target),
-            new ImprovementXmirFootprint(this.target)
+            new ImprovementXmirFootprint(this.target),
+            new ImprovementEoFootprint(this.target)
         ).apply(new BytecodeClasses(this.classes).bytecode());
     }
 }
