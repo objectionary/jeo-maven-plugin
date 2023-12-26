@@ -52,6 +52,7 @@ public final class ImprovementXmirFootprint implements Improvement {
 
     /**
      * Constructor.
+     *
      * @param home Where to save the EO.
      */
     public ImprovementXmirFootprint(final Path home) {
@@ -62,6 +63,7 @@ public final class ImprovementXmirFootprint implements Improvement {
     public Collection<Representation> apply(
         final Collection<? extends Representation> representations
     ) {
+        Logger.info(this, "Writing .xmir files to %s", this.folder());
         return representations.stream()
             .map(this::transform)
             .collect(Collectors.toList());
@@ -69,12 +71,13 @@ public final class ImprovementXmirFootprint implements Improvement {
 
     /**
      * Try to save XMIR to the target folder and return new representation.
+     *
      * @param representation Representation to save.
      * @return New representation with source attached to the saved file.
      */
     private Representation transform(final Representation representation) {
         final String name = new JavaName(representation.details().name()).decode();
-        final Path path = this.target.resolve(new XmirDefaultDirectory().toPath())
+        final Path path = this.folder()
             .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
         try {
             Files.createDirectories(path.getParent());
@@ -100,5 +103,14 @@ public final class ImprovementXmirFootprint implements Improvement {
                 exception
             );
         }
+    }
+
+    /**
+     * Folder where to save the XMIR.
+     *
+     * @return Folder where to save the XMIR.
+     */
+    private Path folder() {
+        return this.target.resolve(new XmirDefaultDirectory().toPath());
     }
 }

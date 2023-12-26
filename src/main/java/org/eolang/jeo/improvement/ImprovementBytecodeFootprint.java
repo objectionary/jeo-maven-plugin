@@ -49,6 +49,7 @@ public final class ImprovementBytecodeFootprint implements Improvement {
 
     /**
      * Constructor.
+     *
      * @param target Where to save the bytecode classes.
      */
     public ImprovementBytecodeFootprint(final Path target) {
@@ -59,12 +60,14 @@ public final class ImprovementBytecodeFootprint implements Improvement {
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
+        Logger.info(this, "Writing bytecode classes to %s", this.classes);
         representations.forEach(this::recompile);
         return Collections.unmodifiableCollection(representations);
     }
 
     /**
      * Recompile the Intermediate Representation.
+     *
      * @param representation Intermediate Representation to recompile.
      */
     private void recompile(final Representation representation) {
