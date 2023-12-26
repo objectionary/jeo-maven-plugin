@@ -23,9 +23,14 @@
  */
 //Check logs first.
 String log = new File(basedir, 'build.log').text;
+assert log.contains("Writing .xmir files to")
 assert log.contains("Application.class translated into Application.xmir")
 assert log.contains("Foo.class translated into Foo.xmir")
 assert log.contains("WithoutPackage.class translated into WithoutPackage.xmir")
+assert log.contains("Writing .eo files to")
+assert log.contains("Application.xmir represented as Application.eo")
+assert log.contains("Foo.xmir represented as Foo.eo")
+assert log.contains("WithoutPackage.xmir represented as WithoutPackage.eo")
 assert log.contains("BUILD SUCCESS")
 //Check that we have generated XMIR object file.
 assert new File(basedir, 'target/generated-sources/xmir/org/eolang/jeo/Application.xmir').exists()

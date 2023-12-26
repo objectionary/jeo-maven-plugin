@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.improvement;
 
+import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -36,12 +37,13 @@ import org.eolang.parser.XMIR;
 /**
  * It's not actually an improvement.
  * It's just a class that prints all the generated .xmir files as .eo files for convenience.
+ *
  * @since 0.1
  * @todo #215:60min Apply ImprovementEoFootprint.
- *  Currently we don't use ImprovementEoFootprint. We have to add it to the next classes:
- *  - {@link org.eolang.jeo.BytecodeToEoMojo}
- *  - {@link org.eolang.jeo.JeoMojo}
- *  Don't forget to add checks for integration tests.
+ * Currently we don't use ImprovementEoFootprint. We have to add it to the next classes:
+ * - {@link org.eolang.jeo.BytecodeToEoMojo}
+ * - {@link org.eolang.jeo.JeoMojo}
+ * Don't forget to add checks for integration tests.
  */
 public final class ImprovementEoFootprint implements Improvement {
 
@@ -52,6 +54,7 @@ public final class ImprovementEoFootprint implements Improvement {
 
     /**
      * Constructor.
+     *
      * @param generated Where to save the EO, usually it's target/generated-sources folder.
      */
     public ImprovementEoFootprint(final Path generated) {
@@ -62,23 +65,34 @@ public final class ImprovementEoFootprint implements Improvement {
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
+        Logger.info(this, "Writing .eo files to %s", this.folder());
         representations.forEach(this::saveEo);
         return representations;
     }
 
     /**
      * Save the EO representation into the 'target/generated-sources/eo' folder.
+     *
      * @param representation EO representation as XMIR.
      */
     private void saveEo(final Representation representation) {
         final String name = new JavaName(representation.details().name()).decode();
-        final Path path = this.target.resolve("eo")
+        final Path path = this.folder()
             .resolve(String.format("%s.eo", name));
         try {
             Files.createDirectories(path.getParent());
             Files.write(
                 path,
                 new XMIR(representation.toEO()).toEO().getBytes(StandardCharsets.UTF_8)
+            );
+            Logger.info(
+                this,
+                String.format(
+                    "%s represented as %s (%d bytes)",
+                    representation.details().source(),
+                    path.getFileName().toString(),
+                    Files.size(path)
+                )
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(
@@ -90,5 +104,14 @@ public final class ImprovementEoFootprint implements Improvement {
                 exception
             );
         }
+    }
+
+    /**
+     * Get the folder where to save the EO.
+     *
+     * @return The folder where to save the EO.
+     */
+    private Path folder() {
+        return this.target.resolve("eo");
     }
 }
