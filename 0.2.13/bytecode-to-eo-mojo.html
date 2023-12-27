@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>jeo-maven-plugin &#x2013; jeo:bytecode-to-eo</title>
+        <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
+                                                    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+        <script src="./js/jcabi.js"></script>
+    </head>
+    <body>
+                <div class="page" itemscope="" itemtype="http://schema.org/BlogPosting">
+            <nav class="menu-section">
+                <ul class="menu" id="menu">
+                                                                                    <li>
+                            <span>Overview</span>
+                                                            <ul>
+                                                                                                    <li >
+                            <span>                        <a href="index.html" title="Introduction">Introduction</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="plugin-info.html" title="Goals">Goals</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                            <li>
+                            <span>Project Documentation</span>
+                                                            <ul>
+                                                                                                    <li >
+                            <span>                        <a href="project-info.html" title="Project Information">Project Information</a>
+        </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="project-reports.html" title="Project Reports">Project Reports</a>
+        </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </li>
+                                                                                        </ul>
+                                                    </li>
+                                    </ul>
+            </nav>
+            <div class="right-side">
+                <main>
+                    <div class="content">
+                        <header>
+                            <div class="logo">
+                                <a href="index.html"
+                                    title=" logo ">
+                                    <img src="https://www.objectionary.com/cactus.svg"
+                                        alt="jeo-maven-plugin"
+                                                                                    width="92"
+                                                                                                                            height="92"
+                                                                                itemprop="image"
+                                    />
+                                </a>
+                            </div>
+                            <ul class="badges">
+                                <li>
+                                    <strong itemprop="version">0.2.13</strong>
+                                </li>
+                                <li>
+                                    
+                                    <time itemprop="datePublished" datetime="2023-12-27T02:00:13Z">
+                                        
+                                        27-Dec-2023
+                                    </time>
+                                </li>
+                                <li class="menu-button">menu</li>
+                            </ul>
+                        </header>
+                        <div id="here-goes-menu" class="menu-off"></div>
+                                                                            <a href="https://github.com/objectionary/jeo-maven-plugin">
+                                <img src="https://www.jcabi.com/fork-me.svg" class="fork-me"/>
+                            </a>
+                                                <article itemprop="articleBody">
+                            <section>
+<h2><a name="jeo:bytecode-to-eo"></a>jeo:bytecode-to-eo</h2><a name="jeo:bytecode-to-eo"></a>
+<p><strong>Full name</strong>:</p>
+<p>org.eolang:jeo-maven-plugin:0.2.13:bytecode-to-eo</p>
+<p><strong>Description</strong>:</p>
+<p>Converts bytecode to EO. The mojo that converts bytecode to EO only. It does not apply any improvements. It does not convert EO to bytecode back.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li>Requires a Maven project to be executed.</li>
+<li>The goal is not marked as thread-safe and thus does not support parallel builds.</li>
+<li>Since version: <code>0.1.0</code>.</li>
+<li>Binds by default to the <a class="externalLink" href="https://maven.apache.org/ref/current/maven-core/lifecycles.html">lifecycle phase</a>: <code>process-classes</code>.</li></ul><section>
+<h3><a name="Optional_Parameters"></a>Optional Parameters</h3><a name="Optional_Parameters"></a>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>Name</th>
+<th>Type</th>
+<th>Since</th>
+<th>Description</th></tr>
+<tr class="b">
+<td align="left"><a href="#classes"><code>&lt;classes&gt;</code></a></td>
+<td><code>File</code></td>
+<td><code>0.1.0</code></td>
+<td>Project compiled classes.<br /><strong>Default</strong>: <code>${project.build.outputDirectory}</code></td></tr>
+<tr class="a">
+<td align="left"><a href="#generated"><code>&lt;generated&gt;</code></a></td>
+<td><code>File</code></td>
+<td><code>0.1.0</code></td>
+<td>Project default target directory.<br /><strong>Default</strong>: <code>${project.build.directory}/generated-sources</code></td></tr></table></section><section>
+<h3><a name="Parameter_Details"></a>Parameter Details</h3><a name="Parameter_Details"></a><a name="classes"><section>
+<h4><a name="a.3Cclasses.3E"></a>&lt;classes&gt;</h4><a name="a.3Cclasses.3E"></a></a>
+<div>Project compiled classes.</div>
+<ul>
+<li><strong>Type</strong>: <code>java.io.File</code></li>
+<li><strong>Since</strong>: <code>0.1.0</code></li>
+<li><strong>Required</strong>: <code>report.plugin.goal.no</code></li>
+<li><strong>Default</strong>: <code>${project.build.outputDirectory}</code></li></ul><hr /></section><a name="generated"><section>
+<h4><a name="a.3Cgenerated.3E"></a>&lt;generated&gt;</h4><a name="a.3Cgenerated.3E"></a></a>
+<div>Project default target directory.</div>
+<ul>
+<li><strong>Type</strong>: <code>java.io.File</code></li>
+<li><strong>Since</strong>: <code>0.1.0</code></li>
+<li><strong>Required</strong>: <code>report.plugin.goal.no</code></li>
+<li><strong>Default</strong>: <code>${project.build.directory}/generated-sources</code></li></ul></section></section></section>
+                        </article>
+                    </div>
+                </main>
+                <footer class="legal-notes">
+                    <div>
+                        Copyright &#169;
+                                                                            2023
+                                            </div>
+                    <div>EO, All Rights Reserved.</div>
+                    <div><a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.</div>
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>
