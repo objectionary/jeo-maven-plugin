@@ -41,12 +41,6 @@ SOFTWARE.
     </head>
     <menu name="Overview">
       <item name="Introduction" href="./index.html"/>
-      <!--
-      @todo #357:30min For some reason, the "plugin-info.html" page is not generated
-       by the maven-site-plugin, but it should. The confirmation is very similar to,
-       for example, jcabi-dynamodb-maven-plugin, where the "plugin-info.html" page
-       is generated automatically. Let's find out what is the problem and fix.
-      -->
       <item name="Goals" href="./plugin-info.html"/>
     </menu>
     <menu ref="reports"/>
