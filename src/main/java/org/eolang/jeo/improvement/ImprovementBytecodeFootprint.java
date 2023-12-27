@@ -85,7 +85,7 @@ public final class ImprovementBytecodeFootprint implements Improvement {
                 "%s compiled into %[file]s (%[size]s)",
                 details.source(),
                 path,
-                bytecode.length
+                (long) bytecode.length
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
