@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">public</strong> Collection&lt;? <strong class="jxr_keyword">extends</strong> Representation&gt; apply(
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>          <strong class="jxr_keyword">final</strong> Collection&lt;? <strong class="jxr_keyword">extends</strong> Representation&gt; representations
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      ) {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>          Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Writing .class files to %s"</span>, <strong class="jxr_keyword">this</strong>.classes);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Writing .class files to %[file]s"</span>, <strong class="jxr_keyword">this</strong>.classes);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          representations.forEach(<strong class="jxr_keyword">this</strong>::recompile);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">return</strong> Collections.unmodifiableCollection(representations);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
@@ -90,18 +90,16 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>              Files.write(path, bytecode);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>              Logger.info(
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>                  <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>                  String.format(
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>                      <span class="jxr_string">"%s compiled into %s (%d bytes)"</span>,
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>                      details.source(),
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>                      path.getFileName().toString(),
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>                      bytecode.length
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>                  )
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>              );
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>          } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IOException exception) {
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(String.format(<span class="jxr_string">"Can't recompile '%s'"</span>, name), exception);
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          }
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      }
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>                  <span class="jxr_string">"%s compiled into %[file]s (%[size]s)"</span>,
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>                  details.source(),
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>                  path,
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>                  (<strong class="jxr_keyword">long</strong>) bytecode.length
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>              );
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>          } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IOException exception) {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(String.format(<span class="jxr_string">"Can't recompile '%s'"</span>, name), exception);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          }
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      }
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
