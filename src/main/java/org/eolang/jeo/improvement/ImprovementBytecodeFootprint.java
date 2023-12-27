@@ -60,7 +60,7 @@ public final class ImprovementBytecodeFootprint implements Improvement {
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        Logger.info(this, "Writing .class files to %s", this.classes);
+        Logger.info(this, "Writing .class files to %[file]s", this.classes);
         representations.forEach(this::recompile);
         return Collections.unmodifiableCollection(representations);
     }
@@ -82,12 +82,10 @@ public final class ImprovementBytecodeFootprint implements Improvement {
             Files.write(path, bytecode);
             Logger.info(
                 this,
-                String.format(
-                    "%s compiled into %s (%d bytes)",
-                    details.source(),
-                    path.getFileName().toString(),
-                    bytecode.length
-                )
+                "%s compiled into %[file]s (%[size]s)",
+                details.source(),
+                path,
+                bytecode.length
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);

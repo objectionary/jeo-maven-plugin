@@ -63,7 +63,7 @@ public final class ImprovementXmirFootprint implements Improvement {
     public Collection<Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        Logger.info(this, "Writing .xmir files to %s", this.folder());
+        Logger.info(this, "Writing .xmir files to %[file]s", this.folder());
         return representations.stream()
             .map(this::transform)
             .collect(Collectors.toList());
@@ -86,17 +86,14 @@ public final class ImprovementXmirFootprint implements Improvement {
                 path,
                 xmir.toString().getBytes(StandardCharsets.UTF_8)
             );
-            final String filename = path.getFileName().toString();
             Logger.info(
                 this,
-                String.format(
-                    "%s translated into %s (%d bytes)",
-                    representation.details().source(),
-                    filename,
-                    Files.size(path)
-                )
+                "%s translated into %[file]s (%[size]s)",
+                representation.details().source(),
+                path,
+                Files.size(path)
             );
-            return new EoRepresentation(xmir, filename);
+            return new EoRepresentation(xmir, path.getFileName().toString());
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't save XML to %s", path),

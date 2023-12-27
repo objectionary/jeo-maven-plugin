@@ -65,7 +65,7 @@ public final class ImprovementEoFootprint implements Improvement {
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        Logger.info(this, "Writing .eo files to %s", this.folder());
+        Logger.info(this, "Writing .eo files to %[file]s", this.folder());
         representations.forEach(this::saveEo);
         return representations;
     }
@@ -87,12 +87,10 @@ public final class ImprovementEoFootprint implements Improvement {
             );
             Logger.info(
                 this,
-                String.format(
-                    "%s represented as %s (%d bytes)",
-                    representation.details().source(),
-                    path.getFileName().toString(),
-                    Files.size(path)
-                )
+                "%s represented as %[file]s (%[size]s)",
+                representation.details().source(),
+                path,
+                Files.size(path)
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(
