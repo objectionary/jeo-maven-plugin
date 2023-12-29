@@ -24,7 +24,6 @@
 package org.eolang.jeo;
 
 import java.io.File;
-import java.io.IOException;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -32,17 +31,22 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.eolang.jeo.representation.BytecodeTransformation;
+import org.eolang.jeo.improvement.ImprovementBytecodeFootprint;
 
 /**
- * Converts bytecode to EO.
- * The mojo that converts bytecode to EO only.
- * It does not apply any improvements. It does not convert EO to bytecode back.
+ * Converts EO to bytecode.
+ * In other words, it assembles low-lever representation EO to bytecode that JVM can execute.
+ * The mojo that converts EO to bytecode only.
+ * It does not apply any improvements.
  *
+ * @todo #59:90min Duplication between EoToBytecode and Optimization.
+ * Both classes have the same code. We have to extract the common code to the separate class.
+ * The class should be able to convert EO to bytecode and save result to the target folder.
+ * When it is done, remove that puzzle.
  * @since 0.1.0
  */
-@Mojo(name = "bytecode-to-eo", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
-public final class BytecodeToEoMojo extends AbstractMojo {
+@Mojo(name = "assemble", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
+public final class AssembleMojo extends AbstractMojo {
 
     /**
      * Maven project.
@@ -72,16 +76,10 @@ public final class BytecodeToEoMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         try {
             new PluginStartup(this.project).init();
-            new BytecodeTransformation(this.classes.toPath(), this.generated.toPath()).transpile();
-        } catch (final IOException | DependencyResolutionRequiredException exception) {
-            throw new MojoExecutionException(
-                String.format(
-                    "Can't transpile bytecode from '%s' to EO. Output directory: '%s'.",
-                    this.classes.toPath(),
-                    this.generated.toPath()
-                ),
-                exception
-            );
+            new ImprovementBytecodeFootprint(this.classes.toPath())
+                .apply(new EoRepresentations(this.generated.toPath()).objects());
+        } catch (final DependencyResolutionRequiredException exception) {
+            throw new MojoExecutionException(exception);
         }
     }
 }

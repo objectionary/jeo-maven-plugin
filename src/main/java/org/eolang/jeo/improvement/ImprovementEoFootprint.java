@@ -29,6 +29,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import org.eolang.jeo.DisassembleMojo;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.JavaName;
@@ -41,7 +42,7 @@ import org.eolang.parser.XMIR;
  * @since 0.1
  * @todo #215:60min Apply ImprovementEoFootprint.
  * Currently we don't use ImprovementEoFootprint. We have to add it to the next classes:
- * - {@link org.eolang.jeo.BytecodeToEoMojo}
+ * - {@link DisassembleMojo}
  * - {@link org.eolang.jeo.JeoMojo}
  * Don't forget to add checks for integration tests.
  */
