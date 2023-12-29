@@ -29,7 +29,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Optimization improvement.
+ * Improvement or transformation.
  * @since 0.1.0
  */
 public interface Improvement {
@@ -84,21 +84,6 @@ public interface Improvement {
          */
         public boolean isApplied() {
             return !this.all.isEmpty();
-        }
-    }
-
-    /**
-     * Dummy improvement.
-     * Returns the same IRs.
-     *
-     * @since 0.1.0
-     */
-    class Dummy implements Improvement {
-        @Override
-        public Collection<Representation> apply(
-            final Collection<? extends Representation> representations
-        ) {
-            return Collections.unmodifiableCollection(representations);
         }
     }
 }
