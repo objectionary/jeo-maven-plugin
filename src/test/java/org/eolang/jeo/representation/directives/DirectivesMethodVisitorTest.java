@@ -30,6 +30,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Label;
@@ -356,6 +357,15 @@ class DirectivesMethodVisitorTest {
             new HasMethod("bar")
                 .inside("Foo")
                 .withTryCatch("java/lang/Exception")
+        );
+    }
+
+    @Test
+    void doesNotContainTryCatchBlock() {
+        MatcherAssert.assertThat(
+            "We expect that method without try-catch block doesn't contain try-catch directives.",
+            new BytecodeClass().helloWorldMethod().xml().toString(),
+            Matchers.not(Matchers.containsString("trycatchblocks"))
         );
     }
 }
