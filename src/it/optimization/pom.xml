@@ -47,9 +47,15 @@ SOFTWARE.
         <version>@project.version@</version>
         <executions>
           <execution>
-            <id>optimization</id>
+            <id>bytecode-to-eo</id>
             <goals>
-              <goal>optimize</goal>
+              <goal>bytecode-to-eo</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>eo-to-bytecode</id>
+            <goals>
+              <goal>eo-to-bytecode</goal>
             </goals>
           </execution>
         </executions>
