@@ -71,7 +71,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li >
-                            <span>                        <a href="apidocs-0.2.13/index.html" title="Javadoc">Javadoc</a>
+                            <span>                        <a href="apidocs-0.2.14/index.html" title="Javadoc">Javadoc</a>
         </span>
                                                                                                                                                                 <ul>
                                                                     </ul>
@@ -111,13 +111,13 @@
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">0.2.13</strong>
+                                    <strong itemprop="version">0.2.14</strong>
                                 </li>
                                 <li>
                                     
-                                    <time itemprop="datePublished" datetime="2023-12-27T02:00:13Z">
+                                    <time itemprop="datePublished" datetime="2023-12-29T02:12:30Z">
                                         
-                                        27-Dec-2023
+                                        29-Dec-2023
                                     </time>
                                 </li>
                                 <li class="menu-button">menu</li>
@@ -136,14 +136,11 @@
 <th>Goal</th>
 <th>Description</th></tr>
 <tr class="b">
-<td align="left"><a href="./bytecode-to-eo-mojo.html">jeo:bytecode-to-eo</a></td>
-<td>Converts bytecode to EO. The mojo that converts bytecode to EO only. It does not apply any improvements. It does not convert EO to bytecode back.</td></tr>
+<td align="left"><a href="./assemble-mojo.html">jeo:assemble</a></td>
+<td>Converts EO to bytecode. In other words, it assembles low-lever representation EO to bytecode that JVM can execute. The mojo that converts EO to bytecode only. It does not apply any improvements.</td></tr>
 <tr class="a">
-<td align="left"><a href="./eo-to-bytecode-mojo.html">jeo:eo-to-bytecode</a></td>
-<td>Converts EO to bytecode. The mojo that converts EO to bytecode only. It does not apply any improvements.</td></tr>
-<tr class="b">
-<td align="left"><a href="./optimize-mojo.html">jeo:optimize</a></td>
-<td>Default optimization mojo. This mojo transforms bytecode into eo code, then applies all improvements and converts it back to bytecode.</td></tr></table><section>
+<td align="left"><a href="./disassemble-mojo.html">jeo:disassemble</a></td>
+<td>Converts bytecode to EO. In other words, it disassembles bytecode to low-level EO representation that contains opcodes and their values. The mojo that converts bytecode to EO only. It does not apply any improvements. It does not convert EO to bytecode back.</td></tr></table><section>
 <h3><a name="System_Requirements"></a>System Requirements</h3><a name="System_Requirements"></a>
 <p>The following specifies the minimum requirements to run this Maven plugin:</p>
 <table border="0" class="bodyTable">
@@ -165,7 +162,7 @@
         &lt;plugin&gt;
           &lt;groupId&gt;org.eolang&lt;/groupId&gt;
           &lt;artifactId&gt;jeo-maven-plugin&lt;/artifactId&gt;
-          &lt;version&gt;0.2.13&lt;/version&gt;
+          &lt;version&gt;0.2.14&lt;/version&gt;
         &lt;/plugin&gt;
         ...
       &lt;/plugins&gt;
