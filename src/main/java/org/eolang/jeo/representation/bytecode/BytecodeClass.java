@@ -27,7 +27,7 @@ import com.jcabi.xml.XML;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import org.eolang.jeo.JeoMojo;
+import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
@@ -158,7 +158,7 @@ public final class BytecodeClass {
      * instead of default implementation. This is because the default class loader doesn't
      * know about classes compiled on the previous maven step.
      * You can read more about the problem here:
-     * {@link JeoMojo#initClassloader()}
+     * {@link PluginStartup#init()} ()}
      * </p>
      * @return Bytecode.
      */

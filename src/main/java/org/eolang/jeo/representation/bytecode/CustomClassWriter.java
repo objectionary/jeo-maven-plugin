@@ -23,12 +23,12 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import org.eolang.jeo.JeoMojo;
+import org.eolang.jeo.PluginStartup;
 import org.objectweb.asm.ClassWriter;
 
 /**
  * Custom class writer.
- * This class works in couple with {@link JeoMojo#initClassloader()} method that sets
+ * This class works in couple with {@link PluginStartup#init()} ()} method that sets
  * the maven classloader as the current thread classloader.
  * Originally we faced with the problem that {@link ClassWriter} uses classes from ClassLoader
  * to perform {@link org.objectweb.asm.MethodVisitor#visitMaxs(int, int)} method and if it can't

@@ -36,7 +36,7 @@ import org.apache.maven.project.MavenProject;
  *
  * @since 0.1
  */
-final class PluginStartup {
+public final class PluginStartup {
 
     /**
      * Maven project.
