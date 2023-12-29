@@ -54,13 +54,13 @@ assert log.contains("Exception during closing resource")
  *     <execution>
  *       <id>bytecode-to-eo</id>
  *       <goals>
- *         <goal>bytecode-to-eo</goal>
+ *         <goal>disassemble</goal>
  *       </goals>
  *     </execution>
  *     <execution>
  *       <id>eo-to-bytecode</id>
  *       <goals>
- *         <goal>eo-to-bytecode</goal>
+ *         <goal>assemble</goal>
  *       </goals>
  *     </execution>
  *   </executions>

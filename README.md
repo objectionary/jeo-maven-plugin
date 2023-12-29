@@ -20,17 +20,17 @@ optimized performance.
 The plugin can be run using several approaches but for all of them you need
 at least Maven 3.1.+ and Java 11+.
 The plugin can convert compiled classes into EOlang by using
-the `bytecode-to-eo` goal. The `eo-to-bytecode` goal can convert EOlang back
+the `disassemble` goal. The `assemble` goal can convert EOlang back
 into bytecode. The default phase for the plugin
 is [process-classes](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#default-lifecycle).
 If you are a developer of optimizations in EOlang you probably need to
 use the both goals in the following order:
 
-* `bytecode-to-eo` create EOlang files in the `target/generated-sources`
+* `disassemble` create EOlang files in the `target/generated-sources`
   directory.
 * Provide your optimizations are applied to the EOlang files
   in the `target/generated-sources` directory.
-* `eo-to-bytecode` scans the `target/generated-sources` directory for EOlang
+* `assemble` scans the `target/generated-sources` directory for EOlang
   files and converts them back to Java bytecode.
 
 More details about plugin usage you can find in our
@@ -42,13 +42,13 @@ You can run the plugin directly from the command line using the following
 commands:
 
 ```bash
-mvn jeo:bytecode-to-eo
+mvn jeo:disassemble
 ```
 
 or
 
 ```bash
-mvn jeo:eo-to-bytecode
+mvn jeo:assemble
 ```
 
 ## Invoke the plugin from the Maven lifecycle
@@ -69,14 +69,14 @@ configuration to your `pom.xml` file:
           <id>bytecode-to-eo</id>
           <phase>process-classes</phase>
           <goals>
-            <goal>bytecode-to-eo</goal>
+            <goal>disassemble</goal>
           </goals>
         </execution>
         <execution>
           <id>eo-to-bytecode</id>
           <phase>process-classes</phase>
           <goals>
-            <goal>eo-to-bytecode</goal>
+            <goal>assemble</goal>
           </goals>
         </execution>
       </executions>
