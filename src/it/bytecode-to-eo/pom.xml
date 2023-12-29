@@ -47,7 +47,7 @@ SOFTWARE.
           <execution>
             <id>bytecode-to-eo</id>
             <goals>
-              <goal>bytecode-to-eo</goal>
+              <goal>disassemble</goal>
             </goals>
           </execution>
           <!--
@@ -61,7 +61,7 @@ SOFTWARE.
           <execution>
             <id>bytecode-to-eo-second-time</id>
             <goals>
-              <goal>bytecode-to-eo</goal>
+              <goal>disassemble</goal>
             </goals>
           </execution>
         </executions>
