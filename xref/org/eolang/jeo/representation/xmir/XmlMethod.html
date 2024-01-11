@@ -186,67 +186,78 @@
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>     }
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">     * Replace instructions.</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">     * @param entries Instructions to replace.</em>
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">     * @todo #350 Remove mutable method from XmlMethod.</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">     *  Here we just remove all instructions and add new ones, this makes XmlMethod class</em>
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">     *  mutable, which is a significant architecture flaw. It's much better to</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">     *  implement copying of this class with creation of a new XmlMethod, but in order to</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">     *  implement this we will have to implement copying all the top level classes like</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">     *  XmlProgram, XmlClass and so on, which requires lots of work.</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> replaceInstructions(<strong class="jxr_keyword">final</strong> XmlNode... entries) {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>         <strong class="jxr_keyword">final</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a> seq = <strong class="jxr_keyword">this</strong>.node.child(<span class="jxr_string">"base"</span>, <span class="jxr_string">"seq"</span>)
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>             .child(<span class="jxr_string">"base"</span>, <span class="jxr_string">"tuple"</span>);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>         seq.children()
-<a class="jxr_linenumber" name="L194" href="#L194">194</a>             .filter(element -&gt; element.attribute(<span class="jxr_string">"base"</span>).isPresent())
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>             .forEach(XmlNode::erase);
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a> entry : entries) {
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>             seq.append(entry);
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>         }
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>     }
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
-<a class="jxr_linenumber" name="L201" href="#L201">201</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">     * Method exceptions.</em>
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">     * @return Exceptions.</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L205" href="#L205">205</a>     <strong class="jxr_keyword">private</strong> String[] exceptions() {
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.child(<span class="jxr_string">"name"</span>, <span class="jxr_string">"exceptions"</span>)
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>             .children()
-<a class="jxr_linenumber" name="L208" href="#L208">208</a>             .map(XmlNode::text)
-<a class="jxr_linenumber" name="L209" href="#L209">209</a>             .map(HexString::<strong class="jxr_keyword">new</strong>)
-<a class="jxr_linenumber" name="L210" href="#L210">210</a>             .map(HexString::decode)
-<a class="jxr_linenumber" name="L211" href="#L211">211</a>             .toArray(String[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L212" href="#L212">212</a>     }
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
-<a class="jxr_linenumber" name="L214" href="#L214">214</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">     * Create Method XmlNode by directives.</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">     * @param name Method name.</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">     * @param access Method access modifiers.</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">     * @param descriptor Method descriptor.</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">     * @param exceptions Method exceptions.</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">     * @return Method XmlNode.</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">     * @checkstyle ParameterNumberCheck (5 lines)</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a> prestructor(
-<a class="jxr_linenumber" name="L224" href="#L224">224</a>         <strong class="jxr_keyword">final</strong> String name,
-<a class="jxr_linenumber" name="L225" href="#L225">225</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> access,
-<a class="jxr_linenumber" name="L226" href="#L226">226</a>         <strong class="jxr_keyword">final</strong> String descriptor,
-<a class="jxr_linenumber" name="L227" href="#L227">227</a>         <strong class="jxr_keyword">final</strong> String... exceptions
-<a class="jxr_linenumber" name="L228" href="#L228">228</a>     ) {
-<a class="jxr_linenumber" name="L229" href="#L229">229</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a>(
-<a class="jxr_linenumber" name="L230" href="#L230">230</a>             <strong class="jxr_keyword">new</strong> Xembler(
-<a class="jxr_linenumber" name="L231" href="#L231">231</a>                 <strong class="jxr_keyword">new</strong> <a name="DirectivesMethod" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethod.html#DirectivesMethod">DirectivesMethod</a>(
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>                     name,
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>                     <strong class="jxr_keyword">new</strong> <a name="DirectivesMethodProperties" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethodProperties.html#DirectivesMethodProperties">DirectivesMethodProperties</a>(access, descriptor, <span class="jxr_string">""</span>, exceptions)
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>                 ),
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>                 <strong class="jxr_keyword">new</strong> Transformers.Node()
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>             ).xmlQuietly()
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>         );
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>     }
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> }
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">     * All the method instructions.</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">     * @return Instructions.</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>     <strong class="jxr_keyword">public</strong> List&lt;XmlNode&gt; nodes() {
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.child(<span class="jxr_string">"base"</span>, <span class="jxr_string">"seq"</span>)
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>             .child(<span class="jxr_string">"base"</span>, <span class="jxr_string">"tuple"</span>)
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>             .children()
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>             .collect(Collectors.toList());
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>     }
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">     * Replace instructions.</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">     * @param entries Instructions to replace.</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">     * @todo #350 Remove mutable method from XmlMethod.</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">     *  Here we just remove all instructions and add new ones, this makes XmlMethod class</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">     *  mutable, which is a significant architecture flaw. It's much better to</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">     *  implement copying of this class with creation of a new XmlMethod, but in order to</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">     *  implement this we will have to implement copying all the top level classes like</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">     *  XmlProgram, XmlClass and so on, which requires lots of work.</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> replaceInstructions(<strong class="jxr_keyword">final</strong> XmlNode... entries) {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>         <strong class="jxr_keyword">final</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a> seq = <strong class="jxr_keyword">this</strong>.node.child(<span class="jxr_string">"base"</span>, <span class="jxr_string">"seq"</span>)
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>             .child(<span class="jxr_string">"base"</span>, <span class="jxr_string">"tuple"</span>);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>         seq.children()
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>             .filter(element -&gt; element.attribute(<span class="jxr_string">"base"</span>).isPresent())
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>             .forEach(XmlNode::erase);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a> entry : entries) {
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>             seq.append(entry);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>         }
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>     }
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">     * Method exceptions.</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">     * @return Exceptions.</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a>     <strong class="jxr_keyword">private</strong> String[] exceptions() {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.child(<span class="jxr_string">"name"</span>, <span class="jxr_string">"exceptions"</span>)
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>             .children()
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>             .map(XmlNode::text)
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>             .map(HexString::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>             .map(HexString::decode)
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>             .toArray(String[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>     }
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
+<a class="jxr_linenumber" name="L225" href="#L225">225</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">     * Create Method XmlNode by directives.</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">     * @param name Method name.</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">     * @param access Method access modifiers.</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">     * @param descriptor Method descriptor.</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">     * @param exceptions Method exceptions.</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">     * @return Method XmlNode.</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">     * @checkstyle ParameterNumberCheck (5 lines)</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a> prestructor(
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>         <strong class="jxr_keyword">final</strong> String name,
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> access,
+<a class="jxr_linenumber" name="L237" href="#L237">237</a>         <strong class="jxr_keyword">final</strong> String descriptor,
+<a class="jxr_linenumber" name="L238" href="#L238">238</a>         <strong class="jxr_keyword">final</strong> String... exceptions
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>     ) {
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a>(
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>             <strong class="jxr_keyword">new</strong> Xembler(
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>                 <strong class="jxr_keyword">new</strong> <a name="DirectivesMethod" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethod.html#DirectivesMethod">DirectivesMethod</a>(
+<a class="jxr_linenumber" name="L243" href="#L243">243</a>                     name,
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>                     <strong class="jxr_keyword">new</strong> <a name="DirectivesMethodProperties" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethodProperties.html#DirectivesMethodProperties">DirectivesMethodProperties</a>(access, descriptor, <span class="jxr_string">""</span>, exceptions)
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>                 ),
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>                 <strong class="jxr_keyword">new</strong> Transformers.Node()
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>             ).xmlQuietly()
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>         );
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>     }
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2023 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
 </body>
 </html>
