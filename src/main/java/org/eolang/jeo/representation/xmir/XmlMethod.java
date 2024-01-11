@@ -178,6 +178,17 @@ public final class XmlMethod {
     }
 
     /**
+     * All the method instructions.
+     * @return Instructions.
+     */
+    public List<XmlNode> nodes() {
+        return this.node.child("base", "seq")
+            .child("base", "tuple")
+            .children()
+            .collect(Collectors.toList());
+    }
+
+    /**
      * Replace instructions.
      * @param entries Instructions to replace.
      * @todo #350 Remove mutable method from XmlMethod.
