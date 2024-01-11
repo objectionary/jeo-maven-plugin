@@ -123,4 +123,20 @@ class XmlMethodTest {
             Matchers.containsInAnyOrder(first, second)
         );
     }
+
+    @Test
+    void retrievesMethodNodes() {
+        final XmlMethod method = new XmlMethod();
+        method.replaceInstructions(
+            new XmlInstruction(Opcodes.LDC, "first").toNode(),
+            new XmlInstruction(Opcodes.LDC, "second").toNode(),
+            new XmlNode("<o/>")
+        );
+        final List<XmlNode> nodes = method.nodes();
+        MatcherAssert.assertThat(
+            "Exactly three node should be added. Pay attention, that the last node is custom xml node",
+            nodes,
+            Matchers.hasSize(3)
+        );
+    }
 }
