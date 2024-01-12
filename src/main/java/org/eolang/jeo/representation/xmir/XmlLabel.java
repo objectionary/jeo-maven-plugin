@@ -53,6 +53,10 @@ public final class XmlLabel implements XmlBytecodeEntry {
 
     @Override
     public void writeTo(final BytecodeMethod method) {
-        method.label(this.labels.label(this.node.child("base", "string").text()));
+        method.label(
+            this.labels.label(
+                new HexString(this.node.child("base", "string").text()).decode()
+            )
+        );
     }
 }

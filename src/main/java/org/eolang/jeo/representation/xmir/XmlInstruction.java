@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.log.Logger;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.List;
@@ -161,7 +162,13 @@ public final class XmlInstruction implements XmlBytecodeEntry {
         if (attr.equals("int")) {
             result = new HexString(argument.text()).decodeAsInt();
         } else if (attr.equals("label")) {
-            result = this.labels.label(argument.text());
+            String text = argument.children().findFirst().orElseThrow().text();
+            if (!text.isEmpty()) {
+                text = new HexString(text.trim()).decode();
+            }
+//            String text =argument.text();
+            Logger.info(this, "Found label '%s'", text);
+            result = this.labels.label(text);
         } else if (attr.equals("reference")) {
             result = Type.getType(String.format("L%s;", new HexString(argument.text()).decode()));
         } else {

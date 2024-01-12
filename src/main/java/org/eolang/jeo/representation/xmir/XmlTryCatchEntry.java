@@ -66,7 +66,9 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      */
     Optional<String> label(final String name) {
         return this.xmlnode.optchild("name", name)
-            .map(node -> node.child("base", "string").text());
+            .map(node -> node.child("base", "string").text())
+            .map(HexString::new)
+            .map(HexString::decode);
     }
 
     /**
