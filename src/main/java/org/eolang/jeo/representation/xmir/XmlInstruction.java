@@ -162,13 +162,15 @@ public final class XmlInstruction implements XmlBytecodeEntry {
         if (attr.equals("int")) {
             result = new HexString(argument.text()).decodeAsInt();
         } else if (attr.equals("label")) {
-            String text = argument.children().findFirst().orElseThrow().text();
-            if (!text.isEmpty()) {
-                text = new HexString(text.trim()).decode();
-            }
-//            String text =argument.text();
-            Logger.info(this, "Found label '%s'", text);
-            result = this.labels.label(text);
+            result = this.labels.label(
+                argument.children()
+                    .map(XmlNode::text)
+                    .map(String::trim)
+                    .map(HexString::new)
+                    .map(HexString::decode)
+                    .findFirst()
+                    .orElseThrow()
+            );
         } else if (attr.equals("reference")) {
             result = Type.getType(String.format("L%s;", new HexString(argument.text()).decode()));
         } else {
