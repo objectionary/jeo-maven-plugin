@@ -56,6 +56,10 @@ public final class XmlLabel implements XmlBytecodeEntry {
         method.label(this.labels.label(this.identifier()));
     }
 
+    /**
+     * Get label identifier.
+     * @return Label identifier.
+     */
     public String identifier() {
         return new HexString(this.node.child("base", "string").text()).decode();
     }
