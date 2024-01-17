@@ -24,6 +24,7 @@
 package org.eolang.jeo;
 
 import java.io.File;
+import java.nio.file.Paths;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -77,14 +78,17 @@ public final class AssembleMojo extends AbstractMojo {
      *
      * @since 0.2.0
      */
-    private File source;
+    @Parameter(property = "sourceDirectory", defaultValue = "xmir")
+    private String sourceDirectory;
 
     @Override
     public void execute() throws MojoExecutionException {
         try {
             new PluginStartup(this.project).init();
-            new ImprovementBytecodeFootprint(this.classes.toPath())
-                .apply(new EoRepresentations(this.generated.toPath()).objects());
+            new ImprovementBytecodeFootprint(this.classes.toPath()).apply(
+                new EoRepresentations(
+                    this.generated.toPath(), Paths.get(this.sourceDirectory)).objects()
+            );
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);
         }
