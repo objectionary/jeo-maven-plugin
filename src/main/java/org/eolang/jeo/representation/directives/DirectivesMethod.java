@@ -131,13 +131,15 @@ public final class DirectivesMethod implements Iterable<Directive> {
             .attr("base", "seq")
             .attr("name", "@")
             .add("o")
-            .attr("base", "tuple");
+            .attr("base", "tuple")
+            .attr("star", "");
         this.instructions.forEach(directives::append);
         directives.up();
         directives.up();
         if (!this.exceptions.isEmpty()) {
             directives.add("o")
                 .attr("base", "tuple")
+                .attr("star", "")
                 .attr("name", "trycatchblocks");
             this.exceptions.forEach(directives::append);
             directives.up();

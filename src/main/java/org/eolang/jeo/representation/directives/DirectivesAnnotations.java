@@ -71,6 +71,7 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
         if (!this.annotations.isEmpty()) {
             directives.add("o")
                 .attr("base", "tuple")
+                .attr("star", "")
                 .attr("name", "annotations");
             this.annotations.forEach(directives::append);
             directives.up();
