@@ -49,6 +49,9 @@ SOFTWARE.
             <goals>
               <goal>assemble</goal>
             </goals>
+            <configuration>
+              <sourceDirectory>opeo-xmir</sourceDirectory>
+            </configuration>
           </execution>
           <!--
             The second run was added in order to check that
@@ -63,6 +66,9 @@ SOFTWARE.
             <goals>
               <goal>assemble</goal>
             </goals>
+            <configuration>
+              <sourceDirectory>opeo-xmir</sourceDirectory>
+            </configuration>
           </execution>
         </executions>
       </plugin>
