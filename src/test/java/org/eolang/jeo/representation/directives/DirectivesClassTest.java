@@ -56,7 +56,7 @@ class DirectivesClassTest {
                         "<o base='int' data='bytes' name='access'>00 00 00 00 00 00 00 00</o>",
                         "<o base='string' data='bytes' name='signature'/>",
                         "<o base='string' data='bytes' name='supername'/>",
-                        "<o base='tuple' data='tuple' name='interfaces'/>",
+                        "<o base='tuple' name='interfaces' star=''/>",
                         "</o>"
                     )
                 )

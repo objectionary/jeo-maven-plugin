@@ -43,7 +43,7 @@ final class XmlInstructionTest {
         new XmlInstruction(
             new XMLDocument(
                 new StringBuilder()
-                    .append("<o base='opcode' name='INVOKESPECIAL'>")
+                    .append("<o base='opcode' line='999' name='INVOKESPECIAL'>")
                     .append("<o base='int' data='bytes'>00 00 00 00 00 00 00 B7</o>")
                     .append("<o base='int' data='bytes'>00 00 00 00 00 00 00 01</o>")
                     .append("<o base='int' data='bytes'>00 00 00 00 00 00 00 02</o>")

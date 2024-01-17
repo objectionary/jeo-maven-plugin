@@ -87,6 +87,7 @@ public final class DirectivesInstruction implements Iterable<Directive> {
             final Directives directives = new Directives();
             directives.add("o")
                 .attr("name", this.name())
+                .attr("line", "999")
                 .attr("base", "opcode");
             directives.append(new DirectivesOperand(this.opcode));
             for (final Object operand : this.arguments) {
