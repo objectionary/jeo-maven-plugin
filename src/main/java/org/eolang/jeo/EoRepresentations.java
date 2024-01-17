@@ -66,7 +66,7 @@ final class EoRepresentations {
      * @param objectspath Where to read objects from.
      * @param folder Subfolder with EO objects.
      */
-    public EoRepresentations(final Path objectspath, final Path folder) {
+    EoRepresentations(final Path objectspath, final Path folder) {
         this.objectspath = objectspath;
         this.folder = folder;
     }

@@ -77,6 +77,7 @@ public final class AssembleMojo extends AbstractMojo {
      * Source directory.
      *
      * @since 0.2.0
+     * @checkstyle MemberNameCheck (3 lines)
      */
     @Parameter(property = "sourceDirectory", defaultValue = "xmir")
     private String sourceDirectory;
@@ -87,7 +88,8 @@ public final class AssembleMojo extends AbstractMojo {
             new PluginStartup(this.project).init();
             new ImprovementBytecodeFootprint(this.classes.toPath()).apply(
                 new EoRepresentations(
-                    this.generated.toPath(), Paths.get(this.sourceDirectory)).objects()
+                    this.generated.toPath(), Paths.get(this.sourceDirectory)
+                ).objects()
             );
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);
