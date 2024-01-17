@@ -72,6 +72,13 @@ public final class AssembleMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.build.directory}/generated-sources")
     private File generated;
 
+    /**
+     * Source directory.
+     *
+     * @since 0.2.0
+     */
+    private File source;
+
     @Override
     public void execute() throws MojoExecutionException {
         try {

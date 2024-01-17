@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -77,6 +78,25 @@ final class EoRepresentationsTest {
             IllegalStateException.class,
             () -> new EoRepresentations(temp).objects(),
             "Exception was not thrown when folder does not exist"
+        );
+    }
+
+    @Test
+    void usesDifferentSubfolder(@TempDir final Path temp) throws IOException {
+        final Path generated = temp.resolve("generated-sources");
+        final Path directory = Paths.get("opeo-xmir");
+        Files.createDirectories(generated.resolve(directory));
+        Files.write(
+            generated.resolve(directory).resolve("opeo-class.xmir"),
+            new BytecodeClass("OpeoClass").xml().toString().getBytes(StandardCharsets.UTF_8)
+        );
+        MatcherAssert.assertThat(
+            String.format(
+                "Objects were not retrieved, we expected exactly one object was read from %s",
+                directory
+            ),
+            new EoRepresentations(generated, directory).objects(),
+            Matchers.hasSize(1)
         );
     }
 }
