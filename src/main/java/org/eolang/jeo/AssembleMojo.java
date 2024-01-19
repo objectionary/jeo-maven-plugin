@@ -24,7 +24,6 @@
 package org.eolang.jeo;
 
 import java.io.File;
-import java.nio.file.Paths;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -61,7 +60,7 @@ public final class AssembleMojo extends AbstractMojo {
      * Source directory.
      *
      * @since 0.2.0
-     * @checkstyle MemberNameCheck (3 lines)
+     * @checkstyle MemberNameCheck (6 lines)
      */
     @Parameter(
         property = "jeo.assemble.sourceDir",
@@ -73,14 +72,13 @@ public final class AssembleMojo extends AbstractMojo {
      * Target directory.
      *
      * @since 0.2.0
-     * @checkstyle MemberNameCheck (3 lines)
+     * @checkstyle MemberNameCheck (6 lines)
      */
     @Parameter(
         property = "jeo.assemble.targetDir",
         defaultValue = "${project.build.outputDirectory}"
     )
     private File targetDir;
-
 
     @Override
     public void execute() throws MojoExecutionException {
