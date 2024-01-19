@@ -50,7 +50,7 @@ SOFTWARE.
               <goal>assemble</goal>
             </goals>
             <configuration>
-              <sourceDir>${project.build.directory}/generated-sources/opeo-xmir</sourceDir>
+              <sourcesDir>${project.build.directory}/generated-sources/opeo-xmir</sourcesDir>
             </configuration>
           </execution>
           <!--
@@ -67,7 +67,7 @@ SOFTWARE.
               <goal>assemble</goal>
             </goals>
             <configuration>
-              <sourceDir>${project.build.directory}/generated-sources/opeo-xmir</sourceDir>
+              <sourcesDir>${project.build.directory}/generated-sources/opeo-xmir</sourcesDir>
             </configuration>
           </execution>
           <!--
@@ -79,8 +79,8 @@ SOFTWARE.
               <goal>assemble</goal>
             </goals>
             <configuration>
-              <sourceDir>${project.build.directory}/generated-sources/opeo-xmir</sourceDir>
-              <targetDir>${project.build.directory}/generated-sources/jeo-classes</targetDir>
+              <sourcesDir>${project.build.directory}/generated-sources/opeo-xmir</sourcesDir>
+              <outputDir>${project.build.directory}/generated-sources/jeo-classes</outputDir>
             </configuration>
           </execution>
         </executions>

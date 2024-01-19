@@ -63,10 +63,10 @@ public final class AssembleMojo extends AbstractMojo {
      * @checkstyle MemberNameCheck (6 lines)
      */
     @Parameter(
-        property = "jeo.assemble.sourceDir",
+        property = "jeo.assemble.sourcesDir",
         defaultValue = "${project.build.directory}/generated-sources/jeo-xmir"
     )
-    private File sourceDir;
+    private File sourcesDir;
 
     /**
      * Target directory.
@@ -75,17 +75,17 @@ public final class AssembleMojo extends AbstractMojo {
      * @checkstyle MemberNameCheck (6 lines)
      */
     @Parameter(
-        property = "jeo.assemble.targetDir",
+        property = "jeo.assemble.outputDir",
         defaultValue = "${project.build.outputDirectory}"
     )
-    private File targetDir;
+    private File outputDir;
 
     @Override
     public void execute() throws MojoExecutionException {
         try {
             new PluginStartup(this.project).init();
-            new ImprovementBytecodeFootprint(this.targetDir.toPath()).apply(
-                new EoRepresentations(this.sourceDir.toPath()).objects()
+            new ImprovementBytecodeFootprint(this.outputDir.toPath()).apply(
+                new EoRepresentations(this.sourcesDir.toPath()).objects()
             );
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);
