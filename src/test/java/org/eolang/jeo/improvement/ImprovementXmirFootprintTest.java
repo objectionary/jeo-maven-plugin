@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import org.eolang.jeo.Representation;
+import org.eolang.jeo.XmirDefaultDirectory;
 import org.eolang.jeo.representation.EoRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
@@ -55,7 +56,7 @@ final class ImprovementXmirFootprintTest {
      * Where the XML file is expected to be saved.
      */
     private final Path expected = Paths.get("")
-        .resolve("xmir")
+        .resolve(new XmirDefaultDirectory().toPath())
         .resolve("org")
         .resolve("eolang")
         .resolve("jeo")

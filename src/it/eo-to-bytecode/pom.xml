@@ -50,7 +50,7 @@ SOFTWARE.
               <goal>assemble</goal>
             </goals>
             <configuration>
-              <sourceDirectory>opeo-xmir</sourceDirectory>
+              <sourceDir>${project.build.directory}/generated-sources/opeo-xmir</sourceDir>
             </configuration>
           </execution>
           <!--
@@ -67,7 +67,7 @@ SOFTWARE.
               <goal>assemble</goal>
             </goals>
             <configuration>
-              <sourceDirectory>opeo-xmir</sourceDirectory>
+              <sourceDir>${project.build.directory}/generated-sources/opeo-xmir</sourceDir>
             </configuration>
           </execution>
         </executions>

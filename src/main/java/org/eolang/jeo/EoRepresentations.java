@@ -47,28 +47,11 @@ final class EoRepresentations {
     private final Path objectspath;
 
     /**
-     * Subfolder with EO objects.
-     * Usually it's a folder with the name "xmir".
-     * See {@link XmirDefaultDirectory}.
-     */
-    private final Path folder;
-
-    /**
-     * Constructor.
-     * @param objects Where to read objects from.
-     */
-    EoRepresentations(final Path objects) {
-        this(objects, new XmirDefaultDirectory().toPath());
-    }
-
-    /**
      * Constructor.
      * @param objectspath Where to read objects from.
-     * @param folder Subfolder with EO objects.
      */
-    EoRepresentations(final Path objectspath, final Path folder) {
+    EoRepresentations(final Path objectspath) {
         this.objectspath = objectspath;
-        this.folder = folder;
     }
 
     /**
@@ -76,7 +59,7 @@ final class EoRepresentations {
      * @return All objects.
      */
     Collection<EoRepresentation> objects() {
-        final Path path = this.objectspath.resolve(this.folder);
+        final Path path = this.objectspath;
         try (Stream<Path> walk = Files.walk(path)) {
             return walk.filter(Files::isRegularFile)
                 .map(EoRepresentation::new)

@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
+import org.eolang.jeo.XmirDefaultDirectory;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,7 @@ class BytecodeTransformationTest {
         MatcherAssert.assertThat(
             String.format("Can't find the transpiled file for the class '%s'.", name),
             Files.exists(
-                temp.resolve("xmir")
+                temp.resolve(new XmirDefaultDirectory().toPath())
                     .resolve("org")
                     .resolve("eolang")
                     .resolve("jeo")

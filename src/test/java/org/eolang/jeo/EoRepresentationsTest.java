@@ -76,7 +76,7 @@ final class EoRepresentationsTest {
     void throwsExceptionIfFolderDoesNotExist(@TempDir final Path temp) {
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> new EoRepresentations(temp).objects(),
+            () -> new EoRepresentations(temp.resolve("missing")).objects(),
             "Exception was not thrown when folder does not exist"
         );
     }
@@ -84,18 +84,18 @@ final class EoRepresentationsTest {
     @Test
     void usesDifferentSubfolder(@TempDir final Path temp) throws IOException {
         final Path generated = temp.resolve("generated-sources");
-        final Path directory = Paths.get("opeo-xmir");
-        Files.createDirectories(generated.resolve(directory));
+        final Path path = generated.resolve("opeo-xmir");
+        Files.createDirectories(path);
         Files.write(
-            generated.resolve(directory).resolve("opeo-class.xmir"),
+            path.resolve("opeo-class.xmir"),
             new BytecodeClass("OpeoClass").xml().toString().getBytes(StandardCharsets.UTF_8)
         );
         MatcherAssert.assertThat(
             String.format(
                 "Objects were not retrieved, we expected exactly one object was read from %s",
-                directory
+                path
             ),
-            new EoRepresentations(generated, directory).objects(),
+            new EoRepresentations(path).objects(),
             Matchers.hasSize(1)
         );
     }

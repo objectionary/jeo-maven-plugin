@@ -38,7 +38,7 @@ final class XmirDefaultDirectoryTest {
     @Test
     void returnsDefaultDirectory() {
         final Path actual = new XmirDefaultDirectory().toPath();
-        final Path expected = Path.of("xmir");
+        final Path expected = Path.of("jeo-xmir");
         MatcherAssert.assertThat(
             String.format(
                 "We expect the default directory to be '%s', but was '%s'",

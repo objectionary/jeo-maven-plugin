@@ -58,38 +58,36 @@ public final class AssembleMojo extends AbstractMojo {
     private MavenProject project;
 
     /**
-     * Project compiled classes.
-     *
-     * @since 0.1.0
-     */
-    @Parameter(defaultValue = "${project.build.outputDirectory}")
-    private File classes;
-
-    /**
-     * Project default target directory.
-     *
-     * @since 0.1.0
-     */
-    @Parameter(defaultValue = "${project.build.directory}/generated-sources")
-    private File generated;
-
-    /**
      * Source directory.
      *
      * @since 0.2.0
      * @checkstyle MemberNameCheck (3 lines)
      */
-    @Parameter(property = "sourceDirectory", defaultValue = "xmir")
-    private String sourceDirectory;
+    @Parameter(
+        property = "jeo.assemble.sourceDir",
+        defaultValue = "${project.build.directory}/generated-sources/jeo-xmir"
+    )
+    private File sourceDir;
+
+    /**
+     * Target directory.
+     *
+     * @since 0.2.0
+     * @checkstyle MemberNameCheck (3 lines)
+     */
+    @Parameter(
+        property = "jeo.assemble.targetDir",
+        defaultValue = "${project.build.outputDirectory}"
+    )
+    private File targetDir;
+
 
     @Override
     public void execute() throws MojoExecutionException {
         try {
             new PluginStartup(this.project).init();
-            new ImprovementBytecodeFootprint(this.classes.toPath()).apply(
-                new EoRepresentations(
-                    this.generated.toPath(), Paths.get(this.sourceDirectory)
-                ).objects()
+            new ImprovementBytecodeFootprint(this.targetDir.toPath()).apply(
+                new EoRepresentations(this.sourceDir.toPath()).objects()
             );
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);

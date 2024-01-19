@@ -42,7 +42,7 @@ public class XmirDefaultDirectory {
      * Constructor.
      */
     public XmirDefaultDirectory() {
-        this("xmir");
+        this("jeo-xmir");
     }
 
     /**
