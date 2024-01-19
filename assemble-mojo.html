@@ -61,13 +61,13 @@
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">0.2.16</strong>
+                                    <strong itemprop="version">0.2.18</strong>
                                 </li>
                                 <li>
                                     
-                                    <time itemprop="datePublished" datetime="2024-01-12T03:47:50Z">
+                                    <time itemprop="datePublished" datetime="2024-01-19T01:21:55Z">
                                         
-                                        12-Jan-2024
+                                        19-Jan-2024
                                     </time>
                                 </li>
                                 <li class="menu-button">menu</li>
@@ -81,7 +81,7 @@
                             <section>
 <h2><a name="jeo:assemble"></a>jeo:assemble</h2><a name="jeo:assemble"></a>
 <p><strong>Full name</strong>:</p>
-<p>org.eolang:jeo-maven-plugin:0.2.16:assemble</p>
+<p>org.eolang:jeo-maven-plugin:0.2.18:assemble</p>
 <p><strong>Description</strong>:</p>
 <p>Converts EO to bytecode. In other words, it assembles low-lever representation EO to bytecode that JVM can execute. The mojo that converts EO to bytecode only. It does not apply any improvements.</p>
 <p><strong>Attributes</strong>:</p>
@@ -98,30 +98,32 @@
 <th>Since</th>
 <th>Description</th></tr>
 <tr class="b">
-<td align="left"><a href="#classes"><code>&lt;classes&gt;</code></a></td>
+<td align="left"><a href="#outputDir"><code>&lt;outputDir&gt;</code></a></td>
 <td><code>File</code></td>
-<td><code>0.1.0</code></td>
-<td>Project compiled classes.<br /><strong>Default</strong>: <code>${project.build.outputDirectory}</code></td></tr>
+<td><code>0.2.0</code></td>
+<td>Target directory.<br /><strong>Default</strong>: <code>${project.build.outputDirectory}</code><br /><strong>User Property</strong>: <code>jeo.assemble.outputDir</code></td></tr>
 <tr class="a">
-<td align="left"><a href="#generated"><code>&lt;generated&gt;</code></a></td>
+<td align="left"><a href="#sourcesDir"><code>&lt;sourcesDir&gt;</code></a></td>
 <td><code>File</code></td>
-<td><code>0.1.0</code></td>
-<td>Project default target directory.<br /><strong>Default</strong>: <code>${project.build.directory}/generated-sources</code></td></tr></table></section><section>
-<h3><a name="Parameter_Details"></a>Parameter Details</h3><a name="Parameter_Details"></a><a name="classes"><section>
-<h4><a name="a.3Cclasses.3E"></a>&lt;classes&gt;</h4><a name="a.3Cclasses.3E"></a></a>
-<div>Project compiled classes.</div>
+<td><code>0.2.0</code></td>
+<td>Source directory.<br /><strong>Default</strong>: <code>${project.build.directory}/generated-sources/jeo-xmir</code><br /><strong>User Property</strong>: <code>jeo.assemble.sourcesDir</code></td></tr></table></section><section>
+<h3><a name="Parameter_Details"></a>Parameter Details</h3><a name="Parameter_Details"></a><a name="outputDir"><section>
+<h4><a name="a.3CoutputDir.3E"></a>&lt;outputDir&gt;</h4><a name="a.3CoutputDir.3E"></a></a>
+<div>Target directory.</div>
 <ul>
 <li><strong>Type</strong>: <code>java.io.File</code></li>
-<li><strong>Since</strong>: <code>0.1.0</code></li>
+<li><strong>Since</strong>: <code>0.2.0</code></li>
 <li><strong>Required</strong>: <code>report.plugin.goal.no</code></li>
-<li><strong>Default</strong>: <code>${project.build.outputDirectory}</code></li></ul><hr /></section><a name="generated"><section>
-<h4><a name="a.3Cgenerated.3E"></a>&lt;generated&gt;</h4><a name="a.3Cgenerated.3E"></a></a>
-<div>Project default target directory.</div>
+<li><strong>User Property</strong>: <code>jeo.assemble.outputDir</code></li>
+<li><strong>Default</strong>: <code>${project.build.outputDirectory}</code></li></ul><hr /></section><a name="sourcesDir"><section>
+<h4><a name="a.3CsourcesDir.3E"></a>&lt;sourcesDir&gt;</h4><a name="a.3CsourcesDir.3E"></a></a>
+<div>Source directory.</div>
 <ul>
 <li><strong>Type</strong>: <code>java.io.File</code></li>
-<li><strong>Since</strong>: <code>0.1.0</code></li>
+<li><strong>Since</strong>: <code>0.2.0</code></li>
 <li><strong>Required</strong>: <code>report.plugin.goal.no</code></li>
-<li><strong>Default</strong>: <code>${project.build.directory}/generated-sources</code></li></ul></section></section></section>
+<li><strong>User Property</strong>: <code>jeo.assemble.sourcesDir</code></li>
+<li><strong>Default</strong>: <code>${project.build.directory}/generated-sources/jeo-xmir</code></li></ul></section></section></section>
                         </article>
                     </div>
                 </main>

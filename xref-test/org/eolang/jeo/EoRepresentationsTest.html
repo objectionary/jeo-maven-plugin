@@ -83,11 +83,30 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">void</strong> throwsExceptionIfFolderDoesNotExist(@TempDir <strong class="jxr_keyword">final</strong> Path temp) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          Assertions.assertThrows(
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>              IllegalStateException.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>              () -&gt; <strong class="jxr_keyword">new</strong> EoRepresentations(temp).objects(),
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>              () -&gt; <strong class="jxr_keyword">new</strong> EoRepresentations(temp.resolve(<span class="jxr_string">"missing"</span>)).objects(),
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>              <span class="jxr_string">"Exception was not thrown when folder does not exist"</span>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>          );
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      }
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      @Test
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">void</strong> usesDifferentSubfolder(@TempDir <strong class="jxr_keyword">final</strong> Path temp) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">final</strong> Path generated = temp.resolve(<span class="jxr_string">"generated-sources"</span>);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          <strong class="jxr_keyword">final</strong> Path path = generated.resolve(<span class="jxr_string">"opeo-xmir"</span>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          Files.createDirectories(path);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          Files.write(
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>              path.resolve(<span class="jxr_string">"opeo-class.xmir"</span>),
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">new</strong> BytecodeClass(<span class="jxr_string">"OpeoClass"</span>).xml().toString().getBytes(StandardCharsets.UTF_8)
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          );
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          MatcherAssert.assertThat(
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>              String.format(
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>                  <span class="jxr_string">"Objects were not retrieved, we expected exactly one object was read from %s"</span>,
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>                  path
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>              ),
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>              <strong class="jxr_keyword">new</strong> EoRepresentations(path).objects(),
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>              Matchers.hasSize(1)
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          );
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     }
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
