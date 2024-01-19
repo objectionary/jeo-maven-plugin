@@ -28,7 +28,6 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.XmirDefaultDirectory;
 import org.eolang.jeo.representation.EoRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;

@@ -80,7 +80,6 @@ public final class DisassembleMojo extends AbstractMojo {
     )
     private File outputDir;
 
-
     @Override
     public void execute() throws MojoExecutionException {
         try {
