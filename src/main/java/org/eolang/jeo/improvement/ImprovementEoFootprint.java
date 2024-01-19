@@ -33,7 +33,7 @@ import org.eolang.jeo.DisassembleMojo;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.JavaName;
-import org.eolang.parser.XMIR;
+import org.eolang.parser.xmir.Xmir;
 
 /**
  * It's not actually an improvement.
@@ -84,7 +84,7 @@ public final class ImprovementEoFootprint implements Improvement {
             Files.createDirectories(path.getParent());
             Files.write(
                 path,
-                new XMIR(representation.toEO()).toEO().getBytes(StandardCharsets.UTF_8)
+                new Xmir.Default(representation.toEO()).toEO().getBytes(StandardCharsets.UTF_8)
             );
             Logger.info(
                 this,
