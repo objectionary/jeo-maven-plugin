@@ -56,7 +56,6 @@ final class ImprovementXmirFootprintTest {
      * Where the XML file is expected to be saved.
      */
     private final Path expected = Paths.get("")
-        .resolve(new XmirDefaultDirectory().toPath())
         .resolve("org")
         .resolve("eolang")
         .resolve("jeo")

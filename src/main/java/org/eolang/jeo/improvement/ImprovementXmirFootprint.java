@@ -34,7 +34,6 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.XmirDefaultDirectory;
 import org.eolang.jeo.representation.EoRepresentation;
 import org.eolang.jeo.representation.JavaName;
 
@@ -63,7 +62,7 @@ public final class ImprovementXmirFootprint implements Improvement {
     public Collection<Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        Logger.info(this, "Writing .xmir files to %[file]s", this.folder());
+        Logger.info(this, "Writing .xmir files to %[file]s", this.target);
         return representations.stream()
             .map(this::transform)
             .collect(Collectors.toList());
@@ -77,7 +76,7 @@ public final class ImprovementXmirFootprint implements Improvement {
      */
     private Representation transform(final Representation representation) {
         final String name = new JavaName(representation.details().name()).decode();
-        final Path path = this.folder()
+        final Path path = this.target
             .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
         try {
             Files.createDirectories(path.getParent());
@@ -100,14 +99,5 @@ public final class ImprovementXmirFootprint implements Improvement {
                 exception
             );
         }
-    }
-
-    /**
-     * Folder where to save the XMIR.
-     *
-     * @return Folder where to save the XMIR.
-     */
-    private Path folder() {
-        return this.target.resolve(new XmirDefaultDirectory().toPath());
     }
 }

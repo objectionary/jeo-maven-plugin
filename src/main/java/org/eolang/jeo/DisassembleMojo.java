@@ -55,32 +55,45 @@ public final class DisassembleMojo extends AbstractMojo {
     private MavenProject project;
 
     /**
-     * Project compiled classes.
+     * Source directory.
+     * Where to take classes from.
      *
-     * @since 0.1.0
+     * @since 0.2.0
+     * @checkstyle MemberNameCheck (6 lines)
      */
-    @Parameter(defaultValue = "${project.build.outputDirectory}")
-    private File classes;
+    @Parameter(
+        property = "jeo.disassemble.sourcesDir",
+        defaultValue = "${project.build.outputDirectory}"
+    )
+    private File sourcesDir;
 
     /**
-     * Project default target directory.
+     * Target directory.
+     * Where to save EO representations to.
      *
-     * @since 0.1.0
+     * @since 0.2.0
+     * @checkstyle MemberNameCheck (6 lines)
      */
-    @Parameter(defaultValue = "${project.build.directory}/generated-sources")
-    private File generated;
+    @Parameter(
+        property = "jeo.disassemble.outputDir",
+        defaultValue = "${project.build.directory}/generated-sources/jeo-xmir"
+    )
+    private File outputDir;
+
 
     @Override
     public void execute() throws MojoExecutionException {
         try {
             new PluginStartup(this.project).init();
-            new BytecodeTransformation(this.classes.toPath(), this.generated.toPath()).transpile();
+            new BytecodeTransformation(
+                this.sourcesDir.toPath(), this.outputDir.toPath()
+            ).transpile();
         } catch (final IOException | DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(
                 String.format(
                     "Can't transpile bytecode from '%s' to EO. Output directory: '%s'.",
-                    this.classes.toPath(),
-                    this.generated.toPath()
+                    this.sourcesDir.toPath(),
+                    this.outputDir.toPath()
                 ),
                 exception
             );

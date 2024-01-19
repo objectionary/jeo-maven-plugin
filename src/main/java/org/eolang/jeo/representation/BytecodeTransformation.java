@@ -69,7 +69,7 @@ public class BytecodeTransformation {
     public void transpile() throws IOException {
         new ImprovementSet(
             new ImprovementXmirFootprint(this.target),
-            new ImprovementEoFootprint(this.target)
+            new ImprovementEoFootprint(this.target.getParent())
         ).apply(new BytecodeClasses(this.classes).bytecode());
     }
 }
