@@ -70,6 +70,19 @@ SOFTWARE.
               <sourceDir>${project.build.directory}/generated-sources/opeo-xmir</sourceDir>
             </configuration>
           </execution>
+          <!--
+          Check different output folder
+          -->
+          <execution>
+            <id>eo-to-bytecode-other-folder</id>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+            <configuration>
+              <sourceDir>${project.build.directory}/generated-sources/opeo-xmir</sourceDir>
+              <targetDir>${project.build.directory}/generated-sources/jeo-classes</targetDir>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
     </plugins>
