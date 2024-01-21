@@ -26,9 +26,9 @@ String log = new File(basedir, 'build.log').text;
 assert log.contains("BUILD SUCCESS")
 assert log.contains("Hello, World!")
 //Check that we have generated XMIR object file.
-assert new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/Application.xmir').exists()
+assert new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/BA.xmir').exists()
 assert new File(basedir, 'target/generated-sources/eo/org/eolang/jeo/Application.eo').exists()
 //Check that class file was changed
 assert log.contains("Application.class translated into")
-assert log.contains("Application.xmir compiled into")
+assert log.contains("BA.xmir compiled into")
 true

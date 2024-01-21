@@ -58,7 +58,7 @@ final class ImprovementXmirFootprintTest {
         .resolve("org")
         .resolve("eolang")
         .resolve("jeo")
-        .resolve("Application.xmir");
+        .resolve("BA.xmir");
 
     @Test
     void savesXml(@TempDir final Path temp) {
