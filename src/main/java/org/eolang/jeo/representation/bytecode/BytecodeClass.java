@@ -42,6 +42,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
  *
  * @since 0.1.0
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class BytecodeClass {
 
     /**
@@ -340,8 +341,7 @@ public final class BytecodeClass {
      *  This class can only print the error message to the console. We need to have a custom
      *  bytecode verifier that can throw an exception with the error message.
      *  Here you can find the detailed problem description:
-     *  https://stackoverflow.com/q/77854100/10423604
-     *
+     *  <a href="https://stackoverflow.com/q/77854100/10423604">link</a>
      */
     private void verify(final byte[] bytes) {
         final StringWriter errors = new StringWriter();
