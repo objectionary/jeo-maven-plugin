@@ -34,7 +34,7 @@ assert log.contains("Exception in try-catch-with-resources statement with suppre
 assert log.contains("Exception during closing resource")
 
 //Check that we have generated EO object files.
-//assert new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/exceptions/BA.xmir').exists()
+//assert new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/exceptions/Application.xmir').exists()
 /**
  * @todo #320:30min Enable 'exceptions' Integration Test.
  *  First of all, we have to implement all the features required for correct
