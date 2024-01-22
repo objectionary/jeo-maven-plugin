@@ -42,7 +42,7 @@ public class Details {
      * Original source of the representation.
      * Might be a file name or a URL:
      * - Application.java
-     * - BA.xmir
+     * - Application.xmir
      */
     private static final String SOURCE_KEY = "source";
 

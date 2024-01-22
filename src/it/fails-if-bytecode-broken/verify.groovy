@@ -23,5 +23,6 @@
  */
 //Check logs first.
 String log = new File(basedir, 'build.log').text;
-assert log.contains("BUILD SUCCESS")
+assert log.contains("BUILD FAILURE")
+assert log.contains("AnalyzerException")
 true

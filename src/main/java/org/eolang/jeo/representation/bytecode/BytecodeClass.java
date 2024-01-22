@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.xml.XML;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.eolang.jeo.PluginStartup;
@@ -168,12 +169,7 @@ public final class BytecodeClass {
             this.methods.forEach(BytecodeMethod::write);
             this.writer.visitEnd();
             final byte[] bytes = this.writer.toByteArray();
-            CheckClassAdapter.verify(
-                new ClassReader(bytes),
-                Thread.currentThread().getContextClassLoader(),
-                false,
-                new PrintWriter(System.err)
-            );
+            this.verify(bytes);
             return new Bytecode(bytes);
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
@@ -335,5 +331,28 @@ public final class BytecodeClass {
             )
             .opcode(Opcodes.RETURN)
             .up();
+    }
+
+    /**
+     * Verify bytecode.
+     * @param bytes Bytecode to verify.
+     */
+    private void verify(final byte[] bytes) {
+        final StringWriter errors = new StringWriter();
+        CheckClassAdapter.verify(
+            new ClassReader(bytes),
+            Thread.currentThread().getContextClassLoader(),
+            false,
+            new PrintWriter(errors)
+        );
+        if (!errors.toString().isEmpty()) {
+            throw new IllegalStateException(
+                String.format(
+                    "Bytecode verification failed for the class '%s' due to the following reasons: %s",
+                    this.name,
+                    errors
+                )
+            );
+        }
     }
 }
