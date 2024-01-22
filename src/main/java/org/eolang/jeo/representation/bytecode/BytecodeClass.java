@@ -336,6 +336,12 @@ public final class BytecodeClass {
     /**
      * Verify bytecode.
      * @param bytes Bytecode to verify.
+     * @todo #427:90min Use custom bytecode verifier instead of CheckClassAdapter#verify.
+     *  This class can only print the error message to the console. We need to have a custom
+     *  bytecode verifier that can throw an exception with the error message.
+     *  Here you can find the detailed problem description:
+     *  https://stackoverflow.com/q/77854100/10423604
+     *
      */
     private void verify(final byte[] bytes) {
         final StringWriter errors = new StringWriter();
