@@ -39,12 +39,13 @@ SOFTWARE.
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <takes>1.24.4</takes>
   </properties>
   <dependencies>
     <dependency>
       <groupId>org.takes</groupId>
       <artifactId>takes</artifactId>
-      <version>1.24.4</version>
+      <version>${takes}</version>
     </dependency>
   </dependencies>
   <build>
@@ -53,6 +54,13 @@ SOFTWARE.
         <groupId>org.eolang</groupId>
         <artifactId>jeo-maven-plugin</artifactId>
         <version>@project.version@</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.takes</groupId>
+            <artifactId>takes</artifactId>
+            <version>${takes}</version>
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
             <id>bytecode-to-eo</id>
