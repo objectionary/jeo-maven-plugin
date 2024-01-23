@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.Improvement;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.Representation;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.JavaName;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.eolang.parser.XMIR;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.eolang.parser.xmir.Xmir;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * It's not actually an improvement.</em>
@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>              Files.createDirectories(path.getParent());
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>              Files.write(
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>                  path,
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>                  <strong class="jxr_keyword">new</strong> XMIR(representation.toEO()).toEO().getBytes(StandardCharsets.UTF_8)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>                  <strong class="jxr_keyword">new</strong> Xmir.Default(representation.toEO()).toEO().getBytes(StandardCharsets.UTF_8)
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>              );
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>              Logger.info(
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>                  <strong class="jxr_keyword">this</strong>,
