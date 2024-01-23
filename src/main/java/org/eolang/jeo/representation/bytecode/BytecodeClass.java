@@ -351,6 +351,7 @@ public final class BytecodeClass {
 //         <a href="https://github.com/objectionary/jeo-maven-plugin/issues/435>here</a>
 //         why we did it. We need to enable bytecode verification.
 //         To do so, just enable the code below.
+//         Also you need to enable integration test: fails-if-bytecode-broken
         if (bytes.length == 0) {
             throw new IllegalStateException("Bytecode class is empty");
         }
