@@ -42,7 +42,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
  * @since 0.1.0
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public final class BytecodeClass implements Testable {
+public final class BytecodeClass implements JavaCode {
 
     /**
      * Class name.
@@ -181,7 +181,7 @@ public final class BytecodeClass implements Testable {
                 String.format(
                     "Bytecode creation for the '%s' class is not possible due to unmet preconditions. To reproduce the problem, you can write the following test: %n%s%n",
                     this.name,
-                    this.debugTest()
+                    this.testCode()
                 ),
                 exception
             );
@@ -311,10 +311,10 @@ public final class BytecodeClass implements Testable {
 
     @Override
     public String testCode() {
-        final StringBuilder builder = new StringBuilder().append("new BytecodeClass(")
-            .append("\"").append(this.name).append("\"").append(")").append("\n");
+        final StringBuilder builder = new StringBuilder("new BytecodeClass(")
+            .append('"').append(this.name).append('"').append(')').append('\n');
         for (final BytecodeMethod method : this.methods) {
-            builder.append(".").append(method.testCode()).append("\n");
+            builder.append('.').append(method.testCode()).append('\n');
         }
         builder.append(".bytecode();");
         return builder.toString();

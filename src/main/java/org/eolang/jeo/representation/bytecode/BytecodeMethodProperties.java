@@ -37,7 +37,7 @@ import org.objectweb.asm.MethodVisitor;
  */
 @EqualsAndHashCode
 @ToString
-public class BytecodeMethodProperties {
+public final class BytecodeMethodProperties implements JavaCode {
 
     /**
      * Access modifiers.
@@ -119,6 +119,11 @@ public class BytecodeMethodProperties {
         this.exceptions = exceptions;
     }
 
+    @Override
+    public String testCode() {
+        return String.format("\"%s\", \"%s\", %d", this.name, this.descriptor, this.access);
+    }
+
     /**
      * Add method to class writer.
      * @param writer Class writer.
@@ -136,17 +141,5 @@ public class BytecodeMethodProperties {
             this.signature,
             this.exceptions
         );
-    }
-
-    int access() {
-        return this.access;
-    }
-
-    String name() {
-        return this.name;
-    }
-
-    String descriptor() {
-        return this.descriptor;
     }
 }

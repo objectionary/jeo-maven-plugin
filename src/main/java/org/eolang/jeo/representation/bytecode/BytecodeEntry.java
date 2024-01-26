@@ -30,7 +30,7 @@ import org.objectweb.asm.MethodVisitor;
  * Might be a label, a jump, a method call, etc.
  * @since 0.1
  */
-public interface BytecodeEntry extends Testable {
+public interface BytecodeEntry extends JavaCode {
     /**
      * Write instruction to the method visitor.
      * @param visitor Method visitor.

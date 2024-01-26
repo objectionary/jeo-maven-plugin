@@ -24,10 +24,10 @@
 package org.eolang.jeo.representation.bytecode;
 
 /**
- * Instances with this interface know how to generate test code.
+ * Instances with this interface know how to generate java code for tests.
  * @since 0.2
  */
-public interface Testable {
+public interface JavaCode {
 
     /**
      * Generate test Java code.

@@ -33,7 +33,7 @@ import org.objectweb.asm.MethodVisitor;
  * Bytecode method.
  * @since 0.1.0
  */
-public final class BytecodeMethod implements Testable {
+public final class BytecodeMethod implements JavaCode {
 
     /**
      * ASM class writer.
@@ -130,6 +130,18 @@ public final class BytecodeMethod implements Testable {
         return this;
     }
 
+    @Override
+    public String testCode() {
+        final StringBuilder res = new StringBuilder("withMethod(")
+            .append(this.properties.testCode())
+            .append(')').append('\n');
+        for (final BytecodeEntry instruction : this.instructions) {
+            res.append(instruction.testCode()).append('\n');
+        }
+        res.append(".up()");
+        return res.toString();
+    }
+
     /**
      * Generate bytecode.
      */
@@ -166,20 +178,5 @@ public final class BytecodeMethod implements Testable {
                 exception
             );
         }
-    }
-
-    @Override
-    public String testCode() {
-        StringBuilder res = new StringBuilder();
-        res.append("withMethod(")
-            .append("\"").append(this.properties.name()).append("\", ")
-            .append("\"").append(this.properties.descriptor()).append("\", ")
-            .append(this.properties.access())
-            .append(")").append("\n");
-        for (final BytecodeEntry instruction : this.instructions) {
-            res.append(instruction.testCode()).append("\n");
-        }
-        res.append(".up()");
-        return res.toString();
     }
 }

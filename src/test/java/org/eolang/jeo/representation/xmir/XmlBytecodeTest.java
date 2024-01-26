@@ -23,9 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XMLDocument;
-import java.io.FileNotFoundException;
-import java.nio.file.Paths;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
@@ -159,15 +156,5 @@ class XmlBytecodeTest {
                         )
                 )
         ).xmlQuietly();
-    }
-
-
-    @Test
-    void convertsMainToBytecode() throws FileNotFoundException {
-        MatcherAssert.assertThat(
-            "Can't convert main method into bytecode",
-            new XmlBytecode(new XMLDocument(Paths.get("/Users/lombrozo/Workspace/EOlang/jeo-maven-plugin/src/it/eo-to-bytecode/target/generated-sources/opeo-xmir/org/eolang/benchmark/Main.xmir"))).bytecode(),
-            Matchers.notNullValue()
-        );
     }
 }
