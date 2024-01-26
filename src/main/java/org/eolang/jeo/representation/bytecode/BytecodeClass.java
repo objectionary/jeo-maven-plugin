@@ -42,7 +42,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
  * @since 0.1.0
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public final class BytecodeClass {
+public final class BytecodeClass implements Testable {
 
     /**
      * Class name.
@@ -309,6 +309,17 @@ public final class BytecodeClass {
         return this;
     }
 
+    @Override
+    public String testCode() {
+        final StringBuilder builder = new StringBuilder().append("new BytecodeClass(")
+            .append("\"").append(this.name).append("\"").append(")").append("\n");
+        for (final BytecodeMethod method : this.methods) {
+            builder.append(".").append(method.testCode()).append("\n");
+        }
+        builder.append(".bytecode();");
+        return builder.toString();
+    }
+
     /**
      * Hello world bytecode.
      *
@@ -371,15 +382,5 @@ public final class BytecodeClass {
         //                )
         //            );
         //        }
-    }
-
-    private String debugTest() {
-        final StringBuilder builder = new StringBuilder().append("new BytecodeClass(")
-            .append("\"").append(this.name).append("\"").append(")").append("\n");
-        for (final BytecodeMethod method : this.methods) {
-            builder.append(".").append(method.debugTest()).append("\n");
-        }
-        builder.append(".bytecode();");
-        return builder.toString();
     }
 }

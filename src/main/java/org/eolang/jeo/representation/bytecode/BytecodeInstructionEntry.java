@@ -85,19 +85,17 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
     }
 
     @Override
-    public String debugTest() {
+    public String testCode() {
         final String args = Stream.concat(
             Stream.of(String.format("Opcodes.%s", new OpcodeName(this.opcode).simplified())),
-            this.args.stream().map(BytecodeInstructionEntry::stringArg)
+            this.args.stream().map(arg -> {
+                if (arg instanceof String) {
+                    return String.format("\"%s\"", arg);
+                }
+                return arg.toString();
+            })
         ).collect(Collectors.joining(","));
         return String.format(".opcode(%s)", args);
-    }
-
-    private static String stringArg(final Object arg) {
-        if (arg instanceof String) {
-            return String.format("\"%s\"", arg);
-        }
-        return arg.toString();
     }
 
     /**

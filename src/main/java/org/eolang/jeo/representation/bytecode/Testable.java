@@ -23,17 +23,16 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import org.objectweb.asm.MethodVisitor;
-
 /**
- * Bytecode instruction or a label.
- * Might be a label, a jump, a method call, etc.
- * @since 0.1
+ * Instances with this interface know how to generate test code.
+ * @since 0.2
  */
-public interface BytecodeEntry extends Testable {
+public interface Testable {
+
     /**
-     * Write instruction to the method visitor.
-     * @param visitor Method visitor.
+     * Generate test Java code.
+     * @return Java code.
      */
-    void writeTo(MethodVisitor visitor);
+    String testCode();
+
 }

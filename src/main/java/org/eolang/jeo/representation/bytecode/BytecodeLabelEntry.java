@@ -53,7 +53,7 @@ public final class BytecodeLabelEntry implements BytecodeEntry {
     }
 
     @Override
-    public String debugTest() {
+    public String testCode() {
         return "// Labels are not supported in tests yet";
     }
 }

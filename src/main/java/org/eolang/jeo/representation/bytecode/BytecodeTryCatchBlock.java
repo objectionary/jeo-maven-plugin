@@ -91,7 +91,7 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     }
 
     @Override
-    public String debugTest() {
+    public String testCode() {
         return "// Try-catch blocks are not supported in tests yet";
     }
 }

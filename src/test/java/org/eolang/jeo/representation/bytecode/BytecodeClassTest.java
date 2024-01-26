@@ -277,7 +277,8 @@ class BytecodeClassTest {
 
     @Test
     void oneMoreTest() {
-        new BytecodeClass("org/eolang/benchmark/Main")
+        final AllLabels labels = new AllLabels();
+        new BytecodeClass("org/eolang/benchmark/Main",new BytecodeClassProperties(33, null, "java/lang/Object", new String[0]))
             .withMethod("<init>", "()V", 1)
 // Labels are not supported in tests yet
             .opcode(Opcodes.ALOAD, 0)
@@ -286,7 +287,7 @@ class BytecodeClassTest {
 // Labels are not supported in tests yet
             .up()
             .withMethod("j$main", "([Ljava/lang/String;)V", 137)
-// Labels are not supported in tests yet
+            .label(labels.label("1"))
             .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
             .opcode(Opcodes.LDC, "Hello %d")
             .opcode(Opcodes.ICONST_1)
@@ -298,10 +299,75 @@ class BytecodeClassTest {
             .opcode(Opcodes.INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
             .opcode(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "printf",
                 "(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/PrintStream;")
-// Labels are not supported in tests yet
+            .label(labels.label("2"))
             .opcode(Opcodes.RETURN)
-// Labels are not supported in tests yet
+            .label(labels.label("3"))
             .up()
             .bytecode();
+    }
+
+    @Test
+    void nextTest(){
+        new BytecodeClass("Some")
+            .withMethod(
+                "j$main", "([Ljava/lang/String;)V", 137
+            )
+            .label(new Label())
+            .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+            .opcode(Opcodes.LDC, "Hello %d")
+            .opcode(Opcodes.ICONST_1)
+            .opcode(Opcodes.ANEWARRAY, "java/lang/Object")
+            .opcode(Opcodes.DUP)
+            .opcode(Opcodes.ICONST_0)
+            .opcode(Opcodes.BIPUSH, 12)
+            .opcode(Opcodes.INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;")
+            .opcode(Opcodes.AASTORE)
+            .opcode(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "printf", "(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/PrintStream;")
+            .opcode(Opcodes.POP)
+            .label(new Label())
+            .opcode(Opcodes.RETURN)
+            .label(new Label())
+            .up();
+
+//          opcode > GETSTATIC-27
+//          178
+//          "java/lang/System"
+//          "out"
+//          "Ljava/io/PrintStream;"
+//        opcode > LDC-28
+//          18
+//          "Hello %d"
+//        opcode > ICONST_1-29
+//          4
+//        opcode > ANEWARRAY-2A
+//          189
+//          "java/lang/Object"
+//        opcode > DUP-2B
+//          89
+//        opcode > ICONST_0-2C
+//          3
+//        opcode > BIPUSH-2D
+//          16
+//          12
+//        opcode > INVOKESTATIC-2E
+//          184
+//          "java/lang/Integer"
+//          "valueOf"
+//          "(I)Ljava/lang/Integer;"
+//        opcode > AASTORE-2F
+//          83
+//        opcode > INVOKEVIRTUAL-30
+//          182
+//          "java/io/PrintStream"
+//          "printf"
+//          "(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/PrintStream;"
+//        opcode > POP-31
+//          87
+//        label
+//          "133add3a-85c2-4f01-aad6-579e2fe190c1"
+//        opcode > RETURN-32
+//          177
+//        label
+//          "2608fdb3-05c0-42f1-aead-1622d368c16e"
     }
 }
