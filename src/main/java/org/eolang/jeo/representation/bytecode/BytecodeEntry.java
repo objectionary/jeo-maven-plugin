@@ -36,4 +36,10 @@ public interface BytecodeEntry {
      * @param visitor Method visitor.
      */
     void writeTo(MethodVisitor visitor);
+
+    /**
+     * Java code to reproduce the instruction in tests.
+     * @return Java code.
+     */
+    String debugTest();
 }

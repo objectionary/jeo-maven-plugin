@@ -167,4 +167,18 @@ public final class BytecodeMethod {
             );
         }
     }
+
+    String debugTest() {
+        StringBuilder res = new StringBuilder();
+        res.append("withMethod(")
+            .append("\"").append(this.properties.name()).append("\", ")
+            .append("\"").append(this.properties.descriptor()).append("\", ")
+            .append(this.properties.access())
+            .append(")").append("\n");
+        for (final BytecodeEntry instruction : this.instructions) {
+            res.append(instruction.debugTest()).append("\n");
+        }
+        res.append(".up()");
+        return res.toString();
+    }
 }

@@ -26,7 +26,10 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.OpcodeName;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -79,6 +82,22 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
     @Override
     public void writeTo(final MethodVisitor visitor) {
         Instruction.find(this.opcode).generate(visitor, this.args);
+    }
+
+    @Override
+    public String debugTest() {
+        final String args = Stream.concat(
+            Stream.of(String.format("Opcodes.%s", new OpcodeName(this.opcode).simplified())),
+            this.args.stream().map(BytecodeInstructionEntry::stringArg)
+        ).collect(Collectors.joining(","));
+        return String.format(".opcode(%s)", args);
+    }
+
+    private static String stringArg(final Object arg) {
+        if (arg instanceof String) {
+            return String.format("\"%s\"", arg);
+        }
+        return arg.toString();
     }
 
     /**

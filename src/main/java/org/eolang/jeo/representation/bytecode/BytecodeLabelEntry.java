@@ -51,4 +51,9 @@ public final class BytecodeLabelEntry implements BytecodeEntry {
     public void writeTo(final MethodVisitor visitor) {
         visitor.visitLabel(this.label);
     }
+
+    @Override
+    public String debugTest() {
+        return "// Labels are not supported in tests yet";
+    }
 }

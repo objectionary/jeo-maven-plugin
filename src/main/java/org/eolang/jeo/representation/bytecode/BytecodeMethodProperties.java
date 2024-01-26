@@ -137,4 +137,16 @@ public class BytecodeMethodProperties {
             this.exceptions
         );
     }
+
+    int access() {
+        return this.access;
+    }
+
+    String name() {
+        return this.name;
+    }
+
+    String descriptor() {
+        return this.descriptor;
+    }
 }

@@ -89,4 +89,9 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
         );
         visitor.visitTryCatchBlock(this.start, this.end, this.handler, this.type);
     }
+
+    @Override
+    public String debugTest() {
+        return "// Try-catch blocks are not supported in tests yet";
+    }
 }

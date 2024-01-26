@@ -35,7 +35,7 @@ import org.objectweb.asm.Opcodes;
  * avoid name collisions.
  * @since 0.1.0
  */
-final class OpcodeName {
+public final class OpcodeName {
 
     /**
      * Opcode names.
@@ -61,7 +61,7 @@ final class OpcodeName {
      * Constructor.
      * @param opcode Bytecode operation code.
      */
-    OpcodeName(final int opcode) {
+    public OpcodeName(final int opcode) {
         this(opcode, OpcodeName.DEFAULT);
     }
 
@@ -70,7 +70,7 @@ final class OpcodeName {
      * @param opcode Bytecode operation code.
      * @param counter Opcode counter.
      */
-    OpcodeName(final int opcode, final AtomicInteger counter) {
+    public OpcodeName(final int opcode, final AtomicInteger counter) {
         this.opcode = opcode;
         this.counter = counter;
     }
@@ -79,7 +79,7 @@ final class OpcodeName {
      * Get simplified opcode name without counter.
      * @return Simplified opcode name.
      */
-    String simplified() {
+    public String simplified() {
         return OpcodeName.NAMES.getOrDefault(this.opcode, "UNKNOWN");
     }
 
@@ -87,7 +87,7 @@ final class OpcodeName {
      * Get string representation of a bytecode.
      * @return String representation of a bytecode.
      */
-    String asString() {
+    public String asString() {
         final String opc = OpcodeName.NAMES.getOrDefault(this.opcode, "UNKNOWN");
         return String.format("%s-%X", opc, this.counter.incrementAndGet());
     }

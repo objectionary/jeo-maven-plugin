@@ -179,8 +179,9 @@ public final class BytecodeClass {
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(
                 String.format(
-                    "Bytecode creation for the '%s' class is not possible due to unmet preconditions.",
-                    this.name
+                    "Bytecode creation for the '%s' class is not possible due to unmet preconditions. To reproduce the problem, you can write the following test: %n%s%n",
+                    this.name,
+                    this.debugTest()
                 ),
                 exception
             );
@@ -370,5 +371,15 @@ public final class BytecodeClass {
         //                )
         //            );
         //        }
+    }
+
+    private String debugTest() {
+        final StringBuilder builder = new StringBuilder().append("new BytecodeClass(")
+            .append("\"").append(this.name).append("\"").append(")").append("\n");
+        for (final BytecodeMethod method : this.methods) {
+            builder.append(".").append(method.debugTest()).append("\n");
+        }
+        builder.append(".bytecode();");
+        return builder.toString();
     }
 }

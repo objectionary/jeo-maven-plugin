@@ -94,6 +94,8 @@ public final class XmlBytecode {
             xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
             xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
         }
-        return bytecode.bytecode();
+        final Bytecode bytecode1 = bytecode.bytecode();
+        System.out.printf("RECEIVED BYTECODE: %n%n%s%n%n", bytecode1);
+        return bytecode1;
     }
 }
