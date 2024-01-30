@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import lombok.ToString;
+import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
@@ -54,6 +55,6 @@ public final class BytecodeLabelEntry implements BytecodeEntry {
 
     @Override
     public String testCode() {
-        return "// Labels are not supported in tests yet";
+        return String.format(".label(\"%s\")", new AllLabels().uid(this.label));
     }
 }
