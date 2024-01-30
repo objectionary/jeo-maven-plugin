@@ -85,6 +85,20 @@ configuration to your `pom.xml` file:
 </build>
 ```
 
+### Disable bytecode verification
+
+Each time the plugin converts EO back to bytecode, it verifies it. If the
+verification fails, the build also fails. You can disable this verification by
+setting the `skipVerification` parameter to `true`:
+
+```xml
+
+<configuration>
+  <skipVerification>true</skipVerification>
+</configuration>
+```
+At times, it might be beneficial to generate intentionally flawed bytecode.
+
 ## Transformation method
 
 The plugin can transform Java bytecode into EO and back. Usually, the plugin
