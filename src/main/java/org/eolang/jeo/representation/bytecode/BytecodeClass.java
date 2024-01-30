@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.xml.XML;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.eolang.jeo.PluginStartup;
@@ -356,32 +357,24 @@ public final class BytecodeClass implements JavaCode {
      *  <a href="https://stackoverflow.com/q/77854100/10423604">link</a>
      */
     private void verify(final byte[] bytes) {
-        //@checkstyle MethodBodyCommentsCheck (50 lines)
-        // @todo #435:90min Enable Bytecode Verification
-        //  Currently we don't verify bytecode properly.
-        //  It was done by purpose, you can check
-        //  <a href="https://github.com/objectionary/jeo-maven-plugin/issues/435>here</a>
-        //  why we did it. We need to enable bytecode verification.
-        //  To do so, just enable the code below.
-        //  Also you need to enable integration test: fails-if-bytecode-broken
         if (bytes.length == 0) {
             throw new IllegalStateException("Bytecode class is empty");
         }
-        //        final StringWriter errors = new StringWriter();
-        //        CheckClassAdapter.verify(
-        //            new ClassReader(bytes),
-        //            Thread.currentThread().getContextClassLoader(),
-        //            false,
-        //            new PrintWriter(errors)
-        //        );
-        //        if (!errors.toString().isEmpty()) {
-        //            throw new IllegalStateException(
-        //                String.format(
-        //      "Bytecode verification failed for the class '%s' due to the following reasons: %s",
-        //                    this.name,
-        //                    errors
-        //                )
-        //            );
-        //        }
+        final StringWriter errors = new StringWriter();
+        CheckClassAdapter.verify(
+            new ClassReader(bytes),
+            Thread.currentThread().getContextClassLoader(),
+            false,
+            new PrintWriter(errors)
+        );
+        if (!errors.toString().isEmpty()) {
+            throw new IllegalStateException(
+                String.format(
+                    "Bytecode verification failed for the class '%s' due to the following reasons: %s",
+                    this.name,
+                    errors
+                )
+            );
+        }
     }
 }
