@@ -47,11 +47,27 @@ final class EoRepresentations {
     private final Path objectspath;
 
     /**
+     * Verify bytecode.
+     * @since 0.2
+     */
+    private final boolean verify;
+
+    /**
      * Constructor.
      * @param objectspath Where to read objects from.
      */
     EoRepresentations(final Path objectspath) {
+        this(objectspath, true);
+    }
+
+    /**
+     * Constructor.
+     * @param objectspath Where to read objects from.
+     * @param verify Verify bytecode.
+     */
+    public EoRepresentations(final Path objectspath, final boolean verify) {
         this.objectspath = objectspath;
+        this.verify = verify;
     }
 
     /**
@@ -62,7 +78,7 @@ final class EoRepresentations {
         final Path path = this.objectspath;
         try (Stream<Path> walk = Files.walk(path)) {
             return walk.filter(Files::isRegularFile)
-                .map(EoRepresentation::new)
+                .map(p -> new EoRepresentation(p, this.verify))
                 .collect(Collectors.toList());
         } catch (final IOException exception) {
             throw new IllegalStateException(

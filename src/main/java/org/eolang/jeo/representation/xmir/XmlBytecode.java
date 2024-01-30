@@ -44,12 +44,9 @@ public final class XmlBytecode {
     private final XML xml;
 
     /**
-     * Constructor.
-     * @param xml XML.
+     * Verify bytecode.
      */
-    public XmlBytecode(final XML xml) {
-        this.xml = xml;
-    }
+    private final boolean verify;
 
     /**
      * Constructor.
@@ -57,6 +54,24 @@ public final class XmlBytecode {
      */
     public XmlBytecode(final String... lines) {
         this(new XMLDocument(String.join("\n", lines)));
+    }
+
+    /**
+     * Constructor.
+     * @param xml XML.
+     */
+    public XmlBytecode(final XML xml) {
+        this(xml, true);
+    }
+
+    /**
+     * Constructor.
+     * @param xml XML.
+     * @param verify Verify bytecode.
+     */
+    public XmlBytecode(final XML xml, final boolean verify) {
+        this.xml = xml;
+        this.verify = verify;
     }
 
     /**
@@ -68,7 +83,8 @@ public final class XmlBytecode {
         final XmlClass clazz = program.top();
         final BytecodeClass bytecode = new BytecodeClass(
             new ClassName(program.pckg(), new JavaName(clazz.name()).decode()).full(),
-            clazz.properties().toBytecodeProperties()
+            clazz.properties().toBytecodeProperties(),
+            this.verify
         );
         clazz.annotations().ifPresent(bytecode::withAnnotations);
         for (final XmlField field : clazz.fields()) {

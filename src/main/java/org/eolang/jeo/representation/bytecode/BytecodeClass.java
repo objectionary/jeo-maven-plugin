@@ -66,6 +66,13 @@ public final class BytecodeClass implements JavaCode {
     private final BytecodeClassProperties props;
 
     /**
+     * Verify bytecode.
+     * This flag is used to disable bytecode verification each time when
+     * the {@link BytecodeClass#bytecode()} method is called.
+     */
+    private final boolean verify;
+
+    /**
      * Constructor.
      */
     public BytecodeClass() {
@@ -110,10 +117,31 @@ public final class BytecodeClass implements JavaCode {
      * Constructor.
      *
      * @param name Class name.
+     * @param properties Class properties.
+     * @param verify Verify bytecode.
+     */
+    public BytecodeClass(
+        final String name,
+        final BytecodeClassProperties properties,
+        final boolean verify
+    ) {
+        this(
+            name,
+            new CustomClassWriter(),
+            new ArrayList<>(0),
+            properties,
+            verify
+        );
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name Class name.
      * @param access Access modifiers.
      * @param writer ASM class writer.
      */
-    private BytecodeClass(
+    public BytecodeClass(
         final String name,
         final int access,
         final ClassWriter writer
@@ -136,10 +164,30 @@ public final class BytecodeClass implements JavaCode {
         final Collection<BytecodeMethod> methods,
         final BytecodeClassProperties properties
     ) {
+        this(name, writer, methods, properties, true);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name Class name.
+     * @param writer ASM class writer.
+     * @param methods Methods.
+     * @param properties Class properties.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    public BytecodeClass(
+        final String name,
+        final ClassWriter writer,
+        final Collection<BytecodeMethod> methods,
+        final BytecodeClassProperties properties,
+        final boolean verify
+    ) {
         this.name = name;
         this.writer = writer;
         this.methods = methods;
         this.props = properties;
+        this.verify = verify;
     }
 
     /**
@@ -357,24 +405,26 @@ public final class BytecodeClass implements JavaCode {
      *  <a href="https://stackoverflow.com/q/77854100/10423604">link</a>
      */
     private void verify(final byte[] bytes) {
-        if (bytes.length == 0) {
-            throw new IllegalStateException("Bytecode class is empty");
-        }
-        final StringWriter errors = new StringWriter();
-        CheckClassAdapter.verify(
-            new ClassReader(bytes),
-            Thread.currentThread().getContextClassLoader(),
-            false,
-            new PrintWriter(errors)
-        );
-        if (!errors.toString().isEmpty()) {
-            throw new IllegalStateException(
-                String.format(
-                    "Bytecode verification failed for the class '%s' due to the following reasons: %s",
-                    this.name,
-                    errors
-                )
+        if (this.verify) {
+            if (bytes.length == 0) {
+                throw new IllegalStateException("Bytecode class is empty");
+            }
+            final StringWriter errors = new StringWriter();
+            CheckClassAdapter.verify(
+                new ClassReader(bytes),
+                Thread.currentThread().getContextClassLoader(),
+                false,
+                new PrintWriter(errors)
             );
+            if (!errors.toString().isEmpty()) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Bytecode verification failed for the class '%s' due to the following reasons: %s",
+                        this.name,
+                        errors
+                    )
+                );
+            }
         }
     }
 }

@@ -51,11 +51,18 @@ public final class EoRepresentation implements Representation {
     private final String source;
 
     /**
+     * Verify bytecode.
+     * @since 0.2
+     */
+    private final boolean verify;
+
+    /**
      * Constructor.
      * @param path Path to XML file.
+     * @param verify Verify bytecode.
      */
-    public EoRepresentation(final Path path) {
-        this(EoRepresentation.open(path), path.getFileName().toString());
+    public EoRepresentation(final Path path, final boolean verify) {
+        this(EoRepresentation.open(path), path.getFileName().toString(), verify);
     }
 
     /**
@@ -83,8 +90,23 @@ public final class EoRepresentation implements Representation {
         final XML xml,
         final String source
     ) {
+        this(xml, source, true);
+    }
+
+    /**
+     * Constructor.
+     * @param xml XML.
+     * @param source Source of the XML.
+     * @param verify Verify bytecode.
+     */
+    public EoRepresentation(
+        final XML xml,
+        final String source,
+        final boolean verify
+    ) {
         this.xml = xml;
         this.source = source;
+        this.verify = verify;
     }
 
     @Override
@@ -100,7 +122,7 @@ public final class EoRepresentation implements Representation {
     @Override
     public Bytecode toBytecode() {
         new Schema(this.xml).check();
-        return new XmlBytecode(this.xml).bytecode();
+        return new XmlBytecode(this.xml, this.verify).bytecode();
     }
 
     /**
