@@ -236,14 +236,6 @@ SOFTWARE.
         <configuration>
           <pomExcludes>
             <exclude>fails-if-bytecode-broken/pom.xml</exclude>
-            <!--
-              @todo #439:90min Enable eo-to-bytecode test.
-               The eo-to-bytecode test is disabled because it fails.
-               You can find more details here:
-               - https://github.com/objectionary/opeo-maven-plugin/issues/132
-               When this issue is fixed, we should enable eo-to-bytecode test.
-            -->
-            <exclude>eo-to-bytecode/pom.xml</exclude>
           </pomExcludes>
         </configuration>
       </plugin>
