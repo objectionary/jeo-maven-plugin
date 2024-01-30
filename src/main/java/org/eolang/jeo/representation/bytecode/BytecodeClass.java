@@ -311,9 +311,9 @@ public final class BytecodeClass implements JavaCode {
 
     @Override
     public String testCode() {
-        final StringBuilder builder = new StringBuilder("AllLabels labels = new AllLabels();\n")
-            .append("new BytecodeClass(")
-            .append('"').append(this.name).append('"').append(')').append('\n');
+        final StringBuilder builder = new StringBuilder(
+            "AllLabels labels = new AllLabels();\nnew BytecodeClass("
+        ).append('"').append(this.name).append('"').append(')').append('\n');
         for (final BytecodeMethod method : this.methods) {
             builder.append('.').append(method.testCode()).append('\n');
         }
