@@ -92,7 +92,7 @@ public final class AssembleMojo extends AbstractMojo {
         property = "jeo.assemble.skip.verification",
         defaultValue = "false"
     )
-    private boolean skipVerification = false;
+    private boolean skipVerification;
 
     @Override
     public void execute() throws MojoExecutionException {

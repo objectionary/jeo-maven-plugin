@@ -65,7 +65,7 @@ final class EoRepresentations {
      * @param objectspath Where to read objects from.
      * @param verify Verify bytecode.
      */
-    public EoRepresentations(final Path objectspath, final boolean verify) {
+    EoRepresentations(final Path objectspath, final boolean verify) {
         this.objectspath = objectspath;
         this.verify = verify;
     }

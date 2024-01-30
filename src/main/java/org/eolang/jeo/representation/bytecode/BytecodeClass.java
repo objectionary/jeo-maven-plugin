@@ -174,6 +174,7 @@ public final class BytecodeClass implements JavaCode {
      * @param writer ASM class writer.
      * @param methods Methods.
      * @param properties Class properties.
+     * @param verify Verify bytecode.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeClass(
@@ -218,7 +219,7 @@ public final class BytecodeClass implements JavaCode {
             this.methods.forEach(BytecodeMethod::write);
             this.writer.visitEnd();
             final byte[] bytes = this.writer.toByteArray();
-            this.verify(bytes);
+            this.verifyBytecode(bytes);
             return new Bytecode(bytes);
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
@@ -404,7 +405,7 @@ public final class BytecodeClass implements JavaCode {
      *  Here you can find the detailed problem description:
      *  <a href="https://stackoverflow.com/q/77854100/10423604">link</a>
      */
-    private void verify(final byte[] bytes) {
+    private void verifyBytecode(final byte[] bytes) {
         if (this.verify) {
             if (bytes.length == 0) {
                 throw new IllegalStateException("Bytecode class is empty");
