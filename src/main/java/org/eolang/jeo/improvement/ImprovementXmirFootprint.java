@@ -31,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
@@ -62,10 +63,12 @@ public final class ImprovementXmirFootprint implements Improvement {
     public Collection<Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        Logger.info(this, "Writing .xmir files to %[file]s", this.target);
-        return representations.stream()
+        Logger.info(this, "Disassembling .class files to %[file]s", this.target);
+        final List<Representation> res = representations.stream()
             .map(this::transform)
             .collect(Collectors.toList());
+        Logger.info(this, "Total %d .class files were disassembled", res.size());
+        return res;
     }
 
     /**
@@ -73,6 +76,12 @@ public final class ImprovementXmirFootprint implements Improvement {
      *
      * @param representation Representation to save.
      * @return New representation with source attached to the saved file.
+     * @todo #431:30min Measure the disassembling time and print it to logs.
+     *  The disassembling time should be measured in milliseconds and printed to logs.
+     *  Moreover, we have to add one more log entry that would print the path of the file
+     *  being disassembled. The entire log should look like this:
+     *  "Disassembling file.class (5kb)....".
+     *  "Disassembled file.xmir (6kb) in 100ms".
      */
     private Representation transform(final Representation representation) {
         final String name = new JavaName(representation.details().name()).decode();
@@ -87,7 +96,7 @@ public final class ImprovementXmirFootprint implements Improvement {
             );
             Logger.info(
                 this,
-                "%s translated into %[file]s (%[size]s)",
+                "%s disassembled to %[file]s (%[size]s)",
                 representation.details().source(),
                 path,
                 Files.size(path)

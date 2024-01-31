@@ -42,7 +42,7 @@ class ImprovementBytecodeFootprintTest {
     @Test
     void appliesSuccessfully(@TempDir final Path temp) {
         final String expected = "jeo/xmir/Fake";
-        new ImprovementBytecodeFootprint(temp).apply(
+        new ImprovementBytecodeFootprint(temp, temp).apply(
             Collections.singleton(new EoRepresentation(new BytecodeClass(expected).xml()))
         );
         MatcherAssert.assertThat(

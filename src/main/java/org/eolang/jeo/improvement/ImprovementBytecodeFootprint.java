@@ -43,25 +43,38 @@ import org.eolang.jeo.representation.JavaName;
 public final class ImprovementBytecodeFootprint implements Improvement {
 
     /**
+     * The folder from where to read the .xmir files.
+     * This field is used for logging purposes only.
+     * @since 0.2
+     */
+    private final Path from;
+
+    /**
      * Where to save the bytecode classes.
      */
     private final Path classes;
 
     /**
      * Constructor.
-     *
-     * @param target Where to save the bytecode classes.
+     * @param from The folder from where to read the .xmir files.
+     * @param classes Where to save the bytecode classes.
      */
-    public ImprovementBytecodeFootprint(final Path target) {
-        this.classes = target;
+    public ImprovementBytecodeFootprint(final Path from, final Path classes) {
+        this.from = from;
+        this.classes = classes;
     }
 
     @Override
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        Logger.info(this, "Writing .class files to %[file]s", this.classes);
-        representations.forEach(this::recompile);
+        Logger.info(
+            this, "Assembling .xmir files from %[file]s to %[file]s",
+            this.from,
+            this.classes
+        );
+        representations.forEach(this::assemble);
+        Logger.info(this, "Assembled total %d .class files", representations.size());
         return Collections.unmodifiableCollection(representations);
     }
 
@@ -69,8 +82,14 @@ public final class ImprovementBytecodeFootprint implements Improvement {
      * Recompile the Intermediate Representation.
      *
      * @param representation Intermediate Representation to recompile.
+     * @todo #431:30min Measure the assembling time and print it to logs.
+     *  The assembling time should be measured in milliseconds and printed to logs.
+     *  Moreover, we have to add one more log entry that would print the path of the file
+     *  being assembled. The entire log should look like this:
+     *  "Assembling file.xmir (5kb)....".
+     *  "Assembled file.class (6kb) in 100ms".
      */
-    private void recompile(final Representation representation) {
+    private void assemble(final Representation representation) {
         final Details details = representation.details();
         final String name = new JavaName(details.name()).decode();
         try {
@@ -82,7 +101,7 @@ public final class ImprovementBytecodeFootprint implements Improvement {
             Files.write(path, bytecode);
             Logger.info(
                 this,
-                "%s compiled into %[file]s (%[size]s)",
+                "%s assembled to %[file]s (%[size]s)",
                 details.source(),
                 path,
                 (long) bytecode.length
