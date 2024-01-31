@@ -31,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
@@ -62,10 +63,12 @@ public final class ImprovementXmirFootprint implements Improvement {
     public Collection<Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        Logger.info(this, "Writing .xmir files to %[file]s", this.target);
-        return representations.stream()
+        Logger.info(this, "Disassembling .class files to %[file]s", this.target);
+        final List<Representation> res = representations.stream()
             .map(this::transform)
             .collect(Collectors.toList());
+        Logger.info(this, "Total %d .class files were disassembled", res.size());
+        return res;
     }
 
     /**
@@ -87,7 +90,7 @@ public final class ImprovementXmirFootprint implements Improvement {
             );
             Logger.info(
                 this,
-                "%s translated into %[file]s (%[size]s)",
+                "%s disassembled to %[file]s (%[size]s)",
                 representation.details().source(),
                 path,
                 Files.size(path)

@@ -98,7 +98,9 @@ public final class AssembleMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         try {
             new PluginStartup(this.project).init();
-            new ImprovementBytecodeFootprint(this.outputDir.toPath()).apply(
+            new ImprovementBytecodeFootprint(
+                this.sourcesDir.toPath(), this.outputDir.toPath()
+            ).apply(
                 new EoRepresentations(this.sourcesDir.toPath(), !this.skipVerification).objects()
             );
         } catch (final DependencyResolutionRequiredException exception) {

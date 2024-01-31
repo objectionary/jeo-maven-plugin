@@ -42,6 +42,14 @@ import org.eolang.jeo.representation.JavaName;
  */
 public final class ImprovementBytecodeFootprint implements Improvement {
 
+
+    /**
+     * The folder from where to read the .xmir files.
+     * This field is used for logging purposes only.
+     * @since 0.2
+     */
+    private final Path from;
+
     /**
      * Where to save the bytecode classes.
      */
@@ -49,19 +57,25 @@ public final class ImprovementBytecodeFootprint implements Improvement {
 
     /**
      * Constructor.
-     *
-     * @param target Where to save the bytecode classes.
+     * @param from The folder from where to read the .xmir files.
+     * @param classes Where to save the bytecode classes.
      */
-    public ImprovementBytecodeFootprint(final Path target) {
-        this.classes = target;
+    public ImprovementBytecodeFootprint(final Path from, final Path classes) {
+        this.from = from;
+        this.classes = classes;
     }
 
     @Override
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        Logger.info(this, "Writing .class files to %[file]s", this.classes);
+        Logger.info(
+            this, "Assembling .xmir files from %[file]s to %[file]s",
+            this.from,
+            this.classes
+        );
         representations.forEach(this::recompile);
+        Logger.info(this, "Assembled total %d .class files", representations.size());
         return Collections.unmodifiableCollection(representations);
     }
 
@@ -82,7 +96,7 @@ public final class ImprovementBytecodeFootprint implements Improvement {
             Files.write(path, bytecode);
             Logger.info(
                 this,
-                "%s compiled into %[file]s (%[size]s)",
+                "%s assembled to %[file]s (%[size]s)",
                 details.source(),
                 path,
                 (long) bytecode.length
