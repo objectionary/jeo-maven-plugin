@@ -42,7 +42,6 @@ import org.eolang.jeo.representation.JavaName;
  */
 public final class ImprovementBytecodeFootprint implements Improvement {
 
-
     /**
      * The folder from where to read the .xmir files.
      * This field is used for logging purposes only.
