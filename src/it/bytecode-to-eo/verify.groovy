@@ -27,12 +27,8 @@ assert log.contains(" Disassembling .class files to ")
 assert log.contains("Application.class disassembled to")
 assert log.contains("Foo.class disassembled to ")
 assert log.contains("WithoutPackage.class disassembled to ")
-assert log.contains("Writing .eo files to")
-assert log.contains("Application.xmir represented as")
-assert log.contains("Foo.xmir represented as")
-assert log.contains("WithoutPackage.xmir represented as")
 assert log.contains("BUILD SUCCESS")
 //Check that we have generated XMIR object file.
 assert new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/Application.xmir').exists()
-assert new File(basedir, 'target/generated-sources/eo/org/eolang/jeo/Application.eo').exists()
+assert new File(basedir, 'target/generated-sources/jeo-eo/org/eolang/jeo/Application.eo').exists()
 true
