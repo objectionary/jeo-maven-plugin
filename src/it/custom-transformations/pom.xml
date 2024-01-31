@@ -66,14 +66,25 @@ SOFTWARE.
         <version>0.35.1</version>
         <executions>
           <execution>
+            <id>convert-xmir-to-eo</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>print</goal>
+            </goals>
+            <configuration>
+              <printSourcesDir>${project.build.directory}/generated-sources/jeo-xmir</printSourcesDir>
+              <printOutputDir>${project.build.directory}/generated-sources/jeo-eo</printOutputDir>
+            </configuration>
+          </execution>
+          <execution>
             <id>convert-xmir-to-phi</id>
             <phase>process-classes</phase>
             <goals>
               <goal>xmir-to-phi</goal>
             </goals>
             <configuration>
-              <phiInputDir>${project.build.directory}/generated-sources/xmir</phiInputDir>
-              <phiOutputDir>${project.build.directory}/generated-sources/phi</phiOutputDir>
+              <phiInputDir>${project.build.directory}/generated-sources/jeo-xmir</phiInputDir>
+              <phiOutputDir>${project.build.directory}/generated-sources/jeo-phi</phiOutputDir>
             </configuration>
           </execution>
         </executions>
