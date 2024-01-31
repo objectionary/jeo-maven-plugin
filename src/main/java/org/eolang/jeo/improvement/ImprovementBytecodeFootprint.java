@@ -74,7 +74,7 @@ public final class ImprovementBytecodeFootprint implements Improvement {
             this.from,
             this.classes
         );
-        representations.forEach(this::recompile);
+        representations.forEach(this::assemble);
         Logger.info(this, "Assembled total %d .class files", representations.size());
         return Collections.unmodifiableCollection(representations);
     }
@@ -83,8 +83,14 @@ public final class ImprovementBytecodeFootprint implements Improvement {
      * Recompile the Intermediate Representation.
      *
      * @param representation Intermediate Representation to recompile.
+     * @todo #431:30min Measure the assembling time and print it to logs.
+     *  The assembling time should be measured in milliseconds and printed to logs.
+     *  Moreover, we have to add one more log entry that would print the path of the file
+     *  being assembled. The entire log should look like this:
+     *  "Assembling file.xmir (5kb)....".
+     *  "Assembled file.class (6kb) in 100ms".
      */
-    private void recompile(final Representation representation) {
+    private void assemble(final Representation representation) {
         final Details details = representation.details();
         final String name = new JavaName(details.name()).decode();
         try {

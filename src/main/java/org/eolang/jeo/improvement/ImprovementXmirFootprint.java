@@ -76,6 +76,12 @@ public final class ImprovementXmirFootprint implements Improvement {
      *
      * @param representation Representation to save.
      * @return New representation with source attached to the saved file.
+     * @todo #431:30min Measure the disassembling time and print it to logs.
+     *  The disassembling time should be measured in milliseconds and printed to logs.
+     *  Moreover, we have to add one more log entry that would print the path of the file
+     *  being disassembled. The entire log should look like this:
+     *  "Disassembling file.class (5kb)....".
+     *  "Disassembled file.xmir (6kb) in 100ms".
      */
     private Representation transform(final Representation representation) {
         final String name = new JavaName(representation.details().name()).decode();
