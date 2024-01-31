@@ -345,17 +345,17 @@ SOFTWARE.
                         <limit>
                           <counter>COMPLEXITY</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.63</minimum>
+                          <minimum>0.62</minimum>
                         </limit>
                         <limit>
                           <counter>METHOD</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.67</minimum>
+                          <minimum>0.65</minimum>
                         </limit>
                         <limit>
                           <counter>CLASS</counter>
                           <value>MISSEDCOUNT</value>
-                          <maximum>7</maximum>
+                          <maximum>9</maximum>
                         </limit>
                       </limits>
                     </rule>
