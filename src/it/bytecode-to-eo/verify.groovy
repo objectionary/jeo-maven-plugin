@@ -23,10 +23,10 @@
  */
 //Check logs first.
 String log = new File(basedir, 'build.log').text;
-assert log.contains("Writing .xmir files to")
-assert log.contains("Application.class translated into")
-assert log.contains("Foo.class translated into")
-assert log.contains("WithoutPackage.class translated into")
+assert log.contains(" Disassembling .class files to ")
+assert log.contains("Application.class disassembled to")
+assert log.contains("Foo.class disassembled to ")
+assert log.contains("WithoutPackage.class disassembled to ")
 assert log.contains("Writing .eo files to")
 assert log.contains("Application.xmir represented as")
 assert log.contains("Foo.xmir represented as")
