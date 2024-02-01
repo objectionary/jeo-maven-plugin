@@ -24,9 +24,6 @@
 package org.eolang.jeo;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Improvement or transformation.
@@ -42,48 +39,4 @@ public interface Improvement {
     Collection<? extends Representation> apply(
         Collection<? extends Representation> representations
     );
-
-    /**
-     * Mock improvement.
-     *
-     * @since 0.1.0
-     */
-    final class Mock implements Improvement {
-
-        /**
-         * All IRs that were applied.
-         */
-        private final Queue<Representation> all;
-
-        /**
-         * Constructor.
-         */
-        public Mock() {
-            this(new LinkedList<>());
-        }
-
-        /**
-         * Constructor.
-         * @param all All IRs that were applied.
-         */
-        Mock(final Queue<Representation> all) {
-            this.all = all;
-        }
-
-        @Override
-        public Collection<Representation> apply(
-            final Collection<? extends Representation> representations
-        ) {
-            this.all.addAll(representations);
-            return Collections.unmodifiableCollection(representations);
-        }
-
-        /**
-         * Check if the boost was applied.
-         * @return True if the boost was applied.
-         */
-        public boolean isApplied() {
-            return !this.all.isEmpty();
-        }
-    }
 }

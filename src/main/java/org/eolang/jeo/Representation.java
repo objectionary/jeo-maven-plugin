@@ -51,45 +51,4 @@ public interface Representation {
      * @return Array of bytes.
      */
     Bytecode toBytecode();
-
-    /**
-     * Named representation.
-     *
-     * @since 0.1.0
-     */
-    class Named implements Representation {
-
-        /**
-         * Name of representation.
-         */
-        private final String name;
-
-        /**
-         * Constructor.
-         * @param name Name of representation.
-         */
-        public Named(final String name) {
-            this.name = name;
-        }
-
-        @Override
-        public Details details() {
-            return new Details(this.name);
-        }
-
-        @Override
-        public XML toEO() {
-            throw new UnsupportedOperationException(
-                String.format("toEO() not implemented for %s", this.getClass().getName())
-            );
-        }
-
-        @Override
-        public Bytecode toBytecode() {
-            throw new UnsupportedOperationException(
-                String.format("toBytecode() not implemented for %s", this.getClass().getName())
-            );
-        }
-    }
-
 }

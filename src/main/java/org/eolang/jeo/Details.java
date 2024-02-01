@@ -62,14 +62,6 @@ public class Details {
 
     /**
      * Constructor.
-     * @param name Name of the class or an object.
-     */
-    Details(final String name) {
-        this(name, "Unknown");
-    }
-
-    /**
-     * Constructor.
      * @param inits Initializations.
      */
     private Details(final String... inits) {
