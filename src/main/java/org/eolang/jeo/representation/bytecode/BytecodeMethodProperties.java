@@ -37,7 +37,7 @@ import org.objectweb.asm.MethodVisitor;
  */
 @EqualsAndHashCode
 @ToString
-public final class BytecodeMethodProperties implements JavaCode {
+public final class BytecodeMethodProperties implements Testable {
 
     /**
      * Access modifiers.

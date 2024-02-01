@@ -59,18 +59,18 @@ public final class XmirRepresentation implements Representation {
     /**
      * Constructor.
      * @param path Path to XML file.
-     * @param verify Verify bytecode.
      */
-    public XmirRepresentation(final Path path, final boolean verify) {
-        this(XmirRepresentation.open(path), path.getFileName().toString(), verify);
+    public XmirRepresentation(final Path path) {
+        this(path, true);
     }
 
     /**
      * Constructor.
-     * @param lines Xml document lines.
+     * @param path Path to XML file.
+     * @param verify Verify bytecode.
      */
-    public XmirRepresentation(final String... lines) {
-        this(new XMLDocument(String.join("\n", lines)));
+    public XmirRepresentation(final Path path, final boolean verify) {
+        this(XmirRepresentation.open(path), path.getFileName().toString(), verify);
     }
 
     /**

@@ -27,7 +27,8 @@ package org.eolang.jeo.representation.bytecode;
  * Instances with this interface know how to generate java code for tests.
  * @since 0.2
  */
-public interface JavaCode {
+@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
+public interface Testable {
 
     /**
      * Generate test Java code.

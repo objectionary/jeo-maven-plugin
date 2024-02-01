@@ -43,7 +43,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
  * @since 0.1.0
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public final class BytecodeClass implements JavaCode {
+public final class BytecodeClass implements Testable {
 
     /**
      * Class name.

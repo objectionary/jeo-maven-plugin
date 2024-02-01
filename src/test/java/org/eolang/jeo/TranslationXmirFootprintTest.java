@@ -23,6 +23,9 @@
  */
 package org.eolang.jeo;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -60,9 +63,17 @@ final class TranslationXmirFootprintTest {
         .resolve("Application.xmir");
 
     @Test
-    void savesXml(@TempDir final Path temp) {
-        final TranslationXmirFootprint footprint = new TranslationXmirFootprint(temp);
-        footprint.apply(this.objects);
+    void savesXml(@TempDir final Path temp) throws IOException {
+        final Path clazz = temp.resolve("Application.xml");
+        Files.write(
+            clazz,
+            new BytecodeClass("org/eolang/jeo/Application")
+                .xml()
+                .toString()
+                .getBytes(StandardCharsets.UTF_8)
+        );
+        new TranslationXmirFootprint(temp)
+            .apply(Collections.singleton(new XmirRepresentation(clazz)));
         MatcherAssert.assertThat(
             "XML file was not saved",
             temp.resolve(this.expected).toFile(),

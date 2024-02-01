@@ -33,7 +33,7 @@ import org.objectweb.asm.MethodVisitor;
  * Bytecode method.
  * @since 0.1.0
  */
-public final class BytecodeMethod implements JavaCode {
+public final class BytecodeMethod implements Testable {
 
     /**
      * ASM class writer.

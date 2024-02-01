@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -86,20 +87,37 @@ public final class TranslationXmirFootprint implements Translation {
         final Path path = this.target
             .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
         try {
+            representation.details().source().ifPresent(
+                src -> {
+                    try {
+                        Logger.info(
+                            this,
+                            "Disassembling %[file]s (%[size]s)",
+                            src,
+                            Files.size(src)
+                        );
+                    } catch (final IOException exception) {
+                        throw new RuntimeException(exception);
+                    }
+                }
+            );
+            final long start = System.currentTimeMillis();
             Files.createDirectories(path.getParent());
             final XML xmir = representation.toEO();
             Files.write(
                 path,
                 xmir.toString().getBytes(StandardCharsets.UTF_8)
             );
+            final long time = System.currentTimeMillis() - start;
             Logger.info(
                 this,
-                "%s disassembled to %[file]s (%[size]s)",
-                representation.details().source(),
+                "%s disassembled to %[file]s (%[size]s) in %[msec]s",
+                name,
                 path,
-                Files.size(path)
+                Files.size(path),
+                time
             );
-            return new XmirRepresentation(xmir, path.getFileName().toString());
+            return new XmirRepresentation(path);
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't save XML to %s", path),

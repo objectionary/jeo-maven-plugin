@@ -23,8 +23,10 @@
  */
 package org.eolang.jeo;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Details of representation.
@@ -49,7 +51,7 @@ public class Details {
     /**
      * Storage with all the details.
      */
-    private final Map<String, String> storage;
+    private final Map<String, ?> storage;
 
     /**
      * Constructor.
@@ -81,16 +83,18 @@ public class Details {
      * @return Name.
      */
     public String name() {
-        return this.storage.get(Details.NAME_KEY);
+        return (String) this.storage.get(Details.NAME_KEY);
     }
 
     /**
      * Original source of the representation.
      * It could be a file name or a URL.
-     * @return Source.
+     * @return Optional Source.
      */
-    public String source() {
-        return this.storage.get(Details.SOURCE_KEY);
+    public Optional<Path> source() {
+        return Optional.ofNullable(this.storage.get(Details.SOURCE_KEY))
+            .filter(Path.class::isInstance)
+            .map(Path.class::cast);
     }
 
     /**
