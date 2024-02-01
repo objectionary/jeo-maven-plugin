@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import org.eolang.jeo.representation.JavaName;
 
 /**
@@ -96,12 +97,14 @@ public final class TranslationBytecodeFootprint implements Translation {
             final Path path = Paths.get(this.classes.toString(), subpath);
             Files.createDirectories(path.getParent());
             Files.write(path, bytecode);
-            Logger.info(
-                this,
-                "%s assembled to %[file]s (%[size]s)",
-                details.source(),
-                path,
-                (long) bytecode.length
+            details.source().ifPresent(
+                value -> Logger.info(
+                    this,
+                    "%s assembled to %[file]s (%[size]s)",
+                    value,
+                    path,
+                    (long) bytecode.length
+                )
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
