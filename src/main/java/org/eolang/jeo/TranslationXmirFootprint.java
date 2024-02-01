@@ -86,11 +86,10 @@ public final class TranslationXmirFootprint implements Translation {
             if (src.isPresent()) {
                 Logger.info(
                     this,
-                    "Disassembling %[file]s (%[size]s)",
+                    "Disassembling '%[file]s' (%[size]s)",
                     src.get(),
                     Files.size(src.get())
                 );
-
             }
             final long start = System.currentTimeMillis();
             Files.createDirectories(path.getParent());
@@ -100,14 +99,16 @@ public final class TranslationXmirFootprint implements Translation {
                 xmir.toString().getBytes(StandardCharsets.UTF_8)
             );
             final long time = System.currentTimeMillis() - start;
-            Logger.info(
-                this,
-                "%s disassembled to %[file]s (%[size]s) in %[msec]s",
-                name,
-                path,
-                Files.size(path),
-                time
-            );
+            if (src.isPresent()) {
+                Logger.info(
+                    this,
+                    "'%[file]s' disassembled to '%[file]s' (%[size]s) in %[ms]s",
+                    src.get(),
+                    path,
+                    Files.size(path),
+                    time
+                );
+            }
             return new XmirRepresentation(path);
         } catch (final IOException exception) {
             throw new IllegalStateException(

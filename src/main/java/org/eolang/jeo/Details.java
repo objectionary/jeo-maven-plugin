@@ -58,7 +58,7 @@ public class Details {
      * @param name Name of the class or an object.
      * @param source Original source of the representation.
      */
-    public Details(final String name, final String source) {
+    public Details(final String name, final Object source) {
         this(Details.NAME_KEY, name, Details.SOURCE_KEY, source);
     }
 
@@ -66,7 +66,7 @@ public class Details {
      * Constructor.
      * @param inits Initializations.
      */
-    private Details(final String... inits) {
+    private Details(final Object... inits) {
         this(Details.initial(inits));
     }
 
@@ -74,7 +74,7 @@ public class Details {
      * Constructor.
      * @param storage Storage with all the details.
      */
-    private Details(final Map<String, String> storage) {
+    private Details(final Map<String, ?> storage) {
         this.storage = storage;
     }
 
@@ -102,14 +102,14 @@ public class Details {
      * @param pairs Pairs of key-value.
      * @return Map with all the details.
      */
-    private static Map<String, String> initial(final String... pairs) {
+    private static Map<String, Object> initial(final Object... pairs) {
         final int length = pairs.length;
         if (length % 2 == 1) {
             throw new IllegalArgumentException("Must have an even number of arguments");
         }
-        final Map<String, String> map = new HashMap<>(pairs.length / 2);
+        final Map<String, Object> map = new HashMap<>(pairs.length / 2);
         for (int index = 0; index < length; index += 2) {
-            map.put(pairs[index], pairs[index + 1]);
+            map.put((String) pairs[index], pairs[index + 1]);
         }
         return map;
     }
