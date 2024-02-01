@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -44,7 +45,7 @@ final class XmirRepresentationsTest {
     @Test
     void retrievesObjectsSuccessfully(@TempDir final Path temp) throws IOException {
         final int expected = 2;
-        final Path directory = temp.resolve(new XmirDefaultDirectory().toPath());
+        final Path directory = temp.resolve(Paths.get("xmirs"));
         Files.createDirectories(directory);
         Files.write(
             directory.resolve("first.xmir"),
@@ -63,7 +64,7 @@ final class XmirRepresentationsTest {
 
     @Test
     void retrievesEmptyObjectsIfFolderIsEmpty(@TempDir final Path temp) throws IOException {
-        Files.createDirectories(temp.resolve(new XmirDefaultDirectory().toPath()));
+        Files.createDirectories(temp.resolve("some-path"));
         MatcherAssert.assertThat(
             "Objects were not retrieved, we expected empty list",
             new XmirRepresentations(temp).all(),
