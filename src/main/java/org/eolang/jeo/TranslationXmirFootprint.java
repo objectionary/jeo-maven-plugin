@@ -33,6 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.JavaName;
 import org.eolang.jeo.representation.XmirRepresentation;
@@ -75,32 +76,22 @@ public final class TranslationXmirFootprint implements Translation {
      *
      * @param representation Representation to save.
      * @return New representation with source attached to the saved file.
-     * @todo #431:30min Measure the disassembling time and print it to logs.
-     *  The disassembling time should be measured in milliseconds and printed to logs.
-     *  Moreover, we have to add one more log entry that would print the path of the file
-     *  being disassembled. The entire log should look like this:
-     *  "Disassembling file.class (5kb)....".
-     *  "Disassembled file.xmir (6kb) in 100ms".
      */
     private Representation disassemble(final Representation representation) {
         final String name = new JavaName(representation.details().name()).decode();
         final Path path = this.target
             .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
         try {
-            representation.details().source().ifPresent(
-                src -> {
-                    try {
-                        Logger.info(
-                            this,
-                            "Disassembling %[file]s (%[size]s)",
-                            src,
-                            Files.size(src)
-                        );
-                    } catch (final IOException exception) {
-                        throw new RuntimeException(exception);
-                    }
-                }
-            );
+            final Optional<Path> src = representation.details().source();
+            if (src.isPresent()) {
+                Logger.info(
+                    this,
+                    "Disassembling %[file]s (%[size]s)",
+                    src.get(),
+                    Files.size(src.get())
+                );
+
+            }
             final long start = System.currentTimeMillis();
             Files.createDirectories(path.getParent());
             final XML xmir = representation.toEO();
@@ -125,4 +116,5 @@ public final class TranslationXmirFootprint implements Translation {
             );
         }
     }
+
 }
