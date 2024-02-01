@@ -25,7 +25,7 @@ package org.eolang.jeo.representation;
 
 import java.nio.file.Path;
 import org.eolang.jeo.BytecodeRepresentations;
-import org.eolang.jeo.improvement.TranslationXmirFootprint;
+import org.eolang.jeo.TranslationXmirFootprint;
 
 /**
  * This class disassembles the project's compiled classes.

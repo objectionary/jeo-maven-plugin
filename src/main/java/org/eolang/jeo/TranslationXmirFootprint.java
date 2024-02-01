@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.improvement;
+package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
@@ -33,8 +33,6 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.eolang.jeo.Representation;
-import org.eolang.jeo.Translation;
 import org.eolang.jeo.representation.JavaName;
 import org.eolang.jeo.representation.XmirRepresentation;
 
@@ -65,7 +63,7 @@ public final class TranslationXmirFootprint implements Translation {
     ) {
         Logger.info(this, "Disassembling .class files to %[file]s", this.target);
         final List<Representation> res = representations.stream()
-            .map(this::transform)
+            .map(this::disassemble)
             .collect(Collectors.toList());
         Logger.info(this, "Total %d .class files were disassembled", res.size());
         return res;
@@ -83,7 +81,7 @@ public final class TranslationXmirFootprint implements Translation {
      *  "Disassembling file.class (5kb)....".
      *  "Disassembled file.xmir (6kb) in 100ms".
      */
-    private Representation transform(final Representation representation) {
+    private Representation disassemble(final Representation representation) {
         final String name = new JavaName(representation.details().name()).decode();
         final Path path = this.target
             .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));

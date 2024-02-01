@@ -21,13 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.improvement;
+package org.eolang.jeo;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.Collections;
-import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
@@ -36,49 +33,27 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link TranslationXmirFootprint}.
+ * Test case for {@link TranslationBytecodeFootprint}.
  *
  * @since 0.1.0
  */
-final class TranslationXmirFootprintTest {
-
-    /**
-     * Representations to test.
-     */
-    private final Collection<Representation> objects = Collections.singleton(
-        new XmirRepresentation(
-            new BytecodeClass("org/eolang/jeo/Application").xml()
-        )
-    );
-
-    /**
-     * Where the XML file is expected to be saved.
-     */
-    private final Path expected = Paths.get("")
-        .resolve("org")
-        .resolve("eolang")
-        .resolve("jeo")
-        .resolve("Application.xmir");
+class TranslationBytecodeFootprintTest {
 
     @Test
-    void savesXml(@TempDir final Path temp) {
-        final TranslationXmirFootprint footprint = new TranslationXmirFootprint(temp);
-        footprint.apply(this.objects);
-        MatcherAssert.assertThat(
-            "XML file was not saved",
-            temp.resolve(this.expected).toFile(),
-            FileMatchers.anExistingFile()
+    void appliesSuccessfully(@TempDir final Path temp) {
+        final String expected = "jeo/xmir/Fake";
+        new TranslationBytecodeFootprint(temp, temp).apply(
+            Collections.singleton(new XmirRepresentation(new BytecodeClass(expected).xml()))
         );
-    }
-
-    @Test
-    void overwritesXml(@TempDir final Path temp) {
-        final TranslationXmirFootprint footprint = new TranslationXmirFootprint(temp);
-        footprint.apply(this.objects);
-        footprint.apply(this.objects);
         MatcherAssert.assertThat(
-            "XML file was not successfully overwritten",
-            temp.resolve(this.expected).toFile(),
+            String.format(
+                "Bytecode file was not saved for the representation with the name '%s'",
+                expected
+            ),
+            temp.resolve("jeo")
+                .resolve("xmir")
+                .resolve("Fake.class")
+                .toFile(),
             FileMatchers.anExistingFile()
         );
     }
