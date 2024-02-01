@@ -24,7 +24,6 @@
 package org.eolang.jeo;
 
 import java.io.File;
-import java.io.IOException;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;

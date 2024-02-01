@@ -33,10 +33,10 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.eolang.jeo.Translation;
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.representation.XmirRepresentation;
+import org.eolang.jeo.Translation;
 import org.eolang.jeo.representation.JavaName;
+import org.eolang.jeo.representation.XmirRepresentation;
 
 /**
  * Footprint of the EO's.

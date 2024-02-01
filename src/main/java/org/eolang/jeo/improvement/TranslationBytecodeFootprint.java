@@ -31,8 +31,8 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import org.eolang.jeo.Details;
-import org.eolang.jeo.Translation;
 import org.eolang.jeo.Representation;
+import org.eolang.jeo.Translation;
 import org.eolang.jeo.representation.JavaName;
 
 /**

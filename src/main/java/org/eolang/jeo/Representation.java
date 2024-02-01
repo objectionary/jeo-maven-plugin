@@ -27,7 +27,7 @@ import com.jcabi.xml.XML;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 
 /**
- * Intermediate representation of a class files which can be optimized.
+ * Intermediate representation of objects or class files which can be translated.
  *
  * @since 0.1.0
  */
@@ -35,7 +35,8 @@ public interface Representation {
 
     /**
      * Details of representation.
-     * Additional info about representation.
+     * Additional info about representation which might include
+     * the source file, the name of a class or an object, etc.
      * @return Representation details instance.
      */
     Details details();
