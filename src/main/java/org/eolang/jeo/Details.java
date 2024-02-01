@@ -32,6 +32,10 @@ import java.util.Optional;
  * Details of representation.
  * Additional info about representation.
  * @since 0.1
+ * @todo #448:30min Continue refactoring of the Details#source() method.
+ *  Here we have a method that returns an Optional Path and it is not clear why
+ *  it is returning an Optional instead of just Path.
+ *  We either should refactor this method to return a Path or justify why it is so.
  */
 public class Details {
 
