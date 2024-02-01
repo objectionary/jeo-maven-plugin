@@ -31,11 +31,11 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link EoRepresentation}.
+ * Test case for {@link XmirRepresentation}.
  *
  * @since 0.1.0
  */
-class EoRepresentationTest {
+class XmirRepresentationTest {
 
     /**
      * Message for assertion.
@@ -47,7 +47,7 @@ class EoRepresentationTest {
     void retrievesName() {
         final String name = "org/eolang/foo/Math";
         final String expected = new JavaName(name).encode();
-        final String actual = new EoRepresentation(
+        final String actual = new XmirRepresentation(
             new BytecodeClass(name).xml()
         ).details().name();
         MatcherAssert.assertThat(
@@ -65,7 +65,7 @@ class EoRepresentationTest {
     void returnsXmlRepresentationOfEo() {
         MatcherAssert.assertThat(
             "The XML representation of the EO object is not correct",
-            new EoRepresentation(new BytecodeClass("org/eolang/foo/Math").xml()).toEO(),
+            new XmirRepresentation(new BytecodeClass("org/eolang/foo/Math").xml()).toEO(),
             XhtmlMatchers.hasXPath("/program[@name='j$Math']")
         );
     }
@@ -74,9 +74,9 @@ class EoRepresentationTest {
     void returnsBytecodeRepresentationOfEo() {
         final BytecodeClass clazz = new BytecodeClass("Bar");
         final Bytecode expected = clazz.bytecode();
-        final Bytecode actual = new EoRepresentation(clazz.xml()).toBytecode();
+        final Bytecode actual = new XmirRepresentation(clazz.xml()).toBytecode();
         MatcherAssert.assertThat(
-            String.format(EoRepresentationTest.MESSAGE, expected, actual),
+            String.format(XmirRepresentationTest.MESSAGE, expected, actual),
             actual,
             Matchers.equalTo(expected)
         );
@@ -87,11 +87,11 @@ class EoRepresentationTest {
         final Bytecode expected = new BytecodeClass("Fields")
             .withField("foo")
             .bytecode();
-        final Bytecode actual = new EoRepresentation(
+        final Bytecode actual = new XmirRepresentation(
             new BytecodeRepresentation(expected).toEO()
         ).toBytecode();
         MatcherAssert.assertThat(
-            String.format(EoRepresentationTest.MESSAGE, expected, actual),
+            String.format(XmirRepresentationTest.MESSAGE, expected, actual),
             actual,
             Matchers.equalTo(expected)
         );
@@ -103,11 +103,11 @@ class EoRepresentationTest {
         final Bytecode expected = new BytecodeClass(name)
             .helloWorldMethod()
             .bytecode();
-        final Bytecode actual = new EoRepresentation(
+        final Bytecode actual = new XmirRepresentation(
             new BytecodeRepresentation(expected).toEO()
         ).toBytecode();
         MatcherAssert.assertThat(
-            String.format(EoRepresentationTest.MESSAGE, expected, actual),
+            String.format(XmirRepresentationTest.MESSAGE, expected, actual),
             actual,
             Matchers.equalTo(expected)
         );

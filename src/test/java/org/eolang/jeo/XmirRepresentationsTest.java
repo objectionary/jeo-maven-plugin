@@ -35,11 +35,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link EoRepresentations}.
+ * Test case for {@link XmirRepresentations}.
  *
  * @since 0.1.0
  */
-final class EoRepresentationsTest {
+final class XmirRepresentationsTest {
 
     @Test
     void retrievesObjectsSuccessfully(@TempDir final Path temp) throws IOException {
@@ -56,7 +56,7 @@ final class EoRepresentationsTest {
         );
         MatcherAssert.assertThat(
             String.format("Objects were not retrieved, we expected '%d' objects", expected),
-            new EoRepresentations(temp).objects(),
+            new XmirRepresentations(temp).objects(),
             Matchers.hasSize(expected)
         );
     }
@@ -66,7 +66,7 @@ final class EoRepresentationsTest {
         Files.createDirectories(temp.resolve(new XmirDefaultDirectory().toPath()));
         MatcherAssert.assertThat(
             "Objects were not retrieved, we expected empty list",
-            new EoRepresentations(temp).objects(),
+            new XmirRepresentations(temp).objects(),
             Matchers.empty()
         );
     }
@@ -75,7 +75,7 @@ final class EoRepresentationsTest {
     void throwsExceptionIfFolderDoesNotExist(@TempDir final Path temp) {
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> new EoRepresentations(temp.resolve("missing")).objects(),
+            () -> new XmirRepresentations(temp.resolve("missing")).objects(),
             "Exception was not thrown when folder does not exist"
         );
     }
@@ -94,7 +94,7 @@ final class EoRepresentationsTest {
                 "Objects were not retrieved, we expected exactly one object was read from %s",
                 path
             ),
-            new EoRepresentations(path).objects(),
+            new XmirRepresentations(path).objects(),
             Matchers.hasSize(1)
         );
     }

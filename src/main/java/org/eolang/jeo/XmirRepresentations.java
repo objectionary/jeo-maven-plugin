@@ -29,7 +29,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.EoRepresentation;
+import org.eolang.jeo.representation.XmirRepresentation;
 
 /**
  * EO objects.
@@ -37,7 +37,7 @@ import org.eolang.jeo.representation.EoRepresentation;
  *
  * @since 0.1.0
  */
-final class EoRepresentations {
+final class XmirRepresentations {
 
     /**
      * Where to read objects from.
@@ -56,7 +56,7 @@ final class EoRepresentations {
      * Constructor.
      * @param objectspath Where to read objects from.
      */
-    EoRepresentations(final Path objectspath) {
+    XmirRepresentations(final Path objectspath) {
         this(objectspath, true);
     }
 
@@ -65,7 +65,7 @@ final class EoRepresentations {
      * @param objectspath Where to read objects from.
      * @param verify Verify bytecode.
      */
-    EoRepresentations(final Path objectspath, final boolean verify) {
+    XmirRepresentations(final Path objectspath, final boolean verify) {
         this.objectspath = objectspath;
         this.verify = verify;
     }
@@ -74,11 +74,11 @@ final class EoRepresentations {
      * Read all objects.
      * @return All objects.
      */
-    Collection<EoRepresentation> objects() {
+    Collection<XmirRepresentation> objects() {
         final Path path = this.objectspath;
         try (Stream<Path> walk = Files.walk(path)) {
             return walk.filter(Files::isRegularFile)
-                .map(p -> new EoRepresentation(p, this.verify))
+                .map(p -> new XmirRepresentation(p, this.verify))
                 .collect(Collectors.toList());
         } catch (final IOException exception) {
             throw new IllegalStateException(

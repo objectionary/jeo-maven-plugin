@@ -28,7 +28,7 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.representation.EoRepresentation;
+import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.io.FileMatchers;
@@ -46,7 +46,7 @@ final class ImprovementXmirFootprintTest {
      * Representations to test.
      */
     private final Collection<Representation> objects = Collections.singleton(
-        new EoRepresentation(
+        new XmirRepresentation(
             new BytecodeClass("org/eolang/jeo/Application").xml()
         )
     );

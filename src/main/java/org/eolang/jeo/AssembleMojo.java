@@ -101,7 +101,7 @@ public final class AssembleMojo extends AbstractMojo {
             new ImprovementBytecodeFootprint(
                 this.sourcesDir.toPath(), this.outputDir.toPath()
             ).apply(
-                new EoRepresentations(this.sourcesDir.toPath(), !this.skipVerification).objects()
+                new XmirRepresentations(this.sourcesDir.toPath(), !this.skipVerification).objects()
             );
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);

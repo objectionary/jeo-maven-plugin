@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.eolang.jeo.Improvement;
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.representation.EoRepresentation;
+import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.JavaName;
 
 /**
@@ -101,7 +101,7 @@ public final class ImprovementXmirFootprint implements Improvement {
                 path,
                 Files.size(path)
             );
-            return new EoRepresentation(xmir, path.getFileName().toString());
+            return new XmirRepresentation(xmir, path.getFileName().toString());
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't save XML to %s", path),

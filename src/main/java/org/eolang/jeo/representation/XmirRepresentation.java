@@ -38,7 +38,7 @@ import org.eolang.parser.Schema;
  *
  * @since 0.1.0
  */
-public final class EoRepresentation implements Representation {
+public final class XmirRepresentation implements Representation {
 
     /**
      * XML.
@@ -61,15 +61,15 @@ public final class EoRepresentation implements Representation {
      * @param path Path to XML file.
      * @param verify Verify bytecode.
      */
-    public EoRepresentation(final Path path, final boolean verify) {
-        this(EoRepresentation.open(path), path.getFileName().toString(), verify);
+    public XmirRepresentation(final Path path, final boolean verify) {
+        this(XmirRepresentation.open(path), path.getFileName().toString(), verify);
     }
 
     /**
      * Constructor.
      * @param lines Xml document lines.
      */
-    public EoRepresentation(final String... lines) {
+    public XmirRepresentation(final String... lines) {
         this(new XMLDocument(String.join("\n", lines)));
     }
 
@@ -77,7 +77,7 @@ public final class EoRepresentation implements Representation {
      * Constructor.
      * @param xml XML.
      */
-    public EoRepresentation(final XML xml) {
+    public XmirRepresentation(final XML xml) {
         this(xml, "Unknown");
     }
 
@@ -86,7 +86,7 @@ public final class EoRepresentation implements Representation {
      * @param xml XML.
      * @param source Source of the XML.
      */
-    public EoRepresentation(
+    public XmirRepresentation(
         final XML xml,
         final String source
     ) {
@@ -99,7 +99,7 @@ public final class EoRepresentation implements Representation {
      * @param source Source of the XML.
      * @param verify Verify bytecode.
      */
-    public EoRepresentation(
+    public XmirRepresentation(
         final XML xml,
         final String source,
         final boolean verify

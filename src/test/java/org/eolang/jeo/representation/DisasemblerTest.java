@@ -24,48 +24,40 @@
 package org.eolang.jeo.representation;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import org.eolang.jeo.BytecodeClasses;
-import org.eolang.jeo.improvement.ImprovementXmirFootprint;
+import org.cactoos.bytes.BytesOf;
+import org.cactoos.bytes.UncheckedBytes;
+import org.cactoos.io.ResourceOf;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Transpilation of the bytecode to the EO.
+ * Tests for {@link Disasembler}.
  *
  * @since 0.1.0
  */
-public class BytecodeTransformation {
+class DisasemblerTest {
 
-    /**
-     * Project compiled classes.
-     */
-    private final Path classes;
-
-    /**
-     * Project default target directory.
-     */
-    private final Path target;
-
-    /**
-     * Constructor.
-     *
-     * @param classes Project compiled classes.
-     * @param target Project default target directory.
-     */
-    public BytecodeTransformation(
-        final Path classes,
-        final Path target
-    ) {
-        this.classes = classes;
-        this.target = target;
-    }
-
-    /**
-     * Transpile all bytecode files.
-     *
-     * @throws IOException If some I/O problem arises.
-     */
-    public void transpile() throws IOException {
-        new ImprovementXmirFootprint(this.target)
-            .apply(new BytecodeClasses(this.classes).bytecode());
+    @Test
+    void transpilesSuccessfully(@TempDir final Path temp) throws IOException {
+        final String name = "MethodByte.class";
+        Files.write(
+            temp.resolve(name),
+            new UncheckedBytes(new BytesOf(new ResourceOf(name))).asBytes()
+        );
+        new Disasembler(temp, temp).disassemble();
+        MatcherAssert.assertThat(
+            String.format("Can't find the transpiled file for the class '%s'.", name),
+            Files.exists(
+                temp.resolve("org")
+                    .resolve("eolang")
+                    .resolve("jeo")
+                    .resolve("MethodByte.xmir")
+            ),
+            Matchers.is(true)
+        );
     }
 }
