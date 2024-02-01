@@ -37,7 +37,7 @@ import org.eolang.jeo.representation.BytecodeRepresentation;
  *
  * @since 0.1.0
  */
-public final class BytecodeClasses {
+public final class BytecodeRepresentations implements Representations {
 
     /**
      * Project compiled classes.
@@ -48,8 +48,23 @@ public final class BytecodeClasses {
      * Constructor.
      * @param classes Folder with compiled classes.
      */
-    public BytecodeClasses(final Path classes) {
+    public BytecodeRepresentations(final Path classes) {
         this.classpath = classes;
+    }
+
+    @Override
+    public Collection<? extends Representation> all() {
+        try {
+            return this.bytecode();
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Can't disassemble bytecode from '%s'. ",
+                    this.classpath
+                ),
+                exception
+            );
+        }
     }
 
     /**
@@ -57,7 +72,7 @@ public final class BytecodeClasses {
      * @return Collection of {@link org.eolang.jeo.Representation}
      * @throws IOException If some I/O problem arises.
      */
-    public Collection<BytecodeRepresentation> bytecode() throws IOException {
+    private Collection<? extends Representation> bytecode() throws IOException {
         return this.classes()
             .stream()
             .map(BytecodeRepresentation::new)

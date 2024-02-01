@@ -31,7 +31,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.eolang.jeo.improvement.ImprovementBytecodeFootprint;
+import org.eolang.jeo.improvement.TranslationBytecodeFootprint;
 
 /**
  * Converts EO to bytecode.
@@ -98,10 +98,10 @@ public final class AssembleMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         try {
             new PluginStartup(this.project).init();
-            new ImprovementBytecodeFootprint(
+            new TranslationBytecodeFootprint(
                 this.sourcesDir.toPath(), this.outputDir.toPath()
             ).apply(
-                new XmirRepresentations(this.sourcesDir.toPath(), !this.skipVerification).objects()
+                new XmirRepresentations(this.sourcesDir.toPath(), !this.skipVerification).all()
             );
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);

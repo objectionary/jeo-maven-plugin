@@ -37,7 +37,7 @@ import org.eolang.jeo.representation.XmirRepresentation;
  *
  * @since 0.1.0
  */
-final class XmirRepresentations {
+final class XmirRepresentations implements Representations {
 
     /**
      * Where to read objects from.
@@ -70,11 +70,8 @@ final class XmirRepresentations {
         this.verify = verify;
     }
 
-    /**
-     * Read all objects.
-     * @return All objects.
-     */
-    Collection<XmirRepresentation> objects() {
+    @Override
+    public Collection<? extends Representation> all() {
         final Path path = this.objectspath;
         try (Stream<Path> walk = Files.walk(path)) {
             return walk.filter(Files::isRegularFile)
@@ -87,4 +84,5 @@ final class XmirRepresentations {
             );
         }
     }
+
 }

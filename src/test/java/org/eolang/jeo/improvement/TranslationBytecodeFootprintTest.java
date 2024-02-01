@@ -21,22 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo;
+package org.eolang.jeo.improvement;
 
-import java.util.Collection;
+import java.nio.file.Path;
+import java.util.Collections;
+import org.eolang.jeo.representation.XmirRepresentation;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.io.FileMatchers;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Improvement or transformation.
+ * Test case for {@link TranslationBytecodeFootprint}.
+ *
  * @since 0.1.0
  */
-public interface Improvement {
+class TranslationBytecodeFootprintTest {
 
-    /**
-     * Apply the improvement.
-     * @param representations IRs to optimize.
-     * @return Optimized IRs.
-     */
-    Collection<? extends Representation> apply(
-        Collection<? extends Representation> representations
-    );
+    @Test
+    void appliesSuccessfully(@TempDir final Path temp) {
+        final String expected = "jeo/xmir/Fake";
+        new TranslationBytecodeFootprint(temp, temp).apply(
+            Collections.singleton(new XmirRepresentation(new BytecodeClass(expected).xml()))
+        );
+        MatcherAssert.assertThat(
+            String.format(
+                "Bytecode file was not saved for the representation with the name '%s'",
+                expected
+            ),
+            temp.resolve("jeo")
+                .resolve("xmir")
+                .resolve("Fake.class")
+                .toFile(),
+            FileMatchers.anExistingFile()
+        );
+    }
 }

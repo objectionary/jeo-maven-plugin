@@ -56,7 +56,7 @@ final class XmirRepresentationsTest {
         );
         MatcherAssert.assertThat(
             String.format("Objects were not retrieved, we expected '%d' objects", expected),
-            new XmirRepresentations(temp).objects(),
+            new XmirRepresentations(temp).all(),
             Matchers.hasSize(expected)
         );
     }
@@ -66,7 +66,7 @@ final class XmirRepresentationsTest {
         Files.createDirectories(temp.resolve(new XmirDefaultDirectory().toPath()));
         MatcherAssert.assertThat(
             "Objects were not retrieved, we expected empty list",
-            new XmirRepresentations(temp).objects(),
+            new XmirRepresentations(temp).all(),
             Matchers.empty()
         );
     }
@@ -75,7 +75,7 @@ final class XmirRepresentationsTest {
     void throwsExceptionIfFolderDoesNotExist(@TempDir final Path temp) {
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> new XmirRepresentations(temp.resolve("missing")).objects(),
+            () -> new XmirRepresentations(temp.resolve("missing")).all(),
             "Exception was not thrown when folder does not exist"
         );
     }
@@ -94,7 +94,7 @@ final class XmirRepresentationsTest {
                 "Objects were not retrieved, we expected exactly one object was read from %s",
                 path
             ),
-            new XmirRepresentations(path).objects(),
+            new XmirRepresentations(path).all(),
             Matchers.hasSize(1)
         );
     }

@@ -87,7 +87,7 @@ public final class DisassembleMojo extends AbstractMojo {
             new Disasembler(
                 this.sourcesDir.toPath(), this.outputDir.toPath()
             ).disassemble();
-        } catch (final IOException | DependencyResolutionRequiredException exception) {
+        } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(
                 String.format(
                     "Can't transpile bytecode from '%s' to EO. Output directory: '%s'.",

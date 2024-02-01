@@ -31,7 +31,7 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import org.eolang.jeo.Details;
-import org.eolang.jeo.Improvement;
+import org.eolang.jeo.Translation;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.JavaName;
 
@@ -40,7 +40,7 @@ import org.eolang.jeo.representation.JavaName;
  *
  * @since 0.1.0
  */
-public final class ImprovementBytecodeFootprint implements Improvement {
+public final class TranslationBytecodeFootprint implements Translation {
 
     /**
      * The folder from where to read the .xmir files.
@@ -59,7 +59,7 @@ public final class ImprovementBytecodeFootprint implements Improvement {
      * @param from The folder from where to read the .xmir files.
      * @param classes Where to save the bytecode classes.
      */
-    public ImprovementBytecodeFootprint(final Path from, final Path classes) {
+    public TranslationBytecodeFootprint(final Path from, final Path classes) {
         this.from = from;
         this.classes = classes;
     }

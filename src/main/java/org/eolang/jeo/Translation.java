@@ -21,50 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation;
+package org.eolang.jeo;
 
-import java.nio.file.Path;
-import org.eolang.jeo.BytecodeRepresentations;
-import org.eolang.jeo.improvement.TranslationXmirFootprint;
+import java.util.Collection;
 
 /**
- * This class disassembles the project's compiled classes.
- * It is used to transpile the project's compiled bytecode classes into EO.
- *
+ * Representation translation.
  * @since 0.1.0
  */
-public class Disasembler {
+public interface Translation {
 
     /**
-     * Project compiled classes.
+     * Apply the translation.
+     * @param representations IRs to translate.
+     * @return Translated IRs.
      */
-    private final Path classes;
-
-    /**
-     * Where to save decompiled classes.
-     */
-    private final Path target;
-
-    /**
-     * Constructor.
-     *
-     * @param classes Project compiled classes.
-     * @param target Project default target directory.
-     */
-    public Disasembler(
-        final Path classes,
-        final Path target
-    ) {
-        this.classes = classes;
-        this.target = target;
-    }
-
-    /**
-     * Disassemble all bytecode files.
-     */
-    public void disassemble() {
-        new TranslationXmirFootprint(this.target).apply(
-            new BytecodeRepresentations(this.classes).all()
-        );
-    }
+    Collection<? extends Representation> apply(
+        Collection<? extends Representation> representations
+    );
 }

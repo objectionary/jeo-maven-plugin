@@ -33,7 +33,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.eolang.jeo.Improvement;
+import org.eolang.jeo.Translation;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.JavaName;
@@ -43,7 +43,7 @@ import org.eolang.jeo.representation.JavaName;
  *
  * @since 0.1.0
  */
-public final class ImprovementXmirFootprint implements Improvement {
+public final class TranslationXmirFootprint implements Translation {
 
     /**
      * Where to save the EO.
@@ -55,7 +55,7 @@ public final class ImprovementXmirFootprint implements Improvement {
      *
      * @param home Where to save the EO.
      */
-    public ImprovementXmirFootprint(final Path home) {
+    public TranslationXmirFootprint(final Path home) {
         this.target = home;
     }
 
