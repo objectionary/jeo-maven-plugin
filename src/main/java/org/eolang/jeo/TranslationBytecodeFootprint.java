@@ -30,7 +30,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Optional;
 import org.eolang.jeo.representation.JavaName;
 
 /**
