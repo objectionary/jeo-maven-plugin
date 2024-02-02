@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import org.eolang.jeo.representation.JavaName;
 import org.eolang.jeo.representation.XmirRepresentation;
 
-public final class Disassemble implements SingleTranslation {
+public final class Disassemble implements Translation {
 
     /**
      * Where to save the EO.

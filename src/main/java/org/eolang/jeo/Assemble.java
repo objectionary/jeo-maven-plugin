@@ -6,9 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.JavaName;
-import org.eolang.jeo.representation.XmirRepresentation;
 
-public final class Assemble implements SingleTranslation {
+public final class Assemble implements Translation {
 
     private final Path classes;
 

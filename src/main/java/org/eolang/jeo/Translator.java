@@ -23,38 +23,20 @@
  */
 package org.eolang.jeo;
 
-import java.nio.file.Path;
-import java.util.Collections;
-import org.eolang.jeo.representation.XmirRepresentation;
-import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.io.FileMatchers;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import java.util.Collection;
 
 /**
- * Test case for {@link TranslationBytecodeFootprint}.
- *
+ * Representation translation.
  * @since 0.1.0
  */
-class TranslationBytecodeFootprintTest {
+public interface Translator {
 
-    @Test
-    void appliesSuccessfully(@TempDir final Path temp) {
-        final String expected = "jeo/xmir/Fake";
-        new TranslationBytecodeFootprint(temp).apply(
-            Collections.singleton(new XmirRepresentation(new BytecodeClass(expected).xml()))
-        );
-        MatcherAssert.assertThat(
-            String.format(
-                "Bytecode file was not saved for the representation with the name '%s'",
-                expected
-            ),
-            temp.resolve("jeo")
-                .resolve("xmir")
-                .resolve("Fake.class")
-                .toFile(),
-            FileMatchers.anExistingFile()
-        );
-    }
+    /**
+     * Apply the translation.
+     * @param representations IRs to translate.
+     * @return Translated IRs.
+     */
+    Collection<? extends Representation> apply(
+        Collection<? extends Representation> representations
+    );
 }

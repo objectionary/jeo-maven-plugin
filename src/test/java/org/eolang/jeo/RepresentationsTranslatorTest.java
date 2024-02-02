@@ -38,11 +38,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link TranslationXmirFootprint}.
+ * Test case for {@link RepresentationsTranslator}.
  *
  * @since 0.1.0
  */
-final class TranslationXmirFootprintTest {
+final class RepresentationsTranslatorTest {
 
     /**
      * Representations to test.
@@ -72,7 +72,7 @@ final class TranslationXmirFootprintTest {
                 .toString()
                 .getBytes(StandardCharsets.UTF_8)
         );
-        new TranslationXmirFootprint(temp)
+        new RepresentationsTranslator(new Disassemble(temp))
             .apply(Collections.singleton(new XmirRepresentation(clazz)));
         MatcherAssert.assertThat(
             "XML file was not saved",
@@ -83,12 +83,33 @@ final class TranslationXmirFootprintTest {
 
     @Test
     void overwritesXml(@TempDir final Path temp) {
-        final TranslationXmirFootprint footprint = new TranslationXmirFootprint(temp);
+        final RepresentationsTranslator footprint = new RepresentationsTranslator(
+            new Disassemble(temp)
+        );
         footprint.apply(this.objects);
         footprint.apply(this.objects);
         MatcherAssert.assertThat(
             "XML file was not successfully overwritten",
             temp.resolve(this.expected).toFile(),
+            FileMatchers.anExistingFile()
+        );
+    }
+
+    @Test
+    void assemblesSuccessfully(@TempDir final Path temp) {
+        final String expected = "jeo/xmir/Fake";
+        new RepresentationsTranslator(new Assemble(temp)).apply(
+            Collections.singleton(new XmirRepresentation(new BytecodeClass(expected).xml()))
+        );
+        MatcherAssert.assertThat(
+            String.format(
+                "Bytecode file was not saved for the representation with the name '%s'",
+                expected
+            ),
+            temp.resolve("jeo")
+                .resolve("xmir")
+                .resolve("Fake.class")
+                .toFile(),
             FileMatchers.anExistingFile()
         );
     }

@@ -32,20 +32,11 @@ import java.util.stream.Collectors;
  *
  * @since 0.1.0
  */
-public final class TranslationXmirFootprint implements Translation {
+public final class RepresentationsTranslator implements Translator {
 
-    private final SingleTranslation translation;
+    private final Translation translation;
 
-    /**
-     * Constructor.
-     *
-     * @param home Where to save the EO.
-     */
-    public TranslationXmirFootprint(final Path home) {
-        this(new SingleTranslationLog("Disassembling", "disassembled", new Disassemble(home)));
-    }
-
-    public TranslationXmirFootprint(final SingleTranslation translation) {
+    public RepresentationsTranslator(final Translation translation) {
         this.translation = translation;
     }
 

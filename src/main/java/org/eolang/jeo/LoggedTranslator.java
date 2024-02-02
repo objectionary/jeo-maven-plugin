@@ -23,44 +23,48 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.log.Logger;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 /**
- * Footprint of the representations as bytecode classes.
- *
- * @since 0.1.0
+ * Translation log.
+ * @since 0.2
  */
-public final class TranslationBytecodeFootprint implements Translation {
+public final class LoggedTranslator implements Translator {
 
-    private final SingleTranslation translation;
+    private final String name;
 
-    /**
-     * Constructor.
-     * @param classes Where to save the bytecode classes.
-     */
-    public TranslationBytecodeFootprint(final Path classes) {
-        this(new SingleTranslationLog("Assembling", "assembled", new Assemble(classes)));
-    }
+    private final String verb;
 
-    public TranslationBytecodeFootprint(final SingleTranslation translation) {
-        this.translation = translation;
+    private final Path from;
+    private final Path to;
+
+    private final Translator original;
+
+    public LoggedTranslator(
+        final String name,
+        final String verb,
+        final Path from,
+        final Path to,
+        final Translator original
+    ) {
+        this.name = name;
+        this.verb = verb;
+        this.from = from;
+        this.to = to;
+        this.original = original;
     }
 
     @Override
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        return representations.stream().map(this::assemble).collect(Collectors.toList());
-    }
-
-    /**
-     * Recompile the Intermediate Representation.
-     *
-     * @param representation Intermediate Representation to recompile.
-     */
-    private Representation assemble(final Representation representation) {
-        return this.translation.apply(representation);
+        Logger.info(this, "%s files from '%[file]s' to '%[file]s'", this.name, this.from, this.to);
+        long start = System.currentTimeMillis();
+        final Collection<? extends Representation> res = this.original.apply(representations);
+        long total = System.currentTimeMillis() - start;
+        Logger.info(this, "Total %d files were %s in %[ms]s", res.size(), this.verb, total);
+        return res;
     }
 }

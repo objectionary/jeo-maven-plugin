@@ -93,13 +93,13 @@ public final class AssembleMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         try {
             new PluginStartup(this.project).init();
-            new TranslationLog(
+            new LoggedTranslator(
                 "Assembling",
                 "assembled",
                 this.sourcesDir.toPath(),
                 this.outputDir.toPath(),
-                new TranslationBytecodeFootprint(
-                    new SingleTranslationLog(
+                new RepresentationsTranslator(
+                    new TranslationLog(
                         "Assembling",
                         "assembled",
                         new Assemble(this.outputDir.toPath())

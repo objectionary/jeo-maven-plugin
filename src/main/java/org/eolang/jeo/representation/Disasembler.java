@@ -26,9 +26,9 @@ package org.eolang.jeo.representation;
 import java.nio.file.Path;
 import org.eolang.jeo.BytecodeRepresentations;
 import org.eolang.jeo.Disassemble;
-import org.eolang.jeo.SingleTranslationLog;
+import org.eolang.jeo.LoggedTranslator;
+import org.eolang.jeo.RepresentationsTranslator;
 import org.eolang.jeo.TranslationLog;
-import org.eolang.jeo.TranslationXmirFootprint;
 
 /**
  * This class disassembles the project's compiled classes.
@@ -66,13 +66,13 @@ public class Disasembler {
      * Disassemble all bytecode files.
      */
     public void disassemble() {
-        new TranslationLog(
+        new LoggedTranslator(
             "Disassembling",
             "disassembled",
             this.classes,
             this.target,
-            new TranslationXmirFootprint(
-                new SingleTranslationLog(
+            new RepresentationsTranslator(
+                new TranslationLog(
                     "Disassembling",
                     "disassembled",
                     new Disassemble(this.target)
