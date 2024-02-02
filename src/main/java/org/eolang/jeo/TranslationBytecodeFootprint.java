@@ -31,6 +31,8 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.JavaName;
 
 /**
@@ -66,8 +68,7 @@ public final class TranslationBytecodeFootprint implements Translation {
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        representations.forEach(this::assemble);
-        return Collections.unmodifiableCollection(representations);
+        return representations.stream().map(this::assemble).collect(Collectors.toList());
     }
 
     /**
@@ -75,37 +76,38 @@ public final class TranslationBytecodeFootprint implements Translation {
      *
      * @param representation Intermediate Representation to recompile.
      */
-    private void assemble(final Representation representation) {
+    private Representation assemble(final Representation representation) {
         final Details details = representation.details();
         final String name = new JavaName(details.name()).decode();
         try {
             final byte[] bytecode = representation.toBytecode().asBytes();
             final String[] subpath = name.split("\\.");
-            final Optional<Path> source = details.source();
-            if (source.isPresent()) {
-                Logger.info(
-                    this,
-                    "Assembling '%[file]s' (%[size]s)",
-                    source.get(),
-                    Files.size(source.get())
-                );
-            }
-            final long start = System.currentTimeMillis();
+//            final Optional<Path> source = details.source();
+//            if (source.isPresent()) {
+//                Logger.info(
+//                    this,
+//                    "Assembling '%[file]s' (%[size]s)",
+//                    source.get(),
+//                    Files.size(source.get())
+//                );
+//            }
+//            final long start = System.currentTimeMillis();
             subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
             final Path path = Paths.get(this.classes.toString(), subpath);
             Files.createDirectories(path.getParent());
             Files.write(path, bytecode);
-            final long time = System.currentTimeMillis() - start;
-            source.ifPresent(
-                value -> Logger.info(
-                    this,
-                    "'%[file]s' assembled to '%[file]s' (%[size]s) in %[ms]s",
-                    value,
-                    path,
-                    (long) bytecode.length,
-                    time
-                )
-            );
+//            final long time = System.currentTimeMillis() - start;
+//            source.ifPresent(
+//                value -> Logger.info(
+//                    this,
+//                    "'%[file]s' assembled to '%[file]s' (%[size]s) in %[ms]s",
+//                    value,
+//                    path,
+//                    (long) bytecode.length,
+//                    time
+//                )
+//            );
+            return new BytecodeRepresentation(path);
         } catch (final IOException exception) {
             throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
         }
