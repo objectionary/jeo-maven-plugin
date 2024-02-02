@@ -26,8 +26,6 @@ package org.eolang.jeo;
 import com.jcabi.log.Logger;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.stream.Collectors;
-import org.eolang.jeo.representation.LoggedRepresentation;
 
 /**
  * Translation log.
@@ -64,9 +62,7 @@ public final class TranslationLog implements Translation {
     ) {
         Logger.info(this, "%s files from '%[file]s' to '%[file]s'", this.name, this.from, this.to);
         long start = System.currentTimeMillis();
-        final Collection<? extends Representation> res = this.original.apply(
-            representations.stream().map(LoggedRepresentation::new).collect(Collectors.toList())
-        );
+        final Collection<? extends Representation> res = this.original.apply(representations);
         long total = System.currentTimeMillis() - start;
         Logger.info(this, "Total %d files were %s in %[ms]s", res.size(), this.verb, total);
         return res;

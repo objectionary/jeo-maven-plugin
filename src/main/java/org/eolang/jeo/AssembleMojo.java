@@ -98,7 +98,13 @@ public final class AssembleMojo extends AbstractMojo {
                 "assembled",
                 this.sourcesDir.toPath(),
                 this.outputDir.toPath(),
-                new TranslationBytecodeFootprint(this.outputDir.toPath())
+                new TranslationBytecodeFootprint(
+                    new SingleTranslationLog(
+                        "Assembling",
+                        "assembled",
+                        new Assemble(this.outputDir.toPath())
+                    )
+                )
             ).apply(
                 new XmirRepresentations(this.sourcesDir.toPath(), !this.skipVerification).all()
             );

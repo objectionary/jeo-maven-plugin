@@ -23,17 +23,9 @@
  */
 package org.eolang.jeo;
 
-import com.jcabi.log.Logger;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.BytecodeRepresentation;
-import org.eolang.jeo.representation.JavaName;
 
 /**
  * Footprint of the representations as bytecode classes.
@@ -42,17 +34,18 @@ import org.eolang.jeo.representation.JavaName;
  */
 public final class TranslationBytecodeFootprint implements Translation {
 
-    /**
-     * Where to save the bytecode classes.
-     */
-    private final Path classes;
+    private final SingleTranslation translation;
 
     /**
      * Constructor.
      * @param classes Where to save the bytecode classes.
      */
     public TranslationBytecodeFootprint(final Path classes) {
-        this.classes = classes;
+        this(new SingleTranslationLog("Assembling", "assembled", new Assemble(classes)));
+    }
+
+    public TranslationBytecodeFootprint(final SingleTranslation translation) {
+        this.translation = translation;
     }
 
     @Override
@@ -68,23 +61,6 @@ public final class TranslationBytecodeFootprint implements Translation {
      * @param representation Intermediate Representation to recompile.
      */
     private Representation assemble(final Representation representation) {
-        return new SingleTranslationLog(
-            "Assembling",
-            "assembled",
-            new Assemble(this.classes)
-        ).apply(representation);
-//        final Details details = representation.details();
-//        final String name = new JavaName(details.name()).decode();
-//        try {
-//            final byte[] bytecode = representation.toBytecode().asBytes();
-//            final String[] subpath = name.split("\\.");
-//            subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
-//            final Path path = Paths.get(this.classes.toString(), subpath);
-//            Files.createDirectories(path.getParent());
-//            Files.write(path, bytecode);
-//            return new BytecodeRepresentation(path);
-//        } catch (final IOException exception) {
-//            throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
-//        }
+        return this.translation.apply(representation);
     }
 }
