@@ -77,40 +77,24 @@ public final class TranslationXmirFootprint implements Translation {
      * @return New representation with source attached to the saved file.
      */
     private Representation disassemble(final Representation representation) {
-        final String name = new JavaName(representation.details().name()).decode();
-        final Path path = this.target
-            .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
-        try {
-//            final Optional<Path> src = representation.details().source();
-//            if (src.isPresent()) {
-//                Logger.info(
-//                    this,
-//                    "Disassembling '%[file]s' (%[size]s)",
-//                    src.get(),
-//                    Files.size(src.get())
-//                );
-//            }
-//            final long start = System.currentTimeMillis();
-            Files.createDirectories(path.getParent());
-            Files.write(path, representation.toEO().toString().getBytes(StandardCharsets.UTF_8));
-//            final long time = System.currentTimeMillis() - start;
-//            if (src.isPresent()) {
-//                Logger.info(
-//                    this,
-//                    "'%[file]s' disassembled to '%[file]s' (%[size]s) in %[ms]s",
-//                    src.get(),
-//                    path,
-//                    Files.size(path),
-//                    time
-//                );
-//            }
-            return new XmirRepresentation(path);
-        } catch (final IOException exception) {
-            throw new IllegalStateException(
-                String.format("Can't save XML to %s", path),
-                exception
-            );
-        }
+        return new SingleTranslationLog(
+            "Disassembling",
+            "disassembled",
+            new Disassemble(this.target)
+        ).apply(representation);
+//        final String name = new JavaName(representation.details().name()).decode();
+//        final Path path = this.target
+//            .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
+//        try {
+//            Files.createDirectories(path.getParent());
+//            Files.write(path, representation.toEO().toString().getBytes(StandardCharsets.UTF_8));
+//            return new XmirRepresentation(path);
+//        } catch (final IOException exception) {
+//            throw new IllegalStateException(
+//                String.format("Can't save XML to %s", path),
+//                exception
+//            );
+//        }
     }
 
 }

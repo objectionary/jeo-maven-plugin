@@ -9,9 +9,18 @@ import java.nio.file.Paths;
 public final class SingleTranslationLog implements SingleTranslation {
     private static final Path UNKNOWN = Paths.get("Unknown");
 
+    private final String process;
+    private final String participal;
+
     private final SingleTranslation original;
 
-    public SingleTranslationLog(final SingleTranslation original) {
+    public SingleTranslationLog(
+        final String process,
+        final String participal,
+        final SingleTranslation original
+    ) {
+        this.process = process;
+        this.participal = participal;
         this.original = original;
     }
 
@@ -24,7 +33,8 @@ public final class SingleTranslationLog implements SingleTranslation {
             if (Files.exists(source)) {
                 Logger.info(
                     this,
-                    "Assembling '%[file]s' (%[size]s)",
+                    "%s '%[file]s' (%[size]s)",
+                    this.process,
                     source,
                     Files.size(source)
                 );
@@ -34,8 +44,9 @@ public final class SingleTranslationLog implements SingleTranslation {
                 final Path after = apply.details().source().orElse(SingleTranslationLog.UNKNOWN);
                 Logger.info(
                     this,
-                    "'%[file]s' assembled to '%[file]s' (%[size]s) in %[ms]s",
+                    "'%[file]s' %s to '%[file]s' (%[size]s) in %[ms]s",
                     source,
+                    this.participal,
                     after,
                     Files.size(after),
                     time

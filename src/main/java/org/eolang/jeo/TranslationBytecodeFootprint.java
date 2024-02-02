@@ -51,7 +51,7 @@ public final class TranslationBytecodeFootprint implements Translation {
      * Constructor.
      * @param classes Where to save the bytecode classes.
      */
-    public TranslationBytecodeFootprint( final Path classes) {
+    public TranslationBytecodeFootprint(final Path classes) {
         this.classes = classes;
     }
 
@@ -68,7 +68,11 @@ public final class TranslationBytecodeFootprint implements Translation {
      * @param representation Intermediate Representation to recompile.
      */
     private Representation assemble(final Representation representation) {
-        return new SingleTranslationLog(new Assemble(this.classes)).apply(representation);
+        return new SingleTranslationLog(
+            "Assembling",
+            "assembled",
+            new Assemble(this.classes)
+        ).apply(representation);
 //        final Details details = representation.details();
 //        final String name = new JavaName(details.name()).decode();
 //        try {
