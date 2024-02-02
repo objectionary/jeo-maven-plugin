@@ -67,7 +67,7 @@ public final class TranslationBytecodeFootprint implements Translation {
         final Collection<? extends Representation> representations
     ) {
         Logger.info(
-            this, "Assembling .xmir files from %[file]s to %[file]s",
+            this, "Assembling .xmir files from '%[file]s' to '%[file]s'",
             this.from,
             this.classes
         );
@@ -105,7 +105,7 @@ public final class TranslationBytecodeFootprint implements Translation {
             source.ifPresent(
                 value -> Logger.info(
                     this,
-                    "%[file]s assembled to %[file]s (%[size]s) in %[ms]s",
+                    "'%[file]s' assembled to '%[file]s' (%[size]s) in %[ms]s",
                     value,
                     path,
                     (long) bytecode.length,

@@ -30,5 +30,5 @@ assert new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/Appli
 assert new File(basedir, 'target/generated-sources/jeo-eo/org/eolang/jeo/Application.eo').exists()
 //Check that class file was changed
 assert log.contains("Application.class' disassembled to")
-assert log.contains("Application.xmir assembled to")
+assert log.contains("Application.xmir' assembled to")
 true
