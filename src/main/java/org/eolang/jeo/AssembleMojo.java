@@ -93,8 +93,12 @@ public final class AssembleMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         try {
             new PluginStartup(this.project).init();
-            new TranslationBytecodeFootprint(
-                this.sourcesDir.toPath(), this.outputDir.toPath()
+            new TranslationLog(
+                "Assembling",
+                "assembled",
+                this.sourcesDir.toPath(),
+                this.outputDir.toPath(),
+                new TranslationBytecodeFootprint(this.sourcesDir.toPath(), this.outputDir.toPath())
             ).apply(
                 new XmirRepresentations(this.sourcesDir.toPath(), !this.skipVerification).all()
             );
