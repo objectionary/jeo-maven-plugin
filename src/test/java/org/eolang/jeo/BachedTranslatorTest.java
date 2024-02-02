@@ -38,11 +38,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link RepresentationsTranslator}.
+ * Test case for {@link BachedTranslator}.
  *
  * @since 0.1.0
  */
-final class RepresentationsTranslatorTest {
+final class BachedTranslatorTest {
 
     /**
      * Representations to test.
@@ -72,7 +72,7 @@ final class RepresentationsTranslatorTest {
                 .toString()
                 .getBytes(StandardCharsets.UTF_8)
         );
-        new RepresentationsTranslator(new Disassemble(temp))
+        new BachedTranslator(new Disassemble(temp))
             .apply(Collections.singleton(new XmirRepresentation(clazz)));
         MatcherAssert.assertThat(
             "XML file was not saved",
@@ -83,7 +83,7 @@ final class RepresentationsTranslatorTest {
 
     @Test
     void overwritesXml(@TempDir final Path temp) {
-        final RepresentationsTranslator footprint = new RepresentationsTranslator(
+        final BachedTranslator footprint = new BachedTranslator(
             new Disassemble(temp)
         );
         footprint.apply(this.objects);
@@ -98,7 +98,7 @@ final class RepresentationsTranslatorTest {
     @Test
     void assemblesSuccessfully(@TempDir final Path temp) {
         final String expected = "jeo/xmir/Fake";
-        new RepresentationsTranslator(new Assemble(temp)).apply(
+        new BachedTranslator(new Assemble(temp)).apply(
             Collections.singleton(new XmirRepresentation(new BytecodeClass(expected).xml()))
         );
         MatcherAssert.assertThat(

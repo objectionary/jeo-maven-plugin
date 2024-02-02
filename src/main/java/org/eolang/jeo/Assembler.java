@@ -22,8 +22,8 @@ public final class Assembler {
             "assembled",
             this.input,
             this.output,
-            new RepresentationsTranslator(
-                new TranslationLog(
+            new BachedTranslator(
+                new LoggedTranslation(
                     "Assembling",
                     "assembled",
                     new Assemble(this.output)

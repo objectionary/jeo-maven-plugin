@@ -23,20 +23,19 @@
  */
 package org.eolang.jeo;
 
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * Footprint of the EO's.
+ * Translator that applies a translation to a batch of representations.
  *
- * @since 0.1.0
+ * @since 0.2
  */
-public final class RepresentationsTranslator implements Translator {
+public final class BachedTranslator implements Translator {
 
     private final Translation translation;
 
-    public RepresentationsTranslator(final Translation translation) {
+    BachedTranslator(final Translation translation) {
         this.translation = translation;
     }
 
@@ -44,17 +43,9 @@ public final class RepresentationsTranslator implements Translator {
     public Collection<Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        return representations.stream().map(this::disassemble).collect(Collectors.toList());
-    }
-
-    /**
-     * Try to save XMIR to the target folder and return new representation.
-     *
-     * @param representation Representation to save.
-     * @return New representation with source attached to the saved file.
-     */
-    private Representation disassemble(final Representation representation) {
-        return this.translation.apply(representation);
+        return representations.stream()
+            .map(this.translation::apply)
+            .collect(Collectors.toList());
     }
 
 }

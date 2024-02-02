@@ -24,11 +24,6 @@
 package org.eolang.jeo;
 
 import java.nio.file.Path;
-import org.eolang.jeo.BytecodeRepresentations;
-import org.eolang.jeo.Disassemble;
-import org.eolang.jeo.LoggedTranslator;
-import org.eolang.jeo.RepresentationsTranslator;
-import org.eolang.jeo.TranslationLog;
 
 /**
  * This class disassembles the project's compiled classes.
@@ -71,8 +66,8 @@ public class Disasembler {
             "disassembled",
             this.classes,
             this.target,
-            new RepresentationsTranslator(
-                new TranslationLog(
+            new BachedTranslator(
+                new LoggedTranslation(
                     "Disassembling",
                     "disassembled",
                     new Disassemble(this.target)
