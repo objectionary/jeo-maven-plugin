@@ -72,7 +72,7 @@ public final class TranslationBytecodeFootprint implements Translation {
             this.classes
         );
         representations.forEach(this::assemble);
-        Logger.info(this, "Assembled total %d .class files", representations.size());
+        Logger.info(this, "Total %d .xmir files were assembled", representations.size());
         return Collections.unmodifiableCollection(representations);
     }
 
@@ -105,7 +105,7 @@ public final class TranslationBytecodeFootprint implements Translation {
             source.ifPresent(
                 value -> Logger.info(
                     this,
-                    "%s assembled to %[file]s (%[size]s) in %[ms]s",
+                    "%[file]s assembled to %[file]s (%[size]s) in %[ms]s",
                     value,
                     path,
                     (long) bytecode.length,
