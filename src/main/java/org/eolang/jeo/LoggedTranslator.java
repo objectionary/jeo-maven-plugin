@@ -33,26 +33,53 @@ import java.util.Collection;
  */
 public final class LoggedTranslator implements Translator {
 
-    private final String name;
+    /**
+     * Process name.
+     */
+    private final String process;
 
-    private final String verb;
+    /**
+     * Past participle of the process.
+     * Usually it is something like:
+     * "disassembled", "assembled", etc.
+     */
+    private final String participle;
 
-    private final Path from;
-    private final Path to;
+    /**
+     * From where.
+     */
+    private final Path input;
 
+    /**
+     * To where.
+     */
+    private final Path output;
+
+    /**
+     * Original translator.
+     */
     private final Translator original;
 
+    /**
+     * Constructor.
+     * @param process Process name.
+     * @param participle Past participle of the process.
+     * @param input From where.
+     * @param output To where.
+     * @param original Original translator.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
     public LoggedTranslator(
-        final String name,
-        final String verb,
-        final Path from,
-        final Path to,
+        final String process,
+        final String participle,
+        final Path input,
+        final Path output,
         final Translator original
     ) {
-        this.name = name;
-        this.verb = verb;
-        this.from = from;
-        this.to = to;
+        this.process = process;
+        this.participle = participle;
+        this.input = input;
+        this.output = output;
         this.original = original;
     }
 
@@ -60,11 +87,23 @@ public final class LoggedTranslator implements Translator {
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        Logger.info(this, "%s files from '%[file]s' to '%[file]s'", this.name, this.from, this.to);
-        long start = System.currentTimeMillis();
+        Logger.info(
+            this,
+            "%s files from '%[file]s' to '%[file]s'",
+            this.process,
+            this.input,
+            this.output
+        );
+        final long start = System.currentTimeMillis();
         final Collection<? extends Representation> res = this.original.apply(representations);
-        long total = System.currentTimeMillis() - start;
-        Logger.info(this, "Total %d files were %s in %[ms]s", res.size(), this.verb, total);
+        final long total = System.currentTimeMillis() - start;
+        Logger.info(
+            this,
+            "Total %d files were %s in %[ms]s",
+            res.size(),
+            this.participle,
+            total
+        );
         return res;
     }
 }

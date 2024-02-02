@@ -97,14 +97,14 @@ final class BachedTranslatorTest {
 
     @Test
     void assemblesSuccessfully(@TempDir final Path temp) {
-        final String expected = "jeo/xmir/Fake";
+        final String fake = "jeo/xmir/Fake";
         new BachedTranslator(new Assemble(temp)).apply(
-            Collections.singleton(new XmirRepresentation(new BytecodeClass(expected).xml()))
+            Collections.singleton(new XmirRepresentation(new BytecodeClass(fake).xml()))
         );
         MatcherAssert.assertThat(
             String.format(
                 "Bytecode file was not saved for the representation with the name '%s'",
-                expected
+                fake
             ),
             temp.resolve("jeo")
                 .resolve("xmir")

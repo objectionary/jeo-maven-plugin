@@ -77,6 +77,7 @@ public final class LoggedTranslation implements Translation {
 
     @Override
     public Representation apply(final Representation representation) {
+        final Representation result;
         final Path source = representation.details().source().orElse(LoggedTranslation.UNKNOWN);
         try {
             if (Files.exists(source)) {
@@ -88,9 +89,9 @@ public final class LoggedTranslation implements Translation {
                     Files.size(source)
                 );
                 final long start = System.currentTimeMillis();
-                final Representation apply = this.original.apply(representation);
+                result = this.original.apply(representation);
                 final long time = System.currentTimeMillis() - start;
-                final Path after = apply.details().source().orElse(LoggedTranslation.UNKNOWN);
+                final Path after = result.details().source().orElse(LoggedTranslation.UNKNOWN);
                 Logger.info(
                     this,
                     "'%[file]s' %s to '%[file]s' (%[size]s) in %[ms]s",
@@ -100,10 +101,10 @@ public final class LoggedTranslation implements Translation {
                     Files.size(after),
                     time
                 );
-                return apply;
             } else {
-                return this.original.apply(representation);
+                result = this.original.apply(representation);
             }
+            return result;
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format(

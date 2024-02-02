@@ -33,8 +33,15 @@ import java.util.stream.Collectors;
  */
 public final class BachedTranslator implements Translator {
 
+    /**
+     * Original translation.
+     */
     private final Translation translation;
 
+    /**
+     * Constructor.
+     * @param translation Original translation.
+     */
     BachedTranslator(final Translation translation) {
         this.translation = translation;
     }
@@ -43,9 +50,7 @@ public final class BachedTranslator implements Translator {
     public Collection<Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        return representations.stream()
-            .map(this.translation::apply)
-            .collect(Collectors.toList());
+        return representations.stream().map(this.translation::apply).collect(Collectors.toList());
     }
 
 }
