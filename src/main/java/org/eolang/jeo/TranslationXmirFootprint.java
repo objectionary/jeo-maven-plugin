@@ -62,12 +62,12 @@ public final class TranslationXmirFootprint implements Translation {
     public Collection<Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        Logger.info(this, "Disassembling .class files to %[file]s", this.target);
-        final List<Representation> res = representations.stream()
-            .map(this::disassemble)
-            .collect(Collectors.toList());
-        Logger.info(this, "Total %d .class files were disassembled", res.size());
-        return res;
+//        Logger.info(this, "Disassembling .class files to %[file]s", this.target);
+//        final List<Representation> res = representations.stream()
+//            .map(this::disassemble)
+//            .collect(Collectors.toList());
+//        Logger.info(this, "Total %d .class files were disassembled", res.size());
+        return representations.stream().map(this::disassemble).collect(Collectors.toList());
     }
 
     /**

@@ -70,13 +70,13 @@ public final class TranslationBytecodeFootprint implements Translation {
     public Collection<? extends Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        Logger.info(
-            this, "Assembling .xmir files from '%[file]s' to '%[file]s'",
-            this.from,
-            this.classes
-        );
+//        Logger.info(
+//            this, "Assembling .xmir files from '%[file]s' to '%[file]s'",
+//            this.from,
+//            this.classes
+//        );
         representations.forEach(this::assemble);
-        Logger.info(this, "Total %d .xmir files were assembled", representations.size());
+//        Logger.info(this, "Total %d .xmir files were assembled", representations.size());
         return Collections.unmodifiableCollection(representations);
     }
 
