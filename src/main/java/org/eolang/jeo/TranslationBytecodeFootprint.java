@@ -37,6 +37,10 @@ import org.eolang.jeo.representation.JavaName;
  * Footprint of the representations as bytecode classes.
  *
  * @since 0.1.0
+ * @todo #447:30min Extract Common Common Code From Footprints.
+ *  The TranslationXmirFootprint and TranslationBytecodeFootprint classes
+ *  have a lot of common code. We have to extract the common code to the separate class.
+ *  The class should be able to save results into filesystem and measure execution time.
  */
 public final class TranslationBytecodeFootprint implements Translation {
 
