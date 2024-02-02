@@ -38,10 +38,6 @@ import org.apache.maven.project.MavenProject;
  * The mojo that converts EO to bytecode only.
  * It does not apply any improvements.
  *
- * @todo #59:90min Duplication between EoToBytecode and Optimization.
- * Both classes have the same code. We have to extract the common code to the separate class.
- * The class should be able to convert EO to bytecode and save result to the target folder.
- * When it is done, remove that puzzle.
  * @since 0.1.0
  */
 @Mojo(name = "assemble", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
