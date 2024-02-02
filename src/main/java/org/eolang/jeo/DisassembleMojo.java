@@ -82,7 +82,7 @@ public final class DisassembleMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         try {
             new PluginStartup(this.project).init();
-            new Disasembler(
+            new Disassembler(
                 this.sourcesDir.toPath(), this.outputDir.toPath()
             ).disassemble();
         } catch (final DependencyResolutionRequiredException exception) {

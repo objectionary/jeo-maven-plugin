@@ -26,13 +26,13 @@ package org.eolang.jeo;
 import java.util.Collection;
 
 /**
- * Representation translation.
+ * Translator that applies a translation to a batch of representations.
  * @since 0.1.0
  */
 public interface Translator {
 
     /**
-     * Apply the translation.
+     * Apply the translation for all representations.
      * @param representations IRs to translate.
      * @return Translated IRs.
      */

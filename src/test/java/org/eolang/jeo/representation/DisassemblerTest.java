@@ -29,18 +29,18 @@ import java.nio.file.Path;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
-import org.eolang.jeo.Disasembler;
+import org.eolang.jeo.Disassembler;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Tests for {@link Disasembler}.
+ * Tests for {@link Disassembler}.
  *
  * @since 0.1.0
  */
-class DisasemblerTest {
+class DisassemblerTest {
 
     @Test
     void transpilesSuccessfully(@TempDir final Path temp) throws IOException {
@@ -49,7 +49,7 @@ class DisasemblerTest {
             temp.resolve(name),
             new UncheckedBytes(new BytesOf(new ResourceOf(name))).asBytes()
         );
-        new Disasembler(temp, temp).disassemble();
+        new Disassembler(temp, temp).disassemble();
         MatcherAssert.assertThat(
             String.format("Can't find the transpiled file for the class '%s'.", name),
             Files.exists(

@@ -101,16 +101,6 @@ public class Details {
             .map(Path.class::cast);
     }
 
-    public Optional<Path> destination() {
-        return Optional.ofNullable(this.storage.get("destination"))
-            .filter(Path.class::isInstance)
-            .map(Path.class::cast);
-    }
-
-    public void destination(final Path destination) {
-        this.storage.put("destination", destination);
-    }
-
     /**
      * Initializations.
      * @param pairs Pairs of key-value.

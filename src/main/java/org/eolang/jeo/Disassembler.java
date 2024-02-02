@@ -31,7 +31,7 @@ import java.nio.file.Path;
  *
  * @since 0.1.0
  */
-public class Disasembler {
+public class Disassembler {
 
     /**
      * Project compiled classes.
@@ -49,7 +49,7 @@ public class Disasembler {
      * @param classes Project compiled classes.
      * @param target Project default target directory.
      */
-    public Disasembler(
+    public Disassembler(
         final Path classes,
         final Path target
     ) {
@@ -61,20 +61,20 @@ public class Disasembler {
      * Disassemble all bytecode files.
      */
     public void disassemble() {
+        final String process = "Disassembling";
+        final String disassembled = "disassembled";
         new LoggedTranslator(
-            "Disassembling",
-            "disassembled",
+            process,
+            disassembled,
             this.classes,
             this.target,
             new BachedTranslator(
                 new LoggedTranslation(
-                    "Disassembling",
-                    "disassembled",
+                    process,
+                    disassembled,
                     new Disassemble(this.target)
                 )
             )
-        ).apply(
-            new BytecodeRepresentations(this.classes).all()
-        );
+        ).apply(new BytecodeRepresentations(this.classes).all());
     }
 }
