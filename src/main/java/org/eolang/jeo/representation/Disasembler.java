@@ -25,6 +25,8 @@ package org.eolang.jeo.representation;
 
 import java.nio.file.Path;
 import org.eolang.jeo.BytecodeRepresentations;
+import org.eolang.jeo.Disassemble;
+import org.eolang.jeo.SingleTranslationLog;
 import org.eolang.jeo.TranslationLog;
 import org.eolang.jeo.TranslationXmirFootprint;
 
@@ -69,7 +71,13 @@ public class Disasembler {
             "disassembled",
             this.classes,
             this.target,
-            new TranslationXmirFootprint(this.target)
+            new TranslationXmirFootprint(
+                new SingleTranslationLog(
+                    "Disassembling",
+                    "disassembled",
+                    new Disassemble(this.target)
+                )
+            )
         ).apply(
             new BytecodeRepresentations(this.classes).all()
         );

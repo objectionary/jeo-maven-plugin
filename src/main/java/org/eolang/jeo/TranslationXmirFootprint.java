@@ -23,19 +23,9 @@
  */
 package org.eolang.jeo;
 
-import com.jcabi.log.Logger;
-import com.jcabi.xml.XML;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.JavaName;
-import org.eolang.jeo.representation.XmirRepresentation;
 
 /**
  * Footprint of the EO's.
@@ -44,10 +34,7 @@ import org.eolang.jeo.representation.XmirRepresentation;
  */
 public final class TranslationXmirFootprint implements Translation {
 
-    /**
-     * Where to save the EO.
-     */
-    private final Path target;
+    private final SingleTranslation translation;
 
     /**
      * Constructor.
@@ -55,18 +42,17 @@ public final class TranslationXmirFootprint implements Translation {
      * @param home Where to save the EO.
      */
     public TranslationXmirFootprint(final Path home) {
-        this.target = home;
+        this(new SingleTranslationLog("Disassembling", "disassembled", new Disassemble(home)));
+    }
+
+    public TranslationXmirFootprint(final SingleTranslation translation) {
+        this.translation = translation;
     }
 
     @Override
     public Collection<Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-//        Logger.info(this, "Disassembling .class files to %[file]s", this.target);
-//        final List<Representation> res = representations.stream()
-//            .map(this::disassemble)
-//            .collect(Collectors.toList());
-//        Logger.info(this, "Total %d .class files were disassembled", res.size());
         return representations.stream().map(this::disassemble).collect(Collectors.toList());
     }
 
@@ -77,24 +63,7 @@ public final class TranslationXmirFootprint implements Translation {
      * @return New representation with source attached to the saved file.
      */
     private Representation disassemble(final Representation representation) {
-        return new SingleTranslationLog(
-            "Disassembling",
-            "disassembled",
-            new Disassemble(this.target)
-        ).apply(representation);
-//        final String name = new JavaName(representation.details().name()).decode();
-//        final Path path = this.target
-//            .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
-//        try {
-//            Files.createDirectories(path.getParent());
-//            Files.write(path, representation.toEO().toString().getBytes(StandardCharsets.UTF_8));
-//            return new XmirRepresentation(path);
-//        } catch (final IOException exception) {
-//            throw new IllegalStateException(
-//                String.format("Can't save XML to %s", path),
-//                exception
-//            );
-//        }
+        return this.translation.apply(representation);
     }
 
 }
