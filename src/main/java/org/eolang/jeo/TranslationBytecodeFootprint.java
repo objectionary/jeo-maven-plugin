@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import org.eolang.jeo.representation.JavaName;
 
 /**
@@ -92,17 +93,29 @@ public final class TranslationBytecodeFootprint implements Translation {
         try {
             final byte[] bytecode = representation.toBytecode().asBytes();
             final String[] subpath = name.split("\\.");
+            final Optional<Path> source = details.source();
+            if (source.isPresent()) {
+                Logger.info(
+                    this,
+                    "Assembling '%[file]s' (%[size]s)",
+                    source.get(),
+                    Files.size(source.get())
+                );
+            }
+            final long start = System.currentTimeMillis();
             subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
             final Path path = Paths.get(this.classes.toString(), subpath);
             Files.createDirectories(path.getParent());
             Files.write(path, bytecode);
-            details.source().ifPresent(
+            final long time = System.currentTimeMillis() - start;
+            source.ifPresent(
                 value -> Logger.info(
                     this,
-                    "%s assembled to %[file]s (%[size]s)",
+                    "%s assembled to %[file]s (%[size]s) in %[ms]s",
                     value,
                     path,
-                    (long) bytecode.length
+                    (long) bytecode.length,
+                    time
                 )
             );
         } catch (final IOException exception) {
