@@ -93,21 +93,11 @@ public final class AssembleMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         try {
             new PluginStartup(this.project).init();
-            new LoggedTranslator(
-                "Assembling",
-                "assembled",
+            new Assembler(
                 this.sourcesDir.toPath(),
                 this.outputDir.toPath(),
-                new RepresentationsTranslator(
-                    new TranslationLog(
-                        "Assembling",
-                        "assembled",
-                        new Assemble(this.outputDir.toPath())
-                    )
-                )
-            ).apply(
-                new XmirRepresentations(this.sourcesDir.toPath(), !this.skipVerification).all()
-            );
+                !this.skipVerification
+            ).assemble();
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);
         }

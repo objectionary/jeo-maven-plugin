@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation;
+package org.eolang.jeo;
 
 import java.nio.file.Path;
 import org.eolang.jeo.BytecodeRepresentations;

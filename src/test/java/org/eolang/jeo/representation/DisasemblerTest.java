@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
+import org.eolang.jeo.Disasembler;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
