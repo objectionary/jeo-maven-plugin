@@ -44,8 +44,8 @@ public final class LoggedRepresentation implements Representation {
                     this,
                     "'%[file]s' disassembled to '%[file]s' (%[size]s) in %[ms]s",
                     source,
-                    this.details().source().orElse(LoggedRepresentation.UNKNOWN),
-                    res.toString().getBytes(StandardCharsets.UTF_8).length,
+                    this.details().destination().orElse(LoggedRepresentation.UNKNOWN),
+                    (long) res.toString().getBytes(StandardCharsets.UTF_8).length,
                     time
                 );
                 return res;
@@ -60,32 +60,32 @@ public final class LoggedRepresentation implements Representation {
 
     @Override
     public Bytecode toBytecode() {
-        final Path source = this.details().source().orElse(LoggedRepresentation.UNKNOWN);
-        try {
-            if (Files.exists(source)) {
-                Logger.info(
-                    this,
-                    "Assembling '%[file]s' (%[size]s)",
-                    source,
-                    Files.size(source)
-                );
-                final long start = System.currentTimeMillis();
-                final Bytecode res = this.original.toBytecode();
-                final long time = System.currentTimeMillis() - start;
-                Logger.info(
-                    this,
-                    "'%[file]s' assembled to '%[file]s' (%[size]s) in %[ms]s",
-                    source,
-                    this.details().source().orElse(LoggedRepresentation.UNKNOWN),
-                    res.asBytes().length,
-                    time
-                );
-                return res;
-            } else {
-                return this.original.toBytecode();
-            }
-        } catch (final IOException exception) {
-            throw new RuntimeException(exception);
-        }
+//        final Path source = this.details().source().orElse(LoggedRepresentation.UNKNOWN);
+//        try {
+//            if (Files.exists(source)) {
+//                Logger.info(
+//                    this,
+//                    "Assembling '%[file]s' (%[size]s)",
+//                    source,
+//                    Files.size(source)
+//                );
+//                final long start = System.currentTimeMillis();
+//                final Bytecode res = this.original.toBytecode();
+//                final long time = System.currentTimeMillis() - start;
+//                Logger.info(
+//                    this,
+//                    "'%[file]s' assembled to '%[file]s' (%[size]s) in %[ms]s",
+//                    source,
+//                    this.details().destination().orElse(LoggedRepresentation.UNKNOWN),
+//                    (long) res.asBytes().length,
+//                    time
+//                );
+//                return res;
+//            } else {
+        return this.original.toBytecode();
+//            }
+//        } catch (final IOException exception) {
+//            throw new RuntimeException(exception);
+//        }
     }
 }

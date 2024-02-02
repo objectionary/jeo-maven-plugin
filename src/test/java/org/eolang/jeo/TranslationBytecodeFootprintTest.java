@@ -42,7 +42,7 @@ class TranslationBytecodeFootprintTest {
     @Test
     void appliesSuccessfully(@TempDir final Path temp) {
         final String expected = "jeo/xmir/Fake";
-        new TranslationBytecodeFootprint(temp, temp).apply(
+        new TranslationBytecodeFootprint(temp).apply(
             Collections.singleton(new XmirRepresentation(new BytecodeClass(expected).xml()))
         );
         MatcherAssert.assertThat(

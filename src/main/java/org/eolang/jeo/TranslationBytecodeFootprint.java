@@ -43,24 +43,15 @@ import org.eolang.jeo.representation.JavaName;
 public final class TranslationBytecodeFootprint implements Translation {
 
     /**
-     * The folder from where to read the .xmir files.
-     * This field is used for logging purposes only.
-     * @since 0.2
-     */
-    private final Path from;
-
-    /**
      * Where to save the bytecode classes.
      */
     private final Path classes;
 
     /**
      * Constructor.
-     * @param from The folder from where to read the .xmir files.
      * @param classes Where to save the bytecode classes.
      */
-    public TranslationBytecodeFootprint(final Path from, final Path classes) {
-        this.from = from;
+    public TranslationBytecodeFootprint( final Path classes) {
         this.classes = classes;
     }
 
@@ -77,39 +68,19 @@ public final class TranslationBytecodeFootprint implements Translation {
      * @param representation Intermediate Representation to recompile.
      */
     private Representation assemble(final Representation representation) {
-        final Details details = representation.details();
-        final String name = new JavaName(details.name()).decode();
-        try {
-            final byte[] bytecode = representation.toBytecode().asBytes();
-            final String[] subpath = name.split("\\.");
-//            final Optional<Path> source = details.source();
-//            if (source.isPresent()) {
-//                Logger.info(
-//                    this,
-//                    "Assembling '%[file]s' (%[size]s)",
-//                    source.get(),
-//                    Files.size(source.get())
-//                );
-//            }
-//            final long start = System.currentTimeMillis();
-            subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
-            final Path path = Paths.get(this.classes.toString(), subpath);
-            Files.createDirectories(path.getParent());
-            Files.write(path, bytecode);
-//            final long time = System.currentTimeMillis() - start;
-//            source.ifPresent(
-//                value -> Logger.info(
-//                    this,
-//                    "'%[file]s' assembled to '%[file]s' (%[size]s) in %[ms]s",
-//                    value,
-//                    path,
-//                    (long) bytecode.length,
-//                    time
-//                )
-//            );
-            return new BytecodeRepresentation(path);
-        } catch (final IOException exception) {
-            throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
-        }
+        return new SingleTranslationLog(new Assemble(this.classes)).apply(representation);
+//        final Details details = representation.details();
+//        final String name = new JavaName(details.name()).decode();
+//        try {
+//            final byte[] bytecode = representation.toBytecode().asBytes();
+//            final String[] subpath = name.split("\\.");
+//            subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
+//            final Path path = Paths.get(this.classes.toString(), subpath);
+//            Files.createDirectories(path.getParent());
+//            Files.write(path, bytecode);
+//            return new BytecodeRepresentation(path);
+//        } catch (final IOException exception) {
+//            throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
+//        }
     }
 }

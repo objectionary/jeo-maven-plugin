@@ -55,7 +55,7 @@ public class Details {
     /**
      * Storage with all the details.
      */
-    private final Map<String, ?> storage;
+    private final Map<String, Object> storage;
 
     /**
      * Constructor.
@@ -78,7 +78,7 @@ public class Details {
      * Constructor.
      * @param storage Storage with all the details.
      */
-    private Details(final Map<String, ?> storage) {
+    private Details(final Map<String, Object> storage) {
         this.storage = storage;
     }
 
@@ -99,6 +99,16 @@ public class Details {
         return Optional.ofNullable(this.storage.get(Details.SOURCE_KEY))
             .filter(Path.class::isInstance)
             .map(Path.class::cast);
+    }
+
+    public Optional<Path> destination() {
+        return Optional.ofNullable(this.storage.get("destination"))
+            .filter(Path.class::isInstance)
+            .map(Path.class::cast);
+    }
+
+    public void destination(final Path destination) {
+        this.storage.put("destination", destination);
     }
 
     /**
