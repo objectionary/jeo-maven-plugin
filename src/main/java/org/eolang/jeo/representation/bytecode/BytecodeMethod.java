@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -36,9 +37,9 @@ import org.objectweb.asm.MethodVisitor;
 public final class BytecodeMethod implements Testable {
 
     /**
-     * ASM class writer.
+     * ASM class visitor.
      */
-    private final ClassWriter writer;
+    private final ClassVisitor visitor;
 
     /**
      * Original class.
@@ -58,7 +59,7 @@ public final class BytecodeMethod implements Testable {
     /**
      * Constructor.
      * @param name Method name.
-     * @param writer ASM class writer.
+     * @param visitor ASM class writer.
      * @param clazz Original class.
      * @param descriptor Method descriptor.
      * @param modifiers Method modifiers.
@@ -66,27 +67,27 @@ public final class BytecodeMethod implements Testable {
      */
     BytecodeMethod(
         final String name,
-        final ClassWriter writer,
+        final ClassVisitor visitor,
         final BytecodeClass clazz,
         final String descriptor,
         final int... modifiers
     ) {
-        this(new BytecodeMethodProperties(name, descriptor, modifiers), writer, clazz);
+        this(new BytecodeMethodProperties(name, descriptor, modifiers), visitor, clazz);
     }
 
     /**
      * Constructor.
      * @param properties Method properties.
-     * @param writer ASM class writer.
+     * @param visitor ASM class writer.
      * @param clazz Original class.
      */
     BytecodeMethod(
         final BytecodeMethodProperties properties,
-        final ClassWriter writer,
+        final ClassVisitor visitor,
         final BytecodeClass clazz
     ) {
         this.properties = properties;
-        this.writer = writer;
+        this.visitor = visitor;
         this.clazz = clazz;
         this.instructions = new ArrayList<>(0);
     }
@@ -148,7 +149,8 @@ public final class BytecodeMethod implements Testable {
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     void write() {
         try {
-            final MethodVisitor visitor = this.properties.writeMethod(this.writer);
+            final MethodVisitor visitor = this.properties.writeMethod(this.visitor);
+            visitor.visitCode();
             this.instructions.forEach(instruction -> instruction.writeTo(visitor));
             visitor.visitMaxs(0, 0);
             visitor.visitEnd();

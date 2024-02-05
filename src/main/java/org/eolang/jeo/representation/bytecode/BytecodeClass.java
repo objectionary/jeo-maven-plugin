@@ -32,6 +32,7 @@ import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Opcodes;
@@ -56,9 +57,19 @@ public final class BytecodeClass implements Testable {
     private final ClassWriter writer;
 
     /**
+     * Class visitor.
+     */
+    private final ClassVisitor visitor;
+
+    /**
      * Methods.
      */
     private final Collection<BytecodeMethod> methods;
+
+    /**
+     * Fields.
+     */
+    private final Collection<BytecodeField> fields;
 
     /**
      * Class properties (access, signature, supername, interfaces).
@@ -186,8 +197,10 @@ public final class BytecodeClass implements Testable {
     ) {
         this.name = name;
         this.writer = writer;
+        this.visitor = new CheckClassAdapter(this.writer);
         this.methods = methods;
         this.props = properties;
+        this.fields = new ArrayList<>(0);
         this.verify = verify;
     }
 
@@ -215,9 +228,10 @@ public final class BytecodeClass implements Testable {
      */
     public Bytecode bytecode() {
         try {
-            this.props.write(this.writer, this.name);
+            this.props.write(this.visitor, this.name);
+            this.fields.forEach(BytecodeField::write);
             this.methods.forEach(BytecodeMethod::write);
-            this.writer.visitEnd();
+            this.visitor.visitEnd();
             final byte[] bytes = this.writer.toByteArray();
             this.verifyBytecode(bytes);
             return new Bytecode(bytes);
@@ -255,7 +269,7 @@ public final class BytecodeClass implements Testable {
      * @return This object.
      */
     public BytecodeMethod withMethod(final BytecodeMethodProperties properties) {
-        final BytecodeMethod method = new BytecodeMethod(properties, this.writer, this);
+        final BytecodeMethod method = new BytecodeMethod(properties, this.visitor, this);
         this.methods.add(method);
         return method;
     }
@@ -286,7 +300,7 @@ public final class BytecodeClass implements Testable {
     ) {
         final BytecodeMethod method = new BytecodeMethod(
             mname,
-            this.writer,
+            this.visitor,
             this,
             descriptor,
             modifiers
@@ -323,7 +337,7 @@ public final class BytecodeClass implements Testable {
      * @return This object.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    public FieldVisitor withField(
+    public void withField(
         final String fname,
         final String descriptor,
         final String signature,
@@ -334,13 +348,16 @@ public final class BytecodeClass implements Testable {
         for (final int modifier : modifiers) {
             access |= modifier;
         }
-        return this.writer.visitField(
-            access,
-            fname,
-            descriptor,
-            signature,
-            value
+        this.fields.add(
+            new BytecodeField(fname, descriptor, signature, value, access, this.visitor)
         );
+//        return this.visitor.visitField(
+//            access,
+//            fname,
+//            descriptor,
+//            signature,
+//            value
+//        );
     }
 
     /**
@@ -351,7 +368,7 @@ public final class BytecodeClass implements Testable {
      */
     public BytecodeClass withAnnotations(final XmlAnnotations annotations) {
         annotations.all().forEach(
-            annotation -> this.writer.visitAnnotation(
+            annotation -> this.visitor.visitAnnotation(
                 annotation.descriptor(),
                 annotation.visible()
             )

@@ -88,22 +88,29 @@ public final class XmlBytecode {
         );
         clazz.annotations().ifPresent(bytecode::withAnnotations);
         for (final XmlField field : clazz.fields()) {
-            final FieldVisitor visitor = bytecode.withField(
+            bytecode.withField(
                 new JavaName(field.name()).decode(),
                 field.descriptor(),
                 field.signature(),
                 field.value(),
                 field.access()
             );
-            field.annotations().ifPresent(
-                annotations -> annotations.all()
-                    .forEach(
-                        annotation -> visitor.visitAnnotation(
-                            annotation.descriptor(),
-                            annotation.visible()
-                        )
-                    )
-            );
+//            final FieldVisitor visitor = bytecode.withField(
+//                new JavaName(field.name()).decode(),
+//                field.descriptor(),
+//                field.signature(),
+//                field.value(),
+//                field.access()
+//            );
+//            field.annotations().ifPresent(
+//                annotations -> annotations.all()
+//                    .forEach(
+//                        annotation -> visitor.visitAnnotation(
+//                            annotation.descriptor(),
+//                            annotation.visible()
+//                        )
+//                    )
+//            );
         }
         for (final XmlMethod xmlmethod : clazz.methods()) {
             final BytecodeMethod method = bytecode.withMethod(xmlmethod.properties());

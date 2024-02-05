@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import org.eolang.jeo.representation.DefaultVersion;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 
 /**
@@ -83,11 +84,11 @@ public final class BytecodeClassProperties {
 
     /**
      * Start writing a class by using class writer.
-     * @param writer Class writer.
+     * @param visitor Class visitor.
      * @param name Class name.
      */
-    void write(final ClassWriter writer, final String name) {
-        writer.visit(
+    void write(final ClassVisitor visitor, final String name) {
+        visitor.visit(
             new DefaultVersion().java(),
             this.access,
             name,
