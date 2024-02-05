@@ -88,6 +88,10 @@ public final class LoggedTranslation implements Translation {
         return result;
     }
 
+    /**
+     * Log the start of the process.
+     * @param source Initial path.
+     */
     private void logStartWithSize(final Path source) {
         Logger.info(
             this,
@@ -98,6 +102,12 @@ public final class LoggedTranslation implements Translation {
         );
     }
 
+    /**
+     * Log the end of the process.
+     * @param source Initial path
+     * @param after Path after the process
+     * @param time Time spent
+     */
     private void logEndWithSize(final Path source, final Path after, final long time) {
         Logger.info(
             this,
@@ -110,9 +120,14 @@ public final class LoggedTranslation implements Translation {
         );
     }
 
+    /**
+     * Size of the file.
+     * @param path Path to the file
+     * @return Size of the file
+     */
     private static long size(final Path path) {
         try {
-            long result;
+            final long result;
             if (Files.exists(path) && !path.equals(LoggedTranslation.UNKNOWN)) {
                 result = Files.size(path);
             } else {
