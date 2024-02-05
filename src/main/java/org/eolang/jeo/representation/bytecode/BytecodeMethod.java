@@ -166,10 +166,12 @@ public final class BytecodeMethod implements Testable {
     void write() {
         try {
             final MethodVisitor visitor = this.properties.writeMethod(this.visitor);
-            visitor.visitCode();
-            this.trycatchblocks.forEach(block -> block.writeTo(visitor));
-            this.instructions.forEach(instruction -> instruction.writeTo(visitor));
-            visitor.visitMaxs(0, 0);
+            if (!this.properties.isAbstract()) {
+                visitor.visitCode();
+                this.trycatchblocks.forEach(block -> block.writeTo(visitor));
+                this.instructions.forEach(instruction -> instruction.writeTo(visitor));
+                visitor.visitMaxs(0, 0);
+            }
             visitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {
             throw new IllegalStateException(

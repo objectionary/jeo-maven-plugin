@@ -30,6 +30,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.JavaName;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Bytecode method properties.
@@ -122,6 +123,14 @@ public final class BytecodeMethodProperties implements Testable {
     @Override
     public String testCode() {
         return String.format("\"%s\", \"%s\", %d", this.name, this.descriptor, this.access);
+    }
+
+    /**
+     * Is method abstract.
+     * @return True if method is abstract.
+     */
+    public boolean isAbstract() {
+        return (this.access & Opcodes.ACC_ABSTRACT) != 0;
     }
 
     /**

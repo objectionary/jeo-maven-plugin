@@ -163,4 +163,15 @@ class BytecodeClassTest {
             }, "We expect no exception here because all instructions are valid"
         );
     }
+
+    @Test
+    void generatesCodeForInterface() {
+        Assertions.assertDoesNotThrow(
+            () -> new BytecodeClass("org/eolang/benchmark/F")
+                .withMethod("j$foo", "()I", 1025)
+                .up()
+                .bytecode(),
+            "We expect no exception here because all instructions are valid"
+        );
+    }
 }
