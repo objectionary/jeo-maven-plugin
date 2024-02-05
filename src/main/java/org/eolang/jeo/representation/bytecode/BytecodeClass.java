@@ -72,6 +72,11 @@ public final class BytecodeClass implements Testable {
     private final Collection<BytecodeField> fields;
 
     /**
+     * Annotations.
+     */
+    private final Collection<BytecodeAnnotation> annotations;
+
+    /**
      * Class properties (access, signature, supername, interfaces).
      */
     private final BytecodeClassProperties props;
@@ -201,6 +206,7 @@ public final class BytecodeClass implements Testable {
         this.methods = methods;
         this.props = properties;
         this.fields = new ArrayList<>(0);
+        this.annotations = new ArrayList<>(0);
         this.verify = verify;
     }
 
@@ -229,7 +235,8 @@ public final class BytecodeClass implements Testable {
     public Bytecode bytecode() {
         try {
             this.props.write(this.visitor, this.name);
-            this.fields.forEach(BytecodeField::write);
+            this.annotations.forEach(annotation -> annotation.write(this.visitor));
+            this.fields.forEach(field -> field.write(this.visitor));
             this.methods.forEach(BytecodeMethod::write);
             this.visitor.visitEnd();
             final byte[] bytes = this.writer.toByteArray();
@@ -337,7 +344,7 @@ public final class BytecodeClass implements Testable {
      * @return This object.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    public void withField(
+    public BytecodeField withField(
         final String fname,
         final String descriptor,
         final String signature,
@@ -348,16 +355,9 @@ public final class BytecodeClass implements Testable {
         for (final int modifier : modifiers) {
             access |= modifier;
         }
-        this.fields.add(
-            new BytecodeField(fname, descriptor, signature, value, access, this.visitor)
-        );
-//        return this.visitor.visitField(
-//            access,
-//            fname,
-//            descriptor,
-//            signature,
-//            value
-//        );
+        final BytecodeField field = new BytecodeField(fname, descriptor, signature, value, access);
+        this.fields.add(field);
+        return field;
     }
 
     /**
@@ -367,12 +367,10 @@ public final class BytecodeClass implements Testable {
      * @return This object.
      */
     public BytecodeClass withAnnotations(final XmlAnnotations annotations) {
-        annotations.all().forEach(
-            annotation -> this.visitor.visitAnnotation(
-                annotation.descriptor(),
-                annotation.visible()
-            )
-        );
+        annotations.all()
+            .stream()
+            .map(ann -> new BytecodeAnnotation(ann.descriptor(), ann.visible()))
+            .forEach(this.annotations::add);
         return this;
     }
 
