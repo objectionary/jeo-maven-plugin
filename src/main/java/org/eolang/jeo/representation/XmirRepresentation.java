@@ -48,7 +48,7 @@ public final class XmirRepresentation implements Representation {
     /**
      * Source of the XML.
      */
-    private final Object source;
+    private final String source;
 
     /**
      * Verify bytecode.
@@ -70,7 +70,7 @@ public final class XmirRepresentation implements Representation {
      * @param verify Verify bytecode.
      */
     public XmirRepresentation(final Path path, final boolean verify) {
-        this(XmirRepresentation.open(path), path, verify);
+        this(XmirRepresentation.open(path), path.toAbsolutePath().toString(), verify);
     }
 
     /**
@@ -88,7 +88,7 @@ public final class XmirRepresentation implements Representation {
      */
     public XmirRepresentation(
         final XML xml,
-        final Object source
+        final String source
     ) {
         this(xml, source, true);
     }
@@ -101,7 +101,7 @@ public final class XmirRepresentation implements Representation {
      */
     public XmirRepresentation(
         final XML xml,
-        final Object source,
+        final String source,
         final boolean verify
     ) {
         this.xml = xml;

@@ -23,7 +23,9 @@
  */
 package org.eolang.jeo;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -55,14 +57,14 @@ public class Details {
     /**
      * Storage with all the details.
      */
-    private final Map<String, Object> storage;
+    private final Map<String, String> storage;
 
     /**
      * Constructor.
      * @param name Name of the class or an object.
      * @param source Original source of the representation.
      */
-    public Details(final String name, final Object source) {
+    public Details(final String name, final String source) {
         this(Details.NAME_KEY, name, Details.SOURCE_KEY, source);
     }
 
@@ -70,7 +72,7 @@ public class Details {
      * Constructor.
      * @param inits Initializations.
      */
-    private Details(final Object... inits) {
+    private Details(final String... inits) {
         this(Details.initial(inits));
     }
 
@@ -78,7 +80,7 @@ public class Details {
      * Constructor.
      * @param storage Storage with all the details.
      */
-    private Details(final Map<String, Object> storage) {
+    private Details(final Map<String, String> storage) {
         this.storage = storage;
     }
 
@@ -87,7 +89,7 @@ public class Details {
      * @return Name.
      */
     public String name() {
-        return (String) this.storage.get(Details.NAME_KEY);
+        return this.storage.get(Details.NAME_KEY);
     }
 
     /**
@@ -96,9 +98,18 @@ public class Details {
      * @return Optional Source.
      */
     public Optional<Path> source() {
-        return Optional.ofNullable(this.storage.get(Details.SOURCE_KEY))
-            .filter(Path.class::isInstance)
-            .map(Path.class::cast);
+        final Optional<Path> result;
+        if (this.storage.containsKey(Details.SOURCE_KEY)) {
+            final Path path = Paths.get(this.storage.get(Details.SOURCE_KEY)).toAbsolutePath();
+            if (Files.exists(path)) {
+                result = Optional.of(path);
+            } else {
+                result = Optional.empty();
+            }
+        } else {
+            result = Optional.empty();
+        }
+        return result;
     }
 
     /**
@@ -106,14 +117,14 @@ public class Details {
      * @param pairs Pairs of key-value.
      * @return Map with all the details.
      */
-    private static Map<String, Object> initial(final Object... pairs) {
+    private static Map<String, String> initial(final String... pairs) {
         final int length = pairs.length;
         if (length % 2 == 1) {
             throw new IllegalArgumentException("Must have an even number of arguments");
         }
-        final Map<String, Object> map = new HashMap<>(pairs.length / 2);
+        final Map<String, String> map = new HashMap<>(pairs.length / 2);
         for (int index = 0; index < length; index += 2) {
-            map.put((String) pairs[index], pairs[index + 1]);
+            map.put(pairs[index], pairs[index + 1]);
         }
         return map;
     }

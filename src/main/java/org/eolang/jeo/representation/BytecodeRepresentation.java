@@ -60,7 +60,7 @@ public final class BytecodeRepresentation implements Representation {
     /**
      * The source of the input.
      */
-    private final Object source;
+    private final String source;
 
     /**
      * Constructor.
@@ -96,7 +96,7 @@ public final class BytecodeRepresentation implements Representation {
      * @param source The source of the input
      */
     private BytecodeRepresentation(final Input input, final Path source) {
-        this(new UncheckedBytes(new BytesOf(input)).asBytes(), source);
+        this(new UncheckedBytes(new BytesOf(input)).asBytes(), source.toAbsolutePath().toString());
     }
 
     /**
@@ -116,7 +116,7 @@ public final class BytecodeRepresentation implements Representation {
      */
     private BytecodeRepresentation(
         final byte[] input,
-        final Object source
+        final String source
     ) {
         this.input = input.clone();
         this.source = source;

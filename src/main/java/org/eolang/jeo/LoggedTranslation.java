@@ -79,36 +79,51 @@ public final class LoggedTranslation implements Translation {
     public Representation apply(final Representation representation) {
         final Representation result;
         final Path source = representation.details().source().orElse(LoggedTranslation.UNKNOWN);
+        this.logStartWithSize(source);
+        final long start = System.currentTimeMillis();
+        result = this.original.apply(representation);
+        final long time = System.currentTimeMillis() - start;
+        final Path after = result.details().source().orElse(LoggedTranslation.UNKNOWN);
+        this.logEndWithSize(source, after, time);
+        return result;
+    }
+
+
+    private void logStartWithSize(final Path source) {
         try {
-            if (Files.exists(source)) {
-                Logger.info(
-                    this,
-                    "%s '%[file]s' (%[size]s)",
-                    this.process,
-                    source,
-                    Files.size(source)
-                );
-                final long start = System.currentTimeMillis();
-                result = this.original.apply(representation);
-                final long time = System.currentTimeMillis() - start;
-                final Path after = result.details().source().orElse(LoggedTranslation.UNKNOWN);
-                Logger.info(
-                    this,
-                    "'%[file]s' %s to '%[file]s' (%[size]s) in %[ms]s",
-                    source,
-                    this.participle,
-                    after,
-                    Files.size(after),
-                    time
-                );
-            } else {
-                result = this.original.apply(representation);
-            }
-            return result;
+            Logger.info(
+                this,
+                "%s '%[file]s' (%[size]s)",
+                this.process,
+                source,
+                Files.size(source)
+            );
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format(
-                    "Failed to apply %s translation",
+                    "Can't log %s translation, since the source file a representation is not found, or its size can't be determined",
+                    this.original
+                ),
+                exception
+            );
+        }
+    }
+
+    private void logEndWithSize(final Path source, final Path after, final long time) {
+        try {
+            Logger.info(
+                this,
+                "'%[file]s' %s to '%[file]s' (%[size]s) in %[ms]s",
+                source,
+                this.participle,
+                after,
+                Files.size(after),
+                time
+            );
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Can't log %s translation, since the output file after transformation is not found, or its size can't be determined",
                     this.original
                 ),
                 exception
