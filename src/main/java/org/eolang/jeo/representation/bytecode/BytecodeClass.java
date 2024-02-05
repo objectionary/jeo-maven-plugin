@@ -34,7 +34,6 @@ import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.util.CheckClassAdapter;
 
@@ -361,13 +360,13 @@ public final class BytecodeClass implements Testable {
     }
 
     /**
-     * Add annotations.
+     * Add anns.
      *
-     * @param annotations Annotations.
+     * @param all Annotations.
      * @return This object.
      */
-    public BytecodeClass withAnnotations(final XmlAnnotations annotations) {
-        annotations.all()
+    public BytecodeClass withAnnotations(final XmlAnnotations all) {
+        all.all()
             .stream()
             .map(ann -> new BytecodeAnnotation(ann.descriptor(), ann.visible()))
             .forEach(this.annotations::add);
@@ -414,10 +413,11 @@ public final class BytecodeClass implements Testable {
     /**
      * Verify bytecode.
      * @param bytes Bytecode to verify.
-     * @todo #427:90min Use custom bytecode verifier instead of CheckClassAdapter#verify.
-     *  This class can only print the error message to the console. We need to have a custom
-     *  bytecode verifier that can throw an exception with the error message.
-     *  Here you can find the detailed problem description:
+     * @todo #429:60min Remove `verifyBytecode` method and its usage from the `BytecodeClass` class.
+     *  This method is used to verify the bytecode of the class. Since we added
+     *  CheckClassAdapter in the `bytecode` method, we can remove this method.
+     *  However, we need to make sure that by doing this we don't break any existing tests.
+     *  You can read more about the problem here:
      *  <a href="https://stackoverflow.com/q/77854100/10423604">link</a>
      */
     private void verifyBytecode(final byte[] bytes) {

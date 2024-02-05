@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.bytecode;
 
 import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
 
 /**
  * Class properties.

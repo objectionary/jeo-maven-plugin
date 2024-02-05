@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.ArrayList;
 import java.util.List;
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
@@ -49,7 +48,7 @@ public final class BytecodeMethod implements Testable {
     /**
      * Try-catch blocks.
      */
-    private final List<BytecodeEntry> trycatchblocks;
+    private final List<BytecodeEntry> tryblocks;
 
     /**
      * Method Instructions.
@@ -94,7 +93,7 @@ public final class BytecodeMethod implements Testable {
         this.properties = properties;
         this.visitor = visitor;
         this.clazz = clazz;
-        this.trycatchblocks = new ArrayList<>(0);
+        this.tryblocks = new ArrayList<>(0);
         this.instructions = new ArrayList<>(0);
     }
 
@@ -133,7 +132,7 @@ public final class BytecodeMethod implements Testable {
      * @return This object.
      */
     public BytecodeMethod trycatch(final BytecodeEntry entry) {
-        this.trycatchblocks.add(entry);
+        this.tryblocks.add(entry);
         return this;
     }
 
@@ -165,14 +164,14 @@ public final class BytecodeMethod implements Testable {
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     void write() {
         try {
-            final MethodVisitor visitor = this.properties.writeMethod(this.visitor);
+            final MethodVisitor mvisitor = this.properties.writeMethod(this.visitor);
             if (!this.properties.isAbstract()) {
-                visitor.visitCode();
-                this.trycatchblocks.forEach(block -> block.writeTo(visitor));
-                this.instructions.forEach(instruction -> instruction.writeTo(visitor));
-                visitor.visitMaxs(0, 0);
+                mvisitor.visitCode();
+                this.tryblocks.forEach(block -> block.writeTo(mvisitor));
+                this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
+                mvisitor.visitMaxs(0, 0);
             }
-            visitor.visitEnd();
+            mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {
             throw new IllegalStateException(
                 String.format(
