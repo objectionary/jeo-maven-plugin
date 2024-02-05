@@ -201,7 +201,7 @@ public final class BytecodeClass implements Testable {
     ) {
         this.name = name;
         this.writer = writer;
-        this.visitor = new CheckClassAdapter(this.writer);
+        this.visitor = new CheckClassAdapter(this.writer, false);
         this.methods = methods;
         this.props = properties;
         this.fields = new ArrayList<>(0);
