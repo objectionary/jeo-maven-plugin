@@ -49,7 +49,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
     @Override
     public void writeTo(final BytecodeMethod method) {
         final AllLabels labels = new AllLabels();
-        method.entry(
+        method.trycatch(
             new BytecodeTryCatchBlock(
                 this.label("start").map(labels::label).orElse(null),
                 this.label("end").map(labels::label).orElse(null),

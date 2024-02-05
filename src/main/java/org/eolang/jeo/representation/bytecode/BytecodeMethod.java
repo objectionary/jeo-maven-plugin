@@ -47,6 +47,11 @@ public final class BytecodeMethod implements Testable {
     private final BytecodeClass clazz;
 
     /**
+     * Try-catch blocks.
+     */
+    private final List<BytecodeEntry> trycatchblocks;
+
+    /**
      * Method Instructions.
      */
     private final List<BytecodeEntry> instructions;
@@ -89,6 +94,7 @@ public final class BytecodeMethod implements Testable {
         this.properties = properties;
         this.visitor = visitor;
         this.clazz = clazz;
+        this.trycatchblocks = new ArrayList<>(0);
         this.instructions = new ArrayList<>(0);
     }
 
@@ -122,6 +128,16 @@ public final class BytecodeMethod implements Testable {
     }
 
     /**
+     * Add try-catch block.
+     * @param entry Try-catch block.
+     * @return This object.
+     */
+    public BytecodeMethod trycatch(final BytecodeEntry entry) {
+        this.trycatchblocks.add(entry);
+        return this;
+    }
+
+    /**
      * Add some bytecode entry.
      * @param entry Entry.
      * @return This object.
@@ -151,6 +167,7 @@ public final class BytecodeMethod implements Testable {
         try {
             final MethodVisitor visitor = this.properties.writeMethod(this.visitor);
             visitor.visitCode();
+            this.trycatchblocks.forEach(block -> block.writeTo(visitor));
             this.instructions.forEach(instruction -> instruction.writeTo(visitor));
             visitor.visitMaxs(0, 0);
             visitor.visitEnd();

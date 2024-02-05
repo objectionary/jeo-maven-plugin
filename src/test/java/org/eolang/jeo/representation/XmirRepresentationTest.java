@@ -72,8 +72,9 @@ class XmirRepresentationTest {
 
     @Test
     void returnsBytecodeRepresentationOfEo() {
-        final BytecodeClass clazz = new BytecodeClass("Bar");
-        final Bytecode expected = clazz.bytecode();
+        final String name = "Bar";
+        final BytecodeClass clazz = new BytecodeClass(name);
+        final Bytecode expected = new BytecodeClass(name).bytecode();
         final Bytecode actual = new XmirRepresentation(clazz.xml()).toBytecode();
         MatcherAssert.assertThat(
             String.format(XmirRepresentationTest.MESSAGE, expected, actual),

@@ -344,7 +344,7 @@ class DirectivesMethodVisitorTest {
             .label(end)
             .label(handler)
             .opcode(Opcodes.RETURN)
-            .entry(new BytecodeTryCatchBlock(start, end, handler, "java/lang/Exception"))
+            .trycatch(new BytecodeTryCatchBlock(start, end, handler, "java/lang/Exception"))
             .up()
             .xml()
             .toString();
