@@ -88,44 +88,40 @@ public final class LoggedTranslation implements Translation {
         return result;
     }
 
-
     private void logStartWithSize(final Path source) {
-        try {
-            Logger.info(
-                this,
-                "%s '%[file]s' (%[size]s)",
-                this.process,
-                source,
-                Files.size(source)
-            );
-        } catch (final IOException exception) {
-            throw new IllegalStateException(
-                String.format(
-                    "Can't log %s translation, since the source file a representation is not found, or its size can't be determined",
-                    this.original
-                ),
-                exception
-            );
-        }
+        Logger.info(
+            this,
+            "%s '%[file]s' (%[size]s)",
+            this.process,
+            source,
+            LoggedTranslation.size(source)
+        );
     }
 
     private void logEndWithSize(final Path source, final Path after, final long time) {
+        Logger.info(
+            this,
+            "'%[file]s' %s to '%[file]s' (%[size]s) in %[ms]s",
+            source,
+            this.participle,
+            after,
+            LoggedTranslation.size(after),
+            time
+        );
+    }
+
+    private static long size(final Path path) {
         try {
-            Logger.info(
-                this,
-                "'%[file]s' %s to '%[file]s' (%[size]s) in %[ms]s",
-                source,
-                this.participle,
-                after,
-                Files.size(after),
-                time
-            );
+            long result;
+            if (Files.exists(path) && !path.equals(LoggedTranslation.UNKNOWN)) {
+                result = Files.size(path);
+            } else {
+                result = 0L;
+            }
+            return result;
         } catch (final IOException exception) {
             throw new IllegalStateException(
-                String.format(
-                    "Can't log %s translation, since the output file after transformation is not found, or its size can't be determined",
-                    this.original
-                ),
+                String.format("Can't determine size of '%s'", path),
                 exception
             );
         }
