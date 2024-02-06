@@ -28,13 +28,20 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
+import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.analysis.Analyzer;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
+import org.objectweb.asm.tree.analysis.BasicValue;
+import org.objectweb.asm.tree.analysis.SimpleVerifier;
 import org.objectweb.asm.util.CheckClassAdapter;
 
 /**
@@ -51,14 +58,9 @@ public final class BytecodeClass implements Testable {
     private final String name;
 
     /**
-     * ASM class writer.
+     * Class writer.
      */
-    private final ClassWriter writer;
-
-    /**
-     * Class visitor.
-     */
-    private final ClassVisitor visitor;
+    private final CustomClassWriter visitor;
 
     /**
      * Methods.
@@ -159,7 +161,7 @@ public final class BytecodeClass implements Testable {
     public BytecodeClass(
         final String name,
         final int access,
-        final ClassWriter writer
+        final CustomClassWriter writer
     ) {
         this(name, writer, new ArrayList<>(0), new BytecodeClassProperties(access));
     }
@@ -175,7 +177,7 @@ public final class BytecodeClass implements Testable {
      */
     public BytecodeClass(
         final String name,
-        final ClassWriter writer,
+        final CustomClassWriter writer,
         final Collection<BytecodeMethod> methods,
         final BytecodeClassProperties properties
     ) {
@@ -194,14 +196,13 @@ public final class BytecodeClass implements Testable {
      */
     public BytecodeClass(
         final String name,
-        final ClassWriter writer,
+        final CustomClassWriter writer,
         final Collection<BytecodeMethod> methods,
         final BytecodeClassProperties properties,
         final boolean verify
     ) {
         this.name = name;
-        this.writer = writer;
-        this.visitor = new CheckClassAdapter(this.writer, false);
+        this.visitor = writer;
         this.methods = methods;
         this.props = properties;
         this.fields = new ArrayList<>(0);
@@ -238,8 +239,8 @@ public final class BytecodeClass implements Testable {
             this.fields.forEach(field -> field.write(this.visitor));
             this.methods.forEach(BytecodeMethod::write);
             this.visitor.visitEnd();
-            final byte[] bytes = this.writer.toByteArray();
-            this.verifyBytecode(bytes);
+            final byte[] bytes = this.visitor.toByteArray();
+            this.verify(bytes);
             return new Bytecode(bytes);
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
@@ -410,35 +411,40 @@ public final class BytecodeClass implements Testable {
             .up();
     }
 
-    /**
-     * Verify bytecode.
-     * @param bytes Bytecode to verify.
-     * @todo #429:60min Remove `verifyBytecode` method and its usage from the `BytecodeClass` class.
-     *  This method is used to verify the bytecode of the class. Since we added
-     *  CheckClassAdapter in the `bytecode` method, we can remove this method.
-     *  However, we need to make sure that by doing this we don't break any existing tests.
-     *  You can read more about the problem here:
-     *  <a href="https://stackoverflow.com/q/77854100/10423604">link</a>
-     */
-    private void verifyBytecode(final byte[] bytes) {
-        if (this.verify) {
-            if (bytes.length == 0) {
-                throw new IllegalStateException("Bytecode class is empty");
-            }
-            final StringWriter errors = new StringWriter();
-            CheckClassAdapter.verify(
-                new ClassReader(bytes),
-                Thread.currentThread().getContextClassLoader(),
-                false,
-                new PrintWriter(errors)
-            );
-            if (!errors.toString().isEmpty()) {
+    private void verify(final byte[] bytes) {
+        ClassNode classNode = new ClassNode();
+        new ClassReader(bytes).accept(
+            new CheckClassAdapter(new DefaultVersion().api(), classNode, false) {
+            },
+            ClassReader.SKIP_DEBUG
+        );
+        List<MethodNode> methods = classNode.methods;
+        Type syperType = classNode.superName == null ? null : Type.getObjectType(
+            classNode.superName);
+        List<Type> interfaces = new ArrayList<>();
+        for (String interfaceName : classNode.interfaces) {
+            interfaces.add(Type.getObjectType(interfaceName));
+        }
+        for (MethodNode method : methods) {
+            try {
+                SimpleVerifier verifier =
+                    new SimpleVerifier(
+                        Type.getObjectType(classNode.name),
+                        syperType,
+                        interfaces,
+                        (classNode.access & Opcodes.ACC_INTERFACE) != 0
+                    );
+                Analyzer<BasicValue> analyzer = new Analyzer<>(verifier);
+                verifier.setClassLoader(Thread.currentThread().getContextClassLoader());
+                analyzer.analyze(classNode.name, method);
+            } catch (final AnalyzerException exception) {
                 throw new IllegalStateException(
                     String.format(
-                        "Bytecode verification failed for the class '%s' due to the following reasons: %s",
+                        "Bytecode verification failed for the class '%s' and method '%s'",
                         this.name,
-                        errors
-                    )
+                        method
+                    ),
+                    exception
                 );
             }
         }

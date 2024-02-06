@@ -180,7 +180,7 @@ class BytecodeClassTest {
         Assertions.assertThrows(
             IllegalStateException.class,
             () -> new BytecodeClass("Broken")
-                .withMethod("j$bar", "()I", 0)
+                .withMethod("j$bar", "()I", Opcodes.ACC_PUBLIC)
                 .label("70b56006-856e-4ac2-be99-632ca25a65a0")
                 .opcode(Opcodes.ALOAD, 0)
                 .opcode(Opcodes.INVOKEVIRTUAL, "com/exam/BA", "foo", "()I")
