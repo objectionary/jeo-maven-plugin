@@ -45,7 +45,7 @@ public final class VerifiedClassWriter extends CustomClassWriter {
     @Override
     public byte[] toByteArray() {
         final byte[] bytes = super.toByteArray();
-        this.verify(bytes);
+        VerifiedClassWriter.verify(bytes);
         return bytes;
     }
 
