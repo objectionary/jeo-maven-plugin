@@ -51,7 +51,7 @@ public class CustomClassWriter extends ClassWriter {
     }
 
     @Override
-    public ClassLoader getClassLoader() {
+    public final ClassLoader getClassLoader() {
         return Thread.currentThread().getContextClassLoader();
     }
 }

@@ -23,9 +23,9 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.eolang.jeo.representation.DefaultVersion;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -33,7 +33,6 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.analysis.Analyzer;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.objectweb.asm.tree.analysis.BasicValue;
 import org.objectweb.asm.tree.analysis.SimpleVerifier;
 import org.objectweb.asm.util.CheckClassAdapter;
 
@@ -54,38 +53,29 @@ public final class VerifiedClassWriter extends CustomClassWriter {
      * Verify the bytecode.
      * @param bytes The bytecode to verify.
      */
-    private void verify(final byte[] bytes) {
-        ClassNode classNode = new ClassNode();
-        new ClassReader(bytes).accept(
-            new CheckClassAdapter(new DefaultVersion().api(), classNode, false) {
-            },
-            ClassReader.SKIP_DEBUG
-        );
-        List<MethodNode> methods = classNode.methods;
-        Type syperType = classNode.superName == null ? null : Type.getObjectType(
-            classNode.superName);
-        List<Type> interfaces = new ArrayList<>();
-        for (String interfaceName : classNode.interfaces) {
-            interfaces.add(Type.getObjectType(interfaceName));
-        }
-        final String name = classNode.name;
-        for (MethodNode method : methods) {
+    private static void verify(final byte[] bytes) {
+        final ClassNode clazz = new ClassNode();
+        new ClassReader(bytes)
+            .accept(new CheckClassAdapter(clazz, false), ClassReader.SKIP_DEBUG);
+        final Optional<Type> syper = Optional.ofNullable(clazz.superName).map(Type::getObjectType);
+        final List<Type> interfaces = clazz.interfaces.stream().map(Type::getObjectType)
+            .collect(Collectors.toList());
+        for (final MethodNode method : clazz.methods) {
             try {
-                SimpleVerifier verifier =
+                final SimpleVerifier verifier =
                     new SimpleVerifier(
-                        Type.getObjectType(name),
-                        syperType,
+                        Type.getObjectType(clazz.name),
+                        syper.orElse(null),
                         interfaces,
-                        (classNode.access & Opcodes.ACC_INTERFACE) != 0
+                        (clazz.access & Opcodes.ACC_INTERFACE) != 0
                     );
-                Analyzer<BasicValue> analyzer = new Analyzer<>(verifier);
                 verifier.setClassLoader(Thread.currentThread().getContextClassLoader());
-                analyzer.analyze(name, method);
+                new Analyzer<>(verifier).analyze(clazz.name, method);
             } catch (final AnalyzerException exception) {
                 throw new IllegalStateException(
                     String.format(
                         "Bytecode verification failed for the class '%s' and method '%s'",
-                        name,
+                        clazz.name,
                         method
                     ),
                     exception

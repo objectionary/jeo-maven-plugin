@@ -50,7 +50,7 @@ public final class BytecodeClass implements Testable {
     /**
      * Class writer.
      */
-    private final CustomClassWriter writer;
+    private final CustomClassWriter visitor;
 
     /**
      * Methods.
@@ -154,7 +154,7 @@ public final class BytecodeClass implements Testable {
         final BytecodeClassProperties properties
     ) {
         this.name = name;
-        this.writer = writer;
+        this.visitor = writer;
         this.methods = methods;
         this.props = properties;
         this.fields = new ArrayList<>(0);
@@ -185,12 +185,12 @@ public final class BytecodeClass implements Testable {
      */
     public Bytecode bytecode() {
         try {
-            this.props.write(this.writer, this.name);
-            this.annotations.forEach(annotation -> annotation.write(this.writer));
-            this.fields.forEach(field -> field.write(this.writer));
+            this.props.write(this.visitor, this.name);
+            this.annotations.forEach(annotation -> annotation.write(this.visitor));
+            this.fields.forEach(field -> field.write(this.visitor));
             this.methods.forEach(BytecodeMethod::write);
-            this.writer.visitEnd();
-            return new Bytecode(this.writer.toByteArray());
+            this.visitor.visitEnd();
+            return new Bytecode(this.visitor.toByteArray());
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
                 String.format("Can't create bytecode for the class '%s' ", this.name),
@@ -225,7 +225,7 @@ public final class BytecodeClass implements Testable {
      * @return This object.
      */
     public BytecodeMethod withMethod(final BytecodeMethodProperties properties) {
-        final BytecodeMethod method = new BytecodeMethod(properties, this.writer, this);
+        final BytecodeMethod method = new BytecodeMethod(properties, this.visitor, this);
         this.methods.add(method);
         return method;
     }
@@ -256,7 +256,7 @@ public final class BytecodeClass implements Testable {
     ) {
         final BytecodeMethod method = new BytecodeMethod(
             mname,
-            this.writer,
+            this.visitor,
             this,
             descriptor,
             modifiers
