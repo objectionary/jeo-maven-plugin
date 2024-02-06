@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">     * @param clazz Path to the class file</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">public</strong> <a name="BytecodeRepresentation" href="../../../../org/eolang/jeo/representation/BytecodeRepresentation.html#BytecodeRepresentation">BytecodeRepresentation</a>(<strong class="jxr_keyword">final</strong> Path clazz) {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">this</strong>(<strong class="jxr_keyword">new</strong> InputOf(clazz), clazz.getFileName().toString());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">this</strong>(<strong class="jxr_keyword">new</strong> InputOf(clazz), clazz);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>      }
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      <em class="jxr_javadoccomment">/**</em>
@@ -103,8 +103,8 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">     * @param input Input source</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">     * @param source The source of the input</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <strong class="jxr_keyword">private</strong> <a name="BytecodeRepresentation" href="../../../../org/eolang/jeo/representation/BytecodeRepresentation.html#BytecodeRepresentation">BytecodeRepresentation</a>(<strong class="jxr_keyword">final</strong> Input input, <strong class="jxr_keyword">final</strong> String source) {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>          <strong class="jxr_keyword">this</strong>(<strong class="jxr_keyword">new</strong> UncheckedBytes(<strong class="jxr_keyword">new</strong> BytesOf(input)).asBytes(), source);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <strong class="jxr_keyword">private</strong> <a name="BytecodeRepresentation" href="../../../../org/eolang/jeo/representation/BytecodeRepresentation.html#BytecodeRepresentation">BytecodeRepresentation</a>(<strong class="jxr_keyword">final</strong> Input input, <strong class="jxr_keyword">final</strong> Path source) {
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          <strong class="jxr_keyword">this</strong>(<strong class="jxr_keyword">new</strong> UncheckedBytes(<strong class="jxr_keyword">new</strong> BytesOf(input)).asBytes(), source.toAbsolutePath().toString());
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>     }
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>     <em class="jxr_javadoccomment">/**</em>
