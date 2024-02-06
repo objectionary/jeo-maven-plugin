@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -105,6 +106,15 @@ public final class BytecodeMethod implements Testable {
     @SuppressWarnings("PMD.ShortMethodName")
     public BytecodeClass up() {
         return this.clazz;
+    }
+
+    /**
+     * Add label.
+     * @param label Label.
+     * @return This object.
+     */
+    public BytecodeMethod label(final String label) {
+        return this.label(new AllLabels().label(label));
     }
 
     /**

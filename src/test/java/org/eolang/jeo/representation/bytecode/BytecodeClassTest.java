@@ -171,7 +171,26 @@ class BytecodeClassTest {
                 .withMethod("j$foo", "()I", 1025)
                 .up()
                 .bytecode(),
-            "We expect no exception here because all instructions are valid"
+            "We expect no exception here because all instructions are valid. This is an abstract method."
+        );
+    }
+
+    @Test
+    void failsBecauseBytecodeIsBroken() {
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new BytecodeClass("Broken")
+                .withMethod("j$bar", "()I", 0)
+                .label("70b56006-856e-4ac2-be99-632ca25a65a0")
+                .opcode(Opcodes.ALOAD, 0)
+                .opcode(Opcodes.INVOKEVIRTUAL, "com/exam/BA", "foo", "()I")
+                .opcode(Opcodes.ICONST_2)
+                .opcode(Opcodes.IADD)
+                .opcode(Opcodes.IRETURN)
+                .label("f3d973ab-c502-4134-8d6f-d7fe89defc6e")
+                .up()
+                .bytecode(),
+            "We expect an exception here because the bytecode is broken"
         );
     }
 }
