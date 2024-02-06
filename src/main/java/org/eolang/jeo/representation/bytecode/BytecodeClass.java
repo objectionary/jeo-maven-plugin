@@ -25,23 +25,13 @@ package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.xml.XML;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
-import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.analysis.Analyzer;
-import org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.objectweb.asm.tree.analysis.BasicValue;
-import org.objectweb.asm.tree.analysis.SimpleVerifier;
 import org.objectweb.asm.util.CheckClassAdapter;
 
 /**
@@ -60,7 +50,7 @@ public final class BytecodeClass implements Testable {
     /**
      * Class writer.
      */
-    private final CustomClassWriter visitor;
+    private final CustomClassWriter writer;
 
     /**
      * Methods.
@@ -81,13 +71,6 @@ public final class BytecodeClass implements Testable {
      * Class properties (access, signature, supername, interfaces).
      */
     private final BytecodeClassProperties props;
-
-    /**
-     * Verify bytecode.
-     * This flag is used to disable bytecode verification each time when
-     * the {@link BytecodeClass#bytecode()} method is called.
-     */
-    private final boolean verify;
 
     /**
      * Constructor.
@@ -112,7 +95,7 @@ public final class BytecodeClass implements Testable {
      * @param access Access modifiers.
      */
     public BytecodeClass(final String name, final int access) {
-        this(name, access, new CustomClassWriter());
+        this(name, new BytecodeClassProperties(access));
     }
 
     /**
@@ -122,12 +105,7 @@ public final class BytecodeClass implements Testable {
      * @param properties Class properties.
      */
     public BytecodeClass(final String name, final BytecodeClassProperties properties) {
-        this(
-            name,
-            new CustomClassWriter(),
-            new ArrayList<>(0),
-            properties
-        );
+        this(name, properties, true);
     }
 
     /**
@@ -142,13 +120,7 @@ public final class BytecodeClass implements Testable {
         final BytecodeClassProperties properties,
         final boolean verify
     ) {
-        this(
-            name,
-            new CustomClassWriter(),
-            new ArrayList<>(0),
-            properties,
-            verify
-        );
+        this(name, BytecodeClass.writer(verify), new ArrayList<>(0), properties);
     }
 
     /**
@@ -181,33 +153,12 @@ public final class BytecodeClass implements Testable {
         final Collection<BytecodeMethod> methods,
         final BytecodeClassProperties properties
     ) {
-        this(name, writer, methods, properties, true);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param name Class name.
-     * @param writer ASM class writer.
-     * @param methods Methods.
-     * @param properties Class properties.
-     * @param verify Verify bytecode.
-     * @checkstyle ParameterNumberCheck (5 lines)
-     */
-    public BytecodeClass(
-        final String name,
-        final CustomClassWriter writer,
-        final Collection<BytecodeMethod> methods,
-        final BytecodeClassProperties properties,
-        final boolean verify
-    ) {
         this.name = name;
-        this.visitor = writer;
+        this.writer = writer;
         this.methods = methods;
         this.props = properties;
         this.fields = new ArrayList<>(0);
         this.annotations = new ArrayList<>(0);
-        this.verify = verify;
     }
 
     /**
@@ -234,14 +185,12 @@ public final class BytecodeClass implements Testable {
      */
     public Bytecode bytecode() {
         try {
-            this.props.write(this.visitor, this.name);
-            this.annotations.forEach(annotation -> annotation.write(this.visitor));
-            this.fields.forEach(field -> field.write(this.visitor));
+            this.props.write(this.writer, this.name);
+            this.annotations.forEach(annotation -> annotation.write(this.writer));
+            this.fields.forEach(field -> field.write(this.writer));
             this.methods.forEach(BytecodeMethod::write);
-            this.visitor.visitEnd();
-            final byte[] bytes = this.visitor.toByteArray();
-            this.verify(bytes);
-            return new Bytecode(bytes);
+            this.writer.visitEnd();
+            return new Bytecode(this.writer.toByteArray());
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
                 String.format("Can't create bytecode for the class '%s' ", this.name),
@@ -276,7 +225,7 @@ public final class BytecodeClass implements Testable {
      * @return This object.
      */
     public BytecodeMethod withMethod(final BytecodeMethodProperties properties) {
-        final BytecodeMethod method = new BytecodeMethod(properties, this.visitor, this);
+        final BytecodeMethod method = new BytecodeMethod(properties, this.writer, this);
         this.methods.add(method);
         return method;
     }
@@ -307,7 +256,7 @@ public final class BytecodeClass implements Testable {
     ) {
         final BytecodeMethod method = new BytecodeMethod(
             mname,
-            this.visitor,
+            this.writer,
             this,
             descriptor,
             modifiers
@@ -411,42 +360,18 @@ public final class BytecodeClass implements Testable {
             .up();
     }
 
-    private void verify(final byte[] bytes) {
-        ClassNode classNode = new ClassNode();
-        new ClassReader(bytes).accept(
-            new CheckClassAdapter(new DefaultVersion().api(), classNode, false) {
-            },
-            ClassReader.SKIP_DEBUG
-        );
-        List<MethodNode> methods = classNode.methods;
-        Type syperType = classNode.superName == null ? null : Type.getObjectType(
-            classNode.superName);
-        List<Type> interfaces = new ArrayList<>();
-        for (String interfaceName : classNode.interfaces) {
-            interfaces.add(Type.getObjectType(interfaceName));
+    /**
+     * Which class writer to use.
+     * @param verify Verify bytecode.
+     * @return Verified class writer if verify is true, otherwise custom class writer.
+     */
+    private static CustomClassWriter writer(final boolean verify) {
+        final CustomClassWriter result;
+        if (verify) {
+            result = new VerifiedClassWriter();
+        } else {
+            result = new CustomClassWriter();
         }
-        for (MethodNode method : methods) {
-            try {
-                SimpleVerifier verifier =
-                    new SimpleVerifier(
-                        Type.getObjectType(classNode.name),
-                        syperType,
-                        interfaces,
-                        (classNode.access & Opcodes.ACC_INTERFACE) != 0
-                    );
-                Analyzer<BasicValue> analyzer = new Analyzer<>(verifier);
-                verifier.setClassLoader(Thread.currentThread().getContextClassLoader());
-                analyzer.analyze(classNode.name, method);
-            } catch (final AnalyzerException exception) {
-                throw new IllegalStateException(
-                    String.format(
-                        "Bytecode verification failed for the class '%s' and method '%s'",
-                        this.name,
-                        method
-                    ),
-                    exception
-                );
-            }
-        }
+        return result;
     }
 }

@@ -41,7 +41,7 @@ import org.objectweb.asm.ClassWriter;
  *
  * @since 0.1
  */
-public final class CustomClassWriter extends ClassWriter {
+public class CustomClassWriter extends ClassWriter {
 
     /**
      * Constructor.
