@@ -31,7 +31,6 @@ import java.util.stream.Stream;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.OpcodeName;
 import org.eolang.jeo.representation.xmir.AllLabels;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -94,9 +93,11 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                 if (arg instanceof String) {
                     return String.format("\"%s\"", arg);
                 }
-                if (arg instanceof Label) {
-                    final String uid = new AllLabels().uid((Label) arg);
-                    return String.format("labels.label(\"%s\")", uid);
+                if (arg instanceof org.objectweb.asm.Label) {
+                    return String.format(
+                        "labels.label(\"%s\")",
+                        new AllLabels().uid((org.objectweb.asm.Label) arg)
+                    );
                 }
                 return arg.toString();
             })
