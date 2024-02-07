@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * Hex string.
  * @since 0.1.0
  */
-final class HexString {
+public final class HexString {
 
     /**
      * Hex radix.
@@ -48,7 +48,7 @@ final class HexString {
      * Constructor.
      * @param hex Hex string.
      */
-    HexString(final String hex) {
+    public HexString(final String hex) {
         this.hex = hex;
     }
 
@@ -58,7 +58,7 @@ final class HexString {
      *  "48 65 6C 6C 6F 20 57 6F 72 6C 64 21" -> "Hello World!"
      * @return Human-readable string.
      */
-    String decode() {
+    public String decode() {
         try {
             final String result;
             if (this.hex.isEmpty()) {
@@ -82,7 +82,7 @@ final class HexString {
      * Convert hex string to integer.
      * @return Integer.
      */
-    int decodeAsInt() {
+    public int decodeAsInt() {
         return Integer.parseInt(this.hex.trim().replace(" ", ""), HexString.RADIX);
     }
 
@@ -90,7 +90,7 @@ final class HexString {
      * Convert hex string to boolean.
      * @return Boolean.
      */
-    boolean decodeAsBoolean() {
+    public boolean decodeAsBoolean() {
         final String value = this.hex.trim();
         if (value.length() != 2) {
             throw new IllegalArgumentException(
