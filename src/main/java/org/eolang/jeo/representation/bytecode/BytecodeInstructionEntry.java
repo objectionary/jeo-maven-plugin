@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.OpcodeName;
+import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -92,9 +93,15 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                 if (arg instanceof String) {
                     return String.format("\"%s\"", arg);
                 }
+                if (arg instanceof org.objectweb.asm.Label) {
+                    return String.format(
+                        "labels.label(\"%s\")",
+                        new AllLabels().uid((org.objectweb.asm.Label) arg)
+                    );
+                }
                 return arg.toString();
             })
-        ).collect(Collectors.joining(","));
+        ).collect(Collectors.joining(", "));
         return String.format(".opcode(%s)", args);
     }
 
