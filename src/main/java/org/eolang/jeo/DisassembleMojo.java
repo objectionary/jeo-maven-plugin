@@ -79,7 +79,6 @@ public final class DisassembleMojo extends AbstractMojo {
     )
     private File outputDir;
 
-
     /**
      * Whether the plugin is disabled.
      * If it's disabled, then it won't do anything.
