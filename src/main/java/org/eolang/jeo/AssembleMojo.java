@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.log.Logger;
 import java.io.File;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
@@ -89,15 +90,32 @@ public final class AssembleMojo extends AbstractMojo {
     )
     private boolean skipVerification;
 
+    /**
+     * Whether the plugin is disabled.
+     * If it's disabled, then it won't do anything.
+     *
+     * @since 0.2.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(
+        property = "jeo.disassemble.disabled",
+        defaultValue = "false"
+    )
+    private boolean disabled;
+
     @Override
     public void execute() throws MojoExecutionException {
         try {
             new PluginStartup(this.project).init();
-            new Assembler(
-                this.sourcesDir.toPath(),
-                this.outputDir.toPath(),
-                !this.skipVerification
-            ).assemble();
+            if (this.disabled) {
+                Logger.info(this, "Assemble mojo is disabled. Skipping.");
+            } else {
+                new Assembler(
+                    this.sourcesDir.toPath(),
+                    this.outputDir.toPath(),
+                    !this.skipVerification
+                ).assemble();
+            }
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);
         }
