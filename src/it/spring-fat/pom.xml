@@ -63,27 +63,66 @@ SOFTWARE.
   <build>
     <plugins>
       <plugin>
-        <groupId>org.eolang</groupId>
-        <artifactId>jeo-maven-plugin</artifactId>
-        <version>@project.version@</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.2.0</version>
         <executions>
           <execution>
-            <id>bytecode-to-eo</id>
+            <id>unpack-dependencies</id>
             <goals>
-              <goal>disassemble</goal>
+              <goal>unpack-dependencies</goal>
             </goals>
-          </execution>
-          <execution>
-            <id>eo-to-bytecode</id>
-            <goals>
-              <goal>assemble</goal>
-            </goals>
+            <configuration>
+              <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+            </configuration>
           </execution>
         </executions>
       </plugin>
+      <!--      <plugin>-->
+      <!--        <groupId>org.eolang</groupId>-->
+      <!--        <artifactId>jeo-maven-plugin</artifactId>-->
+      <!--        <version>@project.version@</version>-->
+      <!--        <executions>-->
+      <!--          <execution>-->
+      <!--            <id>bytecode-to-eo</id>-->
+      <!--            <goals>-->
+      <!--              <goal>disassemble</goal>-->
+      <!--            </goals>-->
+      <!--          </execution>-->
+      <!--          <execution>-->
+      <!--            <id>eo-to-bytecode</id>-->
+      <!--            <goals>-->
+      <!--              <goal>assemble</goal>-->
+      <!--            </goals>-->
+      <!--          </execution>-->
+      <!--        </executions>-->
+      <!--      </plugin>-->
+      <!--      <plugin>-->
+      <!--        <groupId>org.springframework.boot</groupId>-->
+      <!--        <artifactId>spring-boot-maven-plugin</artifactId>-->
+      <!--      </plugin>-->
       <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <phase>
+              process-classes
+            </phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>java</executable>
+          <arguments>
+            <argument>-classpath</argument>
+            <argument>${project.build.outputDirectory}</argument>
+            <argument>org.eolang.jeo.spring.Application</argument>
+          </arguments>
+        </configuration>
       </plugin>
     </plugins>
   </build>
