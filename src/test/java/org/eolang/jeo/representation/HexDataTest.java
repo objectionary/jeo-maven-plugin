@@ -67,6 +67,40 @@ class HexDataTest {
         );
     }
 
+    @Test
+    void convertsRawPrimitiveDataToHexString() {
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for '10' should be '00 00 00 00 00 00 00 0A'",
+            new HexData(10).value(),
+            Matchers.equalTo("00 00 00 00 00 00 00 0A")
+        );
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for '0.1d' should be '3F B9 99 99 99 99 99 9A'",
+            new HexData(0.1d).value(),
+            Matchers.equalTo("3F B9 99 99 99 99 99 9A")
+        );
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for '0.1f' should be '3D CC CC CD'",
+            new HexData(0.1f).value(),
+            Matchers.equalTo("3D CC CC CD")
+        );
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for 'true' should be '01'",
+            new HexData(true).value(),
+            Matchers.equalTo("01")
+        );
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for 'false' should be '00'",
+            new HexData(false).value(),
+            Matchers.equalTo("00")
+        );
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for 'Hello!' should be '48 65 6C 6C 6F 21'",
+            new HexData(11L).type(),
+            Matchers.equalTo("long")
+        );
+    }
+
     /**
      * Arguments for {@link HexDataTest#determinesTypeCorrectly(Object, String)} test.
      * @return Stream of arguments.

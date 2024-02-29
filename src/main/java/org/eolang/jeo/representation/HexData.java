@@ -117,7 +117,7 @@ public final class HexData {
         FLOAT(
             "float",
             Float.class,
-            data -> ByteBuffer.allocate(Long.BYTES).putFloat((float) data).array()
+            data -> ByteBuffer.allocate(Float.BYTES).putFloat((float) data).array()
         ),
 
         /**
@@ -126,7 +126,7 @@ public final class HexData {
         DOUBLE(
             "double",
             Double.class,
-            data -> ByteBuffer.allocate(Long.BYTES).putDouble((double) data).array()
+            data -> ByteBuffer.allocate(Double.BYTES).putDouble((double) data).array()
         ),
 
         /**
@@ -141,7 +141,7 @@ public final class HexData {
         /**
          * Bytes.
          */
-        BYTES("bytes", byte[].class, byte[].class::cast),
+        BYTES("bytes", byte[].class, data -> byte[].class.cast(data)),
 
         /**
          * Label.

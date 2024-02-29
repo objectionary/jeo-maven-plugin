@@ -38,7 +38,7 @@ public final class DirectivesData implements Iterable<Directive> {
     /**
      * Data.
      */
-    private final Object data;
+    private final HexData data;
 
     /**
      * Name.
@@ -49,7 +49,7 @@ public final class DirectivesData implements Iterable<Directive> {
      * Constructor.
      * @param data Data.
      */
-    public DirectivesData(final Object data) {
+    public <T> DirectivesData(final T data) {
         this("", data);
     }
 
@@ -58,20 +58,28 @@ public final class DirectivesData implements Iterable<Directive> {
      * @param name Name.
      * @param data Data.
      */
-    public DirectivesData(final String name, final Object data) {
+    public <T> DirectivesData(final String name, final T data) {
+        this(new HexData(data), name);
+    }
+
+    /**
+     * Constructor.
+     * @param data Data.
+     * @param name Name.
+     */
+    public DirectivesData(final HexData data, final String name) {
         this.data = data;
         this.name = name;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        final HexData hex = new HexData(this.data);
         final Directives directives = new Directives().add("o")
-            .attr("base", hex.type())
+            .attr("base", this.data.type())
             .attr("data", "bytes");
         if (!this.name.isEmpty()) {
             directives.attr("name", this.name);
         }
-        return directives.set(hex.value()).up().iterator();
+        return directives.set(this.data.value()).up().iterator();
     }
 }
