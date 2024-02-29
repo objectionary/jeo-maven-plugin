@@ -25,9 +25,10 @@ package org.eolang.jeo.representation;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
+import java.util.Arrays;
 import java.util.StringJoiner;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 
@@ -55,7 +56,7 @@ public final class HexData {
      * @return Value
      */
     public String value() {
-        return HexData.bytesToHex(DataType.fromRaw(this.data).convert(this.data));
+        return HexData.bytesToHex(DataType.hex(this.data));
     }
 
     /**
@@ -63,7 +64,7 @@ public final class HexData {
      * @return Type
      */
     public String type() {
-        return DataType.fromRaw(this.data).type();
+        return DataType.type(this.data);
     }
 
     /**
@@ -81,20 +82,60 @@ public final class HexData {
     }
 
     private enum DataType {
-        STRING("string", data -> {
-            return ((String) data).getBytes(StandardCharsets.UTF_8);
-        }),
-        INT("int", data -> ByteBuffer.allocate(Long.BYTES).putLong((int) data).array()),
-        LONG("long", data -> ByteBuffer.allocate(Long.BYTES).putLong((long) data).array()),
-        FLOAT("float", data -> ByteBuffer.allocate(Long.BYTES).putFloat((float) data).array()),
-        DOUBLE("double", data -> ByteBuffer.allocate(Long.BYTES).putDouble((double) data).array()),
-        BOOL("bool", data -> {
-            return ((boolean) data) ? new byte[]{0x01} : new byte[]{0x00};
-        }),
-        BYTES("bytes", data -> {
-            return (byte[]) data;
-        }),
-        LABEL("label", data -> new byte[0]),
+        STRING(
+            "string",
+            data -> String.valueOf(data).getBytes(StandardCharsets.UTF_8),
+            String.class
+        ),
+        INT(
+            "int",
+            data -> ByteBuffer.allocate(Long.BYTES).putLong((int) data).array(),
+            Integer.class
+        ),
+        LONG(
+            "long",
+            data -> ByteBuffer.allocate(Long.BYTES).putLong((long) data).array(),
+            Long.class
+        ),
+        FLOAT(
+            "float",
+            data -> ByteBuffer.allocate(Long.BYTES).putFloat((float) data).array(),
+            Float.class
+        ),
+        DOUBLE(
+            "double",
+            data -> ByteBuffer.allocate(Long.BYTES).putDouble((double) data).array(),
+            Double.class
+        ),
+        BOOL(
+            "bool",
+            data -> {
+                return ((boolean) data) ? new byte[]{0x01} : new byte[]{0x00};
+            },
+            Boolean.class
+        ),
+        BYTES(
+            "bytes",
+            data -> (byte[]) data,
+            byte[].class
+        ),
+        LABEL(
+            "label",
+            data -> new byte[0],
+            Label.class
+        ),
+
+        REFERENCE_CLASS("reference", data -> {
+            final byte[] res;
+            if (data instanceof Class<?>) {
+                res = ((Class<?>) data).getName().replace('.', '/')
+                    .getBytes(StandardCharsets.UTF_8);
+            } else {
+                res = ((Type) data).getClassName().replace('.', '/')
+                    .getBytes(StandardCharsets.UTF_8);
+            }
+            return res;
+        }, Class.class),
         REFERENCE(
             "reference",
             data -> {
@@ -107,48 +148,38 @@ public final class HexData {
                         .getBytes(StandardCharsets.UTF_8);
                 }
                 return res;
-            }
+            },
+            Type.class
         );
 
         private final String base;
 
         private final Function<Object, byte[]> converter;
 
-        DataType(final String base, final Function<Object, byte[]> converter) {
+        private final Class<?> claazz;
+
+        DataType(
+            final String base,
+            final Function<Object, byte[]> converter,
+            final Class<?> predicate
+        ) {
             this.base = base;
             this.converter = converter;
+            this.claazz = predicate;
         }
 
-        String type() {
-            return this.base;
+        private static String type(final Object data) {
+            return DataType.from(data).base;
         }
 
-
-        public byte[] convert(final Object data) {
-            return this.converter.apply(data);
+        private static byte[] hex(final Object data) {
+            return DataType.from(data).converter.apply(data);
         }
 
-
-        static DataType fromRaw(final Object data) {
-            final DataType res;
-            if (data instanceof String) {
-                res = DataType.STRING;
-            } else if (data instanceof Integer) {
-                res = DataType.INT;
-            } else if (data instanceof Float) {
-                res = DataType.FLOAT;
-            } else if (data instanceof Double) {
-                res = DataType.DOUBLE;
-            } else if (data instanceof Boolean) {
-                res = DataType.BOOL;
-            } else if (data instanceof Label) {
-                res = DataType.LABEL;
-            } else if (data instanceof Class<?> || data instanceof Type) {
-                res = DataType.REFERENCE;
-            } else {
-                res = DataType.BYTES;
-            }
-            return res;
+        private static DataType from(final Object data) {
+            return Arrays.stream(DataType.values()).filter(type -> type.claazz.isInstance(data))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unknown data type"));
         }
     }
 }
