@@ -146,6 +146,9 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Extract argument value from XmlNode.
      * @param argument XmlNode with argument value.
      * @return Argument value.
+     * @todo #477:90min Here we parse HexString to parse arguments.
+     *  We should delegate this to HexData class. This will make the code
+     *  more readable and maintainable. Also, we should add tests for this.
      */
     private Object argument(final XmlNode argument) {
         final String attr = argument.attribute("base")
