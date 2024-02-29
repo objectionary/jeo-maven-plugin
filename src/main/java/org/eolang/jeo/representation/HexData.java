@@ -28,7 +28,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.StringJoiner;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 
@@ -81,103 +80,173 @@ public final class HexData {
         return out.toString();
     }
 
+    /**
+     * All supported data types.
+     * @since 0.3
+     */
     private enum DataType {
-        STRING(
-            "string",
-            data -> String.valueOf(data).getBytes(StandardCharsets.UTF_8),
-            String.class
-        ),
-        INT(
-            "int",
-            data -> ByteBuffer.allocate(Long.BYTES).putLong((int) data).array(),
-            Integer.class
-        ),
-        LONG(
-            "long",
-            data -> ByteBuffer.allocate(Long.BYTES).putLong((long) data).array(),
-            Long.class
-        ),
-        FLOAT(
-            "float",
-            data -> ByteBuffer.allocate(Long.BYTES).putFloat((float) data).array(),
-            Float.class
-        ),
-        DOUBLE(
-            "double",
-            data -> ByteBuffer.allocate(Long.BYTES).putDouble((double) data).array(),
-            Double.class
-        ),
+        /**
+         * Boolean.
+         */
         BOOL(
             "bool",
-            data -> {
-                return ((boolean) data) ? new byte[]{0x01} : new byte[]{0x00};
-            },
-            Boolean.class
-        ),
-        BYTES(
-            "bytes",
-            data -> (byte[]) data,
-            byte[].class
-        ),
-        LABEL(
-            "label",
-            data -> new byte[0],
-            Label.class
+            Boolean.class,
+            data -> DataType.hexBoolean(Boolean.class.cast(data))
         ),
 
-        REFERENCE_CLASS("reference", data -> {
-            final byte[] res;
-            if (data instanceof Class<?>) {
-                res = ((Class<?>) data).getName().replace('.', '/')
-                    .getBytes(StandardCharsets.UTF_8);
-            } else {
-                res = ((Type) data).getClassName().replace('.', '/')
-                    .getBytes(StandardCharsets.UTF_8);
-            }
-            return res;
-        }, Class.class),
-        REFERENCE(
+        /**
+         * Integer.
+         */
+        INT(
+            "int",
+            Integer.class,
+            data -> ByteBuffer.allocate(Long.BYTES).putLong((int) data).array()
+        ),
+        /**
+         * Long.
+         */
+        LONG(
+            "long",
+            Long.class,
+            data -> ByteBuffer.allocate(Long.BYTES).putLong((long) data).array()
+        ),
+
+        /**
+         * Float.
+         */
+        FLOAT(
+            "float",
+            Float.class,
+            data -> ByteBuffer.allocate(Long.BYTES).putFloat((float) data).array()
+        ),
+
+        /**
+         * Double.
+         */
+        DOUBLE(
+            "double",
+            Double.class,
+            data -> ByteBuffer.allocate(Long.BYTES).putDouble((double) data).array()
+        ),
+
+        /**
+         * String.
+         */
+        STRING(
+            "string",
+            String.class,
+            data -> String.valueOf(data).getBytes(StandardCharsets.UTF_8)
+        ),
+
+        /**
+         * Bytes.
+         */
+        BYTES("bytes", byte[].class, byte[].class::cast),
+
+        /**
+         * Label.
+         */
+        LABEL("label", Label.class, data -> new byte[0]),
+
+        /**
+         * Class reference.
+         */
+        CLASS_REFERENCE(
             "reference",
-            data -> {
-                final byte[] res;
-                if (data instanceof Class<?>) {
-                    res = ((Class<?>) data).getName().replace('.', '/')
-                        .getBytes(StandardCharsets.UTF_8);
-                } else {
-                    res = ((Type) data).getClassName().replace('.', '/')
-                        .getBytes(StandardCharsets.UTF_8);
-                }
-                return res;
-            },
-            Type.class
+            Class.class,
+            data -> DataType.hexClass(Class.class.cast(data).getName())
+        ),
+
+        /**
+         * Type reference.
+         */
+        TYPE_REFERENCE(
+            "reference",
+            Type.class,
+            data -> DataType.hexClass(Type.class.cast(data).getClassName())
         );
 
+        /**
+         * Base type.
+         */
         private final String base;
 
+        /**
+         * Class.
+         */
+        private final Class<?> clazz;
+
+        /**
+         * Converter.
+         */
         private final Function<Object, byte[]> converter;
 
-        private final Class<?> claazz;
-
+        /**
+         * Constructor.
+         * @param base Base type.
+         * @param klass Class.
+         * @param converter Converter.
+         */
         DataType(
             final String base,
-            final Function<Object, byte[]> converter,
-            final Class<?> predicate
+            final Class<?> klass,
+            final Function<Object, byte[]> converter
         ) {
             this.base = base;
+            this.clazz = klass;
             this.converter = converter;
-            this.claazz = predicate;
         }
 
+
+        /**
+         * Get a type for some data.
+         * @param data Some data.
+         * @return Type.
+         */
         private static String type(final Object data) {
             return DataType.from(data).base;
         }
 
+        /**
+         * Convert data to hex.
+         * @param data Data.
+         * @return Hex representation of data.
+         */
         private static byte[] hex(final Object data) {
             return DataType.from(data).converter.apply(data);
         }
 
+        /**
+         * Convert boolean to bytes.
+         * @param data Boolean.
+         * @return Bytes.
+         */
+        private static byte[] hexBoolean(final boolean data) {
+            final byte[] result;
+            if (data) {
+                result = new byte[]{0x01};
+            } else {
+                result = new byte[]{0x00};
+            }
+            return result;
+        }
+
+        /**
+         * Convert class name to bytes.
+         * @param name Class name.
+         * @return Bytes.
+         */
+        private static byte[] hexClass(final String name) {
+            return name.replace('.', '/').getBytes(StandardCharsets.UTF_8);
+        }
+
+        /**
+         * Get a data type for some data.
+         * @param data Data.
+         * @return Data type.
+         */
         private static DataType from(final Object data) {
-            return Arrays.stream(DataType.values()).filter(type -> type.claazz.isInstance(data))
+            return Arrays.stream(DataType.values()).filter(type -> type.clazz.isInstance(data))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Unknown data type"));
         }
