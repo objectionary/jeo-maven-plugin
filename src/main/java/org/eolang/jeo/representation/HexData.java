@@ -45,6 +45,7 @@ public final class HexData {
     /**
      * Constructor.
      * @param data Data.
+     * @param <T> Data type.
      */
     public <T> HexData(final T data) {
         this.data = data;
@@ -88,82 +89,66 @@ public final class HexData {
         /**
          * Boolean.
          */
-        BOOL(
-            "bool",
-            Boolean.class,
-            data -> DataType.hexBoolean(Boolean.class.cast(data))
+        BOOL("bool", Boolean.class, value ->
+            DataType.hexBoolean(Boolean.class.cast(value))
         ),
 
         /**
          * Integer.
          */
-        INT(
-            "int",
-            Integer.class,
-            data -> ByteBuffer.allocate(Long.BYTES).putLong((int) data).array()
+        INT("int", Integer.class, value ->
+            ByteBuffer.allocate(Long.BYTES).putLong((int) value).array()
         ),
         /**
          * Long.
          */
-        LONG(
-            "long",
-            Long.class,
-            data -> ByteBuffer.allocate(Long.BYTES).putLong((long) data).array()
+        LONG("long", Long.class, value ->
+            ByteBuffer.allocate(Long.BYTES).putLong((long) value).array()
         ),
 
         /**
          * Float.
          */
-        FLOAT(
-            "float",
-            Float.class,
-            data -> ByteBuffer.allocate(Float.BYTES).putFloat((float) data).array()
+        FLOAT("float", Float.class, value ->
+            ByteBuffer.allocate(Float.BYTES).putFloat((float) value).array()
         ),
 
         /**
          * Double.
          */
-        DOUBLE(
-            "double",
-            Double.class,
-            data -> ByteBuffer.allocate(Double.BYTES).putDouble((double) data).array()
+        DOUBLE("double", Double.class, value ->
+            ByteBuffer.allocate(Double.BYTES).putDouble((double) value).array()
         ),
 
         /**
          * String.
          */
-        STRING(
-            "string",
-            String.class,
-            data -> String.valueOf(data).getBytes(StandardCharsets.UTF_8)
+        STRING("string", String.class, value ->
+            String.valueOf(value).getBytes(StandardCharsets.UTF_8)
         ),
 
         /**
          * Bytes.
          */
-        BYTES("bytes", byte[].class, data -> byte[].class.cast(data)),
+        BYTES("bytes", byte[].class, value -> byte[].class.cast(value)),
 
         /**
          * Label.
          */
-        LABEL("label", Label.class, data -> new byte[0]),
+        LABEL("label", Label.class, value -> new byte[0]),
 
         /**
          * Class reference.
          */
-        CLASS_REFERENCE(
-            "reference",
-            Class.class,
-            data -> DataType.hexClass(Class.class.cast(data).getName())
+        CLASS_REFERENCE("reference", Class.class, value ->
+            DataType.hexClass(Class.class.cast(value).getName())
         ),
 
         /**
          * Type reference.
          */
-        TYPE_REFERENCE(
-            "reference",
-            Type.class,
-            data -> DataType.hexClass(Type.class.cast(data).getClassName())
+        TYPE_REFERENCE("reference", Type.class, value ->
+            DataType.hexClass(Type.class.cast(value).getClassName())
         );
 
         /**
@@ -196,7 +181,6 @@ public final class HexData {
             this.clazz = klass;
             this.converter = converter;
         }
-
 
         /**
          * Get a type for some data.
