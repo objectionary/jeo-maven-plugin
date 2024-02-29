@@ -25,7 +25,9 @@ package org.eolang.jeo.representation;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.StringJoiner;
+import java.util.function.Function;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 
@@ -53,48 +55,7 @@ public final class HexData {
      * @return Value
      */
     public String value() {
-        final byte[] res;
-        if (this.data instanceof String) {
-            res = ((String) this.data).getBytes(StandardCharsets.UTF_8);
-        } else if (this.data instanceof Integer) {
-            res = ByteBuffer
-                .allocate(Long.BYTES)
-                .putLong((int) this.data)
-                .array();
-        } else if (this.data instanceof Float) {
-            res = ByteBuffer
-                .allocate(Long.BYTES)
-                .putFloat((float) this.data)
-                .array();
-        } else if (this.data instanceof Double) {
-            res = ByteBuffer
-                .allocate(Long.BYTES)
-                .putDouble((double) this.data)
-                .array();
-        } else if (this.data instanceof Boolean) {
-            if ((boolean) this.data) {
-                res = new byte[]{0x01};
-            } else {
-                res = new byte[]{0x00};
-            }
-        } else if (this.data instanceof byte[]) {
-            res = (byte[]) this.data;
-        } else if (this.data instanceof Class<?>) {
-            res = ((Class<?>) this.data).getName().replace('.', '/')
-                .getBytes(StandardCharsets.UTF_8);
-        } else if (this.data instanceof Type) {
-            res = ((Type) this.data).getClassName().replace('.', '/')
-                .getBytes(StandardCharsets.UTF_8);
-        } else {
-            throw new IllegalStateException(
-                String.format(
-                    "Can't convert '%s' into hex string. The type is '%s'",
-                    this.data,
-                    this.data.getClass()
-                )
-            );
-        }
-        return HexData.bytesToHex(res);
+        return HexData.bytesToHex(DataType.fromRaw(this.data).convert(this.data));
     }
 
     /**
@@ -102,25 +63,7 @@ public final class HexData {
      * @return Type
      */
     public String type() {
-        final String res;
-        if (this.data instanceof String) {
-            res = "string";
-        } else if (this.data instanceof Integer) {
-            res = "int";
-        } else if (this.data instanceof Float) {
-            res = "float";
-        } else if (this.data instanceof Double) {
-            res = "double";
-        } else if (this.data instanceof Boolean) {
-            res = "bool";
-        } else if (this.data instanceof Label) {
-            res = "label";
-        } else if (this.data instanceof Class<?> || this.data instanceof Type) {
-            res = "reference";
-        } else {
-            res = "bytes";
-        }
-        return res;
+        return DataType.fromRaw(this.data).type();
     }
 
     /**
@@ -135,5 +78,77 @@ public final class HexData {
             out.add(String.format("%02X", bty));
         }
         return out.toString();
+    }
+
+    private enum DataType {
+        STRING("string", data -> {
+            return ((String) data).getBytes(StandardCharsets.UTF_8);
+        }),
+        INT("int", data -> ByteBuffer.allocate(Long.BYTES).putLong((int) data).array()),
+        LONG("long", data -> ByteBuffer.allocate(Long.BYTES).putLong((long) data).array()),
+        FLOAT("float", data -> ByteBuffer.allocate(Long.BYTES).putFloat((float) data).array()),
+        DOUBLE("double", data -> ByteBuffer.allocate(Long.BYTES).putDouble((double) data).array()),
+        BOOL("bool", data -> {
+            return ((boolean) data) ? new byte[]{0x01} : new byte[]{0x00};
+        }),
+        BYTES("bytes", data -> {
+            return (byte[]) data;
+        }),
+        LABEL("label", data -> new byte[0]),
+        REFERENCE(
+            "reference",
+            data -> {
+                final byte[] res;
+                if (data instanceof Class<?>) {
+                    res = ((Class<?>) data).getName().replace('.', '/')
+                        .getBytes(StandardCharsets.UTF_8);
+                } else {
+                    res = ((Type) data).getClassName().replace('.', '/')
+                        .getBytes(StandardCharsets.UTF_8);
+                }
+                return res;
+            }
+        );
+
+        private final String base;
+
+        private final Function<Object, byte[]> converter;
+
+        DataType(final String base, final Function<Object, byte[]> converter) {
+            this.base = base;
+            this.converter = converter;
+        }
+
+        String type() {
+            return this.base;
+        }
+
+
+        public byte[] convert(final Object data) {
+            return this.converter.apply(data);
+        }
+
+
+        static DataType fromRaw(final Object data) {
+            final DataType res;
+            if (data instanceof String) {
+                res = DataType.STRING;
+            } else if (data instanceof Integer) {
+                res = DataType.INT;
+            } else if (data instanceof Float) {
+                res = DataType.FLOAT;
+            } else if (data instanceof Double) {
+                res = DataType.DOUBLE;
+            } else if (data instanceof Boolean) {
+                res = DataType.BOOL;
+            } else if (data instanceof Label) {
+                res = DataType.LABEL;
+            } else if (data instanceof Class<?> || data instanceof Type) {
+                res = DataType.REFERENCE;
+            } else {
+                res = DataType.BYTES;
+            }
+            return res;
+        }
     }
 }
