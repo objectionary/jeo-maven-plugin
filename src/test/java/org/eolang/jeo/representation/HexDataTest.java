@@ -76,7 +76,8 @@ class HexDataTest {
             Arguments.of("Hello!", "string"),
             Arguments.of(new byte[]{1, 2, 3}, "bytes"),
             Arguments.of(true, "bool"),
-            Arguments.of(0.1d, "float"),
+            Arguments.of(0.1f, "float"),
+            Arguments.of(0.1d, "double"),
             Arguments.of(HexDataTest.class, "reference")
         );
     }
@@ -88,7 +89,7 @@ class HexDataTest {
      */
     static Stream<Arguments> values() {
         return Stream.of(
-            Arguments.of(10, "00 00 00 00 00 00 00 0A"),
+            Arguments.of(10, "00 00 00 0A"),
             Arguments.of("Hello!", "48 65 6C 6C 6F 21"),
             Arguments.of(new byte[]{1, 2, 3}, "01 02 03"),
             Arguments.of(true, "01"),

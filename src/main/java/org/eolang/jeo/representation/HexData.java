@@ -44,7 +44,7 @@ public final class HexData {
      * Constructor.
      * @param data Data.
      */
-    public HexData(final Object data) {
+    public <T> HexData(final T data) {
         this.data = data;
     }
 
@@ -58,12 +58,17 @@ public final class HexData {
             res = ((String) this.data).getBytes(StandardCharsets.UTF_8);
         } else if (this.data instanceof Integer) {
             res = ByteBuffer
-                .allocate(Long.BYTES)
-                .putLong((int) this.data)
+                .allocate(Integer.BYTES)
+                .putInt((int) this.data)
                 .array();
-        } else if (this.data instanceof Float || this.data instanceof Double) {
+        } else if (this.data instanceof Float) {
             res = ByteBuffer
-                .allocate(Long.BYTES)
+                .allocate(Float.BYTES)
+                .putFloat((float) this.data)
+                .array();
+        } else if (this.data instanceof Double) {
+            res = ByteBuffer
+                .allocate(Double.BYTES)
                 .putDouble((double) this.data)
                 .array();
         } else if (this.data instanceof Boolean) {
@@ -102,15 +107,15 @@ public final class HexData {
             res = "string";
         } else if (this.data instanceof Integer) {
             res = "int";
-        } else if (this.data instanceof Float || this.data instanceof Double) {
+        } else if (this.data instanceof Float) {
             res = "float";
+        } else if (this.data instanceof Double) {
+            res = "double";
         } else if (this.data instanceof Boolean) {
             res = "bool";
         } else if (this.data instanceof Label) {
             res = "label";
-        } else if (this.data instanceof Class<?>) {
-            res = "reference";
-        } else if (this.data instanceof Type) {
+        } else if (this.data instanceof Class<?> || this.data instanceof Type) {
             res = "reference";
         } else {
             res = "bytes";
