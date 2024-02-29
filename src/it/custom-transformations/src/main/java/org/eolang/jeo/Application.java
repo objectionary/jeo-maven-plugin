@@ -12,6 +12,8 @@ public class Application {
         } else {
             message = new WakeUpNeo();
         }
+        long a = 0L;
+        a = a + 123L;
         System.out.println(message.msg());
     }
 

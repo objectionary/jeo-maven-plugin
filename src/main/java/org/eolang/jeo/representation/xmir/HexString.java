@@ -87,6 +87,14 @@ public final class HexString {
     }
 
     /**
+     * Convert hex string to long.
+     * @return Long.
+     */
+    public long decodeAsLong() {
+        return Long.parseLong(this.hex.trim().replace(" ", ""), HexString.RADIX);
+    }
+
+    /**
      * Convert hex string to boolean.
      * @return Boolean.
      */

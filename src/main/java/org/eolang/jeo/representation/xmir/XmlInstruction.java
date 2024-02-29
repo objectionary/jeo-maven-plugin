@@ -160,6 +160,8 @@ public final class XmlInstruction implements XmlBytecodeEntry {
         final Object result;
         if (attr.equals("int")) {
             result = new HexString(argument.text()).decodeAsInt();
+        } else if (attr.equals("long")) {
+            result = new HexString(argument.text()).decodeAsLong();
         } else if (attr.equals("label")) {
             result = this.labels.label(
                 argument.children()
