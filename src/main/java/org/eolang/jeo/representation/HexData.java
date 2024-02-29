@@ -58,17 +58,17 @@ public final class HexData {
             res = ((String) this.data).getBytes(StandardCharsets.UTF_8);
         } else if (this.data instanceof Integer) {
             res = ByteBuffer
-                .allocate(Integer.BYTES)
-                .putInt((int) this.data)
+                .allocate(Long.BYTES)
+                .putLong((int) this.data)
                 .array();
         } else if (this.data instanceof Float) {
             res = ByteBuffer
-                .allocate(Float.BYTES)
+                .allocate(Long.BYTES)
                 .putFloat((float) this.data)
                 .array();
         } else if (this.data instanceof Double) {
             res = ByteBuffer
-                .allocate(Double.BYTES)
+                .allocate(Long.BYTES)
                 .putDouble((double) this.data)
                 .array();
         } else if (this.data instanceof Boolean) {
