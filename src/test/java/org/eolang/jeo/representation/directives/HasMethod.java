@@ -42,7 +42,8 @@ import org.objectweb.asm.Label;
 @SuppressWarnings({
     "PMD.TooManyMethods",
     "JTCOP.RuleAllTestsHaveProductionClass",
-    "JTCOP.RuleCorrectTestName"
+    "JTCOP.RuleCorrectTestName",
+    "JTCOP.RuleInheritanceInTests"
 })
 public final class HasMethod extends TypeSafeMatcher<String> {
 
