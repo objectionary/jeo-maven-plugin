@@ -36,7 +36,11 @@ import org.hamcrest.TypeSafeMatcher;
  * Matcher to check if the received XMIR document has a class with a given name.
  * @since 0.1.0
  */
-@SuppressWarnings({"JTCOP.RuleAllTestsHaveProductionClass", "JTCOP.RuleCorrectTestName"})
+@SuppressWarnings({
+    "JTCOP.RuleAllTestsHaveProductionClass",
+    "JTCOP.RuleCorrectTestName",
+    "JTCOP.RuleInheritanceInTests"
+})
 final class HasClass extends TypeSafeMatcher<String> {
 
     /**
