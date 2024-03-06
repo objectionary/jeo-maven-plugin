@@ -57,7 +57,7 @@ import org.junit.jupiter.api.io.TempDir;
  *  We have to add debug information to the bytecode.
  *  When it is done, we have to remove -g:none flag from the test.
  */
-class JavaSourceCompilationIT {
+final class JavaSourceCompilationIT {
 
     @Test
     @EnabledIf(value = "hasJavaCompiler", disabledReason = "Java compiler is not available")

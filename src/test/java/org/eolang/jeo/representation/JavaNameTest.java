@@ -34,7 +34,7 @@ import org.junit.jupiter.params.provider.CsvSource;
  * Test case for {@link JavaName}.
  * @since 0.1
  */
-class JavaNameTest {
+final class JavaNameTest {
 
     @ParameterizedTest
     @CsvSource({

@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 0.1.0
  */
-class XmirRepresentationTest {
+final class XmirRepresentationTest {
 
     /**
      * Message for assertion.

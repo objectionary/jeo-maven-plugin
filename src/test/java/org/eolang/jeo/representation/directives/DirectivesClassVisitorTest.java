@@ -35,7 +35,7 @@ import org.xembly.Xembler;
  * Test case for {@link DirectivesClassVisitor}.
  * @since 0.1.0
  */
-class DirectivesClassVisitorTest {
+final class DirectivesClassVisitorTest {
 
     @Test
     void parsesSimpleClassWithoutConstructor() throws ImpossibleModificationException {

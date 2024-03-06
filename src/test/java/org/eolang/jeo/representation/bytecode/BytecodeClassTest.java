@@ -37,7 +37,7 @@ import org.objectweb.asm.Opcodes;
  * Test case for {@link org.eolang.jeo.representation.bytecode.BytecodeClass}.
  * @since 0.1
  */
-class BytecodeClassTest {
+final class BytecodeClassTest {
 
     @Test
     void parsesAbstractClass() {

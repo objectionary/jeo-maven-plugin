@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  * Test cases for {@link org.eolang.jeo.representation.HexData}.
  * @since 0.1
  */
-class HexDataTest {
+final class HexDataTest {
 
     @MethodSource("types")
     @ParameterizedTest

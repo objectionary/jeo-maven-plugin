@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 0.1.0
  */
-class Base64BytecodeTest {
+final class Base64BytecodeTest {
 
     @Test
     void convertsToString() {

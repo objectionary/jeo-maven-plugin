@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
  * Test case for {@link XmlTryCatchEntry}.
  * @since 0.1
  */
-class XmlTryCatchEntryTest {
+final class XmlTryCatchEntryTest {
 
     /**
      * Try-catch block in XMIR format.

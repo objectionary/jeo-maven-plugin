@@ -33,7 +33,7 @@ import org.objectweb.asm.Label;
  * Test case for {@link AllLabels}.
  * @since 0.1
  */
-class AllLabelsTest {
+final class AllLabelsTest {
 
     @Test
     void retrievesLabelIfItAbsent() {

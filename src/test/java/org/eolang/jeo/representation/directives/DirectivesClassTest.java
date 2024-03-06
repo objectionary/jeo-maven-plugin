@@ -36,7 +36,7 @@ import org.xembly.Xembler;
  * Test case for {@link DirectivesClass}.
  * @since 0.1
  */
-class DirectivesClassTest {
+final class DirectivesClassTest {
 
     @Test
     void createsWithSimpleConstructor() {

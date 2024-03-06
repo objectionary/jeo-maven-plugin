@@ -35,7 +35,7 @@ import org.xembly.Xembler;
  * Test cases for {@link DirectivesProgram}.
  * @since 0.1
  */
-class DirectivesProgramTest {
+final class DirectivesProgramTest {
 
     @Test
     void createsCorrectDirectives() {

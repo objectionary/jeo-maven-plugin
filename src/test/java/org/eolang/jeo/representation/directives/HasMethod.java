@@ -41,11 +41,12 @@ import org.objectweb.asm.Label;
  */
 @SuppressWarnings({
     "PMD.TooManyMethods",
+    "PMD.AvoidAccessToStaticMembersViaThis",
     "JTCOP.RuleAllTestsHaveProductionClass",
     "JTCOP.RuleCorrectTestName",
     "JTCOP.RuleInheritanceInTests"
 })
-public final class HasMethod extends TypeSafeMatcher<String> {
+final class HasMethod extends TypeSafeMatcher<String> {
 
     /**
      * Class name.
@@ -81,7 +82,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * Constructor.
      * @param method Method name.
      */
-    public HasMethod(final String method) {
+    HasMethod(final String method) {
         this("", new JavaName(method).encode());
     }
 
@@ -119,7 +120,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * @param klass Class name.
      * @return New matcher that checks class.
      */
-    public HasMethod inside(final String klass) {
+    HasMethod inside(final String klass) {
         return new HasMethod(new JavaName(klass).encode(), this.name);
     }
 
@@ -128,7 +129,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * @param parameter Parameter name.
      * @return The same matcher that checks parameter.
      */
-    public HasMethod withParameter(final String parameter) {
+    HasMethod withParameter(final String parameter) {
         this.params.add(parameter);
         return this;
     }
@@ -139,7 +140,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * @param args Arguments.
      * @return The same matcher that checks instruction.
      */
-    public HasMethod withInstruction(final int opcode, final Object... args) {
+    HasMethod withInstruction(final int opcode, final Object... args) {
         this.instr.add(new HasInstruction(opcode, args));
         return this;
     }
@@ -148,7 +149,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * With label.
      * @return The same matcher that checks label.
      */
-    public HasMethod withLabel() {
+    HasMethod withLabel() {
         this.lbls.add(new HasLabel());
         return this;
     }
@@ -158,7 +159,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * @param type Exception type.
      * @return The same matcher that checks try-catch.
      */
-    public HasMethod withTryCatch(final String type) {
+    HasMethod withTryCatch(final String type) {
         this.trycatches.add(new HasTryCatch(type));
         return this;
     }

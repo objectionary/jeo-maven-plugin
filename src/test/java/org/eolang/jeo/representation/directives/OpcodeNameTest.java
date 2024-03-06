@@ -36,7 +36,7 @@ import org.objectweb.asm.Opcodes;
  * Test case for {@link OpcodeName}.
  * @since 0.1
  */
-class OpcodeNameTest {
+final class OpcodeNameTest {
 
     /**
      * Opcode counter.

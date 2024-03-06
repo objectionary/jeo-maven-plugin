@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
  * Test case for {@link XmlProgram}.
  * @since 0.1
  */
-class XmlProgramTest {
+final class XmlProgramTest {
 
     @Test
     void retrievesTopClass() {

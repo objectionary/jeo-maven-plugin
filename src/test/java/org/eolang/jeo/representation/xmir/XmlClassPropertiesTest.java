@@ -35,7 +35,7 @@ import org.objectweb.asm.Opcodes;
  * Test case for {@link org.eolang.jeo.representation.xmir.XmlClassProperties}.
  * @since 0.1
  */
-class XmlClassPropertiesTest {
+final class XmlClassPropertiesTest {
 
     @Test
     void retrievesAccessModifier() {

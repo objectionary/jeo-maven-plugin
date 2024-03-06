@@ -40,7 +40,7 @@ import org.junit.jupiter.api.io.TempDir;
  *
  * @since 0.1.0
  */
-class DisassemblerTest {
+final class DisassemblerTest {
 
     @Test
     void transpilesSuccessfully(@TempDir final Path temp) throws IOException {

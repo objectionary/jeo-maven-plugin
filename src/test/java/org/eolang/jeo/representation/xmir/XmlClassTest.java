@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
  * Test case for {@link XmlClass}.
  * @since 0.1
  */
-class XmlClassTest {
+final class XmlClassTest {
 
     @Test
     void createsByName() {

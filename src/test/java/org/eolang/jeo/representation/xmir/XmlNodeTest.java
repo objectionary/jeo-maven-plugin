@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
  * Test case for {@link XmlNode}.
  * @since 0.1
  */
-class XmlNodeTest {
+final class XmlNodeTest {
 
     @Test
     void retrievesTheFirstChild() {

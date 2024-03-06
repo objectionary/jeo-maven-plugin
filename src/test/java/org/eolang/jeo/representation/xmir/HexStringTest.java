@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
  * Test case for {@link HexString}.
  * @since 0.1
  */
-class HexStringTest {
+final class HexStringTest {
 
     @Test
     void parsesHexStringAsInteger() {

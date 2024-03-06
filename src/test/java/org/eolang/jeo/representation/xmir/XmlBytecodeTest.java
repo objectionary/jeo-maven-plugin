@@ -39,7 +39,7 @@ import org.xembly.Xembler;
  *
  * @since 0.1
  */
-class XmlBytecodeTest {
+final class XmlBytecodeTest {
 
     @Test
     void convertsGenericsMethodIntoBytecode() {

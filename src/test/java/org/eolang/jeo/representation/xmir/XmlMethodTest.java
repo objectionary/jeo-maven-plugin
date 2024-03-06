@@ -34,7 +34,7 @@ import org.objectweb.asm.Opcodes;
  * Test case for {@link XmlMethod}.
  * @since 0.1
  */
-class XmlMethodTest {
+final class XmlMethodTest {
 
     @Test
     void createsMethodByValues() {

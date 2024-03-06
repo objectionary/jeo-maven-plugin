@@ -50,7 +50,7 @@ import org.xembly.Xembler;
  * @since 0.1.0
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-class DirectivesMethodVisitorTest {
+final class DirectivesMethodVisitorTest {
 
     @Test
     void parsesMethodInstructions() throws ImpossibleModificationException {

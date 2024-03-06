@@ -33,7 +33,7 @@ import org.objectweb.asm.ClassReader;
  * Test case for {@link ClassNameVisitor}.
  * @since 0.1.0
  */
-class ClassNameVisitorTest {
+final class ClassNameVisitorTest {
 
     @Test
     void retrievesClassName() {

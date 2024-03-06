@@ -35,7 +35,7 @@ import org.xembly.Xembler;
  * Test case for {@link DirectivesAnnotation}.
  * @since 0.1
  */
-class DirectivesAnnotationsTest {
+final class DirectivesAnnotationsTest {
 
     @Test
     void returnsEmptyDirectviesIfNoAnnotations() {
