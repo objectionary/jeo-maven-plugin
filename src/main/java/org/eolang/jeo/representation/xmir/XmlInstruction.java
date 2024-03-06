@@ -27,6 +27,7 @@ import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
@@ -49,11 +50,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
-
-    /**
-     * All found labels.
-     */
-    private final AllLabels labels;
 
     /**
      * Constructor.
@@ -83,12 +79,11 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      */
     public XmlInstruction(final Node node) {
         this.node = node;
-        this.labels = new AllLabels();
     }
 
     @Override
     public void writeTo(final BytecodeMethod method) {
-        method.opcode(this.opcode(), this.operands());
+        method.opcode(this.opcode(), this.operands().stream().map(XmlOperand::asObject).toArray());
     }
 
     /**
@@ -103,13 +98,12 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Instruction arguments.
      * @return Arguments.
      */
-    public Object[] operands() {
+    public List<XmlOperand> operands() {
         return new XmlNode(this.node)
             .children()
             .skip(1)
             .map(XmlOperand::new)
-            .map(XmlOperand::asObject)
-            .toArray();
+            .collect(Collectors.toList());
     }
 
     /**
@@ -141,47 +135,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     @Override
     public String toString() {
         return new XMLDocument(this.node).toString();
-    }
-
-    /**
-     * Extract argument value from XmlNode.
-     * @param argument XmlNode with argument value.
-     * @return Argument value.
-     * @todo #477:90min Here we parse HexString to parse arguments.
-     *  We should delegate this to HexData class. This will make the code
-     *  more readable and maintainable. Also, we should add tests for this.
-     */
-    private Object argument(final XmlNode argument) {
-        final String attr = argument.attribute("base")
-            .orElseThrow(
-                () -> new IllegalStateException(
-                    String.format(
-                        "'%s' is not an argument because it doesn't have 'base' attribute",
-                        argument
-                    )
-                )
-            );
-        final Object result;
-        if (attr.equals("int")) {
-            result = new HexString(argument.text()).decodeAsInt();
-        } else if (attr.equals("long")) {
-            result = new HexString(argument.text()).decodeAsLong();
-        } else if (attr.equals("label")) {
-            result = this.labels.label(
-                argument.children()
-                    .map(XmlNode::text)
-                    .map(String::trim)
-                    .map(HexString::new)
-                    .map(HexString::decode)
-                    .findFirst()
-                    .orElseThrow()
-            );
-        } else if (attr.equals("reference")) {
-            result = Type.getType(String.format("L%s;", new HexString(argument.text()).decode()));
-        } else {
-            result = new HexString(argument.text()).decode();
-        }
-        return result;
     }
 
     /**
