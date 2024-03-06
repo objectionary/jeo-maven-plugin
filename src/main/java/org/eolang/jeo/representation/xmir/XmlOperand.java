@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.HexData;
 import org.objectweb.asm.Type;
 
 /**
@@ -41,12 +42,18 @@ public final class XmlOperand {
      */
     private final AllLabels labels;
 
+    /**
+     * Constructor.
+     * @param node Raw XML operand node.
+     */
     public XmlOperand(final XmlNode node) {
         this.raw = node;
         this.labels = new AllLabels();
     }
 
     public Object asObject() {
+
+
         final String attr = this.raw.attribute("base")
             .orElseThrow(
                 () -> new IllegalStateException(
@@ -56,6 +63,9 @@ public final class XmlOperand {
                     )
                 )
             );
+        HexData.DataType.byBase(attr).decode(this.raw.text());
+
+
         final Object result;
         if (attr.equals("int")) {
             result = new HexString(this.raw.text()).decodeAsInt();
