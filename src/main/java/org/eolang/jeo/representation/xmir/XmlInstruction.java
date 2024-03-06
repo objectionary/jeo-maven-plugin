@@ -107,7 +107,8 @@ public final class XmlInstruction implements XmlBytecodeEntry {
         return new XmlNode(this.node)
             .children()
             .skip(1)
-            .map(this::argument)
+            .map(XmlOperand::new)
+            .map(XmlOperand::asObject)
             .toArray();
     }
 
@@ -245,6 +246,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @param first First attribute.
      * @param second Second attribute.
      * @return True if attributes are equal.
+     * @TODO! Remove this suboptimal method!
      */
     private static boolean areAttributesEqual(final Node first, final Node second) {
         final boolean result;
