@@ -87,4 +87,30 @@ final class XmlNodeTest {
             Matchers.equalTo("text")
         );
     }
+
+    @Test
+    void convertsToLabelEntry() {
+        MatcherAssert.assertThat(
+            "Can't convert to label entry",
+            new XmlNode(
+                "<o base='label' data='bytes'>73 6F 6D 65</o>").toEntry(),
+            Matchers.instanceOf(XmlLabel.class)
+        );
+    }
+
+    @Test
+    void convertsToInstructionEntry() {
+        MatcherAssert.assertThat(
+            "Can't convert to instruction entry",
+            new XmlNode(
+                String.join(
+                    "\n",
+                    "<o base='opcode' line='999' name='ICONST_2-17'>",
+                    "<o base=\"int\" data=\"bytes\">00 00 00 00 00 00 00 05</o>",
+                    "</o>"
+                )
+            ).toEntry(),
+            Matchers.instanceOf(XmlInstruction.class)
+        );
+    }
 }

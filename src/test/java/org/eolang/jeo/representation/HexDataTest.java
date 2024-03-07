@@ -23,7 +23,9 @@
  */
 package org.eolang.jeo.representation;
 
+import java.nio.ByteBuffer;
 import java.util.stream.Stream;
+import org.apache.commons.codec.binary.Hex;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -98,6 +100,16 @@ final class HexDataTest {
             "Expected and actual hex values differ, the value for 'Hello!' should be '48 65 6C 6C 6F 21'",
             new HexData(11L).type(),
             Matchers.equalTo("long")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("values")
+    void decodesEncodesCorrectly(final Object origin, final String hex) {
+        MatcherAssert.assertThat(
+            "Decoding and encoding are not consistent",
+            origin,
+            Matchers.equalTo(HexData.DataType.byBase(new HexData(origin).type()).decode(hex))
         );
     }
 

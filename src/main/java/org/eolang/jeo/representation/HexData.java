@@ -103,7 +103,7 @@ public final class HexData {
          */
         INT("int", Integer.class, value ->
             ByteBuffer.allocate(Long.BYTES).putLong((int) value).array(),
-            bytes -> ByteBuffer.wrap(bytes).getInt()
+            bytes -> (int) ByteBuffer.wrap(bytes).getLong()
         ),
         /**
          * Long.
@@ -259,7 +259,7 @@ public final class HexData {
 
         private static Class<?> decodeClass(final byte[] bytes) {
             try {
-                return Class.forName(new String(bytes, StandardCharsets.UTF_8));
+                return Class.forName(new String(bytes, StandardCharsets.UTF_8).replace('/', '.'));
             } catch (final ClassNotFoundException exception) {
                 throw new IllegalArgumentException(
                     String.format("Class not found: %s", new String(bytes, StandardCharsets.UTF_8)),

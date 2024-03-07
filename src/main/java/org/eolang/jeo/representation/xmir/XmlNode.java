@@ -233,16 +233,22 @@ public final class XmlNode {
     }
 
     /**
-     * Convert to a command.
-     * @return Command.
+     * Convert to an entry.
+     * @return Bytecode entry.
      */
-    XmlBytecodeEntry toCommand() {
+    XmlBytecodeEntry toEntry() {
         final XmlBytecodeEntry result;
-        if (this.attribute("name").isPresent()) {
-            result = new XmlInstruction(this.node);
-        } else {
+        final Optional<String> base = this.attribute("base");
+        if (base.isPresent() && base.get().equals("label")) {
             result = new XmlLabel(this);
+        } else {
+            result = new XmlInstruction(this.node);
         }
+//        if (base.isPresent()) {
+//            result = new XmlInstruction(this.node);
+//        } else {
+//            result = new XmlLabel(this);
+//        }
         return result;
     }
 

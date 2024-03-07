@@ -172,7 +172,7 @@ public final class XmlMethod {
             .child("base", "tuple")
             .children()
             .filter(element -> element.attribute("base").isPresent())
-            .map(XmlNode::toCommand)
+            .map(XmlNode::toEntry)
             .filter(instr -> Arrays.stream(predicates).allMatch(predicate -> predicate.test(instr)))
             .collect(Collectors.toList());
     }

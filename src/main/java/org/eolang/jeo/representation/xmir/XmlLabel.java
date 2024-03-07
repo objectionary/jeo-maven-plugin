@@ -23,7 +23,9 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.objectweb.asm.Label;
 
 /**
  * XML representation of bytecode label.
@@ -34,7 +36,6 @@ public final class XmlLabel implements XmlBytecodeEntry {
     /**
      * Label node.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final XmlNode node;
 
     /**
@@ -53,14 +54,16 @@ public final class XmlLabel implements XmlBytecodeEntry {
 
     @Override
     public void writeTo(final BytecodeMethod method) {
-        method.label(this.labels.label(this.identifier()));
+//        method.label(this.labels.label(this.identifier()));
+        method.label((Label) HexData.DataType.LABEL.decode(this.node.text()));
     }
 
     /**
      * Get label identifier.
      * @return Label identifier.
      */
-    public String identifier() {
-        return new HexString(this.node.child("base", "string").text()).decode();
-    }
+//    public String identifier() {
+//        return labels.uid();
+//        return new HexString(this.node.text()).decode();
+//    }
 }
