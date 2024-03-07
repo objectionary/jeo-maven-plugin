@@ -131,6 +131,9 @@ public enum DataType {
      */
     private final Function<Object, byte[]> encoder;
 
+    /**
+     * Converter from hex.
+     */
     private final Function<byte[], Object> decoder;
 
     /**
@@ -139,6 +142,7 @@ public enum DataType {
      * @param clazz Class.
      * @param encoder Converter to hex.
      * @param decoder Converter from hex.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     DataType(
         final String base,
@@ -157,6 +161,7 @@ public enum DataType {
      * @param base Base type.
      * @return Type.
      */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DataType find(final String base) {
         return Arrays.stream(DataType.values())
             .filter(type -> type.base.equals(base))
@@ -177,9 +182,9 @@ public enum DataType {
         final char[] chars = raw.trim().replace(" ", "").toCharArray();
         final int length = chars.length;
         final byte[] res = new byte[length / 2];
-        for (int i = 0; i < length; i += 2) {
-            res[i / 2] = (byte) Integer.parseInt(
-                String.copyValueOf(new char[]{chars[i], chars[i + 1]}), 16
+        for (int index = 0; index < length; index += 2) {
+            res[index / 2] = (byte) Integer.parseInt(
+                String.copyValueOf(new char[]{chars[index], chars[index + 1]}), 16
             );
         }
         return this.decoder.apply(res);

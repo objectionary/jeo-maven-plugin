@@ -24,11 +24,8 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import org.eolang.jeo.representation.HexData;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Xml directives for label entry in byrecode.
@@ -47,25 +44,11 @@ public final class DirectivesLabel implements Iterable<Directive> {
     private final String name;
 
     /**
-     * All labels.
-     */
-    private final AllLabels all;
-
-    /**
      * Constructor.
      * @param label Bytecode label.
      */
     public DirectivesLabel(final Label label) {
-        this(label, new AllLabels());
-    }
-
-    /**
-     * Constructor.
-     * @param label Bytecode label.
-     * @param all All labels.
-     */
-    public DirectivesLabel(final Label label, final AllLabels all) {
-        this(label, "", all);
+        this(label, "");
     }
 
     /**
@@ -74,37 +57,12 @@ public final class DirectivesLabel implements Iterable<Directive> {
      * @param name Label name.
      */
     public DirectivesLabel(final Label label, final String name) {
-        this(label, name, new AllLabels());
-    }
-
-    /**
-     * Constructor.
-     * @param label Bytecode label.
-     * @param name Label name.
-     * @param all All labels.
-     */
-    public DirectivesLabel(
-        final Label label,
-        final String name,
-        final AllLabels all
-    ) {
         this.label = label;
         this.name = name;
-        this.all = all;
     }
 
     @Override
     public Iterator<Directive> iterator() {
         return new DirectivesData(this.name, this.label).iterator();
-//        final String uid = this.all.uid(this.label);
-//        final Directives directives = new Directives().add("o")
-//            .attr("base", "label");
-//        if (!this.name.isEmpty()) {
-//            directives.attr("name", this.name);
-//        }
-//        return directives
-//            .append(new DirectivesData(uid))
-//            .up()
-//            .iterator();
     }
 }

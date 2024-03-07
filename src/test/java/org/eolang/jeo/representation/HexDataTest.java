@@ -148,7 +148,6 @@ final class HexDataTest {
         );
     }
 
-
     /**
      * Arguments for {@link HexDataTest#decodesEncodesCorrectly(Object, String)}.
      * Example for reference - {@link HexDataTest} is "org.eolang.jeo.representation.HexDataTest"

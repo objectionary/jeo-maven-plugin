@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
-import org.objectweb.asm.Type;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -48,7 +47,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     /**
      * Instruction node.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
 
     /**

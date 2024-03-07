@@ -244,11 +244,6 @@ public final class XmlNode {
         } else {
             result = new XmlInstruction(this.node);
         }
-//        if (base.isPresent()) {
-//            result = new XmlInstruction(this.node);
-//        } else {
-//            result = new XmlLabel(this);
-//        }
         return result;
     }
 

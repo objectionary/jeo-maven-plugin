@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.JavaName;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.objectweb.asm.Label;

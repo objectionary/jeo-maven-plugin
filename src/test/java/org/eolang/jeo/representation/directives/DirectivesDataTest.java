@@ -44,7 +44,8 @@ final class DirectivesDataTest {
             "Converts label to XML",
             new Xembler(
                 new DirectivesData(
-                    new AllLabels().label("some-random")),
+                    new AllLabels().label("some-random")
+                ),
                 new Transformers.Node()
             ).xml(),
             Matchers.equalTo(
@@ -61,5 +62,4 @@ final class DirectivesDataTest {
             Matchers.equalTo(new AllLabels().label("some-random"))
         );
     }
-
 }
