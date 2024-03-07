@@ -93,7 +93,9 @@ public final class HexData {
          */
         BOOL("bool", Boolean.class, value ->
             DataType.hexBoolean(Boolean.class.cast(value)),
-            bytes -> bytes[0] != 0
+            bytes -> {
+                return Boolean.valueOf(bytes[0] != 0);
+            }
         ),
 
         /**
@@ -145,7 +147,8 @@ public final class HexData {
         /**
          * Label.
          */
-        LABEL("label", Label.class, value -> new byte[0],
+        LABEL("label", Label.class, value ->
+            new AllLabels().uid(Label.class.cast(value)).getBytes(StandardCharsets.UTF_8),
             bytes -> new AllLabels().label(new String(bytes, StandardCharsets.UTF_8))
         ),
 
@@ -277,9 +280,15 @@ public final class HexData {
         }
 
         public Object decode(final String raw) {
-//            TODO:!
-//            return this.decoder.apply();
-            return null;
+            final char[] chars = raw.trim().replace(" ", "").toCharArray();
+            final int length = chars.length;
+            final byte[] res = new byte[length / 2];
+            for (int i = 0; i < length; i += 2) {
+                res[i / 2] = (byte) Integer.parseInt(
+                    String.copyValueOf(new char[]{chars[i], chars[i + 1]}), 16
+                );
+            }
+            return this.decoder.apply(res);
         }
     }
 }

@@ -322,16 +322,14 @@ final class HasMethod extends TypeSafeMatcher<String> {
                 .map(
                     arg -> {
                         final String result;
+                        final HexData hex = new HexData(arg);
                         if (arg instanceof Label) {
-                            final String uid = new AllLabels().uid((Label) arg);
-                            final HexData data = new HexData(uid);
                             result = String.format(
-                                "%s/o[@base='label']/o[@base='%s' and @data='bytes' and text()]/@data",
+                                "%s/o[@base='%s' and @data='bytes']/@data",
                                 instruction,
-                                data.type()
+                                hex.type()
                             );
                         } else {
-                            final HexData hex = new HexData(arg);
                             result = String.format(
                                 "%s/o[@base='%s' and @data='bytes' and text()='%s']/@data",
                                 instruction,
@@ -421,7 +419,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
         static Stream<String> checks(final String root) {
             return Stream.of(
                 String.format(
-                    "%s/o[@base='seq']/o[@base='tuple']/o[@base='label']/o[@base='string' and @data='bytes']/@data",
+                    "%s/o[@base='seq']/o[@base='tuple']/o[@base='label' and @data='bytes']/@data",
                     root
                 )
             );

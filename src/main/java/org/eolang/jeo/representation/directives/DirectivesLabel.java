@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.xembly.Directive;
@@ -94,15 +95,16 @@ public final class DirectivesLabel implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final String uid = this.all.uid(this.label);
-        final Directives directives = new Directives().add("o")
-            .attr("base", "label");
-        if (!this.name.isEmpty()) {
-            directives.attr("name", this.name);
-        }
-        return directives
-            .append(new DirectivesData(uid))
-            .up()
-            .iterator();
+        return new DirectivesData(this.name, this.label).iterator();
+//        final String uid = this.all.uid(this.label);
+//        final Directives directives = new Directives().add("o")
+//            .attr("base", "label");
+//        if (!this.name.isEmpty()) {
+//            directives.attr("name", this.name);
+//        }
+//        return directives
+//            .append(new DirectivesData(uid))
+//            .up()
+//            .iterator();
     }
 }

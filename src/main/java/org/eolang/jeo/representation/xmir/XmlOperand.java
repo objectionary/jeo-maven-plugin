@@ -63,29 +63,29 @@ public final class XmlOperand {
                     )
                 )
             );
-        HexData.DataType.byBase(attr).decode(this.raw.text());
+        return HexData.DataType.byBase(attr).decode(this.raw.text());
 
 
-        final Object result;
-        if (attr.equals("int")) {
-            result = new HexString(this.raw.text()).decodeAsInt();
-        } else if (attr.equals("long")) {
-            result = new HexString(this.raw.text()).decodeAsLong();
-        } else if (attr.equals("label")) {
-            result = this.labels.label(
-                this.raw.children()
-                    .map(XmlNode::text)
-                    .map(String::trim)
-                    .map(HexString::new)
-                    .map(HexString::decode)
-                    .findFirst()
-                    .orElseThrow()
-            );
-        } else if (attr.equals("reference")) {
-            result = Type.getType(String.format("L%s;", new HexString(this.raw.text()).decode()));
-        } else {
-            result = new HexString(this.raw.text()).decode();
-        }
-        return result;
+//        final Object result;
+//        if (attr.equals("int")) {
+//            result = new HexString(this.raw.text()).decodeAsInt();
+//        } else if (attr.equals("long")) {
+//            result = new HexString(this.raw.text()).decodeAsLong();
+//        } else if (attr.equals("label")) {
+//            result = this.labels.label(
+//                this.raw.children()
+//                    .map(XmlNode::text)
+//                    .map(String::trim)
+//                    .map(HexString::new)
+//                    .map(HexString::decode)
+//                    .findFirst()
+//                    .orElseThrow()
+//            );
+//        } else if (attr.equals("reference")) {
+//            result = Type.getType(String.format("L%s;", new HexString(this.raw.text()).decode()));
+//        } else {
+//            result = new HexString(this.raw.text()).decode();
+//        }
+//        return result;
     }
 }
