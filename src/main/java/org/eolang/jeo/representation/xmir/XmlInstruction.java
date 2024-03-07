@@ -24,8 +24,9 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.xembly.Transformers;
@@ -35,6 +36,8 @@ import org.xembly.Xembler;
  * Bytecode instruction from XML.
  * @since 0.1
  */
+@ToString
+@EqualsAndHashCode
 public final class XmlInstruction implements XmlBytecodeEntry {
 
     /**
@@ -58,13 +61,19 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      */
     public XmlInstruction(final boolean counting, final int opcode, final Object... args) {
         this(
-            new XmlNode(new Xembler(
-                new DirectivesInstruction(opcode, counting, args),
-                new Transformers.Node()
-            ).xmlQuietly())
+            new XmlNode(
+                new Xembler(
+                    new DirectivesInstruction(opcode, counting, args),
+                    new Transformers.Node()
+                ).xmlQuietly()
+            )
         );
     }
 
+    /**
+     * Constructor.
+     * @param xml XML string that represents an instruction.
+     */
     public XmlInstruction(final String xml) {
         this(new XmlNode(xml));
     }
@@ -108,38 +117,5 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      */
     public XmlNode toNode() {
         return this.node;
-    }
-
-    @Override
-    public boolean equals(final Object other) {
-        final boolean result;
-        if (this == other) {
-            result = true;
-        } else if (other == null || this.getClass() != other.getClass()) {
-            result = false;
-        } else {
-            result = this.equals(this.node, ((XmlInstruction) other).node);
-        }
-        return result;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.node);
-    }
-
-    @Override
-    public String toString() {
-        return this.node.toString();
-    }
-
-    /**
-     * Check if two nodes are equal.
-     * @param first First node.
-     * @param second Second node.
-     * @return True if nodes are equal.
-     */
-    private boolean equals(final XmlNode first, final XmlNode second) {
-        return first.equals(second);
     }
 }
