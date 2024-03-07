@@ -24,16 +24,12 @@
 package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -48,11 +44,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Instruction node.
      */
     private final Node node;
-
-    /**
-     * Opcodes names counting.
-     */
-    private boolean counting;
 
     /**
      * Constructor.
@@ -75,8 +66,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
                     new DirectivesInstruction(opcode, counting, args),
                     new Transformers.Node()
                 ).xmlQuietly()
-            ).node().getFirstChild(),
-            counting
+            ).node().getFirstChild()
         );
     }
 
@@ -85,17 +75,8 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @param node Instruction node.
      */
     public XmlInstruction(final Node node) {
-        this(node, true);
-    }
-
-    /**
-     * Constructor.
-     * @param node Instruction node.
-     * @param counting Opcodes counting.
-     */
-    public XmlInstruction(final Node node, final boolean counting) {
         this.node = node;
-        this.counting = counting;
+
     }
 
     @Override
@@ -162,113 +143,5 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      */
     private boolean equals(final Node first, final Node second) {
         return new XmlNode(first).equals(new XmlNode(second));
-
-//        return first.equals(second);
-
-//        final boolean result;
-//        if (first.getNodeType() == second.getNodeType()) {
-//            if (first.getNodeType() == Node.TEXT_NODE) {
-//                result = first.getTextContent().trim().equals(second.getTextContent().trim());
-//            } else {
-//                result = this.areElementsEqual(first, second);
-//            }
-//        } else {
-//            result = false;
-//        }
-//        return result;
-    }
-
-    /**
-     * Check if two elements are equal.
-     * @param first First element.
-     * @param second Second element.
-     * @return True if elements are equal.
-     */
-    private boolean areElementsEqual(final Node first, final Node second) {
-        return first.getNodeName().equals(second.getNodeName())
-            && XmlInstruction.hasSameAttributes(first, second)
-            && this.hasSameChildren(first, second);
-    }
-
-    /**
-     * Check if two nodes have the same attributes.
-     * @param first First node.
-     * @param second Second node.
-     * @return True if nodes have the same attributes.
-     */
-    private static boolean hasSameAttributes(final Node first, final Node second) {
-        boolean result = true;
-        final NamedNodeMap attributes = first.getAttributes();
-        final int length = attributes.getLength();
-        if (length == second.getAttributes().getLength()) {
-            for (int index = 0; index < length; ++index) {
-                final Node left = attributes.item(index);
-                final Node right = second.getAttributes().getNamedItem(left.getNodeName());
-                if (!XmlInstruction.areAttributesEqual(left, right)) {
-                    result = false;
-                    break;
-                }
-            }
-        } else {
-            result = false;
-        }
-        return result;
-    }
-
-    /**
-     * Check if two attributes are equal.
-     * @param first First attribute.
-     * @param second Second attribute.
-     * @return True if attributes are equal.
-     * @TODO! Remove this suboptimal method!
-     */
-    private static boolean areAttributesEqual(final Node first, final Node second) {
-        final boolean result;
-        if (first != null && second != null && first.getNodeName().equals(second.getNodeName())) {
-            if (first.getNodeName().equals("name")) {
-                result = first.getNodeValue().split("-")[0]
-                    .equals(second.getNodeValue().split("-")[0]);
-            } else {
-                result = first.getNodeValue().equals(second.getNodeValue());
-            }
-        } else {
-            result = false;
-        }
-        return result;
-    }
-
-    /**
-     * Check if two nodes have the same children.
-     * @param left Left node.
-     * @param right Right node.
-     * @return True if nodes have the same children.
-     */
-    private boolean hasSameChildren(final Node left, final Node right) {
-        final List<Node> first = XmlInstruction.children(left);
-        final List<Node> second = XmlInstruction.children(right);
-        return first.size() == second.size()
-            && IntStream.range(0, first.size())
-            .allMatch(index -> this.equals(first.get(index), second.get(index)));
-    }
-
-    /**
-     * Get children nodes.
-     * @param root Root node.
-     * @return Children nodes.
-     */
-    private static List<Node> children(final Node root) {
-        final NodeList all = root.getChildNodes();
-        final List<Node> res = new ArrayList<>(0);
-        for (int index = 0; index < all.getLength(); ++index) {
-            final Node item = all.item(index);
-            final int type = item.getNodeType();
-            if (type == Node.ELEMENT_NODE) {
-                res.add(item);
-            }
-            if (type == Node.TEXT_NODE && !item.getTextContent().isBlank()) {
-                res.add(item);
-            }
-        }
-        return res;
     }
 }
