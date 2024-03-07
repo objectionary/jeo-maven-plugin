@@ -153,19 +153,19 @@ public final class HexData {
         ),
 
         /**
-         * Class reference.
-         */
-        CLASS_REFERENCE("reference", Class.class, value ->
-            DataType.hexClass(Class.class.cast(value).getName()),
-            DataType::decodeClass
-        ),
-
-        /**
          * Type reference.
          */
         TYPE_REFERENCE("reference", Type.class, value ->
             DataType.hexClass(Type.class.cast(value).getClassName()),
-            bytes -> Type.getObjectType(new String(bytes, StandardCharsets.UTF_8))
+            bytes -> Type.getType(String.format("L%s;", new String(bytes, StandardCharsets.UTF_8)))
+        ),
+
+        /**
+         * Class reference.
+         */
+        CLASS_REFERENCE("reference", Class.class, value ->
+            DataType.hexClass(Class.class.cast(value).getName()),
+            bytes -> new String(bytes, StandardCharsets.UTF_8)
         );
 
         /**
@@ -258,11 +258,12 @@ public final class HexData {
         }
 
         private static Class<?> decodeClass(final byte[] bytes) {
+            final String clazz = new String(bytes, StandardCharsets.UTF_8).replace('/', '.');
             try {
-                return Class.forName(new String(bytes, StandardCharsets.UTF_8).replace('/', '.'));
+                return Class.forName(clazz);
             } catch (final ClassNotFoundException exception) {
                 throw new IllegalArgumentException(
-                    String.format("Class not found: %s", new String(bytes, StandardCharsets.UTF_8)),
+                    String.format("Class not found: %s", clazz),
                     exception
                 );
             }

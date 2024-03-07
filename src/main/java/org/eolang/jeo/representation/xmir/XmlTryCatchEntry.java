@@ -30,6 +30,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 /**
  * XML try-catch entry.
  * @since 0.1
+ * @TODO: Label Decoding?
  */
 public final class XmlTryCatchEntry implements XmlBytecodeEntry {
 
@@ -66,7 +67,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      */
     Optional<String> label(final String name) {
         return this.xmlnode.optchild("name", name)
-            .map(node -> node.child("base", "string").text())
+            .map(XmlNode::text)
             .map(HexString::new)
             .map(HexString::decode);
     }

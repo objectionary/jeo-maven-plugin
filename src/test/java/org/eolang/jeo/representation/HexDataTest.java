@@ -23,9 +23,8 @@
  */
 package org.eolang.jeo.representation;
 
-import java.nio.ByteBuffer;
 import java.util.stream.Stream;
-import org.apache.commons.codec.binary.Hex;
+import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -104,7 +103,7 @@ final class HexDataTest {
     }
 
     @ParameterizedTest
-    @MethodSource("values")
+    @MethodSource("encodedValues")
     void decodesEncodesCorrectly(final Object origin, final String hex) {
         MatcherAssert.assertThat(
             "Decoding and encoding are not consistent",
@@ -146,6 +145,28 @@ final class HexDataTest {
                 HexDataTest.class,
                 "6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2F 48 65 78 44 61 74 61 54 65 73 74"
             )
+        );
+    }
+
+
+    /**
+     * Arguments for {@link HexDataTest#decodesEncodesCorrectly(Object, String)}.
+     * Example for reference - {@link HexDataTest} is "org.eolang.jeo.representation.HexDataTest"
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> encodedValues() {
+        return Stream.of(
+            Arguments.of(10, "00 00 00 00 00 00 00 0A"),
+            Arguments.of("Hello!", "48 65 6C 6C 6F 21"),
+            Arguments.of(new byte[]{1, 2, 3}, "01 02 03"),
+            Arguments.of(true, "01"),
+            Arguments.of(false, "00"),
+            Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A"),
+            Arguments.of(
+                "org/eolang/jeo/representation/HexDataTest",
+                "6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2F 48 65 78 44 61 74 61 54 65 73 74"
+            ),
+            Arguments.of(new AllLabels().label("some"), "73 6F 6D 65")
         );
     }
 }
