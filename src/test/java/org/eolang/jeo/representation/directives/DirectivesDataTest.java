@@ -23,7 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import org.eolang.jeo.representation.HexData;
+import org.eolang.jeo.representation.DataType;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -57,7 +57,7 @@ final class DirectivesDataTest {
     void decodesLabel() {
         MatcherAssert.assertThat(
             "Decodes label from XML",
-            HexData.DataType.byBase("label").decode("73 6F 6D 65 2D 72 61 6E 64 6F 6D"),
+            DataType.find("label").decode("73 6F 6D 65 2D 72 61 6E 64 6F 6D"),
             Matchers.equalTo(new AllLabels().label("some-random"))
         );
     }

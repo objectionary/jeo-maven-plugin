@@ -23,8 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import javax.validation.constraints.AssertTrue;
-import net.sf.saxon.expr.Component;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

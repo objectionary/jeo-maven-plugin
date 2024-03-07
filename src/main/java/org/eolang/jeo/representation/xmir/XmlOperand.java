@@ -23,8 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.HexData;
-import org.objectweb.asm.Type;
+import org.eolang.jeo.representation.DataType;
 
 /**
  * XML operand.
@@ -38,54 +37,24 @@ public final class XmlOperand {
     private final XmlNode raw;
 
     /**
-     * All found labels.
-     */
-    private final AllLabels labels;
-
-    /**
      * Constructor.
      * @param node Raw XML operand node.
      */
     public XmlOperand(final XmlNode node) {
         this.raw = node;
-        this.labels = new AllLabels();
     }
 
     public Object asObject() {
-
-
-        final String attr = this.raw.attribute("base")
-            .orElseThrow(
-                () -> new IllegalStateException(
-                    String.format(
-                        "'%s' is not an argument because it doesn't have 'base' attribute",
-                        this.raw
+        return DataType.find(
+            this.raw.attribute("base")
+                .orElseThrow(
+                    () -> new IllegalStateException(
+                        String.format(
+                            "'%s' is not an argument because it doesn't have 'base' attribute",
+                            this.raw
+                        )
                     )
                 )
-            );
-        return HexData.DataType.byBase(attr).decode(this.raw.text());
-
-
-//        final Object result;
-//        if (attr.equals("int")) {
-//            result = new HexString(this.raw.text()).decodeAsInt();
-//        } else if (attr.equals("long")) {
-//            result = new HexString(this.raw.text()).decodeAsLong();
-//        } else if (attr.equals("label")) {
-//            result = this.labels.label(
-//                this.raw.children()
-//                    .map(XmlNode::text)
-//                    .map(String::trim)
-//                    .map(HexString::new)
-//                    .map(HexString::decode)
-//                    .findFirst()
-//                    .orElseThrow()
-//            );
-//        } else if (attr.equals("reference")) {
-//            result = Type.getType(String.format("L%s;", new HexString(this.raw.text()).decode()));
-//        } else {
-//            result = new HexString(this.raw.text()).decode();
-//        }
-//        return result;
+        ).decode(this.raw.text());
     }
 }

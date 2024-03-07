@@ -108,7 +108,7 @@ final class HexDataTest {
         MatcherAssert.assertThat(
             "Decoding and encoding are not consistent",
             origin,
-            Matchers.equalTo(HexData.DataType.byBase(new HexData(origin).type()).decode(hex))
+            Matchers.equalTo(DataType.find(new HexData(origin).type()).decode(hex))
         );
     }
 

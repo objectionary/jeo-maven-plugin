@@ -23,7 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.HexData;
+import org.eolang.jeo.representation.DataType;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.objectweb.asm.Label;
 
@@ -39,31 +39,16 @@ public final class XmlLabel implements XmlBytecodeEntry {
     private final XmlNode node;
 
     /**
-     * All found labels.
-     */
-    private final AllLabels labels;
-
-    /**
      * Constructor.
      * @param node Label node.
      */
     public XmlLabel(final XmlNode node) {
         this.node = node;
-        this.labels = new AllLabels();
     }
 
     @Override
     public void writeTo(final BytecodeMethod method) {
-//        method.label(this.labels.label(this.identifier()));
-        method.label((Label) HexData.DataType.LABEL.decode(this.node.text()));
+        method.label((Label) DataType.LABEL.decode(this.node.text()));
     }
 
-    /**
-     * Get label identifier.
-     * @return Label identifier.
-     */
-//    public String identifier() {
-//        return labels.uid();
-//        return new HexString(this.node.text()).decode();
-//    }
 }
