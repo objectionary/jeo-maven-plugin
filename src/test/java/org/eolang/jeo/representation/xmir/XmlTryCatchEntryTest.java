@@ -99,6 +99,7 @@ final class XmlTryCatchEntryTest {
     @Test
     void findsHandlerLabel() {
         MatcherAssert.assertThat(
+            "Can't find 'handler' label",
             new XmlTryCatchEntry(
                 new XmlNode(
                     String.join(
