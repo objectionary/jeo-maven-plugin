@@ -23,13 +23,11 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XMLDocument;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
-import org.w3c.dom.Node;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -37,13 +35,12 @@ import org.xembly.Xembler;
  * Bytecode instruction from XML.
  * @since 0.1
  */
-@SuppressWarnings("PMD.TooManyMethods")
 public final class XmlInstruction implements XmlBytecodeEntry {
 
     /**
      * Instruction node.
      */
-    private final Node node;
+    private final XmlNode node;
 
     /**
      * Constructor.
@@ -61,22 +58,23 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      */
     public XmlInstruction(final boolean counting, final int opcode, final Object... args) {
         this(
-            new XMLDocument(
-                new Xembler(
-                    new DirectivesInstruction(opcode, counting, args),
-                    new Transformers.Node()
-                ).xmlQuietly()
-            ).node().getFirstChild()
+            new XmlNode(new Xembler(
+                new DirectivesInstruction(opcode, counting, args),
+                new Transformers.Node()
+            ).xmlQuietly())
         );
+    }
+
+    public XmlInstruction(final String xml) {
+        this(new XmlNode(xml));
     }
 
     /**
      * Constructor.
      * @param node Instruction node.
      */
-    public XmlInstruction(final Node node) {
+    public XmlInstruction(final XmlNode node) {
         this.node = node;
-
     }
 
     @Override
@@ -89,7 +87,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @return Code.
      */
     public int opcode() {
-        return new HexString(new XmlNode(this.node).firstChild().text()).decodeAsInt();
+        return new HexString(this.node.firstChild().text()).decodeAsInt();
     }
 
     /**
@@ -97,7 +95,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @return Arguments.
      */
     public List<XmlOperand> operands() {
-        return new XmlNode(this.node)
+        return this.node
             .children()
             .skip(1)
             .map(XmlOperand::new)
@@ -109,7 +107,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @return XML node.
      */
     public XmlNode toNode() {
-        return new XmlNode(this.node);
+        return this.node;
     }
 
     @Override
@@ -132,7 +130,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
 
     @Override
     public String toString() {
-        return new XMLDocument(this.node).toString();
+        return this.node.toString();
     }
 
     /**
@@ -141,7 +139,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @param second Second node.
      * @return True if nodes are equal.
      */
-    private boolean equals(final Node first, final Node second) {
-        return new XmlNode(first).equals(new XmlNode(second));
+    private boolean equals(final XmlNode first, final XmlNode second) {
+        return first.equals(second);
     }
 }

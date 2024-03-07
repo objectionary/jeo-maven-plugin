@@ -242,7 +242,7 @@ public final class XmlNode {
         if (base.isPresent() && base.get().equals("label")) {
             result = new XmlLabel(this);
         } else {
-            result = new XmlInstruction(this.node);
+            result = new XmlInstruction(this);
         }
         return result;
     }
