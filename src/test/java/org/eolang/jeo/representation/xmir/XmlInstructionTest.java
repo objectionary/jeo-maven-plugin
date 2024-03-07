@@ -57,7 +57,7 @@ final class XmlInstructionTest {
     void comparesSuccessfullyWithSpaces() {
         MatcherAssert.assertThat(
             "Xml Instruction nodes with different empty spaces, but with the same content should be the same, but it wasn't",
-            new XmlInstruction(Opcodes.INVOKESPECIAL, 1, 2, 3),
+            new XmlInstruction(false, Opcodes.INVOKESPECIAL, 1, 2, 3),
             Matchers.equalTo(XmlInstructionTest.INSTRUCTION)
         );
     }

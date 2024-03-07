@@ -50,12 +50,9 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     private final Node node;
 
     /**
-     * Constructor.
-     * @param xml XML node as String.
+     * Opcodes names counting.
      */
-    public XmlInstruction(final String xml) {
-        this(new XMLDocument(xml).node().getFirstChild());
-    }
+    private boolean counting;
 
     /**
      * Constructor.
@@ -63,11 +60,23 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @param args Arguments.
      */
     public XmlInstruction(final int opcode, final Object... args) {
+        this(true, opcode, args);
+    }
+
+    /**
+     * Constructor.
+     * @param opcode Opcode.
+     * @param args Arguments.
+     */
+    public XmlInstruction(final boolean counting, final int opcode, final Object... args) {
         this(
-            new Xembler(
-                new DirectivesInstruction(opcode, args),
-                new Transformers.Node()
-            ).xmlQuietly()
+            new XMLDocument(
+                new Xembler(
+                    new DirectivesInstruction(opcode, counting, args),
+                    new Transformers.Node()
+                ).xmlQuietly()
+            ).node().getFirstChild(),
+            counting
         );
     }
 
@@ -76,7 +85,17 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @param node Instruction node.
      */
     public XmlInstruction(final Node node) {
+        this(node, true);
+    }
+
+    /**
+     * Constructor.
+     * @param node Instruction node.
+     * @param counting Opcodes counting.
+     */
+    public XmlInstruction(final Node node, final boolean counting) {
         this.node = node;
+        this.counting = counting;
     }
 
     @Override
@@ -142,17 +161,21 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @return True if nodes are equal.
      */
     private boolean equals(final Node first, final Node second) {
-        final boolean result;
-        if (first.getNodeType() == second.getNodeType()) {
-            if (first.getNodeType() == Node.TEXT_NODE) {
-                result = first.getTextContent().trim().equals(second.getTextContent().trim());
-            } else {
-                result = this.areElementsEqual(first, second);
-            }
-        } else {
-            result = false;
-        }
-        return result;
+        return new XmlNode(first).equals(new XmlNode(second));
+
+//        return first.equals(second);
+
+//        final boolean result;
+//        if (first.getNodeType() == second.getNodeType()) {
+//            if (first.getNodeType() == Node.TEXT_NODE) {
+//                result = first.getTextContent().trim().equals(second.getTextContent().trim());
+//            } else {
+//                result = this.areElementsEqual(first, second);
+//            }
+//        } else {
+//            result = false;
+//        }
+//        return result;
     }
 
     /**
