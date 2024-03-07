@@ -56,6 +56,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
 
     /**
      * Constructor.
+     * @param counting Add numbers for instruction names in XML.
      * @param opcode Opcode.
      * @param args Arguments.
      */

@@ -30,7 +30,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 /**
  * XML try-catch entry.
  * @since 0.1
- * @TODO: Label Decoding?
  */
 public final class XmlTryCatchEntry implements XmlBytecodeEntry {
 
