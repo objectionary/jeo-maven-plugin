@@ -53,6 +53,8 @@ public final class XmlLabel implements XmlBytecodeEntry {
 
     /**
      * Retrieves label identifier.
+     * This method is used in other repositories.
+     * Do not remove it!
      * @return Label identifier.
      */
     public String identifier() {
