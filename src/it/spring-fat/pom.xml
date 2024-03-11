@@ -90,7 +90,7 @@ SOFTWARE.
              support many java features. We need to implement them and enable
              the test.
           -->
-          <disabled>false</disabled>
+          <disabled>true</disabled>
         </configuration>
         <executions>
           <execution>

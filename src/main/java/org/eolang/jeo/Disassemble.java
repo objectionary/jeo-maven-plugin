@@ -53,6 +53,13 @@ public final class Disassemble implements Translation {
 
     @Override
     public Representation apply(final Representation representation) {
+        // @checkstyle MethodBodyCommentsCheck (6 lines)
+        //  @todo #499:90min Use AllLabels properly to avoid the need to clear the cache.
+        //   It's better to create a new instance of AllLabels for each method that is parsed.
+        //   AllLabels shouldn't share common cache between different methods.
+        //   The following line were added to optimize the performance of the code.
+        //   This is dangerous and should be removed as soon as possible.
+        //   Moreover, we have the same solution in {@link Assemble} class.
         new AllLabels().clearCache();
         final String name = new JavaName(representation.details().name()).decode();
         final Path path = this.target
