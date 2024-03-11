@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.JavaName;
+import org.eolang.jeo.representation.xmir.AllLabels;
 
 /**
  * Assemble a representation.
@@ -51,6 +52,7 @@ public final class Assemble implements Translation {
 
     @Override
     public Representation apply(final Representation representation) {
+        new AllLabels().clearCache();
         final Details details = representation.details();
         final String name = new JavaName(details.name()).decode();
         try {

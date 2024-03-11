@@ -95,6 +95,13 @@ public final class AllLabels {
     }
 
     /**
+     * Clear the cache.
+     */
+    public void clearCache() {
+        this.labels.clear();
+    }
+
+    /**
      * Clean the UID.
      * @param uid UID with new lines and spaces.
      * @return Cleaned UID.

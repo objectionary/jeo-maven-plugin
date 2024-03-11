@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.eolang.jeo.representation.JavaName;
 import org.eolang.jeo.representation.XmirRepresentation;
+import org.eolang.jeo.representation.xmir.AllLabels;
 
 /**
  * Disassemble a representation to a file.
@@ -52,6 +53,7 @@ public final class Disassemble implements Translation {
 
     @Override
     public Representation apply(final Representation representation) {
+        new AllLabels().clearCache();
         final String name = new JavaName(representation.details().name()).decode();
         final Path path = this.target
             .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
