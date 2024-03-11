@@ -23,39 +23,32 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.DataType;
-import org.eolang.jeo.representation.bytecode.BytecodeMethod;
-import org.objectweb.asm.Label;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * XML representation of bytecode label.
- * @since 0.1
+ * Test case for {@link XmlLabel}.
+ * @since 0.3
  */
-public final class XmlLabel implements XmlBytecodeEntry {
+final class XmlLabelTest {
 
-    /**
-     * Label node.
-     */
-    private final XmlNode node;
-
-    /**
-     * Constructor.
-     * @param node Label node.
-     */
-    public XmlLabel(final XmlNode node) {
-        this.node = node;
+    @Test
+    void createsLabelFromNode() {
+        Assertions.assertDoesNotThrow(
+            () -> new XmlLabel(new XmlNode("<o base='label' data='bytes'>some</o>")),
+            "Can't create label from node"
+        );
     }
 
-    @Override
-    public void writeTo(final BytecodeMethod method) {
-        method.label((Label) DataType.LABEL.decode(this.identifier()));
+    @Test
+    void retrievesLabelIdentifier() {
+        MatcherAssert.assertThat(
+            "Can't retrieve correct label identifier",
+            new XmlLabel(new XmlNode("<o base='label' data='bytes'>some</o>")).identifier(),
+            Matchers.equalTo("some")
+        );
     }
 
-    /**
-     * Retrieves label identifier.
-     * @return Label identifier.
-     */
-    public String identifier() {
-        return this.node.text();
-    }
 }
