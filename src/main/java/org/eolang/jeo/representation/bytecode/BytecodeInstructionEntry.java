@@ -342,13 +342,6 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
-         * Add two integers.
-         */
-        IADD(Opcodes.IADD, (visitor, arguments) ->
-            visitor.visitInsn(Opcodes.IADD)
-        ),
-
-        /**
          * Store int value into variable #index.
          */
         ISTORE(Opcodes.ISTORE, (visitor, arguments) ->
@@ -507,6 +500,12 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
             visitor.visitInsn(Opcodes.SWAP)
         ),
 
+        /**
+         * Add two integers.
+         */
+        IADD(Opcodes.IADD, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.IADD)
+        ),
         /**
          * Add two longs.
          */
