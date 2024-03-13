@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.OpcodeName;
 import org.eolang.jeo.representation.xmir.AllLabels;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -93,10 +94,10 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                 if (arg instanceof String) {
                     return String.format("\"%s\"", arg);
                 }
-                if (arg instanceof org.objectweb.asm.Label) {
+                if (arg instanceof Label) {
                     return String.format(
                         "labels.label(\"%s\")",
-                        new AllLabels().uid((org.objectweb.asm.Label) arg)
+                        new AllLabels().uid((Label) arg)
                     );
                 }
                 return arg.toString();
@@ -125,6 +126,13 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
          */
         ACONST_NULL(Opcodes.ACONST_NULL, (visitor, arguments) ->
             visitor.visitInsn(Opcodes.ACONST_NULL)
+        ),
+
+        /**
+         * Load the int value −1 onto the stack
+         */
+        ICONST_M1(Opcodes.ICONST_M1, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.ICONST_M1)
         ),
 
         /**
@@ -223,6 +231,13 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
          */
         BIPUSH(Opcodes.BIPUSH, (visitor, arguments) ->
             visitor.visitIntInsn(Opcodes.BIPUSH, (int) arguments.get(0))
+        ),
+
+        /**
+         * Push a short onto the stack as an integer value.
+         */
+        SIPUSH(Opcodes.SIPUSH, (visitor, arguments) ->
+            visitor.visitIntInsn(Opcodes.SIPUSH, (int) arguments.get(0))
         ),
 
         /**
@@ -332,13 +347,6 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
          */
         SALOAD(Opcodes.SALOAD, (visitor, arguments) ->
             visitor.visitInsn(Opcodes.SALOAD)
-        ),
-
-        /**
-         * Add two integers.
-         */
-        IADD(Opcodes.IADD, (visitor, arguments) ->
-            visitor.visitInsn(Opcodes.IADD)
         ),
 
         /**
@@ -500,6 +508,12 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
             visitor.visitInsn(Opcodes.SWAP)
         ),
 
+        /**
+         * Add two integers.
+         */
+        IADD(Opcodes.IADD, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.IADD)
+        ),
         /**
          * Add two longs.
          */
@@ -901,7 +915,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFEQ(Opcodes.IFEQ, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFEQ,
-                (org.objectweb.asm.Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -911,7 +925,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFNE(Opcodes.IFNE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFNE,
-                (org.objectweb.asm.Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -921,7 +935,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFLT(Opcodes.IFLT, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFLT,
-                (org.objectweb.asm.Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -931,7 +945,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFGE(Opcodes.IFGE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFGE,
-                (org.objectweb.asm.Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -941,7 +955,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFGT(Opcodes.IFGT, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFGT,
-                (org.objectweb.asm.Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -951,7 +965,37 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFLE(Opcodes.IFLE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFLE,
-                (org.objectweb.asm.Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
+            )
+        ),
+
+        /**
+         * If the two integer values are equal, branch to instruction at branchoffset.
+         */
+        IF_ICMPEQ(Opcodes.IF_ICMPEQ, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ICMPEQ,
+                Label.class.cast(arguments.get(0))
+            )
+        ),
+
+        /**
+         * If the two integer values are not equal, branch to instruction at branchoffset.
+         */
+        IF_ICMPNE(Opcodes.IF_ICMPNE, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ICMPNE,
+                Label.class.cast(arguments.get(0))
+            )
+        ),
+
+        /**
+         * If value1 is less than value2, branch to instruction at branchoffset.
+         */
+        IF_ICMPLT(Opcodes.IF_ICMPLT, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ICMPLT,
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -961,7 +1005,17 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IF_ICMPGE(Opcodes.IF_ICMPGE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IF_ICMPGE,
-                (org.objectweb.asm.Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
+            )
+        ),
+
+        /**
+         * If value1 is greater than value2, branch to instruction at branchoffset.
+         */
+        IF_ICMPGT(Opcodes.IF_ICMPGT, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ICMPGT,
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -971,7 +1025,27 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IF_ICMPLE(Opcodes.IF_ICMPLE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IF_ICMPLE,
-                (org.objectweb.asm.Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
+            )
+        ),
+
+        /**
+         * If references are equal, branch to instruction at branchoffset.
+         */
+        IF_ACMPEQ(Opcodes.IF_ACMPEQ, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ACMPEQ,
+                Label.class.cast(arguments.get(0))
+            )
+        ),
+
+        /**
+         * If references are not equal, branch to instruction at branchoffset.
+         */
+        IF_ACMPNE(Opcodes.IF_ACMPNE, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ACMPNE,
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -981,8 +1055,66 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         GOTO(Opcodes.GOTO, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.GOTO,
-                (org.objectweb.asm.Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
+        ),
+
+        /**
+         * Jump to subroutine at branchoffset
+         */
+        JSR(Opcodes.JSR, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.JSR,
+                Label.class.cast(arguments.get(0))
+            )
+        ),
+
+        /**
+         * Return from subroutine.
+         */
+        RET(Opcodes.RET, (visitor, arguments) ->
+            visitor.visitVarInsn(
+                Opcodes.RET,
+                (int) arguments.get(0)
+            )
+        ),
+
+        /**
+         * Access jump table by key match and jump.
+         * Continue execution from an address in the table at offset index
+         */
+        TABLESWITCH(Opcodes.TABLESWITCH, (visitor, arguments) -> {
+            visitor.visitTableSwitchInsn(
+                (int) arguments.get(0),
+                (int) arguments.get(1),
+                Label.class.cast(arguments.get(2)),
+                arguments.subList(3, arguments.size())
+                    .stream()
+                    .map(Label.class::cast)
+                    .toArray(Label[]::new)
+            );
+        }
+        ),
+
+        /**
+         * Access jump table by key match and jump.
+         * A target address is looked up from a table using a key and execution
+         * continues from the instruction at that address
+         */
+        LOOKUPSWITCH(Opcodes.LOOKUPSWITCH, (visitor, arguments) -> {
+            final List<Label> labels = arguments.stream()
+                .filter(Label.class::isInstance)
+                .map(Label.class::cast)
+                .collect(Collectors.toList());
+            visitor.visitLookupSwitchInsn(
+                labels.get(0),
+                arguments.stream()
+                    .filter(Integer.class::isInstance)
+                    .mapToInt(Integer.class::cast)
+                    .toArray(),
+                labels.subList(1, labels.size()).toArray(Label[]::new)
+            );
+        }
         ),
 
         /**
@@ -1034,6 +1166,20 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         GETSTATIC(Opcodes.GETSTATIC, (visitor, arguments) ->
             visitor.visitFieldInsn(
                 Opcodes.GETSTATIC,
+                String.valueOf(arguments.get(0)),
+                String.valueOf(arguments.get(1)),
+                String.valueOf(arguments.get(2))
+            )
+        ),
+
+        /**
+         * Set static field to value.
+         * Set static field to value in a class, where the field is identified
+         * by a field reference index in constant pool.
+         */
+        PUTSTATIC(Opcodes.PUTSTATIC, (visitor, arguments) ->
+            visitor.visitFieldInsn(
+                Opcodes.PUTSTATIC,
                 String.valueOf(arguments.get(0)),
                 String.valueOf(arguments.get(1)),
                 String.valueOf(arguments.get(2))
@@ -1233,7 +1379,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFNULL(Opcodes.IFNULL, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFNULL,
-                (org.objectweb.asm.Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -1243,7 +1389,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFNONNULL(Opcodes.IFNONNULL, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFNONNULL,
-                (org.objectweb.asm.Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         );
 

@@ -76,17 +76,25 @@ SOFTWARE.
               <printOutputDir>${project.build.directory}/generated-sources/jeo-eo</printOutputDir>
             </configuration>
           </execution>
-          <execution>
-            <id>convert-xmir-to-phi</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>xmir-to-phi</goal>
-            </goals>
-            <configuration>
-              <phiInputDir>${project.build.directory}/generated-sources/jeo-xmir</phiInputDir>
-              <phiOutputDir>${project.build.directory}/generated-sources/jeo-phi</phiOutputDir>
-            </configuration>
-          </execution>
+          <!--
+            @todo #488:30min Enable the execution of the `xmir-to-phi` goal.
+             The `xmir-to-phi` goal is currently disabled because it has some bug.
+             You can read more about it right here:
+             https://github.com/objectionary/eo/issues/2938
+             Once it is implemented, this comment should be removed and the goal
+             should be enabled.
+          -->
+          <!--          <execution>-->
+          <!--            <id>convert-xmir-to-phi</id>-->
+          <!--            <phase>process-classes</phase>-->
+          <!--            <goals>-->
+          <!--              <goal>xmir-to-phi</goal>-->
+          <!--            </goals>-->
+          <!--            <configuration>-->
+          <!--              <phiInputDir>${project.build.directory}/generated-sources/jeo-xmir</phiInputDir>-->
+          <!--              <phiOutputDir>${project.build.directory}/generated-sources/jeo-phi</phiOutputDir>-->
+          <!--            </configuration>-->
+          <!--          </execution>-->
         </executions>
       </plugin>
       <plugin>
