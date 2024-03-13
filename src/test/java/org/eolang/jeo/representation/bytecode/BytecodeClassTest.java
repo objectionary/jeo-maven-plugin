@@ -193,4 +193,17 @@ final class BytecodeClassTest {
             "We expect an exception here because the bytecode is broken"
         );
     }
+
+    @Test
+    void returnsShortValue() {
+        Assertions.assertDoesNotThrow(
+            () -> new BytecodeClass("ShortValue")
+                .withMethod("j$foo", "()S", Opcodes.ACC_PUBLIC)
+                .opcode(Opcodes.SIPUSH, 256)
+                .opcode(Opcodes.IRETURN)
+                .up()
+                .bytecode(),
+            "We expect no exception here because all instructions are valid"
+        );
+    }
 }

@@ -7,4 +7,9 @@ public class Bar {
         }
         return 2;
     }
+
+    public void sipush() {
+        short s = 256;
+        System.out.println(s);
+    }
 }

@@ -226,6 +226,13 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
+         * Push a short onto the stack as an integer value.
+         */
+        SIPUSH(Opcodes.SIPUSH, (visitor, arguments) ->
+            visitor.visitIntInsn(Opcodes.SIPUSH, (int) arguments.get(0))
+        ),
+
+        /**
          * Push a constant #index from a constant pool onto the stack.
          */
         LDC(Opcodes.LDC, (visitor, arguments) ->
