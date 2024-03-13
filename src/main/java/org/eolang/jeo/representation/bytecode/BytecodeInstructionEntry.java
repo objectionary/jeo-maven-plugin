@@ -915,7 +915,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFEQ(Opcodes.IFEQ, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFEQ,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -925,7 +925,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFNE(Opcodes.IFNE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFNE,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -935,7 +935,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFLT(Opcodes.IFLT, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFLT,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -945,7 +945,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFGE(Opcodes.IFGE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFGE,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -955,7 +955,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFGT(Opcodes.IFGT, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFGT,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -965,7 +965,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFLE(Opcodes.IFLE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFLE,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -975,7 +975,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IF_ICMPEQ(Opcodes.IF_ICMPEQ, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IF_ICMPEQ,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -985,7 +985,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IF_ICMPNE(Opcodes.IF_ICMPNE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IF_ICMPNE,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -995,7 +995,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IF_ICMPLT(Opcodes.IF_ICMPLT, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IF_ICMPLT,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -1005,7 +1005,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IF_ICMPGE(Opcodes.IF_ICMPGE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IF_ICMPGE,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -1015,7 +1015,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IF_ICMPGT(Opcodes.IF_ICMPGT, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IF_ICMPGT,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -1025,7 +1025,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IF_ICMPLE(Opcodes.IF_ICMPLE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IF_ICMPLE,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -1035,7 +1035,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IF_ACMPEQ(Opcodes.IF_ACMPEQ, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IF_ACMPEQ,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -1045,7 +1045,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IF_ACMPNE(Opcodes.IF_ACMPNE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IF_ACMPNE,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -1055,7 +1055,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         GOTO(Opcodes.GOTO, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.GOTO,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -1065,7 +1065,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         JSR(Opcodes.JSR, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.JSR,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -1379,7 +1379,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFNULL(Opcodes.IFNULL, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFNULL,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         ),
 
@@ -1389,7 +1389,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         IFNONNULL(Opcodes.IFNONNULL, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IFNONNULL,
-                (Label) arguments.get(0)
+                Label.class.cast(arguments.get(0))
             )
         );
 
