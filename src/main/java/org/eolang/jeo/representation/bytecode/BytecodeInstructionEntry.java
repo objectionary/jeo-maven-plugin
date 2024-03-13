@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.OpcodeName;
 import org.eolang.jeo.representation.xmir.AllLabels;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -962,11 +963,51 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
+         * If the two integer values are equal, branch to instruction at branchoffset.
+         */
+        IF_ICMPEQ(Opcodes.IF_ICMPEQ, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ICMPEQ,
+                (org.objectweb.asm.Label) arguments.get(0)
+            )
+        ),
+
+        /**
+         * If the two integer values are not equal, branch to instruction at branchoffset.
+         */
+        IF_ICMPNE(Opcodes.IF_ICMPNE, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ICMPNE,
+                (org.objectweb.asm.Label) arguments.get(0)
+            )
+        ),
+
+        /**
+         * If value1 is less than value2, branch to instruction at branchoffset.
+         */
+        IF_ICMPLT(Opcodes.IF_ICMPLT, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ICMPLT,
+                (org.objectweb.asm.Label) arguments.get(0)
+            )
+        ),
+
+        /**
          * If value1 is greater than or equal to value2, branch to instruction at branchoffset.
          */
         IF_ICMPGE(Opcodes.IF_ICMPGE, (visitor, arguments) ->
             visitor.visitJumpInsn(
                 Opcodes.IF_ICMPGE,
+                (org.objectweb.asm.Label) arguments.get(0)
+            )
+        ),
+
+        /**
+         * If value1 is greater than value2, branch to instruction at branchoffset.
+         */
+        IF_ICMPGT(Opcodes.IF_ICMPGT, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ICMPGT,
                 (org.objectweb.asm.Label) arguments.get(0)
             )
         ),
@@ -982,6 +1023,26 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
+         * If references are equal, branch to instruction at branchoffset.
+         */
+        IF_ACMPEQ(Opcodes.IF_ACMPEQ, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ACMPEQ,
+                (org.objectweb.asm.Label) arguments.get(0)
+            )
+        ),
+
+        /**
+         * If references are not equal, branch to instruction at branchoffset.
+         */
+        IF_ACMPNE(Opcodes.IF_ACMPNE, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.IF_ACMPNE,
+                (org.objectweb.asm.Label) arguments.get(0)
+            )
+        ),
+
+        /**
          * Goes to another instruction at branchoffset.
          */
         GOTO(Opcodes.GOTO, (visitor, arguments) ->
@@ -989,6 +1050,62 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                 Opcodes.GOTO,
                 (org.objectweb.asm.Label) arguments.get(0)
             )
+        ),
+
+        /**
+         * Jump to subroutine at branchoffset
+         */
+        JSR(Opcodes.JSR, (visitor, arguments) ->
+            visitor.visitJumpInsn(
+                Opcodes.JSR,
+                (org.objectweb.asm.Label) arguments.get(0)
+            )
+        ),
+
+        /**
+         * Return from subroutine.
+         */
+        RET(Opcodes.RET, (visitor, arguments) ->
+            visitor.visitVarInsn(
+                Opcodes.RET,
+                (int) arguments.get(0)
+            )
+        ),
+
+        /**
+         * Access jump table by key match and jump.
+         * Continue execution from an address in the table at offset index
+         */
+        TABLESWITCH(Opcodes.TABLESWITCH, (visitor, arguments) ->
+            visitor.visitTableSwitchInsn(
+                (int) arguments.get(0),
+                (int) arguments.get(1),
+                (org.objectweb.asm.Label) arguments.get(2),
+                arguments.subList(3, arguments.size()).stream()
+                    .map(label -> (org.objectweb.asm.Label) label)
+                    .toArray(org.objectweb.asm.Label[]::new)
+            )
+        ),
+
+        /**
+         * Access jump table by key match and jump.
+         * A target address is looked up from a table using a key and execution
+         * continues from the instruction at that address
+         */
+        LOOKUPSWITCH(Opcodes.LOOKUPSWITCH, (visitor, arguments) -> {
+            final List<Label> labels = arguments.stream()
+                .filter(Label.class::isInstance)
+                .map(Label.class::cast)
+                .collect(Collectors.toList());
+            visitor.visitLookupSwitchInsn(
+                labels.get(0),
+                arguments.stream()
+                    .filter(Integer.class::isInstance)
+                    .mapToInt(Integer.class::cast)
+                    .toArray(),
+                labels.subList(1, labels.size()).toArray(Label[]::new)
+            );
+        }
         ),
 
         /**
