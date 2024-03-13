@@ -129,6 +129,13 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         ),
 
         /**
+         * Load the int value −1 onto the stack
+         */
+        ICONST_M1(Opcodes.ICONST_M1, (visitor, arguments) ->
+            visitor.visitInsn(Opcodes.ICONST_M1)
+        ),
+
+        /**
          * Load the int value 0 onto the stack.
          */
         ICONST_0(Opcodes.ICONST_0, (visitor, arguments) ->
@@ -1076,15 +1083,17 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
          * Access jump table by key match and jump.
          * Continue execution from an address in the table at offset index
          */
-        TABLESWITCH(Opcodes.TABLESWITCH, (visitor, arguments) ->
+        TABLESWITCH(Opcodes.TABLESWITCH, (visitor, arguments) -> {
             visitor.visitTableSwitchInsn(
                 (int) arguments.get(0),
                 (int) arguments.get(1),
-                (org.objectweb.asm.Label) arguments.get(2),
-                arguments.subList(3, arguments.size()).stream()
-                    .map(label -> (org.objectweb.asm.Label) label)
-                    .toArray(org.objectweb.asm.Label[]::new)
-            )
+                Label.class.cast(arguments.get(2)),
+                arguments.subList(3, arguments.size())
+                    .stream()
+                    .map(Label.class::cast)
+                    .toArray(Label[]::new)
+            );
+        }
         ),
 
         /**
@@ -1157,6 +1166,20 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
         GETSTATIC(Opcodes.GETSTATIC, (visitor, arguments) ->
             visitor.visitFieldInsn(
                 Opcodes.GETSTATIC,
+                String.valueOf(arguments.get(0)),
+                String.valueOf(arguments.get(1)),
+                String.valueOf(arguments.get(2))
+            )
+        ),
+
+        /**
+         * Set static field to value.
+         * Set static field to value in a class, where the field is identified
+         * by a field reference index in constant pool.
+         */
+        PUTSTATIC(Opcodes.PUTSTATIC, (visitor, arguments) ->
+            visitor.visitFieldInsn(
+                Opcodes.PUTSTATIC,
                 String.valueOf(arguments.get(0)),
                 String.valueOf(arguments.get(1)),
                 String.valueOf(arguments.get(2))
