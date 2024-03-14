@@ -50,6 +50,7 @@ import org.xembly.Directive;
  *  {@link #visitMultiANewArrayInsn},
  *  {@link #visitIincInsn}.
  *  We need to implement them and add tests for them.
+ *  Don't forget to enable 'custom-transformations' integration test.
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class DirectivesMethodVisitor extends MethodVisitor implements Iterable<Directive> {
