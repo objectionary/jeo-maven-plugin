@@ -325,14 +325,15 @@ public final class BytecodeClass implements Testable {
 
     @Override
     public String testCode() {
-        final StringBuilder builder = new StringBuilder(
-            "AllLabels labels = new AllLabels();\nnew BytecodeClass("
-        ).append('"').append(this.name).append('"').append(')').append('\n');
+        final StringBuilder builder = new StringBuilder(0);
         for (final BytecodeMethod method : this.methods) {
             builder.append('.').append(method.testCode()).append('\n');
         }
-        builder.append(".bytecode();");
-        return builder.toString();
+        return String.format(
+            "AllLabels labels = new AllLabels();\nnew BytecodeClass(\"%s\")\n%s.bytecode();",
+            this.name,
+            builder
+        );
     }
 
     /**

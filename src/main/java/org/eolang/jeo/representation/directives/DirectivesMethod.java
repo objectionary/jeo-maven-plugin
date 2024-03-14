@@ -118,7 +118,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives();
         final String eoname;
-        if (this.name.equals("<init>")) {
+        if ("<init>".equals(this.name)) {
             eoname = "new";
         } else {
             eoname = this.name;

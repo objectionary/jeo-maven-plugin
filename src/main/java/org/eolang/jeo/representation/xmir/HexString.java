@@ -108,6 +108,6 @@ public final class HexString {
                 )
             );
         }
-        return value.equals("01");
+        return "01".equals(value);
     }
 }

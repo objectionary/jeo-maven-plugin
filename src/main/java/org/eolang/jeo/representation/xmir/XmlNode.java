@@ -239,7 +239,7 @@ public final class XmlNode {
     XmlBytecodeEntry toEntry() {
         final XmlBytecodeEntry result;
         final Optional<String> base = this.attribute("base");
-        if (base.isPresent() && base.get().equals("label")) {
+        if (base.isPresent() && "label".equals(base.get())) {
             result = new XmlLabel(this);
         } else {
             result = new XmlInstruction(this);
@@ -279,7 +279,7 @@ public final class XmlNode {
         final List<Node> res = new ArrayList<>(children.getLength());
         for (int index = 0; index < children.getLength(); ++index) {
             final Node child = children.item(index);
-            if (child.getNodeName().equals("o")) {
+            if ("o".equals(child.getNodeName())) {
                 res.add(child);
             }
         }
