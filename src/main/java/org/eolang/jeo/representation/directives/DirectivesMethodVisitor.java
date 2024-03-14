@@ -25,8 +25,6 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import org.eolang.jeo.representation.DefaultVersion;
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -165,50 +163,8 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     }
 
     @Override
-    public void visitLookupSwitchInsn(final Label dflt, final int[] keys, final Label[] labels) {
-        super.visitLookupSwitchInsn(dflt, keys, labels);
-    }
-
-    @Override
-    public void visitTableSwitchInsn(
-        final int min, final int max, final Label dflt, final Label... labels
-    ) {
-        super.visitTableSwitchInsn(min, max, dflt, labels);
-    }
-
-    @Override
-    public void visitMultiANewArrayInsn(final String descriptor, final int numDimensions) {
-        super.visitMultiANewArrayInsn(descriptor, numDimensions);
-    }
-
-    @Override
-    public void visitIincInsn(final int varIndex, final int increment) {
-        super.visitIincInsn(varIndex, increment);
-    }
-
-    @Override
     public Iterator<Directive> iterator() {
         return this.method.iterator();
-    }
-
-    @Override
-    public void visitMaxs(final int maxStack, final int maxLocals) {
-        super.visitMaxs(maxStack, maxLocals);
-    }
-
-    @Override
-    public void visitParameter(final String name, final int access) {
-        super.visitParameter(name, access);
-    }
-
-    @Override
-    public void visitAttribute(final Attribute attribute) {
-        super.visitAttribute(attribute);
-    }
-
-    @Override
-    public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
-        return super.visitAnnotation(descriptor, visible);
     }
 
     /**
