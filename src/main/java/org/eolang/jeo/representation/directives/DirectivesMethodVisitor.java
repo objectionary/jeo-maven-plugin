@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import org.eolang.jeo.representation.DefaultVersion;
-import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -42,6 +41,14 @@ import org.xembly.Directive;
  *  Probably in this issue you will need to add some additional
  *  parsing logic.
  *  See {@link #visitInvokeDynamicInsn} method.
+ * @todo #488:90min Implement the rest of instruction mappings to XMIR directives.
+ *  Currently we left several instructions unimplemented:
+ *  {@link #visitLookupSwitchInsn},
+ *  {@link #visitTableSwitchInsn},
+ *  {@link #visitMultiANewArrayInsn},
+ *  {@link #visitIincInsn}.
+ *  We need to implement them and add tests for them.
+ *  Don't forget to enable 'custom-transformations' integration test.
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class DirectivesMethodVisitor extends MethodVisitor implements Iterable<Directive> {
@@ -153,11 +160,6 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     ) {
         this.method.exception(new DirectivesTryCatch(start, end, handler, type));
         super.visitTryCatchBlock(start, end, handler, type);
-    }
-
-    @Override
-    public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
-        return super.visitAnnotation(descriptor, visible);
     }
 
     @Override

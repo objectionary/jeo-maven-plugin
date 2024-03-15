@@ -71,7 +71,7 @@ public final class VerifiedClassWriter extends CustomClassWriter {
                     );
                 verifier.setClassLoader(Thread.currentThread().getContextClassLoader());
                 new Analyzer<>(verifier).analyze(clazz.name, method);
-            } catch (final AnalyzerException exception) {
+            } catch (final ClassFormatError | AnalyzerException exception) {
                 throw new IllegalStateException(
                     String.format(
                         "Bytecode verification failed for the class '%s' and method '%s'",

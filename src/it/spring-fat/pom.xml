@@ -91,6 +91,7 @@ SOFTWARE.
              the test.
           -->
           <disabled>true</disabled>
+          <skipVerification>true</skipVerification>
         </configuration>
         <executions>
           <execution>
