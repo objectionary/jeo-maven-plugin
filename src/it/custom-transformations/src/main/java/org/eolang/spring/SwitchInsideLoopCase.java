@@ -24,7 +24,6 @@
 package org.eolang.spring;
 
 public class SwitchInsideLoopCase {
-
     public int example(byte x) {
         for (int i = 0; i < 10; ++i) {
             switch (x) {

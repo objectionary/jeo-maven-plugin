@@ -244,14 +244,6 @@ SOFTWARE.
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <artifactId>maven-invoker-plugin</artifactId>
-        <configuration>
-          <pomExcludes>
-            <exclude>custom-transformations/pom.xml</exclude>
-          </pomExcludes>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
   <profiles>
