@@ -43,14 +43,6 @@ import org.xembly.Directive;
  *  Probably in this issue you will need to add some additional
  *  parsing logic.
  *  See {@link #visitInvokeDynamicInsn} method.
- * @todo #488:90min Implement the rest of instruction mappings to XMIR directives.
- *  Currently we left several instructions unimplemented:
- *  {@link #visitLookupSwitchInsn},
- *  {@link #visitTableSwitchInsn},
- *  {@link #visitMultiANewArrayInsn},
- *  {@link #visitIincInsn}.
- *  We need to implement them and add tests for them.
- *  Don't forget to enable 'custom-transformations' integration test.
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public final class DirectivesMethodVisitor extends MethodVisitor implements Iterable<Directive> {
