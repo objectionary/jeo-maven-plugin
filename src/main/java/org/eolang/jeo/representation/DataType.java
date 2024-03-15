@@ -240,6 +240,14 @@ public enum DataType {
     private static DataType from(final Object data) {
         return Arrays.stream(DataType.values()).filter(type -> type.clazz.isInstance(data))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Unknown data type"));
+            .orElseThrow(
+                () -> new IllegalArgumentException(
+                    String.format(
+                        "Unknown data type of %s, class is %s",
+                        data,
+                        data.getClass().getName()
+                    )
+                )
+            );
     }
 }

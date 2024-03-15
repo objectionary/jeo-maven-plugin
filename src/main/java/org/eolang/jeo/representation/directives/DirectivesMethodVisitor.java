@@ -23,8 +23,11 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.stream.Stream;
 import org.eolang.jeo.representation.DefaultVersion;
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -57,6 +60,10 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
      * Method directives.
      */
     private final DirectivesMethod method;
+
+    DirectivesMethodVisitor(final DirectivesMethod method) {
+        this(method, new DummyMethodVisitor());
+    }
 
     /**
      * Constructor.
@@ -143,12 +150,54 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
         final Handle handler,
         final Object... arguments
     ) {
+        this.opcode(Opcodes.INVOKEDYNAMIC, name, descriptor, handler, arguments);
         super.visitInvokeDynamicInsn(
             name,
             descriptor,
             handler,
             arguments
         );
+    }
+
+    @Override
+    public void visitMultiANewArrayInsn(final String descriptor, final int numDimensions) {
+        this.opcode(Opcodes.MULTIANEWARRAY, descriptor, numDimensions);
+        super.visitMultiANewArrayInsn(descriptor, numDimensions);
+    }
+
+    @Override
+    public void visitIincInsn(final int varIndex, final int increment) {
+        this.opcode(Opcodes.IINC, varIndex, increment);
+        super.visitIincInsn(varIndex, increment);
+    }
+
+    @Override
+    public void visitLookupSwitchInsn(final Label dflt, final int[] keys, final Label[] labels) {
+        this.method.opcode(
+            Opcodes.LOOKUPSWITCH,
+            Stream.concat(
+                Stream.of(dflt),
+                Stream.concat(
+                    Arrays.stream(keys).boxed(),
+                    Stream.of(labels)
+                )
+            ).toArray(Object[]::new)
+        );
+        super.visitLookupSwitchInsn(dflt, keys, labels);
+    }
+
+    @Override
+    public void visitTableSwitchInsn(
+        final int min, final int max, final Label dflt, final Label... labels
+    ) {
+        this.opcode(
+            Opcodes.TABLESWITCH,
+            Stream.concat(
+                Stream.of(min, max, dflt),
+                Arrays.stream(labels)
+            ).toArray(Object[]::new)
+        );
+        super.visitTableSwitchInsn(min, max, dflt, labels);
     }
 
     @Override
@@ -174,5 +223,20 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
      */
     private void opcode(final int opcode, final Object... operands) {
         this.method.opcode(opcode, operands);
+    }
+
+    /**
+     * Dummy method visitor.
+     * This method visitor does nothing.
+     * It is used in tests.
+     * @since 0.3
+     */
+    private static class DummyMethodVisitor extends MethodVisitor {
+        /**
+         * Constructor.
+         */
+        DummyMethodVisitor() {
+            super(new DefaultVersion().api());
+        }
     }
 }

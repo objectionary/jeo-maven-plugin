@@ -368,4 +368,70 @@ final class DirectivesMethodVisitorTest {
             Matchers.not(Matchers.containsString("trycatchblocks"))
         );
     }
+
+    @Test
+    void visitsMultiArrayInstructionSuccessfully() throws ImpossibleModificationException {
+        final DirectivesMethod method = new DirectivesMethod();
+        new DirectivesMethodVisitor(method).visitMultiANewArrayInsn("java/lang/String", 2);
+        MatcherAssert.assertThat(
+            "MultiArray instruction wasn't visited successfully.",
+            new Xembler(method).xml(),
+            Matchers.allOf(
+                Matchers.containsString("MULTIANEWARRAY"),
+                Matchers.containsString("2")
+            )
+        );
+    }
+
+    @Test
+    void visitsIisncInstructionSuccessfully() throws ImpossibleModificationException {
+        final DirectivesMethod method = new DirectivesMethod();
+        new DirectivesMethodVisitor(method).visitIincInsn(1, 2);
+        MatcherAssert.assertThat(
+            "Iinc instruction wasn't visited successfully.",
+            new Xembler(method).xml(),
+            Matchers.allOf(
+                Matchers.containsString("IINC"),
+                Matchers.containsString("1"),
+                Matchers.containsString("2")
+            )
+        );
+    }
+
+    @Test
+    void visitsLookupSwitchInstructionSuccessfully() throws ImpossibleModificationException {
+        final DirectivesMethod method = new DirectivesMethod();
+        new DirectivesMethodVisitor(method).visitLookupSwitchInsn(
+            new Label(), new int[]{1, 2, 3}, new Label[]{new Label(), new Label(), new Label()}
+        );
+        MatcherAssert.assertThat(
+            "LookupSwitch instruction wasn't visited successfully.",
+            new Xembler(method).xml(),
+            Matchers.allOf(
+                Matchers.containsString("LOOKUPSWITCH"),
+                Matchers.containsString("1"),
+                Matchers.containsString("2"),
+                Matchers.containsString("3"),
+                Matchers.containsString("label")
+            )
+        );
+    }
+
+    @Test
+    void visitsTableSwitchInstructionSuccessfully() throws ImpossibleModificationException {
+        final DirectivesMethod method = new DirectivesMethod();
+        new DirectivesMethodVisitor(method).visitTableSwitchInsn(
+            1, 3, new Label(), new Label[]{new Label(), new Label(), new Label()}
+        );
+        MatcherAssert.assertThat(
+            "TableSwitch instruction wasn't visited successfully.",
+            new Xembler(method).xml(),
+            Matchers.allOf(
+                Matchers.containsString("TABLESWITCH"),
+                Matchers.containsString("1"),
+                Matchers.containsString("3"),
+                Matchers.containsString("label")
+            )
+        );
+    }
 }
