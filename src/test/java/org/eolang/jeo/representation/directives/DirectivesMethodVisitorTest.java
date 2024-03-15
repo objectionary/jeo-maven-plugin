@@ -49,7 +49,7 @@ import org.xembly.Xembler;
  *
  * @since 0.1.0
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods"})
 final class DirectivesMethodVisitorTest {
 
     @Test

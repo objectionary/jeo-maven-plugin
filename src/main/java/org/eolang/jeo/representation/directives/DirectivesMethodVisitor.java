@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.DefaultVersion;
-import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -160,15 +159,15 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     }
 
     @Override
-    public void visitMultiANewArrayInsn(final String descriptor, final int numDimensions) {
-        this.opcode(Opcodes.MULTIANEWARRAY, descriptor, numDimensions);
-        super.visitMultiANewArrayInsn(descriptor, numDimensions);
+    public void visitMultiANewArrayInsn(final String descriptor, final int dimensions) {
+        this.opcode(Opcodes.MULTIANEWARRAY, descriptor, dimensions);
+        super.visitMultiANewArrayInsn(descriptor, dimensions);
     }
 
     @Override
-    public void visitIincInsn(final int varIndex, final int increment) {
-        this.opcode(Opcodes.IINC, varIndex, increment);
-        super.visitIincInsn(varIndex, increment);
+    public void visitIincInsn(final int index, final int increment) {
+        this.opcode(Opcodes.IINC, index, increment);
+        super.visitIincInsn(index, increment);
     }
 
     @Override
