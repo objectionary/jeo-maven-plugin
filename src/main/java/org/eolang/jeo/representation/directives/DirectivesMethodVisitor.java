@@ -141,7 +141,13 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
         final Handle handler,
         final Object... arguments
     ) {
-        this.opcode(Opcodes.INVOKEDYNAMIC, name, descriptor, handler, arguments);
+        this.opcode(
+            Opcodes.INVOKEDYNAMIC,
+            Stream.concat(
+                Stream.of(name, descriptor, handler),
+                Arrays.stream(arguments)
+            ).toArray(Object[]::new)
+        );
         super.visitInvokeDynamicInsn(
             name,
             descriptor,

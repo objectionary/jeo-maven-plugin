@@ -103,8 +103,18 @@ public enum DataType {
     /**
      * Type reference.
      */
-    TYPE_REFERENCE("reference", Type.class, value ->
-        DataType.hexClass(Type.class.cast(value).getClassName()),
+    TYPE_REFERENCE(
+        "reference",
+        Type.class,
+        value -> {
+            try {
+                return DataType.hexClass(Type.getType((String) value).getClassName());
+            } catch (final AssertionError exception) {
+                throw new IllegalStateException(
+                    String.format("Failed to get class name for %s", value), exception
+                );
+            }
+        },
         bytes -> Type.getType(String.format("L%s;", new String(bytes, StandardCharsets.UTF_8)))
     ),
 

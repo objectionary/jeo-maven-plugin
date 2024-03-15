@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import lombok.ToString;
 import org.eolang.jeo.representation.HexData;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -33,6 +34,7 @@ import org.xembly.Directives;
  *
  * @since 0.1.0
  */
+@ToString
 public final class DirectivesData implements Iterable<Directive> {
 
     /**
@@ -76,12 +78,18 @@ public final class DirectivesData implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives().add("o")
-            .attr("base", this.data.type())
-            .attr("data", "bytes");
-        if (!this.name.isEmpty()) {
-            directives.attr("name", this.name);
+        try {
+            final Directives directives = new Directives().add("o")
+                .attr("base", this.data.type())
+                .attr("data", "bytes");
+            if (!this.name.isEmpty()) {
+                directives.attr("name", this.name);
+            }
+            return directives.set(this.data.value()).up().iterator();
+        } catch (final IllegalArgumentException exception) {
+            throw new IllegalStateException(
+                String.format("Failed to create directives for %s", this), exception
+            );
         }
-        return directives.set(this.data.value()).up().iterator();
     }
 }
