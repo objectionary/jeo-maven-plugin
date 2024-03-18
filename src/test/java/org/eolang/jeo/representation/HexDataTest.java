@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.objectweb.asm.Type;
 
 /**
  * Test cases for {@link org.eolang.jeo.representation.HexData}.
@@ -112,6 +113,25 @@ final class HexDataTest {
         );
     }
 
+    @Test
+    void encodesType() {
+        final String value = new HexData(Type.INT_TYPE).value();
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for 'Type.INT_TYPE' should be '69 6E 74'",
+            value,
+            Matchers.equalTo("49")
+        );
+    }
+
+    @Test
+    void decodesType() {
+        MatcherAssert.assertThat(
+            "Expected and actual types differ, the type for '69 6E 74' should be 'int'",
+            DataType.TYPE_REFERENCE.decode("49"),
+            Matchers.equalTo(Type.INT_TYPE)
+        );
+    }
+
     /**
      * Arguments for {@link HexDataTest#determinesTypeCorrectly(Object, String)} test.
      * @return Stream of arguments.
@@ -124,7 +144,7 @@ final class HexDataTest {
             Arguments.of(true, "bool"),
             Arguments.of(0.1f, "float"),
             Arguments.of(0.1d, "double"),
-            Arguments.of(HexDataTest.class, "reference")
+            Arguments.of(HexDataTest.class, "class")
         );
     }
 
