@@ -40,11 +40,11 @@ public class Application {
         Runnable r = () -> System.out.println("Runnable test passed successfully!");
         r.run();
         Predicate<String> p = s -> s.length() > 10;
-        System.out.println(p.test("Predicate test passed successfully"));
+        System.out.println(p.test("Predicate test passed successfully!"));
         Consumer<String> c = s -> System.out.println("Consumer test passed successfully with " + s);
-        c.accept("Consumer");
+        c.accept("Consumer!");
         Function<String, Integer> f = s -> s.length();
-        System.out.println("Function test passed successfully with " + f.apply("Function"));
+        System.out.println("Function test passed successfully with " + f.apply("Function") + "!");
     }
 
     private static void streams() {
