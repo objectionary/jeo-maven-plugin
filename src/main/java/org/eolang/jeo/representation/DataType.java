@@ -104,18 +104,8 @@ public enum DataType {
      * Type reference.
      */
     TYPE_REFERENCE(
-        "type",
-        Type.class,
-        value -> {
-            try {
-                return DataType.hexClass(((Type) value).getDescriptor());
-            } catch (final AssertionError exception) {
-                throw new IllegalStateException(
-                    String.format("Failed to get class name for %s", value), exception
-                );
-            }
-        },
-        bytes -> Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)))
+        "type", Type.class, DataType::typeBytes, bytes ->
+        Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)))
     ),
 
     /**
@@ -259,5 +249,20 @@ public enum DataType {
                     )
                 )
             );
+    }
+
+    /**
+     * Convert type to bytes.
+     * @param value Type.
+     * @return Bytes.
+     */
+    private static byte[] typeBytes(final Object value) {
+        try {
+            return DataType.hexClass(((Type) value).getDescriptor());
+        } catch (final AssertionError exception) {
+            throw new IllegalStateException(
+                String.format("Failed to get class name for %s", value), exception
+            );
+        }
     }
 }
