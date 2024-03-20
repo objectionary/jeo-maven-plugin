@@ -40,7 +40,11 @@ public class Application {
         Runnable r = () -> System.out.println("Runnable test passed successfully!");
         r.run();
         Predicate<String> p = s -> s.length() > 10;
-        System.out.println(p.test("Predicate test passed successfully!"));
+        System.out.println(
+            "Predicate test passed successfully " +
+                p.test("String length is greater than 10!") +
+                "!"
+        );
         Consumer<String> c = s -> System.out.println("Consumer test passed successfully with " + s);
         c.accept("Consumer!");
         Function<String, Integer> f = s -> s.length();
@@ -48,7 +52,7 @@ public class Application {
     }
 
     private static void streams() {
-        List<String> list = Arrays.asList("Streams", "test", "passed", "successfully!");
+        List<String> list = Arrays.asList("Streams", "Test", "paSSed", "successfuLLy!");
         final String res = list.stream().map(String::toLowerCase).collect(Collectors.joining(" "));
         System.out.println(res);
     }
