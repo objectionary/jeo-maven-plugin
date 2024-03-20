@@ -21,48 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.directives;
+package org.eolang.jeo.representation.xmir;
 
-import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.objectweb.asm.Handle;
-import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
- * Directives Handle.
- * Xmir representation of the Java ASM Handle object.
- * @since 0.1
- * @todo #329:30min Implement DirectivesHandle class.
- *  The {@link Handle} class is one of the parameters for INVOKEDYNAMIC instruction.
- *  The class should be implemented in the same way as {@link DirectivesLabel}.
- *  Don't forget to add tests.
+ * XML representation of handler.
+ * @since 0.3
  */
-public final class DirectivesHandle implements Iterable<Directive> {
+final class XmlHandler {
 
     /**
-     * ASM Handle object.
+     * XML node.
      */
-    private final Handle handle;
+    private final XmlNode node;
 
     /**
      * Constructor.
-     * @param handle ASM Handle object.
+     * @param node Node.
      */
-    public DirectivesHandle(final Handle handle) {
-        this.handle = handle;
+    public XmlHandler(final XmlNode node) {
+        this.node = node;
     }
 
-    @Override
-    public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o")
-            .attr("base", "handle")
-            .append(new DirectivesData(this.handle.getTag()))
-            .append(new DirectivesData(this.handle.getOwner()))
-            .append(new DirectivesData(this.handle.getName()))
-            .append(new DirectivesData(this.handle.getDesc()))
-            .append(new DirectivesData(this.handle.isInterface()))
-            .up()
-            .iterator();
+    /**
+     * Convert to a handler.
+     * @return Handler.
+     */
+    public Handle asHandle() {
+        final List<XmlOperand> operands = this.node.children()
+            .map(XmlOperand::new)
+            .collect(Collectors.toList());
+        return new Handle(
+            Integer.class.cast(operands.get(0).asObject()),
+            operands.get(1).asObject().toString(),
+            operands.get(2).asObject().toString(),
+            operands.get(3).asObject().toString(),
+            Boolean.class.cast(operands.get(4).asObject())
+        );
     }
 }

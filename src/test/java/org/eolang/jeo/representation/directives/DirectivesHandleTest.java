@@ -23,46 +23,36 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.util.Iterator;
+import com.jcabi.matchers.XhtmlMatchers;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Handle;
-import org.xembly.Directive;
-import org.xembly.Directives;
+import org.objectweb.asm.Opcodes;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
- * Directives Handle.
- * Xmir representation of the Java ASM Handle object.
- * @since 0.1
- * @todo #329:30min Implement DirectivesHandle class.
- *  The {@link Handle} class is one of the parameters for INVOKEDYNAMIC instruction.
- *  The class should be implemented in the same way as {@link DirectivesLabel}.
- *  Don't forget to add tests.
+ * Test case for {@link DirectivesHandle}.
+ *
+ * @since 0.3
  */
-public final class DirectivesHandle implements Iterable<Directive> {
+class DirectivesHandleTest {
 
-    /**
-     * ASM Handle object.
-     */
-    private final Handle handle;
-
-    /**
-     * Constructor.
-     * @param handle ASM Handle object.
-     */
-    public DirectivesHandle(final Handle handle) {
-        this.handle = handle;
-    }
-
-    @Override
-    public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o")
-            .attr("base", "handle")
-            .append(new DirectivesData(this.handle.getTag()))
-            .append(new DirectivesData(this.handle.getOwner()))
-            .append(new DirectivesData(this.handle.getName()))
-            .append(new DirectivesData(this.handle.getDesc()))
-            .append(new DirectivesData(this.handle.isInterface()))
-            .up()
-            .iterator();
+    @Test
+    void convertsHandleToDirectives() throws ImpossibleModificationException {
+        final String xml = new Xembler(
+            new DirectivesHandle(
+                new Handle(Opcodes.H_INVOKESTATIC, "java/lang/Math", "max", "(II)I", false)
+            )
+        ).xml();
+        MatcherAssert.assertThat(
+            String.format("Can't convert Handle to DirectivesHandle. Expected XML:%n%s%n", xml),
+            xml,
+            XhtmlMatchers.hasXPaths(
+                "/o[@base='handle']",
+                "/o[@base='handle']/o[@base='int']",
+                "/o[@base='handle']/o[@base='string']"
+            )
+        );
     }
 }

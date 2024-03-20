@@ -23,49 +23,32 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import lombok.ToString;
-import org.eolang.jeo.representation.DataType;
+import org.eolang.jeo.representation.directives.DirectivesHandle;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Handle;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
+
 
 /**
- * XML operand.
+ * Test case for {@link XmlHandler}.
+ *
  * @since 0.3
  */
-@ToString
-public final class XmlOperand {
+class XmlHandlerTest {
 
-    /**
-     * Raw XML node which represents an instruction operand.
-     */
-    private final XmlNode raw;
-
-    /**
-     * Constructor.
-     * @param node Raw XML operand node.
-     */
-    public XmlOperand(final XmlNode node) {
-        this.raw = node;
+    @Test
+    void convertsToHandleObject() throws ImpossibleModificationException {
+        final Handle handle = new Handle(
+            1, "owner", "name", "desc", false
+        );
+        MatcherAssert.assertThat(
+            "Can't convert XML handler to the correct handle object",
+            new XmlHandler(new XmlNode(new Xembler(new DirectivesHandle(handle)).xml())).asHandle(),
+            Matchers.equalTo(handle)
+        );
     }
 
-    /**
-     * Convert XML operand to an object.
-     * @return Object.
-     */
-    public Object asObject() {
-        final Object result;
-        final String base = this.raw.attribute("base")
-            .orElseThrow(
-                () -> new IllegalStateException(
-                    String.format(
-                        "'%s' is not an argument because it doesn't have 'base' attribute",
-                        this.raw
-                    )
-                )
-            );
-        if (base.equals("handle")) {
-            result = new XmlHandler(this.raw).asHandle();
-        } else {
-            result = DataType.find(base).decode(this.raw.text());
-        }
-        return result;
-    }
 }
