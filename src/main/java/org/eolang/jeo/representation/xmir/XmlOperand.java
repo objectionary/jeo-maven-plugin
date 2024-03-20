@@ -61,7 +61,7 @@ public final class XmlOperand {
                     )
                 )
             );
-        if (base.equals("handle")) {
+        if ("handle".equals(base)) {
             result = new XmlHandler(this.raw).asHandle();
         } else {
             result = DataType.find(base).decode(this.raw.text());

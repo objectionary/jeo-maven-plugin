@@ -42,7 +42,7 @@ final class XmlHandler {
      * Constructor.
      * @param node Node.
      */
-    public XmlHandler(final XmlNode node) {
+    XmlHandler(final XmlNode node) {
         this.node = node;
     }
 
@@ -50,7 +50,7 @@ final class XmlHandler {
      * Convert to a handler.
      * @return Handler.
      */
-    public Handle asHandle() {
+    Handle asHandle() {
         final List<XmlOperand> operands = this.node.children()
             .map(XmlOperand::new)
             .collect(Collectors.toList());

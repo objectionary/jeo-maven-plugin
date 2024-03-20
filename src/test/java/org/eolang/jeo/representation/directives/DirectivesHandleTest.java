@@ -36,7 +36,7 @@ import org.xembly.Xembler;
  *
  * @since 0.3
  */
-class DirectivesHandleTest {
+final class DirectivesHandleTest {
 
     @Test
     void convertsHandleToDirectives() throws ImpossibleModificationException {

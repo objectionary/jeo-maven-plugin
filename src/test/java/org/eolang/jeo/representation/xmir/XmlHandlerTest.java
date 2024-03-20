@@ -31,13 +31,12 @@ import org.objectweb.asm.Handle;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
-
 /**
  * Test case for {@link XmlHandler}.
  *
  * @since 0.3
  */
-class XmlHandlerTest {
+final class XmlHandlerTest {
 
     @Test
     void convertsToHandleObject() throws ImpossibleModificationException {
