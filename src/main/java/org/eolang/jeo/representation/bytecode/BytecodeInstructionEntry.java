@@ -100,7 +100,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                         new AllLabels().uid((Label) arg)
                     );
                 }
-                return arg.toString();
+                return String.valueOf(arg);
             })
         ).collect(Collectors.joining(", "));
         return String.format(".opcode(%s)", args);
