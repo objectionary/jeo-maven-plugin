@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import java.util.Optional;
-import java.util.stream.Stream;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -132,16 +131,22 @@ public final class DirectivesField implements Iterable<Directive> {
         return new Directives().add("o")
             .attr("base", "field")
             .attr("name", this.name)
-            .append(new DirectivesData(this.name("access"), this.access))
-            .append(new DirectivesData(this.name("descriptor"), this.descriptor))
-            .append(new DirectivesData(this.name("signature"), this.signature))
-            .append(new DirectivesData(this.name("value"), this.value))
+            .append(new DirectivesData(this.title("access"), this.access))
+            .append(new DirectivesData(this.title("descriptor"), this.descriptor))
+            .append(new DirectivesData(this.title("signature"), this.signature))
+            .append(new DirectivesData(this.title("value"), this.value))
             .append(this.annotations)
             .up()
             .iterator();
     }
 
-    private String name(final String prefix) {
+    /**
+     * Field property title.
+     * It is used to create a title for the field property to make XMIR more readable.
+     * @param prefix Prefix
+     * @return Title
+     */
+    private String title(final String prefix) {
         final String template = "%s-%s";
         return String.format(template, prefix, this.name);
     }

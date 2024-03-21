@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.directives;
 import com.jcabi.matchers.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -52,6 +53,32 @@ class DirectivesFieldTest {
                 "/o/o[@name='value-unknown' and text()='30']"
             )
         );
+    }
 
+    @Test
+    void convertsLongFieldToDirectives() throws ImpossibleModificationException {
+        final String xml = new Xembler(
+            new DirectivesField(
+                Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL,
+                "serialVersionUID",
+                "J",
+                "",
+                7099057708183571937L
+            )
+        ).xml();
+        MatcherAssert.assertThat(
+            String.format(
+                "Incorrect transformation of long field to directives, received invalid XMIR: %n%s",
+                xml
+            ),
+            xml,
+            XhtmlMatchers.hasXPaths(
+                "/o[@base='field' and @name='serialVersionUID']",
+                "/o/o[@name='access-serialVersionUID' and contains(text(),'1A')]",
+                "/o/o[@name='descriptor-serialVersionUID' and text()='4A']",
+                "/o/o[@name='signature-serialVersionUID']",
+                "/o/o[@name='value-serialVersionUID' and text()='62 84 EB 5F 88 47 CD E1']"
+            )
+        );
     }
 }
