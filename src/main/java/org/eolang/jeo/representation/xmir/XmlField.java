@@ -25,11 +25,13 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.ToString;
 
 /**
  * XML field.
  * @since 0.1
  */
+@ToString
 public class XmlField {
 
     /**

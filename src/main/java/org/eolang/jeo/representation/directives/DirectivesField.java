@@ -25,6 +25,8 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import java.util.Optional;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -53,6 +55,8 @@ import org.xembly.Directives;
  *
  * @since 0.1
  */
+@ToString
+@EqualsAndHashCode
 public final class DirectivesField implements Iterable<Directive> {
 
     /**

@@ -26,6 +26,8 @@ package org.eolang.jeo.representation.directives;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -33,6 +35,8 @@ import org.xembly.Directives;
  * Directives Annotation.
  * @since 0.1
  */
+@ToString
+@EqualsAndHashCode
 public final class DirectivesAnnotations implements Iterable<Directive> {
 
     /**
