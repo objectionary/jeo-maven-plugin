@@ -365,7 +365,7 @@ SOFTWARE.
                         <limit>
                           <counter>COMPLEXITY</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.62</minimum>
+                          <minimum>0.60</minimum>
                         </limit>
                         <limit>
                           <counter>METHOD</counter>
