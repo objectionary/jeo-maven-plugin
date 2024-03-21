@@ -179,18 +179,21 @@ public enum DataType {
      * @return Data.
      */
     public Object decode(final String raw) {
+        final Object result;
         if (raw == null || raw.isEmpty()) {
-            return null;
+            result = null;
+        } else {
+            final char[] chars = raw.trim().replace(" ", "").toCharArray();
+            final int length = chars.length;
+            final byte[] res = new byte[length / 2];
+            for (int index = 0; index < length; index += 2) {
+                res[index / 2] = (byte) Integer.parseInt(
+                    String.copyValueOf(new char[]{chars[index], chars[index + 1]}), 16
+                );
+            }
+            result = this.decoder.apply(res);
         }
-        final char[] chars = raw.trim().replace(" ", "").toCharArray();
-        final int length = chars.length;
-        final byte[] res = new byte[length / 2];
-        for (int index = 0; index < length; index += 2) {
-            res[index / 2] = (byte) Integer.parseInt(
-                String.copyValueOf(new char[]{chars[index], chars[index + 1]}), 16
-            );
-        }
-        return this.decoder.apply(res);
+        return result;
     }
 
     /**

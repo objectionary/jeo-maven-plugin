@@ -34,7 +34,7 @@ import org.xembly.Xembler;
  * Test case for {@link DirectivesField}.
  * @since 0.3
  */
-class DirectivesFieldTest {
+final class DirectivesFieldTest {
 
     @Test
     void convertsDefaultFieldToDirectives() throws ImpossibleModificationException {
@@ -63,7 +63,7 @@ class DirectivesFieldTest {
                 "serialVersionUID",
                 "J",
                 "",
-                7099057708183571937L
+                7_099_057_708_183_571_937L
             )
         ).xml();
         MatcherAssert.assertThat(

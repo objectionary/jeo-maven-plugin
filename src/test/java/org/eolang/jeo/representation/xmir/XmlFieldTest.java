@@ -43,7 +43,7 @@ final class XmlFieldTest {
         final int access = Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL;
         final String name = "serialVersionUID";
         final String descriptor = "J";
-        final long value = 7099057708183571937L;
+        final long value = 7_099_057_708_183_571_937L;
         final XmlField field = new XmlField(
             new XmlNode(
                 new Xembler(
@@ -69,7 +69,8 @@ final class XmlFieldTest {
             ),
             name.equals(field.name())
                 && descriptor.equals(field.descriptor())
-                && field.value().equals(value)
+                && field.value().equals(value),
+            Matchers.is(true)
         );
     }
 
