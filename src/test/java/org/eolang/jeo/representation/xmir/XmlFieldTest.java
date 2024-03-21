@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.directives.DirectivesField;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
@@ -38,7 +39,7 @@ import org.xembly.Xembler;
 final class XmlFieldTest {
 
     @Test
-    void parsesXmirSuccessfully() throws ImpossibleModificationException {
+    void parsesXmirFieldSuccessfully() throws ImpossibleModificationException {
         final int access = Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL;
         final String name = "serialVersionUID";
         final String descriptor = "J";
@@ -69,6 +70,28 @@ final class XmlFieldTest {
             name.equals(field.name())
                 && descriptor.equals(field.descriptor())
                 && field.value().equals(value)
+        );
+    }
+
+    @Test
+    void parsesFieldWithStringValue() throws ImpossibleModificationException {
+        final String expected = "7099057708183571937";
+        MatcherAssert.assertThat(
+            "Failed to parse XMIR field",
+            new XmlField(
+                new XmlNode(
+                    new Xembler(
+                        new DirectivesField(
+                            Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL,
+                            "serialVersionUID",
+                            "Ljava/lang/String;",
+                            "",
+                            expected
+                        )
+                    ).xml()
+                )
+            ).value(),
+            Matchers.equalTo(expected)
         );
     }
 

@@ -179,6 +179,9 @@ public enum DataType {
      * @return Data.
      */
     public Object decode(final String raw) {
+        if (raw == null || raw.isEmpty()) {
+            return null;
+        }
         final char[] chars = raw.trim().replace(" ", "").toCharArray();
         final int length = chars.length;
         final byte[] res = new byte[length / 2];

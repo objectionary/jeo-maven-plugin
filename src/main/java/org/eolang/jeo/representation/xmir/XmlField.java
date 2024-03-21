@@ -88,7 +88,11 @@ public class XmlField {
      * @return Value.
      */
     public Object value() {
-        return this.find(Attribute.VALUE).map(HexString::decode).orElse(null);
+        return new XmlOperand(
+            this.node.children()
+                .collect(Collectors.toList())
+                .get(Attribute.VALUE.ordinal())
+        ).asObject();
     }
 
     /**
