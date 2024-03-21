@@ -27,6 +27,7 @@ import com.jcabi.xml.XML;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import lombok.ToString;
 import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
@@ -40,6 +41,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
  * @since 0.1.0
  */
 @SuppressWarnings("PMD.TooManyMethods")
+@ToString
 public final class BytecodeClass implements Testable {
 
     /**
@@ -50,21 +52,25 @@ public final class BytecodeClass implements Testable {
     /**
      * Class writer.
      */
+    @ToString.Exclude
     private final CustomClassWriter visitor;
 
     /**
      * Methods.
      */
+    @ToString.Exclude
     private final Collection<BytecodeMethod> methods;
 
     /**
      * Fields.
      */
+    @ToString.Exclude
     private final Collection<BytecodeField> fields;
 
     /**
      * Annotations.
      */
+    @ToString.Exclude
     private final Collection<BytecodeAnnotation> annotations;
 
     /**

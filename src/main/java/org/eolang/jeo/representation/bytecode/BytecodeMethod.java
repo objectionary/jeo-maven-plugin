@@ -199,6 +199,16 @@ public final class BytecodeMethod implements Testable {
                 exception
             );
             // @checkstyle IllegalCatchCheck (1 line)
+        } catch (final ClassFormatError format) {
+            throw new IllegalStateException(
+                String.format(
+                    "Failed to generate bytecode method %s in class %s due to class format error,",
+                    this.properties,
+                    this.clazz
+                ),
+                format
+            );
+            // @checkstyle IllegalCatchCheck (1 line)
         } catch (final Exception exception) {
             throw new IllegalStateException(
                 String.format(

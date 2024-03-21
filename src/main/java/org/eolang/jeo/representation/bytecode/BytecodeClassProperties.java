@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import lombok.ToString;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.ClassVisitor;
 
@@ -31,6 +32,7 @@ import org.objectweb.asm.ClassVisitor;
  *
  * @since 0.1.0
  */
+@ToString
 public final class BytecodeClassProperties {
 
     /**
