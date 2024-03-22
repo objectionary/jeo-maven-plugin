@@ -38,218 +38,116 @@ import org.objectweb.asm.Type;
  * @since 0.3
  */
 public enum DataType {
+
     /**
      * Boolean.
      */
-    BOOL("bool", Boolean.class, boolean.class, value -> {
-        if (value == null) {
-            return null;
-        }
-        if (value instanceof Integer) {
-            return DataType.hexBoolean((int) value != 0);
-        }
-        return DataType.hexBoolean(Boolean.class.cast(value));
-    },
-        bytes -> {
-            if (bytes == null) {
-                return null;
+    BOOL("bool", Boolean.class, boolean.class,
+        value -> {
+            final byte[] result;
+            if (value instanceof Integer) {
+                result = DataType.hexBoolean((int) value != 0);
+            } else {
+                result = DataType.hexBoolean(Boolean.class.cast(value));
             }
-            return Boolean.valueOf(bytes[0] != 0);
-        }
+            return result;
+        },
+        bytes -> Boolean.valueOf(bytes[0] != 0)
     ),
 
     /**
      * Character.
      */
-    CHAR("char", Character.class, char.class, value -> {
-        if (value == null) {
-            return null;
-        }
-        return ByteBuffer.allocate(Character.BYTES).putChar((char) (int) value).array();
-    },
-        bytes -> {
-            if (bytes == null) {
-                return null;
-            }
-            return ByteBuffer.wrap(bytes).getChar();
-        }
+    CHAR("char", Character.class, char.class,
+        value -> ByteBuffer.allocate(Character.BYTES).putChar((char) (int) value).array(),
+        bytes -> ByteBuffer.wrap(bytes).getChar()
     ),
 
     /**
      * Byte.
      */
-    BYTE("byte", Byte.class, byte.class, value -> {
-        if (value == null) {
-            return null;
-        }
-        return ByteBuffer.allocate(Byte.BYTES).put((byte) (int) value).array();
-    },
-        bytes -> {
-            if (bytes == null) {
-                return null;
-            }
-            return ByteBuffer.wrap(bytes).get();
-        }
+    BYTE("byte", Byte.class, byte.class,
+        value -> ByteBuffer.allocate(Byte.BYTES).put((byte) (int) value).array(),
+        bytes -> ByteBuffer.wrap(bytes).get()
     ),
 
     /**
      * Short.
      */
-    SHORT("short", Short.class, short.class, value -> {
-        if (value == null) {
-            return null;
-        }
-        return ByteBuffer.allocate(Short.BYTES).putShort((short) (int)  value).array();
-    },
-        bytes -> {
-            if (bytes == null) {
-                return null;
-            }
-            return ByteBuffer.wrap(bytes).getShort();
-        }
+    SHORT("short", Short.class, short.class,
+        value -> ByteBuffer.allocate(Short.BYTES).putShort((short) (int) value).array(),
+        bytes -> ByteBuffer.wrap(bytes).getShort()
     ),
 
     /**
      * Integer.
      */
-    INT("int", Integer.class, int.class, value -> {
-        if (value == null) {
-            return null;
-        }
-        return ByteBuffer.allocate(Long.BYTES).putLong((int) value).array();
-    },
-        bytes -> {
-            if (bytes == null) {
-                return null;
-            }
-            return (int) ByteBuffer.wrap(bytes).getLong();
-        }
+    INT("int", Integer.class, int.class,
+        value -> ByteBuffer.allocate(Long.BYTES).putLong((int) value).array(),
+        bytes -> (int) ByteBuffer.wrap(bytes).getLong()
     ),
     /**
      * Long.
      */
-    LONG("long", Long.class, long.class, value -> {
-        if (value == null) {
-            return null;
-        }
-        return ByteBuffer.allocate(Long.BYTES).putLong((long) value).array();
-    },
-        bytes -> {
-            if (bytes == null) {
-                return null;
-            }
-            return ByteBuffer.wrap(bytes).getLong();
-        }
+    LONG("long", Long.class, long.class,
+        value -> ByteBuffer.allocate(Long.BYTES).putLong((long) value).array(),
+        bytes -> ByteBuffer.wrap(bytes).getLong()
     ),
 
     /**
      * Float.
      */
-    FLOAT("float", Float.class, float.class, value -> {
-        if (value == null) {
-            return null;
-        }
-        return ByteBuffer.allocate(Float.BYTES).putFloat((float) value).array();
-    },
-        bytes -> {
-            if (bytes == null) {
-                return null;
-            }
-            return ByteBuffer.wrap(bytes).getFloat();
-        }
+    FLOAT("float", Float.class, float.class,
+        value -> ByteBuffer.allocate(Float.BYTES).putFloat((float) value).array(),
+        bytes -> ByteBuffer.wrap(bytes).getFloat()
     ),
 
     /**
      * Double.
      */
-    DOUBLE("double", Double.class, double.class, value -> {
-        if (value == null) {
-            return null;
-        }
-        return ByteBuffer.allocate(Double.BYTES).putDouble((double) value).array();
-    },
-        bytes -> {
-            if (bytes == null) {
-                return null;
-            }
-            return ByteBuffer.wrap(bytes).getDouble();
-        }
+    DOUBLE("double", Double.class, double.class,
+        value -> ByteBuffer.allocate(Double.BYTES).putDouble((double) value).array(),
+        bytes -> ByteBuffer.wrap(bytes).getDouble()
     ),
 
     /**
      * String.
      */
-    STRING("string", String.class, String.class, value -> {
-        if (value == null) {
-            return null;
-        }
-        return Optional.ofNullable(value).map(String::valueOf).map(String::getBytes).orElse(null);
-    },
-        bytes -> {
-            if (bytes == null) {
-                return null;
-            }
-            return new String(bytes, StandardCharsets.UTF_8);
-        }
+    STRING("string", String.class, String.class,
+        value -> Optional.ofNullable(value).map(String::valueOf).map(String::getBytes).orElse(null),
+        bytes -> new String(bytes, StandardCharsets.UTF_8)
     ),
 
     /**
      * Bytes.
      */
-    BYTES("bytes", byte[].class, Byte[].class, value -> {
-        if (value == null) {
-            return null;
-        }
-        return byte[].class.cast(value);
-    },
+    BYTES("bytes", byte[].class, Byte[].class,
+        value -> byte[].class.cast(value),
         bytes -> bytes
     ),
 
     /**
      * Label.
      */
-    LABEL("label", Label.class, Label.class, value -> {
-        if (value == null) {
-            return null;
-        }
-        return new AllLabels().uid(Label.class.cast(value)).getBytes(StandardCharsets.UTF_8);
-    },
-        bytes -> {
-            if (bytes == null) {
-                return null;
-            }
-            return new AllLabels().label(new String(bytes, StandardCharsets.UTF_8));
-        }
+    LABEL("label", Label.class, Label.class,
+        value -> new AllLabels().uid(Label.class.cast(value)).getBytes(StandardCharsets.UTF_8),
+        bytes -> new AllLabels().label(new String(bytes, StandardCharsets.UTF_8))
     ),
 
     /**
      * Type reference.
      */
     TYPE_REFERENCE(
-        "type", Type.class, Type.class, DataType::typeBytes, bytes -> {
-        if (bytes == null) {
-            return null;
-        }
-        return Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)));
-    }
+        "type", Type.class, Type.class, DataType::typeBytes, bytes ->
+        Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)))
     ),
 
     /**
      * Class reference.
      */
-    CLASS_REFERENCE("class", Class.class, Class.class, value -> {
-        if (value == null) {
-            return null;
-        }
-        return DataType.hexClass(Class.class.cast(value).getName());
-    },
-        bytes -> {
-            if (bytes == null) {
-                return null;
-
-            }
-            return new String(bytes, StandardCharsets.UTF_8);
-        }
+    CLASS_REFERENCE("class", Class.class, Class.class,
+        value -> DataType.hexClass(Class.class.cast(value).getName()),
+        bytes -> new String(bytes, StandardCharsets.UTF_8)
     );
 
     /**
@@ -281,6 +179,7 @@ public enum DataType {
      * Constructor.
      * @param base Base type.
      * @param clazz Class.
+     * @param primitive Primitive class.
      * @param encoder Converter to hex.
      * @param decoder Converter from hex.
      * @checkstyle ParameterNumberCheck (5 lines)
@@ -324,20 +223,14 @@ public enum DataType {
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DataType find(final Type type) {
         return Arrays.stream(DataType.values())
-            .filter(dataType -> {
-                final Type real = Type.getType(dataType.clazz);
-                final Type prim = Type.getType(dataType.primitive);
-                return prim.equals(type) || real.equals(type);
-            })
+            .filter(
+                dataType -> {
+                    final Type real = Type.getType(dataType.clazz);
+                    final Type prim = Type.getType(dataType.primitive);
+                    return prim.equals(type) || real.equals(type);
+                }
+            )
             .findFirst()
-//            .orElseThrow(
-//                () -> new IllegalArgumentException(
-//                    String.format(
-//                        "Unknown data type of %s",
-//                        type.getDescriptor()
-//                    )
-//                )
-//            );
             .orElse(DataType.CLASS_REFERENCE);
     }
 
@@ -367,9 +260,29 @@ public enum DataType {
                     String.copyValueOf(new char[]{chars[index], chars[index + 1]}), 16
                 );
             }
-            result = this.decoder.apply(res);
+            result = this.decode(res);
         }
         return result;
+    }
+
+    /**
+     * Convert data to hex string.
+     * @param data Data.
+     * @return Hex string.
+     */
+    public String toHexString(final Object data) {
+        final byte[] bytes = this.encode(data);
+        final String res;
+        if (bytes == null) {
+            res = null;
+        } else {
+            final StringJoiner out = new StringJoiner(" ");
+            for (final byte bty : bytes) {
+                out.add(String.format("%02X", bty));
+            }
+            res = out.toString();
+        }
+        return res;
     }
 
     /**
@@ -387,25 +300,7 @@ public enum DataType {
      * @return Hex representation of data.
      */
     static byte[] toBytes(final Object data) {
-        return DataType.from(data).encoder.apply(data);
-    }
-
-    /**
-     * Convert data to hex string.
-     * @param data Data.
-     * @return Hex string.
-     */
-    public String toHexString(final Object data) {
-        final byte[] bytes = this.encoder.apply(data);
-        if (bytes == null) {
-            return null;
-
-        }
-        final StringJoiner out = new StringJoiner(" ");
-        for (final byte bty : bytes) {
-            out.add(String.format("%02X", bty));
-        }
-        return out.toString();
+        return DataType.from(data).encode(data);
     }
 
     /**
@@ -421,6 +316,14 @@ public enum DataType {
             result = new byte[]{0x00};
         }
         return result;
+    }
+
+    private byte[] encode(final Object data) {
+        return Optional.ofNullable(data).map(this.encoder).orElse(null);
+    }
+
+    private Object decode(final byte[] data) {
+        return Optional.ofNullable(data).map(this.decoder).orElse(null);
     }
 
     /**

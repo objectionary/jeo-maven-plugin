@@ -38,14 +38,37 @@ import org.xembly.Directives;
 @ToString
 public final class DirectivesTypedData implements Iterable<Directive> {
 
+    /**
+     * Name of the value.
+     */
     private final String name;
+
+    /**
+     * Value.
+     */
     private final Object data;
+
+    /**
+     * Type of the value.
+     */
     private final Type type;
 
+    /**
+     * Constructor.
+     * @param name Name of the value
+     * @param data Value
+     * @param descriptor Type descriptor
+     */
     public DirectivesTypedData(final String name, final Object data, final String descriptor) {
         this(name, data, Type.getType(descriptor));
     }
 
+    /**
+     * Constructor.
+     * @param name Name of the value
+     * @param data Value
+     * @param type Type of the value
+     */
     public DirectivesTypedData(final String name, final Object data, final Type type) {
         this.name = name;
         this.data = data;
@@ -74,6 +97,5 @@ public final class DirectivesTypedData implements Iterable<Directive> {
                 String.format("Failed to create directives for %s", this), exception
             );
         }
-
     }
 }
