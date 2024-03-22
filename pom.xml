@@ -231,23 +231,6 @@ SOFTWARE.
     </testResources>
     <plugins>
       <plugin>
-        <artifactId>maven-invoker-plugin</artifactId>
-        <configuration>
-          <!--
-          @todo #488:90min Enable 'exceptions' integration test.
-           Enable the execution of the `exceptions` integration test.
-           Currently, the `exceptions` integration test is disabled because it fails.
-           The reason is that we broke something in field parsing and we need to fix it.
-           Actually, it's important to pay attention to XmlField, DirectivesField and DataType classes.
-           The problem started after the 'null' return of the `DataType#decode` method.
-           So it's important to cover all this classes by unit tests and then enable the integration test.
-          -->
-          <pomExcludes>
-            <exclude>exceptions/pom.xml</exclude>
-          </pomExcludes>
-        </configuration>
-      </plugin>
-      <plugin>
         <artifactId>maven-plugin-plugin</artifactId>
         <configuration>
           <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
