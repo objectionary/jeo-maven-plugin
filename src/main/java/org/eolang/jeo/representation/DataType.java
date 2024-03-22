@@ -52,7 +52,9 @@ public enum DataType {
             }
             return result;
         },
-        bytes -> Boolean.valueOf(bytes[0] != 0)
+        bytes -> {
+            return Boolean.valueOf(bytes[0] != 0);
+        }
     ),
 
     /**
