@@ -180,7 +180,7 @@ public enum DataType {
      */
     public Object decode(final String raw) {
         final Object result;
-        if (raw == null || raw.isEmpty()) {
+        if (raw == null) {
             result = null;
         } else {
             final char[] chars = raw.trim().replace(" ", "").toCharArray();
