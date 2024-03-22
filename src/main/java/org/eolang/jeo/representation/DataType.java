@@ -41,9 +41,17 @@ public enum DataType {
     /**
      * Boolean.
      */
-    BOOL("bool", Boolean.class, boolean.class, value ->
-        DataType.hexBoolean(Boolean.class.cast(value)),
+    BOOL("bool", Boolean.class, boolean.class, value -> {
+
+        if (value == null) {
+            return null;
+        }
+        return DataType.hexBoolean(Boolean.class.cast(value));
+    },
         bytes -> {
+            if (bytes == null) {
+                return null;
+            }
             return Boolean.valueOf(bytes[0] != 0);
         }
     ),
@@ -51,63 +59,126 @@ public enum DataType {
     /**
      * Integer.
      */
-    INT("int", Integer.class, int.class, value ->
-        ByteBuffer.allocate(Long.BYTES).putLong((int) value).array(),
-        bytes -> (int) ByteBuffer.wrap(bytes).getLong()
+    INT("int", Integer.class, int.class, value -> {
+        if (value == null) {
+            return null;
+        }
+        return ByteBuffer.allocate(Long.BYTES).putLong((int) value).array();
+    },
+        bytes -> {
+            if (bytes == null) {
+                return null;
+            }
+            return (int) ByteBuffer.wrap(bytes).getLong();
+        }
     ),
     /**
      * Long.
      */
-    LONG("long", Long.class, long.class, value ->
-        ByteBuffer.allocate(Long.BYTES).putLong((long) value).array(),
-        bytes -> ByteBuffer.wrap(bytes).getLong()
+    LONG("long", Long.class, long.class, value -> {
+        if (value == null) {
+            return null;
+        }
+        return ByteBuffer.allocate(Long.BYTES).putLong((long) value).array();
+    },
+        bytes -> {
+            if (bytes == null) {
+                return null;
+            }
+            return ByteBuffer.wrap(bytes).getLong();
+        }
     ),
 
     /**
      * Float.
      */
-    FLOAT("float", Float.class, float.class, value ->
-        ByteBuffer.allocate(Float.BYTES).putFloat((float) value).array(),
-        bytes -> ByteBuffer.wrap(bytes).getFloat()
+    FLOAT("float", Float.class, float.class, value -> {
+        if (value == null) {
+            return null;
+        }
+        return ByteBuffer.allocate(Float.BYTES).putFloat((float) value).array();
+    },
+        bytes -> {
+            if (bytes == null) {
+                return null;
+            }
+            return ByteBuffer.wrap(bytes).getFloat();
+        }
     ),
 
     /**
      * Double.
      */
-    DOUBLE("double", Double.class, double.class, value ->
-        ByteBuffer.allocate(Double.BYTES).putDouble((double) value).array(),
-        bytes -> ByteBuffer.wrap(bytes).getDouble()
+    DOUBLE("double", Double.class, double.class, value -> {
+        if (value == null) {
+            return null;
+        }
+        return ByteBuffer.allocate(Double.BYTES).putDouble((double) value).array();
+    },
+        bytes -> {
+            if (bytes == null) {
+                return null;
+            }
+            return ByteBuffer.wrap(bytes).getDouble();
+        }
     ),
 
     /**
      * String.
      */
-    STRING("string", String.class, String.class, value ->
-        Optional.ofNullable(value).map(String::valueOf).map(String::getBytes).orElse(null),
-        bytes -> new String(bytes, StandardCharsets.UTF_8)
+    STRING("string", String.class, String.class, value -> {
+        if (value == null) {
+            return null;
+        }
+        return Optional.ofNullable(value).map(String::valueOf).map(String::getBytes).orElse(null);
+    },
+        bytes -> {
+            if (bytes == null) {
+                return null;
+            }
+            return new String(bytes, StandardCharsets.UTF_8);
+        }
     ),
 
     /**
      * Bytes.
      */
-    BYTES("bytes", byte[].class, Byte[].class, value -> byte[].class.cast(value),
+    BYTES("bytes", byte[].class, Byte[].class, value -> {
+        if (value == null) {
+            return null;
+        }
+        return byte[].class.cast(value);
+    },
         bytes -> bytes
     ),
 
     /**
      * Label.
      */
-    LABEL("label", Label.class, Label.class, value ->
-        new AllLabels().uid(Label.class.cast(value)).getBytes(StandardCharsets.UTF_8),
-        bytes -> new AllLabels().label(new String(bytes, StandardCharsets.UTF_8))
+    LABEL("label", Label.class, Label.class, value -> {
+        if (value == null) {
+            return null;
+        }
+        return new AllLabels().uid(Label.class.cast(value)).getBytes(StandardCharsets.UTF_8);
+    },
+        bytes -> {
+            if (bytes == null) {
+                return null;
+            }
+            return new AllLabels().label(new String(bytes, StandardCharsets.UTF_8));
+        }
     ),
 
     /**
      * Type reference.
      */
     TYPE_REFERENCE(
-        "type", Type.class, Type.class, DataType::typeBytes, bytes ->
-        Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)))
+        "type", Type.class, Type.class, DataType::typeBytes, bytes -> {
+        if (bytes == null) {
+            return null;
+        }
+        return Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)));
+    }
     ),
 
     /**
