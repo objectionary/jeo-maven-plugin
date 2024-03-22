@@ -69,7 +69,7 @@ public final class DirectivesTypedData implements Iterable<Directive> {
                 directives.attr("scope", "nullable");
             }
             return directives.up().iterator();
-        } catch (final IllegalArgumentException exception) {
+        } catch (final IllegalArgumentException | ClassCastException exception) {
             throw new IllegalStateException(
                 String.format("Failed to create directives for %s", this), exception
             );

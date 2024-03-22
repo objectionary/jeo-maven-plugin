@@ -42,9 +42,11 @@ public enum DataType {
      * Boolean.
      */
     BOOL("bool", Boolean.class, boolean.class, value -> {
-
         if (value == null) {
             return null;
+        }
+        if (value instanceof Integer) {
+            return DataType.hexBoolean((int) value != 0);
         }
         return DataType.hexBoolean(Boolean.class.cast(value));
     },
@@ -53,6 +55,57 @@ public enum DataType {
                 return null;
             }
             return Boolean.valueOf(bytes[0] != 0);
+        }
+    ),
+
+    /**
+     * Character.
+     */
+    CHAR("char", Character.class, char.class, value -> {
+        if (value == null) {
+            return null;
+        }
+        return ByteBuffer.allocate(Character.BYTES).putChar((char) (int) value).array();
+    },
+        bytes -> {
+            if (bytes == null) {
+                return null;
+            }
+            return ByteBuffer.wrap(bytes).getChar();
+        }
+    ),
+
+    /**
+     * Byte.
+     */
+    BYTE("byte", Byte.class, byte.class, value -> {
+        if (value == null) {
+            return null;
+        }
+        return ByteBuffer.allocate(Byte.BYTES).put((byte) (int) value).array();
+    },
+        bytes -> {
+            if (bytes == null) {
+                return null;
+            }
+            return ByteBuffer.wrap(bytes).get();
+        }
+    ),
+
+    /**
+     * Short.
+     */
+    SHORT("short", Short.class, short.class, value -> {
+        if (value == null) {
+            return null;
+        }
+        return ByteBuffer.allocate(Short.BYTES).putShort((short) (int)  value).array();
+    },
+        bytes -> {
+            if (bytes == null) {
+                return null;
+            }
+            return ByteBuffer.wrap(bytes).getShort();
         }
     ),
 

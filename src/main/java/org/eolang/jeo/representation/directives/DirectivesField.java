@@ -132,16 +132,23 @@ public final class DirectivesField implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives().add("o")
-            .attr("base", "field")
-            .attr("name", this.name)
-            .append(new DirectivesData(this.title("access"), this.access))
-            .append(new DirectivesData(this.title("descriptor"), this.descriptor))
-            .append(new DirectivesData(this.title("signature"), this.signature))
-            .append(new DirectivesTypedData(this.title("value"), this.value, this.descriptor))
-            .append(this.annotations)
-            .up()
-            .iterator();
+        try {
+            return new Directives().add("o")
+                .attr("base", "field")
+                .attr("name", this.name)
+                .append(new DirectivesData(this.title("access"), this.access))
+                .append(new DirectivesData(this.title("descriptor"), this.descriptor))
+                .append(new DirectivesData(this.title("signature"), this.signature))
+                .append(new DirectivesTypedData(this.title("value"), this.value, this.descriptor))
+                .append(this.annotations)
+                .up()
+                .iterator();
+        } catch (final IllegalStateException exception) {
+            throw new IllegalStateException(
+                String.format("Failed to create directives for field %n%s", this),
+                exception
+            );
+        }
     }
 
     /**
