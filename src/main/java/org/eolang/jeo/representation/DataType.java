@@ -26,6 +26,8 @@ package org.eolang.jeo.representation;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.function.Function;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
@@ -39,7 +41,7 @@ public enum DataType {
     /**
      * Boolean.
      */
-    BOOL("bool", Boolean.class, value ->
+    BOOL("bool", Boolean.class, boolean.class, value ->
         DataType.hexBoolean(Boolean.class.cast(value)),
         bytes -> {
             return Boolean.valueOf(bytes[0] != 0);
@@ -49,14 +51,14 @@ public enum DataType {
     /**
      * Integer.
      */
-    INT("int", Integer.class, value ->
+    INT("int", Integer.class, int.class, value ->
         ByteBuffer.allocate(Long.BYTES).putLong((int) value).array(),
         bytes -> (int) ByteBuffer.wrap(bytes).getLong()
     ),
     /**
      * Long.
      */
-    LONG("long", Long.class, value ->
+    LONG("long", Long.class, long.class, value ->
         ByteBuffer.allocate(Long.BYTES).putLong((long) value).array(),
         bytes -> ByteBuffer.wrap(bytes).getLong()
     ),
@@ -64,7 +66,7 @@ public enum DataType {
     /**
      * Float.
      */
-    FLOAT("float", Float.class, value ->
+    FLOAT("float", Float.class, float.class, value ->
         ByteBuffer.allocate(Float.BYTES).putFloat((float) value).array(),
         bytes -> ByteBuffer.wrap(bytes).getFloat()
     ),
@@ -72,7 +74,7 @@ public enum DataType {
     /**
      * Double.
      */
-    DOUBLE("double", Double.class, value ->
+    DOUBLE("double", Double.class, double.class, value ->
         ByteBuffer.allocate(Double.BYTES).putDouble((double) value).array(),
         bytes -> ByteBuffer.wrap(bytes).getDouble()
     ),
@@ -80,22 +82,22 @@ public enum DataType {
     /**
      * String.
      */
-    STRING("string", String.class, value ->
-        String.valueOf(value).getBytes(StandardCharsets.UTF_8),
+    STRING("string", String.class, String.class, value ->
+        Optional.ofNullable(value).map(String::valueOf).map(String::getBytes).orElse(null),
         bytes -> new String(bytes, StandardCharsets.UTF_8)
     ),
 
     /**
      * Bytes.
      */
-    BYTES("bytes", byte[].class, value -> byte[].class.cast(value),
+    BYTES("bytes", byte[].class, Byte[].class, value -> byte[].class.cast(value),
         bytes -> bytes
     ),
 
     /**
      * Label.
      */
-    LABEL("label", Label.class, value ->
+    LABEL("label", Label.class, Label.class, value ->
         new AllLabels().uid(Label.class.cast(value)).getBytes(StandardCharsets.UTF_8),
         bytes -> new AllLabels().label(new String(bytes, StandardCharsets.UTF_8))
     ),
@@ -104,14 +106,14 @@ public enum DataType {
      * Type reference.
      */
     TYPE_REFERENCE(
-        "type", Type.class, DataType::typeBytes, bytes ->
+        "type", Type.class, Type.class, DataType::typeBytes, bytes ->
         Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)))
     ),
 
     /**
      * Class reference.
      */
-    CLASS_REFERENCE("class", Class.class, value ->
+    CLASS_REFERENCE("class", Class.class, Class.class, value ->
         DataType.hexClass(Class.class.cast(value).getName()),
         bytes -> new String(bytes, StandardCharsets.UTF_8)
     );
@@ -125,6 +127,11 @@ public enum DataType {
      * Class.
      */
     private final Class<?> clazz;
+
+    /**
+     * Primitive class.
+     */
+    private final Class<?> primitive;
 
     /**
      * Converter to hex.
@@ -147,11 +154,13 @@ public enum DataType {
     DataType(
         final String base,
         final Class<?> clazz,
+        final Class<?> primitive,
         final Function<Object, byte[]> encoder,
         final Function<byte[], Object> decoder
     ) {
         this.base = base;
         this.clazz = clazz;
+        this.primitive = primitive;
         this.encoder = encoder;
         this.decoder = decoder;
     }
@@ -171,6 +180,38 @@ public enum DataType {
                     String.format("Unknown data type '%s'", base)
                 )
             );
+    }
+
+    /**
+     * Get a data type for some ASM type.
+     * @param type ASM Type.
+     * @return Data type.
+     */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
+    public static DataType find(final Type type) {
+        return Arrays.stream(DataType.values())
+            .filter(dataType -> {
+                final Type real = Type.getType(dataType.clazz);
+                final Type prim = Type.getType(dataType.primitive);
+                return prim.equals(type) || real.equals(type);
+            })
+            .findFirst()
+            .orElseThrow(
+                () -> new IllegalArgumentException(
+                    String.format(
+                        "Unknown data type of %s",
+                        type.getDescriptor()
+                    )
+                )
+            );
+    }
+
+    /**
+     * Get a base type.
+     * @return Base type.
+     */
+    public String type() {
+        return this.base;
     }
 
     /**
@@ -215,6 +256,24 @@ public enum DataType {
     }
 
     /**
+     * Convert data to hex string.
+     * @param data Data.
+     * @return Hex string.
+     */
+    public String toHexString(final Object data) {
+        final byte[] bytes = this.encoder.apply(data);
+        if (bytes == null) {
+            return null;
+
+        }
+        final StringJoiner out = new StringJoiner(" ");
+        for (final byte bty : bytes) {
+            out.add(String.format("%02X", bty));
+        }
+        return out.toString();
+    }
+
+    /**
      * Convert boolean to bytes.
      * @param data Boolean.
      * @return Bytes.
@@ -251,7 +310,10 @@ public enum DataType {
                     String.format(
                         "Unknown data type of %s, class is %s",
                         data,
-                        data.getClass().getName()
+                        Optional.ofNullable(data)
+                            .map(Object::getClass)
+                            .map(Class::getName)
+                            .orElse("Nullable")
                     )
                 )
             );

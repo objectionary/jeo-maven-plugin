@@ -96,4 +96,47 @@ final class XmlFieldTest {
         );
     }
 
+    @Test
+    void parsesFieldWithEmptyStringValue() throws ImpossibleModificationException {
+        final String expected = "";
+        MatcherAssert.assertThat(
+            "Failed to parse XMIR field with empty initial value",
+            new XmlField(
+                new XmlNode(
+                    new Xembler(
+                        new DirectivesField(
+                            Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL,
+                            "serialVersionUID",
+                            "Ljava/lang/String;",
+                            "",
+                            expected
+                        )
+                    ).xml()
+                )
+            ).value(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void parsesFieldWithNullableStringValue() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Failed to parse XMIR field with null initial value",
+            new XmlField(
+                new XmlNode(
+                    new Xembler(
+                        new DirectivesField(
+                            Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL,
+                            "serialVersionUID",
+                            "Ljava/lang/String;",
+                            "",
+                            null
+                        )
+                    ).xml()
+                )
+            ).value(),
+            Matchers.nullValue()
+        );
+    }
+
 }

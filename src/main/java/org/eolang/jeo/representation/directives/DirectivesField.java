@@ -93,7 +93,7 @@ public final class DirectivesField implements Iterable<Directive> {
      * Constructor.
      */
     public DirectivesField() {
-        this(Opcodes.ACC_PUBLIC, "unknown", "I", "", "0");
+        this(Opcodes.ACC_PUBLIC, "unknown", "I", "", 0);
     }
 
     /**
@@ -116,7 +116,7 @@ public final class DirectivesField implements Iterable<Directive> {
         this.name = name;
         this.descriptor = Optional.ofNullable(descriptor).orElse("");
         this.signature = Optional.ofNullable(signature).orElse("");
-        this.value = Optional.ofNullable(value).orElse("");
+        this.value = value;
         this.annotations = new DirectivesAnnotations();
     }
 
@@ -138,7 +138,7 @@ public final class DirectivesField implements Iterable<Directive> {
             .append(new DirectivesData(this.title("access"), this.access))
             .append(new DirectivesData(this.title("descriptor"), this.descriptor))
             .append(new DirectivesData(this.title("signature"), this.signature))
-            .append(new DirectivesData(this.title("value"), this.value))
+            .append(new DirectivesTypedData(this.title("value"), this.value, this.descriptor))
             .append(this.annotations)
             .up()
             .iterator();

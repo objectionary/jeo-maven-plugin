@@ -64,7 +64,14 @@ public final class XmlOperand {
         if ("handle".equals(base)) {
             result = new XmlHandler(this.raw).asHandle();
         } else {
-            result = DataType.find(base).decode(this.raw.text());
+            final boolean nullable = this.raw.attribute("scope").map("nullable"::equals)
+                .orElse(false);
+            if (nullable) {
+                result = null;
+            } else {
+                final String text = this.raw.text();
+                result = DataType.find(base).decode(text);
+            }
         }
         return result;
     }

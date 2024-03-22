@@ -24,11 +24,13 @@
 package org.eolang.jeo.representation;
 
 import java.util.StringJoiner;
+import lombok.ToString;
 
 /**
  * Hexadecimal data.
  * @since 0.1
  */
+@ToString
 public final class HexData {
 
     /**
