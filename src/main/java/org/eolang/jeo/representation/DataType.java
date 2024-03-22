@@ -113,9 +113,19 @@ public enum DataType {
     /**
      * Class reference.
      */
-    CLASS_REFERENCE("class", Class.class, Class.class, value ->
-        DataType.hexClass(Class.class.cast(value).getName()),
-        bytes -> new String(bytes, StandardCharsets.UTF_8)
+    CLASS_REFERENCE("class", Class.class, Class.class, value -> {
+        if (value == null) {
+            return null;
+        }
+        return DataType.hexClass(Class.class.cast(value).getName());
+    },
+        bytes -> {
+            if (bytes == null) {
+                return null;
+
+            }
+            return new String(bytes, StandardCharsets.UTF_8);
+        }
     );
 
     /**
@@ -196,14 +206,15 @@ public enum DataType {
                 return prim.equals(type) || real.equals(type);
             })
             .findFirst()
-            .orElseThrow(
-                () -> new IllegalArgumentException(
-                    String.format(
-                        "Unknown data type of %s",
-                        type.getDescriptor()
-                    )
-                )
-            );
+//            .orElseThrow(
+//                () -> new IllegalArgumentException(
+//                    String.format(
+//                        "Unknown data type of %s",
+//                        type.getDescriptor()
+//                    )
+//                )
+//            );
+            .orElse(DataType.CLASS_REFERENCE);
     }
 
     /**
