@@ -231,7 +231,27 @@ public final class BytecodeClass implements Testable {
      * @return This object.
      */
     public BytecodeMethod withMethod(final BytecodeMethodProperties properties) {
-        final BytecodeMethod method = new BytecodeMethod(properties, this.visitor, this);
+        return this.withMethod(properties, 0, 0);
+    }
+
+    /**
+     * Add method.
+     *
+     * @param properties Method properties.
+     * @param stack Stack size.
+     * @param locals Local variables size.
+     * @return This object.
+     */
+    public BytecodeMethod withMethod(
+        final BytecodeMethodProperties properties, final int stack, final int locals
+    ) {
+        final BytecodeMethod method = new BytecodeMethod(
+            properties,
+            this.visitor,
+            this,
+            stack,
+            locals
+        );
         this.methods.add(method);
         return method;
     }

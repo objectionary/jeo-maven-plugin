@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -60,6 +61,11 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
     private final String[] exceptions;
 
     /**
+     * Method max stack and locals.
+     */
+    private AtomicReference<Maxs> maxs;
+
+    /**
      * Constructor.
      */
     public DirectivesMethodProperties() {
@@ -84,6 +90,16 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         this.descriptor = Optional.ofNullable(descriptor).orElse("");
         this.signature = Optional.ofNullable(signature).orElse("");
         this.exceptions = Optional.ofNullable(exceptions).orElse(new String[0]).clone();
+        this.maxs = new AtomicReference<>(new Maxs());
+    }
+
+    /**
+     * Set max stack and locals.
+     * @param stack Max stack size.
+     * @param locals Max locals size.
+     */
+    public void maxs(final int stack, final int locals) {
+        this.maxs.set(new Maxs(stack, locals));
     }
 
     @Override
@@ -93,7 +109,52 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
             .append(new DirectivesData("descriptor", this.descriptor))
             .append(new DirectivesData("signature", this.signature))
             .append(new DirectivesTuple("exceptions", this.exceptions))
+            .append(this.maxs.get())
             .append(new DirectivesMethodParams(this.descriptor))
             .iterator();
+    }
+
+    /**
+     * Max stack and locals.
+     *
+     * @since 0.3
+     */
+    private static class Maxs implements Iterable<Directive> {
+
+        /**
+         * Max stack size.
+         */
+        final int stack;
+
+        /**
+         * Max locals size.
+         */
+        final int locals;
+
+        /**
+         * Constructor.
+         */
+        private Maxs() {
+            this(0, 0);
+        }
+
+        /**
+         * Constructor.
+         * @param stack Max stack size.
+         * @param locals Max locals size.
+         */
+        private Maxs(final int stack, final int locals) {
+            this.stack = stack;
+            this.locals = locals;
+        }
+
+        @Override
+        public Iterator<Directive> iterator() {
+            return new Directives().add("o").attr("name", "maxs")
+                .append(new DirectivesData("stack", this.stack))
+                .append(new DirectivesData("locals", this.locals))
+                .up()
+                .iterator();
+        }
     }
 }

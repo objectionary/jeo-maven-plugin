@@ -59,6 +59,61 @@ SOFTWARE.
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
     </dependency>
+
+
+<!--    &lt;!&ndash;    TODO !&ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>io.projectreactor</groupId>-->
+<!--      <artifactId>reactor-core</artifactId>-->
+<!--      <version>3.6.0</version>-->
+<!--    </dependency>-->
+<!--    &lt;!&ndash; https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect &ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>org.jetbrains.kotlin</groupId>-->
+<!--      <artifactId>kotlin-reflect</artifactId>-->
+<!--      <version>1.9.21</version>-->
+<!--      <scope>runtime</scope>-->
+<!--    </dependency>-->
+<!--    &lt;!&ndash; https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib &ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>org.jetbrains.kotlin</groupId>-->
+<!--      <artifactId>kotlin-stdlib</artifactId>-->
+<!--      <version>1.9.21</version>-->
+<!--    </dependency>-->
+<!--    &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/spring-web &ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>org.springframework</groupId>-->
+<!--      <artifactId>spring-webmvc</artifactId>-->
+<!--      <version>5.3.25</version>-->
+<!--    </dependency>-->
+<!--    &lt;!&ndash; https://mvnrepository.com/artifact/com.caucho/hessian &ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>com.caucho</groupId>-->
+<!--      <artifactId>hessian</artifactId>-->
+<!--      <version>4.0.66</version>-->
+<!--    </dependency>-->
+<!--    &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/spring-webflux &ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>org.springframework</groupId>-->
+<!--      <artifactId>spring-webflux</artifactId>-->
+<!--      <version>5.3.25</version>-->
+<!--    </dependency>-->
+<!--    &lt;!&ndash; https://mvnrepository.com/artifact/com.samskivert/jmustache &ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>com.samskivert</groupId>-->
+<!--      <artifactId>jmustache</artifactId>-->
+<!--      <version>1.16</version>-->
+<!--    </dependency>-->
+<!--    &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-catalina &ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>org.apache.tomcat</groupId>-->
+<!--      <artifactId>tomcat-catalina</artifactId>-->
+<!--      <version>10.1.17</version>-->
+<!--    </dependency>-->
+
+
+    <!--    TODO !-->
+
   </dependencies>
   <build>
     <plugins>
@@ -90,7 +145,7 @@ SOFTWARE.
              support many java features. We need to implement them and enable
              the test.
           -->
-          <disabled>true</disabled>
+          <disabled>false</disabled>
           <skipVerification>true</skipVerification>
         </configuration>
         <executions>

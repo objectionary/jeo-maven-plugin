@@ -152,6 +152,14 @@ public final class XmlMethod {
     }
 
     /**
+     * Method max stack and locals.
+     * @return Maxs.
+     */
+    public XmlMaxs maxs() {
+        return new XmlMaxs(this.node.child("name", "maxs"));
+    }
+
+    /**
      * Checks if method is a constructor.
      * @return True if method is a constructor.
      */

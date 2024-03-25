@@ -209,6 +209,12 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     }
 
     @Override
+    public void visitMaxs(final int stack, final int locals) {
+        this.method.maxs(stack, locals);
+        super.visitMaxs(stack, locals);
+    }
+
+    @Override
     public Iterator<Directive> iterator() {
         return this.method.iterator();
     }

@@ -121,6 +121,15 @@ public final class DirectivesMethod implements Iterable<Directive> {
         this.instructions.add(directives);
     }
 
+    /**
+     * Add maxs to the directives.
+     * @param stack Max stack size
+     * @param locals Max locals size
+     */
+    public void maxs(final int stack, final int locals) {
+        this.properties.maxs(stack, locals);
+    }
+
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives();

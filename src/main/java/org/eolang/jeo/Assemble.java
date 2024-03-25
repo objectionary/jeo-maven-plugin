@@ -66,5 +66,9 @@ public final class Assemble implements Translation {
         } catch (final IOException exception) {
             throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
         }
+//        catch (final TypeNotPresentException exception){
+//            todo!
+//            return representation;
+//        }
     }
 }

@@ -62,6 +62,16 @@ public final class BytecodeMethod implements Testable {
     private final BytecodeMethodProperties properties;
 
     /**
+     * Stack size.
+     */
+    private final int stack;
+
+    /**
+     * Local variables.
+     */
+    private final int locals;
+
+    /**
      * Constructor.
      * @param name Method name.
      * @param visitor ASM class writer.
@@ -91,11 +101,31 @@ public final class BytecodeMethod implements Testable {
         final ClassVisitor visitor,
         final BytecodeClass clazz
     ) {
+        this(properties, visitor, clazz, 0, 0);
+    }
+
+    /**
+     * Constructor.
+     * @param properties Method properties.
+     * @param visitor ASM class writer.
+     * @param clazz Original class.
+     * @param stack Stack size.
+     * @param locals Local variables.
+     */
+    public BytecodeMethod(
+        final BytecodeMethodProperties properties,
+        final ClassVisitor visitor,
+        final BytecodeClass clazz,
+        final int stack,
+        final int locals
+    ) {
         this.properties = properties;
         this.visitor = visitor;
         this.clazz = clazz;
         this.tryblocks = new ArrayList<>(0);
         this.instructions = new ArrayList<>(0);
+        this.stack = stack;
+        this.locals = locals;
     }
 
     /**
@@ -160,7 +190,12 @@ public final class BytecodeMethod implements Testable {
     public String testCode() {
         final StringBuilder res = new StringBuilder("withMethod(")
             .append(this.properties.testCode())
-            .append(')').append('\n');
+            .append(')').append('\n')
+            .append("// max stack: ")
+            .append(this.stack)
+            .append(" max locals: ")
+            .append(this.locals)
+            .append('\n');
         for (final BytecodeEntry instruction : this.instructions) {
             res.append(instruction.testCode()).append('\n');
         }
@@ -179,7 +214,7 @@ public final class BytecodeMethod implements Testable {
                 mvisitor.visitCode();
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor));
                 this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
-                mvisitor.visitMaxs(0, 0);
+                mvisitor.visitMaxs(this.stack, this.locals);
             }
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {
@@ -199,6 +234,8 @@ public final class BytecodeMethod implements Testable {
                 exception
             );
             // @checkstyle IllegalCatchCheck (1 line)
+//        } catch (final TypeNotPresentException | NoClassDefFoundError ignore) {
+//            todo!
         } catch (final ClassFormatError format) {
             throw new IllegalStateException(
                 String.format(

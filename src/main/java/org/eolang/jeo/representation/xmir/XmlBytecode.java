@@ -106,7 +106,10 @@ public final class XmlBytecode {
             );
         }
         for (final XmlMethod xmlmethod : clazz.methods()) {
-            final BytecodeMethod method = bytecode.withMethod(xmlmethod.properties());
+            final XmlMaxs maxs = xmlmethod.maxs();
+            final BytecodeMethod method = bytecode.withMethod(
+                xmlmethod.properties(), maxs.stack(), maxs.locals()
+            );
             xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
             xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
         }
