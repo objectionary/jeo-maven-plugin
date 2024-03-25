@@ -215,6 +215,17 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     }
 
     @Override
+    public void visitFrame(
+        final int type,
+        final int numlocal,
+        final Object[] local,
+        final int numstack,
+        final Object[] stack
+    ) {
+        super.visitFrame(type, numlocal, local, numstack, stack);
+    }
+
+    @Override
     public Iterator<Directive> iterator() {
         return this.method.iterator();
     }

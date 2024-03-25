@@ -63,7 +63,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
     /**
      * Method max stack and locals.
      */
-    private AtomicReference<Maxs> maxs;
+    private final AtomicReference<Maxs> max;
 
     /**
      * Constructor.
@@ -90,7 +90,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         this.descriptor = Optional.ofNullable(descriptor).orElse("");
         this.signature = Optional.ofNullable(signature).orElse("");
         this.exceptions = Optional.ofNullable(exceptions).orElse(new String[0]).clone();
-        this.maxs = new AtomicReference<>(new Maxs());
+        this.max = new AtomicReference<>(new Maxs());
     }
 
     /**
@@ -99,7 +99,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      * @param locals Max locals size.
      */
     public void maxs(final int stack, final int locals) {
-        this.maxs.set(new Maxs(stack, locals));
+        this.max.set(new Maxs(stack, locals));
     }
 
     @Override
@@ -109,7 +109,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
             .append(new DirectivesData("descriptor", this.descriptor))
             .append(new DirectivesData("signature", this.signature))
             .append(new DirectivesTuple("exceptions", this.exceptions))
-            .append(this.maxs.get())
+            .append(this.max.get())
             .append(new DirectivesMethodParams(this.descriptor))
             .iterator();
     }
@@ -119,17 +119,17 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      *
      * @since 0.3
      */
-    private static class Maxs implements Iterable<Directive> {
+    private static final class Maxs implements Iterable<Directive> {
 
         /**
          * Max stack size.
          */
-        final int stack;
+        private final int stack;
 
         /**
          * Max locals size.
          */
-        final int locals;
+        private final int locals;
 
         /**
          * Constructor.

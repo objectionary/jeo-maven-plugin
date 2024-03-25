@@ -111,6 +111,7 @@ public final class BytecodeMethod implements Testable {
      * @param clazz Original class.
      * @param stack Stack size.
      * @param locals Local variables.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeMethod(
         final BytecodeMethodProperties properties,
@@ -187,15 +188,16 @@ public final class BytecodeMethod implements Testable {
     }
 
     @Override
+    @SuppressWarnings("PMD.InsufficientStringBufferDeclaration")
     public String testCode() {
-        final StringBuilder res = new StringBuilder("withMethod(")
-            .append(this.properties.testCode())
-            .append(')').append('\n')
-            .append("// max stack: ")
-            .append(this.stack)
-            .append(" max locals: ")
-            .append(this.locals)
-            .append('\n');
+        final StringBuilder res = new StringBuilder(
+            String.format(
+                "withMethod(%s)%n//max stack: %d max locals %d%n",
+                this.properties.testCode(),
+                this.stack,
+                this.locals
+            )
+        );
         for (final BytecodeEntry instruction : this.instructions) {
             res.append(instruction.testCode()).append('\n');
         }
@@ -234,8 +236,6 @@ public final class BytecodeMethod implements Testable {
                 exception
             );
             // @checkstyle IllegalCatchCheck (1 line)
-//        } catch (final TypeNotPresentException | NoClassDefFoundError ignore) {
-//            todo!
         } catch (final ClassFormatError format) {
             throw new IllegalStateException(
                 String.format(
