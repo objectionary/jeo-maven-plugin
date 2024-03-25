@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.util.Optional;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.JavaName;
 import org.eolang.jeo.representation.bytecode.Bytecode;
@@ -106,10 +107,12 @@ public final class XmlBytecode {
             );
         }
         for (final XmlMethod xmlmethod : clazz.methods()) {
-            final XmlMaxs maxs = xmlmethod.maxs();
-            final BytecodeMethod method = bytecode.withMethod(
-                xmlmethod.properties(), maxs.stack(), maxs.locals()
-            );
+            final Optional<XmlMaxs> maxs = xmlmethod.maxs();
+            final BytecodeMethod method = maxs.map(
+                xmlMaxs -> bytecode.withMethod(
+                    xmlmethod.properties(), xmlMaxs.stack(), xmlMaxs.locals()
+                )
+            ).orElseGet(() -> bytecode.withMethod(xmlmethod.properties()));
             xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
             xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
         }

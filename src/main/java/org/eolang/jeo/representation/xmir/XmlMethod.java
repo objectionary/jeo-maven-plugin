@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.ToString;
@@ -155,8 +156,8 @@ public final class XmlMethod {
      * Method max stack and locals.
      * @return Maxs.
      */
-    public XmlMaxs maxs() {
-        return new XmlMaxs(this.node.child("name", "maxs"));
+    public Optional<XmlMaxs> maxs() {
+        return this.node.optchild("name", "maxs").map(XmlMaxs::new);
     }
 
     /**
