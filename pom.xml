@@ -241,6 +241,7 @@ SOFTWARE.
            we broke backward compatibility with the `eo-to-bytecode` integration test.
            We need to enable automatic computation of bytecode frames, max locals and max stack
            in case of missing frame information.
+           Don't forget to remove ClassWriter.COMPUTE_FRAMES from CustomClassWriter.
           -->
           <pomExcludes>
             <exclude>eo-to-bytecode/pom.xml</exclude>

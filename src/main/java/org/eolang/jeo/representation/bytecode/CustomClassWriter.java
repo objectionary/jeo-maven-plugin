@@ -47,7 +47,7 @@ public class CustomClassWriter extends ClassWriter {
      * Constructor.
      */
     CustomClassWriter() {
-        super(0);
+        super(ClassWriter.COMPUTE_FRAMES);
     }
 
     @Override
