@@ -35,7 +35,7 @@ import org.xembly.Xembler;
  *
  * @since 0.3
  */
-class DirectivesFrameTest {
+final class DirectivesFrameTest {
 
     @Test
     void createsCorrectDirectivesForFrame() throws ImpossibleModificationException {

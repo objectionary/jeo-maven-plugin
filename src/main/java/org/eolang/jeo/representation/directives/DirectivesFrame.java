@@ -73,19 +73,20 @@ public final class DirectivesFrame implements Iterable<Directive> {
      * @param locals The local variable types in this frame.
      * @param nstack The number of operand stack elements in the visited frame.
      * @param stack The operand stack types in this frame.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesFrame(
         final int type,
         final int nlocal,
         final Object[] locals,
         final int nstack,
-        final Object[] stack
+        final Object... stack
     ) {
         this.type = type;
         this.nlocal = nlocal;
-        this.locals = locals;
+        this.locals = locals.clone();
         this.nstack = nstack;
-        this.stack = stack;
+        this.stack = stack.clone();
     }
 
     @Override
