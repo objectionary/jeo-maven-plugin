@@ -241,6 +241,8 @@ public final class XmlNode {
         final Optional<String> base = this.attribute("base");
         if (base.isPresent() && "label".equals(base.get())) {
             result = new XmlLabel(this);
+        } else if (base.isPresent() && "frame".equals(base.get())) {
+            result = new XmlFrame(this);
         } else {
             result = new XmlInstruction(this);
         }

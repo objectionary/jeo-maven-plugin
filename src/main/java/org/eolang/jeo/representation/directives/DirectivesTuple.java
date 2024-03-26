@@ -42,16 +42,18 @@ public final class DirectivesTuple implements Iterable<Directive> {
     /**
      * Tuple values.
      */
-    private final String[] values;
+    private final Object[] values;
 
     /**
      * Constructor.
      * @param name Tuple name.
      * @param values Tuple values.
+     * @param <T> Value type.
      */
-    public DirectivesTuple(
+    @SuppressWarnings("unchecked")
+    public <T> DirectivesTuple(
         final String name,
-        final String... values
+        final T... values
     ) {
         this.name = name;
         this.values = values.clone();
@@ -64,7 +66,7 @@ public final class DirectivesTuple implements Iterable<Directive> {
             .attr("base", "tuple")
             .attr("star", "")
             .attr("name", this.name);
-        for (final String exception : this.values) {
+        for (final Object exception : this.values) {
             tuple.append(new DirectivesData(exception));
         }
         tuple.up();

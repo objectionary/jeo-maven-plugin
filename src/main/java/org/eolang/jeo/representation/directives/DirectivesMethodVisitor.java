@@ -222,18 +222,7 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
         final int numstack,
         final Object[] stack
     ) {
-        // @checkstyle MethodBodyCommentsCheck (12 line)
-        //  @todo #488:90min Implement frame instructions assembling.
-        //   This method is not implemented yet, but it's crucial for
-        //   the correct assembling and disassembling of a method.
-        //   We previously avoided this implementation because
-        //   ClassWriter.COMPUTE_FRAMES flag is used in the ClassWriter
-        //   Which automatically did it for us (it computed all frames automatically).
-        //   However, the usage of this flag leads to problems with
-        //   'spring-fat' integration test. Particularly, if we use this method,
-        //   Java ASM library requires all the project dependencies to be present
-        //   in the classpath, which is usually impossible for large projects that
-        //   extensively use reflection and classloading.
+        this.method.operand(new DirectivesFrame(type, numlocal, local, numstack, stack));
         super.visitFrame(type, numlocal, local, numstack, stack);
     }
 
