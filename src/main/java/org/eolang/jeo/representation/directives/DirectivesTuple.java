@@ -23,7 +23,9 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -66,9 +68,10 @@ public final class DirectivesTuple implements Iterable<Directive> {
             .attr("base", "tuple")
             .attr("star", "")
             .attr("name", this.name);
-        for (final Object exception : this.values) {
-            tuple.append(new DirectivesData(exception));
-        }
+        Arrays.stream(this.values)
+            .filter(Objects::nonNull)
+            .map(DirectivesData::new)
+            .forEach(tuple::append);
         tuple.up();
         return tuple.iterator();
     }
