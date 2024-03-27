@@ -24,7 +24,9 @@
 package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
+import java.util.List;
 import java.util.Optional;
+import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 
 /**
@@ -60,7 +62,14 @@ public final class XmlClassProperties {
      * @return Bytecode version.
      */
     int version() {
-        return new HexString(this.clazz.xpath("./o[@name='version']/text()").get(0)).decodeAsInt();
+        final List<String> version = this.clazz.xpath("./o[@name='version']/text()");
+        final int result;
+        if (version.isEmpty()) {
+            result = new DefaultVersion().bytecode();
+        } else {
+            result = new HexString(version.get(0)).decodeAsInt();
+        }
+        return result;
     }
 
     /**
