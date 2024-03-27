@@ -46,6 +46,11 @@ public class CustomClassWriter extends ClassWriter {
 
     /**
      * Constructor.
+     * @todo #488:90min Disable automatic frame computation in the ClassWriter.
+     *  The ClassWriter is currently configured to automatically compute the stack map frames.
+     *  This is a very expensive operation and it is not necessary for our use case.
+     *  But if we disable it, tests fail.
+     *  We need to investigate why this happens and fix it.
      */
     CustomClassWriter() {
         super(ClassWriter.COMPUTE_FRAMES);
