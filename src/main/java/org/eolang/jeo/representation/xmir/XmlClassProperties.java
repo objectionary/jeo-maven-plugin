@@ -57,6 +57,7 @@ public final class XmlClassProperties {
 
     /**
      * Retrieve bytecode 'version'.
+     * @return Bytecode version.
      */
     int version() {
         return new HexString(this.clazz.xpath("./o[@name='version']/text()").get(0)).decodeAsInt();

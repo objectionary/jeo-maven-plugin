@@ -115,13 +115,13 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         final int access,
         final String signature,
         final String supername,
-        final String[] interfaces
+        final String... interfaces
     ) {
         this.version = version;
         this.access = access;
         this.signature = signature;
         this.supername = supername;
-        this.interfaces = interfaces;
+        this.interfaces = interfaces.clone();
     }
 
     @Override
