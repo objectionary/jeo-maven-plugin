@@ -126,8 +126,8 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
         final String descriptor,
         final boolean isinterface
     ) {
-        this.opcode(opcode, owner, name, descriptor);
-        super.visitMethodInsn(opcode, owner, name, descriptor, false);
+        this.opcode(opcode, owner, name, descriptor, isinterface);
+        super.visitMethodInsn(opcode, owner, name, descriptor, isinterface);
     }
 
     @Override

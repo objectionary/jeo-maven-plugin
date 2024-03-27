@@ -381,7 +381,8 @@ public final class BytecodeClass implements Testable {
                 Opcodes.INVOKEVIRTUAL,
                 "java/io/PrintStream",
                 "println",
-                "(Ljava/lang/String;)V"
+                "(Ljava/lang/String;)V",
+                false
             )
             .opcode(Opcodes.RETURN)
             .up();

@@ -1226,7 +1226,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                 String.valueOf(arguments.get(0)),
                 String.valueOf(arguments.get(1)),
                 String.valueOf(arguments.get(2)),
-                false
+                (Boolean) arguments.get(3)
             )
         ),
 
@@ -1240,7 +1240,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                 String.valueOf(arguments.get(0)),
                 String.valueOf(arguments.get(1)),
                 String.valueOf(arguments.get(2)),
-                false
+                (Boolean) arguments.get(3)
             )
         ),
 
@@ -1253,7 +1253,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                 String.valueOf(arguments.get(0)),
                 String.valueOf(arguments.get(1)),
                 String.valueOf(arguments.get(2)),
-                false
+                (Boolean) arguments.get(3)
             )
         ),
 
@@ -1266,7 +1266,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                 String.valueOf(arguments.get(0)),
                 String.valueOf(arguments.get(1)),
                 String.valueOf(arguments.get(2)),
-                true
+                (Boolean) arguments.get(3)
             )
         ),
 

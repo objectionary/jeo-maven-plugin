@@ -94,14 +94,16 @@ final class XmlBytecodeTest {
                                 Opcodes.GETSTATIC,
                                 "java/lang/System",
                                 "out",
-                                "Ljava/io/PrintStream;"
+                                "Ljava/io/PrintStream;",
+                                false
                             )
                             .opcode(Opcodes.ALOAD, 0)
                             .opcode(
                                 Opcodes.INVOKEVIRTUAL,
                                 "java/io/PrintStream",
                                 "println",
-                                "(Ljava/lang/Object;)V"
+                                "(Ljava/lang/Object;)V",
+                                false
                             )
                             .opcode(Opcodes.RETURN)
                     )
@@ -150,7 +152,8 @@ final class XmlBytecodeTest {
                                     Opcodes.INVOKESPECIAL,
                                     "java/lang/Exception",
                                     "<init>",
-                                    "()V"
+                                    "()V",
+                                    false
                                 )
                                 .opcode(Opcodes.ATHROW)
                         )
