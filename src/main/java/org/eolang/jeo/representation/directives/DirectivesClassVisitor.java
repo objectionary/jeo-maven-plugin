@@ -139,6 +139,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
             new DirectivesClass(
                 classname,
                 new DirectivesClassProperties(
+                    version,
                     access,
                     signature,
                     supername,

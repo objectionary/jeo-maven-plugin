@@ -56,6 +56,13 @@ public final class XmlClassProperties {
     }
 
     /**
+     * Retrieve bytecode 'version'.
+     */
+    int version() {
+        return new HexString(this.clazz.xpath("./o[@name='version']/text()").get(0)).decodeAsInt();
+    }
+
+    /**
      * Retrieve 'access' modifiers of a class.
      * @return Access modifiers.
      */
@@ -104,6 +111,7 @@ public final class XmlClassProperties {
      */
     BytecodeClassProperties toBytecodeProperties() {
         return new BytecodeClassProperties(
+            this.version(),
             this.access(),
             this.signature().orElse(null),
             this.supername(),

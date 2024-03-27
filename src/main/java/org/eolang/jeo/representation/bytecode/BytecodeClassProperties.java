@@ -36,6 +36,11 @@ import org.objectweb.asm.ClassVisitor;
 public final class BytecodeClassProperties {
 
     /**
+     * Bytecode version.
+     */
+    private final int version;
+
+    /**
      * Access modifiers.
      */
     private final int access;
@@ -60,11 +65,12 @@ public final class BytecodeClassProperties {
      * @param access Access modifiers.
      */
     public BytecodeClassProperties(final int access) {
-        this(access, null, "java/lang/Object", new String[0]);
+        this(new DefaultVersion().bytecode(), access, null, "java/lang/Object", new String[0]);
     }
 
     /**
      * Constructor.
+     * @param version Bytecode version.
      * @param access Access modifiers.
      * @param signature Signature.
      * @param supername Supername.
@@ -72,11 +78,13 @@ public final class BytecodeClassProperties {
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeClassProperties(
+        final int version,
         final int access,
         final String signature,
         final String supername,
         final String... interfaces
     ) {
+        this.version = version;
         this.access = access;
         this.signature = signature;
         this.supername = supername;
@@ -84,13 +92,13 @@ public final class BytecodeClassProperties {
     }
 
     /**
-     * Start writing a class by using class writer.
+     * Start writing a class by using a class writer.
      * @param visitor Class visitor.
      * @param name Class name.
      */
     void write(final ClassVisitor visitor, final String name) {
         visitor.visit(
-            new DefaultVersion().java(),
+            this.version,
             this.access,
             name,
             this.signature,

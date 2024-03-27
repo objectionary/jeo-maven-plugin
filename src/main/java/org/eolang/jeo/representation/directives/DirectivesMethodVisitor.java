@@ -105,6 +105,14 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     }
 
     @Override
+    public void visitLocalVariable(
+        final String name, final String descriptor, final String signature, final Label start,
+        final Label end, final int index
+    ) {
+        super.visitLocalVariable(name, descriptor, signature, start, end, index);
+    }
+
+    @Override
     public void visitVarInsn(final int opcode, final int varindex) {
         this.opcode(opcode, varindex);
         super.visitVarInsn(opcode, varindex);

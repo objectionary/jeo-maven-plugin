@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import org.eolang.jeo.PluginStartup;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Custom class writer.

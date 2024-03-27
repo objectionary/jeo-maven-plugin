@@ -34,7 +34,7 @@ public final class DefaultVersion {
     /**
      * Java bytecode version.
      */
-    private final int bytecode;
+    private final int bcode;
 
     /**
      * ASM API version.
@@ -50,11 +50,11 @@ public final class DefaultVersion {
 
     /**
      * Constructor.
-     * @param java Java bytecode version.
+     * @param bytecode Java bytecode version.
      * @param api ASM API version.
      */
-    private DefaultVersion(final int java, final int api) {
-        this.bytecode = java;
+    private DefaultVersion(final int bytecode, final int api) {
+        this.bcode = bytecode;
         this.asm = api;
     }
 
@@ -62,8 +62,8 @@ public final class DefaultVersion {
      * Java bytecode version.
      * @return Java bytecode version.
      */
-    public int java() {
-        return this.bytecode;
+    public int bytecode() {
+        return this.bcode;
     }
 
     /**

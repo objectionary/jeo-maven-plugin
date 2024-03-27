@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import org.eolang.jeo.representation.DefaultVersion;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -33,6 +34,11 @@ import org.xembly.Directives;
  * @since 0.1.0
  */
 public final class DirectivesClassProperties implements Iterable<Directive> {
+
+    /**
+     * Class bytecode version.
+     */
+    private final int version;
 
     /**
      * Access modifiers.
@@ -92,15 +98,36 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         final String supername,
         final String... interfaces
     ) {
+        this(new DefaultVersion().bytecode(), access, signature, supername, interfaces.clone());
+    }
+
+    /**
+     * Constructor.
+     * @param version Bytecode version.
+     * @param access Access modifiers.
+     * @param signature Class Signature.
+     * @param supername Class supername.
+     * @param interfaces Class interfaces.
+     * @checkstyle ParameterNumberCheck (6 lines)
+     */
+    public DirectivesClassProperties(
+        final int version,
+        final int access,
+        final String signature,
+        final String supername,
+        final String[] interfaces
+    ) {
+        this.version = version;
         this.access = access;
         this.signature = signature;
         this.supername = supername;
-        this.interfaces = interfaces.clone();
+        this.interfaces = interfaces;
     }
 
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives()
+            .append(new DirectivesData("version", this.version))
             .append(new DirectivesData("access", this.access));
         if (this.signature != null) {
             directives.append(new DirectivesData("signature", this.signature));
