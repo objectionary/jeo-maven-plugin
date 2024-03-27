@@ -57,6 +57,7 @@
               <o base="string" data="bytes">6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>
               <o base="string" data="bytes">3C 69 6E 69 74 3E</o>
               <o base="string" data="bytes">28 29 56</o>
+              <o base="bool" data="bytes">00</o>
             </o>
             <o base="label">
               <o base="string" data="bytes">66 65 63 35 31 34 32 62 2D 34 33 61 39 2D 34 65 39 61 2D 61 37 39 64 2D 34 36 30 34 33 39 32 65 30 33 34 62</o>
@@ -143,6 +144,7 @@
               <o base="string" data="bytes">63 6F 6D 2F 65 78 61 6D 2F 42 41</o>
               <o base="string" data="bytes">66 6F 6F</o>
               <o base="string" data="bytes">28 29 49</o>
+              <o base="bool" data="bytes">00</o>
             </o>
             <o base="opcode" line="999" name="ICONST_2-17">
               <o base="int" data="bytes">00 00 00 00 00 00 00 05</o>
