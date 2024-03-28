@@ -23,10 +23,10 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -34,7 +34,7 @@ import org.xembly.Directives;
  * Annotation property as Xembly directives.
  * @since 0.3
  */
-public final class DirectivesAnnotationProperty implements Iterable<Directive> {
+public final class DirectivesAnnotationProperty implements Iterable<Directive>, Appendable {
 
     /**
      * Type of the property.
@@ -52,7 +52,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
      * @param params Property parameters.
      */
     @SafeVarargs
-    private DirectivesAnnotationProperty(final Type type, Iterable<Directive>... params) {
+    public DirectivesAnnotationProperty(final Type type, Iterable<Directive>... params) {
         this(type, Arrays.asList(params));
     }
 
@@ -63,7 +63,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
      */
     private DirectivesAnnotationProperty(final Type type, final List<Iterable<Directive>> params) {
         this.type = type;
-        this.params = params;
+        this.params = new ArrayList<>(params);
     }
 
     /**
@@ -103,12 +103,12 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
      * @return Property directives.
      */
     public static DirectivesAnnotationProperty array(
-        final String name, final DirectivesAnnotation annotation
+        final String name, final Appendable deep
     ) {
         return new DirectivesAnnotationProperty(
             Type.ARRAY,
             new DirectivesData("name", name == null ? "" : name),
-            annotation
+            deep.sum()
         );
     }
 
@@ -119,13 +119,13 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
      * @return Property directives.
      */
     public static DirectivesAnnotationProperty annotation(
-        final String name, final String descriptor, final DirectivesAnnotation annotation
+        final String name, final String descriptor, final Appendable deep
     ) {
         return new DirectivesAnnotationProperty(
             Type.ANNOTATION,
             new DirectivesData("name", name == null ? "" : name),
             new DirectivesData("descriptor", descriptor),
-            annotation
+            deep.sum()
         );
     }
 
@@ -138,10 +138,21 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
         return directives.up().iterator();
     }
 
+    @Override
+    public void append(final Iterable<Directive> directives) {
+        this.params.add(directives);
+    }
+
+    @Override
+    public Iterable<Directive> sum() {
+        return this;
+    }
+
+
     /**
      * Property types.
      */
-    private enum Type {
+    enum Type {
         /**
          * Plain property.
          */

@@ -37,7 +37,7 @@ import org.xembly.Directives;
  */
 @ToString
 @EqualsAndHashCode
-public final class DirectivesAnnotation implements Iterable<Directive> {
+public final class DirectivesAnnotation implements Iterable<Directive>, Appendable {
 
     /**
      * Annotation descriptor.
@@ -68,12 +68,14 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
         this.properties = new ArrayList<>(0);
     }
 
-    /**
-     * Add annotation property.
-     * @param prop Annotation property.
-     */
-    public void add(final Iterable<Directive> prop) {
-        this.properties.add(prop);
+    @Override
+    public void append(final Iterable<Directive> directives) {
+        this.properties.add(directives);
+    }
+
+    @Override
+    public Iterable<Directive> sum() {
+        return this;
     }
 
     @Override

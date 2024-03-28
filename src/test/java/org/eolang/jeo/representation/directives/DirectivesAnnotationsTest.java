@@ -84,7 +84,7 @@ final class DirectivesAnnotationsTest {
         final DirectivesAnnotation annotation = new DirectivesAnnotation(
             "Ljava/lang/Override;", true
         );
-        annotation.add(DirectivesAnnotationProperty.plain("name", "something"));
+        annotation.append(DirectivesAnnotationProperty.plain("name", "something"));
         MatcherAssert.assertThat(
             "Can't create an annotation with a property",
             new Xembler(annotation).xml(),

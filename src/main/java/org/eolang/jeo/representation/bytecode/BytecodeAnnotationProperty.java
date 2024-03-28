@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.List;
+import java.util.Optional;
 import org.objectweb.asm.AnnotationVisitor;
 
 /**
@@ -103,7 +104,7 @@ public final class BytecodeAnnotationProperty implements AnnotationValue {
                 break;
             case ARRAY:
                 final AnnotationVisitor array = avisitor.visitArray(
-                    (String) this.params.get(0)
+                    Optional.ofNullable(this.params.get(0)).map(String.class::cast).orElse(null)
                 );
                 for (final Object param : this.params.subList(1, this.params.size())) {
                     ((AnnotationValue) param).write(array);

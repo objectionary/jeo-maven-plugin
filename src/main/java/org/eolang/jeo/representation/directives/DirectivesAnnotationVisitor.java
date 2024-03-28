@@ -23,8 +23,8 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.util.UUID;
 import org.objectweb.asm.AnnotationVisitor;
+import org.xembly.Directives;
 
 /**
  * Directives Annotation Visitor.
@@ -38,7 +38,7 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
     /**
      * Annotation directives which later can be used to build an XML document.
      */
-    private final DirectivesAnnotation annotation;
+    private final Appendable annotation;
 
     /**
      * Constructor.
@@ -49,7 +49,7 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
     public DirectivesAnnotationVisitor(
         final int api,
         final AnnotationVisitor visitor,
-        final DirectivesAnnotation annotation
+        final Appendable annotation
     ) {
         super(api, visitor);
         this.annotation = annotation;
@@ -57,27 +57,31 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
 
     @Override
     public void visit(final String name, final Object value) {
-        this.annotation.add(DirectivesAnnotationProperty.plain(name, value));
+        this.annotation.append(DirectivesAnnotationProperty.plain(name, value));
         super.visit(name, value);
     }
 
     @Override
     public void visitEnum(final String name, final String descriptor, final String value) {
-        this.annotation.add(DirectivesAnnotationProperty.enump(name, descriptor, value));
+        this.annotation.append(DirectivesAnnotationProperty.enump(name, descriptor, value));
         super.visitEnum(name, descriptor, value);
     }
 
     @Override
     public AnnotationVisitor visitArray(final String name) {
-        final DirectivesAnnotation deep = new DirectivesAnnotation("", true);
-        this.annotation.add(DirectivesAnnotationProperty.array(name, deep));
-        return new DirectivesAnnotationVisitor(this.api, super.visitArray(name), deep);
+        final DirectivesAnnotationProperty prop = new DirectivesAnnotationProperty(
+            DirectivesAnnotationProperty.Type.ARRAY);
+        prop.append(new DirectivesData("name", name));
+        this.annotation.append(prop);
+        return new DirectivesAnnotationVisitor(this.api, super.visitArray(name), prop);
     }
 
     @Override
     public AnnotationVisitor visitAnnotation(final String name, final String descriptor) {
-        final DirectivesAnnotation deep = new DirectivesAnnotation("", true);
-        this.annotation.add(DirectivesAnnotationProperty.annotation(name, descriptor, deep));
+        final DirectivesAnnotation deep = new DirectivesAnnotation(descriptor, true);
+        this.annotation.append(
+            DirectivesAnnotationProperty.annotation(name, descriptor, deep)
+        );
         return new DirectivesAnnotationVisitor(
             this.api,
             super.visitAnnotation(name, descriptor),

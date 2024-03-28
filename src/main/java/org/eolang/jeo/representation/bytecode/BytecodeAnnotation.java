@@ -33,7 +33,7 @@ import org.objectweb.asm.FieldVisitor;
  * Bytecode annotation.
  * @since 0.2
  */
-public final class BytecodeAnnotation {
+public final class BytecodeAnnotation implements AnnotationValue {
 
     /**
      * Descriptor.
@@ -99,13 +99,12 @@ public final class BytecodeAnnotation {
     /**
      * Write annotation annotation.
      * @param visitor Visitor.
-     * @return This.
      */
-    public BytecodeAnnotation write(final AnnotationVisitor visitor) {
+    @Override
+    public void write(final AnnotationVisitor visitor) {
         final AnnotationVisitor inner = visitor.visitAnnotation(
             this.descriptor, this.descriptor);
         this.properties.forEach(property -> property.write(inner));
-        return this;
     }
 
 }

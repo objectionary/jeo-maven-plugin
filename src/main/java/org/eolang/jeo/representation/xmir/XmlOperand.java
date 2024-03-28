@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import lombok.ToString;
 import org.eolang.jeo.representation.DataType;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
 
 /**
  * XML operand.
@@ -67,6 +68,9 @@ public final class XmlOperand {
         } else if ("annotation".equals(base)) {
             final XmlAnnotation xml = new XmlAnnotation(this.raw);
             result = new BytecodeAnnotation(xml.descriptor(), xml.visible(), xml.props());
+        } else if ("annotation-property".equals(base)) {
+            final XmlAnnotationProperty xml = new XmlAnnotationProperty(this.raw);
+            result = xml.toBytecode();
         } else {
             final boolean nullable = this.raw.attribute("scope").map("nullable"::equals)
                 .orElse(false);
