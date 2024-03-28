@@ -344,7 +344,7 @@ public final class BytecodeClass implements Testable {
     public BytecodeClass withAnnotations(final XmlAnnotations all) {
         all.all()
             .stream()
-            .map(ann -> new BytecodeAnnotation(ann.descriptor(), ann.visible()))
+            .map(ann -> new BytecodeAnnotation(ann.descriptor(), ann.visible(), ann.props()))
             .forEach(this.annotations::add);
         return this;
     }

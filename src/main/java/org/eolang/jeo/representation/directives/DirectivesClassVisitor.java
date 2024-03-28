@@ -173,8 +173,13 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
 
     @Override
     public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
-        this.program.top().annotation(new DirectivesAnnotation(descriptor, visible));
-        return super.visitAnnotation(descriptor, visible);
+        final DirectivesAnnotation annotation = new DirectivesAnnotation(descriptor, visible);
+        this.program.top().annotation(annotation);
+        return new DirectivesAnnotationVisitor(
+            this.api,
+            super.visitAnnotation(descriptor, visible),
+            annotation
+        );
     }
 
     @Override

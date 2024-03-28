@@ -28,50 +28,37 @@ import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
 
 /**
- * Xmir representation of an annotation.
- * @since 0.1
+ * Xmir annotation property.
+ * @since 0.3
  */
-public class XmlAnnotation {
+public final class XmlAnnotationProperty {
 
     /**
-     * Xmir node.
+     * Annotation property XML node.
      */
     private final XmlNode node;
 
     /**
      * Constructor.
-     * @param xmlnode XML node.
+     * @param node XML node.
      */
-    public XmlAnnotation(final XmlNode xmlnode) {
-        this.node = xmlnode;
+    public XmlAnnotationProperty(final XmlNode node) {
+        this.node = node;
     }
 
     /**
-     * Annotation descriptor.
-     * @return Descriptor.
+     * Transform to bytecode.
+     * @return Bytecode annotation property.
      */
-    public String descriptor() {
-        return new HexString(this.node.child("name", "descriptor").text()).decode();
-    }
-
-    /**
-     * Annotation visible.
-     * Is it runtime-visible?
-     * @return True if visible at runtime, false otherwise.
-     */
-    public boolean visible() {
-        return new HexString(this.node.child("name", "visible").text()).decodeAsBoolean();
-    }
-
-    /**
-     * Annotation properties.
-     * @return Properties.
-     */
-    public List<BytecodeAnnotationProperty> props() {
-        return this.node.children()
-            .filter(xmlnode -> xmlnode.hasAttribute("base", "annotation-property"))
-            .map(XmlAnnotationProperty::new)
-            .map(XmlAnnotationProperty::toBytecode)
-            .collect(Collectors.toList());
+    public BytecodeAnnotationProperty toBytecode() {
+        final List<XmlNode> all = this.node.children().collect(Collectors.toList());
+        return BytecodeAnnotationProperty.byType(
+            (String) new XmlOperand(all.get(0)).asObject(),
+            all.subList(1, all.size())
+                .stream()
+                .map(XmlOperand::new)
+                .map(XmlOperand::asObject)
+                .collect(Collectors.toList())
+        );
     }
 }

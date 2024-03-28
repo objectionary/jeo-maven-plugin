@@ -23,14 +23,22 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 
 /**
  * Bytecode annotation.
  * @since 0.2
+ * @todo #488:90min Refactor Annotations Implementation.
+ *  Current implementation of annotations mapping is rather complicated.
+ *  I would say it's over-engineered. We have a lot of classes and interfaces
+ *  that are used to represent annotations in different formats. We should
+ *  refactor this implementation to make it simpler and more readable.
  */
-public final class BytecodeAnnotation {
+public final class BytecodeAnnotation implements BytecodeAnnotationValue {
 
     /**
      * Descriptor.
@@ -43,13 +51,33 @@ public final class BytecodeAnnotation {
     private final boolean visible;
 
     /**
+     * Properties.
+     */
+    private final List<BytecodeAnnotationProperty> properties;
+
+    /**
      * Constructor.
      * @param descriptor Descriptor.
      * @param visible Visible.
      */
     public BytecodeAnnotation(final String descriptor, final boolean visible) {
+        this(descriptor, visible, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param descriptor Descriptor.
+     * @param visible Visible.
+     * @param properties Properties.
+     */
+    public BytecodeAnnotation(
+        final String descriptor,
+        final boolean visible,
+        final List<BytecodeAnnotationProperty> properties
+    ) {
         this.descriptor = descriptor;
         this.visible = visible;
+        this.properties = properties;
     }
 
     /**
@@ -58,7 +86,8 @@ public final class BytecodeAnnotation {
      * @return This.
      */
     public BytecodeAnnotation write(final ClassVisitor visitor) {
-        visitor.visitAnnotation(this.descriptor, this.visible);
+        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descriptor, this.visible);
+        this.properties.forEach(property -> property.write(avisitor));
         return this;
     }
 
@@ -70,5 +99,11 @@ public final class BytecodeAnnotation {
     public BytecodeAnnotation write(final FieldVisitor visitor) {
         visitor.visitAnnotation(this.descriptor, this.visible);
         return this;
+    }
+
+    @Override
+    public void write(final AnnotationVisitor visitor) {
+        final AnnotationVisitor inner = visitor.visitAnnotation(this.descriptor, this.descriptor);
+        this.properties.forEach(property -> property.write(inner));
     }
 }

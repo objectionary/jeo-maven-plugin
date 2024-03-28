@@ -23,7 +23,9 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.xembly.Directive;
@@ -35,7 +37,7 @@ import org.xembly.Directives;
  */
 @ToString
 @EqualsAndHashCode
-public final class DirectivesAnnotation implements Iterable<Directive> {
+public final class DirectivesAnnotation implements Iterable<Directive>, Composite {
 
     /**
      * Annotation descriptor.
@@ -48,6 +50,11 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
     private final boolean visible;
 
     /**
+     * Annotation properties.
+     */
+    private final List<Iterable<Directive>> properties;
+
+    /**
      * Constructor.
      * @param descriptor Descriptor.
      * @param visible Visible.
@@ -58,14 +65,26 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
     ) {
         this.descriptor = descriptor;
         this.visible = visible;
+        this.properties = new ArrayList<>(0);
+    }
+
+    @Override
+    public void append(final Iterable<Directive> directives) {
+        this.properties.add(directives);
+    }
+
+    @Override
+    public Iterable<Directive> build() {
+        return this;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives().add("o")
+        final Directives directives = new Directives().add("o")
+            .attr("base", "annotation")
             .append(new DirectivesData("descriptor", this.descriptor))
-            .append(new DirectivesData("visible", this.visible))
-            .up()
-            .iterator();
+            .append(new DirectivesData("visible", this.visible));
+        this.properties.forEach(directives::append);
+        return directives.up().iterator();
     }
 }
