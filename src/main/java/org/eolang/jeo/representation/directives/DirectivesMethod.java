@@ -56,6 +56,11 @@ public final class DirectivesMethod implements Iterable<Directive> {
     private final List<Iterable<Directive>> exceptions;
 
     /**
+     * Method annotations.
+     */
+    private final List<DirectivesAnnotation> annotations;
+
+    /**
      * Opcodes counting.
      */
     private final boolean counting;
@@ -100,6 +105,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         this.counting = counting;
         this.instructions = new ArrayList<>(0);
         this.exceptions = new ArrayList<>(0);
+        this.annotations = new ArrayList<>(0);
     }
 
     /**
@@ -128,6 +134,14 @@ public final class DirectivesMethod implements Iterable<Directive> {
      */
     public void maxs(final int stack, final int locals) {
         this.properties.maxs(stack, locals);
+    }
+
+    /**
+     * Add annotation to the directives.
+     * @param annotation Annotation directives.
+     */
+    public void annotation(final DirectivesAnnotation annotation) {
+        this.annotations.add(annotation);
     }
 
     @Override

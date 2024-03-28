@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.DefaultVersion;
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -203,6 +204,15 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
             ).toArray(Object[]::new)
         );
         super.visitTableSwitchInsn(min, max, dflt, labels);
+    }
+
+    @Override
+    public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
+        final DirectivesAnnotation annotation = new DirectivesAnnotation(descriptor, visible);
+        this.method.annotation(annotation);
+        return new DirectivesAnnotationVisitor(
+            this.api, super.visitAnnotation(descriptor, visible), annotation
+        );
     }
 
     @Override
