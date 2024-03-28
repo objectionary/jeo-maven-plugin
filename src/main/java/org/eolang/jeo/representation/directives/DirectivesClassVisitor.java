@@ -32,7 +32,6 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Class printer.

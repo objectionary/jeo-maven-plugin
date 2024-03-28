@@ -31,7 +31,7 @@ import org.objectweb.asm.AnnotationVisitor;
  * Bytecode annotation property.
  * @since 0.3
  */
-public final class BytecodeAnnotationProperty implements AnnotationValue {
+public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue {
 
     /**
      * Type of the property.
@@ -59,8 +59,9 @@ public final class BytecodeAnnotationProperty implements AnnotationValue {
      * @param params Parameters.
      * @return Property.
      */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static BytecodeAnnotationProperty byType(final String type, final List<Object> params) {
-        BytecodeAnnotationProperty result;
+        final BytecodeAnnotationProperty result;
         switch (Type.valueOf(type)) {
             case PLAIN:
                 result = new BytecodeAnnotationProperty(Type.PLAIN, params);
@@ -85,10 +86,6 @@ public final class BytecodeAnnotationProperty implements AnnotationValue {
         return result;
     }
 
-    /**
-     * Write property to annotation visitor.
-     * @param avisitor Annotation visitor.
-     */
     @Override
     public void write(final AnnotationVisitor avisitor) {
         switch (this.type) {
@@ -107,7 +104,7 @@ public final class BytecodeAnnotationProperty implements AnnotationValue {
                     Optional.ofNullable(this.params.get(0)).map(String.class::cast).orElse(null)
                 );
                 for (final Object param : this.params.subList(1, this.params.size())) {
-                    ((AnnotationValue) param).write(array);
+                    ((BytecodeAnnotationValue) param).write(array);
                 }
                 array.visitEnd();
                 break;
@@ -117,10 +114,12 @@ public final class BytecodeAnnotationProperty implements AnnotationValue {
                     (String) this.params.get(1)
                 );
                 for (final Object param : this.params.subList(2, this.params.size())) {
-                    ((AnnotationValue) param).write(annotation);
+                    ((BytecodeAnnotationValue) param).write(annotation);
                 }
                 annotation.visitEnd();
                 break;
+            default:
+                throw new IllegalStateException(String.format("Unexpected value: %s", this.type));
         }
     }
 

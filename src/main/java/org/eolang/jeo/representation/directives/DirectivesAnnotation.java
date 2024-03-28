@@ -37,7 +37,7 @@ import org.xembly.Directives;
  */
 @ToString
 @EqualsAndHashCode
-public final class DirectivesAnnotation implements Iterable<Directive>, Appendable {
+public final class DirectivesAnnotation implements Iterable<Directive>, Composite {
 
     /**
      * Annotation descriptor.
@@ -74,7 +74,7 @@ public final class DirectivesAnnotation implements Iterable<Directive>, Appendab
     }
 
     @Override
-    public Iterable<Directive> sum() {
+    public Iterable<Directive> build() {
         return this;
     }
 

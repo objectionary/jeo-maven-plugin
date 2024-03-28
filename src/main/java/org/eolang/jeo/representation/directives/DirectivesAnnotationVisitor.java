@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.directives;
 
 import org.objectweb.asm.AnnotationVisitor;
-import org.xembly.Directives;
 
 /**
  * Directives Annotation Visitor.
@@ -38,7 +37,7 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
     /**
      * Annotation directives which later can be used to build an XML document.
      */
-    private final Appendable annotation;
+    private final Composite annotation;
 
     /**
      * Constructor.
@@ -49,7 +48,7 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
     public DirectivesAnnotationVisitor(
         final int api,
         final AnnotationVisitor visitor,
-        final Appendable annotation
+        final Composite annotation
     ) {
         super(api, visitor);
         this.annotation = annotation;
@@ -70,7 +69,8 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
     @Override
     public AnnotationVisitor visitArray(final String name) {
         final DirectivesAnnotationProperty prop = new DirectivesAnnotationProperty(
-            DirectivesAnnotationProperty.Type.ARRAY);
+            DirectivesAnnotationProperty.Type.ARRAY
+        );
         prop.append(new DirectivesData("name", name));
         this.annotation.append(prop);
         return new DirectivesAnnotationVisitor(this.api, super.visitArray(name), prop);

@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.xmir;
 import lombok.ToString;
 import org.eolang.jeo.representation.DataType;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
 
 /**
  * XML operand.

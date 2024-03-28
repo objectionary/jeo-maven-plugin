@@ -28,7 +28,6 @@ import org.eolang.jeo.representation.DataType;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Type;
-import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -37,7 +36,7 @@ import org.xembly.Xembler;
  *
  * @since 0.3
  */
-class DirectivesAnnotationPropertyTest {
+final class DirectivesAnnotationPropertyTest {
 
     @Test
     void createsPlainProperty() throws ImpossibleModificationException {
@@ -74,7 +73,10 @@ class DirectivesAnnotationPropertyTest {
         MatcherAssert.assertThat(
             "Can't create an array property with a name",
             new Xembler(
-                DirectivesAnnotationProperty.array("name", new AnnotationArray())
+                DirectivesAnnotationProperty.array(
+                    "name",
+                    new DirectivesAnnotationProperty(DirectivesAnnotationProperty.Type.PLAIN)
+                )
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[@base='annotation-property']",
@@ -91,7 +93,7 @@ class DirectivesAnnotationPropertyTest {
                 DirectivesAnnotationProperty.annotation(
                     "name",
                     Type.getDescriptor(DataType.class),
-                    new AnnotationArray()
+                    new DirectivesAnnotationProperty(DirectivesAnnotationProperty.Type.PLAIN)
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(

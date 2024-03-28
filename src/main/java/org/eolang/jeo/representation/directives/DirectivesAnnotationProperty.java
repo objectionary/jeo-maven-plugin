@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -34,7 +35,7 @@ import org.xembly.Directives;
  * Annotation property as Xembly directives.
  * @since 0.3
  */
-public final class DirectivesAnnotationProperty implements Iterable<Directive>, Appendable {
+public final class DirectivesAnnotationProperty implements Iterable<Directive>, Composite {
 
     /**
      * Type of the property.
@@ -52,7 +53,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
      * @param params Property parameters.
      */
     @SafeVarargs
-    public DirectivesAnnotationProperty(final Type type, Iterable<Directive>... params) {
+    public DirectivesAnnotationProperty(final Type type, final Iterable<Directive>... params) {
         this(type, Arrays.asList(params));
     }
 
@@ -68,13 +69,15 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
 
     /**
      * Factory method for plain property.
+     * @param name Name.
      * @param value Parameter.
      * @return Property directives.
      */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DirectivesAnnotationProperty plain(final String name, final Object value) {
         return new DirectivesAnnotationProperty(
             Type.PLAIN,
-            new DirectivesData("name", name == null ? "" : name),
+            new DirectivesData("name", Optional.ofNullable(name).orElse("")),
             new DirectivesData("value", value)
         );
     }
@@ -86,12 +89,13 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
      * @param value Value.
      * @return Property directives.
      */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DirectivesAnnotationProperty enump(
         final String name, final String descriptor, final String value
     ) {
         return new DirectivesAnnotationProperty(
             Type.ENUM,
-            new DirectivesData("name", name == null ? "" : name),
+            new DirectivesData("name", Optional.ofNullable(name).orElse("")),
             new DirectivesData("descriptor", descriptor),
             new DirectivesData("value", value)
         );
@@ -100,15 +104,17 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
     /**
      * Factory method for array property.
      * @param name Name.
+     * @param child Child directives.
      * @return Property directives.
      */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DirectivesAnnotationProperty array(
-        final String name, final Appendable deep
+        final String name, final Composite child
     ) {
         return new DirectivesAnnotationProperty(
             Type.ARRAY,
-            new DirectivesData("name", name == null ? "" : name),
-            deep.sum()
+            new DirectivesData("name", Optional.ofNullable(name).orElse("")),
+            child.build()
         );
     }
 
@@ -116,16 +122,18 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
      * Factory method for annotation property.
      * @param name Name.
      * @param descriptor Descriptor.
+     * @param child Child directives.
      * @return Property directives.
      */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DirectivesAnnotationProperty annotation(
-        final String name, final String descriptor, final Appendable deep
+        final String name, final String descriptor, final Composite child
     ) {
         return new DirectivesAnnotationProperty(
             Type.ANNOTATION,
-            new DirectivesData("name", name == null ? "" : name),
+            new DirectivesData("name", Optional.ofNullable(name).orElse("")),
             new DirectivesData("descriptor", descriptor),
-            deep.sum()
+            child.build()
         );
     }
 
@@ -144,10 +152,9 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
     }
 
     @Override
-    public Iterable<Directive> sum() {
+    public Iterable<Directive> build() {
         return this;
     }
-
 
     /**
      * Property types.
