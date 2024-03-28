@@ -23,6 +23,10 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
+
 /**
  * Xmir annotation property.
  * @since 0.3
@@ -42,8 +46,20 @@ public final class XmlAnnotationProperty {
         this.node = node;
     }
 
-
-
-
+    /**
+     * Transform to bytecode.
+     * @return Bytecode annotation property.
+     */
+    public BytecodeAnnotationProperty toBytecode() {
+        final List<XmlNode> all = this.node.children().collect(Collectors.toList());
+        return BytecodeAnnotationProperty.byType(
+            (String) new XmlOperand(all.get(0)).asObject(),
+            all.subList(1, all.size())
+                .stream()
+                .map(XmlOperand::new)
+                .map(XmlOperand::asObject)
+                .collect(Collectors.toList())
+        );
+    }
 
 }

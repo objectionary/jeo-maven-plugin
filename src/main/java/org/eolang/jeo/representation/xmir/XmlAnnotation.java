@@ -23,6 +23,10 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
+
 /**
  * Xmir representation of an annotation.
  * @since 0.1
@@ -57,5 +61,17 @@ public class XmlAnnotation {
      */
     public boolean visible() {
         return new HexString(this.node.child("name", "visible").text()).decodeAsBoolean();
+    }
+
+    /**
+     * Annotation properties.
+     * @return Properties.
+     */
+    public List<BytecodeAnnotationProperty> props() {
+        return this.node.children()
+            .filter(xmlnode -> xmlnode.hasAttribute("base", "annotation-property"))
+            .map(XmlAnnotationProperty::new)
+            .map(XmlAnnotationProperty::toBytecode)
+            .collect(Collectors.toList());
     }
 }

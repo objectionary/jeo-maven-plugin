@@ -56,9 +56,23 @@ public final class BytecodeAnnotation {
      * @param visible Visible.
      */
     public BytecodeAnnotation(final String descriptor, final boolean visible) {
+        this(descriptor, visible, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param descriptor Descriptor.
+     * @param visible Visible.
+     * @param properties Properties.
+     */
+    public BytecodeAnnotation(
+        final String descriptor,
+        final boolean visible,
+        final List<BytecodeAnnotationProperty> properties
+    ) {
         this.descriptor = descriptor;
         this.visible = visible;
-        this.properties = new ArrayList<>(0);
+        this.properties = properties;
     }
 
     /**

@@ -71,6 +71,7 @@ public final class BytecodeAnnotationProperty {
         return new BytecodeAnnotationProperty(Type.PLAIN, List.of(name, value));
     }
 
+
     /**
      * Factory method for enum property.
      * @param name Name.
@@ -101,16 +102,45 @@ public final class BytecodeAnnotationProperty {
     }
 
     /**
+     * Factory method for property by type.
+     * @param type Type.
+     * @param params Parameters.
+     * @return Property.
+     */
+    public static BytecodeAnnotationProperty byType(final String type, final List<Object> params) {
+        BytecodeAnnotationProperty result;
+        switch (Type.valueOf(type)) {
+            case PLAIN:
+                result = new BytecodeAnnotationProperty(Type.PLAIN, params);
+                break;
+            case ENUM:
+                result = new BytecodeAnnotationProperty(Type.ENUM, params);
+                break;
+            case ARRAY:
+                result = new BytecodeAnnotationProperty(Type.ARRAY, params);
+                break;
+            case ANNOTATION:
+                result = new BytecodeAnnotationProperty(Type.ANNOTATION, params);
+                break;
+            default:
+                throw new IllegalArgumentException(
+                    String.format(
+                        "Unknown annotation property type %s",
+                        type
+                    )
+                );
+        }
+        return result;
+    }
+
+    /**
      * Write property to annotation visitor.
      * @param avisitor Annotation visitor.
      */
     public void write(final AnnotationVisitor avisitor) {
         switch (this.type) {
             case PLAIN:
-                avisitor.visit(
-                    (String) this.params.get(0),
-                    this.params.get(1)
-                );
+                avisitor.visit((String) this.params.get(0), this.params.get(1));
                 break;
             case ENUM:
                 avisitor.visitEnum(
@@ -123,9 +153,10 @@ public final class BytecodeAnnotationProperty {
                 final AnnotationVisitor array = avisitor.visitArray(
                     (String) this.params.get(0)
                 );
-                for (final Object param : this.params.subList(1, this.params.size())) {
-                    ((BytecodeAnnotationProperty) param).write(array);
-                }
+//                !todo! fix this
+//                for (final Object param : this.params.subList(1, this.params.size())) {
+//                    ((BytecodeAnnotationProperty) param).write(array);
+//                }
                 array.visitEnd();
                 break;
             case ANNOTATION:
@@ -133,9 +164,10 @@ public final class BytecodeAnnotationProperty {
                     (String) this.params.get(0),
                     (String) this.params.get(1)
                 );
-                for (final Object param : this.params.subList(2, this.params.size())) {
-                    ((BytecodeAnnotationProperty) param).write(annotation);
-                }
+//                !todo! fix this
+//                for (final Object param : this.params.subList(2, this.params.size())) {
+//                    ((BytecodeAnnotationProperty) param).write(annotation);
+//                }
                 annotation.visitEnd();
                 break;
         }
