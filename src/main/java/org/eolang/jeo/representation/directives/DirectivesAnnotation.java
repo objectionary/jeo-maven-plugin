@@ -52,7 +52,7 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
     /**
      * Annotation properties.
      */
-    private final List<DirectivesAnnotationProperty> properties;
+    private final List<Iterable<Directive>> properties;
 
     /**
      * Constructor.
@@ -72,7 +72,7 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
      * Add annotation property.
      * @param prop Annotation property.
      */
-    public void add(final DirectivesAnnotationProperty prop) {
+    public void add(final Iterable<Directive> prop) {
         this.properties.add(prop);
     }
 

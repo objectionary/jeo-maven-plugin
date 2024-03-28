@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.directives;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -43,14 +44,15 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
     /**
      * Property parameters.
      */
-    private final List<Object> params;
+    private final List<Iterable<Directive>> params;
 
     /**
      * Constructor.
      * @param type Type of the property.
      * @param params Property parameters.
      */
-    private DirectivesAnnotationProperty(final Type type, Object... params) {
+    @SafeVarargs
+    private DirectivesAnnotationProperty(final Type type, Iterable<Directive>... params) {
         this(type, Arrays.asList(params));
     }
 
@@ -59,18 +61,22 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
      * @param type Type of the property.
      * @param params Property parameters.
      */
-    private DirectivesAnnotationProperty(final Type type, final List<Object> params) {
+    private DirectivesAnnotationProperty(final Type type, final List<Iterable<Directive>> params) {
         this.type = type;
         this.params = params;
     }
 
     /**
      * Factory method for plain property.
-     * @param params Parameters.
+     * @param value Parameter.
      * @return Property directives.
      */
-    public static DirectivesAnnotationProperty plain(Object... params) {
-        return new DirectivesAnnotationProperty(Type.PLAIN, params);
+    public static DirectivesAnnotationProperty plain(final String name, final Object value) {
+        return new DirectivesAnnotationProperty(
+            Type.PLAIN,
+            new DirectivesData("name", name == null ? "" : name),
+            new DirectivesData("value", value)
+        );
     }
 
     /**
@@ -83,7 +89,12 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
     public static DirectivesAnnotationProperty enump(
         final String name, final String descriptor, final String value
     ) {
-        return new DirectivesAnnotationProperty(Type.ENUM, name, descriptor, value);
+        return new DirectivesAnnotationProperty(
+            Type.ENUM,
+            new DirectivesData("name", name == null ? "" : name),
+            new DirectivesData("descriptor", descriptor),
+            new DirectivesData("value", value)
+        );
     }
 
     /**
@@ -91,8 +102,14 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
      * @param name Name.
      * @return Property directives.
      */
-    public static DirectivesAnnotationProperty array(final String name) {
-        return new DirectivesAnnotationProperty(Type.ARRAY, name);
+    public static DirectivesAnnotationProperty array(
+        final String name, final DirectivesAnnotation annotation
+    ) {
+        return new DirectivesAnnotationProperty(
+            Type.ARRAY,
+            new DirectivesData("name", name == null ? "" : name),
+            annotation
+        );
     }
 
     /**
@@ -102,9 +119,14 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
      * @return Property directives.
      */
     public static DirectivesAnnotationProperty annotation(
-        final String name, final String descriptor
+        final String name, final String descriptor, final DirectivesAnnotation annotation
     ) {
-        return new DirectivesAnnotationProperty(Type.ANNOTATION, name, descriptor);
+        return new DirectivesAnnotationProperty(
+            Type.ANNOTATION,
+            new DirectivesData("name", name == null ? "" : name),
+            new DirectivesData("descriptor", descriptor),
+            annotation
+        );
     }
 
     @Override
@@ -112,7 +134,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
         final Directives directives = new Directives()
             .add("o").attr("base", "annotation-property")
             .append(new DirectivesData("type", this.type.toString()));
-        this.params.stream().map(DirectivesData::new).forEach(directives::append);
+        this.params.forEach(directives::append);
         return directives.up().iterator();
     }
 

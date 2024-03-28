@@ -73,10 +73,10 @@ class DirectivesAnnotationPropertyTest {
         MatcherAssert.assertThat(
             "Can't create an array property with a name",
             new Xembler(
-                DirectivesAnnotationProperty.array("name")
+                DirectivesAnnotationProperty.array("name", new DirectivesAnnotation("", true))
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "./o[@base='annotation-property' and count(o) = 2]",
+                "./o[@base='annotation-property']",
                 "./o[@base='annotation-property']/o[@name='type' and text()='41 52 52 41 59']"
             )
         );
@@ -87,10 +87,14 @@ class DirectivesAnnotationPropertyTest {
         MatcherAssert.assertThat(
             "Can't create an annotation property with a name and a descriptor",
             new Xembler(
-                DirectivesAnnotationProperty.annotation("name", Type.getDescriptor(DataType.class))
+                DirectivesAnnotationProperty.annotation(
+                    "name",
+                    Type.getDescriptor(DataType.class),
+                    new DirectivesAnnotation("", true)
+                )
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "./o[@base='annotation-property' and count(o) = 3]",
+                "./o[@base='annotation-property']",
                 "./o[@base='annotation-property']/o[@name='type' and text()='41 4E 4E 4F 54 41 54 49 4F 4E']"
             )
         );

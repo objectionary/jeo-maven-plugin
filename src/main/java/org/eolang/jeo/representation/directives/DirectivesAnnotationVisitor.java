@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.UUID;
 import org.objectweb.asm.AnnotationVisitor;
 
 /**
@@ -42,15 +43,15 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
     /**
      * Constructor.
      * @param api Java ASM library API version.
-     * @param annotationVisitor Annotation visitor.
+     * @param visitor Annotation visitor.
      * @param annotation Directives.
      */
     public DirectivesAnnotationVisitor(
         final int api,
-        final AnnotationVisitor annotationVisitor,
+        final AnnotationVisitor visitor,
         final DirectivesAnnotation annotation
     ) {
-        super(api, annotationVisitor);
+        super(api, visitor);
         this.annotation = annotation;
     }
 
@@ -68,13 +69,19 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
 
     @Override
     public AnnotationVisitor visitArray(final String name) {
-        this.annotation.add(DirectivesAnnotationProperty.array(name));
-        return super.visitArray(name);
+        final DirectivesAnnotation deep = new DirectivesAnnotation("", true);
+        this.annotation.add(DirectivesAnnotationProperty.array(name, deep));
+        return new DirectivesAnnotationVisitor(this.api, super.visitArray(name), deep);
     }
 
     @Override
     public AnnotationVisitor visitAnnotation(final String name, final String descriptor) {
-        this.annotation.add(DirectivesAnnotationProperty.annotation(name, descriptor));
-        return super.visitAnnotation(name, descriptor);
+        final DirectivesAnnotation deep = new DirectivesAnnotation("", true);
+        this.annotation.add(DirectivesAnnotationProperty.annotation(name, descriptor, deep));
+        return new DirectivesAnnotationVisitor(
+            this.api,
+            super.visitAnnotation(name, descriptor),
+            deep
+        );
     }
 }
