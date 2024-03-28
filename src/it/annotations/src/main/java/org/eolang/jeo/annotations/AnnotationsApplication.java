@@ -2,6 +2,13 @@ package org.eolang.jeo.annotations;
 
 import java.util.Arrays;
 
+/**
+ * Annotations application.
+ * @since 0.3
+ * @todo #488:90min Add more examples of annotations usage.
+ *  Currenlty we support only some annotations usage. Add more examples, especially
+ *  when we use another annotations inside, or when we have more complex annotations.
+ */
 @JeoAnnotation(name = "example", value = 496, color = MyEnum.GREEN, tags = {"tag1", "tag2"})
 public class AnnotationsApplication {
 
