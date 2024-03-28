@@ -30,7 +30,7 @@ import org.objectweb.asm.AnnotationVisitor;
  * Bytecode annotation property.
  * @since 0.3
  */
-public final class BytecodeAnnotationProperty {
+public final class BytecodeAnnotationProperty implements AnnotationValue {
 
     /**
      * Type of the property.
@@ -88,6 +88,7 @@ public final class BytecodeAnnotationProperty {
      * Write property to annotation visitor.
      * @param avisitor Annotation visitor.
      */
+    @Override
     public void write(final AnnotationVisitor avisitor) {
         switch (this.type) {
             case PLAIN:
@@ -105,7 +106,7 @@ public final class BytecodeAnnotationProperty {
                     (String) this.params.get(0)
                 );
                 for (final Object param : this.params.subList(1, this.params.size())) {
-                    ((BytecodeAnnotation) param).write(array);
+                    ((AnnotationValue) param).write(array);
                 }
                 array.visitEnd();
                 break;
@@ -115,7 +116,7 @@ public final class BytecodeAnnotationProperty {
                     (String) this.params.get(1)
                 );
                 for (final Object param : this.params.subList(2, this.params.size())) {
-                    ((BytecodeAnnotation) param).write(annotation);
+                    ((AnnotationValue) param).write(annotation);
                 }
                 annotation.visitEnd();
                 break;
