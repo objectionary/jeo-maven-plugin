@@ -79,6 +79,7 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives().add("o")
+            .attr("base", "annotation")
             .append(new DirectivesData("descriptor", this.descriptor))
             .append(new DirectivesData("visible", this.visible));
         this.properties.forEach(directives::append);
