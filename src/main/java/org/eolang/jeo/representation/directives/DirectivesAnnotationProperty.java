@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.directives;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -109,7 +110,11 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives().iterator();
+        final Directives directives = new Directives()
+            .add("o").attr("base", "annotation-property")
+            .append(new DirectivesData("type", this.type.toString()));
+        this.params.stream().map(DirectivesData::new).forEach(directives::append);
+        return directives.up().iterator();
     }
 
     /**
