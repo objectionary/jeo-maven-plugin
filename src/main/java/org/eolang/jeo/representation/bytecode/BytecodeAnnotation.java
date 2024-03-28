@@ -95,4 +95,17 @@ public final class BytecodeAnnotation {
         visitor.visitAnnotation(this.descriptor, this.visible);
         return this;
     }
+
+    /**
+     * Write annotation annotation.
+     * @param visitor Visitor.
+     * @return This.
+     */
+    public BytecodeAnnotation write(final AnnotationVisitor visitor) {
+        final AnnotationVisitor inner = visitor.visitAnnotation(
+            this.descriptor, this.descriptor);
+        this.properties.forEach(property -> property.write(inner));
+        return this;
+    }
+
 }

@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.util.Arrays;
 import java.util.List;
 import org.objectweb.asm.AnnotationVisitor;
 
@@ -48,57 +47,9 @@ public final class BytecodeAnnotationProperty {
      * @param type Type of the property.
      * @param params Property parameters.
      */
-    private BytecodeAnnotationProperty(final Type type, final Object... params) {
-        this(type, Arrays.asList(params));
-    }
-
-    /**
-     * Constructor.
-     * @param type Type of the property.
-     * @param params Property parameters.
-     */
     private BytecodeAnnotationProperty(final Type type, final List<Object> params) {
         this.type = type;
         this.params = params;
-    }
-
-    /**
-     * Factory method for plain property.
-     * @param name Name.
-     * @param value Value.
-     */
-    public static BytecodeAnnotationProperty plain(final String name, final Object value) {
-        return new BytecodeAnnotationProperty(Type.PLAIN, List.of(name, value));
-    }
-
-
-    /**
-     * Factory method for enum property.
-     * @param name Name.
-     * @param desc Descriptor.
-     * @param value Value.
-     */
-    public static BytecodeAnnotationProperty enump(
-        final String name, final String desc, final String value
-    ) {
-        return new BytecodeAnnotationProperty(Type.ENUM, name, desc, value);
-    }
-
-    /**
-     * Factory method for array property.
-     * @param name Name.
-     */
-    public static BytecodeAnnotationProperty array(final String name) {
-        return new BytecodeAnnotationProperty(Type.ARRAY, name);
-    }
-
-    /**
-     * Factory method for annotation property.
-     * @param name Name.
-     * @param desc Descriptor.
-     */
-    public static BytecodeAnnotationProperty annotation(final String name, final String desc) {
-        return new BytecodeAnnotationProperty(Type.ANNOTATION, name, desc);
     }
 
     /**
@@ -153,10 +104,9 @@ public final class BytecodeAnnotationProperty {
                 final AnnotationVisitor array = avisitor.visitArray(
                     (String) this.params.get(0)
                 );
-//                !todo! fix this
-//                for (final Object param : this.params.subList(1, this.params.size())) {
-//                    ((BytecodeAnnotationProperty) param).write(array);
-//                }
+                for (final Object param : this.params.subList(1, this.params.size())) {
+                    ((BytecodeAnnotation) param).write(array);
+                }
                 array.visitEnd();
                 break;
             case ANNOTATION:
@@ -164,10 +114,9 @@ public final class BytecodeAnnotationProperty {
                     (String) this.params.get(0),
                     (String) this.params.get(1)
                 );
-//                !todo! fix this
-//                for (final Object param : this.params.subList(2, this.params.size())) {
-//                    ((BytecodeAnnotationProperty) param).write(annotation);
-//                }
+                for (final Object param : this.params.subList(2, this.params.size())) {
+                    ((BytecodeAnnotation) param).write(annotation);
+                }
                 annotation.visitEnd();
                 break;
         }
