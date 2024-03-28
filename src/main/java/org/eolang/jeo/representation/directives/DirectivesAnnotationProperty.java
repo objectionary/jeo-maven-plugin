@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.directives;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import org.xembly.Directive;
 import org.xembly.Directives;
 

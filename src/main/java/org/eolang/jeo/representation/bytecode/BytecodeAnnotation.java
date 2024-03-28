@@ -23,6 +23,9 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 
@@ -43,6 +46,11 @@ public final class BytecodeAnnotation {
     private final boolean visible;
 
     /**
+     * Properties.
+     */
+    private final List<BytecodeAnnotationProperty> properties;
+
+    /**
      * Constructor.
      * @param descriptor Descriptor.
      * @param visible Visible.
@@ -50,6 +58,7 @@ public final class BytecodeAnnotation {
     public BytecodeAnnotation(final String descriptor, final boolean visible) {
         this.descriptor = descriptor;
         this.visible = visible;
+        this.properties = new ArrayList<>(0);
     }
 
     /**
@@ -58,7 +67,8 @@ public final class BytecodeAnnotation {
      * @return This.
      */
     public BytecodeAnnotation write(final ClassVisitor visitor) {
-        visitor.visitAnnotation(this.descriptor, this.visible);
+        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descriptor, this.visible);
+        this.properties.forEach(property -> property.write(avisitor));
         return this;
     }
 

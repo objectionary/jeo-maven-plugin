@@ -1,0 +1,169 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2016-2023 Objectionary.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+package org.eolang.jeo.representation.bytecode;
+
+import java.util.Arrays;
+import java.util.List;
+import org.objectweb.asm.AnnotationVisitor;
+
+/**
+ * Bytecode annotation property.
+ * @since 0.3
+ */
+public final class BytecodeAnnotationProperty {
+
+    /**
+     * Type of the property.
+     */
+    private final Type type;
+
+    /**
+     * Property parameters.
+     */
+    private final List<Object> params;
+
+    /**
+     * Constructor.
+     * @param type Type of the property.
+     * @param params Property parameters.
+     */
+    private BytecodeAnnotationProperty(final Type type, final Object... params) {
+        this(type, Arrays.asList(params));
+    }
+
+    /**
+     * Constructor.
+     * @param type Type of the property.
+     * @param params Property parameters.
+     */
+    private BytecodeAnnotationProperty(final Type type, final List<Object> params) {
+        this.type = type;
+        this.params = params;
+    }
+
+    /**
+     * Factory method for plain property.
+     * @param name Name.
+     * @param value Value.
+     */
+    public static BytecodeAnnotationProperty plain(final String name, final Object value) {
+        return new BytecodeAnnotationProperty(Type.PLAIN, List.of(name, value));
+    }
+
+    /**
+     * Factory method for enum property.
+     * @param name Name.
+     * @param desc Descriptor.
+     * @param value Value.
+     */
+    public static BytecodeAnnotationProperty enump(
+        final String name, final String desc, final String value
+    ) {
+        return new BytecodeAnnotationProperty(Type.ENUM, name, desc, value);
+    }
+
+    /**
+     * Factory method for array property.
+     * @param name Name.
+     */
+    public static BytecodeAnnotationProperty array(final String name) {
+        return new BytecodeAnnotationProperty(Type.ARRAY, name);
+    }
+
+    /**
+     * Factory method for annotation property.
+     * @param name Name.
+     * @param desc Descriptor.
+     */
+    public static BytecodeAnnotationProperty annotation(final String name, final String desc) {
+        return new BytecodeAnnotationProperty(Type.ANNOTATION, name, desc);
+    }
+
+    /**
+     * Write property to annotation visitor.
+     * @param avisitor Annotation visitor.
+     */
+    public void write(final AnnotationVisitor avisitor) {
+        switch (this.type) {
+            case PLAIN:
+                avisitor.visit(
+                    (String) this.params.get(0),
+                    this.params.get(1)
+                );
+                break;
+            case ENUM:
+                avisitor.visitEnum(
+                    (String) this.params.get(0),
+                    (String) this.params.get(1),
+                    (String) this.params.get(2)
+                );
+                break;
+            case ARRAY:
+                final AnnotationVisitor array = avisitor.visitArray(
+                    (String) this.params.get(0)
+                );
+                for (final Object param : this.params.subList(1, this.params.size())) {
+                    ((BytecodeAnnotationProperty) param).write(array);
+                }
+                array.visitEnd();
+                break;
+            case ANNOTATION:
+                final AnnotationVisitor annotation = avisitor.visitAnnotation(
+                    (String) this.params.get(0),
+                    (String) this.params.get(1)
+                );
+                for (final Object param : this.params.subList(2, this.params.size())) {
+                    ((BytecodeAnnotationProperty) param).write(annotation);
+                }
+                annotation.visitEnd();
+                break;
+        }
+    }
+
+    /**
+     * Property types.
+     * !todo! duplicate
+     */
+    private enum Type {
+        /**
+         * Plain property.
+         */
+        PLAIN,
+
+        /**
+         * Enum property.
+         */
+        ENUM,
+
+        /**
+         * Array property.
+         */
+        ARRAY,
+
+        /**
+         * Annotation property.
+         */
+        ANNOTATION
+    }
+}
