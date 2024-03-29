@@ -75,6 +75,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
      */
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DirectivesAnnotationProperty plain(final String name, final Object value) {
+
         return new DirectivesAnnotationProperty(
             Type.PLAIN,
             new DirectivesData("name", Optional.ofNullable(name).orElse("")),

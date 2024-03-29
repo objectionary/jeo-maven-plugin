@@ -63,6 +63,15 @@ public class AnnotationsApplication {
             if (!Arrays.equals(floats, new float[]{1.0f, 2.0f, 3.0f})) {
                 throw new IllegalStateException("floats are not [1.0f, 2.0f, 3.0f]");
             }
+            if (!Arrays.equals(annotation.classes(), new Class<?>[]{AnnotationsApplication.class})) {
+                throw new IllegalStateException("classes are not [AnnotationsApplication.class]");
+            }
+            if (annotation.nested() == null) {
+                throw new IllegalStateException("nested is null");
+            }
+            if (annotation.nestedArray().length != 2) {
+                throw new IllegalStateException("nestedArray length is not 2");
+            }
             System.out.println("Annotations test passed successfully!");
         } else {
             throw new IllegalStateException(

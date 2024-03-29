@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import com.jcabi.log.Logger;
 import org.objectweb.asm.AnnotationVisitor;
 
 /**
@@ -56,18 +57,33 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
 
     @Override
     public void visit(final String name, final Object value) {
+        Logger.debug(
+            this,
+            "Visit annotation with name '%s', value '%s' and type '%s'",
+            name,
+            value,
+            value.getClass().getName()
+        );
         this.annotation.append(DirectivesAnnotationProperty.plain(name, value));
         super.visit(name, value);
     }
 
     @Override
     public void visitEnum(final String name, final String descriptor, final String value) {
+        Logger.debug(
+            this,
+            "Visit annotation with enum type with name '%s', descriptor '%s' and value '%s'",
+            name,
+            descriptor,
+            value
+        );
         this.annotation.append(DirectivesAnnotationProperty.enump(name, descriptor, value));
         super.visitEnum(name, descriptor, value);
     }
 
     @Override
     public AnnotationVisitor visitArray(final String name) {
+        Logger.debug(this, "Visit array annotation with name '%s'", name);
         final DirectivesAnnotationProperty prop = new DirectivesAnnotationProperty(
             DirectivesAnnotationProperty.Type.ARRAY
         );
@@ -78,6 +94,12 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
 
     @Override
     public AnnotationVisitor visitAnnotation(final String name, final String descriptor) {
+        Logger.debug(
+            this,
+            "Visit annotation with name '%s' and descriptor '%s'",
+            name,
+            descriptor
+        );
         final DirectivesAnnotation deep = new DirectivesAnnotation(descriptor, true);
         this.annotation.append(
             DirectivesAnnotationProperty.annotation(name, descriptor, deep)
