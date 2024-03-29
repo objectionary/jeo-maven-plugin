@@ -15,9 +15,15 @@ import java.util.Arrays;
     color = MyEnum.GREEN,
     tags = {"tag1", "tag2"},
     ints = {1, 2, 3},
-    longs= {10L, 20L, 30L},
-    doubles= {1.0, 2.0, 3.0},
-    floats= {1.0f, 2.0f, 3.0f}
+    longs = {10L, 20L, 30L},
+    doubles = {1.0, 2.0, 3.0},
+    floats = {1.0f, 2.0f, 3.0f},
+    classes = {AnnotationsApplication.class},
+    nested = @NestedAnnotation,
+    nestedArray = {
+        @NestedAnnotation(name = "nested1"),
+        @NestedAnnotation(name = "nested2")
+    }
 )
 public class AnnotationsApplication {
 

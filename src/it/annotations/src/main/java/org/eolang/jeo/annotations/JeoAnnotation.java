@@ -23,4 +23,10 @@ public @interface JeoAnnotation {
     double[] doubles();
 
     float[] floats();
+
+    Class<?>[] classes();
+
+    NestedAnnotation nested();
+
+    NestedAnnotation[] nestedArray();
 }
