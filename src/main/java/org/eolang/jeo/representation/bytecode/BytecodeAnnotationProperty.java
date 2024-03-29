@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import com.jcabi.log.Logger;
 import java.util.List;
 import java.util.Optional;
 import org.objectweb.asm.AnnotationVisitor;
@@ -73,6 +74,9 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
                 result = new BytecodeAnnotationProperty(Type.ARRAY, params);
                 break;
             case ANNOTATION:
+                Logger.debug(
+                    BytecodeAnnotationProperty.class, "Annotation property params: %s", params
+                );
                 result = new BytecodeAnnotationProperty(Type.ANNOTATION, params);
                 break;
             default:

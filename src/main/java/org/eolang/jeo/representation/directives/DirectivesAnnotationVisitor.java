@@ -101,13 +101,13 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
             descriptor
         );
         final DirectivesAnnotation deep = new DirectivesAnnotation(descriptor, true);
-        this.annotation.append(
-            DirectivesAnnotationProperty.annotation(name, descriptor, deep)
-        );
+        final DirectivesAnnotationProperty ann = DirectivesAnnotationProperty.annotation(
+            name, descriptor, deep);
+        this.annotation.append(ann);
         return new DirectivesAnnotationVisitor(
             this.api,
             super.visitAnnotation(name, descriptor),
-            deep
+            ann
         );
     }
 }

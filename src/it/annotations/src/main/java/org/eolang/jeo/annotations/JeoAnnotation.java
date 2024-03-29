@@ -28,5 +28,5 @@ public @interface JeoAnnotation {
 
     NestedAnnotation nested();
 
-//    NestedAnnotation[] nestedArray();
+    NestedAnnotation[] nestedArray();
 }

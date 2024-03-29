@@ -19,12 +19,11 @@ import java.util.Arrays;
     doubles = {1.0, 2.0, 3.0},
     floats = {1.0f, 2.0f, 3.0f},
     classes = {AnnotationsApplication.class},
-    nested = @NestedAnnotation
-//    ,
-//    nestedArray = {
-//        @NestedAnnotation(name = "nested1"),
-//        @NestedAnnotation(name = "nested2")
-//    }
+    nested = @NestedAnnotation,
+    nestedArray = {
+        @NestedAnnotation(name = "nested1"),
+        @NestedAnnotation(name = "nested2")
+    }
 )
 public class AnnotationsApplication {
 
@@ -64,15 +63,16 @@ public class AnnotationsApplication {
             if (!Arrays.equals(floats, new float[]{1.0f, 2.0f, 3.0f})) {
                 throw new IllegalStateException("floats are not [1.0f, 2.0f, 3.0f]");
             }
-            if (!Arrays.equals(annotation.classes(), new Class<?>[]{AnnotationsApplication.class})) {
+            if (!Arrays.equals(
+                annotation.classes(), new Class<?>[]{AnnotationsApplication.class})) {
                 throw new IllegalStateException("classes are not [AnnotationsApplication.class]");
             }
             if (annotation.nested() == null) {
                 throw new IllegalStateException("nested is null");
             }
-//            if (annotation.nestedArray().length != 2) {
-//                throw new IllegalStateException("nestedArray length is not 2");
-//            }
+            if (annotation.nestedArray().length != 2) {
+                throw new IllegalStateException("nestedArray length is not 2");
+            }
             System.out.println("Annotations test passed successfully!");
         } else {
             throw new IllegalStateException(
