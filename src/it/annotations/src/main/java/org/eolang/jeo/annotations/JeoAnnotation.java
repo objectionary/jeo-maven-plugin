@@ -12,6 +12,8 @@ public @interface JeoAnnotation {
 
     int value();
 
+    boolean required() default false;
+
     MyEnum color();
 
     String[] tags();

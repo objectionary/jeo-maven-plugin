@@ -52,7 +52,7 @@ public class CustomClassWriter extends ClassWriter {
      *  We need to investigate why this happens and fix it.
      */
     CustomClassWriter() {
-        super(ClassWriter.COMPUTE_FRAMES);
+        super(0);
     }
 
     @Override

@@ -12,6 +12,7 @@ import java.util.Arrays;
 @JeoAnnotation(
     name = "example",
     value = 496,
+    required = true,
     color = MyEnum.GREEN,
     tags = {"tag1", "tag2"},
     ints = {1, 2, 3},
@@ -44,6 +45,9 @@ public class AnnotationsApplication {
             }
             if (value != 496) {
                 throw new IllegalStateException("value is not 496");
+            }
+            if (!annotation.required()) {
+                throw new IllegalStateException("required is not true");
             }
             if (color != MyEnum.GREEN) {
                 throw new IllegalStateException("color is not GREEN");
