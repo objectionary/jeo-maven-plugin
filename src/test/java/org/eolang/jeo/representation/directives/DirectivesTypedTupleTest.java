@@ -41,10 +41,10 @@ final class DirectivesTypedTupleTest {
     void convertsInts() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Can't convert ints to XML directives correctly",
-            new Xembler(new DirectivesTypedTuple(int.class, 1, 2, 3)).xml(),
+            new Xembler(new DirectivesTypedTuple("name", new int[]{1, 2, 3})).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[count(o)=4]",
-                "./o/o[1][text()='69 6E 74']"
+                "./o/o[1][text()='5B 49']"
             )
         );
     }
@@ -53,10 +53,12 @@ final class DirectivesTypedTupleTest {
     void convertsLongs() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Can't convert longs to XML directives correctly",
-            new Xembler(new DirectivesTypedTuple(long.class, 1L, 2L, 3L)).xml(),
+            new Xembler(
+                new DirectivesTypedTuple("longs", new long[]{1L, 2L, 3L})
+            ).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[count(o)=4]",
-                "./o/o[1][text()='6C 6F 6E 67']"
+                "./o/o[1][text()='5B 4A']"
             )
         );
     }
@@ -65,12 +67,11 @@ final class DirectivesTypedTupleTest {
     void convertsStrings() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Can't convert strings to XML directives correctly",
-            new Xembler(new DirectivesTypedTuple(String.class, "a", "b", "c")).xml(),
+            new Xembler(new DirectivesTypedTuple("strings", new String[]{"a", "b", "c"})).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[count(o)=4]",
-                "./o/o[1][text()='6A 61 76 61 2E 6C 61 6E 67 2E 53 74 72 69 6E 67']"
+                "./o/o[1][text()='5B 4C 6A 61 76 61 2E 6C 61 6E 67 2E 53 74 72 69 6E 67 3B']"
             )
         );
     }
-
 }

@@ -24,8 +24,14 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -34,11 +40,87 @@ import org.xembly.Directives;
  */
 public final class DirectivesTypedTuple implements Iterable<Directive> {
 
+    private final String name;
+
     private final Class<?> type;
 
-    private final Object[] values;
+    private final List<DirectivesData> values;
 
-    public DirectivesTypedTuple(final Class<?> type, final Object... values) {
+    public DirectivesTypedTuple(final String name, int[] values) {
+        this(name, int[].class, Arrays.stream(values).mapToObj(i -> i));
+    }
+
+    public DirectivesTypedTuple(final String name, long[] values) {
+        this(name, long[].class, Arrays.stream(values).mapToObj(i -> i));
+    }
+
+    public DirectivesTypedTuple(final String name, double[] values) {
+        this(name, double[].class, Arrays.stream(values).mapToObj(i -> i));
+    }
+
+    public DirectivesTypedTuple(final String name, float[] values) {
+        this(
+            name,
+            float[].class,
+            IntStream.range(0, values.length).mapToObj(i -> values[i])
+        );
+    }
+
+    public DirectivesTypedTuple(final String name, boolean[] values) {
+        this(
+            name,
+            boolean[].class,
+            IntStream.range(0, values.length).mapToObj(i -> values[i])
+        );
+    }
+
+    public DirectivesTypedTuple(final String name, char[] values) {
+        this(
+            name,
+            char[].class,
+            IntStream.range(0, values.length).mapToObj(i -> values[i])
+        );
+    }
+
+    public DirectivesTypedTuple(final String name, byte[] values) {
+        this(
+            name,
+            byte[].class,
+            IntStream.range(0, values.length).mapToObj(i -> values[i])
+        );
+    }
+
+    public DirectivesTypedTuple(final String name, short[] values) {
+        this(
+            name,
+            short[].class,
+            IntStream.range(0, values.length).mapToObj(i -> values[i])
+        );
+    }
+
+    public DirectivesTypedTuple(final String name, Object[] values) {
+        this(
+            name,
+            values.getClass(),
+            IntStream.range(0, values.length).mapToObj(i -> values[i])
+        );
+    }
+
+    public DirectivesTypedTuple(
+        final String name,
+        final Class<?> type,
+        Stream<Object> values
+    ) {
+        this(name, type, values.map(DirectivesData::new).collect(Collectors.toList()));
+    }
+
+
+    public DirectivesTypedTuple(
+        final String name,
+        final Class<?> type,
+        final List<DirectivesData> values
+    ) {
+        this.name = name;
         this.type = type;
         this.values = values;
     }
@@ -49,11 +131,11 @@ public final class DirectivesTypedTuple implements Iterable<Directive> {
             .add("o")
             .attr("base", "tuple")
             .attr("star", "");
+        if (!this.name.isEmpty()) {
+            tuple.attr("name", this.name);
+        }
         tuple.append(new DirectivesData("type", this.type.getName()));
-        Arrays.stream(this.values)
-            .filter(Objects::nonNull)
-            .map(DirectivesData::new)
-            .forEach(tuple::append);
+        this.values.forEach(tuple::append);
         tuple.up();
         return tuple.iterator();
     }

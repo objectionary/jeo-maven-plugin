@@ -75,12 +75,58 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
      */
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DirectivesAnnotationProperty plain(final String name, final Object value) {
-
-        return new DirectivesAnnotationProperty(
-            Type.PLAIN,
-            new DirectivesData("name", Optional.ofNullable(name).orElse("")),
-            new DirectivesData("value", value)
-        );
+        Class<?>[] iterable = {
+            byte[].class,
+            short[].class,
+            int[].class,
+            long[].class,
+            float[].class,
+            double[].class,
+            boolean[].class,
+            char[].class,
+            Integer[].class,
+            Long[].class,
+            Float[].class,
+            Double[].class,
+            Boolean[].class,
+            Character[].class,
+            String[].class,
+            Class[].class,
+            Object[].class
+        };
+        if (Arrays.stream(iterable).anyMatch(iter -> iter.equals(value.getClass()))) {
+            final DirectivesTypedTuple res;
+            if (value.getClass().equals(int[].class)) {
+                res = new DirectivesTypedTuple("value", (int[]) value);
+            } else if (value.getClass().equals(long[].class)) {
+                res = new DirectivesTypedTuple("value", (long[]) value);
+            } else if (value.getClass().equals(float[].class)) {
+                res = new DirectivesTypedTuple("value", (float[]) value);
+            } else if (value.getClass().equals(double[].class)) {
+                res = new DirectivesTypedTuple("value", (double[]) value);
+            } else if (value.getClass().equals(boolean[].class)) {
+                res = new DirectivesTypedTuple("value", (boolean[]) value);
+            } else if (value.getClass().equals(char[].class)) {
+                res = new DirectivesTypedTuple("value", (char[]) value);
+            } else if (value.getClass().equals(byte[].class)) {
+                res = new DirectivesTypedTuple("value", (byte[]) value);
+            } else if (value.getClass().equals(short[].class)) {
+                res = new DirectivesTypedTuple("value", (short[]) value);
+            } else {
+                res = new DirectivesTypedTuple("value", (Object[]) value);
+            }
+            return new DirectivesAnnotationProperty(
+                Type.PLAIN,
+                new DirectivesData("name", Optional.ofNullable(name).orElse("")),
+                res
+            );
+        } else {
+            return new DirectivesAnnotationProperty(
+                Type.PLAIN,
+                new DirectivesData("name", Optional.ofNullable(name).orElse("")),
+                new DirectivesData("value", value)
+            );
+        }
     }
 
     /**
