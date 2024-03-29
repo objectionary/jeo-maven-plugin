@@ -1,5 +1,6 @@
 package org.eolang.jeo.annotations;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
@@ -77,11 +78,24 @@ public class AnnotationsApplication {
             if (annotation.nestedArray().length != 2) {
                 throw new IllegalStateException("nestedArray length is not 2");
             }
+
+            final boolean methodAnnotation = Arrays.stream(clazz.getDeclaredMethods())
+                .filter(method -> method.isAnnotationPresent(JeoMethodAnnotation.class))
+                .map(method -> method.getAnnotation(JeoMethodAnnotation.class))
+                .anyMatch(JeoMethodAnnotation::required);
+            if (!methodAnnotation) {
+                throw new IllegalStateException("Method annotation is not present");
+            }
             System.out.println("Annotations test passed successfully!");
         } else {
             throw new IllegalStateException(
                 "JeoAnnotation not present on class AnnotationsApplication"
             );
         }
+    }
+
+    @JeoMethodAnnotation(required = true)
+    public static void annotatedMethod() {
+        // This method is annotated with JeoMethodAnnotation
     }
 }

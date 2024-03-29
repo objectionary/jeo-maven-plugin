@@ -28,6 +28,7 @@ import java.util.List;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
 
 /**
  * Bytecode annotation.
@@ -92,12 +93,24 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
     }
 
     /**
+     * Write method annotation.
+     * @param visitor Visitor.
+     * @return This.
+     */
+    public BytecodeAnnotation write(final MethodVisitor visitor) {
+        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descriptor, this.visible);
+        this.properties.forEach(property -> property.write(avisitor));
+        return this;
+    }
+
+    /**
      * Write field annotation.
      * @param visitor Visitor.
      * @return This.
      */
     public BytecodeAnnotation write(final FieldVisitor visitor) {
-        visitor.visitAnnotation(this.descriptor, this.visible);
+        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descriptor, this.visible);
+        this.properties.forEach(property -> property.write(avisitor));
         return this;
     }
 
