@@ -15,4 +15,12 @@ public @interface JeoAnnotation {
     MyEnum color();
 
     String[] tags();
+
+    int[] ints();
+
+    long[] longs();
+
+    double[] doubles();
+
+    float[] floats();
 }

@@ -9,7 +9,16 @@ import java.util.Arrays;
  *  Currenlty we support only some annotations usage. Add more examples, especially
  *  when we use another annotations inside, or when we have more complex annotations.
  */
-@JeoAnnotation(name = "example", value = 496, color = MyEnum.GREEN, tags = {"tag1", "tag2"})
+@JeoAnnotation(
+    name = "example",
+    value = 496,
+    color = MyEnum.GREEN,
+    tags = {"tag1", "tag2"},
+    ints = {1, 2, 3},
+    longs= {10L, 20L, 30L},
+    doubles= {1.0, 2.0, 3.0},
+    floats= {1.0f, 2.0f, 3.0f}
+)
 public class AnnotationsApplication {
 
     public static void main(String[] args) {
@@ -20,6 +29,10 @@ public class AnnotationsApplication {
             int value = annotation.value();
             MyEnum color = annotation.color();
             String[] tags = annotation.tags();
+            int[] ints = annotation.ints();
+            long[] longs = annotation.longs();
+            double[] doubles = annotation.doubles();
+            float[] floats = annotation.floats();
             if (!name.equals("example")) {
                 throw new IllegalStateException("name is not 'example'");
             }
@@ -31,6 +44,18 @@ public class AnnotationsApplication {
             }
             if (!Arrays.equals(tags, new String[]{"tag1", "tag2"})) {
                 throw new IllegalStateException("tags are not ['tag1', 'tag2']");
+            }
+            if (!Arrays.equals(ints, new int[]{1, 2, 3})) {
+                throw new IllegalStateException("ints are not [1, 2, 3]");
+            }
+            if (!Arrays.equals(longs, new long[]{10L, 20L, 30L})) {
+                throw new IllegalStateException("longs are not [10L, 20L, 30L]");
+            }
+            if (!Arrays.equals(doubles, new double[]{1.0, 2.0, 3.0})) {
+                throw new IllegalStateException("doubles are not [1.0, 2.0, 3.0]");
+            }
+            if (!Arrays.equals(floats, new float[]{1.0f, 2.0f, 3.0f})) {
+                throw new IllegalStateException("floats are not [1.0f, 2.0f, 3.0f]");
             }
             System.out.println("Annotations test passed successfully!");
         } else {
