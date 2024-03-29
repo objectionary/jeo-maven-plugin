@@ -26,8 +26,6 @@ package org.eolang.jeo.representation.xmir;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.HexData;
-import org.objectweb.asm.Type;
 
 /**
  * Xmir representation of a bytecode array.
