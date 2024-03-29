@@ -23,12 +23,15 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.ToString;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
@@ -255,5 +258,26 @@ public final class XmlMethod {
                 new Transformers.Node()
             ).xmlQuietly()
         );
+    }
+
+    /**
+     * Method annotations.
+     * @return Annotations.
+     */
+    public List<BytecodeAnnotation> annotations() {
+        final List<XmlAnnotation> all = this.node.children()
+            .filter(element -> element.hasAttribute("name", "annotations"))
+            .findFirst()
+            .map(XmlAnnotations::new)
+            .map(XmlAnnotations::all)
+            .orElse(new ArrayList<>(0));
+        List<BytecodeAnnotation> res = new ArrayList<>(all.size());
+        for (final XmlAnnotation xml : all) {
+            final boolean visible = xml.visible();
+            final String descriptor = xml.descriptor();
+            final List<BytecodeAnnotationProperty> props = xml.props();
+            res.add(new BytecodeAnnotation(descriptor, visible, props));
+        }
+        return res;
     }
 }

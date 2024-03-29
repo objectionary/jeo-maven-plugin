@@ -57,6 +57,11 @@ public final class BytecodeMethod implements Testable {
     private final List<BytecodeEntry> instructions;
 
     /**
+     * Method annotations.
+     */
+    private final List<BytecodeAnnotation> annotations;
+
+    /**
      * Method properties.
      */
     private final BytecodeMethodProperties properties;
@@ -125,6 +130,7 @@ public final class BytecodeMethod implements Testable {
         this.clazz = clazz;
         this.tryblocks = new ArrayList<>(0);
         this.instructions = new ArrayList<>(0);
+        this.annotations = new ArrayList<>(0);
         this.stack = stack;
         this.locals = locals;
     }
@@ -187,6 +193,16 @@ public final class BytecodeMethod implements Testable {
         return this;
     }
 
+    /**
+     * Add annotation.
+     * @param annotation Annotation.
+     * @return This object.
+     */
+    public BytecodeMethod annotation(final BytecodeAnnotation annotation) {
+        this.annotations.add(annotation);
+        return this;
+    }
+
     @Override
     @SuppressWarnings("PMD.InsufficientStringBufferDeclaration")
     public String testCode() {
@@ -212,6 +228,7 @@ public final class BytecodeMethod implements Testable {
     void write() {
         try {
             final MethodVisitor mvisitor = this.properties.writeMethod(this.visitor);
+            this.annotations.forEach(annotation -> annotation.write(mvisitor));
             if (!this.properties.isAbstract()) {
                 mvisitor.visitCode();
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor));

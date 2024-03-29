@@ -113,6 +113,7 @@ public final class XmlBytecode {
                     xmlmethod.properties(), xmlMaxs.stack(), xmlMaxs.locals()
                 )
             ).orElseGet(() -> bytecode.withMethod(xmlmethod.properties()));
+            xmlmethod.annotations().forEach(method::annotation);
             xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
             xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
         }
