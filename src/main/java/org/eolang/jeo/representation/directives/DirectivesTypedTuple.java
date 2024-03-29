@@ -24,12 +24,9 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.xembly.Directive;
@@ -37,28 +34,59 @@ import org.xembly.Directives;
 
 /**
  * Tuple representation of a Java array as Xembly directives.
+ *
+ * @since 0.3
  */
 public final class DirectivesTypedTuple implements Iterable<Directive> {
 
+    /**
+     * Tuple name.
+     */
     private final String name;
 
+    /**
+     * Tuple type.
+     */
     private final Class<?> type;
 
+    /**
+     * Tuple values.
+     */
     private final List<DirectivesData> values;
 
-    public DirectivesTypedTuple(final String name, int[] values) {
+    /**
+     * Constructor.
+     * @param name Tuple name
+     * @param values Tuple values
+     */
+    public DirectivesTypedTuple(final String name, final int... values) {
         this(name, int[].class, Arrays.stream(values).mapToObj(i -> i));
     }
 
-    public DirectivesTypedTuple(final String name, long[] values) {
+    /**
+     * Constructor.
+     * @param name Tuple name
+     * @param values Tuple values
+     */
+    public DirectivesTypedTuple(final String name, final long... values) {
         this(name, long[].class, Arrays.stream(values).mapToObj(i -> i));
     }
 
-    public DirectivesTypedTuple(final String name, double[] values) {
+    /**
+     * Constructor.
+     * @param name Tuple name
+     * @param values Tuple values
+     */
+    public DirectivesTypedTuple(final String name, final double... values) {
         this(name, double[].class, Arrays.stream(values).mapToObj(i -> i));
     }
 
-    public DirectivesTypedTuple(final String name, float[] values) {
+    /**
+     * Constructor.
+     * @param name Tuple name
+     * @param values Tuple values
+     */
+    public DirectivesTypedTuple(final String name, final float... values) {
         this(
             name,
             float[].class,
@@ -66,7 +94,12 @@ public final class DirectivesTypedTuple implements Iterable<Directive> {
         );
     }
 
-    public DirectivesTypedTuple(final String name, boolean[] values) {
+    /**
+     * Constructor.
+     * @param name Tuple name
+     * @param values Tuple values
+     */
+    public DirectivesTypedTuple(final String name, final boolean... values) {
         this(
             name,
             boolean[].class,
@@ -74,7 +107,12 @@ public final class DirectivesTypedTuple implements Iterable<Directive> {
         );
     }
 
-    public DirectivesTypedTuple(final String name, char[] values) {
+    /**
+     * Constructor.
+     * @param name Tuple name
+     * @param values Tuple values
+     */
+    public DirectivesTypedTuple(final String name, final char... values) {
         this(
             name,
             char[].class,
@@ -82,7 +120,12 @@ public final class DirectivesTypedTuple implements Iterable<Directive> {
         );
     }
 
-    public DirectivesTypedTuple(final String name, byte[] values) {
+    /**
+     * Constructor.
+     * @param name Tuple name
+     * @param values Tuple values
+     */
+    public DirectivesTypedTuple(final String name, final byte... values) {
         this(
             name,
             byte[].class,
@@ -90,7 +133,12 @@ public final class DirectivesTypedTuple implements Iterable<Directive> {
         );
     }
 
-    public DirectivesTypedTuple(final String name, short[] values) {
+    /**
+     * Constructor.
+     * @param name Tuple name
+     * @param values Tuple values
+     */
+    public DirectivesTypedTuple(final String name, final short... values) {
         this(
             name,
             short[].class,
@@ -98,7 +146,12 @@ public final class DirectivesTypedTuple implements Iterable<Directive> {
         );
     }
 
-    public DirectivesTypedTuple(final String name, Object[] values) {
+    /**
+     * Constructor.
+     * @param name Tuple name
+     * @param values Tuple values
+     */
+    public DirectivesTypedTuple(final String name, final Object... values) {
         this(
             name,
             values.getClass(),
@@ -106,15 +159,26 @@ public final class DirectivesTypedTuple implements Iterable<Directive> {
         );
     }
 
+    /**
+     * Constructor.
+     * @param name Tuple name
+     * @param type Tuple type
+     * @param values Tuple values
+     */
     public DirectivesTypedTuple(
         final String name,
         final Class<?> type,
-        Stream<Object> values
+        final Stream<Object> values
     ) {
         this(name, type, values.map(DirectivesData::new).collect(Collectors.toList()));
     }
 
-
+    /**
+     * Constructor.
+     * @param name Tuple name
+     * @param type Tuple type
+     * @param values Tuple values
+     */
     public DirectivesTypedTuple(
         final String name,
         final Class<?> type,

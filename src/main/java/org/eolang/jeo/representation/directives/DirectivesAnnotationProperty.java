@@ -35,6 +35,7 @@ import org.xembly.Directives;
  * Annotation property as Xembly directives.
  * @since 0.3
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class DirectivesAnnotationProperty implements Iterable<Directive>, Composite {
 
     /**
@@ -75,7 +76,8 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
      */
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DirectivesAnnotationProperty plain(final String name, final Object value) {
-        Class<?>[] iterable = {
+        final DirectivesAnnotationProperty result;
+        final Class<?>[] iterable = {
             byte[].class,
             short[].class,
             int[].class,
@@ -92,7 +94,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
             Character[].class,
             String[].class,
             Class[].class,
-            Object[].class
+            Object[].class,
         };
         if (Arrays.stream(iterable).anyMatch(iter -> iter.equals(value.getClass()))) {
             final DirectivesTypedTuple res;
@@ -115,18 +117,19 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
             } else {
                 res = new DirectivesTypedTuple("value", (Object[]) value);
             }
-            return new DirectivesAnnotationProperty(
+            result = new DirectivesAnnotationProperty(
                 Type.PLAIN,
                 new DirectivesData("name", Optional.ofNullable(name).orElse("")),
                 res
             );
         } else {
-            return new DirectivesAnnotationProperty(
+            result = new DirectivesAnnotationProperty(
                 Type.PLAIN,
                 new DirectivesData("name", Optional.ofNullable(name).orElse("")),
                 new DirectivesData("value", value)
             );
         }
+        return result;
     }
 
     /**

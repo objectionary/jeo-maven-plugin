@@ -100,9 +100,9 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
             name,
             descriptor
         );
-        final DirectivesAnnotation deep = new DirectivesAnnotation(descriptor, true);
         final DirectivesAnnotationProperty ann = DirectivesAnnotationProperty.annotation(
-            name, descriptor, deep);
+            name, descriptor, new DirectivesAnnotation(descriptor, true)
+        );
         this.annotation.append(ann);
         return new DirectivesAnnotationVisitor(
             this.api,

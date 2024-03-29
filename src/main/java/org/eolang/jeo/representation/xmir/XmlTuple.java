@@ -32,6 +32,7 @@ import java.util.stream.Stream;
  *
  * @since 0.3
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class XmlTuple {
 
     /**
@@ -39,10 +40,18 @@ public final class XmlTuple {
      */
     private final XmlNode node;
 
+    /**
+     * Constructor.
+     * @param lines XML Lines.
+     */
     public XmlTuple(final String... lines) {
         this(String.join("\n", lines));
     }
 
+    /**
+     * Constructor.
+     * @param xml XML.
+     */
     public XmlTuple(final String xml) {
         this(new XmlNode(xml));
     }
@@ -60,32 +69,42 @@ public final class XmlTuple {
      * @return Object.
      */
     public Object asObject() {
+        final Object result;
         final Class<?> type = this.type();
         if (int[].class.equals(type)) {
-            return this.toIntArray();
+            result = this.toIntArray();
         } else if (byte[].class.equals(type)) {
-            return this.toByteArray();
+            result = this.toByteArray();
         } else if (char[].class.equals(type)) {
-            return this.toCharArray();
+            result = this.toCharArray();
         } else if (long[].class.equals(type)) {
-            return this.toLongArray();
+            result = this.toLongArray();
         } else if (float[].class.equals(type)) {
-            return this.toFloatArray();
+            result = this.toFloatArray();
         } else if (double[].class.equals(type)) {
-            return this.toDoubleArray();
+            result = this.toDoubleArray();
         } else if (short[].class.equals(type)) {
-            return this.toShortArray();
+            result = this.toShortArray();
         } else if (boolean[].class.equals(type)) {
-            return this.toBooleanArray();
+            result = this.toBooleanArray();
         } else {
-            return this.toObjectsArray();
+            result = this.toObjectsArray();
         }
+        return result;
     }
 
+    /**
+     * Convert XML tuple to an object array.
+     * @return Object array.
+     */
     private Object[] toObjectsArray() {
         return this.elements().map(HexString::decode).toArray();
     }
 
+    /**
+     * Convert XML tuple to a boolean array.
+     * @return Boolean array.
+     */
     private boolean[] toBooleanArray() {
         final List<Boolean> values = this.elements().map(HexString::decodeAsBoolean)
             .collect(Collectors.toList());
@@ -96,6 +115,10 @@ public final class XmlTuple {
         return array;
     }
 
+    /**
+     * Convert XML tuple to a short array.
+     * @return Short array.
+     */
     private short[] toShortArray() {
         final int[] array = this.elements().mapToInt(HexString::decodeAsInt).toArray();
         final short[] shorts = new short[array.length];
@@ -105,10 +128,18 @@ public final class XmlTuple {
         return shorts;
     }
 
+    /**
+     * Convert XML tuple to a double array.
+     * @return Double array.
+     */
     private double[] toDoubleArray() {
         return this.elements().mapToDouble(HexString::decodeAsDouble).toArray();
     }
 
+    /**
+     * Convert XML tuple to a float array.
+     * @return Float array.
+     */
     private float[] toFloatArray() {
         final double[] array = this.elements().mapToDouble(HexString::decodeAsFloat).toArray();
         final float[] floats = new float[array.length];
@@ -118,10 +149,18 @@ public final class XmlTuple {
         return floats;
     }
 
+    /**
+     * Convert XML tuple to a long array.
+     * @return Long array.
+     */
     private long[] toLongArray() {
         return this.elements().mapToLong(HexString::decodeAsLong).toArray();
     }
 
+    /**
+     * Convert XML tuple to a character array.
+     * @return Character array.
+     */
     private char[] toCharArray() {
         final int[] array = this.elements().mapToInt(HexString::decodeAsInt).toArray();
         final char[] chars = new char[array.length];
@@ -131,8 +170,12 @@ public final class XmlTuple {
         return chars;
     }
 
+    /**
+     * Convert XML tuple to a byte array.
+     * @return Byte array.
+     */
     private byte[] toByteArray() {
-        final int[] array = elements().mapToInt(HexString::decodeAsInt).toArray();
+        final int[] array = this.elements().mapToInt(HexString::decodeAsInt).toArray();
         final byte[] bytes = new byte[array.length];
         for (int idx = 0; idx < array.length; ++idx) {
             bytes[idx] = (byte) array[idx];
@@ -140,16 +183,28 @@ public final class XmlTuple {
         return bytes;
     }
 
+    /**
+     * Convert XML tuple to an integer array.
+     * @return Integer array.
+     */
     private int[] toIntArray() {
         return this.elements().mapToInt(HexString::decodeAsInt).toArray();
     }
 
+    /**
+     * Get elements of the tuple.
+     * @return Elements.
+     */
     private Stream<HexString> elements() {
         return this.node.children().skip(1)
             .map(XmlNode::text)
             .map(HexString::new);
     }
 
+    /**
+     * Parse type from XML tuple.
+     * @return Type.
+     */
     private Class<?> type() {
         try {
             return Class.forName(new HexString(this.node.firstChild().text()).decode());

@@ -67,7 +67,8 @@ final class DirectivesTypedTupleTest {
         MatcherAssert.assertThat(
             "Can't convert strings to XML directives correctly",
             new Xembler(
-                new DirectivesTypedTuple("strings", new String[]{"a", "b", "c"})).xml(),
+                new DirectivesTypedTuple("strings", new String[]{"a", "b", "c"})
+            ).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[count(o)=4]",
                 "./o/o[1][text()='5B 4C 6A 61 76 61 2E 6C 61 6E 67 2E 53 74 72 69 6E 67 3B']"

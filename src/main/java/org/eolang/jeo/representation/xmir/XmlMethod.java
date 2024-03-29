@@ -201,6 +201,27 @@ public final class XmlMethod {
     }
 
     /**
+     * Method annotations.
+     * @return Annotations.
+     */
+    public List<BytecodeAnnotation> annotations() {
+        final List<XmlAnnotation> all = this.node.children()
+            .filter(element -> element.hasAttribute("name", "annotations"))
+            .findFirst()
+            .map(XmlAnnotations::new)
+            .map(XmlAnnotations::all)
+            .orElse(new ArrayList<>(0));
+        final List<BytecodeAnnotation> res = new ArrayList<>(all.size());
+        for (final XmlAnnotation xml : all) {
+            final boolean visible = xml.visible();
+            final String descriptor = xml.descriptor();
+            final List<BytecodeAnnotationProperty> props = xml.props();
+            res.add(new BytecodeAnnotation(descriptor, visible, props));
+        }
+        return res;
+    }
+
+    /**
      * Replace instructions.
      * @param entries Instructions to replace.
      * @todo #350 Remove mutable method from XmlMethod.
@@ -258,26 +279,5 @@ public final class XmlMethod {
                 new Transformers.Node()
             ).xmlQuietly()
         );
-    }
-
-    /**
-     * Method annotations.
-     * @return Annotations.
-     */
-    public List<BytecodeAnnotation> annotations() {
-        final List<XmlAnnotation> all = this.node.children()
-            .filter(element -> element.hasAttribute("name", "annotations"))
-            .findFirst()
-            .map(XmlAnnotations::new)
-            .map(XmlAnnotations::all)
-            .orElse(new ArrayList<>(0));
-        List<BytecodeAnnotation> res = new ArrayList<>(all.size());
-        for (final XmlAnnotation xml : all) {
-            final boolean visible = xml.visible();
-            final String descriptor = xml.descriptor();
-            final List<BytecodeAnnotationProperty> props = xml.props();
-            res.add(new BytecodeAnnotation(descriptor, visible, props));
-        }
-        return res;
     }
 }
