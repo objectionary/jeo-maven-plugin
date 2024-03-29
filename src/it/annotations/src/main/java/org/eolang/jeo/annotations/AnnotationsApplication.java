@@ -26,6 +26,14 @@ import java.util.Arrays;
 )
 public class AnnotationsApplication {
 
+    /**
+     * Main method.
+     * @param args Command line arguments
+     * @todo #531:90min Check default values for annotation properties.
+     *  We still encounter some problems with annotation processing.
+     *  Especially with Autowired annotation from Spring Framework.
+     *  It's relatively simple annotation, but it's not processed correctly.
+     */
     public static void main(String[] args) {
         Class<AnnotationsApplication> clazz = AnnotationsApplication.class;
         if (clazz.isAnnotationPresent(JeoAnnotation.class)) {
