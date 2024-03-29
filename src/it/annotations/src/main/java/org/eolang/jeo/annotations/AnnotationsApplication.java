@@ -18,7 +18,7 @@ import java.util.Arrays;
     longs = {10L, 20L, 30L},
     doubles = {1.0, 2.0, 3.0},
     floats = {1.0f, 2.0f, 3.0f},
-//    classes = {AnnotationsApplication.class},
+    classes = {AnnotationsApplication.class},
     nested = @NestedAnnotation
 //    ,
 //    nestedArray = {
@@ -64,9 +64,9 @@ public class AnnotationsApplication {
             if (!Arrays.equals(floats, new float[]{1.0f, 2.0f, 3.0f})) {
                 throw new IllegalStateException("floats are not [1.0f, 2.0f, 3.0f]");
             }
-//            if (!Arrays.equals(annotation.classes(), new Class<?>[]{AnnotationsApplication.class})) {
-//                throw new IllegalStateException("classes are not [AnnotationsApplication.class]");
-//            }
+            if (!Arrays.equals(annotation.classes(), new Class<?>[]{AnnotationsApplication.class})) {
+                throw new IllegalStateException("classes are not [AnnotationsApplication.class]");
+            }
             if (annotation.nested() == null) {
                 throw new IllegalStateException("nested is null");
             }
