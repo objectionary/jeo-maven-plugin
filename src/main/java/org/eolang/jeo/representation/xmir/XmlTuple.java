@@ -108,11 +108,16 @@ public final class XmlTuple {
     }
 
     private double[] toDoubleArray() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return this.elements().mapToDouble(HexString::decodeAsDouble).toArray();
     }
 
     private float[] toFloatArray() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        final double[] array = this.elements().mapToDouble(HexString::decodeAsFloat).toArray();
+        final float[] floats = new float[array.length];
+        for (int idx = 0; idx < array.length; ++idx) {
+            floats[idx] = (float) array[idx];
+        }
+        return floats;
     }
 
     private long[] toLongArray() {

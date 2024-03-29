@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import org.eolang.jeo.representation.DataType;
 
 /**
  * Hex string.
@@ -109,5 +110,13 @@ public final class HexString {
             );
         }
         return "01".equals(value);
+    }
+
+    public double decodeAsDouble() {
+        return (double) DataType.DOUBLE.decode(this.hex.replace(" ", ""));
+    }
+
+    public float decodeAsFloat() {
+        return (float) DataType.FLOAT.decode(this.hex.replace(" ", ""));
     }
 }

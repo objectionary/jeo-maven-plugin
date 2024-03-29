@@ -70,6 +70,8 @@ public final class XmlOperand {
         } else if ("annotation-property".equals(base)) {
             final XmlAnnotationProperty xml = new XmlAnnotationProperty(this.raw);
             result = xml.toBytecode();
+        } else if ("tuple".equals(base)) {
+            result = new XmlTuple(this.raw).asObject();
         } else {
             final boolean nullable = this.raw.attribute("scope").map("nullable"::equals)
                 .orElse(false);
