@@ -151,7 +151,8 @@ public final class DirectivesTypedTuple implements Iterable<Directive> {
      * @param name Tuple name
      * @param values Tuple values
      */
-    public DirectivesTypedTuple(final String name, final Object... values) {
+    @SuppressWarnings("PMD.UseVarargs")
+    public DirectivesTypedTuple(final String name, final Object[] values) {
         this(
             name,
             values.getClass(),
