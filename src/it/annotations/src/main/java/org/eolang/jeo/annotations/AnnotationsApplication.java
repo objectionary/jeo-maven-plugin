@@ -83,11 +83,10 @@ public class AnnotationsApplication {
             if (annotation.nestedArray().length != 2) {
                 throw new IllegalStateException("nestedArray length is not 2");
             }
-
             final boolean methodAnnotation = Arrays.stream(clazz.getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(JeoMethodAnnotation.class))
                 .map(method -> method.getAnnotation(JeoMethodAnnotation.class))
-                .anyMatch(JeoMethodAnnotation::required);
+                .allMatch(JeoMethodAnnotation::required);
             if (!methodAnnotation) {
                 throw new IllegalStateException("Method annotation is not present");
             }
@@ -101,6 +100,11 @@ public class AnnotationsApplication {
 
     @JeoMethodAnnotation(required = true)
     public static void annotatedMethod() {
+        // This method is annotated with JeoMethodAnnotation
+    }
+
+    @JeoMethodAnnotation
+    public static void annotatedMethodWithDefaultValue() {
         // This method is annotated with JeoMethodAnnotation
     }
 }

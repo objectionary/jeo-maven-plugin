@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface JeoMethodAnnotation {
 
-    boolean required();
+    boolean required() default true;
 
 }
