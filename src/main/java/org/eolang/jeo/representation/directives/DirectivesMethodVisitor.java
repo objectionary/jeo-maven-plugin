@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import com.jcabi.log.Logger;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.stream.Stream;
@@ -212,6 +213,15 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
         this.method.annotation(annotation);
         return new DirectivesAnnotationVisitor(
             this.api, super.visitAnnotation(descriptor, visible), annotation
+        );
+    }
+
+    @Override
+    public AnnotationVisitor visitAnnotationDefault() {
+        final AnnotationVisitor visitor = super.visitAnnotationDefault();
+        Logger.debug(this, String.format("Visit annotation default by %s visitor", visitor));
+        return new DirectivesAnnotationVisitor(
+            this.api, visitor, new DirectivesAnnotationDefault()
         );
     }
 

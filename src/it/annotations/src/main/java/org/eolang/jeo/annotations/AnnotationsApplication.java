@@ -18,7 +18,7 @@ import java.util.Arrays;
     doubles = {1.0, 2.0, 3.0},
     floats = {1.0f, 2.0f, 3.0f},
     classes = {AnnotationsApplication.class},
-    nested = @NestedAnnotation,
+    nested = @NestedAnnotation(name = "single-nested"),
     nestedArray = {
         @NestedAnnotation(name = "nested1"),
         @NestedAnnotation(name = "nested2")
