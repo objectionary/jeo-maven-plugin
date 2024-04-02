@@ -21,23 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.bytecode;
+package org.eolang.jeo.representation.xmir;
 
-import org.objectweb.asm.AnnotationVisitor;
+import org.eolang.jeo.representation.bytecode.BytecodeDefaultValue;
+import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 
 /**
- * Bytecode annotation value.
- * All the instances of this class know how to write themselves to the given
- * {@link AnnotationVisitor}. Since the annotation values are not always plain
- * values, this interface is used to abstract the writing process.
+ * XMIR of annotation default value.
  *
  * @since 0.3
  */
-public interface BytecodeAnnotationValue {
+public final class XmlDefaultValue {
 
     /**
-     * Write the value to the given visitor.
-     * @param visitor Visitor.
+     * Default value XMIR node.
      */
-    void writeTo(AnnotationVisitor visitor);
+    private final XmlNode node;
+
+    /**
+     * Constructor.
+     * @param node Default value XMIR node.
+     */
+    public XmlDefaultValue(final XmlNode node) {
+        this.node = node;
+    }
+
+    /**
+     * Write to method.
+     * @param method Method.
+     */
+    public void writeTo(final BytecodeMethod method) {
+        this.node.children().findFirst().ifPresent(
+            property -> method.defvalue(
+                new BytecodeDefaultValue(
+                    new XmlAnnotationProperty(property).toBytecode()
+                )
+            )
+        );
+    }
 }

@@ -243,6 +243,15 @@ public final class XmlMethod {
     }
 
     /**
+     * Annotation default value.
+     * @return Optional XMIR of the default value.
+     */
+    public Optional<XmlDefaultValue> defvalue() {
+        return this.node.optchild("base", "annotation-default-value")
+            .map(XmlDefaultValue::new);
+    }
+
+    /**
      * Method exceptions.
      * @return Exceptions.
      */

@@ -24,20 +24,35 @@
 package org.eolang.jeo.representation.bytecode;
 
 import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.MethodVisitor;
 
 /**
- * Bytecode annotation value.
- * All the instances of this class know how to write themselves to the given
- * {@link AnnotationVisitor}. Since the annotation values are not always plain
- * values, this interface is used to abstract the writing process.
+ * Bytecode default value.
  *
  * @since 0.3
  */
-public interface BytecodeAnnotationValue {
+public final class BytecodeDefaultValue {
 
     /**
-     * Write the value to the given visitor.
-     * @param visitor Visitor.
+     * Annotation property as a value.
      */
-    void writeTo(AnnotationVisitor visitor);
+    private final BytecodeAnnotationProperty property;
+
+    /**
+     * Constructor.
+     * @param property Annotation property as a value.
+     */
+    public BytecodeDefaultValue(final BytecodeAnnotationProperty property) {
+        this.property = property;
+    }
+
+    /**
+     * Write the default value to the given visitor.
+     * @param mvisitor Visitor.
+     */
+    public void writeTo(final MethodVisitor mvisitor) {
+        final AnnotationVisitor visitor = mvisitor.visitAnnotationDefault();
+        this.property.writeTo(visitor);
+        visitor.visitEnd();
+    }
 }

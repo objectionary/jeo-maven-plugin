@@ -116,6 +116,7 @@ public final class XmlBytecode {
             xmlmethod.annotations().forEach(method::annotation);
             xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
             xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
+            xmlmethod.defvalue().ifPresent(defv -> defv.writeTo(method));
         }
         return bytecode.bytecode();
     }

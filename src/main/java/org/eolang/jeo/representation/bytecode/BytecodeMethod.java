@@ -67,6 +67,11 @@ public final class BytecodeMethod implements Testable {
     private final BytecodeMethodProperties properties;
 
     /**
+     * Default value.
+     */
+    private final List<BytecodeDefaultValue> defvalues;
+
+    /**
      * Stack size.
      */
     private final int stack;
@@ -131,6 +136,7 @@ public final class BytecodeMethod implements Testable {
         this.tryblocks = new ArrayList<>(0);
         this.instructions = new ArrayList<>(0);
         this.annotations = new ArrayList<>(0);
+        this.defvalues = new ArrayList<>(0);
         this.stack = stack;
         this.locals = locals;
     }
@@ -203,6 +209,16 @@ public final class BytecodeMethod implements Testable {
         return this;
     }
 
+    /**
+     * Add default value.
+     * @param defvalue Default value.
+     * @return This object.
+     */
+    public BytecodeMethod defvalue(final BytecodeDefaultValue defvalue) {
+        this.defvalues.add(defvalue);
+        return this;
+    }
+
     @Override
     @SuppressWarnings("PMD.InsufficientStringBufferDeclaration")
     public String testCode() {
@@ -229,6 +245,7 @@ public final class BytecodeMethod implements Testable {
         try {
             final MethodVisitor mvisitor = this.properties.writeMethod(this.visitor);
             this.annotations.forEach(annotation -> annotation.write(mvisitor));
+            this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));
             if (!this.properties.isAbstract()) {
                 mvisitor.visitCode();
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor));

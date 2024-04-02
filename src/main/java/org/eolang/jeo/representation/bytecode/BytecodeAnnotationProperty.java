@@ -91,7 +91,7 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
     }
 
     @Override
-    public void write(final AnnotationVisitor avisitor) {
+    public void writeTo(final AnnotationVisitor avisitor) {
         switch (this.type) {
             case PLAIN:
                 avisitor.visit((String) this.params.get(0), this.params.get(1));
@@ -108,7 +108,7 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
                     Optional.ofNullable(this.params.get(0)).map(String.class::cast).orElse(null)
                 );
                 for (final Object param : this.params.subList(1, this.params.size())) {
-                    ((BytecodeAnnotationValue) param).write(array);
+                    ((BytecodeAnnotationValue) param).writeTo(array);
                 }
                 array.visitEnd();
                 break;
@@ -118,7 +118,7 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
                     (String) this.params.get(1)
                 );
                 for (final Object param : this.params.subList(2, this.params.size())) {
-                    ((BytecodeAnnotationValue) param).write(annotation);
+                    ((BytecodeAnnotationValue) param).writeTo(annotation);
                 }
                 annotation.visitEnd();
                 break;
