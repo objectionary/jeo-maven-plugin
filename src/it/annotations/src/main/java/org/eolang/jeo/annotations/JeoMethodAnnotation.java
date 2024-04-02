@@ -11,4 +11,6 @@ public @interface JeoMethodAnnotation {
 
     boolean required() default true;
 
+    String[] notes() default {};
+
 }
