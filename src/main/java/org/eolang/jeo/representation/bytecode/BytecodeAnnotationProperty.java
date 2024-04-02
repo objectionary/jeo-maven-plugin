@@ -104,13 +104,17 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
                 );
                 break;
             case ARRAY:
-                final AnnotationVisitor array = avisitor.visitArray(
-                    Optional.ofNullable(this.params.get(0)).map(String.class::cast).orElse(null)
-                );
-                for (final Object param : this.params.subList(1, this.params.size())) {
-                    ((BytecodeAnnotationValue) param).writeTo(array);
+                if (this.params.isEmpty()) {
+                    avisitor.visitArray(null).visitEnd();
+                } else {
+                    final AnnotationVisitor array = avisitor.visitArray(
+                        Optional.ofNullable(this.params.get(0)).map(String.class::cast).orElse(null)
+                    );
+                    for (final Object param : this.params.subList(1, this.params.size())) {
+                        ((BytecodeAnnotationValue) param).writeTo(array);
+                    }
+                    array.visitEnd();
                 }
-                array.visitEnd();
                 break;
             case ANNOTATION:
                 final AnnotationVisitor annotation = avisitor.visitAnnotation(

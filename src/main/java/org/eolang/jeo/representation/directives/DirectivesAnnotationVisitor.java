@@ -87,7 +87,9 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
         final DirectivesAnnotationProperty prop = new DirectivesAnnotationProperty(
             DirectivesAnnotationProperty.Type.ARRAY
         );
-        prop.append(new DirectivesData("name", name));
+        if (name != null) {
+            prop.append(new DirectivesData("name", name));
+        }
         this.annotation.append(prop);
         return new DirectivesAnnotationVisitor(this.api, super.visitArray(name), prop);
     }
