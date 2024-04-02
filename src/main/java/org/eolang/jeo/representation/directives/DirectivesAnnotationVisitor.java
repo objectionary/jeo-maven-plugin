@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.log.Logger;
+import java.util.Optional;
 import org.objectweb.asm.AnnotationVisitor;
 
 /**
@@ -87,9 +88,7 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
         final DirectivesAnnotationProperty prop = new DirectivesAnnotationProperty(
             DirectivesAnnotationProperty.Type.ARRAY
         );
-        if (name != null) {
-            prop.append(new DirectivesData("name", name));
-        }
+        prop.append(new DirectivesData("name", Optional.ofNullable(name).orElse("")));
         this.annotation.append(prop);
         return new DirectivesAnnotationVisitor(this.api, super.visitArray(name), prop);
     }
