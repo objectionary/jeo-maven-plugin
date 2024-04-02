@@ -34,6 +34,10 @@ import org.xembly.Directives;
 /**
  * Directives Method.
  * @since 0.1
+ * @todo #534:90min Refactor DirectivesMethod class to simplify the code.
+ *  Currently, the class has a lot of methods and fields. It's kind of hard to understand
+ *  what this class does. We need to refactor it to make it more readable and understandable.
+ *  Moreover, in many places this class uses null checks, which is not good.
  */
 public final class DirectivesMethod implements Iterable<Directive> {
 
@@ -65,7 +69,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
     /**
      * Annotation default value.
      */
-    private final AtomicReference<DirectivesDefaultValue> defvalue;
+    private final AtomicReference<DirectivesDefaultValue> dvalue;
 
     /**
      * Opcodes counting.
@@ -113,7 +117,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         this.instructions = new ArrayList<>(0);
         this.exceptions = new ArrayList<>(0);
         this.annotations = new DirectivesAnnotations();
-        this.defvalue = new AtomicReference<>();
+        this.dvalue = new AtomicReference<>();
     }
 
     /**
@@ -183,11 +187,11 @@ public final class DirectivesMethod implements Iterable<Directive> {
             this.exceptions.forEach(directives::append);
             directives.up();
         }
-        if (Objects.nonNull(this.defvalue)
-            && this.defvalue.get() != null
-            && !this.defvalue.get().isEmpty()
+        if (Objects.nonNull(this.dvalue)
+            && this.dvalue.get() != null
+            && !this.dvalue.get().isEmpty()
         ) {
-            directives.append(this.defvalue.get());
+            directives.append(this.dvalue.get());
         }
         directives.up();
         return directives.iterator();
@@ -205,7 +209,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * Add annotation default value to the directives.
      * @param value Default value directives.
      */
-    public void defvalue(final DirectivesDefaultValue value) {
-        this.defvalue.set(value);
+    void defvalue(final DirectivesDefaultValue value) {
+        this.dvalue.set(value);
     }
 }
