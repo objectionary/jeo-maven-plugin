@@ -26,6 +26,8 @@ package org.eolang.jeo.representation.directives;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -59,6 +61,11 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * Method annotations.
      */
     private final DirectivesAnnotations annotations;
+
+    /**
+     * Annotation default value.
+     */
+    private final AtomicReference<DirectivesDefaultValue> defvalue;
 
     /**
      * Opcodes counting.
@@ -106,6 +113,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         this.instructions = new ArrayList<>(0);
         this.exceptions = new ArrayList<>(0);
         this.annotations = new DirectivesAnnotations();
+        this.defvalue = new AtomicReference<>();
     }
 
     /**
@@ -175,6 +183,12 @@ public final class DirectivesMethod implements Iterable<Directive> {
             this.exceptions.forEach(directives::append);
             directives.up();
         }
+        if (Objects.nonNull(this.defvalue)
+            && this.defvalue.get() != null
+            && !this.defvalue.get().isEmpty()
+        ) {
+            directives.append(this.defvalue.get());
+        }
         directives.up();
         return directives.iterator();
     }
@@ -185,5 +199,13 @@ public final class DirectivesMethod implements Iterable<Directive> {
      */
     void exception(final Iterable<Directive> exception) {
         this.exceptions.add(exception);
+    }
+
+    /**
+     * Add annotation default value to the directives.
+     * @param value Default value directives.
+     */
+    public void defvalue(final DirectivesDefaultValue value) {
+        this.defvalue.set(value);
     }
 }

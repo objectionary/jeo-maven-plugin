@@ -220,9 +220,9 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     public AnnotationVisitor visitAnnotationDefault() {
         final AnnotationVisitor visitor = super.visitAnnotationDefault();
         Logger.debug(this, String.format("Visit annotation default by %s visitor", visitor));
-        return new DirectivesAnnotationVisitor(
-            this.api, visitor, new DirectivesAnnotationDefault()
-        );
+        final DirectivesDefaultValue value = new DirectivesDefaultValue();
+        this.method.defvalue(value);
+        return new DirectivesAnnotationVisitor(this.api, visitor, value);
     }
 
     @Override
