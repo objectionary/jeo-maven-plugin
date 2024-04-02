@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
@@ -41,6 +42,21 @@ import org.objectweb.asm.util.CheckClassAdapter;
  * @since 0.2
  */
 public final class VerifiedClassWriter extends CustomClassWriter {
+
+    /**
+     * Default constructor.
+     */
+    public VerifiedClassWriter() {
+        this(ClassWriter.COMPUTE_FRAMES);
+    }
+
+    /**
+     * Constructor.
+     * @param flags Flags. See {@link ClassWriter#COMPUTE_FRAMES} for more info.
+     */
+    public VerifiedClassWriter(final int flags) {
+        super(flags);
+    }
 
     @Override
     public byte[] toByteArray() {

@@ -32,6 +32,7 @@ import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.util.CheckClassAdapter;
 
@@ -80,6 +81,7 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Constructor.
+     * Used in tests only.
      */
     public BytecodeClass() {
         this("Simple");
@@ -87,7 +89,7 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Constructor.
-     *
+     * Used in tests only.
      * @param name Class name.
      */
     public BytecodeClass(final String name) {
@@ -96,7 +98,7 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Constructor.
-     *
+     * Used in tests only.
      * @param name Class name.
      * @param access Access modifiers.
      */
@@ -106,7 +108,7 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Constructor.
-     *
+     * Used in tests only.
      * @param name Class name.
      * @param properties Class properties.
      */
@@ -114,9 +116,18 @@ public final class BytecodeClass implements Testable {
         this(name, properties, true);
     }
 
+    public BytecodeClass(
+        final String name,
+        final BytecodeClassProperties properties,
+        final boolean verify,
+        final boolean frames
+    ) {
+        this(name, BytecodeClass.writer(verify, frames), new ArrayList<>(0), properties);
+    }
+
     /**
      * Constructor.
-     *
+     * Has real usages.
      * @param name Class name.
      * @param properties Class properties.
      * @param verify Verify bytecode.
@@ -126,22 +137,7 @@ public final class BytecodeClass implements Testable {
         final BytecodeClassProperties properties,
         final boolean verify
     ) {
-        this(name, BytecodeClass.writer(verify), new ArrayList<>(0), properties);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param name Class name.
-     * @param access Access modifiers.
-     * @param writer ASM class writer.
-     */
-    public BytecodeClass(
-        final String name,
-        final int access,
-        final CustomClassWriter writer
-    ) {
-        this(name, writer, new ArrayList<>(0), new BytecodeClassProperties(access));
+        this(name, BytecodeClass.writer(verify, true), new ArrayList<>(0), properties);
     }
 
     /**
@@ -393,12 +389,18 @@ public final class BytecodeClass implements Testable {
      * @param verify Verify bytecode.
      * @return Verified class writer if verify is true, otherwise custom class writer.
      */
-    private static CustomClassWriter writer(final boolean verify) {
+    private static CustomClassWriter writer(final boolean verify, final boolean frames) {
         final CustomClassWriter result;
-        if (verify) {
-            result = new VerifiedClassWriter();
+        final int flags;
+        if (frames) {
+            flags = ClassWriter.COMPUTE_FRAMES;
         } else {
-            result = new CustomClassWriter();
+            flags = 0;
+        }
+        if (verify) {
+            result = new VerifiedClassWriter(flags);
+        } else {
+            result = new CustomClassWriter(flags);
         }
         return result;
     }
