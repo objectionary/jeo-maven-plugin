@@ -33,6 +33,12 @@ import org.objectweb.asm.AnnotationVisitor;
  * These directives then can be used to build an XML document.
  *
  * @since 0.3
+ * @todo #534:90min Refactor the code to reduce complexity and remove null values.
+ *  Currently many classes use null checks in many places, including DirectivesAnnotationVisitor.
+ *  This happens because the Java ASM library produce them a lot.
+ *  I added accidentally checks, but they look awful.
+ *  We need to refactor the code to remove these checks and make it more readable.
+ *  Moreover, I would pay attention to all Null usages in the project.
  */
 public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
 
