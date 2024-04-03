@@ -12,11 +12,6 @@ public final class CustomClassVisitor extends ClassVisitor {
 
     private final CustomClassWriter writer;
 
-
-    public CustomClassVisitor(final int api) {
-        this(api, new CustomClassWriter());
-    }
-
     public CustomClassVisitor(final CustomClassWriter writer) {
         this(new DefaultVersion().api(), writer);
     }
