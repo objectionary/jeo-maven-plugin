@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.ArrayList;
 import java.util.List;
 import org.eolang.jeo.representation.xmir.AllLabels;
-import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
@@ -39,7 +38,7 @@ public final class BytecodeMethod implements Testable {
     /**
      * ASM class visitor.
      */
-    private final ClassVisitor visitor;
+    private final CustomClassWriter visitor;
 
     /**
      * Original class.
@@ -92,7 +91,7 @@ public final class BytecodeMethod implements Testable {
      */
     BytecodeMethod(
         final String name,
-        final ClassVisitor visitor,
+        final CustomClassWriter visitor,
         final BytecodeClass clazz,
         final String descriptor,
         final int... modifiers
@@ -108,7 +107,7 @@ public final class BytecodeMethod implements Testable {
      */
     BytecodeMethod(
         final BytecodeMethodProperties properties,
-        final ClassVisitor visitor,
+        final CustomClassWriter visitor,
         final BytecodeClass clazz
     ) {
         this(properties, visitor, clazz, 0, 0);
@@ -125,7 +124,7 @@ public final class BytecodeMethod implements Testable {
      */
     public BytecodeMethod(
         final BytecodeMethodProperties properties,
-        final ClassVisitor visitor,
+        final CustomClassWriter visitor,
         final BytecodeClass clazz,
         final int stack,
         final int locals
@@ -243,7 +242,10 @@ public final class BytecodeMethod implements Testable {
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     void write() {
         try {
-            final MethodVisitor mvisitor = this.properties.writeMethod(this.visitor);
+            final MethodVisitor mvisitor = this.properties.writeMethod(
+                this.visitor,
+                this.stack == 0 && this.locals == 0
+            );
             this.annotations.forEach(annotation -> annotation.write(mvisitor));
             this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));
             if (!this.properties.isAbstract()) {

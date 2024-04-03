@@ -23,40 +23,248 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.eolang.jeo.PluginStartup;
+import org.eolang.jeo.representation.DefaultVersion;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.analysis.Analyzer;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
+import org.objectweb.asm.tree.analysis.SimpleVerifier;
+import org.objectweb.asm.util.CheckClassAdapter;
 
 /**
  * Custom class writer.
- * This class works in couple with {@link PluginStartup#init()} ()} method that sets
- * the maven classloader as the current thread classloader.
- * Originally we faced with the problem that {@link ClassWriter} uses classes from ClassLoader
- * to perform {@link org.objectweb.asm.MethodVisitor#visitMaxs(int, int)} method and if it can't
- * find the class it throws {@link ClassNotFoundException}. To prevent this we override
- * {@link ClassWriter#getClassLoader()} method and return the current thread classloader that
- * knows about all classes that were compiled on the previous maven phases.
- * You can read more about this problem here:
- * - https://gitlab.ow2.org/asm/asm/-/issues/317918
- * - https://stackoverflow.com/questions/11292701/error-while-instrumenting-class-files-asm-classwriter-getcommonsuperclass
  *
- * @since 0.1
+ * @since 0.3
  */
-public class CustomClassWriter extends ClassWriter {
+public final class CustomClassWriter extends ClassVisitor {
+
+    /**
+     * Bytecode writer.
+     */
+    private final ClassesAwareWriter writer;
 
     /**
      * Constructor.
-     * @todo #488:90min Disable automatic frame computation in the ClassWriter.
-     *  The ClassWriter is currently configured to automatically compute the stack map frames.
-     *  This is a very expensive operation and it is not necessary for our use case.
-     *  But if we disable it, tests fail.
-     *  We need to investigate why this happens and fix it.
+     * @param verify Verify bytecode.
      */
-    CustomClassWriter() {
-        super(ClassWriter.COMPUTE_FRAMES);
+    CustomClassWriter(final boolean verify) {
+        this(CustomClassWriter.prestructor(verify));
     }
 
-    @Override
-    public final ClassLoader getClassLoader() {
-        return Thread.currentThread().getContextClassLoader();
+    /**
+     * Constructor.
+     * @param writer Writer.
+     */
+    private CustomClassWriter(final ClassesAwareWriter writer) {
+        this(new DefaultVersion().api(), writer);
+    }
+
+    /**
+     * Constructor.
+     * @param api Java ASM API version.
+     * @param writer Writer.
+     */
+    private CustomClassWriter(final int api, final ClassesAwareWriter writer) {
+        super(api, writer);
+        this.writer = writer;
+    }
+
+    /**
+     * Generate class bytecode.
+     * @return Bytecode.
+     */
+    public Bytecode bytecode() {
+        return new Bytecode(this.writer.toByteArray());
+    }
+
+    /**
+     * Visits a method of the class.
+     * @param access Access flags.
+     * @param name Method name.
+     * @param descriptor Method descriptor.
+     * @param signature Method signature.
+     * @param exceptions Method exceptions.
+     * @param compute If frames should be computed.
+     * @return Method visitor.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    MethodVisitor visitMethod(
+        final int access,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final String[] exceptions,
+        final boolean compute
+    ) {
+        final MethodVisitor result;
+        if (compute) {
+            result = this.visitMethodWithoutFrames(access, name, descriptor, signature, exceptions);
+        } else {
+            result = this.visitMethod(access, name, descriptor, signature, exceptions);
+        }
+        return result;
+    }
+
+    /**
+     * Visits a method of the class and compute all required stack values, locals, and frames.
+     * @param access Access flags.
+     * @param name Method name.
+     * @param descriptor Method descriptor.
+     * @param signature Method signature.
+     * @param exceptions Method exceptions.
+     * @return Method visitor.
+     * @todo #528:90min Remove ad-hoc solution for method frames, stack and locals computation.
+     *  This method is a workaround for the issue with the ASM library that doesn't allow
+     *  to compute frames and stack values per method basis. Here I use reflection to change
+     *  the computation mode to COMPUTE_ALL_FRAMES and then restore it back to the original value.
+     *  This is a hacky solution and should be removed once the issue is fixed in the ASM library.
+     *  Another option is to compute all this values ourselves.
+     *  You can read more about this issue here:
+     *  https://stackoverflow.com/questions/78262674/how-to-mix-manual-and-automatic-calculation-of-max-locals-max-stack-and-frames
+     * @checkstyle ParameterNumberCheck (25 lines)
+     */
+    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
+    private MethodVisitor visitMethodWithoutFrames(
+        final int access,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final String... exceptions
+    ) {
+        final ClassVisitor delegate = this.getDelegate();
+        try {
+            final Field field = ClassWriter.class.getDeclaredField("compute");
+            field.setAccessible(true);
+            final int previous = field.getInt(delegate);
+            field.setInt(delegate, 4);
+            final MethodVisitor original = this.visitMethod(
+                access, name, descriptor, signature, exceptions
+            );
+            field.setInt(delegate, previous);
+            return original;
+        } catch (final NoSuchFieldException | IllegalAccessException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Can't set compute field for ASM ClassWriter '%s' and change the computation mode to COMPUTE_ALL_FRAMES",
+                    delegate
+                ),
+                exception
+            );
+        }
+    }
+
+    /**
+     * Which class writer to use.
+     * @param verify Verify bytecode.
+     * @return A verified class writer if verify is true, otherwise custom class writer.
+     */
+    private static ClassesAwareWriter prestructor(final boolean verify) {
+        final ClassesAwareWriter result;
+        if (verify) {
+            result = new VerifiedClassWriter();
+        } else {
+            result = new ClassesAwareWriter();
+        }
+        return result;
+    }
+
+    /**
+     * Class writer that knows about additional classes loaded.
+     * This class works in couple with {@link PluginStartup#init()} ()} method that sets
+     * the maven classloader as the current thread classloader.
+     * Originally we faced with the problem that {@link ClassWriter} uses classes from ClassLoader
+     * to perform {@link MethodVisitor#visitMaxs(int, int)} method and if it can't
+     * find the class it throws {@link ClassNotFoundException}. To prevent this we override
+     * {@link ClassWriter#getClassLoader()} method and return the current thread classloader that
+     * knows about all classes that were compiled on the previous maven phases.
+     * You can read more about this problem here:
+     * - https://gitlab.ow2.org/asm/asm/-/issues/317918
+     * - https://stackoverflow.com/questions/11292701/error-while-instrumenting-class-files-asm-classwriter-getcommonsuperclass
+     *
+     * @since 0.1
+     */
+    private static class ClassesAwareWriter extends ClassWriter {
+
+        /**
+         * Constructor.
+         * Do not compute frames automatically.
+         */
+        private ClassesAwareWriter() {
+            this(0);
+        }
+
+        /**
+         * Constructor.
+         * @param flags Flags. See {@link ClassWriter#COMPUTE_FRAMES} for more information.
+         */
+        private ClassesAwareWriter(final int flags) {
+            super(flags);
+        }
+
+        @Override
+        public final ClassLoader getClassLoader() {
+            return Thread.currentThread().getContextClassLoader();
+        }
+    }
+
+    /**
+     * Class writer that verifies the bytecode.
+     * @since 0.2
+     */
+    private static final class VerifiedClassWriter extends ClassesAwareWriter {
+
+        @Override
+        public byte[] toByteArray() {
+            final byte[] bytes = super.toByteArray();
+            VerifiedClassWriter.verify(bytes);
+            return bytes;
+        }
+
+        /**
+         * Verify the bytecode.
+         * @param bytes The bytecode to verify.
+         */
+        private static void verify(final byte[] bytes) {
+            final ClassNode clazz = new ClassNode();
+            new ClassReader(bytes)
+                .accept(new CheckClassAdapter(clazz, false), ClassReader.SKIP_DEBUG);
+            final Optional<Type> syper = Optional.ofNullable(clazz.superName)
+                .map(Type::getObjectType);
+            final List<Type> interfaces = clazz.interfaces.stream().map(Type::getObjectType)
+                .collect(Collectors.toList());
+            for (final MethodNode method : clazz.methods) {
+                try {
+                    final SimpleVerifier verifier =
+                        new SimpleVerifier(
+                            Type.getObjectType(clazz.name),
+                            syper.orElse(null),
+                            interfaces,
+                            (clazz.access & Opcodes.ACC_INTERFACE) != 0
+                        );
+                    verifier.setClassLoader(Thread.currentThread().getContextClassLoader());
+                    new Analyzer<>(verifier).analyze(clazz.name, method);
+                } catch (final ClassFormatError | AnalyzerException exception) {
+                    throw new IllegalStateException(
+                        String.format(
+                            "Bytecode verification failed for the class '%s' and method '%s'",
+                            clazz.name,
+                            method
+                        ),
+                        exception
+                    );
+                }
+            }
+        }
     }
 }

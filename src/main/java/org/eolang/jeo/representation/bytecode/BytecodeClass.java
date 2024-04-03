@@ -80,6 +80,7 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Constructor.
+     * Used in tests only.
      */
     public BytecodeClass() {
         this("Simple");
@@ -87,7 +88,7 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Constructor.
-     *
+     * Used in tests only.
      * @param name Class name.
      */
     public BytecodeClass(final String name) {
@@ -96,7 +97,7 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Constructor.
-     *
+     * Used in tests only.
      * @param name Class name.
      * @param access Access modifiers.
      */
@@ -106,7 +107,7 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Constructor.
-     *
+     * Used in tests only.
      * @param name Class name.
      * @param properties Class properties.
      */
@@ -116,7 +117,7 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Constructor.
-     *
+     * Has real usages.
      * @param name Class name.
      * @param properties Class properties.
      * @param verify Verify bytecode.
@@ -126,22 +127,7 @@ public final class BytecodeClass implements Testable {
         final BytecodeClassProperties properties,
         final boolean verify
     ) {
-        this(name, BytecodeClass.writer(verify), new ArrayList<>(0), properties);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param name Class name.
-     * @param access Access modifiers.
-     * @param writer ASM class writer.
-     */
-    public BytecodeClass(
-        final String name,
-        final int access,
-        final CustomClassWriter writer
-    ) {
-        this(name, writer, new ArrayList<>(0), new BytecodeClassProperties(access));
+        this(name, new CustomClassWriter(verify), new ArrayList<>(0), properties);
     }
 
     /**
@@ -196,7 +182,7 @@ public final class BytecodeClass implements Testable {
             this.fields.forEach(field -> field.write(this.visitor));
             this.methods.forEach(BytecodeMethod::write);
             this.visitor.visitEnd();
-            return new Bytecode(this.visitor.toByteArray());
+            return this.visitor.bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
                 String.format("Can't create bytecode for the class '%s' ", this.name),
@@ -386,20 +372,5 @@ public final class BytecodeClass implements Testable {
             )
             .opcode(Opcodes.RETURN)
             .up();
-    }
-
-    /**
-     * Which class writer to use.
-     * @param verify Verify bytecode.
-     * @return Verified class writer if verify is true, otherwise custom class writer.
-     */
-    private static CustomClassWriter writer(final boolean verify) {
-        final CustomClassWriter result;
-        if (verify) {
-            result = new VerifiedClassWriter();
-        } else {
-            result = new CustomClassWriter();
-        }
-        return result;
     }
 }
