@@ -42,6 +42,11 @@ import org.objectweb.asm.tree.analysis.AnalyzerException;
 import org.objectweb.asm.tree.analysis.SimpleVerifier;
 import org.objectweb.asm.util.CheckClassAdapter;
 
+/**
+ * Custom class writer.
+ *
+ * @since 0.3
+ */
 public final class CustomClassWriter extends ClassVisitor {
 
     /**
@@ -54,7 +59,7 @@ public final class CustomClassWriter extends ClassVisitor {
      * @param verify Verify bytecode.
      */
     CustomClassWriter(final boolean verify) {
-        this(CustomClassWriter.writer(verify));
+        this(CustomClassWriter.prestructor(verify));
     }
 
     /**
@@ -92,6 +97,7 @@ public final class CustomClassWriter extends ClassVisitor {
      * @param exceptions Method exceptions.
      * @param compute If frames should be computed.
      * @return Method visitor.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     MethodVisitor visitMethod(
         final int access,
@@ -118,41 +124,44 @@ public final class CustomClassWriter extends ClassVisitor {
      * @param signature Method signature.
      * @param exceptions Method exceptions.
      * @return Method visitor.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
+    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
     private MethodVisitor visitMethodWithoutFrames(
         final int access,
         final String name,
         final String descriptor,
         final String signature,
-        final String[] exceptions
+        final String... exceptions
     ) {
+        final ClassVisitor delegate = this.getDelegate();
         try {
             final Field field = ClassWriter.class.getDeclaredField("compute");
             field.setAccessible(true);
-            field.setInt(this.writer, 4);
+            final int previous = field.getInt(delegate);
+            field.setInt(delegate, 4);
             final MethodVisitor original = this.visitMethod(
                 access, name, descriptor, signature, exceptions
             );
-            field.setInt(this.writer, 0);
+            field.setInt(delegate, previous);
             return original;
         } catch (final NoSuchFieldException | IllegalAccessException exception) {
             throw new IllegalStateException(
                 String.format(
                     "Can't set compute field for ASM ClassWriter '%s' and change the computation mode to COMPUTE_ALL_FRAMES",
-                    this.writer
+                    delegate
                 ),
                 exception
             );
         }
     }
 
-
     /**
      * Which class writer to use.
      * @param verify Verify bytecode.
      * @return A verified class writer if verify is true, otherwise custom class writer.
      */
-    private static ClassesAwareWriter writer(final boolean verify) {
+    private static ClassesAwareWriter prestructor(final boolean verify) {
         final ClassesAwareWriter result;
         if (verify) {
             result = new VerifiedClassWriter();

@@ -116,7 +116,7 @@ public final class BytecodeMethodProperties implements Testable {
         this.name = name;
         this.descriptor = descriptor;
         this.signature = signature;
-        this.exceptions = exceptions;
+        this.exceptions = exceptions.clone();
     }
 
     @Override
@@ -126,15 +126,16 @@ public final class BytecodeMethodProperties implements Testable {
 
     /**
      * Is method abstract.
-     * @return True if method is abstract.
+     * @return True if the method is abstract.
      */
     public boolean isAbstract() {
         return (this.access & Opcodes.ACC_ABSTRACT) != 0;
     }
 
     /**
-     * Add method to class writer.
+     * Add method to a class writer.
      * @param writer Class writer.
+     * @param compute If frames should be computed.
      * @return Method visitor.
      */
     MethodVisitor writeMethod(final CustomClassWriter writer, final boolean compute) {
