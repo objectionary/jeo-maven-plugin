@@ -132,32 +132,12 @@ public final class BytecodeMethodProperties implements Testable {
         return (this.access & Opcodes.ACC_ABSTRACT) != 0;
     }
 
-
     /**
      * Add method to class writer.
      * @param writer Class writer.
      * @return Method visitor.
      */
-    MethodVisitor writeCustomMethodWithComputation(final CustomClassVisitor writer) {
-        Logger.debug(
-            this,
-            String.format("Creating method visitor with the following properties %s", this)
-        );
-        return writer.visitCustomMethodWithComputation(
-            this.access,
-            new JavaName(this.name).decode(),
-            this.descriptor,
-            this.signature,
-            this.exceptions
-        );
-    }
-
-    /**
-     * Add method to class writer.
-     * @param writer Class writer.
-     * @return Method visitor.
-     */
-    MethodVisitor writeMethod(final CustomClassVisitor writer) {
+    MethodVisitor writeMethod(final CustomClassVisitor writer, final boolean compute) {
         Logger.debug(
             this,
             String.format("Creating method visitor with the following properties %s", this)
@@ -167,7 +147,8 @@ public final class BytecodeMethodProperties implements Testable {
             new JavaName(this.name).decode(),
             this.descriptor,
             this.signature,
-            this.exceptions
+            this.exceptions,
+            compute
         );
     }
 }

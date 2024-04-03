@@ -44,13 +44,6 @@ import org.objectweb.asm.util.CheckClassAdapter;
 public final class VerifiedClassWriter extends CustomClassWriter {
 
     /**
-     * Default constructor.
-     */
-    public VerifiedClassWriter() {
-        this(ClassWriter.COMPUTE_FRAMES);
-    }
-
-    /**
      * Constructor.
      * @param flags Flags. See {@link ClassWriter#COMPUTE_FRAMES} for more info.
      */

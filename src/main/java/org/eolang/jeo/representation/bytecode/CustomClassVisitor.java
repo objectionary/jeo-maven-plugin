@@ -21,7 +21,26 @@ public final class CustomClassVisitor extends ClassVisitor {
         this.writer = writer;
     }
 
-    public MethodVisitor visitCustomMethodWithComputation(
+    public MethodVisitor visitMethod(
+        final int access,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final String[] exceptions,
+        final boolean compute
+    ) {
+        MethodVisitor result;
+        if (compute) {
+            result = this.visitCustomMethodWithComputation(
+                access, name, descriptor, signature, exceptions
+            );
+        } else {
+            result = super.visitMethod(access, name, descriptor, signature, exceptions);
+        }
+        return result;
+    }
+
+    private MethodVisitor visitCustomMethodWithComputation(
         final int access,
         final String name,
         final String descriptor,

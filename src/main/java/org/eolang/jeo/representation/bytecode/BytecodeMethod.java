@@ -242,30 +242,19 @@ public final class BytecodeMethod implements Testable {
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     void write() {
         try {
-            if (this.stack == 0 && this.locals == 0) {
-                final MethodVisitor mvisitor = this.properties.writeCustomMethodWithComputation(
-                    this.visitor);
-                this.annotations.forEach(annotation -> annotation.write(mvisitor));
-                this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));
-                if (!this.properties.isAbstract()) {
-                    mvisitor.visitCode();
-                    this.tryblocks.forEach(block -> block.writeTo(mvisitor));
-                    this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
-                    mvisitor.visitMaxs(this.stack, this.locals);
-                }
-                mvisitor.visitEnd();
-            } else {
-                final MethodVisitor mvisitor = this.properties.writeMethod(this.visitor);
-                this.annotations.forEach(annotation -> annotation.write(mvisitor));
-                this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));
-                if (!this.properties.isAbstract()) {
-                    mvisitor.visitCode();
-                    this.tryblocks.forEach(block -> block.writeTo(mvisitor));
-                    this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
-                    mvisitor.visitMaxs(this.stack, this.locals);
-                }
-                mvisitor.visitEnd();
+            final MethodVisitor mvisitor = this.properties.writeMethod(
+                this.visitor,
+                this.stack == 0 && this.locals == 0
+            );
+            this.annotations.forEach(annotation -> annotation.write(mvisitor));
+            this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));
+            if (!this.properties.isAbstract()) {
+                mvisitor.visitCode();
+                this.tryblocks.forEach(block -> block.writeTo(mvisitor));
+                this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
+                mvisitor.visitMaxs(this.stack, this.locals);
             }
+            mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {
             throw new IllegalStateException(
                 String.format(
