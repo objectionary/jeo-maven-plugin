@@ -38,7 +38,7 @@ public final class BytecodeMethod implements Testable {
     /**
      * ASM class visitor.
      */
-    private final CustomClassVisitor visitor;
+    private final CustomClassWriter visitor;
 
     /**
      * Original class.
@@ -91,7 +91,7 @@ public final class BytecodeMethod implements Testable {
      */
     BytecodeMethod(
         final String name,
-        final CustomClassVisitor visitor,
+        final CustomClassWriter visitor,
         final BytecodeClass clazz,
         final String descriptor,
         final int... modifiers
@@ -107,7 +107,7 @@ public final class BytecodeMethod implements Testable {
      */
     BytecodeMethod(
         final BytecodeMethodProperties properties,
-        final CustomClassVisitor visitor,
+        final CustomClassWriter visitor,
         final BytecodeClass clazz
     ) {
         this(properties, visitor, clazz, 0, 0);
@@ -124,7 +124,7 @@ public final class BytecodeMethod implements Testable {
      */
     public BytecodeMethod(
         final BytecodeMethodProperties properties,
-        final CustomClassVisitor visitor,
+        final CustomClassWriter visitor,
         final BytecodeClass clazz,
         final int stack,
         final int locals

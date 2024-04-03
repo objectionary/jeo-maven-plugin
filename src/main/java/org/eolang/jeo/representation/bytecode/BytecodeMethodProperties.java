@@ -137,7 +137,7 @@ public final class BytecodeMethodProperties implements Testable {
      * @param writer Class writer.
      * @return Method visitor.
      */
-    MethodVisitor writeMethod(final CustomClassVisitor writer, final boolean compute) {
+    MethodVisitor writeMethod(final CustomClassWriter writer, final boolean compute) {
         Logger.debug(
             this,
             String.format("Creating method visitor with the following properties %s", this)

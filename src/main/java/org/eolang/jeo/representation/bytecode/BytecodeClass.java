@@ -32,7 +32,6 @@ import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.util.CheckClassAdapter;
 
@@ -54,7 +53,7 @@ public final class BytecodeClass implements Testable {
      * Class writer.
      */
     @ToString.Exclude
-    private final CustomClassVisitor visitor;
+    private final CustomClassWriter visitor;
 
     /**
      * Methods.
@@ -128,16 +127,7 @@ public final class BytecodeClass implements Testable {
         final BytecodeClassProperties properties,
         final boolean verify
     ) {
-        this(name, BytecodeClass.writer(verify, false), new ArrayList<>(0), properties);
-    }
-
-    public BytecodeClass(
-        final String name,
-        final BytecodeClassProperties properties,
-        final boolean verify,
-        final boolean frames
-    ) {
-        this(name, BytecodeClass.writer(verify, frames), new ArrayList<>(0), properties);
+        this(name, new CustomClassWriter(verify), new ArrayList<>(0), properties);
     }
 
     /**
@@ -151,7 +141,7 @@ public final class BytecodeClass implements Testable {
      */
     public BytecodeClass(
         final String name,
-        final CustomClassVisitor writer,
+        final CustomClassWriter writer,
         final Collection<BytecodeMethod> methods,
         final BytecodeClassProperties properties
     ) {
@@ -382,26 +372,5 @@ public final class BytecodeClass implements Testable {
             )
             .opcode(Opcodes.RETURN)
             .up();
-    }
-
-    /**
-     * Which class writer to use.
-     * @param verify Verify bytecode.
-     * @return Verified class writer if verify is true, otherwise custom class writer.
-     */
-    private static CustomClassVisitor writer(final boolean verify, final boolean frames) {
-        final CustomClassWriter result;
-        final int flags;
-        if (frames) {
-            flags = ClassWriter.COMPUTE_FRAMES;
-        } else {
-            flags = 0;
-        }
-        if (verify) {
-            result = new VerifiedClassWriter(flags);
-        } else {
-            result = new CustomClassWriter(flags);
-        }
-        return new CustomClassVisitor(result);
     }
 }
