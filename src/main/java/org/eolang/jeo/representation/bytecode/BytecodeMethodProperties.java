@@ -28,7 +28,6 @@ import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.JavaName;
-import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -133,12 +132,32 @@ public final class BytecodeMethodProperties implements Testable {
         return (this.access & Opcodes.ACC_ABSTRACT) != 0;
     }
 
+
     /**
      * Add method to class writer.
      * @param writer Class writer.
      * @return Method visitor.
      */
-    MethodVisitor writeMethod(final ClassVisitor writer) {
+    MethodVisitor writeCustomMethodWithComputation(final CustomClassVisitor writer) {
+        Logger.debug(
+            this,
+            String.format("Creating method visitor with the following properties %s", this)
+        );
+        return writer.visitCustomMethodWithComputation(
+            this.access,
+            new JavaName(this.name).decode(),
+            this.descriptor,
+            this.signature,
+            this.exceptions
+        );
+    }
+
+    /**
+     * Add method to class writer.
+     * @param writer Class writer.
+     * @return Method visitor.
+     */
+    MethodVisitor writeMethod(final CustomClassVisitor writer) {
         Logger.debug(
             this,
             String.format("Creating method visitor with the following properties %s", this)

@@ -54,7 +54,7 @@ public final class BytecodeClass implements Testable {
      * Class writer.
      */
     @ToString.Exclude
-    private final CustomClassWriter visitor;
+    private final CustomClassVisitor visitor;
 
     /**
      * Methods.
@@ -116,15 +116,6 @@ public final class BytecodeClass implements Testable {
         this(name, properties, true);
     }
 
-    public BytecodeClass(
-        final String name,
-        final BytecodeClassProperties properties,
-        final boolean verify,
-        final boolean frames
-    ) {
-        this(name, BytecodeClass.writer(verify, frames), new ArrayList<>(0), properties);
-    }
-
     /**
      * Constructor.
      * Has real usages.
@@ -137,7 +128,16 @@ public final class BytecodeClass implements Testable {
         final BytecodeClassProperties properties,
         final boolean verify
     ) {
-        this(name, BytecodeClass.writer(verify, true), new ArrayList<>(0), properties);
+        this(name, BytecodeClass.writer(verify, false), new ArrayList<>(0), properties);
+    }
+
+    public BytecodeClass(
+        final String name,
+        final BytecodeClassProperties properties,
+        final boolean verify,
+        final boolean frames
+    ) {
+        this(name, BytecodeClass.writer(verify, frames), new ArrayList<>(0), properties);
     }
 
     /**
@@ -151,7 +151,7 @@ public final class BytecodeClass implements Testable {
      */
     public BytecodeClass(
         final String name,
-        final CustomClassWriter writer,
+        final CustomClassVisitor writer,
         final Collection<BytecodeMethod> methods,
         final BytecodeClassProperties properties
     ) {
@@ -192,7 +192,7 @@ public final class BytecodeClass implements Testable {
             this.fields.forEach(field -> field.write(this.visitor));
             this.methods.forEach(BytecodeMethod::write);
             this.visitor.visitEnd();
-            return new Bytecode(this.visitor.toByteArray());
+            return this.visitor.bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
                 String.format("Can't create bytecode for the class '%s' ", this.name),
@@ -389,7 +389,7 @@ public final class BytecodeClass implements Testable {
      * @param verify Verify bytecode.
      * @return Verified class writer if verify is true, otherwise custom class writer.
      */
-    private static CustomClassWriter writer(final boolean verify, final boolean frames) {
+    private static CustomClassVisitor writer(final boolean verify, final boolean frames) {
         final CustomClassWriter result;
         final int flags;
         if (frames) {
@@ -402,6 +402,6 @@ public final class BytecodeClass implements Testable {
         } else {
             result = new CustomClassWriter(flags);
         }
-        return result;
+        return new CustomClassVisitor(result);
     }
 }
