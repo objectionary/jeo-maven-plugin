@@ -124,7 +124,15 @@ public final class CustomClassWriter extends ClassVisitor {
      * @param signature Method signature.
      * @param exceptions Method exceptions.
      * @return Method visitor.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     * @todo #528:90min Remove ad-hoc solution for method frames, stack and locals computation.
+     *  This method is a workaround for the issue with the ASM library that doesn't allow
+     *  to compute frames and stack values per method basis. Here I use reflection to change
+     *  the computation mode to COMPUTE_ALL_FRAMES and then restore it back to the original value.
+     *  This is a hacky solution and should be removed once the issue is fixed in the ASM library.
+     *  Another option is to compute all this values ourselves.
+     *  You can read more about this issue here:
+     *  https://stackoverflow.com/questions/78262674/how-to-mix-manual-and-automatic-calculation-of-max-locals-max-stack-and-frames
+     * @checkstyle ParameterNumberCheck (25 lines)
      */
     @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
     private MethodVisitor visitMethodWithoutFrames(
