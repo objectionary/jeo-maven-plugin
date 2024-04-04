@@ -83,14 +83,14 @@ SOFTWARE.
         <artifactId>jeo-maven-plugin</artifactId>
         <version>@project.version@</version>
         <configuration>
+          <disabled>false</disabled>
           <!--
-            @todo #464:90min Enable 'spring-fat' Integration Test.
-             Currently, the 'spring-fat' integration test is disabled because
-             it fails. The reason is that the 'jeo-maven-plugin' does not
-             support many java features. We need to implement them and enable
-             the test.
+            @todo #488:90min Enable Bytecode Verification For Spring Fat Integration Test.
+             We skip verification because the Spring Framework uses many classes that
+             are not in the classpath and the plugin cannot verify the correctness of
+             the transformation. For not it's not so crucial, but in the future, we
+             should enable it.
           -->
-          <disabled>true</disabled>
           <skipVerification>true</skipVerification>
         </configuration>
         <executions>
