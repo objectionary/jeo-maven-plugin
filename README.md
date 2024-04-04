@@ -97,6 +97,7 @@ setting the `skipVerification` parameter to `true`:
   <skipVerification>true</skipVerification>
 </configuration>
 ```
+
 At times, it might be beneficial to generate intentionally flawed bytecode.
 
 ## Transformation method
@@ -344,6 +345,19 @@ compromised. Therefore, it is extremely important to preserve most of the
 labels. However, it's worth noting that you can omit certain labels used solely
 for debugging purposes when generating your own classes. For instance, you can
 omit labels at the start and end of a method.
+
+## How to Build the Plugin
+
+To build the plugin from the source code, you need to clone the repository and
+run the following command:
+
+```bash
+$ mvn clean install -Pqulice,long
+```
+
+Pay attention to the `qulice` profile, which activates the static analysis
+tools. The `long` profile is optional and runs the full test suite, including
+long-running integration tests.
 
 ## How to Contribute
 

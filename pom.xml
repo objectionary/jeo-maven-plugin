@@ -403,10 +403,11 @@ SOFTWARE.
         <plugins>
           <plugin>
             <artifactId>maven-invoker-plugin</artifactId>
-            <configuration>
-              <pomIncludes>
-                <include>spring-fat/pom.xml</include>
-              </pomIncludes>
+            <configuration combine.self="override">
+              <!--
+                All integration tests are enabled in the 'long' profile.
+              -->
+              <pomExcludes/>
             </configuration>
           </plugin>
         </plugins>
