@@ -201,7 +201,20 @@
 <a class="jxr_linenumber" name="L193" href="#L193">193</a>             <span class="jxr_string">"We expect an exception here because the bytecode is broken"</span>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a>         );
 <a class="jxr_linenumber" name="L195" href="#L195">195</a>     }
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> }
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>     @Test
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>     <strong class="jxr_keyword">void</strong> returnsShortValue() {
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>         Assertions.assertDoesNotThrow(
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>             () -&gt; <strong class="jxr_keyword">new</strong> BytecodeClass(<span class="jxr_string">"ShortValue"</span>)
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>                 .withMethod(<span class="jxr_string">"j$foo"</span>, <span class="jxr_string">"()S"</span>, Opcodes.ACC_PUBLIC)
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>                 .opcode(Opcodes.SIPUSH, 256)
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>                 .opcode(Opcodes.IRETURN)
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>                 .up()
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>                 .bytecode(),
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>             <span class="jxr_string">"We expect no exception here because all instructions are valid"</span>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>         );
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>     }
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>

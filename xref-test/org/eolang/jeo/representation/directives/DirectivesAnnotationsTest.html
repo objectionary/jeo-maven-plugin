@@ -86,7 +86,25 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>              )
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          );
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>      }
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      @Test
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">void</strong> createsAnnotationWithProperty() <strong class="jxr_keyword">throws</strong> ImpossibleModificationException {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">final</strong> DirectivesAnnotation annotation = <strong class="jxr_keyword">new</strong> DirectivesAnnotation(
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>              <span class="jxr_string">"Ljava/lang/Override;"</span>, <strong class="jxr_keyword">true</strong>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          );
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          annotation.append(DirectivesAnnotationProperty.plain(<span class="jxr_string">"name"</span>, <span class="jxr_string">"something"</span>));
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          MatcherAssert.assertThat(
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>              <span class="jxr_string">"Can't create an annotation with a property"</span>,
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">new</strong> Xembler(annotation).xml(),
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>              XhtmlMatchers.hasXPaths(
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>                  <span class="jxr_string">"/o[@base='annotation' and count(o) = 3]"</span>,
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>                  <span class="jxr_string">"/o[@base='annotation']/o[@name='descriptor' and text()='4C 6A 61 76 61 2F 6C 61 6E 67 2F 4F 76 65 72 72 69 64 65 3B']"</span>,
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>                  <span class="jxr_string">"/o[@base='annotation']/o[@name='visible' and text()='01']"</span>,
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>                  <span class="jxr_string">"/o[@base='annotation']/o[@base='annotation-property']"</span>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>              )
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          );
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      }
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
