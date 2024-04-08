@@ -210,21 +210,6 @@ public final class XmlNode {
     }
 
     /**
-     * Append entry to the end of the node.
-     * @param entry Entry.
-     */
-    public void append(final XmlNode entry) {
-        this.node.appendChild(this.node.getOwnerDocument().adoptNode(entry.node.cloneNode(true)));
-    }
-
-    /**
-     * Remove this node from parent.
-     */
-    public void erase() {
-        this.node.getParentNode().removeChild(this.node);
-    }
-
-    /**
      * Convert to class.
      * @return Class.
      */

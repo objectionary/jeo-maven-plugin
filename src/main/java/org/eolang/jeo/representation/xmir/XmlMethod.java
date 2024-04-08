@@ -247,6 +247,11 @@ public final class XmlMethod {
         return res;
     }
 
+    /**
+     * Clear max stack and max locals.
+     *
+     * @return Copy of the method without max stack and max locals.
+     */
     public XmlMethod withoutMaxs() {
         try {
             return new XmlMethod(
@@ -325,28 +330,6 @@ public final class XmlMethod {
                 ),
                 exception
             );
-        }
-    }
-
-    /**
-     * Replace instructions.
-     *
-     * @param entries Instructions to replace.
-     * @todo #350 Remove mutable method from XmlMethod.
-     *  Here we just remove all instructions and add new ones, this makes XmlMethod class
-     *  mutable, which is a significant architecture flaw. It's much better to
-     *  implement copying of this class with creation of a new XmlMethod, but in order to
-     *  implement this we will have to implement copying all the top level classes like
-     *  XmlProgram, XmlClass and so on, which requires lots of work.
-     */
-    public void replaceInstructions(final XmlNode... entries) {
-        final XmlNode seq = this.node.child("base", "seq")
-            .child("base", "tuple");
-        seq.children()
-            .filter(element -> element.attribute("base").isPresent())
-            .forEach(XmlNode::erase);
-        for (final XmlNode entry : entries) {
-            seq.append(entry);
         }
     }
 
