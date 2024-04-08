@@ -283,7 +283,10 @@ public final class XmlMethod {
                 directives.add("o").append(Directives.copyOf(entry.node())).up();
             }
             return new XmlMethod(
-                new XmlNode(new Xembler(directives).apply(this.withoutInstructions().node.node())
+                new XmlNode(
+                    new Xembler(directives).apply(
+                        this.withoutInstructions().node.node()
+                    )
                 )
             );
         } catch (final ImpossibleModificationException exception) {
@@ -325,17 +328,16 @@ public final class XmlMethod {
         }
     }
 
-
     /**
      * Replace instructions.
      *
      * @param entries Instructions to replace.
      * @todo #350 Remove mutable method from XmlMethod.
-     * Here we just remove all instructions and add new ones, this makes XmlMethod class
-     * mutable, which is a significant architecture flaw. It's much better to
-     * implement copying of this class with creation of a new XmlMethod, but in order to
-     * implement this we will have to implement copying all the top level classes like
-     * XmlProgram, XmlClass and so on, which requires lots of work.
+     *  Here we just remove all instructions and add new ones, this makes XmlMethod class
+     *  mutable, which is a significant architecture flaw. It's much better to
+     *  implement copying of this class with creation of a new XmlMethod, but in order to
+     *  implement this we will have to implement copying all the top level classes like
+     *  XmlProgram, XmlClass and so on, which requires lots of work.
      */
     public void replaceInstructions(final XmlNode... entries) {
         final XmlNode seq = this.node.child("base", "seq")
