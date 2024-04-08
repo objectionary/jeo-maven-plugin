@@ -63,7 +63,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
     /**
      * Method max stack and locals.
      */
-    private final AtomicReference<Maxs> max;
+    private final AtomicReference<DirectivesMaxs> max;
 
     /**
      * Constructor.
@@ -90,7 +90,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         this.descriptor = Optional.ofNullable(descriptor).orElse("");
         this.signature = Optional.ofNullable(signature).orElse("");
         this.exceptions = Optional.ofNullable(exceptions).orElse(new String[0]).clone();
-        this.max = new AtomicReference<>(new Maxs());
+        this.max = new AtomicReference<>(new DirectivesMaxs());
     }
 
     /**
@@ -99,7 +99,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      * @param locals Max locals size.
      */
     public void maxs(final int stack, final int locals) {
-        this.max.set(new Maxs(stack, locals));
+        this.max.set(new DirectivesMaxs(stack, locals));
     }
 
     @Override
@@ -114,47 +114,4 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
             .iterator();
     }
 
-    /**
-     * Max stack and locals.
-     *
-     * @since 0.3
-     */
-    private static final class Maxs implements Iterable<Directive> {
-
-        /**
-         * Max stack size.
-         */
-        private final int stack;
-
-        /**
-         * Max locals size.
-         */
-        private final int locals;
-
-        /**
-         * Constructor.
-         */
-        private Maxs() {
-            this(0, 0);
-        }
-
-        /**
-         * Constructor.
-         * @param stack Max stack size.
-         * @param locals Max locals size.
-         */
-        private Maxs(final int stack, final int locals) {
-            this.stack = stack;
-            this.locals = locals;
-        }
-
-        @Override
-        public Iterator<Directive> iterator() {
-            return new Directives().add("o").attr("name", "maxs")
-                .append(new DirectivesData("stack", this.stack))
-                .append(new DirectivesData("locals", this.locals))
-                .up()
-                .iterator();
-        }
-    }
 }

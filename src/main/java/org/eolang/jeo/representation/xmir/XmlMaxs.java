@@ -23,11 +23,18 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesMaxs;
+import org.xembly.Xembler;
+
 /**
  * Xmir representation of max stack and max locals of a method.
  *
  * @since 0.3
  */
+@EqualsAndHashCode
+@ToString
 public final class XmlMaxs {
 
     /**
@@ -37,6 +44,17 @@ public final class XmlMaxs {
 
     /**
      * Constructor.
+     *
+     * @param stack Stack size.
+     * @param locals Locals size.
+     */
+    public XmlMaxs(final int stack, final int locals) {
+        this(XmlMaxs.prestructor(stack, locals));
+    }
+
+    /**
+     * Constructor.
+     *
      * @param node XML node.
      */
     public XmlMaxs(final XmlNode node) {
@@ -45,6 +63,7 @@ public final class XmlMaxs {
 
     /**
      * Stack max size.
+     *
      * @return Stack size.
      */
     public int stack() {
@@ -53,9 +72,21 @@ public final class XmlMaxs {
 
     /**
      * Locals max size.
+     *
      * @return Locals size.
      */
     public int locals() {
         return (int) new XmlOperand(this.node.child("name", "locals")).asObject();
+    }
+
+    /**
+     * Prestructor.
+     *
+     * @param stack Stack size.
+     * @param locals Locals size.
+     * @return XML node that represents Max Stack and Max Locals.
+     */
+    private static XmlNode prestructor(final int stack, final int locals) {
+        return new XmlNode(new Xembler(new DirectivesMaxs(stack, locals)).xmlQuietly());
     }
 }
