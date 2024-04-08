@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.List;
+import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -32,6 +33,7 @@ import org.objectweb.asm.Opcodes;
 
 /**
  * Test case for {@link XmlMethod}.
+ *
  * @since 0.1
  */
 final class XmlMethodTest {
@@ -95,48 +97,78 @@ final class XmlMethodTest {
 
     @Test
     void addsInstructions() {
-        final XmlMethod method = new XmlMethod();
         final XmlInstruction instruction = new XmlInstruction(Opcodes.LDC, "Bye world!");
-        method.replaceInstructions(instruction.toNode());
-        final List<XmlBytecodeEntry> after = method.instructions();
         MatcherAssert.assertThat(
             "Exactly one instruction should be added",
-            after,
+            new XmlMethod().withInstructions(instruction.toNode()).instructions(),
             Matchers.contains(instruction)
         );
     }
 
     @Test
     void replacesInstructions() {
-        final XmlMethod method = new XmlMethod();
-        method.replaceInstructions(new XmlInstruction(Opcodes.LDC, "Bye world!").toNode());
         final XmlInstruction first = new XmlInstruction(Opcodes.INVOKESPECIAL, 1);
         final XmlInstruction second = new XmlInstruction(Opcodes.INVOKEVIRTUAL, 2);
-        method.replaceInstructions(
+        final XmlMethod method = new XmlMethod().withInstructions(
+            new XmlInstruction(Opcodes.LDC, "Bye world!").toNode()
+        ).withInstructions(
             first.toNode(),
             second.toNode()
         );
-        final List<XmlBytecodeEntry> after = method.instructions();
         MatcherAssert.assertThat(
-            "Exactly two instruction should be added",
-            after,
+            "Exactly two instructions should be added",
+            method.instructions(),
             Matchers.containsInAnyOrder(first, second)
         );
     }
 
     @Test
+    void cleansInstructions() {
+        MatcherAssert.assertThat(
+            "Instructions should be cleaned",
+            new XmlMethod()
+                .withInstructions(new XmlInstruction(Opcodes.POP).toNode())
+                .withoutInstructions()
+                .instructions(),
+            Matchers.empty()
+        );
+    }
+
+    @Test
     void retrievesMethodNodes() {
-        final XmlMethod method = new XmlMethod();
-        method.replaceInstructions(
+        final List<XmlNode> nodes = new XmlMethod().withInstructions(
             new XmlInstruction(Opcodes.LDC, "first").toNode(),
             new XmlInstruction(Opcodes.LDC, "second").toNode(),
             new XmlNode("<o/>")
-        );
-        final List<XmlNode> nodes = method.nodes();
+        ).nodes();
         MatcherAssert.assertThat(
             "Exactly three node should be added. Pay attention, that the last node is custom xml node",
             nodes,
             Matchers.hasSize(3)
+        );
+    }
+
+    @Test
+    void createsMethodWithMaxStackAndMaxLocals() {
+        final Optional<XmlMaxs> max = new XmlMethod(1, 2).maxs();
+        MatcherAssert.assertThat(
+            "Max stack is not present",
+            max.isPresent(),
+            Matchers.is(true)
+        );
+        MatcherAssert.assertThat(
+            "Max stack is not equal to expected",
+            max.get(),
+            Matchers.equalTo(new XmlMaxs(1, 2))
+        );
+    }
+
+    @Test
+    void cleansMaxValues() {
+        MatcherAssert.assertThat(
+            "Max values should be cleaned",
+            new XmlMethod(2, 1).withoutMaxs().maxs().isPresent(),
+            Matchers.is(false)
         );
     }
 }

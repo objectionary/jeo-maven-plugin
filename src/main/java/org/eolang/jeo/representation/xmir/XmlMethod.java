@@ -36,11 +36,14 @@ import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.objectweb.asm.Opcodes;
+import org.xembly.Directives;
+import org.xembly.ImpossibleModificationException;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
 /**
  * XML method.
+ *
  * @since 0.1
  */
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
@@ -62,6 +65,7 @@ public final class XmlMethod {
 
     /**
      * Constructor.
+     *
      * @param name Method name.
      * @param access Access modifiers.
      * @param descriptor Method descriptor.
@@ -74,11 +78,22 @@ public final class XmlMethod {
         final String descriptor,
         final String... exceptions
     ) {
-        this(XmlMethod.prestructor(name, access, descriptor, exceptions));
+        this(XmlMethod.prestructor(name, access, descriptor, 0, 0, exceptions));
     }
 
     /**
      * Constructor.
+     *
+     * @param stack Max stack.
+     * @param locals Max locals.
+     */
+    public XmlMethod(final int stack, final int locals) {
+        this(XmlMethod.prestructor("foo", Opcodes.ACC_PUBLIC, "()V", stack, locals));
+    }
+
+    /**
+     * Constructor.
+     *
      * @param xmlnode Method node.
      */
     public XmlMethod(final XmlNode xmlnode) {
@@ -87,6 +102,7 @@ public final class XmlMethod {
 
     /**
      * Method name.
+     *
      * @return Name.
      */
     public String name() {
@@ -102,6 +118,7 @@ public final class XmlMethod {
 
     /**
      * Method access modifiers.
+     *
      * @return Access modifiers.
      */
     public int access() {
@@ -110,6 +127,7 @@ public final class XmlMethod {
 
     /**
      * Method descriptor.
+     *
      * @return Descriptor.
      */
     public String descriptor() {
@@ -118,6 +136,7 @@ public final class XmlMethod {
 
     /**
      * Method signature.
+     *
      * @return Signature.
      */
     public String signature() {
@@ -131,6 +150,7 @@ public final class XmlMethod {
 
     /**
      * Method trycatch entries.
+     *
      * @return Trycatch entries.
      */
     public List<XmlTryCatchEntry> trycatchEntries() {
@@ -143,6 +163,7 @@ public final class XmlMethod {
 
     /**
      * Method properties as bytecode.
+     *
      * @return Properties.
      */
     public BytecodeMethodProperties properties() {
@@ -157,6 +178,7 @@ public final class XmlMethod {
 
     /**
      * Method max stack and locals.
+     *
      * @return Maxs.
      */
     public Optional<XmlMaxs> maxs() {
@@ -165,6 +187,7 @@ public final class XmlMethod {
 
     /**
      * Checks if method is a constructor.
+     *
      * @return True if method is a constructor.
      */
     public boolean isConstructor() {
@@ -173,6 +196,7 @@ public final class XmlMethod {
 
     /**
      * All method instructions.
+     *
      * @param predicates Predicates to filter instructions.
      * @return Instructions.
      */
@@ -191,6 +215,7 @@ public final class XmlMethod {
 
     /**
      * All the method instructions.
+     *
      * @return Instructions.
      */
     public List<XmlNode> nodes() {
@@ -202,6 +227,7 @@ public final class XmlMethod {
 
     /**
      * Method annotations.
+     *
      * @return Annotations.
      */
     public List<BytecodeAnnotation> annotations() {
@@ -221,15 +247,95 @@ public final class XmlMethod {
         return res;
     }
 
+    public XmlMethod withoutMaxs() {
+        try {
+            return new XmlMethod(
+                new XmlNode(
+                    new Xembler(
+                        new Directives()
+                            .xpath("./o[@name='maxs']")
+                            .remove()
+                    ).apply(this.node.node())
+                )
+            );
+        } catch (final ImpossibleModificationException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Failed to remove maxs from a method '%s'",
+                    this.node
+                ),
+                exception
+            );
+        }
+    }
+
+    /**
+     * Method instructions.
+     *
+     * @param entries Instructions to add.
+     * @return Copy of the method with added instructions.
+     */
+    public XmlMethod withInstructions(final XmlNode... entries) {
+        try {
+            final Directives directives = new Directives()
+                .xpath("//o[@base='seq']/o[@base='tuple']");
+            for (final XmlNode entry : entries) {
+                directives.add("o").append(Directives.copyOf(entry.node())).up();
+            }
+            return new XmlMethod(
+                new XmlNode(new Xembler(directives).apply(this.withoutInstructions().node.node())
+                )
+            );
+        } catch (final ImpossibleModificationException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Failed to add instructions '%s' to a method '%s'",
+                    Arrays.toString(entries),
+                    this.node
+                ),
+                exception
+            );
+        }
+    }
+
+    /**
+     * Clear instructions.
+     *
+     * @return Method without instructions.
+     */
+    public XmlMethod withoutInstructions() {
+        try {
+            return new XmlMethod(
+                new XmlNode(
+                    new Xembler(
+                        new Directives()
+                            .xpath("//o[@base='seq']/o[@base='tuple']/o")
+                            .remove()
+                    ).apply(this.node.node())
+                )
+            );
+        } catch (final ImpossibleModificationException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Failed to remove instructions from a method '%s'",
+                    this.node
+                ),
+                exception
+            );
+        }
+    }
+
+
     /**
      * Replace instructions.
+     *
      * @param entries Instructions to replace.
      * @todo #350 Remove mutable method from XmlMethod.
-     *  Here we just remove all instructions and add new ones, this makes XmlMethod class
-     *  mutable, which is a significant architecture flaw. It's much better to
-     *  implement copying of this class with creation of a new XmlMethod, but in order to
-     *  implement this we will have to implement copying all the top level classes like
-     *  XmlProgram, XmlClass and so on, which requires lots of work.
+     * Here we just remove all instructions and add new ones, this makes XmlMethod class
+     * mutable, which is a significant architecture flaw. It's much better to
+     * implement copying of this class with creation of a new XmlMethod, but in order to
+     * implement this we will have to implement copying all the top level classes like
+     * XmlProgram, XmlClass and so on, which requires lots of work.
      */
     public void replaceInstructions(final XmlNode... entries) {
         final XmlNode seq = this.node.child("base", "seq")
@@ -244,6 +350,7 @@ public final class XmlMethod {
 
     /**
      * Annotation default value.
+     *
      * @return Optional XMIR of the default value.
      */
     public Optional<XmlDefaultValue> defvalue() {
@@ -253,6 +360,7 @@ public final class XmlMethod {
 
     /**
      * Method exceptions.
+     *
      * @return Exceptions.
      */
     private String[] exceptions() {
@@ -266,9 +374,12 @@ public final class XmlMethod {
 
     /**
      * Create Method XmlNode by directives.
+     *
      * @param name Method name.
      * @param access Method access modifiers.
      * @param descriptor Method descriptor.
+     * @param stack Max stack.
+     * @param locals Max locals.
      * @param exceptions Method exceptions.
      * @return Method XmlNode.
      * @checkstyle ParameterNumberCheck (5 lines)
@@ -277,13 +388,19 @@ public final class XmlMethod {
         final String name,
         final int access,
         final String descriptor,
+        final int stack,
+        final int locals,
         final String... exceptions
     ) {
+        final DirectivesMethodProperties props = new DirectivesMethodProperties(
+            access, descriptor, "", exceptions
+        );
+        props.maxs(stack, locals);
         return new XmlNode(
             new Xembler(
                 new DirectivesMethod(
                     name,
-                    new DirectivesMethodProperties(access, descriptor, "", exceptions)
+                    props
                 ),
                 new Transformers.Node()
             ).xmlQuietly()
