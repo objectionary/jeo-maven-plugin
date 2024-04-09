@@ -1,7 +1,7 @@
 architect:
   - volodya-lombrozo
 docker:
-  image: lombrozo/rultor-image-java:pr-3
+  image: yegor256/rultor-image:1.23.1
 assets:
   settings.xml: yegor256/objectionary-secrets#settings.xml
   pubring.gpg: yegor256/objectionary-secrets#pubring.gpg
