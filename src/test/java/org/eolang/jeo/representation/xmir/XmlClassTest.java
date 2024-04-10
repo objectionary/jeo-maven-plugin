@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -129,6 +128,4 @@ final class XmlClassTest {
             Matchers.empty()
         );
     }
-
-
 }

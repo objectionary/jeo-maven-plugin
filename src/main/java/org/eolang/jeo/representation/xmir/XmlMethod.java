@@ -36,8 +36,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.objectweb.asm.Opcodes;
-import org.w3c.dom.Node;
-import org.xembly.Directive;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Transformers;

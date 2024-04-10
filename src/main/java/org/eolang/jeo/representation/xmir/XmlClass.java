@@ -33,7 +33,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
-import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.w3c.dom.Node;
 import org.xembly.Directives;
 import org.xembly.Transformers;
@@ -46,6 +45,7 @@ import org.xembly.Xembler;
  */
 @ToString
 @EqualsAndHashCode
+@SuppressWarnings("PMD.TooManyMethods")
 public final class XmlClass {
 
     /**
@@ -107,16 +107,6 @@ public final class XmlClass {
      */
     public XmlClass(final Node xml) {
         this(new XmlNode(xml));
-    }
-
-    /**
-     * Prestructor.
-     *
-     * @param methods Methods.
-     * @return Class node.
-     */
-    private static XmlNode prestructor(final XmlMethod[] methods) {
-        return null;
     }
 
     /**
