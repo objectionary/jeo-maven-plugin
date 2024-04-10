@@ -128,4 +128,21 @@ final class XmlClassTest {
             Matchers.empty()
         );
     }
+
+    @Test
+    void convertesXmlClassBackToXmlNode() {
+        final XML expected = new XMLDocument(
+            String.join(
+                "",
+                "<o name='TwoWay'>",
+                "<o name='foo'>",
+                "</o></o>"
+            )
+        );
+        MatcherAssert.assertThat(
+            "XmlClass should be correctly converted back to XML",
+            new XmlClass(expected.node()).toXml().toString(),
+            Matchers.equalTo(expected.toString())
+        );
+    }
 }

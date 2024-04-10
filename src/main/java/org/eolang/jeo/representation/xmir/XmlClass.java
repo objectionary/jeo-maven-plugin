@@ -238,6 +238,15 @@ public final class XmlClass {
     }
 
     /**
+     * Convert XmlClass to XML node.
+     *
+     * @return XML node.
+     */
+    public XML toXml() {
+        return new XMLDocument(this.node.node());
+    }
+
+    /**
      * Generate empty class node with given name.
      *
      * @param classname Class name.
