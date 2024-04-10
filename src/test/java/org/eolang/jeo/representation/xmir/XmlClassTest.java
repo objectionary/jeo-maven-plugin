@@ -25,12 +25,14 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link XmlClass}.
+ *
  * @since 0.1
  */
 final class XmlClassTest {
@@ -87,8 +89,46 @@ final class XmlClassTest {
                 XmlClass.class.getSimpleName(),
                 doc
             ),
-            new XmlClass(doc.node().getFirstChild()).constructors(),
+            new XmlClass(doc).constructors(),
             Matchers.empty()
         );
     }
+
+    @Test
+    void addsMethods() {
+        MatcherAssert.assertThat(
+            "Methods should be added.",
+            new XmlClass("Empty")
+                .withMethods(new XmlMethod())
+                .withMethods(new XmlMethod())
+                .methods(),
+            Matchers.hasSize(2)
+        );
+    }
+
+    @Test
+    void replacesMethods() {
+        MatcherAssert.assertThat(
+            "Methods should be replaced.",
+            new XmlClass("Replaced")
+                .withMethods(new XmlMethod())
+                .replaceMethods(new XmlMethod(), new XmlMethod()).methods(),
+            Matchers.hasSize(2)
+        );
+    }
+
+    @Test
+    void cleansAllMethods() {
+        MatcherAssert.assertThat(
+            "Methods should be empty.",
+            new XmlClass(
+                "<o name='MethodClass'>",
+                "<o name='bar'>",
+                "</o></o>"
+            ).withoutMethods().methods(),
+            Matchers.empty()
+        );
+    }
+
+
 }
