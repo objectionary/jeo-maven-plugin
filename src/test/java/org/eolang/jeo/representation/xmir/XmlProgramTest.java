@@ -23,13 +23,17 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link XmlProgram}.
+ *
  * @since 0.1
  */
 final class XmlProgramTest {
@@ -65,6 +69,48 @@ final class XmlProgramTest {
             ),
             actual,
             Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void convertsToXml() {
+        final XML expected = new XMLDocument(
+            String.join(
+                "",
+                "<o name='TwoWayProgram'>",
+                "<o name='foo'>",
+                "</o></o>"
+            )
+        );
+        MatcherAssert.assertThat(
+            "Can't convert program to XML",
+            new XmlProgram(expected).toXml(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void replacesTopClass() {
+        final XmlProgram program = new XmlProgram(new ClassName("Bar"));
+        final XmlClass expected = new XmlClass("Foo");
+        MatcherAssert.assertThat(
+            String.format(
+                "Can't replace top-level class in program %s. Expected %s%n Actual %s%n",
+                program,
+                expected,
+                program.top()
+            ),
+            program.replaceTopClass(expected).top(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void removesTopClass() {
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new XmlProgram(new ClassName("Bar")).withoutTopClass().top(),
+            "Can't remove top-level class from program"
         );
     }
 }
