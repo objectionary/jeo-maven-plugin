@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
@@ -48,6 +49,7 @@ import org.xembly.Xembler;
  */
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
 @ToString
+@EqualsAndHashCode
 public final class XmlMethod {
 
     /**
@@ -60,8 +62,18 @@ public final class XmlMethod {
      * Constructor.
      */
     public XmlMethod() {
-        this("foo", Opcodes.ACC_PUBLIC, "()V");
+        this("foo");
     }
+
+    /**
+     * Constructor.
+     *
+     * @param name Method name.
+     */
+    public XmlMethod(final String name) {
+        this(name, Opcodes.ACC_PUBLIC, "()V");
+    }
+
 
     /**
      * Constructor.

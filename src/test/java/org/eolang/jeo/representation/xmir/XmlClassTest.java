@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -107,12 +108,20 @@ final class XmlClassTest {
 
     @Test
     void replacesMethods() {
+        final XmlMethod second = new XmlMethod("two");
+        final XmlMethod third = new XmlMethod("three");
+        final List<XmlMethod> methods = new XmlClass("Replaced")
+            .withMethods(new XmlMethod("one"))
+            .replaceMethods(second, third).methods();
         MatcherAssert.assertThat(
-            "Methods should be replaced.",
-            new XmlClass("Replaced")
-                .withMethods(new XmlMethod())
-                .replaceMethods(new XmlMethod(), new XmlMethod()).methods(),
+            "Old methods should be removed",
+            methods,
             Matchers.hasSize(2)
+        );
+        MatcherAssert.assertThat(
+            "Methods should be replaced with new",
+            methods,
+            Matchers.containsInAnyOrder(second, third)
         );
     }
 
