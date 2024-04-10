@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import lombok.ToString;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
@@ -123,7 +122,6 @@ public final class XmlProgram {
         );
     }
 
-
     /**
      * Copy program without top class.
      *
@@ -140,6 +138,11 @@ public final class XmlProgram {
         );
     }
 
+    @Override
+    public String toString() {
+        return new XMLDocument(this.root).toString();
+    }
+
     /**
      * Retrieve program package.
      *
@@ -152,10 +155,5 @@ public final class XmlProgram {
             .child("meta")
             .child("tail")
             .text();
-    }
-
-    @Override
-    public String toString() {
-        return new XMLDocument(this.root).toString();
     }
 }
