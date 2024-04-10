@@ -74,7 +74,6 @@ public final class XmlMethod {
         this(name, Opcodes.ACC_PUBLIC, "()V");
     }
 
-
     /**
      * Constructor.
      *
