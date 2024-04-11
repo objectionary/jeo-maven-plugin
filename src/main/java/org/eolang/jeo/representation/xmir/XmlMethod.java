@@ -294,7 +294,7 @@ public final class XmlMethod {
     public XmlMethod withInstructions(final XmlNode... entries) {
         try {
             final Directives directives = new Directives()
-                .xpath("//o[@base='seq']/o[@base='tuple']");
+                .xpath("./o[@base='seq']/o[@base='tuple']");
             for (final XmlNode entry : entries) {
                 directives.add("o").append(Directives.copyOf(entry.node())).up();
             }
@@ -328,7 +328,7 @@ public final class XmlMethod {
                 new XmlNode(
                     new Xembler(
                         new Directives()
-                            .xpath("//o[@base='seq']/o[@base='tuple']/o")
+                            .xpath("./o[@base='seq']/o[@base='tuple']/o")
                             .remove()
                     ).apply(this.node.node())
                 )
