@@ -69,7 +69,7 @@ SOFTWARE.
       <plugin>
         <groupId>org.eolang</groupId>
         <artifactId>eo-maven-plugin</artifactId>
-        <version>0.36.0</version>
+        <version>0.37.0</version>
         <executions>
           <execution>
             <id>convert-xmir-to-eo</id>
