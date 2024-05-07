@@ -65,7 +65,15 @@ public enum DataType {
      * Character.
      */
     CHAR("char", Character.class, char.class,
-        value -> ByteBuffer.allocate(Character.BYTES).putChar((char) value).array(),
+        value -> {
+            final char val;
+            if (value instanceof Integer) {
+                val = (char) (int) value;
+            } else {
+                val = (char) value;
+            }
+            return ByteBuffer.allocate(Character.BYTES).putChar(val).array();
+        },
         bytes -> ByteBuffer.wrap(bytes).getChar()
     ),
 
