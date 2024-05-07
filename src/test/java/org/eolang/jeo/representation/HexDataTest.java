@@ -161,7 +161,7 @@ final class HexDataTest {
             Arguments.of(new byte[]{1, 2, 3}, "01 02 03"),
             Arguments.of(true, "01"),
             Arguments.of(false, "00"),
-            Arguments.of('a', "61"),
+            Arguments.of('a', "00 61"),
             Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A"),
             Arguments.of(
                 HexDataTest.class,
@@ -180,7 +180,7 @@ final class HexDataTest {
             Arguments.of(10, "00 00 00 00 00 00 00 0A"),
             Arguments.of("Hello!", "48 65 6C 6C 6F 21"),
             Arguments.of(new byte[]{1, 2, 3}, "01 02 03"),
-            Arguments.of('1', "31"),
+            Arguments.of('a', "00 61"),
             Arguments.of(true, "01"),
             Arguments.of(false, "00"),
             Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A"),
