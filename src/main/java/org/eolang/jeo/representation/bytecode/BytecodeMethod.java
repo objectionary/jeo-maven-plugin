@@ -168,7 +168,7 @@ public final class BytecodeMethod implements Testable {
      * @return This object.
      */
     public BytecodeMethod opcode(final int opcode, final Object... args) {
-        return this.entry(new BytecodeInstructionEntry(opcode, args));
+        return this.entry(new BytecodeInstructionEntry(this.labels, opcode, args));
     }
 
     /**
