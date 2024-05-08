@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation;
 
-import java.util.StringJoiner;
 import lombok.ToString;
 
 /**
@@ -32,6 +31,13 @@ import lombok.ToString;
  */
 @ToString
 public final class HexData {
+
+    /**
+     * Array of hexadecimal characters.
+     * Used for converting bytes to hexadecimal.
+     * See {@link #bytesToHex(byte[])}.
+     */
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
     /**
      * Data to convert.
@@ -65,16 +71,25 @@ public final class HexData {
 
     /**
      * Bytes to HEX.
+     * The efficient way to convert bytes to hexadecimal.
+     * ATTENTION!
+     * Do not modify this method.
+     * It is an optimized version that saves memory and CPU.
+     * Actually, the solution is based on the following StackOverflow answer:
+     * <a href="https://stackoverflow.com/a/9855338/10423604">here</a>
+     * You can find the full explanation or any other examples there.
      *
      * @param bytes Bytes.
      * @return Hexadecimal value as string.
      */
-    private static String bytesToHex(final byte... bytes) {
-        final StringJoiner out = new StringJoiner(" ");
-        for (final byte bty : bytes) {
-            out.add(String.format("%02X", bty));
+    private static String bytesToHex(byte[] bytes) {
+        char[] hex = new char[bytes.length * 3];
+        for (int index = 0; index < bytes.length; index++) {
+            int value = bytes[index] & 0xFF;
+            hex[index * 3] = HexData.HEX_ARRAY[value >>> 4];
+            hex[index * 3 + 1] = HexData.HEX_ARRAY[value & 0x0F];
+            hex[index * 3 + 2] = ' ';
         }
-        return out.toString();
+        return new String(hex, 0, hex.length - 1);
     }
-
 }
