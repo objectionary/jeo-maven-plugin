@@ -65,15 +65,13 @@ public final class PluginStartup {
      * @throws DependencyResolutionRequiredException If a problem happened during loading classes.
      */
     void init() throws DependencyResolutionRequiredException {
-        Thread.currentThread().setContextClassLoader(
-            new URLClassLoader(
-                this.project.getRuntimeClasspathElements()
-                    .stream()
-                    .map(File::new)
-                    .map(PluginStartup::url).toArray(URL[]::new),
-                Thread.currentThread().getContextClassLoader()
-            )
-        );
+        Thread.currentThread().setContextClassLoader(new URLClassLoader(
+            this.project.getRuntimeClasspathElements()
+                .stream()
+                .map(File::new)
+                .map(PluginStartup::url).toArray(URL[]::new),
+            Thread.currentThread().getContextClassLoader()
+        ));
     }
 
     /**

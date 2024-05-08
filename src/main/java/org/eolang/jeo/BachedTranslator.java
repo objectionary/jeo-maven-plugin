@@ -38,19 +38,30 @@ public final class BachedTranslator implements Translator {
      */
     private final Translation translation;
 
+    private final ClassLoader loader;
+
     /**
      * Constructor.
      * @param translation Original translation.
      */
     BachedTranslator(final Translation translation) {
         this.translation = translation;
+        this.loader = Thread.currentThread().getContextClassLoader();
     }
 
     @Override
     public Collection<Representation> apply(
         final Collection<? extends Representation> representations
     ) {
-        return representations.stream().map(this.translation::apply).collect(Collectors.toList());
+        return representations.stream()
+            .parallel()
+            .map(this::translate)
+            .collect(Collectors.toList());
+    }
+
+    private Representation translate(final Representation rep) {
+        Thread.currentThread().setContextClassLoader(this.loader);
+        return this.translation.apply(rep);
     }
 
 }
