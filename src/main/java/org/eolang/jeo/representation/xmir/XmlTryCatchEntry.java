@@ -38,8 +38,15 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      */
     private final XmlNode xmlnode;
 
+    /**
+     * Method Labels.
+     */
     private final AllLabels labels;
 
+    /**
+     * Constructor.
+     * @param xmlnode XML node
+     */
     public XmlTryCatchEntry(final XmlNode xmlnode) {
         this(xmlnode, new AllLabels());
     }
@@ -47,6 +54,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
     /**
      * Constructor.
      * @param node XML node
+     * @param labels Labels
      */
     public XmlTryCatchEntry(final XmlNode node, final AllLabels labels) {
         this.xmlnode = node;

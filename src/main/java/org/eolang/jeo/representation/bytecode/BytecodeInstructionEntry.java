@@ -54,6 +54,9 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
      */
     private final List<Object> args;
 
+    /**
+     * All labels.
+     */
     private final AllLabels labels;
 
     /**

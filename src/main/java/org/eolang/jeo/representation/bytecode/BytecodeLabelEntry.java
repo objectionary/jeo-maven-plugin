@@ -40,6 +40,9 @@ public final class BytecodeLabelEntry implements BytecodeEntry {
      */
     private final Label label;
 
+    /**
+     * All method labels.
+     */
     private final AllLabels labels;
 
     /**

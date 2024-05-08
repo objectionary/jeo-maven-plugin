@@ -80,7 +80,10 @@ public final class BytecodeMethod implements Testable {
      */
     private final int locals;
 
-    private final AllLabels labels = new AllLabels();
+    /**
+     * All Method Labels.
+     */
+    private final AllLabels labels;
 
     /**
      * Constructor.
@@ -140,6 +143,7 @@ public final class BytecodeMethod implements Testable {
         this.defvalues = new ArrayList<>(0);
         this.stack = stack;
         this.locals = locals;
+        this.labels = new AllLabels();
     }
 
     /**
