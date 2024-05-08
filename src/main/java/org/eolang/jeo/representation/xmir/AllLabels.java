@@ -46,7 +46,9 @@ public final class AllLabels {
      *  - Remove the {@link AllLabels#CACHE} field.
      *  But this issue isn't urgent and can be done later.
      */
-    private static final Map<String, Label> CACHE = new ConcurrentHashMap<>(0);
+    private static final ThreadLocal<Map<String, Label>> CACHE = ThreadLocal.withInitial(
+        () -> new ConcurrentHashMap<>(0)
+    );
 
     /**
      * All the labels.
@@ -57,7 +59,7 @@ public final class AllLabels {
      * Constructor.
      */
     public AllLabels() {
-        this(AllLabels.CACHE);
+        this(AllLabels.CACHE.get());
     }
 
     /**
