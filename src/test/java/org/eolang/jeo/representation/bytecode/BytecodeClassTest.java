@@ -181,13 +181,13 @@ final class BytecodeClassTest {
             IllegalStateException.class,
             () -> new BytecodeClass("Broken")
                 .withMethod("j$bar", "()I", Opcodes.ACC_PUBLIC)
-                .label("70b56006-856e-4ac2-be99-632ca25a65a0")
+                .label(new Label())
                 .opcode(Opcodes.ALOAD, 0)
                 .opcode(Opcodes.INVOKEVIRTUAL, "com/exam/BA", "foo", "()I")
                 .opcode(Opcodes.ICONST_2)
                 .opcode(Opcodes.IADD)
                 .opcode(Opcodes.IRETURN)
-                .label("f3d973ab-c502-4134-8d6f-d7fe89defc6e")
+                .label(new Label())
                 .up()
                 .bytecode(),
             "We expect an exception here because the bytecode is broken"

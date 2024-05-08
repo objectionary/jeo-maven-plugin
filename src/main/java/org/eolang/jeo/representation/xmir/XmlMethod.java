@@ -59,6 +59,12 @@ public final class XmlMethod {
     private final XmlNode node;
 
     /**
+     * Method labels.
+     */
+    @EqualsAndHashCode.Exclude
+    private final AllLabels labels;
+
+    /**
      * Constructor.
      */
     public XmlMethod() {
@@ -109,6 +115,7 @@ public final class XmlMethod {
      */
     public XmlMethod(final XmlNode xmlnode) {
         this.node = xmlnode;
+        this.labels = new AllLabels();
     }
 
     /**
@@ -168,7 +175,7 @@ public final class XmlMethod {
         return this.node.children()
             .filter(element -> element.hasAttribute("name", "trycatchblocks"))
             .flatMap(XmlNode::children)
-            .map(XmlTryCatchEntry::new)
+            .map(entry -> new XmlTryCatchEntry(entry, this.labels))
             .collect(Collectors.toList());
     }
 

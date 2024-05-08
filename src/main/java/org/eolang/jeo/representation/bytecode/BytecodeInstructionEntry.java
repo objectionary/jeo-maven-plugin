@@ -55,16 +55,23 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
     private final List<Object> args;
 
     /**
+     * All labels.
+     */
+    private final AllLabels labels;
+
+    /**
      * Constructor.
      *
+     * @param labels All labels.
      * @param opcode Opcode.
      * @param args Arguments.
      */
     BytecodeInstructionEntry(
+        final AllLabels labels,
         final int opcode,
         final Object... args
     ) {
-        this(opcode, Arrays.asList(args));
+        this(labels, opcode, Arrays.asList(args));
     }
 
     /**
@@ -74,9 +81,11 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
      * @param args Arguments.
      */
     BytecodeInstructionEntry(
+        final AllLabels labels,
         final int opcode,
         final List<Object> args
     ) {
+        this.labels = labels;
         this.opcode = opcode;
         this.args = args;
     }
@@ -97,7 +106,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                 if (arg instanceof Label) {
                     return String.format(
                         "labels.label(\"%s\")",
-                        new AllLabels().uid((Label) arg)
+                        this.labels.uid((Label) arg)
                     );
                 }
                 return String.valueOf(arg);

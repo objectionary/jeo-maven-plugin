@@ -81,6 +81,11 @@ public final class BytecodeMethod implements Testable {
     private final int locals;
 
     /**
+     * All Method Labels.
+     */
+    private final AllLabels labels;
+
+    /**
      * Constructor.
      * @param name Method name.
      * @param visitor ASM class writer.
@@ -138,6 +143,7 @@ public final class BytecodeMethod implements Testable {
         this.defvalues = new ArrayList<>(0);
         this.stack = stack;
         this.locals = locals;
+        this.labels = new AllLabels();
     }
 
     /**
@@ -155,17 +161,8 @@ public final class BytecodeMethod implements Testable {
      * @param label Label.
      * @return This object.
      */
-    public BytecodeMethod label(final String label) {
-        return this.label(new AllLabels().label(label));
-    }
-
-    /**
-     * Add label.
-     * @param label Label.
-     * @return This object.
-     */
     public BytecodeMethod label(final Label label) {
-        return this.entry(new BytecodeLabelEntry(label));
+        return this.entry(new BytecodeLabelEntry(label, this.labels));
     }
 
     /**
@@ -175,7 +172,7 @@ public final class BytecodeMethod implements Testable {
      * @return This object.
      */
     public BytecodeMethod opcode(final int opcode, final Object... args) {
-        return this.entry(new BytecodeInstructionEntry(opcode, args));
+        return this.entry(new BytecodeInstructionEntry(this.labels, opcode, args));
     }
 
     /**

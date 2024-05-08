@@ -39,21 +39,35 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
     private final XmlNode xmlnode;
 
     /**
+     * Method Labels.
+     */
+    private final AllLabels labels;
+
+    /**
+     * Constructor.
+     * @param xmlnode XML node
+     */
+    public XmlTryCatchEntry(final XmlNode xmlnode) {
+        this(xmlnode, new AllLabels());
+    }
+
+    /**
      * Constructor.
      * @param node XML node
+     * @param labels Labels
      */
-    public XmlTryCatchEntry(final XmlNode node) {
+    public XmlTryCatchEntry(final XmlNode node, final AllLabels labels) {
         this.xmlnode = node;
+        this.labels = labels;
     }
 
     @Override
     public void writeTo(final BytecodeMethod method) {
-        final AllLabels labels = new AllLabels();
         method.trycatch(
             new BytecodeTryCatchBlock(
-                this.label("start").map(labels::label).orElse(null),
-                this.label("end").map(labels::label).orElse(null),
-                this.label("handler").map(labels::label).orElse(null),
+                this.label("start").map(this.labels::label).orElse(null),
+                this.label("end").map(this.labels::label).orElse(null),
+                this.label("handler").map(this.labels::label).orElse(null),
                 this.type().map(HexString::new).map(HexString::decode).orElse(null)
             )
         );
