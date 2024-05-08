@@ -80,6 +80,8 @@ public final class BytecodeMethod implements Testable {
      */
     private final int locals;
 
+    private final AllLabels labels = new AllLabels();
+
     /**
      * Constructor.
      * @param name Method name.
@@ -156,7 +158,7 @@ public final class BytecodeMethod implements Testable {
      * @return This object.
      */
     public BytecodeMethod label(final Label label) {
-        return this.entry(new BytecodeLabelEntry(label));
+        return this.entry(new BytecodeLabelEntry(label, this.labels));
     }
 
     /**
