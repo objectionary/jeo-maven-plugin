@@ -155,15 +155,6 @@ public final class BytecodeMethod implements Testable {
      * @param label Label.
      * @return This object.
      */
-    public BytecodeMethod label(final String label) {
-        return this.label(new AllLabels().label(label));
-    }
-
-    /**
-     * Add label.
-     * @param label Label.
-     * @return This object.
-     */
     public BytecodeMethod label(final Label label) {
         return this.entry(new BytecodeLabelEntry(label));
     }
