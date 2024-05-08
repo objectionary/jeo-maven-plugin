@@ -82,14 +82,20 @@ public final class HexData {
      * @param bytes Bytes.
      * @return Hexadecimal value as string.
      */
-    private static String bytesToHex(byte[] bytes) {
-        char[] hex = new char[bytes.length * 3];
-        for (int index = 0; index < bytes.length; index++) {
-            int value = bytes[index] & 0xFF;
-            hex[index * 3] = HexData.HEX_ARRAY[value >>> 4];
-            hex[index * 3 + 1] = HexData.HEX_ARRAY[value & 0x0F];
-            hex[index * 3 + 2] = ' ';
+    private static String bytesToHex(final byte[] bytes) {
+        final String res;
+        if (bytes == null || bytes.length == 0) {
+            res = "";
+        } else {
+            final char[] hex = new char[bytes.length * 3];
+            for (int index = 0; index < bytes.length; ++index) {
+                final int value = bytes[index] & 0xFF;
+                hex[index * 3] = HexData.HEX_ARRAY[value >>> 4];
+                hex[index * 3 + 1] = HexData.HEX_ARRAY[value & 0x0F];
+                hex[index * 3 + 2] = ' ';
+            }
+            res = new String(hex, 0, hex.length - 1);
         }
-        return new String(hex, 0, hex.length - 1);
+        return res;
     }
 }
