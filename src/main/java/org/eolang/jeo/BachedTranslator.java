@@ -38,6 +38,9 @@ public final class BachedTranslator implements Translator {
      */
     private final Translation translation;
 
+    /**
+     * Class loader.
+     */
     private final ClassLoader loader;
 
     /**
@@ -59,6 +62,14 @@ public final class BachedTranslator implements Translator {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Translate a representation.
+     * This method is run in parallel.
+     * Pay attention to the class loader;
+     * It's set for each sub-thread to avoid class loading issues.
+     * @param rep Representation to translate.
+     * @return Translated representation.
+     */
     private Representation translate(final Representation rep) {
         Thread.currentThread().setContextClassLoader(this.loader);
         return this.translation.apply(rep);
