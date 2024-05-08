@@ -66,7 +66,6 @@ public final class Disassemble implements Translation {
             .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
         try {
             Files.createDirectories(path.getParent());
-            System.out.println("CLASSLOADER IN DISASSMEBLE: " + Thread.currentThread().getContextClassLoader());
             Files.write(path, representation.toEO().toString().getBytes(StandardCharsets.UTF_8));
             return new XmirRepresentation(path);
         } catch (final IOException exception) {
