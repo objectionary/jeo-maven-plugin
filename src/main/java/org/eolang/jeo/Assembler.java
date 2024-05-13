@@ -25,6 +25,7 @@ package org.eolang.jeo;
 
 import java.nio.file.Path;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Assembler.
@@ -67,7 +68,7 @@ final class Assembler {
     void assemble() {
         final String assembling = "Assembling";
         final String assembled = "assembled";
-        new LoggedTranslator(
+        final Stream<? extends Representation> stream = new LoggedTranslator(
             assembling,
             assembled,
             this.input,
@@ -79,8 +80,9 @@ final class Assembler {
                     new Assemble(this.output)
                 )
             )
-        ).apply(
-            new XmirRepresentations(this.input, this.verify).all().collect(Collectors.toList())
-        );
+        ).apply(new XmirRepresentations(this.input, this.verify).all());
+        stream.forEach(terminate -> {
+        });
+        stream.close();
     }
 }

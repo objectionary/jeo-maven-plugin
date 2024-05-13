@@ -23,8 +23,7 @@
  */
 package org.eolang.jeo;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Translator that applies a translation to a batch of representations.
@@ -53,14 +52,10 @@ public final class BachedTranslator implements Translator {
     }
 
     @Override
-    public Collection<Representation> apply(
-        final Collection<? extends Representation> representations
+    public Stream<Representation> apply(
+        final Stream<? extends Representation> representations
     ) {
-        return representations
-            .stream()
-            .parallel()
-            .map(this::translate)
-            .collect(Collectors.toList());
+        return representations.parallel().map(this::translate);
     }
 
     /**

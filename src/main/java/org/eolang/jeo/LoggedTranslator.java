@@ -25,7 +25,8 @@ package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
 import java.nio.file.Path;
-import java.util.Collection;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 /**
  * Translation log.
@@ -84,8 +85,8 @@ public final class LoggedTranslator implements Translator {
     }
 
     @Override
-    public Collection<? extends Representation> apply(
-        final Collection<? extends Representation> representations
+    public Stream<? extends Representation> apply(
+        final Stream<? extends Representation> representations
     ) {
         Logger.info(
             this,
@@ -95,15 +96,27 @@ public final class LoggedTranslator implements Translator {
             this.output
         );
         final long start = System.currentTimeMillis();
-        final Collection<? extends Representation> res = this.original.apply(representations);
-        final long total = System.currentTimeMillis() - start;
-        Logger.info(
-            this,
-            "Total %d files were %s in %[ms]s",
-            res.size(),
-            this.participle,
-            total
-        );
-        return res;
+        final AtomicInteger counter = new AtomicInteger();
+        return this.original.apply(representations)
+            .peek(rep -> counter.incrementAndGet())
+            .onClose(
+                () -> Logger.info(
+                    this,
+                    "Total %d files were %s in %[ms]s",
+                    counter.get(),
+                    this.participle,
+                    System.currentTimeMillis() - start
+                )
+            );
+//        );
+//        final long total = ;
+//        Logger.info(
+//            this,
+//            "Total %d files were %s in %[ms]s",
+//            res.size(),
+//            this.participle,
+//            total
+//        );
+//        return res;
     }
 }

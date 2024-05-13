@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
@@ -64,7 +65,7 @@ final class BachedTranslatorTest {
                 .getBytes(StandardCharsets.UTF_8)
         );
         new BachedTranslator(new Disassemble(temp))
-            .apply(List.of(new XmirRepresentation(clazz)));
+            .apply(Stream.of(new XmirRepresentation(clazz))).collect(Collectors.toList());
         MatcherAssert.assertThat(
             "XML file was not saved",
             temp.resolve(this.expected).toFile(),
@@ -80,8 +81,8 @@ final class BachedTranslatorTest {
         final Representation repr = new XmirRepresentation(
             new BytecodeClass("org/eolang/jeo/Application").xml()
         );
-        footprint.apply(List.of(repr));
-        footprint.apply(List.of(repr));
+        footprint.apply(Stream.of(repr)).collect(Collectors.toList());
+        footprint.apply(Stream.of(repr)).collect(Collectors.toList());
         MatcherAssert.assertThat(
             "XML file was not successfully overwritten",
             temp.resolve(this.expected).toFile(),
@@ -93,8 +94,8 @@ final class BachedTranslatorTest {
     void assemblesSuccessfully(@TempDir final Path temp) {
         final String fake = "jeo/xmir/Fake";
         new BachedTranslator(new Assemble(temp)).apply(
-            List.of(new XmirRepresentation(new BytecodeClass(fake).xml()))
-        );
+            Stream.of(new XmirRepresentation(new BytecodeClass(fake).xml()))
+        ).collect(Collectors.toList());
         MatcherAssert.assertThat(
             String.format(
                 "Bytecode file was not saved for the representation with the name '%s'",
