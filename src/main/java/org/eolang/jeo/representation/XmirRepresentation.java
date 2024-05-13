@@ -27,6 +27,9 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import org.cactoos.scalar.Sticky;
+import org.cactoos.scalar.Synced;
+import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
@@ -43,7 +46,7 @@ public final class XmirRepresentation implements Representation {
     /**
      * XML.
      */
-    private final XML xml;
+    private final Unchecked<XML> xml;
 
     /**
      * Source of the XML.
@@ -70,7 +73,7 @@ public final class XmirRepresentation implements Representation {
      * @param verify Verify bytecode.
      */
     public XmirRepresentation(final Path path, final boolean verify) {
-        this(XmirRepresentation.open(path), path.toAbsolutePath().toString(), verify);
+        this(XmirRepresentation.fromFile(path), path.toAbsolutePath().toString(), verify);
     }
 
     /**
@@ -104,6 +107,20 @@ public final class XmirRepresentation implements Representation {
         final String source,
         final boolean verify
     ) {
+        this(new Unchecked<>(() -> xml), source, verify);
+    }
+
+    /**
+     * Constructor.
+     * @param xml XML source.
+     * @param source Source of the XML.
+     * @param verify Verify bytecode.
+     */
+    private XmirRepresentation(
+        final Unchecked<XML> xml,
+        final String source,
+        final boolean verify
+    ) {
         this.xml = xml;
         this.source = source;
         this.verify = verify;
@@ -116,13 +133,13 @@ public final class XmirRepresentation implements Representation {
 
     @Override
     public XML toEO() {
-        return this.xml;
+        return this.xml.value();
     }
 
     @Override
     public Bytecode toBytecode() {
-        new Schema(this.xml).check();
-        return new XmlBytecode(this.xml, this.verify).bytecode();
+        new Schema(this.xml.value()).check();
+        return new XmlBytecode(this.xml.value(), this.verify).bytecode();
     }
 
     /**
@@ -131,9 +148,18 @@ public final class XmirRepresentation implements Representation {
      */
     private String className() {
         return new ClassName(
-            this.xml.xpath("/program/metas/meta/tail/text()").stream().findFirst().orElse(""),
-            this.xml.xpath("/program/@name").get(0)
+            this.xml.value()
+                .xpath("/program/metas/meta/tail/text()")
+                .stream()
+                .findFirst()
+                .orElse(""),
+            this.xml.value().xpath("/program/@name").get(0)
         ).full();
+    }
+
+
+    private static Unchecked<XML> fromFile(final Path path) {
+        return new Unchecked<>(new Synced<>(new Sticky<>(() -> XmirRepresentation.open(path))));
     }
 
     /**
