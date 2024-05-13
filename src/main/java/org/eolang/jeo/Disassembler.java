@@ -24,6 +24,7 @@
 package org.eolang.jeo;
 
 import java.nio.file.Path;
+import java.util.stream.Stream;
 
 /**
  * This class disassembles the project's compiled classes.
@@ -63,7 +64,7 @@ public class Disassembler {
     public void disassemble() {
         final String process = "Disassembling";
         final String disassembled = "disassembled";
-        new LoggedTranslator(
+        final Stream<? extends Representation> stream = new LoggedTranslator(
             process,
             disassembled,
             this.classes,
@@ -76,5 +77,10 @@ public class Disassembler {
                 )
             )
         ).apply(new BytecodeRepresentations(this.classes).all());
+        stream.forEach(
+            terminate -> {
+            }
+        );
+        stream.close();
     }
 }

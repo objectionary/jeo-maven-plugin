@@ -28,6 +28,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -57,7 +59,7 @@ final class XmirRepresentationsTest {
         );
         MatcherAssert.assertThat(
             String.format("Objects were not retrieved, we expected '%d' objects", expected),
-            new XmirRepresentations(temp).all(),
+            new XmirRepresentations(temp).all().collect(Collectors.toList()),
             Matchers.hasSize(expected)
         );
     }
@@ -67,7 +69,7 @@ final class XmirRepresentationsTest {
         Files.createDirectories(temp.resolve("some-path"));
         MatcherAssert.assertThat(
             "Objects were not retrieved, we expected empty list",
-            new XmirRepresentations(temp).all(),
+            new XmirRepresentations(temp).all().collect(Collectors.toList()),
             Matchers.empty()
         );
     }
@@ -90,12 +92,13 @@ final class XmirRepresentationsTest {
             path.resolve("opeo-class.xmir"),
             new BytecodeClass("OpeoClass").xml().toString().getBytes(StandardCharsets.UTF_8)
         );
+        final Stream<? extends Representation> all = new XmirRepresentations(path).all();
         MatcherAssert.assertThat(
             String.format(
                 "Objects were not retrieved, we expected exactly one object was read from %s",
                 path
             ),
-            new XmirRepresentations(path).all(),
+            all.collect(Collectors.toList()),
             Matchers.hasSize(1)
         );
     }

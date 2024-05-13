@@ -28,8 +28,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
@@ -43,15 +43,6 @@ import org.junit.jupiter.api.io.TempDir;
  * @since 0.1.0
  */
 final class BachedTranslatorTest {
-
-    /**
-     * Representations to test.
-     */
-    private final Collection<Representation> objects = Collections.singleton(
-        new XmirRepresentation(
-            new BytecodeClass("org/eolang/jeo/Application").xml()
-        )
-    );
 
     /**
      * Where the XML file is expected to be saved.
@@ -73,7 +64,7 @@ final class BachedTranslatorTest {
                 .getBytes(StandardCharsets.UTF_8)
         );
         new BachedTranslator(new Disassemble(temp))
-            .apply(Collections.singleton(new XmirRepresentation(clazz)));
+            .apply(Stream.of(new XmirRepresentation(clazz))).collect(Collectors.toList());
         MatcherAssert.assertThat(
             "XML file was not saved",
             temp.resolve(this.expected).toFile(),
@@ -86,8 +77,11 @@ final class BachedTranslatorTest {
         final BachedTranslator footprint = new BachedTranslator(
             new Disassemble(temp)
         );
-        footprint.apply(this.objects);
-        footprint.apply(this.objects);
+        final Representation repr = new XmirRepresentation(
+            new BytecodeClass("org/eolang/jeo/Application").xml()
+        );
+        footprint.apply(Stream.of(repr)).collect(Collectors.toList());
+        footprint.apply(Stream.of(repr)).collect(Collectors.toList());
         MatcherAssert.assertThat(
             "XML file was not successfully overwritten",
             temp.resolve(this.expected).toFile(),
@@ -99,8 +93,8 @@ final class BachedTranslatorTest {
     void assemblesSuccessfully(@TempDir final Path temp) {
         final String fake = "jeo/xmir/Fake";
         new BachedTranslator(new Assemble(temp)).apply(
-            Collections.singleton(new XmirRepresentation(new BytecodeClass(fake).xml()))
-        );
+            Stream.of(new XmirRepresentation(new BytecodeClass(fake).xml()))
+        ).collect(Collectors.toList());
         MatcherAssert.assertThat(
             String.format(
                 "Bytecode file was not saved for the representation with the name '%s'",

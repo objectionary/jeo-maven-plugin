@@ -53,7 +53,7 @@ public final class BytecodeRepresentations implements Representations {
     }
 
     @Override
-    public Collection<? extends Representation> all() {
+    public Stream<? extends Representation> all() {
         try {
             return this.bytecode();
         } catch (final IOException exception) {
@@ -72,11 +72,10 @@ public final class BytecodeRepresentations implements Representations {
      * @return Collection of {@link org.eolang.jeo.Representation}
      * @throws IOException If some I/O problem arises.
      */
-    private Collection<? extends Representation> bytecode() throws IOException {
+    private Stream<? extends Representation> bytecode() throws IOException {
         return this.classes()
             .stream()
-            .map(BytecodeRepresentation::new)
-            .collect(Collectors.toList());
+            .map(BytecodeRepresentation::new);
     }
 
     /**

@@ -32,6 +32,9 @@ import org.cactoos.Input;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
+import org.cactoos.scalar.Sticky;
+import org.cactoos.scalar.Synced;
+import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
@@ -43,7 +46,7 @@ import org.xembly.Xembler;
 
 /**
  * Intermediate representation of a class files which can be optimized from bytecode.
- * In order to implement this class you can also use that site to check if bytecode is correct:
+ * You can also use that site to check if bytecode is correct:
  * <a href="https://godbolt.org">https://godbolt.org/</a>
  *
  * @since 0.1.0
@@ -55,7 +58,7 @@ public final class BytecodeRepresentation implements Representation {
     /**
      * Input source.
      */
-    private final byte[] input;
+    private final Unchecked<byte[]> input;
 
     /**
      * The source of the input.
@@ -68,7 +71,7 @@ public final class BytecodeRepresentation implements Representation {
      * @param clazz Path to the class file
      */
     public BytecodeRepresentation(final Path clazz) {
-        this(new InputOf(clazz), clazz);
+        this(BytecodeRepresentation.fromFile(clazz), String.valueOf(clazz));
     }
 
     /**
@@ -77,7 +80,7 @@ public final class BytecodeRepresentation implements Representation {
      * @param bytecode Bytecode
      */
     public BytecodeRepresentation(final Bytecode bytecode) {
-        this(bytecode.asBytes());
+        this(BytecodeRepresentation.fromBytes(bytecode.asBytes()), "bytecode");
     }
 
     /**
@@ -86,39 +89,19 @@ public final class BytecodeRepresentation implements Representation {
      * @param input Input source
      */
     BytecodeRepresentation(final Input input) {
-        this(new UncheckedBytes(new BytesOf(input)).asBytes());
+        this(BytecodeRepresentation.fromInput(input), "bytecode");
     }
 
     /**
      * Constructor.
-     *
-     * @param input Input source
-     * @param source The source of the input
-     */
-    private BytecodeRepresentation(final Input input, final Path source) {
-        this(new UncheckedBytes(new BytesOf(input)).asBytes(), source.toAbsolutePath().toString());
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param input Input source.
-     */
-    private BytecodeRepresentation(final byte[] input) {
-        this(input, "bytecode");
-    }
-
-    /**
-     * Constructor.
-     *
      * @param input Input.
      * @param source The source of the input.
      */
-    private BytecodeRepresentation(
-        final byte[] input,
+    public BytecodeRepresentation(
+        final Unchecked<byte[]> input,
         final String source
     ) {
-        this.input = input.clone();
+        this.input = input;
         this.source = source;
     }
 
@@ -139,18 +122,18 @@ public final class BytecodeRepresentation implements Representation {
      */
     public XML toEO(final boolean count) {
         final DirectivesClassVisitor directives = new DirectivesClassVisitor(
-            new Base64Bytecode(this.input).asString(),
+            new Base64Bytecode(this.input.value()).asString(),
             count
         );
         try {
-            new ClassReader(this.input).accept(directives, 0);
+            new ClassReader(this.input.value()).accept(directives, 0);
             final XMLDocument res = new XMLDocument(new Xembler(directives).xml());
             new Schema(res).check();
             return res;
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(
                 String.format(
-                    "Something went wrong during transformation %s into XML by using directives",
+                    "Something went wrong during transformation %s into XML by using directives %n%s%n",
                     this.className(),
                     directives
                 ),
@@ -160,7 +143,7 @@ public final class BytecodeRepresentation implements Representation {
             throw new IllegalStateException(
                 String.format(
                     "Can't build XML from %s by using directives %s",
-                    Arrays.toString(this.input),
+                    Arrays.toString(this.input.value()),
                     directives
                 ),
                 exception
@@ -170,7 +153,7 @@ public final class BytecodeRepresentation implements Representation {
 
     @Override
     public Bytecode toBytecode() {
-        return new Bytecode(new UncheckedBytes(new BytesOf(this.input)).asBytes());
+        return new Bytecode(new UncheckedBytes(new BytesOf(this.input.value())).asBytes());
     }
 
     /**
@@ -180,7 +163,34 @@ public final class BytecodeRepresentation implements Representation {
      */
     private String className() {
         final ClassNameVisitor name = new ClassNameVisitor();
-        new ClassReader(this.input).accept(name, 0);
+        new ClassReader(this.input.value()).accept(name, 0);
         return name.asString();
+    }
+
+    /**
+     * Prestructor that converts a file to a byte source.
+     * @param path Path to the file.
+     * @return Byte source.
+     */
+    private static Unchecked<byte[]> fromFile(final Path path) {
+        return BytecodeRepresentation.fromInput(new InputOf(path));
+    }
+
+    /**
+     * Prestructor that converts input to a byte source.
+     * @param input Input.
+     * @return Byte source.
+     */
+    private static Unchecked<byte[]> fromInput(final Input input) {
+        return new Unchecked<>(new Synced<>(new Sticky<>(() -> new BytesOf(input).asBytes())));
+    }
+
+    /**
+     * Prestructor that converts bytes to a byte source.
+     * @param bytes Bytes.
+     * @return Byte source.
+     */
+    private static Unchecked<byte[]> fromBytes(final byte[] bytes) {
+        return new Unchecked<>(new Synced<>(new Sticky<>(() -> bytes)));
     }
 }

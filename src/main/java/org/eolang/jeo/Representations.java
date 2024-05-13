@@ -23,7 +23,7 @@
  */
 package org.eolang.jeo;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 /**
  * Collection of representations.
@@ -37,5 +37,5 @@ public interface Representations {
      * All representations.
      * @return All representations.
      */
-    Collection<? extends Representation> all();
+    Stream<? extends Representation> all();
 }
