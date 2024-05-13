@@ -189,13 +189,13 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a>             IllegalStateException.<strong class="jxr_keyword">class</strong>,
 <a class="jxr_linenumber" name="L182" href="#L182">182</a>             () -&gt; <strong class="jxr_keyword">new</strong> BytecodeClass(<span class="jxr_string">"Broken"</span>)
 <a class="jxr_linenumber" name="L183" href="#L183">183</a>                 .withMethod(<span class="jxr_string">"j$bar"</span>, <span class="jxr_string">"()I"</span>, Opcodes.ACC_PUBLIC)
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>                 .label(<span class="jxr_string">"70b56006-856e-4ac2-be99-632ca25a65a0"</span>)
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>                 .label(<strong class="jxr_keyword">new</strong> Label())
 <a class="jxr_linenumber" name="L185" href="#L185">185</a>                 .opcode(Opcodes.ALOAD, 0)
 <a class="jxr_linenumber" name="L186" href="#L186">186</a>                 .opcode(Opcodes.INVOKEVIRTUAL, <span class="jxr_string">"com/exam/BA"</span>, <span class="jxr_string">"foo"</span>, <span class="jxr_string">"()I"</span>)
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>                 .opcode(Opcodes.ICONST_2)
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>                 .opcode(Opcodes.IADD)
 <a class="jxr_linenumber" name="L189" href="#L189">189</a>                 .opcode(Opcodes.IRETURN)
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>                 .label(<span class="jxr_string">"f3d973ab-c502-4134-8d6f-d7fe89defc6e"</span>)
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>                 .label(<strong class="jxr_keyword">new</strong> Label())
 <a class="jxr_linenumber" name="L191" href="#L191">191</a>                 .up()
 <a class="jxr_linenumber" name="L192" href="#L192">192</a>                 .bytecode(),
 <a class="jxr_linenumber" name="L193" href="#L193">193</a>             <span class="jxr_string">"We expect an exception here because the bytecode is broken"</span>
