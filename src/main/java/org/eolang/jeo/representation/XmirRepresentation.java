@@ -157,7 +157,11 @@ public final class XmirRepresentation implements Representation {
         ).full();
     }
 
-
+    /**
+     * Prestructor that converts a path to a lazy XML.
+     * @param path Path to an XML file.
+     * @return Lazy XML.
+     */
     private static Unchecked<XML> fromFile(final Path path) {
         return new Unchecked<>(new Synced<>(new Sticky<>(() -> XmirRepresentation.open(path))));
     }

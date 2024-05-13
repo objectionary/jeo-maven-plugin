@@ -24,7 +24,6 @@
 package org.eolang.jeo;
 
 import java.nio.file.Path;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -81,8 +80,10 @@ final class Assembler {
                 )
             )
         ).apply(new XmirRepresentations(this.input, this.verify).all());
-        stream.forEach(terminate -> {
-        });
+        stream.forEach(
+            terminate -> {
+            }
+        );
         stream.close();
     }
 }

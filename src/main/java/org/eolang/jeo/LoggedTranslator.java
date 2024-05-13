@@ -108,15 +108,5 @@ public final class LoggedTranslator implements Translator {
                     System.currentTimeMillis() - start
                 )
             );
-//        );
-//        final long total = ;
-//        Logger.info(
-//            this,
-//            "Total %d files were %s in %[ms]s",
-//            res.size(),
-//            this.participle,
-//            total
-//        );
-//        return res;
     }
 }

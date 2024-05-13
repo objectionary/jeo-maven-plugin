@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo;
 
-import java.util.Collection;
 import java.util.stream.Stream;
 
 /**

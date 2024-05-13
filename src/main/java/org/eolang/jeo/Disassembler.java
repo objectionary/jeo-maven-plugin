@@ -77,8 +77,10 @@ public class Disassembler {
                 )
             )
         ).apply(new BytecodeRepresentations(this.classes).all());
-        stream.forEach(terminate -> {
-        });
+        stream.forEach(
+            terminate -> {
+            }
+        );
         stream.close();
     }
 }
