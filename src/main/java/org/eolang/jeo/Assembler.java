@@ -24,6 +24,7 @@
 package org.eolang.jeo;
 
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 /**
  * Assembler.
@@ -78,6 +79,8 @@ final class Assembler {
                     new Assemble(this.output)
                 )
             )
-        ).apply(new XmirRepresentations(this.input, this.verify).all());
+        ).apply(
+            new XmirRepresentations(this.input, this.verify).all().collect(Collectors.toList())
+        );
     }
 }

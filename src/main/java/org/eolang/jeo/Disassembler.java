@@ -24,6 +24,7 @@
 package org.eolang.jeo;
 
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 /**
  * This class disassembles the project's compiled classes.
@@ -75,6 +76,6 @@ public class Disassembler {
                     new Disassemble(this.target)
                 )
             )
-        ).apply(new BytecodeRepresentations(this.classes).all());
+        ).apply(new BytecodeRepresentations(this.classes).all().collect(Collectors.toList()));
     }
 }

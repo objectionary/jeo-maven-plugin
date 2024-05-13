@@ -24,7 +24,6 @@
 package org.eolang.jeo;
 
 import java.util.Collection;
-import java.util.stream.Stream;
 
 /**
  * Translator that applies a translation to a batch of representations.
@@ -38,6 +37,6 @@ public interface Translator {
      * @return Translated IRs.
      */
     Collection<? extends Representation> apply(
-        Stream<? extends Representation> representations
+        Collection<? extends Representation> representations
     );
 }

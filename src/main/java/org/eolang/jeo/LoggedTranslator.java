@@ -26,7 +26,6 @@ package org.eolang.jeo;
 import com.jcabi.log.Logger;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.stream.Stream;
 
 /**
  * Translation log.
@@ -86,7 +85,7 @@ public final class LoggedTranslator implements Translator {
 
     @Override
     public Collection<? extends Representation> apply(
-        final Stream<? extends Representation> representations
+        final Collection<? extends Representation> representations
     ) {
         Logger.info(
             this,
