@@ -31,4 +31,10 @@ public @interface JeoAnnotation {
     NestedAnnotation nested();
 
     NestedAnnotation[] nestedArray();
+
+    InnerEnum innerEnum() default InnerEnum.ONE;
+
+    enum InnerEnum {
+        ONE, TWO, THREE
+    }
 }

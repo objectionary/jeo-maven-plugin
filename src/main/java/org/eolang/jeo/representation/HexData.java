@@ -70,6 +70,14 @@ public final class HexData {
     }
 
     /**
+     * Is it null?
+     * @return TRUE if it's null
+     */
+    public boolean isNull() {
+        return this.data == null;
+    }
+
+    /**
      * Bytes to HEX.
      * The efficient way to convert bytes to hexadecimal.
      * ATTENTION!

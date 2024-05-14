@@ -45,7 +45,7 @@ import org.xembly.Xembler;
  */
 @ToString
 @EqualsAndHashCode
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
 public final class XmlClass {
 
     /**
@@ -191,6 +191,18 @@ public final class XmlClass {
             .filter(o -> "field".equals(o.attribute("base").get()))
             .map(XmlField::new)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Attributes.
+     * @return Attributes.
+     */
+    public Optional<XmlAttributes> attributes() {
+        return this.node.children()
+            .filter(o -> o.hasAttribute("name", "attributes"))
+            .filter(o -> o.hasAttribute("base", "tuple"))
+            .findFirst()
+            .map(XmlAttributes::new);
     }
 
     /**

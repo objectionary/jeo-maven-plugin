@@ -206,6 +206,22 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
     }
 
     @Override
+    public void visitInnerClass(
+        final String name, final String outer, final String inner, final int access
+    ) {
+        this.program.top()
+            .attribute(
+                new DirectivesAttribute(
+                    "InnerClass",
+                    new DirectivesNullable("name", name),
+                    new DirectivesNullable("outer", outer),
+                    new DirectivesNullable("inner", inner),
+                    new DirectivesNullable("access", access)
+                ));
+        super.visitInnerClass(name, outer, inner, access);
+    }
+
+    @Override
     public Iterator<Directive> iterator() {
         return this.program.iterator();
     }

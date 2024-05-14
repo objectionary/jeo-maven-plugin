@@ -19,6 +19,7 @@ import java.util.Arrays;
     floats = {1.0f, 2.0f, 3.0f},
     classes = {AnnotationsApplication.class},
     nested = @NestedAnnotation(name = "single-nested"),
+    innerEnum = JeoAnnotation.InnerEnum.TWO,
     nestedArray = {
         @NestedAnnotation(name = "nested1"),
         @NestedAnnotation(name = "nested2")
@@ -82,6 +83,9 @@ public class AnnotationsApplication {
             }
             if (annotation.nestedArray().length != 2) {
                 throw new IllegalStateException("nestedArray length is not 2");
+            }
+            if (annotation.innerEnum() != JeoAnnotation.InnerEnum.TWO) {
+                throw new IllegalStateException("innerEnum is not TWO");
             }
             final boolean methodAnnotation = Arrays.stream(clazz.getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(JeoMethodAnnotation.class))

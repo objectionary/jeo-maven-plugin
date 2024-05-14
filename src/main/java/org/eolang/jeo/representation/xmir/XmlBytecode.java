@@ -118,6 +118,7 @@ public final class XmlBytecode {
             xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
             xmlmethod.defvalue().ifPresent(defv -> defv.writeTo(method));
         }
+        clazz.attributes().ifPresent(attrs -> attrs.writeTo(bytecode));
         return bytecode.bytecode();
     }
 }
