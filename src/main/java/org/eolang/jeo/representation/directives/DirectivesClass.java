@@ -62,6 +62,11 @@ public final class DirectivesClass implements Iterable<Directive> {
     private final DirectivesAnnotations annotations;
 
     /**
+     * Attributes.
+     */
+    private final DirectivesAttributes attributes;
+
+    /**
      * Constructor.
      * @param classname Class name.
      */
@@ -114,6 +119,7 @@ public final class DirectivesClass implements Iterable<Directive> {
         this.methods = methods;
         this.fields = fields;
         this.annotations = new DirectivesAnnotations();
+        this.attributes = new DirectivesAttributes();
     }
 
     /**
@@ -146,6 +152,16 @@ public final class DirectivesClass implements Iterable<Directive> {
         return this;
     }
 
+    /**
+     * Add attribute to the directives.
+     * @param attribute Attribute
+     * @return The same instance of {@link DirectivesClass}.
+     */
+    public DirectivesClass attribute(final DirectivesAttribute attribute) {
+        this.attributes.add(attribute);
+        return this;
+    }
+
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives();
@@ -156,6 +172,7 @@ public final class DirectivesClass implements Iterable<Directive> {
         this.fields.forEach(directives::append);
         this.methods.forEach(directives::append);
         directives.append(this.annotations);
+        directives.append(this.attributes);
         return directives.up().iterator();
     }
 }
