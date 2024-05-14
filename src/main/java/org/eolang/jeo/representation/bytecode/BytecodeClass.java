@@ -74,6 +74,12 @@ public final class BytecodeClass implements Testable {
     private final Collection<BytecodeAnnotation> annotations;
 
     /**
+     * Attributes.
+     */
+    @ToString.Exclude
+    private final Collection<BytecodeAttribute> attributes;
+
+    /**
      * Class properties (access, signature, supername, interfaces).
      */
     private final BytecodeClassProperties props;
@@ -151,6 +157,7 @@ public final class BytecodeClass implements Testable {
         this.props = properties;
         this.fields = new ArrayList<>(0);
         this.annotations = new ArrayList<>(0);
+        this.attributes = new ArrayList<>(0);
     }
 
     /**
@@ -181,6 +188,7 @@ public final class BytecodeClass implements Testable {
             this.annotations.forEach(annotation -> annotation.write(this.visitor));
             this.fields.forEach(field -> field.write(this.visitor));
             this.methods.forEach(BytecodeMethod::write);
+            this.attributes.forEach(attr -> attr.write(this.visitor));
             this.visitor.visitEnd();
             return this.visitor.bytecode();
         } catch (final IllegalArgumentException exception) {
@@ -291,6 +299,16 @@ public final class BytecodeClass implements Testable {
             "bar",
             Opcodes.ACC_PUBLIC
         );
+        return this;
+    }
+
+    /**
+     * Add attribute.
+     * @param attribute Attribute.
+     * @return This object.
+     */
+    public BytecodeClass withAttribute(final BytecodeAttribute attribute) {
+        this.attributes.add(attribute);
         return this;
     }
 

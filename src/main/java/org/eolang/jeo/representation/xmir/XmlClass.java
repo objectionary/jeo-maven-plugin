@@ -194,6 +194,18 @@ public final class XmlClass {
     }
 
     /**
+     * Attributes.
+     * @return Attributes.
+     */
+    public Optional<XmlAttributes> attributes() {
+        return this.node.children()
+            .filter(o -> o.hasAttribute("name", "attributes"))
+            .filter(o -> o.hasAttribute("base", "tuple"))
+            .findFirst()
+            .map(XmlAttributes::new);
+    }
+
+    /**
      * Copies current class with replaced methods.
      *
      * @param methods Methods.
