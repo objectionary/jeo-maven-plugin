@@ -45,7 +45,7 @@ import org.xembly.Xembler;
  */
 @ToString
 @EqualsAndHashCode
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
 public final class XmlClass {
 
     /**

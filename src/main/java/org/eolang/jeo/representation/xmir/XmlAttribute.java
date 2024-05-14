@@ -34,6 +34,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeClass;
  *  Add unit tests for XmlAttribute class in order to increase the code coverage
  *  and improve the quality of the code.
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class XmlAttribute {
 
     /**
@@ -55,8 +56,10 @@ public final class XmlAttribute {
      */
     public void writeTo(final BytecodeClass bytecode) {
         final String name = this.node.attribute("name")
-            .orElseThrow(() -> new IllegalArgumentException(
-                String.format("Attribute name is missing in XML node %s", this.node))
+            .orElseThrow(
+                () -> new IllegalArgumentException(
+                    String.format("Attribute name is missing in XML node %s", this.node)
+                )
             );
         if ("InnerClass".equals(name)) {
             bytecode.withAttribute(
