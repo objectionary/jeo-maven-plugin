@@ -58,16 +58,14 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
     /**
      * Add a parameter annotation
      * @param index Index of the parameter
-     * @param annotation Annotation descriptor
-     * @param visible Is the annotation visible at runtime?
+     * @param annotation Annotation.
      */
-    public void annotation(final int index, final String annotation, final boolean visible) {
+    public void annotation(final int index, final  DirectivesAnnotation annotation) {
         this.annotations.compute(index, (key, value) -> {
-                final DirectivesAnnotation ann = new DirectivesAnnotation(annotation, visible);
                 if (value == null) {
-                    value = new ArrayList<>(Collections.singletonList(ann));
+                    value = new ArrayList<>(Collections.singletonList(annotation));
                 } else {
-                    value.add(ann);
+                    value.add(annotation);
                 }
                 return value;
             }
