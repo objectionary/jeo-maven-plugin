@@ -94,6 +94,23 @@ public class AnnotationsApplication {
             if (!methodAnnotation) {
                 throw new IllegalStateException("Method annotation is not present");
             }
+            String def = Arrays.stream(AnnotationsApplication.class.getDeclaredMethods())
+                .filter(method -> "annotatedMethodWithDefaultValue".equals(method.getName()))
+                .findFirst().orElseThrow().getParameters()[0]
+                .getAnnotation(ParamAnnotation.class)
+                .value();
+            if (!def.equals(
+                "We can parse annotations from method parameters")) {
+                throw new IllegalStateException("Default annotation param value is not correct");
+            }
+            String custom = Arrays.stream(AnnotationsApplication.class.getDeclaredMethods())
+                .filter(method -> "annotatedMethod".equals(method.getName()))
+                .findFirst().orElseThrow().getParameters()[0]
+                .getAnnotation(ParamAnnotation.class)
+                .value();
+            if (!custom.equals("custom")) {
+                throw new IllegalStateException("Custom annotation param value is not correct");
+            }
             System.out.println("Annotations test passed successfully!");
         } else {
             throw new IllegalStateException(
@@ -103,12 +120,12 @@ public class AnnotationsApplication {
     }
 
     @JeoMethodAnnotation(required = true)
-    public static void annotatedMethod() {
+    public static void annotatedMethod(@ParamAnnotation("custom") final String param) {
         // This method is annotated with JeoMethodAnnotation
     }
 
     @JeoMethodAnnotation
-    public static void annotatedMethodWithDefaultValue() {
+    public static void annotatedMethodWithDefaultValue(@ParamAnnotation final String param) {
         // This method is annotated with JeoMethodAnnotation
     }
 }
