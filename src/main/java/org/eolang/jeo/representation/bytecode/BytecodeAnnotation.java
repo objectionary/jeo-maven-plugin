@@ -107,7 +107,13 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
         return this;
     }
 
-    public BytecodeAnnotation write(final int index, MethodVisitor visitor) {
+    /**
+     * Write parameter annotation.
+     * @param index Index of a parameter.
+     * @param visitor Method visitor.
+     * @return This.
+     */
+    public BytecodeAnnotation write(final int index, final MethodVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitParameterAnnotation(
             index, this.descriptor, this.visible
         );

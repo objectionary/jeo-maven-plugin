@@ -76,6 +76,10 @@ public class XmlAnnotation {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Convert to bytecode.
+     * @return Bytecode annotation.
+     */
     public BytecodeAnnotation toBytecode() {
         return new BytecodeAnnotation(
             this.descriptor(),

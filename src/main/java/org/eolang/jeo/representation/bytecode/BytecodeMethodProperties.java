@@ -59,6 +59,9 @@ public final class BytecodeMethodProperties implements Testable {
      */
     private final String signature;
 
+    /**
+     * Method parameters.
+     */
     private final BytecodeParameters parameters;
 
     /**
@@ -117,20 +120,30 @@ public final class BytecodeMethodProperties implements Testable {
         this(access, name, descriptor, signature, new BytecodeParameters(), exceptions);
     }
 
+    /**
+     * Constructor.
+     * @param access Access modifiers.
+     * @param name Method name.
+     * @param descriptor Method descriptor.
+     * @param signature Method signature.
+     * @param parameters Method parameters.
+     * @param exceptions Method exceptions.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
     public BytecodeMethodProperties(
         final int access,
         final String name,
         final String descriptor,
         final String signature,
         final BytecodeParameters parameters,
-        final String[] exceptions
+        final String... exceptions
     ) {
         this.access = access;
         this.name = name;
         this.descriptor = descriptor;
         this.signature = signature;
         this.parameters = parameters;
-        this.exceptions = exceptions;
+        this.exceptions = exceptions.clone();
     }
 
     @Override

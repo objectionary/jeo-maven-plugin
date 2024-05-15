@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -44,6 +45,9 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
      */
     private final String descriptor;
 
+    /**
+     * Parameter annotations.
+     */
     private final Map<Integer, List<DirectivesAnnotation>> annotations;
 
     /**
@@ -56,18 +60,22 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
     }
 
     /**
-     * Add a parameter annotation
-     * @param index Index of the parameter
+     * Add a parameter annotation.
+     * @param index Index of the parameter.
      * @param annotation Annotation.
      */
-    public void annotation(final int index, final  DirectivesAnnotation annotation) {
-        this.annotations.compute(index, (key, value) -> {
-                if (value == null) {
-                    value = new ArrayList<>(Collections.singletonList(annotation));
+    public void annotation(final int index, final DirectivesAnnotation annotation) {
+        this.annotations.compute(
+            index,
+            (key, initial) -> {
+                final List<DirectivesAnnotation> res;
+                if (Objects.isNull(initial)) {
+                    res = new ArrayList<>(Collections.singletonList(annotation));
                 } else {
-                    value.add(annotation);
+                    initial.add(annotation);
+                    res = initial;
                 }
-                return value;
+                return res;
             }
         );
     }
