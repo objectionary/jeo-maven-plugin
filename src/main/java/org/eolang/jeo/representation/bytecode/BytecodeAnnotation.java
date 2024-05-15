@@ -25,6 +25,8 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
@@ -39,6 +41,8 @@ import org.objectweb.asm.MethodVisitor;
  *  that are used to represent annotations in different formats. We should
  *  refactor this implementation to make it simpler and more readable.
  */
+@ToString
+@EqualsAndHashCode
 public final class BytecodeAnnotation implements BytecodeAnnotationValue {
 
     /**
@@ -99,6 +103,14 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      */
     public BytecodeAnnotation write(final MethodVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descriptor, this.visible);
+        this.properties.forEach(property -> property.writeTo(avisitor));
+        return this;
+    }
+
+    public BytecodeAnnotation write(final int index, MethodVisitor visitor) {
+        final AnnotationVisitor avisitor = visitor.visitParameterAnnotation(
+            index, this.descriptor, this.visible
+        );
         this.properties.forEach(property -> property.writeTo(avisitor));
         return this;
     }

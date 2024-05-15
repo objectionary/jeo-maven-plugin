@@ -30,6 +30,7 @@ import java.util.Collection;
 import lombok.ToString;
 import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
+import org.eolang.jeo.representation.xmir.XmlAnnotation;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
@@ -348,7 +349,7 @@ public final class BytecodeClass implements Testable {
     public BytecodeClass withAnnotations(final XmlAnnotations all) {
         all.all()
             .stream()
-            .map(ann -> new BytecodeAnnotation(ann.descriptor(), ann.visible(), ann.props()))
+            .map(XmlAnnotation::toBytecode)
             .forEach(this.annotations::add);
         return this;
     }

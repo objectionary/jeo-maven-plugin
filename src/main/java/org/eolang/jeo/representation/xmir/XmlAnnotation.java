@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
 
 /**
@@ -73,5 +74,13 @@ public class XmlAnnotation {
             .map(XmlAnnotationProperty::new)
             .map(XmlAnnotationProperty::toBytecode)
             .collect(Collectors.toList());
+    }
+
+    public BytecodeAnnotation toBytecode() {
+        return new BytecodeAnnotation(
+            this.descriptor(),
+            this.visible(),
+            this.props()
+        );
     }
 }

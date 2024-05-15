@@ -26,12 +26,16 @@ package org.eolang.jeo.representation.bytecode;
 import com.jcabi.log.Logger;
 import java.util.List;
 import java.util.Optional;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.objectweb.asm.AnnotationVisitor;
 
 /**
  * Bytecode annotation property.
  * @since 0.3
  */
+@ToString
+@EqualsAndHashCode
 public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue {
 
     /**

@@ -23,8 +23,11 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
@@ -41,7 +44,7 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
      */
     private final String descriptor;
 
-    private final Map<Integer, DirectivesAnnotation> annotations;
+    private final Map<Integer, List<DirectivesAnnotation>> annotations;
 
     /**
      * Constructor.
@@ -59,7 +62,16 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
      * @param visible Is the annotation visible at runtime?
      */
     public void annotation(final int index, final String annotation, final boolean visible) {
-        this.annotations.put(index, new DirectivesAnnotation(annotation, visible));
+        this.annotations.compute(index, (key, value) -> {
+                final DirectivesAnnotation ann = new DirectivesAnnotation(annotation, visible);
+                if (value == null) {
+                    value = new ArrayList<>(Collections.singletonList(ann));
+                } else {
+                    value.add(ann);
+                }
+                return value;
+            }
+        );
     }
 
     @Override
@@ -71,7 +83,7 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
                 .attr("abstract", "")
                 .attr("name", String.format("arg__%s__%d", arguments[index], index));
             if (this.annotations.containsKey(index)) {
-                param.append(this.annotations.get(index));
+                this.annotations.get(index).forEach(param::append);
             }
             param.up();
         }

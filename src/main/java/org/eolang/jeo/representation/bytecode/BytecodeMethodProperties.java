@@ -59,6 +59,8 @@ public final class BytecodeMethodProperties implements Testable {
      */
     private final String signature;
 
+    private final BytecodeParameters parameters;
+
     /**
      * Method exceptions.
      */
@@ -112,11 +114,23 @@ public final class BytecodeMethodProperties implements Testable {
         final String signature,
         final String... exceptions
     ) {
+        this(access, name, descriptor, signature, new BytecodeParameters(), exceptions);
+    }
+
+    public BytecodeMethodProperties(
+        final int access,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final BytecodeParameters parameters,
+        final String[] exceptions
+    ) {
         this.access = access;
         this.name = name;
         this.descriptor = descriptor;
         this.signature = signature;
-        this.exceptions = exceptions.clone();
+        this.parameters = parameters;
+        this.exceptions = exceptions;
     }
 
     @Override
@@ -143,7 +157,7 @@ public final class BytecodeMethodProperties implements Testable {
             this,
             String.format("Creating method visitor with the following properties %s", this)
         );
-        return writer.visitMethod(
+        final MethodVisitor visitor = writer.visitMethod(
             this.access,
             new JavaName(this.name).decode(),
             this.descriptor,
@@ -151,5 +165,7 @@ public final class BytecodeMethodProperties implements Testable {
             this.exceptions,
             compute
         );
+        this.parameters.write(visitor);
+        return visitor;
     }
 }

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
@@ -34,6 +35,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
+import org.eolang.jeo.representation.bytecode.BytecodeParameters;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.objectweb.asm.Opcodes;
@@ -190,6 +192,7 @@ public final class XmlMethod {
             this.name(),
             this.descriptor(),
             this.signature(),
+            this.params(),
             this.exceptions()
         );
     }
@@ -377,6 +380,16 @@ public final class XmlMethod {
             .map(HexString::new)
             .map(HexString::decode)
             .toArray(String[]::new);
+    }
+
+    private BytecodeParameters params() {
+        final AtomicInteger index = new AtomicInteger(0);
+        return new BytecodeParameters(
+            this.node.children()
+                .filter(element -> element.hasAttribute("abstract", ""))
+                .map(element -> new XmlParam(index.getAndIncrement(), element))
+                .collect(Collectors.toMap(XmlParam::index, XmlParam::annotations))
+        );
     }
 
     /**
