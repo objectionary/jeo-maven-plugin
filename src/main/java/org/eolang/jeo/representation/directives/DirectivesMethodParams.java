@@ -23,7 +23,9 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -39,12 +41,25 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
      */
     private final String descriptor;
 
+    private final Map<Integer, DirectivesAnnotation> annotations;
+
     /**
      * Constructor.
      * @param descriptor Method descriptor.
      */
     public DirectivesMethodParams(final String descriptor) {
         this.descriptor = descriptor;
+        this.annotations = new HashMap<>(0);
+    }
+
+    /**
+     * Add a parameter annotation
+     * @param index Index of the parameter
+     * @param annotation Annotation descriptor
+     * @param visible Is the annotation visible at runtime?
+     */
+    public void annotation(final int index, final String annotation, final boolean visible) {
+        this.annotations.put(index, new DirectivesAnnotation(annotation, visible));
     }
 
     @Override
@@ -52,10 +67,13 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
         final Directives directives = new Directives();
         final Type[] arguments = Type.getArgumentTypes(this.descriptor);
         for (int index = 0; index < arguments.length; ++index) {
-            directives.add("o")
+            final Directives param = directives.add("o")
                 .attr("abstract", "")
-                .attr("name", String.format("arg__%s__%d", arguments[index], index))
-                .up();
+                .attr("name", String.format("arg__%s__%d", arguments[index], index));
+            if (this.annotations.containsKey(index)) {
+                param.append(this.annotations.get(index));
+            }
+            param.up();
         }
         return directives.iterator();
     }

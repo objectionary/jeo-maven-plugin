@@ -66,6 +66,11 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
     private final AtomicReference<DirectivesMaxs> max;
 
     /**
+     * Method parameters.
+     */
+    private final DirectivesMethodParams params;
+
+    /**
      * Constructor.
      */
     public DirectivesMethodProperties() {
@@ -91,6 +96,17 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         this.signature = Optional.ofNullable(signature).orElse("");
         this.exceptions = Optional.ofNullable(exceptions).orElse(new String[0]).clone();
         this.max = new AtomicReference<>(new DirectivesMaxs());
+        this.params = new DirectivesMethodParams(this.descriptor);
+    }
+
+    /**
+     * Set parameter annotation.
+     * @param index Parameter index.
+     * @param annotation Annotation descriptor.
+     * @param visible True if annotation is visible at runtime.
+     */
+    public void paramAnnotation(final int index, final String annotation, final boolean visible) {
+        this.params.annotation(index, annotation, visible);
     }
 
     /**
@@ -110,7 +126,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
             .append(new DirectivesData("signature", this.signature))
             .append(new DirectivesTuple("exceptions", this.exceptions))
             .append(this.max.get())
-            .append(new DirectivesMethodParams(this.descriptor))
+            .append(this.params)
             .iterator();
     }
 

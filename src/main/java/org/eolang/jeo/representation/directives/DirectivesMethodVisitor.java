@@ -208,6 +208,14 @@ public final class DirectivesMethodVisitor extends MethodVisitor implements Iter
     }
 
     @Override
+    public AnnotationVisitor visitParameterAnnotation(
+        final int parameter, final String descriptor, final boolean visible
+    ) {
+        this.method.paramAnnotation(parameter, descriptor, visible);
+        return super.visitParameterAnnotation(parameter, descriptor, visible);
+    }
+
+    @Override
     public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
         final DirectivesAnnotation annotation = new DirectivesAnnotation(descriptor, visible);
         this.method.annotation(annotation);

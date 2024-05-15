@@ -212,4 +212,16 @@ public final class DirectivesMethod implements Iterable<Directive> {
     void defvalue(final DirectivesDefaultValue value) {
         this.dvalue.set(value);
     }
+
+    /**
+     * Set parameter annotation.
+     * @param parameter Parameter index
+     * @param descriptor Annotation descriptor
+     * @param visible True if annotation is visible at runtime
+     */
+    void paramAnnotation(
+        final int parameter, final String descriptor, final boolean visible
+    ) {
+        this.properties.paramAnnotation(parameter, descriptor, visible);
+    }
 }
