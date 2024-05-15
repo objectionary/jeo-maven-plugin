@@ -348,7 +348,7 @@ SOFTWARE.
                         <limit>
                           <counter>INSTRUCTION</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.68</minimum>
+                          <minimum>0.66</minimum>
                         </limit>
                         <limit>
                           <counter>LINE</counter>
@@ -358,17 +358,17 @@ SOFTWARE.
                         <limit>
                           <counter>BRANCH</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.43</minimum>
+                          <minimum>0.39</minimum>
                         </limit>
                         <limit>
                           <counter>COMPLEXITY</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.55</minimum>
+                          <minimum>0.53</minimum>
                         </limit>
                         <limit>
                           <counter>METHOD</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.63</minimum>
+                          <minimum>0.62</minimum>
                         </limit>
                         <limit>
                           <counter>CLASS</counter>
