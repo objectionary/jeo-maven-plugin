@@ -40,9 +40,9 @@ import org.xembly.Directives;
 public final class DirectivesAttribute implements Iterable<Directive> {
 
     /**
-     * The name of the attribute.
+     * The base of the attribute.
      */
-    private final String name;
+    private final String base;
 
     /**
      * Data to store.
@@ -51,27 +51,29 @@ public final class DirectivesAttribute implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name The name of the attribute.
+     * @param base The name of the attribute.
      * @param data Properties of an attribute.
      */
     @SafeVarargs
-    public DirectivesAttribute(final String name, final Iterable<Directive>... data) {
-        this(name, Arrays.asList(data));
+    public DirectivesAttribute(final String base, final Iterable<Directive>... data) {
+        this(base, Arrays.asList(data));
     }
 
     /**
      * Constructor.
-     * @param name The name of the attribute.
+     * @param base The base of the attribute.
      * @param data Properties of an attribute.
      */
-    public DirectivesAttribute(final String name, final List<Iterable<Directive>> data) {
-        this.name = name;
+    public DirectivesAttribute(final String base, final List<Iterable<Directive>> data) {
+        this.base = base;
         this.data = data;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives().add("o").attr("name", this.name);
+        final Directives directives = new Directives()
+            .add("o")
+            .attr("base", this.base);
         this.data.forEach(directives::append);
         return directives.up().iterator();
     }

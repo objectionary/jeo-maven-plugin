@@ -55,13 +55,13 @@ public final class XmlAttribute {
      * @param bytecode Bytecode.
      */
     public void writeTo(final BytecodeClass bytecode) {
-        final String name = this.node.attribute("name")
+        final String base = this.node.attribute("base")
             .orElseThrow(
                 () -> new IllegalArgumentException(
-                    String.format("Attribute name is missing in XML node %s", this.node)
+                    String.format("Attribute base is missing in XML node %s", this.node)
                 )
             );
-        if ("InnerClass".equals(name)) {
+        if ("InnerClass".equals(base)) {
             bytecode.withAttribute(
                 new BytecodeAttribute.InnerClass(
                     this.node.optchild("name", "name")
