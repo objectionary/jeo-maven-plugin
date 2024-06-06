@@ -203,7 +203,7 @@ public final class XmlMethod {
      * @return Maxs.
      */
     public Optional<XmlMaxs> maxs() {
-        return this.node.optchild("name", "maxs").map(XmlMaxs::new);
+        return this.node.optchild("base", "maxs").map(XmlMaxs::new);
     }
 
     /**
@@ -279,7 +279,7 @@ public final class XmlMethod {
                 new XmlNode(
                     new Xembler(
                         new Directives()
-                            .xpath("./o[@name='maxs']")
+                            .xpath("./o[@base='maxs']")
                             .remove()
                     ).apply(this.node.node())
                 )
