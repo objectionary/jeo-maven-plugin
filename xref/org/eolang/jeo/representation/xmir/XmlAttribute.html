@@ -63,13 +63,13 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">     * @param bytecode Bytecode.</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeTo(<strong class="jxr_keyword">final</strong> <a name="BytecodeClass" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeClass.html#BytecodeClass">BytecodeClass</a> bytecode) {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>          <strong class="jxr_keyword">final</strong> String name = <strong class="jxr_keyword">this</strong>.node.attribute(<span class="jxr_string">"name"</span>)
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          <strong class="jxr_keyword">final</strong> String base = <strong class="jxr_keyword">this</strong>.node.attribute(<span class="jxr_string">"base"</span>)
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>              .orElseThrow(
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>                  () -&gt; <strong class="jxr_keyword">new</strong> IllegalArgumentException(
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>                      String.format(<span class="jxr_string">"Attribute name is missing in XML node %s"</span>, <strong class="jxr_keyword">this</strong>.node)
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>                      String.format(<span class="jxr_string">"Attribute base is missing in XML node %s"</span>, <strong class="jxr_keyword">this</strong>.node)
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>                  )
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>              );
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"InnerClass"</span>.equals(name)) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"InnerClass"</span>.equals(base)) {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>              bytecode.withAttribute(
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>                  <strong class="jxr_keyword">new</strong> BytecodeAttribute.InnerClass(
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>                      <strong class="jxr_keyword">this</strong>.node.optchild(<span class="jxr_string">"name"</span>, <span class="jxr_string">"name"</span>)

@@ -72,13 +72,14 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      @Override
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Directives().add(<span class="jxr_string">"o"</span>).attr(<span class="jxr_string">"name"</span>, <span class="jxr_string">"maxs"</span>)
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<span class="jxr_string">"stack"</span>, <strong class="jxr_keyword">this</strong>.stack))
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<span class="jxr_string">"locals"</span>, <strong class="jxr_keyword">this</strong>.locals))
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>              .up()
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>              .iterator();
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      }
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  }
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Directives().add(<span class="jxr_string">"o"</span>)
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>              .attr(<span class="jxr_string">"base"</span>, <span class="jxr_string">"maxs"</span>)
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<span class="jxr_string">"stack"</span>, <strong class="jxr_keyword">this</strong>.stack))
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<span class="jxr_string">"locals"</span>, <strong class="jxr_keyword">this</strong>.locals))
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>              .up()
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>              .iterator();
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      }
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
