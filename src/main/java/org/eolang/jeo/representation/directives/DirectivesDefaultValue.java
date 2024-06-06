@@ -67,11 +67,12 @@ public final class DirectivesDefaultValue implements Iterable<Directive>, Compos
     public Iterator<Directive> iterator() {
         final Iterator<Directive> result;
         if (this.value.get() != null) {
-            final String label = "annotation-default-value";
+            final String caption = "annotation-default-value";
             final Directives directives = new Directives()
                 .add("o")
-                .attr("base", label)
-                .attr("name", label);
+                .attr("base", caption)
+                .attr("name", caption)
+                .attr("line", "999");
             directives.append(this.value.get());
             result = directives.up().iterator();
         } else {
