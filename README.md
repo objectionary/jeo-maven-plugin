@@ -18,7 +18,7 @@ optimized performance.
 # How to use
 
 The plugin can be run using several approaches but for all of them you need
-at least Maven 3.1.+ and Java 11+.
+at least Maven 3.1.+ and Java 8+.
 The plugin can convert compiled classes into EOlang by using
 the `disassemble` goal. The `assemble` goal can convert EOlang back
 into bytecode. The default phase for the plugin
@@ -371,5 +371,5 @@ before sending us your pull request please run full Maven build:
 $ mvn clean install -Pqulice
 ```
 
-You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
+You will need [Maven 3.3+](https://maven.apache.org) and Java 8+ installed.
 
