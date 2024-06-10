@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -274,7 +275,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
          * @param args Arguments.
          */
         HasInstruction(final int opcode, final Object... args) {
-            this(opcode, List.of(args));
+            this(opcode, Arrays.asList(args));
         }
 
         /**

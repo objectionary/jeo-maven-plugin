@@ -127,7 +127,9 @@ public final class XmlMethod {
      */
     public String name() {
         final String result;
-        final String original = this.node.attribute("name").orElseThrow();
+        final String original = this.node.attribute("name").orElseThrow(
+            () -> new IllegalStateException("Method 'name' attribute is not present")
+        );
         if ("new".equals(original)) {
             result = "<init>";
         } else {
@@ -162,7 +164,7 @@ public final class XmlMethod {
     public String signature() {
         return this.node.optchild("name", "signature")
             .map(XmlNode::text)
-            .filter(s -> !s.isBlank())
+            .filter(s -> !s.isEmpty())
             .map(HexString::new)
             .map(HexString::decode)
             .orElse(null);

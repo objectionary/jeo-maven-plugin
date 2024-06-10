@@ -73,7 +73,7 @@ public final class JavaName {
      */
     public String encode() {
         final String res;
-        if (this.origin.isBlank()) {
+        if (this.origin.replace(" ", "").isEmpty()) {
             throw new IllegalArgumentException(JavaName.BLANK);
         } else if (this.origin.contains(JavaName.DELIMITER)) {
             final String[] split = this.origin.split(JavaName.DELIMITER);
@@ -93,7 +93,7 @@ public final class JavaName {
      */
     public String decode() {
         final String res;
-        if (this.origin.isBlank()) {
+        if (this.origin.replace(" ", "").isEmpty()) {
             throw new IllegalArgumentException(JavaName.BLANK);
         } else if (this.origin.startsWith(JavaName.PREFIX)) {
             res = this.origin.substring(JavaName.PREFIX.length());

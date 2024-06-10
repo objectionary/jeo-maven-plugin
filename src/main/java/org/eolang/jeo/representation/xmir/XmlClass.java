@@ -175,7 +175,7 @@ public final class XmlClass {
      */
     public List<XmlMethod> methods() {
         return this.node.children()
-            .filter(o -> o.attribute("base").isEmpty())
+            .filter(o -> !o.attribute("base").isPresent())
             .map(XmlMethod::new)
             .collect(Collectors.toList());
     }

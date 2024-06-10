@@ -87,13 +87,15 @@ public final class AllLabels {
     public String uid(final Label label) {
         return this.labels.entrySet().stream()
             .filter(e -> e.getValue().equals(label))
-            .findFirst().orElseGet(
+            .findFirst()
+            .map(Map.Entry::getKey)
+            .orElseGet(
                 () -> {
                     final String generated = UUID.randomUUID().toString();
                     this.labels.put(generated, label);
-                    return Map.entry(generated, label);
+                    return generated;
                 }
-            ).getKey();
+            );
     }
 
     /**
@@ -109,6 +111,6 @@ public final class AllLabels {
      * @return Cleaned UID.
      */
     private static String clean(final String uid) {
-        return uid.strip().replace("\n", "");
+        return uid.replace("\n", "");
     }
 }

@@ -1121,7 +1121,7 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
                     .filter(Integer.class::isInstance)
                     .mapToInt(Integer.class::cast)
                     .toArray(),
-                labels.subList(1, labels.size()).toArray(Label[]::new)
+                labels.subList(1, labels.size()).toArray(new Label[0])
             );
         }
         ),
