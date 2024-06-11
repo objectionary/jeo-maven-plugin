@@ -53,7 +53,7 @@ final class DirectivesClassTest {
                     String.join(
                         "",
                         "<o abstract='' name='Neo'>",
-                        "<o base=\"int\" data=\"bytes\" name=\"version\">00 00 00 00 00 00 00 37</o>\n",
+                        "<o base=\"int\" data=\"bytes\" name=\"version\">00 00 00 00 00 00 00 34</o>\n",
                         "<o base='int' data='bytes' name='access'>00 00 00 00 00 00 00 00</o>",
                         "<o base='string' data='bytes' name='signature'/>",
                         "<o base='string' data='bytes' name='supername'/>",
