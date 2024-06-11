@@ -96,7 +96,7 @@ public class AnnotationsApplication {
             }
             String def = Arrays.stream(AnnotationsApplication.class.getDeclaredMethods())
                 .filter(method -> "annotatedMethodWithDefaultValue".equals(method.getName()))
-                .findFirst().orElseThrow().getParameters()[0]
+                .findFirst().orElseThrow(()-> new IllegalStateException()).getParameters()[0]
                 .getAnnotation(ParamAnnotation.class)
                 .value();
             if (!def.equals(
@@ -105,7 +105,7 @@ public class AnnotationsApplication {
             }
             String custom = Arrays.stream(AnnotationsApplication.class.getDeclaredMethods())
                 .filter(method -> "annotatedMethod".equals(method.getName()))
-                .findFirst().orElseThrow().getParameters()[0]
+                .findFirst().orElseThrow(()-> new IllegalStateException()).getParameters()[0]
                 .getAnnotation(ParamAnnotation.class)
                 .value();
             if (!custom.equals("custom")) {

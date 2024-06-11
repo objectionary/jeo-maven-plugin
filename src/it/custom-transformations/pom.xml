@@ -65,17 +65,17 @@ SOFTWARE.
         <artifactId>eo-maven-plugin</artifactId>
         <version>0.38.1</version>
         <executions>
-          <execution>
-            <id>convert-xmir-to-eo</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>print</goal>
-            </goals>
-            <configuration>
-              <printSourcesDir>${project.build.directory}/generated-sources/jeo-xmir</printSourcesDir>
-              <printOutputDir>${project.build.directory}/generated-sources/jeo-eo</printOutputDir>
-            </configuration>
-          </execution>
+          <!--          <execution>-->
+          <!--            <id>convert-xmir-to-eo</id>-->
+          <!--            <phase>process-classes</phase>-->
+          <!--            <goals>-->
+          <!--              <goal>print</goal>-->
+          <!--            </goals>-->
+          <!--            <configuration>-->
+          <!--              <printSourcesDir>${project.build.directory}/generated-sources/jeo-xmir</printSourcesDir>-->
+          <!--              <printOutputDir>${project.build.directory}/generated-sources/jeo-eo</printOutputDir>-->
+          <!--            </configuration>-->
+          <!--          </execution>-->
           <!--
             @todo #488:30min Enable the execution of the `xmir-to-phi` goal.
              The `xmir-to-phi` goal is currently disabled because it has some bug.
