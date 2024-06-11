@@ -183,7 +183,7 @@
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a>     <strong class="jxr_keyword">public</strong> List&lt;XmlMethod&gt; methods() {
 <a class="jxr_linenumber" name="L177" href="#L177">177</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>             .filter(o -&gt; o.attribute(<span class="jxr_string">"base"</span>).isEmpty())
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>             .filter(o -&gt; !o.attribute(<span class="jxr_string">"base"</span>).isPresent())
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>             .map(XmlMethod::<strong class="jxr_keyword">new</strong>)
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>             .collect(Collectors.toList());
 <a class="jxr_linenumber" name="L181" href="#L181">181</a>     }
