@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Objects;
 import lombok.ToString;
 import org.eolang.jeo.representation.DataType;
 import org.objectweb.asm.Type;
@@ -86,10 +87,10 @@ public final class DirectivesTypedData implements Iterable<Directive> {
             if (!this.name.isEmpty()) {
                 directives.attr("name", this.name);
             }
-            if (hex != null) {
-                directives.set(hex);
-            } else {
+            if (Objects.isNull(hex)) {
                 directives.attr("scope", "nullable");
+            } else {
+                directives.set(hex);
             }
             return directives.up().iterator();
         } catch (final IllegalArgumentException | ClassCastException exception) {

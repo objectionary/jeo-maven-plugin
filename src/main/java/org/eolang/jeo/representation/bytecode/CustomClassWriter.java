@@ -99,6 +99,7 @@ public final class CustomClassWriter extends ClassVisitor {
      * @return Method visitor.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
+    @SuppressWarnings("PMD.UseObjectForClearerAPI")
     MethodVisitor visitMethod(
         final int access,
         final String name,
@@ -134,7 +135,7 @@ public final class CustomClassWriter extends ClassVisitor {
      *  https://stackoverflow.com/questions/78262674/how-to-mix-manual-and-automatic-calculation-of-max-locals-max-stack-and-frames
      * @checkstyle ParameterNumberCheck (25 lines)
      */
-    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
+    @SuppressWarnings({"PMD.AvoidAccessibilityAlteration", "PMD.UseObjectForClearerAPI"})
     private MethodVisitor visitMethodWithoutFrames(
         final int access,
         final String name,
@@ -193,6 +194,7 @@ public final class CustomClassWriter extends ClassVisitor {
      * - https://stackoverflow.com/questions/11292701/error-while-instrumenting-class-files-asm-classwriter-getcommonsuperclass
      *
      * @since 0.1
+     * @checkstyle FinalClassCheck (5 lines)
      */
     private static class ClassesAwareWriter extends ClassWriter {
 

@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -66,7 +67,9 @@ public final class DirectivesDefaultValue implements Iterable<Directive>, Compos
     @Override
     public Iterator<Directive> iterator() {
         final Iterator<Directive> result;
-        if (this.value.get() != null) {
+        if (Objects.isNull(this.value.get())) {
+            result = new Directives().iterator();
+        } else {
             final String caption = "annotation-default-value";
             final Directives directives = new Directives()
                 .add("o")
@@ -75,8 +78,6 @@ public final class DirectivesDefaultValue implements Iterable<Directive>, Compos
                 .attr("line", "999");
             directives.append(this.value.get());
             result = directives.up().iterator();
-        } else {
-            result = new Directives().iterator();
         }
         return result;
     }
