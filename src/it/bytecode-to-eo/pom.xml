@@ -66,6 +66,16 @@ SOFTWARE.
           </execution>
         </executions>
       </plugin>
+      <!--
+        @todo #610:30min Enable EO Printing.
+         The `print` goal is currently disabled because it doesn't support Java 8.
+         You can read more about it right here:
+         https://github.com/objectionary/eo/issues/3207
+         Once it is implemented, this comment should be removed and the goal
+         should be enabled.
+         Don't forget to enable checks in `verify.groovy` file related to `.eo` files.
+         Now they are commented.
+      -->
       <!--      <plugin>-->
       <!--        <groupId>org.eolang</groupId>-->
       <!--        <artifactId>eo-maven-plugin</artifactId>-->
