@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -115,6 +117,10 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      */
     public void maxs(final int stack, final int locals) {
         this.max.set(new DirectivesMaxs(stack, locals));
+    }
+
+    public String suffix() {
+        return Base64.getEncoder().encodeToString(this.descriptor.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override

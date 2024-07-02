@@ -161,7 +161,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final Directives directives = new Directives();
         final String eoname;
         if ("<init>".equals(this.name)) {
-            eoname = "new";
+            eoname = "new" + "-" + this.properties.suffix();
         } else {
             eoname = this.name;
         }

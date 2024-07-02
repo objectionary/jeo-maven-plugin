@@ -130,12 +130,17 @@ public final class XmlMethod {
         final String original = this.node.attribute("name").orElseThrow(
             () -> new IllegalStateException("Method 'name' attribute is not present")
         );
-        if ("new".equals(original)) {
+        if (original.contains("new")) {
             result = "<init>";
         } else {
             result = original;
         }
-        return result;
+        final int endIndex = result.lastIndexOf('-');
+        if (endIndex > 0) {
+            return result.substring(0, endIndex);
+        } else {
+            return result;
+        }
     }
 
     /**
