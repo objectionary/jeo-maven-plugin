@@ -7,5 +7,5 @@ application with several beans and prints results to the console.
 If you need to run only this test, use the following command:
 
 ```shell
-mvn clean integration-test invoker:run -Dinvoker.test=spring -DskipTests
+mvn clean integration-test -Dinvoker.test=spring -DskipTests
 ```

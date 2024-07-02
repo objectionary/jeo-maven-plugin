@@ -117,6 +117,14 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         this.max.set(new DirectivesMaxs(stack, locals));
     }
 
+    /**
+     * Method descriptor.
+     * @return Descriptor.
+     */
+    public String descriptor() {
+        return this.descriptor;
+    }
+
     @Override
     public Iterator<Directive> iterator() {
         return new Directives()
