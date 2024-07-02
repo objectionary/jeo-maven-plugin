@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
+import org.eolang.jeo.representation.MethodName;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -44,7 +45,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
     /**
      * Method name.
      */
-    private final String name;
+    private final MethodName name;
 
     /**
      * Method properties.
@@ -111,7 +112,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final boolean counting,
         final DirectivesMethodProperties properties
     ) {
-        this.name = name;
+        this.name = new MethodName(name, properties.descriptor());
         this.properties = properties;
         this.counting = counting;
         this.instructions = new ArrayList<>(0);
@@ -159,15 +160,9 @@ public final class DirectivesMethod implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives();
-        final String eoname;
-        if ("<init>".equals(this.name)) {
-            eoname = "new" + "-" + this.properties.suffix();
-        } else {
-            eoname = this.name;
-        }
         directives.add("o")
             .attr("abstract", "")
-            .attr("name", eoname)
+            .attr("name", this.name.name())
             .append(this.properties)
             .append(this.annotations)
             .add("o")
