@@ -117,7 +117,7 @@ public final class DirectivesField implements Iterable<Directive> {
         this.descriptor = Optional.ofNullable(descriptor).orElse("");
         this.signature = Optional.ofNullable(signature).orElse("");
         this.value = value;
-        this.annotations = new DirectivesAnnotations();
+        this.annotations = new DirectivesAnnotations(this.title("annotations"));
     }
 
     /**

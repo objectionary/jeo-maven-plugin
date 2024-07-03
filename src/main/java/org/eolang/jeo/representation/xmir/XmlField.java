@@ -100,7 +100,8 @@ public class XmlField {
      * @return Annotations.
      */
     public Optional<XmlAnnotations> annotations() {
-        return this.node.optchild("name", "annotations").map(XmlAnnotations::new);
+        return this.node.optchild("name", String.format("annotations-%s", this.name()))
+            .map(XmlAnnotations::new);
     }
 
     /**
