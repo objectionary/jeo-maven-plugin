@@ -136,6 +136,7 @@ public final class DirectivesField implements Iterable<Directive> {
             return new Directives().add("o")
                 .attr("base", "field")
                 .attr("name", this.name)
+                .attr("line", "999")
                 .append(new DirectivesData(this.title("access"), this.access))
                 .append(new DirectivesData(this.title("descriptor"), this.descriptor))
                 .append(new DirectivesData(this.title("signature"), this.signature))

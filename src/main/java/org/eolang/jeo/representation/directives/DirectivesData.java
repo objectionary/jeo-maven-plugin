@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Random;
 import lombok.ToString;
 import org.eolang.jeo.representation.HexData;
 import org.xembly.Directive;
@@ -33,6 +34,12 @@ import org.xembly.Directives;
  * Data Object Directive in EO language.
  *
  * @since 0.1.0
+ * @todo #627:90min Remove 'line' attribute usages.
+ *  We add 'line' attribute in many places to be able print XMIR representation as PHI expressions.
+ *  Actually we shouldn't add any artificial attributes to the representation.
+ *  When the following issue will be solved we should remove 'line' attribute from all places
+ *  where it used:
+ *  https://github.com/objectionary/eo/issues/3189
  */
 @ToString
 public final class DirectivesData implements Iterable<Directive> {
@@ -81,7 +88,8 @@ public final class DirectivesData implements Iterable<Directive> {
         try {
             final Directives directives = new Directives().add("o")
                 .attr("base", this.data.type())
-                .attr("data", "bytes");
+                .attr("data", "bytes")
+                .attr("line", new Random().nextInt(Integer.MAX_VALUE));
             if (!this.name.isEmpty()) {
                 directives.attr("name", this.name);
             }

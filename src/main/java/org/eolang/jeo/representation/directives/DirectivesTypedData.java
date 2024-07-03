@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.Random;
 import lombok.ToString;
 import org.eolang.jeo.representation.DataType;
 import org.objectweb.asm.Type;
@@ -82,7 +83,8 @@ public final class DirectivesTypedData implements Iterable<Directive> {
             final DataType base = DataType.find(this.type);
             final Directives directives = new Directives().add("o")
                 .attr("base", base.type())
-                .attr("data", "bytes");
+                .attr("data", "bytes")
+                .attr("line", new Random().nextInt(Integer.MAX_VALUE));
             final String hex = base.toHexString(this.data);
             if (!this.name.isEmpty()) {
                 directives.attr("name", this.name);
