@@ -74,7 +74,7 @@ public final class DirectivesDefaultValue implements Iterable<Directive>, Compos
             final Directives directives = new Directives()
                 .add("o")
                 .attr("base", caption)
-                .attr("name", caption)
+//                .attr("name", caption)
                 .attr("line", "999");
             directives.append(this.value.get());
             result = directives.up().iterator();

@@ -178,7 +178,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
             directives.add("o")
                 .attr("base", "tuple")
                 .attr("star", "")
-                .attr("name", "trycatchblocks");
+                .attr("name", String.format("trycatchblocks-%s", this.name.name()));
             this.exceptions.forEach(directives::append);
             directives.up();
         }

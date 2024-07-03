@@ -191,7 +191,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives()
             .add("o").attr("base", "annotation-property")
-            .append(new DirectivesData("type", this.type.toString()));
+            .append(new DirectivesData( this.type.toString()));
         this.params.forEach(directives::append);
         return directives.up().iterator();
     }

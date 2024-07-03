@@ -66,12 +66,14 @@ SOFTWARE.
         <executions>
           <execution>
             <id>bytecode-to-eo</id>
+              <phase>process-classes</phase>
             <goals>
               <goal>disassemble</goal>
             </goals>
           </execution>
           <execution>
             <id>eo-to-bytecode</id>
+            <phase>generate-test-sources</phase>
             <goals>
               <goal>assemble</goal>
             </goals>

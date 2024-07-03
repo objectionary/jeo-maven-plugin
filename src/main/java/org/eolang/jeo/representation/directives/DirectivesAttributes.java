@@ -79,7 +79,8 @@ public final class DirectivesAttributes implements Iterable<Directive> {
             final Directives directives = new Directives().add("o")
                 .attr("base", "tuple")
                 .attr("star", "")
-                .attr("name", "attributes");
+//                .attr("name", "attributes")
+                ;
             this.attributes.forEach(directives::append);
             result = directives.up().iterator();
         }
