@@ -149,7 +149,9 @@ public final class XmlMethod {
      * @return Access modifiers.
      */
     public int access() {
-        return new HexString(this.node.child("name", "access").text()).decodeAsInt();
+        return new HexString(
+            this.node.children().collect(Collectors.toList()).get(0).text()
+        ).decodeAsInt();
     }
 
     /**
@@ -158,7 +160,9 @@ public final class XmlMethod {
      * @return Descriptor.
      */
     public String descriptor() {
-        return new HexString(this.node.child("name", "descriptor").text()).decode();
+        return new HexString(
+            this.node.children().collect(Collectors.toList()).get(1).text()
+        ).decode();
     }
 
     /**
@@ -167,12 +171,32 @@ public final class XmlMethod {
      * @return Signature.
      */
     public String signature() {
-        return this.node.optchild("name", "signature")
+        return new HexString(
+            this.node.children().collect(Collectors.toList()).get(2).text()
+        ).decode();
+    }
+
+    /**
+     * Method exceptions.
+     *
+     * @return Exceptions.
+     */
+    private String[] exceptions() {
+        return this.node.children().collect(Collectors.toList()).get(3)
+            .children()
             .map(XmlNode::text)
-            .filter(s -> !s.isEmpty())
             .map(HexString::new)
             .map(HexString::decode)
-            .orElse(null);
+            .toArray(String[]::new);
+    }
+
+    /**
+     * Method max stack and locals.
+     *
+     * @return Maxs.
+     */
+    public Optional<XmlMaxs> maxs() {
+        return this.node.optchild("base", "maxs").map(XmlMaxs::new);
     }
 
     /**
@@ -182,7 +206,9 @@ public final class XmlMethod {
      */
     public List<XmlTryCatchEntry> trycatchEntries() {
         return this.node.children()
-            .filter(element -> element.hasAttribute("name", "trycatchblocks"))
+            .filter(element -> element.attribute("name")
+                .map(s -> s.contains("trycatchblocks"))
+                .orElse(false))
             .flatMap(XmlNode::children)
             .map(entry -> new XmlTryCatchEntry(entry, this.labels))
             .collect(Collectors.toList());
@@ -202,15 +228,6 @@ public final class XmlMethod {
             this.params(),
             this.exceptions()
         );
-    }
-
-    /**
-     * Method max stack and locals.
-     *
-     * @return Maxs.
-     */
-    public Optional<XmlMaxs> maxs() {
-        return this.node.optchild("base", "maxs").map(XmlMaxs::new);
     }
 
     /**
@@ -373,20 +390,6 @@ public final class XmlMethod {
     public Optional<XmlDefaultValue> defvalue() {
         return this.node.optchild("base", "annotation-default-value")
             .map(XmlDefaultValue::new);
-    }
-
-    /**
-     * Method exceptions.
-     *
-     * @return Exceptions.
-     */
-    private String[] exceptions() {
-        return this.node.child("name", "exceptions")
-            .children()
-            .map(XmlNode::text)
-            .map(HexString::new)
-            .map(HexString::decode)
-            .toArray(String[]::new);
     }
 
     private BytecodeParameters params() {
