@@ -238,11 +238,11 @@ public final class XmlMethod {
      * @return True if method is a constructor.
      */
     public boolean isConstructor() {
-        return this.node.hasAttribute("name", "new");
+        return this.node.attribute("name").map(s -> s.contains("new")).orElse(false);
     }
 
     /**
-     * All method instructions.
+     * All instructions.
      *
      * @param predicates Predicates to filter instructions.
      * @return Instructions.
