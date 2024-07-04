@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.log.Logger;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -174,11 +175,23 @@ public final class BytecodeMethodProperties implements Testable {
             this.access,
             new JavaName(this.name).decode(),
             this.descriptor,
-            this.signature,
+            BytecodeMethodProperties.nullIfEmpty(this.signature),
             this.exceptions,
             compute
         );
         this.parameters.write(visitor);
         return visitor;
+    }
+
+    /**
+     * Return null if the text is empty.
+     * @param text Text.
+     * @return Text or null.
+     */
+    private static String nullIfEmpty(final String text) {
+        if (text.isEmpty()) {
+            return null;
+        }
+        return text;
     }
 }

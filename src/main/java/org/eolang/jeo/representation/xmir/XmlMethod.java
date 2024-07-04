@@ -32,6 +32,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
@@ -126,21 +127,22 @@ public final class XmlMethod {
      * @return Name.
      */
     public String name() {
-        final String result;
+//        final String result;
         final String original = this.node.attribute("name").orElseThrow(
             () -> new IllegalStateException("Method 'name' attribute is not present")
         );
-        if (original.contains("new")) {
-            result = "<init>";
-        } else {
-            result = original;
-        }
-        final int endIndex = result.lastIndexOf('-');
-        if (endIndex > 0) {
-            return result.substring(0, endIndex);
-        } else {
-            return result;
-        }
+        return new MethodName(original).name();
+//        if (original.contains("new")) {
+//            result = "<init>";
+//        } else {
+//            result = original;
+//        }
+//        final int endIndex = result.lastIndexOf('-');
+//        if (endIndex > 0) {
+//            return result.substring(0, endIndex);
+//        } else {
+//            return result;
+//        }
     }
 
     /**

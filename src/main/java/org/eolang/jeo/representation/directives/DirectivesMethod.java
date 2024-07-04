@@ -164,7 +164,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final Directives directives = new Directives();
         directives.add("o")
             .attr("abstract", "")
-            .attr("name", this.name.name())
+            .attr("name", this.name.encoded())
             .append(this.properties)
             .append(this.annotations)
             .add("o")
