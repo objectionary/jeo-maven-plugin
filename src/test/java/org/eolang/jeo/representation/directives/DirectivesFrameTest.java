@@ -24,7 +24,10 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import org.eolang.jeo.representation.xmir.XmlFrame;
+import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
@@ -39,24 +42,39 @@ final class DirectivesFrameTest {
 
     @Test
     void createsCorrectDirectivesForFrame() throws ImpossibleModificationException {
+        final int type = Opcodes.F_NEW;
+        final int nlocal = 2;
+        final Object[] locals = {"java/lang/Object", Opcodes.LONG};
+        final int nstack = 3;
+        final Object[] stack = {"java/lang/String", Opcodes.DOUBLE};
+        final String xml = new Xembler(
+            new DirectivesFrame(type, nlocal, locals, nstack, stack)
+        ).xml();
+        final XmlFrame frame = new XmlFrame(new XmlNode(xml));
         MatcherAssert.assertThat(
-            "We failed to create correct directives for bytecode frame.",
-            new Xembler(
-                new DirectivesFrame(
-                    Opcodes.F_NEW,
-                    2,
-                    new Object[]{"java/lang/Object", Opcodes.LONG},
-                    3,
-                    new Object[]{"java/lang/String", Opcodes.DOUBLE}
-                )
-            ).xml(),
-            XhtmlMatchers.hasXPaths(
-                "./o[@base='frame']/o[@base='int' and @name='type']",
-                "./o[@base='frame']/o[@base='int' and @name='nlocal']",
-                "./o[@base='frame']/o[@base='tuple' and @name='local']",
-                "./o[@base='frame']/o[@base='int' and @name='nstack']",
-                "./o[@base='frame']/o[@base='tuple' and @name='stack']"
-            )
+            "We failed to create correct directives for bytecode frame. Type is incorrect.",
+            frame.type(),
+            Matchers.equalTo(type)
+        );
+        MatcherAssert.assertThat(
+            "We failed to create correct directives for bytecode frame. Number of locals is incorrect.",
+            frame.nlocal(),
+            Matchers.equalTo(nlocal)
+        );
+        MatcherAssert.assertThat(
+            "We failed to create correct directives for bytecode frame. Number of stack is incorrect.",
+            frame.nstack(),
+            Matchers.equalTo(nstack)
+        );
+        MatcherAssert.assertThat(
+            "We failed to create correct directives for bytecode frame. Locals are incorrect.",
+            frame.locals(),
+            Matchers.arrayContaining(locals)
+        );
+        MatcherAssert.assertThat(
+            "We failed to create correct directives for bytecode frame. Stack is incorrect.",
+            frame.stack(),
+            Matchers.arrayContaining(stack)
         );
     }
 }

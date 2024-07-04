@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeEntry;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.objectweb.asm.MethodVisitor;
@@ -34,11 +35,6 @@ import org.objectweb.asm.MethodVisitor;
  * @since 0.3
  */
 public final class XmlFrame implements XmlBytecodeEntry {
-
-    /**
-     * Object attribute name.
-     */
-    private static final String NAME_ATTR = "name";
 
     /**
      * Xmir node.
@@ -78,32 +74,28 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * Type of frame.
      * @return Type.
      */
-    int type() {
-        return (int) new XmlOperand(this.node.child(XmlFrame.NAME_ATTR, "type")).asObject();
+    public int type() {
+        return (int) new XmlOperand(
+            this.node.children().collect(Collectors.toList()).get(0)
+        ).asObject();
     }
 
     /**
      * Number of local variables.
      * @return Number of local variables.
      */
-    int nlocal() {
-        return (int) new XmlOperand(this.node.child(XmlFrame.NAME_ATTR, "nlocal")).asObject();
-    }
-
-    /**
-     * Number of stack elements.
-     * @return Number of stack elements.
-     */
-    int nstack() {
-        return (int) new XmlOperand(this.node.child(XmlFrame.NAME_ATTR, "nstack")).asObject();
+    public int nlocal() {
+        return (int) new XmlOperand(
+            this.node.children().collect(Collectors.toList()).get(1)
+        ).asObject();
     }
 
     /**
      * Local variables.
      * @return Local variables.
      */
-    Object[] locals() {
-        return this.node.child(XmlFrame.NAME_ATTR, "local")
+    public Object[] locals() {
+        return this.node.children().collect(Collectors.toList()).get(2)
             .children()
             .map(XmlOperand::new)
             .map(XmlOperand::asObject)
@@ -111,11 +103,21 @@ public final class XmlFrame implements XmlBytecodeEntry {
     }
 
     /**
+     * Number of stack elements.
+     * @return Number of stack elements.
+     */
+    public int nstack() {
+        return (int) new XmlOperand(
+            this.node.children().collect(Collectors.toList()).get(3)
+        ).asObject();
+    }
+
+    /**
      * Stack elements.
      * @return Stack elements.
      */
-    Object[] stack() {
-        return this.node.child(XmlFrame.NAME_ATTR, "stack")
+    public Object[] stack() {
+        return this.node.children().collect(Collectors.toList()).get(4)
             .children()
             .map(XmlOperand::new)
             .map(XmlOperand::asObject)
