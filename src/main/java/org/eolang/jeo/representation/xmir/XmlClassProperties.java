@@ -33,6 +33,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
  * XML representation of a class.
  *
  * @since 0.1.0
+ * @todo
  */
 public final class XmlClassProperties {
 
@@ -76,7 +77,7 @@ public final class XmlClassProperties {
      * Retrieve 'access' modifiers of a class.
      * @return Access modifiers.
      */
-    int access() {
+    public int access() {
         return new HexString(this.clazz.xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
     }
 
@@ -84,7 +85,7 @@ public final class XmlClassProperties {
      * Retrieve 'signature' of a class.
      * @return Signature.
      */
-    Optional<String> signature() {
+    public Optional<String> signature() {
         return this.clazz.xpath("./o[@name='signature']/text()")
             .stream()
             .map(HexString::new)
@@ -96,7 +97,7 @@ public final class XmlClassProperties {
      * Retrieve 'supername' of a class.
      * @return Supername.
      */
-    String supername() {
+    public String supername() {
         return this.clazz.xpath("./o[@name='supername']/text()")
             .stream()
             .map(HexString::new)
@@ -108,7 +109,7 @@ public final class XmlClassProperties {
      * Retrieve 'interfaces' of a class.
      * @return Interfaces.
      */
-    String[] interfaces() {
+    public String[] interfaces() {
         return this.clazz.xpath("./o[@name='interfaces']/o/text()")
             .stream()
             .map(HexString::new)

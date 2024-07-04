@@ -26,9 +26,12 @@ package org.eolang.jeo.representation.directives;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.xmir.XmlClass;
+import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.xembly.ImpossibleModificationException;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -95,6 +98,56 @@ final class DirectivesClassTest {
             xml,
             XhtmlMatchers.hasXPath("/o[@name='Neo']/o[@name='method']")
         );
+    }
+
+    @Test
+    void correctlyConvertsToDirectives() throws ImpossibleModificationException {
+        final String name = "Foo";
+        final int access = 100;
+        final String signature = "java/lang/Object";
+        final String supername = "java/lang/Runnable";
+        final String interfce = "java/lang/Cloneable";
+        final XmlClass clazz = new XmlClass(
+            new XmlNode(
+                new Xembler(
+                    new DirectivesClass(
+                        name,
+                        new DirectivesClassProperties(
+                            access,
+                            signature,
+                            supername,
+                            interfce
+                        )
+                    )
+                ).xml()
+            )
+        );
+        MatcherAssert.assertThat(
+            "Class name is not equal to expected",
+            clazz.name(),
+            Matchers.equalTo(name)
+        );
+        MatcherAssert.assertThat(
+            "Class access is not equal to expected",
+            clazz.properties().access(),
+            Matchers.equalTo(access)
+        );
+        MatcherAssert.assertThat(
+            "Class signature is not equal to expected",
+            clazz.properties().signature().get(),
+            Matchers.equalTo(signature)
+        );
+        MatcherAssert.assertThat(
+            "Class supername is not equal to expected",
+            clazz.properties().supername(),
+            Matchers.equalTo(supername)
+        );
+        MatcherAssert.assertThat(
+            "Class interface is not equal to expected",
+            clazz.properties().interfaces()[0],
+            Matchers.equalTo(interfce)
+        );
+
     }
 
 }
