@@ -137,4 +137,21 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
         final AnnotationVisitor inner = visitor.visitAnnotation(this.descriptor, this.descriptor);
         this.properties.forEach(property -> property.writeTo(inner));
     }
+
+    /**
+     * Descriptor.
+     * @return Descriptor.
+     */
+    public String descriptor() {
+        return this.descriptor;
+    }
+
+    /**
+     * @todo
+     * Visible.
+     * @return Visible.
+     */
+    public boolean visible() {
+        return this.visible;
+    }
 }

@@ -152,9 +152,11 @@ public final class DirectivesMethod implements Iterable<Directive> {
     /**
      * Add annotation to the directives.
      * @param annotation Annotation directives.
+     * @return This object.
      */
-    public void annotation(final DirectivesAnnotation annotation) {
+    public DirectivesMethod annotation(final DirectivesAnnotation annotation) {
         this.annotations.add(annotation);
+        return this;
     }
 
     @Override

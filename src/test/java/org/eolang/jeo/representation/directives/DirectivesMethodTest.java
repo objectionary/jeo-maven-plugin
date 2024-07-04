@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
@@ -75,4 +76,27 @@ final class DirectivesMethodTest {
         );
     }
 
+    @Test
+    void transformsAnnotationsToXmir() throws ImpossibleModificationException {
+        final String descriptor = "Consumer";
+        final boolean visible = true;
+        final BytecodeAnnotation annotation = new XmlMethod(
+            new XmlNode(
+                new Xembler(
+                    new DirectivesMethod("foo")
+                        .annotation(new DirectivesAnnotation(descriptor, visible))
+                ).xml()
+            )
+        ).annotations().get(0);
+        MatcherAssert.assertThat(
+            "Annotation descriptor is not equal to expected",
+            annotation.descriptor(),
+            Matchers.equalTo(descriptor)
+        );
+        MatcherAssert.assertThat(
+            "Annotation visibility is not equal to expected",
+            annotation.visible(),
+            Matchers.equalTo(visible)
+        );
+    }
 }
