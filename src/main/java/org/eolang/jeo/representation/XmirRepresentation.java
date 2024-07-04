@@ -138,8 +138,15 @@ public final class XmirRepresentation implements Representation {
 
     @Override
     public Bytecode toBytecode() {
-        new Schema(this.xml.value()).check();
-        return new XmlBytecode(this.xml.value(), this.verify).bytecode();
+        try {
+            new Schema(this.xml.value()).check();
+            return new XmlBytecode(this.xml.value(), this.verify).bytecode();
+        } catch (final IllegalArgumentException exception) {
+            throw new IllegalArgumentException(
+                String.format("Can't transform '%s' to bytecode", this.xml.value()),
+                exception
+            );
+        }
     }
 
     /**
