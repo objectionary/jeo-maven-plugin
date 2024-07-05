@@ -70,7 +70,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
                 this.start(),
                 this.end(),
                 this.handler(),
-                this.type().orElse(null)
+                this.type()
             )
         );
     }
@@ -87,6 +87,18 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
         return this.label(2).map(this.labels::label).orElse(null);
     }
 
+    /**
+     * Retrieves the exception type.
+     * @return Exception type.
+     */
+    public String type() {
+        return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(3))
+            .map(XmlNode::text)
+            .map(HexString::new)
+            .map(HexString::decode)
+            .filter(s -> !s.isEmpty())
+            .orElse(null);
+    }
 
     /**
      * Retrieves the label.
@@ -95,17 +107,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      */
     Optional<String> label(final int id) {
         return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(id))
-            .map(XmlNode::text)
-            .map(HexString::new)
-            .map(HexString::decode);
-    }
-
-    /**
-     * Retrieves the exception type.
-     * @return Exception type.
-     */
-    public Optional<String> type() {
-        return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(3))
+            .filter(node -> !node.hasAttribute("base", "nop"))
             .map(XmlNode::text)
             .map(HexString::new)
             .map(HexString::decode);

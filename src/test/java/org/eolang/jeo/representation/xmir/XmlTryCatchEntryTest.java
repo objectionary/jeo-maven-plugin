@@ -49,8 +49,8 @@ final class XmlTryCatchEntryTest {
                         "</o>"
                     )
                 )
-            ).type().isPresent(),
-            Matchers.is(true)
+            ).type(),
+            Matchers.equalTo("java/io/IOException")
         );
     }
 

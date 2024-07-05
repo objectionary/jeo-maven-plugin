@@ -23,12 +23,16 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.stream.Stream;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.eolang.jeo.representation.xmir.XmlTryCatchEntry;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.objectweb.asm.Label;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -69,8 +73,60 @@ final class DirectivesTryCatchTest {
         );
         MatcherAssert.assertThat(
             "We failed to convert try-catch directives to XML. Exception type is incorrect.",
-            entry.type().get(),
+            entry.type(),
             Matchers.equalTo(type)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    void correctlyConvertsToXmirIfSomeLabelsAreAbsent(
+        final Label start,
+        final Label end,
+        final Label handler,
+        final String type
+    ) throws ImpossibleModificationException {
+        final XmlTryCatchEntry entry = new XmlTryCatchEntry(
+            new XmlNode(
+                new Xembler(
+                    new DirectivesTryCatch(start, end, handler, type)
+                ).xml()
+            )
+        );
+        MatcherAssert.assertThat(
+            "We failed to convert try-catch directives to XML. Start label is incorrect.",
+            entry.start(),
+            Matchers.equalTo(start)
+        );
+        MatcherAssert.assertThat(
+            "We failed to convert try-catch directives to XML. End label is incorrect.",
+            entry.end(),
+            Matchers.equalTo(end)
+        );
+        MatcherAssert.assertThat(
+            "We failed to convert try-catch directives to XML. Handler label is incorrect.",
+            entry.handler(),
+            Matchers.equalTo(handler)
+        );
+        MatcherAssert.assertThat(
+            "We failed to convert try-catch directives to XML. Exception type is incorrect.",
+            entry.type(),
+            Matchers.equalTo(type)
+        );
+    }
+
+    /**
+     * Test cases.
+     * For {@link #correctlyConvertsToXmirIfSomeLabelsAreAbsent(Label, Label, Label, String)}.
+     * @return Test cases.
+     */
+    private static Stream<Arguments> cases() {
+        return Stream.of(
+            Arguments.of(new Label(), new Label(), new Label(), "java/lang/Exception"),
+            Arguments.of(new Label(), new Label(), new Label(), null),
+            Arguments.of(new Label(), new Label(), null, null),
+            Arguments.of(new Label(), null, null, null),
+            Arguments.of(null, null, null, null)
         );
     }
 
