@@ -5,5 +5,5 @@ The integration test verifies that the program can run successfully, and the jeo
 If you only need to run this test, use the following command:
 
 ```shell
-mvn clean integration-test invoker:run -Dinvoker.test=annotations -DskipTests
+mvn clean integration-test -Dinvoker.test=annotations -DskipTests
 ```

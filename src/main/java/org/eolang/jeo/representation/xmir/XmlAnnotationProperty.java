@@ -51,14 +51,28 @@ public final class XmlAnnotationProperty {
      * @return Bytecode annotation property.
      */
     public BytecodeAnnotationProperty toBytecode() {
-        final List<XmlNode> all = this.node.children().collect(Collectors.toList());
-        return BytecodeAnnotationProperty.byType(
-            (String) new XmlOperand(all.get(0)).asObject(),
-            all.subList(1, all.size())
-                .stream()
-                .map(XmlOperand::new)
-                .map(XmlOperand::asObject)
-                .collect(Collectors.toList())
-        );
+        return BytecodeAnnotationProperty.byType(this.type(), this.params());
+    }
+
+    /**
+     * Type of the property.
+     * @return Type.
+     */
+    public String type() {
+        return (String) new XmlOperand(
+            this.node.children().collect(Collectors.toList()).get(0)
+        ).asObject();
+    }
+
+    /**
+     * Property parameters.
+     * @return Parameters.
+     */
+    public List<Object> params() {
+        return this.node.children()
+            .skip(1)
+            .map(XmlOperand::new)
+            .map(XmlOperand::asObject)
+            .collect(Collectors.toList());
     }
 }
