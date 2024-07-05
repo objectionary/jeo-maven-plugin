@@ -60,6 +60,24 @@ SOFTWARE.
           </execution>
         </executions>
       </plugin>
+            <plugin>
+              <groupId>org.eolang</groupId>
+              <artifactId>eo-maven-plugin</artifactId>
+              <version>0.38.4</version>
+              <executions>
+                <execution>
+                  <id>convert-xmir-to-eo</id>
+                  <phase>process-classes</phase>
+                  <goals>
+                    <goal>xmir-to-phi</goal>
+                  </goals>
+                  <configuration>
+                    <phiInputDir>${project.build.directory}/generated-sources/jeo-xmir</phiInputDir>
+                    <phiOutputDir>${project.build.directory}/generated-sources/jeo-phi</phiOutputDir>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
