@@ -23,6 +23,9 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.List;
+import java.util.Optional;
+import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.DirectivesField;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -139,4 +142,44 @@ final class XmlFieldTest {
         );
     }
 
+    @Test
+    void retrievesFieldAnnotations() throws ImpossibleModificationException {
+        final String override = "java/lang/Override";
+        final String safe = "java/lang/SafeVarargs";
+        final Optional<XmlAnnotations> opt = new XmlField(
+            new XmlNode(new Xembler(
+                new DirectivesField()
+                    .annotation(new DirectivesAnnotation(override, true))
+                    .annotation(new DirectivesAnnotation(safe, true))
+            ).xml())
+        ).annotations();
+        MatcherAssert.assertThat(
+            "Annotations are not found",
+            opt.isPresent(),
+            Matchers.is(true)
+        );
+        final List<XmlAnnotation> all = opt.get().all();
+        final XmlAnnotation first = all.get(0);
+        MatcherAssert.assertThat(
+            "First annotation descriptor is not correct",
+            first.descriptor(),
+            Matchers.equalTo(override)
+        );
+        MatcherAssert.assertThat(
+            "First annotation visibility is not correct",
+            first.visible(),
+            Matchers.is(true)
+        );
+        final XmlAnnotation second = all.get(1);
+        MatcherAssert.assertThat(
+            "Second annotation descriptor is not correct",
+            second.descriptor(),
+            Matchers.equalTo(safe)
+        );
+        MatcherAssert.assertThat(
+            "Second annotation visibility is not correct",
+            second.visible(),
+            Matchers.is(true)
+        );
+    }
 }
