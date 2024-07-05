@@ -94,7 +94,7 @@ public final class DirectivesAnnotationVisitor extends AnnotationVisitor {
         final DirectivesAnnotationProperty prop = new DirectivesAnnotationProperty(
             DirectivesAnnotationProperty.Type.ARRAY
         );
-        prop.append(new DirectivesData("name", Optional.ofNullable(name).orElse("")));
+        prop.append(new DirectivesData(Optional.ofNullable(name).orElse("")));
         this.annotation.append(prop);
         return new DirectivesAnnotationVisitor(this.api, super.visitArray(name), prop);
     }
