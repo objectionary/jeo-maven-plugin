@@ -127,22 +127,23 @@ public final class XmlMethod {
      * @return Name.
      */
     public String name() {
-//        final String result;
+        final String result;
         final String original = this.node.attribute("name").orElseThrow(
             () -> new IllegalStateException("Method 'name' attribute is not present")
         );
-        return new MethodName(original).name();
-//        if (original.contains("new")) {
-//            result = "<init>";
-//        } else {
-//            result = original;
-//        }
-//        final int endIndex = result.lastIndexOf('-');
-//        if (endIndex > 0) {
-//            return result.substring(0, endIndex);
-//        } else {
-//            return result;
-//        }
+        // @todo
+//        return new MethodName(original).name();
+        if (original.contains("new")) {
+            result = "<init>";
+        } else {
+            result = original;
+        }
+        final int endIndex = result.lastIndexOf('-');
+        if (endIndex > 0) {
+            return result.substring(0, endIndex);
+        } else {
+            return result;
+        }
     }
 
     /**
