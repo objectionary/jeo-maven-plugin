@@ -147,7 +147,6 @@ final class DirectivesClassTest {
             clazz.properties().interfaces()[0],
             Matchers.equalTo(interfce)
         );
-
     }
 
 }

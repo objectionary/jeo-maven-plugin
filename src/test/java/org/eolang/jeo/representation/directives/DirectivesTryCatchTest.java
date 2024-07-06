@@ -28,7 +28,6 @@ import org.eolang.jeo.representation.xmir.XmlNode;
 import org.eolang.jeo.representation.xmir.XmlTryCatchEntry;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -78,6 +77,15 @@ final class DirectivesTryCatchTest {
         );
     }
 
+    /**
+     * Checks several different cases of converting try-catch statements with different structures.
+     * @param start Where the try-catch block starts.
+     * @param end Where the try-catch block ends.
+     * @param handler Code to handle try-catch block.
+     * @param type The type of error that might occur.
+     * @throws ImpossibleModificationException in case of incorrect XML.
+     * @checkstyle ParameterNumberCheck (10 lines)
+     */
     @ParameterizedTest
     @MethodSource("cases")
     void correctlyConvertsToXmirIfSomeLabelsAreAbsent(

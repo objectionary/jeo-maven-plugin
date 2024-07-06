@@ -147,11 +147,13 @@ final class XmlFieldTest {
         final String override = "java/lang/Override";
         final String safe = "java/lang/SafeVarargs";
         final Optional<XmlAnnotations> opt = new XmlField(
-            new XmlNode(new Xembler(
-                new DirectivesField()
-                    .annotation(new DirectivesAnnotation(override, true))
-                    .annotation(new DirectivesAnnotation(safe, true))
-            ).xml())
+            new XmlNode(
+                new Xembler(
+                    new DirectivesField()
+                        .annotation(new DirectivesAnnotation(override, true))
+                        .annotation(new DirectivesAnnotation(safe, true))
+                ).xml()
+            )
         ).annotations();
         MatcherAssert.assertThat(
             "Annotations are not found",
