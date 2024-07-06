@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.List;
-import java.util.Optional;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 
@@ -59,21 +58,6 @@ public final class XmlClassProperties {
     }
 
     /**
-     * Retrieve bytecode 'version'.
-     * @return Bytecode version.
-     */
-    int version() {
-        final List<String> version = this.clazz.xpath("./o[@name='version']/text()");
-        final int result;
-        if (version.isEmpty()) {
-            result = new DefaultVersion().bytecode();
-        } else {
-            result = new HexString(version.get(0)).decodeAsInt();
-        }
-        return result;
-    }
-
-    /**
      * Retrieve 'access' modifiers of a class.
      * @return Access modifiers.
      */
@@ -85,12 +69,13 @@ public final class XmlClassProperties {
      * Retrieve 'signature' of a class.
      * @return Signature.
      */
-    public Optional<String> signature() {
+    public String signature() {
         return this.clazz.xpath("./o[@name='signature']/text()")
             .stream()
             .map(HexString::new)
             .map(HexString::decode)
-            .findFirst();
+            .findFirst()
+            .orElse(null);
     }
 
     /**
@@ -117,6 +102,21 @@ public final class XmlClassProperties {
     }
 
     /**
+     * Retrieve bytecode 'version'.
+     * @return Bytecode version.
+     */
+    int version() {
+        final List<String> version = this.clazz.xpath("./o[@name='version']/text()");
+        final int result;
+        if (version.isEmpty()) {
+            result = new DefaultVersion().bytecode();
+        } else {
+            result = new HexString(version.get(0)).decodeAsInt();
+        }
+        return result;
+    }
+
+    /**
      * Convert to bytecode properties.
      * @return Bytecode properties.
      */
@@ -124,7 +124,7 @@ public final class XmlClassProperties {
         return new BytecodeClassProperties(
             this.version(),
             this.access(),
-            this.signature().orElse(null),
+            this.signature(),
             this.supername(),
             this.interfaces()
         );

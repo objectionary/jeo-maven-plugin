@@ -38,7 +38,7 @@ final class MethodNameTest {
         final String name = "foo";
         MatcherAssert.assertThat(
             "Method name shouldn't be changed after creation",
-            new MethodName(name, "()I").name(),
+            new MethodName(name, "()I").decoded(),
             Matchers.equalTo(name)
         );
     }
@@ -47,7 +47,7 @@ final class MethodNameTest {
     void createsConstructorMethodName() {
         MatcherAssert.assertThat(
             "Constructor name should be changed after creation from '<init>' to 'new'",
-            new MethodName("<init>", "()I").name(),
+            new MethodName("<init>", "()I").decoded(),
             Matchers.equalTo("new")
         );
     }
@@ -65,7 +65,7 @@ final class MethodNameTest {
     void decodesMethodName() {
         MatcherAssert.assertThat(
             "Decoded method name should be correct",
-            new MethodName("foo-KCgpSUk=").name(),
+            new MethodName("foo-KCgpSUk=").decoded(),
             Matchers.equalTo("foo")
         );
     }

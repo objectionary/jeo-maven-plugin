@@ -175,23 +175,11 @@ public final class BytecodeMethodProperties implements Testable {
             this.access,
             new JavaName(this.name).decode(),
             this.descriptor,
-            BytecodeMethodProperties.nullIfEmpty(this.signature),
+            Optional.of(this.signature).filter(s -> !s.isEmpty()).orElse(null),
             this.exceptions,
             compute
         );
         this.parameters.write(visitor);
         return visitor;
-    }
-
-    /**
-     * Return null if the text is empty.
-     * @param text Text.
-     * @return Text or null.
-     */
-    private static String nullIfEmpty(final String text) {
-        if (text.isEmpty()) {
-            return null;
-        }
-        return text;
     }
 }

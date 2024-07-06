@@ -45,9 +45,8 @@ public final class MethodName {
      */
     private static final Base64.Encoder ENCODER = Base64.getEncoder();
 
-
     /**
-     * Method name in source code.
+     * Human-readable method name in source code.
      */
     private final String name;
 
@@ -61,7 +60,7 @@ public final class MethodName {
      * @param encoded Method name and descriptor encoded.
      */
     public MethodName(final String encoded) {
-        this(MethodName.name(encoded), MethodName.descriptor(encoded));
+        this(MethodName.prefix(encoded), MethodName.suffix(encoded));
     }
 
     /**
@@ -81,7 +80,7 @@ public final class MethodName {
     public String encoded() {
         return String.format(
             "%s-%s",
-            this.name(),
+            this.decoded(),
             MethodName.ENCODER.encodeToString(this.descriptor.getBytes(StandardCharsets.UTF_8))
         );
     }
@@ -90,7 +89,7 @@ public final class MethodName {
      * Method name.
      * @return Method name.
      */
-    public String name() {
+    public String decoded() {
         final String res;
         if ("<init>".equals(this.name)) {
             res = "new";
@@ -105,7 +104,7 @@ public final class MethodName {
      * @param encoded Encoded method name and descriptor.
      * @return Method name.
      */
-    private static String name(final String encoded) {
+    private static String prefix(final String encoded) {
         return encoded.substring(0, encoded.indexOf('-'));
     }
 
@@ -114,7 +113,7 @@ public final class MethodName {
      * @param encoded Encoded method name and descriptor.
      * @return Method descriptor.
      */
-    private static String descriptor(final String encoded) {
+    private static String suffix(final String encoded) {
         return new String(
             MethodName.DECODER.decode(encoded.substring(encoded.indexOf('-') + 1)),
             StandardCharsets.UTF_8

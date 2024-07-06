@@ -96,7 +96,7 @@ final class DirectivesClassTest {
                 new XMLDocument(xml)
             ),
             xml,
-            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[@name='method']")
+            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[contains(@name,'method')]")
         );
     }
 
@@ -134,7 +134,7 @@ final class DirectivesClassTest {
         );
         MatcherAssert.assertThat(
             "Class signature is not equal to expected",
-            clazz.properties().signature().get(),
+            clazz.properties().signature(),
             Matchers.equalTo(signature)
         );
         MatcherAssert.assertThat(

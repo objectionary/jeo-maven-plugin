@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.Arrays;
-import java.util.Optional;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -58,21 +57,16 @@ final class XmlClassPropertiesTest {
     @Test
     void retrievesSignature() {
         final String expected = "Ljava/util/List<Ljava/lang/String;>;";
-        final Optional<String> actual = new XmlClass(
+        final String actual = new XmlClass(
             new DirectivesClassProperties(0, expected)
         ).properties().signature();
-        MatcherAssert.assertThat(
-            String.format("Signature is not present, expected %s", expected),
-            actual.isPresent(),
-            Matchers.is(true)
-        );
         MatcherAssert.assertThat(
             String.format(
                 "Can't retrieve signature correctly, expected %s, got %s",
                 expected,
-                actual.get()
+                actual
             ),
-            actual.get(),
+            actual,
             Matchers.is(expected)
         );
     }

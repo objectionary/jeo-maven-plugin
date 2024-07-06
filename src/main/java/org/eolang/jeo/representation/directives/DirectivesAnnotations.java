@@ -62,7 +62,7 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
      * @param name Name.
      */
     public DirectivesAnnotations(final String name) {
-        this(new ArrayList<>(), name);
+        this(new ArrayList<>(0), name);
     }
 
     /**

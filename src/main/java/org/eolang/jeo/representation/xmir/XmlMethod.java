@@ -129,7 +129,7 @@ public final class XmlMethod {
      *  Currently we have some ad-hoc solution for method retrieval.
      *  The problem is code is a bit cryptic and hard to understand.
      *  Moreover the logic under method naming is spread around several places like
-     *  inside {@link #name()} method as well as inside {@link MethodName#name()} method.
+     *  inside {@link #name()} method as well as inside {@link MethodName#decoded()} method.
      *  In other words, it would be great to find sophisticated solution for this problem.
      */
     public String name() {
@@ -142,9 +142,9 @@ public final class XmlMethod {
         } else {
             result = original;
         }
-        final int endIndex = result.lastIndexOf('-');
-        if (endIndex > 0) {
-            result = result.substring(0, endIndex);
+        final int dash = result.lastIndexOf('-');
+        if (dash > 0) {
+            result = result.substring(0, dash);
         }
         return result;
     }
@@ -183,20 +183,6 @@ public final class XmlMethod {
     }
 
     /**
-     * Method exceptions.
-     *
-     * @return Exceptions.
-     */
-    private String[] exceptions() {
-        return this.node.children().collect(Collectors.toList()).get(3)
-            .children()
-            .map(XmlNode::text)
-            .map(HexString::new)
-            .map(HexString::decode)
-            .toArray(String[]::new);
-    }
-
-    /**
      * Method max stack and locals.
      *
      * @return Maxs.
@@ -212,9 +198,10 @@ public final class XmlMethod {
      */
     public List<XmlTryCatchEntry> trycatchEntries() {
         return this.node.children()
-            .filter(element -> element.attribute("name")
-                .map(s -> s.contains("trycatchblocks"))
-                .orElse(false))
+            .filter(
+                element -> element.attribute("name")
+                    .map(s -> s.contains("trycatchblocks"))
+                    .orElse(false))
             .flatMap(XmlNode::children)
             .map(entry -> new XmlTryCatchEntry(entry, this.labels))
             .collect(Collectors.toList());
@@ -406,6 +393,20 @@ public final class XmlMethod {
                 .map(element -> new XmlParam(index.getAndIncrement(), element))
                 .collect(Collectors.toMap(XmlParam::index, XmlParam::annotations))
         );
+    }
+
+    /**
+     * Method exceptions.
+     *
+     * @return Exceptions.
+     */
+    private String[] exceptions() {
+        return this.node.children().collect(Collectors.toList()).get(3)
+            .children()
+            .map(XmlNode::text)
+            .map(HexString::new)
+            .map(HexString::decode)
+            .toArray(String[]::new);
     }
 
     /**

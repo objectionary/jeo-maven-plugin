@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import com.jcabi.matchers.XhtmlMatchers;
 import org.eolang.jeo.representation.xmir.XmlFrame;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
