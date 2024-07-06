@@ -125,14 +125,18 @@ public final class XmlMethod {
      * Method name.
      *
      * @return Name.
+     * @todo #627:60min Simplify Method Names Retrieval.
+     *  Currently we have some ad-hoc solution for method retrieval.
+     *  The problem is code is a bit cryptic and hard to understand.
+     *  Moreover the logic under method naming is spread around several places like
+     *  inside {@link #name()} method as well as inside {@link MethodName#name()} method.
+     *  In other words, it would be great to find sophisticated solution for this problem.
      */
     public String name() {
-        final String result;
         final String original = this.node.attribute("name").orElseThrow(
             () -> new IllegalStateException("Method 'name' attribute is not present")
         );
-        // @todo
-//        return new MethodName(original).name();
+        String result;
         if (original.contains("new")) {
             result = "<init>";
         } else {
@@ -140,10 +144,9 @@ public final class XmlMethod {
         }
         final int endIndex = result.lastIndexOf('-');
         if (endIndex > 0) {
-            return result.substring(0, endIndex);
-        } else {
-            return result;
+            result = result.substring(0, endIndex);
         }
+        return result;
     }
 
     /**

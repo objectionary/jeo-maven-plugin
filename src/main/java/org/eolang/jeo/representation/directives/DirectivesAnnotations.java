@@ -45,8 +45,10 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
      */
     private final List<DirectivesAnnotation> annotations;
 
+    /**
+     * Annotations name.
+     */
     private final String name;
-
 
     /**
      * Constructor.
