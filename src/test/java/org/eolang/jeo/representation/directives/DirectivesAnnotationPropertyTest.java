@@ -41,6 +41,7 @@ import org.xembly.Xembler;
  *
  * @since 0.3
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 final class DirectivesAnnotationPropertyTest {
 
     @Test

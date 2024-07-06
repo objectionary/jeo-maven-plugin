@@ -121,7 +121,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      * Method descriptor.
      * @return Descriptor.
      */
-    public String descriptor() {
+    public String descr() {
         return this.descriptor;
     }
 

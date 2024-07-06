@@ -112,7 +112,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final boolean counting,
         final DirectivesMethodProperties properties
     ) {
-        this.name = new MethodName(name, properties.descriptor());
+        this.name = new MethodName(name, properties.descr());
         this.properties = properties;
         this.counting = counting;
         this.instructions = new ArrayList<>(0);

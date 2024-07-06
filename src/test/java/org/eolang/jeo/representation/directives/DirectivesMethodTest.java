@@ -95,7 +95,7 @@ final class DirectivesMethodTest {
         );
         MatcherAssert.assertThat(
             "Annotation visibility is not equal to expected",
-            annotation.visible(),
+            annotation.isVisible(),
             Matchers.equalTo(visible)
         );
     }

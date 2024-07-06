@@ -128,6 +128,7 @@ final class DirectivesTryCatchTest {
      * For {@link #correctlyConvertsToXmirIfSomeLabelsAreAbsent(Label, Label, Label, String)}.
      * @return Test cases.
      */
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> cases() {
         return Stream.of(
             Arguments.of(new Label(), new Label(), new Label(), "java/lang/Exception"),
