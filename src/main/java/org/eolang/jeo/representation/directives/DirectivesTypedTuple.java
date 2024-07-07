@@ -199,7 +199,7 @@ public final class DirectivesTypedTuple implements Iterable<Directive> {
         if (!this.name.isEmpty()) {
             tuple.attr("name", this.name);
         }
-        tuple.append(new DirectivesData("type", this.type.getName()));
+        tuple.append(new DirectivesData(this.type.getName()));
         this.values.forEach(tuple::append);
         tuple.up();
         return tuple.iterator();

@@ -6,5 +6,5 @@ the plugin didn't break anything. If you need to run only this test, use the
 following command:
 
 ```shell
-mvn clean integration-test invoker:run -Dinvoker.test=custom-transformations -DskipTests
+mvn clean integration-test -Dinvoker.test=custom-transformations -DskipTests
 ```

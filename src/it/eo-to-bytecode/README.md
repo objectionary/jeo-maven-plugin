@@ -7,5 +7,5 @@ generated XMIR files to bytecode. In other words, it checks the
 If you need to run only this test, use the following command:
 
 ```shell
-mvn clean integration-test invoker:run -Dinvoker.test=eo-to-bytecode -DskipTests
+mvn clean integration-test -Dinvoker.test=eo-to-bytecode -DskipTests
 ```

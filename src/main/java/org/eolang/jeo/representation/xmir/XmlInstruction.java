@@ -43,6 +43,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     /**
      * Instruction node.
      */
+    @EqualsAndHashCode.Exclude
     private final XmlNode node;
 
     /**
@@ -96,6 +97,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Instruction code.
      * @return Code.
      */
+    @EqualsAndHashCode.Include
     public int opcode() {
         return new HexString(this.node.firstChild().text()).decodeAsInt();
     }
@@ -104,6 +106,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Instruction arguments.
      * @return Arguments.
      */
+    @EqualsAndHashCode.Include
     public List<XmlOperand> operands() {
         return this.node
             .children()

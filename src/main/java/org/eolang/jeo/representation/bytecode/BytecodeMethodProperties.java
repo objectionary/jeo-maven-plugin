@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.log.Logger;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -174,7 +175,8 @@ public final class BytecodeMethodProperties implements Testable {
             this.access,
             new JavaName(this.name).decode(),
             this.descriptor,
-            this.signature,
+            Optional.ofNullable(this.signature).filter(s -> !s.isEmpty())
+                .orElse(null),
             this.exceptions,
             compute
         );

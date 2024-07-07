@@ -6,5 +6,5 @@ that utilizes exceptions.
 If you need to run only this test, use the following command:
 
 ```shell
-mvn clean integration-test invoker:run -Dinvoker.test=exceptions -DskipTests
+mvn clean integration-test -Dinvoker.test=exceptions -DskipTests
 ```

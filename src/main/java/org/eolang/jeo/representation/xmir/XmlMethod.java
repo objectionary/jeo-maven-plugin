@@ -32,6 +32,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
@@ -124,16 +125,26 @@ public final class XmlMethod {
      * Method name.
      *
      * @return Name.
+     * @todo #627:60min Simplify Method Names Retrieval.
+     *  Currently we have some ad-hoc solution for method retrieval.
+     *  The problem is code is a bit cryptic and hard to understand.
+     *  Moreover the logic under method naming is spread around several places like
+     *  inside {@link #name()} method as well as inside {@link MethodName#decoded()} method.
+     *  In other words, it would be great to find sophisticated solution for this problem.
      */
     public String name() {
-        final String result;
         final String original = this.node.attribute("name").orElseThrow(
             () -> new IllegalStateException("Method 'name' attribute is not present")
         );
-        if ("new".equals(original)) {
+        String result;
+        if (original.startsWith("new-")) {
             result = "<init>";
         } else {
             result = original;
+        }
+        final int dash = result.lastIndexOf('-');
+        if (dash > 0) {
+            result = result.substring(0, dash);
         }
         return result;
     }
@@ -144,7 +155,9 @@ public final class XmlMethod {
      * @return Access modifiers.
      */
     public int access() {
-        return new HexString(this.node.child("name", "access").text()).decodeAsInt();
+        return new HexString(
+            this.node.children().collect(Collectors.toList()).get(0).text()
+        ).decodeAsInt();
     }
 
     /**
@@ -153,7 +166,9 @@ public final class XmlMethod {
      * @return Descriptor.
      */
     public String descriptor() {
-        return new HexString(this.node.child("name", "descriptor").text()).decode();
+        return new HexString(
+            this.node.children().collect(Collectors.toList()).get(1).text()
+        ).decode();
     }
 
     /**
@@ -162,12 +177,18 @@ public final class XmlMethod {
      * @return Signature.
      */
     public String signature() {
-        return this.node.optchild("name", "signature")
-            .map(XmlNode::text)
-            .filter(s -> !s.isEmpty())
-            .map(HexString::new)
-            .map(HexString::decode)
-            .orElse(null);
+        return new HexString(
+            this.node.children().collect(Collectors.toList()).get(2).text()
+        ).decode();
+    }
+
+    /**
+     * Method max stack and locals.
+     *
+     * @return Maxs.
+     */
+    public Optional<XmlMaxs> maxs() {
+        return this.node.optchild("base", "maxs").map(XmlMaxs::new);
     }
 
     /**
@@ -177,7 +198,10 @@ public final class XmlMethod {
      */
     public List<XmlTryCatchEntry> trycatchEntries() {
         return this.node.children()
-            .filter(element -> element.hasAttribute("name", "trycatchblocks"))
+            .filter(
+                element -> element.attribute("name")
+                    .map(s -> s.contains("trycatchblocks"))
+                    .orElse(false))
             .flatMap(XmlNode::children)
             .map(entry -> new XmlTryCatchEntry(entry, this.labels))
             .collect(Collectors.toList());
@@ -200,25 +224,16 @@ public final class XmlMethod {
     }
 
     /**
-     * Method max stack and locals.
-     *
-     * @return Maxs.
-     */
-    public Optional<XmlMaxs> maxs() {
-        return this.node.optchild("base", "maxs").map(XmlMaxs::new);
-    }
-
-    /**
      * Checks if method is a constructor.
      *
      * @return True if method is a constructor.
      */
     public boolean isConstructor() {
-        return this.node.hasAttribute("name", "new");
+        return this.node.attribute("name").map(s -> s.contains("new")).orElse(false);
     }
 
     /**
-     * All method instructions.
+     * All instructions.
      *
      * @param predicates Predicates to filter instructions.
      * @return Instructions.
@@ -370,20 +385,6 @@ public final class XmlMethod {
             .map(XmlDefaultValue::new);
     }
 
-    /**
-     * Method exceptions.
-     *
-     * @return Exceptions.
-     */
-    private String[] exceptions() {
-        return this.node.child("name", "exceptions")
-            .children()
-            .map(XmlNode::text)
-            .map(HexString::new)
-            .map(HexString::decode)
-            .toArray(String[]::new);
-    }
-
     private BytecodeParameters params() {
         final AtomicInteger index = new AtomicInteger(0);
         return new BytecodeParameters(
@@ -392,6 +393,20 @@ public final class XmlMethod {
                 .map(element -> new XmlParam(index.getAndIncrement(), element))
                 .collect(Collectors.toMap(XmlParam::index, XmlParam::annotations))
         );
+    }
+
+    /**
+     * Method exceptions.
+     *
+     * @return Exceptions.
+     */
+    private String[] exceptions() {
+        return this.node.children().collect(Collectors.toList()).get(3)
+            .children()
+            .map(XmlNode::text)
+            .map(HexString::new)
+            .map(HexString::decode)
+            .toArray(String[]::new);
     }
 
     /**

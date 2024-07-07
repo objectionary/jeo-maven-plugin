@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesMaxs;
@@ -40,6 +41,7 @@ public final class XmlMaxs {
     /**
      * XML node.
      */
+    @EqualsAndHashCode.Exclude
     private final XmlNode node;
 
     /**
@@ -66,8 +68,11 @@ public final class XmlMaxs {
      *
      * @return Stack size.
      */
+    @EqualsAndHashCode.Include
     public int stack() {
-        return (int) new XmlOperand(this.node.child("name", "stack")).asObject();
+        return (int) new XmlOperand(
+            this.node.children().collect(Collectors.toList()).get(0)
+        ).asObject();
     }
 
     /**
@@ -75,8 +80,11 @@ public final class XmlMaxs {
      *
      * @return Locals size.
      */
+    @EqualsAndHashCode.Include
     public int locals() {
-        return (int) new XmlOperand(this.node.child("name", "locals")).asObject();
+        return (int) new XmlOperand(
+            this.node.children().collect(Collectors.toList()).get(1)
+        ).asObject();
     }
 
     /**

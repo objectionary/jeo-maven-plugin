@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import org.eolang.jeo.SameXml;
 import org.eolang.jeo.representation.ClassName;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -51,8 +52,8 @@ final class XmlProgramTest {
                 expected,
                 actual
             ),
-            actual,
-            Matchers.equalTo(expected)
+            actual.toXml().toString(),
+            new SameXml(expected.toXml())
         );
     }
 

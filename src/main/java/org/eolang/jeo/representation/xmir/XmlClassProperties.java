@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.List;
-import java.util.Optional;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 
@@ -33,6 +32,15 @@ import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
  * XML representation of a class.
  *
  * @since 0.1.0
+ * @todo #627:30min Improve Encapsulation of XmlClassProperties.
+ *  Currently we are exposing many methods like:
+ *  - {@link XmlClassProperties#access()}
+ *  - {@link XmlClassProperties#signature()}
+ *  - {@link XmlClassProperties#supername()}
+ *  - {@link XmlClassProperties#interfaces()}
+ *  They are some sort of getters. This encapsulation violation tells us about poor design.
+ *  We need to hide this methods and provide a better way to access this properties.
+ *  Most probably the problem is deeper than just hiding the methods. We need to rethink the design.
  */
 public final class XmlClassProperties {
 
@@ -58,6 +66,50 @@ public final class XmlClassProperties {
     }
 
     /**
+     * Retrieve 'access' modifiers of a class.
+     * @return Access modifiers.
+     */
+    public int access() {
+        return new HexString(this.clazz.xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
+    }
+
+    /**
+     * Retrieve 'signature' of a class.
+     * @return Signature.
+     */
+    public String signature() {
+        return this.clazz.xpath("./o[@name='signature']/text()")
+            .stream()
+            .map(HexString::new)
+            .map(HexString::decode)
+            .findFirst()
+            .orElse(null);
+    }
+
+    /**
+     * Retrieve 'supername' of a class.
+     * @return Supername.
+     */
+    public String supername() {
+        return this.clazz.xpath("./o[@name='supername']/text()")
+            .stream()
+            .map(HexString::new)
+            .map(HexString::decode)
+            .findFirst().orElse("java/lang/Object");
+    }
+
+    /**
+     * Retrieve 'interfaces' of a class.
+     * @return Interfaces.
+     */
+    public String[] interfaces() {
+        return this.clazz.xpath("./o[@name='interfaces']/o/text()")
+            .stream()
+            .map(HexString::new)
+            .map(HexString::decode).toArray(String[]::new);
+    }
+
+    /**
      * Retrieve bytecode 'version'.
      * @return Bytecode version.
      */
@@ -73,49 +125,6 @@ public final class XmlClassProperties {
     }
 
     /**
-     * Retrieve 'access' modifiers of a class.
-     * @return Access modifiers.
-     */
-    int access() {
-        return new HexString(this.clazz.xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
-    }
-
-    /**
-     * Retrieve 'signature' of a class.
-     * @return Signature.
-     */
-    Optional<String> signature() {
-        return this.clazz.xpath("./o[@name='signature']/text()")
-            .stream()
-            .map(HexString::new)
-            .map(HexString::decode)
-            .findFirst();
-    }
-
-    /**
-     * Retrieve 'supername' of a class.
-     * @return Supername.
-     */
-    String supername() {
-        return this.clazz.xpath("./o[@name='supername']/text()")
-            .stream()
-            .map(HexString::new)
-            .map(HexString::decode)
-            .findFirst().orElse("java/lang/Object");
-    }
-
-    /**
-     * Retrieve 'interfaces' of a class.
-     * @return Interfaces.
-     */
-    String[] interfaces() {
-        return this.clazz.xpath("./o[@name='interfaces']/o/text()")
-            .stream()
-            .map(HexString::new)
-            .map(HexString::decode).toArray(String[]::new);
-    }
-
-    /**
      * Convert to bytecode properties.
      * @return Bytecode properties.
      */
@@ -123,7 +132,7 @@ public final class XmlClassProperties {
         return new BytecodeClassProperties(
             this.version(),
             this.access(),
-            this.signature().orElse(null),
+            this.signature(),
             this.supername(),
             this.interfaces()
         );

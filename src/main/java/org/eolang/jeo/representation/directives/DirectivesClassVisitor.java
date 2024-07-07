@@ -213,10 +213,10 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
             .attribute(
                 new DirectivesAttribute(
                     "InnerClass",
-                    new DirectivesNullable("name", name),
-                    new DirectivesNullable("outer", outer),
-                    new DirectivesNullable("inner", inner),
-                    new DirectivesNullable("access", access)
+                    new DirectivesNullable("", name),
+                    new DirectivesNullable("", outer),
+                    new DirectivesNullable("", inner),
+                    new DirectivesNullable("", access)
                 ));
         super.visitInnerClass(name, outer, inner, access);
     }

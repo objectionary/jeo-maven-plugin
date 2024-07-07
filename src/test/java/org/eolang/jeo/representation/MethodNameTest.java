@@ -21,46 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.directives;
+package org.eolang.jeo.representation;
 
-import org.eolang.jeo.SameXml;
-import org.eolang.jeo.representation.DataType;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.xembly.ImpossibleModificationException;
-import org.xembly.Transformers;
-import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesData}.
- * @since 0.3
+ * Test for {@link MethodName}.
+ * @since 0.5
  */
-final class DirectivesDataTest {
+final class MethodNameTest {
 
     @Test
-    void convertsLabel() throws ImpossibleModificationException {
+    void createsMethodNameUsingMainConstructor() {
+        final String name = "foo";
         MatcherAssert.assertThat(
-            "Converts label to XML",
-            new Xembler(
-                new DirectivesData(
-                    new AllLabels().label("some-random")
-                ),
-                new Transformers.Node()
-            ).xml(),
-            new SameXml(
-                "<o base='label' data='bytes'>73 6F 6D 65 2D 72 61 6E 64 6F 6D</o>"
-            )
+            "Method name shouldn't be changed after creation",
+            new MethodName(name, "()I").decoded(),
+            Matchers.equalTo(name)
         );
     }
 
     @Test
-    void decodesLabel() {
+    void createsConstructorMethodName() {
         MatcherAssert.assertThat(
-            "Decodes label from XML",
-            DataType.find("label").decode("73 6F 6D 65 2D 72 61 6E 64 6F 6D"),
-            Matchers.equalTo(new AllLabels().label("some-random"))
+            "Constructor name should be changed after creation from '<init>' to 'new'",
+            new MethodName("<init>", "()I").decoded(),
+            Matchers.equalTo("new")
         );
     }
+
+    @Test
+    void encodesMethodNameAndDescriptor() {
+        MatcherAssert.assertThat(
+            "Encoded method name and descriptor should be correct",
+            new MethodName("bar", "(Ljava/lang/String;)V").encoded(),
+            Matchers.equalTo("bar-KExqYXZhL2xhbmcvU3RyaW5nOylW")
+        );
+    }
+
+    @Test
+    void decodesMethodName() {
+        MatcherAssert.assertThat(
+            "Decoded method name should be correct",
+            new MethodName("foo-KCgpSUk=").decoded(),
+            Matchers.equalTo("foo")
+        );
+    }
+
 }

@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 
@@ -64,22 +66,22 @@ public final class XmlAttribute {
         if ("InnerClass".equals(base)) {
             bytecode.withAttribute(
                 new BytecodeAttribute.InnerClass(
-                    this.node.optchild("name", "name")
+                    Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(0))
                         .map(XmlOperand::new)
                         .map(XmlOperand::asObject)
                         .map(String.class::cast)
                         .orElse(null),
-                    this.node.optchild("name", "outer")
+                    Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(1))
                         .map(XmlOperand::new)
                         .map(XmlOperand::asObject)
                         .map(String.class::cast)
                         .orElse(null),
-                    this.node.optchild("name", "inner")
+                    Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(2))
                         .map(XmlOperand::new)
                         .map(XmlOperand::asObject)
                         .map(String.class::cast)
                         .orElse(null),
-                    this.node.optchild("name", "access")
+                    Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(3))
                         .map(XmlOperand::new)
                         .map(XmlOperand::asObject)
                         .map(Integer.class::cast)

@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.directives;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.xembly.Directive;
@@ -45,6 +46,11 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
     private final List<DirectivesAnnotation> annotations;
 
     /**
+     * Annotations name.
+     */
+    private final String name;
+
+    /**
      * Constructor.
      */
     public DirectivesAnnotations() {
@@ -53,10 +59,28 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param name Name.
+     */
+    public DirectivesAnnotations(final String name) {
+        this(new ArrayList<>(0), name);
+    }
+
+    /**
+     * Constructor.
      * @param annotations Annotations.
      */
     public DirectivesAnnotations(final List<DirectivesAnnotation> annotations) {
+        this(annotations, "annotations");
+    }
+
+    /**
+     * Constructor.
+     * @param annotations Annotations.
+     * @param name Name.
+     */
+    public DirectivesAnnotations(final List<DirectivesAnnotation> annotations, final String name) {
         this.annotations = annotations;
+        this.name = name;
     }
 
     /**
@@ -76,7 +100,8 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
             directives.add("o")
                 .attr("base", "tuple")
                 .attr("star", "")
-                .attr("name", "annotations");
+                .attr("name", this.name)
+                .attr("line", new Random().nextInt(Integer.MAX_VALUE));
             this.annotations.forEach(directives::append);
             directives.up();
         }

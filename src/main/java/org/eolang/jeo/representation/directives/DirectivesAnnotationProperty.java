@@ -74,7 +74,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
      * @param value Parameter.
      * @return Property directives.
      */
-    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
+    @SuppressWarnings("PMD.ProhibiyPublicStaticMethods")
     public static DirectivesAnnotationProperty plain(final String name, final Object value) {
         final DirectivesAnnotationProperty result;
         final Class<?>[] iterable = {
@@ -99,34 +99,34 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
         if (Arrays.stream(iterable).anyMatch(iter -> iter.equals(value.getClass()))) {
             final DirectivesTypedTuple res;
             if (value.getClass().equals(int[].class)) {
-                res = new DirectivesTypedTuple("value", (int[]) value);
+                res = new DirectivesTypedTuple("", (int[]) value);
             } else if (value.getClass().equals(long[].class)) {
-                res = new DirectivesTypedTuple("value", (long[]) value);
+                res = new DirectivesTypedTuple("", (long[]) value);
             } else if (value.getClass().equals(float[].class)) {
-                res = new DirectivesTypedTuple("value", (float[]) value);
+                res = new DirectivesTypedTuple("", (float[]) value);
             } else if (value.getClass().equals(double[].class)) {
-                res = new DirectivesTypedTuple("value", (double[]) value);
+                res = new DirectivesTypedTuple("", (double[]) value);
             } else if (value.getClass().equals(boolean[].class)) {
-                res = new DirectivesTypedTuple("value", (boolean[]) value);
+                res = new DirectivesTypedTuple("", (boolean[]) value);
             } else if (value.getClass().equals(char[].class)) {
-                res = new DirectivesTypedTuple("value", (char[]) value);
+                res = new DirectivesTypedTuple("", (char[]) value);
             } else if (value.getClass().equals(byte[].class)) {
-                res = new DirectivesTypedTuple("value", (byte[]) value);
+                res = new DirectivesTypedTuple("", (byte[]) value);
             } else if (value.getClass().equals(short[].class)) {
-                res = new DirectivesTypedTuple("value", (short[]) value);
+                res = new DirectivesTypedTuple("", (short[]) value);
             } else {
-                res = new DirectivesTypedTuple("value", (Object[]) value);
+                res = new DirectivesTypedTuple("", (Object[]) value);
             }
             result = new DirectivesAnnotationProperty(
                 Type.PLAIN,
-                new DirectivesData("name", Optional.ofNullable(name).orElse("")),
+                new DirectivesData(Optional.ofNullable(name).orElse("")),
                 res
             );
         } else {
             result = new DirectivesAnnotationProperty(
                 Type.PLAIN,
-                new DirectivesData("name", Optional.ofNullable(name).orElse("")),
-                new DirectivesData("value", value)
+                new DirectivesData(Optional.ofNullable(name).orElse("")),
+                new DirectivesData(value)
             );
         }
         return result;
@@ -145,9 +145,9 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
     ) {
         return new DirectivesAnnotationProperty(
             Type.ENUM,
-            new DirectivesData("name", Optional.ofNullable(name).orElse("")),
-            new DirectivesData("descriptor", descriptor),
-            new DirectivesData("value", value)
+            new DirectivesData(Optional.ofNullable(name).orElse("")),
+            new DirectivesData(descriptor),
+            new DirectivesData(value)
         );
     }
 
@@ -163,7 +163,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
     ) {
         return new DirectivesAnnotationProperty(
             Type.ARRAY,
-            new DirectivesData("name", Optional.ofNullable(name).orElse("")),
+            new DirectivesData(Optional.ofNullable(name).orElse("")),
             child.build()
         );
     }
@@ -181,8 +181,8 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
     ) {
         return new DirectivesAnnotationProperty(
             Type.ANNOTATION,
-            new DirectivesData("name", Optional.ofNullable(name).orElse("")),
-            new DirectivesData("descriptor", descriptor),
+            new DirectivesData(Optional.ofNullable(name).orElse("")),
+            new DirectivesData(descriptor),
             child.build()
         );
     }
@@ -191,7 +191,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives()
             .add("o").attr("base", "annotation-property")
-            .append(new DirectivesData("type", this.type.toString()));
+            .append(new DirectivesData(this.type.toString()));
         this.params.forEach(directives::append);
         return directives.up().iterator();
     }

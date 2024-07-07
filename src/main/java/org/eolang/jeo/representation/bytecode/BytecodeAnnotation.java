@@ -48,7 +48,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
     /**
      * Descriptor.
      */
-    private final String descriptor;
+    private final String descr;
 
     /**
      * Visible.
@@ -80,7 +80,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
         final boolean visible,
         final List<BytecodeAnnotationProperty> properties
     ) {
-        this.descriptor = descriptor;
+        this.descr = descriptor;
         this.visible = visible;
         this.properties = properties;
     }
@@ -91,7 +91,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      * @return This.
      */
     public BytecodeAnnotation write(final ClassVisitor visitor) {
-        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descriptor, this.visible);
+        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
         this.properties.forEach(property -> property.writeTo(avisitor));
         return this;
     }
@@ -102,7 +102,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      * @return This.
      */
     public BytecodeAnnotation write(final MethodVisitor visitor) {
-        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descriptor, this.visible);
+        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
         this.properties.forEach(property -> property.writeTo(avisitor));
         return this;
     }
@@ -115,7 +115,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      */
     public BytecodeAnnotation write(final int index, final MethodVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitParameterAnnotation(
-            index, this.descriptor, this.visible
+            index, this.descr, this.visible
         );
         this.properties.forEach(property -> property.writeTo(avisitor));
         return this;
@@ -127,14 +127,34 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      * @return This.
      */
     public BytecodeAnnotation write(final FieldVisitor visitor) {
-        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descriptor, this.visible);
+        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
         this.properties.forEach(property -> property.writeTo(avisitor));
         return this;
     }
 
     @Override
     public void writeTo(final AnnotationVisitor visitor) {
-        final AnnotationVisitor inner = visitor.visitAnnotation(this.descriptor, this.descriptor);
+        final AnnotationVisitor inner = visitor.visitAnnotation(this.descr, this.descr);
         this.properties.forEach(property -> property.writeTo(inner));
+    }
+
+    /**
+     * Descriptor.
+     * @return Descriptor.
+     */
+    public String descriptor() {
+        return this.descr;
+    }
+
+    /**
+     * Visible.
+     * @return Visible.
+     * @todo #627:30min Remove Getters From {@link BytecodeAnnotation}.
+     *  We opened {@link #descriptor()} and {@link #isVisible()} methods to simplify unit testing.
+     *  However, now we violate encapsulation idea at all.
+     *  It's better to find another way to test correct transformations.
+     */
+    public boolean isVisible() {
+        return this.visible;
     }
 }

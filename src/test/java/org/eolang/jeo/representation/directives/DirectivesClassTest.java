@@ -25,10 +25,14 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
+import org.eolang.jeo.SameXml;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.xmir.XmlClass;
+import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.xembly.ImpossibleModificationException;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -42,24 +46,20 @@ final class DirectivesClassTest {
     void createsWithSimpleConstructor() {
         MatcherAssert.assertThat(
             "Can't create class with simple constructor",
-            new XMLDocument(
-                new Xembler(
-                    new DirectivesClass(new ClassName("Neo"), new DirectivesClassProperties()),
-                    new Transformers.Node()
-                ).xmlQuietly()
-            ),
-            Matchers.equalTo(
-                new XMLDocument(
-                    String.join(
-                        "",
-                        "<o abstract='' name='Neo'>",
-                        "<o base=\"int\" data=\"bytes\" name=\"version\">00 00 00 00 00 00 00 34</o>\n",
-                        "<o base='int' data='bytes' name='access'>00 00 00 00 00 00 00 00</o>",
-                        "<o base='string' data='bytes' name='signature'/>",
-                        "<o base='string' data='bytes' name='supername'/>",
-                        "<o base='tuple' name='interfaces' star=''/>",
-                        "</o>"
-                    )
+            new Xembler(
+                new DirectivesClass(new ClassName("Neo"), new DirectivesClassProperties()),
+                new Transformers.Node()
+            ).xmlQuietly(),
+            new SameXml(
+                String.join(
+                    "",
+                    "<o abstract='' name='Neo'>",
+                    "<o base=\"int\" data=\"bytes\" name=\"version\">00 00 00 00 00 00 00 34</o>\n",
+                    "<o base='int' data='bytes' name='access'>00 00 00 00 00 00 00 00</o>",
+                    "<o base='string' data='bytes' name='signature'/>",
+                    "<o base='string' data='bytes' name='supername'/>",
+                    "<o base='tuple' name='interfaces' star=''/>",
+                    "</o>"
                 )
             )
         );
@@ -93,7 +93,56 @@ final class DirectivesClassTest {
                 new XMLDocument(xml)
             ),
             xml,
-            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[@name='method']")
+            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[contains(@name,'method')]")
+        );
+    }
+
+    @Test
+    void convertsToDirectives() throws ImpossibleModificationException {
+        final String name = "Foo";
+        final int access = 100;
+        final String signature = "java/lang/Object";
+        final String supername = "java/lang/Runnable";
+        final String interfce = "java/lang/Cloneable";
+        final XmlClass clazz = new XmlClass(
+            new XmlNode(
+                new Xembler(
+                    new DirectivesClass(
+                        name,
+                        new DirectivesClassProperties(
+                            access,
+                            signature,
+                            supername,
+                            interfce
+                        )
+                    )
+                ).xml()
+            )
+        );
+        MatcherAssert.assertThat(
+            "Class name is not equal to expected",
+            clazz.name(),
+            Matchers.equalTo(name)
+        );
+        MatcherAssert.assertThat(
+            "Class access is not equal to expected",
+            clazz.properties().access(),
+            Matchers.equalTo(access)
+        );
+        MatcherAssert.assertThat(
+            "Class signature is not equal to expected",
+            clazz.properties().signature(),
+            Matchers.equalTo(signature)
+        );
+        MatcherAssert.assertThat(
+            "Class supername is not equal to expected",
+            clazz.properties().supername(),
+            Matchers.equalTo(supername)
+        );
+        MatcherAssert.assertThat(
+            "Class interface is not equal to expected",
+            clazz.properties().interfaces()[0],
+            Matchers.equalTo(interfce)
         );
     }
 

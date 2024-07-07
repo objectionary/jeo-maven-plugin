@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.DataType;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
@@ -32,11 +33,13 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
  * @since 0.3
  */
 @ToString
+@EqualsAndHashCode
 public final class XmlOperand {
 
     /**
      * Raw XML node which represents an instruction operand.
      */
+    @EqualsAndHashCode.Exclude
     private final XmlNode raw;
 
     /**
@@ -51,6 +54,7 @@ public final class XmlOperand {
      * Convert XML operand to an object.
      * @return Object.
      */
+    @EqualsAndHashCode.Include
     public Object asObject() {
         final Object result;
         final String base = this.raw.attribute("base")

@@ -52,7 +52,9 @@ public class XmlAnnotation {
      * @return Descriptor.
      */
     public String descriptor() {
-        return new HexString(this.node.child("name", "descriptor").text()).decode();
+        return new HexString(
+            this.node.children().collect(Collectors.toList()).get(0).text()
+        ).decode();
     }
 
     /**
@@ -61,7 +63,9 @@ public class XmlAnnotation {
      * @return True if visible at runtime, false otherwise.
      */
     public boolean visible() {
-        return new HexString(this.node.child("name", "visible").text()).decodeAsBoolean();
+        return new HexString(
+            this.node.children().collect(Collectors.toList()).get(1).text()
+        ).decodeAsBoolean();
     }
 
     /**

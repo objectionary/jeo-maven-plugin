@@ -66,15 +66,35 @@ SOFTWARE.
         <executions>
           <execution>
             <id>bytecode-to-eo</id>
+            <phase>process-classes</phase>
             <goals>
               <goal>disassemble</goal>
             </goals>
           </execution>
           <execution>
             <id>eo-to-bytecode</id>
+            <phase>generate-test-sources</phase>
             <goals>
               <goal>assemble</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.eolang</groupId>
+        <artifactId>eo-maven-plugin</artifactId>
+        <version>0.38.4</version>
+        <executions>
+          <execution>
+            <id>convert-xmir-to-phi</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>xmir-to-phi</goal>
+            </goals>
+            <configuration>
+              <phiInputDir>${project.build.directory}/generated-sources/jeo-xmir</phiInputDir>
+              <phiOutputDir>${project.build.directory}/generated-sources/phi-jeo</phiOutputDir>
+            </configuration>
           </execution>
         </executions>
       </plugin>

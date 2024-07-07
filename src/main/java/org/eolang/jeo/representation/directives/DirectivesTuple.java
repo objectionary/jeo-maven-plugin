@@ -46,6 +46,13 @@ public final class DirectivesTuple implements Iterable<Directive> {
      */
     private final Object[] values;
 
+    @SafeVarargs
+    public <T> DirectivesTuple(
+        final T... values
+    ) {
+        this("", values);
+    }
+
     /**
      * Constructor.
      * @param name Tuple name.
@@ -66,8 +73,10 @@ public final class DirectivesTuple implements Iterable<Directive> {
         final Directives tuple = new Directives()
             .add("o")
             .attr("base", "tuple")
-            .attr("star", "")
-            .attr("name", this.name);
+            .attr("star", "");
+        if (!"".equals(this.name)) {
+            tuple.attr("name", this.name);
+        }
         Arrays.stream(this.values)
             .filter(Objects::nonNull)
             .map(DirectivesData::new)

@@ -24,8 +24,10 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
+import org.objectweb.asm.Label;
 
 /**
  * XML try-catch entry.
@@ -65,31 +67,49 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
     public void writeTo(final BytecodeMethod method) {
         method.trycatch(
             new BytecodeTryCatchBlock(
-                this.label("start").map(this.labels::label).orElse(null),
-                this.label("end").map(this.labels::label).orElse(null),
-                this.label("handler").map(this.labels::label).orElse(null),
-                this.type().map(HexString::new).map(HexString::decode).orElse(null)
+                this.start(),
+                this.end(),
+                this.handler(),
+                this.type()
             )
         );
     }
 
-    /**
-     * Retrieves the label.
-     * @param name Label uid.
-     * @return Label.
-     */
-    Optional<String> label(final String name) {
-        return this.xmlnode.optchild("name", name)
-            .map(XmlNode::text)
-            .map(HexString::new)
-            .map(HexString::decode);
+    public Label start() {
+        return this.label(0).map(this.labels::label).orElse(null);
+    }
+
+    public Label end() {
+        return this.label(1).map(this.labels::label).orElse(null);
+    }
+
+    public Label handler() {
+        return this.label(2).map(this.labels::label).orElse(null);
     }
 
     /**
      * Retrieves the exception type.
      * @return Exception type.
      */
-    Optional<String> type() {
-        return this.xmlnode.optchild("name", "type").map(XmlNode::text);
+    public String type() {
+        return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(3))
+            .map(XmlNode::text)
+            .map(HexString::new)
+            .map(HexString::decode)
+            .filter(s -> !s.isEmpty())
+            .orElse(null);
+    }
+
+    /**
+     * Retrieves the label.
+     * @param id Label uid.
+     * @return Label.
+     */
+    Optional<String> label(final int id) {
+        return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(id))
+            .filter(node -> !node.hasAttribute("base", "nop"))
+            .map(XmlNode::text)
+            .map(HexString::new)
+            .map(HexString::decode);
     }
 }

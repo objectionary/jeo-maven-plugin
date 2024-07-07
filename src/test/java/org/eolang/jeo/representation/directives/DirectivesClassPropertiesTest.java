@@ -23,8 +23,8 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import org.eolang.jeo.SameXml;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
@@ -53,21 +53,22 @@ final class DirectivesClassPropertiesTest {
                         )
                     ).up()
             ).xml(),
-            Matchers.equalTo(
+            new SameXml(
                 String.join(
                     "",
-                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n",
+                    "<?xml version='1.0' encoding='UTF-8'?>\n",
                     "<o>\n",
-                    "   <o base=\"int\" data=\"bytes\" name=\"version\">00 00 00 00 00 00 00 34</o>\n",
-                    "   <o base=\"int\" data=\"bytes\" name=\"access\">00 00 00 00 00 00 00 01</o>\n",
-                    "   <o base=\"string\" data=\"bytes\" name=\"signature\">6F 72 67 2F 65 6F 6C 61 6E 67 2F 53 6F 6D 65 43 6C 61 73 73</o>\n",
-                    "   <o base=\"string\" data=\"bytes\" name=\"supername\">6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>\n",
-                    "   <o base=\"tuple\" name=\"interfaces\" star=\"\">\n",
-                    "      <o base=\"string\" data=\"bytes\">6F 72 67 2F 65 6F 6C 61 6E 67 2F 53 6F 6D 65 49 6E 74 65 72 66 61 63 65</o>\n",
+                    "   <o base='int' data='bytes' name='version'>00 00 00 00 00 00 00 34</o>\n",
+                    "   <o base='int' data='bytes' name='access'>00 00 00 00 00 00 00 01</o>\n",
+                    "   <o base='string' data='bytes' name='signature'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 53 6F 6D 65 43 6C 61 73 73</o>\n",
+                    "   <o base='string' data='bytes' name='supername'>6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>\n",
+                    "   <o base='tuple' name='interfaces' star=''>\n",
+                    "      <o base='string' data='bytes'>6F 72 67 2F 65 6F 6C 61 6E 67 2F 53 6F 6D 65 49 6E 74 65 72 66 61 63 65</o>\n",
                     "   </o>\n",
                     "</o>\n"
                 )
             )
         );
     }
+
 }
