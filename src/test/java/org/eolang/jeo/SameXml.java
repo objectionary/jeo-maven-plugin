@@ -65,7 +65,7 @@ public final class SameXml extends TypeSafeMatcher<String> {
     }
 
     @Override
-    protected boolean matchesSafely(final String item) {
+    public boolean matchesSafely(final String item) {
         return SameXml.withoutLines(new XMLDocument(this.expected))
             .equals(SameXml.withoutLines(new XMLDocument(item)));
     }
@@ -93,5 +93,4 @@ public final class SameXml extends TypeSafeMatcher<String> {
             throw new IllegalStateException("Failed to remove 'line' attributes", exception);
         }
     }
-
 }

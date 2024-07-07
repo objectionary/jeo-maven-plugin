@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.directives;
 
 import org.eolang.jeo.SameXml;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;

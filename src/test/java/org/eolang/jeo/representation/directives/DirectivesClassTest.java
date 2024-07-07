@@ -61,7 +61,6 @@ final class DirectivesClassTest {
                     "<o base='tuple' name='interfaces' star=''/>",
                     "</o>"
                 )
-
             )
         );
     }
