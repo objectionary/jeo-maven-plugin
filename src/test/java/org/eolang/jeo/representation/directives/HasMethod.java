@@ -366,31 +366,31 @@ final class HasMethod extends TypeSafeMatcher<String> {
         Stream<String> checks(final String root) {
             return Stream.of(
                 String.format(
-                    "%s/o[@base='tuple' and @name='trycatchblocks']/@name",
+                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/@name",
                     root
                 ),
                 String.format(
-                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/@base",
+                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/o[@base='trycatch']/@base",
                     root
                 ),
                 String.format(
-                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='label' and @name='start']/@name",
+                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/o[@base='trycatch']/o[1][@base='label']/@base",
                     root
                 ),
                 String.format(
-                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='label' and @name='end']/@name",
+                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/o[@base='trycatch']/o[2][@base='label']/@base",
                     root
                 ),
                 String.format(
-                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='label' and @name='handler']/@name",
+                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/o[@base='trycatch']/o[3][@base='label']/@base",
                     root
                 ),
                 String.format(
-                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='string' and @name='type']/@name",
+                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/o[@base='trycatch']/o[4][@base='string']/@base",
                     root
                 ),
                 String.format(
-                    "%s/o[@base='tuple' and @name='trycatchblocks']/o[@base='trycatch']/o[@base='string' and @name='type' and text()='%s']/@data",
+                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/o[@base='trycatch']/o[4][@base='string' and text()='%s']/@data",
                     root,
                     new HexData(this.type).value()
                 )
