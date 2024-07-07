@@ -32,7 +32,15 @@ import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
  * XML representation of a class.
  *
  * @since 0.1.0
- * @todo
+ * @todo #627:30min Improve Encapsulation of XmlClassProperties.
+ *  Currently we are exposing many methods like:
+ *  - {@link XmlClassProperties#access()}
+ *  - {@link XmlClassProperties#signature()}
+ *  - {@link XmlClassProperties#supername()}
+ *  - {@link XmlClassProperties#interfaces()}
+ *  They are some sort of getters. This encapsulation violation tells us about poor design.
+ *  We need to hide this methods and provide a better way to access this properties.
+ *  Most probably the problem is deeper than just hiding the methods. We need to rethink the design.
  */
 public final class XmlClassProperties {
 
