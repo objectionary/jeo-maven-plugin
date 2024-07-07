@@ -175,7 +175,8 @@ public final class BytecodeMethodProperties implements Testable {
             this.access,
             new JavaName(this.name).decode(),
             this.descriptor,
-            Optional.of(this.signature).filter(s -> !s.isEmpty()).orElse(null),
+            Optional.ofNullable(this.signature).filter(s -> !s.isEmpty())
+                .orElse(null),
             this.exceptions,
             compute
         );

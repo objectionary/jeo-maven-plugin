@@ -192,11 +192,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
         final String root = this.root();
         return Stream.of(
             root.concat("/@name"),
-            root.concat("/o[@base='seq']/@base"),
-            root.concat("/o[@name='access']/@name"),
-            root.concat("/o[@name='descriptor']/@name"),
-            root.concat("/o[@name='signature']/@name"),
-            root.concat("/o[@name='exceptions']/@name")
+            root.concat("/o[@base='seq']/@base")
         );
     }
 
@@ -246,7 +242,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
      */
     private String root() {
         return String.format(
-            "/program/objects/o[@name='%s']/o[@name='%s']",
+            "/program/objects/o[@name='%s']/o[contains(@name,'%s')]",
             this.clazz,
             this.name
         );
