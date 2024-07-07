@@ -43,7 +43,7 @@ import org.xembly.Xembler;
 final class DirectivesTryCatchTest {
 
     @Test
-    void correctlyConvertsToXmir() throws ImpossibleModificationException {
+    void convertsToXmir() throws ImpossibleModificationException {
         final Label start = new Label();
         final Label end = new Label();
         final Label handler = new Label();
@@ -88,7 +88,7 @@ final class DirectivesTryCatchTest {
      */
     @ParameterizedTest
     @MethodSource("cases")
-    void correctlyConvertsToXmirIfSomeLabelsAreAbsent(
+    void convertsToXmirIfSomeLabelsAreAbsent(
         final Label start,
         final Label end,
         final Label handler,

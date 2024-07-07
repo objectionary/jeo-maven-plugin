@@ -98,7 +98,7 @@ final class DirectivesClassTest {
     }
 
     @Test
-    void correctlyConvertsToDirectives() throws ImpossibleModificationException {
+    void convertsToDirectives() throws ImpossibleModificationException {
         final String name = "Foo";
         final int access = 100;
         final String signature = "java/lang/Object";
