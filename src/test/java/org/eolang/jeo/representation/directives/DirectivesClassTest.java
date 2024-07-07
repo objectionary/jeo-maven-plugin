@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
+import org.eolang.jeo.SameXml;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlNode;
@@ -45,25 +46,22 @@ final class DirectivesClassTest {
     void createsWithSimpleConstructor() {
         MatcherAssert.assertThat(
             "Can't create class with simple constructor",
-            new XMLDocument(
-                new Xembler(
-                    new DirectivesClass(new ClassName("Neo"), new DirectivesClassProperties()),
-                    new Transformers.Node()
-                ).xmlQuietly()
-            ),
-            Matchers.equalTo(
-                new XMLDocument(
-                    String.join(
-                        "",
-                        "<o abstract='' name='Neo'>",
-                        "<o base=\"int\" data=\"bytes\" name=\"version\">00 00 00 00 00 00 00 34</o>\n",
-                        "<o base='int' data='bytes' name='access'>00 00 00 00 00 00 00 00</o>",
-                        "<o base='string' data='bytes' name='signature'/>",
-                        "<o base='string' data='bytes' name='supername'/>",
-                        "<o base='tuple' name='interfaces' star=''/>",
-                        "</o>"
-                    )
+            new Xembler(
+                new DirectivesClass(new ClassName("Neo"), new DirectivesClassProperties()),
+                new Transformers.Node()
+            ).xmlQuietly(),
+            new SameXml(
+                String.join(
+                    "",
+                    "<o abstract='' name='Neo'>",
+                    "<o base=\"int\" data=\"bytes\" name=\"version\">00 00 00 00 00 00 00 34</o>\n",
+                    "<o base='int' data='bytes' name='access'>00 00 00 00 00 00 00 00</o>",
+                    "<o base='string' data='bytes' name='signature'/>",
+                    "<o base='string' data='bytes' name='supername'/>",
+                    "<o base='tuple' name='interfaces' star=''/>",
+                    "</o>"
                 )
+
             )
         );
     }

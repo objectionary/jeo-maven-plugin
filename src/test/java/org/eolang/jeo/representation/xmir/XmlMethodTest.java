@@ -81,7 +81,7 @@ final class XmlMethodTest {
             "Method properties are not equal to expected",
             method.properties(),
             Matchers.equalTo(
-                new BytecodeMethodProperties(access, name, descriptor, null, exceptions)
+                new BytecodeMethodProperties(access, name, descriptor, "", exceptions)
             )
         );
     }

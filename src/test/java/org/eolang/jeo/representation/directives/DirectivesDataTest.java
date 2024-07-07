@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import org.eolang.jeo.SameXml;
 import org.eolang.jeo.representation.DataType;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
@@ -48,8 +49,8 @@ final class DirectivesDataTest {
                 ),
                 new Transformers.Node()
             ).xml(),
-            Matchers.equalTo(
-                "<o base=\"label\" data=\"bytes\">73 6F 6D 65 2D 72 61 6E 64 6F 6D</o>"
+            new SameXml(
+                "<o base='label' data='bytes'>73 6F 6D 65 2D 72 61 6E 64 6F 6D</o>"
             )
         );
     }
