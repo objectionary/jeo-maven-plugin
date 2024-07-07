@@ -137,7 +137,7 @@ public final class XmlMethod {
             () -> new IllegalStateException("Method 'name' attribute is not present")
         );
         String result;
-        if (original.contains("new")) {
+        if (original.startsWith("new-")) {
             result = "<init>";
         } else {
             result = original;
