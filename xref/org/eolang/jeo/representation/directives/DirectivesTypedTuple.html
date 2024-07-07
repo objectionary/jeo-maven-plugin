@@ -207,7 +207,7 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a>         <strong class="jxr_keyword">if</strong> (!<strong class="jxr_keyword">this</strong>.name.isEmpty()) {
 <a class="jxr_linenumber" name="L200" href="#L200">200</a>             tuple.attr(<span class="jxr_string">"name"</span>, <strong class="jxr_keyword">this</strong>.name);
 <a class="jxr_linenumber" name="L201" href="#L201">201</a>         }
-<a class="jxr_linenumber" name="L202" href="#L202">202</a>         tuple.append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<span class="jxr_string">"type"</span>, <strong class="jxr_keyword">this</strong>.type.getName()));
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>         tuple.append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<strong class="jxr_keyword">this</strong>.type.getName()));
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>         <strong class="jxr_keyword">this</strong>.values.forEach(tuple::append);
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>         tuple.up();
 <a class="jxr_linenumber" name="L205" href="#L205">205</a>         <strong class="jxr_keyword">return</strong> tuple.iterator();

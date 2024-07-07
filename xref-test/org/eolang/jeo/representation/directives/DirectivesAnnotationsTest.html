@@ -73,13 +73,13 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>                  ),
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>                  XhtmlMatchers.hasXPath(
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>                      String.format(
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>                          <span class="jxr_string">"/o[@base='tuple' and @name='annotations']/o/o[@base='string' and @name='descriptor' and text()='%s']"</span>,
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>                          <span class="jxr_string">"/o[@base='tuple' and @name='annotations']/o/o[1][@base='string' and text()='%s']"</span>,
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>                          <strong class="jxr_keyword">new</strong> HexData(annotation).value()
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>                      )
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>                  ),
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>                  XhtmlMatchers.hasXPath(
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>                      String.format(
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>                          <span class="jxr_string">"/o[@base='tuple' and @name='annotations']/o/o[@base='bool' and @name='visible' and text()='%s']"</span>,
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>                          <span class="jxr_string">"/o[@base='tuple' and @name='annotations']/o/o[2][@base='bool' and text()='%s']"</span>,
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>                          <strong class="jxr_keyword">new</strong> HexData(<strong class="jxr_keyword">true</strong>).value()
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>                      )
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>                  )
@@ -98,8 +98,8 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">new</strong> Xembler(annotation).xml(),
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>              XhtmlMatchers.hasXPaths(
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>                  <span class="jxr_string">"/o[@base='annotation' and count(o) = 3]"</span>,
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>                  <span class="jxr_string">"/o[@base='annotation']/o[@name='descriptor' and text()='4C 6A 61 76 61 2F 6C 61 6E 67 2F 4F 76 65 72 72 69 64 65 3B']"</span>,
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>                  <span class="jxr_string">"/o[@base='annotation']/o[@name='visible' and text()='01']"</span>,
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>                  <span class="jxr_string">"/o[@base='annotation']/o[1][text()='4C 6A 61 76 61 2F 6C 61 6E 67 2F 4F 76 65 72 72 69 64 65 3B']"</span>,
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>                  <span class="jxr_string">"/o[@base='annotation']/o[2][text()='01']"</span>,
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>                  <span class="jxr_string">"/o[@base='annotation']/o[@base='annotation-property']"</span>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>              )
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>          );
