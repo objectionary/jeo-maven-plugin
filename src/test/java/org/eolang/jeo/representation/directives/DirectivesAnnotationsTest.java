@@ -65,13 +65,13 @@ final class DirectivesAnnotationsTest {
                 ),
                 XhtmlMatchers.hasXPath(
                     String.format(
-                        "/o[@base='tuple' and @name='annotations']/o/o[@base='string' and @name='descriptor' and text()='%s']",
+                        "/o[@base='tuple' and @name='annotations']/o/o[1][@base='string' and text()='%s']",
                         new HexData(annotation).value()
                     )
                 ),
                 XhtmlMatchers.hasXPath(
                     String.format(
-                        "/o[@base='tuple' and @name='annotations']/o/o[@base='bool' and @name='visible' and text()='%s']",
+                        "/o[@base='tuple' and @name='annotations']/o/o[2][@base='bool' and text()='%s']",
                         new HexData(true).value()
                     )
                 )
@@ -90,8 +90,8 @@ final class DirectivesAnnotationsTest {
             new Xembler(annotation).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[@base='annotation' and count(o) = 3]",
-                "/o[@base='annotation']/o[@name='descriptor' and text()='4C 6A 61 76 61 2F 6C 61 6E 67 2F 4F 76 65 72 72 69 64 65 3B']",
-                "/o[@base='annotation']/o[@name='visible' and text()='01']",
+                "/o[@base='annotation']/o[1][text()='4C 6A 61 76 61 2F 6C 61 6E 67 2F 4F 76 65 72 72 69 64 65 3B']",
+                "/o[@base='annotation']/o[2][text()='01']",
                 "/o[@base='annotation']/o[@base='annotation-property']"
             )
         );

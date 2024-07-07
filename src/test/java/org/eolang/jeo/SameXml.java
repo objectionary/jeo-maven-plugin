@@ -50,6 +50,14 @@ public final class SameXml extends TypeSafeMatcher<String> {
 
     /**
      * Constructor.
+     * @param xml Expected XML document.
+     */
+    public SameXml(final XML xml) {
+        this(xml.toString());
+    }
+
+    /**
+     * Constructor.
      * @param expected Expected XML document.
      */
     public SameXml(final String expected) {
