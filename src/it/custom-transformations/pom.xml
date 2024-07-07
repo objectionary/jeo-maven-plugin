@@ -93,17 +93,17 @@ SOFTWARE.
              Once it is implemented, this comment should be removed and the goal
              should be enabled.
           -->
-                    <execution>
-                      <id>convert-xmir-to-phi</id>
-                      <phase>process-classes</phase>
-                      <goals>
-                        <goal>xmir-to-phi</goal>
-                      </goals>
-                      <configuration>
-                        <phiInputDir>${project.build.directory}/generated-sources/jeo-xmir</phiInputDir>
-                        <phiOutputDir>${project.build.directory}/generated-sources/jeo-phi</phiOutputDir>
-                      </configuration>
-                    </execution>
+          <execution>
+            <id>convert-xmir-to-phi</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>xmir-to-phi</goal>
+            </goals>
+            <configuration>
+              <phiInputDir>${project.build.directory}/generated-sources/jeo-xmir</phiInputDir>
+              <phiOutputDir>${project.build.directory}/generated-sources/jeo-phi</phiOutputDir>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
