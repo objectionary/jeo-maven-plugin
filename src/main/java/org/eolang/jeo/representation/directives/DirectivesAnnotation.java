@@ -26,8 +26,10 @@ package org.eolang.jeo.representation.directives;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.MethodName;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -82,6 +84,8 @@ public final class DirectivesAnnotation implements Iterable<Directive>, Composit
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives().add("o")
             .attr("base", "annotation")
+            .attr("name", new MethodName("annotation", this.descriptor))
+            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
             .append(new DirectivesData(this.descriptor))
             .append(new DirectivesData(this.visible));
         this.properties.forEach(directives::append);

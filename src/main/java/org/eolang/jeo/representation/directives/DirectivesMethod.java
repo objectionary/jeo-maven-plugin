@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 import org.eolang.jeo.representation.MethodName;
 import org.xembly.Directive;
@@ -172,6 +173,8 @@ public final class DirectivesMethod implements Iterable<Directive> {
             .attr("name", "@")
             .add("o")
             .attr("base", "tuple")
+            .attr("name", "instructions")
+            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
             .attr("star", "");
         this.instructions.forEach(directives::append);
         directives.up();

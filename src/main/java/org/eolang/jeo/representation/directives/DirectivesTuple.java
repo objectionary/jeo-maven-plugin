@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.directives;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.Random;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -73,6 +74,7 @@ public final class DirectivesTuple implements Iterable<Directive> {
         final Directives tuple = new Directives()
             .add("o")
             .attr("base", "tuple")
+            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
             .attr("star", "");
         if (!"".equals(this.name)) {
             tuple.attr("name", this.name);
