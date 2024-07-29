@@ -179,6 +179,13 @@ SOFTWARE.
       <version>0.0.5</version>
     </dependency>
     <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest</artifactId>
+      <!-- version from the parent pom -->
+      <!-- compile scope required for sharing matchers -->
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-matchers</artifactId>
       <!-- version from the parent pom -->
@@ -193,12 +200,6 @@ SOFTWARE.
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <!-- version from the parent pom -->
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest</artifactId>
       <!-- version from the parent pom -->
       <scope>test</scope>
     </dependency>
