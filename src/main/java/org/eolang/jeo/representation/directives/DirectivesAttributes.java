@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -78,6 +79,8 @@ public final class DirectivesAttributes implements Iterable<Directive> {
         } else {
             final Directives directives = new Directives().add("o")
                 .attr("base", "tuple")
+                .attr("name", "attributes")
+                .attr("line", new Random().nextInt(Integer.MAX_VALUE))
                 .attr("star", "");
             this.attributes.forEach(directives::append);
             result = directives.up().iterator();

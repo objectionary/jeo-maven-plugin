@@ -70,16 +70,19 @@ public final class XmlAttribute {
                         .map(XmlOperand::new)
                         .map(XmlOperand::asObject)
                         .map(String.class::cast)
+                        .filter(s -> !s.isEmpty())
                         .orElse(null),
                     Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(1))
                         .map(XmlOperand::new)
                         .map(XmlOperand::asObject)
                         .map(String.class::cast)
+                        .filter(s -> !s.isEmpty())
                         .orElse(null),
                     Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(2))
                         .map(XmlOperand::new)
                         .map(XmlOperand::asObject)
                         .map(String.class::cast)
+                        .filter(s -> !s.isEmpty())
                         .orElse(null),
                     Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(3))
                         .map(XmlOperand::new)
