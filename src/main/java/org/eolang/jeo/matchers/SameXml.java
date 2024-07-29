@@ -75,7 +75,7 @@ public final class SameXml extends TypeSafeMatcher<String> {
 
     /**
      * The same XML, but without lines.
-     * @since 0.3.1
+     * @since 0.6
      */
     public static final class WithoutLines implements Scalar<XML> {
 
