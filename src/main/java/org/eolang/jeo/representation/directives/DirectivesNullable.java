@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.util.Collections;
 import java.util.Iterator;
 import org.eolang.jeo.representation.HexData;
 import org.xembly.Directive;
