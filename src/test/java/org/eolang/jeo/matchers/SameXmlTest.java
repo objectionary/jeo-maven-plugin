@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 final class SameXmlTest {
 
     @Test
-    void matchesXMLs() throws FileNotFoundException {
+    void matchesXmls() throws FileNotFoundException {
         final XML input = new XMLDocument(
             Paths.get("src", "test", "resources", "sample.xml")
         );
@@ -58,7 +58,7 @@ final class SameXmlTest {
     }
 
     @Test
-    void transformsToXMLWithoutLines() throws FileNotFoundException {
+    void transformsToXmlWithoutLines() throws FileNotFoundException {
         final XML lineless = new SameXml.WithoutLines(
             new XMLDocument(
                 Paths.get("src", "test", "resources", "sample.xml")
