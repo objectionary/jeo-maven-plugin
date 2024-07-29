@@ -43,8 +43,9 @@ final class SameXmlTest {
         final XML input = new XMLDocument(
             Paths.get("src", "test", "resources", "sample.xml")
         );
-        final String lineless =
-            "<root><o>data</o><anotherElement><o>data</o></anotherElement></root>";
+        final String lineless = new XMLDocument(
+            Paths.get("src", "test", "resources", "without-lines.xml")
+        ).toString();
         final boolean matches = new SameXml(input).matchesSafely(lineless);
         MatcherAssert.assertThat(
             String.format(
