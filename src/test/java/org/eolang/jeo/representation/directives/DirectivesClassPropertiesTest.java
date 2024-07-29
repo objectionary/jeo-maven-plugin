@@ -23,7 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import org.eolang.jeo.SameXml;
+import org.eolang.jeo.matchers.SameXml;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.xembly.Directives;

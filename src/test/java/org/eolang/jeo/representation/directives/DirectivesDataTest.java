@@ -23,7 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import org.eolang.jeo.SameXml;
+import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.DataType;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;

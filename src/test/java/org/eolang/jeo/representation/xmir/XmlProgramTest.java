@@ -25,7 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import org.eolang.jeo.SameXml;
+import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.ClassName;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
