@@ -37,11 +37,6 @@ import org.xembly.Xembler;
  * Smart comparison of XML documents that ignores 'line' attributes.
  * @since 0.6
  */
-@SuppressWarnings({
-    "JTCOP.RuleAllTestsHaveProductionClass",
-    "JTCOP.RuleCorrectTestName",
-    "JTCOP.RuleInheritanceInTests"
-})
 public final class SameXml extends TypeSafeMatcher<String> {
 
     /**
