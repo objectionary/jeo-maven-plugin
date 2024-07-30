@@ -28,7 +28,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
       - run: mvn clean install -P"qulice,long" --errors --batch-mode
-      - name: Print integration test logs
+      - name: Archive failure logs
+        uses: actions/upload-artifact@v4
         if: failure()
-        run: find . -name "build.log" | xargs cat
-
+        with:
+          name: build-log-files
+          path: |
+            target/**/build.log
