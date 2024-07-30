@@ -25,12 +25,8 @@ package org.eolang.jeo.matchers;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import org.cactoos.Scalar;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.xembly.Directives;
-import org.xembly.ImpossibleModificationException;
-import org.xembly.Xembler;
 
 /**
  * Matcher to check if the received XML document is the same as the expected one.

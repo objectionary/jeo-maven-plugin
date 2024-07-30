@@ -25,8 +25,6 @@ package org.eolang.jeo.matchers;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.io.FileNotFoundException;
-import java.nio.file.Paths;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
@@ -39,12 +37,28 @@ import org.junit.jupiter.api.Test;
 final class SameXmlTest {
 
     @Test
-    void matchesXmls() throws FileNotFoundException {
+    void matchesXmls() {
         final XML input = new XMLDocument(
-            Paths.get("src", "test", "resources", "sample.xml")
+            String.join(
+                "",
+                "<root>",
+                "<o line=\"val\">data</o>",
+                "<anotherElement>",
+                "<o line=\"\">data</o>",
+                "</anotherElement>",
+                "</root>"
+            )
         );
         final String lineless = new XMLDocument(
-            Paths.get("src", "test", "resources", "without-lines.xml")
+            String.join(
+                "",
+                "<root>",
+                "<o>data</o>",
+                "<anotherElement>",
+                "<o>data</o>",
+                "</anotherElement>",
+                "</root>"
+            )
         ).toString();
         final boolean matches = new SameXml(input).matchesSafely(lineless);
         MatcherAssert.assertThat(

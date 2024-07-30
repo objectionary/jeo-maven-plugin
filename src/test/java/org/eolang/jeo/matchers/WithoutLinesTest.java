@@ -25,8 +25,6 @@ package org.eolang.jeo.matchers;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.io.FileNotFoundException;
-import java.nio.file.Paths;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
@@ -39,14 +37,30 @@ import org.junit.jupiter.api.Test;
 final class WithoutLinesTest {
 
     @Test
-    void transformsToXmlWithoutLines() throws FileNotFoundException {
+    void transformsToXmlWithoutLines() {
         final XML lineless = new WithoutLines(
             new XMLDocument(
-                Paths.get("src", "test", "resources", "sample.xml")
+                String.join(
+                    "",
+                    "<root>",
+                    "<o line=\"val\">data</o>",
+                    "<anotherElement>",
+                    "<o line=\"\">data</o>",
+                    "</anotherElement>",
+                    "</root>"
+                )
             )
         ).value();
-        final XMLDocument expected = new XMLDocument(
-            Paths.get("src", "test", "resources", "without-lines.xml")
+        final XML expected = new XMLDocument(
+            String.join(
+                "",
+                "<root>",
+                "<o>data</o>",
+                "<anotherElement>",
+                "<o>data</o>",
+                "</anotherElement>",
+                "</root>"
+            )
         );
         MatcherAssert.assertThat(
             String.format(
