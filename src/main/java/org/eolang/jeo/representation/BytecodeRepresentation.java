@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import java.nio.file.Path;
 import java.util.Arrays;
 import lombok.ToString;
@@ -39,10 +38,8 @@ import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.directives.DirectivesClassVisitor;
-import org.eolang.parser.Schema;
 import org.objectweb.asm.ClassReader;
 import org.xembly.ImpossibleModificationException;
-import org.xembly.Xembler;
 
 /**
  * Intermediate representation of a class files which can be optimized from bytecode.
@@ -127,7 +124,7 @@ public final class BytecodeRepresentation implements Representation {
         );
         try {
             new ClassReader(this.input.value()).accept(directives, 0);
-            return new VerifiedXml(directives).asXml();
+            return new VerifiedEo(directives).asXml();
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(
                 String.format(
