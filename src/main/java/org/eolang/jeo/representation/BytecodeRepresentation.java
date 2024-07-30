@@ -127,9 +127,7 @@ public final class BytecodeRepresentation implements Representation {
         );
         try {
             new ClassReader(this.input.value()).accept(directives, 0);
-            final XMLDocument res = new XMLDocument(new Xembler(directives).xml());
-            new Schema(res).check();
-            return res;
+            return new VerifiedXml(directives).asXml();
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(
                 String.format(
