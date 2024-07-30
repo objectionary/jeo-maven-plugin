@@ -28,3 +28,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
       - run: mvn clean install -P"qulice,long" --errors --batch-mode
+      - name: Print integration test logs
+        if: failure()
+        run: echo target/its/takes/build.log
