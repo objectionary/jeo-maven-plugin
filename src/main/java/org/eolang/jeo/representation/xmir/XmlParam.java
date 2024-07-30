@@ -70,7 +70,8 @@ public final class XmlParam {
      * @return Annotations.
      */
     public List<BytecodeAnnotation> annotations() {
-        return this.root.children().filter(node -> node.hasAttribute("base", "annotation"))
+        return this.root.children()
+            .filter(node -> node.hasAttribute("base", "annotation"))
             .map(XmlAnnotation::new)
             .map(XmlAnnotation::toBytecode)
             .collect(Collectors.toList());

@@ -243,6 +243,7 @@ SOFTWARE.
           <pomExcludes>
             <exclude>spring-fat/pom.xml</exclude>
           </pomExcludes>
+          <streamLogs>true</streamLogs>
         </configuration>
       </plugin>
       <plugin>

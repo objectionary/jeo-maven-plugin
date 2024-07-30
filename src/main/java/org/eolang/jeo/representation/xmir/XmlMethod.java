@@ -188,7 +188,7 @@ public final class XmlMethod {
      * @return Maxs.
      */
     public Optional<XmlMaxs> maxs() {
-        return this.node.optchild("base", "maxs").map(XmlMaxs::new);
+        return this.node.optchild("name", "maxs").map(XmlMaxs::new);
     }
 
     /**
@@ -296,7 +296,7 @@ public final class XmlMethod {
                 new XmlNode(
                     new Xembler(
                         new Directives()
-                            .xpath("./o[@base='maxs']")
+                            .xpath("./o[@name='maxs']")
                             .remove()
                     ).apply(this.node.node())
                 )
@@ -389,7 +389,10 @@ public final class XmlMethod {
         final AtomicInteger index = new AtomicInteger(0);
         return new BytecodeParameters(
             this.node.children()
-                .filter(element -> element.hasAttribute("abstract", ""))
+                .filter(
+                    element -> element.hasAttribute("abstract", "")
+                        && !element.hasAttribute("name", "maxs")
+                )
                 .map(element -> new XmlParam(index.getAndIncrement(), element))
                 .collect(Collectors.toMap(XmlParam::index, XmlParam::annotations))
         );
