@@ -57,25 +57,4 @@ final class SameXmlTest {
             new IsEqual<>(true)
         );
     }
-
-    @Test
-    void transformsToXmlWithoutLines() throws FileNotFoundException {
-        final XML lineless = new SameXml.WithoutLines(
-            new XMLDocument(
-                Paths.get("src", "test", "resources", "sample.xml")
-            )
-        ).value();
-        final XMLDocument expected = new XMLDocument(
-            Paths.get("src", "test", "resources", "without-lines.xml")
-        );
-        MatcherAssert.assertThat(
-            String.format(
-                "XML transformed: '%s', but does not match with expected XML'%s'",
-                lineless,
-                expected
-            ),
-            lineless,
-            new IsEqual<>(expected)
-        );
-    }
 }

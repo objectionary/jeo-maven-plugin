@@ -25,51 +25,37 @@ package org.eolang.jeo.matchers;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import org.cactoos.Scalar;
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
-import org.xembly.Directives;
-import org.xembly.ImpossibleModificationException;
-import org.xembly.Xembler;
+import java.io.FileNotFoundException;
+import java.nio.file.Paths;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsEqual;
+import org.junit.jupiter.api.Test;
 
 /**
- * Matcher to check if the received XML document is the same as the expected one.
- * Smart comparison of XML documents that ignores 'line' attributes.
+ * Test case for {@link WithoutLines}.
+ *
  * @since 0.6
  */
-public final class SameXml extends TypeSafeMatcher<String> {
+final class WithoutLinesTest {
 
-    /**
-     * Expected XML document.
-     */
-    private final String expected;
-
-    /**
-     * Constructor.
-     * @param xml Expected XML document.
-     */
-    public SameXml(final XML xml) {
-        this(xml.toString());
-    }
-
-    /**
-     * Constructor.
-     * @param expected Expected XML document.
-     */
-    public SameXml(final String expected) {
-        this.expected = expected;
-    }
-
-    @Override
-    public boolean matchesSafely(final String item) {
-        return new WithoutLines(new XMLDocument(this.expected)).value()
-            .equals(new WithoutLines(new XMLDocument(item)).value());
-    }
-
-    @Override
-    public void describeTo(final Description description) {
-        description.appendText("XML documents is not the same.")
-            .appendText("Expected:\n")
-            .appendText(this.expected);
+    @Test
+    void transformsToXmlWithoutLines() throws FileNotFoundException {
+        final XML lineless = new WithoutLines(
+            new XMLDocument(
+                Paths.get("src", "test", "resources", "sample.xml")
+            )
+        ).value();
+        final XMLDocument expected = new XMLDocument(
+            Paths.get("src", "test", "resources", "without-lines.xml")
+        );
+        MatcherAssert.assertThat(
+            String.format(
+                "XML transformed: '%s', but does not match with expected XML'%s'",
+                lineless,
+                expected
+            ),
+            lineless,
+            new IsEqual<>(expected)
+        );
     }
 }
