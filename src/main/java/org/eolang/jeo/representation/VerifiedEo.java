@@ -53,11 +53,14 @@ final class VerifiedEo {
 
     /**
      * XML representation of the EO.
+     * We also check if the EO is correct.
      * @return XML representation.
      * @throws ImpossibleModificationException If something goes wrong.
      */
     XML asXml() throws ImpossibleModificationException {
-        final XML res = this.cleanAliases(new XMLDocument(new Xembler(this.directives).xml()));
+        final XML res = VerifiedEo.cleanAliases(
+            new XMLDocument(new Xembler(this.directives).xml())
+        );
         new Schema(res).check();
         return res;
     }
@@ -66,26 +69,26 @@ final class VerifiedEo {
      * Clean aliases from the EO if they are not needed.
      * @param original Original EO with aliases.
      * @return Clean EO.
+     * @throws ImpossibleModificationException If something goes wrong.
      * @todo #640:60min Remove {@link #cleanAliases(XML)} method.
      *  This method is some sort of crutch to remove aliases from the EO.
      *  Actually, it's better just not to add them if they are not needed.
      *  So, we need to remove this method and refactor the code to not add aliases.
      */
-    private XML cleanAliases(final XML original) {
+    private static XML cleanAliases(final XML original) throws ImpossibleModificationException {
+        final XML result;
         if (VerifiedEo.dontHaveInstructions(original)) {
-            try {
-                return new XMLDocument(
-                    new Xembler(
-                        new Directives()
-                            .xpath("./program/metas/meta[head[text()='alias']]")
-                            .remove()
-                    ).apply(original.node())
-                );
-            } catch (final ImpossibleModificationException exception) {
-                throw new RuntimeException(exception);
-            }
+            result = new XMLDocument(
+                new Xembler(
+                    new Directives()
+                        .xpath("./program/metas/meta[head[text()='alias']]")
+                        .remove()
+                ).apply(original.node())
+            );
+        } else {
+            result = original;
         }
-        return original;
+        return result;
     }
 
     /**
