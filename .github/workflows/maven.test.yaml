@@ -12,7 +12,12 @@ jobs:
     name: Tests
     strategy:
       matrix:
-        os: [ ubuntu-20.04, windows-2022, macos-12 ]
+        # @todo #640:30min Enable Windows OS.
+        #  To do so, you just need to add 'windows-2022' below.
+        #  However, we can do it, because of the following problem:
+        #  https://github.com/objectionary/eo/issues/3307
+        #  After the problem is resolved, we can enable Windows OS.
+        os: [ ubuntu-20.04, macos-12 ]
         java: [ 8, 11, 20 ]
     runs-on: ${{ matrix.os }}
     steps:
