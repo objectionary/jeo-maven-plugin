@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-20.04, windows-2022, macos-12 ]
-        java: [8, 11, 20 ]
+        java: [ 8, 11, 20 ]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -30,4 +30,5 @@ jobs:
       - run: mvn clean install -P"qulice,long" --errors --batch-mode
       - name: Print integration test logs
         if: failure()
-        run: echo target/its/takes/build.log
+        run: find . -name "build.log" | xargs cat
+
