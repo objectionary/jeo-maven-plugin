@@ -71,7 +71,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li >
-                            <span>                        <a href="apidocs-0.5.0/index.html" title="Javadoc">Javadoc</a>
+                            <span>                        <a href="apidocs-0.5.1/index.html" title="Javadoc">Javadoc</a>
         </span>
                                                                                                                                                                 <ul>
                                                                     </ul>
@@ -111,13 +111,13 @@
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">0.5.0</strong>
+                                    <strong itemprop="version">0.5.1</strong>
                                 </li>
                                 <li>
                                     
-                                    <time itemprop="datePublished" datetime="2024-07-07T04:34:01Z">
+                                    <time itemprop="datePublished" datetime="2024-07-31T10:02:56Z">
                                         
-                                        07-Jul-2024
+                                        31-Jul-2024
                                     </time>
                                 </li>
                                 <li class="menu-button">menu</li>
@@ -130,6 +130,8 @@
                                                 <article itemprop="articleBody">
                             <section>
 <h2><a name="Plugin_Documentation"></a>Plugin Documentation</h2><a name="Plugin_Documentation"></a>
+<p>This report describes goals, parameters details, requirements and sample usage of this plugin.</p><section>
+<h3><a name="Goals"></a>Goals</h3><a name="Goals"></a>
 <p>Goals available for this plugin:</p>
 <table border="0" class="bodyTable">
 <tr class="a">
@@ -140,7 +142,7 @@
 <td>Converts EO to bytecode. In other words, it assembles low-lever representation EO to bytecode that JVM can execute. The mojo that converts EO to bytecode only. It does not apply any improvements.</td></tr>
 <tr class="a">
 <td align="left"><a href="./disassemble-mojo.html">jeo:disassemble</a></td>
-<td>Converts bytecode to EO. In other words, it disassembles bytecode to low-level EO representation that contains opcodes and their values. The mojo that converts bytecode to EO only. It does not apply any improvements. It does not convert EO to bytecode back.</td></tr></table><section>
+<td>Converts bytecode to EO. In other words, it disassembles bytecode to low-level EO representation that contains opcodes and their values. The mojo that converts bytecode to EO only. It does not apply any improvements. It does not convert EO to bytecode back.</td></tr></table></section><section>
 <h3><a name="System_Requirements"></a>System Requirements</h3><a name="System_Requirements"></a>
 <p>The following specifies the minimum requirements to run this Maven plugin:</p>
 <table border="0" class="bodyTable">
@@ -150,6 +152,25 @@
 <tr class="b">
 <td align="left">JDK</td>
 <td>1.8</td></tr></table></section><section>
+<h3><a name="System_Requirements_History"></a>System Requirements History</h3><a name="System_Requirements_History"></a>
+<p>The following specifies the minimum requirements to run this Maven plugin for historical versions:</p>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>Plugin Version</th>
+<th>Maven</th>
+<th>JDK</th></tr>
+<tr class="b">
+<td align="left">from 0.4.6 to 0.5.0</td>
+<td>-</td>
+<td>8</td></tr>
+<tr class="a">
+<td align="left">from 0.1.0 to 0.4.5</td>
+<td>-</td>
+<td>11</td></tr>
+<tr class="b">
+<td align="left">0.0.1</td>
+<td>-</td>
+<td>8</td></tr></table></section><section>
 <h3><a name="Usage"></a>Usage</h3><a name="Usage"></a>
 <p>You should specify the version in your project's plugin configuration:</p>
 <div class="source">
@@ -162,7 +183,7 @@
         &lt;plugin&gt;
           &lt;groupId&gt;org.eolang&lt;/groupId&gt;
           &lt;artifactId&gt;jeo-maven-plugin&lt;/artifactId&gt;
-          &lt;version&gt;0.5.0&lt;/version&gt;
+          &lt;version&gt;0.5.1&lt;/version&gt;
         &lt;/plugin&gt;
         ...
       &lt;/plugins&gt;

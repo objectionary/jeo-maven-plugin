@@ -196,7 +196,7 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">     * @return Maxs.</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a>     <strong class="jxr_keyword">public</strong> Optional&lt;XmlMaxs&gt; maxs() {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.optchild(<span class="jxr_string">"base"</span>, <span class="jxr_string">"maxs"</span>).map(XmlMaxs::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.optchild(<span class="jxr_string">"name"</span>, <span class="jxr_string">"maxs"</span>).map(XmlMaxs::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L192" href="#L192">192</a>     }
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 
 <a class="jxr_linenumber" name="L194" href="#L194">194</a>     <em class="jxr_javadoccomment">/**</em>
@@ -304,7 +304,7 @@
 <a class="jxr_linenumber" name="L296" href="#L296">296</a>                 <strong class="jxr_keyword">new</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a>(
 <a class="jxr_linenumber" name="L297" href="#L297">297</a>                     <strong class="jxr_keyword">new</strong> Xembler(
 <a class="jxr_linenumber" name="L298" href="#L298">298</a>                         <strong class="jxr_keyword">new</strong> Directives()
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>                             .xpath(<span class="jxr_string">"./o[@base='maxs']"</span>)
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>                             .xpath(<span class="jxr_string">"./o[@name='maxs']"</span>)
 <a class="jxr_linenumber" name="L300" href="#L300">300</a>                             .remove()
 <a class="jxr_linenumber" name="L301" href="#L301">301</a>                     ).apply(<strong class="jxr_keyword">this</strong>.node.node())
 <a class="jxr_linenumber" name="L302" href="#L302">302</a>                 )
@@ -397,61 +397,64 @@
 <a class="jxr_linenumber" name="L389" href="#L389">389</a>         <strong class="jxr_keyword">final</strong> AtomicInteger index = <strong class="jxr_keyword">new</strong> AtomicInteger(0);
 <a class="jxr_linenumber" name="L390" href="#L390">390</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BytecodeParameters" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeParameters.html#BytecodeParameters">BytecodeParameters</a>(
 <a class="jxr_linenumber" name="L391" href="#L391">391</a>             <strong class="jxr_keyword">this</strong>.node.children()
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>                 .filter(element -&gt; element.hasAttribute(<span class="jxr_string">"abstract"</span>, <span class="jxr_string">""</span>))
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>                 .map(element -&gt; <strong class="jxr_keyword">new</strong> <a name="XmlParam" href="../../../../../org/eolang/jeo/representation/xmir/XmlParam.html#XmlParam">XmlParam</a>(index.getAndIncrement(), element))
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>                 .collect(Collectors.toMap(XmlParam::index, XmlParam::annotations))
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>         );
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>     }
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">     * Method exceptions.</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">     * @return Exceptions.</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>     <strong class="jxr_keyword">private</strong> String[] exceptions() {
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children().collect(Collectors.toList()).get(3)
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>             .children()
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>             .map(XmlNode::text)
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>             .map(HexString::<strong class="jxr_keyword">new</strong>)
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>             .map(HexString::decode)
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>             .toArray(String[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>     }
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">     * Create Method XmlNode by directives.</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">     * @param name Method name.</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">     * @param access Method access modifiers.</em>
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">     * @param descriptor Method descriptor.</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">     * @param stack Max stack.</em>
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">     * @param locals Max locals.</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">     * @param exceptions Method exceptions.</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">     * @return Method XmlNode.</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">     * @checkstyle ParameterNumberCheck (5 lines)</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a> prestructor(
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>         <strong class="jxr_keyword">final</strong> String name,
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> access,
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>         <strong class="jxr_keyword">final</strong> String descriptor,
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> stack,
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> locals,
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>         <strong class="jxr_keyword">final</strong> String... exceptions
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>     ) {
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>         <strong class="jxr_keyword">final</strong> <a name="DirectivesMethodProperties" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethodProperties.html#DirectivesMethodProperties">DirectivesMethodProperties</a> props = <strong class="jxr_keyword">new</strong> <a name="DirectivesMethodProperties" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethodProperties.html#DirectivesMethodProperties">DirectivesMethodProperties</a>(
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>             access, descriptor, <span class="jxr_string">""</span>, exceptions
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>         );
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>         props.maxs(stack, locals);
-<a class="jxr_linenumber" name="L436" href="#L436">436</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a>(
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>             <strong class="jxr_keyword">new</strong> Xembler(
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>                 <strong class="jxr_keyword">new</strong> <a name="DirectivesMethod" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethod.html#DirectivesMethod">DirectivesMethod</a>(
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>                     name,
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>                     props
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>                 ),
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>                 <strong class="jxr_keyword">new</strong> Transformers.Node()
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>             ).xmlQuietly()
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>         );
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>     }
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> }
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>                 .filter(
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>                     element -&gt; element.hasAttribute(<span class="jxr_string">"abstract"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>                         &amp;&amp; !element.hasAttribute(<span class="jxr_string">"name"</span>, <span class="jxr_string">"maxs"</span>)
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>                 )
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>                 .map(element -&gt; <strong class="jxr_keyword">new</strong> <a name="XmlParam" href="../../../../../org/eolang/jeo/representation/xmir/XmlParam.html#XmlParam">XmlParam</a>(index.getAndIncrement(), element))
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>                 .collect(Collectors.toMap(XmlParam::index, XmlParam::annotations))
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>         );
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>     }
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">     * Method exceptions.</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">     * @return Exceptions.</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>     <strong class="jxr_keyword">private</strong> String[] exceptions() {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children().collect(Collectors.toList()).get(3)
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>             .children()
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>             .map(XmlNode::text)
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>             .map(HexString::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>             .map(HexString::decode)
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>             .toArray(String[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>     }
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">     * Create Method XmlNode by directives.</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">     * @param name Method name.</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">     * @param access Method access modifiers.</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">     * @param descriptor Method descriptor.</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">     * @param stack Max stack.</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">     * @param locals Max locals.</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">     * @param exceptions Method exceptions.</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">     * @return Method XmlNode.</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">     * @checkstyle ParameterNumberCheck (5 lines)</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a> prestructor(
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>         <strong class="jxr_keyword">final</strong> String name,
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> access,
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>         <strong class="jxr_keyword">final</strong> String descriptor,
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> stack,
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> locals,
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>         <strong class="jxr_keyword">final</strong> String... exceptions
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>     ) {
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>         <strong class="jxr_keyword">final</strong> <a name="DirectivesMethodProperties" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethodProperties.html#DirectivesMethodProperties">DirectivesMethodProperties</a> props = <strong class="jxr_keyword">new</strong> <a name="DirectivesMethodProperties" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethodProperties.html#DirectivesMethodProperties">DirectivesMethodProperties</a>(
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>             access, descriptor, <span class="jxr_string">""</span>, exceptions
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>         );
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>         props.maxs(stack, locals);
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a>(
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>             <strong class="jxr_keyword">new</strong> Xembler(
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>                 <strong class="jxr_keyword">new</strong> <a name="DirectivesMethod" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethod.html#DirectivesMethod">DirectivesMethod</a>(
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>                     name,
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>                     props
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>                 ),
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>                 <strong class="jxr_keyword">new</strong> Transformers.Node()
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>             ).xmlQuietly()
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>         );
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>     }
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
