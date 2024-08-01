@@ -270,7 +270,7 @@ SOFTWARE.
   </build>
   <profiles>
     <profile>
-      <id>java8</id>
+      <id>quliceJava8</id>
       <activation>
         <jdk>1.8</jdk>
       </activation>
@@ -307,6 +307,9 @@ SOFTWARE.
     </profile>
     <profile>
       <id>qulice</id>
+      <activation>
+        <jdk>[11,)</jdk>
+      </activation>
       <build>
         <plugins>
           <plugin>
