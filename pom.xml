@@ -270,82 +270,9 @@ SOFTWARE.
   </build>
   <profiles>
     <profile>
-      <id>quliceJava8</id>
-      <activation>
-        <jdk>1.8</jdk>
-      </activation>
+      <id>check</id>
       <build>
         <plugins>
-          <plugin>
-            <groupId>com.qulice</groupId>
-            <artifactId>qulice-maven-plugin</artifactId>
-            <version>0.22.1</version>
-            <configuration>
-              <license>file:${basedir}/LICENSE.txt</license>
-              <excludes>
-                <exclude>checkstyle:.*/BytecodeInstructionEntry.java</exclude>
-                <exclude>pmd:/src/test/resources/.*</exclude>
-                <exclude>pmd:/src/it/.*</exclude>
-                <exclude>checkstyle:/src/site/.*</exclude>
-                <exclude>checkstyle:/src/test/resources/.*</exclude>
-                <exclude>checkstyle:/src/main/resources/.*</exclude>
-                <exclude>checkstyle:/src/it/.*</exclude>
-                <exclude>duplicatefinder:.*</exclude>
-                <exclude>dependencies:.*</exclude>
-              </excludes>
-            </configuration>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>check</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>qulice</id>
-      <activation>
-        <jdk>[11,)</jdk>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>com.qulice</groupId>
-            <artifactId>qulice-maven-plugin</artifactId>
-            <version>0.23.0</version>
-            <configuration>
-              <license>file:${basedir}/LICENSE.txt</license>
-              <excludes>
-                <exclude>checkstyle:.*/BytecodeInstructionEntry.java</exclude>
-                <exclude>pmd:/src/test/resources/.*</exclude>
-                <exclude>pmd:/src/it/.*</exclude>
-                <exclude>checkstyle:/src/site/.*</exclude>
-                <exclude>checkstyle:/src/test/resources/.*</exclude>
-                <exclude>checkstyle:/src/main/resources/.*</exclude>
-                <exclude>checkstyle:/src/it/.*</exclude>
-                <exclude>duplicatefinder:.*</exclude>
-                <!--
-                  @todo #30:30min Enable dependency check.
-                    The qulice library has an issue related to dependency check.
-                    You can find more details here:
-                    - https://github.com/yegor256/qulice/issues/1145
-                    When this issue is fixed, we should enable dependency check.
-                    Don't forget to remove the exclude below and this puzzle.
-                -->
-                <exclude>dependencies:.*</exclude>
-              </excludes>
-            </configuration>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>check</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
           <plugin>
             <groupId>com.github.volodya-lombrozo</groupId>
             <artifactId>jtcop-maven-plugin</artifactId>
@@ -431,6 +358,86 @@ SOFTWARE.
                 <phase>prepare-package</phase>
                 <goals>
                   <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>quliceJava8</id>
+      <activation>
+        <jdk>1.8</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.qulice</groupId>
+            <artifactId>qulice-maven-plugin</artifactId>
+            <version>0.22.1</version>
+            <configuration>
+              <license>file:${basedir}/LICENSE.txt</license>
+              <excludes>
+                <exclude>checkstyle:.*/BytecodeInstructionEntry.java</exclude>
+                <exclude>pmd:/src/test/resources/.*</exclude>
+                <exclude>pmd:/src/it/.*</exclude>
+                <exclude>checkstyle:/src/site/.*</exclude>
+                <exclude>checkstyle:/src/test/resources/.*</exclude>
+                <exclude>checkstyle:/src/main/resources/.*</exclude>
+                <exclude>checkstyle:/src/it/.*</exclude>
+                <exclude>duplicatefinder:.*</exclude>
+                <exclude>dependencies:.*</exclude>
+              </excludes>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>qulice</id>
+      <activation>
+        <jdk>[11,)</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.qulice</groupId>
+            <artifactId>qulice-maven-plugin</artifactId>
+            <version>0.23.0</version>
+            <configuration>
+              <license>file:${basedir}/LICENSE.txt</license>
+              <excludes>
+                <exclude>checkstyle:.*/BytecodeInstructionEntry.java</exclude>
+                <exclude>pmd:/src/test/resources/.*</exclude>
+                <exclude>pmd:/src/it/.*</exclude>
+                <exclude>checkstyle:/src/site/.*</exclude>
+                <exclude>checkstyle:/src/test/resources/.*</exclude>
+                <exclude>checkstyle:/src/main/resources/.*</exclude>
+                <exclude>checkstyle:/src/it/.*</exclude>
+                <exclude>duplicatefinder:.*</exclude>
+                <!--
+                  @todo #30:30min Enable dependency check.
+                    The qulice library has an issue related to dependency check.
+                    You can find more details here:
+                    - https://github.com/yegor256/qulice/issues/1145
+                    When this issue is fixed, we should enable dependency check.
+                    Don't forget to remove the exclude below and this puzzle.
+                -->
+                <exclude>dependencies:.*</exclude>
+              </excludes>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>check</goal>
                 </goals>
               </execution>
             </executions>
