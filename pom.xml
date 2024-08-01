@@ -312,12 +312,6 @@ SOFTWARE.
           <plugin>
             <groupId>com.qulice</groupId>
             <artifactId>qulice-maven-plugin</artifactId>
-            <!--
-              @todo #648:30min Upgrade qulice-maven-plugin version.
-               Currently we can't do it because qulice fails on ubuntu 20.04 and Java 8.
-               We should find the original reason why this happens and upgrade the version.
-               Up to 0.23.0, or latest.
-            -->
             <version>0.23.0</version>
             <configuration>
               <license>file:${basedir}/LICENSE.txt</license>
