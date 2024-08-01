@@ -18,7 +18,7 @@ jobs:
         #  https://github.com/objectionary/eo/issues/3307
         #  After the problem is resolved, we can enable Windows OS.
         os: [ ubuntu-20.04, macos-12 ]
-        java: [ 8, 11, 20 ]
+        java: [ 8, 11, 21 ]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
