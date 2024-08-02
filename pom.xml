@@ -288,6 +288,14 @@ SOFTWARE.
                 <exclude>checkstyle:/src/main/resources/.*</exclude>
                 <exclude>checkstyle:/src/it/.*</exclude>
                 <exclude>duplicatefinder:.*</exclude>
+                <!--
+                  @todo #30:30min Enable dependency check.
+                    The qulice library has an issue related to dependency check.
+                    You can find more details here:
+                    - https://github.com/yegor256/qulice/issues/1145
+                    When this issue is fixed, we should enable dependency check.
+                    Don't forget to remove the exclude below and this puzzle.
+                -->
                 <exclude>dependencies:.*</exclude>
               </excludes>
             </configuration>
