@@ -86,7 +86,7 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
         final Type[] arguments = Type.getArgumentTypes(this.descriptor);
         for (int index = 0; index < arguments.length; ++index) {
             final Directives param = directives.add("o")
-                .attr("abstract", "")
+                .attr("base", "param")
                 .attr("name", String.format("arg__%s__%d", arguments[index], index));
             if (this.annotations.containsKey(index)) {
                 this.annotations.get(index).forEach(param::append);

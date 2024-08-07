@@ -390,7 +390,7 @@ public final class XmlMethod {
         return new BytecodeParameters(
             this.node.children()
                 .filter(
-                    element -> element.hasAttribute("abstract", "")
+                    element -> element.hasAttribute("base", "param")
                         && !element.hasAttribute("name", "maxs")
                 )
                 .map(element -> new XmlParam(index.getAndIncrement(), element))
