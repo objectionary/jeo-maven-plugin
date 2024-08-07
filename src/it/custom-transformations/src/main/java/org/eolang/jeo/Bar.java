@@ -12,4 +12,12 @@ public class Bar {
         short s = 256;
         System.out.println(s);
     }
+
+    public int sum(int a, int b) {
+        return a + b;
+    }
+
+    public int sub(int a, int b) {
+        return a - b;
+    }
 }
