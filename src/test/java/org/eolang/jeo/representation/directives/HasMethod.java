@@ -203,7 +203,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
     private Stream<String> parameters() {
         final String root = this.root();
         return this.params.stream()
-            .map(param -> String.format("%s/o[@name='%s']/@name", root, param));
+            .map(param -> String.format("%s/o[@name='%s' and @base='param']/@name", root, param));
     }
 
     /**
