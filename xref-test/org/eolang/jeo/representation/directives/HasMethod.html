@@ -211,7 +211,7 @@
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>     <strong class="jxr_keyword">private</strong> Stream&lt;String&gt; parameters() {
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>         <strong class="jxr_keyword">final</strong> String root = <strong class="jxr_keyword">this</strong>.root();
 <a class="jxr_linenumber" name="L205" href="#L205">205</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.params.stream()
-<a class="jxr_linenumber" name="L206" href="#L206">206</a>             .map(param -&gt; String.format(<span class="jxr_string">"%s/o[@name='%s']/@name"</span>, root, param));
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>             .map(param -&gt; String.format(<span class="jxr_string">"%s/o[@name='%s' and @base='param']/@name"</span>, root, param));
 <a class="jxr_linenumber" name="L207" href="#L207">207</a>     }
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 
 <a class="jxr_linenumber" name="L209" href="#L209">209</a>     <em class="jxr_javadoccomment">/**</em>

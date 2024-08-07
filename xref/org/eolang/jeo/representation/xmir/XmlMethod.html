@@ -398,7 +398,7 @@
 <a class="jxr_linenumber" name="L390" href="#L390">390</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BytecodeParameters" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeParameters.html#BytecodeParameters">BytecodeParameters</a>(
 <a class="jxr_linenumber" name="L391" href="#L391">391</a>             <strong class="jxr_keyword">this</strong>.node.children()
 <a class="jxr_linenumber" name="L392" href="#L392">392</a>                 .filter(
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>                     element -&gt; element.hasAttribute(<span class="jxr_string">"abstract"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>                     element -&gt; element.hasAttribute(<span class="jxr_string">"base"</span>, <span class="jxr_string">"param"</span>)
 <a class="jxr_linenumber" name="L394" href="#L394">394</a>                         &amp;&amp; !element.hasAttribute(<span class="jxr_string">"name"</span>, <span class="jxr_string">"maxs"</span>)
 <a class="jxr_linenumber" name="L395" href="#L395">395</a>                 )
 <a class="jxr_linenumber" name="L396" href="#L396">396</a>                 .map(element -&gt; <strong class="jxr_keyword">new</strong> <a name="XmlParam" href="../../../../../org/eolang/jeo/representation/xmir/XmlParam.html#XmlParam">XmlParam</a>(index.getAndIncrement(), element))
