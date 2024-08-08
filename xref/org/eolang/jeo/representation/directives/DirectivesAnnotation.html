@@ -92,14 +92,20 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">final</strong> Directives directives = <strong class="jxr_keyword">new</strong> Directives().add(<span class="jxr_string">"o"</span>)
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>              .attr(<span class="jxr_string">"base"</span>, <span class="jxr_string">"annotation"</span>)
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>              .attr(<span class="jxr_string">"name"</span>, <strong class="jxr_keyword">new</strong> <a name="MethodName" href="../../../../../org/eolang/jeo/representation/MethodName.html#MethodName">MethodName</a>(<span class="jxr_string">"annotation"</span>, <strong class="jxr_keyword">this</strong>.descriptor))
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>              .attr(<span class="jxr_string">"line"</span>, <strong class="jxr_keyword">new</strong> Random().nextInt(Integer.MAX_VALUE))
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<strong class="jxr_keyword">this</strong>.descriptor))
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<strong class="jxr_keyword">this</strong>.visible));
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>          <strong class="jxr_keyword">this</strong>.properties.forEach(directives::append);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>          <strong class="jxr_keyword">return</strong> directives.up().iterator();
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      }
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>              .attr(
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>                  <span class="jxr_string">"name"</span>,
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>                  <strong class="jxr_keyword">new</strong> <a name="MethodName" href="../../../../../org/eolang/jeo/representation/MethodName.html#MethodName">MethodName</a>(
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>                      String.format(<span class="jxr_string">"annotation-%d"</span>, <strong class="jxr_keyword">new</strong> Random().nextInt(Integer.MAX_VALUE)),
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>                      <strong class="jxr_keyword">this</strong>.descriptor
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>                  ).encoded()
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>              )
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>              .attr(<span class="jxr_string">"line"</span>, <strong class="jxr_keyword">new</strong> Random().nextInt(Integer.MAX_VALUE))
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<strong class="jxr_keyword">this</strong>.descriptor))
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<strong class="jxr_keyword">this</strong>.visible));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <strong class="jxr_keyword">this</strong>.properties.forEach(directives::append);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>          <strong class="jxr_keyword">return</strong> directives.up().iterator();
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      }
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
