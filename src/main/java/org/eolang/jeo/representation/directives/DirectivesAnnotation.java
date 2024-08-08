@@ -84,7 +84,7 @@ public final class DirectivesAnnotation implements Iterable<Directive>, Composit
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives().add("o")
             .attr("base", "annotation")
-            .attr("name", new MethodName("annotation", this.descriptor))
+            .attr("name", new MethodName("annotation", this.descriptor).encoded())
             .attr("line", new Random().nextInt(Integer.MAX_VALUE))
             .append(new DirectivesData(this.descriptor))
             .append(new DirectivesData(this.visible));
