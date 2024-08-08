@@ -23,7 +23,9 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -39,6 +41,12 @@ import org.xembly.Directives;
  * @since 0.1
  */
 public final class DirectivesMethodParams implements Iterable<Directive> {
+
+    /**
+     * Base64 decoder.
+     */
+    private static final Base64.Encoder ENCODER = Base64.getEncoder();
+
 
     /**
      * Method descriptor.
@@ -87,7 +95,16 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
         for (int index = 0; index < arguments.length; ++index) {
             final Directives param = directives.add("o")
                 .attr("base", "param")
-                .attr("name", String.format("param-%s-%d", arguments[index], index));
+                .attr(
+                    "name",
+                    String.format(
+                        "param-%s-%d",
+                        DirectivesMethodParams.ENCODER.encodeToString(
+                            arguments[index].toString().getBytes(StandardCharsets.UTF_8)
+                        ),
+                        index
+                    )
+                );
             if (this.annotations.containsKey(index)) {
                 this.annotations.get(index).forEach(param::append);
             }

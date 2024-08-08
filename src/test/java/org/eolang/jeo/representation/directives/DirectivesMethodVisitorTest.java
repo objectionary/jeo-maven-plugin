@@ -139,8 +139,8 @@ final class DirectivesMethodVisitorTest {
             xml,
             new HasMethod(method)
                 .inside(clazz)
-                .withParameter("param-I-0")
-                .withParameter("param-I-1")
+                .withParameter("param-SQ==-0")
+                .withParameter("param-SQ==-1")
         );
     }
 
