@@ -47,7 +47,6 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
      */
     private static final Base64.Encoder ENCODER = Base64.getEncoder();
 
-
     /**
      * Method descriptor.
      */
