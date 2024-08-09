@@ -250,7 +250,6 @@ SOFTWARE.
           <pomExcludes>
             <exclude>spring-fat/pom.xml</exclude>
           </pomExcludes>
-
         </configuration>
       </plugin>
       <plugin>
