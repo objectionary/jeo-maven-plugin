@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.bytecode;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XML;
 import org.eolang.jeo.representation.BytecodeRepresentation;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
