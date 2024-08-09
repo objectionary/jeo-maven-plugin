@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.log.Logger;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -78,8 +79,9 @@ public class Disassembler {
             )
         ).apply(new BytecodeRepresentations(this.classes).all());
         stream.forEach(
-            terminate -> {
-            }
+            terminated -> Logger.info(
+                this, "Dissembling of '%s' finished successfully.", terminated.details().name()
+            )
         );
         stream.close();
     }

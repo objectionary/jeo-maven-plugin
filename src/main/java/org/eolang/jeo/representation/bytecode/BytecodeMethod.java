@@ -156,6 +156,10 @@ public final class BytecodeMethod implements Testable {
         return this.clazz;
     }
 
+    public BytecodeMethod label(final String uid) {
+        return this.label(this.labels.label(uid));
+    }
+
     /**
      * Add label.
      * @param label Label.

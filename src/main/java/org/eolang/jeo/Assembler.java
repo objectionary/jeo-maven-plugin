@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.log.Logger;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -81,8 +82,9 @@ final class Assembler {
             )
         ).apply(new XmirRepresentations(this.input, this.verify).all());
         stream.forEach(
-            terminate -> {
-            }
+            terminated -> Logger.info(
+                this, "Assembling of '%s' finished successfully.", terminated.details().name()
+            )
         );
         stream.close();
     }

@@ -29,12 +29,14 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import lombok.ToString;
 
 /**
  * Details of representation.
  * Additional info about representation.
  * @since 0.1
  */
+@ToString
 public class Details {
 
     /**
