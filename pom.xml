@@ -238,13 +238,50 @@ SOFTWARE.
     </testResources>
     <plugins>
       <plugin>
-        <artifactId>maven-plugin-plugin</artifactId>
+        <artifactId>maven-compiler-plugin</artifactId>
         <executions>
           <execution>
+            <id>default-compile</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>default-testCompile</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>java-compile</id>
+            <phase>compile</phase>
             <goals>
-              <goal>helpmojo</goal>
-              <goal>descriptor</goal>
+              <goal>compile</goal>
             </goals>
+            <configuration>
+              <excludes>
+                <exclude>**/HelpMojo.java</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>java-test-compile</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+            <configuration>
+              <compilerArgument>-Xlint:-processing</compilerArgument>
+            </configuration>
+          </execution>
+          <execution>
+            <id>compile-helpmojo</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <release>8</release>
+              <includes>
+                <include>**/HelpMojo.java</include>
+              </includes>
+              <failOnWarning>false</failOnWarning>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -269,6 +306,12 @@ SOFTWARE.
           <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
         </configuration>
         <executions>
+          <execution>
+            <goals>
+              <goal>helpmojo</goal>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
           <execution>
             <id>mojo-descriptor</id>
             <goals>
