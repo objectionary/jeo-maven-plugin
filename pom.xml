@@ -238,6 +238,17 @@ SOFTWARE.
     </testResources>
     <plugins>
       <plugin>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>helpmojo</goal>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-invoker-plugin</artifactId>
         <configuration>
           <!--
