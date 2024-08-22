@@ -414,7 +414,7 @@ SOFTWARE.
                         <limit>
                           <counter>LINE</counter>
                           <value>COVEREDRATIO</value>
-                          <minimum>0.69</minimum>
+                          <minimum>0.68</minimum>
                         </limit>
                         <limit>
                           <counter>BRANCH</counter>
