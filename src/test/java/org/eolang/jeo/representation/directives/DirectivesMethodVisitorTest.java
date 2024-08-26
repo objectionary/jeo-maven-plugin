@@ -392,7 +392,7 @@ final class DirectivesMethodVisitorTest {
             "Iinc instruction wasn't visited successfully.",
             new Xembler(method).xml(),
             Matchers.allOf(
-                Matchers.containsString("IINC"),
+                Matchers.containsString("iinc"),
                 Matchers.containsString("1"),
                 Matchers.containsString("2")
             )

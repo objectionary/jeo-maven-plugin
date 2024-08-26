@@ -62,17 +62,17 @@ final class OpcodeNameTest {
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> opcodes() {
         return Stream.of(
-            Arguments.of(Opcodes.INVOKESPECIAL, "INVOKESPECIAL-1"),
-            Arguments.of(Opcodes.INVOKEVIRTUAL, "INVOKEVIRTUAL-2"),
-            Arguments.of(Opcodes.INVOKESTATIC, "INVOKESTATIC-3"),
-            Arguments.of(Opcodes.INVOKEINTERFACE, "INVOKEINTERFACE-4"),
-            Arguments.of(Opcodes.INVOKEDYNAMIC, "INVOKEDYNAMIC-5"),
-            Arguments.of(Opcodes.DUP, "DUP-6"),
-            Arguments.of(Opcodes.LDC, "LDC-7"),
-            Arguments.of(Opcodes.ALOAD, "ALOAD-8"),
-            Arguments.of(Opcodes.ASTORE, "ASTORE-9"),
-            Arguments.of(Opcodes.ILOAD, "ILOAD-A"),
-            Arguments.of(Opcodes.ISTORE, "ISTORE-B")
+            Arguments.of(Opcodes.INVOKESPECIAL, "invokespecial-1"),
+            Arguments.of(Opcodes.INVOKEVIRTUAL, "invokevirtual-2"),
+            Arguments.of(Opcodes.INVOKESTATIC, "invokestatic-3"),
+            Arguments.of(Opcodes.INVOKEINTERFACE, "invokeinterface-4"),
+            Arguments.of(Opcodes.INVOKEDYNAMIC, "invokedynamic-5"),
+            Arguments.of(Opcodes.DUP, "dup-6"),
+            Arguments.of(Opcodes.LDC, "ldc-7"),
+            Arguments.of(Opcodes.ALOAD, "aload-8"),
+            Arguments.of(Opcodes.ASTORE, "astore-9"),
+            Arguments.of(Opcodes.ILOAD, "iload-A"),
+            Arguments.of(Opcodes.ISTORE, "istore-B")
         );
     }
 }
