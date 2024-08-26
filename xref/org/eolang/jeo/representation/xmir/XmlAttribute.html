@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>                      String.format(<span class="jxr_string">"Attribute base is missing in XML node %s"</span>, <strong class="jxr_keyword">this</strong>.node)
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>                  )
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>              );
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"InnerClass"</span>.equals(base)) {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"inner-class"</span>.equals(base)) {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>              bytecode.withAttribute(
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>                  <strong class="jxr_keyword">new</strong> BytecodeAttribute.InnerClass(
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>                      Optional.ofNullable(<strong class="jxr_keyword">this</strong>.node.children().collect(Collectors.toList()).get(0))
