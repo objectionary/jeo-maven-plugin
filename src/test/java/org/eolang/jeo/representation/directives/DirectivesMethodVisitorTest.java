@@ -378,7 +378,7 @@ final class DirectivesMethodVisitorTest {
             "MultiArray instruction wasn't visited successfully.",
             new Xembler(method).xml(),
             Matchers.allOf(
-                Matchers.containsString("MULTIANEWARRAY"),
+                Matchers.containsString("multianewarray"),
                 Matchers.containsString("2")
             )
         );
@@ -409,7 +409,7 @@ final class DirectivesMethodVisitorTest {
             "LookupSwitch instruction wasn't visited successfully.",
             new Xembler(method).xml(),
             Matchers.allOf(
-                Matchers.containsString("LOOKUPSWITCH"),
+                Matchers.containsString("lookupswitch"),
                 Matchers.containsString("1"),
                 Matchers.containsString("2"),
                 Matchers.containsString("3"),
@@ -428,7 +428,7 @@ final class DirectivesMethodVisitorTest {
             "TableSwitch instruction wasn't visited successfully.",
             new Xembler(method).xml(),
             Matchers.allOf(
-                Matchers.containsString("TABLESWITCH"),
+                Matchers.containsString("tableswitch"),
                 Matchers.containsString("1"),
                 Matchers.containsString("3"),
                 Matchers.containsString("label")

@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.objectweb.asm.Opcodes;
@@ -46,6 +47,11 @@ public final class OpcodeName {
      * Default counter.
      */
     private static final AtomicInteger DEFAULT = new AtomicInteger(0);
+
+    /**
+     * Unknown opcode name.
+     */
+    private static final String UNKNOWN = "unknown";
 
     /**
      * Bytecode operation code.
@@ -80,7 +86,7 @@ public final class OpcodeName {
      * @return Simplified opcode name.
      */
     public String simplified() {
-        return OpcodeName.NAMES.getOrDefault(this.opcode, "UNKNOWN");
+        return OpcodeName.NAMES.getOrDefault(this.opcode, OpcodeName.UNKNOWN);
     }
 
     /**
@@ -88,7 +94,7 @@ public final class OpcodeName {
      * @return String representation of a bytecode.
      */
     public String asString() {
-        final String opc = OpcodeName.NAMES.getOrDefault(this.opcode, "UNKNOWN");
+        final String opc = OpcodeName.NAMES.getOrDefault(this.opcode, OpcodeName.UNKNOWN);
         return String.format("%s-%X", opc, this.counter.incrementAndGet());
     }
 
@@ -101,7 +107,7 @@ public final class OpcodeName {
             final Map<Integer, String> res = new HashMap<>();
             for (final Field field : Opcodes.class.getFields()) {
                 if (field.getType() == int.class) {
-                    res.put(field.getInt(Opcodes.class), field.getName());
+                    res.put(field.getInt(Opcodes.class), field.getName().toLowerCase(Locale.ROOT));
                 }
             }
             return res;
