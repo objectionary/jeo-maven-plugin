@@ -63,7 +63,7 @@ public final class XmlAttribute {
                     String.format("Attribute base is missing in XML node %s", this.node)
                 )
             );
-        if ("InnerClass".equals(base)) {
+        if ("inner-class".equals(base)) {
             bytecode.withAttribute(
                 new BytecodeAttribute.InnerClass(
                     Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(0))

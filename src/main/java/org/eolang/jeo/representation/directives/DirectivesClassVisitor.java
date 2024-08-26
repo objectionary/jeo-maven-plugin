@@ -206,7 +206,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         this.program.top()
             .attribute(
                 new DirectivesAttribute(
-                    "InnerClass",
+                    "inner-class",
                     new DirectivesNullable("", name),
                     new DirectivesNullable("", outer),
                     new DirectivesNullable("", inner),
