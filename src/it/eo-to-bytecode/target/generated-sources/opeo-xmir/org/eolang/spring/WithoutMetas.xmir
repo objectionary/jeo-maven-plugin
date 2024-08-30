@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program dob="2024-08-30T14:32:31.695194Z"
+  ms="1725028351699"
+  name="j$WithoutMetas"
+  revision="0.0.0"
+  time="2024-08-30T14:32:31.695194Z"
+  version="0.0.0">
+  <listing>yv66vgAAADQAMwoAAgADBwAEDAAFAAYBABBqYXZhL2xhbmcvT2JqZWN0AQAGPGluaXQ+AQADKClWBkBFAAAAAAAACgAKAAsHAAwMAA0ADgEADmphdmEvbGFuZy9NYXRoAQADc2luAQAEKEQpRAkAEAARBwASDAATABQBABBqYXZhL2xhbmcvU3lzdGVtAQADb3V0AQAVTGphdmEvaW8vUHJpbnRTdHJlYW07CAAWAQANc2luKCVmKSA9ICVmCgoAGAAZBwAaDAAbABwBABBqYXZhL2xhbmcvRG91YmxlAQAHdmFsdWVPZgEAFShEKUxqYXZhL2xhbmcvRG91YmxlOwoAHgAfBwAgDAAhACIBABNqYXZhL2lvL1ByaW50U3RyZWFtAQAGcHJpbnRmAQA8KExqYXZhL2xhbmcvU3RyaW5nO1tMamF2YS9sYW5nL09iamVjdDspTGphdmEvaW8vUHJpbnRTdHJlYW07BwAkAQAZb3JnL2VvbGFuZy9qZW8vc3ByaW5nL0FwcAEABENvZGUBAA9MaW5lTnVtYmVyVGFibGUBABJMb2NhbFZhcmlhYmxlVGFibGUBAAR0aGlzAQAbTG9yZy9lb2xhbmcvamVvL3NwcmluZy9BcHA7AQAEbWFpbgEAFihbTGphdmEvbGFuZy9TdHJpbmc7KVYBAARhcmdzAQATW0xqYXZhL2xhbmcvU3RyaW5nOwEABWFuZ2xlAQABRAEAEE1ldGhvZFBhcmFtZXRlcnMBAApTb3VyY2VGaWxlAQAIQXBwLmphdmEAIQAjAAIAAAAAAAIAAQAFAAYAAQAlAAAALwABAAEAAAAFKrcAAbEAAAACACYAAAAGAAEAAAAeACcAAAAMAAEAAAAFACgAKQAAAAkAKgArAAIAJQAAAG8ABwAFAAAAJRQAB0gnuAAJSrIADxIVBb0AAlkDJ7gAF1NZBCm4ABdTtgAdV7EAAAACACYAAAASAAQAAAAgAAQAIQAJACIAJAAjACcAAAAgAAMAAAAlACwALQAAAAQAIQAuAC8AAQAJABwADQAvAAMAMAAAAAUBACwAAAABADEAAAACADI=</listing>
+  <errors/>
+  <sheets/>
+  <license/>
+  <metas/>
+  <objects>
+    <o abstract="" name="j$App">
+      <o base="int" data="bytes" line="1473606923" name="version">00 00 00 00 00 00 00 34</o>
+      <o base="int" data="bytes" line="802662048" name="access">00 00 00 00 00 00 00 21</o>
+      <o base="string" data="bytes" line="1870128174" name="supername">6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>
+      <o base="tuple" line="915060366" name="interfaces" star=""/>
+      <o abstract="" name="new-KClW">
+        <o base="int" data="bytes" line="13345701" name="access">00 00 00 00 00 00 00 01</o>
+        <o base="string" data="bytes" line="826053400" name="descriptor">28 29 56</o>
+        <o base="string" data="bytes" line="144287926" name="signature"/>
+        <o base="tuple" line="692225205" name="exceptions" star=""/>
+        <o abstract="" line="1953389670" name="maxs">
+          <o base="int" data="bytes" line="1595880184" name="stack">00 00 00 00 00 00 00 01</o>
+          <o base="int" data="bytes" line="6629062" name="locals">00 00 00 00 00 00 00 01</o>
+        </o>
+        <o base="seq" name="@">
+          <o base="tuple" line="319707463" name="instructions" star="">
+            <o base="label" data="bytes" line="395214061">66 33 63 63 30 30 32 30 2D 65 66 36 30 2D 34 63 39 66 2D 62 39 34 37 2D 61 36 65 38 62 39 34 30 34 62 37 31</o>
+            <o base="opcode" line="999" name="aload-1">
+              <o base="int" data="bytes" line="1914543386">00 00 00 00 00 00 00 19</o>
+              <o base="int" data="bytes" line="1275735963">00 00 00 00 00 00 00 00</o>
+            </o>
+            <o base="opcode" line="999" name="invokespecial-6">
+              <o base="int" data="bytes" line="1090425941">00 00 00 00 00 00 00 B7</o>
+              <o base="string" data="bytes" line="1229077614">6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>
+              <o base="string" data="bytes" line="354382675">3C 69 6E 69 74 3E</o>
+              <o base="string" data="bytes" line="1726678544">28 29 56</o>
+              <o base="bool" data="bytes" line="672853479">00</o>
+            </o>
+            <o base="opcode" line="999" name="return-8">
+              <o base="int" data="bytes" line="1271119602">00 00 00 00 00 00 00 B1</o>
+            </o>
+            <o base="label" data="bytes" line="972475114">65 31 62 36 33 66 34 65 2D 61 39 36 36 2D 34 61 65 66 2D 39 65 61 39 2D 34 62 63 38 65 32 64 62 66 37 37 39</o>
+          </o>
+        </o>
+      </o>
+    </o>
+  </objects>
+</program>
