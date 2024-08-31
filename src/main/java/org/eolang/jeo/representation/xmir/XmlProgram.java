@@ -145,15 +145,16 @@ public final class XmlProgram {
 
     /**
      * Retrieve program package.
+     * In case if metas are empty, or there is no package meta, or there is no tail, return empty
+     * string.
      *
      * @return Package.
      */
     String pckg() {
         return new XmlNode(this.root)
-            .child(XmlProgram.PROGRAM)
-            .child("metas")
-            .child("meta")
-            .child("tail")
-            .text();
+            .xpath("/program/metas/meta[head='package']/tail/text()")
+            .stream()
+            .findFirst()
+            .orElse("");
     }
 }

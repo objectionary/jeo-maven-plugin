@@ -102,6 +102,15 @@ public final class XmlNode {
     }
 
     /**
+     * Find elements by xpath.
+     * @param xpath XPath.
+     * @return List of elements.
+     */
+    public List<String> xpath(final String xpath) {
+        return new XMLDocument(this.node).xpath(xpath);
+    }
+
+    /**
      * Get optional child node.
      * @param name Child node name.
      * @return Child node.
