@@ -153,18 +153,19 @@
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">     * Retrieve program package.</em>
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">     * @return Package.</em>
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>     String pckg() {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a>(<strong class="jxr_keyword">this</strong>.root)
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>             .child(XmlProgram.PROGRAM)
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>             .child(<span class="jxr_string">"metas"</span>)
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>             .child(<span class="jxr_string">"meta"</span>)
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>             .child(<span class="jxr_string">"tail"</span>)
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>             .text();
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>     }
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> }
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">     * In case if metas are empty, or there is no package meta, or there is no tail, return empty</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">     * string.</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">     * @return Package.</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>     String pckg() {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a>(<strong class="jxr_keyword">this</strong>.root)
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>             .xpath(<span class="jxr_string">"/program/metas/meta[head='package']/tail/text()"</span>)
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>             .stream()
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>             .findFirst()
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>             .orElse(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>     }
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
