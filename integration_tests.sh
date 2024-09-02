@@ -2,6 +2,7 @@
 # This is us useful to find flaky bugs in the project.
 while [ true  ]; do
     echo "Running integration tests"
+    java --version
     mvn clean install -DskipTests
     if [[ "$?" -ne 0 ]]; then
       break

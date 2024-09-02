@@ -34,4 +34,4 @@ jobs:
         with:
           name: build-log-files
           path: |
-            target/**/build.log
+            target/
