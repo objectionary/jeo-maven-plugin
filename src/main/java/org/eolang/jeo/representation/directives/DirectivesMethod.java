@@ -222,11 +222,22 @@ public final class DirectivesMethod implements Iterable<Directive> {
         this.properties.paramAnnotation(parameter, annotation);
     }
 
+    /**
+     * True if method has opcodes.
+     * @return True if method has opcodes.
+     */
     public boolean hasOpcodes() {
         return this.instructions.stream().anyMatch(DirectivesInstruction.class::isInstance);
     }
 
+    /**
+     * True if method has labels.
+     * @return True if method has labels.
+     */
     public boolean hasLabels() {
-        return this.instructions.stream().anyMatch(DirectivesLabel.class::isInstance);
+        return this.instructions.stream()
+            .filter(DirectivesOperand.class::isInstance)
+            .map(DirectivesOperand.class::cast)
+            .anyMatch(DirectivesOperand::isLabel);
     }
 }

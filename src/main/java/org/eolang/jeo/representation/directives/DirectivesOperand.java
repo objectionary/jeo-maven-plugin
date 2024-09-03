@@ -50,7 +50,7 @@ public final class DirectivesOperand implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Iterator<Directive> result;
-        if (this.raw instanceof Label) {
+        if (this.isLabel()) {
             result = new DirectivesLabel((Label) this.raw).iterator();
         } else if (this.raw instanceof Handle) {
             result = new DirectivesHandle((Handle) this.raw).iterator();
@@ -58,5 +58,13 @@ public final class DirectivesOperand implements Iterable<Directive> {
             result = new DirectivesData(this.raw).iterator();
         }
         return result;
+    }
+
+    /**
+     * Is it a label?
+     * @return True if it is a label.
+     */
+    public boolean isLabel() {
+        return this.raw instanceof Label;
     }
 }
