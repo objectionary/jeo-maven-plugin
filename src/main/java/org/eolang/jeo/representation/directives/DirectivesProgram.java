@@ -52,11 +52,9 @@ public final class DirectivesProgram implements Iterable<Directive> {
     private final AtomicReference<DirectivesClass> klass;
 
     /**
-     * Top-level class name.
-     * This field uses atomic reference because the field can't be initialized in the constructor.
-     * It is ASM framework limitation.
+     * Metas.
      */
-    private final AtomicReference<ClassName> classname;
+    private final AtomicReference<DirectivesMetas> metas;
 
     /**
      * Simple constructor with empty listing.
@@ -82,21 +80,20 @@ public final class DirectivesProgram implements Iterable<Directive> {
     public DirectivesProgram(
         final String code,
         final AtomicReference<DirectivesClass> clazz,
-        final AtomicReference<ClassName> name
+        final AtomicReference<DirectivesMetas> name
     ) {
         this.listing = code;
         this.klass = clazz;
-        this.classname = name;
+        this.metas = name;
     }
 
     /**
      * Append top-level class.
-     * @param name Class Name.
      * @param clazz Top-level class.
      * @return The same instance.
      */
-    public DirectivesProgram withClass(final ClassName name, final DirectivesClass clazz) {
-        this.classname.set(name);
+    public DirectivesProgram withClass(final DirectivesMetas metas, final DirectivesClass clazz) {
+        this.metas.set(metas);
         this.klass.set(clazz);
         return this;
     }
@@ -107,7 +104,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
             .format(DateTimeFormatter.ISO_INSTANT);
         final Directives directives = new Directives();
         directives.add("program")
-            .attr("name", this.classname.get().name())
+            .attr("name", this.metas.get().name())
             .attr("version", "0.0.0")
             .attr("revision", "0.0.0")
             .attr("dob", now)
@@ -118,7 +115,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
             .add("errors").up()
             .add("sheets").up()
             .add("license").up()
-            .append(new DirectivesMetas(this.classname.get()))
+            .append(this.metas.get())
             .attr("ms", System.currentTimeMillis())
             .add("objects");
         directives.append(this.klass.get());

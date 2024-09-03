@@ -137,7 +137,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final ClassName classname = new ClassName(new JavaName(name).encode());
         this.metas.set(new DirectivesMetas(classname));
         this.program.withClass(
-            classname,
+            this.metas.get(),
             new DirectivesClass(
                 classname,
                 new DirectivesClassProperties(
@@ -221,6 +221,19 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
                     new DirectivesNullable("", access)
                 ));
         super.visitInnerClass(name, outer, inner, access);
+    }
+
+    @Override
+    public void visitEnd() {
+        final DirectivesClass clazz = this.program.top();
+        final DirectivesMetas aliases = this.metas.get();
+        if (clazz.hasOpcodes()) {
+            aliases.withOpcodes();
+        }
+        if (clazz.hasLabels()) {
+            aliases.withLabels();
+        }
+        super.visitEnd();
     }
 
     @Override

@@ -40,8 +40,14 @@ public final class DirectivesMetas implements Iterable<Directive> {
      */
     private final ClassName name;
 
+    /**
+     * Whether to include "opcodes" import.
+     */
     private final AtomicBoolean opcodes;
 
+    /**
+     * Whether to include "labels" import.
+     */
     private final AtomicBoolean labels;
 
     /**
@@ -70,6 +76,14 @@ public final class DirectivesMetas implements Iterable<Directive> {
     }
 
     /**
+     * Class name.
+     * @return The class name.
+     */
+    public ClassName name() {
+        return this.name;
+    }
+
+    /**
      * With opcodes.
      * @return The same instance with opcodes.
      */
@@ -92,17 +106,13 @@ public final class DirectivesMetas implements Iterable<Directive> {
         final String opcode = "org.eolang.jeo.opcode";
         final String label = "org.eolang.jeo.label";
         final String alias = "alias";
-
-        final Directives opdirs;
+        final Directives opdirs = new Directives();
         if (this.opcodes.get()) {
-            opdirs = new Directives()
-                .add("meta")
+            opdirs.add("meta")
                 .add("head").set(alias).up()
                 .add("tail").set(opcode).up()
                 .add("part").set(opcode).up()
                 .up();
-        } else {
-            opdirs = new Directives();
         }
         final Directives labeldirs = new Directives();
         if (this.labels.get()) {

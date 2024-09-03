@@ -154,6 +154,22 @@ public final class DirectivesClass implements Iterable<Directive> {
         return this;
     }
 
+    /**
+     * Check if class has opcodes.
+     * @return True if class has opcodes, false otherwise.
+     */
+    public boolean hasOpcodes() {
+        return this.methods.stream().anyMatch(DirectivesMethod::hasOpcodes);
+    }
+
+    /**
+     * Check if class has labels.
+     * @return True if class has labels, false otherwise.
+     */
+    public boolean hasLabels() {
+        return this.methods.stream().anyMatch(DirectivesMethod::hasLabels);
+    }
+
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives();

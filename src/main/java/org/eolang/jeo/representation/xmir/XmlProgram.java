@@ -27,6 +27,7 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.directives.DirectivesClass;
+import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.w3c.dom.Node;
 import org.xembly.Directives;
@@ -58,7 +59,10 @@ public final class XmlProgram {
         this(
             new XMLDocument(
                 new Xembler(
-                    new DirectivesProgram().withClass(name, new DirectivesClass(name))
+                    new DirectivesProgram().withClass(
+                        new DirectivesMetas(name),
+                        new DirectivesClass(name)
+                    )
                 ).xmlQuietly()
             ).node()
         );

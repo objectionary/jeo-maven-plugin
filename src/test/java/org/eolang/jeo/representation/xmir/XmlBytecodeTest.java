@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.directives.DirectivesClass;
+import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
@@ -80,7 +81,7 @@ final class XmlBytecodeTest {
         return new Xembler(
             new DirectivesProgram()
                 .withClass(
-                    name,
+                    new DirectivesMetas(name),
                     new DirectivesClass(name).method(
                         new DirectivesMethod(
                             "printElement",
@@ -131,7 +132,7 @@ final class XmlBytecodeTest {
         return new Xembler(
             new DirectivesProgram()
                 .withClass(
-                    name,
+                    new DirectivesMetas(name),
                     new DirectivesClass(name)
                         .method(
                             new DirectivesMethod(
