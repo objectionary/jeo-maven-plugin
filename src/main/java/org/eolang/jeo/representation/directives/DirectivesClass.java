@@ -68,14 +68,6 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param classname Class name.
-     */
-    public DirectivesClass(final String classname) {
-        this(new ClassName(classname));
-    }
-
-    /**
-     * Constructor.
      * @param name Class name
      */
     public DirectivesClass(final ClassName name) {

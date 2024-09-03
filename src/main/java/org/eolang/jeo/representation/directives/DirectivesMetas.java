@@ -24,12 +24,13 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.eolang.jeo.representation.ClassName;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
 /**
- * Directives for meta information of a class.
+ * Directives for meta-information of a class.
  * @since 0.1
  */
 public final class DirectivesMetas implements Iterable<Directive> {
@@ -38,6 +39,10 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * Class name.
      */
     private final ClassName name;
+
+    private final AtomicBoolean opcodes;
+
+    private final AtomicBoolean labels;
 
     /**
      * Constructor.
@@ -51,7 +56,35 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * @param classname Class name.
      */
     public DirectivesMetas(final ClassName classname) {
+        this(classname, false, false);
+    }
+
+    public DirectivesMetas(
+        final ClassName classname,
+        final boolean opcodes,
+        final boolean labels
+    ) {
         this.name = classname;
+        this.opcodes = new AtomicBoolean(opcodes);
+        this.labels = new AtomicBoolean(labels);
+    }
+
+    /**
+     * With opcodes.
+     * @return The same instance with opcodes.
+     */
+    public DirectivesMetas withOpcodes() {
+        this.opcodes.set(true);
+        return this;
+    }
+
+    /**
+     * With labels.
+     * @return The same instance with labels.
+     */
+    public DirectivesMetas withLabels() {
+        this.labels.set(true);
+        return this;
     }
 
     @Override
@@ -59,6 +92,26 @@ public final class DirectivesMetas implements Iterable<Directive> {
         final String opcode = "org.eolang.jeo.opcode";
         final String label = "org.eolang.jeo.label";
         final String alias = "alias";
+
+        final Directives opdirs;
+        if (this.opcodes.get()) {
+            opdirs = new Directives()
+                .add("meta")
+                .add("head").set(alias).up()
+                .add("tail").set(opcode).up()
+                .add("part").set(opcode).up()
+                .up();
+        } else {
+            opdirs = new Directives();
+        }
+        final Directives labeldirs = new Directives();
+        if (this.labels.get()) {
+            labeldirs.add("meta")
+                .add("head").set(alias).up()
+                .add("tail").set(label).up()
+                .add("part").set(label).up()
+                .up();
+        }
         return new Directives()
             .add("metas")
             .add("meta")
@@ -66,16 +119,8 @@ public final class DirectivesMetas implements Iterable<Directive> {
             .add("tail").set(this.name.pckg()).up()
             .add("part").set(this.name.pckg()).up()
             .up()
-            .add("meta")
-            .add("head").set(alias).up()
-            .add("tail").set(opcode).up()
-            .add("part").set(opcode).up()
-            .up()
-            .add("meta")
-            .add("head").set(alias).up()
-            .add("tail").set(label).up()
-            .add("part").set(label).up()
-            .up()
+            .append(opdirs)
+            .append(labeldirs)
             .up()
             .iterator();
     }

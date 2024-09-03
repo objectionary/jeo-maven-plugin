@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicReference;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.JavaName;
@@ -49,6 +50,11 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
      * Program directives.
      */
     private final DirectivesProgram program;
+
+    /**
+     * Metas.
+     */
+    private final AtomicReference<DirectivesMetas> metas;
 
     /**
      * Opcodes counting.
@@ -116,6 +122,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         super(api);
         this.program = program;
         this.counting = counting;
+        this.metas = new AtomicReference<>();
     }
 
     @Override
@@ -128,6 +135,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String[] interfaces
     ) {
         final ClassName classname = new ClassName(new JavaName(name).encode());
+        this.metas.set(new DirectivesMetas(classname));
         this.program.withClass(
             classname,
             new DirectivesClass(

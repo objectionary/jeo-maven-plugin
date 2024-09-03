@@ -58,7 +58,7 @@ final class DirectivesMetasTest {
         MatcherAssert.assertThat(
             "Can't create corresponding xembly directives for opcode alias",
             new Xembler(
-                new DirectivesMetas(),
+                new DirectivesMetas().withOpcodes(),
                 new Transformers.Node()
             ).xmlQuietly(),
             Matchers.allOf(
@@ -74,12 +74,34 @@ final class DirectivesMetasTest {
         MatcherAssert.assertThat(
             "Can't create corresponding xembly directives for label alias",
             new Xembler(
-                new DirectivesMetas(),
+                new DirectivesMetas().withLabels(),
                 new Transformers.Node()
             ).xmlQuietly(),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath("/metas/meta/tail[text()='org.eolang.jeo.label']"),
                 XhtmlMatchers.hasXPath("/metas/meta/part[text()='org.eolang.jeo.label']")
+            )
+        );
+    }
+
+    @Test
+    void addsNothingExceptPackage() {
+        MatcherAssert.assertThat(
+            "Can't create corresponding xembly directives for metas with package only",
+            new Xembler(
+                new DirectivesMetas(new ClassName("path/to/SomeClass")),
+                new Transformers.Node()
+            ).xmlQuietly(),
+            Matchers.allOf(
+                XhtmlMatchers.hasXPath("/metas/meta/head[text()='package']"),
+                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='path.to']"),
+                XhtmlMatchers.hasXPath("/metas/meta/part[text()='path.to']"),
+                Matchers.not(
+                    XhtmlMatchers.hasXPath("/metas/meta/tail[text()='org.eolang.jeo.label']")
+                ),
+                Matchers.not(
+                    XhtmlMatchers.hasXPath("/metas/meta/tail[text()='org.eolang.jeo.opcode']")
+                )
             )
         );
     }
