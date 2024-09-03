@@ -27,7 +27,6 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.directives.DirectivesClassVisitor;
 import org.eolang.parser.Schema;
-import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -58,47 +57,9 @@ final class VerifiedEo {
      * @throws ImpossibleModificationException If something goes wrong.
      */
     XML asXml() throws ImpossibleModificationException {
-        final XML res = VerifiedEo.cleanAliases(
-            new XMLDocument(new Xembler(this.directives).xml())
-        );
+        final XML res = new XMLDocument(new Xembler(this.directives).xml());
         new Schema(res).check();
         return res;
     }
 
-    /**
-     * Clean aliases from the EO if they are not needed.
-     * @param original Original EO with aliases.
-     * @return Clean EO.
-     * @throws ImpossibleModificationException If something goes wrong.
-     * @todo #640:60min Remove {@link #cleanAliases(XML)} method.
-     *  This method is some sort of crutch to remove aliases from the EO.
-     *  Actually, it's better just not to add them if they are not needed.
-     *  So, we need to remove this method and refactor the code to not add aliases.
-     */
-    private static XML cleanAliases(final XML original) throws ImpossibleModificationException {
-        final XML result;
-        if (VerifiedEo.dontHaveInstructions(original)) {
-            result = new XMLDocument(
-                new Xembler(
-                    new Directives()
-                        .xpath("./program/metas/meta[head[text()='alias']]")
-                        .remove()
-                ).apply(original.node())
-            );
-        } else {
-            result = original;
-        }
-        return result;
-    }
-
-    /**
-     * Check if EO has methods with instructions.
-     * @param original Original EO.
-     * @return True if EO has instructions.
-     */
-    private static boolean dontHaveInstructions(final XML original) {
-        return original.xpath(
-            ".//o[@base='seq']/o[@base='tuple']/o[@base='opcode' or @base='label']/text()"
-        ).isEmpty();
-    }
 }
