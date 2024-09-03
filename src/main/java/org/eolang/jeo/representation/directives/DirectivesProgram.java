@@ -104,7 +104,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
             .format(DateTimeFormatter.ISO_INSTANT);
         final Directives directives = new Directives();
         directives.add("program")
-            .attr("name", this.metas.get().name())
+            .attr("name", this.metas.get().name().name())
             .attr("version", "0.0.0")
             .attr("revision", "0.0.0")
             .attr("dob", now)
