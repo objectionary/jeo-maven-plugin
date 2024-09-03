@@ -29,7 +29,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-import org.eolang.jeo.representation.ClassName;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -75,7 +74,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
      * Constructor.
      * @param code Program listing.
      * @param clazz Class.
-     * @param name Classname.
+     * @param name Metas.
      */
     public DirectivesProgram(
         final String code,
@@ -89,11 +88,12 @@ public final class DirectivesProgram implements Iterable<Directive> {
 
     /**
      * Append top-level class.
+     * @param meta Metas.
      * @param clazz Top-level class.
      * @return The same instance.
      */
-    public DirectivesProgram withClass(final DirectivesMetas metas, final DirectivesClass clazz) {
-        this.metas.set(metas);
+    public DirectivesProgram withClass(final DirectivesMetas meta, final DirectivesClass clazz) {
+        this.metas.set(meta);
         this.klass.set(clazz);
         return this;
     }
@@ -104,7 +104,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
             .format(DateTimeFormatter.ISO_INSTANT);
         final Directives directives = new Directives();
         directives.add("program")
-            .attr("name", this.metas.get().name().name())
+            .attr("name", this.metas.get().className().name())
             .attr("version", "0.0.0")
             .attr("revision", "0.0.0")
             .attr("dob", now)

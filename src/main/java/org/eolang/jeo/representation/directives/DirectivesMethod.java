@@ -226,7 +226,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * True if method has opcodes.
      * @return True if method has opcodes.
      */
-    public boolean hasOpcodes() {
+    boolean hasOpcodes() {
         return this.instructions.stream().anyMatch(DirectivesInstruction.class::isInstance);
     }
 
@@ -234,7 +234,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * True if method has labels.
      * @return True if method has labels.
      */
-    public boolean hasLabels() {
+    boolean hasLabels() {
         return this.instructions.stream()
             .filter(DirectivesOperand.class::isInstance)
             .map(DirectivesOperand.class::cast)

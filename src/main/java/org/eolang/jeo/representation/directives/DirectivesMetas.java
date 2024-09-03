@@ -79,7 +79,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * Class name.
      * @return The class name.
      */
-    public ClassName name() {
+    public ClassName className() {
         return this.name;
     }
 
