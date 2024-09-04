@@ -209,7 +209,7 @@ final class BytecodeClassTest {
     }
 
     @Test
-    void triesToCompileTruncatedClassFromGenericsIntegrationTest() {
+    void triesToCompileTruncatedClassFromGenericsIt() {
         final String application = "org/eolang/jeo/Application";
         final String descr = "()V";
         final String init = "<init>";
