@@ -233,6 +233,7 @@ SOFTWARE.
           <include>**/*.java</include>
           <include>**/*.eo</include>
           <include>**/*.yaml</include>
+          <include>**/*.xmir</include>
         </includes>
       </testResource>
     </testResources>

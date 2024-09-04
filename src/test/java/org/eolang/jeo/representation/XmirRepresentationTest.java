@@ -24,10 +24,14 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XMLDocument;
+import org.cactoos.io.ResourceOf;
+import org.cactoos.text.TextOf;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -112,5 +116,20 @@ final class XmirRepresentationTest {
             actual,
             Matchers.equalTo(expected)
         );
+    }
+
+    @Test
+    void assemblesDisassembledXmirToBytecode() {
+        Assertions.assertDoesNotThrow(
+            () -> new XmirRepresentation(
+                new XMLDocument(
+                    new TextOf(
+                        new ResourceOf("org/eolang/jeo/Application.xmir")
+                    ).asString()
+                )
+            ).toBytecode().asBytes(),
+            "The disassembled XMIR representation should be assembled to bytecode without any problems"
+        );
+
     }
 }
