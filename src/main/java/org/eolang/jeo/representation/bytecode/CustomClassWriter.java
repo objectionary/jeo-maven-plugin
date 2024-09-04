@@ -261,7 +261,7 @@ public final class CustomClassWriter extends ClassVisitor {
                         String.format(
                             "Bytecode verification failed for the class '%s' and method '%s'",
                             clazz.name,
-                            method
+                            method.name
                         ),
                         exception
                     );
