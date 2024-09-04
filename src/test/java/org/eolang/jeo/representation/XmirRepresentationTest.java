@@ -130,6 +130,5 @@ final class XmirRepresentationTest {
             ).toBytecode().asBytes(),
             "The disassembled XMIR representation should be assembled to bytecode without any problems"
         );
-
     }
 }
