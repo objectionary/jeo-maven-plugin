@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.ToString;
+import org.eolang.jeo.representation.PrefixedName;
 
 /**
  * XML field.
@@ -52,11 +53,13 @@ public class XmlField {
      * @return Name.
      */
     public String name() {
-        return this.node.attribute("name").orElseThrow(
-            () -> new IllegalStateException(
-                String.format("Can't find field name in '%s'", this.node)
+        return new PrefixedName(
+            this.node.attribute("name").orElseThrow(
+                () -> new IllegalStateException(
+                    String.format("Can't find field name in '%s'", this.node)
+                )
             )
-        );
+        ).decode();
     }
 
     /**

@@ -129,13 +129,20 @@ public final class XmlClassProperties {
      * @return Bytecode properties.
      */
     BytecodeClassProperties toBytecodeProperties() {
-        return new BytecodeClassProperties(
-            this.version(),
-            this.access(),
-            this.signature(),
-            this.supername(),
-            this.interfaces()
-        );
+        try {
+            return new BytecodeClassProperties(
+                this.version(),
+                this.access(),
+                this.signature(),
+                this.supername(),
+                this.interfaces()
+            );
+        } catch (final IllegalArgumentException exception) {
+            throw new IllegalArgumentException(
+                String.format("Invalid class properties: %s", this.clazz),
+                exception
+            );
+        }
     }
 }
 

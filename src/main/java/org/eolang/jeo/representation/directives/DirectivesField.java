@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.PrefixedName;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -135,7 +136,7 @@ public final class DirectivesField implements Iterable<Directive> {
         try {
             return new Directives().add("o")
                 .attr("base", "field")
-                .attr("name", this.name)
+                .attr("name", new PrefixedName(this.name).encode())
                 .attr("line", "999")
                 .append(new DirectivesData(this.title("access"), this.access))
                 .append(new DirectivesData(this.title("descriptor"), this.descriptor))
