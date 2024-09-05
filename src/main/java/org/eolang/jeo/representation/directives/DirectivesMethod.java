@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
+import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.Signature;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -113,7 +114,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final boolean counting,
         final DirectivesMethodProperties properties
     ) {
-        this.name = new Signature(name, properties.descr());
+        this.name = new Signature(new MethodName(name).xmir(), properties.descr());
         this.properties = properties;
         this.counting = counting;
         this.instructions = new ArrayList<>(0);
@@ -183,7 +184,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
             directives.add("o")
                 .attr("base", "tuple")
                 .attr("star", "")
-                .attr("name", String.format("trycatchblocks-%s", this.name.decoded()));
+                .attr("name", String.format("trycatchblocks-%s", this.name.name()));
             this.exceptions.forEach(directives::append);
             directives.up();
         }

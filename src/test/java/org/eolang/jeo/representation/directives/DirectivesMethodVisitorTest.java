@@ -199,7 +199,7 @@ final class DirectivesMethodVisitorTest {
                 new XMLDocument(xml)
             ),
             xml,
-            new HasMethod("new")
+            new HasMethod("@init@")
                 .inside("ConstructorExample")
                 .withInstruction(Opcodes.LDC, "Hello, constructor!")
         );
@@ -259,7 +259,7 @@ final class DirectivesMethodVisitorTest {
                 new XMLDocument(xml)
             ),
             xml,
-            new HasMethod("new")
+            new HasMethod("@init@")
                 .inside(clazz)
                 .withInstruction(Opcodes.ILOAD, 1)
                 .withInstruction(Opcodes.ILOAD, 2)

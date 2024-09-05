@@ -80,7 +80,7 @@ public final class Signature {
     public String encoded() {
         return String.format(
             "%s-%s",
-            this.decoded(),
+            this.name,
             Signature.ENCODER.encodeToString(this.descriptor.getBytes(StandardCharsets.UTF_8))
         );
     }
@@ -99,20 +99,6 @@ public final class Signature {
      */
     public String descriptor() {
         return this.descriptor;
-    }
-
-    /**
-     * Method name.
-     * @return Method name.
-     */
-    public String decoded() {
-        final String res;
-        if ("<init>".equals(this.name)) {
-            res = "new";
-        } else {
-            res = this.name;
-        }
-        return res;
     }
 
     /**
