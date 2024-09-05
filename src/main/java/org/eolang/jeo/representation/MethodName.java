@@ -34,27 +34,53 @@ package org.eolang.jeo.representation;
 public final class MethodName {
 
     /**
+     * Constructor name in EO.
+     */
+    private static final String EO_CONSTRUCTOR = "@init@";
+
+    /**
+     * Constructor name in bytecode.
+     */
+    private static final String CONSTRUCTOR = "<init>";
+
+    /**
      * Original name.
      */
     private final String original;
 
+    /**
+     * Constructor.
+     * @param name Method name.
+     */
     public MethodName(final String name) {
         this.original = name;
     }
 
+    /**
+     * Converts method name to bytecode.
+     * @return Bytecode name.
+     */
     public String bytecode() {
-        if (this.original.equals("@init@")) {
-            return "<init>";
+        final String result;
+        if (MethodName.EO_CONSTRUCTOR.equals(this.original)) {
+            result = MethodName.CONSTRUCTOR;
         } else {
-            return this.original;
+            result = this.original;
         }
+        return result;
     }
 
+    /**
+     * Converts method name to EO.
+     * @return EO name.
+     */
     public String xmir() {
-        if (this.original.equals("<init>")) {
-            return "@init@";
+        final String result;
+        if (MethodName.CONSTRUCTOR.equals(this.original)) {
+            result = MethodName.EO_CONSTRUCTOR;
         } else {
-            return this.original;
+            result = this.original;
         }
+        return result;
     }
 }

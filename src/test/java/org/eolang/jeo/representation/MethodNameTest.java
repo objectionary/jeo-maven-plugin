@@ -36,7 +36,6 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 final class MethodNameTest {
 
-
     @ParameterizedTest(name = "Converts \"{1}\" to \"{0}\"")
     @MethodSource("names")
     void convertsToBytecode(final String bytecode, final String xmir) {
@@ -57,6 +56,13 @@ final class MethodNameTest {
         );
     }
 
+    /**
+     * Test cases for different tests.
+     * Method is used by {@link #convertsToBytecode(String, String)}
+     * and {@link #convertsToXmir(String, String)}.
+     * @return Test cases.
+     */
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> names() {
         return Stream.of(
             Arguments.of("<init>", "@init@"),

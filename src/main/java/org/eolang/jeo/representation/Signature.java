@@ -48,12 +48,12 @@ public final class Signature {
     /**
      * Human-readable method name in source code.
      */
-    private final String name;
+    private final String original;
 
     /**
      * Method descriptor.
      */
-    private final String descriptor;
+    private final String descr;
 
     /**
      * Constructor.
@@ -69,8 +69,8 @@ public final class Signature {
      * @param descriptor Method descriptor.
      */
     public Signature(final String name, final String descriptor) {
-        this.name = name;
-        this.descriptor = descriptor;
+        this.original = name;
+        this.descr = descriptor;
     }
 
     /**
@@ -80,8 +80,8 @@ public final class Signature {
     public String encoded() {
         return String.format(
             "%s-%s",
-            this.name,
-            Signature.ENCODER.encodeToString(this.descriptor.getBytes(StandardCharsets.UTF_8))
+            this.original,
+            Signature.ENCODER.encodeToString(this.descr.getBytes(StandardCharsets.UTF_8))
         );
     }
 
@@ -90,7 +90,7 @@ public final class Signature {
      * @return Name without suffix.
      */
     public String name() {
-        return this.name;
+        return this.original;
     }
 
     /**
@@ -98,7 +98,7 @@ public final class Signature {
      * @return Descriptor without name.
      */
     public String descriptor() {
-        return this.descriptor;
+        return this.descr;
     }
 
     /**
