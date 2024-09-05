@@ -44,6 +44,16 @@ public final class MethodName {
     private static final String CONSTRUCTOR = "<init>";
 
     /**
+     * Static initializer name.
+     */
+    private static final String STATIC = "<clinit>";
+
+    /**
+     * Static initializer name in EO.
+     */
+    private static final String EO_STATIC = "@clinit@";
+
+    /**
      * Original name.
      */
     private final String original;
@@ -62,10 +72,15 @@ public final class MethodName {
      */
     public String bytecode() {
         final String result;
-        if (MethodName.EO_CONSTRUCTOR.equals(this.original)) {
-            result = MethodName.CONSTRUCTOR;
-        } else {
-            result = this.original;
+        switch (this.original) {
+            case MethodName.EO_CONSTRUCTOR:
+                result = MethodName.CONSTRUCTOR;
+                break;
+            case MethodName.EO_STATIC:
+                result = MethodName.STATIC;
+                break;
+            default:
+                result = this.original;
         }
         return result;
     }
@@ -76,10 +91,15 @@ public final class MethodName {
      */
     public String xmir() {
         final String result;
-        if (MethodName.CONSTRUCTOR.equals(this.original)) {
-            result = MethodName.EO_CONSTRUCTOR;
-        } else {
-            result = this.original;
+        switch (this.original) {
+            case MethodName.CONSTRUCTOR:
+                result = MethodName.EO_CONSTRUCTOR;
+                break;
+            case MethodName.STATIC:
+                result = MethodName.EO_STATIC;
+                break;
+            default:
+                result = this.original;
         }
         return result;
     }

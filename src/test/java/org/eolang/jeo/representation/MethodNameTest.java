@@ -66,7 +66,7 @@ final class MethodNameTest {
     private static Stream<Arguments> names() {
         return Stream.of(
             Arguments.of("<init>", "@init@"),
-            Arguments.of("clinit", "clinit"),
+            Arguments.of("<clinit>", "@clinit@"),
             Arguments.of("main", "main"),
             Arguments.of("init", "init"),
             Arguments.of("new", "new")
