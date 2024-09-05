@@ -69,6 +69,7 @@ final class SignatureTest {
     private static Stream<Arguments> namesDescriptorsAndEncoded() {
         return Stream.of(
             Arguments.of("foo", "()I", "foo-KClJ"),
+            Arguments.of("@init@", "()V", "@init@-KClW"),
             Arguments.of("bar", "(Ljava/lang/String;)V", "bar-KExqYXZhL2xhbmcvU3RyaW5nOylW"),
             Arguments.of(
                 "baz",

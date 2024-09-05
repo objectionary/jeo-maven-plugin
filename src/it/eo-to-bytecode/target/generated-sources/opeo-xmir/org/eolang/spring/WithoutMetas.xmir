@@ -16,7 +16,7 @@
       <o base="int" data="bytes" line="802662048" name="access">00 00 00 00 00 00 00 21</o>
       <o base="string" data="bytes" line="1870128174" name="supername">6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>
       <o base="tuple" line="915060366" name="interfaces" star=""/>
-      <o abstract="" name="new-KClW">
+      <o abstract="" name="@init@-KClW">
         <o base="int" data="bytes" line="13345701" name="access">00 00 00 00 00 00 00 01</o>
         <o base="string" data="bytes" line="826053400" name="descriptor">28 29 56</o>
         <o base="string" data="bytes" line="144287926" name="signature"/>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <program dob="2023-12-25T18:13:56.947739Z"
-         ms="1703528036947"
-         name="j$BA"
-         revision="0.0.0"
-         time="2023-12-25T18:13:56.947739Z"
-         version="0.0.0">
+  ms="1703528036947"
+  name="j$BA"
+  revision="0.0.0"
+  time="2023-12-25T18:13:56.947739Z"
+  version="0.0.0">
   <listing/>
   <errors/>
   <sheets/>
@@ -36,7 +36,7 @@
         <o base="string" data="bytes"/>
         <o base="string" data="bytes"/>
       </o>
-      <o abstract="" name="new">
+      <o abstract="" name="@init@-KClW">
         <o base="int" data="bytes" name="access">00 00 00 00 00 00 00 00</o>
         <o base="string" data="bytes" name="descriptor">28 49 29 56</o>
         <o base="string" data="bytes" name="signature"/>
@@ -80,7 +80,7 @@
         </o>
         <o base="tuple" name="trycatchblocks"/>
       </o>
-      <o abstract="" name="j$foo">
+      <o abstract="" name="j$foo-KClJ">
         <o base="int" data="bytes" name="access">00 00 00 00 00 00 00 01</o>
         <o base="string" data="bytes" name="descriptor">28 29 49</o>
         <o base="string" data="bytes" name="signature"/>
@@ -112,7 +112,7 @@
         </o>
         <o base="tuple" name="trycatchblocks"/>
       </o>
-      <o abstract="" name="j$bar">
+      <o abstract="" name="j$bar-KClJ">
         <o base="int" data="bytes" name="access">00 00 00 00 00 00 00 00</o>
         <o base="string" data="bytes" name="descriptor">28 29 49</o>
         <o base="string" data="bytes" name="signature"/>

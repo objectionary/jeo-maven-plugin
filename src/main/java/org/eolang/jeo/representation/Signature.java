@@ -107,7 +107,13 @@ public final class Signature {
      * @return Method name.
      */
     private static String prefix(final String encoded) {
-        return encoded.substring(0, encoded.indexOf('-'));
+        try {
+            return encoded.substring(0, encoded.indexOf('-'));
+        } catch (final StringIndexOutOfBoundsException ex) {
+            throw new IllegalArgumentException(
+                String.format("Invalid encoded method name: %s", encoded)
+            );
+        }
     }
 
     /**
