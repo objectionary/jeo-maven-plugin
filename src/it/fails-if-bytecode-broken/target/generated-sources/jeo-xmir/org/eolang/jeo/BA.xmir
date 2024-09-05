@@ -37,7 +37,7 @@
         <o base="string" data="bytes"/>
         <o base="string" data="bytes"/>
       </o>
-      <o abstract="" name="new">
+      <o abstract="" name="@init@-KClW">
         <o base="int" data="bytes" name="access">00 00 00 00 00 00 00 00</o>
         <o base="string" data="bytes" name="descriptor">28 49 29 56</o>
         <o base="string" data="bytes" name="signature"/>
@@ -89,7 +89,7 @@
         </o>
         <o base="tuple" name="trycatchblocks"/>
       </o>
-      <o abstract="" name="j$foo">
+      <o abstract="" name="j$foo-KClJ">
         <o base="int" data="bytes" name="access">00 00 00 00 00 00 00 01</o>
         <o base="string" data="bytes" name="descriptor">28 29 49</o>
         <o base="string" data="bytes" name="signature"/>
@@ -125,7 +125,7 @@
         </o>
         <o base="tuple" name="trycatchblocks"/>
       </o>
-      <o abstract="" name="j$bar">
+      <o abstract="" name="j$bar-KClJ">
         <o base="int" data="bytes" name="access">00 00 00 00 00 00 00 00</o>
         <o base="string" data="bytes" name="descriptor">28 29 49</o>
         <o base="string" data="bytes" name="signature"/>
