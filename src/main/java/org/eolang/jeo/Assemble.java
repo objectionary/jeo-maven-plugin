@@ -28,7 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.eolang.jeo.representation.BytecodeRepresentation;
-import org.eolang.jeo.representation.JavaName;
+import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.xmir.AllLabels;
 
 /**
@@ -54,7 +54,7 @@ public final class Assemble implements Translation {
     public Representation apply(final Representation representation) {
         new AllLabels().clearCache();
         final Details details = representation.details();
-        final String name = new JavaName(details.name()).decode();
+        final String name = new PrefixedName(details.name()).decode();
         try {
             final byte[] bytecode = representation.toBytecode().asBytes();
             final String[] subpath = name.split("\\.");

@@ -36,7 +36,7 @@ import lombok.ToString;
  * @since 0.1
  */
 @ToString
-public final class JavaName {
+public final class PrefixedName {
 
     /**
      * Prefix.
@@ -63,7 +63,7 @@ public final class JavaName {
      * Constructor.
      * @param origin Original name.
      */
-    public JavaName(final String origin) {
+    public PrefixedName(final String origin) {
         this.origin = origin;
     }
 
@@ -74,15 +74,13 @@ public final class JavaName {
     public String encode() {
         final String res;
         if (this.origin.replace(" ", "").isEmpty()) {
-            throw new IllegalArgumentException(JavaName.BLANK);
-        } else if (this.origin.contains(JavaName.DELIMITER)) {
-            final String[] split = this.origin.split(JavaName.DELIMITER);
-            split[split.length - 1] = new JavaName(split[split.length - 1]).encode();
-            res = String.join(JavaName.DELIMITER, split);
-        } else if ("<init>".equals(this.origin) || "@init@".equals(this.origin)) {
-            res = this.origin;
+            throw new IllegalArgumentException(PrefixedName.BLANK);
+        } else if (this.origin.contains(PrefixedName.DELIMITER)) {
+            final String[] split = this.origin.split(PrefixedName.DELIMITER);
+            split[split.length - 1] = new PrefixedName(split[split.length - 1]).encode();
+            res = String.join(PrefixedName.DELIMITER, split);
         } else {
-            res = String.format("%s%s", JavaName.PREFIX, this.origin);
+            res = String.format("%s%s", PrefixedName.PREFIX, this.origin);
         }
         return res;
     }
@@ -94,15 +92,13 @@ public final class JavaName {
     public String decode() {
         final String res;
         if (this.origin.replace(" ", "").isEmpty()) {
-            throw new IllegalArgumentException(JavaName.BLANK);
-        } else if (this.origin.startsWith(JavaName.PREFIX)) {
-            res = this.origin.substring(JavaName.PREFIX.length());
-        } else if (this.origin.contains(JavaName.DELIMITER)) {
-            final String[] split = this.origin.split(JavaName.DELIMITER);
-            split[split.length - 1] = new JavaName(split[split.length - 1]).decode();
-            res = String.join(JavaName.DELIMITER, split);
-        } else if ("<init>".equals(this.origin) || "@init@".equals(this.origin)) {
-            res = this.origin;
+            throw new IllegalArgumentException(PrefixedName.BLANK);
+        } else if (this.origin.startsWith(PrefixedName.PREFIX)) {
+            res = this.origin.substring(PrefixedName.PREFIX.length());
+        } else if (this.origin.contains(PrefixedName.DELIMITER)) {
+            final String[] split = this.origin.split(PrefixedName.DELIMITER);
+            split[split.length - 1] = new PrefixedName(split[split.length - 1]).decode();
+            res = String.join(PrefixedName.DELIMITER, split);
         } else {
             res = this.origin;
         }

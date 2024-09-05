@@ -27,7 +27,7 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.util.Optional;
 import org.eolang.jeo.representation.ClassName;
-import org.eolang.jeo.representation.JavaName;
+import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
@@ -83,14 +83,14 @@ public final class XmlBytecode {
         final XmlProgram program = new XmlProgram(this.xml);
         final XmlClass clazz = program.top();
         final BytecodeClass bytecode = new BytecodeClass(
-            new ClassName(program.pckg(), new JavaName(clazz.name()).decode()).full(),
+            new ClassName(program.pckg(), new PrefixedName(clazz.name()).decode()).full(),
             clazz.properties().toBytecodeProperties(),
             this.verify
         );
         clazz.annotations().ifPresent(bytecode::withAnnotations);
         for (final XmlField field : clazz.fields()) {
             final BytecodeField bfield = bytecode.withField(
-                new JavaName(field.name()).decode(),
+                field.name(),
                 field.descriptor(),
                 field.signature(),
                 field.value(),

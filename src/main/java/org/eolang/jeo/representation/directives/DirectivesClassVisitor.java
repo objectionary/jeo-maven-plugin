@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicReference;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.DefaultVersion;
-import org.eolang.jeo.representation.JavaName;
+import org.eolang.jeo.representation.PrefixedName;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
@@ -134,7 +134,7 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String supername,
         final String[] interfaces
     ) {
-        final ClassName classname = new ClassName(new JavaName(name).encode());
+        final ClassName classname = new ClassName(new PrefixedName(name).encode());
         this.metas.set(new DirectivesMetas(classname));
         this.program.withClass(
             this.metas.get(),
@@ -160,16 +160,15 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String signature,
         final String[] exceptions
     ) {
-        final String ename = new JavaName(name).encode();
         final DirectivesMethod method = new DirectivesMethod(
-            ename,
+            name,
             this.counting,
             new DirectivesMethodProperties(access, descriptor, signature, exceptions)
         );
         this.program.top().method(method);
         return new DirectivesMethodVisitor(
             method,
-            super.visitMethod(access, ename, descriptor, signature, exceptions)
+            super.visitMethod(access, name, descriptor, signature, exceptions)
         );
     }
 
@@ -192,17 +191,16 @@ public final class DirectivesClassVisitor extends ClassVisitor implements Iterab
         final String signature,
         final Object value
     ) {
-        final String ename = new JavaName(name).encode();
         final DirectivesField field = new DirectivesField(
             access,
-            ename,
+            name,
             descriptor,
             signature,
             value
         );
         this.program.top().field(field);
         return new DirectivesFieldVisitor(
-            super.visitField(access, ename, descriptor, signature, value),
+            super.visitField(access, name, descriptor, signature, value),
             field
         );
     }

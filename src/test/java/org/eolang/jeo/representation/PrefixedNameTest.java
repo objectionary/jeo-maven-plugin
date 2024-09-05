@@ -31,10 +31,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 /**
- * Test case for {@link JavaName}.
+ * Test case for {@link PrefixedName}.
  * @since 0.1
  */
-final class JavaNameTest {
+final class PrefixedNameTest {
 
     @ParameterizedTest
     @CsvSource({
@@ -42,13 +42,12 @@ final class JavaNameTest {
         "ClassName, j$ClassName",
         "someLongName, j$someLongName",
         "j$j, j$j$j",
-        "jeo/xmir/Fake, jeo/xmir/j$Fake",
-        "<init>, <init>"
+        "jeo/xmir/Fake, jeo/xmir/j$Fake"
     })
     void encodesName(final String origin, final String encoded) {
         MatcherAssert.assertThat(
             String.format("Can't encode '%s' to '%s'", origin, encoded),
-            new JavaName(origin).encode(),
+            new PrefixedName(origin).encode(),
             Matchers.equalTo(encoded)
         );
     }
@@ -60,13 +59,12 @@ final class JavaNameTest {
         "j$someLongName, someLongName",
         "j$j$j, j$j",
         "someName, someName",
-        "jeo/xmir/j$Fake, jeo/xmir/Fake",
-        "<init>, <init>"
+        "jeo/xmir/j$Fake, jeo/xmir/Fake"
     })
     void decodesName(final String encoded, final String origin) {
         MatcherAssert.assertThat(
             String.format("Can't decode '%s' to '%s'", encoded, origin),
-            new JavaName(encoded).decode(),
+            new PrefixedName(encoded).decode(),
             Matchers.equalTo(origin)
         );
     }
@@ -75,7 +73,7 @@ final class JavaNameTest {
     void throwsExceptionWhenEncodingInvalidName() {
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new JavaName(" ").encode(),
+            () -> new PrefixedName(" ").encode(),
             "Can't throw exception when encoding invalid name"
         );
     }
@@ -84,7 +82,7 @@ final class JavaNameTest {
     void throwsExceptionWhenDecodingInvalidName() {
         Assertions.assertThrows(
             IllegalArgumentException.class,
-            () -> new JavaName(" ").decode(),
+            () -> new PrefixedName(" ").decode(),
             "Can't throw exception when decoding invalid name"
         );
     }

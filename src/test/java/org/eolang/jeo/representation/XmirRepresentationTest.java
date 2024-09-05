@@ -50,7 +50,7 @@ final class XmirRepresentationTest {
     @Test
     void retrievesName() {
         final String name = "org/eolang/foo/Math";
-        final String expected = new JavaName(name).encode();
+        final String expected = new PrefixedName(name).encode();
         final String actual = new XmirRepresentation(
             new BytecodeClass(name).xml()
         ).details().name();

@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.JavaName;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -173,10 +172,9 @@ public final class BytecodeMethodProperties implements Testable {
         );
         final MethodVisitor visitor = writer.visitMethod(
             this.access,
-            new JavaName(this.name).decode(),
+            this.name,
             this.descriptor,
-            Optional.ofNullable(this.signature).filter(s -> !s.isEmpty())
-                .orElse(null),
+            Optional.ofNullable(this.signature).filter(s -> !s.isEmpty()).orElse(null),
             this.exceptions,
             compute
         );
