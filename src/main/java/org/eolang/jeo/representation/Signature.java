@@ -109,9 +109,10 @@ public final class Signature {
     private static String prefix(final String encoded) {
         try {
             return encoded.substring(0, encoded.indexOf('-'));
-        } catch (final StringIndexOutOfBoundsException ex) {
+        } catch (final StringIndexOutOfBoundsException exception) {
             throw new IllegalArgumentException(
-                String.format("Invalid encoded method name: %s", encoded)
+                String.format("Invalid encoded method name: %s", encoded),
+                exception
             );
         }
     }
