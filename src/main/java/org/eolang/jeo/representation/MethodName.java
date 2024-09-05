@@ -81,6 +81,7 @@ public final class MethodName {
                 break;
             default:
                 result = this.original;
+                break;
         }
         return result;
     }
@@ -100,6 +101,7 @@ public final class MethodName {
                 break;
             default:
                 result = this.original;
+                break;
         }
         return result;
     }
