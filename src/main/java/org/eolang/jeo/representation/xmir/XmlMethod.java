@@ -32,7 +32,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.MethodName;
+import org.eolang.jeo.representation.Signature;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
@@ -129,7 +129,7 @@ public final class XmlMethod {
      *  Currently we have some ad-hoc solution for method retrieval.
      *  The problem is code is a bit cryptic and hard to understand.
      *  Moreover the logic under method naming is spread around several places like
-     *  inside {@link #name()} method as well as inside {@link MethodName#decoded()} method.
+     *  inside {@link #name()} method as well as inside {@link Signature#decoded()} method.
      *  In other words, it would be great to find sophisticated solution for this problem.
      */
     public String name() {

@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Random;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.MethodName;
+import org.eolang.jeo.representation.Signature;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -86,7 +86,7 @@ public final class DirectivesAnnotation implements Iterable<Directive>, Composit
             .attr("base", "annotation")
             .attr(
                 "name",
-                new MethodName(
+                new Signature(
                     String.format("annotation-%d", new Random().nextInt(Integer.MAX_VALUE)),
                     this.descriptor
                 ).encoded()

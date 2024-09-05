@@ -33,7 +33,7 @@ import java.util.Base64;
  * This class is used to represent method name and its descriptor.
  * @since 0.5
  */
-public final class MethodName {
+public final class Signature {
 
     /**
      * Base64 decoder.
@@ -59,8 +59,8 @@ public final class MethodName {
      * Constructor.
      * @param encoded Method name and descriptor encoded.
      */
-    public MethodName(final String encoded) {
-        this(MethodName.prefix(encoded), MethodName.suffix(encoded));
+    public Signature(final String encoded) {
+        this(Signature.prefix(encoded), Signature.suffix(encoded));
     }
 
     /**
@@ -68,7 +68,7 @@ public final class MethodName {
      * @param name Method name.
      * @param descriptor Method descriptor.
      */
-    public MethodName(final String name, final String descriptor) {
+    public Signature(final String name, final String descriptor) {
         this.name = name;
         this.descriptor = descriptor;
     }
@@ -81,8 +81,24 @@ public final class MethodName {
         return String.format(
             "%s-%s",
             this.decoded(),
-            MethodName.ENCODER.encodeToString(this.descriptor.getBytes(StandardCharsets.UTF_8))
+            Signature.ENCODER.encodeToString(this.descriptor.getBytes(StandardCharsets.UTF_8))
         );
+    }
+
+    /**
+     * Just a name without suffix.
+     * @return Name without suffix.
+     */
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Just a descriptor.
+     * @return Descriptor without name.
+     */
+    public String descriptor() {
+        return this.descriptor;
     }
 
     /**
@@ -115,7 +131,7 @@ public final class MethodName {
      */
     private static String suffix(final String encoded) {
         return new String(
-            MethodName.DECODER.decode(encoded.substring(encoded.indexOf('-') + 1)),
+            Signature.DECODER.decode(encoded.substring(encoded.indexOf('-') + 1)),
             StandardCharsets.UTF_8
         );
     }
