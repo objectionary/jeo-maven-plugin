@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import org.eolang.jeo.representation.bytecode.BytecodeFrame;
 import org.eolang.jeo.representation.xmir.XmlFrame;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
@@ -49,31 +50,16 @@ final class DirectivesFrameTest {
         final String xml = new Xembler(
             new DirectivesFrame(type, nlocal, locals, nstack, stack)
         ).xml();
-        final XmlFrame frame = new XmlFrame(new XmlNode(xml));
         MatcherAssert.assertThat(
-            "We failed to create correct directives for bytecode frame. Type is incorrect.",
-            frame.type(),
-            Matchers.equalTo(type)
-        );
-        MatcherAssert.assertThat(
-            "We failed to create correct directives for bytecode frame. Number of locals is incorrect.",
-            frame.nlocal(),
-            Matchers.equalTo(nlocal)
-        );
-        MatcherAssert.assertThat(
-            "We failed to create correct directives for bytecode frame. Number of stack is incorrect.",
-            frame.nstack(),
-            Matchers.equalTo(nstack)
-        );
-        MatcherAssert.assertThat(
-            "We failed to create correct directives for bytecode frame. Locals are incorrect.",
-            frame.locals(),
-            Matchers.arrayContaining(locals)
-        );
-        MatcherAssert.assertThat(
-            "We failed to create correct directives for bytecode frame. Stack is incorrect.",
-            frame.stack(),
-            Matchers.arrayContaining(stack)
+            "We failed to create correct directives for bytecode frame.",
+            new XmlFrame(new XmlNode(xml)).bytecode(),
+            Matchers.equalTo(new BytecodeFrame(
+                type,
+                nlocal,
+                locals,
+                nstack,
+                stack
+            ))
         );
     }
 }

@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeEntry;
+import org.eolang.jeo.representation.bytecode.BytecodeFrame;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.objectweb.asm.MethodVisitor;
 
@@ -45,7 +46,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * Constructor.
      * @param lines Lines of XML
      */
-    public XmlFrame(final String... lines) {
+    XmlFrame(final String... lines) {
         this(String.join("\n", lines));
     }
 
@@ -53,7 +54,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * Constructor.
      * @param xml XML
      */
-    public XmlFrame(final String xml) {
+    private XmlFrame(final String xml) {
         this(new XmlNode(xml));
     }
 
@@ -65,6 +66,20 @@ public final class XmlFrame implements XmlBytecodeEntry {
         this.node = node;
     }
 
+    /**
+     * Convert to bytecode.
+     * @return Bytecode frame.
+     */
+    public BytecodeFrame bytecode() {
+        return new BytecodeFrame(
+            this.type(),
+            this.nlocal(),
+            this.locals(),
+            this.nstack(),
+            this.stack()
+        );
+    }
+
     @Override
     public void writeTo(final BytecodeMethod method) {
         method.entry(new FrameEntry());
@@ -74,7 +89,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * Type of frame.
      * @return Type.
      */
-    public int type() {
+    private int type() {
         return (int) new XmlOperand(
             this.node.children().collect(Collectors.toList()).get(0)
         ).asObject();
@@ -84,7 +99,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * Number of local variables.
      * @return Number of local variables.
      */
-    public int nlocal() {
+    private int nlocal() {
         return (int) new XmlOperand(
             this.node.children().collect(Collectors.toList()).get(1)
         ).asObject();
@@ -94,7 +109,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * Local variables.
      * @return Local variables.
      */
-    public Object[] locals() {
+    private Object[] locals() {
         return this.node.children().collect(Collectors.toList()).get(2)
             .children()
             .map(XmlOperand::new)
@@ -106,7 +121,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * Number of stack elements.
      * @return Number of stack elements.
      */
-    public int nstack() {
+    private int nstack() {
         return (int) new XmlOperand(
             this.node.children().collect(Collectors.toList()).get(3)
         ).asObject();
@@ -116,7 +131,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * Stack elements.
      * @return Stack elements.
      */
-    public Object[] stack() {
+    private Object[] stack() {
         return this.node.children().collect(Collectors.toList()).get(4)
             .children()
             .map(XmlOperand::new)
