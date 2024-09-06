@@ -42,7 +42,7 @@ import org.objectweb.asm.Opcodes;
  */
 @ToString
 @SuppressWarnings("PMD.ExcessiveClassLength")
-final class BytecodeInstructionEntry implements BytecodeEntry {
+public final class BytecodeInstructionEntry implements BytecodeEntry {
 
     /**
      * Opcode.
@@ -58,6 +58,15 @@ final class BytecodeInstructionEntry implements BytecodeEntry {
      * All labels.
      */
     private final AllLabels labels;
+
+    /**
+     * Constructor.
+     * @param opcode Opcode.
+     * @param args Arguments.
+     */
+    public BytecodeInstructionEntry(final int opcode, final List<Object> args) {
+        this(new AllLabels(), opcode, args);
+    }
 
     /**
      * Constructor.

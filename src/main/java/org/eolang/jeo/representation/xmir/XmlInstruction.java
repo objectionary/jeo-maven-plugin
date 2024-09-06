@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.bytecode.BytecodeInstructionEntry;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.xembly.Transformers;
@@ -51,7 +52,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @param opcode Opcode.
      * @param args Arguments.
      */
-    public XmlInstruction(final int opcode, final Object... args) {
+    XmlInstruction(final int opcode, final Object... args) {
         this(true, opcode, args);
     }
 
@@ -61,7 +62,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @param opcode Opcode.
      * @param args Arguments.
      */
-    public XmlInstruction(final boolean counting, final int opcode, final Object... args) {
+    XmlInstruction(final boolean counting, final int opcode, final Object... args) {
         this(
             new XmlNode(
                 new Xembler(
@@ -76,7 +77,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Constructor.
      * @param xml XML string that represents an instruction.
      */
-    public XmlInstruction(final String xml) {
+    XmlInstruction(final String xml) {
         this(new XmlNode(xml));
     }
 
@@ -84,13 +85,24 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Constructor.
      * @param node Instruction node.
      */
-    public XmlInstruction(final XmlNode node) {
+    XmlInstruction(final XmlNode node) {
         this.node = node;
     }
 
     @Override
     public void writeTo(final BytecodeMethod method) {
-        method.opcode(this.opcode(), this.operands().stream().map(XmlOperand::asObject).toArray());
+        method.entry(this.bytecode());
+    }
+
+    /**
+     * Convert to bytecode.
+     * @return Bytecode instruction.
+     */
+    public BytecodeInstructionEntry bytecode() {
+        return new BytecodeInstructionEntry(
+            this.opcode(),
+            this.operands().stream().map(XmlOperand::asObject).collect(Collectors.toList())
+        );
     }
 
     /**
@@ -98,7 +110,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @return Code.
      */
     @EqualsAndHashCode.Include
-    public int opcode() {
+    private int opcode() {
         return new HexString(this.node.firstChild().text()).decodeAsInt();
     }
 
@@ -107,7 +119,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @return Arguments.
      */
     @EqualsAndHashCode.Include
-    public List<XmlOperand> operands() {
+    private List<XmlOperand> operands() {
         return this.node
             .children()
             .skip(1)
@@ -118,6 +130,11 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     /**
      * Get XML node.
      * @return XML node.
+     * @todo #636:30min Rremove {@link XmlInstruction#toNode()} method.
+     *  This method is required for inserting instructions into {@link XmlMethod}.
+     *  Actually, we should insert instructions not to the {@link XmlMethod},
+     *  but to the {@link BytecodeMethod}. When this will be implemented in
+     *  `opeo-maven-plugin`, we should remove this method.
      */
     public XmlNode toNode() {
         return this.node;

@@ -23,12 +23,9 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeEntry;
 import org.eolang.jeo.representation.bytecode.BytecodeFrame;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
-import org.objectweb.asm.MethodVisitor;
 
 /**
  * Xmir representation of bytecode frame.
