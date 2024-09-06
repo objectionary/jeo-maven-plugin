@@ -23,9 +23,9 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -35,19 +35,11 @@ import org.junit.jupiter.api.Test;
 final class XmlLabelTest {
 
     @Test
-    void createsLabelFromNode() {
-        Assertions.assertDoesNotThrow(
-            () -> new XmlLabel(new XmlNode("<o base='label' data='bytes'>some</o>")),
-            "Can't create label from node"
-        );
-    }
-
-    @Test
     void retrievesLabelIdentifier() {
         MatcherAssert.assertThat(
             "Can't retrieve correct label identifier",
-            new XmlLabel(new XmlNode("<o base='label' data='bytes'>some</o>")).identifier(),
-            Matchers.equalTo("some")
+            new XmlLabel(new XmlNode("<o base='label' data='bytes'>some</o>")).bytecode(),
+            Matchers.equalTo(new BytecodeLabel("some"))
         );
     }
 

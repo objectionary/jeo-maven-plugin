@@ -26,12 +26,16 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.objectweb.asm.Label;
 
 /**
  * All the labels that have been found in bytecode.
  * @since 0.1
  */
+@ToString
+@EqualsAndHashCode
 public final class AllLabels {
 
     /**

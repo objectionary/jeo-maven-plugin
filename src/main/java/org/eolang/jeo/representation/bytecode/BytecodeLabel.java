@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
@@ -33,7 +34,8 @@ import org.objectweb.asm.MethodVisitor;
  * @since 0.1
  */
 @ToString
-public final class BytecodeLabelEntry implements BytecodeEntry {
+@EqualsAndHashCode
+public final class BytecodeLabel implements BytecodeEntry {
 
     /**
      * Label.
@@ -47,10 +49,27 @@ public final class BytecodeLabelEntry implements BytecodeEntry {
 
     /**
      * Constructor.
+     * @param identifier Label identifier.
+     */
+    public BytecodeLabel(final String identifier) {
+        this(identifier, new AllLabels());
+    }
+
+    /**
+     * Constructor.
+     * @param identifier Label identifier.
+     * @param labels All labels.
+     */
+    public BytecodeLabel(final String identifier, final AllLabels labels) {
+        this(labels.label(identifier), labels);
+    }
+
+    /**
+     * Constructor.
      * @param label Label.
      * @param labels All labels.
      */
-    public BytecodeLabelEntry(final Label label, final AllLabels labels) {
+    public BytecodeLabel(final Label label, final AllLabels labels) {
         this.label = label;
         this.labels = labels;
     }

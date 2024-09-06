@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.DataType;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.objectweb.asm.Label;
 
@@ -42,22 +43,21 @@ public final class XmlLabel implements XmlBytecodeEntry {
      * Constructor.
      * @param node Label node.
      */
-    public XmlLabel(final XmlNode node) {
+    XmlLabel(final XmlNode node) {
         this.node = node;
     }
 
     @Override
     public void writeTo(final BytecodeMethod method) {
-        method.label((Label) DataType.LABEL.decode(this.identifier()));
+        method.label((Label) DataType.LABEL.decode(this.node.text()));
     }
 
     /**
-     * Retrieves label identifier.
-     * This method is used in other repositories.
-     * Do not remove it!
-     * @return Label identifier.
+     * Converts label to bytecode.
+     * @return Bytecode label.
      */
-    public String identifier() {
-        return this.node.text();
+    public BytecodeLabel bytecode() {
+        return new BytecodeLabel(this.node.text());
     }
+
 }
