@@ -71,14 +71,10 @@ public final class BytecodeMethod implements Testable {
     private final List<BytecodeDefaultValue> defvalues;
 
     /**
-     * Stack size.
+     * Max stack and locals.
      */
-    private final int stack;
+    private final BytecodeMaxs maxs;
 
-    /**
-     * Local variables.
-     */
-    private final int locals;
 
     /**
      * All Method Labels.
@@ -115,7 +111,7 @@ public final class BytecodeMethod implements Testable {
         final CustomClassWriter visitor,
         final BytecodeClass clazz
     ) {
-        this(properties, visitor, clazz, 0, 0);
+        this(properties, visitor, clazz, new BytecodeMaxs(0, 0));
     }
 
     /**
@@ -123,16 +119,13 @@ public final class BytecodeMethod implements Testable {
      * @param properties Method properties.
      * @param visitor ASM class writer.
      * @param clazz Original class.
-     * @param stack Stack size.
-     * @param locals Local variables.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     * @param maxs Max stack and locals.
      */
     public BytecodeMethod(
         final BytecodeMethodProperties properties,
         final CustomClassWriter visitor,
         final BytecodeClass clazz,
-        final int stack,
-        final int locals
+        final BytecodeMaxs maxs
     ) {
         this.properties = properties;
         this.visitor = visitor;
@@ -141,8 +134,7 @@ public final class BytecodeMethod implements Testable {
         this.instructions = new ArrayList<>(0);
         this.annotations = new ArrayList<>(0);
         this.defvalues = new ArrayList<>(0);
-        this.stack = stack;
-        this.locals = locals;
+        this.maxs = maxs;
         this.labels = new AllLabels();
     }
 
@@ -224,10 +216,9 @@ public final class BytecodeMethod implements Testable {
     public String testCode() {
         final StringBuilder res = new StringBuilder(
             String.format(
-                "withMethod(%s)%n//max stack: %d max locals %d%n",
+                "withMethod(%s)%n//maxs %s",
                 this.properties.testCode(),
-                this.stack,
-                this.locals
+                this.maxs
             )
         );
         for (final BytecodeEntry instruction : this.instructions) {
@@ -245,7 +236,7 @@ public final class BytecodeMethod implements Testable {
         try {
             final MethodVisitor mvisitor = this.properties.writeMethod(
                 this.visitor,
-                this.stack == 0 && this.locals == 0
+                this.maxs.isZero()
             );
             this.annotations.forEach(annotation -> annotation.write(mvisitor));
             this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));
@@ -253,7 +244,7 @@ public final class BytecodeMethod implements Testable {
                 mvisitor.visitCode();
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor));
                 this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
-                mvisitor.visitMaxs(this.stack, this.locals);
+                mvisitor.visitMaxs(this.maxs.stack(), this.maxs.locals());
             }
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {

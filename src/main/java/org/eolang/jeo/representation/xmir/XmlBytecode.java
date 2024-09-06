@@ -110,7 +110,7 @@ public final class XmlBytecode {
             final Optional<XmlMaxs> maxs = xmlmethod.maxs();
             final BytecodeMethod method = maxs.map(
                 xmlMaxs -> bytecode.withMethod(
-                    xmlmethod.properties(), xmlMaxs.stack(), xmlMaxs.locals()
+                    xmlmethod.properties(), xmlMaxs.bytecode()
                 )
             ).orElseGet(() -> bytecode.withMethod(xmlmethod.properties()));
             xmlmethod.annotations().forEach(method::annotation);

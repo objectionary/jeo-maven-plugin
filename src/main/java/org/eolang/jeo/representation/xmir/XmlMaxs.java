@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.directives.DirectivesMaxs;
 import org.xembly.Xembler;
 
@@ -50,7 +51,7 @@ public final class XmlMaxs {
      * @param stack Stack size.
      * @param locals Locals size.
      */
-    public XmlMaxs(final int stack, final int locals) {
+    XmlMaxs(final int stack, final int locals) {
         this(XmlMaxs.prestructor(stack, locals));
     }
 
@@ -59,8 +60,16 @@ public final class XmlMaxs {
      *
      * @param node XML node.
      */
-    public XmlMaxs(final XmlNode node) {
+    XmlMaxs(final XmlNode node) {
         this.node = node;
+    }
+
+    /**
+     * Convert to bytecode maxs.
+     * @return Bytecode maxs.
+     */
+    public BytecodeMaxs bytecode() {
+        return new BytecodeMaxs(this.stack(), this.locals());
     }
 
     /**
@@ -69,7 +78,7 @@ public final class XmlMaxs {
      * @return Stack size.
      */
     @EqualsAndHashCode.Include
-    public int stack() {
+    private int stack() {
         return (int) new XmlOperand(
             this.node.children().collect(Collectors.toList()).get(0)
         ).asObject();
@@ -81,7 +90,7 @@ public final class XmlMaxs {
      * @return Locals size.
      */
     @EqualsAndHashCode.Include
-    public int locals() {
+    private int locals() {
         return (int) new XmlOperand(
             this.node.children().collect(Collectors.toList()).get(1)
         ).asObject();
