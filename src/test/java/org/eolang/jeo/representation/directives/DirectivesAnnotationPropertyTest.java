@@ -24,9 +24,10 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import java.util.List;
+import java.util.Arrays;
 import org.eolang.jeo.representation.DataType;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
 import org.eolang.jeo.representation.xmir.XmlAnnotationProperty;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
@@ -113,26 +114,16 @@ final class DirectivesAnnotationPropertyTest {
     void createsAnnotationPlainProperty() throws ImpossibleModificationException {
         final String name = "hello";
         final int value = 1;
-        final XmlAnnotationProperty property = new XmlAnnotationProperty(
-            new XmlNode(
-                new Xembler(DirectivesAnnotationProperty.plain(name, value)).xml()
+        MatcherAssert.assertThat(
+            "Incorrect annotation property for plain property",
+            new XmlAnnotationProperty(
+                new XmlNode(
+                    new Xembler(DirectivesAnnotationProperty.plain(name, value)).xml()
+                )
+            ).bytecode(),
+            Matchers.equalTo(
+                BytecodeAnnotationProperty.byType("PLAIN", Arrays.asList(name, value))
             )
-        );
-        final List<Object> params = property.params();
-        MatcherAssert.assertThat(
-            "Incorrect annotation property type",
-            property.type(),
-            Matchers.equalTo("PLAIN")
-        );
-        MatcherAssert.assertThat(
-            "Incorrect annotation property name",
-            params.get(0),
-            Matchers.equalTo(name)
-        );
-        MatcherAssert.assertThat(
-            "Incorrect annotation property value",
-            params.get(1),
-            Matchers.equalTo(value)
         );
     }
 
@@ -141,31 +132,18 @@ final class DirectivesAnnotationPropertyTest {
         final String name = "name";
         final String descriptor = "Lorg/eolang/jeo/representation/DataType";
         final String value = "BOOL";
-        final XmlAnnotationProperty property = new XmlAnnotationProperty(
-            new XmlNode(
-                new Xembler(DirectivesAnnotationProperty.enump(name, descriptor, value)).xml()
+        MatcherAssert.assertThat(
+            "Incorrect annotation property for enum property",
+            new XmlAnnotationProperty(
+                new XmlNode(
+                    new Xembler(DirectivesAnnotationProperty.enump(name, descriptor, value)).xml()
+                )
+            ).bytecode(),
+            Matchers.equalTo(
+                BytecodeAnnotationProperty.byType(
+                    "ENUM", Arrays.asList(name, descriptor, value)
+                )
             )
-        );
-        final List<Object> params = property.params();
-        MatcherAssert.assertThat(
-            "Incorrect annotation property type",
-            property.type(),
-            Matchers.equalTo("ENUM")
-        );
-        MatcherAssert.assertThat(
-            "Incorrect annotation property name",
-            params.get(0),
-            Matchers.equalTo(name)
-        );
-        MatcherAssert.assertThat(
-            "Incorrect annotation property descriptor",
-            params.get(1),
-            Matchers.equalTo(descriptor)
-        );
-        MatcherAssert.assertThat(
-            "Incorrect annotation property value",
-            params.get(2),
-            Matchers.equalTo(value)
         );
     }
 
@@ -174,31 +152,23 @@ final class DirectivesAnnotationPropertyTest {
         final String name = "name";
         final String descriptor = "java/lang/Override";
         final boolean visible = true;
-        final XmlAnnotationProperty property = new XmlAnnotationProperty(
-            new XmlNode(
-                new Xembler(
-                    DirectivesAnnotationProperty.array(
-                        name,
-                        new DirectivesAnnotation(descriptor, visible)
-                    )
-                ).xml()
+        MatcherAssert.assertThat(
+            "Incorrect array annotation property",
+            new XmlAnnotationProperty(
+                new XmlNode(
+                    new Xembler(
+                        DirectivesAnnotationProperty.array(
+                            name,
+                            new DirectivesAnnotation(descriptor, visible)
+                        )
+                    ).xml()
+                )
+            ).bytecode(),
+            Matchers.equalTo(
+                BytecodeAnnotationProperty.byType(
+                    "ARRAY", Arrays.asList(name, new BytecodeAnnotation(descriptor, visible))
+                )
             )
-        );
-        final List<Object> params = property.params();
-        MatcherAssert.assertThat(
-            "Incorrect annotation property type",
-            property.type(),
-            Matchers.equalTo("ARRAY")
-        );
-        MatcherAssert.assertThat(
-            "Incorrect annotation property name",
-            params.get(0),
-            Matchers.equalTo(name)
-        );
-        MatcherAssert.assertThat(
-            "Incorrect annotation property child",
-            (BytecodeAnnotation) params.get(1),
-            Matchers.equalTo(new BytecodeAnnotation(descriptor, visible))
         );
     }
 
@@ -207,37 +177,25 @@ final class DirectivesAnnotationPropertyTest {
         final String name = "name";
         final String descriptor = "java/lang/Override";
         final boolean visible = true;
-        final XmlAnnotationProperty property = new XmlAnnotationProperty(
-            new XmlNode(
-                new Xembler(
-                    DirectivesAnnotationProperty.annotation(
-                        name,
-                        descriptor,
-                        new DirectivesAnnotation(descriptor, visible)
-                    )
-                ).xml()
-            )
-        );
-        final List<Object> params = property.params();
         MatcherAssert.assertThat(
             "Incorrect annotation property type",
-            property.type(),
-            Matchers.equalTo("ANNOTATION")
-        );
-        MatcherAssert.assertThat(
-            "Incorrect annotation property name",
-            params.get(0),
-            Matchers.equalTo(name)
-        );
-        MatcherAssert.assertThat(
-            "Incorrect annotation property descriptor",
-            params.get(1),
-            Matchers.equalTo(descriptor)
-        );
-        MatcherAssert.assertThat(
-            "Incorrect annotation property child",
-            (BytecodeAnnotation) params.get(2),
-            Matchers.equalTo(new BytecodeAnnotation(descriptor, visible))
+            new XmlAnnotationProperty(
+                new XmlNode(
+                    new Xembler(
+                        DirectivesAnnotationProperty.annotation(
+                            name,
+                            descriptor,
+                            new DirectivesAnnotation(descriptor, visible)
+                        )
+                    ).xml()
+                )
+            ).bytecode(),
+            Matchers.equalTo(
+                BytecodeAnnotationProperty.byType(
+                    "ANNOTATION",
+                    Arrays.asList(name, descriptor, new BytecodeAnnotation(descriptor, visible))
+                )
+            )
         );
     }
 }

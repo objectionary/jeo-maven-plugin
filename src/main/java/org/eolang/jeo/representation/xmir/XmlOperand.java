@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.xmir;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.DataType;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 
 /**
  * XML operand.
@@ -72,7 +71,7 @@ public final class XmlOperand {
             result = new XmlAnnotation(this.raw).bytecode();
         } else if ("annotation-property".equals(base)) {
             final XmlAnnotationProperty xml = new XmlAnnotationProperty(this.raw);
-            result = xml.toBytecode();
+            result = xml.bytecode();
         } else if ("tuple".equals(base)) {
             result = new XmlTuple(this.raw).asObject();
         } else {

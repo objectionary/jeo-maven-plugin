@@ -88,7 +88,7 @@ public class XmlAnnotation {
         return this.node.children()
             .filter(xmlnode -> xmlnode.hasAttribute("base", "annotation-property"))
             .map(XmlAnnotationProperty::new)
-            .map(XmlAnnotationProperty::toBytecode)
+            .map(XmlAnnotationProperty::bytecode)
             .collect(Collectors.toList());
     }
 }

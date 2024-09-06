@@ -54,7 +54,7 @@ public final class XmlDefaultValue {
         this.node.children().findFirst().ifPresent(
             property -> method.defvalue(
                 new BytecodeDefaultValue(
-                    new XmlAnnotationProperty(property).toBytecode()
+                    new XmlAnnotationProperty(property).bytecode()
                 )
             )
         );

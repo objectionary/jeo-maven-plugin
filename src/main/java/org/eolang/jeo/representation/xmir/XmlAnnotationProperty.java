@@ -50,7 +50,7 @@ public final class XmlAnnotationProperty {
      * Transform to bytecode.
      * @return Bytecode annotation property.
      */
-    public BytecodeAnnotationProperty toBytecode() {
+    public BytecodeAnnotationProperty bytecode() {
         return BytecodeAnnotationProperty.byType(this.type(), this.params());
     }
 
@@ -58,7 +58,7 @@ public final class XmlAnnotationProperty {
      * Type of the property.
      * @return Type.
      */
-    public String type() {
+    private String type() {
         return (String) new XmlOperand(
             this.node.children().collect(Collectors.toList()).get(0)
         ).asObject();
@@ -68,7 +68,7 @@ public final class XmlAnnotationProperty {
      * Property parameters.
      * @return Parameters.
      */
-    public List<Object> params() {
+    private List<Object> params() {
         return this.node.children()
             .skip(1)
             .map(XmlOperand::new)
