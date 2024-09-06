@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.eolang.jeo.representation.xmir.XmlTryCatchEntry;
 import org.hamcrest.MatcherAssert;
@@ -48,32 +49,21 @@ final class DirectivesTryCatchTest {
         final Label end = new Label();
         final Label handler = new Label();
         final String type = "java/lang/Exception";
-        final XmlTryCatchEntry entry = new XmlTryCatchEntry(
-            new XmlNode(
-                new Xembler(
-                    new DirectivesTryCatch(start, end, handler, type)
-                ).xml()
-            )
-        );
         MatcherAssert.assertThat(
-            "We failed to convert try-catch directives to XML. Start label is incorrect.",
-            entry.start(),
-            Matchers.equalTo(start)
-        );
-        MatcherAssert.assertThat(
-            "We failed to convert try-catch directives to XML. End label is incorrect.",
-            entry.end(),
-            Matchers.equalTo(end)
-        );
-        MatcherAssert.assertThat(
-            "We failed to convert try-catch directives to XML. Handler label is incorrect.",
-            entry.handler(),
-            Matchers.equalTo(handler)
-        );
-        MatcherAssert.assertThat(
-            "We failed to convert try-catch directives to XML. Exception type is incorrect.",
-            entry.type(),
-            Matchers.equalTo(type)
+            "We expected to convert try-catch directives to correct bytecode.",
+            new XmlTryCatchEntry(
+                new XmlNode(
+                    new Xembler(
+                        new DirectivesTryCatch(start, end, handler, type)
+                    ).xml()
+                )
+            ).bytecode(),
+            Matchers.equalTo(new BytecodeTryCatchBlock(
+                start,
+                end,
+                handler,
+                type
+            ))
         );
     }
 
@@ -94,38 +84,29 @@ final class DirectivesTryCatchTest {
         final Label handler,
         final String type
     ) throws ImpossibleModificationException {
-        final XmlTryCatchEntry entry = new XmlTryCatchEntry(
-            new XmlNode(
-                new Xembler(
-                    new DirectivesTryCatch(start, end, handler, type)
-                ).xml()
+        MatcherAssert.assertThat(
+            "We failed to convert try-catch directives to correct XML.",
+            new XmlTryCatchEntry(
+                new XmlNode(
+                    new Xembler(
+                        new DirectivesTryCatch(start, end, handler, type)
+                    ).xml()
+                )
+            ).bytecode(),
+            Matchers.equalTo(
+                new BytecodeTryCatchBlock(
+                    start,
+                    end,
+                    handler,
+                    type
+                )
             )
-        );
-        MatcherAssert.assertThat(
-            "We failed to convert try-catch directives to XML. Start label is incorrect.",
-            entry.start(),
-            Matchers.equalTo(start)
-        );
-        MatcherAssert.assertThat(
-            "We failed to convert try-catch directives to XML. End label is incorrect.",
-            entry.end(),
-            Matchers.equalTo(end)
-        );
-        MatcherAssert.assertThat(
-            "We failed to convert try-catch directives to XML. Handler label is incorrect.",
-            entry.handler(),
-            Matchers.equalTo(handler)
-        );
-        MatcherAssert.assertThat(
-            "We failed to convert try-catch directives to XML. Exception type is incorrect.",
-            entry.type(),
-            Matchers.equalTo(type)
         );
     }
 
     /**
      * Test cases.
-     * For {@link #correctlyConvertsToXmirIfSomeLabelsAreAbsent(Label, Label, Label, String)}.
+     * For {@link #convertsToXmirIfSomeLabelsAreAbsent(Label, Label, Label, String)}.
      * @return Test cases.
      */
     @SuppressWarnings("PMD.UnusedPrivateMethod")

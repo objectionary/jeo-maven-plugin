@@ -44,24 +44,24 @@ public final class XmlTuple {
      * Constructor.
      * @param lines XML Lines.
      */
-    public XmlTuple(final String... lines) {
+    XmlTuple(final String... lines) {
         this(String.join("\n", lines));
-    }
-
-    /**
-     * Constructor.
-     * @param xml XML.
-     */
-    public XmlTuple(final String xml) {
-        this(new XmlNode(xml));
     }
 
     /**
      * Constructor.
      * @param node Xmir node.
      */
-    public XmlTuple(final XmlNode node) {
+    XmlTuple(final XmlNode node) {
         this.node = node;
+    }
+
+    /**
+     * Constructor.
+     * @param xml XML.
+     */
+    private XmlTuple(final String xml) {
+        this(new XmlNode(xml));
     }
 
     /**

@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.log.Logger;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -33,6 +34,7 @@ import org.objectweb.asm.MethodVisitor;
  * @since 0.1
  */
 @ToString
+@EqualsAndHashCode
 public final class BytecodeTryCatchBlock implements BytecodeEntry {
 
     /**

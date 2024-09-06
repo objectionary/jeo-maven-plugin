@@ -58,32 +58,50 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      * @param node XML node
      * @param labels Labels
      */
-    public XmlTryCatchEntry(final XmlNode node, final AllLabels labels) {
+    XmlTryCatchEntry(final XmlNode node, final AllLabels labels) {
         this.xmlnode = node;
         this.labels = labels;
     }
 
     @Override
     public void writeTo(final BytecodeMethod method) {
-        method.trycatch(
-            new BytecodeTryCatchBlock(
-                this.start(),
-                this.end(),
-                this.handler(),
-                this.type()
-            )
+        method.trycatch(this.bytecode());
+    }
+
+    /**
+     * Converts XML to bytecode.
+     * @return Bytecode try-catch block.
+     */
+    public BytecodeTryCatchBlock bytecode() {
+        return new BytecodeTryCatchBlock(
+            this.start(),
+            this.end(),
+            this.handler(),
+            this.type()
         );
     }
 
-    public Label start() {
+    /**
+     * Retrieves the start label.
+     * @return Start label.
+     */
+    private Label start() {
         return this.label(0).map(this.labels::label).orElse(null);
     }
 
-    public Label end() {
+    /**
+     * Retrieves the end label.
+     * @return End label.
+     */
+    private Label end() {
         return this.label(1).map(this.labels::label).orElse(null);
     }
 
-    public Label handler() {
+    /**
+     * Retrieves the handler label.
+     * @return Handler label.
+     */
+    private Label handler() {
         return this.label(2).map(this.labels::label).orElse(null);
     }
 
@@ -91,7 +109,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      * Retrieves the exception type.
      * @return Exception type.
      */
-    public String type() {
+    private String type() {
         return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(3))
             .map(XmlNode::text)
             .map(HexString::new)
@@ -105,7 +123,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      * @param id Label uid.
      * @return Label.
      */
-    Optional<String> label(final int id) {
+    private Optional<String> label(final int id) {
         return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(id))
             .filter(node -> !node.hasAttribute("base", "nop"))
             .map(XmlNode::text)
