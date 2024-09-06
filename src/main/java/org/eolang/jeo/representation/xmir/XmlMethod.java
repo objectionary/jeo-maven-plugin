@@ -36,8 +36,12 @@ import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.Signature;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
+import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeParameters;
+import org.eolang.jeo.representation.bytecode.CustomClassWriter;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.objectweb.asm.Opcodes;
@@ -121,6 +125,44 @@ public final class XmlMethod {
         this.node = xmlnode;
         this.labels = new AllLabels();
     }
+
+    /**
+     * Convert to bytecode.
+     * @return Bytecode method.
+     */
+//    public BytecodeMethod bytecode(final CustomClassWriter writer, final BytecodeClass clazz) {
+//        new BytecodeMethod(
+//            writer,
+//            clazz,
+//            this.trycatchEntries()
+//                .stream()
+//                .map(XmlTryCatchEntry::bytecode)
+//                .collect(Collectors.toList()),
+//            this.instructions()
+//                .stream()
+//                .map(XmlBytecodeEntry::bytecode)
+//                .collect(Collectors.toList()),
+//            this.annotations(),
+//            this.properties(),
+//            this.defvalue().map(XmlDefaultValue::bytecode),
+//            maxs().map(XmlMaxs::bytecode).orElse(new BytecodeMaxs(0, 0))
+//
+//        );
+//
+//        final Optional<XmlMaxs> maxs = this.maxs();
+//        final BytecodeMethod method = maxs.map(
+//            xmlMaxs -> bytecode.withMethod(
+//                xmlmethod.properties(), xmlMaxs.bytecode()
+//            )
+//        ).orElseGet(() -> bytecode.withMethod(xmlmethod.properties()));
+//        xmlmethod.annotations().forEach(method::annotation);
+//        xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
+//        xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
+//        xmlmethod.defvalue().ifPresent(defv -> defv.writeTo(method));
+
+//        return method;
+//    }
+
 
     /**
      * Method name.
@@ -366,13 +408,16 @@ public final class XmlMethod {
             .map(XmlDefaultValue::new);
     }
 
+    /**
+     * Method parameters.
+     * @return Parameters.
+     */
     private BytecodeParameters params() {
         final AtomicInteger index = new AtomicInteger(0);
         return new BytecodeParameters(
             this.node.children()
-                .filter(
-                    element -> element.hasAttribute("base", "param")
-                        && !element.hasAttribute("name", "maxs")
+                .filter(element -> element.hasAttribute("base", "param")
+                    && !element.hasAttribute("name", "maxs")
                 )
                 .map(element -> new XmlParam(index.getAndIncrement(), element))
                 .collect(Collectors.toMap(XmlParam::index, XmlParam::annotations))

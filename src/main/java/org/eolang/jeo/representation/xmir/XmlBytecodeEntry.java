@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.bytecode.BytecodeEntry;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 
 /**
@@ -38,4 +39,10 @@ public interface XmlBytecodeEntry {
      * @param method Bytecode Method where instruction should be written.
      */
     void writeTo(BytecodeMethod method);
+
+    /**
+     * Convert to bytecode entry.
+     * @return Bytecode entry.
+     */
+    BytecodeEntry bytecode();
 }

@@ -127,13 +127,46 @@ public final class BytecodeMethod implements Testable {
         final BytecodeClass clazz,
         final BytecodeMaxs maxs
     ) {
-        this.properties = properties;
+        this(
+            visitor,
+            clazz,
+            new ArrayList<>(0),
+            new ArrayList<>(0),
+            new ArrayList<>(0),
+            properties,
+            new ArrayList<>(0),
+            maxs
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param visitor ASM class writer.
+     * @param clazz Original class.
+     * @param tryblocks Try-catch blocks.
+     * @param instructions Method instructions.
+     * @param annotations Method annotations.
+     * @param properties Method properties.
+     * @param defvalues Default values.
+     * @param maxs Max stack and locals.
+     */
+    public BytecodeMethod(
+        final CustomClassWriter visitor,
+        final BytecodeClass clazz,
+        final List<BytecodeEntry> tryblocks,
+        final List<BytecodeEntry> instructions,
+        final List<BytecodeAnnotation> annotations,
+        final BytecodeMethodProperties properties,
+        final List<BytecodeDefaultValue> defvalues,
+        final BytecodeMaxs maxs
+    ) {
         this.visitor = visitor;
         this.clazz = clazz;
-        this.tryblocks = new ArrayList<>(0);
-        this.instructions = new ArrayList<>(0);
-        this.annotations = new ArrayList<>(0);
-        this.defvalues = new ArrayList<>(0);
+        this.tryblocks = tryblocks;
+        this.instructions = instructions;
+        this.annotations = annotations;
+        this.properties = properties;
+        this.defvalues = defvalues;
         this.maxs = maxs;
         this.labels = new AllLabels();
     }

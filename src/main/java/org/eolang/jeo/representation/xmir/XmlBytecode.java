@@ -107,6 +107,9 @@ public final class XmlBytecode {
 //            );
         }
         for (final XmlMethod xmlmethod : clazz.methods()) {
+//            xmlmethod.bytecode().writeTo(bytecode);
+
+            ////REMOVAL CANDIDATE
             final Optional<XmlMaxs> maxs = xmlmethod.maxs();
             final BytecodeMethod method = maxs.map(
                 xmlMaxs -> bytecode.withMethod(
@@ -117,6 +120,7 @@ public final class XmlBytecode {
             xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
             xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
             xmlmethod.defvalue().ifPresent(defv -> defv.writeTo(method));
+            ///REMOVAL CANDIDATE
         }
         clazz.attributes().ifPresent(attrs -> attrs.writeTo(bytecode));
         return bytecode.bytecode();

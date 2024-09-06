@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeDefaultValue;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 
@@ -47,16 +48,23 @@ public final class XmlDefaultValue {
     }
 
     /**
+     * Convert to bytecode.
+     * @return Bytecode default value.
+     */
+    public Optional<BytecodeDefaultValue> bytecode() {
+        return this.node.children().findFirst().map(
+            property -> new BytecodeDefaultValue(
+                new XmlAnnotationProperty(property).bytecode()
+            )
+        );
+    }
+
+    /**
      * Write to method.
      * @param method Method.
      */
     public void writeTo(final BytecodeMethod method) {
-        this.node.children().findFirst().ifPresent(
-            property -> method.defvalue(
-                new BytecodeDefaultValue(
-                    new XmlAnnotationProperty(property).bytecode()
-                )
-            )
-        );
+        this.bytecode().ifPresent(method::defvalue);
     }
+
 }
