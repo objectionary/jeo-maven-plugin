@@ -42,7 +42,7 @@ final class XmlClassPropertiesTest {
         final int actual = new XmlClass(
             "Language",
             new DirectivesClassProperties(expected)
-        ).properties().access();
+        ).properties().bytecode().access();
         MatcherAssert.assertThat(
             String.format(
                 "Can't retrieve access modifier correctly, expected %d (public abstract class), got %d",
@@ -59,7 +59,7 @@ final class XmlClassPropertiesTest {
         final String expected = "Ljava/util/List<Ljava/lang/String;>;";
         final String actual = new XmlClass(
             new DirectivesClassProperties(0, expected)
-        ).properties().signature();
+        ).properties().bytecode().signature();
         MatcherAssert.assertThat(
             String.format(
                 "Can't retrieve signature correctly, expected %s, got %s",
@@ -76,6 +76,7 @@ final class XmlClassPropertiesTest {
         final String expected = "some/custom/Supername";
         final String supername = new XmlClass(new DirectivesClassProperties(0, "", expected))
             .properties()
+            .bytecode()
             .supername();
         MatcherAssert.assertThat(
             String.format(
@@ -93,6 +94,7 @@ final class XmlClassPropertiesTest {
         final String expected = "java/lang/Object";
         final String supername = new XmlClass("DefaultClass")
             .properties()
+            .bytecode()
             .supername();
         MatcherAssert.assertThat(
             String.format(
@@ -110,6 +112,7 @@ final class XmlClassPropertiesTest {
         final String[] expected = {"java/util/List", "java/util/Collection"};
         final String[] interfaces = new XmlClass(new DirectivesClassProperties(0, "", "", expected))
             .properties()
+            .bytecode()
             .interfaces();
         MatcherAssert.assertThat(
             String.format(
@@ -126,6 +129,7 @@ final class XmlClassPropertiesTest {
     void retrievesInterfacesIfTheyAreNotDefinedExplicitly() {
         final String[] interfaces = new XmlClass("WithoutIntefaces")
             .properties()
+            .bytecode()
             .interfaces();
         MatcherAssert.assertThat(
             String.format(

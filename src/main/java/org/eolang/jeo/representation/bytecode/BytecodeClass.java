@@ -185,7 +185,15 @@ public final class BytecodeClass implements Testable {
      */
     public Bytecode bytecode() {
         try {
-            this.props.write(this.visitor, this.name);
+            this.visitor.visit(
+                this.props.version(),
+                this.props.access(),
+                this.name,
+                this.props.signature(),
+                this.props.supername(),
+                this.props.interfaces()
+            );
+
             this.annotations.forEach(annotation -> annotation.write(this.visitor));
             this.fields.forEach(field -> field.write(this.visitor));
             this.methods.forEach(BytecodeMethod::write);

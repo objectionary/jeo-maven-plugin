@@ -32,15 +32,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
  * XML representation of a class.
  *
  * @since 0.1.0
- * @todo #627:30min Improve Encapsulation of XmlClassProperties.
- *  Currently we are exposing many methods like:
- *  - {@link XmlClassProperties#access()}
- *  - {@link XmlClassProperties#signature()}
- *  - {@link XmlClassProperties#supername()}
- *  - {@link XmlClassProperties#interfaces()}
- *  They are some sort of getters. This encapsulation violation tells us about poor design.
- *  We need to hide this methods and provide a better way to access this properties.
- *  Most probably the problem is deeper than just hiding the methods. We need to rethink the design.
  */
 public final class XmlClassProperties {
 
@@ -53,7 +44,7 @@ public final class XmlClassProperties {
      * Constructor.
      * @param clazz XMl representation of a class.
      */
-    public XmlClassProperties(final XmlNode clazz) {
+    XmlClassProperties(final XmlNode clazz) {
         this(clazz.asDocument());
     }
 
@@ -61,74 +52,15 @@ public final class XmlClassProperties {
      * Constructor.
      * @param clazz XML representation of a class.
      */
-    public XmlClassProperties(final XMLDocument clazz) {
+    private XmlClassProperties(final XMLDocument clazz) {
         this.clazz = clazz;
-    }
-
-    /**
-     * Retrieve 'access' modifiers of a class.
-     * @return Access modifiers.
-     */
-    public int access() {
-        return new HexString(this.clazz.xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
-    }
-
-    /**
-     * Retrieve 'signature' of a class.
-     * @return Signature.
-     */
-    public String signature() {
-        return this.clazz.xpath("./o[@name='signature']/text()")
-            .stream()
-            .map(HexString::new)
-            .map(HexString::decode)
-            .findFirst()
-            .orElse(null);
-    }
-
-    /**
-     * Retrieve 'supername' of a class.
-     * @return Supername.
-     */
-    public String supername() {
-        return this.clazz.xpath("./o[@name='supername']/text()")
-            .stream()
-            .map(HexString::new)
-            .map(HexString::decode)
-            .findFirst().orElse("java/lang/Object");
-    }
-
-    /**
-     * Retrieve 'interfaces' of a class.
-     * @return Interfaces.
-     */
-    public String[] interfaces() {
-        return this.clazz.xpath("./o[@name='interfaces']/o/text()")
-            .stream()
-            .map(HexString::new)
-            .map(HexString::decode).toArray(String[]::new);
-    }
-
-    /**
-     * Retrieve bytecode 'version'.
-     * @return Bytecode version.
-     */
-    int version() {
-        final List<String> version = this.clazz.xpath("./o[@name='version']/text()");
-        final int result;
-        if (version.isEmpty()) {
-            result = new DefaultVersion().bytecode();
-        } else {
-            result = new HexString(version.get(0)).decodeAsInt();
-        }
-        return result;
     }
 
     /**
      * Convert to bytecode properties.
      * @return Bytecode properties.
      */
-    BytecodeClassProperties toBytecodeProperties() {
+    public BytecodeClassProperties bytecode() {
         try {
             return new BytecodeClassProperties(
                 this.version(),
@@ -143,6 +75,65 @@ public final class XmlClassProperties {
                 exception
             );
         }
+    }
+
+    /**
+     * Retrieve 'access' modifiers of a class.
+     * @return Access modifiers.
+     */
+    private int access() {
+        return new HexString(this.clazz.xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
+    }
+
+    /**
+     * Retrieve 'signature' of a class.
+     * @return Signature.
+     */
+    private String signature() {
+        return this.clazz.xpath("./o[@name='signature']/text()")
+            .stream()
+            .map(HexString::new)
+            .map(HexString::decode)
+            .findFirst()
+            .orElse(null);
+    }
+
+    /**
+     * Retrieve 'supername' of a class.
+     * @return Supername.
+     */
+    private String supername() {
+        return this.clazz.xpath("./o[@name='supername']/text()")
+            .stream()
+            .map(HexString::new)
+            .map(HexString::decode)
+            .findFirst().orElse("java/lang/Object");
+    }
+
+    /**
+     * Retrieve 'interfaces' of a class.
+     * @return Interfaces.
+     */
+    private String[] interfaces() {
+        return this.clazz.xpath("./o[@name='interfaces']/o/text()")
+            .stream()
+            .map(HexString::new)
+            .map(HexString::decode).toArray(String[]::new);
+    }
+
+    /**
+     * Retrieve bytecode 'version'.
+     * @return Bytecode version.
+     */
+    private int version() {
+        final List<String> version = this.clazz.xpath("./o[@name='version']/text()");
+        final int result;
+        if (version.isEmpty()) {
+            result = new DefaultVersion().bytecode();
+        } else {
+            result = new HexString(version.get(0)).decodeAsInt();
+        }
+        return result;
     }
 }
 

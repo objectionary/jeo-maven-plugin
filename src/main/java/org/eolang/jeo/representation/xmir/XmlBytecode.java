@@ -84,7 +84,7 @@ public final class XmlBytecode {
         final XmlClass clazz = program.top();
         final BytecodeClass bytecode = new BytecodeClass(
             new ClassName(program.pckg(), new PrefixedName(clazz.name()).decode()).full(),
-            clazz.properties().toBytecodeProperties(),
+            clazz.properties().bytecode(),
             this.verify
         );
         clazz.annotations().ifPresent(bytecode::withAnnotations);

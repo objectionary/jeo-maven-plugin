@@ -27,6 +27,7 @@ import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
@@ -125,24 +126,16 @@ final class DirectivesClassTest {
             Matchers.equalTo(name)
         );
         MatcherAssert.assertThat(
-            "Class access is not equal to expected",
-            clazz.properties().access(),
-            Matchers.equalTo(access)
-        );
-        MatcherAssert.assertThat(
-            "Class signature is not equal to expected",
-            clazz.properties().signature(),
-            Matchers.equalTo(signature)
-        );
-        MatcherAssert.assertThat(
-            "Class supername is not equal to expected",
-            clazz.properties().supername(),
-            Matchers.equalTo(supername)
-        );
-        MatcherAssert.assertThat(
-            "Class interface is not equal to expected",
-            clazz.properties().interfaces()[0],
-            Matchers.equalTo(interfce)
+            "Class properties are not equal to expected",
+            clazz.properties().bytecode(),
+            Matchers.equalTo(
+                new BytecodeClassProperties(
+                    access,
+                    signature,
+                    supername,
+                    interfce
+                )
+            )
         );
     }
 

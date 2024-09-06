@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.ClassVisitor;
@@ -33,6 +34,7 @@ import org.objectweb.asm.ClassVisitor;
  * @since 0.1.0
  */
 @ToString
+@EqualsAndHashCode
 public final class BytecodeClassProperties {
 
     /**
@@ -70,6 +72,22 @@ public final class BytecodeClassProperties {
 
     /**
      * Constructor.
+     * @param access Access modifiers.
+     * @param signature Signature.
+     * @param supername Supername.
+     * @param interfaces Interfaces.
+     */
+    public BytecodeClassProperties(
+        final int access,
+        final String signature,
+        final String supername,
+        final String... interfaces
+    ) {
+        this(new DefaultVersion().bytecode(), access, signature, supername, interfaces);
+    }
+
+    /**
+     * Constructor.
      * @param version Bytecode version.
      * @param access Access modifiers.
      * @param signature Signature.
@@ -89,6 +107,27 @@ public final class BytecodeClassProperties {
         this.signature = signature;
         this.supername = supername;
         this.interfaces = interfaces.clone();
+    }
+
+
+    public int version() {
+        return this.version;
+    }
+
+    public int access() {
+        return this.access;
+    }
+
+    public String signature() {
+        return this.signature;
+    }
+
+    public String supername() {
+        return this.supername;
+    }
+
+    public String[] interfaces() {
+        return this.interfaces;
     }
 
     /**
