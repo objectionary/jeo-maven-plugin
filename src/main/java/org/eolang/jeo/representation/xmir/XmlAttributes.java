@@ -44,7 +44,7 @@ public final class XmlAttributes {
      * Constructor.
      * @param node XML node.
      */
-    public XmlAttributes(final XmlNode node) {
+    XmlAttributes(final XmlNode node) {
         this.node = node;
     }
 

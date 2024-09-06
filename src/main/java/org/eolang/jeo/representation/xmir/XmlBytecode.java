@@ -51,9 +51,19 @@ public final class XmlBytecode {
 
     /**
      * Constructor.
+     * @param xml XML.
+     * @param verify Verify bytecode.
+     */
+    public XmlBytecode(final XML xml, final boolean verify) {
+        this.xml = xml;
+        this.verify = verify;
+    }
+
+    /**
+     * Constructor.
      * @param lines Xml document lines.
      */
-    public XmlBytecode(final String... lines) {
+    XmlBytecode(final String... lines) {
         this(new XMLDocument(String.join("\n", lines)));
     }
 
@@ -61,18 +71,8 @@ public final class XmlBytecode {
      * Constructor.
      * @param xml XML.
      */
-    public XmlBytecode(final XML xml) {
+    private XmlBytecode(final XML xml) {
         this(xml, true);
-    }
-
-    /**
-     * Constructor.
-     * @param xml XML.
-     * @param verify Verify bytecode.
-     */
-    public XmlBytecode(final XML xml, final boolean verify) {
-        this.xml = xml;
-        this.verify = verify;
     }
 
     /**
@@ -97,24 +97,13 @@ public final class XmlBytecode {
                 field.access()
             );
             field.annotations().map(XmlAnnotations::bytecode).ifPresent(
-                all -> {
-                    all.annotations().forEach(
-                        annotation -> bfield.withAnnotation(
-                            annotation.descriptor(),
-                            annotation.isVisible()
-                        )
-                    );
-                }
+                all -> all.annotations().forEach(
+                    annotation -> bfield.withAnnotation(
+                        annotation.descriptor(),
+                        annotation.isVisible()
+                    )
+                )
             );
-//            field.annotations().ifPresent(
-//                annotations -> annotations.all()
-//                    .forEach(
-//                        annotation -> bfield.withAnnotation(
-//                            annotation.descriptor(),
-//                            annotation.visible()
-//                        )
-//                    )
-//            );
         }
         for (final XmlMethod xmlmethod : clazz.methods()) {
             final Optional<XmlMaxs> maxs = xmlmethod.maxs();

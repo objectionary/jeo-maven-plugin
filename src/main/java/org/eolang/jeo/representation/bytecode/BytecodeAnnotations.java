@@ -23,20 +23,33 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Bytecode annotations.
  * @since 0.6
  */
+@ToString
+@EqualsAndHashCode
 public final class BytecodeAnnotations {
     /**
      * All annotations.
      */
     private final List<BytecodeAnnotation> all;
+
+    /**
+     * Constructor.
+     * @param all All annotations.
+     */
+    public BytecodeAnnotations(final BytecodeAnnotation... all) {
+        this(Arrays.asList(all));
+    }
 
     /**
      * Constructor.

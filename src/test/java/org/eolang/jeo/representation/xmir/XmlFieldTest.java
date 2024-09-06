@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import java.util.List;
 import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.DirectivesField;
 import org.hamcrest.MatcherAssert;
@@ -161,16 +162,13 @@ final class XmlFieldTest {
             opt.isPresent(),
             Matchers.is(true)
         );
-        final List<XmlAnnotation> all = opt.get().all();
         MatcherAssert.assertThat(
-            "First annotation is not correct",
-            all.get(0).bytecode(),
-            Matchers.equalTo(new BytecodeAnnotation(override, true))
-        );
-        MatcherAssert.assertThat(
-            "Second annotation is not correct",
-            all.get(1).bytecode(),
-            Matchers.equalTo(new BytecodeAnnotation(safe, true))
+            "Annotations are not correct",
+            opt.get().bytecode(),
+            Matchers.equalTo(new BytecodeAnnotations(
+                new BytecodeAnnotation(override, true),
+                new BytecodeAnnotation(safe, true)
+            ))
         );
     }
 }

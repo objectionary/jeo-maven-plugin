@@ -35,7 +35,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.Signature;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeParameters;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
@@ -257,17 +257,13 @@ public final class XmlMethod {
      * @return Annotations.
      */
     public List<BytecodeAnnotation> annotations() {
-        final List<XmlAnnotation> all = this.node.children()
+        return this.node.children()
             .filter(element -> element.hasAttribute("name", "annotations"))
             .findFirst()
             .map(XmlAnnotations::new)
-            .map(XmlAnnotations::all)
+            .map(XmlAnnotations::bytecode)
+            .map(BytecodeAnnotations::annotations)
             .orElse(new ArrayList<>(0));
-        final List<BytecodeAnnotation> res = new ArrayList<>(all.size());
-        for (final XmlAnnotation xml : all) {
-            res.add(xml.bytecode());
-        }
-        return res;
     }
 
     /**

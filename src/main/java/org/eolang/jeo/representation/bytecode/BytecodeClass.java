@@ -355,10 +355,7 @@ public final class BytecodeClass implements Testable {
      * @return This object.
      */
     public BytecodeClass withAnnotations(final XmlAnnotations all) {
-        all.all()
-            .stream()
-            .map(XmlAnnotation::bytecode)
-            .forEach(this.annotations::add);
+        this.annotations.addAll(all.bytecode().annotations());
         return this;
     }
 

@@ -47,10 +47,14 @@ public class XmlAnnotations {
      * Constructor.
      * @param xmlnode XML node.
      */
-    public XmlAnnotations(final XmlNode xmlnode) {
+    XmlAnnotations(final XmlNode xmlnode) {
         this.node = xmlnode;
     }
 
+    /**
+     * Convert to bytecode.
+     * @return Bytecode annotations.
+     */
     public BytecodeAnnotations bytecode() {
         return new BytecodeAnnotations(this.all().stream().map(XmlAnnotation::bytecode));
     }
@@ -59,7 +63,7 @@ public class XmlAnnotations {
      * All annotations.
      * @return Annotations.
      */
-    public List<XmlAnnotation> all() {
+    private List<XmlAnnotation> all() {
         return this.node.children()
             .map(XmlAnnotation::new)
             .collect(Collectors.toList());
