@@ -21,60 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.bytecode;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import java.util.stream.Stream;
 
 /**
- * Xmir representation of a method parameter.
- * @since 0.4
- * @todo #596:30min Add unit tests for the XmlParam class.
- *  We should add unit tests for the XmlParam class. The tests should cover
- *  the following methods: {@link #index()} and {@link #annotations()}.
- *  This will help us to ensure that the class is working as expected.
+ * Bytecode annotations.
+ * @since 0.6
  */
-public final class XmlParam {
-
+public final class BytecodeAnnotations {
     /**
-     * Index of the parameter in the method.
+     * All annotations.
      */
-    private final int position;
-
-    /**
-     * Root node from which we will get all required data.
-     */
-    private final XmlNode root;
+    private final List<BytecodeAnnotation> all;
 
     /**
      * Constructor.
-     * @param position Index of the parameter in the method.
-     * @param root Root node.
+     * @param all All annotations.
      */
-    public XmlParam(final int position, final XmlNode root) {
-        this.position = position;
-        this.root = root;
+    public BytecodeAnnotations(Stream<BytecodeAnnotation> all) {
+        this(all.collect(Collectors.toList()));
     }
 
     /**
-     * Index of the parameter in the method.
-     * @return Index.
+     * Constructor.
+     * @param all All annotations.
      */
-    public int index() {
-        return this.position;
+    private BytecodeAnnotations(final List<BytecodeAnnotation> all) {
+        this.all = all;
     }
 
     /**
-     * Annotations of the parameter.
+     * All annotations.
      * @return Annotations.
      */
     public List<BytecodeAnnotation> annotations() {
-        return this.root.children()
-            .filter(node -> node.hasAttribute("base", "annotation"))
-            .map(XmlAnnotation::new)
-            .map(XmlAnnotation::bytecode)
-            .collect(Collectors.toList());
+        return Collections.unmodifiableList(this.all);
     }
-
 }

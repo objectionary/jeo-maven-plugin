@@ -96,15 +96,25 @@ public final class XmlBytecode {
                 field.value(),
                 field.access()
             );
-            field.annotations().ifPresent(
-                annotations -> annotations.all()
-                    .forEach(
+            field.annotations().map(XmlAnnotations::bytecode).ifPresent(
+                all -> {
+                    all.annotations().forEach(
                         annotation -> bfield.withAnnotation(
                             annotation.descriptor(),
-                            annotation.visible()
+                            annotation.isVisible()
                         )
-                    )
+                    );
+                }
             );
+//            field.annotations().ifPresent(
+//                annotations -> annotations.all()
+//                    .forEach(
+//                        annotation -> bfield.withAnnotation(
+//                            annotation.descriptor(),
+//                            annotation.visible()
+//                        )
+//                    )
+//            );
         }
         for (final XmlMethod xmlmethod : clazz.methods()) {
             final Optional<XmlMaxs> maxs = xmlmethod.maxs();

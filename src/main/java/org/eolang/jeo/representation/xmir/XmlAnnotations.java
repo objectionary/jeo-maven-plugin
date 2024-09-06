@@ -25,6 +25,8 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 
 /**
  * Xmir annotations.
@@ -47,6 +49,10 @@ public class XmlAnnotations {
      */
     public XmlAnnotations(final XmlNode xmlnode) {
         this.node = xmlnode;
+    }
+
+    public BytecodeAnnotations bytecode() {
+        return new BytecodeAnnotations(this.all().stream().map(XmlAnnotation::bytecode));
     }
 
     /**

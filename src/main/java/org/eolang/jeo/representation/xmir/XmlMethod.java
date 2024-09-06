@@ -265,10 +265,7 @@ public final class XmlMethod {
             .orElse(new ArrayList<>(0));
         final List<BytecodeAnnotation> res = new ArrayList<>(all.size());
         for (final XmlAnnotation xml : all) {
-            final boolean visible = xml.visible();
-            final String descriptor = xml.descriptor();
-            final List<BytecodeAnnotationProperty> props = xml.props();
-            res.add(new BytecodeAnnotation(descriptor, visible, props));
+            res.add(xml.bytecode());
         }
         return res;
     }

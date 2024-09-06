@@ -43,15 +43,27 @@ public class XmlAnnotation {
      * Constructor.
      * @param xmlnode XML node.
      */
-    public XmlAnnotation(final XmlNode xmlnode) {
+    XmlAnnotation(final XmlNode xmlnode) {
         this.node = xmlnode;
+    }
+
+    /**
+     * Convert to bytecode.
+     * @return Bytecode annotation.
+     */
+    public BytecodeAnnotation bytecode() {
+        return new BytecodeAnnotation(
+            this.descriptor(),
+            this.visible(),
+            this.props()
+        );
     }
 
     /**
      * Annotation descriptor.
      * @return Descriptor.
      */
-    public String descriptor() {
+    private String descriptor() {
         return new HexString(
             this.node.children().collect(Collectors.toList()).get(0).text()
         ).decode();
@@ -62,7 +74,7 @@ public class XmlAnnotation {
      * Is it runtime-visible?
      * @return True if visible at runtime, false otherwise.
      */
-    public boolean visible() {
+    private boolean visible() {
         return new HexString(
             this.node.children().collect(Collectors.toList()).get(1).text()
         ).decodeAsBoolean();
@@ -72,23 +84,11 @@ public class XmlAnnotation {
      * Annotation properties.
      * @return Properties.
      */
-    public List<BytecodeAnnotationProperty> props() {
+    private List<BytecodeAnnotationProperty> props() {
         return this.node.children()
             .filter(xmlnode -> xmlnode.hasAttribute("base", "annotation-property"))
             .map(XmlAnnotationProperty::new)
             .map(XmlAnnotationProperty::toBytecode)
             .collect(Collectors.toList());
-    }
-
-    /**
-     * Convert to bytecode.
-     * @return Bytecode annotation.
-     */
-    public BytecodeAnnotation toBytecode() {
-        return new BytecodeAnnotation(
-            this.descriptor(),
-            this.visible(),
-            this.props()
-        );
     }
 }
