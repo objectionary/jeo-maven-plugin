@@ -23,8 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
@@ -33,6 +32,8 @@ import org.eolang.jeo.representation.directives.DirectivesField;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -78,11 +79,11 @@ final class XmlFieldTest {
         );
     }
 
-    @Test
-    void parsesFieldWithStringValue() throws ImpossibleModificationException {
-        final String expected = "7099057708183571937";
+    @ParameterizedTest
+    @MethodSource("values")
+    void parsesFieldWithValues(final Object value) throws ImpossibleModificationException {
         MatcherAssert.assertThat(
-            "Failed to parse XMIR field",
+            "We expect the value to be the same",
             new XmlField(
                 new XmlNode(
                     new Xembler(
@@ -91,55 +92,12 @@ final class XmlFieldTest {
                             "serialVersionUID",
                             "Ljava/lang/String;",
                             "",
-                            expected
+                            value
                         )
                     ).xml()
                 )
             ).bytecode().value(),
-            Matchers.equalTo(expected)
-        );
-    }
-
-    @Test
-    void parsesFieldWithEmptyStringValue() throws ImpossibleModificationException {
-        final String expected = "";
-        MatcherAssert.assertThat(
-            "Failed to parse XMIR field with empty initial value",
-            new XmlField(
-                new XmlNode(
-                    new Xembler(
-                        new DirectivesField(
-                            Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL,
-                            "serialVersionUID",
-                            "Ljava/lang/String;",
-                            "",
-                            expected
-                        )
-                    ).xml()
-                )
-            ).bytecode().value(),
-            Matchers.equalTo(expected)
-        );
-    }
-
-    @Test
-    void parsesFieldWithNullableStringValue() throws ImpossibleModificationException {
-        MatcherAssert.assertThat(
-            "Failed to parse XMIR field with null initial value",
-            new XmlField(
-                new XmlNode(
-                    new Xembler(
-                        new DirectivesField(
-                            Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL,
-                            "serialVersionUID",
-                            "Ljava/lang/String;",
-                            "",
-                            null
-                        )
-                    ).xml()
-                )
-            ).bytecode().value(),
-            Matchers.nullValue()
+            Matchers.equalTo(value)
         );
     }
 
@@ -172,5 +130,15 @@ final class XmlFieldTest {
                 )
             )
         );
+    }
+
+    /**
+     * Provide values.
+     * Test cases for {@link #parsesFieldWithValues(Object)}.
+     * @return Values.
+     */
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private static Stream<Object> values() {
+        return Stream.of("7099057708183571937", "", null);
     }
 }
