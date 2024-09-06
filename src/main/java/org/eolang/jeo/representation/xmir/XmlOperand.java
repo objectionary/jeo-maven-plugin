@@ -66,7 +66,7 @@ public final class XmlOperand {
                 )
             );
         if ("handle".equals(base)) {
-            result = new XmlHandler(this.raw).asHandle();
+            result = new XmlHandler(this.raw).bytecode().asHandle();
         } else if ("annotation".equals(base)) {
             result = new XmlAnnotation(this.raw).bytecode();
         } else if ("annotation-property".equals(base)) {

@@ -21,45 +21,72 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.bytecode;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeHandler;
+import org.eolang.jeo.representation.xmir.XmlOperand;
+import org.objectweb.asm.Handle;
 
 /**
- * XML representation of handler.
- * @since 0.3
+ * Bytecode handler.
+ * @since 0.6
  */
-final class XmlHandler {
+public final class BytecodeHandler {
 
     /**
-     * XML node.
+     * Handler tag.
      */
-    private final XmlNode node;
+    private final int tag;
+
+    /**
+     * Owner.
+     */
+    private final String owner;
+
+    /**
+     * Name.
+     */
+    private final String name;
+
+    /**
+     * Descriptor.
+     */
+    private final String descriptor;
+
+    /**
+     * Is it an interface?
+     */
+    private final boolean interf;
 
     /**
      * Constructor.
-     * @param node Node.
+     * @param tag Tag.
+     * @param owner Owner.
+     * @param name Name.
+     * @param descriptor Descriptor.
+     * @param interf Is it an interface?
      */
-    XmlHandler(final XmlNode node) {
-        this.node = node;
+    public BytecodeHandler(
+        final int tag,
+        final String owner,
+        final String name,
+        final String descriptor,
+        final boolean interf
+    ) {
+        this.tag = tag;
+        this.owner = owner;
+        this.name = name;
+        this.descriptor = descriptor;
+        this.interf = interf;
     }
 
     /**
      * Convert to a handler.
      * @return Handler.
      */
-    public BytecodeHandler bytecode() {
-        final List<XmlOperand> operands = this.node.children()
-            .map(XmlOperand::new)
-            .collect(Collectors.toList());
-        return new BytecodeHandler(
-            Integer.class.cast(operands.get(0).asObject()),
-            operands.get(1).asObject().toString(),
-            operands.get(2).asObject().toString(),
-            operands.get(3).asObject().toString(),
-            Boolean.class.cast(operands.get(4).asObject())
-        );
+    public Handle asHandle() {
+        return new Handle(this.tag, this.owner, this.name, this.descriptor, this.interf);
     }
+
 }
