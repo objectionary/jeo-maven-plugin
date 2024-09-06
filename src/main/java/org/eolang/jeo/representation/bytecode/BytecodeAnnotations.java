@@ -74,4 +74,14 @@ public final class BytecodeAnnotations {
     public List<BytecodeAnnotation> annotations() {
         return Collections.unmodifiableList(this.all);
     }
+
+    /**
+     * Add annotation.
+     * @param annotation Annotation.
+     * @return These annotations.
+     */
+    public BytecodeAnnotations with(final BytecodeAnnotation annotation) {
+        this.all.add(annotation);
+        return this;
+    }
 }

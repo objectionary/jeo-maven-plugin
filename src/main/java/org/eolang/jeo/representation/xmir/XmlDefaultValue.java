@@ -42,7 +42,7 @@ public final class XmlDefaultValue {
      * Constructor.
      * @param node Default value XMIR node.
      */
-    public XmlDefaultValue(final XmlNode node) {
+    XmlDefaultValue(final XmlNode node) {
         this.node = node;
     }
 

@@ -89,21 +89,22 @@ public final class XmlBytecode {
         );
         clazz.annotations().ifPresent(bytecode::withAnnotations);
         for (final XmlField field : clazz.fields()) {
-            final BytecodeField bfield = bytecode.withField(
-                field.name(),
-                field.descriptor(),
-                field.signature(),
-                field.value(),
-                field.access()
-            );
-            field.annotations().map(XmlAnnotations::bytecode).ifPresent(
-                all -> all.annotations().forEach(
-                    annotation -> bfield.withAnnotation(
-                        annotation.descriptor(),
-                        annotation.isVisible()
-                    )
-                )
-            );
+            bytecode.withField(field.bytecode());
+//            final BytecodeField bfield = bytecode.withField(
+//                field.name(),
+//                field.descriptor(),
+//                field.signature(),
+//                field.value(),
+//                field.access()
+//            );
+//            field.annotations().map(XmlAnnotations::bytecode).ifPresent(
+//                all -> all.annotations().forEach(
+//                    annotation -> bfield.withAnnotation(
+//                        annotation.descriptor(),
+//                        annotation.isVisible()
+//                    )
+//                )
+//            );
         }
         for (final XmlMethod xmlmethod : clazz.methods()) {
             final Optional<XmlMaxs> maxs = xmlmethod.maxs();

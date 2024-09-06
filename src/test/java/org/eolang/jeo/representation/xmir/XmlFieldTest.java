@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeField;
 import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.DirectivesField;
 import org.hamcrest.MatcherAssert;
@@ -49,33 +50,31 @@ final class XmlFieldTest {
         final String name = "serialVersionUID";
         final String descriptor = "J";
         final long value = 7_099_057_708_183_571_937L;
-        final XmlField field = new XmlField(
-            new XmlNode(
-                new Xembler(
-                    new DirectivesField(
-                        access,
-                        name,
-                        descriptor,
-                        "",
-                        value
-                    )
-                ).xml()
-            )
-        );
         MatcherAssert.assertThat(
-            String.format(
-                "Failed to parse XMIR field. Expected name '%s', actual '%s'. Expected descriptor '%s', actual '%s'. Expected value '%s', actual '%s'",
-                name,
-                field.name(),
-                descriptor,
-                field.descriptor(),
-                value,
-                field.value()
-            ),
-            name.equals(field.name())
-                && descriptor.equals(field.descriptor())
-                && field.value().equals(value),
-            Matchers.is(true)
+            "Failed to parse XMIR field",
+            new XmlField(
+                new XmlNode(
+                    new Xembler(
+                        new DirectivesField(
+                            access,
+                            name,
+                            descriptor,
+                            "",
+                            value
+                        )
+                    ).xml()
+                )
+            ).bytecode(),
+            Matchers.equalTo(
+                new BytecodeField(
+                    name,
+                    descriptor,
+                    null,
+                    value,
+                    access,
+                    new BytecodeAnnotations()
+                )
+            )
         );
     }
 
@@ -96,7 +95,7 @@ final class XmlFieldTest {
                         )
                     ).xml()
                 )
-            ).value(),
+            ).bytecode().value(),
             Matchers.equalTo(expected)
         );
     }
@@ -118,7 +117,7 @@ final class XmlFieldTest {
                         )
                     ).xml()
                 )
-            ).value(),
+            ).bytecode().value(),
             Matchers.equalTo(expected)
         );
     }
@@ -139,7 +138,7 @@ final class XmlFieldTest {
                         )
                     ).xml()
                 )
-            ).value(),
+            ).bytecode().value(),
             Matchers.nullValue()
         );
     }
@@ -148,27 +147,30 @@ final class XmlFieldTest {
     void retrievesFieldAnnotations() throws ImpossibleModificationException {
         final String override = "java/lang/Override";
         final String safe = "java/lang/SafeVarargs";
-        final Optional<XmlAnnotations> opt = new XmlField(
-            new XmlNode(
-                new Xembler(
-                    new DirectivesField()
-                        .annotation(new DirectivesAnnotation(override, true))
-                        .annotation(new DirectivesAnnotation(safe, true))
-                ).xml()
-            )
-        ).annotations();
         MatcherAssert.assertThat(
             "Annotations are not found",
-            opt.isPresent(),
-            Matchers.is(true)
-        );
-        MatcherAssert.assertThat(
-            "Annotations are not correct",
-            opt.get().bytecode(),
-            Matchers.equalTo(new BytecodeAnnotations(
-                new BytecodeAnnotation(override, true),
-                new BytecodeAnnotation(safe, true)
-            ))
+            new XmlField(
+                new XmlNode(
+                    new Xembler(
+                        new DirectivesField()
+                            .annotation(new DirectivesAnnotation(override, true))
+                            .annotation(new DirectivesAnnotation(safe, true))
+                    ).xml()
+                )
+            ).bytecode(),
+            Matchers.equalTo(
+                new BytecodeField(
+                    "unknown",
+                    "I",
+                    null,
+                    0,
+                    1,
+                    new BytecodeAnnotations(
+                        new BytecodeAnnotation(override, true),
+                        new BytecodeAnnotation(safe, true)
+                    )
+                )
+            )
         );
     }
 }

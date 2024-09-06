@@ -27,6 +27,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.ToString;
 import org.eolang.jeo.representation.PrefixedName;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeField;
 
 /**
  * XML field.
@@ -44,15 +46,30 @@ public class XmlField {
      * Constructor.
      * @param xmlnode Field node.
      */
-    public XmlField(final XmlNode xmlnode) {
+    XmlField(final XmlNode xmlnode) {
         this.node = xmlnode;
+    }
+
+    /**
+     * Convert to bytecode.
+     * @return Bytecode field.
+     */
+    public BytecodeField bytecode() {
+        return new BytecodeField(
+            this.name(),
+            this.descriptor(),
+            this.signature(),
+            this.value(),
+            this.access(),
+            this.annotations().map(XmlAnnotations::bytecode).orElse(new BytecodeAnnotations())
+        );
     }
 
     /**
      * Field name.
      * @return Name.
      */
-    public String name() {
+    private String name() {
         return new PrefixedName(
             this.node.attribute("name").orElseThrow(
                 () -> new IllegalStateException(
@@ -66,7 +83,7 @@ public class XmlField {
      * Field access modifiers.
      * @return Access modifiers.
      */
-    public int access() {
+    private int access() {
         return this.find(Attribute.ACCESS).map(HexString::decodeAsInt).orElse(0);
     }
 
@@ -74,7 +91,7 @@ public class XmlField {
      * Field descriptor.
      * @return Descriptor.
      */
-    public String descriptor() {
+    private String descriptor() {
         return this.find(Attribute.DESCRIPTOR).map(HexString::decode).orElse(null);
     }
 
@@ -82,7 +99,7 @@ public class XmlField {
      * Field signature.
      * @return Signature.
      */
-    public String signature() {
+    private String signature() {
         return this.find(Attribute.SIGNATURE).map(HexString::decode).orElse(null);
     }
 
@@ -90,7 +107,7 @@ public class XmlField {
      * Field value.
      * @return Value.
      */
-    public Object value() {
+    private Object value() {
         return new XmlOperand(
             this.node.children()
                 .collect(Collectors.toList())
@@ -102,7 +119,7 @@ public class XmlField {
      * Field annotations.
      * @return Annotations.
      */
-    public Optional<XmlAnnotations> annotations() {
+    private Optional<XmlAnnotations> annotations() {
         return this.node.optchild("name", String.format("annotations-%s", this.name()))
             .map(XmlAnnotations::new);
     }

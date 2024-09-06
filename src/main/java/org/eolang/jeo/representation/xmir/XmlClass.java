@@ -47,6 +47,7 @@ import org.xembly.Xembler;
 @EqualsAndHashCode
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
 public final class XmlClass {
+    //TODO: WE NEED REFACTORING HERE!
 
     /**
      * Class node from entire XML.

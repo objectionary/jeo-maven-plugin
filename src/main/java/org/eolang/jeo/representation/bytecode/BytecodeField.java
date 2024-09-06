@@ -25,6 +25,8 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 
@@ -32,6 +34,8 @@ import org.objectweb.asm.FieldVisitor;
  * Bytecode field.
  * @since 0.2
  */
+@ToString
+@EqualsAndHashCode
 public final class BytecodeField {
 
     /**
@@ -62,7 +66,7 @@ public final class BytecodeField {
     /**
      * Annotations.
      */
-    private final Collection<BytecodeAnnotation> annotations;
+    private final BytecodeAnnotations annotations;
 
     /**
      * Constructor.
@@ -80,12 +84,36 @@ public final class BytecodeField {
         final Object value,
         final int access
     ) {
+        this(name, descr, signature, value, access, new BytecodeAnnotations());
+    }
+
+    /**
+     * Constructor.
+     * @param name Name.
+     * @param descriptor Descriptor.
+     * @param signature Signature.
+     * @param value Value.
+     * @param access Access.
+     * @param annotations Annotations.
+     */
+    public BytecodeField(
+        final String name,
+        final String descriptor,
+        final String signature,
+        final Object value,
+        final int access,
+        final BytecodeAnnotations annotations
+    ) {
         this.name = name;
-        this.descriptor = descr;
+        this.descriptor = descriptor;
         this.signature = signature;
         this.value = value;
         this.access = access;
-        this.annotations = new ArrayList<>(0);
+        this.annotations = annotations;
+    }
+
+    public Object value() {
+        return this.value;
     }
 
     /**
@@ -100,7 +128,7 @@ public final class BytecodeField {
             this.signature,
             this.value
         );
-        this.annotations.forEach(annotation -> annotation.write(fvisitor));
+        this.annotations.annotations().forEach(annotation -> annotation.write(fvisitor));
     }
 
     /**
@@ -109,6 +137,6 @@ public final class BytecodeField {
      * @param visible Visible.
      */
     public void withAnnotation(final String descr, final boolean visible) {
-        this.annotations.add(new BytecodeAnnotation(descr, visible));
+        this.annotations.with(new BytecodeAnnotation(descr, visible));
     }
 }

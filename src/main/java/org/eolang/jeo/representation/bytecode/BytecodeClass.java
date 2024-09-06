@@ -30,7 +30,6 @@ import java.util.Collection;
 import lombok.ToString;
 import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
-import org.eolang.jeo.representation.xmir.XmlAnnotation;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
@@ -344,8 +343,16 @@ public final class BytecodeClass implements Testable {
             access |= modifier;
         }
         final BytecodeField field = new BytecodeField(fname, descriptor, signature, value, access);
-        this.fields.add(field);
+        this.withField(field);
         return field;
+    }
+
+    /**
+     * Add field.
+     * @param field Field.
+     */
+    public void withField(final BytecodeField field) {
+        this.fields.add(field);
     }
 
     /**
