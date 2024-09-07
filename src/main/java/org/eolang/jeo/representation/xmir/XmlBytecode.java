@@ -31,6 +31,7 @@ import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
+import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 
 /**
@@ -92,20 +93,31 @@ public final class XmlBytecode {
             bytecode.withField(field.bytecode());
         }
         for (final XmlMethod xmlmethod : clazz.methods()) {
-//            bytecode.withMethod(xmlmethod.bytecode(bytecode));
+            bytecode.withMethod(xmlmethod.bytecode(bytecode));
 
             ////REMOVAL CANDIDATE
-            final Optional<XmlMaxs> maxs = xmlmethod.maxs();
-            final BytecodeMethod method = maxs.map(
-                xmlMaxs -> bytecode.withMethod(
-                    xmlmethod.properties(), xmlMaxs.bytecode()
-                )
-            ).orElseGet(() -> bytecode.withMethod(xmlmethod.properties()));
-            xmlmethod.annotations().forEach(method::annotation);
-            xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
-            xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
-            xmlmethod.defvalue().ifPresent(defv -> defv.writeTo(method));
+//            final BytecodeMaxs maxs = xmlmethod.maxs().map(XmlMaxs::bytecode)
+//                .orElse(new BytecodeMaxs(0, 0));
+//            final BytecodeMethod method = bytecode.withMethod(xmlmethod.properties(), maxs);
+//            xmlmethod.annotations().forEach(method::annotation);
+//            xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
+//            xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
+//            xmlmethod.defvalue().ifPresent(defv -> defv.writeTo(method));
 //            /REMOVAL CANDIDATE
+
+
+            // WORKS!
+//            final Optional<XmlMaxs> maxs = xmlmethod.maxs();
+//            final BytecodeMethod method = maxs.map(
+//                xmlMaxs -> bytecode.withMethod(
+//                    xmlmethod.properties(), xmlMaxs.bytecode()
+//                )
+//            ).orElseGet(() -> bytecode.withMethod(xmlmethod.properties()));
+//            xmlmethod.annotations().forEach(method::annotation);
+//            xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
+//            xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
+//            xmlmethod.defvalue().ifPresent(defv -> defv.writeTo(method));
+            //
         }
         clazz.attributes().ifPresent(attrs -> attrs.writeTo(bytecode));
         return bytecode.bytecode();

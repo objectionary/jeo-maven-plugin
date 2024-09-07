@@ -269,7 +269,7 @@ public final class BytecodeMethod implements Testable {
         try {
             final MethodVisitor mvisitor = this.properties.writeMethod(
                 this.visitor,
-                this.maxs.isZero()
+                this.maxs.compute()
             );
             this.annotations.forEach(annotation -> annotation.write(mvisitor));
             this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));

@@ -74,7 +74,7 @@ public final class BytecodeMaxs {
      * Is maxs stack and locals are zero?
      * @return True if both are zero.
      */
-    boolean isZero() {
+    boolean compute() {
         return this.stack == 0 && this.locals == 0;
     }
 }
