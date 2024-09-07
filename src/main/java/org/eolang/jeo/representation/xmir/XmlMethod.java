@@ -159,9 +159,13 @@ public final class XmlMethod {
         ;
 
         final BytecodeMethod method = new BytecodeMethod(
-            this.properties(),
             clazz.visitor(),
             clazz,
+            new ArrayList<>(0),
+            new ArrayList<>(0),
+            new ArrayList<>(0),
+            this.properties(),
+            new ArrayList<>(0),
             this.maxs().map(XmlMaxs::bytecode)
                 .orElse(new BytecodeMaxs(0, 0))
         );
