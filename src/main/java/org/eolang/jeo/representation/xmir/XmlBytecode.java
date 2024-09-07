@@ -94,30 +94,6 @@ public final class XmlBytecode {
         }
         for (final XmlMethod xmlmethod : clazz.methods()) {
             bytecode.withMethod(xmlmethod.bytecode(bytecode));
-
-            ////REMOVAL CANDIDATE
-//            final BytecodeMaxs maxs = xmlmethod.maxs().map(XmlMaxs::bytecode)
-//                .orElse(new BytecodeMaxs(0, 0));
-//            final BytecodeMethod method = bytecode.withMethod(xmlmethod.properties(), maxs);
-//            xmlmethod.annotations().forEach(method::annotation);
-//            xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
-//            xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
-//            xmlmethod.defvalue().ifPresent(defv -> defv.writeTo(method));
-//            /REMOVAL CANDIDATE
-
-
-            // WORKS!
-//            final Optional<XmlMaxs> maxs = xmlmethod.maxs();
-//            final BytecodeMethod method = maxs.map(
-//                xmlMaxs -> bytecode.withMethod(
-//                    xmlmethod.properties(), xmlMaxs.bytecode()
-//                )
-//            ).orElseGet(() -> bytecode.withMethod(xmlmethod.properties()));
-//            xmlmethod.annotations().forEach(method::annotation);
-//            xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
-//            xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
-//            xmlmethod.defvalue().ifPresent(defv -> defv.writeTo(method));
-            //
         }
         clazz.attributes().ifPresent(attrs -> attrs.writeTo(bytecode));
         return bytecode.bytecode();

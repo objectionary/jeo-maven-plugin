@@ -42,7 +42,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeParameters;
-import org.eolang.jeo.representation.bytecode.CustomClassWriter;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.objectweb.asm.Opcodes;
@@ -132,33 +131,7 @@ public final class XmlMethod {
      * @return Bytecode method.
      */
     public BytecodeMethod bytecode(final BytecodeClass clazz) {
-//        final BytecodeMethod method = new BytecodeMethod(
-//            clazz.visitor(),
-//            clazz,
-//            this.trycatchEntries()
-//                .stream()
-//                .map(XmlTryCatchEntry::bytecode)
-//                .collect(Collectors.toList()),
-//            this.instructions()
-//                .stream()
-//                .map(XmlBytecodeEntry::bytecode)
-//                .collect(Collectors.toList()),
-//            this.annotations(),
-//            this.properties(),
-//            this.defvalue()
-//                .map(XmlDefaultValue::bytecode)
-//                .filter(Optional::isPresent)
-//                .map(Optional::get)
-//                .map(Collections::singletonList)
-//                .orElse(Collections.emptyList()),
-//            this.maxs()
-//                .map(XmlMaxs::bytecode)
-//                .orElse(new BytecodeMaxs(0, 0))
-//        );
-
-        ;
-
-        final BytecodeMethod method = new BytecodeMethod(
+        return new BytecodeMethod(
             clazz.visitor(),
             clazz,
             this.trycatchEntries()
@@ -180,34 +153,6 @@ public final class XmlMethod {
             this.maxs().map(XmlMaxs::bytecode)
                 .orElse(new BytecodeMaxs(0, 0))
         );
-//        this.annotations().forEach(method::annotation);
-
-
-//        this.instructions().forEach(inst -> inst.writeTo(method));
-
-//        this.trycatchEntries().forEach(exc -> exc.writeTo(method));
-//        this.defvalue().ifPresent(defv -> defv.writeTo(method));
-        return method;
-//        //            final BytecodeMaxs maxs = xmlmethod.maxs().map(XmlMaxs::bytecode)
-////                .orElse(new BytecodeMaxs(0, 0));
-////            final BytecodeMethod method = bytecode.withMethod(xmlmethod.properties(), maxs);
-////            xmlmethod.annotations().forEach(method::annotation);
-////            xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
-////            xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
-////            xmlmethod.defvalue().ifPresent(defv -> defv.writeTo(method));
-
-//        final Optional<XmlMaxs> maxs = this.maxs();
-//        final BytecodeMethod method = maxs.map(
-//            xmlMaxs -> bytecode.withMethod(
-//                xmlmethod.properties(), xmlMaxs.bytecode()
-//            )
-//        ).orElseGet(() -> bytecode.withMethod(xmlmethod.properties()));
-//        xmlmethod.annotations().forEach(method::annotation);
-//        xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
-//        xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
-//        xmlmethod.defvalue().ifPresent(defv -> defv.writeTo(method));
-//
-//        return method;
     }
 
 
@@ -231,7 +176,7 @@ public final class XmlMethod {
      *
      * @return Access modifiers.
      */
-    public int access() {
+    private int access() {
         return new HexString(
             this.node.children().collect(Collectors.toList()).get(0).text()
         ).decodeAsInt();
@@ -242,7 +187,7 @@ public final class XmlMethod {
      *
      * @return Descriptor.
      */
-    public String descriptor() {
+    private String descriptor() {
         return new HexString(
             this.node.children().collect(Collectors.toList()).get(1).text()
         ).decode();
@@ -253,7 +198,7 @@ public final class XmlMethod {
      *
      * @return Signature.
      */
-    public String signature() {
+    private String signature() {
         return new HexString(
             this.node.children().collect(Collectors.toList()).get(2).text()
         ).decode();
@@ -264,7 +209,7 @@ public final class XmlMethod {
      *
      * @return Maxs.
      */
-    public Optional<XmlMaxs> maxs() {
+    Optional<XmlMaxs> maxs() {
         return this.node.optchild("name", "maxs").map(XmlMaxs::new);
     }
 
@@ -273,7 +218,7 @@ public final class XmlMethod {
      *
      * @return Trycatch entries.
      */
-    public List<XmlTryCatchEntry> trycatchEntries() {
+    private List<XmlTryCatchEntry> trycatchEntries() {
         return this.node.children()
             .filter(
                 element -> element.attribute("name")
@@ -289,7 +234,7 @@ public final class XmlMethod {
      *
      * @return Properties.
      */
-    public BytecodeMethodProperties properties() {
+    BytecodeMethodProperties properties() {
         return new BytecodeMethodProperties(
             this.access(),
             this.name(),
@@ -305,7 +250,7 @@ public final class XmlMethod {
      *
      * @return True if method is a constructor.
      */
-    public boolean isConstructor() {
+    boolean isConstructor() {
         return this.node.attribute("name").map(s -> s.contains("new")).orElse(false);
     }
 
@@ -345,7 +290,7 @@ public final class XmlMethod {
      *
      * @return Annotations.
      */
-    public List<BytecodeAnnotation> annotations() {
+    private List<BytecodeAnnotation> annotations() {
         return this.node.children()
             .filter(element -> element.hasAttribute("name", "annotations"))
             .findFirst()
@@ -360,7 +305,7 @@ public final class XmlMethod {
      *
      * @return Copy of the method without max stack and max locals.
      */
-    public XmlMethod withoutMaxs() {
+    XmlMethod withoutMaxs() {
         try {
             return new XmlMethod(
                 new XmlNode(
@@ -388,7 +333,7 @@ public final class XmlMethod {
      * @param entries Instructions to add.
      * @return Copy of the method with added instructions.
      */
-    public XmlMethod withInstructions(final XmlNode... entries) {
+    XmlMethod withInstructions(final XmlNode... entries) {
         try {
             final Directives directives = new Directives()
                 .xpath("./o[@base='seq']/o[@base='tuple']");
@@ -419,7 +364,7 @@ public final class XmlMethod {
      *
      * @return Method without instructions.
      */
-    public XmlMethod withoutInstructions() {
+    XmlMethod withoutInstructions() {
         try {
             return new XmlMethod(
                 new XmlNode(
@@ -441,7 +386,11 @@ public final class XmlMethod {
         }
     }
 
-    public Directives toDirectives() {
+    /**
+     * Convert to Directives.
+     * @return Directives of this method.
+     */
+    Directives toDirectives() {
         return new Directives().add("o").append(Directives.copyOf(this.node.node())).up();
     }
 
@@ -450,7 +399,7 @@ public final class XmlMethod {
      *
      * @return Optional XMIR of the default value.
      */
-    public Optional<XmlDefaultValue> defvalue() {
+    private Optional<XmlDefaultValue> defvalue() {
         return this.node.optchild("base", "annotation-default-value")
             .map(XmlDefaultValue::new);
     }

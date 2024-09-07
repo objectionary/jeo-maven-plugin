@@ -38,7 +38,7 @@ final class XmlLabelTest {
     void retrievesLabelIdentifier() {
         MatcherAssert.assertThat(
             "Can't retrieve correct label identifier",
-            new XmlLabel(new XmlNode("<o base='label' data='bytes'>some</o>")).bytecode(),
+            new XmlLabel(new XmlNode("<o base='label' data='bytes'>73 6F 6D 65 0A</o>")).bytecode(),
             Matchers.equalTo(new BytecodeLabel("some"))
         );
     }
