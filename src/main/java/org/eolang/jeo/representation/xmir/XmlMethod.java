@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -130,25 +131,31 @@ public final class XmlMethod {
      * Convert to bytecode.
      * @return Bytecode method.
      */
-//    public BytecodeMethod bytecode(final CustomClassWriter writer, final BytecodeClass clazz) {
-//        new BytecodeMethod(
-//            writer,
-//            clazz,
-//            this.trycatchEntries()
-//                .stream()
-//                .map(XmlTryCatchEntry::bytecode)
-//                .collect(Collectors.toList()),
-//            this.instructions()
-//                .stream()
-//                .map(XmlBytecodeEntry::bytecode)
-//                .collect(Collectors.toList()),
-//            this.annotations(),
-//            this.properties(),
-//            this.defvalue().map(XmlDefaultValue::bytecode),
-//            maxs().map(XmlMaxs::bytecode).orElse(new BytecodeMaxs(0, 0))
-//
-//        );
-//
+    public BytecodeMethod bytecode(final BytecodeClass clazz) {
+        return new BytecodeMethod(
+            clazz.visitor(),
+            clazz,
+            this.trycatchEntries()
+                .stream()
+                .map(XmlTryCatchEntry::bytecode)
+                .collect(Collectors.toList()),
+            this.instructions()
+                .stream()
+                .map(XmlBytecodeEntry::bytecode)
+                .collect(Collectors.toList()),
+            this.annotations(),
+            this.properties(),
+            this.defvalue()
+                .map(XmlDefaultValue::bytecode)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Collections::singletonList)
+                .orElse(Collections.emptyList()),
+            this.maxs()
+                .map(XmlMaxs::bytecode)
+                .orElse(new BytecodeMaxs(0, 0))
+        );
+
 //        final Optional<XmlMaxs> maxs = this.maxs();
 //        final BytecodeMethod method = maxs.map(
 //            xmlMaxs -> bytecode.withMethod(
@@ -159,9 +166,9 @@ public final class XmlMethod {
 //        xmlmethod.instructions().forEach(inst -> inst.writeTo(method));
 //        xmlmethod.trycatchEntries().forEach(exc -> exc.writeTo(method));
 //        xmlmethod.defvalue().ifPresent(defv -> defv.writeTo(method));
-
+//
 //        return method;
-//    }
+    }
 
 
     /**

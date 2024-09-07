@@ -192,7 +192,6 @@ public final class BytecodeClass implements Testable {
                 this.props.supername(),
                 this.props.interfaces()
             );
-
             this.annotations.forEach(annotation -> annotation.write(this.visitor));
             this.fields.forEach(field -> field.write(this.visitor));
             this.methods.forEach(BytecodeMethod::write);
@@ -247,6 +246,16 @@ public final class BytecodeClass implements Testable {
         final BytecodeMethodProperties properties, BytecodeMaxs maxs
     ) {
         final BytecodeMethod method = new BytecodeMethod(properties, this.visitor, this, maxs);
+        this.methods.add(method);
+        return method;
+    }
+
+    /**
+     * Add method.
+     * @param method Method.
+     * @return This object.
+     */
+    public BytecodeMethod withMethod(final BytecodeMethod method) {
         this.methods.add(method);
         return method;
     }
@@ -396,5 +405,13 @@ public final class BytecodeClass implements Testable {
             )
             .opcode(Opcodes.RETURN)
             .up();
+    }
+
+    /**
+     * Visitor.
+     * @return Class visitor.
+     */
+    public CustomClassWriter visitor() {
+        return this.visitor;
     }
 }
