@@ -161,18 +161,32 @@ public final class XmlMethod {
         final BytecodeMethod method = new BytecodeMethod(
             clazz.visitor(),
             clazz,
-            new ArrayList<>(0),
-            new ArrayList<>(0),
-            new ArrayList<>(0),
+            this.trycatchEntries()
+                .stream()
+                .map(XmlTryCatchEntry::bytecode)
+                .collect(Collectors.toList()),
+            this.instructions()
+                .stream()
+                .map(XmlBytecodeEntry::bytecode)
+                .collect(Collectors.toList()),
+            this.annotations(),
             this.properties(),
-            new ArrayList<>(0),
+            this.defvalue()
+                .map(XmlDefaultValue::bytecode)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Collections::singletonList)
+                .orElse(Collections.emptyList()),
             this.maxs().map(XmlMaxs::bytecode)
                 .orElse(new BytecodeMaxs(0, 0))
         );
-        this.annotations().forEach(method::annotation);
-        this.instructions().forEach(inst -> inst.writeTo(method));
-        this.trycatchEntries().forEach(exc -> exc.writeTo(method));
-        this.defvalue().ifPresent(defv -> defv.writeTo(method));
+//        this.annotations().forEach(method::annotation);
+
+
+//        this.instructions().forEach(inst -> inst.writeTo(method));
+
+//        this.trycatchEntries().forEach(exc -> exc.writeTo(method));
+//        this.defvalue().ifPresent(defv -> defv.writeTo(method));
         return method;
 //        //            final BytecodeMaxs maxs = xmlmethod.maxs().map(XmlMaxs::bytecode)
 ////                .orElse(new BytecodeMaxs(0, 0));

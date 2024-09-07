@@ -57,7 +57,7 @@ public final class XmlLabel implements XmlBytecodeEntry {
      * @return Bytecode label.
      */
     public BytecodeLabel bytecode() {
-        return new BytecodeLabel(this.node.text());
+        return new BytecodeLabel((Label) DataType.LABEL.decode(this.node.text()), new AllLabels());
     }
 
 }
