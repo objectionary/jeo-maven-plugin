@@ -46,6 +46,13 @@ public final class BytecodeMaxs {
 
     /**
      * Constructor.
+     */
+    public BytecodeMaxs() {
+        this(0, 0);
+    }
+
+    /**
+     * Constructor.
      * @param stack Stack size.
      * @param locals Locals size.
      */

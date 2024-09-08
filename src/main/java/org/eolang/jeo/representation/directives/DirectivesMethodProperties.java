@@ -74,7 +74,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      * Constructor.
      */
     public DirectivesMethodProperties() {
-        this(Opcodes.ACC_PUBLIC, "()V", "", "", "");
+        this(Opcodes.ACC_PUBLIC, "()V", "");
     }
 
     /**

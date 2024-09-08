@@ -24,6 +24,10 @@
 package org.eolang.jeo.representation.directives;
 
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
+import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
@@ -54,49 +58,72 @@ final class DirectivesMethodTest {
                 ).xml()
             )
         );
-        MatcherAssert.assertThat(
-            "Method name is not equal to expected",
-            method.name(),
-            Matchers.equalTo(name)
+        final BytecodeClass clazz = new BytecodeClass();
+        final BytecodeMethod actual = method.bytecode(clazz);
+        final BytecodeMethod expected = new BytecodeMethod(
+            new BytecodeMethodProperties(name, descriptor, signature, access),
+            clazz.visitor(),
+            clazz,
+            new BytecodeMaxs()
         );
         MatcherAssert.assertThat(
-            "Method access is not equal to expected",
-            method.access(),
-            Matchers.equalTo(access)
+            "We expect that directives will generate correct method",
+            actual,
+            Matchers.equalTo(expected)
         );
-        MatcherAssert.assertThat(
-            "Method descriptor is not equal to expected",
-            method.descriptor(),
-            Matchers.equalTo(descriptor)
-        );
-        MatcherAssert.assertThat(
-            "Method signature is not equal to expected",
-            method.signature(),
-            Matchers.equalTo(signature)
-        );
+
+//        MatcherAssert.assertThat(
+//            "Method name is not equal to expected",
+//            method.name(),
+//            Matchers.equalTo(name)
+//        );
+//        MatcherAssert.assertThat(
+//            "Method access is not equal to expected",
+//            method.access(),
+//            Matchers.equalTo(access)
+//        );
+//        MatcherAssert.assertThat(
+//            "Method descriptor is not equal to expected",
+//            method.descriptor(),
+//            Matchers.equalTo(descriptor)
+//        );
+//        MatcherAssert.assertThat(
+//            "Method signature is not equal to expected",
+//            method.signature(),
+//            Matchers.equalTo(signature)
+//        );
     }
 
     @Test
     void transformsAnnotationsToXmir() throws ImpossibleModificationException {
         final String descriptor = "Consumer";
         final boolean visible = true;
-        final BytecodeAnnotation annotation = new XmlMethod(
+        final String name = "foo";
+        final BytecodeMethod method = new XmlMethod(
             new XmlNode(
                 new Xembler(
-                    new DirectivesMethod("foo")
+                    new DirectivesMethod(name)
                         .annotation(new DirectivesAnnotation(descriptor, visible))
                 ).xml()
             )
-        ).annotations().get(0);
+        ).bytecode(new BytecodeClass());
+        final BytecodeMethod expected = new BytecodeMethod(name)
+            .annotation(new BytecodeAnnotation(descriptor, visible));
         MatcherAssert.assertThat(
-            "Annotation descriptor is not equal to expected",
-            annotation.descriptor(),
-            Matchers.equalTo(descriptor)
+            "We expect that annotation dirictes will be added to the method",
+            method,
+            Matchers.equalTo(expected)
         );
-        MatcherAssert.assertThat(
-            "Annotation visibility is not equal to expected",
-            annotation.isVisible(),
-            Matchers.equalTo(visible)
-        );
+
+//        MatcherAssert.assertThat(
+//            "Annotation descriptor is not equal to expected",
+//            annotation.descriptor(),
+//            Matchers.equalTo(descriptor)
+//        );
+//        MatcherAssert.assertThat(
+//            "Annotation visibility is not equal to expected",
+//            annotation.isVisible(),
+//            Matchers.equalTo(visible)
+//        );
     }
 }

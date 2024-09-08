@@ -25,6 +25,9 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.List;
 import java.util.Optional;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
+import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -44,20 +47,19 @@ final class XmlMethodTest {
         final int access = 0;
         final String descriptor = "()V";
         final XmlMethod method = new XmlMethod(name, access, descriptor);
+
+        final BytecodeClass clazz = new BytecodeClass();
         MatcherAssert.assertThat(
-            "Method name is not equal to expected",
-            method.name(),
-            Matchers.equalTo(name)
-        );
-        MatcherAssert.assertThat(
-            "Method access is not equal to expected",
-            method.access(),
-            Matchers.equalTo(access)
-        );
-        MatcherAssert.assertThat(
-            "Method descriptor is not equal to expected",
-            method.descriptor(),
-            Matchers.equalTo(descriptor)
+            "We expect that method will be correctly parsed",
+            method.bytecode(clazz),
+            Matchers.equalTo(
+                new BytecodeMethod(
+                    new BytecodeMethodProperties(name, descriptor, "", access),
+                    clazz.visitor(),
+                    clazz,
+                    new BytecodeMaxs()
+                )
+            )
         );
     }
 

@@ -25,14 +25,19 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Bytecode method.
  * @since 0.1.0
  */
+@ToString
+@EqualsAndHashCode
 public final class BytecodeMethod implements Testable {
 
     /**
@@ -75,11 +80,14 @@ public final class BytecodeMethod implements Testable {
      */
     private final BytecodeMaxs maxs;
 
-
     /**
      * All Method Labels.
      */
     private final AllLabels labels;
+
+    public BytecodeMethod(final String name) {
+        this(name, new BytecodeClass().visitor(), new BytecodeClass(), "()V", Opcodes.ACC_PUBLIC);
+    }
 
     /**
      * Constructor.
@@ -97,7 +105,7 @@ public final class BytecodeMethod implements Testable {
         final String descriptor,
         final int... modifiers
     ) {
-        this(new BytecodeMethodProperties(name, descriptor, modifiers), visitor, clazz);
+        this(new BytecodeMethodProperties(name, descriptor, "", modifiers), visitor, clazz);
     }
 
     /**

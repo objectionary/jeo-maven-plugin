@@ -27,6 +27,8 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.ClassReader;
@@ -47,6 +49,8 @@ import org.objectweb.asm.util.CheckClassAdapter;
  *
  * @since 0.3
  */
+@ToString
+@EqualsAndHashCode(callSuper = false)
 public final class CustomClassWriter extends ClassVisitor {
 
     /**
@@ -196,6 +200,8 @@ public final class CustomClassWriter extends ClassVisitor {
      * @since 0.1
      * @checkstyle FinalClassCheck (5 lines)
      */
+    @ToString
+    @EqualsAndHashCode(callSuper = false)
     private static class ClassesAwareWriter extends ClassWriter {
 
         /**
@@ -224,6 +230,8 @@ public final class CustomClassWriter extends ClassVisitor {
      * Class writer that verifies the bytecode.
      * @since 0.2
      */
+    @ToString
+    @EqualsAndHashCode(callSuper = false)
     private static final class VerifiedClassWriter extends ClassesAwareWriter {
 
         @Override

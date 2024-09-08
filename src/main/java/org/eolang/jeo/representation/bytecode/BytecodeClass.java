@@ -27,6 +27,7 @@ import com.jcabi.xml.XML;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
@@ -42,6 +43,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
  */
 @SuppressWarnings("PMD.TooManyMethods")
 @ToString
+@EqualsAndHashCode
 public final class BytecodeClass implements Testable {
 
     /**
