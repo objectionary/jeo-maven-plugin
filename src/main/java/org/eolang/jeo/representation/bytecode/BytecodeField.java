@@ -23,8 +23,6 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.objectweb.asm.ClassVisitor;

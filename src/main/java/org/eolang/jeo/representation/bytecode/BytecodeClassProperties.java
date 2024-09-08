@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.bytecode;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.DefaultVersion;
-import org.objectweb.asm.ClassVisitor;
 
 /**
  * Class properties.
@@ -109,40 +108,43 @@ public final class BytecodeClassProperties {
         this.interfaces = interfaces.clone();
     }
 
-
+    /**
+     * API version.
+     * @return Api version.
+     */
     public int version() {
         return this.version;
     }
 
+    /**
+     * Access modifiers.
+     * @return Access modifiers.
+     */
     public int access() {
         return this.access;
     }
 
+    /**
+     * Class signature.
+     * @return Class signature.
+     */
     public String signature() {
         return this.signature;
     }
 
+    /**
+     * Superclass name.
+     * @return Superclass name.
+     */
     public String supername() {
         return this.supername;
     }
 
+    /**
+     * All class interfaces.
+     * @return All class interfaces.
+     */
     public String[] interfaces() {
         return this.interfaces;
-    }
-
-    /**
-     * Start writing a class by using a class writer.
-     * @param visitor Class visitor.
-     * @param name Class name.
-     */
-    void write(final ClassVisitor visitor, final String name) {
-        visitor.visit(
-            this.version,
-            this.access,
-            name,
-            this.signature,
-            this.supername,
-            this.interfaces
-        );
     }
 }

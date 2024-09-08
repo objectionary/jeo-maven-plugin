@@ -23,9 +23,6 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import org.eolang.jeo.representation.xmir.XmlOperand;
 import org.objectweb.asm.Handle;
 
 /**

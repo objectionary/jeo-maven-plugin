@@ -36,10 +36,29 @@ import org.objectweb.asm.MethodVisitor;
 @EqualsAndHashCode
 public final class BytecodeFrame implements BytecodeEntry {
 
+    /**
+     * Type.
+     */
     private final int type;
+
+    /**
+     * Number of locals.
+     */
     private final int nlocal;
+
+    /**
+     * Locals.
+     */
     private final Object[] locals;
+
+    /**
+     * Stack size.
+     */
     private final int nstack;
+
+    /**
+     * Stack.
+     */
     private final Object[] stack;
 
     /**

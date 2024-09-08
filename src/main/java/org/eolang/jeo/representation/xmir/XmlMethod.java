@@ -172,89 +172,6 @@ public final class XmlMethod {
     }
 
     /**
-     * Method access modifiers.
-     *
-     * @return Access modifiers.
-     */
-    private int access() {
-        return new HexString(
-            this.node.children().collect(Collectors.toList()).get(0).text()
-        ).decodeAsInt();
-    }
-
-    /**
-     * Method descriptor.
-     *
-     * @return Descriptor.
-     */
-    private String descriptor() {
-        return new HexString(
-            this.node.children().collect(Collectors.toList()).get(1).text()
-        ).decode();
-    }
-
-    /**
-     * Method signature.
-     *
-     * @return Signature.
-     */
-    private String signature() {
-        return new HexString(
-            this.node.children().collect(Collectors.toList()).get(2).text()
-        ).decode();
-    }
-
-    /**
-     * Method max stack and locals.
-     *
-     * @return Maxs.
-     */
-    Optional<XmlMaxs> maxs() {
-        return this.node.optchild("name", "maxs").map(XmlMaxs::new);
-    }
-
-    /**
-     * Method trycatch entries.
-     *
-     * @return Trycatch entries.
-     */
-    private List<XmlTryCatchEntry> trycatchEntries() {
-        return this.node.children()
-            .filter(
-                element -> element.attribute("name")
-                    .map(s -> s.contains("trycatchblocks"))
-                    .orElse(false))
-            .flatMap(XmlNode::children)
-            .map(entry -> new XmlTryCatchEntry(entry, this.labels))
-            .collect(Collectors.toList());
-    }
-
-    /**
-     * Method properties as bytecode.
-     *
-     * @return Properties.
-     */
-    BytecodeMethodProperties properties() {
-        return new BytecodeMethodProperties(
-            this.access(),
-            this.name(),
-            this.descriptor(),
-            this.signature(),
-            this.params(),
-            this.exceptions()
-        );
-    }
-
-    /**
-     * Checks if method is a constructor.
-     *
-     * @return True if method is a constructor.
-     */
-    boolean isConstructor() {
-        return this.node.attribute("name").map(s -> s.contains("new")).orElse(false);
-    }
-
-    /**
      * All instructions.
      *
      * @param predicates Predicates to filter instructions.
@@ -286,18 +203,45 @@ public final class XmlMethod {
     }
 
     /**
-     * Method annotations.
+     * Method max stack and locals.
      *
-     * @return Annotations.
+     * @return Maxs.
      */
-    private List<BytecodeAnnotation> annotations() {
-        return this.node.children()
-            .filter(element -> element.hasAttribute("name", "annotations"))
-            .findFirst()
-            .map(XmlAnnotations::new)
-            .map(XmlAnnotations::bytecode)
-            .map(BytecodeAnnotations::annotations)
-            .orElse(new ArrayList<>(0));
+    Optional<XmlMaxs> maxs() {
+        return this.node.optchild("name", "maxs").map(XmlMaxs::new);
+    }
+
+    /**
+     * Method properties as bytecode.
+     *
+     * @return Properties.
+     */
+    BytecodeMethodProperties properties() {
+        return new BytecodeMethodProperties(
+            this.access(),
+            this.name(),
+            this.descriptor(),
+            this.signature(),
+            this.params(),
+            this.exceptions()
+        );
+    }
+
+    /**
+     * Checks if method is a constructor.
+     *
+     * @return True if method is a constructor.
+     */
+    boolean isConstructor() {
+        return this.node.attribute("name").map(s -> s.contains("new")).orElse(false);
+    }
+
+    /**
+     * Convert to Directives.
+     * @return Directives of this method.
+     */
+    Directives toDirectives() {
+        return new Directives().add("o").append(Directives.copyOf(this.node.node())).up();
     }
 
     /**
@@ -387,11 +331,67 @@ public final class XmlMethod {
     }
 
     /**
-     * Convert to Directives.
-     * @return Directives of this method.
+     * Method access modifiers.
+     *
+     * @return Access modifiers.
      */
-    Directives toDirectives() {
-        return new Directives().add("o").append(Directives.copyOf(this.node.node())).up();
+    private int access() {
+        return new HexString(
+            this.node.children().collect(Collectors.toList()).get(0).text()
+        ).decodeAsInt();
+    }
+
+    /**
+     * Method descriptor.
+     *
+     * @return Descriptor.
+     */
+    private String descriptor() {
+        return new HexString(
+            this.node.children().collect(Collectors.toList()).get(1).text()
+        ).decode();
+    }
+
+    /**
+     * Method signature.
+     *
+     * @return Signature.
+     */
+    private String signature() {
+        return new HexString(
+            this.node.children().collect(Collectors.toList()).get(2).text()
+        ).decode();
+    }
+
+    /**
+     * Method trycatch entries.
+     *
+     * @return Trycatch entries.
+     */
+    private List<XmlTryCatchEntry> trycatchEntries() {
+        return this.node.children()
+            .filter(
+                element -> element.attribute("name")
+                    .map(s -> s.contains("trycatchblocks"))
+                    .orElse(false))
+            .flatMap(XmlNode::children)
+            .map(entry -> new XmlTryCatchEntry(entry, this.labels))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Method annotations.
+     *
+     * @return Annotations.
+     */
+    private List<BytecodeAnnotation> annotations() {
+        return this.node.children()
+            .filter(element -> element.hasAttribute("name", "annotations"))
+            .findFirst()
+            .map(XmlAnnotations::new)
+            .map(XmlAnnotations::bytecode)
+            .map(BytecodeAnnotations::annotations)
+            .orElse(new ArrayList<>(0));
     }
 
     /**

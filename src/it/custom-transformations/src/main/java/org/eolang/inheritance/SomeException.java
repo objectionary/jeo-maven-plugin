@@ -27,8 +27,12 @@ class SomeException extends org.eolang.inheritance.OriginalException {
 
     private static final long serialVersionUID = 12312123123213L;
 
-    public SomeException(String s) { super(s); }
+    public SomeException(String s) {
+        super(s);
+    }
 
-    public SomeException(String s, Throwable t) { super(s, t); }
+    public SomeException(String s, Throwable t) {
+        super(s, t);
+    }
 
 }

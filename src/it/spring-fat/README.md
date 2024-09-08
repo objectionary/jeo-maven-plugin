@@ -29,7 +29,6 @@ mvn clean integration-test -Dinvoker.test=spring-fat -DskipTests
 
 ## The First Results
 
-
 Here is the summary of the first results of the `spring-fat` integration test:
 
 - The application starts and runs successfully.

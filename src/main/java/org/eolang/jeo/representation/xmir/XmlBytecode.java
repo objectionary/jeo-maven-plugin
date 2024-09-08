@@ -25,14 +25,10 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.util.Optional;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.eolang.jeo.representation.bytecode.BytecodeField;
-import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
-import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 
 /**
  * XML to Java bytecode.
