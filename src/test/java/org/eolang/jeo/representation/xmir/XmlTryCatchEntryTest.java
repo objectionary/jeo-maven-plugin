@@ -36,7 +36,7 @@ final class XmlTryCatchEntryTest {
 
     @Test
     void transformsToBytecode() {
-        AllLabels labels = new AllLabels();
+        final AllLabels labels = new AllLabels();
         MatcherAssert.assertThat(
             "Can't convert XML try-catch entry to the correct bytecode",
             new XmlTryCatchEntry(

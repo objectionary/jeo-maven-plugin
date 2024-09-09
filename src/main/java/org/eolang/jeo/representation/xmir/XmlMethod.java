@@ -118,7 +118,6 @@ public final class XmlMethod {
 
     /**
      * Constructor.
-     *
      * @param xmlnode Method node.
      */
     public XmlMethod(final XmlNode xmlnode) {
@@ -128,11 +127,12 @@ public final class XmlMethod {
 
     /**
      * Convert to bytecode.
+     * @param clazz Bytecode class.
      * @return Bytecode method.
      */
     public BytecodeMethod bytecode(final BytecodeClass clazz) {
         return new BytecodeMethod(
-            clazz.visitor(),
+            clazz.writer(),
             clazz,
             this.trycatchEntries()
                 .stream()
@@ -154,7 +154,6 @@ public final class XmlMethod {
                 .orElse(new BytecodeMaxs(0, 0))
         );
     }
-
 
     /**
      * Method name.
@@ -412,8 +411,9 @@ public final class XmlMethod {
         final AtomicInteger index = new AtomicInteger(0);
         return new BytecodeParameters(
             this.node.children()
-                .filter(element -> element.hasAttribute("base", "param")
-                    && !element.hasAttribute("name", "maxs")
+                .filter(
+                    element -> element.hasAttribute("base", "param")
+                        && !element.hasAttribute("name", "maxs")
                 )
                 .map(element -> new XmlParam(index.getAndIncrement(), element))
                 .collect(Collectors.toMap(XmlParam::index, XmlParam::annotations))

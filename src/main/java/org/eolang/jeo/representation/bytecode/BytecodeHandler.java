@@ -63,6 +63,7 @@ public final class BytecodeHandler {
      * @param name Name.
      * @param descriptor Descriptor.
      * @param interf Is it an interface?
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeHandler(
         final int tag,

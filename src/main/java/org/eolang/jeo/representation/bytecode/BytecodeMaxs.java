@@ -32,6 +32,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public final class BytecodeMaxs {
 
     /**

@@ -48,50 +48,28 @@ final class DirectivesMethodTest {
         final int access = 100;
         final String descriptor = "()I";
         final String signature = "";
-        final XmlMethod method = new XmlMethod(
-            new XmlNode(
-                new Xembler(
-                    new DirectivesMethod(
-                        name,
-                        new DirectivesMethodProperties(access, descriptor, signature)
-                    )
-                ).xml()
-            )
-        );
         final BytecodeClass clazz = new BytecodeClass();
-        final BytecodeMethod actual = method.bytecode(clazz);
-        final BytecodeMethod expected = new BytecodeMethod(
-            new BytecodeMethodProperties(name, descriptor, signature, access),
-            clazz.visitor(),
-            clazz,
-            new BytecodeMaxs()
-        );
         MatcherAssert.assertThat(
             "We expect that directives will generate correct method",
-            actual,
-            Matchers.equalTo(expected)
+            new XmlMethod(
+                new XmlNode(
+                    new Xembler(
+                        new DirectivesMethod(
+                            name,
+                            new DirectivesMethodProperties(access, descriptor, signature)
+                        )
+                    ).xml()
+                )
+            ).bytecode(clazz),
+            Matchers.equalTo(
+                new BytecodeMethod(
+                    new BytecodeMethodProperties(name, descriptor, signature, access),
+                    clazz.writer(),
+                    clazz,
+                    new BytecodeMaxs()
+                )
+            )
         );
-
-//        MatcherAssert.assertThat(
-//            "Method name is not equal to expected",
-//            method.name(),
-//            Matchers.equalTo(name)
-//        );
-//        MatcherAssert.assertThat(
-//            "Method access is not equal to expected",
-//            method.access(),
-//            Matchers.equalTo(access)
-//        );
-//        MatcherAssert.assertThat(
-//            "Method descriptor is not equal to expected",
-//            method.descriptor(),
-//            Matchers.equalTo(descriptor)
-//        );
-//        MatcherAssert.assertThat(
-//            "Method signature is not equal to expected",
-//            method.signature(),
-//            Matchers.equalTo(signature)
-//        );
     }
 
     @Test
@@ -99,31 +77,20 @@ final class DirectivesMethodTest {
         final String descriptor = "Consumer";
         final boolean visible = true;
         final String name = "foo";
-        final BytecodeMethod method = new XmlMethod(
-            new XmlNode(
-                new Xembler(
-                    new DirectivesMethod(name)
-                        .annotation(new DirectivesAnnotation(descriptor, visible))
-                ).xml()
-            )
-        ).bytecode(new BytecodeClass());
-        final BytecodeMethod expected = new BytecodeMethod(name)
-            .annotation(new BytecodeAnnotation(descriptor, visible));
         MatcherAssert.assertThat(
             "We expect that annotation dirictes will be added to the method",
-            method,
-            Matchers.equalTo(expected)
+            new XmlMethod(
+                new XmlNode(
+                    new Xembler(
+                        new DirectivesMethod(name)
+                            .annotation(new DirectivesAnnotation(descriptor, visible))
+                    ).xml()
+                )
+            ).bytecode(new BytecodeClass()),
+            Matchers.equalTo(
+                new BytecodeMethod(name)
+                    .annotation(new BytecodeAnnotation(descriptor, visible))
+            )
         );
-
-//        MatcherAssert.assertThat(
-//            "Annotation descriptor is not equal to expected",
-//            annotation.descriptor(),
-//            Matchers.equalTo(descriptor)
-//        );
-//        MatcherAssert.assertThat(
-//            "Annotation visibility is not equal to expected",
-//            annotation.isVisible(),
-//            Matchers.equalTo(visible)
-//        );
     }
 }

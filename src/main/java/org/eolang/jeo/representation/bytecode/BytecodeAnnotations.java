@@ -55,7 +55,7 @@ public final class BytecodeAnnotations {
      * Constructor.
      * @param all All annotations.
      */
-    public BytecodeAnnotations(Stream<BytecodeAnnotation> all) {
+    public BytecodeAnnotations(final Stream<BytecodeAnnotation> all) {
         this(all.collect(Collectors.toList()));
     }
 

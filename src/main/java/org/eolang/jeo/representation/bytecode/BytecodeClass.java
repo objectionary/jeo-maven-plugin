@@ -245,7 +245,7 @@ public final class BytecodeClass implements Testable {
      * @return This object.
      */
     public BytecodeMethod withMethod(
-        final BytecodeMethodProperties properties, BytecodeMaxs maxs
+        final BytecodeMethodProperties properties, final BytecodeMaxs maxs
     ) {
         final BytecodeMethod method = new BytecodeMethod(properties, this.visitor, this, maxs);
         this.methods.add(method);
@@ -411,9 +411,9 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Visitor.
-     * @return Class visitor.
+     * @return Class writer.
      */
-    public CustomClassWriter visitor() {
+    public CustomClassWriter writer() {
         return this.visitor;
     }
 }

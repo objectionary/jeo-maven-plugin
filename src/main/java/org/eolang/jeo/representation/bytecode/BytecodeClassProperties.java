@@ -34,6 +34,7 @@ import org.eolang.jeo.representation.DefaultVersion;
  */
 @ToString
 @EqualsAndHashCode
+@SuppressWarnings({"PMD.AvoidFieldNameMatchingMethodName", "PMD.DataClass"})
 public final class BytecodeClassProperties {
 
     /**
@@ -75,6 +76,7 @@ public final class BytecodeClassProperties {
      * @param signature Signature.
      * @param supername Supername.
      * @param interfaces Interfaces.
+     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public BytecodeClassProperties(
         final int access,
@@ -92,7 +94,7 @@ public final class BytecodeClassProperties {
      * @param signature Signature.
      * @param supername Supername.
      * @param interfaces Interfaces.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public BytecodeClassProperties(
         final int version,
@@ -145,6 +147,6 @@ public final class BytecodeClassProperties {
      * @return All class interfaces.
      */
     public String[] interfaces() {
-        return this.interfaces;
+        return this.interfaces.clone();
     }
 }

@@ -85,8 +85,12 @@ public final class BytecodeMethod implements Testable {
      */
     private final AllLabels labels;
 
+    /**
+     * Constructor.
+     * @param name Method name.
+     */
     public BytecodeMethod(final String name) {
-        this(name, new BytecodeClass().visitor(), new BytecodeClass(), "()V", Opcodes.ACC_PUBLIC);
+        this(name, new BytecodeClass().writer(), new BytecodeClass(), "()V", Opcodes.ACC_PUBLIC);
     }
 
     /**
@@ -96,7 +100,7 @@ public final class BytecodeMethod implements Testable {
      * @param clazz Original class.
      * @param descriptor Method descriptor.
      * @param modifiers Method modifiers.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     * @checkstyle ParameterNumberCheck (10 lines)
      */
     BytecodeMethod(
         final String name,
@@ -128,6 +132,7 @@ public final class BytecodeMethod implements Testable {
      * @param visitor ASM class writer.
      * @param clazz Original class.
      * @param maxs Max stack and locals.
+     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public BytecodeMethod(
         final BytecodeMethodProperties properties,
@@ -157,6 +162,7 @@ public final class BytecodeMethod implements Testable {
      * @param properties Method properties.
      * @param defvalues Default values.
      * @param maxs Max stack and locals.
+     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public BytecodeMethod(
         final CustomClassWriter visitor,

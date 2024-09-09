@@ -68,19 +68,20 @@ public final class BytecodeFrame implements BytecodeEntry {
      * @param locals Local variables.
      * @param nstack Number of stack elements.
      * @param stack Stack elements.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeFrame(
         final int type,
         final int nlocal,
         final Object[] locals,
         final int nstack,
-        final Object[] stack
+        final Object... stack
     ) {
         this.type = type;
         this.nlocal = nlocal;
-        this.locals = locals;
+        this.locals = locals.clone();
         this.nstack = nstack;
-        this.stack = stack;
+        this.stack = stack.clone();
     }
 
     @Override

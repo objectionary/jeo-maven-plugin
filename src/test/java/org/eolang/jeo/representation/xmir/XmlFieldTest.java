@@ -82,22 +82,23 @@ final class XmlFieldTest {
     @ParameterizedTest
     @MethodSource("values")
     void parsesFieldWithValues(final Object value) throws ImpossibleModificationException {
+        final int access = Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL;
+        final String name = "serialVersionUID";
+        final String descriptor = "Ljava/lang/String;";
         MatcherAssert.assertThat(
             "We expect the value to be the same",
             new XmlField(
                 new XmlNode(
                     new Xembler(
-                        new DirectivesField(
-                            Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL,
-                            "serialVersionUID",
-                            "Ljava/lang/String;",
-                            "",
-                            value
-                        )
+                        new DirectivesField(access, name, descriptor, null, value)
                     ).xml()
                 )
-            ).bytecode().value(),
-            Matchers.equalTo(value)
+            ).bytecode(),
+            Matchers.equalTo(
+                new BytecodeField(
+                    name, descriptor, null, value, access
+                )
+            )
         );
     }
 

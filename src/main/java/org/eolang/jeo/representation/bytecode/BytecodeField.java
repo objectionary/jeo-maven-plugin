@@ -93,6 +93,7 @@ public final class BytecodeField {
      * @param value Value.
      * @param access Access.
      * @param annotations Annotations.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeField(
         final String name,
@@ -110,10 +111,6 @@ public final class BytecodeField {
         this.annotations = annotations;
     }
 
-    public Object value() {
-        return this.value;
-    }
-
     /**
      * Write field to a class.
      * @param visitor Visitor.
@@ -126,15 +123,7 @@ public final class BytecodeField {
             this.signature,
             this.value
         );
-        this.annotations.annotations().forEach(annotation -> annotation.write(fvisitor));
-    }
-
-    /**
-     * Add annotation.
-     * @param descr Descriptor.
-     * @param visible Visible.
-     */
-    public void withAnnotation(final String descr, final boolean visible) {
-        this.annotations.with(new BytecodeAnnotation(descr, visible));
+        this.annotations.annotations()
+            .forEach(annotation -> annotation.write(fvisitor));
     }
 }

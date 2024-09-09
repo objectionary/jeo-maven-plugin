@@ -46,16 +46,14 @@ final class XmlMethodTest {
         final String name = "name";
         final int access = 0;
         final String descriptor = "()V";
-        final XmlMethod method = new XmlMethod(name, access, descriptor);
-
         final BytecodeClass clazz = new BytecodeClass();
         MatcherAssert.assertThat(
             "We expect that method will be correctly parsed",
-            method.bytecode(clazz),
+            new XmlMethod(name, access, descriptor).bytecode(clazz),
             Matchers.equalTo(
                 new BytecodeMethod(
                     new BytecodeMethodProperties(name, descriptor, "", access),
-                    clazz.visitor(),
+                    clazz.writer(),
                     clazz,
                     new BytecodeMaxs()
                 )

@@ -58,12 +58,7 @@ final class DirectivesTryCatchTest {
                     ).xml()
                 )
             ).bytecode(),
-            Matchers.equalTo(new BytecodeTryCatchBlock(
-                start,
-                end,
-                handler,
-                type
-            ))
+            Matchers.equalTo(new BytecodeTryCatchBlock(start, end, handler, type))
         );
     }
 
@@ -93,14 +88,7 @@ final class DirectivesTryCatchTest {
                     ).xml()
                 )
             ).bytecode(),
-            Matchers.equalTo(
-                new BytecodeTryCatchBlock(
-                    start,
-                    end,
-                    handler,
-                    type
-                )
-            )
+            Matchers.equalTo(new BytecodeTryCatchBlock(start, end, handler, type))
         );
     }
 

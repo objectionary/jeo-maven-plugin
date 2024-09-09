@@ -53,13 +53,7 @@ final class DirectivesFrameTest {
         MatcherAssert.assertThat(
             "We failed to create correct directives for bytecode frame.",
             new XmlFrame(new XmlNode(xml)).bytecode(),
-            Matchers.equalTo(new BytecodeFrame(
-                type,
-                nlocal,
-                locals,
-                nstack,
-                stack
-            ))
+            Matchers.equalTo(new BytecodeFrame(type, nlocal, locals, nstack, stack))
         );
     }
 }
