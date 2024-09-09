@@ -36,7 +36,7 @@ import org.objectweb.asm.Opcodes;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link XmlBytecode}.
+ * Test case for {@link XmlProgram}.
  *
  * @since 0.1
  */
@@ -46,7 +46,7 @@ final class XmlBytecodeTest {
     void convertsGenericsMethodIntoBytecode() {
         MatcherAssert.assertThat(
             "Can't convert generics method into bytecode",
-            new XmlBytecode(XmlBytecodeTest.classWithGenericMethod()).bytecode(),
+            new XmlProgram(XmlBytecodeTest.classWithGenericMethod()).bytecode().bytecode(),
             Matchers.notNullValue()
         );
     }
@@ -55,7 +55,7 @@ final class XmlBytecodeTest {
     void convertsMethodWithExceptionIntoBytecode() {
         MatcherAssert.assertThat(
             "Can't convert method with exception into bytecode",
-            new XmlBytecode(XmlBytecodeTest.classWithException()).bytecode(),
+            new XmlProgram(XmlBytecodeTest.classWithException()).bytecode().bytecode(),
             Matchers.notNullValue()
         );
     }

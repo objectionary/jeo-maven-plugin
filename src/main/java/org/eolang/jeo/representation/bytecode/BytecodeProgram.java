@@ -48,8 +48,6 @@ public final class BytecodeProgram {
      */
     private final String pckg;
 
-    private final CustomClassWriter writer;
-
     /**
      * Class.
      */
@@ -72,14 +70,7 @@ public final class BytecodeProgram {
     }
 
     public BytecodeProgram(final String pckg, final List<BytecodeClass> classes) {
-        this(pckg, new CustomClassWriter(false), classes);
-    }
-
-    public BytecodeProgram(
-        final String pckg, final CustomClassWriter writer, final List<BytecodeClass> classes
-    ) {
         this.pckg = pckg;
-        this.writer = writer;
         this.classes = classes;
     }
 
@@ -91,7 +82,6 @@ public final class BytecodeProgram {
     public XML xml() {
         return new BytecodeRepresentation(this.bytecode(true)).toEO();
     }
-
 
     /**
      * Generate bytecode.
@@ -106,6 +96,10 @@ public final class BytecodeProgram {
      * </p>
      * @return Bytecode.
      */
+    public Bytecode bytecode() {
+        return this.bytecode(true);
+    }
+
     /**
      * Traverse XML and build bytecode class.
      * @return Bytecode.
@@ -114,10 +108,6 @@ public final class BytecodeProgram {
         final CustomClassWriter writer = new CustomClassWriter(verify);
         this.top().writeTo(writer);
         return writer.bytecode();
-    }
-
-    public Bytecode bytecode() {
-        return this.bytecode(true);
     }
 
     public BytecodeClass top() {

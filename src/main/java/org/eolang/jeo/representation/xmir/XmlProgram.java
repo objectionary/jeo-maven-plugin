@@ -70,6 +70,11 @@ public final class XmlProgram {
         );
     }
 
+    public XmlProgram(final String... lines) {
+        this(new XMLDocument(String.join("\n", lines)));
+    }
+
+
     /**
      * Constructor.
      *

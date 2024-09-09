@@ -33,7 +33,7 @@ import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
-import org.eolang.jeo.representation.xmir.XmlBytecode;
+import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.eolang.parser.Schema;
 
 /**
@@ -138,12 +138,13 @@ public final class XmirRepresentation implements Representation {
 
     @Override
     public Bytecode toBytecode() {
+        final XML xmir = this.xml.value();
         try {
-            new Schema(this.xml.value()).check();
-            return new XmlBytecode(this.xml.value(), this.verify).bytecode();
+            new Schema(xmir).check();
+            return new XmlProgram(xmir).bytecode().bytecode(this.verify);
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
-                String.format("Can't transform '%s' to bytecode", this.xml.value()),
+                String.format("Can't transform '%s' to bytecode", xmir),
                 exception
             );
         }
