@@ -41,6 +41,22 @@ import org.objectweb.asm.Opcodes;
 final class BytecodeClassTest {
 
     @Test
+    void cleansMethods() {
+        final String name = "CleanMethods";
+        MatcherAssert.assertThat(
+            String.format(
+                "Can't clean methods from the class %s",
+                name
+            ),
+            new BytecodeClass(name)
+                .withMethod("j$foo", "()V", Opcodes.ACC_PUBLIC)
+                .up()
+                .withoutMethods(),
+            Matchers.equalTo(new BytecodeClass(name))
+        );
+    }
+
+    @Test
     void parsesAbstractClass() {
         final int access = Opcodes.ACC_ABSTRACT | Opcodes.ACC_PUBLIC | Opcodes.ACC_SUPER;
         MatcherAssert.assertThat(

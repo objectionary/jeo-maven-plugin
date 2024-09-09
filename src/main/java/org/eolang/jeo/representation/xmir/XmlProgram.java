@@ -132,7 +132,6 @@ public final class XmlProgram {
      *
      * @return Program without top class.
      */
-    @Deprecated
     public XmlProgram withoutTopClass() {
         final String name = this.top().bytecode(this.pckg(), true).name();
         return new XmlProgram(

@@ -255,9 +255,7 @@ public final class BytecodeClass implements Testable {
     public BytecodeMethod withMethod(
         final BytecodeMethodProperties properties, final BytecodeMaxs maxs
     ) {
-        final BytecodeMethod method = new BytecodeMethod(properties, this.visitor, this, maxs);
-        this.methods.add(method);
-        return method;
+        return this.withMethod(new BytecodeMethod(properties, this.visitor, this, maxs));
     }
 
     /**
@@ -431,5 +429,14 @@ public final class BytecodeClass implements Testable {
      */
     public BytecodeClassProperties properties() {
         return this.props;
+    }
+
+    /**
+     * Without methods.
+     * @return The same class without methods.
+     */
+    public BytecodeClass withoutMethods() {
+        this.methods.clear();
+        return this;
     }
 }

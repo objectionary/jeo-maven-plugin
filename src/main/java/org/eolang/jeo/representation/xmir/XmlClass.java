@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,7 +36,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
 import org.w3c.dom.Node;
-import org.xembly.Directives;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -61,18 +59,9 @@ public final class XmlClass {
     /**
      * Constructor.
      *
-     * @param lines XML lines.
-     */
-    public XmlClass(final String... lines) {
-        this(new XMLDocument(String.join("\n", lines)));
-    }
-
-    /**
-     * Constructor.
-     *
      * @param xmlnode XML node.
      */
-    public XmlClass(final XML xmlnode) {
+    private XmlClass(final XML xmlnode) {
         this(xmlnode.node().getFirstChild());
     }
 
@@ -81,17 +70,8 @@ public final class XmlClass {
      *
      * @param classname Class name.
      */
-    public XmlClass(final String classname) {
+    XmlClass(final String classname) {
         this(XmlClass.empty(classname));
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param properties Class properties.
-     */
-    public XmlClass(final DirectivesClassProperties properties) {
-        this("HelloWorld", properties);
     }
 
     /**
@@ -100,7 +80,7 @@ public final class XmlClass {
      * @param classname Class name.
      * @param properties Class properties.
      */
-    public XmlClass(final String classname, final DirectivesClassProperties properties) {
+    XmlClass(final String classname, final DirectivesClassProperties properties) {
         this(XmlClass.withProps(classname, properties));
     }
 
@@ -121,7 +101,6 @@ public final class XmlClass {
     XmlClass(final Node xml) {
         this(new XmlNode(xml));
     }
-
 
     /**
      * Convert to bytecode.
@@ -215,54 +194,9 @@ public final class XmlClass {
     }
 
     /**
-     * Copies current class with replaced methods.
-     * @param methods Methods.
-     * @return Class node.
-     */
-    @Deprecated
-    public XmlClass replaceMethods(final XmlMethod... methods) {
-        return this.withoutMethods().withMethods(methods);
-    }
-
-    /**
-     * Copies the same class node, but with added methods.
-     * @param methods Methods.
-     * @return Copy of the class with added methods.
-     */
-    @Deprecated
-    public XmlClass withMethods(final XmlMethod... methods) {
-        return new XmlClass(
-            new Xembler(
-                Arrays.stream(methods)
-                    .map(XmlMethod::toDirectives)
-                    .reduce(
-                        new Directives(),
-                        Directives::append
-                    )
-            ).applyQuietly(this.node.node())
-        );
-    }
-
-    /**
-     * Copies the same class node, but without methods.
-     * @return Class node.
-     */
-    @Deprecated
-    public XmlClass withoutMethods() {
-        return new XmlClass(
-            new Xembler(
-                new Directives()
-                    .xpath("./o[not(@base) and @name]")
-                    .remove()
-            ).applyQuietly(this.node.node())
-        );
-    }
-
-    /**
      * Convert XmlClass to XML node.
      * @return XML node.
      */
-    @Deprecated
     public XML toXml() {
         return new XMLDocument(this.node.node());
     }
