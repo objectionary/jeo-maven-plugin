@@ -72,20 +72,21 @@ final class BytecodeClassTest {
     @Test
     void createsConstructorWithStoreInstructions() {
         Assertions.assertDoesNotThrow(
-            () -> new BytecodeProgram(new BytecodeClass("Store")
-                .withConstructor()
-                .opcode(Opcodes.ICONST_0)
-                .opcode(Opcodes.ISTORE, 1)
-                .opcode(Opcodes.LCONST_0)
-                .opcode(Opcodes.LSTORE, 2)
-                .opcode(Opcodes.FCONST_0)
-                .opcode(Opcodes.FSTORE, 3)
-                .opcode(Opcodes.DCONST_0)
-                .opcode(Opcodes.DSTORE, 4)
-                .opcode(Opcodes.ACONST_NULL)
-                .opcode(Opcodes.ASTORE, 5)
-                .opcode(Opcodes.RETURN)
-                .up()
+            () -> new BytecodeProgram(
+                new BytecodeClass("Store")
+                    .withConstructor()
+                    .opcode(Opcodes.ICONST_0)
+                    .opcode(Opcodes.ISTORE, 1)
+                    .opcode(Opcodes.LCONST_0)
+                    .opcode(Opcodes.LSTORE, 2)
+                    .opcode(Opcodes.FCONST_0)
+                    .opcode(Opcodes.FSTORE, 3)
+                    .opcode(Opcodes.DCONST_0)
+                    .opcode(Opcodes.DSTORE, 4)
+                    .opcode(Opcodes.ACONST_NULL)
+                    .opcode(Opcodes.ASTORE, 5)
+                    .opcode(Opcodes.RETURN)
+                    .up()
             ).bytecode(),
             "We expect no exception here because all instructions are valid"
         );
@@ -218,13 +219,13 @@ final class BytecodeClassTest {
     @Test
     void returnsShortValue() {
         Assertions.assertDoesNotThrow(
-            () -> new BytecodeProgram(new BytecodeClass("ShortValue")
-                .withMethod("j$foo", "()S", Opcodes.ACC_PUBLIC)
-                .opcode(Opcodes.SIPUSH, 256)
-                .opcode(Opcodes.IRETURN)
-                .up()
-            )
-                .bytecode(),
+            () -> new BytecodeProgram(
+                new BytecodeClass("ShortValue")
+                    .withMethod("j$foo", "()S", Opcodes.ACC_PUBLIC)
+                    .opcode(Opcodes.SIPUSH, 256)
+                    .opcode(Opcodes.IRETURN)
+                    .up()
+            ).bytecode(),
             "We expect no exception here because all instructions are valid"
         );
     }
@@ -236,99 +237,100 @@ final class BytecodeClassTest {
         final String init = "<init>";
         final String developer = "org/eolang/jeo/Developer";
         Assertions.assertDoesNotThrow(
-            () -> new BytecodeProgram(new BytecodeClass(application)
-                .withMethod(init, descr, 1)
-                .label("245a510e-d8c5-45d9-b270-921a5e17e9c8")
-                .opcode(Opcodes.ALOAD, 0)
-                .opcode(Opcodes.INVOKESPECIAL, "java/lang/Object", init, descr, false)
-                .opcode(Opcodes.RETURN)
-                .label("3a851f60-17cd-4ff6-a7be-cf3b0fe4b843")
-                .up()
-                .withMethod("j$main", "([Ljava/lang/String;)V", 9)
-                .label("6c2d7242-c4be-4605-a330-2bde6dc4b423")
-                .opcode(Opcodes.NEW, developer)
-                .opcode(Opcodes.DUP)
-                .opcode(Opcodes.LDC, "Yegor")
-                .opcode(Opcodes.NEW, "org/eolang/jeo/Application$1")
-                .opcode(Opcodes.DUP)
-                .opcode(
-                    Opcodes.INVOKESPECIAL, "org/eolang/jeo/Application$1", init, descr, false
-                )
-                .opcode(
-                    Opcodes.INVOKESPECIAL,
-                    developer,
-                    init,
-                    "(Ljava/lang/String;Lorg/eolang/jeo/Language;)V",
-                    false
-                )
-                .label("a568f756-0140-44c9-bb48-1ed13d9058a5")
-                .opcode(
-                    Opcodes.INVOKEVIRTUAL, developer, "writeCode", descr, false
-                )
-                .label("1f3726bc-879d-4649-ad4e-2592064a4deb")
-                .opcode(Opcodes.NEW, developer)
-                .opcode(Opcodes.DUP)
-                .opcode(Opcodes.LDC, "Lev")
-                .opcode(Opcodes.NEW, "org/eolang/jeo/Application$2")
-                .opcode(Opcodes.DUP)
-                .opcode(
-                    Opcodes.INVOKESPECIAL, "org/eolang/jeo/Application$2", init, descr, false
-                )
-                .opcode(
-                    Opcodes.INVOKESPECIAL,
-                    developer,
-                    init,
-                    "(Ljava/lang/String;Lorg/eolang/jeo/Language;)V",
-                    false
-                )
-                .label("1751c688-5569-4ebc-97fc-ea9f118702ff")
-                .opcode(
-                    Opcodes.INVOKEVIRTUAL, developer, "writeCode", descr, false
-                )
-                .label("aa3d26fc-1d87-4898-9c6b-dd77d5bf2a37")
-                .opcode(Opcodes.NEW, developer)
-                .opcode(Opcodes.DUP)
-                .opcode(Opcodes.LDC, "Maxim")
-                .opcode(Opcodes.NEW, "org/eolang/jeo/Application$3")
-                .opcode(Opcodes.DUP)
-                .opcode(
-                    Opcodes.INVOKESPECIAL, "org/eolang/jeo/Application$3", init, descr, false
-                )
-                .opcode(
-                    Opcodes.INVOKESPECIAL,
-                    developer,
-                    init,
-                    "(Ljava/lang/String;Lorg/eolang/jeo/Language;)V",
-                    false
-                )
-                .label("5e0e53c5-464b-4073-b825-af00455fb1f9")
-                .opcode(
-                    Opcodes.INVOKEVIRTUAL, developer, "writeCode", descr, false
-                )
-                .label("7ed0c330-96db-481f-9d18-cdbaf53dbd66")
-                .opcode(Opcodes.NEW, developer)
-                .opcode(Opcodes.DUP)
-                .opcode(Opcodes.LDC, "Roman")
-                .opcode(Opcodes.NEW, "org/eolang/jeo/Application$4")
-                .opcode(Opcodes.DUP)
-                .opcode(
-                    Opcodes.INVOKESPECIAL, "org/eolang/jeo/Application$4", init, descr, false
-                )
-                .opcode(
-                    Opcodes.INVOKESPECIAL,
-                    developer,
-                    init,
-                    "(Ljava/lang/String;Lorg/eolang/jeo/Language;)V",
-                    false
-                )
-                .label("7c6d85b2-8938-485f-859d-7bc3bcac3b03")
-                .opcode(
-                    Opcodes.INVOKEVIRTUAL, developer, "writeCode", descr, false
-                )
-                .label("09d62634-f853-45d7-9c5d-80f3a2ecbfde")
-                .opcode(Opcodes.RETURN)
-                .label("0db9a0b5-5515-49b4-9cac-b733be49aef9")
-                .up()
+            () -> new BytecodeProgram(
+                new BytecodeClass(application)
+                    .withMethod(init, descr, 1)
+                    .label("245a510e-d8c5-45d9-b270-921a5e17e9c8")
+                    .opcode(Opcodes.ALOAD, 0)
+                    .opcode(Opcodes.INVOKESPECIAL, "java/lang/Object", init, descr, false)
+                    .opcode(Opcodes.RETURN)
+                    .label("3a851f60-17cd-4ff6-a7be-cf3b0fe4b843")
+                    .up()
+                    .withMethod("j$main", "([Ljava/lang/String;)V", 9)
+                    .label("6c2d7242-c4be-4605-a330-2bde6dc4b423")
+                    .opcode(Opcodes.NEW, developer)
+                    .opcode(Opcodes.DUP)
+                    .opcode(Opcodes.LDC, "Yegor")
+                    .opcode(Opcodes.NEW, "org/eolang/jeo/Application$1")
+                    .opcode(Opcodes.DUP)
+                    .opcode(
+                        Opcodes.INVOKESPECIAL, "org/eolang/jeo/Application$1", init, descr, false
+                    )
+                    .opcode(
+                        Opcodes.INVOKESPECIAL,
+                        developer,
+                        init,
+                        "(Ljava/lang/String;Lorg/eolang/jeo/Language;)V",
+                        false
+                    )
+                    .label("a568f756-0140-44c9-bb48-1ed13d9058a5")
+                    .opcode(
+                        Opcodes.INVOKEVIRTUAL, developer, "writeCode", descr, false
+                    )
+                    .label("1f3726bc-879d-4649-ad4e-2592064a4deb")
+                    .opcode(Opcodes.NEW, developer)
+                    .opcode(Opcodes.DUP)
+                    .opcode(Opcodes.LDC, "Lev")
+                    .opcode(Opcodes.NEW, "org/eolang/jeo/Application$2")
+                    .opcode(Opcodes.DUP)
+                    .opcode(
+                        Opcodes.INVOKESPECIAL, "org/eolang/jeo/Application$2", init, descr, false
+                    )
+                    .opcode(
+                        Opcodes.INVOKESPECIAL,
+                        developer,
+                        init,
+                        "(Ljava/lang/String;Lorg/eolang/jeo/Language;)V",
+                        false
+                    )
+                    .label("1751c688-5569-4ebc-97fc-ea9f118702ff")
+                    .opcode(
+                        Opcodes.INVOKEVIRTUAL, developer, "writeCode", descr, false
+                    )
+                    .label("aa3d26fc-1d87-4898-9c6b-dd77d5bf2a37")
+                    .opcode(Opcodes.NEW, developer)
+                    .opcode(Opcodes.DUP)
+                    .opcode(Opcodes.LDC, "Maxim")
+                    .opcode(Opcodes.NEW, "org/eolang/jeo/Application$3")
+                    .opcode(Opcodes.DUP)
+                    .opcode(
+                        Opcodes.INVOKESPECIAL, "org/eolang/jeo/Application$3", init, descr, false
+                    )
+                    .opcode(
+                        Opcodes.INVOKESPECIAL,
+                        developer,
+                        init,
+                        "(Ljava/lang/String;Lorg/eolang/jeo/Language;)V",
+                        false
+                    )
+                    .label("5e0e53c5-464b-4073-b825-af00455fb1f9")
+                    .opcode(
+                        Opcodes.INVOKEVIRTUAL, developer, "writeCode", descr, false
+                    )
+                    .label("7ed0c330-96db-481f-9d18-cdbaf53dbd66")
+                    .opcode(Opcodes.NEW, developer)
+                    .opcode(Opcodes.DUP)
+                    .opcode(Opcodes.LDC, "Roman")
+                    .opcode(Opcodes.NEW, "org/eolang/jeo/Application$4")
+                    .opcode(Opcodes.DUP)
+                    .opcode(
+                        Opcodes.INVOKESPECIAL, "org/eolang/jeo/Application$4", init, descr, false
+                    )
+                    .opcode(
+                        Opcodes.INVOKESPECIAL,
+                        developer,
+                        init,
+                        "(Ljava/lang/String;Lorg/eolang/jeo/Language;)V",
+                        false
+                    )
+                    .label("7c6d85b2-8938-485f-859d-7bc3bcac3b03")
+                    .opcode(
+                        Opcodes.INVOKEVIRTUAL, developer, "writeCode", descr, false
+                    )
+                    .label("09d62634-f853-45d7-9c5d-80f3a2ecbfde")
+                    .opcode(Opcodes.RETURN)
+                    .label("0db9a0b5-5515-49b4-9cac-b733be49aef9")
+                    .up()
             ).bytecode(),
             "We expect no exception here because all instructions are valid"
         );

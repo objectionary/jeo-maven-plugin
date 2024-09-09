@@ -23,9 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
-import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -49,68 +46,6 @@ final class XmlClassTest {
             ),
             klass.bytecode("", true).name(),
             Matchers.equalTo(expected)
-        );
-    }
-
-
-//    @Test
-//    void addsMethods() {
-//        MatcherAssert.assertThat(
-//            "Methods should be added.",
-//            new XmlClass("Empty")
-//                .withMethods(new XmlMethod())
-//                .withMethods(new XmlMethod())
-//                .methods(),
-//            Matchers.hasSize(2)
-//        );
-//    }
-
-//    @Test
-//    void replacesMethods() {
-//        final XmlMethod second = new XmlMethod("two");
-//        final XmlMethod third = new XmlMethod("three");
-//        final List<XmlMethod> methods = new XmlClass("Replaced")
-//            .withMethods(new XmlMethod("one"))
-//            .replaceMethods(second, third).methods();
-//        MatcherAssert.assertThat(
-//            "Old methods should be removed",
-//            methods,
-//            Matchers.hasSize(2)
-//        );
-//        MatcherAssert.assertThat(
-//            "Methods should be replaced with new",
-//            methods,
-//            Matchers.containsInAnyOrder(second, third)
-//        );
-//    }
-
-//    @Test
-//    void cleansAllMethods() {
-//        MatcherAssert.assertThat(
-//            "Methods should be empty.",
-//            new XmlClass(
-//                "<o name='MethodClass'>",
-//                "<o name='bar'>",
-//                "</o></o>"
-//            ).withoutMethods().methods(),
-//            Matchers.empty()
-//        );
-//    }
-
-    @Test
-    void convertesXmlClassBackToXmlNode() {
-        final XML expected = new XMLDocument(
-            String.join(
-                "",
-                "<o name='TwoWay'>",
-                "<o name='foo'>",
-                "</o></o>"
-            )
-        );
-        MatcherAssert.assertThat(
-            "XmlClass should be correctly converted back to XML",
-            new XmlClass(expected.node()).toXml().toString(),
-            Matchers.equalTo(expected.toString())
         );
     }
 }

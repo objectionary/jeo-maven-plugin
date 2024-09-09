@@ -46,7 +46,7 @@ import org.xembly.Xembler;
  */
 @ToString
 @EqualsAndHashCode
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class XmlClass {
     /**
      * Class node from entire XML.
@@ -59,7 +59,7 @@ public final class XmlClass {
      *
      * @param xmlnode XML node.
      */
-    private XmlClass(final XML xmlnode) {
+    XmlClass(final XML xmlnode) {
         this(xmlnode.node().getFirstChild());
     }
 
@@ -189,14 +189,6 @@ public final class XmlClass {
             .filter(o -> o.hasAttribute("base", "tuple"))
             .findFirst()
             .map(XmlAttributes::new);
-    }
-
-    /**
-     * Convert XmlClass to XML node.
-     * @return XML node.
-     */
-    public XML toXml() {
-        return new XMLDocument(this.node.node());
     }
 
     /**

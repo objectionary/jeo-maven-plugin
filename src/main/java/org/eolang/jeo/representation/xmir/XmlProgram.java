@@ -31,7 +31,6 @@ import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.w3c.dom.Node;
-import org.xembly.Directives;
 import org.xembly.Xembler;
 
 /**
@@ -40,8 +39,6 @@ import org.xembly.Xembler;
  * @since 0.1
  */
 public final class XmlProgram {
-    //TODO: WE NEED REFACTORING HERE!
-
     /**
      * Program node name.
      */
@@ -70,10 +67,13 @@ public final class XmlProgram {
         );
     }
 
+    /**
+     * Constructor.
+     * @param lines Xmir lines.
+     */
     public XmlProgram(final String... lines) {
         this(new XMLDocument(String.join("\n", lines)));
     }
-
 
     /**
      * Constructor.
@@ -84,11 +84,6 @@ public final class XmlProgram {
         this(xml.node());
     }
 
-    @Override
-    public String toString() {
-        return new XMLDocument(this.root).toString();
-    }
-
     /**
      * Constructor.
      *
@@ -96,6 +91,11 @@ public final class XmlProgram {
      */
     public XmlProgram(final Node root) {
         this.root = root;
+    }
+
+    @Override
+    public String toString() {
+        return new XMLDocument(this.root).toString();
     }
 
     /**
@@ -124,7 +124,6 @@ public final class XmlProgram {
             .child("o")
             .toClass();
     }
-
 
     /**
      * Retrieve program package.
