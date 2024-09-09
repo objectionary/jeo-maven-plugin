@@ -133,25 +133,6 @@ public final class BytecodeClass implements Testable {
     /**
      * Constructor.
      * @param name Class name.
-     * @param fields Fields.
-     * @param annotations Annotations.
-     * @param attributes Attributes.
-     * @param props Class properties.
-     * @checkstyle ParameterNumberCheck (5 lines)
-     */
-    public BytecodeClass(
-        final String name,
-        final Collection<BytecodeField> fields,
-        final Collection<BytecodeAnnotation> annotations,
-        final Collection<BytecodeAttribute> attributes,
-        final BytecodeClassProperties props
-    ) {
-        this(name, new ArrayList<>(0), fields, annotations, attributes, props);
-    }
-
-    /**
-     * Constructor.
-     * @param name Class name.
      * @param methods Methods.
      * @param fields Fields.
      * @param annotations Annotations.
@@ -242,14 +223,14 @@ public final class BytecodeClass implements Testable {
     /**
      * Add method.
      *
-     * @param properties Method properties.
+     * @param props Method properties.
      * @param maxs Method maxs.
      * @return This object.
      */
     public BytecodeMethodBuilder withMethod(
-        final BytecodeMethodProperties properties, final BytecodeMaxs maxs
+        final BytecodeMethodProperties props, final BytecodeMaxs maxs
     ) {
-        return this.withMethod(new BytecodeMethod(properties, this, maxs));
+        return this.withMethod(new BytecodeMethod(props, maxs));
     }
 
     /**
@@ -272,13 +253,9 @@ public final class BytecodeClass implements Testable {
      * @return This object.
      */
     public BytecodeMethodBuilder withMethod(
-        final String mname,
-        final String descriptor,
-        final int... modifiers
+        final String mname, final String descriptor, final int... modifiers
     ) {
-        return this.withMethod(
-            new BytecodeMethod(mname, this, descriptor, modifiers)
-        );
+        return this.withMethod(new BytecodeMethod(mname, descriptor, modifiers));
     }
 
     /**

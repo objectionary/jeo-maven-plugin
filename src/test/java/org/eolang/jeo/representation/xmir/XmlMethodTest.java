@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
@@ -44,14 +43,12 @@ final class XmlMethodTest {
         final String name = "name";
         final int access = 0;
         final String descriptor = "()V";
-        final BytecodeClass clazz = new BytecodeClass();
         MatcherAssert.assertThat(
             "We expect that method will be correctly parsed",
-            new XmlMethod(name, access, descriptor).bytecode(clazz),
+            new XmlMethod(name, access, descriptor).bytecode(),
             Matchers.equalTo(
                 new BytecodeMethod(
                     new BytecodeMethodProperties(name, descriptor, "", access),
-                    clazz,
                     new BytecodeMaxs()
                 )
             )
@@ -76,11 +73,10 @@ final class XmlMethodTest {
         final XmlMethod method = new XmlMethod(name, access, descriptor, exceptions);
         MatcherAssert.assertThat(
             "Method properties are not equal to expected",
-            method.bytecode(new BytecodeClass()),
+            method.bytecode(),
             Matchers.equalTo(
                 new BytecodeMethod(
                     new BytecodeMethodProperties(access, name, descriptor, "", exceptions),
-                    new BytecodeClass(),
                     new BytecodeMaxs()
                 )
             )
@@ -91,7 +87,7 @@ final class XmlMethodTest {
     void createsMethodWithMaxStackAndMaxLocals() {
         MatcherAssert.assertThat(
             "We expect that max stack and max locals will be correctly parsed",
-            new XmlMethod(1, 2).bytecode(new BytecodeClass()),
+            new XmlMethod(1, 2).bytecode(),
             Matchers.equalTo(new BytecodeMethod("foo", new BytecodeMaxs(1, 2)))
         );
     }

@@ -95,6 +95,8 @@ public final class XmlClass {
     public BytecodeClass bytecode(final String pckg) {
         final BytecodeClass bytecode = new BytecodeClass(
             new ClassName(pckg, new PrefixedName(this.name()).decode()).full(),
+            this.methods().stream().map(XmlMethod::bytecode)
+                .collect(Collectors.toList()),
             this.fields().stream()
                 .map(XmlField::bytecode)
                 .collect(Collectors.toList()),
@@ -107,8 +109,7 @@ public final class XmlClass {
                 .orElse(new ArrayList<>(0)),
             this.properties().bytecode()
         );
-        this.methods().stream().map(m -> m.bytecode(bytecode))
-            .forEach(bytecode::withMethod);
+        ;
 //        this.annotations().ifPresent(bytecode::withAnnotations);
 //        for (final XmlField field : this.fields()) {
 //            bytecode.withField(field.bytecode());

@@ -42,11 +42,6 @@ import org.objectweb.asm.Opcodes;
 public final class BytecodeMethod implements Testable {
 
     /**
-     * Original class.
-     */
-    private final BytecodeClass clazz;
-
-    /**
      * Try-catch blocks.
      */
     private final List<BytecodeEntry> tryblocks;
@@ -86,7 +81,7 @@ public final class BytecodeMethod implements Testable {
      * @param name Method name.
      */
     public BytecodeMethod(final String name) {
-        this(name, new BytecodeClass(), "()V", Opcodes.ACC_PUBLIC);
+        this(name, "()V", Opcodes.ACC_PUBLIC);
     }
 
     /**
@@ -95,52 +90,39 @@ public final class BytecodeMethod implements Testable {
      * @param maxs Max stack and locals.
      */
     public BytecodeMethod(final String name, final BytecodeMaxs maxs) {
-        this(new BytecodeMethodProperties(name, "()V", "", 1), new BytecodeClass(), maxs);
+        this(new BytecodeMethodProperties(name, "()V", "", 1), maxs);
     }
 
     /**
      * Constructor.
      * @param name Method name.
-     * @param clazz Original class.
      * @param descriptor Method descriptor.
      * @param modifiers Method modifiers.
      * @checkstyle ParameterNumberCheck (10 lines)
      */
-    BytecodeMethod(
-        final String name,
-        final BytecodeClass clazz,
-        final String descriptor,
-        final int... modifiers
-    ) {
-        this(new BytecodeMethodProperties(name, descriptor, "", modifiers), clazz);
+    BytecodeMethod(final String name, final String descriptor, final int... modifiers) {
+        this(new BytecodeMethodProperties(name, descriptor, "", modifiers));
     }
 
     /**
      * Constructor.
      * @param properties Method properties.
-     * @param clazz Original class.
      */
-    BytecodeMethod(
-        final BytecodeMethodProperties properties,
-        final BytecodeClass clazz
-    ) {
-        this(properties, clazz, new BytecodeMaxs(0, 0));
+    BytecodeMethod(final BytecodeMethodProperties properties) {
+        this(properties, new BytecodeMaxs(0, 0));
     }
 
     /**
      * Constructor.
      * @param properties Method properties.
-     * @param clazz Original class.
      * @param maxs Max stack and locals.
      * @checkstyle ParameterNumberCheck (10 lines)
      */
     public BytecodeMethod(
         final BytecodeMethodProperties properties,
-        final BytecodeClass clazz,
         final BytecodeMaxs maxs
     ) {
         this(
-            clazz,
             new ArrayList<>(0),
             new ArrayList<>(0),
             new ArrayList<>(0),
@@ -152,7 +134,6 @@ public final class BytecodeMethod implements Testable {
 
     /**
      * Constructor.
-     * @param clazz Original class.
      * @param tryblocks Try-catch blocks.
      * @param instructions Method instructions.
      * @param annotations Method annotations.
@@ -162,7 +143,6 @@ public final class BytecodeMethod implements Testable {
      * @checkstyle ParameterNumberCheck (10 lines)
      */
     public BytecodeMethod(
-        final BytecodeClass clazz,
         final List<BytecodeEntry> tryblocks,
         final List<BytecodeEntry> instructions,
         final List<BytecodeAnnotation> annotations,
@@ -170,7 +150,6 @@ public final class BytecodeMethod implements Testable {
         final List<BytecodeDefaultValue> defvalues,
         final BytecodeMaxs maxs
     ) {
-        this.clazz = clazz;
         this.tryblocks = tryblocks;
         this.instructions = instructions;
         this.annotations = annotations;
@@ -186,7 +165,6 @@ public final class BytecodeMethod implements Testable {
      */
     public BytecodeMethod withoutMaxs() {
         return new BytecodeMethod(
-            this.clazz,
             this.tryblocks,
             this.instructions,
             this.annotations,
@@ -301,9 +279,8 @@ public final class BytecodeMethod implements Testable {
         } catch (final ClassFormatError format) {
             throw new IllegalStateException(
                 String.format(
-                    "Failed to generate bytecode method %s in class %s due to class format error,",
-                    this.properties,
-                    this.clazz
+                    "Failed to generate bytecode method %s due to class format error,",
+                    this.properties
                 ),
                 format
             );

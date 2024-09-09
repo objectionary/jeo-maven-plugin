@@ -109,12 +109,10 @@ public final class XmlMethod {
 
     /**
      * Convert to bytecode.
-     * @param clazz Bytecode class.
      * @return Bytecode method.
      */
-    public BytecodeMethod bytecode(final BytecodeClass clazz) {
+    public BytecodeMethod bytecode() {
         return new BytecodeMethod(
-            clazz,
             this.trycatchEntries()
                 .stream()
                 .map(XmlTryCatchEntry::bytecode)

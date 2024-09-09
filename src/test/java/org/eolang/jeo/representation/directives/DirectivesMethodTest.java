@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.directives;
 
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
-import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
@@ -48,7 +47,6 @@ final class DirectivesMethodTest {
         final int access = 100;
         final String descriptor = "()I";
         final String signature = "";
-        final BytecodeClass clazz = new BytecodeClass();
         MatcherAssert.assertThat(
             "We expect that directives will generate correct method",
             new XmlMethod(
@@ -60,11 +58,10 @@ final class DirectivesMethodTest {
                         )
                     ).xml()
                 )
-            ).bytecode(clazz),
+            ).bytecode(),
             Matchers.equalTo(
                 new BytecodeMethod(
                     new BytecodeMethodProperties(name, descriptor, signature, access),
-                    clazz,
                     new BytecodeMaxs()
                 )
             )
@@ -85,7 +82,7 @@ final class DirectivesMethodTest {
                             .annotation(new DirectivesAnnotation(descriptor, visible))
                     ).xml()
                 )
-            ).bytecode(new BytecodeClass()),
+            ).bytecode(),
             Matchers.equalTo(
                 new BytecodeMethod(name)
                     .annotation(new BytecodeAnnotation(descriptor, visible))
