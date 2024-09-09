@@ -27,6 +27,7 @@ import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.eolang.jeo.representation.xmir.XmlNode;
@@ -120,23 +121,45 @@ final class DirectivesClassTest {
                 ).xml()
             )
         );
-        MatcherAssert.assertThat(
-            "Class name is not equal to expected",
-            clazz.name(),
-            Matchers.equalTo(name)
+
+        final boolean verify = true;
+        final String pckg = "pckg";
+        final BytecodeClass actual = clazz.bytecode(pckg, verify);
+
+        final BytecodeClass expected = new BytecodeClass(
+            new ClassName(pckg, name).full(),
+            new BytecodeClassProperties(
+                access,
+                signature,
+                supername,
+                interfce
+            ),
+            verify
         );
+
         MatcherAssert.assertThat(
-            "Class properties are not equal to expected",
-            clazz.properties().bytecode(),
-            Matchers.equalTo(
-                new BytecodeClassProperties(
-                    access,
-                    signature,
-                    supername,
-                    interfce
-                )
-            )
+            "We expect that class created from directives is equal to expected",
+            actual,
+            Matchers.equalTo(expected)
         );
+
+//        MatcherAssert.assertThat(
+//            "Class name is not equal to expected",
+//            clazz.name(),
+//            Matchers.equalTo(name)
+//        );
+//        MatcherAssert.assertThat(
+//            "Class properties are not equal to expected",
+//            clazz.properties().bytecode(),
+//            Matchers.equalTo(
+//                new BytecodeClassProperties(
+//                    access,
+//                    signature,
+//                    supername,
+//                    interfce
+//                )
+//            )
+//        );
     }
 
 }

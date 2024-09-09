@@ -52,47 +52,7 @@ final class XmlClassTest {
         );
     }
 
-    @Test
-    void retrievesConstructor() {
-        final XML doc = new XMLDocument(
-            String.join(
-                "",
-                "<o name='FooClass'>",
-                "<o name='new'>",
-                "</o></o>"
-            )
-        );
-        MatcherAssert.assertThat(
-            String.format(
-                "%s should retrieve exactly one constructor from %n%s%n",
-                XmlClass.class.getSimpleName(),
-                doc
-            ),
-            new XmlClass(doc.node().getFirstChild()).constructors(),
-            Matchers.hasSize(1)
-        );
-    }
 
-    @Test
-    void doesNotRetrieveConstructor() {
-        final XML doc = new XMLDocument(
-            String.join(
-                "",
-                "<o name='BarClass'>",
-                "<o name='bar'>",
-                "</o></o>"
-            )
-        );
-        MatcherAssert.assertThat(
-            String.format(
-                "%s should not retrieve any constructor from %n%s%n",
-                XmlClass.class.getSimpleName(),
-                doc
-            ),
-            new XmlClass(doc).constructors(),
-            Matchers.empty()
-        );
-    }
 
     @Test
     void addsMethods() {

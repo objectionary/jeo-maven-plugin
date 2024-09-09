@@ -163,6 +163,14 @@ public final class BytecodeClass implements Testable {
     }
 
     /**
+     * Constructor.
+     * @return Class name.
+     */
+    public String name() {
+        return this.name;
+    }
+
+    /**
      * Converts bytecode into XML.
      *
      * @return XML representation of bytecode.
@@ -415,5 +423,13 @@ public final class BytecodeClass implements Testable {
      */
     public CustomClassWriter writer() {
         return this.visitor;
+    }
+
+    /**
+     * Properties.
+     * @return Class properties.
+     */
+    public BytecodeClassProperties properties() {
+        return this.props;
     }
 }

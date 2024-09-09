@@ -79,19 +79,20 @@ public final class XmlBytecode {
     public Bytecode bytecode() {
         final XmlProgram program = new XmlProgram(this.xml);
         final XmlClass clazz = program.top();
-        final BytecodeClass bytecode = new BytecodeClass(
-            new ClassName(program.pckg(), new PrefixedName(clazz.name()).decode()).full(),
-            clazz.properties().bytecode(),
-            this.verify
-        );
-        clazz.annotations().ifPresent(bytecode::withAnnotations);
-        for (final XmlField field : clazz.fields()) {
-            bytecode.withField(field.bytecode());
-        }
-        for (final XmlMethod xmlmethod : clazz.methods()) {
-            bytecode.withMethod(xmlmethod.bytecode(bytecode));
-        }
-        clazz.attributes().ifPresent(attrs -> attrs.writeTo(bytecode));
+        final BytecodeClass bytecode = clazz.bytecode(program.pckg(), this.verify);
+//        final BytecodeClass bytecode = new BytecodeClass(
+//            new ClassName(program.pckg(), new PrefixedName(clazz.name()).decode()).full(),
+//            clazz.properties().bytecode(),
+//            this.verify
+//        );
+//        clazz.annotations().ifPresent(bytecode::withAnnotations);
+//        for (final XmlField field : clazz.fields()) {
+//            bytecode.withField(field.bytecode());
+//        }
+//        for (final XmlMethod xmlmethod : clazz.methods()) {
+//            bytecode.withMethod(xmlmethod.bytecode(bytecode));
+//        }
+//        clazz.attributes().ifPresent(attrs -> attrs.writeTo(bytecode));
         return bytecode.bytecode();
     }
 }

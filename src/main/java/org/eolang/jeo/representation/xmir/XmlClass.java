@@ -31,6 +31,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.PrefixedName;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
 import org.w3c.dom.Node;
@@ -104,15 +107,6 @@ public final class XmlClass {
     /**
      * Constructor.
      *
-     * @param xml Class node.
-     */
-    public XmlClass(final Node xml) {
-        this(new XmlNode(xml));
-    }
-
-    /**
-     * Constructor.
-     *
      * @param node Class node.
      */
     public XmlClass(final XmlNode node) {
@@ -120,11 +114,41 @@ public final class XmlClass {
     }
 
     /**
-     * Class name.
+     * Constructor.
      *
+     * @param xml Class node.
+     */
+    XmlClass(final Node xml) {
+        this(new XmlNode(xml));
+    }
+
+
+    /**
+     * Convert to bytecode.
+     * @return Bytecode class.
+     */
+    public BytecodeClass bytecode(final String pckg, final boolean verify) {
+        final BytecodeClass bytecode = new BytecodeClass(
+            new ClassName(pckg, new PrefixedName(this.name()).decode()).full(),
+            this.properties().bytecode(),
+            verify
+        );
+        this.annotations().ifPresent(bytecode::withAnnotations);
+        for (final XmlField field : this.fields()) {
+            bytecode.withField(field.bytecode());
+        }
+        for (final XmlMethod xmlmethod : this.methods()) {
+            bytecode.withMethod(xmlmethod.bytecode(bytecode));
+        }
+        this.attributes().ifPresent(attrs -> attrs.writeTo(bytecode));
+        return bytecode;
+    }
+
+    /**
+     * Class name.
      * @return Name.
      */
-    public String name() {
+    private String name() {
         return this.node.attribute("name").orElseThrow(
             () -> new IllegalStateException(
                 String.format(
@@ -137,10 +161,9 @@ public final class XmlClass {
 
     /**
      * Annotations.
-     *
      * @return Annotations node.
      */
-    public Optional<XmlAnnotations> annotations() {
+    private Optional<XmlAnnotations> annotations() {
         return this.node.children()
             .filter(o -> o.hasAttribute("name", "annotations"))
             .filter(o -> o.hasAttribute("base", "tuple"))
@@ -150,31 +173,17 @@ public final class XmlClass {
 
     /**
      * Class properties.
-     *
      * @return Class properties.
      */
-    public XmlClassProperties properties() {
+    private XmlClassProperties properties() {
         return new XmlClassProperties(this.node);
     }
 
     /**
-     * Retrieve all constructors from XMIR.
-     *
-     * @return List of constructors.
-     */
-    public List<XmlMethod> constructors() {
-        return this.methods()
-            .stream()
-            .filter(XmlMethod::isConstructor)
-            .collect(Collectors.toList());
-    }
-
-    /**
      * Methods.
-     *
      * @return Class methods.
      */
-    public List<XmlMethod> methods() {
+    private List<XmlMethod> methods() {
         return this.node.children()
             .filter(o -> !o.attribute("base").isPresent())
             .map(XmlMethod::new)
@@ -183,10 +192,9 @@ public final class XmlClass {
 
     /**
      * Fields.
-     *
      * @return Class fields.
      */
-    public List<XmlField> fields() {
+    private List<XmlField> fields() {
         return this.node.children()
             .filter(o -> o.attribute("base").isPresent())
             .filter(o -> "field".equals(o.attribute("base").get()))
@@ -198,7 +206,7 @@ public final class XmlClass {
      * Attributes.
      * @return Attributes.
      */
-    public Optional<XmlAttributes> attributes() {
+    private Optional<XmlAttributes> attributes() {
         return this.node.children()
             .filter(o -> o.hasAttribute("name", "attributes"))
             .filter(o -> o.hasAttribute("base", "tuple"))
@@ -208,20 +216,20 @@ public final class XmlClass {
 
     /**
      * Copies current class with replaced methods.
-     *
      * @param methods Methods.
      * @return Class node.
      */
+    @Deprecated
     public XmlClass replaceMethods(final XmlMethod... methods) {
         return this.withoutMethods().withMethods(methods);
     }
 
     /**
      * Copies the same class node, but with added methods.
-     *
      * @param methods Methods.
      * @return Copy of the class with added methods.
      */
+    @Deprecated
     public XmlClass withMethods(final XmlMethod... methods) {
         return new XmlClass(
             new Xembler(
@@ -237,9 +245,9 @@ public final class XmlClass {
 
     /**
      * Copies the same class node, but without methods.
-     *
      * @return Class node.
      */
+    @Deprecated
     public XmlClass withoutMethods() {
         return new XmlClass(
             new Xembler(
@@ -252,16 +260,15 @@ public final class XmlClass {
 
     /**
      * Convert XmlClass to XML node.
-     *
      * @return XML node.
      */
+    @Deprecated
     public XML toXml() {
         return new XMLDocument(this.node.node());
     }
 
     /**
      * Generate empty class node with given name.
-     *
      * @param classname Class name.
      * @return Class node.
      */
@@ -271,7 +278,6 @@ public final class XmlClass {
 
     /**
      * Generate class node with given name and access.
-     *
      * @param classname Class name.
      * @param props Class properties.
      * @return Class node.
