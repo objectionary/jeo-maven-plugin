@@ -121,45 +121,20 @@ final class DirectivesClassTest {
                 ).xml()
             )
         );
-
-        final boolean verify = true;
         final String pckg = "pckg";
-        final BytecodeClass actual = clazz.bytecode(pckg, verify);
-
-        final BytecodeClass expected = new BytecodeClass(
-            new ClassName(pckg, name).full(),
-            new BytecodeClassProperties(
-                access,
-                signature,
-                supername,
-                interfce
-            ),
-            verify
-        );
-
         MatcherAssert.assertThat(
             "We expect that class created from directives is equal to expected",
-            actual,
-            Matchers.equalTo(expected)
+            clazz.bytecode(pckg),
+            Matchers.equalTo(new BytecodeClass(
+                new ClassName(pckg, name).full(),
+                new BytecodeClassProperties(
+                    access,
+                    signature,
+                    supername,
+                    interfce
+                )
+            ))
         );
-
-//        MatcherAssert.assertThat(
-//            "Class name is not equal to expected",
-//            clazz.name(),
-//            Matchers.equalTo(name)
-//        );
-//        MatcherAssert.assertThat(
-//            "Class properties are not equal to expected",
-//            clazz.properties().bytecode(),
-//            Matchers.equalTo(
-//                new BytecodeClassProperties(
-//                    access,
-//                    signature,
-//                    supername,
-//                    interfce
-//                )
-//            )
-//        );
     }
 
 }

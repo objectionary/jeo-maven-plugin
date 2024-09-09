@@ -46,12 +46,6 @@ public final class BytecodeClass implements Testable {
     private final String name;
 
     /**
-     * Class writer.
-     */
-    @ToString.Exclude
-    private final CustomClassWriter visitor;
-
-    /**
      * Methods.
      */
     @ToString.Exclude
@@ -109,46 +103,31 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Constructor.
-     * Used in tests only.
-     * @param name Class name.
-     * @param properties Class properties.
-     */
-    public BytecodeClass(final String name, final BytecodeClassProperties properties) {
-        this(name, properties, true);
-    }
-
-    /**
-     * Constructor.
      * Has real usages.
      * @param name Class name.
      * @param properties Class properties.
-     * @param verify Verify bytecode.
      */
     public BytecodeClass(
         final String name,
-        final BytecodeClassProperties properties,
-        final boolean verify
+        final BytecodeClassProperties properties
     ) {
-        this(name, new CustomClassWriter(verify), new ArrayList<>(0), properties);
+        this(name, new ArrayList<>(0), properties);
     }
 
     /**
      * Constructor.
      *
      * @param name Class name.
-     * @param writer ASM class writer.
      * @param methods Methods.
      * @param properties Class properties.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeClass(
         final String name,
-        final CustomClassWriter writer,
         final Collection<BytecodeMethod> methods,
         final BytecodeClassProperties properties
     ) {
         this.name = name;
-        this.visitor = writer;
         this.methods = methods;
         this.props = properties;
         this.fields = new ArrayList<>(0);

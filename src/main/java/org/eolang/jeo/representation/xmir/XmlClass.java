@@ -104,11 +104,10 @@ public final class XmlClass {
      * Convert to bytecode.
      * @return Bytecode class.
      */
-    public BytecodeClass bytecode(final String pckg, final boolean verify) {
+    public BytecodeClass bytecode(final String pckg) {
         final BytecodeClass bytecode = new BytecodeClass(
             new ClassName(pckg, new PrefixedName(this.name()).decode()).full(),
-            this.properties().bytecode(),
-            verify
+            this.properties().bytecode()
         );
         this.annotations().ifPresent(bytecode::withAnnotations);
         for (final XmlField field : this.fields()) {

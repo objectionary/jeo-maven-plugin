@@ -44,7 +44,7 @@ final class XmlClassTest {
                 klass,
                 expected
             ),
-            klass.bytecode("", true).name(),
+            klass.bytecode("").name(),
             Matchers.equalTo(expected)
         );
     }

@@ -52,7 +52,7 @@ final class XmlClassPropertiesTest {
                     supername,
                     interfaces
                 )
-            ).bytecode("pckg", true).properties(),
+            ).bytecode("pckg").properties(),
             Matchers.is(
                 new BytecodeClassProperties(
                     access,

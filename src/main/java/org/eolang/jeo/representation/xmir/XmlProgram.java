@@ -105,10 +105,7 @@ public final class XmlProgram {
     public BytecodeProgram bytecode() {
         return new BytecodeProgram(
             this.pckg(),
-            this.top().bytecode(
-                this.pckg(),
-                true
-            )
+            this.top().bytecode(this.pckg())
         );
     }
 
