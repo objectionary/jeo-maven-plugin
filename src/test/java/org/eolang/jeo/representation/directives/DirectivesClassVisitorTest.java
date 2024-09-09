@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
@@ -40,7 +41,8 @@ final class DirectivesClassVisitorTest {
     @Test
     void parsesSimpleClassWithoutConstructor() throws ImpossibleModificationException {
         final DirectivesClassVisitor directives = new DirectivesClassVisitor();
-        new ClassReader(new BytecodeClass().bytecode().asBytes()).accept(directives, 0);
+        new ClassReader(new BytecodeProgram(new BytecodeClass()).bytecode().asBytes()).accept(
+            directives, 0);
         MatcherAssert.assertThat(
             "Can't parse simple class without constructor",
             new Xembler(directives).xml(),
@@ -53,10 +55,10 @@ final class DirectivesClassVisitorTest {
         final DirectivesClassVisitor directives = new DirectivesClassVisitor();
         final String clazz = "WithMethod";
         new ClassReader(
-            new BytecodeClass(clazz)
+            new BytecodeProgram(
+                new BytecodeClass(clazz)
                 .helloWorldMethod()
-                .bytecode()
-                .asBytes()
+            ).bytecode().asBytes()
         ).accept(directives, 0);
         final String xml = new Xembler(directives).xml();
         MatcherAssert.assertThat(
@@ -74,9 +76,9 @@ final class DirectivesClassVisitorTest {
         final DirectivesClassVisitor directives = new DirectivesClassVisitor();
         final String clazz = "some/package/ClassInPackage";
         new ClassReader(
-            new BytecodeClass(clazz)
+            new BytecodeProgram(new BytecodeClass(clazz)
                 .helloWorldMethod()
-                .bytecode()
+            ).bytecode()
                 .asBytes()
         ).accept(directives, 0);
         final String xml = new Xembler(directives).xml();

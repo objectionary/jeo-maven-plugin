@@ -29,6 +29,7 @@ import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -52,7 +53,7 @@ final class XmirRepresentationTest {
         final String name = "org/eolang/foo/Math";
         final String expected = new PrefixedName(name).encode();
         final String actual = new XmirRepresentation(
-            new BytecodeClass(name).xml()
+            new BytecodeProgram(new BytecodeClass(name)).xml()
         ).details().name();
         MatcherAssert.assertThat(
             String.format(
@@ -69,7 +70,9 @@ final class XmirRepresentationTest {
     void returnsXmlRepresentationOfEo() {
         MatcherAssert.assertThat(
             "The XML representation of the EO object is not correct",
-            new XmirRepresentation(new BytecodeClass("org/eolang/foo/Math").xml()).toEO(),
+            new XmirRepresentation(
+                new BytecodeProgram(new BytecodeClass("org/eolang/foo/Math")).xml()
+            ).toEO(),
             XhtmlMatchers.hasXPath("/program[@name='j$Math']")
         );
     }
@@ -78,8 +81,10 @@ final class XmirRepresentationTest {
     void returnsBytecodeRepresentationOfEo() {
         final String name = "Bar";
         final BytecodeClass clazz = new BytecodeClass(name);
-        final Bytecode expected = new BytecodeClass(name).bytecode();
-        final Bytecode actual = new XmirRepresentation(clazz.xml()).toBytecode();
+        final Bytecode expected = new BytecodeProgram(new BytecodeClass(name)).bytecode();
+        final Bytecode actual = new XmirRepresentation(
+            new BytecodeProgram(clazz).xml()
+        ).toBytecode();
         MatcherAssert.assertThat(
             String.format(XmirRepresentationTest.MESSAGE, expected, actual),
             actual,
@@ -89,8 +94,9 @@ final class XmirRepresentationTest {
 
     @Test
     void returnsBytecodeRepresentationOfEoObjectWithFields() {
-        final Bytecode expected = new BytecodeClass("Fields")
+        final Bytecode expected = new BytecodeProgram(new BytecodeClass("Fields")
             .withField("foo")
+        )
             .bytecode();
         final Bytecode actual = new XmirRepresentation(
             new BytecodeRepresentation(expected).toEO()
@@ -104,8 +110,9 @@ final class XmirRepresentationTest {
 
     @Test
     void convertsHelloWordEoRepresentationIntoBytecode() {
-        final Bytecode expected = new BytecodeClass("Application")
+        final Bytecode expected =new BytecodeProgram( new BytecodeClass("Application")
             .helloWorldMethod()
+        )
             .bytecode();
         final Bytecode actual = new XmirRepresentation(
             new BytecodeRepresentation(expected).toEO()

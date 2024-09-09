@@ -33,6 +33,7 @@ import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.util.CheckClassAdapter;
 
@@ -175,9 +176,9 @@ public final class BytecodeClass implements Testable {
      *
      * @return XML representation of bytecode.
      */
-    public XML xml() {
-        return new BytecodeRepresentation(this.bytecode()).toEO();
-    }
+//    public XML xml() {
+//        return new BytecodeRepresentation(this.bytecode()).toEO();
+//    }
 
     /**
      * Generate bytecode.
@@ -192,9 +193,42 @@ public final class BytecodeClass implements Testable {
      * </p>
      * @return Bytecode.
      */
-    public Bytecode bytecode() {
+//    public Bytecode bytecode() {
+//        try {
+//            this.visitor.visit(
+//                this.props.version(),
+//                this.props.access(),
+//                this.name,
+//                this.props.signature(),
+//                this.props.supername(),
+//                this.props.interfaces()
+//            );
+//            this.annotations.forEach(annotation -> annotation.write(this.visitor));
+//            this.fields.forEach(field -> field.write(this.visitor));
+//            this.methods.forEach(BytecodeMethod::write);
+//            this.attributes.forEach(attr -> attr.write(this.visitor));
+//            this.visitor.visitEnd();
+//            return this.visitor.bytecode();
+//        } catch (final IllegalArgumentException exception) {
+//            throw new IllegalArgumentException(
+//                String.format("Can't create bytecode for the class '%s' ", this.name),
+//                exception
+//            );
+//        } catch (final IllegalStateException exception) {
+//            throw new IllegalStateException(
+//                String.format(
+//                    "Bytecode creation for the '%s' class is not possible due to unmet preconditions. To reproduce the problem, you can write the following test: %n%s%n",
+//                    this.name,
+//                    this.testCode()
+//                ),
+//                exception
+//            );
+//        }
+//    }
+
+    void writeTo(final CustomClassWriter visitor) {
         try {
-            this.visitor.visit(
+            visitor.visit(
                 this.props.version(),
                 this.props.access(),
                 this.name,
@@ -202,12 +236,11 @@ public final class BytecodeClass implements Testable {
                 this.props.supername(),
                 this.props.interfaces()
             );
-            this.annotations.forEach(annotation -> annotation.write(this.visitor));
-            this.fields.forEach(field -> field.write(this.visitor));
-            this.methods.forEach(BytecodeMethod::write);
-            this.attributes.forEach(attr -> attr.write(this.visitor));
-            this.visitor.visitEnd();
-            return this.visitor.bytecode();
+            this.annotations.forEach(annotation -> annotation.write(visitor));
+            this.fields.forEach(field -> field.write(visitor));
+            this.methods.forEach(method -> method.write(visitor));
+            this.attributes.forEach(attr -> attr.write(visitor));
+            visitor.visitEnd();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
                 String.format("Can't create bytecode for the class '%s' ", this.name),

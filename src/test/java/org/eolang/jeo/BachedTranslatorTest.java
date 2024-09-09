@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.io.FileMatchers;
 import org.junit.jupiter.api.Test;
@@ -58,8 +59,10 @@ final class BachedTranslatorTest {
         final Path clazz = temp.resolve("Application.xml");
         Files.write(
             clazz,
-            new BytecodeClass("org/eolang/jeo/Application")
-                .xml()
+            new BytecodeProgram(
+                "org/eolang/jeo",
+                new BytecodeClass("org/eolang/jeo/Application")
+            ).xml()
                 .toString()
                 .getBytes(StandardCharsets.UTF_8)
         );
@@ -78,7 +81,10 @@ final class BachedTranslatorTest {
             new Disassemble(temp)
         );
         final Representation repr = new XmirRepresentation(
-            new BytecodeClass("org/eolang/jeo/Application").xml()
+            new BytecodeProgram(
+                "org/eolang/jeo",
+                new BytecodeClass("org/eolang/jeo/Application")
+            ).xml()
         );
         footprint.apply(Stream.of(repr)).collect(Collectors.toList());
         footprint.apply(Stream.of(repr)).collect(Collectors.toList());
@@ -93,7 +99,11 @@ final class BachedTranslatorTest {
     void assemblesSuccessfully(@TempDir final Path temp) {
         final String fake = "jeo/xmir/Fake";
         new BachedTranslator(new Assemble(temp)).apply(
-            Stream.of(new XmirRepresentation(new BytecodeClass(fake).xml()))
+            Stream.of(
+                new XmirRepresentation(
+                    new BytecodeProgram("jeo/xmir", new BytecodeClass(fake)).xml()
+                )
+            )
         ).collect(Collectors.toList());
         MatcherAssert.assertThat(
             String.format(

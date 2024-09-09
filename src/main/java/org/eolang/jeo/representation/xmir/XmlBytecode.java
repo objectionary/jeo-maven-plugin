@@ -77,7 +77,7 @@ public final class XmlBytecode {
         final XmlProgram program = new XmlProgram(this.xml);
 //        final XmlClass clazz = program.top();
 //        final BytecodeClass bytecode = clazz.bytecode(program.pckg(), this.verify);
-        return program.bytecode().bytecode();
+        return program.bytecode().bytecode(this.verify);
 
 //        final BytecodeClass bytecode = new BytecodeClass(
 //            new ClassName(program.pckg(), new PrefixedName(clazz.name()).decode()).full(),

@@ -64,7 +64,7 @@ final class BytecodeClassTest {
                 "Can't parse abstract class with access modifier %s",
                 access
             ),
-            new BytecodeClass("AbstractClass", access).bytecode(),
+            new BytecodeProgram(new BytecodeClass("AbstractClass", access)).bytecode(),
             Matchers.notNullValue()
         );
     }
@@ -72,7 +72,7 @@ final class BytecodeClassTest {
     @Test
     void createsConstructorWithStoreInstructions() {
         Assertions.assertDoesNotThrow(
-            () -> new BytecodeClass("Store")
+            () -> new BytecodeProgram(new BytecodeClass("Store")
                 .withConstructor()
                 .opcode(Opcodes.ICONST_0)
                 .opcode(Opcodes.ISTORE, 1)
@@ -86,7 +86,7 @@ final class BytecodeClassTest {
                 .opcode(Opcodes.ASTORE, 5)
                 .opcode(Opcodes.RETURN)
                 .up()
-                .bytecode(),
+            ).bytecode(),
             "We expect no exception here because all instructions are valid"
         );
     }
@@ -95,10 +95,11 @@ final class BytecodeClassTest {
     void createsBytecodeWithDefaultConstructor() {
         MatcherAssert.assertThat(
             "Can't create bytecode with default public constructor",
-            new BytecodeClass("DefaultConstructor")
+            new BytecodeProgram(new BytecodeClass("DefaultConstructor")
                 .withConstructor(Opcodes.ACC_PUBLIC)
                 .opcode(Opcodes.RETURN)
                 .up()
+            )
                 .bytecode(),
             Matchers.notNullValue()
         );
@@ -110,11 +111,11 @@ final class BytecodeClassTest {
             "Exception message is not equal to expected",
             Assertions.assertThrows(
                 IllegalStateException.class,
-                () -> new BytecodeClass("UnknownInstruction")
+                () -> new BytecodeProgram(new BytecodeClass("UnknownInstruction")
                     .withConstructor()
                     .opcode(305)
                     .up()
-                    .bytecode(),
+                ).bytecode(),
                 "We expect an exception here because 305 is not a valid opcode"
             ).getMessage(),
             Matchers.containsString(
@@ -126,8 +127,9 @@ final class BytecodeClassTest {
     @Test
     void transformsBytecodeIntoEoWithoutCountingOpcodes() {
         final XML xmir = new BytecodeRepresentation(
-            new BytecodeClass("Hello")
+            new BytecodeProgram(new BytecodeClass("Hello")
                 .helloWorldMethod()
+            )
                 .bytecode()
         ).toEO(false);
         MatcherAssert.assertThat(
@@ -184,9 +186,10 @@ final class BytecodeClassTest {
     @Test
     void generatesCodeForInterface() {
         Assertions.assertDoesNotThrow(
-            () -> new BytecodeClass("org/eolang/benchmark/F")
+            () -> new BytecodeProgram(new BytecodeClass("org/eolang/benchmark/F")
                 .withMethod("j$foo", "()I", 1025)
                 .up()
+            )
                 .bytecode(),
             "We expect no exception here because all instructions are valid. This is an abstract method."
         );
@@ -196,7 +199,7 @@ final class BytecodeClassTest {
     void failsBecauseBytecodeIsBroken() {
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> new BytecodeClass("Broken")
+            () -> new BytecodeProgram(new BytecodeClass("Broken")
                 .withMethod("j$bar", "()I", Opcodes.ACC_PUBLIC)
                 .label(new Label())
                 .opcode(Opcodes.ALOAD, 0)
@@ -206,6 +209,7 @@ final class BytecodeClassTest {
                 .opcode(Opcodes.IRETURN)
                 .label(new Label())
                 .up()
+            )
                 .bytecode(),
             "We expect an exception here because the bytecode is broken"
         );
@@ -214,11 +218,12 @@ final class BytecodeClassTest {
     @Test
     void returnsShortValue() {
         Assertions.assertDoesNotThrow(
-            () -> new BytecodeClass("ShortValue")
+            () -> new BytecodeProgram(new BytecodeClass("ShortValue")
                 .withMethod("j$foo", "()S", Opcodes.ACC_PUBLIC)
                 .opcode(Opcodes.SIPUSH, 256)
                 .opcode(Opcodes.IRETURN)
                 .up()
+            )
                 .bytecode(),
             "We expect no exception here because all instructions are valid"
         );
@@ -231,7 +236,7 @@ final class BytecodeClassTest {
         final String init = "<init>";
         final String developer = "org/eolang/jeo/Developer";
         Assertions.assertDoesNotThrow(
-            () -> new BytecodeClass(application)
+            () -> new BytecodeProgram(new BytecodeClass(application)
                 .withMethod(init, descr, 1)
                 .label("245a510e-d8c5-45d9-b270-921a5e17e9c8")
                 .opcode(Opcodes.ALOAD, 0)
@@ -324,7 +329,7 @@ final class BytecodeClassTest {
                 .opcode(Opcodes.RETURN)
                 .label("0db9a0b5-5515-49b4-9cac-b733be49aef9")
                 .up()
-                .bytecode(),
+            ).bytecode(),
             "We expect no exception here because all instructions are valid"
         );
     }

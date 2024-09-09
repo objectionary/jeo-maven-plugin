@@ -27,6 +27,7 @@ import com.jcabi.xml.XMLDocument;
 import java.util.UUID;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
+import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
@@ -56,13 +57,13 @@ final class DirectivesMethodVisitorTest {
     void parsesMethodInstructions() throws ImpossibleModificationException {
         final DirectivesClassVisitor visitor = new DirectivesClassVisitor();
         new ClassReader(
-            new BytecodeClass()
-                .withMethod(new BytecodeMethodProperties("main", "()I"))
-                .opcode(Opcodes.BIPUSH, 28)
-                .opcode(Opcodes.IRETURN)
-                .up()
-                .bytecode()
-                .asBytes()
+            new BytecodeProgram(
+                new BytecodeClass()
+                    .withMethod(new BytecodeMethodProperties("main", "()I"))
+                    .opcode(Opcodes.BIPUSH, 28)
+                    .opcode(Opcodes.IRETURN)
+                    .up()
+            ).bytecode().asBytes()
         ).accept(visitor, 0);
         final String xml = new Xembler(visitor).xml();
         MatcherAssert.assertThat(
@@ -100,7 +101,7 @@ final class DirectivesMethodVisitorTest {
     void parsesMethodParameters() {
         final String clazz = "ParametersExample";
         final String method = "printSum";
-        final String xml = new BytecodeClass(clazz)
+        final String xml = new BytecodeProgram(new BytecodeClass(clazz)
             .withMethod(
                 new BytecodeMethodProperties(
                     "main",
@@ -129,6 +130,7 @@ final class DirectivesMethodVisitorTest {
             .opcode(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V", false)
             .opcode(Opcodes.RETURN)
             .up()
+        )
             .xml()
             .toString();
         MatcherAssert.assertThat(
@@ -162,7 +164,7 @@ final class DirectivesMethodVisitorTest {
      */
     @Test
     void parsesConstructor() {
-        final String xml = new BytecodeClass("ConstructorExample")
+        final String xml = new BytecodeProgram(new BytecodeClass("ConstructorExample")
             .withConstructor(Opcodes.ACC_PUBLIC)
             .opcode(Opcodes.ALOAD, 0)
             .opcode(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false)
@@ -191,6 +193,7 @@ final class DirectivesMethodVisitorTest {
             .opcode(Opcodes.POP)
             .opcode(Opcodes.RETURN)
             .up()
+        )
             .xml()
             .toString();
         MatcherAssert.assertThat(
@@ -224,7 +227,7 @@ final class DirectivesMethodVisitorTest {
     @Test
     void parsesConstructorWithParameters() {
         final String clazz = "ConstructorParams";
-        final String xml = new BytecodeClass(clazz)
+        final String xml =new BytecodeProgram( new BytecodeClass(clazz)
             .withConstructor("(II)V", Opcodes.ACC_PUBLIC)
             .opcode(Opcodes.ALOAD, 0)
             .opcode(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false)
@@ -251,6 +254,7 @@ final class DirectivesMethodVisitorTest {
             .opcode(Opcodes.POP)
             .opcode(Opcodes.RETURN)
             .up()
+        )
             .xml()
             .toString();
         MatcherAssert.assertThat(
@@ -288,7 +292,7 @@ final class DirectivesMethodVisitorTest {
     void parsesIfStatementCorrectly() {
         final AllLabels labels = new AllLabels();
         final Label label = labels.label(UUID.randomUUID().toString());
-        final String xml = new BytecodeClass("Foo")
+        final String xml = new BytecodeProgram(new BytecodeClass("Foo")
             .withMethod("bar", "(D)I", 0)
             .opcode(Opcodes.DLOAD, 1)
             .opcode(Opcodes.DCONST_0)
@@ -299,6 +303,7 @@ final class DirectivesMethodVisitorTest {
             .label(label)
             .opcode(Opcodes.BIPUSH, 8)
             .opcode(Opcodes.IRETURN).up()
+        )
             .xml()
             .toString();
         MatcherAssert.assertThat(
@@ -334,7 +339,7 @@ final class DirectivesMethodVisitorTest {
         final Label start = labels.label(UUID.randomUUID().toString());
         final Label end = labels.label(UUID.randomUUID().toString());
         final Label handler = labels.label(UUID.randomUUID().toString());
-        final String xml = new BytecodeClass("Foo")
+        final String xml = new BytecodeProgram(new BytecodeClass("Foo")
             .withMethod("bar", "()V", Opcodes.ACC_PUBLIC)
             .label(start)
             .opcode(Opcodes.NEW, "java/lang/Exception")
@@ -347,6 +352,7 @@ final class DirectivesMethodVisitorTest {
             .opcode(Opcodes.RETURN)
             .trycatch(new BytecodeTryCatchBlock(start, end, handler, "java/lang/Exception"))
             .up()
+        )
             .xml()
             .toString();
         MatcherAssert.assertThat(
@@ -365,7 +371,7 @@ final class DirectivesMethodVisitorTest {
     void doesNotContainTryCatchBlock() {
         MatcherAssert.assertThat(
             "We expect that method without try-catch block doesn't contain try-catch directives.",
-            new BytecodeClass().helloWorldMethod().xml().toString(),
+            new BytecodeProgram(new BytecodeClass().helloWorldMethod()).xml().toString(),
             Matchers.not(Matchers.containsString("trycatchblocks"))
         );
     }

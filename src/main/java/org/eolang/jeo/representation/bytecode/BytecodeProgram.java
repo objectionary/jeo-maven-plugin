@@ -23,12 +23,18 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import com.jcabi.xml.XML;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.PluginStartup;
+import org.eolang.jeo.representation.BytecodeRepresentation;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.util.CheckClassAdapter;
 
 /**
  * Bytecode program.
@@ -41,6 +47,8 @@ public final class BytecodeProgram {
      * Package.
      */
     private final String pckg;
+
+    private final CustomClassWriter writer;
 
     /**
      * Class.
@@ -55,35 +63,61 @@ public final class BytecodeProgram {
         this(pckg, new ArrayList<>(0));
     }
 
+    public BytecodeProgram(final BytecodeClass... classes) {
+        this("", Arrays.asList(classes));
+    }
+
     public BytecodeProgram(final String pckg, final BytecodeClass... classes) {
         this(pckg, Arrays.asList(classes));
     }
 
     public BytecodeProgram(final String pckg, final List<BytecodeClass> classes) {
+        this(pckg, new CustomClassWriter(false), classes);
+    }
+
+    public BytecodeProgram(
+        final String pckg, final CustomClassWriter writer, final List<BytecodeClass> classes
+    ) {
         this.pckg = pckg;
+        this.writer = writer;
         this.classes = classes;
     }
 
     /**
+     * Converts bytecode into XML.
+     *
+     * @return XML representation of bytecode.
+     */
+    public XML xml() {
+        return new BytecodeRepresentation(this.bytecode(true)).toEO();
+    }
+
+
+    /**
+     * Generate bytecode.
+     * <p>
+     * In this method we intentionally use the Thread.currentThread().getContextClassLoader()
+     * for the class loader of the
+     * {@link CheckClassAdapter#verify(ClassReader, ClassLoader, boolean, PrintWriter)}
+     * instead of default implementation. This is because the default class loader doesn't
+     * know about classes compiled on the previous maven step.
+     * You can read more about the problem here:
+     * {@link PluginStartup#init()} ()}
+     * </p>
+     * @return Bytecode.
+     */
+    /**
      * Traverse XML and build bytecode class.
      * @return Bytecode.
      */
+    public Bytecode bytecode(final boolean verify) {
+        final CustomClassWriter writer = new CustomClassWriter(verify);
+        this.top().writeTo(writer);
+        return writer.bytecode();
+    }
+
     public Bytecode bytecode() {
-        return this.top().bytecode();
-//        final BytecodeClass bytecode = new BytecodeClass(
-//            new ClassName(program.pckg(), new PrefixedName(clazz.name()).decode()).full(),
-//            clazz.properties().bytecode(),
-//            this.verify
-//        );
-//        clazz.annotations().ifPresent(bytecode::withAnnotations);
-//        for (final XmlField field : clazz.fields()) {
-//            bytecode.withField(field.bytecode());
-//        }
-//        for (final XmlMethod xmlmethod : clazz.methods()) {
-//            bytecode.withMethod(xmlmethod.bytecode(bytecode));
-//        }
-//        clazz.attributes().ifPresent(attrs -> attrs.writeTo(bytecode));
-//        return bytecode.bytecode();
+        return this.bytecode(true);
     }
 
     public BytecodeClass top() {

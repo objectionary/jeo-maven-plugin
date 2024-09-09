@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -51,11 +52,13 @@ final class XmirRepresentationsTest {
         Files.createDirectories(directory);
         Files.write(
             directory.resolve("first.xmir"),
-            new BytecodeClass("First").xml().toString().getBytes(StandardCharsets.UTF_8)
+            new BytecodeProgram(new BytecodeClass("First")).xml().toString()
+                .getBytes(StandardCharsets.UTF_8)
         );
         Files.write(
             directory.resolve("second.xmir"),
-            new BytecodeClass("Second").xml().toString().getBytes(StandardCharsets.UTF_8)
+            new BytecodeProgram(new BytecodeClass("Second")).xml().toString()
+                .getBytes(StandardCharsets.UTF_8)
         );
         MatcherAssert.assertThat(
             String.format("Objects were not retrieved, we expected '%d' objects", expected),
@@ -90,7 +93,8 @@ final class XmirRepresentationsTest {
         Files.createDirectories(path);
         Files.write(
             path.resolve("opeo-class.xmir"),
-            new BytecodeClass("OpeoClass").xml().toString().getBytes(StandardCharsets.UTF_8)
+            new BytecodeProgram(new BytecodeClass("OpeoClass")).xml().toString()
+                .getBytes(StandardCharsets.UTF_8)
         );
         final Stream<? extends Representation> all = new XmirRepresentations(path).all();
         MatcherAssert.assertThat(
