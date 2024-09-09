@@ -53,7 +53,6 @@ final class XmlMethodTest {
             Matchers.equalTo(
                 new BytecodeMethod(
                     new BytecodeMethodProperties(name, descriptor, "", access),
-                    clazz.writer(),
                     clazz,
                     new BytecodeMaxs()
                 )

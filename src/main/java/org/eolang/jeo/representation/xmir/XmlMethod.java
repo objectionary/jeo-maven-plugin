@@ -132,7 +132,6 @@ public final class XmlMethod {
      */
     public BytecodeMethod bytecode(final BytecodeClass clazz) {
         return new BytecodeMethod(
-            clazz.writer(),
             clazz,
             this.trycatchEntries()
                 .stream()

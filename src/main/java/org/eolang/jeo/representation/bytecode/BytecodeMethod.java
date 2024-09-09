@@ -42,11 +42,6 @@ import org.objectweb.asm.Opcodes;
 public final class BytecodeMethod implements Testable {
 
     /**
-     * ASM class visitor.
-     */
-    private final CustomClassWriter visitor;
-
-    /**
      * Original class.
      */
     private final BytecodeClass clazz;
@@ -91,13 +86,12 @@ public final class BytecodeMethod implements Testable {
      * @param name Method name.
      */
     public BytecodeMethod(final String name) {
-        this(name, new BytecodeClass().writer(), new BytecodeClass(), "()V", Opcodes.ACC_PUBLIC);
+        this(name, new BytecodeClass(), "()V", Opcodes.ACC_PUBLIC);
     }
 
     /**
      * Constructor.
      * @param name Method name.
-     * @param visitor ASM class writer.
      * @param clazz Original class.
      * @param descriptor Method descriptor.
      * @param modifiers Method modifiers.
@@ -105,44 +99,38 @@ public final class BytecodeMethod implements Testable {
      */
     BytecodeMethod(
         final String name,
-        final CustomClassWriter visitor,
         final BytecodeClass clazz,
         final String descriptor,
         final int... modifiers
     ) {
-        this(new BytecodeMethodProperties(name, descriptor, "", modifiers), visitor, clazz);
+        this(new BytecodeMethodProperties(name, descriptor, "", modifiers), clazz);
     }
 
     /**
      * Constructor.
      * @param properties Method properties.
-     * @param visitor ASM class writer.
      * @param clazz Original class.
      */
     BytecodeMethod(
         final BytecodeMethodProperties properties,
-        final CustomClassWriter visitor,
         final BytecodeClass clazz
     ) {
-        this(properties, visitor, clazz, new BytecodeMaxs(0, 0));
+        this(properties, clazz, new BytecodeMaxs(0, 0));
     }
 
     /**
      * Constructor.
      * @param properties Method properties.
-     * @param visitor ASM class writer.
      * @param clazz Original class.
      * @param maxs Max stack and locals.
      * @checkstyle ParameterNumberCheck (10 lines)
      */
     public BytecodeMethod(
         final BytecodeMethodProperties properties,
-        final CustomClassWriter visitor,
         final BytecodeClass clazz,
         final BytecodeMaxs maxs
     ) {
         this(
-            visitor,
             clazz,
             new ArrayList<>(0),
             new ArrayList<>(0),
@@ -155,7 +143,6 @@ public final class BytecodeMethod implements Testable {
 
     /**
      * Constructor.
-     * @param visitor ASM class writer.
      * @param clazz Original class.
      * @param tryblocks Try-catch blocks.
      * @param instructions Method instructions.
@@ -166,7 +153,6 @@ public final class BytecodeMethod implements Testable {
      * @checkstyle ParameterNumberCheck (10 lines)
      */
     public BytecodeMethod(
-        final CustomClassWriter visitor,
         final BytecodeClass clazz,
         final List<BytecodeEntry> tryblocks,
         final List<BytecodeEntry> instructions,
@@ -175,7 +161,6 @@ public final class BytecodeMethod implements Testable {
         final List<BytecodeDefaultValue> defvalues,
         final BytecodeMaxs maxs
     ) {
-        this.visitor = visitor;
         this.clazz = clazz;
         this.tryblocks = tryblocks;
         this.instructions = instructions;

@@ -23,19 +23,12 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import com.jcabi.xml.XML;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.PluginStartup;
-import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.util.CheckClassAdapter;
 
 /**
  * Class useful for generating bytecode for testing purposes.
@@ -171,61 +164,6 @@ public final class BytecodeClass implements Testable {
         return this.name;
     }
 
-    /**
-     * Converts bytecode into XML.
-     *
-     * @return XML representation of bytecode.
-     */
-//    public XML xml() {
-//        return new BytecodeRepresentation(this.bytecode()).toEO();
-//    }
-
-    /**
-     * Generate bytecode.
-     * <p>
-     * In this method we intentionally use the Thread.currentThread().getContextClassLoader()
-     * for the class loader of the
-     * {@link CheckClassAdapter#verify(ClassReader, ClassLoader, boolean, PrintWriter)}
-     * instead of default implementation. This is because the default class loader doesn't
-     * know about classes compiled on the previous maven step.
-     * You can read more about the problem here:
-     * {@link PluginStartup#init()} ()}
-     * </p>
-     * @return Bytecode.
-     */
-//    public Bytecode bytecode() {
-//        try {
-//            this.visitor.visit(
-//                this.props.version(),
-//                this.props.access(),
-//                this.name,
-//                this.props.signature(),
-//                this.props.supername(),
-//                this.props.interfaces()
-//            );
-//            this.annotations.forEach(annotation -> annotation.write(this.visitor));
-//            this.fields.forEach(field -> field.write(this.visitor));
-//            this.methods.forEach(BytecodeMethod::write);
-//            this.attributes.forEach(attr -> attr.write(this.visitor));
-//            this.visitor.visitEnd();
-//            return this.visitor.bytecode();
-//        } catch (final IllegalArgumentException exception) {
-//            throw new IllegalArgumentException(
-//                String.format("Can't create bytecode for the class '%s' ", this.name),
-//                exception
-//            );
-//        } catch (final IllegalStateException exception) {
-//            throw new IllegalStateException(
-//                String.format(
-//                    "Bytecode creation for the '%s' class is not possible due to unmet preconditions. To reproduce the problem, you can write the following test: %n%s%n",
-//                    this.name,
-//                    this.testCode()
-//                ),
-//                exception
-//            );
-//        }
-//    }
-
     void writeTo(final CustomClassWriter visitor) {
         try {
             visitor.visit(
@@ -288,7 +226,7 @@ public final class BytecodeClass implements Testable {
     public BytecodeMethod withMethod(
         final BytecodeMethodProperties properties, final BytecodeMaxs maxs
     ) {
-        return this.withMethod(new BytecodeMethod(properties, this.visitor, this, maxs));
+        return this.withMethod(new BytecodeMethod(properties, this, maxs));
     }
 
     /**
@@ -327,7 +265,6 @@ public final class BytecodeClass implements Testable {
     ) {
         final BytecodeMethod method = new BytecodeMethod(
             mname,
-            this.visitor,
             this,
             descriptor,
             modifiers
@@ -446,14 +383,6 @@ public final class BytecodeClass implements Testable {
             )
             .opcode(Opcodes.RETURN)
             .up();
-    }
-
-    /**
-     * Visitor.
-     * @return Class writer.
-     */
-    public CustomClassWriter writer() {
-        return this.visitor;
     }
 
     /**

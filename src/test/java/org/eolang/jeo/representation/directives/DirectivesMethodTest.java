@@ -64,7 +64,6 @@ final class DirectivesMethodTest {
             Matchers.equalTo(
                 new BytecodeMethod(
                     new BytecodeMethodProperties(name, descriptor, signature, access),
-                    clazz.writer(),
                     clazz,
                     new BytecodeMaxs()
                 )
