@@ -21,52 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.bytecode;
 
-import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
-import org.eolang.jeo.representation.bytecode.Bytecode;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
- * XML to Java bytecode.
- * @since 0.1.0
+ * Bytecode program.
+ * @since 0.6
  */
-public final class XmlBytecode {
+@ToString
+@EqualsAndHashCode
+public final class BytecodeProgram {
+    /**
+     * Package.
+     */
+    private final String pckg;
 
     /**
-     * XML.
+     * Class.
      */
-    private final XML xml;
-
-    /**
-     * Verify bytecode.
-     */
-    private final boolean verify;
+    private final List<BytecodeClass> classes;
 
     /**
      * Constructor.
-     * @param xml XML.
-     * @param verify Verify bytecode.
+     * @param pckg Package.
      */
-    public XmlBytecode(final XML xml, final boolean verify) {
-        this.xml = xml;
-        this.verify = verify;
+    public BytecodeProgram(final String pckg) {
+        this(pckg, new ArrayList<>(0));
     }
 
-    /**
-     * Constructor.
-     * @param lines Xml document lines.
-     */
-    XmlBytecode(final String... lines) {
-        this(new XMLDocument(String.join("\n", lines)));
+    public BytecodeProgram(final String pckg, final BytecodeClass... classes) {
+        this(pckg, Arrays.asList(classes));
     }
 
-    /**
-     * Constructor.
-     * @param xml XML.
-     */
-    private XmlBytecode(final XML xml) {
-        this(xml, true);
+    public BytecodeProgram(final String pckg, final List<BytecodeClass> classes) {
+        this.pckg = pckg;
+        this.classes = classes;
     }
 
     /**
@@ -74,11 +69,7 @@ public final class XmlBytecode {
      * @return Bytecode.
      */
     public Bytecode bytecode() {
-        final XmlProgram program = new XmlProgram(this.xml);
-//        final XmlClass clazz = program.top();
-//        final BytecodeClass bytecode = clazz.bytecode(program.pckg(), this.verify);
-        return program.bytecode().bytecode();
-
+        return this.top().bytecode();
 //        final BytecodeClass bytecode = new BytecodeClass(
 //            new ClassName(program.pckg(), new PrefixedName(clazz.name()).decode()).full(),
 //            clazz.properties().bytecode(),
@@ -92,7 +83,35 @@ public final class XmlBytecode {
 //            bytecode.withMethod(xmlmethod.bytecode(bytecode));
 //        }
 //        clazz.attributes().ifPresent(attrs -> attrs.writeTo(bytecode));
-
 //        return bytecode.bytecode();
+    }
+
+    public BytecodeClass top() {
+        return this.classes.get(0);
+    }
+
+    /**
+     * Copy program with replaced top class.
+     *
+     * @param clazz Class to replace.
+     * @return Program with replaced top class.
+     */
+    public BytecodeProgram replaceTopClass(final BytecodeClass clazz) {
+        return new BytecodeProgram(
+            this.pckg,
+            new ArrayList<>(Collections.singletonList(clazz))
+        );
+    }
+
+    /**
+     * Copy program without top class.
+     *
+     * @return Program without top class.
+     */
+    public BytecodeProgram withoutTopClass() {
+        return new BytecodeProgram(
+            this.pckg,
+            new ArrayList<>(Collections.emptyList())
+        );
     }
 }

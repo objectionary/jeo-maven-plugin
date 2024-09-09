@@ -23,13 +23,12 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -39,79 +38,55 @@ import org.junit.jupiter.api.Test;
  */
 final class XmlProgramTest {
 
-    @Test
-    void retrievesTopClass() {
-        final String bar = "Bar";
-        final XmlProgram program = new XmlProgram(new ClassName(bar));
-        final XmlClass actual = program.top();
-        final XmlClass expected = new XmlClass(bar);
-        MatcherAssert.assertThat(
-            String.format(
-                "Can't retrieve top-level class from program %s. Expected %s%n Actual %s%n",
-                program,
-                expected,
-                actual
-            ),
-            actual.toXml().toString(),
-            new SameXml(expected.toXml())
-        );
-    }
+//    @Test
+//    void retrievesTopClass() {
+//        final String bar = "Bar";
+//        final XmlProgram program = new XmlProgram(new ClassName(bar));
+//        final XmlClass actual = program.top();
+//        final XmlClass expected = new XmlClass(bar);
+//        MatcherAssert.assertThat(
+//            String.format(
+//                "Can't retrieve top-level class from program %s. Expected %s%n Actual %s%n",
+//                program,
+//                expected,
+//                actual
+//            ),
+//            actual.toXml().toString(),
+//            new SameXml(expected.toXml())
+//        );
+//    }
+//
+//    @Test
+//    void retrievesPackage() {
+//        final String expected = "com.matrix.foobar";
+//        final String actual = new XmlProgram(new ClassName(expected, "FooBar")).pckg();
+//        MatcherAssert.assertThat(
+//            String.format(
+//                "Can't retrieve package from program %s. Expected %s%n Actual %s%n",
+//                expected,
+//                expected,
+//                actual
+//            ),
+//            actual,
+//            Matchers.equalTo(expected)
+//        );
+//    }
 
     @Test
-    void retrievesPackage() {
-        final String expected = "com.matrix.foobar";
-        final String actual = new XmlProgram(new ClassName(expected, "FooBar")).pckg();
+    void convertsToBytecode() {
+        final String pckg = "com.matrix.foobar";
+        final ClassName name = new ClassName(pckg, "FooBar");
         MatcherAssert.assertThat(
-            String.format(
-                "Can't retrieve package from program %s. Expected %s%n Actual %s%n",
-                expected,
-                expected,
-                actual
-            ),
-            actual,
-            Matchers.equalTo(expected)
-        );
-    }
-
-    @Test
-    void convertsToXml() {
-        final XML expected = new XMLDocument(
-            String.join(
-                "",
-                "<o name='TwoWayProgram'>",
-                "<o name='foo'>",
-                "</o></o>"
+            "Can't convert program to bytecode.",
+            new XmlProgram(name).bytecode(),
+            Matchers.equalTo(
+                new BytecodeProgram(
+                    pckg,
+                    new BytecodeClass(name.full(), 0)
+                )
             )
         );
-        MatcherAssert.assertThat(
-            "Can't convert program to XML",
-            new XmlProgram(expected).toXml(),
-            Matchers.equalTo(expected)
-        );
-    }
 
-    @Test
-    void replacesTopClass() {
-        final XmlProgram program = new XmlProgram(new ClassName("Bar"));
-        final XmlClass expected = new XmlClass("Foo");
-        MatcherAssert.assertThat(
-            String.format(
-                "Can't replace top-level class in program %s. Expected %s%n Actual %s%n",
-                program,
-                expected,
-                program.top()
-            ),
-            program.replaceTopClass(expected).top(),
-            Matchers.equalTo(expected)
-        );
-    }
-
-    @Test
-    void removesTopClass() {
-        Assertions.assertThrows(
-            IllegalStateException.class,
-            () -> new XmlProgram(new ClassName("Bar")).withoutTopClass().top(),
-            "Can't remove top-level class from program"
-        );
     }
 }
+

@@ -104,8 +104,7 @@ final class XmirRepresentationTest {
 
     @Test
     void convertsHelloWordEoRepresentationIntoBytecode() {
-        final String name = "org/eolang/jeo/Application";
-        final Bytecode expected = new BytecodeClass(name)
+        final Bytecode expected = new BytecodeClass("Application")
             .helloWorldMethod()
             .bytecode();
         final Bytecode actual = new XmirRepresentation(

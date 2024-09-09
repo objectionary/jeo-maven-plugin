@@ -42,25 +42,25 @@ final class XmlClassPropertiesTest {
         final String signature = "Ljava/util/List<Ljava/lang/String;>;";
         final String supername = "some/custom/Supername";
         final String[] interfaces = {"java/util/List", "java/util/Collection"};
-        final BytecodeClassProperties actual = new XmlClass(
-            "Language",
-            new DirectivesClassProperties(
-                access,
-                signature,
-                supername,
-                interfaces
-            )
-        ).bytecode("pckg", true).properties();
-        final BytecodeClassProperties expected = new BytecodeClassProperties(
-            access,
-            signature,
-            supername,
-            interfaces
-        );
         MatcherAssert.assertThat(
             "We expect that the properties will be created correctly and contain the correct values",
-            actual,
-            Matchers.is(expected)
+            new XmlClass(
+                "Language",
+                new DirectivesClassProperties(
+                    access,
+                    signature,
+                    supername,
+                    interfaces
+                )
+            ).bytecode("pckg", true).properties(),
+            Matchers.is(
+                new BytecodeClassProperties(
+                    access,
+                    signature,
+                    supername,
+                    interfaces
+                )
+            )
         );
     }
 }

@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
@@ -78,6 +79,11 @@ public final class XmlProgram {
         this(xml.node());
     }
 
+    @Override
+    public String toString() {
+        return new XMLDocument(this.root).toString();
+    }
+
     /**
      * Constructor.
      *
@@ -88,11 +94,25 @@ public final class XmlProgram {
     }
 
     /**
+     * Convert to bytecode.
+     * @return Bytecode program.
+     */
+    public BytecodeProgram bytecode() {
+        return new BytecodeProgram(
+            this.pckg(),
+            this.top().bytecode(
+                this.pckg(),
+                true
+            )
+        );
+    }
+
+    /**
      * Find top-level class.
      *
      * @return Class.
      */
-    public XmlClass top() {
+    private XmlClass top() {
         return new XmlNode(this.root)
             .child(XmlProgram.PROGRAM)
             .child("objects")
@@ -100,53 +120,6 @@ public final class XmlProgram {
             .toClass();
     }
 
-    /**
-     * Convert to XML.
-     *
-     * @return XML representation of XmlProgram.
-     */
-    public XML toXml() {
-        return new XMLDocument(this.root);
-    }
-
-    /**
-     * Copy program with replaced top class.
-     *
-     * @param clazz Class to replace.
-     * @return Program with replaced top class.
-     */
-    public XmlProgram replaceTopClass(final XmlClass clazz) {
-        return new XmlProgram(
-            new Xembler(
-                new Directives()
-                    .xpath("/program/objects")
-                    .add("o")
-                    .append(Directives.copyOf(clazz.toXml().node()))
-                    .up()
-            ).applyQuietly(this.withoutTopClass().root)
-        );
-    }
-
-    /**
-     * Copy program without top class.
-     *
-     * @return Program without top class.
-     */
-    public XmlProgram withoutTopClass() {
-        final String name = this.top().bytecode(this.pckg(), true).name();
-        return new XmlProgram(
-            new Xembler(
-                new Directives()
-                    .xpath(String.format("/program/objects/o[@name='%s']", name))
-                    .remove()
-            ).applyQuietly(this.root)
-        );
-    }
-
-    @Override
-    public String toString() {
-        return new XMLDocument(this.root).toString();
-    }
 
     /**
      * Retrieve program package.
@@ -155,7 +128,7 @@ public final class XmlProgram {
      *
      * @return Package.
      */
-    String pckg() {
+    private String pckg() {
         return new XmlNode(this.root)
             .xpath("/program/metas/meta[head='package']/tail/text()")
             .stream()
