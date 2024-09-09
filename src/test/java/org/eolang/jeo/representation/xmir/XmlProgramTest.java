@@ -26,9 +26,16 @@ package org.eolang.jeo.representation.xmir;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.directives.DirectivesClass;
+import org.eolang.jeo.representation.directives.DirectivesMetas;
+import org.eolang.jeo.representation.directives.DirectivesMethod;
+import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
+import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Opcodes;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlProgram}.
@@ -51,5 +58,125 @@ final class XmlProgramTest {
                 )
             )
         );
+    }
+
+    @Test
+    void convertsGenericsMethodIntoBytecode() {
+        MatcherAssert.assertThat(
+            "Can't convert generics method into bytecode",
+            new XmlProgram(XmlProgramTest.classWithGenericMethod()).bytecode().bytecode(),
+            Matchers.notNullValue()
+        );
+    }
+
+    @Test
+    void convertsMethodWithExceptionIntoBytecode() {
+        MatcherAssert.assertThat(
+            "Can't convert method with exception into bytecode",
+            new XmlProgram(XmlProgramTest.classWithException()).bytecode().bytecode(),
+            Matchers.notNullValue()
+        );
+    }
+
+    /**
+     * Creates XML with class that contains generic method.
+     * The XML representation of the following java class:
+     * {@code
+     *
+     * package org.eolang.jeo.takes;
+     *
+     * public class StrangeClass {
+     *   public static <T> void printElement(T element) {
+     *     System.out.println(element);
+     *   }
+     * }
+     *
+     * }
+     * @return XML representation of the class.
+     */
+    private static String classWithGenericMethod() {
+        final ClassName name = new ClassName("org.eolang.jeo.takes", "StrangeClass");
+        return new Xembler(
+            new DirectivesProgram()
+                .withClass(
+                    new DirectivesMetas(name),
+                    new DirectivesClass(name).method(
+                        new DirectivesMethod(
+                            "printElement",
+                            new DirectivesMethodProperties(
+                                Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
+                                "(Ljava/lang/Object;)V",
+                                "<T:Ljava/lang/Object;>(TT;)V"
+                            )
+                        )
+                            .opcode(
+                                Opcodes.GETSTATIC,
+                                "java/lang/System",
+                                "out",
+                                "Ljava/io/PrintStream;",
+                                false
+                            )
+                            .opcode(Opcodes.ALOAD, 0)
+                            .opcode(
+                                Opcodes.INVOKEVIRTUAL,
+                                "java/io/PrintStream",
+                                "println",
+                                "(Ljava/lang/Object;)V",
+                                false
+                            )
+                            .opcode(Opcodes.RETURN)
+                    )
+                )
+        ).xmlQuietly();
+    }
+
+    /**
+     * Creates XML with class that contains method that declares exception.
+     * The XML representation of the following java class:
+     * {@code
+     *
+     * public class Foo {
+     *   public void bar() throws Exception {
+     *     throw new Exception();
+     *   }
+     * }
+     *
+     * }
+     *
+     * @return XML representation of the class.
+     */
+    private static String classWithException() {
+        final ClassName name = new ClassName("Foo");
+        return new Xembler(
+            new DirectivesProgram()
+                .withClass(
+                    new DirectivesMetas(name),
+                    new DirectivesClass(name)
+                        .method(
+                            new DirectivesMethod(
+                                "bar",
+                                new DirectivesMethodProperties(
+                                    Opcodes.ACC_PUBLIC,
+                                    "()V",
+                                    null,
+                                    "java/lang/Exception"
+                                )
+                            )
+                                .opcode(
+                                    Opcodes.NEW,
+                                    "java/lang/Exception"
+                                )
+                                .opcode(Opcodes.DUP)
+                                .opcode(
+                                    Opcodes.INVOKESPECIAL,
+                                    "java/lang/Exception",
+                                    "<init>",
+                                    "()V",
+                                    false
+                                )
+                                .opcode(Opcodes.ATHROW)
+                        )
+                )
+        ).xmlQuietly();
     }
 }
