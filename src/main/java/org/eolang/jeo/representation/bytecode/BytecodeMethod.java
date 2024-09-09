@@ -181,17 +181,19 @@ public final class BytecodeMethod implements Testable {
     }
 
     /**
-     * Return to the original class.
-     * @return Original class.
-     * @checkstyle MethodNameCheck (3 lines)
+     * Similar method without maxs.
+     * @return Method without maxs.
      */
-    @SuppressWarnings("PMD.ShortMethodName")
-    public BytecodeClass up() {
-        return this.clazz;
-    }
-
-    public BytecodeMethod label(final String uid) {
-        return this.label(this.labels.label(uid));
+    public BytecodeMethod withoutMaxs() {
+        return new BytecodeMethod(
+            this.clazz,
+            this.tryblocks,
+            this.instructions,
+            this.annotations,
+            this.properties,
+            this.defvalues,
+            new BytecodeMaxs()
+        );
     }
 
     /**
@@ -201,16 +203,6 @@ public final class BytecodeMethod implements Testable {
      */
     public BytecodeMethod label(final Label label) {
         return this.entry(new BytecodeLabel(label, this.labels));
-    }
-
-    /**
-     * Add instruction.
-     * @param opcode Opcode.
-     * @param args Arguments.
-     * @return This object.
-     */
-    public BytecodeMethod opcode(final int opcode, final Object... args) {
-        return this.entry(new BytecodeInstructionEntry(this.labels, opcode, args));
     }
 
     /**
@@ -251,22 +243,6 @@ public final class BytecodeMethod implements Testable {
     public BytecodeMethod defvalue(final BytecodeDefaultValue defvalue) {
         this.defvalues.add(defvalue);
         return this;
-    }
-
-    /**
-     * Similar method without maxs.
-     * @return Method without maxs.
-     */
-    public BytecodeMethod withoutMaxs() {
-        return new BytecodeMethod(
-            this.clazz,
-            this.tryblocks,
-            this.instructions,
-            this.annotations,
-            this.properties,
-            this.defvalues,
-            new BytecodeMaxs()
-        );
     }
 
     @Override
@@ -341,5 +317,24 @@ public final class BytecodeMethod implements Testable {
                 exception
             );
         }
+    }
+
+    /**
+     * Add instruction.
+     * @param opcode Opcode.
+     * @param args Arguments.
+     * @return This object.
+     */
+    BytecodeMethod opcode(final int opcode, final Object... args) {
+        return this.entry(new BytecodeInstructionEntry(this.labels, opcode, args));
+    }
+
+    /**
+     * Add label.
+     * @param uid Label uid.
+     * @return This object.
+     */
+    BytecodeMethod label(final String uid) {
+        return this.label(this.labels.label(uid));
     }
 }

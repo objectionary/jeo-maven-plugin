@@ -225,7 +225,7 @@ public final class BytecodeClass implements Testable {
      * @param modifiers Constructor modifiers.
      * @return This object.
      */
-    public BytecodeMethod withConstructor(final int... modifiers) {
+    public BytecodeMethodBuilder withConstructor(final int... modifiers) {
         return this.withConstructor("()V", modifiers);
     }
 
@@ -235,7 +235,7 @@ public final class BytecodeClass implements Testable {
      * @param properties Method properties.
      * @return This object.
      */
-    public BytecodeMethod withMethod(final BytecodeMethodProperties properties) {
+    public BytecodeMethodBuilder withMethod(final BytecodeMethodProperties properties) {
         return this.withMethod(properties, new BytecodeMaxs(0, 0));
     }
 
@@ -246,20 +246,10 @@ public final class BytecodeClass implements Testable {
      * @param maxs Method maxs.
      * @return This object.
      */
-    public BytecodeMethod withMethod(
+    public BytecodeMethodBuilder withMethod(
         final BytecodeMethodProperties properties, final BytecodeMaxs maxs
     ) {
         return this.withMethod(new BytecodeMethod(properties, this, maxs));
-    }
-
-    /**
-     * Add method.
-     * @param method Method.
-     * @return This object.
-     */
-    public BytecodeMethod withMethod(final BytecodeMethod method) {
-        this.methods.add(method);
-        return method;
     }
 
     /**
@@ -269,7 +259,7 @@ public final class BytecodeClass implements Testable {
      * @param modifiers Constructor modifiers.
      * @return This object.
      */
-    public BytecodeMethod withConstructor(final String descriptor, final int... modifiers) {
+    public BytecodeMethodBuilder withConstructor(final String descriptor, final int... modifiers) {
         return this.withMethod("<init>", descriptor, modifiers);
     }
 
@@ -281,19 +271,24 @@ public final class BytecodeClass implements Testable {
      * @param modifiers Access modifiers.
      * @return This object.
      */
-    public BytecodeMethod withMethod(
+    public BytecodeMethodBuilder withMethod(
         final String mname,
         final String descriptor,
         final int... modifiers
     ) {
-        final BytecodeMethod method = new BytecodeMethod(
-            mname,
-            this,
-            descriptor,
-            modifiers
+        return this.withMethod(
+            new BytecodeMethod(mname, this, descriptor, modifiers)
         );
+    }
+
+    /**
+     * Add method.
+     * @param method Method.
+     * @return This object.
+     */
+    public BytecodeMethodBuilder withMethod(final BytecodeMethod method) {
         this.methods.add(method);
-        return method;
+        return new BytecodeMethodBuilder(this, method);
     }
 
     /**

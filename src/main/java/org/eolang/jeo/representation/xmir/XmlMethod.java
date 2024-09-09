@@ -53,7 +53,7 @@ import org.xembly.Xembler;
  *
  * @since 0.1
  */
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 @ToString
 @EqualsAndHashCode
 public final class XmlMethod {

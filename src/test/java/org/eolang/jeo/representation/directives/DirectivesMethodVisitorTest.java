@@ -227,7 +227,7 @@ final class DirectivesMethodVisitorTest {
     @Test
     void parsesConstructorWithParameters() {
         final String clazz = "ConstructorParams";
-        final String xml =new BytecodeProgram( new BytecodeClass(clazz)
+        final String xml = new BytecodeProgram(new BytecodeClass(clazz)
             .withConstructor("(II)V", Opcodes.ACC_PUBLIC)
             .opcode(Opcodes.ALOAD, 0)
             .opcode(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false)
@@ -292,20 +292,20 @@ final class DirectivesMethodVisitorTest {
     void parsesIfStatementCorrectly() {
         final AllLabels labels = new AllLabels();
         final Label label = labels.label(UUID.randomUUID().toString());
-        final String xml = new BytecodeProgram(new BytecodeClass("Foo")
-            .withMethod("bar", "(D)I", 0)
-            .opcode(Opcodes.DLOAD, 1)
-            .opcode(Opcodes.DCONST_0)
-            .opcode(Opcodes.DCMPL)
-            .opcode(Opcodes.IFLE, label)
-            .opcode(Opcodes.ICONST_5)
-            .opcode(Opcodes.IRETURN)
-            .label(label)
-            .opcode(Opcodes.BIPUSH, 8)
-            .opcode(Opcodes.IRETURN).up()
-        )
-            .xml()
-            .toString();
+        final String xml = new BytecodeProgram(
+            new BytecodeClass("Foo")
+                .withMethod("bar", "(D)I", 0)
+                .opcode(Opcodes.DLOAD, 1)
+                .opcode(Opcodes.DCONST_0)
+                .opcode(Opcodes.DCMPL)
+                .opcode(Opcodes.IFLE, label)
+                .opcode(Opcodes.ICONST_5)
+                .opcode(Opcodes.IRETURN)
+                .label(label)
+                .opcode(Opcodes.BIPUSH, 8)
+                .opcode(Opcodes.IRETURN)
+                .up()
+        ).xml().toString();
         MatcherAssert.assertThat(
             String.format(
                 "If statement wasn't parsed correctly, please, check the resulting XMIR: \n%s\n",
