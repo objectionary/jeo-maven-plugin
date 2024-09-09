@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
@@ -37,40 +36,6 @@ import org.junit.jupiter.api.Test;
  * @since 0.1
  */
 final class XmlProgramTest {
-
-//    @Test
-//    void retrievesTopClass() {
-//        final String bar = "Bar";
-//        final XmlProgram program = new XmlProgram(new ClassName(bar));
-//        final XmlClass actual = program.top();
-//        final XmlClass expected = new XmlClass(bar);
-//        MatcherAssert.assertThat(
-//            String.format(
-//                "Can't retrieve top-level class from program %s. Expected %s%n Actual %s%n",
-//                program,
-//                expected,
-//                actual
-//            ),
-//            actual.toXml().toString(),
-//            new SameXml(expected.toXml())
-//        );
-//    }
-//
-//    @Test
-//    void retrievesPackage() {
-//        final String expected = "com.matrix.foobar";
-//        final String actual = new XmlProgram(new ClassName(expected, "FooBar")).pckg();
-//        MatcherAssert.assertThat(
-//            String.format(
-//                "Can't retrieve package from program %s. Expected %s%n Actual %s%n",
-//                expected,
-//                expected,
-//                actual
-//            ),
-//            actual,
-//            Matchers.equalTo(expected)
-//        );
-//    }
 
     @Test
     void convertsToBytecode() {
@@ -86,7 +51,5 @@ final class XmlProgramTest {
                 )
             )
         );
-
     }
 }
-

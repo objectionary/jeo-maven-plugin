@@ -41,8 +41,9 @@ final class DirectivesClassVisitorTest {
     @Test
     void parsesSimpleClassWithoutConstructor() throws ImpossibleModificationException {
         final DirectivesClassVisitor directives = new DirectivesClassVisitor();
-        new ClassReader(new BytecodeProgram(new BytecodeClass()).bytecode().asBytes()).accept(
-            directives, 0);
+        new ClassReader(
+            new BytecodeProgram(new BytecodeClass()).bytecode().asBytes()
+        ).accept(directives, 0);
         MatcherAssert.assertThat(
             "Can't parse simple class without constructor",
             new Xembler(directives).xml(),
@@ -57,7 +58,7 @@ final class DirectivesClassVisitorTest {
         new ClassReader(
             new BytecodeProgram(
                 new BytecodeClass(clazz)
-                .helloWorldMethod()
+                    .helloWorldMethod()
             ).bytecode().asBytes()
         ).accept(directives, 0);
         final String xml = new Xembler(directives).xml();

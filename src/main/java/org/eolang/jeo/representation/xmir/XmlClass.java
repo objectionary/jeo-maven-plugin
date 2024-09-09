@@ -35,6 +35,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
+import org.objectweb.asm.Opcodes;
 import org.w3c.dom.Node;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
@@ -186,7 +187,7 @@ public final class XmlClass {
      * @return Class node.
      */
     private static Node empty(final String classname) {
-        return XmlClass.withProps(classname, new DirectivesClassProperties(0));
+        return XmlClass.withProps(classname, new DirectivesClassProperties(Opcodes.ACC_PUBLIC));
     }
 
     /**

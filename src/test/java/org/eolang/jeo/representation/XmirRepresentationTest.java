@@ -96,8 +96,7 @@ final class XmirRepresentationTest {
     void returnsBytecodeRepresentationOfEoObjectWithFields() {
         final Bytecode expected = new BytecodeProgram(new BytecodeClass("Fields")
             .withField("foo")
-        )
-            .bytecode();
+        ).bytecode();
         final Bytecode actual = new XmirRepresentation(
             new BytecodeRepresentation(expected).toEO()
         ).toBytecode();
@@ -110,10 +109,9 @@ final class XmirRepresentationTest {
 
     @Test
     void convertsHelloWordEoRepresentationIntoBytecode() {
-        final Bytecode expected =new BytecodeProgram( new BytecodeClass("Application")
+        final Bytecode expected = new BytecodeProgram(new BytecodeClass("Application")
             .helloWorldMethod()
-        )
-            .bytecode();
+        ).bytecode();
         final Bytecode actual = new XmirRepresentation(
             new BytecodeRepresentation(expected).toEO()
         ).toBytecode();

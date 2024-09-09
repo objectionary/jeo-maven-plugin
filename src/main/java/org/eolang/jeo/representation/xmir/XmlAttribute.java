@@ -63,8 +63,9 @@ public final class XmlAttribute {
                     String.format("Attribute base is missing in XML node %s", this.node)
                 )
             );
+        final Optional<BytecodeAttribute> result;
         if ("inner-class".equals(base)) {
-            return Optional.of(
+            result = Optional.of(
                 new BytecodeAttribute.InnerClass(
                     Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(0))
                         .map(XmlOperand::new)
@@ -90,8 +91,10 @@ public final class XmlAttribute {
                         .map(Integer.class::cast)
                         .orElse(0)
                 ));
+        } else {
+            result = Optional.empty();
         }
-        return Optional.empty();
+        return result;
     }
 
     /**

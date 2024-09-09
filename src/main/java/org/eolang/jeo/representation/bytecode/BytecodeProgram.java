@@ -94,7 +94,7 @@ public final class BytecodeProgram {
      * @return XML representation of bytecode.
      */
     public XML xml() {
-        return new BytecodeRepresentation(this.bytecode(true)).toEO();
+        return new BytecodeRepresentation(this.bytecode()).toEO();
     }
 
     /**
@@ -116,6 +116,7 @@ public final class BytecodeProgram {
 
     /**
      * Traverse XML and build bytecode class.
+     * @param verify Verify bytecode.
      * @return Bytecode.
      */
     public Bytecode bytecode(final boolean verify) {
@@ -124,6 +125,10 @@ public final class BytecodeProgram {
         return writer.bytecode();
     }
 
+    /**
+     * Get top class.
+     * @return Top class.
+     */
     public BytecodeClass top() {
         return this.classes.get(0);
     }

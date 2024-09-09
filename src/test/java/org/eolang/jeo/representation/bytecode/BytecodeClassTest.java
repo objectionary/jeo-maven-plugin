@@ -37,7 +37,7 @@ import org.objectweb.asm.Opcodes;
  * Test case for {@link org.eolang.jeo.representation.bytecode.BytecodeClass}.
  * @since 0.1
  */
-@SuppressWarnings("PMD.ExcessiveMethodLength")
+@SuppressWarnings({"PMD.ExcessiveMethodLength", "PMD.TooManyMethods"})
 final class BytecodeClassTest {
 
     @Test

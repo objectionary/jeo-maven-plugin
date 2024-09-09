@@ -28,7 +28,6 @@ import java.util.Collection;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.ClassName;
-import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.Opcodes;
 
 /**
@@ -158,52 +157,7 @@ public final class BytecodeClass implements Testable {
     }
 
     /**
-     * Constructor.
-     * @return Class name.
-     */
-    public String name() {
-        return this.name;
-    }
-
-    /**
-     * Constructor.
-     * @param visitor Writer.
-     */
-    void writeTo(final CustomClassWriter visitor, final String pckg) {
-        try {
-            visitor.visit(
-                this.props.version(),
-                this.props.access(),
-                new ClassName(pckg, this.name).full(),
-                this.props.signature(),
-                this.props.supername(),
-                this.props.interfaces()
-            );
-            this.annotations.forEach(annotation -> annotation.write(visitor));
-            this.fields.forEach(field -> field.write(visitor));
-            this.methods.forEach(method -> method.write(visitor));
-            this.attributes.forEach(attr -> attr.write(visitor));
-            visitor.visitEnd();
-        } catch (final IllegalArgumentException exception) {
-            throw new IllegalArgumentException(
-                String.format("Can't create bytecode for the class '%s' ", this.name),
-                exception
-            );
-        } catch (final IllegalStateException exception) {
-            throw new IllegalStateException(
-                String.format(
-                    "Bytecode creation for the '%s' class is not possible due to unmet preconditions. To reproduce the problem, you can write the following test: %n%s%n",
-                    this.name,
-                    this.testCode()
-                ),
-                exception
-            );
-        }
-    }
-
-    /**
      * Add constructor.
-     *
      * @param modifiers Constructor modifiers.
      * @return This object.
      */
@@ -213,7 +167,6 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Add method.
-     *
      * @param properties Method properties.
      * @return This object.
      */
@@ -223,20 +176,18 @@ public final class BytecodeClass implements Testable {
 
     /**
      * Add method.
-     *
-     * @param props Method properties.
+     * @param properties Method properties.
      * @param maxs Method maxs.
      * @return This object.
      */
     public BytecodeMethodBuilder withMethod(
-        final BytecodeMethodProperties props, final BytecodeMaxs maxs
+        final BytecodeMethodProperties properties, final BytecodeMaxs maxs
     ) {
-        return this.withMethod(new BytecodeMethod(props, maxs));
+        return this.withMethod(new BytecodeMethod(properties, maxs));
     }
 
     /**
      * Add constructor.
-     *
      * @param descriptor Constructor descriptor.
      * @param modifiers Constructor modifiers.
      * @return This object.
@@ -246,32 +197,7 @@ public final class BytecodeClass implements Testable {
     }
 
     /**
-     * Add method.
-     *
-     * @param mname Method name.
-     * @param descriptor Method descriptor.
-     * @param modifiers Access modifiers.
-     * @return This object.
-     */
-    public BytecodeMethodBuilder withMethod(
-        final String mname, final String descriptor, final int... modifiers
-    ) {
-        return this.withMethod(new BytecodeMethod(mname, descriptor, modifiers));
-    }
-
-    /**
-     * Add method.
-     * @param method Method.
-     * @return This object.
-     */
-    private BytecodeMethodBuilder withMethod(final BytecodeMethod method) {
-        this.methods.add(method);
-        return new BytecodeMethodBuilder(this, method);
-    }
-
-    /**
      * Add field.
-     *
      * @param fname Field name.
      * @return This object.
      */
@@ -287,6 +213,19 @@ public final class BytecodeClass implements Testable {
     }
 
     /**
+     * Add method.
+     * @param mname Method name.
+     * @param descriptor Method descriptor.
+     * @param modifiers Access modifiers.
+     * @return This object.
+     */
+    public BytecodeMethodBuilder withMethod(
+        final String mname, final String descriptor, final int... modifiers
+    ) {
+        return this.withMethod(new BytecodeMethod(mname, descriptor, modifiers));
+    }
+
+    /**
      * Add attribute.
      * @param attribute Attribute.
      * @return This object.
@@ -294,33 +233,6 @@ public final class BytecodeClass implements Testable {
     public BytecodeClass withAttribute(final BytecodeAttribute attribute) {
         this.attributes.add(attribute);
         return this;
-    }
-
-    /**
-     * Add field.
-     *
-     * @param fname Field name.
-     * @param descriptor Field descriptor.
-     * @param signature Field signature.
-     * @param value Field value.
-     * @param modifiers Access modifiers.
-     * @return This object.
-     * @checkstyle ParameterNumberCheck (5 lines)
-     */
-    private BytecodeField withField(
-        final String fname,
-        final String descriptor,
-        final String signature,
-        final Object value,
-        final int... modifiers
-    ) {
-        int access = 0;
-        for (final int modifier : modifiers) {
-            access |= modifier;
-        }
-        final BytecodeField field = new BytecodeField(fname, descriptor, signature, value, access);
-        this.fields.add(field);
-        return field;
     }
 
     @Override
@@ -377,5 +289,79 @@ public final class BytecodeClass implements Testable {
     public BytecodeClass withoutMethods() {
         this.methods.clear();
         return this;
+    }
+
+    /**
+     * Constructor.
+     * @param visitor Writer.
+     * @param pckg Package.
+     */
+    void writeTo(final CustomClassWriter visitor, final String pckg) {
+        try {
+            visitor.visit(
+                this.props.version(),
+                this.props.access(),
+                new ClassName(pckg, this.name).full(),
+                this.props.signature(),
+                this.props.supername(),
+                this.props.interfaces()
+            );
+            this.annotations.forEach(annotation -> annotation.write(visitor));
+            this.fields.forEach(field -> field.write(visitor));
+            this.methods.forEach(method -> method.write(visitor));
+            this.attributes.forEach(attr -> attr.write(visitor));
+            visitor.visitEnd();
+        } catch (final IllegalArgumentException exception) {
+            throw new IllegalArgumentException(
+                String.format("Can't create bytecode for the class '%s' ", this.name),
+                exception
+            );
+        } catch (final IllegalStateException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Bytecode creation for the '%s' class is not possible due to unmet preconditions. To reproduce the problem, you can write the following test: %n%s%n",
+                    this.name,
+                    this.testCode()
+                ),
+                exception
+            );
+        }
+    }
+
+    /**
+     * Add method.
+     * @param method Method.
+     * @return This object.
+     */
+    private BytecodeMethodBuilder withMethod(final BytecodeMethod method) {
+        this.methods.add(method);
+        return new BytecodeMethodBuilder(this, method);
+    }
+
+    /**
+     * Add field.
+     *
+     * @param fname Field name.
+     * @param descriptor Field descriptor.
+     * @param signature Field signature.
+     * @param value Field value.
+     * @param modifiers Access modifiers.
+     * @return This object.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    private BytecodeField withField(
+        final String fname,
+        final String descriptor,
+        final String signature,
+        final Object value,
+        final int... modifiers
+    ) {
+        int access = 0;
+        for (final int modifier : modifiers) {
+            access |= modifier;
+        }
+        final BytecodeField field = new BytecodeField(fname, descriptor, signature, value, access);
+        this.fields.add(field);
+        return field;
     }
 }

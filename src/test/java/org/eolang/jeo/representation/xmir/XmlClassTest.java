@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -44,8 +45,8 @@ final class XmlClassTest {
                 klass,
                 expected
             ),
-            klass.bytecode().name(),
-            Matchers.equalTo(expected)
+            klass.bytecode(),
+            Matchers.equalTo(new BytecodeClass(expected))
         );
     }
 }

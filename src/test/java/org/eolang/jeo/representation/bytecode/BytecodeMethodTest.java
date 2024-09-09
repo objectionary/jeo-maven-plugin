@@ -41,5 +41,4 @@ final class BytecodeMethodTest {
             Matchers.equalTo(new BytecodeMethod("foo"))
         );
     }
-
 }

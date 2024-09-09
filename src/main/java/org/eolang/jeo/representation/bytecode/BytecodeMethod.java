@@ -28,7 +28,6 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.xmir.AllLabels;
-import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -242,6 +241,7 @@ public final class BytecodeMethod implements Testable {
 
     /**
      * Generate bytecode.
+     * @param visitor Visitor.
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     void write(final CustomClassWriter visitor) {
