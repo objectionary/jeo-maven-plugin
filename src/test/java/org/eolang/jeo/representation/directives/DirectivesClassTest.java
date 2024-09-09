@@ -106,34 +106,29 @@ final class DirectivesClassTest {
         final String signature = "java/lang/Object";
         final String supername = "java/lang/Runnable";
         final String interfce = "java/lang/Cloneable";
-        final XmlClass clazz = new XmlClass(
-            new XmlNode(
-                new Xembler(
-                    new DirectivesClass(
-                        name,
-                        new DirectivesClassProperties(
-                            access,
-                            signature,
-                            supername,
-                            interfce
-                        )
-                    )
-                ).xml()
-            )
-        );
-        final String pckg = "pckg";
         MatcherAssert.assertThat(
             "We expect that class created from directives is equal to expected",
-            clazz.bytecode(pckg),
-            Matchers.equalTo(new BytecodeClass(
-                new ClassName(pckg, name).full(),
-                new BytecodeClassProperties(
-                    access,
-                    signature,
-                    supername,
-                    interfce
+            new XmlClass(
+                new XmlNode(
+                    new Xembler(
+                        new DirectivesClass(
+                            name,
+                            new DirectivesClassProperties(
+                                access,
+                                signature,
+                                supername,
+                                interfce
+                            )
+                        )
+                    ).xml()
                 )
-            ))
+            ).bytecode(),
+            Matchers.equalTo(
+                new BytecodeClass(
+                    name,
+                    new BytecodeClassProperties(access, signature, supername, interfce)
+                )
+            )
         );
     }
 

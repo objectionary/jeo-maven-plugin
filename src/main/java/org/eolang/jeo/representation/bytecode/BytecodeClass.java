@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.xmir.XmlAnnotations;
 import org.objectweb.asm.Opcodes;
 
@@ -168,12 +169,12 @@ public final class BytecodeClass implements Testable {
      * Constructor.
      * @param visitor Writer.
      */
-    void writeTo(final CustomClassWriter visitor) {
+    void writeTo(final CustomClassWriter visitor, final String pckg) {
         try {
             visitor.visit(
                 this.props.version(),
                 this.props.access(),
-                this.name,
+                new ClassName(pckg, this.name).full(),
                 this.props.signature(),
                 this.props.supername(),
                 this.props.interfaces()
@@ -263,7 +264,7 @@ public final class BytecodeClass implements Testable {
      * @param method Method.
      * @return This object.
      */
-    public BytecodeMethodBuilder withMethod(final BytecodeMethod method) {
+    private BytecodeMethodBuilder withMethod(final BytecodeMethod method) {
         this.methods.add(method);
         return new BytecodeMethodBuilder(this, method);
     }
@@ -306,7 +307,7 @@ public final class BytecodeClass implements Testable {
      * @return This object.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    public BytecodeField withField(
+    private BytecodeField withField(
         final String fname,
         final String descriptor,
         final String signature,
@@ -318,27 +319,8 @@ public final class BytecodeClass implements Testable {
             access |= modifier;
         }
         final BytecodeField field = new BytecodeField(fname, descriptor, signature, value, access);
-        this.withField(field);
-        return field;
-    }
-
-    /**
-     * Add field.
-     * @param field Field.
-     */
-    public void withField(final BytecodeField field) {
         this.fields.add(field);
-    }
-
-    /**
-     * Add anns.
-     *
-     * @param all Annotations.
-     * @return This object.
-     */
-    public BytecodeClass withAnnotations(final XmlAnnotations all) {
-        this.annotations.addAll(all.bytecode().annotations());
-        return this;
+        return field;
     }
 
     @Override

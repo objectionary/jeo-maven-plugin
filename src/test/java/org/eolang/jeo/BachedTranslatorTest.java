@@ -61,7 +61,7 @@ final class BachedTranslatorTest {
             clazz,
             new BytecodeProgram(
                 "org/eolang/jeo",
-                new BytecodeClass("org/eolang/jeo/Application")
+                new BytecodeClass("Application")
             ).xml()
                 .toString()
                 .getBytes(StandardCharsets.UTF_8)
@@ -83,7 +83,7 @@ final class BachedTranslatorTest {
         final Representation repr = new XmirRepresentation(
             new BytecodeProgram(
                 "org/eolang/jeo",
-                new BytecodeClass("org/eolang/jeo/Application")
+                new BytecodeClass("Application")
             ).xml()
         );
         footprint.apply(Stream.of(repr)).collect(Collectors.toList());
@@ -97,7 +97,7 @@ final class BachedTranslatorTest {
 
     @Test
     void assemblesSuccessfully(@TempDir final Path temp) {
-        final String fake = "jeo/xmir/Fake";
+        final String fake = "Fake";
         new BachedTranslator(new Assemble(temp)).apply(
             Stream.of(
                 new XmirRepresentation(

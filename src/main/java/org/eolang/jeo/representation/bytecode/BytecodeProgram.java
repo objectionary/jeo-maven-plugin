@@ -61,14 +61,28 @@ public final class BytecodeProgram {
         this(pckg, new ArrayList<>(0));
     }
 
+    /**
+     * Constructor.
+     * @param classes Classes.
+     */
     public BytecodeProgram(final BytecodeClass... classes) {
         this("", Arrays.asList(classes));
     }
 
+    /**
+     * Constructor.
+     * @param pckg Package.
+     * @param classes Classes.
+     */
     public BytecodeProgram(final String pckg, final BytecodeClass... classes) {
         this(pckg, Arrays.asList(classes));
     }
 
+    /**
+     * Constructor.
+     * @param pckg Package.
+     * @param classes Classes.
+     */
     public BytecodeProgram(final String pckg, final List<BytecodeClass> classes) {
         this.pckg = pckg;
         this.classes = classes;
@@ -106,7 +120,7 @@ public final class BytecodeProgram {
      */
     public Bytecode bytecode(final boolean verify) {
         final CustomClassWriter writer = new CustomClassWriter(verify);
-        this.top().writeTo(writer);
+        this.top().writeTo(writer, this.pckg);
         return writer.bytecode();
     }
 

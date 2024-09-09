@@ -30,7 +30,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
@@ -92,9 +91,9 @@ public final class XmlClass {
      * Convert to bytecode.
      * @return Bytecode class.
      */
-    public BytecodeClass bytecode(final String pckg) {
-        final BytecodeClass bytecode = new BytecodeClass(
-            new ClassName(pckg, new PrefixedName(this.name()).decode()).full(),
+    public BytecodeClass bytecode() {
+        return new BytecodeClass(
+            new PrefixedName(this.name()).decode(),
             this.methods().stream().map(XmlMethod::bytecode)
                 .collect(Collectors.toList()),
             this.fields().stream()
@@ -109,16 +108,6 @@ public final class XmlClass {
                 .orElse(new ArrayList<>(0)),
             this.properties().bytecode()
         );
-        ;
-//        this.annotations().ifPresent(bytecode::withAnnotations);
-//        for (final XmlField field : this.fields()) {
-//            bytecode.withField(field.bytecode());
-//        }
-//        for (final XmlMethod xmlmethod : this.methods()) {
-//            bytecode.withMethod(xmlmethod.bytecode(bytecode));
-//        }
-//        this.attributes().ifPresent(attrs -> attrs.writeTo(bytecode));
-        return bytecode;
     }
 
     /**

@@ -75,14 +75,14 @@ final class XmlProgramTest {
     @Test
     void convertsToBytecode() {
         final String pckg = "com.matrix.foobar";
-        final ClassName name = new ClassName(pckg, "FooBar");
+        final String name = "FooBar";
         MatcherAssert.assertThat(
             "Can't convert program to bytecode.",
-            new XmlProgram(name).bytecode(),
+            new XmlProgram(new ClassName(pckg, name)).bytecode(),
             Matchers.equalTo(
                 new BytecodeProgram(
                     pckg,
-                    new BytecodeClass(name.full(), 0)
+                    new BytecodeClass(name, 0)
                 )
             )
         );
