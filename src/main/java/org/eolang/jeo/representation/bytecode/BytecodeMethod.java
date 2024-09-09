@@ -92,6 +92,15 @@ public final class BytecodeMethod implements Testable {
     /**
      * Constructor.
      * @param name Method name.
+     * @param maxs Max stack and locals.
+     */
+    public BytecodeMethod(final String name, final BytecodeMaxs maxs) {
+        this(new BytecodeMethodProperties(name, "()V", "", 1), new BytecodeClass(), maxs);
+    }
+
+    /**
+     * Constructor.
+     * @param name Method name.
      * @param clazz Original class.
      * @param descriptor Method descriptor.
      * @param modifiers Method modifiers.
@@ -242,6 +251,22 @@ public final class BytecodeMethod implements Testable {
     public BytecodeMethod defvalue(final BytecodeDefaultValue defvalue) {
         this.defvalues.add(defvalue);
         return this;
+    }
+
+    /**
+     * Similar method without maxs.
+     * @return Method without maxs.
+     */
+    public BytecodeMethod withoutMaxs() {
+        return new BytecodeMethod(
+            this.clazz,
+            this.tryblocks,
+            this.instructions,
+            this.annotations,
+            this.properties,
+            this.defvalues,
+            new BytecodeMaxs()
+        );
     }
 
     @Override

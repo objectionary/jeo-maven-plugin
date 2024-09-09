@@ -45,8 +45,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeParameters;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.objectweb.asm.Opcodes;
-import org.xembly.Directives;
-import org.xembly.ImpossibleModificationException;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -71,22 +69,6 @@ public final class XmlMethod {
      */
     @EqualsAndHashCode.Exclude
     private final AllLabels labels;
-
-    /**
-     * Constructor.
-     */
-    public XmlMethod() {
-        this("foo");
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param name Method name.
-     */
-    public XmlMethod(final String name) {
-        this(name, Opcodes.ACC_PUBLIC, "()V");
-    }
 
     /**
      * Constructor.
@@ -176,7 +158,7 @@ public final class XmlMethod {
      * @return Instructions.
      */
     @SafeVarargs
-    public final List<XmlBytecodeEntry> instructions(
+    private final List<XmlBytecodeEntry> instructions(
         final Predicate<XmlBytecodeEntry>... predicates
     ) {
         return this.node.child("base", "seq")
@@ -189,23 +171,11 @@ public final class XmlMethod {
     }
 
     /**
-     * All the method instructions.
-     *
-     * @return Instructions.
-     */
-    public List<XmlNode> nodes() {
-        return this.node.child("base", "seq")
-            .child("base", "tuple")
-            .children()
-            .collect(Collectors.toList());
-    }
-
-    /**
      * Method max stack and locals.
      *
      * @return Maxs.
      */
-    Optional<XmlMaxs> maxs() {
+    private Optional<XmlMaxs> maxs() {
         return this.node.optchild("name", "maxs").map(XmlMaxs::new);
     }
 
@@ -214,7 +184,7 @@ public final class XmlMethod {
      *
      * @return Properties.
      */
-    BytecodeMethodProperties properties() {
+    private BytecodeMethodProperties properties() {
         return new BytecodeMethodProperties(
             this.access(),
             this.name(),
@@ -223,109 +193,6 @@ public final class XmlMethod {
             this.params(),
             this.exceptions()
         );
-    }
-
-    /**
-     * Checks if method is a constructor.
-     *
-     * @return True if method is a constructor.
-     */
-    boolean isConstructor() {
-        return this.node.attribute("name").map(s -> s.contains("new")).orElse(false);
-    }
-
-    /**
-     * Convert to Directives.
-     * @return Directives of this method.
-     */
-    Directives toDirectives() {
-        return new Directives().add("o").append(Directives.copyOf(this.node.node())).up();
-    }
-
-    /**
-     * Clear max stack and max locals.
-     *
-     * @return Copy of the method without max stack and max locals.
-     */
-    XmlMethod withoutMaxs() {
-        try {
-            return new XmlMethod(
-                new XmlNode(
-                    new Xembler(
-                        new Directives()
-                            .xpath("./o[@name='maxs']")
-                            .remove()
-                    ).apply(this.node.node())
-                )
-            );
-        } catch (final ImpossibleModificationException exception) {
-            throw new IllegalStateException(
-                String.format(
-                    "Failed to remove maxs from a method '%s'",
-                    this.node
-                ),
-                exception
-            );
-        }
-    }
-
-    /**
-     * Method instructions.
-     *
-     * @param entries Instructions to add.
-     * @return Copy of the method with added instructions.
-     */
-    XmlMethod withInstructions(final XmlNode... entries) {
-        try {
-            final Directives directives = new Directives()
-                .xpath("./o[@base='seq']/o[@base='tuple']");
-            for (final XmlNode entry : entries) {
-                directives.add("o").append(Directives.copyOf(entry.node())).up();
-            }
-            return new XmlMethod(
-                new XmlNode(
-                    new Xembler(directives).apply(
-                        this.withoutInstructions().node.node()
-                    )
-                )
-            );
-        } catch (final ImpossibleModificationException exception) {
-            throw new IllegalStateException(
-                String.format(
-                    "Failed to add instructions '%s' to a method '%s'",
-                    Arrays.toString(entries),
-                    this.node
-                ),
-                exception
-            );
-        }
-    }
-
-    /**
-     * Clear instructions.
-     *
-     * @return Method without instructions.
-     */
-    XmlMethod withoutInstructions() {
-        try {
-            return new XmlMethod(
-                new XmlNode(
-                    new Xembler(
-                        new Directives()
-                            .xpath("./o[@base='seq']/o[@base='tuple']/o")
-                            .remove()
-                    ).apply(this.node.node())
-                )
-            );
-        } catch (final ImpossibleModificationException exception) {
-            throw new IllegalStateException(
-                String.format(
-                    "Failed to remove instructions from a method '%s'",
-                    this.node
-                ),
-                exception
-            );
-        }
     }
 
     /**
