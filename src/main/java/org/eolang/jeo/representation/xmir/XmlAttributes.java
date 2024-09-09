@@ -23,6 +23,10 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 
 /**
@@ -46,6 +50,17 @@ public final class XmlAttributes {
      */
     XmlAttributes(final XmlNode node) {
         this.node = node;
+    }
+
+    /**
+     * Get attributes.
+     * @return Attributes.
+     */
+    public List<BytecodeAttribute> attributes() {
+        return this.node.children().map(XmlAttribute::new).map(XmlAttribute::attribute)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toList());
     }
 
     /**

@@ -127,12 +127,52 @@ public final class BytecodeClass implements Testable {
         final Collection<BytecodeMethod> methods,
         final BytecodeClassProperties properties
     ) {
+        this(name, methods, new ArrayList<>(0), new ArrayList<>(0), new ArrayList<>(0), properties);
+    }
+
+    /**
+     * Constructor.
+     * @param name Class name.
+     * @param fields Fields.
+     * @param annotations Annotations.
+     * @param attributes Attributes.
+     * @param props Class properties.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    public BytecodeClass(
+        final String name,
+        final Collection<BytecodeField> fields,
+        final Collection<BytecodeAnnotation> annotations,
+        final Collection<BytecodeAttribute> attributes,
+        final BytecodeClassProperties props
+    ) {
+        this(name, new ArrayList<>(0), fields, annotations, attributes, props);
+    }
+
+    /**
+     * Constructor.
+     * @param name Class name.
+     * @param methods Methods.
+     * @param fields Fields.
+     * @param annotations Annotations.
+     * @param attributes Attributes.
+     * @param props Class properties.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    public BytecodeClass(
+        final String name,
+        final Collection<BytecodeMethod> methods,
+        final Collection<BytecodeField> fields,
+        final Collection<BytecodeAnnotation> annotations,
+        final Collection<BytecodeAttribute> attributes,
+        final BytecodeClassProperties props
+    ) {
         this.name = name;
         this.methods = methods;
-        this.props = properties;
-        this.fields = new ArrayList<>(0);
-        this.annotations = new ArrayList<>(0);
-        this.attributes = new ArrayList<>(0);
+        this.fields = fields;
+        this.annotations = annotations;
+        this.attributes = attributes;
+        this.props = props;
     }
 
     /**
@@ -143,6 +183,10 @@ public final class BytecodeClass implements Testable {
         return this.name;
     }
 
+    /**
+     * Constructor.
+     * @param visitor Writer.
+     */
     void writeTo(final CustomClassWriter visitor) {
         try {
             visitor.visit(

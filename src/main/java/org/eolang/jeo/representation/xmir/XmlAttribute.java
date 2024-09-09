@@ -53,10 +53,10 @@ public final class XmlAttribute {
     }
 
     /**
-     * Write to bytecode.
-     * @param bytecode Bytecode.
+     * Get attribute.
+     * @return Attribute.
      */
-    public void writeTo(final BytecodeClass bytecode) {
+    public Optional<BytecodeAttribute> attribute() {
         final String base = this.node.attribute("base")
             .orElseThrow(
                 () -> new IllegalArgumentException(
@@ -64,7 +64,7 @@ public final class XmlAttribute {
                 )
             );
         if ("inner-class".equals(base)) {
-            bytecode.withAttribute(
+            return Optional.of(
                 new BytecodeAttribute.InnerClass(
                     Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(0))
                         .map(XmlOperand::new)
@@ -89,8 +89,16 @@ public final class XmlAttribute {
                         .map(XmlOperand::asObject)
                         .map(Integer.class::cast)
                         .orElse(0)
-                )
-            );
+                ));
         }
+        return Optional.empty();
+    }
+
+    /**
+     * Write to bytecode.
+     * @param bytecode Bytecode.
+     */
+    public void writeTo(final BytecodeClass bytecode) {
+        this.attribute().ifPresent(bytecode::withAttribute);
     }
 }

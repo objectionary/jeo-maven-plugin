@@ -23,8 +23,8 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,6 +32,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
@@ -56,16 +57,14 @@ public final class XmlClass {
 
     /**
      * Constructor.
-     *
-     * @param xmlnode XML node.
+     * @param node Class node.
      */
-    XmlClass(final XML xmlnode) {
-        this(xmlnode.node().getFirstChild());
+    public XmlClass(final XmlNode node) {
+        this.node = node;
     }
 
     /**
      * Constructor.
-     *
      * @param classname Class name.
      */
     XmlClass(final String classname) {
@@ -74,7 +73,6 @@ public final class XmlClass {
 
     /**
      * Constructor.
-     *
      * @param classname Class name.
      * @param properties Class properties.
      */
@@ -84,16 +82,6 @@ public final class XmlClass {
 
     /**
      * Constructor.
-     *
-     * @param node Class node.
-     */
-    public XmlClass(final XmlNode node) {
-        this.node = node;
-    }
-
-    /**
-     * Constructor.
-     *
      * @param xml Class node.
      */
     XmlClass(final Node xml) {
@@ -107,16 +95,28 @@ public final class XmlClass {
     public BytecodeClass bytecode(final String pckg) {
         final BytecodeClass bytecode = new BytecodeClass(
             new ClassName(pckg, new PrefixedName(this.name()).decode()).full(),
+            this.fields().stream()
+                .map(XmlField::bytecode)
+                .collect(Collectors.toList()),
+            this.annotations()
+                .map(XmlAnnotations::bytecode)
+                .orElse(new BytecodeAnnotations())
+                .annotations(),
+            this.attributes()
+                .map(XmlAttributes::attributes)
+                .orElse(new ArrayList<>(0)),
             this.properties().bytecode()
         );
-        this.annotations().ifPresent(bytecode::withAnnotations);
-        for (final XmlField field : this.fields()) {
-            bytecode.withField(field.bytecode());
-        }
-        for (final XmlMethod xmlmethod : this.methods()) {
-            bytecode.withMethod(xmlmethod.bytecode(bytecode));
-        }
-        this.attributes().ifPresent(attrs -> attrs.writeTo(bytecode));
+        this.methods().stream().map(m -> m.bytecode(bytecode))
+            .forEach(bytecode::withMethod);
+//        this.annotations().ifPresent(bytecode::withAnnotations);
+//        for (final XmlField field : this.fields()) {
+//            bytecode.withField(field.bytecode());
+//        }
+//        for (final XmlMethod xmlmethod : this.methods()) {
+//            bytecode.withMethod(xmlmethod.bytecode(bytecode));
+//        }
+//        this.attributes().ifPresent(attrs -> attrs.writeTo(bytecode));
         return bytecode;
     }
 

@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 
 /**
- * Test case for {@link org.eolang.jeo.representation.xmir.XmlClassProperties}.
+ * Test case for {@link XmlClassProperties}.
  * @since 0.1
  */
 final class XmlClassPropertiesTest {
