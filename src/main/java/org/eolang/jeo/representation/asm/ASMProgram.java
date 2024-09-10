@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
@@ -50,6 +51,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeParameters;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.xmir.AllLabels;
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
@@ -338,8 +340,76 @@ public final class ASMProgram {
 
 
     private static BytecodeAnnotation annotation(final AnnotationNode node, final boolean visible) {
-        return null;
-//        return new BytecodeAnnotation(node.desc, visible, node.values);
+        List<BytecodeAnnotationValue> properties = new ArrayList<>(0);
+        final List<Object> values = Optional.ofNullable(node.values).orElse(new ArrayList<>(0));
+        for (int index = 0; index < values.size(); index += 2) {
+            properties.add(
+                ASMProgram.annotationProperty(
+                    (String) values.get(index),
+                    values.get(index + 1)
+                )
+            );
+        }
+        return new BytecodeAnnotation(node.desc, visible, properties);
+    }
+
+    private static BytecodeAnnotationValue annotationProperty(
+        final String name, final Object value
+    ) {
+        if (value instanceof String[]) {
+            final String[] params = (String[]) value;
+            return BytecodeAnnotationProperty.enump(name, params[0], params[1]);
+        } else if (value instanceof AnnotationNode) {
+            AnnotationNode annotation = (AnnotationNode) value;
+            return ASMProgram.annotation(
+                annotation,
+                true
+            );
+        } else if (value instanceof List) {
+            return BytecodeAnnotationProperty.array(
+                name,
+                ((List<?>) value).stream()
+                    .map(val -> ASMProgram.annotationProperty(null, val))
+                    .collect(Collectors.toList())
+            );
+//            AnnotationVisitor arrayAnnotationVisitor = annotationVisitor.visitArray(name);
+//            if (arrayAnnotationVisitor != null) {
+//                List<?> arrayValue = (List<?>) value;
+//                for (int i = 0, n = arrayValue.size(); i < n; ++i) {
+//                    accept(arrayAnnotationVisitor, null, arrayValue.get(i));
+//                }
+//                arrayAnnotationVisitor.visitEnd();
+//            }
+        } else {
+            return BytecodeAnnotationProperty.plain(name, value);
+        }
+    }
+
+    //Understand the type!
+    static void accept(
+        final AnnotationVisitor annotationVisitor, final String name, final Object value
+    ) {
+        if (annotationVisitor != null) {
+            if (value instanceof String[]) {
+                String[] typeValue = (String[]) value;
+                annotationVisitor.visitEnum(name, typeValue[0], typeValue[1]);
+            } else if (value instanceof AnnotationNode) {
+                AnnotationNode annotationValue = (AnnotationNode) value;
+                annotationValue.accept(
+                    annotationVisitor.visitAnnotation(name, annotationValue.desc));
+            } else if (value instanceof List) {
+                AnnotationVisitor arrayAnnotationVisitor = annotationVisitor.visitArray(name);
+                if (arrayAnnotationVisitor != null) {
+                    List<?> arrayValue = (List<?>) value;
+                    for (int i = 0, n = arrayValue.size(); i < n; ++i) {
+                        accept(arrayAnnotationVisitor, null, arrayValue.get(i));
+                    }
+                    arrayAnnotationVisitor.visitEnd();
+                }
+            } else {
+                annotationVisitor.visit(name, value);
+            }
+        }
     }
 
     private static List<BytecodeDefaultValue> defvalues(final MethodNode node) {

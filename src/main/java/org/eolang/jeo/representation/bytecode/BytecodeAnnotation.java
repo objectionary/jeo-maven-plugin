@@ -58,7 +58,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
     /**
      * Properties.
      */
-    private final List<BytecodeAnnotationProperty> properties;
+    private final List<BytecodeAnnotationValue> properties;
 
     /**
      * Constructor.
@@ -78,7 +78,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
     public BytecodeAnnotation(
         final String descriptor,
         final boolean visible,
-        final List<BytecodeAnnotationProperty> properties
+        final List<BytecodeAnnotationValue> properties
     ) {
         this.descr = descriptor;
         this.visible = visible;

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
 
 /**
  * Xmir representation of an annotation.
@@ -84,7 +85,7 @@ public class XmlAnnotation {
      * Annotation properties.
      * @return Properties.
      */
-    private List<BytecodeAnnotationProperty> props() {
+    private List<BytecodeAnnotationValue> props() {
         return this.node.children()
             .filter(xmlnode -> xmlnode.hasAttribute("base", "annotation-property"))
             .map(XmlAnnotationProperty::new)

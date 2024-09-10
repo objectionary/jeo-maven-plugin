@@ -24,8 +24,11 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.log.Logger;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.objectweb.asm.AnnotationVisitor;
@@ -56,6 +59,29 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
     private BytecodeAnnotationProperty(final Type type, final List<Object> params) {
         this.type = type;
         this.params = params;
+    }
+
+    public static BytecodeAnnotationProperty enump(
+        final String name, final String desc, final String value
+    ) {
+        return new BytecodeAnnotationProperty(Type.ENUM, Arrays.asList(name, desc, value));
+    }
+
+    public static BytecodeAnnotationProperty plain(final String name, final Object value) {
+        return new BytecodeAnnotationProperty(Type.PLAIN, Arrays.asList(name, value));
+    }
+
+    public static BytecodeAnnotationProperty array(final String name, final List<Object> values) {
+        return new BytecodeAnnotationProperty(
+            Type.ARRAY,
+            Stream.concat(Stream.of(name), values.stream()).collect(Collectors.toList())
+        );
+    }
+
+    public static BytecodeAnnotationProperty annotation(
+        final String name, final String desc, final List<Object> values
+    ) {
+        return new BytecodeAnnotationProperty(Type.ANNOTATION, Arrays.asList(name, desc, values));
     }
 
     /**
