@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -58,6 +59,15 @@ public final class BytecodeInstructionEntry implements BytecodeEntry {
      * All labels.
      */
     private final AllLabels labels;
+
+    /**
+     * Constructor.
+     * @param opcode Opcode.
+     * @param args Arguments.
+     */
+    public BytecodeInstructionEntry(final int opcode, final Object... args) {
+        this(opcode, Arrays.asList(args));
+    }
 
     /**
      * Constructor.
