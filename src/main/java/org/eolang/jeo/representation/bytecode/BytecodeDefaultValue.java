@@ -36,13 +36,13 @@ public final class BytecodeDefaultValue {
     /**
      * Annotation property as a value.
      */
-    private final BytecodeAnnotationProperty property;
+    private final BytecodeAnnotationValue property;
 
     /**
      * Constructor.
      * @param property Annotation property as a value.
      */
-    public BytecodeDefaultValue(final BytecodeAnnotationProperty property) {
+    public BytecodeDefaultValue(final BytecodeAnnotationValue property) {
         this.property = property;
     }
 
