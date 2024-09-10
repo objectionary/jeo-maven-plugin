@@ -74,6 +74,18 @@ public final class DirectivesProgram implements Iterable<Directive> {
      * Constructor.
      * @param code Program listing.
      * @param clazz Class.
+     * @param metas Metas.
+     */
+    public DirectivesProgram(
+        final String code, final DirectivesClass clazz, final DirectivesMetas metas
+    ) {
+        this(code, new AtomicReference<>(clazz), new AtomicReference<>(metas));
+    }
+
+    /**
+     * Constructor.
+     * @param code Program listing.
+     * @param clazz Class.
      * @param name Metas.
      */
     public DirectivesProgram(

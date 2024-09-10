@@ -114,13 +114,43 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final boolean counting,
         final DirectivesMethodProperties properties
     ) {
-        this.name = new Signature(new MethodName(name).xmir(), properties.descr());
+        this(
+            new Signature(new MethodName(name).xmir(), properties.descr()),
+            properties,
+            new ArrayList<>(0),
+            new ArrayList<>(0),
+            new DirectivesAnnotations(),
+            new AtomicReference<>(),
+            counting
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param name Method name
+     * @param properties Method properties
+     * @param instructions Method instructions
+     * @param exceptions Method exceptions
+     * @param annotations Method annotations
+     * @param dvalue Annotation default value
+     * @param counting Opcodes counting
+     */
+    public DirectivesMethod(
+        final Signature name,
+        final DirectivesMethodProperties properties,
+        final List<Iterable<Directive>> instructions,
+        final List<Iterable<Directive>> exceptions,
+        final DirectivesAnnotations annotations,
+        final AtomicReference<DirectivesDefaultValue> dvalue,
+        final boolean counting
+    ) {
+        this.name = name;
         this.properties = properties;
+        this.instructions = instructions;
+        this.exceptions = exceptions;
+        this.annotations = annotations;
+        this.dvalue = dvalue;
         this.counting = counting;
-        this.instructions = new ArrayList<>(0);
-        this.exceptions = new ArrayList<>(0);
-        this.annotations = new DirectivesAnnotations();
-        this.dvalue = new AtomicReference<>();
     }
 
     /**

@@ -25,8 +25,13 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.Signature;
+import org.eolang.jeo.representation.directives.DirectivesAnnotation;
+import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -313,5 +318,18 @@ public final class BytecodeMethod implements Testable {
      */
     BytecodeMethod label(final String uid) {
         return this.label(this.labels.label(uid));
+    }
+
+    public DirectivesMethod directives() {
+        return new DirectivesMethod(
+            new Signature(this.properties.name(), this.properties.descriptor()),
+            this.properties.directives(),
+            this.instructions.stream().map(BytecodeEntry::directives).collect(Collectors.toList()),
+            this.tryblocks.stream().map(BytecodeEntry::directives).collect(Collectors.toList()),
+            new BytecodeAnnotations(this.annotations).directives(),
+            this.defvalues.stream().findFirst().map(BytecodeDefaultValue::directives)
+                .map(AtomicReference::new).orElse(new AtomicReference<>()),
+            true
+        );
     }
 }

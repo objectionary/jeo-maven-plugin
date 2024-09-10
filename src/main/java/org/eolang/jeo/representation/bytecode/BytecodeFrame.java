@@ -26,7 +26,9 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.Arrays;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesFrame;
 import org.objectweb.asm.MethodVisitor;
+import org.xembly.Directive;
 
 /**
  * Bytecode frame.
@@ -87,6 +89,17 @@ public final class BytecodeFrame implements BytecodeEntry {
     @Override
     public void writeTo(final MethodVisitor visitor) {
         visitor.visitFrame(
+            this.type,
+            this.nlocal,
+            this.locals,
+            this.nstack,
+            this.stack
+        );
+    }
+
+    @Override
+    public Iterable<Directive> directives() {
+        return new DirectivesFrame(
             this.type,
             this.nlocal,
             this.locals,

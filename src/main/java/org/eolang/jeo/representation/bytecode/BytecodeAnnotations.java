@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesAnnotations;
 
 /**
  * Bytecode annotations.
@@ -63,7 +64,7 @@ public final class BytecodeAnnotations {
      * Constructor.
      * @param all All annotations.
      */
-    private BytecodeAnnotations(final List<BytecodeAnnotation> all) {
+    public BytecodeAnnotations(final List<BytecodeAnnotation> all) {
         this.all = all;
     }
 
@@ -83,5 +84,13 @@ public final class BytecodeAnnotations {
     public BytecodeAnnotations with(final BytecodeAnnotation annotation) {
         this.all.add(annotation);
         return this;
+    }
+
+    public DirectivesAnnotations directives() {
+        return new DirectivesAnnotations(
+            this.all.stream()
+                .map(BytecodeAnnotation::directives)
+                .collect(Collectors.toList())
+        );
     }
 }

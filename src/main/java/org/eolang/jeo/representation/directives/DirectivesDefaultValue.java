@@ -61,6 +61,14 @@ public final class DirectivesDefaultValue implements Iterable<Directive>, Compos
      * Constructor.
      * @param value Default value.
      */
+    public DirectivesDefaultValue(final Iterable<Directive> value) {
+        this(new AtomicReference<>(value));
+    }
+
+    /**
+     * Constructor.
+     * @param value Default value.
+     */
     public DirectivesDefaultValue(final AtomicReference<Iterable<Directive>> value) {
         this.value = value;
     }

@@ -26,8 +26,10 @@ package org.eolang.jeo.representation.bytecode;
 import com.jcabi.log.Logger;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesTryCatch;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.xembly.Directive;
 
 /**
  * Bytecode try-catch block.
@@ -90,6 +92,11 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
             )
         );
         visitor.visitTryCatchBlock(this.start, this.end, this.handler, this.type);
+    }
+
+    @Override
+    public Iterable<Directive> directives() {
+        return new DirectivesTryCatch(this.start, this.end, this.handler, this.type);
     }
 
     @Override

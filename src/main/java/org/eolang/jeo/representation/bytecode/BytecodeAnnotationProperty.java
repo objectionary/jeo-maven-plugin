@@ -31,7 +31,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesAnnotationProperty;
 import org.objectweb.asm.AnnotationVisitor;
+import org.xembly.Directive;
 
 /**
  * Bytecode annotation property.
@@ -156,6 +158,36 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
                 }
                 annotation.visitEnd();
                 break;
+            default:
+                throw new IllegalStateException(String.format("Unexpected value: %s", this.type));
+        }
+    }
+
+    @Override
+    public Iterable<Directive> directives() {
+        switch (this.type) {
+            case ENUM:
+                return DirectivesAnnotationProperty.enump(
+                    (String) this.params.get(0),
+                    (String) this.params.get(1),
+                    (String) this.params.get(2)
+                );
+            case PLAIN:
+                return DirectivesAnnotationProperty.plain(
+                    (String) this.params.get(0),
+                    this.params.get(1)
+                );
+            case ANNOTATION:
+                return DirectivesAnnotationProperty.annotation(
+                    (String) this.params.get(0),
+                    (String) this.params.get(1),
+                    null
+                );
+            case ARRAY:
+                return DirectivesAnnotationProperty.array(
+                    (String) this.params.get(0),
+                    null
+                );
             default:
                 throw new IllegalStateException(String.format("Unexpected value: %s", this.type));
         }

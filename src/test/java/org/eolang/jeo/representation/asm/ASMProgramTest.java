@@ -28,9 +28,11 @@ import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link ASMProgram}.
@@ -58,6 +60,21 @@ final class ASMProgramTest {
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode",
             actual,
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void convertsToBytecodeThenToXmirAndThenBackToBytecode() throws Exception {
+        final byte[] original = new BytesOf(new ResourceOf("FixedWidth.class")).asBytes();
+        final BytecodeProgram bytecode = new ASMProgram(original).bytecode();
+        final Bytecode expected = bytecode.bytecode();
+        final BytecodeProgram actual = new XmlProgram(
+            new Xembler(bytecode.directives("")).xml()
+        ).bytecode();
+        MatcherAssert.assertThat(
+            "We expect to receive the same bytecode",
+            actual.bytecode(),
             Matchers.equalTo(expected)
         );
     }

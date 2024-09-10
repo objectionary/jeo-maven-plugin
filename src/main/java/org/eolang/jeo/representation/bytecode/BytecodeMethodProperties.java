@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -52,7 +53,7 @@ public final class BytecodeMethodProperties implements Testable {
     /**
      * Method descriptor.
      */
-    private final String descriptor;
+    private final String descr;
 
     /**
      * Method signature.
@@ -140,15 +141,31 @@ public final class BytecodeMethodProperties implements Testable {
     ) {
         this.access = access;
         this.name = name;
-        this.descriptor = descriptor;
+        this.descr = descriptor;
         this.signature = signature;
         this.parameters = parameters;
         this.exceptions = exceptions.clone();
     }
 
+    /**
+     * Method name.
+     * @return Method name.
+     */
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Method descriptor.
+     * @return Method descriptor.
+     */
+    public String descriptor() {
+        return this.descr;
+    }
+
     @Override
     public String testCode() {
-        return String.format("\"%s\", \"%s\", %d", this.name, this.descriptor, this.access);
+        return String.format("\"%s\", \"%s\", %d", this.name, this.descr, this.access);
     }
 
     /**
@@ -173,12 +190,21 @@ public final class BytecodeMethodProperties implements Testable {
         final MethodVisitor visitor = writer.visitMethod(
             this.access,
             this.name,
-            this.descriptor,
+            this.descr,
             Optional.ofNullable(this.signature).filter(s -> !s.isEmpty()).orElse(null),
             this.exceptions,
             compute
         );
         this.parameters.write(visitor);
         return visitor;
+    }
+
+    public DirectivesMethodProperties directives() {
+        return new DirectivesMethodProperties(
+            this.access,
+            this.descr,
+            this.signature,
+            this.exceptions
+        );
     }
 }

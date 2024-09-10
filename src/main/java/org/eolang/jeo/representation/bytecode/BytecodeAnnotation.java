@@ -27,10 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
  * Bytecode annotation.
@@ -136,6 +139,11 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
     public void writeTo(final AnnotationVisitor visitor) {
         final AnnotationVisitor inner = visitor.visitAnnotation(this.descr, this.descr);
         this.properties.forEach(property -> property.writeTo(inner));
+    }
+
+    @Override
+    public Iterable<Directive> directives() {
+        return new DirectivesAnnotation(this.descr, this.visible);
     }
 
     /**

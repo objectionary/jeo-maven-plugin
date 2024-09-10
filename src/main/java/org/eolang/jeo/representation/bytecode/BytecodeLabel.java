@@ -25,9 +25,11 @@ package org.eolang.jeo.representation.bytecode;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesLabel;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.xembly.Directive;
 
 /**
  * Mark label instruction.
@@ -77,6 +79,11 @@ public final class BytecodeLabel implements BytecodeEntry {
     @Override
     public void writeTo(final MethodVisitor visitor) {
         visitor.visitLabel(this.label);
+    }
+
+    @Override
+    public Iterable<Directive> directives() {
+        return new DirectivesLabel(this.label);
     }
 
     @Override

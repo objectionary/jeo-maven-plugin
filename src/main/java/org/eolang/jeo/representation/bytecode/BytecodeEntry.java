@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import org.objectweb.asm.MethodVisitor;
+import org.xembly.Directive;
 
 /**
  * Bytecode instruction or a label.
@@ -36,4 +37,6 @@ public interface BytecodeEntry extends Testable {
      * @param visitor Method visitor.
      */
     void writeTo(MethodVisitor visitor);
+
+    Iterable<Directive> directives();
 }

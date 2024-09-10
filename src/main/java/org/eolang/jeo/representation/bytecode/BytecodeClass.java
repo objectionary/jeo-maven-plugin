@@ -25,9 +25,11 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.objectweb.asm.Opcodes;
 
 /**
@@ -363,5 +365,14 @@ public final class BytecodeClass implements Testable {
         final BytecodeField field = new BytecodeField(fname, descriptor, signature, value, access);
         this.fields.add(field);
         return field;
+    }
+
+    public DirectivesClass directives() {
+        return new DirectivesClass(
+            new ClassName(this.name),
+            this.props.directives(),
+            this.methods.stream().map(BytecodeMethod::directives).collect(Collectors.toList()),
+            this.fields.stream().map(BytecodeField::directives).collect(Collectors.toList())
+        );
     }
 }

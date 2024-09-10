@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesField;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 
@@ -125,5 +126,15 @@ public final class BytecodeField {
         );
         this.annotations.annotations()
             .forEach(annotation -> annotation.write(fvisitor));
+    }
+
+    public DirectivesField directives() {
+        return new DirectivesField(
+            this.access,
+            this.name,
+            this.descriptor,
+            this.signature,
+            this.value
+        );
     }
 }

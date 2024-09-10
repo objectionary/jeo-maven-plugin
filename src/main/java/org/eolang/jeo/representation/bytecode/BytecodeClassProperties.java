@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.bytecode;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.DefaultVersion;
+import org.eolang.jeo.representation.directives.DirectivesClassProperties;
 
 /**
  * Class properties.
@@ -148,5 +149,15 @@ public final class BytecodeClassProperties {
      */
     public String[] interfaces() {
         return this.interfaces.clone();
+    }
+
+    public DirectivesClassProperties directives() {
+        return new DirectivesClassProperties(
+            this.version,
+            this.access,
+            this.signature,
+            this.supername,
+            this.interfaces
+        );
     }
 }

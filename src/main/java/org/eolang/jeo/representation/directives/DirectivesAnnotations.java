@@ -43,7 +43,7 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
     /**
      * All the annotations.
      */
-    private final List<DirectivesAnnotation> annotations;
+    private final List<Iterable<Directive>> annotations;
 
     /**
      * Annotations name.
@@ -69,7 +69,7 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
      * Constructor.
      * @param annotations Annotations.
      */
-    public DirectivesAnnotations(final List<DirectivesAnnotation> annotations) {
+    public DirectivesAnnotations(final List<Iterable<Directive>> annotations) {
         this(annotations, "annotations");
     }
 
@@ -78,7 +78,7 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
      * @param annotations Annotations.
      * @param name Name.
      */
-    public DirectivesAnnotations(final List<DirectivesAnnotation> annotations, final String name) {
+    public DirectivesAnnotations(final List<Iterable<Directive>> annotations, final String name) {
         this.annotations = annotations;
         this.name = name;
     }

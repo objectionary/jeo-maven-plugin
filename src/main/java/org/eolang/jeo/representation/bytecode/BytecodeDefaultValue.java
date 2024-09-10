@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import org.eolang.jeo.representation.directives.DirectivesDefaultValue;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.MethodVisitor;
 
@@ -54,5 +55,9 @@ public final class BytecodeDefaultValue {
         final AnnotationVisitor visitor = mvisitor.visitAnnotationDefault();
         this.property.writeTo(visitor);
         visitor.visitEnd();
+    }
+
+    public DirectivesDefaultValue directives() {
+        return new DirectivesDefaultValue(this.property.directives());
     }
 }

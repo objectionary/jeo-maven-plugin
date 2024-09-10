@@ -30,11 +30,13 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.OpcodeName;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.xembly.Directive;
 
 /**
  * Bytecode instruction.
@@ -112,6 +114,11 @@ public final class BytecodeInstructionEntry implements BytecodeEntry {
     @Override
     public void writeTo(final MethodVisitor visitor) {
         Instruction.find(this.opcode).generate(visitor, this.args);
+    }
+
+    @Override
+    public Iterable<Directive> directives() {
+        return new DirectivesInstruction(this.opcode, this.args.toArray());
     }
 
     @Override

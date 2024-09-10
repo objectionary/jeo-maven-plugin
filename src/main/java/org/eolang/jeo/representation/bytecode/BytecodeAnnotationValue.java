@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import org.objectweb.asm.AnnotationVisitor;
+import org.xembly.Directive;
 
 /**
  * Bytecode annotation value.
@@ -40,4 +41,6 @@ public interface BytecodeAnnotationValue {
      * @param visitor Visitor.
      */
     void writeTo(AnnotationVisitor visitor);
+
+    Iterable<Directive> directives();
 }
