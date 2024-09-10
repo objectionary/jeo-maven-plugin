@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import org.cactoos.bytes.BytesOf;
+import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
@@ -45,6 +47,18 @@ final class ASMProgramTest {
             "We expect to receive the same bytecode",
             new ASMProgram(same.asBytes()).bytecode().bytecode(),
             Matchers.equalTo(same)
+        );
+    }
+
+    @Test
+    void parsesAnnotations() throws Exception {
+        final byte[] original = new BytesOf(new ResourceOf("FixedWidth.class")).asBytes();
+        final Bytecode expected = new Bytecode(original);
+        final Bytecode actual = new ASMProgram(original).bytecode().bytecode();
+        MatcherAssert.assertThat(
+            "We expect to receive the same bytecode",
+            actual,
+            Matchers.equalTo(expected)
         );
     }
 

@@ -27,10 +27,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
@@ -137,7 +139,6 @@ public final class ASMProgram {
                 node.name,
                 node.desc,
                 node.signature,
-                ASMProgram.parameters(node),
                 node.exceptions.toArray(new String[0])
             ),
             ASMProgram.defvalues(node),
@@ -305,30 +306,44 @@ public final class ASMProgram {
         }
     }
 
-
-    //TODO:
-    private static BytecodeParameters parameters(final MethodNode node) {
-        return new BytecodeParameters();
+    private static Collection<BytecodeAnnotation> annotations(final ClassNode node) {
+        return Stream.concat(
+            ASMProgram.safe(node.visibleAnnotations, true),
+            ASMProgram.safe(node.invisibleAnnotations, false)
+        ).collect(Collectors.toList());
     }
 
     private static List<BytecodeAnnotation> annotations(final MethodNode node) {
-        return new ArrayList<>(0);
+        return Stream.concat(
+            ASMProgram.safe(node.visibleAnnotations, true),
+            ASMProgram.safe(node.invisibleAnnotations, false)
+        ).collect(Collectors.toList());
     }
+
+    private static BytecodeAnnotations annotations(final FieldNode node) {
+        return new BytecodeAnnotations(
+            Stream.concat(
+                ASMProgram.safe(node.visibleAnnotations, true),
+                ASMProgram.safe(node.invisibleAnnotations, false)
+            )
+        );
+    }
+
+    static Stream<BytecodeAnnotation> safe(List<AnnotationNode> nodes, boolean visible) {
+        return Optional.ofNullable(nodes)
+            .orElse(new ArrayList<>(0))
+            .stream()
+            .map(ann -> ASMProgram.annotation(ann, visible));
+    }
+
 
     private static BytecodeAnnotation annotation(final AnnotationNode node, final boolean visible) {
         return null;
 //        return new BytecodeAnnotation(node.desc, visible, node.values);
     }
 
-    private static Collection<BytecodeAnnotation> annotations(final ClassNode node) {
-        return new ArrayList<>(0);
-    }
-
-    private static BytecodeAnnotations annotations(final FieldNode node) {
-        return new BytecodeAnnotations();
-    }
-
     private static List<BytecodeDefaultValue> defvalues(final MethodNode node) {
+        System.out.println(node.annotationDefault);
         return new ArrayList<>(0);
     }
 }
