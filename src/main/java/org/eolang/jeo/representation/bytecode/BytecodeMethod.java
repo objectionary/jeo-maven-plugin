@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.Signature;
 import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
@@ -341,7 +342,7 @@ public final class BytecodeMethod implements Testable {
 
     public DirectivesMethod directives(final boolean counting) {
         return new DirectivesMethod(
-            new Signature(this.properties.name(), this.properties.descriptor()),
+            new Signature(new MethodName(this.properties.name()).xmir(), this.properties.descriptor()),
             this.properties.directives(),
             this.instructions.stream().map(entry -> entry.directives(counting))
                 .collect(Collectors.toList()),
