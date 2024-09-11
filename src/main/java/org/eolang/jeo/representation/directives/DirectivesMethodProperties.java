@@ -91,12 +91,39 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         final String signature,
         final String... exceptions
     ) {
+        this(
+            access,
+            descriptor,
+            signature,
+            exceptions,
+            new DirectivesMaxs(),
+            new DirectivesMethodParams(descriptor)
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param access Access modifiers.
+     * @param descriptor Method descriptor.
+     * @param signature Method signature.
+     * @param exceptions Method exceptions.
+     * @param max Max stack and locals.
+     * @param params Method parameters.
+     */
+    public DirectivesMethodProperties(
+        final int access,
+        final String descriptor,
+        final String signature,
+        final String[] exceptions,
+        final DirectivesMaxs max,
+        final DirectivesMethodParams params
+    ) {
         this.access = access;
         this.descriptor = Optional.ofNullable(descriptor).orElse("");
         this.signature = Optional.ofNullable(signature).orElse("");
         this.exceptions = Optional.ofNullable(exceptions).orElse(new String[0]).clone();
-        this.max = new AtomicReference<>(new DirectivesMaxs());
-        this.params = new DirectivesMethodParams(this.descriptor);
+        this.max = new AtomicReference<>(max);
+        this.params = params;
     }
 
     /**

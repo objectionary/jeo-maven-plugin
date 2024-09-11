@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesMaxs;
 
 /**
  * Bytecode maxs.
@@ -84,5 +85,9 @@ public final class BytecodeMaxs {
      */
     boolean compute() {
         return this.stack == 0 && this.locals == 0;
+    }
+
+    public DirectivesMaxs directives() {
+        return new DirectivesMaxs(this.stack, this.locals);
     }
 }

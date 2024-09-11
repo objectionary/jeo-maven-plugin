@@ -341,8 +341,9 @@ public final class BytecodeMethod implements Testable {
 
     public DirectivesMethod directives(final boolean counting) {
         return new DirectivesMethod(
-            new Signature(new MethodName(this.properties.name()).xmir(), this.properties.descriptor()),
-            this.properties.directives(),
+            new Signature(
+                new MethodName(this.properties.name()).xmir(), this.properties.descriptor()),
+            this.properties.directives(this.maxs),
             this.instructions.stream().map(entry -> entry.directives(counting))
                 .collect(Collectors.toList()),
             this.tryblocks.stream().map(entry -> entry.directives(counting))

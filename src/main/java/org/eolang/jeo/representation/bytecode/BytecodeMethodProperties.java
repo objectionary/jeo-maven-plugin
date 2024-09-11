@@ -28,6 +28,8 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesMaxs;
+import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -199,12 +201,14 @@ public final class BytecodeMethodProperties implements Testable {
         return visitor;
     }
 
-    public DirectivesMethodProperties directives() {
+    public DirectivesMethodProperties directives(final BytecodeMaxs maxs) {
         return new DirectivesMethodProperties(
             this.access,
             this.descr,
             this.signature,
-            this.exceptions
+            this.exceptions,
+            maxs.directives(),
+            new DirectivesMethodParams(this.descr)
         );
     }
 }
