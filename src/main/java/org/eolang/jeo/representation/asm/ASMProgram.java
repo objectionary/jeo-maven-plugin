@@ -192,9 +192,7 @@ public final class ASMProgram {
     private static BytecodeEntry instruction(final AbstractInsnNode node) {
         switch (node.getType()) {
             case AbstractInsnNode.INSN:
-                return new BytecodeInstructionEntry(
-                    InsnNode.class.cast(node).getOpcode()
-                );
+                return new BytecodeInstructionEntry(node.getOpcode());
             case AbstractInsnNode.INT_INSN:
                 final IntInsnNode instr = IntInsnNode.class.cast(node);
                 return new BytecodeInstructionEntry(
@@ -272,7 +270,7 @@ public final class ASMProgram {
                 return new BytecodeInstructionEntry(
                     table.getOpcode(),
                     Stream.concat(
-                        Stream.of(table.min, table.max, table.dflt),
+                        Stream.of(table.min, table.max, table.dflt.getLabel()),
                         table.labels.stream().map(LabelNode::getLabel)
                     ).toArray(Object[]::new)
                 );
@@ -281,7 +279,7 @@ public final class ASMProgram {
                 return new BytecodeInstructionEntry(
                     lookup.getOpcode(),
                     Stream.concat(
-                        Stream.of(lookup.dflt),
+                        Stream.of(lookup.dflt.getLabel()),
                         Stream.concat(
                             lookup.keys.stream(),
                             lookup.labels.stream().map(LabelNode::getLabel)
