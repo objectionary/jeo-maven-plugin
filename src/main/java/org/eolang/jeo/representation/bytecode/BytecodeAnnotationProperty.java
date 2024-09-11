@@ -140,7 +140,9 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
                     avisitor.visitArray(null).visitEnd();
                 } else {
                     final AnnotationVisitor array = avisitor.visitArray(
-                        Optional.ofNullable(this.params.get(0)).map(String.class::cast).orElse(null)
+                        Optional.ofNullable(this.params.get(0)
+                            ).map(String.class::cast)
+                            .orElse(null)
                     );
                     for (final Object param : this.params.subList(1, this.params.size())) {
                         ((BytecodeAnnotationValue) param).writeTo(array);
@@ -181,12 +183,18 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
                 return DirectivesAnnotationProperty.annotation(
                     (String) this.params.get(0),
                     (String) this.params.get(1),
-                    null
+                    this.params.subList(2, this.params.size()).stream()
+                        .map(BytecodeAnnotationProperty.class::cast)
+                        .map(BytecodeAnnotationProperty::directives)
+                        .collect(Collectors.toList())
                 );
             case ARRAY:
                 return DirectivesAnnotationProperty.array(
                     (String) this.params.get(0),
-                    null
+                    this.params.subList(1, this.params.size()).stream()
+                        .map(BytecodeAnnotationProperty.class::cast)
+                        .map(BytecodeAnnotationProperty::directives)
+                        .collect(Collectors.toList())
                 );
             default:
                 throw new IllegalStateException(String.format("Unexpected value: %s", this.type));

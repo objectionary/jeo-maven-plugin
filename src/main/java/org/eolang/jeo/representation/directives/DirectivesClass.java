@@ -94,24 +94,52 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param name Class name
      * @param properties Class properties
-     * @param methods Class methods
      * @param fields Class fields
+     * @param methods Class methods
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesClass(
         final ClassName name,
         final DirectivesClassProperties properties,
+        final List<DirectivesField> fields,
+        final List<DirectivesMethod> methods
+    ) {
+        this(
+            name,
+            properties,
+            fields,
+            methods,
+            new DirectivesAnnotations(),
+            new DirectivesAttributes()
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param name Class name
+     * @param properties Class properties
+     * @param fields Class fields
+     * @param methods Class methods
+     * @param annotations Annotations
+     * @param attributes Attributes
+     */
+    public DirectivesClass(
+        final ClassName name,
+        final DirectivesClassProperties properties,
+        final List<DirectivesField> fields,
         final List<DirectivesMethod> methods,
-        final List<DirectivesField> fields
+        final DirectivesAnnotations annotations,
+        final DirectivesAttributes attributes
     ) {
         this.name = name;
         this.properties = properties;
-        this.methods = methods;
         this.fields = fields;
-        this.annotations = new DirectivesAnnotations();
-        this.attributes = new DirectivesAttributes();
+        this.methods = methods;
+        this.annotations = annotations;
+        this.attributes = attributes;
     }
 
     /**

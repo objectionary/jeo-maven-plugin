@@ -70,6 +70,22 @@ public final class DirectivesAnnotation implements Iterable<Directive>, Composit
         this.properties = new ArrayList<>(0);
     }
 
+    /**
+     * Constructor.
+     * @param descriptor Descriptor.
+     * @param visible Visible.
+     * @param properties Properties.
+     */
+    public DirectivesAnnotation(
+        final String descriptor,
+        final boolean visible,
+        final List<Iterable<Directive>> properties
+    ) {
+        this.descriptor = descriptor;
+        this.visible = visible;
+        this.properties = properties;
+    }
+
     @Override
     public void append(final Iterable<Directive> directives) {
         this.properties.add(directives);

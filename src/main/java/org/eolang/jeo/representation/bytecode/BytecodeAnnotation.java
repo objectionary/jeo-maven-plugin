@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAnnotation;
@@ -143,7 +144,13 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
 
     @Override
     public Iterable<Directive> directives() {
-        return new DirectivesAnnotation(this.descr, this.visible);
+        return new DirectivesAnnotation(
+            this.descr,
+            this.visible,
+            this.properties.stream()
+                .map(BytecodeAnnotationValue::directives)
+                .collect(Collectors.toList())
+        );
     }
 
     /**

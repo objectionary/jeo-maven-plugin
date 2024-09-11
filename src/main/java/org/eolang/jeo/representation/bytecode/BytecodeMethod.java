@@ -327,8 +327,10 @@ public final class BytecodeMethod implements Testable {
             this.instructions.stream().map(BytecodeEntry::directives).collect(Collectors.toList()),
             this.tryblocks.stream().map(BytecodeEntry::directives).collect(Collectors.toList()),
             new BytecodeAnnotations(this.annotations).directives(),
-            this.defvalues.stream().findFirst().map(BytecodeDefaultValue::directives)
-                .map(AtomicReference::new).orElse(new AtomicReference<>()),
+            this.defvalues.stream().findFirst()
+                .map(BytecodeDefaultValue::directives)
+                .map(AtomicReference::new)
+                .orElse(new AtomicReference<>()),
             true
         );
     }

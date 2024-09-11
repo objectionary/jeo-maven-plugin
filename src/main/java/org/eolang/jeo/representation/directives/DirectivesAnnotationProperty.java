@@ -168,6 +168,21 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
         );
     }
 
+    public static DirectivesAnnotationProperty array(
+        final String name, List<Iterable<Directive>> properties
+    ) {
+        return new DirectivesAnnotationProperty(
+            Type.ARRAY,
+            properties.stream().map(Directives::new)
+                .reduce(
+                    new Directives().append(
+                        new DirectivesData(Optional.ofNullable(name).orElse(""))
+                    ),
+                    Directives::append
+                )
+        );
+    }
+
     /**
      * Factory method for annotation property.
      * @param name Name.
@@ -186,6 +201,27 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
             child.build()
         );
     }
+
+    /**
+     * Factory method for annotation property.
+     * @param name Name.
+     * @param descriptor Descriptor.
+     * @return Property directives.
+     */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
+    public static DirectivesAnnotationProperty annotation(
+        final String name, final String descriptor, List<Iterable<Directive>> properties
+    ) {
+        return new DirectivesAnnotationProperty(
+            Type.ANNOTATION,
+            new DirectivesData(Optional.ofNullable(name).orElse("")),
+            properties.stream().map(Directives::new)
+                .reduce(new Directives().append(
+                        new DirectivesData(Optional.ofNullable(name).orElse("")))
+                    .append(new DirectivesData(descriptor)), Directives::append)
+        );
+    }
+
 
     @Override
     public Iterator<Directive> iterator() {

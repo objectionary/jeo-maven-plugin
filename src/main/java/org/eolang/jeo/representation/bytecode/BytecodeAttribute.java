@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import org.eolang.jeo.representation.directives.DirectivesAttribute;
+import org.eolang.jeo.representation.directives.DirectivesNullable;
 import org.objectweb.asm.ClassVisitor;
 
 /**
@@ -36,6 +38,12 @@ public interface BytecodeAttribute {
      * @param bytecode Bytecode where to write.
      */
     void write(ClassVisitor bytecode);
+
+    /**
+     * Converts to directives.
+     * @return Directives.
+     */
+    DirectivesAttribute directives();
 
     /**
      * Inner class attribute.
@@ -87,6 +95,17 @@ public interface BytecodeAttribute {
         @Override
         public void write(final ClassVisitor bytecode) {
             bytecode.visitInnerClass(this.name, this.outer, this.inner, this.access);
+        }
+
+        @Override
+        public DirectivesAttribute directives() {
+            return new DirectivesAttribute(
+                "inner-class",
+                new DirectivesNullable("", this.name),
+                new DirectivesNullable("", this.outer),
+                new DirectivesNullable("", this.inner),
+                new DirectivesNullable("", this.access)
+            );
         }
     }
 }
