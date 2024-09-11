@@ -170,11 +170,12 @@ public final class BytecodeProgram {
 
     public DirectivesProgram directives(final String code, boolean counting) {
         final BytecodeClass top = this.top();
+        final ClassName classname = new ClassName(this.pckg, new PrefixedName(top.name()).encode());
         return new DirectivesProgram(
             code,
             top.directives(counting),
             new DirectivesMetas(
-                new ClassName(new PrefixedName(top.name()).encode()),
+                classname,
                 top.hasOpcodes(),
                 top.hasLabels()
             )

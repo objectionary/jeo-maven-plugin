@@ -31,7 +31,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.Signature;
-import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;

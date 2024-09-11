@@ -68,14 +68,12 @@ final class BytecodeProgramTest {
 
     @Test
     void convertsClassWithPackageToXmir() throws ImpossibleModificationException {
-        final String clazz = "some/package/ClassInPackage";
+        final String name = "ClassInPackage";
         final DirectivesProgram directives = new BytecodeProgram(
             "some/package",
-            new BytecodeClass(clazz).helloWorldMethod()
+            new BytecodeClass(name).helloWorldMethod()
         ).directives("");
         final String xml = new Xembler(directives).xml();
-        System.out.println(new XMLDocument(xml));
-        final String name = "ClassInPackage";
         final String pckg = "some.package";
         MatcherAssert.assertThat(
             String.format(
