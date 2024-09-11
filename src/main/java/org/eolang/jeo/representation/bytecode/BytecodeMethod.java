@@ -81,6 +81,13 @@ public final class BytecodeMethod implements Testable {
     private final AllLabels labels;
 
     /**
+     * Constructor for tests.
+     */
+    public BytecodeMethod() {
+        this("foo");
+    }
+
+    /**
      * Constructor.
      * @param name Method name.
      */
@@ -320,6 +327,14 @@ public final class BytecodeMethod implements Testable {
         return this.label(this.labels.label(uid));
     }
 
+    public boolean hasOpcodes() {
+        return this.instructions.stream().anyMatch(BytecodeEntry::isOpcode);
+    }
+
+    public boolean hasLabels() {
+        return this.instructions.stream().anyMatch(BytecodeEntry::isLabel);
+    }
+
     public DirectivesMethod directives() {
         return new DirectivesMethod(
             new Signature(this.properties.name(), this.properties.descriptor()),
@@ -333,13 +348,5 @@ public final class BytecodeMethod implements Testable {
                 .orElse(new AtomicReference<>()),
             true
         );
-    }
-
-    public boolean hasOpcodes() {
-        return this.instructions.stream().anyMatch(BytecodeEntry::isOpcode);
-    }
-
-    public boolean hasLabels() {
-        return this.instructions.stream().anyMatch(BytecodeEntry::isLabel);
     }
 }

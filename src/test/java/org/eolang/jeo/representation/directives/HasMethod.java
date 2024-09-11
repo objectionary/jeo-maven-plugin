@@ -129,7 +129,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * @param parameter Parameter name.
      * @return The same matcher that checks parameter.
      */
-    HasMethod withParameter(final String parameter) {
+    public HasMethod withParameter(final String parameter) {
         this.params.add(parameter);
         return this;
     }
@@ -140,7 +140,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * @param args Arguments.
      * @return The same matcher that checks instruction.
      */
-    HasMethod withInstruction(final int opcode, final Object... args) {
+    public HasMethod withInstruction(final int opcode, final Object... args) {
         this.instr.add(new HasInstruction(opcode, args));
         return this;
     }
@@ -149,7 +149,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * With label.
      * @return The same matcher that checks label.
      */
-    HasMethod withLabel() {
+    public HasMethod withLabel() {
         this.lbls.add(new HasLabel());
         return this;
     }
@@ -159,7 +159,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      * @param type Exception type.
      * @return The same matcher that checks try-catch.
      */
-    HasMethod withTryCatch(final String type) {
+    public HasMethod withTryCatch(final String type) {
         this.trycatches.add(new HasTryCatch(type));
         return this;
     }
