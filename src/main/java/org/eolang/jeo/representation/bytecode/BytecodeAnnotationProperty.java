@@ -192,8 +192,8 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
                 return DirectivesAnnotationProperty.array(
                     (String) this.params.get(0),
                     this.params.subList(1, this.params.size()).stream()
-                        .map(BytecodeAnnotationProperty.class::cast)
-                        .map(BytecodeAnnotationProperty::directives)
+                        .map(BytecodeAnnotationValue.class::cast)
+                        .map(BytecodeAnnotationValue::directives)
                         .collect(Collectors.toList())
                 );
             default:
