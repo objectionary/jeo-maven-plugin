@@ -53,7 +53,10 @@ final class XmirRepresentationTest {
         final String name = "org/eolang/foo/Math";
         final String expected = new PrefixedName(name).encode();
         final String actual = new XmirRepresentation(
-            new BytecodeProgram(new BytecodeClass(name)).xml()
+            new BytecodeProgram(
+                "org/eolang/foo",
+                new BytecodeClass(name)
+            ).xml()
         ).details().name();
         MatcherAssert.assertThat(
             String.format(

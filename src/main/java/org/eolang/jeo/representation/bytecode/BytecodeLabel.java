@@ -82,7 +82,7 @@ public final class BytecodeLabel implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives() {
+    public Iterable<Directive> directives(final boolean counting) {
         return new DirectivesLabel(this.label);
     }
 

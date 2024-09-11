@@ -24,9 +24,12 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesFrame;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
@@ -66,6 +69,22 @@ public final class BytecodeFrame implements BytecodeEntry {
     /**
      * Constructor.
      * @param type Frame type.
+     * @param locals Local variables.
+     * @param stack Stack elements.
+     */
+    public BytecodeFrame(final int type, List<Object> locals, List<Object> stack) {
+        this(
+            type,
+            Optional.ofNullable(locals).map(List::size).orElse(0),
+            Optional.ofNullable(locals).map(List::toArray).orElse(new Object[0]),
+            Optional.ofNullable(stack).map(List::size).orElse(0),
+            Optional.ofNullable(stack).map(List::toArray).orElse(new Object[0])
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param type Frame type.
      * @param nlocal Number of local variables.
      * @param locals Local variables.
      * @param nstack Number of stack elements.
@@ -98,7 +117,7 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives() {
+    public Iterable<Directive> directives(final boolean counting) {
         return new DirectivesFrame(
             this.type,
             this.nlocal,

@@ -38,7 +38,7 @@ public interface BytecodeEntry extends Testable {
      */
     void writeTo(MethodVisitor visitor);
 
-    Iterable<Directive> directives();
+    Iterable<Directive> directives(boolean counting);
 
     boolean isLabel();
 

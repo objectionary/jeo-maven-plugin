@@ -336,17 +336,23 @@ public final class BytecodeMethod implements Testable {
     }
 
     public DirectivesMethod directives() {
+        return this.directives(true);
+    }
+
+    public DirectivesMethod directives(final boolean counting) {
         return new DirectivesMethod(
             new Signature(this.properties.name(), this.properties.descriptor()),
             this.properties.directives(),
-            this.instructions.stream().map(BytecodeEntry::directives).collect(Collectors.toList()),
-            this.tryblocks.stream().map(BytecodeEntry::directives).collect(Collectors.toList()),
+            this.instructions.stream().map(entry -> entry.directives(counting))
+                .collect(Collectors.toList()),
+            this.tryblocks.stream().map(entry -> entry.directives(counting))
+                .collect(Collectors.toList()),
             new BytecodeAnnotations(this.annotations).directives(),
             this.defvalues.stream().findFirst()
                 .map(BytecodeDefaultValue::directives)
                 .map(AtomicReference::new)
                 .orElse(new AtomicReference<>()),
-            true
+            counting
         );
     }
 }

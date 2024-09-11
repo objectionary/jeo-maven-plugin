@@ -128,10 +128,9 @@ final class BytecodeClassTest {
     @Test
     void transformsBytecodeIntoEoWithoutCountingOpcodes() {
         final XML xmir = new BytecodeRepresentation(
-            new BytecodeProgram(new BytecodeClass("Hello")
-                .helloWorldMethod()
-            )
-                .bytecode()
+            new BytecodeProgram(
+                new BytecodeClass("Hello").helloWorldMethod()
+            ).bytecode()
         ).toEO(false);
         MatcherAssert.assertThat(
             String.format(

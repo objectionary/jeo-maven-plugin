@@ -374,11 +374,16 @@ public final class BytecodeClass implements Testable {
     }
 
     public DirectivesClass directives() {
+        return this.directives(true);
+    }
+
+    public DirectivesClass directives(final boolean counting) {
         return new DirectivesClass(
             new ClassName(new PrefixedName(this.name).encode()),
             this.props.directives(),
             this.fields.stream().map(BytecodeField::directives).collect(Collectors.toList()),
-            this.methods.stream().map(BytecodeMethod::directives).collect(Collectors.toList()),
+            this.methods.stream().map(method -> method.directives(counting))
+                .collect(Collectors.toList()),
             new BytecodeAnnotations(this.annotations.stream()).directives(),
             new DirectivesAttributes(
                 this.attributes.stream()

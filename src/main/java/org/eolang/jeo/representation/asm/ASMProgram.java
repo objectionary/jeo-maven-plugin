@@ -54,6 +54,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -76,6 +77,7 @@ import org.objectweb.asm.tree.TableSwitchInsnNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
+import org.xembly.Directive;
 
 public final class ASMProgram {
 
@@ -295,13 +297,34 @@ public final class ASMProgram {
                 );
             case AbstractInsnNode.FRAME:
                 final FrameNode frame = FrameNode.class.cast(node);
-                return new BytecodeFrame(
-                    frame.type,
-                    frame.local.size(),
-                    frame.local.toArray(),
-                    frame.stack.size(),
-                    frame.stack.toArray()
-                );
+                return new BytecodeFrame(frame.type, frame.local, frame.stack);
+            case AbstractInsnNode.LINE:
+                return new BytecodeEntry() {
+                    @Override
+                    public void writeTo(final MethodVisitor visitor) {
+
+                    }
+
+                    @Override
+                    public Iterable<Directive> directives(final boolean counting) {
+                        return Collections.emptyList();
+                    }
+
+                    @Override
+                    public boolean isLabel() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isOpcode() {
+                        return false;
+                    }
+
+                    @Override
+                    public String testCode() {
+                        return "";
+                    }
+                };
             default:
                 throw new IllegalStateException(
                     String.format("Unknown instruction type: %s", node)

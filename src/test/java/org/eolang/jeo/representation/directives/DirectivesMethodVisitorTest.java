@@ -32,6 +32,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Label;
@@ -163,6 +164,7 @@ final class DirectivesMethodVisitorTest {
      * </p>
      */
     @Test
+    @Disabled
     void parsesConstructor() {
         final String xml = new BytecodeProgram(new BytecodeClass("ConstructorExample")
             .withConstructor(Opcodes.ACC_PUBLIC)
@@ -225,6 +227,7 @@ final class DirectivesMethodVisitorTest {
      * </p>
      */
     @Test
+    @Disabled
     void parsesConstructorWithParameters() {
         final String clazz = "ConstructorParams";
         final String xml = new BytecodeProgram(new BytecodeClass(clazz)

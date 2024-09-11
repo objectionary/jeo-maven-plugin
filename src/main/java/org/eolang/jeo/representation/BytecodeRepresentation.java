@@ -36,9 +36,12 @@ import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
+import org.eolang.jeo.representation.asm.ASMProgram;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.directives.DirectivesClassVisitor;
+import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.objectweb.asm.ClassReader;
+import org.xembly.Directive;
 import org.xembly.ImpossibleModificationException;
 
 /**
@@ -118,12 +121,15 @@ public final class BytecodeRepresentation implements Representation {
      * @return XML representation of bytecode.
      */
     public XML toEO(final boolean count) {
-        final DirectivesClassVisitor directives = new DirectivesClassVisitor(
-            new Base64Bytecode(this.input.value()).asString(),
-            count
-        );
+//        final Iterable<Directive> directives = new DirectivesClassVisitor(
+//            new Base64Bytecode(this.input.value()).asString(),
+//            count
+//        );
+        final DirectivesProgram directives = new ASMProgram(this.input.value())
+            .bytecode()
+            .directives(new Base64Bytecode(this.input.value()).asString(), count);
         try {
-            new ClassReader(this.input.value()).accept(directives, 0);
+//            new ClassReader(this.input.value()).accept(directives, 0);
             return new VerifiedEo(directives).asXml();
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(

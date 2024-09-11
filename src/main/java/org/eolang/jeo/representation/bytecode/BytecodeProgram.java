@@ -34,6 +34,7 @@ import lombok.ToString;
 import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.objectweb.asm.ClassReader;
@@ -163,12 +164,17 @@ public final class BytecodeProgram {
 
 
     public DirectivesProgram directives(final String code) {
+        return this.directives(code, true);
+    }
+
+
+    public DirectivesProgram directives(final String code, boolean counting) {
         final BytecodeClass top = this.top();
         return new DirectivesProgram(
             code,
-            top.directives(),
+            top.directives(counting),
             new DirectivesMetas(
-                new ClassName(top.name()),
+                new ClassName(new PrefixedName(top.name()).encode()),
                 top.hasOpcodes(),
                 top.hasLabels()
             )

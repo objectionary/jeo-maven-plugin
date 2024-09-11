@@ -25,8 +25,8 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import org.eolang.jeo.representation.directives.DirectivesClassVisitor;
 import org.eolang.parser.Schema;
+import org.xembly.Directive;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -40,13 +40,13 @@ final class VerifiedEo {
     /**
      * Directives to verify.
      */
-    private final DirectivesClassVisitor directives;
+    private final Iterable<Directive> directives;
 
     /**
      * Constructor.
      * @param dirs Directives to verify.
      */
-    VerifiedEo(final DirectivesClassVisitor dirs) {
+    VerifiedEo(final Iterable<Directive> dirs) {
         this.directives = dirs;
     }
 
