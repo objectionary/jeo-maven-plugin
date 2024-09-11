@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesFrame;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.tree.LabelNode;
 import org.xembly.Directive;
 
 /**
@@ -76,9 +78,9 @@ public final class BytecodeFrame implements BytecodeEntry {
         this(
             type,
             Optional.ofNullable(locals).map(List::size).orElse(0),
-            Optional.ofNullable(locals).map(List::toArray).orElse(new Object[0]),
+            BytecodeFrame.asArray(Optional.ofNullable(locals).orElse(new ArrayList<>(0))),
             Optional.ofNullable(stack).map(List::size).orElse(0),
-            Optional.ofNullable(stack).map(List::toArray).orElse(new Object[0])
+            BytecodeFrame.asArray(Optional.ofNullable(stack).orElse(new ArrayList<>(0)))
         );
     }
 
@@ -147,5 +149,17 @@ public final class BytecodeFrame implements BytecodeEntry {
             this.nstack,
             Arrays.toString(this.stack)
         );
+    }
+
+    private static Object[] asArray(final List<Object> list) {
+        Object[] array = new Object[list.size()];
+        for (int i = 0, n = array.length; i < n; ++i) {
+            Object o = list.get(i);
+            if (o instanceof LabelNode) {
+                o = ((LabelNode) o).getLabel();
+            }
+            array[i] = o;
+        }
+        return array;
     }
 }
