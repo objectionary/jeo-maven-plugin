@@ -23,24 +23,28 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import org.objectweb.asm.MethodVisitor;
-import org.xembly.Directive;
+import org.eolang.jeo.representation.ClassName;
 
 /**
- * Bytecode instruction or a label.
- * Might be a label, a jump, a method call, etc.
- * @since 0.1
+ * Bytecode metas.
+ * Additional information about the program.
+ * @since 0.6
  */
-public interface BytecodeEntry extends Testable {
+public final class BytecodeMetas {
+
+    private final ClassName name;
+    private final boolean opcodes;
+    private final boolean labels;
+
     /**
-     * Write instruction to the method visitor.
-     * @param visitor Method visitor.
+     * Constructor.
+     * @param name Class name.
+     * @param opcodes Whether to include "opcodes" import.
+     * @param labels Whether to include "labels" import.
      */
-    void writeTo(MethodVisitor visitor);
-
-    Iterable<Directive> directives();
-
-    boolean isLabel();
-
-    boolean isOpcode();
+    public BytecodeMetas(final ClassName name, final boolean opcodes, final boolean labels) {
+        this.name = name;
+        this.opcodes = opcodes;
+        this.labels = labels;
+    }
 }

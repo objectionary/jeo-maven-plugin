@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.directives.DirectivesAttributes;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.objectweb.asm.Opcodes;
@@ -157,6 +158,10 @@ public final class BytecodeClass implements Testable {
         this.annotations = annotations;
         this.attributes = attributes;
         this.props = props;
+    }
+
+    public String name() {
+        return this.name;
     }
 
     /**
@@ -370,7 +375,7 @@ public final class BytecodeClass implements Testable {
 
     public DirectivesClass directives() {
         return new DirectivesClass(
-            new ClassName(this.name),
+            new ClassName(new PrefixedName(this.name).encode()),
             this.props.directives(),
             this.fields.stream().map(BytecodeField::directives).collect(Collectors.toList()),
             this.methods.stream().map(BytecodeMethod::directives).collect(Collectors.toList()),
@@ -381,5 +386,13 @@ public final class BytecodeClass implements Testable {
                     .collect(Collectors.toList())
             )
         );
+    }
+
+    public boolean hasOpcodes() {
+        return this.methods.stream().anyMatch(BytecodeMethod::hasOpcodes);
+    }
+
+    public boolean hasLabels() {
+        return this.methods.stream().anyMatch(BytecodeMethod::hasLabels);
     }
 }

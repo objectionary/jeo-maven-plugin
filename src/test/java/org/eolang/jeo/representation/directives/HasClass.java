@@ -41,7 +41,7 @@ import org.hamcrest.TypeSafeMatcher;
     "JTCOP.RuleCorrectTestName",
     "JTCOP.RuleInheritanceInTests"
 })
-final class HasClass extends TypeSafeMatcher<String> {
+public final class HasClass extends TypeSafeMatcher<String> {
 
     /**
      * Class name.
@@ -58,7 +58,7 @@ final class HasClass extends TypeSafeMatcher<String> {
      * Constructor.
      * @param name Class name.
      */
-    HasClass(final String name) {
+    public HasClass(final String name) {
         this.name = new PrefixedName(name).encode();
         this.additional = new ArrayList<>(0);
     }

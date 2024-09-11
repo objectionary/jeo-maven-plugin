@@ -87,6 +87,16 @@ public final class BytecodeLabel implements BytecodeEntry {
     }
 
     @Override
+    public boolean isLabel() {
+        return true;
+    }
+
+    @Override
+    public boolean isOpcode() {
+        return false;
+    }
+
+    @Override
     public String testCode() {
         return String.format(".label(\"%s\")", this.labels.uid(this.label));
     }

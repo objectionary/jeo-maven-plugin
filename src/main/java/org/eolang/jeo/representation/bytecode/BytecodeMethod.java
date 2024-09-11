@@ -334,4 +334,12 @@ public final class BytecodeMethod implements Testable {
             true
         );
     }
+
+    public boolean hasOpcodes() {
+        return this.instructions.stream().anyMatch(BytecodeEntry::isOpcode);
+    }
+
+    public boolean hasLabels() {
+        return this.instructions.stream().anyMatch(BytecodeEntry::isLabel);
+    }
 }

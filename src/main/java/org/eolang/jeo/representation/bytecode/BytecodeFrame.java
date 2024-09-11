@@ -109,6 +109,16 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
+    public boolean isLabel() {
+        return false;
+    }
+
+    @Override
+    public boolean isOpcode() {
+        return false;
+    }
+
+    @Override
     public String testCode() {
         return String.format(
             ".visitFrame(%d, %d, new Object[]{ %s }, %d, new Object[]{ %s })",

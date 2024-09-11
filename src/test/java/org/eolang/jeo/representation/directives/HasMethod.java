@@ -46,7 +46,7 @@ import org.objectweb.asm.Label;
     "JTCOP.RuleCorrectTestName",
     "JTCOP.RuleInheritanceInTests"
 })
-final class HasMethod extends TypeSafeMatcher<String> {
+public final class HasMethod extends TypeSafeMatcher<String> {
 
     /**
      * Class name.
@@ -82,7 +82,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
      * Constructor.
      * @param method Method name.
      */
-    HasMethod(final String method) {
+    public HasMethod(final String method) {
         this("", method);
     }
 
@@ -120,7 +120,7 @@ final class HasMethod extends TypeSafeMatcher<String> {
      * @param klass Class name.
      * @return New matcher that checks class.
      */
-    HasMethod inside(final String klass) {
+    public HasMethod inside(final String klass) {
         return new HasMethod(new PrefixedName(klass).encode(), this.name);
     }
 

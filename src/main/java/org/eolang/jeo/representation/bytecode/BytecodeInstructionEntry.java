@@ -122,6 +122,16 @@ public final class BytecodeInstructionEntry implements BytecodeEntry {
     }
 
     @Override
+    public boolean isLabel() {
+        return false;
+    }
+
+    @Override
+    public boolean isOpcode() {
+        return true;
+    }
+
+    @Override
     public String testCode() {
         final String args = Stream.concat(
             Stream.of(String.format("Opcodes.%s", new OpcodeName(this.opcode).simplified())),

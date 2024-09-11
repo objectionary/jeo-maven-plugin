@@ -28,17 +28,16 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
+import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.util.CheckClassAdapter;
-import org.xembly.Directive;
 
 /**
  * Bytecode program.
@@ -164,12 +163,15 @@ public final class BytecodeProgram {
 
 
     public DirectivesProgram directives(final String code) {
-        //todo: metas
-        DirectivesMetas metas = new DirectivesMetas();
+        final BytecodeClass top = this.top();
         return new DirectivesProgram(
             code,
-            this.top().directives(),
-            metas
+            top.directives(),
+            new DirectivesMetas(
+                new ClassName(top.name()),
+                top.hasOpcodes(),
+                top.hasLabels()
+            )
         );
     }
 }

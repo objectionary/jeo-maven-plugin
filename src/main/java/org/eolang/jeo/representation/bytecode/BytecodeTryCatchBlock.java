@@ -100,6 +100,16 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     }
 
     @Override
+    public boolean isLabel() {
+        return false;
+    }
+
+    @Override
+    public boolean isOpcode() {
+        return false;
+    }
+
+    @Override
     public String testCode() {
         return "// Try-catch blocks are not supported in tests yet";
     }
