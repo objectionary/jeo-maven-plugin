@@ -26,8 +26,11 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesAnnotation;
+import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.objectweb.asm.MethodVisitor;
 
 /**
@@ -65,6 +68,20 @@ public final class BytecodeParameters {
     public void write(final MethodVisitor visitor) {
         this.annotations.forEach(
             (key, value) -> value.forEach(annotation -> annotation.write(key, visitor))
+        );
+    }
+
+    public DirectivesMethodParams directives(final String descr) {
+        return new DirectivesMethodParams(
+            descr,
+            this.annotations.entrySet().stream().collect(
+                Collectors.toMap(
+                    Map.Entry::getKey,
+                    entry -> entry.getValue().stream()
+                        .map(BytecodeAnnotation::directives)
+                        .collect(Collectors.toList())
+                )
+            )
         );
     }
 }

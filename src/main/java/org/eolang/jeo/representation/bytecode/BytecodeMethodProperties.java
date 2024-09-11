@@ -208,7 +208,7 @@ public final class BytecodeMethodProperties implements Testable {
             this.signature,
             this.exceptions,
             maxs.directives(),
-            new DirectivesMethodParams(this.descr)
+            this.parameters.directives(this.descr)
         );
     }
 }

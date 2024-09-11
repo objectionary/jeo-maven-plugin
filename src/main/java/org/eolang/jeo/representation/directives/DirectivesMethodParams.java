@@ -55,15 +55,22 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
     /**
      * Parameter annotations.
      */
-    private final Map<Integer, List<DirectivesAnnotation>> annotations;
+    private final Map<Integer, List<Iterable<Directive>>> annotations;
 
     /**
      * Constructor.
      * @param descriptor Method descriptor.
      */
     public DirectivesMethodParams(final String descriptor) {
+        this(descriptor, new HashMap<>(0));
+    }
+
+    public DirectivesMethodParams(
+        final String descriptor,
+        final Map<Integer, List<Iterable<Directive>>> annotations
+    ) {
         this.descriptor = descriptor;
-        this.annotations = new HashMap<>(0);
+        this.annotations = annotations;
     }
 
     /**
@@ -71,11 +78,11 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
      * @param index Index of the parameter.
      * @param annotation Annotation.
      */
-    public void annotation(final int index, final DirectivesAnnotation annotation) {
+    public void annotation(final int index, final Iterable<Directive> annotation) {
         this.annotations.compute(
             index,
             (key, initial) -> {
-                final List<DirectivesAnnotation> res;
+                final List<Iterable<Directive>> res;
                 if (Objects.isNull(initial)) {
                     res = new ArrayList<>(Collections.singletonList(annotation));
                 } else {

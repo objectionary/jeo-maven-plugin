@@ -27,10 +27,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import org.cactoos.map.MapEntry;
+import org.cactoos.map.MapOf;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
@@ -73,6 +79,7 @@ import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.MultiANewArrayInsnNode;
+import org.objectweb.asm.tree.ParameterNode;
 import org.objectweb.asm.tree.TableSwitchInsnNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeInsnNode;
@@ -144,11 +151,65 @@ public final class ASMProgram {
                 node.name,
                 node.desc,
                 node.signature,
+                ASMProgram.parameters(node),
                 node.exceptions.toArray(new String[0])
             ),
             ASMProgram.defvalues(node),
             ASMProgram.maxs(node)
         );
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static BytecodeParameters parameters(final MethodNode node) {
+        final List<ParameterNode> all = node.parameters;
+        if (all == null) {
+            return new BytecodeParameters();
+        }
+        final List<AnnotationNode>[] invisible;
+        if (node.invisibleParameterAnnotations == null) {
+            invisible = new List[Optional.ofNullable(node.visibleParameterAnnotations)
+                .orElse(new List[0]).length];
+        } else {
+            invisible = node.invisibleParameterAnnotations;
+        }
+        final List<AnnotationNode>[] visible;
+        if (node.visibleParameterAnnotations == null) {
+            visible = new List[Optional.ofNullable(node.invisibleParameterAnnotations)
+                .orElse(new List[0]).length];
+        } else {
+            visible = node.visibleParameterAnnotations;
+        }
+        final int size = all.size();
+        if (visible.length == 0 || invisible.length == 0) {
+            return new BytecodeParameters();
+        }
+        try {
+            Map<Integer, List<BytecodeAnnotation>> map = IntStream.range(0, size).mapToObj(
+                index -> new MapEntry<>(
+                    index,
+                    new BytecodeAnnotations(
+                        Stream.concat(
+                            ASMProgram.safe(visible[index], true),
+                            ASMProgram.safe(invisible[index], false)
+                        )
+                    ).annotations()
+                )
+            ).collect(Collectors.toMap(MapEntry::getKey, MapEntry::getValue));
+            return new BytecodeParameters(map);
+        } catch (final ArrayIndexOutOfBoundsException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Size: %d, Visible size: %d, Invisible size: %d, Invisible: %s, Visible: %s",
+                    size,
+                    visible.length,
+                    invisible.length,
+                    Arrays.toString(invisible),
+                    Arrays.toString(visible)
+                ),
+                exception
+            );
+        }
+
     }
 
     private static BytecodeMaxs maxs(final MethodNode node) {
