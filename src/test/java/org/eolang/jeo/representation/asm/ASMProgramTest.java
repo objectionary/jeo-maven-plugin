@@ -83,31 +83,4 @@ final class ASMProgramTest {
             Matchers.equalTo(expected)
         );
     }
-
-
-    @ParameterizedTest
-    @Disabled
-    @ValueSource(strings = "AnnotationsApplication.class")
-    void disableVerification(final String resource) throws Exception {
-        final byte[] original = new BytesOf(new ResourceOf(resource)).asBytes();
-        final BytecodeProgram bytecode = new ASMProgram(original).bytecode();
-        final BytecodeProgram expected = bytecode;
-        final DirectivesProgram directives = bytecode.directives("");
-        final String xml = new Xembler(directives).xml();
-        System.out.println(xml);
-        final BytecodeProgram actual = new XmlProgram(xml).bytecode();
-        System.out.println("_____________________");
-        System.out.println(expected);
-        System.out.println("_____________________");
-        System.out.println(actual);
-        System.out.println("_____________________");
-        MatcherAssert.assertThat(
-            String.format(
-                "We expect to receive the same bytecode."
-            ),
-            actual.bytecode(false),
-            Matchers.equalTo(expected.bytecode(false))
-        );
-    }
-
 }
