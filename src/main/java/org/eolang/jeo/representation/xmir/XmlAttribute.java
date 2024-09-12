@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.InnerClass;
 
 /**
  * Xml representation of a single bytecode attribute.
@@ -66,7 +67,7 @@ public final class XmlAttribute {
         final Optional<BytecodeAttribute> result;
         if ("inner-class".equals(base)) {
             result = Optional.of(
-                new BytecodeAttribute.InnerClass(
+                new InnerClass(
                     Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(0))
                         .map(XmlOperand::new)
                         .map(XmlOperand::asObject)

@@ -23,10 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAttribute;
-import org.eolang.jeo.representation.directives.DirectivesNullable;
 import org.objectweb.asm.ClassVisitor;
 
 /**
@@ -47,69 +44,4 @@ public interface BytecodeAttribute {
      */
     DirectivesAttribute directives();
 
-    /**
-     * Inner class attribute.
-     * @since 0.4
-     */
-    @ToString
-    @EqualsAndHashCode
-    final class InnerClass implements BytecodeAttribute {
-
-        /**
-         * Internal name of the class.
-         */
-        private final String name;
-
-        /**
-         * The internal name of the class or interface class is a member of.
-         */
-        private final String outer;
-
-        /**
-         * The simple name of the class.
-         */
-        private final String inner;
-
-        /**
-         * Access flags of the inner class as originally declared in the enclosing class.
-         */
-        private final int access;
-
-        /**
-         * Constructor.
-         * @param name Internal name of the class.
-         * @param outer The internal name of the class or interface class is a member of.
-         * @param inner The simple name of the class.
-         * @param access Access flags of the inner class as originally declared in the
-         *  enclosing class.
-         * @checkstyle ParameterNumberCheck (5 lines)
-         */
-        public InnerClass(
-            final String name,
-            final String outer,
-            final String inner,
-            final int access
-        ) {
-            this.name = name;
-            this.outer = outer;
-            this.inner = inner;
-            this.access = access;
-        }
-
-        @Override
-        public void write(final ClassVisitor bytecode) {
-            bytecode.visitInnerClass(this.name, this.outer, this.inner, this.access);
-        }
-
-        @Override
-        public DirectivesAttribute directives() {
-            return new DirectivesAttribute(
-                "inner-class",
-                new DirectivesNullable("", this.name),
-                new DirectivesNullable("", this.outer),
-                new DirectivesNullable("", this.inner),
-                new DirectivesNullable("", this.access)
-            );
-        }
-    }
 }
