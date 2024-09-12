@@ -161,10 +161,6 @@ public final class ASMProgram {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static BytecodeParameters parameters(final MethodNode node) {
-        final List<ParameterNode> all = node.parameters;
-        if (all == null) {
-            return new BytecodeParameters();
-        }
         final List<AnnotationNode>[] invisible;
         if (node.invisibleParameterAnnotations == null) {
             invisible = new List[Optional.ofNullable(node.visibleParameterAnnotations)
@@ -461,11 +457,6 @@ public final class ASMProgram {
                     val -> ASMProgram.annotationProperty("", val)
                 ).collect(Collectors.toList())
             );
-//            AnnotationNode annotation = (AnnotationNode) value;
-//            return ASMProgram.annotation(
-//                annotation,
-//                true
-//            );
         } else if (value instanceof List) {
             return BytecodeAnnotationProperty.array(
                 name,

@@ -69,7 +69,7 @@ final class ASMProgramTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"FixedWidth.class", "ParamAnnotation.class"})
+    @ValueSource(strings = {"FixedWidth.class", "DeprecatedMethod.class", "ParamAnnotation.class"})
     void convertsToBytecodeThenToXmirAndThenBackToBytecode(final String resource) throws Exception {
         final byte[] original = new BytesOf(new ResourceOf(resource)).asBytes();
         final BytecodeProgram bytecode = new ASMProgram(original).bytecode();
