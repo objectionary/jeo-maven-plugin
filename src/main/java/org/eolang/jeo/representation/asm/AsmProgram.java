@@ -105,7 +105,8 @@ import org.xembly.Directive;
     "PMD.CouplingBetweenObjects",
     "PMD.TooManyMethods",
     "PMD.NcssCount",
-    "PMD.UncommentedEmptyMethodBody"
+    "PMD.UncommentedEmptyMethodBody",
+    "PMD.ExcessiveMethodLength"
 })
 public final class AsmProgram {
 
