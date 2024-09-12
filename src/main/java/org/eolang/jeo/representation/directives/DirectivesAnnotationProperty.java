@@ -36,7 +36,7 @@ import org.xembly.Directives;
  * @since 0.3
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public final class DirectivesAnnotationProperty implements Iterable<Directive>, Composite {
+public final class DirectivesAnnotationProperty implements Iterable<Directive> {
 
     /**
      * Type of the property.
@@ -159,12 +159,12 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
      */
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DirectivesAnnotationProperty array(
-        final String name, final Composite child
+        final String name, final Iterable<Directive> child
     ) {
         return new DirectivesAnnotationProperty(
             Type.ARRAY,
             new DirectivesData(Optional.ofNullable(name).orElse("")),
-            child.build()
+            child
         );
     }
 
@@ -192,13 +192,13 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
      */
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DirectivesAnnotationProperty annotation(
-        final String name, final String descriptor, final Composite child
+        final String name, final String descriptor, final Iterable<Directive> child
     ) {
         return new DirectivesAnnotationProperty(
             Type.ANNOTATION,
             new DirectivesData(Optional.ofNullable(name).orElse("")),
             new DirectivesData(descriptor),
-            child.build()
+            child
         );
     }
 
@@ -228,16 +228,6 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
             .append(new DirectivesData(this.type.toString()));
         this.params.forEach(directives::append);
         return directives.up().iterator();
-    }
-
-    @Override
-    public void append(final Iterable<Directive> directives) {
-        this.params.add(directives);
-    }
-
-    @Override
-    public Iterable<Directive> build() {
-        return this;
     }
 
     /**

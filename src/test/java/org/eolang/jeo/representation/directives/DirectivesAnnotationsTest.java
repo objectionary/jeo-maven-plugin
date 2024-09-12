@@ -81,13 +81,15 @@ final class DirectivesAnnotationsTest {
 
     @Test
     void createsAnnotationWithProperty() throws ImpossibleModificationException {
-        final DirectivesAnnotation annotation = new DirectivesAnnotation(
-            "Ljava/lang/Override;", true
-        );
-        annotation.append(DirectivesAnnotationProperty.plain("name", "something"));
         MatcherAssert.assertThat(
             "Can't create an annotation with a property",
-            new Xembler(annotation).xml(),
+            new Xembler(
+                new DirectivesAnnotation(
+                    "Ljava/lang/Override;",
+                    true,
+                    DirectivesAnnotationProperty.plain("name", "something")
+                )
+            ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[@base='annotation' and count(o) = 3]",
                 "/o[@base='annotation']/o[1][text()='4C 6A 61 76 61 2F 6C 61 6E 67 2F 4F 76 65 72 72 69 64 65 3B']",

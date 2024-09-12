@@ -43,19 +43,12 @@ import org.xembly.Directives;
  *
  * @since 0.3
  */
-public final class DirectivesDefaultValue implements Iterable<Directive>, Composite {
+public final class DirectivesDefaultValue implements Iterable<Directive> {
 
     /**
      * Default value.
      */
     private final AtomicReference<Iterable<Directive>> value;
-
-    /**
-     * Constructor.
-     */
-    public DirectivesDefaultValue() {
-        this(new AtomicReference<>());
-    }
 
     /**
      * Constructor.
@@ -96,15 +89,5 @@ public final class DirectivesDefaultValue implements Iterable<Directive>, Compos
      */
     public boolean isEmpty() {
         return this.value.get() == null;
-    }
-
-    @Override
-    public void append(final Iterable<Directive> directives) {
-        this.value.set(directives);
-    }
-
-    @Override
-    public Iterable<Directive> build() {
-        return this;
     }
 }

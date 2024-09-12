@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -39,7 +40,7 @@ import org.xembly.Directives;
  */
 @ToString
 @EqualsAndHashCode
-public final class DirectivesAnnotation implements Iterable<Directive>, Composite {
+public final class DirectivesAnnotation implements Iterable<Directive> {
 
     /**
      * Annotation descriptor.
@@ -74,6 +75,21 @@ public final class DirectivesAnnotation implements Iterable<Directive>, Composit
      * Constructor.
      * @param descriptor Descriptor.
      * @param visible Visible.
+     * @param props Properties.
+     */
+    @SafeVarargs
+    public DirectivesAnnotation(
+        final String descriptor,
+        final boolean visible,
+        final Iterable<Directive>... props
+    ) {
+        this(descriptor, visible, Arrays.asList(props));
+    }
+
+    /**
+     * Constructor.
+     * @param descriptor Descriptor.
+     * @param visible Visible.
      * @param properties Properties.
      */
     public DirectivesAnnotation(
@@ -84,16 +100,6 @@ public final class DirectivesAnnotation implements Iterable<Directive>, Composit
         this.descriptor = descriptor;
         this.visible = visible;
         this.properties = properties;
-    }
-
-    @Override
-    public void append(final Iterable<Directive> directives) {
-        this.properties.add(directives);
-    }
-
-    @Override
-    public Iterable<Directive> build() {
-        return this;
     }
 
     @Override
