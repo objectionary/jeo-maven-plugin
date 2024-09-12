@@ -34,6 +34,10 @@ import org.xembly.Directives;
 /**
  * Annotation property as Xembly directives.
  * @since 0.3
+ * @todo #537:60min Refactor {@link DirectivesAnnotationProperty} class.
+ *  The class uses public static methods to create instances of itself.
+ *  We should use constructors instead of static methods.
+ *  Don't forget to add/update the tests.
  */
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class DirectivesAnnotationProperty implements Iterable<Directive> {
@@ -168,6 +172,13 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
         );
     }
 
+    /**
+     * Factory method for array property.
+     * @param name Name.
+     * @param properties Child directives.
+     * @return Property directives.
+     */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DirectivesAnnotationProperty array(
         final String name, List<Iterable<Directive>> properties
     ) {
@@ -219,7 +230,6 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
                 .reduce(new Directives().append(new DirectivesData(descriptor)), Directives::append)
         );
     }
-
 
     @Override
     public Iterator<Directive> iterator() {

@@ -162,13 +162,22 @@ public final class BytecodeProgram {
         );
     }
 
-
+    /**
+     * Convert to directives.
+     * @param code Program listing.
+     * @return Directives program.
+     */
     public DirectivesProgram directives(final String code) {
         return this.directives(code, true);
     }
 
-
-    public DirectivesProgram directives(final String code, boolean counting) {
+    /**
+     * Convert to directives.
+     * @param code Program listing.
+     * @param counting Opcodes counting.
+     * @return Directives program.
+     */
+    public DirectivesProgram directives(final String code, final boolean counting) {
         final BytecodeClass top = this.top();
         final ClassName classname = new ClassName(this.pckg, new PrefixedName(top.name()).encode());
         return new DirectivesProgram(

@@ -80,14 +80,18 @@ public final class BytecodeMaxs {
     }
 
     /**
+     * Convert to directives.
+     * @return Directives.
+     */
+    public DirectivesMaxs directives() {
+        return new DirectivesMaxs(this.stack, this.locals);
+    }
+
+    /**
      * Is maxs stack and locals are zero?
      * @return True if both are zero.
      */
     boolean compute() {
         return this.stack == 0 && this.locals == 0;
-    }
-
-    public DirectivesMaxs directives() {
-        return new DirectivesMaxs(this.stack, this.locals);
     }
 }

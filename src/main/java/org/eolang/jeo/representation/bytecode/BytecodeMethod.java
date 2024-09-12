@@ -30,7 +30,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.Signature;
-import org.eolang.jeo.representation.directives.DirectivesEmpty;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
@@ -43,6 +42,7 @@ import org.objectweb.asm.Opcodes;
  */
 @ToString
 @EqualsAndHashCode
+@SuppressWarnings("PMD.TooManyMethods")
 public final class BytecodeMethod implements Testable {
 
     /**
@@ -309,6 +309,28 @@ public final class BytecodeMethod implements Testable {
     }
 
     /**
+     * Generate directives.
+     * @param counting Whether to count opcodes.
+     * @return Directives.
+     */
+    public DirectivesMethod directives(final boolean counting) {
+        return new DirectivesMethod(
+            new Signature(
+                new MethodName(this.properties.name()).xmir(), this.properties.descriptor()),
+            this.properties.directives(this.maxs),
+            this.instructions.stream().map(entry -> entry.directives(counting))
+                .collect(Collectors.toList()),
+            this.tryblocks.stream().map(entry -> entry.directives(counting))
+                .collect(Collectors.toList()),
+            new BytecodeAnnotations(this.annotations).directives(),
+            this.defvalues.stream()
+                .map(BytecodeDefaultValue::directives)
+                .collect(Collectors.toList()),
+            counting
+        );
+    }
+
+    /**
      * Add instruction.
      * @param opcode Opcode.
      * @param args Arguments.
@@ -327,32 +349,27 @@ public final class BytecodeMethod implements Testable {
         return this.label(this.labels.label(uid));
     }
 
-    public boolean hasOpcodes() {
+    /**
+     * Whether the method has opcodes.
+     * @return True if method has opcodes.
+     */
+    boolean hasOpcodes() {
         return this.instructions.stream().anyMatch(BytecodeEntry::isOpcode);
     }
 
-    public boolean hasLabels() {
+    /**
+     * Whether the method has labels.
+     * @return True if method has labels.
+     */
+    boolean hasLabels() {
         return this.instructions.stream().anyMatch(BytecodeEntry::isLabel);
     }
 
-    public DirectivesMethod directives() {
+    /**
+     * Convert to directives with opcodes' counting.
+     * @return Directives.
+     */
+    DirectivesMethod directives() {
         return this.directives(true);
-    }
-
-    public DirectivesMethod directives(final boolean counting) {
-        return new DirectivesMethod(
-            new Signature(
-                new MethodName(this.properties.name()).xmir(), this.properties.descriptor()),
-            this.properties.directives(this.maxs),
-            this.instructions.stream().map(entry -> entry.directives(counting))
-                .collect(Collectors.toList()),
-            this.tryblocks.stream().map(entry -> entry.directives(counting))
-                .collect(Collectors.toList()),
-            new BytecodeAnnotations(this.annotations).directives(),
-            this.defvalues.stream()
-                .map(BytecodeDefaultValue::directives)
-                .collect(Collectors.toList()),
-            counting
-        );
     }
 }

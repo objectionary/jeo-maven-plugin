@@ -38,6 +38,10 @@ import org.xembly.Directive;
 /**
  * Bytecode annotation property.
  * @since 0.3
+ * @todo #537:60min Refactor {@link BytecodeAnnotationProperty}.
+ *  The class uses public static methods to create instances of itself.
+ *  We should use constructors instead of static methods.
+ *  Don't forget to add/update the tests.
  */
 @ToString
 @EqualsAndHashCode
@@ -63,16 +67,38 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
         this.params = params;
     }
 
+    /**
+     * Factory method for enum property.
+     * @param name Property name.
+     * @param desc Property descriptor.
+     * @param value Property value.
+     * @return Property.
+     */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static BytecodeAnnotationProperty enump(
         final String name, final String desc, final String value
     ) {
         return new BytecodeAnnotationProperty(Type.ENUM, Arrays.asList(name, desc, value));
     }
 
+    /**
+     * Factory method for plain property.
+     * @param name Property name.
+     * @param value Property value.
+     * @return Property.
+     */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static BytecodeAnnotationProperty plain(final String name, final Object value) {
         return new BytecodeAnnotationProperty(Type.PLAIN, Arrays.asList(name, value));
     }
 
+    /**
+     * Factory method for array property.
+     * @param name Property name.
+     * @param values Property values.
+     * @return Property.
+     */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static BytecodeAnnotationProperty array(final String name, final List<Object> values) {
         return new BytecodeAnnotationProperty(
             Type.ARRAY,
@@ -80,14 +106,21 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
         );
     }
 
+    /**
+     * Factory method for annotation property.
+     * @param name Property name.
+     * @param desc Property descriptor.
+     * @param values Property values.
+     * @return Property.
+     */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static BytecodeAnnotationProperty annotation(
         final String name, final String desc, final List<Object> values
     ) {
-        final List<Object> collect = Stream.concat(Stream.of(name, desc), values.stream())
-            .collect(Collectors.toList());
         return new BytecodeAnnotationProperty(
             Type.ANNOTATION,
-            collect
+            Stream.concat(Stream.of(name, desc), values.stream())
+                .collect(Collectors.toList())
         );
     }
 
@@ -102,11 +135,12 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
         final BytecodeAnnotationProperty result;
         switch (Type.valueOf(type)) {
             case PLAIN:
-                result = plain((String) params.get(0), params.get(1));
+                result = BytecodeAnnotationProperty.plain((String) params.get(0), params.get(1));
                 break;
             case ENUM:
-                result = enump(
-                    (String) params.get(0), (String) params.get(1), (String) params.get(2));
+                result = BytecodeAnnotationProperty.enump(
+                    (String) params.get(0), (String) params.get(1), (String) params.get(2)
+                );
                 break;
             case ARRAY:
                 result = array((String) params.get(0), params.subList(1, params.size()));
@@ -115,7 +149,7 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
                 Logger.debug(
                     BytecodeAnnotationProperty.class, "Annotation property params: %s", params
                 );
-                result = annotation(
+                result = BytecodeAnnotationProperty.annotation(
                     (String) params.get(0), (String) params.get(1),
                     params.subList(2, params.size())
                 );
@@ -176,20 +210,23 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
 
     @Override
     public Iterable<Directive> directives() {
+        final Iterable<Directive> result;
         switch (this.type) {
             case ENUM:
-                return DirectivesAnnotationProperty.enump(
+                result = DirectivesAnnotationProperty.enump(
                     (String) this.params.get(0),
                     (String) this.params.get(1),
                     (String) this.params.get(2)
                 );
+                break;
             case PLAIN:
-                return DirectivesAnnotationProperty.plain(
+                result = DirectivesAnnotationProperty.plain(
                     (String) this.params.get(0),
                     this.params.get(1)
                 );
+                break;
             case ANNOTATION:
-                return DirectivesAnnotationProperty.annotation(
+                result = DirectivesAnnotationProperty.annotation(
                     (String) this.params.get(0),
                     (String) this.params.get(1),
                     this.params.subList(2, this.params.size()).stream()
@@ -197,22 +234,24 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
                         .map(BytecodeAnnotationProperty::directives)
                         .collect(Collectors.toList())
                 );
+                break;
             case ARRAY:
-                return DirectivesAnnotationProperty.array(
+                result = DirectivesAnnotationProperty.array(
                     (String) this.params.get(0),
                     this.params.subList(1, this.params.size()).stream()
                         .map(BytecodeAnnotationValue.class::cast)
                         .map(BytecodeAnnotationValue::directives)
                         .collect(Collectors.toList())
                 );
+                break;
             default:
                 throw new IllegalStateException(String.format("Unexpected value: %s", this.type));
         }
+        return result;
     }
 
     /**
      * Property types.
-     * !todo! duplicate
      */
     private enum Type {
         /**

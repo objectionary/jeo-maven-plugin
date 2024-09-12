@@ -28,8 +28,6 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.directives.DirectivesMaxs;
-import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;

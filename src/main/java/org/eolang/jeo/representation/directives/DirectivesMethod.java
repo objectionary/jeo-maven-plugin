@@ -26,9 +26,7 @@ package org.eolang.jeo.representation.directives;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicReference;
 import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.Signature;
 import org.xembly.Directive;
@@ -195,12 +193,6 @@ public final class DirectivesMethod implements Iterable<Directive> {
             directives.up();
         }
         this.dvalue.forEach(directives::append);
-//        if (Objects.nonNull(this.dvalue)
-//            && this.dvalue.get() != null
-//            && !this.dvalue.get().isEmpty()
-//        ) {
-//            directives.append(this.dvalue.get());
-//        }
         directives.up();
         return directives.iterator();
     }

@@ -36,7 +36,6 @@ import org.objectweb.asm.Opcodes;
 
 /**
  * Class useful for generating bytecode for testing purposes.
- *
  * @since 0.1.0
  */
 @SuppressWarnings("PMD.TooManyMethods")
@@ -156,6 +155,10 @@ public final class BytecodeClass implements Testable {
         this.props = props;
     }
 
+    /**
+     * Class name.
+     * @return Name.
+     */
     public String name() {
         return this.name;
     }
@@ -296,6 +299,35 @@ public final class BytecodeClass implements Testable {
     }
 
     /**
+     * Convert to directives with opcodes' counting.
+     * @return Directives.
+     */
+    public DirectivesClass directives() {
+        return this.directives(true);
+    }
+
+    /**
+     * Convert to directives.
+     * @param counting Whether to count opcodes.
+     * @return Directives.
+     */
+    public DirectivesClass directives(final boolean counting) {
+        return new DirectivesClass(
+            new ClassName(new PrefixedName(this.name).encode()),
+            this.props.directives(),
+            this.fields.stream().map(BytecodeField::directives).collect(Collectors.toList()),
+            this.methods.stream().map(method -> method.directives(counting))
+                .collect(Collectors.toList()),
+            new BytecodeAnnotations(this.annotations.stream()).directives(),
+            new DirectivesAttributes(
+                this.attributes.stream()
+                    .map(BytecodeAttribute::directives)
+                    .collect(Collectors.toList())
+            )
+        );
+    }
+
+    /**
      * Constructor.
      * @param visitor Writer.
      * @param pckg Package.
@@ -333,6 +365,22 @@ public final class BytecodeClass implements Testable {
     }
 
     /**
+     * Whether the class has opcodes.
+     * @return True if it has opcodes, false otherwise.
+     */
+    boolean hasOpcodes() {
+        return this.methods.stream().anyMatch(BytecodeMethod::hasOpcodes);
+    }
+
+    /**
+     * Whether the class has labels.
+     * @return True if it has labels, false otherwise.
+     */
+    boolean hasLabels() {
+        return this.methods.stream().anyMatch(BytecodeMethod::hasLabels);
+    }
+
+    /**
      * Add method.
      * @param method Method.
      * @return This object.
@@ -367,33 +415,5 @@ public final class BytecodeClass implements Testable {
         final BytecodeField field = new BytecodeField(fname, descriptor, signature, value, access);
         this.fields.add(field);
         return field;
-    }
-
-    public DirectivesClass directives() {
-        return this.directives(true);
-    }
-
-    public DirectivesClass directives(final boolean counting) {
-        return new DirectivesClass(
-            new ClassName(new PrefixedName(this.name).encode()),
-            this.props.directives(),
-            this.fields.stream().map(BytecodeField::directives).collect(Collectors.toList()),
-            this.methods.stream().map(method -> method.directives(counting))
-                .collect(Collectors.toList()),
-            new BytecodeAnnotations(this.annotations.stream()).directives(),
-            new DirectivesAttributes(
-                this.attributes.stream()
-                    .map(BytecodeAttribute::directives)
-                    .collect(Collectors.toList())
-            )
-        );
-    }
-
-    public boolean hasOpcodes() {
-        return this.methods.stream().anyMatch(BytecodeMethod::hasOpcodes);
-    }
-
-    public boolean hasLabels() {
-        return this.methods.stream().anyMatch(BytecodeMethod::hasLabels);
     }
 }

@@ -30,7 +30,6 @@ import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesFrame;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.LabelNode;
 import org.xembly.Directive;
@@ -74,13 +73,13 @@ public final class BytecodeFrame implements BytecodeEntry {
      * @param locals Local variables.
      * @param stack Stack elements.
      */
-    public BytecodeFrame(final int type, List<Object> locals, List<Object> stack) {
+    public BytecodeFrame(final int type, final List<Object> locals, final List<Object> stack) {
         this(
             type,
             Optional.ofNullable(locals).map(List::size).orElse(0),
-            BytecodeFrame.asArray(Optional.ofNullable(locals).orElse(new ArrayList<>(0))),
+            BytecodeFrame.toArray(Optional.ofNullable(locals).orElse(new ArrayList<>(0))),
             Optional.ofNullable(stack).map(List::size).orElse(0),
-            BytecodeFrame.asArray(Optional.ofNullable(stack).orElse(new ArrayList<>(0)))
+            BytecodeFrame.toArray(Optional.ofNullable(stack).orElse(new ArrayList<>(0)))
         );
     }
 
@@ -151,15 +150,27 @@ public final class BytecodeFrame implements BytecodeEntry {
         );
     }
 
-    private static Object[] asArray(final List<Object> list) {
-        Object[] array = new Object[list.size()];
-        for (int i = 0, n = array.length; i < n; ++i) {
-            Object o = list.get(i);
-            if (o instanceof LabelNode) {
-                o = ((LabelNode) o).getLabel();
-            }
-            array[i] = o;
+    /**
+     * Convert a list to array.
+     * @param list List of objects.
+     * @return Array of objects.
+     */
+    private static Object[] toArray(final List<Object> list) {
+        return list.stream().map(BytecodeFrame::extract).toArray(Object[]::new);
+    }
+
+    /**
+     * Extract an object.
+     * @param argument Argument.
+     * @return Object.
+     */
+    private static Object extract(final Object argument) {
+        final Object result;
+        if (argument instanceof LabelNode) {
+            result = ((LabelNode) argument).getLabel();
+        } else {
+            result = argument;
         }
-        return array;
+        return result;
     }
 }

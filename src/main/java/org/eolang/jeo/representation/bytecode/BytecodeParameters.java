@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.objectweb.asm.MethodVisitor;
 
