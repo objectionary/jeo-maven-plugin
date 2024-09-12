@@ -38,10 +38,8 @@ import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.asm.ASMProgram;
 import org.eolang.jeo.representation.bytecode.Bytecode;
-import org.eolang.jeo.representation.directives.DirectivesClassVisitor;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.objectweb.asm.ClassReader;
-import org.xembly.Directive;
 import org.xembly.ImpossibleModificationException;
 
 /**
