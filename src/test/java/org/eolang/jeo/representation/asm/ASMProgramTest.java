@@ -32,6 +32,8 @@ import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.xembly.Xembler;
 
 /**
@@ -64,9 +66,10 @@ final class ASMProgramTest {
         );
     }
 
-    @Test
-    void convertsToBytecodeThenToXmirAndThenBackToBytecode() throws Exception {
-        final byte[] original = new BytesOf(new ResourceOf("FixedWidth.class")).asBytes();
+    @ParameterizedTest
+    @ValueSource(strings = {"FixedWidth.class", "ParamAnnotation.class"})
+    void convertsToBytecodeThenToXmirAndThenBackToBytecode(final String resource) throws Exception {
+        final byte[] original = new BytesOf(new ResourceOf(resource)).asBytes();
         final BytecodeProgram bytecode = new ASMProgram(original).bytecode();
         final Bytecode expected = bytecode.bytecode();
         final BytecodeProgram actual = new XmlProgram(

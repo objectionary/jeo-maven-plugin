@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;

@@ -179,9 +179,18 @@ public final class ASMProgram {
         } else {
             visible = node.visibleParameterAnnotations;
         }
-        final int size = all.size();
-        if (visible.length == 0 || invisible.length == 0) {
-            return new BytecodeParameters();
+        final int size = visible.length;
+        if (visible.length != invisible.length) {
+            throw new IllegalStateException(
+                String.format(
+                    "Size: %d, Visible size: %d, Invisible size: %d, Invisible: %s, Visible: %s",
+                    size,
+                    visible.length,
+                    invisible.length,
+                    Arrays.toString(invisible),
+                    Arrays.toString(visible)
+                )
+            );
         }
         try {
             Map<Integer, List<BytecodeAnnotation>> map = IntStream.range(0, size).mapToObj(
