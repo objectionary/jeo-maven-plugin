@@ -100,7 +100,7 @@ final class XmlProgramTest {
             new DirectivesProgram()
                 .withClass(
                     new DirectivesMetas(name),
-                    new DirectivesClass(name).method(
+                    new DirectivesClass(name).withMethod(
                         new DirectivesMethod(
                             "printElement",
                             new DirectivesMethodProperties(
@@ -152,7 +152,7 @@ final class XmlProgramTest {
                 .withClass(
                     new DirectivesMetas(name),
                     new DirectivesClass(name)
-                        .method(
+                        .withMethod(
                             new DirectivesMethod(
                                 "bar",
                                 new DirectivesMethodProperties(

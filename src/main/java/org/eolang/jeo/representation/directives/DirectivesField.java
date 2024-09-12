@@ -99,6 +99,21 @@ public final class DirectivesField implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param annotations Annotations.
+     */
+    public DirectivesField(final DirectivesAnnotation... annotations) {
+        this(
+            Opcodes.ACC_PUBLIC,
+            "unknown",
+            "I",
+            "",
+            0,
+            new DirectivesAnnotations("annotations-unknown", annotations)
+        );
+    }
+
+    /**
+     * Constructor.
      * @param access Access
      * @param name Name
      * @param descriptor Descriptor
@@ -123,6 +138,15 @@ public final class DirectivesField implements Iterable<Directive> {
         );
     }
 
+    /**
+     * Constructor.
+     * @param access Access modifiers
+     * @param name Name
+     * @param descriptor Descriptor
+     * @param signature Signature
+     * @param value Initial value
+     * @param annotations Annotations
+     */
     public DirectivesField(
         final int access,
         final String name,
@@ -137,16 +161,6 @@ public final class DirectivesField implements Iterable<Directive> {
         this.signature = Optional.ofNullable(signature).orElse("");
         this.value = value;
         this.annotations = annotations;
-    }
-
-    /**
-     * Add annotation.
-     * @param annotation Annotation
-     * @return This object
-     */
-    public DirectivesField annotation(final DirectivesAnnotation annotation) {
-        this.annotations.add(annotation);
-        return this;
     }
 
     @Override
@@ -181,6 +195,4 @@ public final class DirectivesField implements Iterable<Directive> {
         final String template = "%s-%s";
         return String.format(template, prefix, this.name);
     }
-
-
 }

@@ -111,9 +111,10 @@ final class XmlFieldTest {
             new XmlField(
                 new XmlNode(
                     new Xembler(
-                        new DirectivesField()
-                            .annotation(new DirectivesAnnotation(override, true))
-                            .annotation(new DirectivesAnnotation(safe, true))
+                        new DirectivesField(
+                            new DirectivesAnnotation(override, true),
+                            new DirectivesAnnotation(safe, true)
+                        )
                     ).xml()
                 )
             ).bytecode(),

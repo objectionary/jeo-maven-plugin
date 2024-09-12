@@ -147,7 +147,7 @@ public final class DirectivesClass implements Iterable<Directive> {
      * @param field Field
      * @return The same instance of {@link DirectivesClass}.
      */
-    public DirectivesClass field(final DirectivesField field) {
+    public DirectivesClass withField(final DirectivesField field) {
         this.fields.add(field);
         return this;
     }
@@ -157,45 +157,9 @@ public final class DirectivesClass implements Iterable<Directive> {
      * @param method Method
      * @return The same instance of {@link DirectivesClass}.
      */
-    public DirectivesClass method(final DirectivesMethod method) {
+    public DirectivesClass withMethod(final DirectivesMethod method) {
         this.methods.add(method);
         return this;
-    }
-
-    /**
-     * Add annotation to the directives.
-     * @param annotation Annotation
-     * @return The same instance of {@link DirectivesClass}.
-     */
-    public DirectivesClass annotation(final DirectivesAnnotation annotation) {
-        this.annotations.add(annotation);
-        return this;
-    }
-
-    /**
-     * Add attribute to the directives.
-     * @param attribute Attribute
-     * @return The same instance of {@link DirectivesClass}.
-     */
-    public DirectivesClass attribute(final DirectivesAttribute attribute) {
-        this.attributes.add(attribute);
-        return this;
-    }
-
-    /**
-     * Check if class has opcodes.
-     * @return True if class has opcodes, false otherwise.
-     */
-    public boolean hasOpcodes() {
-        return this.methods.stream().anyMatch(DirectivesMethod::hasOpcodes);
-    }
-
-    /**
-     * Check if class has labels.
-     * @return True if class has labels, false otherwise.
-     */
-    public boolean hasLabels() {
-        return this.methods.stream().anyMatch(DirectivesMethod::hasLabels);
     }
 
     @Override

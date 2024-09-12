@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -64,6 +65,23 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
     public DirectivesAnnotations(final String name) {
         this(new ArrayList<>(0), name);
     }
+
+    /**
+     * Constructor.
+     * @param annotations Annotations.
+     */
+    public DirectivesAnnotations(final DirectivesAnnotation... annotations) {
+        this("annotations", annotations);
+    }
+
+    /**
+     * Constructor.
+     * @param annotations Annotations.
+     */
+    public DirectivesAnnotations(final String name, final DirectivesAnnotation... annotations) {
+        this(Arrays.asList(annotations), name);
+    }
+
 
     /**
      * Constructor.
