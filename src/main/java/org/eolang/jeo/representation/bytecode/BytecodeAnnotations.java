@@ -86,11 +86,16 @@ public final class BytecodeAnnotations {
         return this;
     }
 
-    public DirectivesAnnotations directives() {
+    public DirectivesAnnotations directives(final String name) {
         return new DirectivesAnnotations(
             this.all.stream()
                 .map(BytecodeAnnotation::directives)
-                .collect(Collectors.toList())
+                .collect(Collectors.toList()),
+            name
         );
+    }
+
+    public DirectivesAnnotations directives() {
+        return this.directives("annotations");
     }
 }

@@ -134,7 +134,8 @@ public final class BytecodeField {
             this.name,
             this.descriptor,
             this.signature,
-            this.value
+            this.value,
+            this.annotations.directives(String.format("annotations-%s", this.name))
         );
     }
 }

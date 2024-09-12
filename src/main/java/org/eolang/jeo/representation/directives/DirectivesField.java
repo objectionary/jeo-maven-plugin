@@ -113,12 +113,30 @@ public final class DirectivesField implements Iterable<Directive> {
         final String signature,
         final Object value
     ) {
+        this(
+            access,
+            name,
+            descriptor,
+            signature,
+            value,
+            new DirectivesAnnotations(String.format("annotations-%s", name))
+        );
+    }
+
+    public DirectivesField(
+        final int access,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final Object value,
+        final DirectivesAnnotations annotations
+    ) {
         this.access = access;
         this.name = name;
         this.descriptor = Optional.ofNullable(descriptor).orElse("");
         this.signature = Optional.ofNullable(signature).orElse("");
         this.value = value;
-        this.annotations = new DirectivesAnnotations(this.title("annotations"));
+        this.annotations = annotations;
     }
 
     /**
@@ -163,5 +181,6 @@ public final class DirectivesField implements Iterable<Directive> {
         final String template = "%s-%s";
         return String.format(template, prefix, this.name);
     }
+
 
 }
