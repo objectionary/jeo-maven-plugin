@@ -252,6 +252,29 @@ public final class BytecodeMethod implements Testable {
     }
 
     /**
+     * Generate directives.
+     * @param counting Whether to count opcodes.
+     * @return Directives.
+     */
+    public DirectivesMethod directives(final boolean counting) {
+        return new DirectivesMethod(
+            new Signature(
+                new MethodName(this.properties.name()).xmir(), this.properties.descriptor()
+            ),
+            this.properties.directives(this.maxs),
+            this.instructions.stream().map(entry -> entry.directives(counting))
+                .collect(Collectors.toList()),
+            this.tryblocks.stream().map(entry -> entry.directives(counting))
+                .collect(Collectors.toList()),
+            new BytecodeAnnotations(this.annotations).directives(),
+            this.defvalues.stream()
+                .map(BytecodeDefaultValue::directives)
+                .collect(Collectors.toList()),
+            counting
+        );
+    }
+
+    /**
      * Generate bytecode.
      * @param visitor Visitor.
      */
@@ -306,28 +329,6 @@ public final class BytecodeMethod implements Testable {
                 exception
             );
         }
-    }
-
-    /**
-     * Generate directives.
-     * @param counting Whether to count opcodes.
-     * @return Directives.
-     */
-    public DirectivesMethod directives(final boolean counting) {
-        return new DirectivesMethod(
-            new Signature(
-                new MethodName(this.properties.name()).xmir(), this.properties.descriptor()),
-            this.properties.directives(this.maxs),
-            this.instructions.stream().map(entry -> entry.directives(counting))
-                .collect(Collectors.toList()),
-            this.tryblocks.stream().map(entry -> entry.directives(counting))
-                .collect(Collectors.toList()),
-            new BytecodeAnnotations(this.annotations).directives(),
-            this.defvalues.stream()
-                .map(BytecodeDefaultValue::directives)
-                .collect(Collectors.toList()),
-            counting
-        );
     }
 
     /**

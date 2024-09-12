@@ -179,6 +179,22 @@ public final class BytecodeMethodProperties implements Testable {
     }
 
     /**
+     * Convert to directives.
+     * @param maxs Maxs.
+     * @return Directives.
+     */
+    public DirectivesMethodProperties directives(final BytecodeMaxs maxs) {
+        return new DirectivesMethodProperties(
+            this.access,
+            this.descr,
+            this.signature,
+            this.exceptions,
+            maxs.directives(),
+            this.parameters.directives(this.descr)
+        );
+    }
+
+    /**
      * Add method to a class writer.
      * @param writer Class writer.
      * @param compute If frames should be computed.
@@ -199,21 +215,5 @@ public final class BytecodeMethodProperties implements Testable {
         );
         this.parameters.write(visitor);
         return visitor;
-    }
-
-    /**
-     * Convert to directives.
-     * @param maxs Maxs.
-     * @return Directives.
-     */
-    public DirectivesMethodProperties directives(final BytecodeMaxs maxs) {
-        return new DirectivesMethodProperties(
-            this.access,
-            this.descr,
-            this.signature,
-            this.exceptions,
-            maxs.directives(),
-            this.parameters.directives(this.descr)
-        );
     }
 }

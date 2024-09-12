@@ -36,7 +36,7 @@ import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.Details;
 import org.eolang.jeo.Representation;
-import org.eolang.jeo.representation.asm.ASMProgram;
+import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.objectweb.asm.ClassReader;
@@ -119,7 +119,7 @@ public final class BytecodeRepresentation implements Representation {
      * @return XML representation of bytecode.
      */
     public XML toEO(final boolean count) {
-        final DirectivesProgram directives = new ASMProgram(this.input.value())
+        final DirectivesProgram directives = new AsmProgram(this.input.value())
             .bytecode()
             .directives(new Base64Bytecode(this.input.value()).asString(), count);
         try {

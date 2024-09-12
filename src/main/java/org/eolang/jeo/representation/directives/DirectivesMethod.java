@@ -125,6 +125,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @param annotations Method annotations
      * @param dvalue Annotation default value
      * @param counting Opcodes counting
+     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public DirectivesMethod(
         final Signature name,

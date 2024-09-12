@@ -37,10 +37,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link ASMProgram}.
+ * Test case for {@link AsmProgram}.
  * @since 0.6
  */
-final class ASMProgramTest {
+final class AsmProgramTest {
 
     @Test
     void convertsToBytecode() {
@@ -49,7 +49,7 @@ final class ASMProgramTest {
             .bytecode();
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode",
-            new ASMProgram(same.asBytes()).bytecode().bytecode(),
+            new AsmProgram(same.asBytes()).bytecode().bytecode(),
             Matchers.equalTo(same)
         );
     }
@@ -58,7 +58,7 @@ final class ASMProgramTest {
     void parsesAnnotations() throws Exception {
         final byte[] original = new BytesOf(new ResourceOf("FixedWidth.class")).asBytes();
         final Bytecode expected = new Bytecode(original);
-        final Bytecode actual = new ASMProgram(original).bytecode().bytecode();
+        final Bytecode actual = new AsmProgram(original).bytecode().bytecode();
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode",
             actual,
@@ -69,9 +69,8 @@ final class ASMProgramTest {
     @ParameterizedTest
     @ValueSource(strings = {"FixedWidth.class", "DeprecatedMethod.class", "ParamAnnotation.class"})
     void convertsToBytecodeThenToXmirAndThenBackToBytecode(final String resource) throws Exception {
-        final BytecodeProgram bytecode = new ASMProgram(
-            new BytesOf(new ResourceOf(resource)
-            ).asBytes()
+        final BytecodeProgram bytecode = new AsmProgram(
+            new BytesOf(new ResourceOf(resource)).asBytes()
         ).bytecode();
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode",

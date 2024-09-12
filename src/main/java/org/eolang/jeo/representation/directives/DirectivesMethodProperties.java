@@ -109,6 +109,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      * @param exceptions Method exceptions.
      * @param max Max stack and locals.
      * @param params Method parameters.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesMethodProperties(
         final int access,

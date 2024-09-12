@@ -89,25 +89,37 @@ import org.xembly.Directive;
  * The recent version with the Visitor pattern is still available in the history:
  * <a href="https://github.com/objectionary/jeo-maven-plugin/tree/29daa0a167b5c2ba4caaceafb6e6bafc381ac05c">github</a>
  * @since 0.6
- * @todo #537:60min Refactor {@link ASMProgram} class.
+ * @todo #537:60min Refactor {@link AsmProgram} class.
  *  It's too big and contains a lot of methods.
  *  We need to refactor it to make it more readable and maintainable.
  *  Maybe it's worth splitting it into several classes.
  *  Don't forget to add/update the tests.
+ *  Don't forget to remove PMD and Checkstyle suppressions.
+ * @checkstyle CyclomaticComplexityCheck (500 lines)
+ * @checkstyle JavaNCSSCheck (500 lines)
+ * @checkstyle ClassFanOutComplexityCheck (500 lines)
+ * @checkstyle MethodLengthCheck (500 lines)
+ * @checkstyle AnonInnerLengthCheck (500 lines)
  */
-public final class ASMProgram {
+@SuppressWarnings({
+    "PMD.CouplingBetweenObjects",
+    "PMD.TooManyMethods",
+    "PMD.NcssCount",
+    "PMD.UncommentedEmptyMethodBody"
+})
+public final class AsmProgram {
 
     /**
      * Bytecode as plain bytes.
      */
-    private final byte[] bytecode;
+    private final byte[] bytes;
 
     /**
      * Constructor.
      * @param bytes Bytes.
      */
-    public ASMProgram(final byte... bytes) {
-        this.bytecode = bytes.clone();
+    public AsmProgram(final byte... bytes) {
+        this.bytes = bytes.clone();
     }
 
     /**
@@ -116,11 +128,11 @@ public final class ASMProgram {
      */
     public BytecodeProgram bytecode() {
         final ClassNode node = new ClassNode();
-        new ClassReader(this.bytecode).accept(node, 0);
+        new ClassReader(this.bytes).accept(node, 0);
         final ClassName full = new ClassName(node.name);
         return new BytecodeProgram(
             full.pckg(),
-            ASMProgram.clazz(node)
+            AsmProgram.clazz(node)
         );
     }
 
@@ -133,10 +145,10 @@ public final class ASMProgram {
         final ClassName full = new ClassName(node.name);
         return new BytecodeClass(
             full.name(),
-            ASMProgram.methods(node),
-            ASMProgram.fields(node),
-            ASMProgram.annotations(node),
-            ASMProgram.innerClasses(node),
+            AsmProgram.methods(node),
+            AsmProgram.fields(node),
+            AsmProgram.annotations(node),
+            AsmProgram.innerClasses(node),
             new BytecodeClassProperties(
                 node.version,
                 node.access,
@@ -153,7 +165,7 @@ public final class ASMProgram {
      * @return Domain field.
      */
     private static Collection<BytecodeField> fields(final ClassNode node) {
-        return node.fields.stream().map(ASMProgram::field).collect(Collectors.toList());
+        return node.fields.stream().map(AsmProgram::field).collect(Collectors.toList());
     }
 
     /**
@@ -168,7 +180,7 @@ public final class ASMProgram {
             node.signature,
             node.value,
             node.access,
-            ASMProgram.annotations(node)
+            AsmProgram.annotations(node)
         );
     }
 
@@ -178,7 +190,7 @@ public final class ASMProgram {
      * @return Domain methods.
      */
     private static Collection<BytecodeMethod> methods(final ClassNode node) {
-        return node.methods.stream().map(ASMProgram::method).collect(Collectors.toList());
+        return node.methods.stream().map(AsmProgram::method).collect(Collectors.toList());
     }
 
     /**
@@ -188,19 +200,19 @@ public final class ASMProgram {
      */
     private static BytecodeMethod method(final MethodNode node) {
         return new BytecodeMethod(
-            ASMProgram.tryblocks(node),
-            ASMProgram.instructions(node),
-            ASMProgram.annotations(node),
+            AsmProgram.tryblocks(node),
+            AsmProgram.instructions(node),
+            AsmProgram.annotations(node),
             new BytecodeMethodProperties(
                 node.access,
                 node.name,
                 node.desc,
                 node.signature,
-                ASMProgram.parameters(node),
+                AsmProgram.parameters(node),
                 node.exceptions.toArray(new String[0])
             ),
-            ASMProgram.defvalues(node),
-            ASMProgram.maxs(node)
+            AsmProgram.defvalues(node),
+            AsmProgram.maxs(node)
         );
     }
 
@@ -232,8 +244,8 @@ public final class ASMProgram {
                     index,
                     new BytecodeAnnotations(
                         Stream.concat(
-                            ASMProgram.safe(visible[index], true),
-                            ASMProgram.safe(invisible[index], false)
+                            AsmProgram.safe(visible[index], true),
+                            AsmProgram.safe(invisible[index], false)
                         )
                     ).annotations()
                 )
@@ -256,7 +268,7 @@ public final class ASMProgram {
      * @return Domain method tryblocks.
      */
     private static List<BytecodeEntry> tryblocks(final MethodNode node) {
-        return node.tryCatchBlocks.stream().map(ASMProgram::tryblock).collect(Collectors.toList());
+        return node.tryCatchBlocks.stream().map(AsmProgram::tryblock).collect(Collectors.toList());
     }
 
     /**
@@ -280,7 +292,7 @@ public final class ASMProgram {
      */
     private static Collection<BytecodeAttribute> innerClasses(final ClassNode node) {
         return node.innerClasses.stream()
-            .map(ASMProgram::innerClass)
+            .map(AsmProgram::innerClass)
             .collect(Collectors.toList());
     }
 
@@ -305,7 +317,7 @@ public final class ASMProgram {
      */
     private static List<BytecodeEntry> instructions(final MethodNode node) {
         return Arrays.stream(node.instructions.toArray())
-            .map(ASMProgram::instruction)
+            .map(AsmProgram::instruction)
             .collect(Collectors.toList());
     }
 
@@ -341,22 +353,22 @@ public final class ASMProgram {
                 );
                 break;
             case AbstractInsnNode.FIELD_INSN:
-                final FieldInsnNode fieldInsnNode = FieldInsnNode.class.cast(node);
+                final FieldInsnNode field = FieldInsnNode.class.cast(node);
                 result = new BytecodeInstructionEntry(
-                    fieldInsnNode.getOpcode(),
-                    fieldInsnNode.owner,
-                    fieldInsnNode.name,
-                    fieldInsnNode.desc
+                    field.getOpcode(),
+                    field.owner,
+                    field.name,
+                    field.desc
                 );
                 break;
             case AbstractInsnNode.METHOD_INSN:
-                final MethodInsnNode methodInsnNode = MethodInsnNode.class.cast(node);
+                final MethodInsnNode method = MethodInsnNode.class.cast(node);
                 result = new BytecodeInstructionEntry(
-                    methodInsnNode.getOpcode(),
-                    methodInsnNode.owner,
-                    methodInsnNode.name,
-                    methodInsnNode.desc,
-                    methodInsnNode.itf
+                    method.getOpcode(),
+                    method.owner,
+                    method.name,
+                    method.desc,
+                    method.itf
                 );
                 break;
             case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
@@ -440,8 +452,7 @@ public final class ASMProgram {
             case AbstractInsnNode.LINE:
                 result = new BytecodeEntry() {
                     @Override
-                    public void writeTo(final MethodVisitor visitor) {
-
+                    public void writeTo(final MethodVisitor ignore) {
                     }
 
                     @Override
@@ -480,8 +491,8 @@ public final class ASMProgram {
      */
     private static Collection<BytecodeAnnotation> annotations(final ClassNode node) {
         return Stream.concat(
-            ASMProgram.safe(node.visibleAnnotations, true),
-            ASMProgram.safe(node.invisibleAnnotations, false)
+            AsmProgram.safe(node.visibleAnnotations, true),
+            AsmProgram.safe(node.invisibleAnnotations, false)
         ).collect(Collectors.toList());
     }
 
@@ -492,8 +503,8 @@ public final class ASMProgram {
      */
     private static List<BytecodeAnnotation> annotations(final MethodNode node) {
         return Stream.concat(
-            ASMProgram.safe(node.visibleAnnotations, true),
-            ASMProgram.safe(node.invisibleAnnotations, false)
+            AsmProgram.safe(node.visibleAnnotations, true),
+            AsmProgram.safe(node.invisibleAnnotations, false)
         ).collect(Collectors.toList());
     }
 
@@ -505,8 +516,8 @@ public final class ASMProgram {
     private static BytecodeAnnotations annotations(final FieldNode node) {
         return new BytecodeAnnotations(
             Stream.concat(
-                ASMProgram.safe(node.visibleAnnotations, true),
-                ASMProgram.safe(node.invisibleAnnotations, false)
+                AsmProgram.safe(node.visibleAnnotations, true),
+                AsmProgram.safe(node.invisibleAnnotations, false)
             )
         );
     }
@@ -517,11 +528,13 @@ public final class ASMProgram {
      * @param visible Is it visible?
      * @return Annotations.
      */
-    private static Stream<BytecodeAnnotation> safe(List<AnnotationNode> nodes, boolean visible) {
+    private static Stream<BytecodeAnnotation> safe(
+        final List<AnnotationNode> nodes, final boolean visible
+    ) {
         return Optional.ofNullable(nodes)
             .orElse(new ArrayList<>(0))
             .stream()
-            .map(ann -> ASMProgram.annotation(ann, visible));
+            .map(ann -> AsmProgram.annotation(ann, visible));
     }
 
     /**
@@ -531,12 +544,12 @@ public final class ASMProgram {
      * @return Domain annotation.
      */
     private static BytecodeAnnotation annotation(final AnnotationNode node, final boolean visible) {
-        List<BytecodeAnnotationValue> properties = new ArrayList<>(0);
+        final List<BytecodeAnnotationValue> properties = new ArrayList<>(0);
         final List<Object> values = Optional.ofNullable(node.values)
             .orElse(new ArrayList<>(0));
         for (int index = 0; index < values.size(); index += 2) {
             properties.add(
-                ASMProgram.annotationProperty(
+                AsmProgram.annotationProperty(
                     (String) values.get(index),
                     values.get(index + 1)
                 )
@@ -564,14 +577,14 @@ public final class ASMProgram {
                 name,
                 cast.desc,
                 cast.values.stream().map(
-                    val -> ASMProgram.annotationProperty("", val)
+                    val -> AsmProgram.annotationProperty("", val)
                 ).collect(Collectors.toList())
             );
         } else if (value instanceof List) {
             result = BytecodeAnnotationProperty.array(
                 name,
                 ((Collection<?>) value).stream()
-                    .map(val -> ASMProgram.annotationProperty("", val))
+                    .map(val -> AsmProgram.annotationProperty("", val))
                     .collect(Collectors.toList())
             );
         } else {
@@ -592,8 +605,7 @@ public final class ASMProgram {
         } else {
             result = Collections.singletonList(
                 new BytecodeDefaultValue(
-                    ASMProgram.annotationProperty(
-                        null, node.annotationDefault)
+                    AsmProgram.annotationProperty(null, node.annotationDefault)
                 )
             );
         }

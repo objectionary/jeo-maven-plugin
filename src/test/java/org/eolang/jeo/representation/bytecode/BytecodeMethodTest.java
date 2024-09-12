@@ -403,18 +403,20 @@ final class BytecodeMethodTest {
     void visitsLookupSwitchInstructionSuccessfully() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "LookupSwitch instruction wasn't visited successfully.",
-            new Xembler(new BytecodeMethod().entry(
-                new BytecodeInstructionEntry(
-                    Opcodes.LOOKUPSWITCH,
-                    Stream.concat(
-                        Stream.of(new Label()),
+            new Xembler(
+                new BytecodeMethod().entry(
+                    new BytecodeInstructionEntry(
+                        Opcodes.LOOKUPSWITCH,
                         Stream.concat(
-                            Stream.of(1, 2, 3),
-                            Stream.of(new Label(), new Label(), new Label())
-                        )
-                    ).toArray(Object[]::new)
-                )
-            ).directives()).xml(),
+                            Stream.of(new Label()),
+                            Stream.concat(
+                                Stream.of(1, 2, 3),
+                                Stream.of(new Label(), new Label(), new Label())
+                            )
+                        ).toArray(Object[]::new)
+                    )
+                ).directives()
+            ).xml(),
             Matchers.allOf(
                 Matchers.containsString("lookupswitch"),
                 Matchers.containsString("1"),

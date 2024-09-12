@@ -76,7 +76,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
     /**
      * Factory method for plain property.
      * @param name Name.
-     * @param value Parameter.
+     * @param value Value.
      * @return Property directives.
      */
     @SuppressWarnings("PMD.ProhibiyPublicStaticMethods")
@@ -218,6 +218,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
      * Factory method for annotation property.
      * @param name Name.
      * @param descriptor Descriptor.
+     * @param properties Child directives.
      * @return Property directives.
      */
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")

@@ -68,20 +68,12 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param annotations Annotations.
-     */
-    public DirectivesAnnotations(final DirectivesAnnotation... annotations) {
-        this("annotations", annotations);
-    }
-
-    /**
-     * Constructor.
+     * @param name Name.
      * @param annotations Annotations.
      */
     public DirectivesAnnotations(final String name, final DirectivesAnnotation... annotations) {
         this(Arrays.asList(annotations), name);
     }
-
 
     /**
      * Constructor.

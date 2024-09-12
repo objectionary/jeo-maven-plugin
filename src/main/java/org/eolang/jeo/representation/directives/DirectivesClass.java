@@ -125,6 +125,7 @@ public final class DirectivesClass implements Iterable<Directive> {
      * @param methods Class methods
      * @param annotations Annotations
      * @param attributes Attributes
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesClass(
         final ClassName name,
