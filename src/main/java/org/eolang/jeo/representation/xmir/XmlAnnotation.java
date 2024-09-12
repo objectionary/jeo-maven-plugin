@@ -90,12 +90,15 @@ public class XmlAnnotation {
                 || xmlnode.hasAttribute("base", "annotation"))
             .map(
                 xmlnode -> {
+                    final BytecodeAnnotationValue result;
                     if (xmlnode.hasAttribute("base", "annotation-property")) {
-                        return new XmlAnnotationProperty(xmlnode).bytecode();
+                        result = new XmlAnnotationProperty(xmlnode).bytecode();
                     } else {
-                        return new XmlAnnotation(xmlnode).bytecode();
+                        result = new XmlAnnotation(xmlnode).bytecode();
                     }
-                })
+                    return result;
+                }
+            )
             .collect(Collectors.toList());
     }
 }

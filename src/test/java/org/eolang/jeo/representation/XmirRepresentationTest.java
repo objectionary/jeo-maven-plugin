@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
@@ -53,13 +52,11 @@ final class XmirRepresentationTest {
     void retrievesName() {
         final String name = "Math";
         final String expected = "org/eolang/foo/j$Math";
-        final XML xml = new BytecodeProgram(
-            "org/eolang/foo",
-            new BytecodeClass(name)
-        ).xml();
-        System.out.println(xml);
         final String actual = new XmirRepresentation(
-            xml
+            new BytecodeProgram(
+                "org/eolang/foo",
+                new BytecodeClass(name)
+            ).xml()
         ).details().name();
         MatcherAssert.assertThat(
             String.format(

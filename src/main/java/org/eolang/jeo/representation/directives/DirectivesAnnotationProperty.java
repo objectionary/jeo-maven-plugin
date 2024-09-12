@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -180,7 +181,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
      */
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DirectivesAnnotationProperty array(
-        final String name, List<Iterable<Directive>> properties
+        final String name, final Collection<Iterable<Directive>> properties
     ) {
         return new DirectivesAnnotationProperty(
             Type.ARRAY,
@@ -221,7 +222,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
      */
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DirectivesAnnotationProperty annotation(
-        final String name, final String descriptor, List<Iterable<Directive>> properties
+        final String name, final String descriptor, final List<Iterable<Directive>> properties
     ) {
         return new DirectivesAnnotationProperty(
             Type.ANNOTATION,

@@ -66,9 +66,7 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
         final String descriptor,
         final boolean visible
     ) {
-        this.descriptor = descriptor;
-        this.visible = visible;
-        this.properties = new ArrayList<>(0);
+        this(descriptor, visible, new ArrayList<>(0));
     }
 
     /**

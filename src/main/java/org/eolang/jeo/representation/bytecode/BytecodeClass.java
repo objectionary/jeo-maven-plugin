@@ -159,6 +159,7 @@ public final class BytecodeClass implements Testable {
      * Class name.
      * @return Name.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public String name() {
         return this.name;
     }

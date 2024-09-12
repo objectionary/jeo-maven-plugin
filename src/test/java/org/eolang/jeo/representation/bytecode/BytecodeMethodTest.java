@@ -40,6 +40,7 @@ import org.xembly.Xembler;
  * Test case for {@link BytecodeMethod}.
  * @since 0.6
  */
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods"})
 final class BytecodeMethodTest {
 
     @Test
