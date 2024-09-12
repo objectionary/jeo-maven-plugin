@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAttribute;
 import org.eolang.jeo.representation.directives.DirectivesNullable;
 import org.objectweb.asm.ClassVisitor;
@@ -49,6 +51,8 @@ public interface BytecodeAttribute {
      * Inner class attribute.
      * @since 0.4
      */
+    @ToString
+    @EqualsAndHashCode
     final class InnerClass implements BytecodeAttribute {
 
         /**

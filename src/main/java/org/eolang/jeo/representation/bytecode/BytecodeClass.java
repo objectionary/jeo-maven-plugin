@@ -52,25 +52,21 @@ public final class BytecodeClass implements Testable {
     /**
      * Methods.
      */
-    @ToString.Exclude
     private final Collection<BytecodeMethod> methods;
 
     /**
      * Fields.
      */
-    @ToString.Exclude
     private final Collection<BytecodeField> fields;
 
     /**
      * Annotations.
      */
-    @ToString.Exclude
     private final Collection<BytecodeAnnotation> annotations;
 
     /**
      * Attributes.
      */
-    @ToString.Exclude
     private final Collection<BytecodeAttribute> attributes;
 
     /**

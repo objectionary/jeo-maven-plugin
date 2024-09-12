@@ -28,9 +28,11 @@ import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -78,6 +80,32 @@ final class ASMProgramTest {
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode",
             actual.bytecode(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+
+    @ParameterizedTest
+    @Disabled
+    @ValueSource(strings = "AnnotationsApplication.class")
+    void disableVerification(final String resource) throws Exception {
+        final byte[] original = new BytesOf(new ResourceOf(resource)).asBytes();
+        final BytecodeProgram bytecode = new ASMProgram(original).bytecode();
+        final BytecodeProgram expected = bytecode;
+        final DirectivesProgram directives = bytecode.directives("");
+        final String xml = new Xembler(directives).xml();
+        System.out.println(xml);
+        final BytecodeProgram actual = new XmlProgram(xml).bytecode();
+        System.out.println("_____________________");
+        System.out.println(expected);
+        System.out.println("_____________________");
+        System.out.println(actual);
+        System.out.println("_____________________");
+        MatcherAssert.assertThat(
+            String.format(
+                "We expect to receive the same bytecode."
+            ),
+            actual,
             Matchers.equalTo(expected)
         );
     }

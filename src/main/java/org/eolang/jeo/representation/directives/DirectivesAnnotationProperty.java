@@ -173,11 +173,11 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
     ) {
         return new DirectivesAnnotationProperty(
             Type.ARRAY,
-            properties.stream().map(Directives::new)
+            properties.stream()
+                .map(Directives::new)
                 .reduce(
-                    new Directives().append(
-                        new DirectivesData(Optional.ofNullable(name).orElse(""))
-                    ),
+                    new Directives()
+                        .append(new DirectivesData(Optional.ofNullable(name).orElse(""))),
                     Directives::append
                 )
         );

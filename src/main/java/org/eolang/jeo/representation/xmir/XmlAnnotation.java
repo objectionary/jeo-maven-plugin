@@ -87,9 +87,16 @@ public class XmlAnnotation {
      */
     private List<BytecodeAnnotationValue> props() {
         return this.node.children()
-            .filter(xmlnode -> xmlnode.hasAttribute("base", "annotation-property"))
-            .map(XmlAnnotationProperty::new)
-            .map(XmlAnnotationProperty::bytecode)
+            .filter(xmlnode -> xmlnode.hasAttribute("base", "annotation-property")
+            || xmlnode.hasAttribute("base", "annotation"))
+            .map(
+                xmlnode -> {
+                    if (xmlnode.hasAttribute("base", "annotation-property")) {
+                        return new XmlAnnotationProperty(xmlnode).bytecode();
+                    } else {
+                        return new XmlAnnotation(xmlnode).bytecode();
+                    }
+                })
             .collect(Collectors.toList());
     }
 }

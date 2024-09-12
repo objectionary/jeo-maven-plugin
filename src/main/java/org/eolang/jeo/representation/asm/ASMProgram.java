@@ -433,7 +433,8 @@ public final class ASMProgram {
 
     private static BytecodeAnnotation annotation(final AnnotationNode node, final boolean visible) {
         List<BytecodeAnnotationValue> properties = new ArrayList<>(0);
-        final List<Object> values = Optional.ofNullable(node.values).orElse(new ArrayList<>(0));
+        final List<Object> values = Optional.ofNullable(node.values)
+            .orElse(new ArrayList<>(0));
         for (int index = 0; index < values.size(); index += 2) {
             properties.add(
                 ASMProgram.annotationProperty(
@@ -452,16 +453,22 @@ public final class ASMProgram {
             final String[] params = (String[]) value;
             return BytecodeAnnotationProperty.enump(name, params[0], params[1]);
         } else if (value instanceof AnnotationNode) {
-            AnnotationNode annotation = (AnnotationNode) value;
-            return ASMProgram.annotation(
-                annotation,
-                true
+            final AnnotationNode cast = AnnotationNode.class.cast(value);
+            return new BytecodeAnnotation(cast.desc, true,
+                cast.values.stream().map(
+                    val -> ASMProgram.annotationProperty("", val)
+                ).collect(Collectors.toList())
             );
+//            AnnotationNode annotation = (AnnotationNode) value;
+//            return ASMProgram.annotation(
+//                annotation,
+//                true
+//            );
         } else if (value instanceof List) {
             return BytecodeAnnotationProperty.array(
                 name,
                 ((Collection<?>) value).stream()
-                    .map(val -> ASMProgram.annotationProperty(null, val))
+                    .map(val -> ASMProgram.annotationProperty("", val))
                     .collect(Collectors.toList())
             );
         } else {

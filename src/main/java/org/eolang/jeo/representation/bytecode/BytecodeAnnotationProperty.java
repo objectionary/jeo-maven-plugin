@@ -97,19 +97,23 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
         final BytecodeAnnotationProperty result;
         switch (Type.valueOf(type)) {
             case PLAIN:
-                result = new BytecodeAnnotationProperty(Type.PLAIN, params);
+                result = plain((String) params.get(0), params.get(1));
                 break;
             case ENUM:
-                result = new BytecodeAnnotationProperty(Type.ENUM, params);
+                result = enump(
+                    (String) params.get(0), (String) params.get(1), (String) params.get(2));
                 break;
             case ARRAY:
-                result = new BytecodeAnnotationProperty(Type.ARRAY, params);
+                result = array((String) params.get(0), params.subList(1, params.size()));
                 break;
             case ANNOTATION:
                 Logger.debug(
                     BytecodeAnnotationProperty.class, "Annotation property params: %s", params
                 );
-                result = new BytecodeAnnotationProperty(Type.ANNOTATION, params);
+                result = annotation(
+                    (String) params.get(0), (String) params.get(1),
+                    params.subList(2, params.size())
+                );
                 break;
             default:
                 throw new IllegalArgumentException(
