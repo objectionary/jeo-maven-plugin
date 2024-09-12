@@ -27,7 +27,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -133,18 +132,5 @@ public final class DirectivesProgram implements Iterable<Directive> {
         directives.append(this.klass.get());
         directives.up();
         return directives.iterator();
-    }
-
-    /**
-     * Retrieve top-level class.
-     * @return Top-level class.
-     */
-    public DirectivesClass top() {
-        if (Objects.isNull(this.klass.get())) {
-            throw new IllegalStateException(
-                String.format("Class is not initialized here %s", this)
-            );
-        }
-        return this.klass.get();
     }
 }

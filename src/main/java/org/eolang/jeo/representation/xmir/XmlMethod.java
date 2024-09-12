@@ -41,7 +41,9 @@ import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeParameters;
+import org.eolang.jeo.representation.directives.DirectivesMaxs;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
+import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Transformers;
@@ -317,15 +319,18 @@ public final class XmlMethod {
         final int locals,
         final String... exceptions
     ) {
-        final DirectivesMethodProperties props = new DirectivesMethodProperties(
-            access, descriptor, "", exceptions
-        );
-        props.maxs(stack, locals);
         return new XmlNode(
             new Xembler(
                 new DirectivesMethod(
                     name,
-                    props
+                    new DirectivesMethodProperties(
+                        access,
+                        descriptor,
+                        "",
+                        exceptions,
+                        new DirectivesMaxs(stack, locals),
+                        new DirectivesMethodParams(descriptor)
+                    )
                 ),
                 new Transformers.Node()
             ).xmlQuietly()

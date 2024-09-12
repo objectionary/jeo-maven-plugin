@@ -127,24 +127,6 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
     }
 
     /**
-     * Set parameter annotation.
-     * @param index Parameter index.
-     * @param annotation Annotation.
-     */
-    public void paramAnnotation(final int index, final DirectivesAnnotation annotation) {
-        this.params.annotation(index, annotation);
-    }
-
-    /**
-     * Set max stack and locals.
-     * @param stack Max stack size.
-     * @param locals Max locals size.
-     */
-    public void maxs(final int stack, final int locals) {
-        this.max.set(new DirectivesMaxs(stack, locals));
-    }
-
-    /**
      * Method descriptor.
      * @return Descriptor.
      */
@@ -163,5 +145,4 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
             .append(this.params)
             .iterator();
     }
-
 }
