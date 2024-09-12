@@ -28,7 +28,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -81,14 +80,40 @@ import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 import org.xembly.Directive;
 
+/**
+ * ASM bytecode parser.
+ * We used to use the Visitor pattern, but it's too verbose and not very readable.
+ * So, we decided to switch to a Tree-API-based approach.
+ * You can read more about different approaches right here:
+ * <a href="https://asm.ow2.io/asm4-guide.pdf">https://asm.ow2.io/asm4-guide.pdf</a>
+ * The recent version with the Visitor pattern is still available in the history:
+ * <a href="https://github.com/objectionary/jeo-maven-plugin/tree/29daa0a167b5c2ba4caaceafb6e6bafc381ac05c">github</a>
+ * @since 0.6
+ * @todo #537:60min Refactor {@link ASMProgram} class.
+ *  It's too big and contains a lot of methods.
+ *  We need to refactor it to make it more readable and maintainable.
+ *  Maybe it's worth splitting it into several classes.
+ *  Don't forget to add/update the tests.
+ */
 public final class ASMProgram {
 
+    /**
+     * Bytecode as plain bytes.
+     */
     private final byte[] bytecode;
 
+    /**
+     * Constructor.
+     * @param bytes Bytes.
+     */
     public ASMProgram(final byte... bytes) {
         this.bytecode = bytes.clone();
     }
 
+    /**
+     * Convert to bytecode.
+     * @return Bytecode.
+     */
     public BytecodeProgram bytecode() {
         final ClassNode node = new ClassNode();
         new ClassReader(this.bytecode).accept(node, 0);
@@ -99,6 +124,11 @@ public final class ASMProgram {
         );
     }
 
+    /**
+     * Convert asm class to domain class.
+     * @param node Asm class node.
+     * @return Domain class.
+     */
     private static BytecodeClass clazz(final ClassNode node) {
         final ClassName full = new ClassName(node.name);
         return new BytecodeClass(
@@ -117,10 +147,20 @@ public final class ASMProgram {
         );
     }
 
+    /**
+     * Convert asm field to domain field.
+     * @param node Asm field node.
+     * @return Domain field.
+     */
     private static Collection<BytecodeField> fields(final ClassNode node) {
         return node.fields.stream().map(ASMProgram::field).collect(Collectors.toList());
     }
 
+    /**
+     * Convert asm field to domain field.
+     * @param node Asm field node.
+     * @return Domain field.
+     */
     private static BytecodeField field(final FieldNode node) {
         return new BytecodeField(
             node.name,
@@ -132,10 +172,20 @@ public final class ASMProgram {
         );
     }
 
+    /**
+     * Convert asm methods to domain methods.
+     * @param node Asm class node.
+     * @return Domain methods.
+     */
     private static Collection<BytecodeMethod> methods(final ClassNode node) {
         return node.methods.stream().map(ASMProgram::method).collect(Collectors.toList());
     }
 
+    /**
+     * Convert asm method to domain method.
+     * @param node Asm method node.
+     * @return Domain method.
+     */
     private static BytecodeMethod method(final MethodNode node) {
         return new BytecodeMethod(
             ASMProgram.tryblocks(node),
@@ -154,6 +204,11 @@ public final class ASMProgram {
         );
     }
 
+    /**
+     * Convert asm method to domain method parameters.
+     * @param node Asm method node.
+     * @return Domain method parameters.
+     */
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static BytecodeParameters parameters(final MethodNode node) {
         final List<AnnotationNode>[] invisible;
@@ -171,20 +226,8 @@ public final class ASMProgram {
             visible = node.visibleParameterAnnotations;
         }
         final int size = visible.length;
-        if (visible.length != invisible.length) {
-            throw new IllegalStateException(
-                String.format(
-                    "Size: %d, Visible size: %d, Invisible size: %d, Invisible: %s, Visible: %s",
-                    size,
-                    visible.length,
-                    invisible.length,
-                    Arrays.toString(invisible),
-                    Arrays.toString(visible)
-                )
-            );
-        }
-        try {
-            Map<Integer, List<BytecodeAnnotation>> map = IntStream.range(0, size).mapToObj(
+        return new BytecodeParameters(
+            IntStream.range(0, size).mapToObj(
                 index -> new MapEntry<>(
                     index,
                     new BytecodeAnnotations(
@@ -194,47 +237,58 @@ public final class ASMProgram {
                         )
                     ).annotations()
                 )
-            ).collect(Collectors.toMap(MapEntry::getKey, MapEntry::getValue));
-            return new BytecodeParameters(map);
-        } catch (final ArrayIndexOutOfBoundsException exception) {
-            throw new IllegalStateException(
-                String.format(
-                    "Size: %d, Visible size: %d, Invisible size: %d, Invisible: %s, Visible: %s",
-                    size,
-                    visible.length,
-                    invisible.length,
-                    Arrays.toString(invisible),
-                    Arrays.toString(visible)
-                ),
-                exception
-            );
-        }
-
+            ).collect(Collectors.toMap(MapEntry::getKey, MapEntry::getValue))
+        );
     }
 
+    /**
+     * Convert asm method to domain method maxs.
+     * @param node Asm method node.
+     * @return Domain method maxs.
+     */
     private static BytecodeMaxs maxs(final MethodNode node) {
         return new BytecodeMaxs(node.maxStack, node.maxLocals);
     }
 
+    /**
+     * Convert asm method to domain method tryblocks.
+     * @param node Asm method node.
+     * @return Domain method tryblocks.
+     */
     private static List<BytecodeEntry> tryblocks(final MethodNode node) {
         return node.tryCatchBlocks.stream().map(ASMProgram::tryblock).collect(Collectors.toList());
     }
 
-    private static BytecodeEntry tryblock(final TryCatchBlockNode tryCatchBlockNode) {
+    /**
+     * Convert asm try-catch block to domain try-catch block.
+     * @param node Asm try-catch block node.
+     * @return Domain try-catch block.
+     */
+    private static BytecodeEntry tryblock(final TryCatchBlockNode node) {
         return new BytecodeTryCatchBlock(
-            tryCatchBlockNode.start.getLabel(),
-            tryCatchBlockNode.end.getLabel(),
-            tryCatchBlockNode.handler.getLabel(),
-            tryCatchBlockNode.type
+            node.start.getLabel(),
+            node.end.getLabel(),
+            node.handler.getLabel(),
+            node.type
         );
     }
 
+    /**
+     * Retrieve domain attributes from asm class.
+     * @param node Asm class node.
+     * @return Domain attributes.
+     */
     private static Collection<BytecodeAttribute> innerClasses(final ClassNode node) {
         return node.innerClasses.stream()
             .map(ASMProgram::innerClass)
             .collect(Collectors.toList());
     }
 
+    /**
+     * Convert asm inner class to domain inner class.
+     * @param node Asm inner class node.
+     * @return Domain inner class.
+     */
     private static BytecodeAttribute innerClass(final InnerClassNode node) {
         return new InnerClass(
             node.name,
@@ -244,53 +298,70 @@ public final class ASMProgram {
         );
     }
 
+    /**
+     * Convert asm class to domain class.
+     * @param node Asm class node.
+     * @return Domain class.
+     */
     private static List<BytecodeEntry> instructions(final MethodNode node) {
         return Arrays.stream(node.instructions.toArray())
             .map(ASMProgram::instruction)
             .collect(Collectors.toList());
     }
 
+    /**
+     * Convert asm instruction to domain instruction.
+     * @param node Asm instruction node.
+     * @return Domain instruction.
+     */
     private static BytecodeEntry instruction(final AbstractInsnNode node) {
+        final BytecodeEntry result;
         switch (node.getType()) {
             case AbstractInsnNode.INSN:
-                return new BytecodeInstructionEntry(node.getOpcode());
+                result = new BytecodeInstructionEntry(node.getOpcode());
+                break;
             case AbstractInsnNode.INT_INSN:
                 final IntInsnNode instr = IntInsnNode.class.cast(node);
-                return new BytecodeInstructionEntry(
+                result = new BytecodeInstructionEntry(
                     instr.getOpcode(),
                     instr.operand
                 );
+                break;
             case AbstractInsnNode.VAR_INSN:
                 final VarInsnNode varinstr = VarInsnNode.class.cast(node);
-                return new BytecodeInstructionEntry(
+                result = new BytecodeInstructionEntry(
                     varinstr.getOpcode(), varinstr.var
                 );
+                break;
             case AbstractInsnNode.TYPE_INSN:
                 final TypeInsnNode typeinstr = TypeInsnNode.class.cast(node);
-                return new BytecodeInstructionEntry(
+                result = new BytecodeInstructionEntry(
                     typeinstr.getOpcode(),
                     typeinstr.desc
                 );
+                break;
             case AbstractInsnNode.FIELD_INSN:
                 final FieldInsnNode fieldInsnNode = FieldInsnNode.class.cast(node);
-                return new BytecodeInstructionEntry(
+                result = new BytecodeInstructionEntry(
                     fieldInsnNode.getOpcode(),
                     fieldInsnNode.owner,
                     fieldInsnNode.name,
                     fieldInsnNode.desc
                 );
+                break;
             case AbstractInsnNode.METHOD_INSN:
                 final MethodInsnNode methodInsnNode = MethodInsnNode.class.cast(node);
-                return new BytecodeInstructionEntry(
+                result = new BytecodeInstructionEntry(
                     methodInsnNode.getOpcode(),
                     methodInsnNode.owner,
                     methodInsnNode.name,
                     methodInsnNode.desc,
                     methodInsnNode.itf
                 );
+                break;
             case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
                 final InvokeDynamicInsnNode dynamic = InvokeDynamicInsnNode.class.cast(node);
-                return new BytecodeInstructionEntry(
+                result = new BytecodeInstructionEntry(
                     dynamic.getOpcode(),
                     Stream.concat(
                         Stream.of(
@@ -301,43 +372,49 @@ public final class ASMProgram {
                         Arrays.stream(dynamic.bsmArgs)
                     ).toArray(Object[]::new)
                 );
+                break;
             case AbstractInsnNode.JUMP_INSN:
                 final JumpInsnNode jump = JumpInsnNode.class.cast(node);
-                return new BytecodeInstructionEntry(
+                result = new BytecodeInstructionEntry(
                     jump.getOpcode(),
                     jump.label.getLabel()
                 );
+                break;
             case AbstractInsnNode.LABEL:
                 final LabelNode label = LabelNode.class.cast(node);
-                return new BytecodeLabel(
+                result = new BytecodeLabel(
                     label.getLabel(),
                     new AllLabels()
                 );
+                break;
             case AbstractInsnNode.LDC_INSN:
                 final LdcInsnNode ldc = LdcInsnNode.class.cast(node);
-                return new BytecodeInstructionEntry(
+                result = new BytecodeInstructionEntry(
                     ldc.getOpcode(),
                     ldc.cst
                 );
+                break;
             case AbstractInsnNode.IINC_INSN:
                 final IincInsnNode iinc = IincInsnNode.class.cast(node);
-                return new BytecodeInstructionEntry(
+                result = new BytecodeInstructionEntry(
                     iinc.getOpcode(),
                     iinc.var,
                     iinc.incr
                 );
+                break;
             case AbstractInsnNode.TABLESWITCH_INSN:
                 final TableSwitchInsnNode table = TableSwitchInsnNode.class.cast(node);
-                return new BytecodeInstructionEntry(
+                result = new BytecodeInstructionEntry(
                     table.getOpcode(),
                     Stream.concat(
                         Stream.of(table.min, table.max, table.dflt.getLabel()),
                         table.labels.stream().map(LabelNode::getLabel)
                     ).toArray(Object[]::new)
                 );
+                break;
             case AbstractInsnNode.LOOKUPSWITCH_INSN:
                 final LookupSwitchInsnNode lookup = LookupSwitchInsnNode.class.cast(node);
-                return new BytecodeInstructionEntry(
+                result = new BytecodeInstructionEntry(
                     lookup.getOpcode(),
                     Stream.concat(
                         Stream.of(lookup.dflt.getLabel()),
@@ -347,18 +424,21 @@ public final class ASMProgram {
                         )
                     ).toArray(Object[]::new)
                 );
+                break;
             case AbstractInsnNode.MULTIANEWARRAY_INSN:
                 final MultiANewArrayInsnNode multiarr = MultiANewArrayInsnNode.class.cast(node);
-                return new BytecodeInstructionEntry(
+                result = new BytecodeInstructionEntry(
                     multiarr.getOpcode(),
                     multiarr.desc,
                     multiarr.dims
                 );
+                break;
             case AbstractInsnNode.FRAME:
                 final FrameNode frame = FrameNode.class.cast(node);
-                return new BytecodeFrame(frame.type, frame.local, frame.stack);
+                result = new BytecodeFrame(frame.type, frame.local, frame.stack);
+                break;
             case AbstractInsnNode.LINE:
-                return new BytecodeEntry() {
+                result = new BytecodeEntry() {
                     @Override
                     public void writeTo(final MethodVisitor visitor) {
 
@@ -384,13 +464,20 @@ public final class ASMProgram {
                         return "";
                     }
                 };
+                break;
             default:
                 throw new IllegalStateException(
                     String.format("Unknown instruction type: %s", node)
                 );
         }
+        return result;
     }
 
+    /**
+     * Retrieve domain annotations from asm class.
+     * @param node Asm class node.
+     * @return Domain annotations.
+     */
     private static Collection<BytecodeAnnotation> annotations(final ClassNode node) {
         return Stream.concat(
             ASMProgram.safe(node.visibleAnnotations, true),
@@ -398,6 +485,11 @@ public final class ASMProgram {
         ).collect(Collectors.toList());
     }
 
+    /**
+     * Retrieve domain annotations from asm method.
+     * @param node Asm method node.
+     * @return Domain annotations.
+     */
     private static List<BytecodeAnnotation> annotations(final MethodNode node) {
         return Stream.concat(
             ASMProgram.safe(node.visibleAnnotations, true),
@@ -405,6 +497,11 @@ public final class ASMProgram {
         ).collect(Collectors.toList());
     }
 
+    /**
+     * Retrieve domain annotations from asm field.
+     * @param node Asm field node.
+     * @return Domain annotations.
+     */
     private static BytecodeAnnotations annotations(final FieldNode node) {
         return new BytecodeAnnotations(
             Stream.concat(
@@ -414,14 +511,25 @@ public final class ASMProgram {
         );
     }
 
-    static Stream<BytecodeAnnotation> safe(List<AnnotationNode> nodes, boolean visible) {
+    /**
+     * Safe annotations.
+     * @param nodes Annotation nodes.
+     * @param visible Is it visible?
+     * @return Annotations.
+     */
+    private static Stream<BytecodeAnnotation> safe(List<AnnotationNode> nodes, boolean visible) {
         return Optional.ofNullable(nodes)
             .orElse(new ArrayList<>(0))
             .stream()
             .map(ann -> ASMProgram.annotation(ann, visible));
     }
 
-
+    /**
+     * Convert asm annotation to domain annotation.
+     * @param node Asm annotation node.
+     * @param visible Is it visible?
+     * @return Domain annotation.
+     */
     private static BytecodeAnnotation annotation(final AnnotationNode node, final boolean visible) {
         List<BytecodeAnnotationValue> properties = new ArrayList<>(0);
         final List<Object> values = Optional.ofNullable(node.values)
@@ -437,15 +545,22 @@ public final class ASMProgram {
         return new BytecodeAnnotation(node.desc, visible, properties);
     }
 
+    /**
+     * Convert asm annotation property to domain annotation property.
+     * @param name Property name.
+     * @param value Property value.
+     * @return Domain annotation.
+     */
     private static BytecodeAnnotationValue annotationProperty(
         final String name, final Object value
     ) {
+        final BytecodeAnnotationValue result;
         if (value instanceof String[]) {
             final String[] params = (String[]) value;
-            return BytecodeAnnotationProperty.enump(name, params[0], params[1]);
+            result = BytecodeAnnotationProperty.enump(name, params[0], params[1]);
         } else if (value instanceof AnnotationNode) {
             final AnnotationNode cast = AnnotationNode.class.cast(value);
-            return BytecodeAnnotationProperty.annotation(
+            result = BytecodeAnnotationProperty.annotation(
                 name,
                 cast.desc,
                 cast.values.stream().map(
@@ -453,27 +568,35 @@ public final class ASMProgram {
                 ).collect(Collectors.toList())
             );
         } else if (value instanceof List) {
-            return BytecodeAnnotationProperty.array(
+            result = BytecodeAnnotationProperty.array(
                 name,
                 ((Collection<?>) value).stream()
                     .map(val -> ASMProgram.annotationProperty("", val))
                     .collect(Collectors.toList())
             );
         } else {
-            return BytecodeAnnotationProperty.plain(name, value);
+            result = BytecodeAnnotationProperty.plain(name, value);
         }
+        return result;
     }
 
+    /**
+     * Convert asm default value to domain default value.
+     * @param node Asm method node.
+     * @return Domain default value.
+     */
     private static List<BytecodeDefaultValue> defvalues(final MethodNode node) {
+        final List<BytecodeDefaultValue> result;
         if (node.annotationDefault == null) {
-            return Collections.emptyList();
+            result = Collections.emptyList();
         } else {
-            return Collections.singletonList(
+            result = Collections.singletonList(
                 new BytecodeDefaultValue(
                     ASMProgram.annotationProperty(
                         null, node.annotationDefault)
                 )
             );
         }
+        return result;
     }
 }

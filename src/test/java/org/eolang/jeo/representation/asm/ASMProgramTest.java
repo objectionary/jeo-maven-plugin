@@ -38,7 +38,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link ASMProgram}.
- * @since 0.6.
+ * @since 0.6
  */
 final class ASMProgramTest {
 
@@ -69,16 +69,16 @@ final class ASMProgramTest {
     @ParameterizedTest
     @ValueSource(strings = {"FixedWidth.class", "DeprecatedMethod.class", "ParamAnnotation.class"})
     void convertsToBytecodeThenToXmirAndThenBackToBytecode(final String resource) throws Exception {
-        final byte[] original = new BytesOf(new ResourceOf(resource)).asBytes();
-        final BytecodeProgram bytecode = new ASMProgram(original).bytecode();
-        final Bytecode expected = bytecode.bytecode();
-        final BytecodeProgram actual = new XmlProgram(
-            new Xembler(bytecode.directives("")).xml()
+        final BytecodeProgram bytecode = new ASMProgram(
+            new BytesOf(new ResourceOf(resource)
+            ).asBytes()
         ).bytecode();
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode",
-            actual.bytecode(),
-            Matchers.equalTo(expected)
+            new XmlProgram(
+                new Xembler(bytecode.directives("")).xml()
+            ).bytecode().bytecode(),
+            Matchers.equalTo(bytecode.bytecode())
         );
     }
 }

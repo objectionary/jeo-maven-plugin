@@ -46,6 +46,7 @@ public final class BytecodeClass implements Testable {
     /**
      * Class name.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final String name;
 
     /**

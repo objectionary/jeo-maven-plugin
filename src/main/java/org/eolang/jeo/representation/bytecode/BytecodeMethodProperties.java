@@ -48,6 +48,7 @@ public final class BytecodeMethodProperties implements Testable {
     /**
      * Method name.
      */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final String name;
 
     /**
@@ -200,6 +201,11 @@ public final class BytecodeMethodProperties implements Testable {
         return visitor;
     }
 
+    /**
+     * Convert to directives.
+     * @param maxs Maxs.
+     * @return Directives.
+     */
     public DirectivesMethodProperties directives(final BytecodeMaxs maxs) {
         return new DirectivesMethodProperties(
             this.access,
