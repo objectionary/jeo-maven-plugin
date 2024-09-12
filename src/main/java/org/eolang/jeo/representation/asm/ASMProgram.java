@@ -454,7 +454,9 @@ public final class ASMProgram {
             return BytecodeAnnotationProperty.enump(name, params[0], params[1]);
         } else if (value instanceof AnnotationNode) {
             final AnnotationNode cast = AnnotationNode.class.cast(value);
-            return new BytecodeAnnotation(cast.desc, true,
+            return BytecodeAnnotationProperty.annotation(
+                name,
+                cast.desc,
                 cast.values.stream().map(
                     val -> ASMProgram.annotationProperty("", val)
                 ).collect(Collectors.toList())

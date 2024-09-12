@@ -105,8 +105,8 @@ final class ASMProgramTest {
             String.format(
                 "We expect to receive the same bytecode."
             ),
-            actual,
-            Matchers.equalTo(expected)
+            actual.bytecode(false),
+            Matchers.equalTo(expected.bytecode(false))
         );
     }
 

@@ -83,7 +83,12 @@ public final class BytecodeAnnotationProperty implements BytecodeAnnotationValue
     public static BytecodeAnnotationProperty annotation(
         final String name, final String desc, final List<Object> values
     ) {
-        return new BytecodeAnnotationProperty(Type.ANNOTATION, Arrays.asList(name, desc, values));
+        final List<Object> collect = Stream.concat(Stream.of(name, desc), values.stream())
+            .collect(Collectors.toList());
+        return new BytecodeAnnotationProperty(
+            Type.ANNOTATION,
+            collect
+        );
     }
 
     /**

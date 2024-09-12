@@ -216,9 +216,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive>, 
             Type.ANNOTATION,
             new DirectivesData(Optional.ofNullable(name).orElse("")),
             properties.stream().map(Directives::new)
-                .reduce(new Directives().append(
-                        new DirectivesData(Optional.ofNullable(name).orElse("")))
-                    .append(new DirectivesData(descriptor)), Directives::append)
+                .reduce(new Directives().append(new DirectivesData(descriptor)), Directives::append)
         );
     }
 
