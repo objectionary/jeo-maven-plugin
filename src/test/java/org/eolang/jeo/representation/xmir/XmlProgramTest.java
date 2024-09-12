@@ -109,22 +109,22 @@ final class XmlProgramTest {
                                 "<T:Ljava/lang/Object;>(TT;)V"
                             )
                         )
-                            .opcode(
+                            .withOpcode(
                                 Opcodes.GETSTATIC,
                                 "java/lang/System",
                                 "out",
                                 "Ljava/io/PrintStream;",
                                 false
                             )
-                            .opcode(Opcodes.ALOAD, 0)
-                            .opcode(
+                            .withOpcode(Opcodes.ALOAD, 0)
+                            .withOpcode(
                                 Opcodes.INVOKEVIRTUAL,
                                 "java/io/PrintStream",
                                 "println",
                                 "(Ljava/lang/Object;)V",
                                 false
                             )
-                            .opcode(Opcodes.RETURN)
+                            .withOpcode(Opcodes.RETURN)
                     )
                 )
         ).xmlQuietly();
@@ -162,19 +162,19 @@ final class XmlProgramTest {
                                     "java/lang/Exception"
                                 )
                             )
-                                .opcode(
+                                .withOpcode(
                                     Opcodes.NEW,
                                     "java/lang/Exception"
                                 )
-                                .opcode(Opcodes.DUP)
-                                .opcode(
+                                .withOpcode(Opcodes.DUP)
+                                .withOpcode(
                                     Opcodes.INVOKESPECIAL,
                                     "java/lang/Exception",
                                     "<init>",
                                     "()V",
                                     false
                                 )
-                                .opcode(Opcodes.ATHROW)
+                                .withOpcode(Opcodes.ATHROW)
                         )
                 )
         ).xmlQuietly();

@@ -79,7 +79,7 @@ final class DirectivesMethodTest {
                 new XmlNode(
                     new Xembler(
                         new DirectivesMethod(name)
-                            .annotation(new DirectivesAnnotation(descriptor, visible))
+                            .withAnnotation(new DirectivesAnnotation(descriptor, visible))
                     ).xml()
                 )
             ).bytecode(),

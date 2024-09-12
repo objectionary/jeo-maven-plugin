@@ -30,7 +30,6 @@ import org.xembly.Directives;
 
 /**
  * Max stack and locals.
- *
  * @since 0.3
  */
 public final class DirectivesMaxs implements Iterable<Directive> {

@@ -49,21 +49,12 @@ public final class DirectivesInstruction implements Iterable<Directive> {
     /**
      * Opcodes counting.
      * Do we add number to opcode name or not?
-     * if true then we add number to opcode name:
+     * if true, then we add number to opcode name:
      *   RETURN -> RETURN-1
-     * if false then we do not add number to opcode name:
+     * if false, then we do not add number to opcode name:
      *   RETURN -> RETURN
      */
     private final boolean counting;
-
-    /**
-     * Constructor.
-     * @param opcode Opcode
-     * @param arguments Instruction arguments
-     */
-    public DirectivesInstruction(final int opcode, final Object... arguments) {
-        this(opcode, true, arguments);
-    }
 
     /**
      * Constructor.

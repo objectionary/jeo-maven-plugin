@@ -24,9 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicReference;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -48,46 +46,24 @@ public final class DirectivesDefaultValue implements Iterable<Directive> {
     /**
      * Default value.
      */
-    private final AtomicReference<Iterable<Directive>> value;
+    private final Iterable<Directive> value;
 
     /**
      * Constructor.
      * @param value Default value.
      */
     public DirectivesDefaultValue(final Iterable<Directive> value) {
-        this(new AtomicReference<>(value));
-    }
-
-    /**
-     * Constructor.
-     * @param value Default value.
-     */
-    public DirectivesDefaultValue(final AtomicReference<Iterable<Directive>> value) {
         this.value = value;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        final Iterator<Directive> result;
-        if (Objects.isNull(this.value.get())) {
-            result = new Directives().iterator();
-        } else {
-            final Directives directives = new Directives()
-                .add("o")
-                .attr("base", "annotation-default-value")
-                .attr("name", "annotation-defvalue")
-                .attr("line", new Random().nextInt(Integer.MAX_VALUE));
-            directives.append(this.value.get());
-            result = directives.up().iterator();
-        }
-        return result;
-    }
-
-    /**
-     * Check if the default value is empty.
-     * @return True if the default value is empty, otherwise false.
-     */
-    public boolean isEmpty() {
-        return this.value.get() == null;
+        final Directives directives = new Directives()
+            .add("o")
+            .attr("base", "annotation-default-value")
+            .attr("name", "annotation-defvalue")
+            .attr("line", new Random().nextInt(Integer.MAX_VALUE));
+        directives.append(this.value);
+        return directives.up().iterator();
     }
 }

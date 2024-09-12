@@ -65,6 +65,12 @@ public final class DirectivesMetas implements Iterable<Directive> {
         this(classname, false, false);
     }
 
+    /**
+     * Constructor.
+     * @param classname Class name.
+     * @param opcodes Whether to include opcodes.
+     * @param labels Whether to include labels.
+     */
     public DirectivesMetas(
         final ClassName classname,
         final boolean opcodes,

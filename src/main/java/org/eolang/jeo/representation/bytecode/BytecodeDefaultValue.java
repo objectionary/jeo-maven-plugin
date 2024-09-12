@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.bytecode;
 import org.eolang.jeo.representation.directives.DirectivesDefaultValue;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.xembly.Directive;
 
 /**
  * Bytecode default value.
@@ -57,7 +58,7 @@ public final class BytecodeDefaultValue {
         visitor.visitEnd();
     }
 
-    public DirectivesDefaultValue directives() {
+    public Iterable<Directive> directives() {
         return new DirectivesDefaultValue(this.property.directives());
     }
 }

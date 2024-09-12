@@ -70,21 +70,14 @@ public final class DirectivesMethod implements Iterable<Directive> {
     private final DirectivesAnnotations annotations;
 
     /**
-     * Annotation default value.
+     * Default value.
      */
-    private final AtomicReference<DirectivesDefaultValue> dvalue;
+    private final List<Iterable<Directive>> dvalue;
 
     /**
      * Opcodes counting.
      */
     private final boolean counting;
-
-    /**
-     * Constructor.
-     */
-    public DirectivesMethod() {
-        this("testMethod");
-    }
 
     /**
      * Constructor.
@@ -120,7 +113,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
             new ArrayList<>(0),
             new ArrayList<>(0),
             new DirectivesAnnotations(),
-            new AtomicReference<>(),
+            new ArrayList<>(0),
             counting
         );
     }
@@ -141,7 +134,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final List<Iterable<Directive>> instructions,
         final List<Iterable<Directive>> exceptions,
         final DirectivesAnnotations annotations,
-        final AtomicReference<DirectivesDefaultValue> dvalue,
+        final List<Iterable<Directive>> dvalue,
         final boolean counting
     ) {
         this.name = name;
@@ -159,26 +152,9 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @param operands Operands
      * @return This object
      */
-    public DirectivesMethod opcode(final int opcode, final Object... operands) {
+    public DirectivesMethod withOpcode(final int opcode, final Object... operands) {
         this.instructions.add(new DirectivesInstruction(opcode, this.counting, operands));
         return this;
-    }
-
-    /**
-     * Add operand to the directives.
-     * @param directives Operand directives.
-     */
-    public void operand(final Iterable<Directive> directives) {
-        this.instructions.add(directives);
-    }
-
-    /**
-     * Add maxs to the directives.
-     * @param stack Max stack size
-     * @param locals Max locals size
-     */
-    public void maxs(final int stack, final int locals) {
-        this.properties.maxs(stack, locals);
     }
 
     /**
@@ -186,7 +162,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @param annotation Annotation directives.
      * @return This object.
      */
-    public DirectivesMethod annotation(final DirectivesAnnotation annotation) {
+    public DirectivesMethod withAnnotation(final DirectivesAnnotation annotation) {
         this.annotations.add(annotation);
         return this;
     }
@@ -218,57 +194,14 @@ public final class DirectivesMethod implements Iterable<Directive> {
             this.exceptions.forEach(directives::append);
             directives.up();
         }
-        if (Objects.nonNull(this.dvalue)
-            && this.dvalue.get() != null
-            && !this.dvalue.get().isEmpty()
-        ) {
-            directives.append(this.dvalue.get());
-        }
+        this.dvalue.forEach(directives::append);
+//        if (Objects.nonNull(this.dvalue)
+//            && this.dvalue.get() != null
+//            && !this.dvalue.get().isEmpty()
+//        ) {
+//            directives.append(this.dvalue.get());
+//        }
         directives.up();
         return directives.iterator();
-    }
-
-    /**
-     * Add exception to the directives.
-     * @param exception Exception directives.
-     */
-    void exception(final Iterable<Directive> exception) {
-        this.exceptions.add(exception);
-    }
-
-    /**
-     * Add annotation default value to the directives.
-     * @param value Default value directives.
-     */
-    void defvalue(final DirectivesDefaultValue value) {
-        this.dvalue.set(value);
-    }
-
-    /**
-     * Set parameter annotation.
-     * @param parameter Parameter index
-     * @param annotation Annotation
-     */
-    void paramAnnotation(final int parameter, final DirectivesAnnotation annotation) {
-        this.properties.paramAnnotation(parameter, annotation);
-    }
-
-    /**
-     * True if method has opcodes.
-     * @return True if method has opcodes.
-     */
-    boolean hasOpcodes() {
-        return this.instructions.stream().anyMatch(DirectivesInstruction.class::isInstance);
-    }
-
-    /**
-     * True if method has labels.
-     * @return True if method has labels.
-     */
-    boolean hasLabels() {
-        return this.instructions.stream()
-            .filter(DirectivesOperand.class::isInstance)
-            .map(DirectivesOperand.class::cast)
-            .anyMatch(DirectivesOperand::isLabel);
     }
 }
