@@ -39,6 +39,9 @@ SOFTWARE.
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <stack-size>256M</stack-size>
+    <jeo.disassemble>${project.build.directory}/generated-sources/jeo-disassemble</jeo.disassemble>
+    <eo.phi>${project.build.directory}/generated-sources/eo-phi</eo.phi>
+    <eo.unphi>${project.build.directory}/generated-sources/eo-unphi</eo.unphi>
   </properties>
   <build>
     <plugins>
@@ -49,15 +52,52 @@ SOFTWARE.
         <executions>
           <execution>
             <id>bytecode-to-xmir</id>
+            <phase>process-classes</phase>
+            <configuration>
+              <outputDir>${jeo.disassemble}</outputDir>
+            </configuration>
             <goals>
               <goal>disassemble</goal>
             </goals>
           </execution>
           <execution>
             <id>xmir-to-bytecode</id>
+            <phase>prepare-package</phase>
+            <configuration>
+              <sourcesDir>${eo.unphi}</sourcesDir>
+            </configuration>
             <goals>
               <goal>assemble</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.eolang</groupId>
+        <artifactId>eo-maven-plugin</artifactId>
+        <version>0.39.0</version>
+        <executions>
+          <execution>
+            <id>xmir-to-phi</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>xmir-to-phi</goal>
+            </goals>
+            <configuration>
+              <phiInputDir>${jeo.disassemble}</phiInputDir>
+              <phiOutputDir>${eo.phi}</phiOutputDir>
+            </configuration>
+          </execution>
+          <execution>
+            <id>phi-to-xmir</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>xmir-to-phi</goal>
+            </goals>
+            <configuration>
+              <phiInputDir>${eo.phi}</phiInputDir>
+              <phiOutputDir>${eo.unphi}</phiOutputDir>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -68,7 +108,7 @@ SOFTWARE.
         <executions>
           <execution>
             <phase>
-              process-classes
+              verify
             </phase>
             <goals>
               <goal>exec</goal>
