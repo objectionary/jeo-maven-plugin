@@ -106,19 +106,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     }
 
     /**
-     * Get XML node.
-     * @return XML node.
-     * @todo #636:30min Rremove {@link XmlInstruction#toNode()} method.
-     *  This method is required for inserting instructions into {@link XmlMethod}.
-     *  Actually, we should insert instructions not to the {@link XmlMethod},
-     *  but to the {@link BytecodeMethod}. When this will be implemented in
-     *  `opeo-maven-plugin`, we should remove this method.
-     */
-    public XmlNode toNode() {
-        return this.node;
-    }
-
-    /**
      * Instruction code.
      * @return Code.
      */
