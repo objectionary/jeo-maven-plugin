@@ -197,8 +197,8 @@ public class XmlField {
 
         /**
          * Initial field value.
-         * For example for field of type int with value 19 the value will be "13".
-         * Any data type will be represented as hex string.
+         * For example, for field of type int with value 19, the value will be "13".
+         * Any data type will be represented as a hex string.
          * May not be set.
          */
         VALUE;
