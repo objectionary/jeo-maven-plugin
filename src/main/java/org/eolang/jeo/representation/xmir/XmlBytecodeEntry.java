@@ -35,12 +35,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 public interface XmlBytecodeEntry {
 
     /**
-     * Write instruction to the bytecode method.
-     * @param method Bytecode Method where instruction should be written.
-     */
-    void writeTo(BytecodeMethod method);
-
-    /**
      * Convert to bytecode entry.
      * @return Bytecode entry.
      */

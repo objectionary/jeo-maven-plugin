@@ -45,7 +45,7 @@ public final class XmlOperand {
      * Constructor.
      * @param node Raw XML operand node.
      */
-    public XmlOperand(final XmlNode node) {
+    XmlOperand(final XmlNode node) {
         this.raw = node;
     }
 
@@ -55,7 +55,6 @@ public final class XmlOperand {
      */
     @EqualsAndHashCode.Include
     public Object asObject() {
-        final Object result;
         final String base = this.raw.attribute("base")
             .orElseThrow(
                 () -> new IllegalStateException(
@@ -65,6 +64,7 @@ public final class XmlOperand {
                     )
                 )
             );
+        final Object result;
         if ("handle".equals(base)) {
             result = new XmlHandler(this.raw).bytecode().asHandle();
         } else if ("annotation".equals(base)) {
@@ -75,13 +75,12 @@ public final class XmlOperand {
         } else if ("tuple".equals(base)) {
             result = new XmlTuple(this.raw).asObject();
         } else {
-            final boolean nullable = this.raw.attribute("scope").map("nullable"::equals)
-                .orElse(false);
-            if (nullable) {
+            if (this.raw.attribute("scope")
+                .map("nullable"::equals)
+                .orElse(false)) {
                 result = null;
             } else {
-                final String text = this.raw.text();
-                result = DataType.find(base).decode(text);
+                result = DataType.find(base).decode(this.raw.text());
             }
         }
         return result;

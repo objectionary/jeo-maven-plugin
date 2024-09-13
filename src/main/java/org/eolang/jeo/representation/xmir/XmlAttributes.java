@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
-import org.eolang.jeo.representation.bytecode.BytecodeClass;
 
 /**
  * Xml representation of a class attributes.
@@ -46,10 +45,10 @@ public final class XmlAttributes {
 
     /**
      * Constructor.
-     * @param node XML node.
+     * @param xmlnode XML node.
      */
-    XmlAttributes(final XmlNode node) {
-        this.node = node;
+    XmlAttributes(final XmlNode xmlnode) {
+        this.node = xmlnode;
     }
 
     /**
@@ -61,13 +60,5 @@ public final class XmlAttributes {
             .filter(Optional::isPresent)
             .map(Optional::get)
             .collect(Collectors.toList());
-    }
-
-    /**
-     * Write to bytecode.
-     * @param bytecode Bytecode where to write.
-     */
-    public void writeTo(final BytecodeClass bytecode) {
-        this.node.children().map(XmlAttribute::new).forEach(attr -> attr.writeTo(bytecode));
     }
 }

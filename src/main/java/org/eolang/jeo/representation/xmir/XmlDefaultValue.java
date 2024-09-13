@@ -29,7 +29,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 
 /**
  * XMIR of annotation default value.
- *
  * @since 0.3
  */
 public final class XmlDefaultValue {
@@ -66,5 +65,4 @@ public final class XmlDefaultValue {
     public void writeTo(final BytecodeMethod method) {
         this.bytecode().ifPresent(method::defvalue);
     }
-
 }

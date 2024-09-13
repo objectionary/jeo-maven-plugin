@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeInstructionEntry;
-import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
@@ -83,15 +82,10 @@ public final class XmlInstruction implements XmlBytecodeEntry {
 
     /**
      * Constructor.
-     * @param node Instruction node.
+     * @param xmlnode Instruction node.
      */
-    XmlInstruction(final XmlNode node) {
-        this.node = node;
-    }
-
-    @Override
-    public void writeTo(final BytecodeMethod method) {
-        method.entry(this.bytecode());
+    XmlInstruction(final XmlNode xmlnode) {
+        this.node = xmlnode;
     }
 
     /**

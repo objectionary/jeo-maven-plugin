@@ -63,22 +63,12 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
         this.labels = labels;
     }
 
-    @Override
-    public void writeTo(final BytecodeMethod method) {
-        method.trycatch(this.bytecode());
-    }
-
     /**
      * Converts XML to bytecode.
      * @return Bytecode try-catch block.
      */
     public BytecodeTryCatchBlock bytecode() {
-        return new BytecodeTryCatchBlock(
-            this.start(),
-            this.end(),
-            this.handler(),
-            this.type()
-        );
+        return new BytecodeTryCatchBlock(this.start(), this.end(), this.handler(), this.type());
     }
 
     /**

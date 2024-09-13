@@ -23,16 +23,14 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
-import org.eolang.jeo.representation.directives.DirectivesMaxs;
-import org.xembly.Xembler;
 
 /**
  * Xmir representation of max stack and max locals of a method.
- *
  * @since 0.3
  */
 @EqualsAndHashCode
@@ -44,16 +42,6 @@ public final class XmlMaxs {
      */
     @EqualsAndHashCode.Exclude
     private final XmlNode node;
-
-    /**
-     * Constructor.
-     *
-     * @param stack Stack size.
-     * @param locals Locals size.
-     */
-    XmlMaxs(final int stack, final int locals) {
-        this(XmlMaxs.prestructor(stack, locals));
-    }
 
     /**
      * Constructor.
@@ -74,36 +62,37 @@ public final class XmlMaxs {
 
     /**
      * Stack max size.
-     *
      * @return Stack size.
      */
     @EqualsAndHashCode.Include
     private int stack() {
-        return (int) new XmlOperand(
-            this.node.children().collect(Collectors.toList()).get(0)
-        ).asObject();
+        return this.ichild(0);
     }
 
     /**
      * Locals max size.
-     *
      * @return Locals size.
      */
     @EqualsAndHashCode.Include
     private int locals() {
-        return (int) new XmlOperand(
-            this.node.children().collect(Collectors.toList()).get(1)
-        ).asObject();
+        return this.ichild(1);
     }
 
     /**
-     * Prestructor.
-     *
-     * @param stack Stack size.
-     * @param locals Locals size.
-     * @return XML node that represents Max Stack and Max Locals.
+     * Retrieve integer child.
+     * @param position Position.
+     * @return Integer value.
      */
-    private static XmlNode prestructor(final int stack, final int locals) {
-        return new XmlNode(new Xembler(new DirectivesMaxs(stack, locals)).xmlQuietly());
+    private int ichild(int position) {
+        return (int) Objects.requireNonNull(
+            new XmlOperand(
+                this.node.children().collect(Collectors.toList()).get(position)
+            ).asObject(),
+            String.format(
+                "The XML node representing Maxs '%s' doesn't contain a valid integer at '%d' position",
+                this.node,
+                position
+            )
+        );
     }
 }

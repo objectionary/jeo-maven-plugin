@@ -51,24 +51,6 @@ public final class XmlProgram {
 
     /**
      * Constructor.
-     *
-     * @param name Class name.
-     */
-    public XmlProgram(final ClassName name) {
-        this(
-            new XMLDocument(
-                new Xembler(
-                    new DirectivesProgram().withClass(
-                        new DirectivesMetas(name),
-                        new DirectivesClass(name)
-                    )
-                ).xmlQuietly()
-            ).node()
-        );
-    }
-
-    /**
-     * Constructor.
      * @param lines Xmir lines.
      */
     public XmlProgram(final String... lines) {
@@ -87,9 +69,27 @@ public final class XmlProgram {
     /**
      * Constructor.
      *
+     * @param name Class name.
+     */
+    XmlProgram(final ClassName name) {
+        this(
+            new XMLDocument(
+                new Xembler(
+                    new DirectivesProgram().withClass(
+                        new DirectivesMetas(name),
+                        new DirectivesClass(name)
+                    )
+                ).xmlQuietly()
+            ).node()
+        );
+    }
+
+    /**
+     * Constructor.
+     *
      * @param root Root node.
      */
-    public XmlProgram(final Node root) {
+    private XmlProgram(final Node root) {
         this.root = root;
     }
 
@@ -103,10 +103,7 @@ public final class XmlProgram {
      * @return Bytecode program.
      */
     public BytecodeProgram bytecode() {
-        return new BytecodeProgram(
-            this.pckg(),
-            this.top().bytecode()
-        );
+        return new BytecodeProgram(this.pckg(), this.top().bytecode());
     }
 
     /**
