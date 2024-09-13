@@ -23,9 +23,9 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeFrame;
-import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 
 /**
  * Xmir representation of bytecode frame.
@@ -38,6 +38,14 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * Xmir node.
      */
     private final XmlNode node;
+
+    /**
+     * Constructor.
+     * @param xmlnode Xmir node
+     */
+    public XmlFrame(final XmlNode xmlnode) {
+        this.node = xmlnode;
+    }
 
     /**
      * Constructor.
@@ -56,14 +64,6 @@ public final class XmlFrame implements XmlBytecodeEntry {
     }
 
     /**
-     * Constructor.
-     * @param node Xmir node
-     */
-    public XmlFrame(final XmlNode node) {
-        this.node = node;
-    }
-
-    /**
      * Convert to bytecode.
      * @return Bytecode frame.
      */
@@ -77,19 +77,12 @@ public final class XmlFrame implements XmlBytecodeEntry {
         );
     }
 
-    @Override
-    public void writeTo(final BytecodeMethod method) {
-        method.entry(this.bytecode());
-    }
-
     /**
      * Type of frame.
      * @return Type.
      */
     private int type() {
-        return (int) new XmlOperand(
-            this.node.children().collect(Collectors.toList()).get(0)
-        ).asObject();
+        return this.ichild(0);
     }
 
     /**
@@ -97,9 +90,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * @return Number of local variables.
      */
     private int nlocal() {
-        return (int) new XmlOperand(
-            this.node.children().collect(Collectors.toList()).get(1)
-        ).asObject();
+        return this.ichild(1);
     }
 
     /**
@@ -119,9 +110,21 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * @return Number of stack elements.
      */
     private int nstack() {
-        return (int) new XmlOperand(
-            this.node.children().collect(Collectors.toList()).get(3)
-        ).asObject();
+        return this.ichild(3);
+    }
+
+    /**
+     * Retrieve integer child.
+     * @param position Position.
+     * @return Integer value.
+     */
+    private int ichild(final int position) {
+        return (int) Objects.requireNonNull(
+            new XmlOperand(
+                this.node.children().collect(Collectors.toList()).get(position)
+            ).asObject(),
+            String.format("Can't find integer child at position %d in '%s'", position, this.node)
+        );
     }
 
     /**

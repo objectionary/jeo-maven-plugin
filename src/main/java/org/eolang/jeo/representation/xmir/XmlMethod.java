@@ -24,12 +24,10 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -73,6 +71,15 @@ public final class XmlMethod {
 
     /**
      * Constructor.
+     * @param xmlnode Method node.
+     */
+    public XmlMethod(final XmlNode xmlnode) {
+        this.node = xmlnode;
+        this.labels = new AllLabels();
+    }
+
+    /**
+     * Constructor.
      *
      * @param name Method name.
      * @param access Access modifiers.
@@ -80,7 +87,7 @@ public final class XmlMethod {
      * @param exceptions Method exceptions.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    public XmlMethod(
+    XmlMethod(
         final String name,
         final int access,
         final String descriptor,
@@ -95,17 +102,8 @@ public final class XmlMethod {
      * @param stack Max stack.
      * @param locals Max locals.
      */
-    public XmlMethod(final int stack, final int locals) {
+    XmlMethod(final int stack, final int locals) {
         this(XmlMethod.prestructor("foo", Opcodes.ACC_PUBLIC, "()V", stack, locals));
-    }
-
-    /**
-     * Constructor.
-     * @param xmlnode Method node.
-     */
-    public XmlMethod(final XmlNode xmlnode) {
-        this.node = xmlnode;
-        this.labels = new AllLabels();
     }
 
     /**
@@ -139,7 +137,7 @@ public final class XmlMethod {
      * Method name.
      * @return Name.
      */
-    public String name() {
+    private String name() {
         return new MethodName(
             new Signature(
                 this.node.attribute("name")
@@ -152,20 +150,14 @@ public final class XmlMethod {
 
     /**
      * All instructions.
-     *
-     * @param predicates Predicates to filter instructions.
      * @return Instructions.
      */
-    @SafeVarargs
-    private final List<XmlBytecodeEntry> instructions(
-        final Predicate<XmlBytecodeEntry>... predicates
-    ) {
+    private List<XmlBytecodeEntry> instructions() {
         return this.node.child("base", "seq")
             .child("base", "tuple")
             .children()
             .filter(element -> element.attribute("base").isPresent())
             .map(XmlNode::toEntry)
-            .filter(instr -> Arrays.stream(predicates).allMatch(predicate -> predicate.test(instr)))
             .collect(Collectors.toList());
     }
 

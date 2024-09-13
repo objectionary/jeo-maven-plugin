@@ -234,6 +234,14 @@ public final class BytecodeMethod implements Testable {
         return this;
     }
 
+    /**
+     * Method name.
+     * @return Method name.
+     */
+    public String name() {
+        return this.properties.name();
+    }
+
     @Override
     @SuppressWarnings("PMD.InsufficientStringBufferDeclaration")
     public String testCode() {

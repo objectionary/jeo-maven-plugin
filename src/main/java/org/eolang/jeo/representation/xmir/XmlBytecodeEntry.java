@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeEntry;
-import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 
 /**
  * XML representation of bytecode instruction or a label.
@@ -33,12 +32,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeMethod;
  * @since 0.1
  */
 public interface XmlBytecodeEntry {
-
-    /**
-     * Write instruction to the bytecode method.
-     * @param method Bytecode Method where instruction should be written.
-     */
-    void writeTo(BytecodeMethod method);
 
     /**
      * Convert to bytecode entry.

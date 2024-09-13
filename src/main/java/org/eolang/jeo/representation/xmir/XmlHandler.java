@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeHandler;
 
@@ -40,10 +41,10 @@ final class XmlHandler {
 
     /**
      * Constructor.
-     * @param node Node.
+     * @param xmlnode Node.
      */
-    XmlHandler(final XmlNode node) {
-        this.node = node;
+    XmlHandler(final XmlNode xmlnode) {
+        this.node = xmlnode;
     }
 
     /**
@@ -55,11 +56,11 @@ final class XmlHandler {
             .map(XmlOperand::new)
             .collect(Collectors.toList());
         return new BytecodeHandler(
-            Integer.class.cast(operands.get(0).asObject()),
-            operands.get(1).asObject().toString(),
-            operands.get(2).asObject().toString(),
-            operands.get(3).asObject().toString(),
-            Boolean.class.cast(operands.get(4).asObject())
+            (Integer) Objects.requireNonNull(operands.get(0).asObject()),
+            Objects.requireNonNull(operands.get(1).asObject()).toString(),
+            Objects.requireNonNull(operands.get(2).asObject()).toString(),
+            Objects.requireNonNull(operands.get(3).asObject()).toString(),
+            (Boolean) Objects.requireNonNull(operands.get(4).asObject())
         );
     }
 }

@@ -59,7 +59,7 @@ final class XmlMethodTest {
     void createsConstructor() {
         MatcherAssert.assertThat(
             "Method name is not equal to expected, it should be <init>",
-            new XmlMethod("@init@", Opcodes.ACC_PUBLIC, "()V").name(),
+            new XmlMethod("@init@", Opcodes.ACC_PUBLIC, "()V").bytecode().name(),
             Matchers.equalTo("<init>")
         );
     }

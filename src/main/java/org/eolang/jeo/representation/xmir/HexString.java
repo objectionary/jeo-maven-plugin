@@ -41,7 +41,7 @@ public final class HexString {
     /**
      * Hex string.
      * Example:
-     * - "48 65 6C 6C 6F 20 57 6F 72 6C 64 21"
+     * - "20 57 6F 72 6C 64 21" (World!)
      */
     private final String hex;
 
@@ -112,10 +112,18 @@ public final class HexString {
         return "01".equals(value);
     }
 
+    /**
+     * Convert hex string to double.
+     * @return Double.
+     */
     public double decodeAsDouble() {
         return (double) DataType.DOUBLE.decode(this.hex.replace(" ", ""));
     }
 
+    /**
+     * Convert hex string to float.
+     * @return Float.
+     */
     public float decodeAsFloat() {
         return (float) DataType.FLOAT.decode(this.hex.replace(" ", ""));
     }

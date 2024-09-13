@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
-import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.InnerClass;
 
 /**
@@ -96,13 +95,5 @@ public final class XmlAttribute {
             result = Optional.empty();
         }
         return result;
-    }
-
-    /**
-     * Write to bytecode.
-     * @param bytecode Bytecode.
-     */
-    public void writeTo(final BytecodeClass bytecode) {
-        this.attribute().ifPresent(bytecode::withAttribute);
     }
 }

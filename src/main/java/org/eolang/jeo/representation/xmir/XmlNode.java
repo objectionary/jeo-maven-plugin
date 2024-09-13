@@ -44,7 +44,6 @@ public final class XmlNode {
     /**
      * Parent node.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final Node node;
 
     /**
@@ -61,14 +60,6 @@ public final class XmlNode {
      */
     public XmlNode(final Node parent) {
         this.node = parent;
-    }
-
-    /**
-     * To XML node.
-     * @return Xml node
-     */
-    public Node node() {
-        return this.node;
     }
 
     @Override
@@ -90,87 +81,6 @@ public final class XmlNode {
     @Override
     public String toString() {
         return new XMLDocument(this.node).toString();
-    }
-
-    /**
-     * Get child node.
-     * @param name Child node name.
-     * @return Child node.
-     */
-    public XmlNode child(final String name) {
-        return this.optchild(name).orElseThrow(() -> this.notFound(name));
-    }
-
-    /**
-     * Find elements by xpath.
-     * @param xpath XPath.
-     * @return List of elements.
-     */
-    public List<String> xpath(final String xpath) {
-        return new XMLDocument(this.node).xpath(xpath);
-    }
-
-    /**
-     * Get optional child node.
-     * @param name Child node name.
-     * @return Child node.
-     */
-    public Optional<XmlNode> optchild(final String name) {
-        Optional<XmlNode> result = Optional.empty();
-        final NodeList children = this.node.getChildNodes();
-        for (int index = 0; index < children.getLength(); ++index) {
-            final Node current = children.item(index);
-            if (current.getNodeName().equals(name)) {
-                result = Optional.of(new XmlNode(current));
-                break;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Get child node by attribute.
-     * @param attribute Attribute name.
-     * @param value Attribute value.
-     * @return Child node.
-     */
-    public XmlNode child(final String attribute, final String value) {
-        return this.children()
-            .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
-            .findFirst()
-            .orElseThrow(
-                () -> this.notFound(
-                    String.format("object with attribute %s='%s'", attribute, value)
-                )
-            );
-    }
-
-    /**
-     * Get optional child node by attribute.
-     * @param attribute Attribute name.
-     * @param value Attribute value.
-     * @return Child node.
-     */
-    public Optional<XmlNode> optchild(final String attribute, final String value) {
-        return this.children()
-            .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
-            .findFirst();
-    }
-
-    /**
-     * Get first child.
-     * @return First child node.
-     */
-    public XmlNode firstChild() {
-        return this.children().findFirst()
-            .orElseThrow(
-                () -> new IllegalStateException(
-                    String.format(
-                        "Can't find any child nodes in '%s'",
-                        new XMLDocument(this.node)
-                    )
-                )
-            );
     }
 
     /**
@@ -206,12 +116,75 @@ public final class XmlNode {
     }
 
     /**
-     * Check if attribute exists.
+     * Get child node.
+     * @param name Child node name.
+     * @return Child node.
+     */
+    XmlNode child(final String name) {
+        return this.optchild(name).orElseThrow(() -> this.notFound(name));
+    }
+
+    /**
+     * Find elements by xpath.
+     * @param xpath XPath.
+     * @return List of elements.
+     */
+    List<String> xpath(final String xpath) {
+        return new XMLDocument(this.node).xpath(xpath);
+    }
+
+    /**
+     * Get child node by attribute.
+     * @param attribute Attribute name.
+     * @param value Attribute value.
+     * @return Child node.
+     */
+    XmlNode child(final String attribute, final String value) {
+        return this.children()
+            .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
+            .findFirst()
+            .orElseThrow(
+                () -> this.notFound(
+                    String.format("object with attribute %s='%s'", attribute, value)
+                )
+            );
+    }
+
+    /**
+     * Get optional child node by attribute.
+     * @param attribute Attribute name.
+     * @param value Attribute value.
+     * @return Child node.
+     */
+    Optional<XmlNode> optchild(final String attribute, final String value) {
+        return this.children()
+            .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
+            .findFirst();
+    }
+
+    /**
+     * Get first child.
+     * @return First child node.
+     */
+    XmlNode firstChild() {
+        return this.children().findFirst()
+            .orElseThrow(
+                () -> new IllegalStateException(
+                    String.format(
+                        "Can't find any child nodes in '%s'",
+                        new XMLDocument(this.node)
+                    )
+                )
+            );
+    }
+
+    /**
+     * Check if an attribute exists.
      * @param name Attribute name.
      * @param value Attribute value.
-     * @return True if attribute with specified value exists.
+     * @return True if an attribute with specified value exists.
      */
-    public boolean hasAttribute(final String name, final String value) {
+    boolean hasAttribute(final String name, final String value) {
         return this.attribute(name)
             .map(String::valueOf)
             .map(val -> val.equals(value))
@@ -249,6 +222,24 @@ public final class XmlNode {
      */
     XMLDocument asDocument() {
         return new XMLDocument(this.node);
+    }
+
+    /**
+     * Get optional child node.
+     * @param name Child node name.
+     * @return Child node.
+     */
+    private Optional<XmlNode> optchild(final String name) {
+        Optional<XmlNode> result = Optional.empty();
+        final NodeList children = this.node.getChildNodes();
+        for (int index = 0; index < children.getLength(); ++index) {
+            final Node current = children.item(index);
+            if (current.getNodeName().equals(name)) {
+                result = Optional.of(new XmlNode(current));
+                break;
+            }
+        }
+        return result;
     }
 
     /**
