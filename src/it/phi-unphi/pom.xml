@@ -92,11 +92,11 @@ SOFTWARE.
             <id>phi-to-xmir</id>
             <phase>process-classes</phase>
             <goals>
-              <goal>xmir-to-phi</goal>
+              <goal>phi-to-xmir</goal>
             </goals>
             <configuration>
-              <phiInputDir>${eo.phi}</phiInputDir>
-              <phiOutputDir>${eo.unphi}</phiOutputDir>
+              <unphiInputDir>${eo.phi}</unphiInputDir>
+              <unphiOutputDir>${eo.unphi}</unphiOutputDir>
             </configuration>
           </execution>
         </executions>
