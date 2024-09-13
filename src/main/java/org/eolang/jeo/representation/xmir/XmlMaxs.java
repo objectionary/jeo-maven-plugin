@@ -83,7 +83,7 @@ public final class XmlMaxs {
      * @param position Position.
      * @return Integer value.
      */
-    private int ichild(int position) {
+    private int ichild(final int position) {
         return (int) Objects.requireNonNull(
             new XmlOperand(
                 this.node.children().collect(Collectors.toList()).get(position)

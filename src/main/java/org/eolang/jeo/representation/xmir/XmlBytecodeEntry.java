@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeEntry;
-import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 
 /**
  * XML representation of bytecode instruction or a label.

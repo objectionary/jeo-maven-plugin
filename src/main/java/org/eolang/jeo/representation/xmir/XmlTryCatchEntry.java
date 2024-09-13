@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.objectweb.asm.Label;
 
