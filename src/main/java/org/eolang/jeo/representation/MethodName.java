@@ -36,7 +36,7 @@ public final class MethodName {
     /**
      * Constructor name in EO.
      */
-    private static final String EO_CONSTRUCTOR = "@init@";
+    private static final String EO_CONSTRUCTOR = "object@init@";
 
     /**
      * Constructor name in bytecode.
@@ -51,7 +51,7 @@ public final class MethodName {
     /**
      * Static initializer name in EO.
      */
-    private static final String EO_STATIC = "@clinit@";
+    private static final String EO_STATIC = "class@clinit@";
 
     /**
      * Original name.

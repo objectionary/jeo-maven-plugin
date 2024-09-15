@@ -65,8 +65,8 @@ final class MethodNameTest {
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> names() {
         return Stream.of(
-            Arguments.of("<init>", "@init@"),
-            Arguments.of("<clinit>", "@clinit@"),
+            Arguments.of("<init>", "object@init@"),
+            Arguments.of("<clinit>", "class@clinit@"),
             Arguments.of("main", "main"),
             Arguments.of("init", "init"),
             Arguments.of("new", "new")
