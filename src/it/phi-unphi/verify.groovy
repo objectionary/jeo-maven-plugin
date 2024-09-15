@@ -40,8 +40,9 @@ private void generateGitHubIssue() {
     copy('target/generated-sources/eo-phi/org/eolang/hone/App.phi', 'App.phi.txt')
     copy('target/generated-sources/eo-unphi/org/eolang/hone/App.xmir', 'App.xmir.unphi.txt')
 
-    def issue = '''
- I run the following [integration test](https://github.com/objectionary/jeo-maven-plugin/tree/master/src/it/phi-unphi):
+
+    def issue = new File(basedir, "issue.md")
+    issue.text = '''I run the following [integration test](https://github.com/objectionary/jeo-maven-plugin/tree/master/src/it/phi-unphi):
  
  bytecode -> (disassemble) `xmir`  -> `phi` -> `unphi` -> `xmir` (assemble) -> bytecode.
  
@@ -62,6 +63,7 @@ private void generateGitHubIssue() {
  have to change the original `xmir` file.
  
  **Actual behaviour:** 
+ 
  `App.xmir.disassemble.txt` and `App.xmir.unphi.txt` files are different. `phi/unphi` significantly changes the original `xmir`.
  
  **Details:**
@@ -78,12 +80,9 @@ file3="App.xmir.unphi.txt"
 # Create the issue using the 'gh' CLI
 gh issue create \\
     --title "Integration Test Failure: `phi/unphi` alters xmir file" \\
-    --body '$issue' \\
+    --body "\$(cat ${basedir}/issue.md)" \\
     --label "bug" \\
-    --repo volodya-lombrozo/eo \\
-    --attach \$file1 \\
-    --attach \$file2 \\
-    --attach \$file3
+    --repo objectionary/eo
     """
 
     def file = new File(basedir, "create_issue.sh")
