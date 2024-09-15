@@ -305,6 +305,8 @@ SOFTWARE.
                You can read more about it here:
                https://github.com/objectionary/eo/issues/3373
                Don't forget to remove the exclusion below and this puzzle description.
+               Important!
+               Don't forget to remove it from "long" profile as well.
             -->
             <exclude>phi-unphi/pom.xml</exclude>
           </pomExcludes>
@@ -496,7 +498,9 @@ SOFTWARE.
               <!--
                 All integration tests are enabled in the 'long' profile.
               -->
-              <pomExcludes/>
+              <pomExcludes>
+                <exclude>phi-unphi/pom.xml</exclude>
+              </pomExcludes>
             </configuration>
           </plugin>
         </plugins>
