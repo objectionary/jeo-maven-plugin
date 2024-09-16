@@ -54,9 +54,7 @@ public final class XmlParams {
         final AtomicInteger index = new AtomicInteger(0);
         return new BytecodeMethodParameters(
             this.node.children()
-                .filter(
-                    element -> element.hasAttribute("base", "param")
-                )
+                .filter(element -> element.hasAttribute("base", "param"))
                 .map(element -> new XmlParam(index.getAndIncrement(), element))
                 .map(XmlParam::bytecode)
                 .collect(Collectors.toList())
