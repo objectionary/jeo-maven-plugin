@@ -74,27 +74,6 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
         this.annotations = annotations;
     }
 
-    /**
-     * Add a parameter annotation.
-     * @param index Index of the parameter.
-     * @param annotation Annotation.
-     */
-    public void annotation(final int index, final Iterable<Directive> annotation) {
-        this.annotations.compute(
-            index,
-            (key, initial) -> {
-                final List<Iterable<Directive>> res;
-                if (Objects.isNull(initial)) {
-                    res = new ArrayList<>(Collections.singletonList(annotation));
-                } else {
-                    initial.add(annotation);
-                    res = initial;
-                }
-                return res;
-            }
-        );
-    }
-
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives().add("o")

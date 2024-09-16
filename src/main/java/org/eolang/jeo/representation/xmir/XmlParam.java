@@ -26,6 +26,8 @@ package org.eolang.jeo.representation.xmir;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
+import org.objectweb.asm.Type;
 
 /**
  * Xmir representation of a method parameter.
@@ -57,6 +59,14 @@ public final class XmlParam {
         this.root = root;
     }
 
+    public BytecodeMethodParameter bytecode() {
+        return new BytecodeMethodParameter(
+            this.index(),
+            Type.INT_TYPE, //wtf?
+            this.annotations()
+        );
+    }
+
     /**
      * Index of the parameter in the method.
      * @return Index.
@@ -76,5 +86,4 @@ public final class XmlParam {
             .map(XmlAnnotation::bytecode)
             .collect(Collectors.toList());
     }
-
 }

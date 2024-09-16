@@ -49,6 +49,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeInstructionEntry;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
@@ -57,6 +58,7 @@ import org.eolang.jeo.representation.bytecode.InnerClass;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -241,16 +243,17 @@ public final class AsmProgram {
         final int size = visible.length;
         return new BytecodeMethodParameters(
             IntStream.range(0, size).mapToObj(
-                index -> new MapEntry<>(
-                    index,
-                    new BytecodeAnnotations(
-                        Stream.concat(
-                            AsmProgram.safe(visible[index], true),
-                            AsmProgram.safe(invisible[index], false)
-                        )
-                    ).annotations()
-                )
-            ).collect(Collectors.toMap(MapEntry::getKey, MapEntry::getValue))
+                    index -> new MapEntry<>(
+                        index,
+                        new BytecodeAnnotations(
+                            Stream.concat(
+                                AsmProgram.safe(visible[index], true),
+                                AsmProgram.safe(invisible[index], false)
+                            )
+                        ).annotations()
+                    )
+                ).map(e -> new BytecodeMethodParameter(e.getKey(), Type.INT_TYPE, e.getValue()))
+                .collect(Collectors.toList())
         );
     }
 

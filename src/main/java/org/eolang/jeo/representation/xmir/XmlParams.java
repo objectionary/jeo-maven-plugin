@@ -21,7 +21,8 @@ public final class XmlParams {
                         && !element.hasAttribute("name", "maxs")
                 )
                 .map(element -> new XmlParam(index.getAndIncrement(), element))
-                .collect(Collectors.toMap(XmlParam::index, XmlParam::annotations))
+                .map(XmlParam::bytecode)
+                .collect(Collectors.toList())
         );
     }
 }

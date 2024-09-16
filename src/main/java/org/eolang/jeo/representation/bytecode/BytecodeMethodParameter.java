@@ -78,12 +78,12 @@ public final class BytecodeMethodParameter {
      * Write the parameter.
      * @param writer Method visitor.
      */
-    private void write(final MethodVisitor writer) {
+    void write(final MethodVisitor writer) {
         this.annotations.forEach(annotation -> annotation.write(this.index, writer));
     }
 
-    private Iterable<Directive> directives() {
-        return new Directives().add("o")
+    Iterable<Directive> directives() {
+        final Directives param = new Directives().add("o")
             .attr("base", "param")
             .attr("line", new Random().nextInt(Integer.MAX_VALUE))
             .attr(
@@ -96,5 +96,10 @@ public final class BytecodeMethodParameter {
                     this.index
                 )
             );
+        this.annotations.stream().map(BytecodeAnnotation::directives).forEach(param::append);
+//        if (this.annotations.containsKey(index)) {
+//            this.annotations.get(index).forEach(param::append);
+//        }
+        return param.up();
     }
 }

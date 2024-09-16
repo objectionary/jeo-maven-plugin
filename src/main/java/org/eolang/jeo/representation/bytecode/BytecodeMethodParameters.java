@@ -23,7 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,21 +43,21 @@ public final class BytecodeMethodParameters {
     /**
      * Annotations with a parameter position (as a key).
      */
-    private final Map<Integer, List<BytecodeAnnotation>> annotations;
+    private final List<BytecodeMethodParameter> params;
 
     /**
      * Default constructor.
      */
     public BytecodeMethodParameters() {
-        this(new HashMap<>(0));
+        this(new ArrayList<>(0));
     }
 
     /**
      * Constructor.
-     * @param annotations Annotations.
+     * @param params Parameters.
      */
-    public BytecodeMethodParameters(final Map<Integer, List<BytecodeAnnotation>> annotations) {
-        this.annotations = annotations;
+    public BytecodeMethodParameters(final List<BytecodeMethodParameter> params) {
+        this.params = params;
     }
 
     /**
@@ -65,9 +65,7 @@ public final class BytecodeMethodParameters {
      * @param visitor Method visitor.
      */
     public void write(final MethodVisitor visitor) {
-        this.annotations.forEach(
-            (key, value) -> value.forEach(annotation -> annotation.write(key, visitor))
-        );
+        this.params.forEach(param -> param.write(visitor));
     }
 
     /**
@@ -76,6 +74,7 @@ public final class BytecodeMethodParameters {
      * @return Directives.
      */
     public DirectivesMethodParams directives(final String descr) {
+        this.params.stream().map(BytecodeMethodParameter::directives)
         return new DirectivesMethodParams(
             descr,
             this.annotations.entrySet().stream().collect(
