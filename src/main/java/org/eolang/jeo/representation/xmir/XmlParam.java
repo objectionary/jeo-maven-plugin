@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
@@ -40,6 +42,11 @@ import org.objectweb.asm.Type;
 public final class XmlParam {
 
     /**
+     * Base64 decoder.
+     */
+    private static final Base64.Decoder DECODER = Base64.getDecoder();
+
+    /**
      * Index of the parameter in the method.
      */
     private final int position;
@@ -48,6 +55,10 @@ public final class XmlParam {
      * Root node from which we will get all required data.
      */
     private final XmlNode root;
+
+    public XmlParam(final XmlNode node) {
+        this(0, node);
+    }
 
     /**
      * Constructor.
@@ -59,10 +70,14 @@ public final class XmlParam {
         this.root = root;
     }
 
+    /**
+     * Convert to bytecode.
+     * @return Bytecode method parameter.
+     */
     public BytecodeMethodParameter bytecode() {
         return new BytecodeMethodParameter(
             this.index(),
-            Type.INT_TYPE, //wtf?
+            this.type(),
             this.annotations()
         );
     }
@@ -71,19 +86,41 @@ public final class XmlParam {
      * Index of the parameter in the method.
      * @return Index.
      */
-    public int index() {
-        return this.position;
+    private int index() {
+        return Integer.parseInt(this.name().split("-")[2]);
+    }
+
+    /**
+     * Type of the parameter.
+     * @return Type.
+     */
+    private Type type() {
+        final String type = this.name().split("-")[1];
+        final byte[] decoded = DECODER.decode(type);
+        final String t = new String(decoded, StandardCharsets.UTF_8);
+        return Type.getType(t);
     }
 
     /**
      * Annotations of the parameter.
      * @return Annotations.
      */
-    public List<BytecodeAnnotation> annotations() {
+    private List<BytecodeAnnotation> annotations() {
         return this.root.children()
             .filter(node -> node.hasAttribute("base", "annotation"))
             .map(XmlAnnotation::new)
             .map(XmlAnnotation::bytecode)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Name attribute of the parameter.
+     * @return Name attribute.
+     */
+    private String name() {
+        return this.root.attribute("name").orElseThrow(
+            () -> new IllegalStateException(
+                String.format("'name' attribute is not present in xml param %n%s%n", this.root))
+        );
     }
 }

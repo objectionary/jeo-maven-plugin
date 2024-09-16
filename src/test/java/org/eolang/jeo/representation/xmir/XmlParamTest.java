@@ -23,43 +23,28 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
+import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Type;
 
 /**
- * XML method params.
+ * Test cases for {@link XmlParam}.
  * @since 0.6
  */
-public final class XmlParams {
+final class XmlParamTest {
 
-    /**
-     * Xml representation of a method params.
-     */
-    private final XmlNode node;
-
-    /**
-     * Constructor.
-     * @param node Xml representation of a method params.
-     */
-    public XmlParams(final XmlNode node) {
-        this.node = node;
-    }
-
-    /**
-     * Get method params.
-     * @return Method params.
-     */
-    public BytecodeMethodParameters params() {
-        final AtomicInteger index = new AtomicInteger(0);
-        return new BytecodeMethodParameters(
-            this.node.children()
-                .filter(
-                    element -> element.hasAttribute("base", "param")
-                )
-                .map(element -> new XmlParam(index.getAndIncrement(), element))
-                .map(XmlParam::bytecode)
-                .collect(Collectors.toList())
+    @Test
+    void convertsToBytecode() {
+        MatcherAssert.assertThat(
+            "Can't convert XML param to bytecode",
+            new XmlParam(
+                new XmlNode("<o base='param' name='param-SQ==-0'/>")
+            ).bytecode(),
+            Matchers.equalTo(
+                new BytecodeMethodParameter(0, Type.INT_TYPE)
+            )
         );
     }
 }

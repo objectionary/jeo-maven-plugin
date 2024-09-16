@@ -26,6 +26,8 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesMethodParam;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
@@ -35,6 +37,8 @@ import org.xembly.Directive;
  * Bytecode method parameter.
  * @since 0.6
  */
+@ToString
+@EqualsAndHashCode
 public final class BytecodeMethodParameter {
 
     /**

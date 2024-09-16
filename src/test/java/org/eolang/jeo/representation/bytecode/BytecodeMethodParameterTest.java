@@ -21,45 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.bytecode;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
+import com.jcabi.matchers.XhtmlMatchers;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Type;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
- * XML method params.
+ * Test case for {@link BytecodeMethodParameter}.
  * @since 0.6
  */
-public final class XmlParams {
+final class BytecodeMethodParameterTest {
 
-    /**
-     * Xml representation of a method params.
-     */
-    private final XmlNode node;
-
-    /**
-     * Constructor.
-     * @param node Xml representation of a method params.
-     */
-    public XmlParams(final XmlNode node) {
-        this.node = node;
-    }
-
-    /**
-     * Get method params.
-     * @return Method params.
-     */
-    public BytecodeMethodParameters params() {
-        final AtomicInteger index = new AtomicInteger(0);
-        return new BytecodeMethodParameters(
-            this.node.children()
-                .filter(
-                    element -> element.hasAttribute("base", "param")
-                )
-                .map(element -> new XmlParam(index.getAndIncrement(), element))
-                .map(XmlParam::bytecode)
-                .collect(Collectors.toList())
+    @Test
+    void convertsToDirectives() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We can't convert bytecode method parameter to correct XML directives",
+            new Xembler(
+                new BytecodeMethodParameter(0, Type.INT_TYPE).directives()
+            ).xml(),
+            XhtmlMatchers.hasXPaths(
+                "/o[@base='param' and @name='param-SQ==-0']"
+            )
         );
     }
 }
