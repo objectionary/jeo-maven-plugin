@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -96,11 +97,15 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives().add("o").attr("base", "params");
+        final Directives directives = new Directives().add("o")
+            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
+            .attr("name", new Random().nextInt(Integer.MAX_VALUE))
+            .attr("base", "params");
         final Type[] arguments = Type.getArgumentTypes(this.descriptor);
         for (int index = 0; index < arguments.length; ++index) {
             final Directives param = directives.add("o")
                 .attr("base", "param")
+                .attr("line", new Random().nextInt(Integer.MAX_VALUE))
                 .attr(
                     "name",
                     String.format(

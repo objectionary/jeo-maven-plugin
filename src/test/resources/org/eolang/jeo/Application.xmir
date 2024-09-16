@@ -67,7 +67,9 @@
           <o base="int" data="bytes" line="54151846" name="stack">00 00 00 00 00 00 00 05</o>
           <o base="int" data="bytes" line="774087457" name="locals">00 00 00 00 00 00 00 01</o>
         </o>
-        <o base="param" name="param-W0xqYXZhL2xhbmcvU3RyaW5nOw==-0"/>
+        <o base="params">
+          <o base="param" name="param-W0xqYXZhL2xhbmcvU3RyaW5nOw==-0"/>
+        </o>
         <o base="seq" name="@">
           <o base="tuple" line="1404498068" name="instructions" star="">
             <o base="label" data="bytes" line="2027381559">36 63 32 64 37 32 34 32 2D 63 34 62 65 2D 34 36 30 35 2D 61 33 33 30 2D 32 62 64 65 36 64 63 34 62 34 32 33</o>

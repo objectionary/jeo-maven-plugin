@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Arrays;
 import java.util.Collections;
 import org.eolang.jeo.matchers.SameXml;
@@ -44,14 +45,10 @@ final class BytecodeMethodParametersTest {
             "Can't convert bytecode method parameters to correct directives",
             new Xembler(new BytecodeMethodParameters(
             ).directives("(II)V")).xml(),
-            new SameXml(
-                String.join(
-                    "\n",
-                    "<o base='params'>",
-                    "  <o base='param' name='param-SQ==-0'/>",
-                    "  <o base='param' name='param-SQ==-1'/>",
-                    "</o>"
-                )
+            XhtmlMatchers.hasXPaths(
+                "/o[@base='params']",
+                "/o[@base='params']/o[@base='param' and @name='param-SQ==-0']",
+                "/o[@base='params']/o[@base='param' and @name='param-SQ==-1']"
             )
         );
     }
