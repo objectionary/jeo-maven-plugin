@@ -30,9 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import org.cactoos.map.MapEntry;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
@@ -50,8 +48,8 @@ import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
-import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
+import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.bytecode.InnerClass;
@@ -240,7 +238,6 @@ public final class AsmProgram {
         } else {
             visible = node.visibleParameterAnnotations;
         }
-        final int size = visible.length;
         final Type[] types = Type.getArgumentTypes(node.desc);
         List<BytecodeMethodParameter> params = new ArrayList<>(types.length);
         for (int index = 0; index < types.length; ++index) {
@@ -255,30 +252,15 @@ public final class AsmProgram {
                     AsmProgram.safe(invisible[index], false).collect(Collectors.toList())
                 );
             }
-            final BytecodeMethodParameter param = new BytecodeMethodParameter(
-                index,
-                types[index],
-                annotations
+            params.add(
+                new BytecodeMethodParameter(
+                    index,
+                    types[index],
+                    annotations
+                )
             );
-            params.add(param);
         }
-
         return new BytecodeMethodParameters(params);
-
-//        return new BytecodeMethodParameters(
-//            IntStream.range(0, size).mapToObj(
-//                    index -> new MapEntry<>(
-//                        index,
-//                        new BytecodeAnnotations(
-//                            Stream.concat(
-//                                AsmProgram.safe(visible[index], true),
-//                                AsmProgram.safe(invisible[index], false)
-//                            )
-//                        ).annotations()
-//                    )
-//                ).map(e -> new BytecodeMethodParameter(e.getKey(), types[e.getKey()], e.getValue()))
-//                .collect(Collectors.toList())
-//        );
     }
 
     /**

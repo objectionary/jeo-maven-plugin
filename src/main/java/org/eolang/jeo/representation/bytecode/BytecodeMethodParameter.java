@@ -23,26 +23,19 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.Random;
+import java.util.stream.Collectors;
+import org.eolang.jeo.representation.directives.DirectivesMethodParam;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Bytecode method parameter.
  * @since 0.6
  */
 public final class BytecodeMethodParameter {
-
-    /**
-     * Base64 decoder.
-     */
-    private static final Base64.Encoder ENCODER = Base64.getEncoder();
 
     /**
      * Index of the parameter.
@@ -59,6 +52,11 @@ public final class BytecodeMethodParameter {
      */
     private final List<BytecodeAnnotation> annotations;
 
+    /**
+     * Constructor.
+     * @param index Index of the parameter.
+     * @param type Type of the parameter.
+     */
     public BytecodeMethodParameter(final int index, final Type type) {
         this(index, type, new ArrayList<>(0));
     }
@@ -87,24 +85,17 @@ public final class BytecodeMethodParameter {
         this.annotations.forEach(annotation -> annotation.write(this.index, writer));
     }
 
+    /**
+     * Convert to directives.
+     * @return Directives.
+     */
     Iterable<Directive> directives() {
-        final Directives param = new Directives().add("o")
-            .attr("base", "param")
-            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-            .attr(
-                "name",
-                String.format(
-                    "param-%s-%d",
-                    BytecodeMethodParameter.ENCODER.encodeToString(
-                        this.type.toString().getBytes(StandardCharsets.UTF_8)
-                    ),
-                    this.index
-                )
-            );
-        this.annotations.stream().map(BytecodeAnnotation::directives).forEach(param::append);
-//        if (this.annotations.containsKey(index)) {
-//            this.annotations.get(index).forEach(param::append);
-//        }
-        return param.up();
+        return new DirectivesMethodParam(
+            this.index,
+            this.type,
+            this.annotations.stream()
+                .map(BytecodeAnnotation::directives)
+                .collect(Collectors.toList())
+        );
     }
 }

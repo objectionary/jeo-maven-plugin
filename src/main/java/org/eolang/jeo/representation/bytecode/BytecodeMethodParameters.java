@@ -53,6 +53,10 @@ public final class BytecodeMethodParameters {
         this(new ArrayList<>(0));
     }
 
+    /**
+     * Constructor.
+     * @param descriptor Method descriptor.
+     */
     public BytecodeMethodParameters(final String descriptor) {
         this(BytecodeMethodParameters.fromDescriptor(descriptor));
     }
@@ -90,17 +94,14 @@ public final class BytecodeMethodParameters {
             this.params.stream()
                 .map(BytecodeMethodParameter::directives)
                 .collect(Collectors.toList())
-//            this.annotations.entrySet().stream().collect(
-//                Collectors.toMap(
-//                    Map.Entry::getKey,
-//                    entry -> entry.getValue().stream()
-//                        .map(BytecodeAnnotation::directives)
-//                        .collect(Collectors.toList())
-//                )
-//            )
         );
     }
 
+    /**
+     * Create from descriptor.
+     * @param descriptor Method descriptor.
+     * @return Parameters.
+     */
     private static List<BytecodeMethodParameter> fromDescriptor(final String descriptor) {
         final Type[] types = Type.getArgumentTypes(descriptor);
         final int size = types.length;
