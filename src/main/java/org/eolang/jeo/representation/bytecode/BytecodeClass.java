@@ -228,7 +228,7 @@ public final class BytecodeClass implements Testable {
      * @param modifiers Access modifiers.
      * @return This object.
      */
-    BytecodeMethodBuilder withMethod(
+    public BytecodeMethodBuilder withMethod(
         final String mname, final String descriptor, final int... modifiers
     ) {
         return this.withMethod(new BytecodeMethod(mname, descriptor, modifiers));

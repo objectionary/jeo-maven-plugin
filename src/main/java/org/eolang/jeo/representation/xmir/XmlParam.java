@@ -115,7 +115,8 @@ public final class XmlParam {
     private String name() {
         return this.root.attribute("name").orElseThrow(
             () -> new IllegalStateException(
-                String.format("'name' attribute is not present in xml param %n%s%n", this.root))
+                String.format("'name' attribute is not present in xml param %n%s%n", this.root)
+            )
         );
     }
 }

@@ -242,7 +242,7 @@ public final class AsmProgram {
         final Type[] types = Type.getArgumentTypes(node.desc);
         final List<BytecodeMethodParameter> params = new ArrayList<>(types.length);
         for (int index = 0; index < types.length; ++index) {
-            List<BytecodeAnnotation> annotations = new ArrayList<>(0);
+            final List<BytecodeAnnotation> annotations = new ArrayList<>(0);
             if (visible.length > index) {
                 annotations.addAll(
                     AsmProgram.safe(visible[index], true).collect(Collectors.toList())
