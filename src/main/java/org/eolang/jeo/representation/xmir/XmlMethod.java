@@ -267,16 +267,6 @@ public final class XmlMethod {
         return this.node.optchild("base", "params")
             .map(XmlParams::new).map(XmlParams::params)
             .orElse(new BytecodeMethodParameters());
-//        final AtomicInteger index = new AtomicInteger(0);
-//        return new BytecodeMethodParameters(
-//            this.node.children()
-//                .filter(
-//                    element -> element.hasAttribute("base", "param")
-//                        && !element.hasAttribute("name", "maxs")
-//                )
-//                .map(element -> new XmlParam(index.getAndIncrement(), element))
-//                .collect(Collectors.toMap(XmlParam::index, XmlParam::annotations))
-//        );
     }
 
     /**

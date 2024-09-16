@@ -106,7 +106,8 @@ import org.xembly.Directive;
     "PMD.TooManyMethods",
     "PMD.NcssCount",
     "PMD.UncommentedEmptyMethodBody",
-    "PMD.ExcessiveMethodLength"
+    "PMD.ExcessiveMethodLength",
+    "PMD.GodClass"
 })
 public final class AsmProgram {
 
@@ -239,7 +240,7 @@ public final class AsmProgram {
             visible = node.visibleParameterAnnotations;
         }
         final Type[] types = Type.getArgumentTypes(node.desc);
-        List<BytecodeMethodParameter> params = new ArrayList<>(types.length);
+        final List<BytecodeMethodParameter> params = new ArrayList<>(types.length);
         for (int index = 0; index < types.length; ++index) {
             List<BytecodeAnnotation> annotations = new ArrayList<>(0);
             if (visible.length > index) {
