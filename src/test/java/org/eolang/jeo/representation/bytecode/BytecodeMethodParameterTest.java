@@ -24,8 +24,11 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.objectweb.asm.Type;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -36,16 +39,23 @@ import org.xembly.Xembler;
  */
 final class BytecodeMethodParameterTest {
 
-    @Test
-    void convertsToDirectives() throws ImpossibleModificationException {
+    @ParameterizedTest(name = "Converts param with index {0} and type {1} to directives")
+    @MethodSource("parameters")
+    void convertsToDirectives(
+        final int index, final Type type, final String expected
+    ) throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We can't convert bytecode method parameter to correct XML directives",
-            new Xembler(
-                new BytecodeMethodParameter(0, Type.INT_TYPE).directives()
-            ).xml(),
-            XhtmlMatchers.hasXPaths(
-                "/o[@base='param' and @name='param-SQ==-0']"
-            )
+            new Xembler(new BytecodeMethodParameter(index, type).directives()).xml(),
+            XhtmlMatchers.hasXPaths(expected)
+        );
+    }
+
+    private static Stream<Arguments> parameters() {
+        return Stream.of(
+            Arguments.of(0, Type.INT_TYPE, "/o[@base='param' and @name='param-SQ==-0']"),
+            Arguments.of(1, Type.INT_TYPE, "/o[@base='param' and @name='param-SQ==-1']"),
+            Arguments.of(2, Type.DOUBLE_TYPE, "/o[@base='param' and @name='param-RA==-2']")
         );
     }
 }
