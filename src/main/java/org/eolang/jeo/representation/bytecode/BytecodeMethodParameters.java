@@ -38,7 +38,7 @@ import org.objectweb.asm.MethodVisitor;
  */
 @ToString
 @EqualsAndHashCode
-public final class BytecodeParameters {
+public final class BytecodeMethodParameters {
 
     /**
      * Annotations with a parameter position (as a key).
@@ -48,7 +48,7 @@ public final class BytecodeParameters {
     /**
      * Default constructor.
      */
-    public BytecodeParameters() {
+    public BytecodeMethodParameters() {
         this(new HashMap<>(0));
     }
 
@@ -56,7 +56,7 @@ public final class BytecodeParameters {
      * Constructor.
      * @param annotations Annotations.
      */
-    public BytecodeParameters(final Map<Integer, List<BytecodeAnnotation>> annotations) {
+    public BytecodeMethodParameters(final Map<Integer, List<BytecodeAnnotation>> annotations) {
         this.annotations = annotations;
     }
 
@@ -70,6 +70,11 @@ public final class BytecodeParameters {
         );
     }
 
+    /**
+     * Convert to directives.
+     * @param descr Method descriptor.
+     * @return Directives.
+     */
     public DirectivesMethodParams directives(final String descr) {
         return new DirectivesMethodParams(
             descr,

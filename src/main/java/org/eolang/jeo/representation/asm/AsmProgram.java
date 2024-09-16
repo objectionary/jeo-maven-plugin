@@ -50,7 +50,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
-import org.eolang.jeo.representation.bytecode.BytecodeParameters;
+import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.bytecode.InnerClass;
@@ -223,7 +223,7 @@ public final class AsmProgram {
      * @return Domain method parameters.
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static BytecodeParameters parameters(final MethodNode node) {
+    private static BytecodeMethodParameters parameters(final MethodNode node) {
         final List<AnnotationNode>[] invisible;
         if (node.invisibleParameterAnnotations == null) {
             invisible = new List[Optional.ofNullable(node.visibleParameterAnnotations)
@@ -239,7 +239,7 @@ public final class AsmProgram {
             visible = node.visibleParameterAnnotations;
         }
         final int size = visible.length;
-        return new BytecodeParameters(
+        return new BytecodeMethodParameters(
             IntStream.range(0, size).mapToObj(
                 index -> new MapEntry<>(
                     index,

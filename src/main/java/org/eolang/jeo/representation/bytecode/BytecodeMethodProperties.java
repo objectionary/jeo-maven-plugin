@@ -64,7 +64,7 @@ public final class BytecodeMethodProperties implements Testable {
     /**
      * Method parameters.
      */
-    private final BytecodeParameters parameters;
+    private final BytecodeMethodParameters parameters;
 
     /**
      * Method exceptions.
@@ -119,7 +119,7 @@ public final class BytecodeMethodProperties implements Testable {
         final String signature,
         final String... exceptions
     ) {
-        this(access, name, descriptor, signature, new BytecodeParameters(), exceptions);
+        this(access, name, descriptor, signature, new BytecodeMethodParameters(), exceptions);
     }
 
     /**
@@ -137,7 +137,7 @@ public final class BytecodeMethodProperties implements Testable {
         final String name,
         final String descriptor,
         final String signature,
-        final BytecodeParameters parameters,
+        final BytecodeMethodParameters parameters,
         final String... exceptions
     ) {
         this.access = access;

@@ -38,7 +38,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
-import org.eolang.jeo.representation.bytecode.BytecodeParameters;
+import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
 import org.eolang.jeo.representation.directives.DirectivesMaxs;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
@@ -264,9 +264,9 @@ public final class XmlMethod {
      * Method parameters.
      * @return Parameters.
      */
-    private BytecodeParameters params() {
+    private BytecodeMethodParameters params() {
         final AtomicInteger index = new AtomicInteger(0);
-        return new BytecodeParameters(
+        return new BytecodeMethodParameters(
             this.node.children()
                 .filter(
                     element -> element.hasAttribute("base", "param")

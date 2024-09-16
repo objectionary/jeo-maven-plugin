@@ -228,20 +228,10 @@ public final class BytecodeClass implements Testable {
      * @param modifiers Access modifiers.
      * @return This object.
      */
-    public BytecodeMethodBuilder withMethod(
+    BytecodeMethodBuilder withMethod(
         final String mname, final String descriptor, final int... modifiers
     ) {
         return this.withMethod(new BytecodeMethod(mname, descriptor, modifiers));
-    }
-
-    /**
-     * Add attribute.
-     * @param attribute Attribute.
-     * @return This object.
-     */
-    public BytecodeClass withAttribute(final BytecodeAttribute attribute) {
-        this.attributes.add(attribute);
-        return this;
     }
 
     @Override

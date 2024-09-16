@@ -96,7 +96,7 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives();
+        final Directives directives = new Directives().add("o").attr("base", "params");
         final Type[] arguments = Type.getArgumentTypes(this.descriptor);
         for (int index = 0; index < arguments.length; ++index) {
             final Directives param = directives.add("o")
@@ -116,6 +116,6 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
             }
             param.up();
         }
-        return directives.iterator();
+        return directives.up().iterator();
     }
 }
