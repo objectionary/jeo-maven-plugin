@@ -34,10 +34,6 @@ import org.objectweb.asm.Type;
 /**
  * Xmir representation of a method parameter.
  * @since 0.4
- * @todo #596:30min Add unit tests for the XmlParam class.
- *  We should add unit tests for the XmlParam class. The tests should cover
- *  the following methods: {@link #index()} and {@link #annotations()}.
- *  This will help us to ensure that the class is working as expected.
  */
 public final class XmlParam {
 
@@ -47,26 +43,15 @@ public final class XmlParam {
     private static final Base64.Decoder DECODER = Base64.getDecoder();
 
     /**
-     * Index of the parameter in the method.
-     */
-    private final int position;
-
-    /**
      * Root node from which we will get all required data.
      */
     private final XmlNode root;
 
-    public XmlParam(final XmlNode node) {
-        this(0, node);
-    }
-
     /**
      * Constructor.
-     * @param position Index of the parameter in the method.
-     * @param root Root node.
+     * @param root Parameter xml node.
      */
-    public XmlParam(final int position, final XmlNode root) {
-        this.position = position;
+    public XmlParam(final XmlNode root) {
         this.root = root;
     }
 
@@ -87,7 +72,7 @@ public final class XmlParam {
      * @return Index.
      */
     private int index() {
-        return Integer.parseInt(this.name().split("-")[2]);
+        return Integer.parseInt(this.suffix(2));
     }
 
     /**
@@ -95,10 +80,9 @@ public final class XmlParam {
      * @return Type.
      */
     private Type type() {
-        final String type = this.name().split("-")[1];
-        final byte[] decoded = DECODER.decode(type);
-        final String t = new String(decoded, StandardCharsets.UTF_8);
-        return Type.getType(t);
+        return Type.getType(
+            new String(XmlParam.DECODER.decode(this.suffix(1)), StandardCharsets.UTF_8)
+        );
     }
 
     /**
@@ -111,6 +95,17 @@ public final class XmlParam {
             .map(XmlAnnotation::new)
             .map(XmlAnnotation::bytecode)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Get the suffix of the name attribute.
+     * position[0]-position[1]-position[2].
+     * param      -type       -index
+     * @param position Position of the suffix.
+     * @return Suffix.
+     */
+    private String suffix(final int position) {
+        return this.name().split("-")[position];
     }
 
     /**
