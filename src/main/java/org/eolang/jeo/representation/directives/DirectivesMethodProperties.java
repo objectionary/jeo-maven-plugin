@@ -97,7 +97,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
             signature,
             exceptions,
             new DirectivesMaxs(),
-            new DirectivesMethodParams(descriptor)
+            new DirectivesMethodParams()
         );
     }
 

@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Random;
@@ -57,6 +58,10 @@ public final class BytecodeMethodParameter {
      * Annotations of the parameter.
      */
     private final List<BytecodeAnnotation> annotations;
+
+    public BytecodeMethodParameter(final int index, final Type type) {
+        this(index, type, new ArrayList<>(0));
+    }
 
     /**
      * Constructor.

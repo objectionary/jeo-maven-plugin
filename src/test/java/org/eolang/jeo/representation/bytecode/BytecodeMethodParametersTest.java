@@ -24,12 +24,10 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import java.util.Arrays;
 import java.util.Collections;
-import org.eolang.jeo.matchers.SameXml;
-import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Type;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -43,8 +41,12 @@ final class BytecodeMethodParametersTest {
     void convertsToDirectivesWithTwoParams() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Can't convert bytecode method parameters to correct directives",
-            new Xembler(new BytecodeMethodParameters(
-            ).directives("(II)V")).xml(),
+            new Xembler(
+                new BytecodeMethodParameters(
+                    new BytecodeMethodParameter(0, Type.INT_TYPE, Collections.emptyList()),
+                    new BytecodeMethodParameter(1, Type.INT_TYPE, Collections.emptyList())
+                ).directives()
+            ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[@base='params']",
                 "/o[@base='params']/o[@base='param' and @name='param-SQ==-0']",

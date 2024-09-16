@@ -241,20 +241,44 @@ public final class AsmProgram {
             visible = node.visibleParameterAnnotations;
         }
         final int size = visible.length;
-        return new BytecodeMethodParameters(
-            IntStream.range(0, size).mapToObj(
-                    index -> new MapEntry<>(
-                        index,
-                        new BytecodeAnnotations(
-                            Stream.concat(
-                                AsmProgram.safe(visible[index], true),
-                                AsmProgram.safe(invisible[index], false)
-                            )
-                        ).annotations()
-                    )
-                ).map(e -> new BytecodeMethodParameter(e.getKey(), Type.INT_TYPE, e.getValue()))
-                .collect(Collectors.toList())
-        );
+        final Type[] types = Type.getArgumentTypes(node.desc);
+        List<BytecodeMethodParameter> params = new ArrayList<>(types.length);
+        for (int index = 0; index < types.length; ++index) {
+            List<BytecodeAnnotation> annotations = new ArrayList<>(0);
+            if (visible.length > index) {
+                annotations.addAll(
+                    AsmProgram.safe(visible[index], true).collect(Collectors.toList())
+                );
+            }
+            if (invisible.length > index) {
+                annotations.addAll(
+                    AsmProgram.safe(invisible[index], false).collect(Collectors.toList())
+                );
+            }
+            final BytecodeMethodParameter param = new BytecodeMethodParameter(
+                index,
+                types[index],
+                annotations
+            );
+            params.add(param);
+        }
+
+        return new BytecodeMethodParameters(params);
+
+//        return new BytecodeMethodParameters(
+//            IntStream.range(0, size).mapToObj(
+//                    index -> new MapEntry<>(
+//                        index,
+//                        new BytecodeAnnotations(
+//                            Stream.concat(
+//                                AsmProgram.safe(visible[index], true),
+//                                AsmProgram.safe(invisible[index], false)
+//                            )
+//                        ).annotations()
+//                    )
+//                ).map(e -> new BytecodeMethodParameter(e.getKey(), types[e.getKey()], e.getValue()))
+//                .collect(Collectors.toList())
+//        );
     }
 
     /**

@@ -44,34 +44,21 @@ import org.xembly.Directives;
 public final class DirectivesMethodParams implements Iterable<Directive> {
 
     /**
-     * Base64 decoder.
+     * Parameters.
      */
-    private static final Base64.Encoder ENCODER = Base64.getEncoder();
-
-    /**
-     * Method descriptor.
-     */
-    private final String descriptor;
-
-    /**
-     * Parameter annotations.
-     */
-    private final Map<Integer, List<Iterable<Directive>>> annotations;
+    private final List<Iterable<Directive>> params;
 
     /**
      * Constructor.
-     * @param descriptor Method descriptor.
      */
-    public DirectivesMethodParams(final String descriptor) {
-        this(descriptor, new HashMap<>(0));
+    public DirectivesMethodParams() {
+        this(new ArrayList<>(0));
     }
 
     public DirectivesMethodParams(
-        final String descriptor,
-        final Map<Integer, List<Iterable<Directive>>> annotations
+        final List<Iterable<Directive>> params
     ) {
-        this.descriptor = descriptor;
-        this.annotations = annotations;
+        this.params = params;
     }
 
     @Override
@@ -80,26 +67,27 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
             .attr("line", new Random().nextInt(Integer.MAX_VALUE))
             .attr("name", new Random().nextInt(Integer.MAX_VALUE))
             .attr("base", "params");
-        final Type[] arguments = Type.getArgumentTypes(this.descriptor);
-        for (int index = 0; index < arguments.length; ++index) {
-            final Directives param = directives.add("o")
-                .attr("base", "param")
-                .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-                .attr(
-                    "name",
-                    String.format(
-                        "param-%s-%d",
-                        DirectivesMethodParams.ENCODER.encodeToString(
-                            arguments[index].toString().getBytes(StandardCharsets.UTF_8)
-                        ),
-                        index
-                    )
-                );
-            if (this.annotations.containsKey(index)) {
-                this.annotations.get(index).forEach(param::append);
-            }
-            param.up();
-        }
+        this.params.forEach(directives::append);
+//        final Type[] arguments = Type.getArgumentTypes(this.descriptor);
+//        for (int index = 0; index < arguments.length; ++index) {
+//            final Directives param = directives.add("o")
+//                .attr("base", "param")
+//                .attr("line", new Random().nextInt(Integer.MAX_VALUE))
+//                .attr(
+//                    "name",
+//                    String.format(
+//                        "param-%s-%d",
+//                        DirectivesMethodParams.ENCODER.encodeToString(
+//                            arguments[index].toString().getBytes(StandardCharsets.UTF_8)
+//                        ),
+//                        index
+//                    )
+//                );
+//            if (this.annotations.containsKey(index)) {
+//                this.annotations.get(index).forEach(param::append);
+//            }
+//            param.up();
+//        }
         return directives.up().iterator();
     }
 }

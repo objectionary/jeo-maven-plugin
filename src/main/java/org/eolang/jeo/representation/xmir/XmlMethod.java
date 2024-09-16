@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -37,8 +36,8 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
-import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
+import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.directives.DirectivesMaxs;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
@@ -324,7 +323,7 @@ public final class XmlMethod {
                         "",
                         exceptions,
                         new DirectivesMaxs(stack, locals),
-                        new DirectivesMethodParams(descriptor)
+                        new DirectivesMethodParams()
                     )
                 ),
                 new Transformers.Node()

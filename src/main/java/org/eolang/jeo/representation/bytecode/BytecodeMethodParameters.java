@@ -24,13 +24,14 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Type;
 
 /**
  * Bytecode parameters.
@@ -52,6 +53,18 @@ public final class BytecodeMethodParameters {
         this(new ArrayList<>(0));
     }
 
+    public BytecodeMethodParameters(final String descriptor) {
+        this(BytecodeMethodParameters.fromDescriptor(descriptor));
+    }
+
+    /**
+     * Constructor.
+     * @param params Parameters.
+     */
+    public BytecodeMethodParameters(final BytecodeMethodParameter... params) {
+        this(Arrays.asList(params));
+    }
+
     /**
      * Constructor.
      * @param params Parameters.
@@ -70,21 +83,31 @@ public final class BytecodeMethodParameters {
 
     /**
      * Convert to directives.
-     * @param descr Method descriptor.
      * @return Directives.
      */
-    public DirectivesMethodParams directives(final String descr) {
-        this.params.stream().map(BytecodeMethodParameter::directives)
+    public DirectivesMethodParams directives() {
         return new DirectivesMethodParams(
-            descr,
-            this.annotations.entrySet().stream().collect(
-                Collectors.toMap(
-                    Map.Entry::getKey,
-                    entry -> entry.getValue().stream()
-                        .map(BytecodeAnnotation::directives)
-                        .collect(Collectors.toList())
-                )
-            )
+            this.params.stream()
+                .map(BytecodeMethodParameter::directives)
+                .collect(Collectors.toList())
+//            this.annotations.entrySet().stream().collect(
+//                Collectors.toMap(
+//                    Map.Entry::getKey,
+//                    entry -> entry.getValue().stream()
+//                        .map(BytecodeAnnotation::directives)
+//                        .collect(Collectors.toList())
+//                )
+//            )
         );
+    }
+
+    private static List<BytecodeMethodParameter> fromDescriptor(final String descriptor) {
+        final Type[] types = Type.getArgumentTypes(descriptor);
+        final int size = types.length;
+        final List<BytecodeMethodParameter> params = new ArrayList<>(size);
+        for (int index = 0; index < size; ++index) {
+            params.add(new BytecodeMethodParameter(index, types[index]));
+        }
+        return params;
     }
 }

@@ -119,7 +119,14 @@ public final class BytecodeMethodProperties implements Testable {
         final String signature,
         final String... exceptions
     ) {
-        this(access, name, descriptor, signature, new BytecodeMethodParameters(), exceptions);
+        this(
+            access,
+            name,
+            descriptor,
+            signature,
+            new BytecodeMethodParameters(descriptor),
+            exceptions
+        );
     }
 
     /**
@@ -190,7 +197,7 @@ public final class BytecodeMethodProperties implements Testable {
             this.signature,
             this.exceptions,
             maxs.directives(),
-            this.parameters.directives(this.descr)
+            this.parameters.directives()
         );
     }
 
