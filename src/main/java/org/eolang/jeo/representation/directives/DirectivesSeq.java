@@ -48,6 +48,7 @@ public final class DirectivesSeq implements Iterable<Directive> {
      * Constructor.
      * @param elements Elements to wrap.
      */
+    @SafeVarargs
     public DirectivesSeq(Iterable<Directive>... elements) {
         this("@", elements);
     }
