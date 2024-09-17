@@ -153,7 +153,6 @@ public final class XmlMethod {
      */
     private List<XmlBytecodeEntry> instructions() {
         return this.node.child("name", "@")
-//            .child("base", "tuple")
             .children()
             .filter(element -> element.attribute("base").isPresent())
             .map(XmlNode::toEntry)

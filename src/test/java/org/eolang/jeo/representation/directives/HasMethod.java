@@ -371,35 +371,28 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          */
         Stream<String> checks(final String root) {
             return Stream.of(
+                String.format("%s/@base", this.path(root)),
+                String.format("%s/o[1][@base='label']/@base", this.path(root)),
+                String.format("%s/o[2][@base='label']/@base", this.path(root)),
+                String.format("%s/o[3][@base='label']/@base", this.path(root)),
+                String.format("%s/o[4][@base='string']/@base", this.path(root)),
                 String.format(
-                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/@name",
-                    root
-                ),
-                String.format(
-                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/o[@base='trycatch']/@base",
-                    root
-                ),
-                String.format(
-                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/o[@base='trycatch']/o[1][@base='label']/@base",
-                    root
-                ),
-                String.format(
-                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/o[@base='trycatch']/o[2][@base='label']/@base",
-                    root
-                ),
-                String.format(
-                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/o[@base='trycatch']/o[3][@base='label']/@base",
-                    root
-                ),
-                String.format(
-                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/o[@base='trycatch']/o[4][@base='string']/@base",
-                    root
-                ),
-                String.format(
-                    "%s/o[@base='tuple' and contains(@name, 'trycatchblocks')]/o[@base='trycatch']/o[4][@base='string' and text()='%s']/@data",
-                    root,
+                    "%s/o[4][@base='string' and text()='%s']/@data",
+                    this.path(root),
                     new HexData(this.type).value()
                 )
+            );
+        }
+
+        /**
+         * Try-catch entry xpath.
+         * @param root Root Method XPath.
+         * @return XPath.
+         */
+        private String path(final String root) {
+            return String.format(
+                "%s/o[contains(@base,'seq') and contains(@name, 'trycatchblocks')]/o[@base='trycatch']",
+                root
             );
         }
     }

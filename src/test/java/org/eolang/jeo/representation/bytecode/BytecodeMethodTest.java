@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -362,7 +363,7 @@ final class BytecodeMethodTest {
         MatcherAssert.assertThat(
             "We expect that method without try-catch block doesn't contain try-catch directives.",
             new BytecodeProgram(new BytecodeClass().helloWorldMethod()).xml().toString(),
-            Matchers.not(Matchers.containsString("trycatchblocks"))
+            XhtmlMatchers.hasXPaths(".//o[@base='seq0' and @name='trycatchblocks-main']")
         );
     }
 

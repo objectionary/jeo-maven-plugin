@@ -174,27 +174,13 @@ public final class DirectivesMethod implements Iterable<Directive> {
             .attr("name", this.name.encoded())
             .append(this.properties)
             .append(this.annotations)
-            .append(new DirectivesSeq("@", this.instructions));
-//            .add("o")
-//            .attr("base", "seq")
-//            .attr("name", "@")
-//            .add("o")
-//            .attr("base", "tuple")
-//            .attr("name", "instructions")
-//            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-//            .attr("star", "");
-//        this.instructions.forEach(directives::append);
-//        directives.up();
-//        directives.up();
-
-        if (!this.exceptions.isEmpty()) {
-            directives.add("o")
-                .attr("base", "tuple")
-                .attr("star", "")
-                .attr("name", String.format("trycatchblocks-%s", this.name.name()));
-            this.exceptions.forEach(directives::append);
-            directives.up();
-        }
+            .append(new DirectivesSeq("@", this.instructions))
+            .append(
+                new DirectivesSeq(
+                    String.format("trycatchblocks-%s", this.name.name()),
+                    this.exceptions
+                )
+            );
         this.dvalue.forEach(directives::append);
         directives.up();
         return directives.iterator();
