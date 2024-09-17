@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -89,7 +90,7 @@ public final class DirectivesValues implements Iterable<Directive> {
     private String nonEmptyName() {
         final String result;
         if (this.name.isEmpty()) {
-            result = UUID.randomUUID().toString().toLowerCase();
+            result = UUID.randomUUID().toString().toLowerCase(Locale.getDefault());
         } else {
             result = this.name;
         }

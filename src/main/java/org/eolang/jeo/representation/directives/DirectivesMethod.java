@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.directives;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.Signature;
 import org.xembly.Directive;

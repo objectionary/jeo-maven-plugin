@@ -371,14 +371,14 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          */
         Stream<String> checks(final String root) {
             return Stream.of(
-                String.format("%s/@base", this.path(root)),
-                String.format("%s/o[1][@base='label']/@base", this.path(root)),
-                String.format("%s/o[2][@base='label']/@base", this.path(root)),
-                String.format("%s/o[3][@base='label']/@base", this.path(root)),
-                String.format("%s/o[4][@base='string']/@base", this.path(root)),
+                String.format("%s/@base", HasTryCatch.path(root)),
+                String.format("%s/o[1][@base='label']/@base", HasTryCatch.path(root)),
+                String.format("%s/o[2][@base='label']/@base", HasTryCatch.path(root)),
+                String.format("%s/o[3][@base='label']/@base", HasTryCatch.path(root)),
+                String.format("%s/o[4][@base='string']/@base", HasTryCatch.path(root)),
                 String.format(
                     "%s/o[4][@base='string' and text()='%s']/@data",
-                    this.path(root),
+                    HasTryCatch.path(root),
                     new HexData(this.type).value()
                 )
             );
@@ -389,7 +389,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          * @param root Root Method XPath.
          * @return XPath.
          */
-        private String path(final String root) {
+        private static String path(final String root) {
             return String.format(
                 "%s/o[contains(@base,'seq') and contains(@name, 'trycatchblocks')]/o[@base='trycatch']",
                 root

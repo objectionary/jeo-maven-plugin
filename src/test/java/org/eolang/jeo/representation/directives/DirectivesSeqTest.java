@@ -42,7 +42,8 @@ final class DirectivesSeqTest {
             "We expect to get a numbered sequence with two elements",
             new Xembler(
                 new DirectivesSeq(
-                    new DirectivesData("1"), new DirectivesData("2"))
+                    new DirectivesData("1"), new DirectivesData("2")
+                )
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[@base='seq2' and @name='@']",

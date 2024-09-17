@@ -37,6 +37,9 @@ import org.xembly.Directives;
  */
 public final class DirectivesSeq implements Iterable<Directive> {
 
+    /**
+     * Name of the sequence.
+     */
     private final String name;
 
     /**
@@ -49,7 +52,7 @@ public final class DirectivesSeq implements Iterable<Directive> {
      * @param elements Elements to wrap.
      */
     @SafeVarargs
-    public DirectivesSeq(Iterable<Directive>... elements) {
+    public DirectivesSeq(final Iterable<Directive>... elements) {
         this("@", elements);
     }
 
@@ -60,7 +63,7 @@ public final class DirectivesSeq implements Iterable<Directive> {
      * @param elements Elements to wrap.
      */
     @SafeVarargs
-    public DirectivesSeq(final String name, Iterable<Directive>... elements) {
+    public DirectivesSeq(final String name, final Iterable<Directive>... elements) {
         this(name, Arrays.asList(elements));
     }
 
@@ -74,7 +77,6 @@ public final class DirectivesSeq implements Iterable<Directive> {
         this.name = name;
         this.directives = elements;
     }
-
 
     @Override
     public Iterator<Directive> iterator() {
