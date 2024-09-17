@@ -25,6 +25,8 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.xembly.Directive;
 
@@ -49,6 +51,16 @@ public final class DirectivesValues implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param vaues Values themselves.
+     * @param <T> Values type.
+     */
+    @SafeVarargs
+    public <T> DirectivesValues(final T... vaues) {
+        this("", vaues);
+    }
+
+    /**
+     * Constructor.
      * @param name Group of values name.
      * @param vals Values themselves.
      * @param <T> Values type.
@@ -62,10 +74,25 @@ public final class DirectivesValues implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         return new DirectivesSeq(
-            this.name,
+            this.nonEmptyName(),
             Arrays.stream(this.values)
+                .filter(Objects::nonNull)
                 .map(DirectivesData::new)
                 .collect(Collectors.toList())
         ).iterator();
+    }
+
+    /**
+     * Name of the group of values.
+     * @return Name of the group of values.
+     */
+    private String nonEmptyName() {
+        final String result;
+        if (this.name.isEmpty()) {
+            result = UUID.randomUUID().toString().toLowerCase();
+        } else {
+            result = this.name;
+        }
+        return result;
     }
 }

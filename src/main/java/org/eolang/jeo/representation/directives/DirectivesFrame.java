@@ -96,9 +96,9 @@ public final class DirectivesFrame implements Iterable<Directive> {
             .attr("base", "frame")
             .append(new DirectivesData(this.type))
             .append(new DirectivesData(this.nlocal))
-            .append(new DirectivesTuple(this.locals))
+            .append(new DirectivesValues(this.locals))
             .append(new DirectivesData(this.nstack))
-            .append(new DirectivesTuple(this.stack))
+            .append(new DirectivesValues(this.stack))
             .up()
             .iterator();
     }
