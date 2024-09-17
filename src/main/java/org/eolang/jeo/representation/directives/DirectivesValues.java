@@ -47,9 +47,16 @@ public final class DirectivesValues implements Iterable<Directive> {
      */
     private final Object[] values;
 
-    public DirectivesValues(final String name, final Object... values) {
+    /**
+     * Constructor.
+     * @param name Group of values name.
+     * @param vals Values themselves.
+     * @param <T> Values type.
+     */
+    @SafeVarargs
+    public <T> DirectivesValues(final String name, final T... vals) {
         this.name = name;
-        this.values = values;
+        this.values = vals.clone();
     }
 
     @Override
