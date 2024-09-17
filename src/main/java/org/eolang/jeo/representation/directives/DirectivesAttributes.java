@@ -78,13 +78,6 @@ public final class DirectivesAttributes implements Iterable<Directive> {
             result = Collections.emptyIterator();
         } else {
             result = new DirectivesSeq("attributes", this.attributes).iterator();
-//            final Directives directives = new Directives().add("o")
-//                .attr("base", "tuple")
-//                .attr("name", "attributes")
-//                .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-//                .attr("star", "");
-//            this.attributes.forEach(directives::append);
-//            result = directives.up().iterator();
         }
         return result;
     }

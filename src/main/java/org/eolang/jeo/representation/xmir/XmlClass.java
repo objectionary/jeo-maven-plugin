@@ -133,7 +133,7 @@ public final class XmlClass {
     private Optional<XmlAnnotations> annotations() {
         return this.node.children()
             .filter(o -> o.hasAttribute("name", "annotations"))
-            .filter(o -> o.hasAttribute("base", "tuple"))
+//            .filter(o -> o.hasAttribute("base", "tuple"))
             .findFirst()
             .map(XmlAnnotations::new);
     }
@@ -176,7 +176,7 @@ public final class XmlClass {
     private Optional<XmlAttributes> attributes() {
         return this.node.children()
             .filter(o -> o.hasAttribute("name", "attributes"))
-            .filter(o -> o.hasAttribute("base", "tuple"))
+//            .filter(o -> o.hasAttribute("base", "tuple"))
             .findFirst()
             .map(XmlAttributes::new);
     }

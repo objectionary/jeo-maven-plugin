@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.HexData;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -38,42 +39,31 @@ import org.xembly.Xembler;
 final class DirectivesAnnotationsTest {
 
     @Test
-    void returnsEmptyDirectviesIfNoAnnotations() {
+    void returnsEmptyDirectviesIfNoAnnotations() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Must return empty directives if no annotations",
-            new DirectivesAnnotations().iterator().hasNext(),
-            Matchers.is(false)
+            new Xembler(new DirectivesAnnotations()).xml(),
+            new SameXml("<o base='seq0' name='annotations'/>")
         );
     }
 
     @Test
     void returnsSingleAnnotation() throws ImpossibleModificationException {
         final String annotation = "Ljava/lang/Override;";
-        final String xml = new Xembler(
-            new DirectivesAnnotations()
-                .add(new DirectivesAnnotation(annotation, true))
-        ).xml();
         MatcherAssert.assertThat(
-            String.format(
-                "Must return single annotation with correct descriptor and visibility, but was: %n%s",
-                xml
-            ),
-            xml,
-            Matchers.allOf(
-                XhtmlMatchers.hasXPath(
-                    "/o[@base='tuple' and @name='annotations']/o"
+            "Must return single annotation with correct descriptor and visibility",
+            new Xembler(
+                new DirectivesAnnotations().add(new DirectivesAnnotation(annotation, true))
+            ).xml(),
+            XhtmlMatchers.hasXPaths(
+                "/o[@base='seq1' and @name='annotations']/o",
+                String.format(
+                    "/o[@base='seq1' and @name='annotations']/o/o[1][@base='string' and text()='%s']",
+                    new HexData(annotation).value()
                 ),
-                XhtmlMatchers.hasXPath(
-                    String.format(
-                        "/o[@base='tuple' and @name='annotations']/o/o[1][@base='string' and text()='%s']",
-                        new HexData(annotation).value()
-                    )
-                ),
-                XhtmlMatchers.hasXPath(
-                    String.format(
-                        "/o[@base='tuple' and @name='annotations']/o/o[2][@base='bool' and text()='%s']",
-                        new HexData(true).value()
-                    )
+                String.format(
+                    "/o[@base='seq1' and @name='annotations']/o/o[2][@base='bool' and text()='%s']",
+                    new HexData(true).value()
                 )
             )
         );

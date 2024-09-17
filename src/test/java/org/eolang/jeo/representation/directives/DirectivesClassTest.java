@@ -45,13 +45,13 @@ import org.xembly.Xembler;
 final class DirectivesClassTest {
 
     @Test
-    void createsWithSimpleConstructor() {
+    void createsWithSimpleConstructor() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Can't create class with simple constructor",
             new Xembler(
                 new DirectivesClass(new ClassName("Neo"), new DirectivesClassProperties()),
                 new Transformers.Node()
-            ).xmlQuietly(),
+            ).xml(),
             new SameXml(
                 String.join(
                     "",
@@ -61,6 +61,7 @@ final class DirectivesClassTest {
                     "<o base='string' data='bytes' name='signature'/>",
                     "<o base='string' data='bytes' name='supername'/>",
                     "<o base='tuple' name='interfaces' star=''/>",
+                    "<o base='seq0' name='annotations'/>",
                     "</o>"
                 )
             )
