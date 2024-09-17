@@ -27,7 +27,6 @@ import com.jcabi.matchers.XhtmlMatchers;
 import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.HexData;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;

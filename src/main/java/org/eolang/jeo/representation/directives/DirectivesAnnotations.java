@@ -104,16 +104,5 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         return new DirectivesSeq(this.name, this.annotations).iterator();
-//        final Directives directives = new Directives();
-//        if (!this.annotations.isEmpty()) {
-//            directives.add("o")
-//                .attr("base", "tuple")
-//                .attr("star", "")
-//                .attr("name", this.name)
-//                .attr("line", new Random().nextInt(Integer.MAX_VALUE));
-//            this.annotations.forEach(directives::append);
-//            directives.up();
-//        }
-//        return directives.iterator();
     }
 }

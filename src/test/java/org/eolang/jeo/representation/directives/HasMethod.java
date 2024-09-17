@@ -192,7 +192,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         final String root = this.root();
         return Stream.of(
             root.concat("/@name"),
-            root.concat("/o[@base='seq']/@base")
+            root.concat("/o[contains(@base,'seq')]/@base")
         );
     }
 
@@ -297,7 +297,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          */
         Stream<String> checks(final String root) {
             final String instruction = String.format(
-                "%s/o[@base='seq']/o[@base='tuple']/o[@base='opcode' and contains(@name,'%s')]",
+                "%s/o[contains(@base,'seq') and @name='@']/o[@base='opcode' and contains(@name,'%s')]",
                 root,
                 new OpcodeName(this.opcode).simplified()
             );
@@ -421,7 +421,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         static Stream<String> checks(final String root) {
             return Stream.of(
                 String.format(
-                    "%s/o[@base='seq']/o[@base='tuple']/o[@base='label' and @data='bytes']/@data",
+                    "%s/o[contains(@base,'seq') and @name='@']/o[@base='label' and @data='bytes']/@data",
                     root
                 )
             );
