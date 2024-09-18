@@ -23,38 +23,40 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
+import org.eolang.jeo.representation.bytecode.InnerClass;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
 /**
- * Xml representation of a class attributes.
- * @since 0.4
+ * Test case for {@link XmlAttributes}.
+ * @since 0.6
  */
-public final class XmlAttributes {
+final class XmlAttributesTest {
 
     /**
-     * XML node of attributes.
+     * Example XMIR of attributes.
      */
-    private final XmlNode node;
+    private static final String XMIR = String.join(
+        "\n",
+        "<o base='seq1' name='attributes'>",
+        "   <o base='inner-class'>",
+        "      <o base='string' data='bytes'>6E 61 6D 65</o>",
+        "      <o base='string' data='bytes'>6F 75 74 65 72</o>",
+        "      <o base='string' data='bytes'>69 6E 6E 65 72</o>",
+        "      <o base='int' data='bytes'>00 00 00 00 00 00 00 00</o>",
+        "   </o>",
+        "</o>"
+    );
 
-    /**
-     * Constructor.
-     * @param xmlnode XML node.
-     */
-    XmlAttributes(final XmlNode xmlnode) {
-        this.node = xmlnode;
-    }
-
-    /**
-     * Get attributes.
-     * @return Attributes.
-     */
-    public List<BytecodeAttribute> attributes() {
-        return this.node.children().map(XmlAttribute::new).map(XmlAttribute::attribute)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .collect(Collectors.toList());
+    @Test
+    void convertsToBytecode() {
+        MatcherAssert.assertThat(
+            "We expect the attributes to be converted to a correct bytecode domain class",
+            new XmlAttributes(new XmlNode(XmlAttributesTest.XMIR)).attributes(),
+            Matchers.contains(
+                new InnerClass("name", "outer", "inner", 0)
+            )
+        );
     }
 }
