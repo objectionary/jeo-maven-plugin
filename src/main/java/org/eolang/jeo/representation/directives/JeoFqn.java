@@ -31,6 +31,12 @@ package org.eolang.jeo.representation.directives;
  * - `representation` -> `org.eolang.jeo.representation`
  * - `int` -> `org.eolang.jeo.int`
  * @since 0.6
+ * @todo #710:90min Refactor the usage of {@link JeoFqn} in the project.
+ *  The solution with FQN transformation is not the best one.
+ *  We create this object many times and use it in many places.
+ *  All the usages are spread across the project.
+ *  We need to refactor the project to use the FQN in a more centralized way.
+ *  The same problem is related to {@link EoFqn}.
  */
 public final class JeoFqn {
 
