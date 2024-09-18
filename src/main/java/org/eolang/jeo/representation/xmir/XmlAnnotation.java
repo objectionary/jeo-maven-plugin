@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
+import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * Xmir representation of an annotation.
@@ -86,7 +87,9 @@ public class XmlAnnotation {
      */
     private List<BytecodeAnnotationValue> props() {
         return this.node.children()
-            .filter(xmlnode -> xmlnode.hasAttribute("base", "annotation-property"))
+            .filter(
+                xmlnode -> xmlnode.hasAttribute("base", new JeoFqn("annotation-property").fqn())
+            )
             .map(XmlAnnotationProperty::new)
             .map(XmlAnnotationProperty::bytecode)
             .collect(Collectors.toList());

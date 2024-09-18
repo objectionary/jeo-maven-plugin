@@ -35,6 +35,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
+import org.eolang.jeo.representation.directives.JeoFqn;
 import org.objectweb.asm.Opcodes;
 import org.w3c.dom.Node;
 import org.xembly.Transformers;
@@ -163,7 +164,7 @@ public final class XmlClass {
     private List<XmlField> fields() {
         return this.node.children()
             .filter(o -> o.attribute("base").isPresent())
-            .filter(o -> "field".equals(o.attribute("base").get()))
+            .filter(o -> new JeoFqn("field").fqn().equals(o.attribute("base").get()))
             .map(XmlField::new)
             .collect(Collectors.toList());
     }

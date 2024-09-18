@@ -73,7 +73,7 @@ public final class DirectivesAttribute implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives()
             .add("o")
-            .attr(new JeoFqn("base").fqn(), this.base);
+            .attr("base", new JeoFqn(this.base).fqn());
         this.data.forEach(directives::append);
         return directives.up().iterator();
     }

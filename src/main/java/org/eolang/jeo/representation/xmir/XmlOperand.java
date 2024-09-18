@@ -23,9 +23,11 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.jar.JarEntry;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.DataType;
+import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * XML operand.
@@ -65,11 +67,11 @@ public final class XmlOperand {
                 )
             );
         final Object result;
-        if ("handle".equals(base)) {
+        if (new JeoFqn("handle").fqn().equals(base)) {
             result = new XmlHandler(this.raw).bytecode().asHandle();
-        } else if ("annotation".equals(base)) {
+        } else if (new JeoFqn("annotation").fqn().equals(base)) {
             result = new XmlAnnotation(this.raw).bytecode();
-        } else if ("annotation-property".equals(base)) {
+        } else if (new JeoFqn("annotation-property").fqn().equals(base)) {
             final XmlAnnotationProperty xml = new XmlAnnotationProperty(this.raw);
             result = xml.bytecode();
         } else {

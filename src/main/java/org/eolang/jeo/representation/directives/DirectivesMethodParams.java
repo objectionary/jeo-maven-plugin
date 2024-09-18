@@ -60,8 +60,8 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives().add("o")
             .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-            .attr("name", new Random().nextInt(Integer.MAX_VALUE))
-            .attr(new JeoFqn("base").fqn(), "params");
+            .attr("name", "method-params")
+            .attr("base", new JeoFqn("params").fqn());
         this.params.forEach(directives::append);
         return directives.up().iterator();
     }

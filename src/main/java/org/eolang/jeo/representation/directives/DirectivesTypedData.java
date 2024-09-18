@@ -82,7 +82,7 @@ public final class DirectivesTypedData implements Iterable<Directive> {
         try {
             final DataType base = DataType.find(this.type);
             final Directives directives = new Directives().add("o")
-                .attr("base", new JeoFqn(base.type()).fqn())
+                .attr("base", base.fqn())
                 .attr("data", "bytes")
                 .attr("line", new Random().nextInt(Integer.MAX_VALUE));
             final String hex = base.toHexString(this.data);

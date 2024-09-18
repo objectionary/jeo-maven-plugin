@@ -103,7 +103,7 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives().add("o")
-            .attr(new JeoFqn("base").fqn(), "annotation")
+            .attr("base", new JeoFqn("annotation").fqn())
             .attr(
                 "name",
                 new Signature(

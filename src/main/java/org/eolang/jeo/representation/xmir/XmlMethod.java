@@ -42,6 +42,7 @@ import org.eolang.jeo.representation.directives.DirectivesMaxs;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
+import org.eolang.jeo.representation.directives.JeoFqn;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
@@ -254,7 +255,7 @@ public final class XmlMethod {
      * @return Optional XMIR of the default value.
      */
     private Optional<XmlDefaultValue> defvalue() {
-        return this.node.optchild("base", "annotation-default-value")
+        return this.node.optchild("base", new JeoFqn("annotation-default-value").fqn())
             .map(XmlDefaultValue::new);
     }
 
@@ -263,7 +264,7 @@ public final class XmlMethod {
      * @return Parameters.
      */
     private BytecodeMethodParameters params() {
-        return this.node.optchild("base", "params")
+        return this.node.optchild("base", new JeoFqn("params").fqn())
             .map(XmlParams::new).map(XmlParams::params)
             .orElse(new BytecodeMethodParameters());
     }

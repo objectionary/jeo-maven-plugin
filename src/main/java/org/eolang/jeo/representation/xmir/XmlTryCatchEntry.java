@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
+import org.eolang.jeo.representation.directives.EoFqn;
 import org.objectweb.asm.Label;
 
 /**
@@ -114,7 +115,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      */
     private Optional<String> label(final int id) {
         return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(id))
-            .filter(node -> !node.hasAttribute("base", "nop"))
+            .filter(node -> !node.hasAttribute("base", new EoFqn("nop").fqn()))
             .map(XmlNode::text)
             .map(HexString::new)
             .map(HexString::decode);

@@ -27,6 +27,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.InnerClass;
+import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * Xml representation of a single bytecode attribute.
@@ -70,7 +71,7 @@ public final class XmlAttribute {
                     String.format("Attribute base is missing in XML node %s", this.node)
                 )
             );
-        if ("inner-class".equals(base)) {
+        if (new JeoFqn("inner-class").fqn().equals(base)) {
             return new InnerClass(
                 Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(0))
                     .map(XmlOperand::new)

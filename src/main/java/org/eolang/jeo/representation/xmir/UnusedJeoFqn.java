@@ -23,40 +23,41 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.bytecode.InnerClass;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
-
 /**
- * Test case for {@link XmlAttributes}.
+ * Jeo fully qualified name.
+ * Removes a jeo-maven-plugin package name from an object base.
+ * For example,
+ * - `org.eolang.jeo.opcode` -> `opcode`
+ * - `org.eolang.jeo.representation` -> `representation`
+ * - `org.eolang.jeo.int` -> `int`
  * @since 0.6
  */
-final class XmlAttributesTest {
+final class UnusedJeoFqn {
 
     /**
-     * Example XMIR of attributes.
+     * Full name.
      */
-    private static final String XMIR = String.join(
-        "\n",
-        "<o base='seq1' name='attributes'>",
-        "   <o base='org.eolang.jeo.inner-class'>",
-        "      <o base='org.eolang.jeo.string' data='bytes'>6E 61 6D 65</o>",
-        "      <o base='org.eolang.jeo.string' data='bytes'>6F 75 74 65 72</o>",
-        "      <o base='org.eolang.jeo.string' data='bytes'>69 6E 6E 65 72</o>",
-        "      <o base='org.eolang.jeo.int' data='bytes'>00 00 00 00 00 00 00 00</o>",
-        "   </o>",
-        "</o>"
-    );
+    private final String fqn;
 
-    @Test
-    void convertsToBytecode() {
-        MatcherAssert.assertThat(
-            "We expect the attributes to be converted to a correct bytecode domain class",
-            new XmlAttributes(new XmlNode(XmlAttributesTest.XMIR)).attributes(),
-            Matchers.contains(
-                new InnerClass("name", "outer", "inner", 0)
-            )
-        );
+    /**
+     * Constructor.
+     * @param full Base name.
+     */
+    UnusedJeoFqn(final String full) {
+        this.fqn = full;
     }
+
+    /**
+     * Get a fully qualified name.
+     * @return Fully qualified name.
+     */
+    String base() {
+        return this.fqn.substring(this.fqn.lastIndexOf('.') + 1);
+    }
+
+    @Override
+    public String toString() {
+        return this.base();
+    }
+
 }

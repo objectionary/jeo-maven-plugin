@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.directives.JeoFqn;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -206,9 +207,9 @@ public final class XmlNode {
     XmlBytecodeEntry toEntry() {
         final XmlBytecodeEntry result;
         final Optional<String> base = this.attribute("base");
-        if (base.isPresent() && "label".equals(base.get())) {
+        if (base.isPresent() && new JeoFqn("label").fqn().equals(base.get())) {
             result = new XmlLabel(this);
-        } else if (base.isPresent() && "frame".equals(base.get())) {
+        } else if (base.isPresent() && new JeoFqn("frame").fqn().equals(base.get())) {
             result = new XmlFrame(this);
         } else {
             result = new XmlInstruction(this);

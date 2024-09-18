@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.function.Function;
+import org.eolang.jeo.representation.directives.JeoFqn;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
@@ -220,7 +221,7 @@ public enum DataType {
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DataType find(final String base) {
         return Arrays.stream(DataType.values())
-            .filter(type -> type.base.equals(base))
+            .filter(type -> type.fqn().equals(base))
             .findFirst()
             .orElseThrow(
                 () -> new IllegalArgumentException(
@@ -249,11 +250,11 @@ public enum DataType {
     }
 
     /**
-     * Get a base type.
-     * @return Base type.
+     * Base fully qualified name.
+     * @return FQN.
      */
-    public String type() {
-        return this.base;
+    public String fqn() {
+        return new JeoFqn(this.base).fqn();
     }
 
     /**
