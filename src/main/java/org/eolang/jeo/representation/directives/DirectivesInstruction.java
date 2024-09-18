@@ -79,7 +79,7 @@ public final class DirectivesInstruction implements Iterable<Directive> {
             directives.add("o")
                 .attr("name", this.name())
                 .attr("line", "999")
-                .attr("base", "opcode");
+                .attr("base", new JeoFqn("opcode").fqn());
             directives.append(new DirectivesOperand(this.opcode));
             for (final Object operand : this.arguments) {
                 directives.append(new DirectivesOperand(operand));

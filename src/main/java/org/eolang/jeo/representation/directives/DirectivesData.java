@@ -87,7 +87,7 @@ public final class DirectivesData implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         try {
             final Directives directives = new Directives().add("o")
-                .attr("base", this.data.type())
+                .attr("base", new JeoFqn(this.data.type()).fqn())
                 .attr("data", "bytes")
                 .attr("line", new Random().nextInt(Integer.MAX_VALUE));
             if (!this.name.isEmpty()) {

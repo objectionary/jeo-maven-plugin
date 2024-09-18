@@ -77,7 +77,7 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         return new Directives().add("o")
-            .attr("base", "param")
+            .attr("base", new JeoFqn("param").fqn())
             .attr("line", new Random().nextInt(Integer.MAX_VALUE))
             .attr(
                 "name",

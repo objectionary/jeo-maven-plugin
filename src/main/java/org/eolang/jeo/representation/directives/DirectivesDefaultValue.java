@@ -60,7 +60,7 @@ public final class DirectivesDefaultValue implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives()
             .add("o")
-            .attr("base", "annotation-default-value")
+            .attr("base", new JeoFqn("annotation-default-value").fqn())
             .attr("name", "annotation-defvalue")
             .attr("line", new Random().nextInt(Integer.MAX_VALUE));
         directives.append(this.value);

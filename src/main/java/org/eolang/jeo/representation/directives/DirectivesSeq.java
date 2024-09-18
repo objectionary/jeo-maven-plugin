@@ -82,7 +82,7 @@ public final class DirectivesSeq implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new Directives()
             .add("o")
-            .attr("base", String.format("seq%d", this.size()))
+            .attr("base", new EoFqn(String.format("seq%d", this.size())).fqn())
             .attr("line", new Random().nextInt(Integer.MAX_VALUE))
             .attr("name", this.name)
             .append(

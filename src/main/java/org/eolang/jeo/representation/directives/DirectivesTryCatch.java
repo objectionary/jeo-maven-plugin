@@ -78,8 +78,8 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives().add("o")
-            .attr("base", "trycatch");
-        final Directives nop = new Directives().add("o").attr("base", "nop").up();
+            .attr("base", new JeoFqn("trycatch").fqn());
+        final Directives nop = new Directives().add("o").attr("base", new EoFqn("nop").fqn()).up();
         if (Objects.nonNull(this.start)) {
             directives.append(new DirectivesLabel(this.start));
         } else {

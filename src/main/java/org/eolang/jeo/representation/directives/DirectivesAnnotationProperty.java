@@ -236,7 +236,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives()
-            .add("o").attr("base", "annotation-property")
+            .add("o").attr(new JeoFqn("base").fqn(), "annotation-property")
             .append(new DirectivesData(this.type.toString()));
         this.params.forEach(directives::append);
         return directives.up().iterator();

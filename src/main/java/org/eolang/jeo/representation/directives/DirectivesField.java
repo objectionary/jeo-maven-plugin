@@ -168,7 +168,7 @@ public final class DirectivesField implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         try {
             return new Directives().add("o")
-                .attr("base", "field")
+                .attr("base", new JeoFqn("field").fqn())
                 .attr("name", new PrefixedName(this.name).encode())
                 .attr("line", "999")
                 .append(new DirectivesData(this.title("access"), this.access))
