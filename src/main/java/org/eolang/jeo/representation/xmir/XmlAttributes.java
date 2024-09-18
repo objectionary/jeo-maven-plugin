@@ -52,9 +52,9 @@ public final class XmlAttributes {
      * @return Attributes.
      */
     public List<BytecodeAttribute> attributes() {
-        return this.node.children().map(XmlAttribute::new).map(XmlAttribute::attribute)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+        return this.node.children()
+            .map(XmlAttribute::new)
+            .map(XmlAttribute::attribute)
             .collect(Collectors.toList());
     }
 }

@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.InnerClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -52,8 +51,7 @@ final class XmlAttributeTest {
     void convertsToDomainInnerClass() {
         MatcherAssert.assertThat(
             "We expect the attribute to be converted to a correct  domain attribute (inner class)",
-            new XmlAttribute(XmlAttributeTest.XMIR).attribute()
-                .get(),
+            new XmlAttribute(XmlAttributeTest.XMIR).attribute(),
             Matchers.equalTo(
                 new InnerClass("name", "outer", "inner", 0)
             )

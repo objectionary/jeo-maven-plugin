@@ -63,44 +63,43 @@ public final class XmlAttribute {
      * Get attribute.
      * @return Attribute.
      */
-    public Optional<BytecodeAttribute> attribute() {
+    public BytecodeAttribute attribute() {
         final String base = this.node.attribute("base")
             .orElseThrow(
                 () -> new IllegalArgumentException(
                     String.format("Attribute base is missing in XML node %s", this.node)
                 )
             );
-        final Optional<BytecodeAttribute> result;
         if ("inner-class".equals(base)) {
-            result = Optional.of(
-                new InnerClass(
-                    Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(0))
-                        .map(XmlOperand::new)
-                        .map(XmlOperand::asObject)
-                        .map(String.class::cast)
-                        .filter(s -> !s.isEmpty())
-                        .orElse(null),
-                    Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(1))
-                        .map(XmlOperand::new)
-                        .map(XmlOperand::asObject)
-                        .map(String.class::cast)
-                        .filter(s -> !s.isEmpty())
-                        .orElse(null),
-                    Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(2))
-                        .map(XmlOperand::new)
-                        .map(XmlOperand::asObject)
-                        .map(String.class::cast)
-                        .filter(s -> !s.isEmpty())
-                        .orElse(null),
-                    Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(3))
-                        .map(XmlOperand::new)
-                        .map(XmlOperand::asObject)
-                        .map(Integer.class::cast)
-                        .orElse(0)
-                ));
+            return new InnerClass(
+                Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(0))
+                    .map(XmlOperand::new)
+                    .map(XmlOperand::asObject)
+                    .map(String.class::cast)
+                    .filter(s -> !s.isEmpty())
+                    .orElse(null),
+                Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(1))
+                    .map(XmlOperand::new)
+                    .map(XmlOperand::asObject)
+                    .map(String.class::cast)
+                    .filter(s -> !s.isEmpty())
+                    .orElse(null),
+                Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(2))
+                    .map(XmlOperand::new)
+                    .map(XmlOperand::asObject)
+                    .map(String.class::cast)
+                    .filter(s -> !s.isEmpty())
+                    .orElse(null),
+                Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(3))
+                    .map(XmlOperand::new)
+                    .map(XmlOperand::asObject)
+                    .map(Integer.class::cast)
+                    .orElse(0)
+            );
         } else {
-            result = Optional.empty();
+            throw new IllegalArgumentException(
+                String.format("Unknown attribute base: %s", base)
+            );
         }
-        return result;
     }
 }
