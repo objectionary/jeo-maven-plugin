@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.xmir;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
-import java.util.jar.JarEntry;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;

@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.jar.JarEntry;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.DataType;

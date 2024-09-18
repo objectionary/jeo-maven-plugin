@@ -27,7 +27,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAttribute;
 import org.eolang.jeo.representation.directives.DirectivesNullable;
-import org.eolang.jeo.representation.directives.JeoFqn;
 import org.objectweb.asm.ClassVisitor;
 
 /**

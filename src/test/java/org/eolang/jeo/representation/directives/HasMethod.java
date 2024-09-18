@@ -373,13 +373,17 @@ public final class HasMethod extends TypeSafeMatcher<String> {
             return Stream.of(
                 String.format("%s/@base", HasTryCatch.path(root)),
                 String.format(
-                    "%s/o[1][contains(@base,'label')]/@base", HasTryCatch.path(root)),
+                    "%s/o[1][contains(@base,'label')]/@base", HasTryCatch.path(root)
+                ),
                 String.format(
-                    "%s/o[2][contains(@base,'label')]/@base", HasTryCatch.path(root)),
+                    "%s/o[2][contains(@base,'label')]/@base", HasTryCatch.path(root)
+                ),
                 String.format(
-                    "%s/o[3][contains(@base,'label')]/@base", HasTryCatch.path(root)),
+                    "%s/o[3][contains(@base,'label')]/@base", HasTryCatch.path(root)
+                ),
                 String.format(
-                    "%s/o[4][contains(@base,'string')]/@base", HasTryCatch.path(root)),
+                    "%s/o[4][contains(@base,'string')]/@base", HasTryCatch.path(root)
+                ),
                 String.format(
                     "%s/o[4][contains(@base,'string') and text()='%s']/@data",
                     HasTryCatch.path(root),
