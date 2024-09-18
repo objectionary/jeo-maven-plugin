@@ -39,12 +39,12 @@ final class XmlAttributesTest {
      */
     private static final String XMIR = String.join(
         "\n",
-        "<o base='seq1' line='637276933' name='attributes'>",
+        "<o base='seq1' name='attributes'>",
         "   <o base='inner-class'>",
-        "      <o base='string' data='bytes' line='2024476541'>6E 61 6D 65</o>",
-        "      <o base='string' data='bytes' line='1277525674'>6F 75 74 65 72</o>",
-        "      <o base='string' data='bytes' line='1937924607'>69 6E 6E 65 72</o>",
-        "      <o base='int' data='bytes' line='1322657598'>00 00 00 00 00 00 00 00</o>",
+        "      <o base='string' data='bytes'>6E 61 6D 65</o>",
+        "      <o base='string' data='bytes'>6F 75 74 65 72</o>",
+        "      <o base='string' data='bytes'>69 6E 6E 65 72</o>",
+        "      <o base='int' data='bytes'>00 00 00 00 00 00 00 00</o>",
         "   </o>",
         "</o>"
     );
@@ -59,5 +59,4 @@ final class XmlAttributesTest {
             )
         );
     }
-
 }

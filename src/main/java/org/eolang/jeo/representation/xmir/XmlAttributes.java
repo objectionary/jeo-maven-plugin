@@ -31,10 +31,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 /**
  * Xml representation of a class attributes.
  * @since 0.4
- * @todo #589:30min Add Unit Tests for XmlAttributes class.
- *  XmlAttributes class is not covered by unit tests.
- *  Add unit tests for XmlAttributes class in order to increase the code coverage
- *  and improve the quality of the code.
  */
 public final class XmlAttributes {
 
