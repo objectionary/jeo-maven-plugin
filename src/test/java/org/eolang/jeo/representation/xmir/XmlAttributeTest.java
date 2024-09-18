@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import org.eolang.jeo.representation.bytecode.InnerClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -55,6 +56,19 @@ final class XmlAttributeTest {
             Matchers.equalTo(
                 new InnerClass("name", "outer", "inner", 0)
             )
+        );
+    }
+
+    @Test
+    void throwsExceptionIfCannotIdentifyAttribute() {
+        MatcherAssert.assertThat(
+            "We expect an exception message be understandable and clear",
+            Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new XmlAttribute("<o base='unknown'/>").attribute(),
+                "We expect an exception to be thrown if the attribute cannot be identified"
+            ).getMessage(),
+            Matchers.equalTo("Unknown attribute base 'unknown'")
         );
     }
 }

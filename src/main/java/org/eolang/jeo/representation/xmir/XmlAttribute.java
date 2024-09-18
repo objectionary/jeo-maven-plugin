@@ -98,7 +98,7 @@ public final class XmlAttribute {
             );
         } else {
             throw new IllegalArgumentException(
-                String.format("Unknown attribute base: %s", base)
+                String.format("Unknown attribute base '%s'", base)
             );
         }
     }
