@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -49,6 +50,14 @@ public final class DirectivesAttributes implements Iterable<Directive> {
      */
     public DirectivesAttributes() {
         this(new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param attributes Attributes.
+     */
+    public DirectivesAttributes(final DirectivesAttribute... attributes) {
+        this(Arrays.asList(attributes));
     }
 
     /**
