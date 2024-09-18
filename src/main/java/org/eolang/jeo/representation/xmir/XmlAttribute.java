@@ -36,13 +36,20 @@ import org.eolang.jeo.representation.bytecode.InnerClass;
  *  Add unit tests for XmlAttribute class in order to increase the code coverage
  *  and improve the quality of the code.
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class XmlAttribute {
 
     /**
      * XML node of an attribute.
      */
     private final XmlNode node;
+
+    /**
+     * Constructor.
+     * @param node XML node as string.
+     */
+    XmlAttribute(final String node) {
+        this(new XmlNode(node));
+    }
 
     /**
      * Constructor.
