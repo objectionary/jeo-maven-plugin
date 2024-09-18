@@ -42,7 +42,7 @@ final class DirectivesAnnotationsTest {
         MatcherAssert.assertThat(
             "Must return empty directives if no annotations",
             new Xembler(new DirectivesAnnotations()).xml(),
-            new SameXml("<o base='seq0' name='annotations'/>")
+            new SameXml("<o base='org.eolang.seq0' name='annotations'/>")
         );
     }
 
@@ -55,13 +55,13 @@ final class DirectivesAnnotationsTest {
                 new DirectivesAnnotations().add(new DirectivesAnnotation(annotation, true))
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o[@base='seq1' and @name='annotations']/o",
+                "/o[contains(@base,'seq1') and @name='annotations']/o",
                 String.format(
-                    "/o[@base='seq1' and @name='annotations']/o/o[1][@base='string' and text()='%s']",
+                    "/o[contains(@base,'seq1') and @name='annotations']/o/o[1][contains(@base,'string') and text()='%s']",
                     new HexData(annotation).value()
                 ),
                 String.format(
-                    "/o[@base='seq1' and @name='annotations']/o/o[2][@base='bool' and text()='%s']",
+                    "/o[contains(@base,'seq1') and @name='annotations']/o/o[2][contains(@base,'bool') and text()='%s']",
                     new HexData(true).value()
                 )
             )
@@ -80,10 +80,10 @@ final class DirectivesAnnotationsTest {
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o[@base='annotation' and count(o) = 3]",
-                "/o[@base='annotation']/o[1][text()='4C 6A 61 76 61 2F 6C 61 6E 67 2F 4F 76 65 72 72 69 64 65 3B']",
-                "/o[@base='annotation']/o[2][text()='01']",
-                "/o[@base='annotation']/o[@base='annotation-property']"
+                "/o[contains(@base,'annotation') and count(o) = 3]",
+                "/o[contains(@base,'annotation')]/o[1][text()='4C 6A 61 76 61 2F 6C 61 6E 67 2F 4F 76 65 72 72 69 64 65 3B']",
+                "/o[contains(@base,'annotation')]/o[2][text()='01']",
+                "/o[contains(@base,'annotation')]/o[contains(@base,'annotation-property')]"
             )
         );
     }

@@ -40,11 +40,11 @@ final class XmlAttributeTest {
      */
     private static final String XMIR = String.join(
         "\n",
-        "<o base='inner-class'>",
-        "  <o base='string' data='bytes'>6E 61 6D 65</o>",
-        "  <o base='string' data='bytes'>6F 75 74 65 72</o>",
-        "  <o base='string' data='bytes'>69 6E 6E 65 72</o>",
-        "  <o base='int' data='bytes'>00 00 00 00 00 00 00 00</o>",
+        "<o base='org.eolang.jeo.inner-class'>",
+        "  <o base='org.eolang.jeo.string' data='bytes'>6E 61 6D 65</o>",
+        "  <o base='org.eolang.jeo.string' data='bytes'>6F 75 74 65 72</o>",
+        "  <o base='org.eolang.jeo.string' data='bytes'>69 6E 6E 65 72</o>",
+        "  <o base='org.eolang.jeo.int' data='bytes'>00 00 00 00 00 00 00 00</o>",
         "</o>"
     );
 

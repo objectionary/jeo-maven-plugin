@@ -22,7 +22,7 @@
   <objects>
 
     <o name="Application">
-      <o base="int" data="bytes" name="access">00 00 00 00 00 00 00 01</o>
+      <o base="org.eolang.jeo.int" data="bytes" name="access">00 00 00 00 00 00 00 01</o>
     </o>
 
   </objects>

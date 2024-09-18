@@ -205,7 +205,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         return this.params.stream()
             .map(
                 param -> String.format(
-                    "%s/o[@base='params']/o[@name='%s' and @base='param']/@name",
+                    "%s/o[contains(@base,'params')]/o[@name='%s' and contains(@base,'param')]/@name",
                     root,
                     param
                 )
@@ -297,7 +297,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          */
         Stream<String> checks(final String root) {
             final String instruction = String.format(
-                "%s/o[contains(@base,'seq') and @name='@']/o[@base='opcode' and contains(@name,'%s')]",
+                "%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'opcode') and contains(@name,'%s')]",
                 root,
                 new OpcodeName(this.opcode).simplified()
             );
@@ -305,7 +305,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 Stream.of(
                     instruction.concat("/@base"),
                     String.format(
-                        "%s/o[@base='int' and @data='bytes' and text()='%s']/@base",
+                        "%s/o[contains(@base,'int') and @data='bytes' and text()='%s']/@base",
                         instruction,
                         new HexData(this.opcode).value()
                     )
@@ -327,13 +327,13 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                         final HexData hex = new HexData(arg);
                         if (arg instanceof Label) {
                             result = String.format(
-                                "%s/o[@base='%s' and @data='bytes']/@data",
+                                "%s/o[contains(@base,'%s') and @data='bytes']/@data",
                                 instruction,
                                 hex.type()
                             );
                         } else {
                             result = String.format(
-                                "%s/o[@base='%s' and @data='bytes' and text()='%s']/@data",
+                                "%s/o[contains(@base,'%s') and @data='bytes' and text()='%s']/@data",
                                 instruction,
                                 hex.type(),
                                 hex.value()
@@ -372,12 +372,16 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         Stream<String> checks(final String root) {
             return Stream.of(
                 String.format("%s/@base", HasTryCatch.path(root)),
-                String.format("%s/o[1][@base='label']/@base", HasTryCatch.path(root)),
-                String.format("%s/o[2][@base='label']/@base", HasTryCatch.path(root)),
-                String.format("%s/o[3][@base='label']/@base", HasTryCatch.path(root)),
-                String.format("%s/o[4][@base='string']/@base", HasTryCatch.path(root)),
                 String.format(
-                    "%s/o[4][@base='string' and text()='%s']/@data",
+                    "%s/o[1][contains(@base,'label')]/@base", HasTryCatch.path(root)),
+                String.format(
+                    "%s/o[2][contains(@base,'label')]/@base", HasTryCatch.path(root)),
+                String.format(
+                    "%s/o[3][contains(@base,'label')]/@base", HasTryCatch.path(root)),
+                String.format(
+                    "%s/o[4][contains(@base,'string')]/@base", HasTryCatch.path(root)),
+                String.format(
+                    "%s/o[4][contains(@base,'string') and text()='%s']/@data",
                     HasTryCatch.path(root),
                     new HexData(this.type).value()
                 )
@@ -391,7 +395,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          */
         private static String path(final String root) {
             return String.format(
-                "%s/o[contains(@base,'seq') and contains(@name, 'trycatchblocks')]/o[@base='trycatch']",
+                "%s/o[contains(@base,'seq') and contains(@name, 'trycatchblocks')]/o[contains(@base,'trycatch')]",
                 root
             );
         }
@@ -414,7 +418,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         static Stream<String> checks(final String root) {
             return Stream.of(
                 String.format(
-                    "%s/o[contains(@base,'seq') and @name='@']/o[@base='label' and @data='bytes']/@data",
+                    "%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'label') and @data='bytes']/@data",
                     root
                 )
             );

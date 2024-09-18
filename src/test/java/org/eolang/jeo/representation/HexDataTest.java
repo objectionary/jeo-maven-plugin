@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation;
 
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.directives.JeoFqn;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -109,7 +110,11 @@ final class HexDataTest {
         MatcherAssert.assertThat(
             "Decoding and encoding are not consistent",
             origin,
-            Matchers.equalTo(DataType.find(new HexData(origin).type()).decode(hex))
+            Matchers.equalTo(
+                DataType.find(
+                    new JeoFqn(new HexData(origin).type()).fqn()
+                ).decode(hex)
+            )
         );
     }
 

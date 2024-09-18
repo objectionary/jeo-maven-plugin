@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<program dob="2024-09-03T08:54:44.732741Z" ms="1725353684737" name="j$Application" revision="0.0.0" time="2024-09-03T08:54:44.732741Z" version="0.0.0">
-  <listing>yv66vgAAADQAMQoAAgADBwAEDAAFAAYBABBqYXZhL2xhbmcvT2JqZWN0AQAGPGluaXQ+AQADKClWBwAIAQAYb3JnL2VvbGFuZy9qZW8vRGV2ZWxvcGVyCAAKAQAFWWVnb3IHAAwBABxvcmcvZW9sYW5nL2plby9BcHBsaWNhdGlvbiQxCgALAAMKAAcADwwABQAQAQAuKExqYXZhL2xhbmcvU3RyaW5nO0xvcmcvZW9sYW5nL2plby9MYW5ndWFnZTspVgoABwASDAATAAYBAAl3cml0ZUNvZGUIABUBAANMZXYHABcBABxvcmcvZW9sYW5nL2plby9BcHBsaWNhdGlvbiQyCgAWAAMIABoBAAVNYXhpbQcAHAEAHG9yZy9lb2xhbmcvamVvL0FwcGxpY2F0aW9uJDMKABsAAwgAHwEABVJvbWFuBwAhAQAcb3JnL2VvbGFuZy9qZW8vQXBwbGljYXRpb24kNAoAIAADBwAkAQAab3JnL2VvbGFuZy9qZW8vQXBwbGljYXRpb24BAARDb2RlAQAPTGluZU51bWJlclRhYmxlAQASTG9jYWxWYXJpYWJsZVRhYmxlAQAEdGhpcwEAHExvcmcvZW9sYW5nL2plby9BcHBsaWNhdGlvbjsBAARtYWluAQAWKFtMamF2YS9sYW5nL1N0cmluZzspVgEABGFyZ3MBABNbTGphdmEvbGFuZy9TdHJpbmc7AQAKU291cmNlRmlsZQEAEEFwcGxpY2F0aW9uLmphdmEBAAxJbm5lckNsYXNzZXMAIQAjAAIAAAAAAAIAAQAFAAYAAQAlAAAALwABAAEAAAAFKrcAAbEAAAACACYAAAAGAAEAAAADACcAAAAMAAEAAAAFACgAKQAAAAkAKgArAAEAJQAAAJcABQABAAAATbsAB1kSCbsAC1m3AA23AA62ABG7AAdZEhS7ABZZtwAYtwAOtgARuwAHWRIZuwAbWbcAHbcADrYAEbsAB1kSHrsAIFm3ACK3AA62ABGxAAAAAgAmAAAAJgAJAAAABQAQAAwAEwANACMAFQAmABYANgAeADkAHwBJACcATAAoACcAAAAMAAEAAABNACwALQAAAAIALgAAAAIALwAwAAAAIgAEAAsAAAAAAAAAFgAAAAAAAAAbAAAAAAAAACAAAAAAAAA=
-  </listing>
+<program dob="2024-09-18T11:24:39.391971Z"
+  ms="1726658679398"
+  name="j$Application"
+  revision="0.0.0"
+  time="2024-09-18T11:24:39.391971Z"
+  version="0.0.0">
+  <listing>yv66vgAAADQAMQoAAgADBwAEDAAFAAYBABBqYXZhL2xhbmcvT2JqZWN0AQAGPGluaXQ+AQADKClWBwAIAQAYb3JnL2VvbGFuZy9qZW8vRGV2ZWxvcGVyCAAKAQAFWWVnb3IHAAwBABxvcmcvZW9sYW5nL2plby9BcHBsaWNhdGlvbiQxCgALAAMKAAcADwwABQAQAQAuKExqYXZhL2xhbmcvU3RyaW5nO0xvcmcvZW9sYW5nL2plby9MYW5ndWFnZTspVgoABwASDAATAAYBAAl3cml0ZUNvZGUIABUBAANMZXYHABcBABxvcmcvZW9sYW5nL2plby9BcHBsaWNhdGlvbiQyCgAWAAMIABoBAAVNYXhpbQcAHAEAHG9yZy9lb2xhbmcvamVvL0FwcGxpY2F0aW9uJDMKABsAAwgAHwEABVJvbWFuBwAhAQAcb3JnL2VvbGFuZy9qZW8vQXBwbGljYXRpb24kNAoAIAADBwAkAQAab3JnL2VvbGFuZy9qZW8vQXBwbGljYXRpb24BAARDb2RlAQAPTGluZU51bWJlclRhYmxlAQASTG9jYWxWYXJpYWJsZVRhYmxlAQAEdGhpcwEAHExvcmcvZW9sYW5nL2plby9BcHBsaWNhdGlvbjsBAARtYWluAQAWKFtMamF2YS9sYW5nL1N0cmluZzspVgEABGFyZ3MBABNbTGphdmEvbGFuZy9TdHJpbmc7AQAKU291cmNlRmlsZQEAEEFwcGxpY2F0aW9uLmphdmEBAAxJbm5lckNsYXNzZXMAIQAjAAIAAAAAAAIAAQAFAAYAAQAlAAAALwABAAEAAAAFKrcAAbEAAAACACYAAAAGAAEAAAADACcAAAAMAAEAAAAFACgAKQAAAAkAKgArAAEAJQAAAJcABQABAAAATbsAB1kSCbsAC1m3AA23AA62ABG7AAdZEhS7ABZZtwAYtwAOtgARuwAHWRIZuwAbWbcAHbcADrYAEbsAB1kSHrsAIFm3ACK3AA62ABGxAAAAAgAmAAAAJgAJAAAABQAQAAwAEwANACMAFQAmABYANgAeADkAHwBJACcATAAoACcAAAAMAAEAAABNACwALQAAAAIALgAAAAIALwAwAAAAIgAEAAsAAAAAAAAAFgAAAAAAAAAbAAAAAAAAACAAAAAAAAA=</listing>
   <errors/>
   <sheets/>
   <license/>
@@ -16,249 +20,303 @@
       <tail>org.eolang.jeo.opcode</tail>
       <part>org.eolang.jeo.opcode</part>
     </meta>
+    <meta>
+      <head>alias</head>
+      <tail>org.eolang.jeo.label</tail>
+      <part>org.eolang.jeo.label</part>
+    </meta>
   </metas>
   <objects>
     <o abstract="" name="j$Application">
-      <o base="int" data="bytes" line="192215717" name="version">00 00 00 00 00 00 00 34</o>
-      <o base="int" data="bytes" line="704321076" name="access">00 00 00 00 00 00 00 21</o>
-      <o base="string" data="bytes" line="1301003003" name="supername">6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>
-      <o base="tuple" line="326493693" name="interfaces" star=""/>
-      <o abstract="" name="new-KClW">
-        <o base="int" data="bytes" line="666594848" name="access">00 00 00 00 00 00 00 01</o>
-        <o base="string" data="bytes" line="992774499" name="descriptor">28 29 56</o>
-        <o base="string" data="bytes" line="99065971" name="signature"/>
-        <o base="tuple" line="1496947971" name="exceptions" star=""/>
-        <o abstract="" line="1503866607" name="maxs">
-          <o base="int" data="bytes" line="1172456157" name="stack">00 00 00 00 00 00 00 01</o>
-          <o base="int" data="bytes" line="393276881" name="locals">00 00 00 00 00 00 00 01</o>
+      <o base="org.eolang.jeo.int"
+        data="bytes"
+        line="902785921"
+        name="version">00 00 00 00 00 00 00 34</o>
+      <o base="org.eolang.jeo.int"
+        data="bytes"
+        line="776402927"
+        name="access">00 00 00 00 00 00 00 21</o>
+      <o base="org.eolang.jeo.string"
+        data="bytes"
+        line="475514316"
+        name="supername">6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>
+      <o base="org.eolang.seq0" line="1879952372" name="interfaces"/>
+      <o abstract="" name="object@init@-KClW">
+        <o base="org.eolang.jeo.int"
+          data="bytes"
+          line="1648101098"
+          name="access">00 00 00 00 00 00 00 01</o>
+        <o base="org.eolang.jeo.string"
+          data="bytes"
+          line="1831667739"
+          name="descriptor">28 29 56</o>
+        <o base="org.eolang.jeo.string"
+          data="bytes"
+          line="51831308"
+          name="signature"/>
+        <o base="org.eolang.seq0" line="1202200626" name="exceptions"/>
+        <o abstract="" line="1367525904" name="maxs">
+          <o base="org.eolang.jeo.int"
+            data="bytes"
+            line="289080162"
+            name="stack">00 00 00 00 00 00 00 01</o>
+          <o base="org.eolang.jeo.int"
+            data="bytes"
+            line="1741359349"
+            name="locals">00 00 00 00 00 00 00 01</o>
         </o>
-        <o base="seq" name="@">
-          <o base="label" data="bytes" line="796509273">32 34 35 61 35 31 30 65 2D 64 38 63 35 2D 34 35 64 39 2D 62 32 37 30 2D 39 32 31 61 35 65 31 37 65 39 63 38</o>
-          <o base="opcode" line="999" name="aload-2">
-            <o base="int" data="bytes" line="1461954670">00 00 00 00 00 00 00 19</o>
-            <o base="int" data="bytes" line="2069126552">00 00 00 00 00 00 00 00</o>
+        <o base="org.eolang.jeo.params" line="1424392615" name="method-params"/>
+        <o base="org.eolang.seq0" line="269894570" name="annotations"/>
+        <o base="org.eolang.seq6" line="1538746732" name="@">
+          <o base="org.eolang.jeo.label" data="bytes" line="1767066294">34 66 34 35 37 61 33 32 2D 31 32 39 64 2D 34 35 64 30 2D 61 65 30 61 2D 62 65 32 31 36 37 63 66 36 61 33 33</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="aload-2">
+            <o base="org.eolang.jeo.int" data="bytes" line="2006157046">00 00 00 00 00 00 00 19</o>
+            <o base="org.eolang.jeo.int" data="bytes" line="1570437640">00 00 00 00 00 00 00 00</o>
           </o>
-          <o base="opcode" line="999" name="invokespecial-A">
-            <o base="int" data="bytes" line="93704424">00 00 00 00 00 00 00 B7</o>
-            <o base="string" data="bytes" line="420798310">6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>
-            <o base="string" data="bytes" line="1572252763">3C 69 6E 69 74 3E</o>
-            <o base="string" data="bytes" line="1554323545">28 29 56</o>
-            <o base="bool" data="bytes" line="370316576">00</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokespecial-B">
+            <o base="org.eolang.jeo.int" data="bytes" line="1308485588">00 00 00 00 00 00 00 B7</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1920771305">6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="243935106">3C 69 6E 69 74 3E</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="2090657957">28 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="1607231623">00</o>
           </o>
-          <o base="opcode" line="999" name="return-11">
-            <o base="int" data="bytes" line="193476440">00 00 00 00 00 00 00 B1</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="return-13">
+            <o base="org.eolang.jeo.int" data="bytes" line="1162391973">00 00 00 00 00 00 00 B1</o>
           </o>
-          <o base="label" data="bytes" line="1263195722">33 61 38 35 31 66 36 30 2D 31 37 63 64 2D 34 66 66 36 2D 61 37 62 65 2D 63 66 33 62 30 66 65 34 62 38 34 33</o>
+          <o base="org.eolang.jeo.label" data="bytes" line="1049021758">39 34 37 63 39 32 37 36 2D 66 35 63 33 2D 34 62 63 63 2D 61 65 37 64 2D 31 39 61 64 65 38 65 62 35 32 38 34</o>
         </o>
+        <o base="org.eolang.seq0"
+          line="1888569486"
+          name="trycatchblocks-object@init@"/>
       </o>
-      <o abstract="" name="j$main-KFtMamF2YS9sYW5nL1N0cmluZzspVg==">
-        <o base="int" data="bytes" line="1089307809" name="access">00 00 00 00 00 00 00 09</o>
-        <o base="string" data="bytes" line="474137795" name="descriptor">28 5B 4C 6A 61 76 61 2F 6C 61 6E 67 2F 53 74 72 69 6E 67 3B 29 56</o>
-        <o base="string" data="bytes" line="1770218720" name="signature"/>
-        <o base="tuple" line="24554023" name="exceptions" star=""/>
-        <o abstract="" line="1092014983" name="maxs">
-          <o base="int" data="bytes" line="54151846" name="stack">00 00 00 00 00 00 00 05</o>
-          <o base="int" data="bytes" line="774087457" name="locals">00 00 00 00 00 00 00 01</o>
+      <o abstract="" name="main-KFtMamF2YS9sYW5nL1N0cmluZzspVg==">
+        <o base="org.eolang.jeo.int"
+          data="bytes"
+          line="995527298"
+          name="access">00 00 00 00 00 00 00 09</o>
+        <o base="org.eolang.jeo.string"
+          data="bytes"
+          line="344037953"
+          name="descriptor">28 5B 4C 6A 61 76 61 2F 6C 61 6E 67 2F 53 74 72 69 6E 67 3B 29 56</o>
+        <o base="org.eolang.jeo.string"
+          data="bytes"
+          line="2042073097"
+          name="signature"/>
+        <o base="org.eolang.seq0" line="1043330363" name="exceptions"/>
+        <o abstract="" line="458245635" name="maxs">
+          <o base="org.eolang.jeo.int"
+            data="bytes"
+            line="1174132432"
+            name="stack">00 00 00 00 00 00 00 05</o>
+          <o base="org.eolang.jeo.int"
+            data="bytes"
+            line="1007166393"
+            name="locals">00 00 00 00 00 00 00 01</o>
         </o>
-        <o base="params">
-          <o base="param" name="param-W0xqYXZhL2xhbmcvU3RyaW5nOw==-0"/>
+        <o base="org.eolang.jeo.params" line="942846293" name="method-params">
+          <o base="org.eolang.jeo.param"
+            line="413798044"
+            name="param-W0xqYXZhL2xhbmcvU3RyaW5nOw==-0"/>
         </o>
-        <o base="seq" name="@">
-          <o base="label" data="bytes" line="2027381559">36 63 32 64 37 32 34 32 2D 63 34 62 65 2D 34 36 30 35 2D 61 33 33 30 2D 32 62 64 65 36 64 63 34 62 34 32 33</o>
-          <o base="opcode" line="999" name="new-19">
-            <o base="int" data="bytes" line="1485166020">00 00 00 00 00 00 00 BB</o>
-            <o base="string" data="bytes" line="408057157">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
+        <o base="org.eolang.seq0" line="2046993838" name="annotations"/>
+        <o base="org.eolang.seq52" line="717652659" name="@">
+          <o base="org.eolang.jeo.label" data="bytes" line="57411939">30 39 61 36 30 35 36 65 2D 30 32 37 39 2D 34 36 61 31 2D 38 64 39 39 2D 39 30 36 30 33 63 35 65 39 63 66 61</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="new-24">
+            <o base="org.eolang.jeo.int" data="bytes" line="1077515622">00 00 00 00 00 00 00 BB</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="902296102">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
           </o>
-          <o base="opcode" line="999" name="dup-1E">
-            <o base="int" data="bytes" line="876024306">00 00 00 00 00 00 00 59</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="dup-25">
+            <o base="org.eolang.jeo.int" data="bytes" line="927579956">00 00 00 00 00 00 00 59</o>
           </o>
-          <o base="opcode" line="999" name="ldc-21">
-            <o base="int" data="bytes" line="1920649368">00 00 00 00 00 00 00 12</o>
-            <o base="string" data="bytes" line="1140307597">59 65 67 6F 72</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="ldc-26">
+            <o base="org.eolang.jeo.int" data="bytes" line="891482252">00 00 00 00 00 00 00 12</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1709810561">59 65 67 6F 72</o>
           </o>
-          <o base="opcode" line="999" name="new-24">
-            <o base="int" data="bytes" line="2056397888">00 00 00 00 00 00 00 BB</o>
-            <o base="string" data="bytes" line="282330569">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 31</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="new-27">
+            <o base="org.eolang.jeo.int" data="bytes" line="1106342286">00 00 00 00 00 00 00 BB</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1188262599">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 31</o>
           </o>
-          <o base="opcode" line="999" name="dup-27">
-            <o base="int" data="bytes" line="1884675491">00 00 00 00 00 00 00 59</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="dup-28">
+            <o base="org.eolang.jeo.int" data="bytes" line="1692775141">00 00 00 00 00 00 00 59</o>
           </o>
-          <o base="opcode" line="999" name="invokespecial-28">
-            <o base="int" data="bytes" line="172397925">00 00 00 00 00 00 00 B7</o>
-            <o base="string" data="bytes" line="1258492709">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 31</o>
-            <o base="string" data="bytes" line="860319465">3C 69 6E 69 74 3E</o>
-            <o base="string" data="bytes" line="1998362498">28 29 56</o>
-            <o base="bool" data="bytes" line="929473912">00</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokespecial-29">
+            <o base="org.eolang.jeo.int" data="bytes" line="162992662">00 00 00 00 00 00 00 B7</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="2101518807">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 31</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="202421612">3C 69 6E 69 74 3E</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1537837278">28 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="886332229">00</o>
           </o>
-          <o base="opcode" line="999" name="invokespecial-29">
-            <o base="int" data="bytes" line="2024511130">00 00 00 00 00 00 00 B7</o>
-            <o base="string" data="bytes" line="1699134497">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
-            <o base="string" data="bytes" line="27384330">3C 69 6E 69 74 3E</o>
-            <o base="string" data="bytes" line="1746426303">28 4C 6A 61 76 61 2F 6C 61 6E 67 2F 53 74 72 69 6E 67 3B 4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 4C 61 6E 67 75 61 67 65 3B 29 56</o>
-            <o base="bool" data="bytes" line="792752159">00</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokespecial-2A">
+            <o base="org.eolang.jeo.int" data="bytes" line="1529667357">00 00 00 00 00 00 00 B7</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="674263761">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1891999351">3C 69 6E 69 74 3E</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="168438428">28 4C 6A 61 76 61 2F 6C 61 6E 67 2F 53 74 72 69 6E 67 3B 4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 4C 61 6E 67 75 61 67 65 3B 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="1757403235">00</o>
           </o>
-          <o base="label" data="bytes" line="1702866356">61 35 36 38 66 37 35 36 2D 30 31 34 30 2D 34 34 63 39 2D 62 62 34 38 2D 31 65 64 31 33 64 39 30 35 38 61 35</o>
-          <o base="opcode" line="999" name="invokevirtual-2B">
-            <o base="int" data="bytes" line="2113095806">00 00 00 00 00 00 00 B6</o>
-            <o base="string" data="bytes" line="326076909">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
-            <o base="string" data="bytes" line="557984147">77 72 69 74 65 43 6F 64 65</o>
-            <o base="string" data="bytes" line="12845424">28 29 56</o>
-            <o base="bool" data="bytes" line="53773469">00</o>
+          <o base="org.eolang.jeo.label" data="bytes" line="521366535">38 32 36 33 32 30 30 34 2D 65 32 64 33 2D 34 61 37 30 2D 61 32 61 32 2D 35 34 64 61 63 63 33 35 62 35 32 63</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokevirtual-2D">
+            <o base="org.eolang.jeo.int" data="bytes" line="170037081">00 00 00 00 00 00 00 B6</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="369576939">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1227863754">77 72 69 74 65 43 6F 64 65</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="948653465">28 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="290234260">00</o>
           </o>
-          <o base="label" data="bytes" line="131056093">31 66 33 37 32 36 62 63 2D 38 37 39 64 2D 34 36 34 39 2D 61 64 34 65 2D 32 35 39 32 30 36 34 61 34 64 65 62</o>
-          <o base="opcode" line="999" name="new-2C">
-            <o base="int" data="bytes" line="372707364">00 00 00 00 00 00 00 BB</o>
-            <o base="string" data="bytes" line="876205953">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
+          <o base="org.eolang.jeo.label" data="bytes" line="1799821931">63 35 32 62 65 62 66 64 2D 63 34 33 61 2D 34 33 34 32 2D 38 34 61 32 2D 61 31 64 38 32 36 34 35 65 66 32 39</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="new-31">
+            <o base="org.eolang.jeo.int" data="bytes" line="626154989">00 00 00 00 00 00 00 BB</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1832564787">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
           </o>
-          <o base="opcode" line="999" name="dup-2D">
-            <o base="int" data="bytes" line="2120613674">00 00 00 00 00 00 00 59</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="dup-33">
+            <o base="org.eolang.jeo.int" data="bytes" line="220129526">00 00 00 00 00 00 00 59</o>
           </o>
-          <o base="opcode" line="999" name="ldc-2F">
-            <o base="int" data="bytes" line="777302509">00 00 00 00 00 00 00 12</o>
-            <o base="string" data="bytes" line="750861739">4C 65 76</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="ldc-35">
+            <o base="org.eolang.jeo.int" data="bytes" line="34125445">00 00 00 00 00 00 00 12</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1524128159">4C 65 76</o>
           </o>
-          <o base="opcode" line="999" name="new-30">
-            <o base="int" data="bytes" line="335751234">00 00 00 00 00 00 00 BB</o>
-            <o base="string" data="bytes" line="963895065">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 32</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="new-37">
+            <o base="org.eolang.jeo.int" data="bytes" line="1372428980">00 00 00 00 00 00 00 BB</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1789125318">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 32</o>
           </o>
-          <o base="opcode" line="999" name="dup-32">
-            <o base="int" data="bytes" line="697341271">00 00 00 00 00 00 00 59</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="dup-39">
+            <o base="org.eolang.jeo.int" data="bytes" line="1058766654">00 00 00 00 00 00 00 59</o>
           </o>
-          <o base="opcode" line="999" name="invokespecial-33">
-            <o base="int" data="bytes" line="655803214">00 00 00 00 00 00 00 B7</o>
-            <o base="string" data="bytes" line="1219235357">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 32</o>
-            <o base="string" data="bytes" line="1928738234">3C 69 6E 69 74 3E</o>
-            <o base="string" data="bytes" line="53944066">28 29 56</o>
-            <o base="bool" data="bytes" line="536039464">00</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokespecial-3B">
+            <o base="org.eolang.jeo.int" data="bytes" line="2076462632">00 00 00 00 00 00 00 B7</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="985216465">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 32</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1749758408">3C 69 6E 69 74 3E</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="42421163">28 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="561489948">00</o>
           </o>
-          <o base="opcode" line="999" name="invokespecial-36">
-            <o base="int" data="bytes" line="1160002445">00 00 00 00 00 00 00 B7</o>
-            <o base="string" data="bytes" line="1191116845">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
-            <o base="string" data="bytes" line="1069101127">3C 69 6E 69 74 3E</o>
-            <o base="string" data="bytes" line="1295618130">28 4C 6A 61 76 61 2F 6C 61 6E 67 2F 53 74 72 69 6E 67 3B 4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 4C 61 6E 67 75 61 67 65 3B 29 56</o>
-            <o base="bool" data="bytes" line="1763821662">00</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokespecial-3F">
+            <o base="org.eolang.jeo.int" data="bytes" line="975805836">00 00 00 00 00 00 00 B7</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1346710113">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="229916824">3C 69 6E 69 74 3E</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1358599301">28 4C 6A 61 76 61 2F 6C 61 6E 67 2F 53 74 72 69 6E 67 3B 4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 4C 61 6E 67 75 61 67 65 3B 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="177171732">00</o>
           </o>
-          <o base="label" data="bytes" line="121079671">31 37 35 31 63 36 38 38 2D 35 35 36 39 2D 34 65 62 63 2D 39 37 66 63 2D 65 61 39 66 31 31 38 37 30 32 66 66</o>
-          <o base="opcode" line="999" name="invokevirtual-3B">
-            <o base="int" data="bytes" line="811148953">00 00 00 00 00 00 00 B6</o>
-            <o base="string" data="bytes" line="495001665">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
-            <o base="string" data="bytes" line="677507271">77 72 69 74 65 43 6F 64 65</o>
-            <o base="string" data="bytes" line="709071583">28 29 56</o>
-            <o base="bool" data="bytes" line="676916361">00</o>
+          <o base="org.eolang.jeo.label" data="bytes" line="1505834224">64 35 33 36 65 65 66 38 2D 31 64 38 34 2D 34 32 38 36 2D 38 31 35 65 2D 65 66 38 62 61 32 61 66 31 30 66 62</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokevirtual-41">
+            <o base="org.eolang.jeo.int" data="bytes" line="369696471">00 00 00 00 00 00 00 B6</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1423949679">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="427010323">77 72 69 74 65 43 6F 64 65</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1774233674">28 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="457457647">00</o>
           </o>
-          <o base="label" data="bytes" line="1021142407">61 61 33 64 32 36 66 63 2D 31 64 38 37 2D 34 38 39 38 2D 39 63 36 62 2D 64 64 37 37 64 35 62 66 32 61 33 37</o>
-          <o base="opcode" line="999" name="new-3E">
-            <o base="int" data="bytes" line="1703198669">00 00 00 00 00 00 00 BB</o>
-            <o base="string" data="bytes" line="828638086">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
+          <o base="org.eolang.jeo.label" data="bytes" line="1318117790">38 64 65 32 36 38 64 33 2D 38 66 35 61 2D 34 31 30 34 2D 38 66 32 66 2D 36 39 37 37 61 64 38 35 64 39 64 38</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="new-44">
+            <o base="org.eolang.jeo.int" data="bytes" line="1220842023">00 00 00 00 00 00 00 BB</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="187730081">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
           </o>
-          <o base="opcode" line="999" name="dup-41">
-            <o base="int" data="bytes" line="1094108570">00 00 00 00 00 00 00 59</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="dup-45">
+            <o base="org.eolang.jeo.int" data="bytes" line="146895195">00 00 00 00 00 00 00 59</o>
           </o>
-          <o base="opcode" line="999" name="ldc-43">
-            <o base="int" data="bytes" line="1676196522">00 00 00 00 00 00 00 12</o>
-            <o base="string" data="bytes" line="112934896">4D 61 78 69 6D</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="ldc-46">
+            <o base="org.eolang.jeo.int" data="bytes" line="2075664447">00 00 00 00 00 00 00 12</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1917796933">4D 61 78 69 6D</o>
           </o>
-          <o base="opcode" line="999" name="new-44">
-            <o base="int" data="bytes" line="826397180">00 00 00 00 00 00 00 BB</o>
-            <o base="string" data="bytes" line="99488181">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 33</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="new-48">
+            <o base="org.eolang.jeo.int" data="bytes" line="1517691086">00 00 00 00 00 00 00 BB</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1182495437">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 33</o>
           </o>
-          <o base="opcode" line="999" name="dup-46">
-            <o base="int" data="bytes" line="852654013">00 00 00 00 00 00 00 59</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="dup-49">
+            <o base="org.eolang.jeo.int" data="bytes" line="897272628">00 00 00 00 00 00 00 59</o>
           </o>
-          <o base="opcode" line="999" name="invokespecial-47">
-            <o base="int" data="bytes" line="1024648734">00 00 00 00 00 00 00 B7</o>
-            <o base="string" data="bytes" line="1598536899">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 33</o>
-            <o base="string" data="bytes" line="616041096">3C 69 6E 69 74 3E</o>
-            <o base="string" data="bytes" line="798277675">28 29 56</o>
-            <o base="bool" data="bytes" line="786634473">00</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokespecial-4B">
+            <o base="org.eolang.jeo.int" data="bytes" line="1642694780">00 00 00 00 00 00 00 B7</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="40725983">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 33</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1826241746">3C 69 6E 69 74 3E</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="712446472">28 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="1570373142">00</o>
           </o>
-          <o base="opcode" line="999" name="invokespecial-49">
-            <o base="int" data="bytes" line="2144403967">00 00 00 00 00 00 00 B7</o>
-            <o base="string" data="bytes" line="1610187899">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
-            <o base="string" data="bytes" line="1145468014">3C 69 6E 69 74 3E</o>
-            <o base="string" data="bytes" line="289549038">28 4C 6A 61 76 61 2F 6C 61 6E 67 2F 53 74 72 69 6E 67 3B 4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 4C 61 6E 67 75 61 67 65 3B 29 56</o>
-            <o base="bool" data="bytes" line="2003348558">00</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokespecial-4C">
+            <o base="org.eolang.jeo.int" data="bytes" line="1916797949">00 00 00 00 00 00 00 B7</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="629091479">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="155461602">3C 69 6E 69 74 3E</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="765308419">28 4C 6A 61 76 61 2F 6C 61 6E 67 2F 53 74 72 69 6E 67 3B 4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 4C 61 6E 67 75 61 67 65 3B 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="1084758265">00</o>
           </o>
-          <o base="label" data="bytes" line="1523899020">35 65 30 65 35 33 63 35 2D 34 36 34 62 2D 34 30 37 33 2D 62 38 32 35 2D 61 66 30 30 34 35 35 66 62 31 66 39</o>
-          <o base="opcode" line="999" name="invokevirtual-4B">
-            <o base="int" data="bytes" line="1298004457">00 00 00 00 00 00 00 B6</o>
-            <o base="string" data="bytes" line="1668258340">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
-            <o base="string" data="bytes" line="798416249">77 72 69 74 65 43 6F 64 65</o>
-            <o base="string" data="bytes" line="1884480586">28 29 56</o>
-            <o base="bool" data="bytes" line="83210009">00</o>
+          <o base="org.eolang.jeo.label" data="bytes" line="1025036675">63 65 66 36 32 66 35 61 2D 64 63 61 31 2D 34 61 39 35 2D 39 32 65 38 2D 64 62 63 34 30 37 34 65 61 35 30 34</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokevirtual-4D">
+            <o base="org.eolang.jeo.int" data="bytes" line="1361179767">00 00 00 00 00 00 00 B6</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1178367748">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1908162830">77 72 69 74 65 43 6F 64 65</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1698890972">28 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="1155014443">00</o>
           </o>
-          <o base="label" data="bytes" line="264707992">37 65 64 30 63 33 33 30 2D 39 36 64 62 2D 34 38 31 66 2D 39 64 31 38 2D 63 64 62 61 66 35 33 64 62 64 36 36</o>
-          <o base="opcode" line="999" name="new-4D">
-            <o base="int" data="bytes" line="433162083">00 00 00 00 00 00 00 BB</o>
-            <o base="string" data="bytes" line="2017559377">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
+          <o base="org.eolang.jeo.label" data="bytes" line="1131887746">61 65 35 35 38 39 33 32 2D 65 62 65 37 2D 34 66 35 65 2D 38 64 36 32 2D 63 31 37 38 35 34 66 35 33 32 32 37</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="new-4E">
+            <o base="org.eolang.jeo.int" data="bytes" line="1469640878">00 00 00 00 00 00 00 BB</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="762224219">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
           </o>
-          <o base="opcode" line="999" name="dup-4E">
-            <o base="int" data="bytes" line="1036516249">00 00 00 00 00 00 00 59</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="dup-4F">
+            <o base="org.eolang.jeo.int" data="bytes" line="1747770276">00 00 00 00 00 00 00 59</o>
           </o>
-          <o base="opcode" line="999" name="ldc-4F">
-            <o base="int" data="bytes" line="276252905">00 00 00 00 00 00 00 12</o>
-            <o base="string" data="bytes" line="1458145540">52 6F 6D 61 6E</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="ldc-50">
+            <o base="org.eolang.jeo.int" data="bytes" line="1421452117">00 00 00 00 00 00 00 12</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1339729384">52 6F 6D 61 6E</o>
           </o>
-          <o base="opcode" line="999" name="new-50">
-            <o base="int" data="bytes" line="488114405">00 00 00 00 00 00 00 BB</o>
-            <o base="string" data="bytes" line="1156488476">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 34</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="new-51">
+            <o base="org.eolang.jeo.int" data="bytes" line="996707093">00 00 00 00 00 00 00 BB</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1140225331">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 34</o>
           </o>
-          <o base="opcode" line="999" name="dup-52">
-            <o base="int" data="bytes" line="293794548">00 00 00 00 00 00 00 59</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="dup-52">
+            <o base="org.eolang.jeo.int" data="bytes" line="459767637">00 00 00 00 00 00 00 59</o>
           </o>
-          <o base="opcode" line="999" name="invokespecial-53">
-            <o base="int" data="bytes" line="1893980521">00 00 00 00 00 00 00 B7</o>
-            <o base="string" data="bytes" line="1514013695">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 34</o>
-            <o base="string" data="bytes" line="1042099684">3C 69 6E 69 74 3E</o>
-            <o base="string" data="bytes" line="1256448024">28 29 56</o>
-            <o base="bool" data="bytes" line="352774111">00</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokespecial-53">
+            <o base="org.eolang.jeo.int" data="bytes" line="588225685">00 00 00 00 00 00 00 B7</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="485620251">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 34</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="2081685126">3C 69 6E 69 74 3E</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="2115260050">28 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="1804707614">00</o>
           </o>
-          <o base="opcode" line="999" name="invokespecial-54">
-            <o base="int" data="bytes" line="1680411632">00 00 00 00 00 00 00 B7</o>
-            <o base="string" data="bytes" line="1477452576">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
-            <o base="string" data="bytes" line="1025044878">3C 69 6E 69 74 3E</o>
-            <o base="string" data="bytes" line="1800468746">28 4C 6A 61 76 61 2F 6C 61 6E 67 2F 53 74 72 69 6E 67 3B 4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 4C 61 6E 67 75 61 67 65 3B 29 56</o>
-            <o base="bool" data="bytes" line="1950248630">00</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokespecial-54">
+            <o base="org.eolang.jeo.int" data="bytes" line="589748922">00 00 00 00 00 00 00 B7</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1470878133">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="357988604">3C 69 6E 69 74 3E</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="1343466927">28 4C 6A 61 76 61 2F 6C 61 6E 67 2F 53 74 72 69 6E 67 3B 4C 6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 4C 61 6E 67 75 61 67 65 3B 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="147069650">00</o>
           </o>
-          <o base="label" data="bytes" line="1112422651">37 63 36 64 38 35 62 32 2D 38 39 33 38 2D 34 38 35 66 2D 38 35 39 64 2D 37 62 63 33 62 63 61 63 33 62 30 33</o>
-          <o base="opcode" line="999" name="invokevirtual-55">
-            <o base="int" data="bytes" line="537899664">00 00 00 00 00 00 00 B6</o>
-            <o base="string" data="bytes" line="1767252263">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
-            <o base="string" data="bytes" line="1770738203">77 72 69 74 65 43 6F 64 65</o>
-            <o base="string" data="bytes" line="167676035">28 29 56</o>
-            <o base="bool" data="bytes" line="935039469">00</o>
+          <o base="org.eolang.jeo.label" data="bytes" line="786936794">34 37 34 65 36 37 66 32 2D 34 65 32 63 2D 34 62 64 33 2D 61 64 66 62 2D 37 32 36 64 36 34 38 62 66 30 63 37</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="invokevirtual-55">
+            <o base="org.eolang.jeo.int" data="bytes" line="915057920">00 00 00 00 00 00 00 B6</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="2090497019">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 44 65 76 65 6C 6F 70 65 72</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="359148545">77 72 69 74 65 43 6F 64 65</o>
+            <o base="org.eolang.jeo.string" data="bytes" line="797541817">28 29 56</o>
+            <o base="org.eolang.jeo.bool" data="bytes" line="1975665911">00</o>
           </o>
-          <o base="label" data="bytes" line="2143528454">30 39 64 36 32 36 33 34 2D 66 38 35 33 2D 34 35 64 37 2D 39 63 35 64 2D 38 30 66 33 61 32 65 63 62 66 64 65</o>
-          <o base="opcode" line="999" name="return-56">
-            <o base="int" data="bytes" line="1103200776">00 00 00 00 00 00 00 B1</o>
+          <o base="org.eolang.jeo.label" data="bytes" line="1065887382">30 35 39 32 37 34 33 30 2D 37 64 63 62 2D 34 32 62 38 2D 39 64 65 62 2D 37 34 36 37 38 34 63 65 34 36 39 31</o>
+          <o base="org.eolang.jeo.opcode" line="999" name="return-56">
+            <o base="org.eolang.jeo.int" data="bytes" line="1237686024">00 00 00 00 00 00 00 B1</o>
           </o>
-          <o base="label" data="bytes" line="596675498">30 64 62 39 61 30 62 35 2D 35 35 31 35 2D 34 39 62 34 2D 39 63 61 63 2D 62 37 33 33 62 65 34 39 61 65 66 39</o>
+          <o base="org.eolang.jeo.label" data="bytes" line="2016531961">63 62 35 36 66 61 62 64 2D 39 39 65 34 2D 34 34 63 61 2D 39 64 62 61 2D 35 64 31 36 30 62 36 62 62 31 62 37</o>
         </o>
+        <o base="org.eolang.seq0" line="479347497" name="trycatchblocks-main"/>
       </o>
-      <o base="tuple" line="1138527139" name="attributes" star="">
-        <o base="inner-class">
-          <o base="string" data="bytes" line="512150361">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 31</o>
-          <o base="string" data="bytes" line="453071480"/>
-          <o base="string" data="bytes" line="1835114280"/>
-          <o base="int" data="bytes" line="120108517">00 00 00 00 00 00 00 00</o>
+      <o base="org.eolang.seq0" line="832273092" name="annotations"/>
+      <o base="org.eolang.seq4" line="507851711" name="attributes">
+        <o base="org.eolang.jeo.inner-class">
+          <o base="org.eolang.jeo.string" data="bytes" line="450848283">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 31</o>
+          <o base="org.eolang.jeo.string" data="bytes" line="491145531"/>
+          <o base="org.eolang.jeo.string" data="bytes" line="1000875281"/>
+          <o base="org.eolang.jeo.int" data="bytes" line="931097465">00 00 00 00 00 00 00 00</o>
         </o>
-        <o base="inner-class">
-          <o base="string" data="bytes" line="1406713802">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 32</o>
-          <o base="string" data="bytes" line="1379411682"/>
-          <o base="string" data="bytes" line="158914410"/>
-          <o base="int" data="bytes" line="165205142">00 00 00 00 00 00 00 00</o>
+        <o base="org.eolang.jeo.inner-class">
+          <o base="org.eolang.jeo.string" data="bytes" line="761946601">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 32</o>
+          <o base="org.eolang.jeo.string" data="bytes" line="39922109"/>
+          <o base="org.eolang.jeo.string" data="bytes" line="38679242"/>
+          <o base="org.eolang.jeo.int" data="bytes" line="1264055963">00 00 00 00 00 00 00 00</o>
         </o>
-        <o base="inner-class">
-          <o base="string" data="bytes" line="1095447994">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 33</o>
-          <o base="string" data="bytes" line="2100701248"/>
-          <o base="string" data="bytes" line="904417456"/>
-          <o base="int" data="bytes" line="1819021264">00 00 00 00 00 00 00 00</o>
+        <o base="org.eolang.jeo.inner-class">
+          <o base="org.eolang.jeo.string" data="bytes" line="248263465">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 33</o>
+          <o base="org.eolang.jeo.string" data="bytes" line="850091501"/>
+          <o base="org.eolang.jeo.string" data="bytes" line="1861943284"/>
+          <o base="org.eolang.jeo.int" data="bytes" line="1842201461">00 00 00 00 00 00 00 00</o>
         </o>
-        <o base="inner-class">
-          <o base="string" data="bytes" line="1768464785">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 34</o>
-          <o base="string" data="bytes" line="1255520523"/>
-          <o base="string" data="bytes" line="1779349902"/>
-          <o base="int" data="bytes" line="655677933">00 00 00 00 00 00 00 00</o>
+        <o base="org.eolang.jeo.inner-class">
+          <o base="org.eolang.jeo.string" data="bytes" line="365879237">6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 41 70 70 6C 69 63 61 74 69 6F 6E 24 34</o>
+          <o base="org.eolang.jeo.string" data="bytes" line="306339916"/>
+          <o base="org.eolang.jeo.string" data="bytes" line="1551467530"/>
+          <o base="org.eolang.jeo.int" data="bytes" line="1928647095">00 00 00 00 00 00 00 00</o>
         </o>
       </o>
     </o>

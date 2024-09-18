@@ -93,7 +93,7 @@ final class XmlNodeTest {
         MatcherAssert.assertThat(
             "Can't convert to label entry",
             new XmlNode(
-                "<o base='label' data='bytes'>73 6F 6D 65</o>"
+                "<o base='org.eolang.jeo.label' data='bytes'>73 6F 6D 65</o>"
             ).toEntry(),
             Matchers.instanceOf(XmlLabel.class)
         );

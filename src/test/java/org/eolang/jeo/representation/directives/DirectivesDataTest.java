@@ -50,7 +50,7 @@ final class DirectivesDataTest {
                 new Transformers.Node()
             ).xml(),
             new SameXml(
-                "<o base='label' data='bytes'>73 6F 6D 65 2D 72 61 6E 64 6F 6D</o>"
+                "<o base='org.eolang.jeo.label' data='bytes'>73 6F 6D 65 2D 72 61 6E 64 6F 6D</o>"
             )
         );
     }
@@ -59,7 +59,7 @@ final class DirectivesDataTest {
     void decodesLabel() {
         MatcherAssert.assertThat(
             "Decodes label from XML",
-            DataType.find("label").decode("73 6F 6D 65 2D 72 61 6E 64 6F 6D"),
+            DataType.find("org.eolang.jeo.label").decode("73 6F 6D 65 2D 72 61 6E 64 6F 6D"),
             Matchers.equalTo(new AllLabels().label("some-random"))
         );
     }

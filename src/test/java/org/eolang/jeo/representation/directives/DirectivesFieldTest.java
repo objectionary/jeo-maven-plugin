@@ -46,11 +46,11 @@ final class DirectivesFieldTest {
             ),
             xml,
             XhtmlMatchers.hasXPaths(
-                "/o[@base='field' and contains(@name,'unknown')]",
+                "/o[contains(@base,'field') and contains(@name,'unknown')]",
                 "/o/o[@name='access-unknown' and contains(text(),'01')]",
                 "/o/o[@name='descriptor-unknown' and text()='49']",
                 "/o/o[@name='signature-unknown']",
-                "/o/o[@base='int' and @name='value-unknown' and contains(text(),'0')]"
+                "/o/o[contains(@base,'int') and @name='value-unknown' and contains(text(),'0')]"
             )
         );
     }
@@ -73,7 +73,7 @@ final class DirectivesFieldTest {
             ),
             xml,
             XhtmlMatchers.hasXPaths(
-                "/o[@base='field' and contains(@name,'serialVersionUID')]",
+                "/o[contains(@base,'field') and contains(@name,'serialVersionUID')]",
                 "/o/o[@name='access-serialVersionUID' and contains(text(),'1A')]",
                 "/o/o[@name='descriptor-serialVersionUID' and text()='4A']",
                 "/o/o[@name='signature-serialVersionUID']",

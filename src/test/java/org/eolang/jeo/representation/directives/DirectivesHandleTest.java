@@ -49,9 +49,9 @@ final class DirectivesHandleTest {
             String.format("Can't convert Handle to DirectivesHandle. Expected XML:%n%s%n", xml),
             xml,
             XhtmlMatchers.hasXPaths(
-                "/o[@base='handle']",
-                "/o[@base='handle']/o[@base='int']",
-                "/o[@base='handle']/o[@base='string']"
+                "/o[contains(@base,'handle')]",
+                "/o[contains(@base,'handle')]/o[contains(@base,'int')]",
+                "/o[contains(@base,'handle')]/o[contains(@base,'string')]"
             )
         );
     }

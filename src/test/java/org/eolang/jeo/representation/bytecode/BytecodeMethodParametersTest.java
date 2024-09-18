@@ -48,9 +48,9 @@ final class BytecodeMethodParametersTest {
                 ).directives()
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o[@base='params']",
-                "/o[@base='params']/o[@base='param' and @name='param-SQ==-0']",
-                "/o[@base='params']/o[@base='param' and @name='param-SQ==-1']"
+                "/o[contains(@base,'params')]",
+                "/o[contains(@base,'params')]/o[contains(@base,'param') and @name='param-SQ==-0']",
+                "/o[contains(@base,'params')]/o[contains(@base,'param') and @name='param-SQ==-1']"
             )
         );
     }

@@ -56,12 +56,12 @@ final class DirectivesClassTest {
                 String.join(
                     "",
                     "<o abstract='' name='Neo'>",
-                    "<o base=\"int\" data=\"bytes\" name=\"version\">00 00 00 00 00 00 00 34</o>\n",
-                    "<o base='int' data='bytes' name='access'>00 00 00 00 00 00 00 00</o>",
-                    "<o base='string' data='bytes' name='signature'/>",
-                    "<o base='string' data='bytes' name='supername'/>",
-                    "<o base='seq0' name='interfaces'/>",
-                    "<o base='seq0' name='annotations'/>",
+                    "<o base='org.eolang.jeo.int' data='bytes' name='version'>00 00 00 00 00 00 00 34</o>",
+                    "<o base='org.eolang.jeo.int' data='bytes' name='access'>00 00 00 00 00 00 00 00</o>",
+                    "<o base='org.eolang.jeo.string' data='bytes' name='signature'/>",
+                    "<o base='org.eolang.jeo.string' data='bytes' name='supername'/>",
+                    "<o base='org.eolang.seq0' name='interfaces'/>",
+                    "<o base='org.eolang.seq0' name='annotations'/>",
                     "</o>"
                 )
             )
@@ -80,7 +80,7 @@ final class DirectivesClassTest {
                 new XMLDocument(xml)
             ),
             xml,
-            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[@base='field']")
+            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[contains(@base,'field')]")
         );
     }
 
