@@ -32,10 +32,6 @@ import org.xembly.Directives;
 /**
  * Directives for an attribute.
  * @since 0.4
- * @todo #589:30min Add Unit Tests for DirectivesAttribute class.
- *  DirectivesAttribute class is not covered by unit tests.
- *  Add unit tests for DirectivesAttribute class in order to increase the code coverage
- *  and improve the quality of the code.
  */
 public final class DirectivesAttribute implements Iterable<Directive> {
 
