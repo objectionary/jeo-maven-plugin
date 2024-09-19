@@ -62,6 +62,7 @@ final class DirectivesClassTest {
                     "<o base='org.eolang.jeo.string' data='bytes' name='supername'/>",
                     "<o base='org.eolang.seq0' name='interfaces'/>",
                     "<o base='org.eolang.seq0' name='annotations'/>",
+                    "<o base='org.eolang.seq0' name='attributes'/>",
                     "</o>"
                 )
             )
