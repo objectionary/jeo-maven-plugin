@@ -28,6 +28,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Stream;
+import org.cactoos.scalar.LengthOf;
+import org.cactoos.scalar.Unchecked;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -85,19 +88,25 @@ public final class DirectivesSeq implements Iterable<Directive> {
             .attr("base", new EoFqn(String.format("seq%d", this.size())).fqn())
             .attr("line", new Random().nextInt(Integer.MAX_VALUE))
             .attr("name", this.name)
-            .append(
-                this.directives.stream()
-                    .filter(Objects::nonNull)
-                    .map(Directives::new)
-                    .reduce(new Directives(), Directives::append)
-            ).up().iterator();
+            .append(this.stream().reduce(new Directives(), Directives::append)).up().iterator();
     }
 
     /**
      * Size of the sequence.
      * @return Size.
      */
-    private int size() {
-        return this.directives.size();
+    private long size() {
+        return this.stream().count();
+    }
+
+    /**
+     * Stream of directives.
+     * @return Stream of directives.
+     */
+    private Stream<Directives> stream() {
+        return this.directives.stream()
+            .filter(Objects::nonNull)
+            .filter(dirs -> new Unchecked<>(new LengthOf(dirs)).value() > 0)
+            .map(Directives::new);
     }
 }
