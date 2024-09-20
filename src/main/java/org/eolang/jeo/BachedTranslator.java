@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo;
 
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 /**
@@ -55,7 +56,13 @@ public final class BachedTranslator implements Translator {
     public Stream<Representation> apply(
         final Stream<? extends Representation> representations
     ) {
-        return representations.parallel().map(this::translate);
+        return representations.sorted(
+
+                Comparator.comparing((Representation o) -> o.details().name()).reversed())
+            .map(this::translate);
+//        return representations
+//            .parallel()
+//            .map(this::translate);
     }
 
     /**

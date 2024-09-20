@@ -25,6 +25,11 @@ package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XML;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -230,7 +235,7 @@ final class BytecodeClassTest {
     }
 
     @Test
-    void triesToCompileTruncatedClassFromGenericsIt() {
+    void triesToCompileTruncatedClassFromGenericsIt() throws MalformedURLException {
         final String application = "org/eolang/jeo/Application";
         final String descr = "()V";
         final String init = "<init>";
@@ -333,5 +338,21 @@ final class BytecodeClassTest {
             ).bytecode(),
             "We expect no exception here because all instructions are valid"
         );
+
+        try {
+            final Class<?> aClass = new URLClassLoader(
+                new URL[]{
+                    new File(
+//                        "/Users/lombrozo/Workspace/EOlang/jeo-maven-plugin/src/test/resources/org/eolang/jeo/Language.class").toURI().toURL()
+                        "/Users/lombrozo/Workspace/EOlang/jeo-maven-plugin/target/it/generics/target/classes/org/eolang/jeo/Language.class").toURI().toURL()
+                },
+                Thread.currentThread().getContextClassLoader()
+            ).loadClass("org.eolang.jeo.Language");
+            System.out.println(aClass.getDeclaredMethod("name").getName());
+        } catch (final ClassNotFoundException exception) {
+            throw new RuntimeException(exception);
+        } catch (final NoSuchMethodException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 }

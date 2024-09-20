@@ -66,14 +66,38 @@ public final class PluginStartup {
      */
     void init() throws DependencyResolutionRequiredException {
         Thread.currentThread().setContextClassLoader(
-            new URLClassLoader(
-                this.project.getRuntimeClasspathElements()
-                    .stream()
-                    .map(File::new)
-                    .map(PluginStartup::url).toArray(URL[]::new),
-                Thread.currentThread().getContextClassLoader()
-            )
+            custom()
         );
+    }
+
+    private ClassLoader custom() throws DependencyResolutionRequiredException {
+        return new JeoClassLoader(
+            Thread.currentThread().getContextClassLoader(),
+            this.project.getRuntimeClasspathElements()
+        );
+    }
+
+    private ClassLoader urlClassLoader() throws DependencyResolutionRequiredException {
+        return new URLClassLoader(
+            this.project.getRuntimeClasspathElements()
+                .stream()
+                .map(File::new)
+                .map(PluginStartup::url)
+                .toArray(URL[]::new),
+            Thread.currentThread().getContextClassLoader()
+        ) {
+            @Override
+            protected Class<?> findClass(final String name) throws ClassNotFoundException {
+                try {
+                    return super.findClass(name);
+                } catch (final ClassFormatError error) {
+                    throw new IllegalStateException(
+                        String.format("Some problems with '%s' class", name),
+                        error
+                    );
+                }
+            }
+        };
     }
 
     /**

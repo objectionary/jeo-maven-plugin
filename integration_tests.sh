@@ -3,7 +3,8 @@
 while [ true  ]; do
     echo "Running integration tests"
     java --version
-    mvn clean install -DskipTests
+#    mvn clean install -DskipTests
+    mvn clean integration-test -Dinvoker.test=generics -DskipTests
     if [[ "$?" -ne 0 ]]; then
       break
     fi
