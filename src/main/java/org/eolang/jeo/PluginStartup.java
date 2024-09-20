@@ -23,10 +23,6 @@
  */
 package org.eolang.jeo;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 
@@ -66,54 +62,11 @@ public final class PluginStartup {
      */
     void init() throws DependencyResolutionRequiredException {
         Thread.currentThread().setContextClassLoader(
-            custom()
+            new JeoClassLoader(
+                Thread.currentThread().getContextClassLoader(),
+                this.project.getRuntimeClasspathElements()
+            )
         );
     }
 
-    private ClassLoader custom() throws DependencyResolutionRequiredException {
-        return new JeoClassLoader(
-            Thread.currentThread().getContextClassLoader(),
-            this.project.getRuntimeClasspathElements()
-        );
-    }
-
-    private ClassLoader urlClassLoader() throws DependencyResolutionRequiredException {
-        return new URLClassLoader(
-            this.project.getRuntimeClasspathElements()
-                .stream()
-                .map(File::new)
-                .map(PluginStartup::url)
-                .toArray(URL[]::new),
-            Thread.currentThread().getContextClassLoader()
-        ) {
-            @Override
-            protected Class<?> findClass(final String name) throws ClassNotFoundException {
-                try {
-                    return super.findClass(name);
-                } catch (final ClassFormatError error) {
-                    throw new IllegalStateException(
-                        String.format("Some problems with '%s' class", name),
-                        error
-                    );
-                }
-            }
-        };
-    }
-
-    /**
-     * Convert file to URL.
-     *
-     * @param file File.
-     * @return URL.
-     */
-    private static URL url(final File file) {
-        try {
-            return file.toURI().toURL();
-        } catch (final MalformedURLException exception) {
-            throw new IllegalStateException(
-                String.format("Can't convert file %s to URL", file),
-                exception
-            );
-        }
-    }
 }

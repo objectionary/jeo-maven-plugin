@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
-import org.cactoos.io.ResourceOf;
 import org.cactoos.map.MapEntry;
 
 /**
@@ -42,6 +41,7 @@ import org.cactoos.map.MapEntry;
  */
 public final class JeoClassLoader extends ClassLoader {
 
+    private static final String CLASS = ".class";
     private final Map<String, byte[]> classes;
 
     public JeoClassLoader(final ClassLoader parent, final List<String> classes) {
@@ -58,7 +58,8 @@ public final class JeoClassLoader extends ClassLoader {
         try {
             if (this.classes.containsKey(name)) {
                 return this.defineClass(
-                    name, this.classes.get(name), 0, this.classes.get(name).length);
+                    name, this.classes.get(name), 0, this.classes.get(name).length
+                );
             } else {
                 return super.loadClass(name);
             }
@@ -74,36 +75,37 @@ public final class JeoClassLoader extends ClassLoader {
     }
 
     private static Map<String, byte[]> prestructor(List<String> classes) {
-        return classes.stream().flatMap(
-            c -> {
-                final Path p = Paths.get(c);
-                if (!Files.exists(p)) {
-                    return Stream.empty();
-                }
-                System.out.println("PATH: " + p);
-                try {
-                    return Files.walk(p)
-                        .peek(file -> System.out.println("FILE: " + file))
-                        .filter(Files::isRegularFile)
-                        .filter(f -> f.getFileName().toString().endsWith(".class"))
-                        .map(f -> file(p, f));
-                } catch (final IOException exception) {
-                    throw new RuntimeException(exception);
-                }
-            }
-        ).collect(Collectors.toMap(MapEntry::getKey, MapEntry::getValue));
+        return classes.stream()
+            .parallel()
+            .map(Paths::get)
+            .filter(Files::exists)
+            .flatMap(JeoClassLoader::clazzes)
+            .collect(Collectors.toMap(MapEntry::getKey, MapEntry::getValue));
     }
 
+    private static boolean isClass(final Path path) {
+        return Files.isRegularFile(path)
+            && path.getFileName().toString().endsWith(JeoClassLoader.CLASS);
+    }
 
-    private static MapEntry<String, byte[]> file(final Path base, final Path file) {
-        System.out.println("FILE: " + file);
-        final String name = base.relativize(file).toString()
-            .replace(File.separatorChar, '.')
-            .replace("/", ".")
-            .replace(".class", "");
-        System.out.println("NAME: " + name);
-        final UncheckedBytes bytes = new UncheckedBytes(new BytesOf(file.toAbsolutePath()));
-        return new MapEntry<>(name, bytes.asBytes());
+    private static Stream<MapEntry<String, byte[]>> clazzes(final Path root) {
+        try {
+            return Files.walk(root)
+                .filter(JeoClassLoader::isClass)
+                .map(f -> clazz(root, f));
+        } catch (final IOException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    private static MapEntry<String, byte[]> clazz(final Path root, final Path file) {
+        return new MapEntry<>(
+            root.relativize(file)
+                .toString()
+                .replace(File.separatorChar, '.')
+                .replace(JeoClassLoader.CLASS, ""),
+            new UncheckedBytes(new BytesOf(file.toAbsolutePath())).asBytes()
+        );
     }
 
 }
