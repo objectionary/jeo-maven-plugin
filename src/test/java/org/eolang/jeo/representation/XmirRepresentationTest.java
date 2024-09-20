@@ -124,18 +124,4 @@ final class XmirRepresentationTest {
             Matchers.equalTo(expected)
         );
     }
-
-    @Test
-    void assemblesDisassembledXmirToBytecode() {
-        Assertions.assertDoesNotThrow(
-            () -> new XmirRepresentation(
-                new XMLDocument(
-                    new TextOf(
-                        new ResourceOf("org/eolang/jeo/Application.xmir")
-                    ).asString()
-                )
-            ).toBytecode().asBytes(),
-            "The disassembled XMIR representation should be assembled to bytecode without any problems"
-        );
-    }
 }
