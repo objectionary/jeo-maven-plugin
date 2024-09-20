@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,28 +39,56 @@ import org.cactoos.map.MapEntry;
 
 /**
  * JEO class loader.
+ * @since 0.1
  */
 public final class JeoClassLoader extends ClassLoader {
 
+    /**
+     * Class extension.
+     */
     private static final String CLASS = ".class";
+
+    /**
+     * Classes.
+     */
     private final Map<String, byte[]> classes;
 
-    public JeoClassLoader(final ClassLoader parent, final List<String> classes) {
+    /**
+     * Cache.
+     */
+    private final Map<String, Class<?>> cache;
+
+    /**
+     * Constructor.
+     * @param parent Parent class loader.
+     * @param classes Classes as file paths.
+     */
+    JeoClassLoader(final ClassLoader parent, final List<String> classes) {
         this(parent, prestructor(classes));
     }
 
-    public JeoClassLoader(final ClassLoader parent, final Map<String, byte[]> classes) {
+    /**
+     * Constructor.
+     * @param parent Parent class loader.
+     * @param classes Classes as byte arrays.
+     */
+    private JeoClassLoader(final ClassLoader parent, final Map<String, byte[]> classes) {
         super(parent);
         this.classes = classes;
+        this.cache = new HashMap<>(0);
     }
 
     @Override
     public Class<?> loadClass(final String name) throws ClassNotFoundException {
         try {
-            if (this.classes.containsKey(name)) {
-                return this.defineClass(
+            if (this.cache.containsKey(name)) {
+                return this.cache.get(name);
+            } else if (this.classes.containsKey(name)) {
+                final Class<?> created = this.defineClass(
                     name, this.classes.get(name), 0, this.classes.get(name).length
                 );
+                this.cache.put(name, created);
+                return created;
             } else {
                 return super.loadClass(name);
             }
@@ -74,6 +103,11 @@ public final class JeoClassLoader extends ClassLoader {
         }
     }
 
+    /**
+     * Construct a map of classes.
+     * @param classes File paths.
+     * @return Map of classes.
+     */
     private static Map<String, byte[]> prestructor(List<String> classes) {
         return classes.stream()
             .parallel()
@@ -83,22 +117,41 @@ public final class JeoClassLoader extends ClassLoader {
             .collect(Collectors.toMap(MapEntry::getKey, MapEntry::getValue));
     }
 
+    /**
+     * Check if the path is a class.
+     * @param path Path to check.
+     * @return True if the path is a class.
+     */
     private static boolean isClass(final Path path) {
         return Files.isRegularFile(path)
             && path.getFileName().toString().endsWith(JeoClassLoader.CLASS);
     }
 
+    /**
+     * Find classes in the root folder.
+     * @param root Root folder.
+     * @return Stream of classes with their names.
+     */
     private static Stream<MapEntry<String, byte[]>> clazzes(final Path root) {
         try {
             return Files.walk(root)
                 .filter(JeoClassLoader::isClass)
-                .map(f -> clazz(root, f));
+                .map(clazz -> JeoClassLoader.entry(root, clazz));
         } catch (final IOException exception) {
-            throw new RuntimeException(exception);
+            throw new IllegalStateException(
+                String.format("Failed to walk through the folder '%s'", root),
+                exception
+            );
         }
     }
 
-    private static MapEntry<String, byte[]> clazz(final Path root, final Path file) {
+    /**
+     * Create a class entry.
+     * @param root Root folder.
+     * @param file File of the class.
+     * @return Class entry.
+     */
+    private static MapEntry<String, byte[]> entry(final Path root, final Path file) {
         return new MapEntry<>(
             root.relativize(file)
                 .toString()
@@ -107,5 +160,4 @@ public final class JeoClassLoader extends ClassLoader {
             new UncheckedBytes(new BytesOf(file.toAbsolutePath())).asBytes()
         );
     }
-
 }
