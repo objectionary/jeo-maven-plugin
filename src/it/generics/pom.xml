@@ -58,9 +58,6 @@ SOFTWARE.
             <goals>
               <goal>assemble</goal>
             </goals>
-<!--            <configuration>-->
-<!--                    <outputDir>${project.build.directory}/gen-classes</outputDir>-->
-<!--</configuration>-->
           </execution>
         </executions>
       </plugin>
