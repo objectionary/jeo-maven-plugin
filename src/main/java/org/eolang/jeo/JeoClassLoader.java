@@ -39,7 +39,16 @@ import org.cactoos.map.MapEntry;
 
 /**
  * JEO class loader.
- * @since 0.1
+ * This classloader reads classes folder, uploads these classes into a memory
+ * and then loads them.
+ * This happens before any transformations are applied.
+ * Preloading allows safe classes validation.
+ * Validator loads "old" classes and uses them for the validation of the "newly" generated classes.
+ * Moreover, by using {@link JeoClassLoader}, we can guarantee that the classes loaded
+ * before any transformations are correct.
+ * If we use any other {@link ClassLoader} implementation it leads to flaky tests as
+ * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/672">issue 672</a> shows.
+ * @since 0.6
  */
 public final class JeoClassLoader extends ClassLoader {
 
@@ -81,17 +90,19 @@ public final class JeoClassLoader extends ClassLoader {
     @Override
     public Class<?> loadClass(final String name) throws ClassNotFoundException {
         try {
+            final Class<?> result;
             if (this.cache.containsKey(name)) {
-                return this.cache.get(name);
+                result = this.cache.get(name);
             } else if (this.classes.containsKey(name)) {
                 final Class<?> created = this.defineClass(
                     name, this.classes.get(name), 0, this.classes.get(name).length
                 );
                 this.cache.put(name, created);
-                return created;
+                result = created;
             } else {
-                return super.loadClass(name);
+                result = super.loadClass(name);
             }
+            return result;
         } catch (final ClassNotFoundException exception) {
             throw new ClassNotFoundException(
                 String.format(
@@ -108,7 +119,7 @@ public final class JeoClassLoader extends ClassLoader {
      * @param classes File paths.
      * @return Map of classes.
      */
-    private static Map<String, byte[]> prestructor(List<String> classes) {
+    private static Map<String, byte[]> prestructor(final List<String> classes) {
         return classes.stream()
             .parallel()
             .map(Paths::get)
