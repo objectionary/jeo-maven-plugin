@@ -89,8 +89,8 @@ public final class XmlParam {
      */
     private BytecodeAnnotations annotations() {
         return this.root.children()
-            .filter(node ->
-                node.attribute("name")
+            .filter(
+                node -> node.attribute("name")
                     .map(name -> name.startsWith("param-annotations-"))
                     .orElse(false)
             )
