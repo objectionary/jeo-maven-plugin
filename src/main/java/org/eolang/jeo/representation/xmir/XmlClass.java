@@ -103,8 +103,7 @@ public final class XmlClass {
                 .collect(Collectors.toList()),
             this.annotations()
                 .map(XmlAnnotations::bytecode)
-                .orElse(new BytecodeAnnotations())
-                .annotations(),
+                .orElse(new BytecodeAnnotations()),
             this.attributes()
                 .map(XmlAttributes::attributes)
                 .orElse(new ArrayList<>(0)),

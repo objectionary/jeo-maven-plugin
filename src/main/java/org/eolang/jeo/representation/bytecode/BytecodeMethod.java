@@ -105,7 +105,7 @@ public final class BytecodeMethod implements Testable {
             new ArrayList<>(0),
             new ArrayList<>(0),
             annotations,
-            new BytecodeMethodProperties(name, "()V"),
+            new BytecodeMethodProperties(name, "()V", "", Opcodes.ACC_PUBLIC),
             new ArrayList<>(0),
             new BytecodeMaxs(0, 0)
         );
