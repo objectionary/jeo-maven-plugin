@@ -72,12 +72,10 @@ final class AsmProgramTest {
         final BytecodeProgram bytecode = new AsmProgram(
             new BytesOf(new ResourceOf(resource)).asBytes()
         ).bytecode();
-        final String xml = new Xembler(bytecode.directives("")).xml();
-        System.out.println(xml);
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode",
             new XmlProgram(
-                xml
+                new Xembler(bytecode.directives("")).xml()
             ).bytecode().bytecode(),
             Matchers.equalTo(bytecode.bytecode())
         );

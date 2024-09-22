@@ -100,7 +100,7 @@ public final class BytecodeMethod implements Testable {
      * @param name Method name.
      * @param annotations Method annotations.
      */
-    public BytecodeMethod(final String name, BytecodeAnnotations annotations) {
+    public BytecodeMethod(final String name, final BytecodeAnnotations annotations) {
         this(
             new ArrayList<>(0),
             new ArrayList<>(0),

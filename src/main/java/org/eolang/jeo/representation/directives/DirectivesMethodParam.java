@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.directives;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;

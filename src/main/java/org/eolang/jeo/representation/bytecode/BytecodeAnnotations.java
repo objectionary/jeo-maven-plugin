@@ -70,10 +70,40 @@ public final class BytecodeAnnotations {
     }
 
     /**
+     * All annotations.
+     * @return Annotations.
+     */
+    public List<BytecodeAnnotation> annotations() {
+        return Collections.unmodifiableList(this.all);
+    }
+
+    /**
+     * Directives with the given name.
+     * @param name Name of the directives.
+     * @return Directives.
+     */
+    public DirectivesAnnotations directives(final String name) {
+        return new DirectivesAnnotations(
+            this.all.stream()
+                .map(BytecodeAnnotation::directives)
+                .collect(Collectors.toList()),
+            name
+        );
+    }
+
+    /**
+     * Directives with the name "annotations".
+     * @return Directives.
+     */
+    public DirectivesAnnotations directives() {
+        return this.directives("annotations");
+    }
+
+    /**
      * Write annotations to the ASM method visitor.
      * @param visitor Method visitor.
      */
-    public void write(final MethodVisitor visitor) {
+    void write(final MethodVisitor visitor) {
         this.all.forEach(annotation -> annotation.write(visitor));
     }
 
@@ -81,7 +111,7 @@ public final class BytecodeAnnotations {
      * Write annotations to the custom class writer.
      * @param visitor Custom class writer.
      */
-    public void write(final CustomClassWriter visitor) {
+    void write(final CustomClassWriter visitor) {
         this.all.forEach(annotation -> annotation.write(visitor));
     }
 
@@ -92,27 +122,5 @@ public final class BytecodeAnnotations {
      */
     void write(final int index, final MethodVisitor writer) {
         this.all.forEach(annotation -> annotation.write(index, writer));
-    }
-
-
-    /**
-     * All annotations.
-     * @return Annotations.
-     */
-    public List<BytecodeAnnotation> annotations() {
-        return Collections.unmodifiableList(this.all);
-    }
-
-    public DirectivesAnnotations directives(final String name) {
-        return new DirectivesAnnotations(
-            this.all.stream()
-                .map(BytecodeAnnotation::directives)
-                .collect(Collectors.toList()),
-            name
-        );
-    }
-
-    public DirectivesAnnotations directives() {
-        return this.directives("annotations");
     }
 }

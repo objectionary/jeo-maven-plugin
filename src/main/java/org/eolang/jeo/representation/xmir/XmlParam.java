@@ -27,7 +27,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
-import org.eolang.jeo.representation.directives.JeoFqn;
 import org.objectweb.asm.Type;
 
 /**
