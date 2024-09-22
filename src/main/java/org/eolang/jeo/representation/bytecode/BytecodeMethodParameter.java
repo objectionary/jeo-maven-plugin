@@ -94,7 +94,7 @@ public final class BytecodeMethodParameter {
         return new DirectivesMethodParam(
             this.index,
             this.type,
-            this.annotations.directives()
+            this.annotations.directives(String.format("param-annotations-%d", this.index))
         );
     }
 }
