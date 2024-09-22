@@ -23,44 +23,38 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
 /**
- * Xmir annotations.
- * @since 0.1
+ * Test case for {@link XmlAnnotations}.
+ * @since 0.6
  */
-public class XmlAnnotations {
+final class XmlAnnotationsTest {
 
-    /**
-     * XML node representing annotations.
-     */
-    private final XmlNode node;
-
-    /**
-     * Constructor.
-     * @param xmlnode XML node.
-     */
-    XmlAnnotations(final XmlNode xmlnode) {
-        this.node = xmlnode;
-    }
-
-    /**
-     * Convert to bytecode.
-     * @return Bytecode annotations.
-     */
-    public BytecodeAnnotations bytecode() {
-        return new BytecodeAnnotations(this.all().stream().map(XmlAnnotation::bytecode));
-    }
-
-    /**
-     * All annotations.
-     * @return Annotations.
-     */
-    private List<XmlAnnotation> all() {
-        return this.node.children()
-            .map(XmlAnnotation::new)
-            .collect(Collectors.toList());
+    @Test
+    void parsesXmirAnnotations() {
+        MatcherAssert.assertThat(
+            "We expect that XMIR annotations are parsed correctly",
+            new XmlAnnotations(
+                new XmlNode(
+                    String.join(
+                        "\n",
+                        "<o name='annotations'>",
+                        "  <o base='org.eolang.jeo.annotation' name='annotation-1015422024-amF2YS9sYW5nL092ZXJyaWRl'>",
+                        "    <o base='org.eolang.jeo.string' data='bytes'>6A 61 76 61 2F 6C 61 6E 67 2F 4F 76 65 72 72 69 64 65</o>",
+                        "    <o base='org.eolang.jeo.bool' data='bytes'>01</o>",
+                        "  </o>",
+                        "</o>"
+                    ))).bytecode(),
+            Matchers.equalTo(
+                new BytecodeAnnotations(
+                    new BytecodeAnnotation("java/lang/Override", true)
+                )
+            )
+        );
     }
 }
