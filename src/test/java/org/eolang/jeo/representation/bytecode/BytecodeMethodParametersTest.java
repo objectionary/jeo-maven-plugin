@@ -43,8 +43,8 @@ final class BytecodeMethodParametersTest {
             "Can't convert bytecode method parameters to correct directives",
             new Xembler(
                 new BytecodeMethodParameters(
-                    new BytecodeMethodParameter(0, Type.INT_TYPE, Collections.emptyList()),
-                    new BytecodeMethodParameter(1, Type.INT_TYPE, Collections.emptyList())
+                    new BytecodeMethodParameter(0, Type.INT_TYPE),
+                    new BytecodeMethodParameter(1, Type.INT_TYPE)
                 ).directives()
             ).xml(),
             XhtmlMatchers.hasXPaths(

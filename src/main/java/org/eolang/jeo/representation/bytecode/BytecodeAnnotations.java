@@ -86,21 +86,21 @@ public final class BytecodeAnnotations {
     }
 
     /**
+     * Write the parameter.
+     * @param index Index of the parameter.
+     * @param writer Method visitor.
+     */
+    void write(final int index, final MethodVisitor writer) {
+        this.all.forEach(annotation -> annotation.write(index, writer));
+    }
+
+
+    /**
      * All annotations.
      * @return Annotations.
      */
     public List<BytecodeAnnotation> annotations() {
         return Collections.unmodifiableList(this.all);
-    }
-
-    /**
-     * Add annotation.
-     * @param annotation Annotation.
-     * @return These annotations.
-     */
-    public BytecodeAnnotations with(final BytecodeAnnotation annotation) {
-        this.all.add(annotation);
-        return this;
     }
 
     public DirectivesAnnotations directives(final String name) {

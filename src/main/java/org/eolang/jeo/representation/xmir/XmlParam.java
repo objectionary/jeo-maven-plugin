@@ -25,9 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
 import org.eolang.jeo.representation.directives.JeoFqn;
 import org.objectweb.asm.Type;
@@ -90,12 +88,13 @@ public final class XmlParam {
      * Annotations of the parameter.
      * @return Annotations.
      */
-    private List<BytecodeAnnotation> annotations() {
+    private BytecodeAnnotations annotations() {
         return this.root.children()
-            .filter(node -> node.hasAttribute("base", new JeoFqn("annotation").fqn()))
-            .map(XmlAnnotation::new)
-            .map(XmlAnnotation::bytecode)
-            .collect(Collectors.toList());
+            .filter(node -> node.hasAttribute("name", "annotations"))
+            .findFirst()
+            .map(XmlAnnotations::new)
+            .map(XmlAnnotations::bytecode)
+            .orElse(new BytecodeAnnotations());
     }
 
     /**

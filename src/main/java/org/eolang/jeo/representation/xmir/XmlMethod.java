@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +31,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.Signature;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;

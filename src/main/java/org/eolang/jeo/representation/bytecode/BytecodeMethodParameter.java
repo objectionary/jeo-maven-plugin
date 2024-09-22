@@ -23,9 +23,6 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesMethodParam;
@@ -54,7 +51,7 @@ public final class BytecodeMethodParameter {
     /**
      * Annotations of the parameter.
      */
-    private final List<BytecodeAnnotation> annotations;
+    private final BytecodeAnnotations annotations;
 
     /**
      * Constructor.
@@ -62,7 +59,7 @@ public final class BytecodeMethodParameter {
      * @param type Type of the parameter.
      */
     public BytecodeMethodParameter(final int index, final Type type) {
-        this(index, type, new ArrayList<>(0));
+        this(index, type, new BytecodeAnnotations());
     }
 
     /**
@@ -74,7 +71,7 @@ public final class BytecodeMethodParameter {
     public BytecodeMethodParameter(
         final int index,
         final Type type,
-        final List<BytecodeAnnotation> annotations
+        final BytecodeAnnotations annotations
     ) {
         this.index = index;
         this.type = type;
@@ -82,11 +79,11 @@ public final class BytecodeMethodParameter {
     }
 
     /**
-     * Write the parameter.
-     * @param writer Method visitor.
+     * Write to the method visitor.
+     * @param visitor Method visitor.
      */
-    void write(final MethodVisitor writer) {
-        this.annotations.forEach(annotation -> annotation.write(this.index, writer));
+    public void write(final MethodVisitor visitor) {
+        this.annotations.write(this.index, visitor);
     }
 
     /**
@@ -97,9 +94,7 @@ public final class BytecodeMethodParameter {
         return new DirectivesMethodParam(
             this.index,
             this.type,
-            this.annotations.stream()
-                .map(BytecodeAnnotation::directives)
-                .collect(Collectors.toList())
+            this.annotations.directives()
         );
     }
 }

@@ -257,7 +257,7 @@ public final class AsmProgram {
                 new BytecodeMethodParameter(
                     index,
                     types[index],
-                    annotations
+                    new BytecodeAnnotations(annotations)
                 )
             );
         }

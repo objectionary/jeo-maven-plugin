@@ -56,7 +56,7 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
     /**
      * Annotations of the parameter.
      */
-    private final List<? extends Iterable<Directive>> annotations;
+    private final DirectivesAnnotations annotations;
 
     /**
      * Constructor.
@@ -67,7 +67,7 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
     public DirectivesMethodParam(
         final int index,
         final Type type,
-        final List<? extends Iterable<Directive>> annotations
+        final DirectivesAnnotations annotations
     ) {
         this.index = index;
         this.type = type;
@@ -89,11 +89,7 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
                     this.index
                 )
             )
-            .append(
-                this.annotations.stream()
-                    .map(Directives::new)
-                    .reduce(new Directives(), Directives::append)
-            )
+            .append(this.annotations)
             .up()
             .iterator();
     }
