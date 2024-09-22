@@ -500,11 +500,13 @@ public final class AsmProgram {
      * @param node Asm class node.
      * @return Domain annotations.
      */
-    private static Collection<BytecodeAnnotation> annotations(final ClassNode node) {
-        return Stream.concat(
-            AsmProgram.safe(node.visibleAnnotations, true),
-            AsmProgram.safe(node.invisibleAnnotations, false)
-        ).collect(Collectors.toList());
+    private static BytecodeAnnotations annotations(final ClassNode node) {
+        return new BytecodeAnnotations(
+            Stream.concat(
+                AsmProgram.safe(node.visibleAnnotations, true),
+                AsmProgram.safe(node.invisibleAnnotations, false)
+            ).collect(Collectors.toList())
+        );
     }
 
     /**
@@ -512,11 +514,13 @@ public final class AsmProgram {
      * @param node Asm method node.
      * @return Domain annotations.
      */
-    private static List<BytecodeAnnotation> annotations(final MethodNode node) {
-        return Stream.concat(
-            AsmProgram.safe(node.visibleAnnotations, true),
-            AsmProgram.safe(node.invisibleAnnotations, false)
-        ).collect(Collectors.toList());
+    private static BytecodeAnnotations annotations(final MethodNode node) {
+        return new BytecodeAnnotations(
+            Stream.concat(
+                AsmProgram.safe(node.visibleAnnotations, true),
+                AsmProgram.safe(node.invisibleAnnotations, false)
+            ).collect(Collectors.toList())
+        );
     }
 
     /**

@@ -239,14 +239,13 @@ public final class XmlMethod {
      *
      * @return Annotations.
      */
-    private List<BytecodeAnnotation> annotations() {
+    private BytecodeAnnotations annotations() {
         return this.node.children()
             .filter(element -> element.hasAttribute("name", "annotations"))
             .findFirst()
             .map(XmlAnnotations::new)
             .map(XmlAnnotations::bytecode)
-            .map(BytecodeAnnotations::annotations)
-            .orElse(new ArrayList<>(0));
+            .orElse(new BytecodeAnnotations());
     }
 
     /**

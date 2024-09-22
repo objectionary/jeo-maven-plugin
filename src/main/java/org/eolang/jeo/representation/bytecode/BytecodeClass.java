@@ -62,7 +62,7 @@ public final class BytecodeClass implements Testable {
     /**
      * Annotations.
      */
-    private final Collection<BytecodeAnnotation> annotations;
+    private final BytecodeAnnotations annotations;
 
     /**
      * Attributes.
@@ -127,7 +127,14 @@ public final class BytecodeClass implements Testable {
         final Collection<BytecodeMethod> methods,
         final BytecodeClassProperties properties
     ) {
-        this(name, methods, new ArrayList<>(0), new ArrayList<>(0), new ArrayList<>(0), properties);
+        this(
+            name,
+            methods,
+            new ArrayList<>(0),
+            new BytecodeAnnotations(),
+            new ArrayList<>(0),
+            properties
+        );
     }
 
     /**
@@ -144,7 +151,7 @@ public final class BytecodeClass implements Testable {
         final String name,
         final Collection<BytecodeMethod> methods,
         final Collection<BytecodeField> fields,
-        final Collection<BytecodeAnnotation> annotations,
+        final BytecodeAnnotations annotations,
         final Collection<BytecodeAttribute> attributes,
         final BytecodeClassProperties props
     ) {
@@ -310,7 +317,7 @@ public final class BytecodeClass implements Testable {
             this.fields.stream().map(BytecodeField::directives).collect(Collectors.toList()),
             this.methods.stream().map(method -> method.directives(counting))
                 .collect(Collectors.toList()),
-            new BytecodeAnnotations(this.annotations.stream()).directives(),
+            this.annotations.directives(),
             new DirectivesAttributes(
                 this.attributes.stream()
                     .map(BytecodeAttribute::directives)
@@ -334,7 +341,7 @@ public final class BytecodeClass implements Testable {
                 this.props.supername(),
                 this.props.interfaces()
             );
-            this.annotations.forEach(annotation -> annotation.write(visitor));
+            this.annotations.write(visitor);
             this.fields.forEach(field -> field.write(visitor));
             this.methods.forEach(method -> method.write(visitor));
             this.attributes.forEach(attr -> attr.write(visitor));

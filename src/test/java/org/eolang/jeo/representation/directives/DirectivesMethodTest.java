@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
@@ -84,8 +85,12 @@ final class DirectivesMethodTest {
                 )
             ).bytecode(),
             Matchers.equalTo(
-                new BytecodeMethod(name)
-                    .annotation(new BytecodeAnnotation(descriptor, visible))
+                new BytecodeMethod(
+                    name,
+                    new BytecodeAnnotations(
+                        new BytecodeAnnotation(descriptor, visible)
+                    )
+                )
             )
         );
     }

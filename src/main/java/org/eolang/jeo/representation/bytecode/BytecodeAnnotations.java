@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAnnotations;
+import org.objectweb.asm.MethodVisitor;
 
 /**
  * Bytecode annotations.
@@ -66,6 +67,22 @@ public final class BytecodeAnnotations {
      */
     public BytecodeAnnotations(final List<BytecodeAnnotation> all) {
         this.all = all;
+    }
+
+    /**
+     * Write annotations to the ASM method visitor.
+     * @param visitor Method visitor.
+     */
+    public void write(final MethodVisitor visitor) {
+        this.all.forEach(annotation -> annotation.write(visitor));
+    }
+
+    /**
+     * Write annotations to the custom class writer.
+     * @param visitor Custom class writer.
+     */
+    public void write(final CustomClassWriter visitor) {
+        this.all.forEach(annotation -> annotation.write(visitor));
     }
 
     /**

@@ -58,7 +58,7 @@ public final class BytecodeMethod implements Testable {
     /**
      * Method annotations.
      */
-    private final List<BytecodeAnnotation> annotations;
+    private final BytecodeAnnotations annotations;
 
     /**
      * Method properties.
@@ -93,6 +93,22 @@ public final class BytecodeMethod implements Testable {
      */
     public BytecodeMethod(final String name) {
         this(name, "()V", Opcodes.ACC_PUBLIC);
+    }
+
+    /**
+     * Constructor.
+     * @param name Method name.
+     * @param annotations Method annotations.
+     */
+    public BytecodeMethod(final String name, BytecodeAnnotations annotations) {
+        this(
+            new ArrayList<>(0),
+            new ArrayList<>(0),
+            annotations,
+            new BytecodeMethodProperties(name, "()V"),
+            new ArrayList<>(0),
+            new BytecodeMaxs(0, 0)
+        );
     }
 
     /**
@@ -136,7 +152,7 @@ public final class BytecodeMethod implements Testable {
         this(
             new ArrayList<>(0),
             new ArrayList<>(0),
-            new ArrayList<>(0),
+            new BytecodeAnnotations(),
             properties,
             new ArrayList<>(0),
             maxs
@@ -156,7 +172,7 @@ public final class BytecodeMethod implements Testable {
     public BytecodeMethod(
         final List<BytecodeEntry> tryblocks,
         final List<BytecodeEntry> instructions,
-        final List<BytecodeAnnotation> annotations,
+        final BytecodeAnnotations annotations,
         final BytecodeMethodProperties properties,
         final List<BytecodeDefaultValue> defvalues,
         final BytecodeMaxs maxs
@@ -215,16 +231,6 @@ public final class BytecodeMethod implements Testable {
     }
 
     /**
-     * Add annotation.
-     * @param annotation Annotation.
-     * @return This object.
-     */
-    public BytecodeMethod annotation(final BytecodeAnnotation annotation) {
-        this.annotations.add(annotation);
-        return this;
-    }
-
-    /**
      * Add default value.
      * @param defvalue Default value.
      * @return This object.
@@ -274,7 +280,7 @@ public final class BytecodeMethod implements Testable {
                 .collect(Collectors.toList()),
             this.tryblocks.stream().map(entry -> entry.directives(counting))
                 .collect(Collectors.toList()),
-            new BytecodeAnnotations(this.annotations).directives(),
+            this.annotations.directives(),
             this.defvalues.stream()
                 .map(BytecodeDefaultValue::directives)
                 .collect(Collectors.toList()),
@@ -293,7 +299,7 @@ public final class BytecodeMethod implements Testable {
                 visitor,
                 this.maxs.compute()
             );
-            this.annotations.forEach(annotation -> annotation.write(mvisitor));
+            this.annotations.write(mvisitor);
             this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));
             if (!this.properties.isAbstract()) {
                 mvisitor.visitCode();
