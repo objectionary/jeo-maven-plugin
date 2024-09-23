@@ -101,6 +101,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      */
     private String type() {
         return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(3))
+            .filter(node -> !node.hasAttribute("base", new EoFqn("nop").fqn()))
             .map(XmlValue::new)
             .map(XmlValue::bytes)
             .map(XmlBytes::hex)
