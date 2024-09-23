@@ -189,9 +189,10 @@ public final class XmlMethod {
      * @return Access modifiers.
      */
     private int access() {
-        return new HexString(
-            this.node.children().collect(Collectors.toList()).get(0).text()
-        ).decodeAsInt();
+        return new XmlValue(this.child(0)).bytes().hex().decodeAsInt();
+//        return new HexString(
+//            this.node.children().collect(Collectors.toList()).get(0).text()
+//        ).decodeAsInt();
     }
 
     /**
@@ -200,9 +201,10 @@ public final class XmlMethod {
      * @return Descriptor.
      */
     private String descriptor() {
-        return new HexString(
-            this.node.children().collect(Collectors.toList()).get(1).text()
-        ).decode();
+        return new XmlValue(this.child(1)).bytes().hex().decode();
+//        return new HexString(
+//            this.node.children().collect(Collectors.toList()).get(1).text()
+//        ).decode();
     }
 
     /**
@@ -211,9 +213,14 @@ public final class XmlMethod {
      * @return Signature.
      */
     private String signature() {
-        return new HexString(
-            this.node.children().collect(Collectors.toList()).get(2).text()
-        ).decode();
+        return new XmlValue(this.child(2)).bytes().hex().decode();
+//        return new HexString(
+//            this.node.children().collect(Collectors.toList()).get(2).text()
+//        ).decode();
+    }
+
+    private XmlNode child(final int index) {
+        return this.node.children().collect(Collectors.toList()).get(index);
     }
 
     /**
@@ -272,12 +279,19 @@ public final class XmlMethod {
      * @return Exceptions.
      */
     private String[] exceptions() {
-        return this.node.children().collect(Collectors.toList()).get(3)
+        return this.child(3)
             .children()
-            .map(XmlNode::text)
-            .map(HexString::new)
+            .map(XmlValue::new)
+            .map(XmlValue::bytes)
+            .map(XmlBytes::hex)
             .map(HexString::decode)
             .toArray(String[]::new);
+//        return this.node.children().collect(Collectors.toList()).get(3)
+//            .children()
+//            .map(XmlNode::text)
+//            .map(HexString::new)
+//            .map(HexString::decode)
+//            .toArray(String[]::new);
     }
 
     /**
