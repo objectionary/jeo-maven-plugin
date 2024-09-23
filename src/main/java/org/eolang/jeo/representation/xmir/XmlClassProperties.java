@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.Collection;
 import java.util.Optional;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
@@ -135,11 +136,29 @@ public final class XmlClassProperties {
      * @return Interfaces.
      */
     private String[] interfaces() {
-        return this.clazz.xpath("./o[@name='interfaces']/o/text()")
-            .stream()
-            .map(HexString::new)
-            .map(HexString::decode)
-            .toArray(String[]::new);
+        return this.clazz.optchild("name", "interfaces")
+            .map(
+                node -> node.children()
+                    .map(XmlValue::new)
+                    .map(XmlValue::bytes)
+                    .map(XmlBytes::hex)
+                    .map(HexString::decode).toArray(String[]::new)
+
+            ).orElse(new String[0]);
+
+//        return
+//            .flatMap(node -> node.children())
+//            .map(XmlValue::new)
+//            .map(XmlValue::bytes)
+//            .map(XmlBytes::hex)
+//            .map(HexString::decode)
+//            .orElse(new String[0]);
+//
+//        return this.clazz.xpath("./o[@name='interfaces']/o/text()")
+//            .stream()
+//            .map(HexString::new)
+//            .map(HexString::decode)
+//            .toArray(String[]::new);
     }
 
     /**
