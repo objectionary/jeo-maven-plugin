@@ -43,4 +43,8 @@ public final class XmlBytes {
     public Object parse() {
         return this.type.decode(this.bytes.text());
     }
+
+    public HexString hex() {
+        return new HexString(this.bytes.text());
+    }
 }
