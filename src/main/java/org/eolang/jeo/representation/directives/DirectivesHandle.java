@@ -57,11 +57,11 @@ public final class DirectivesHandle implements Iterable<Directive> {
         return new Directives()
             .add("o")
             .attr("base", new JeoFqn("handle").fqn())
-            .append(new DirectivesData(this.handle.getTag()))
-            .append(new DirectivesData(this.handle.getOwner()))
-            .append(new DirectivesData(this.handle.getName()))
-            .append(new DirectivesData(this.handle.getDesc()))
-            .append(new DirectivesData(this.handle.isInterface()))
+            .append(new DirectivesValue(this.handle.getTag()))
+            .append(new DirectivesValue(this.handle.getOwner()))
+            .append(new DirectivesValue(this.handle.getName()))
+            .append(new DirectivesValue(this.handle.getDesc()))
+            .append(new DirectivesValue(this.handle.isInterface()))
             .up()
             .iterator();
     }

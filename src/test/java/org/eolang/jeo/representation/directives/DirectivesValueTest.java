@@ -34,17 +34,17 @@ import org.xembly.Transformers;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesData}.
+ * Test case for {@link DirectivesValue}.
  * @since 0.3
  */
-final class DirectivesDataTest {
+final class DirectivesValueTest {
 
     @Test
     void convertsLabel() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Converts label to XML",
             new Xembler(
-                new DirectivesData(
+                new DirectivesValue(
                     new AllLabels().label("some-random")
                 ),
                 new Transformers.Node()

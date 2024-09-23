@@ -42,7 +42,7 @@ import org.xembly.Directives;
  *  https://github.com/objectionary/eo/issues/3189
  */
 @ToString
-public final class DirectivesData implements Iterable<Directive> {
+public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Data.
@@ -59,7 +59,7 @@ public final class DirectivesData implements Iterable<Directive> {
      * @param data Data.
      * @param <T> Data type.
      */
-    public <T> DirectivesData(final T data) {
+    public <T> DirectivesValue(final T data) {
         this("", data);
     }
 
@@ -69,7 +69,7 @@ public final class DirectivesData implements Iterable<Directive> {
      * @param data Data.
      * @param <T> Data type.
      */
-    public <T> DirectivesData(final String name, final T data) {
+    public <T> DirectivesValue(final String name, final T data) {
         this(new HexData(data), name);
     }
 
@@ -78,7 +78,7 @@ public final class DirectivesData implements Iterable<Directive> {
      * @param data Data.
      * @param name Name.
      */
-    public DirectivesData(final HexData data, final String name) {
+    public DirectivesValue(final HexData data, final String name) {
         this.data = data;
         this.name = name;
     }

@@ -68,8 +68,8 @@ public final class DirectivesMaxs implements Iterable<Directive> {
             .attr("name", "maxs")
             .attr("abstract", "")
             .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-            .append(new DirectivesData("stack", this.stack))
-            .append(new DirectivesData("locals", this.locals))
+            .append(new DirectivesValue("stack", this.stack))
+            .append(new DirectivesValue("locals", this.locals))
             .up()
             .iterator();
     }

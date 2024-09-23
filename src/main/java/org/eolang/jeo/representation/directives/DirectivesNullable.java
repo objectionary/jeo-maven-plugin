@@ -71,9 +71,9 @@ public final class DirectivesNullable implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final Iterator<Directive> result;
         if (this.data.isNull()) {
-            result = new DirectivesData(this.name, "").iterator();
+            result = new DirectivesValue(this.name, "").iterator();
         } else {
-            result = new DirectivesData(this.data, this.name).iterator();
+            result = new DirectivesValue(this.data, this.name).iterator();
         }
         return result;
     }
