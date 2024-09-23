@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.Random;
 import lombok.ToString;
 import org.eolang.jeo.representation.DataType;
+import org.eolang.jeo.representation.xmir.XmlBytes;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -38,7 +39,7 @@ import org.xembly.Directives;
  * @since 0.3
  */
 @ToString
-public final class DirectivesTypedData implements Iterable<Directive> {
+public final class DirectivesTypedValue implements Iterable<Directive> {
 
     /**
      * Name of the value.
@@ -61,7 +62,7 @@ public final class DirectivesTypedData implements Iterable<Directive> {
      * @param data Value
      * @param descriptor Type descriptor
      */
-    public DirectivesTypedData(final String name, final Object data, final String descriptor) {
+    public DirectivesTypedValue(final String name, final Object data, final String descriptor) {
         this(name, data, Type.getType(descriptor));
     }
 
@@ -71,7 +72,7 @@ public final class DirectivesTypedData implements Iterable<Directive> {
      * @param data Value
      * @param type Type of the value
      */
-    public DirectivesTypedData(final String name, final Object data, final Type type) {
+    public DirectivesTypedValue(final String name, final Object data, final Type type) {
         this.name = name;
         this.data = data;
         this.type = type;
@@ -83,7 +84,7 @@ public final class DirectivesTypedData implements Iterable<Directive> {
             final DataType base = DataType.find(this.type);
             final Directives directives = new Directives().add("o")
                 .attr("base", base.fqn())
-                .attr("data", "bytes")
+//                .attr("data", "bytes")
                 .attr("line", new Random().nextInt(Integer.MAX_VALUE));
             final String hex = base.toHexString(this.data);
             if (!this.name.isEmpty()) {
@@ -92,8 +93,9 @@ public final class DirectivesTypedData implements Iterable<Directive> {
             if (Objects.isNull(hex)) {
                 directives.attr("scope", "nullable");
             } else {
-                directives.set(hex);
+                directives.append(new DirectivesBytes(hex));
             }
+
             return directives.up().iterator();
         } catch (final IllegalArgumentException | ClassCastException exception) {
             throw new IllegalStateException(

@@ -79,7 +79,8 @@ public final class XmlOperand {
                 .orElse(false)) {
                 result = null;
             } else {
-                result = DataType.find(base).decode(this.raw.text());
+                return new XmlBytes(base, this.raw.firstChild()).parse();
+//                result = DataType.find(base).decode(this.raw.text());
             }
         }
         return result;
