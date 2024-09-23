@@ -48,7 +48,6 @@ final class XmlAttributeTest {
         "</o>"
     );
 
-
     @Test
     void convertsToDomainInnerClass() {
         MatcherAssert.assertThat(

@@ -25,25 +25,57 @@ package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.DataType;
 
+/**
+ * Xml representation of EO bytes.
+ * @since 0.6
+ * @todo #715:60min Refactor {@link XmlBytes} class.
+ *  We should decide whether to keep this class or not.
+ *  If we decide to keep it, we need to consider the combination of
+ *  {@link XmlBytes#parse()}, {@link XmlBytes#text()} and {@link XmlBytes#hex()}
+ *  methods into one method.
+ */
 public final class XmlBytes {
 
+    /**
+     * Data type.
+     */
     private final DataType type;
 
+    /**
+     * Bytes.
+     */
     private final XmlNode bytes;
 
-    public XmlBytes(final String base, final XmlNode bytes) {
+    /**
+     * Constructor.
+     * @param base Base.
+     * @param bytes Bytes.
+     */
+    XmlBytes(final String base, final XmlNode bytes) {
         this.type = DataType.find(base);
         this.bytes = bytes;
     }
 
+    /**
+     * Bytes text.
+     * @return Bytes as string.
+     */
     public String text() {
         return this.bytes.text();
     }
 
+    /**
+     * Parse bytes.
+     * @return Parsed object.
+     */
     public Object parse() {
         return this.type.decode(this.bytes.text());
     }
 
+    /**
+     * Convert to hex.
+     * @return Hex string.
+     */
     public HexString hex() {
         return new HexString(this.bytes.text());
     }

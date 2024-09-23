@@ -66,9 +66,6 @@ public class XmlAnnotation {
      */
     private String descriptor() {
         return new XmlValue(this.child(0)).bytes().hex().decode();
-//        return new HexString(
-//            this.node.children().collect(Collectors.toList()).get(0).text()
-//        ).decode();
     }
 
     /**
@@ -78,9 +75,6 @@ public class XmlAnnotation {
      */
     private boolean visible() {
         return new XmlValue(this.child(1)).bytes().hex().decodeAsBoolean();
-//        return new HexString(
-//            this.node.children().collect(Collectors.toList()).get(1).text()
-//        ).decodeAsBoolean();
     }
 
     private XmlNode child(final int index) {

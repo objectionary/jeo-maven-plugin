@@ -31,21 +31,34 @@ import org.objectweb.asm.Opcodes;
 /**
  * Test case for {@link XmlInstruction}.
  * @since 0.1
+ * @todo #715:60min Simplify Xml Transformation Tests
+ *  Currently we compare XMLs with their String representations.
+ *  It leads to significant efforts to update this XML when the structure changes.
+ *  We should use domain classes from {@link org.eolang.jeo.representation.bytecode} package.
+ *  We should refactor all "Xml..." tests to use these classes.
  */
 final class XmlInstructionTest {
 
     /**
      * Default instruction which we use for testing.
-     * This XML is compare with all other XMLs.
+     * This XML is compared with all other XMLs.
      */
     private static final XmlInstruction INSTRUCTION =
         new XmlInstruction(
             new StringBuilder()
                 .append("<o base='org.eolang.jeo.opcode' line='999' name='INVOKESPECIAL'>")
-                .append("<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 B7</o></o>")
-                .append("<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 01</o></o>")
-                .append("<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 02</o></o>")
-                .append("<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 03</o></o>")
+                .append(
+                    "<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 B7</o></o>"
+                )
+                .append(
+                    "<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 01</o></o>"
+                )
+                .append(
+                    "<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 02</o></o>"
+                )
+                .append(
+                    "<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 03</o></o>"
+                )
                 .append("</o>")
                 .toString()
         );

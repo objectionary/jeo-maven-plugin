@@ -23,14 +23,29 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+/**
+ * XML value.
+ * @since 0.6
+ */
 public final class XmlValue {
 
+    /**
+     * XML node.
+     */
     private final XmlNode node;
 
+    /**
+     * Constructor.
+     * @param node XML node.
+     */
     public XmlValue(final XmlNode node) {
         this.node = node;
     }
 
+    /**
+     * Convert to bytes.
+     * @return Bytes.
+     */
     public XmlBytes bytes() {
         return new XmlBytes(
             this.node.attribute("base")

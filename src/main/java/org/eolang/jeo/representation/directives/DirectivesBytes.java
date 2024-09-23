@@ -27,6 +27,10 @@ import java.util.Iterator;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
+/**
+ * Directives for bytes.
+ * @since 0.6
+ */
 public final class DirectivesBytes implements Iterable<Directive> {
     /**
      * Hex representation of bytes.
@@ -39,7 +43,7 @@ public final class DirectivesBytes implements Iterable<Directive> {
      * Constructor.
      * @param hex Hex representation of bytes.
      */
-    public DirectivesBytes(final String hex) {
+    DirectivesBytes(final String hex) {
         this.hex = hex;
     }
 

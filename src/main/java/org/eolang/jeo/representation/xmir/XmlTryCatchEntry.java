@@ -106,9 +106,6 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
             .map(XmlValue::bytes)
             .map(XmlBytes::hex)
             .map(HexString::decode)
-//            .map(XmlNode::text)
-//            .map(HexString::new)
-//            .map(HexString::decode)
             .filter(s -> !s.isEmpty())
             .orElse(null);
     }
@@ -124,8 +121,6 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
             .map(XmlValue::new)
             .map(XmlValue::bytes)
             .map(XmlBytes::hex)
-//            .map(XmlNode::text)
-//            .map(HexString::new)
             .map(HexString::decode);
     }
 }

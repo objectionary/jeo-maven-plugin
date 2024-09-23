@@ -28,7 +28,6 @@ import java.util.Objects;
 import java.util.Random;
 import lombok.ToString;
 import org.eolang.jeo.representation.DataType;
-import org.eolang.jeo.representation.xmir.XmlBytes;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -84,7 +83,6 @@ public final class DirectivesTypedValue implements Iterable<Directive> {
             final DataType base = DataType.find(this.type);
             final Directives directives = new Directives().add("o")
                 .attr("base", base.fqn())
-//                .attr("data", "bytes")
                 .attr("line", new Random().nextInt(Integer.MAX_VALUE));
             final String hex = base.toHexString(this.data);
             if (!this.name.isEmpty()) {
@@ -95,7 +93,6 @@ public final class DirectivesTypedValue implements Iterable<Directive> {
             } else {
                 directives.append(new DirectivesBytes(hex));
             }
-
             return directives.up().iterator();
         } catch (final IllegalArgumentException | ClassCastException exception) {
             throw new IllegalStateException(

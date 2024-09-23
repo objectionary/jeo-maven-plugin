@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.xmir;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.DataType;
 import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
@@ -79,8 +78,7 @@ public final class XmlOperand {
                 .orElse(false)) {
                 result = null;
             } else {
-                return new XmlBytes(base, this.raw.firstChild()).parse();
-//                result = DataType.find(base).decode(this.raw.text());
+                result = new XmlBytes(base, this.raw.firstChild()).parse();
             }
         }
         return result;

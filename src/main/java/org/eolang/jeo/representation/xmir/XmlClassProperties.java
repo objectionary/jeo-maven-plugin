@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.Collection;
 import java.util.Optional;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
@@ -44,17 +43,8 @@ public final class XmlClassProperties {
      * @param xmlclass XMl representation of a class.
      */
     XmlClassProperties(final XmlNode xmlclass) {
-//        this(xmlclass.asDocument());
         this.clazz = xmlclass;
     }
-
-    /**
-     * Constructor.
-     * @param xmlclass XML representation of a class.
-     */
-//    private XmlClassProperties(final XMLDocument xmlclass) {
-//        this.clazz = xmlclass;
-//    }
 
     /**
      * Convert to bytecode properties.
@@ -86,7 +76,6 @@ public final class XmlClassProperties {
             .bytes()
             .hex()
             .decodeAsInt();
-//        return new HexString(this.clazz.xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
     }
 
     /**
@@ -94,21 +83,13 @@ public final class XmlClassProperties {
      * @return Signature.
      */
     private String signature() {
-        final Optional<XmlNode> optchild = this.clazz.optchild("name", "signature");
-        return optchild
+        return this.child("signature")
             .map(XmlValue::new)
             .map(XmlValue::bytes)
             .map(XmlBytes::hex)
             .map(HexString::decode)
             .filter(s -> !s.isEmpty())
             .orElse(null);
-//        return new XmlValue(this.child("signature")).bytes().hex().decode();
-//        return this.clazz.xpath("./o[@name='signature']/text()")
-//            .stream()
-//            .map(HexString::new)
-//            .map(HexString::decode)
-//            .findFirst()
-//            .orElse(null);
     }
 
     /**
@@ -116,19 +97,13 @@ public final class XmlClassProperties {
      * @return Supername.
      */
     private String supername() {
-        return this.clazz.optchild("name", "supername")
+        return this.child("supername")
             .map(XmlValue::new)
             .map(XmlValue::bytes)
             .map(XmlBytes::hex)
             .map(HexString::decode)
             .filter(s -> !s.isEmpty())
             .orElse("java/lang/Object");
-//        return new XmlValue(this.child("supername")).bytes().hex().decode();
-//        return this.clazz.xpath("./o[@name='supername']/text()")
-//            .stream()
-//            .map(HexString::new)
-//            .map(HexString::decode)
-//            .findFirst().orElse("java/lang/Object");
     }
 
     /**
@@ -136,29 +111,15 @@ public final class XmlClassProperties {
      * @return Interfaces.
      */
     private String[] interfaces() {
-        return this.clazz.optchild("name", "interfaces")
+        return this.child("interfaces")
             .map(
                 node -> node.children()
                     .map(XmlValue::new)
                     .map(XmlValue::bytes)
                     .map(XmlBytes::hex)
-                    .map(HexString::decode).toArray(String[]::new)
-
+                    .map(HexString::decode)
+                    .toArray(String[]::new)
             ).orElse(new String[0]);
-
-//        return
-//            .flatMap(node -> node.children())
-//            .map(XmlValue::new)
-//            .map(XmlValue::bytes)
-//            .map(XmlBytes::hex)
-//            .map(HexString::decode)
-//            .orElse(new String[0]);
-//
-//        return this.clazz.xpath("./o[@name='interfaces']/o/text()")
-//            .stream()
-//            .map(HexString::new)
-//            .map(HexString::decode)
-//            .toArray(String[]::new);
     }
 
     /**
@@ -166,22 +127,21 @@ public final class XmlClassProperties {
      * @return Bytecode version.
      */
     private int version() {
-        return this.clazz.optchild("name", "version")
+        return this.child("version")
             .map(XmlValue::new)
             .map(XmlValue::bytes)
             .map(XmlBytes::hex)
             .map(HexString::decodeAsInt)
             .orElse(new DefaultVersion().bytecode());
-//        return new XmlValue(this.child("version")).bytes().hex().decodeAsInt();
+    }
 
-        //        final List<String> version = this.clazz.xpath("./o[@name='version']/text()");
-//        final int result;
-//        if (version.isEmpty()) {
-//            result = new DefaultVersion().bytecode();
-//        } else {
-//            result = new HexString(version.get(0)).decodeAsInt();
-//        }
-//        return result;
+    /**
+     * Retrieve child node by name.
+     * @param name Name of the child node.
+     * @return Child node.
+     */
+    private Optional<XmlNode> child(final String name) {
+        return this.clazz.optchild("name", name);
     }
 
 }
