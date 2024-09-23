@@ -41,12 +41,13 @@ final class XmlAttributeTest {
     private static final String XMIR = String.join(
         "\n",
         "<o base='org.eolang.jeo.inner-class'>",
-        "  <o base='org.eolang.jeo.string' data='bytes'>6E 61 6D 65</o>",
-        "  <o base='org.eolang.jeo.string' data='bytes'>6F 75 74 65 72</o>",
-        "  <o base='org.eolang.jeo.string' data='bytes'>69 6E 6E 65 72</o>",
-        "  <o base='org.eolang.jeo.int' data='bytes'>00 00 00 00 00 00 00 00</o>",
+        "  <o base='org.eolang.jeo.string'><o base='bytes' data='bytes'>6E 61 6D 65</o></o>",
+        "  <o base='org.eolang.jeo.string'><o base='bytes' data='bytes'>6F 75 74 65 72</o></o>",
+        "  <o base='org.eolang.jeo.string'><o base='bytes' data='bytes'>69 6E 6E 65 72</o></o>",
+        "  <o base='org.eolang.jeo.int'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 00</o></o>",
         "</o>"
     );
+
 
     @Test
     void convertsToDomainInnerClass() {
