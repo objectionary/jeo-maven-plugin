@@ -42,7 +42,7 @@ final class DirectivesValuesTest {
             new Xembler(new DirectivesValues("name", "value")).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[contains(@base,'seq1') and @name='name']",
-                "./o[contains(@base,'seq1') and @name='name']/o[@data='bytes' and text()='76 61 6C 75 65']"
+                "./o[contains(@base,'seq1') and @name='name']/o/o[@data='bytes' and text()='76 61 6C 75 65']"
             )
         );
     }

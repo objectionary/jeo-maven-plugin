@@ -66,7 +66,7 @@ final class DirectivesValueTest {
                 new Transformers.Node()
             ).xml(),
             new SameXml(
-                "<o base='org.eolang.jeo.label' data='bytes'>73 6F 6D 65 2D 72 61 6E 64 6F 6D</o>"
+                "<o base='org.eolang.jeo.label'><o base='bytes' data='bytes'>73 6F 6D 65 2D 72 61 6E 64 6F 6D</o></o>"
             )
         );
     }

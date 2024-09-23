@@ -57,11 +57,11 @@ final class DirectivesAnnotationsTest {
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@base,'seq1') and @name='annotations']/o",
                 String.format(
-                    "/o[contains(@base,'seq1') and @name='annotations']/o/o[1][contains(@base,'string') and text()='%s']",
+                    "/o[contains(@base,'seq1') and @name='annotations']/o/o[1][contains(@base,'string')]/o[text()='%s']",
                     new HexData(annotation).value()
                 ),
                 String.format(
-                    "/o[contains(@base,'seq1') and @name='annotations']/o/o[2][contains(@base,'bool') and text()='%s']",
+                    "/o[contains(@base,'seq1') and @name='annotations']/o/o[2][contains(@base,'bool')]/o[text()='%s']",
                     new HexData(true).value()
                 )
             )
@@ -81,8 +81,8 @@ final class DirectivesAnnotationsTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@base,'annotation') and count(o) = 3]",
-                "/o[contains(@base,'annotation')]/o[1][text()='4C 6A 61 76 61 2F 6C 61 6E 67 2F 4F 76 65 72 72 69 64 65 3B']",
-                "/o[contains(@base,'annotation')]/o[2][text()='01']",
+                "/o[contains(@base,'annotation')]/o[1]/o[text()='4C 6A 61 76 61 2F 6C 61 6E 67 2F 4F 76 65 72 72 69 64 65 3B']",
+                "/o[contains(@base,'annotation')]/o[2]/o[text()='01']",
                 "/o[contains(@base,'annotation')]/o[contains(@base,'annotation-property')]"
             )
         );
