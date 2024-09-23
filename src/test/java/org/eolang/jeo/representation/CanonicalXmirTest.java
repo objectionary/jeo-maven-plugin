@@ -23,7 +23,19 @@
  */
 package org.eolang.jeo.representation;
 
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
+import java.util.Collections;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
+import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.directives.DirectivesProgram;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link CanonicalXmir}.
@@ -32,8 +44,24 @@ import org.junit.jupiter.api.Test;
 final class CanonicalXmirTest {
 
     @Test
-    void transformsToPlainXmir() {
-
+    void transformsToPlainXmir() throws ImpossibleModificationException {
+        final BytecodeProgram bytecode = new BytecodeProgram(
+            "org.jeo",
+            new BytecodeClass(
+                "App",
+                Collections.singleton(new BytecodeMethod("main")),
+                new BytecodeClassProperties(1)
+            )
+        );
+        final DirectivesProgram directives = bytecode.directives("");
+        final String xml = new Xembler(directives).xml();
+        final XML expected = new XMLDocument(xml);
+        final XML plain = new CanonicalXmir(expected).plain();
+        MatcherAssert.assertThat(
+            "We expect that unrolling doesn't change the original XMIR",
+            plain,
+            Matchers.equalTo(expected)
+        );
 
     }
 
