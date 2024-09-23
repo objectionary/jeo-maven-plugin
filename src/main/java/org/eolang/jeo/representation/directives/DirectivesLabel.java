@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.directives;
 import java.util.Iterator;
 import org.objectweb.asm.Label;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
  * Xml directives for label entry in byrecode.
@@ -63,6 +64,9 @@ public final class DirectivesLabel implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
+//        return new Directives().add("o")
+//
+//            .up().iterator();
         return new DirectivesValue(this.name, this.label).iterator();
     }
 }
