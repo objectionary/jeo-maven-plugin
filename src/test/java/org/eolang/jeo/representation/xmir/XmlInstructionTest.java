@@ -42,10 +42,10 @@ final class XmlInstructionTest {
         new XmlInstruction(
             new StringBuilder()
                 .append("<o base='org.eolang.jeo.opcode' line='999' name='INVOKESPECIAL'>")
-                .append("<o base='org.eolang.jeo.int' data='bytes'>00 00 00 00 00 00 00 B7</o>")
-                .append("<o base='org.eolang.jeo.int' data='bytes'>00 00 00 00 00 00 00 01</o>")
-                .append("<o base='org.eolang.jeo.int' data='bytes'>00 00 00 00 00 00 00 02</o>")
-                .append("<o base='org.eolang.jeo.int' data='bytes'>00 00 00 00 00 00 00 03</o>")
+                .append("<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 B7</o></o>")
+                .append("<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 01</o></o>")
+                .append("<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 02</o></o>")
+                .append("<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 03</o></o>")
                 .append("</o>")
                 .toString()
         );
