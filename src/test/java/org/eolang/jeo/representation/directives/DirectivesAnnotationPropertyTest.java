@@ -54,7 +54,7 @@ final class DirectivesAnnotationPropertyTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[contains(@base,'annotation-property') and count(o) = 3]",
-                "./o[contains(@base,'annotation-property')]/o[1][text()='50 4C 41 49 4E']"
+                "./o[contains(@base,'annotation-property')]/o[1]/o[text()='50 4C 41 49 4E']"
             )
         );
     }
@@ -70,7 +70,7 @@ final class DirectivesAnnotationPropertyTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[contains(@base,'annotation-property') and count(o) = 4]",
-                "./o[contains(@base,'annotation-property')]/o[1][text()='45 4E 55 4D']"
+                "./o[contains(@base,'annotation-property')]/o[1]/o[text()='45 4E 55 4D']"
             )
         );
     }
@@ -87,7 +87,7 @@ final class DirectivesAnnotationPropertyTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[contains(@base,'annotation-property')]",
-                "./o[contains(@base,'annotation-property')]/o[1][text()='41 52 52 41 59']"
+                "./o[contains(@base,'annotation-property')]/o[1]/o[text()='41 52 52 41 59']"
             )
         );
     }
@@ -105,7 +105,7 @@ final class DirectivesAnnotationPropertyTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[contains(@base,'annotation-property')]",
-                "./o[contains(@base,'annotation-property')]/o[1][text()='41 4E 4E 4F 54 41 54 49 4F 4E']"
+                "./o[contains(@base,'annotation-property')]/o[1]/o[text()='41 4E 4E 4F 54 41 54 49 4F 4E']"
             )
         );
     }
