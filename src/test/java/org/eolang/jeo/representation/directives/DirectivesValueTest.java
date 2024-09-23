@@ -40,6 +40,22 @@ import org.xembly.Xembler;
 final class DirectivesValueTest {
 
     @Test
+    void convertsInteger() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect that integer value is converted to the correct XMIR",
+            new Xembler(new DirectivesValue("access", 42)).xml(),
+            new SameXml(
+                String.join(
+                    "\n",
+                    "<o base='org.eolang.jeo.int' name='access'>",
+                    "  <o base='bytes' data='bytes'>00 00 00 00 00 00 00 2A</o>",
+                    "</o>"
+                )
+            )
+        );
+    }
+
+    @Test
     void convertsLabel() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Converts label to XML",
