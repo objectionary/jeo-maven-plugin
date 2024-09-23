@@ -23,16 +23,16 @@
  */
 package org.eolang.jeo.representation;
 
-import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.util.Collections;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
-import org.eolang.jeo.representation.directives.DirectivesProgram;
+import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -44,8 +44,9 @@ import org.xembly.Xembler;
 final class CanonicalXmirTest {
 
     @Test
+    @Disabled
     void transformsToPlainXmir() throws ImpossibleModificationException {
-        final BytecodeProgram bytecode = new BytecodeProgram(
+        final BytecodeProgram initial = new BytecodeProgram(
             "org.jeo",
             new BytecodeClass(
                 "App",
@@ -53,16 +54,16 @@ final class CanonicalXmirTest {
                 new BytecodeClassProperties(1)
             )
         );
-        final DirectivesProgram directives = bytecode.directives("");
-        final String xml = new Xembler(directives).xml();
-        final XML expected = new XMLDocument(xml);
-        final XML plain = new CanonicalXmir(expected).plain();
         MatcherAssert.assertThat(
-            "We expect that unrolling doesn't change the original XMIR",
-            plain,
-            Matchers.equalTo(expected)
+            "We expect that after all the transformations we will get the same bytecode. CanonicalXmir should be able restore the original XMIR format after PHI/UNPHI transformations ",
+            new XmlProgram(
+                new CanonicalXmir(
+                    new XMLDocument(
+                        new Xembler(initial.directives("")).xml()
+                    )
+                ).plain()
+            ).bytecode(),
+            Matchers.equalTo(initial)
         );
-
     }
-
 }

@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
-import com.yegor256.xsline.Shift;
 import com.yegor256.xsline.StClasspath;
 import com.yegor256.xsline.StEndless;
 import com.yegor256.xsline.TrClasspath;
@@ -36,15 +35,25 @@ import org.cactoos.io.InputOf;
 import org.eolang.parser.EoSyntax;
 import org.eolang.parser.xmir.Xmir;
 
-public final class CanonicalXmir {
+/**
+ * Canonical XMIR.
+ * The purpose of this class is to restore the original XMIR format after PHI/UNPHI transformations.
+ * You can read more about it
+ * <a href="https://github.com/objectionary/eo/issues/3373#issuecomment-2361337359">here</a>.
+ * @since 0.6
+ */
+final class CanonicalXmir {
 
+    /**
+     * Canonical XMIR after "phi/unphi" transformations.
+     */
     private final XML canonical;
 
     /**
      * Constructor.
      * @param canonical Significantly modified XMIR after "phi/unphi".
      */
-    public CanonicalXmir(final XML canonical) {
+    CanonicalXmir(final XML canonical) {
         this.canonical = canonical;
     }
 
@@ -52,11 +61,9 @@ public final class CanonicalXmir {
      * Convert canonical XMIR to plain XMIR.
      * @return Plain XMIR.
      */
-    public XML plain() {
+    XML plain() {
         try {
-            final String eo = this.toEo();
-            final XML parsed = CanonicalXmir.parse(eo);
-            return CanonicalXmir.unroll(parsed);
+            return CanonicalXmir.unroll(CanonicalXmir.parse(this.toEo()));
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 "Can't parse the canonical XMIR",
@@ -65,31 +72,47 @@ public final class CanonicalXmir {
         }
     }
 
+    /**
+     * Unroll all the changes made by the "phi/unphi" transformations.
+     * @param parsed Parsed XMIR.
+     * @return Unrolled XMIR.
+     */
     private static XML unroll(final XML parsed) {
-        final TrJoined<Shift> shifts = new TrJoined<>(
-            new TrClasspath<>(
-                "/org/eolang/parser/wrap-method-calls.xsl"
-            ).back(),
-            new TrDefault<>(
-                new StEndless(
-                    new StClasspath(
-                        "/org/eolang/parser/roll-bases.xsl"
+        return new Xsline(
+            new TrJoined<>(
+                new TrClasspath<>(
+                    "/org/eolang/parser/wrap-method-calls.xsl"
+                ).back(),
+                new TrDefault<>(
+                    new StEndless(
+                        new StClasspath(
+                            "/org/eolang/parser/roll-bases.xsl"
+                        )
                     )
-                )
-            ),
-            new TrClasspath<>(
-                "/org/eolang/parser/add-refs.xsl",
-                "/org/eolang/parser/vars-float-down.xsl",
-                "/org/eolang/parser/roll-data.xsl"
-            ).back()
-        );
-        return new Xsline(shifts).pass(parsed);
+                ),
+                new TrClasspath<>(
+                    "/org/eolang/parser/add-refs.xsl",
+                    "/org/eolang/parser/vars-float-down.xsl",
+                    "/org/eolang/parser/roll-data.xsl"
+                ).back()
+            )
+        ).pass(parsed);
     }
 
+    /**
+     * Convert XMIR to EO.
+     * @return EO.
+     */
     private String toEo() {
         return new Xmir.Default(this.canonical).toEO();
     }
 
+    /**
+     * Parse XMIR.
+     * @param eoprog Eo program.
+     * @return Parsed XMIR.
+     * @throws IOException If fails.
+     */
     private static XML parse(final String eoprog) throws IOException {
         return new EoSyntax("name", new InputOf(eoprog)).parsed();
     }
