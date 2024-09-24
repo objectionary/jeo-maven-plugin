@@ -112,8 +112,8 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
                 ).encoded()
             )
             .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-            .append(new DirectivesData(this.descriptor))
-            .append(new DirectivesData(this.visible));
+            .append(new DirectivesValue(this.descriptor))
+            .append(new DirectivesValue(this.visible));
         this.properties.forEach(directives::append);
         return directives.up().iterator();
     }

@@ -21,46 +21,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.directives;
+package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.DataType;
-import org.eolang.jeo.representation.xmir.AllLabels;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
-import org.xembly.ImpossibleModificationException;
-import org.xembly.Transformers;
-import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesData}.
- * @since 0.3
+ * Xml representation of EO bytes.
+ * @since 0.6
+ * @todo #715:60min Refactor {@link XmlBytes} class.
+ *  We should decide whether to keep this class or not.
+ *  If we decide to keep it, we need to consider the combination of
+ *  {@link XmlBytes#parse()}, {@link XmlBytes#text()} and {@link XmlBytes#hex()}
+ *  methods into one method.
  */
-final class DirectivesDataTest {
+public final class XmlBytes {
 
-    @Test
-    void convertsLabel() throws ImpossibleModificationException {
-        MatcherAssert.assertThat(
-            "Converts label to XML",
-            new Xembler(
-                new DirectivesData(
-                    new AllLabels().label("some-random")
-                ),
-                new Transformers.Node()
-            ).xml(),
-            new SameXml(
-                "<o base='org.eolang.jeo.label' data='bytes'>73 6F 6D 65 2D 72 61 6E 64 6F 6D</o>"
-            )
-        );
+    /**
+     * Data type.
+     */
+    private final DataType type;
+
+    /**
+     * Bytes.
+     */
+    private final XmlNode bytes;
+
+    /**
+     * Constructor.
+     * @param base Base.
+     * @param bytes Bytes.
+     */
+    XmlBytes(final String base, final XmlNode bytes) {
+        this.type = DataType.find(base);
+        this.bytes = bytes;
     }
 
-    @Test
-    void decodesLabel() {
-        MatcherAssert.assertThat(
-            "Decodes label from XML",
-            DataType.find("org.eolang.jeo.label").decode("73 6F 6D 65 2D 72 61 6E 64 6F 6D"),
-            Matchers.equalTo(new AllLabels().label("some-random"))
-        );
+    /**
+     * Bytes text.
+     * @return Bytes as string.
+     */
+    public String text() {
+        return this.bytes.text();
+    }
+
+    /**
+     * Parse bytes.
+     * @return Parsed object.
+     */
+    public Object parse() {
+        return this.type.decode(this.bytes.text());
+    }
+
+    /**
+     * Convert to hex.
+     * @return Hex string.
+     */
+    public HexString hex() {
+        return new HexString(this.bytes.text());
     }
 }

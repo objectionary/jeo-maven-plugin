@@ -23,41 +23,60 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import com.jcabi.matchers.XhtmlMatchers;
+import org.eolang.jeo.matchers.SameXml;
+import org.eolang.jeo.representation.DataType;
+import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
+import org.xembly.Transformers;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesAttribute}.
- * @since 0.6
+ * Test case for {@link DirectivesValue}.
+ * @since 0.3
  */
-final class DirectivesAttributeTest {
+final class DirectivesValueTest {
 
     @Test
-    void convertsToXmirWithoutChildren() throws ImpossibleModificationException {
+    void convertsInteger() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
-            "We expect that the attribute will be converted to Xmir as a simple object without children",
-            new Xembler(new DirectivesAttribute("some")).xml(),
-            XhtmlMatchers.hasXPaths("./o[contains(@base, 'some')]")
+            "We expect that integer value is converted to the correct XMIR",
+            new Xembler(new DirectivesValue("access", 42)).xml(),
+            new SameXml(
+                String.join(
+                    "\n",
+                    "<o base='org.eolang.jeo.int' name='access'>",
+                    "  <o base='bytes' data='bytes'>00 00 00 00 00 00 00 2A</o>",
+                    "</o>"
+                )
+            )
         );
     }
 
     @Test
-    void convertsToXmirWithChildren() throws ImpossibleModificationException {
+    void convertsLabel() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
-            "We expect that the attribute will be converted to Xmir with children",
+            "Converts label to XML",
             new Xembler(
-                new DirectivesAttribute(
-                    "children",
-                    new DirectivesValue("data")
-                )
+                new DirectivesValue(
+                    new AllLabels().label("some-random")
+                ),
+                new Transformers.Node()
             ).xml(),
-            XhtmlMatchers.hasXPaths(
-                "./o[contains(@base, 'children')]",
-                "./o[contains(@base, 'children')]/o[contains(@base, 'string')]"
+            new SameXml(
+                "<o base='org.eolang.jeo.label'><o base='bytes' data='bytes'>73 6F 6D 65 2D 72 61 6E 64 6F 6D</o></o>"
             )
+        );
+    }
+
+    @Test
+    void decodesLabel() {
+        MatcherAssert.assertThat(
+            "Decodes label from XML",
+            DataType.find("org.eolang.jeo.label").decode("73 6F 6D 65 2D 72 61 6E 64 6F 6D"),
+            Matchers.equalTo(new AllLabels().label("some-random"))
         );
     }
 }

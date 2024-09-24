@@ -55,7 +55,7 @@ public final class DirectivesOperand implements Iterable<Directive> {
         } else if (this.raw instanceof Handle) {
             result = new DirectivesHandle((Handle) this.raw).iterator();
         } else {
-            result = new DirectivesData(this.raw).iterator();
+            result = new DirectivesValue(this.raw).iterator();
         }
         return result;
     }

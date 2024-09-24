@@ -78,7 +78,7 @@ public final class DirectivesValues implements Iterable<Directive> {
             this.nonEmptyName(),
             Arrays.stream(this.values)
                 .filter(Objects::nonNull)
-                .map(DirectivesData::new)
+                .map(DirectivesValue::new)
                 .collect(Collectors.toList())
         ).iterator();
     }

@@ -24,53 +24,36 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import java.util.Random;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
 /**
- * Max stack and locals.
- * @since 0.3
+ * Directives for bytes.
+ * @since 0.6
  */
-public final class DirectivesMaxs implements Iterable<Directive> {
-
+public final class DirectivesBytes implements Iterable<Directive> {
     /**
-     * Max stack size.
+     * Hex representation of bytes.
+     * For example,
+     * "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F"
      */
-    private final int stack;
-
-    /**
-     * Max locals size.
-     */
-    private final int locals;
+    private final String hex;
 
     /**
      * Constructor.
+     * @param hex Hex representation of bytes.
      */
-    public DirectivesMaxs() {
-        this(0, 0);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param stack Max stack size.
-     * @param locals Max locals size.
-     */
-    public DirectivesMaxs(final int stack, final int locals) {
-        this.stack = stack;
-        this.locals = locals;
+    DirectivesBytes(final String hex) {
+        this.hex = hex;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives().add("o")
-            .attr("name", "maxs")
-            .attr("abstract", "")
-            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-            .append(new DirectivesValue("stack", this.stack))
-            .append(new DirectivesValue("locals", this.locals))
-            .up()
-            .iterator();
+        return new Directives()
+            .add("o")
+            .attr("base", "bytes")
+            .attr("data", "bytes")
+            .set(this.hex)
+            .up().iterator();
     }
 }

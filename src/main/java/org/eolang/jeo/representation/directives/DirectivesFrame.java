@@ -94,10 +94,10 @@ public final class DirectivesFrame implements Iterable<Directive> {
         return new Directives()
             .add("o")
             .attr("base", new JeoFqn("frame").fqn())
-            .append(new DirectivesData(this.type))
-            .append(new DirectivesData(this.nlocal))
+            .append(new DirectivesValue(this.type))
+            .append(new DirectivesValue(this.nlocal))
             .append(new DirectivesValues(this.locals))
-            .append(new DirectivesData(this.nstack))
+            .append(new DirectivesValue(this.nstack))
             .append(new DirectivesValues(this.stack))
             .up()
             .iterator();

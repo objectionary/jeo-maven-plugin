@@ -96,7 +96,7 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
             directives.append(nop);
         }
         if (Objects.nonNull(this.type)) {
-            directives.append(new DirectivesData(this.type));
+            directives.append(new DirectivesValue(this.type));
         } else {
             directives.append(nop);
         }

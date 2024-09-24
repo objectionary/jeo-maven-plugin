@@ -42,7 +42,7 @@ import org.xembly.Directives;
  *  https://github.com/objectionary/eo/issues/3189
  */
 @ToString
-public final class DirectivesData implements Iterable<Directive> {
+public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Data.
@@ -59,7 +59,7 @@ public final class DirectivesData implements Iterable<Directive> {
      * @param data Data.
      * @param <T> Data type.
      */
-    public <T> DirectivesData(final T data) {
+    public <T> DirectivesValue(final T data) {
         this("", data);
     }
 
@@ -69,7 +69,7 @@ public final class DirectivesData implements Iterable<Directive> {
      * @param data Data.
      * @param <T> Data type.
      */
-    public <T> DirectivesData(final String name, final T data) {
+    public <T> DirectivesValue(final String name, final T data) {
         this(new HexData(data), name);
     }
 
@@ -78,7 +78,7 @@ public final class DirectivesData implements Iterable<Directive> {
      * @param data Data.
      * @param name Name.
      */
-    public DirectivesData(final HexData data, final String name) {
+    public DirectivesValue(final HexData data, final String name) {
         this.data = data;
         this.name = name;
     }
@@ -88,12 +88,11 @@ public final class DirectivesData implements Iterable<Directive> {
         try {
             final Directives directives = new Directives().add("o")
                 .attr("base", new JeoFqn(this.data.type()).fqn())
-                .attr("data", "bytes")
                 .attr("line", new Random().nextInt(Integer.MAX_VALUE));
             if (!this.name.isEmpty()) {
                 directives.attr("name", this.name);
             }
-            return directives.set(this.data.value()).up().iterator();
+            return directives.append(new DirectivesBytes(this.data.value())).up().iterator();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalStateException(
                 String.format("Failed to create directives for %s", this), exception

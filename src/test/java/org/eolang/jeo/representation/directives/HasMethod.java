@@ -305,7 +305,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 Stream.of(
                     instruction.concat("/@base"),
                     String.format(
-                        "%s/o[contains(@base,'int') and @data='bytes' and text()='%s']/@base",
+                        "%s/o[contains(@base,'int')]/o[@data='bytes' and text()='%s']/@base",
                         instruction,
                         new HexData(this.opcode).value()
                     )
@@ -327,13 +327,13 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                         final HexData hex = new HexData(arg);
                         if (arg instanceof Label) {
                             result = String.format(
-                                "%s/o[contains(@base,'%s') and @data='bytes']/@data",
+                                "%s/o[contains(@base,'%s')]/o[@data='bytes']/@data",
                                 instruction,
                                 hex.type()
                             );
                         } else {
                             result = String.format(
-                                "%s/o[contains(@base,'%s') and @data='bytes' and text()='%s']/@data",
+                                "%s/o[contains(@base,'%s')]/o[@data='bytes' and text()='%s']/@data",
                                 instruction,
                                 hex.type(),
                                 hex.value()
@@ -385,7 +385,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                     "%s/o[4][contains(@base,'string')]/@base", HasTryCatch.path(root)
                 ),
                 String.format(
-                    "%s/o[4][contains(@base,'string') and text()='%s']/@data",
+                    "%s/o[4][contains(@base,'string')]/o[text()='%s']/@data",
                     HasTryCatch.path(root),
                     new HexData(this.type).value()
                 )
@@ -422,7 +422,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         static Stream<String> checks(final String root) {
             return Stream.of(
                 String.format(
-                    "%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'label') and @data='bytes']/@data",
+                    "%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'label')]/o[@data='bytes']/@data",
                     root
                 )
             );

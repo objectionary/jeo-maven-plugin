@@ -42,13 +42,13 @@ final class DirectivesSeqTest {
             "We expect to get a numbered sequence with two elements",
             new Xembler(
                 new DirectivesSeq(
-                    new DirectivesData("1"), new DirectivesData("2")
+                    new DirectivesValue("1"), new DirectivesValue("2")
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@base,'seq2') and @name='@']",
-                "/o[contains(@base,'seq2') and @name='@']/o[contains(@base,'string') and @data='bytes' and text()='31']",
-                "/o[contains(@base,'seq2') and @name='@']/o[contains(@base,'string') and @data='bytes' and text()='32']"
+                "/o[contains(@base,'seq2') and @name='@']/o[contains(@base,'string')]/o[@data='bytes' and text()='31']",
+                "/o[contains(@base,'seq2') and @name='@']/o[contains(@base,'string')]/o[@data='bytes' and text()='32']"
             )
         );
     }

@@ -124,14 +124,14 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
             }
             result = new DirectivesAnnotationProperty(
                 Type.PLAIN,
-                new DirectivesData(Optional.ofNullable(name).orElse("")),
+                new DirectivesValue(Optional.ofNullable(name).orElse("")),
                 res
             );
         } else {
             result = new DirectivesAnnotationProperty(
                 Type.PLAIN,
-                new DirectivesData(Optional.ofNullable(name).orElse("")),
-                new DirectivesData(value)
+                new DirectivesValue(Optional.ofNullable(name).orElse("")),
+                new DirectivesValue(value)
             );
         }
         return result;
@@ -150,9 +150,9 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
     ) {
         return new DirectivesAnnotationProperty(
             Type.ENUM,
-            new DirectivesData(Optional.ofNullable(name).orElse("")),
-            new DirectivesData(descriptor),
-            new DirectivesData(value)
+            new DirectivesValue(Optional.ofNullable(name).orElse("")),
+            new DirectivesValue(descriptor),
+            new DirectivesValue(value)
         );
     }
 
@@ -168,7 +168,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
     ) {
         return new DirectivesAnnotationProperty(
             Type.ARRAY,
-            new DirectivesData(Optional.ofNullable(name).orElse("")),
+            new DirectivesValue(Optional.ofNullable(name).orElse("")),
             child
         );
     }
@@ -189,7 +189,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
                 .map(Directives::new)
                 .reduce(
                     new Directives()
-                        .append(new DirectivesData(Optional.ofNullable(name).orElse(""))),
+                        .append(new DirectivesValue(Optional.ofNullable(name).orElse(""))),
                     Directives::append
                 )
         );
@@ -208,8 +208,8 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
     ) {
         return new DirectivesAnnotationProperty(
             Type.ANNOTATION,
-            new DirectivesData(Optional.ofNullable(name).orElse("")),
-            new DirectivesData(descriptor),
+            new DirectivesValue(Optional.ofNullable(name).orElse("")),
+            new DirectivesValue(descriptor),
             child
         );
     }
@@ -227,9 +227,13 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
     ) {
         return new DirectivesAnnotationProperty(
             Type.ANNOTATION,
-            new DirectivesData(Optional.ofNullable(name).orElse("")),
-            properties.stream().map(Directives::new)
-                .reduce(new Directives().append(new DirectivesData(descriptor)), Directives::append)
+            new DirectivesValue(Optional.ofNullable(name).orElse("")),
+            properties.stream()
+                .map(Directives::new)
+                .reduce(
+                    new Directives().append(new DirectivesValue(descriptor)),
+                    Directives::append
+                )
         );
     }
 
@@ -237,7 +241,7 @@ public final class DirectivesAnnotationProperty implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives()
             .add("o").attr("base", new JeoFqn("annotation-property").fqn())
-            .append(new DirectivesData(this.type.toString()));
+            .append(new DirectivesValue(this.type.toString()));
         this.params.forEach(directives::append);
         return directives.up().iterator();
     }

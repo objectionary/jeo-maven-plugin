@@ -23,8 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XMLDocument;
-import java.util.List;
+import java.util.Optional;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 
@@ -37,21 +36,13 @@ public final class XmlClassProperties {
     /**
      * XML representation of a class.
      */
-    private final XMLDocument clazz;
+    private final XmlNode clazz;
 
     /**
      * Constructor.
      * @param xmlclass XMl representation of a class.
      */
     XmlClassProperties(final XmlNode xmlclass) {
-        this(xmlclass.asDocument());
-    }
-
-    /**
-     * Constructor.
-     * @param xmlclass XML representation of a class.
-     */
-    private XmlClassProperties(final XMLDocument xmlclass) {
         this.clazz = xmlclass;
     }
 
@@ -81,7 +72,10 @@ public final class XmlClassProperties {
      * @return Access modifiers.
      */
     private int access() {
-        return new HexString(this.clazz.xpath("./o[@name='access']/text()").get(0)).decodeAsInt();
+        return new XmlValue(this.clazz.child("name", "access"))
+            .bytes()
+            .hex()
+            .decodeAsInt();
     }
 
     /**
@@ -89,11 +83,12 @@ public final class XmlClassProperties {
      * @return Signature.
      */
     private String signature() {
-        return this.clazz.xpath("./o[@name='signature']/text()")
-            .stream()
-            .map(HexString::new)
+        return this.child("signature")
+            .map(XmlValue::new)
+            .map(XmlValue::bytes)
+            .map(XmlBytes::hex)
             .map(HexString::decode)
-            .findFirst()
+            .filter(s -> !s.isEmpty())
             .orElse(null);
     }
 
@@ -102,11 +97,13 @@ public final class XmlClassProperties {
      * @return Supername.
      */
     private String supername() {
-        return this.clazz.xpath("./o[@name='supername']/text()")
-            .stream()
-            .map(HexString::new)
+        return this.child("supername")
+            .map(XmlValue::new)
+            .map(XmlValue::bytes)
+            .map(XmlBytes::hex)
             .map(HexString::decode)
-            .findFirst().orElse("java/lang/Object");
+            .filter(s -> !s.isEmpty())
+            .orElse("java/lang/Object");
     }
 
     /**
@@ -114,10 +111,15 @@ public final class XmlClassProperties {
      * @return Interfaces.
      */
     private String[] interfaces() {
-        return this.clazz.xpath("./o[@name='interfaces']/o/text()")
-            .stream()
-            .map(HexString::new)
-            .map(HexString::decode).toArray(String[]::new);
+        return this.child("interfaces")
+            .map(
+                node -> node.children()
+                    .map(XmlValue::new)
+                    .map(XmlValue::bytes)
+                    .map(XmlBytes::hex)
+                    .map(HexString::decode)
+                    .toArray(String[]::new)
+            ).orElse(new String[0]);
     }
 
     /**
@@ -125,14 +127,22 @@ public final class XmlClassProperties {
      * @return Bytecode version.
      */
     private int version() {
-        final List<String> version = this.clazz.xpath("./o[@name='version']/text()");
-        final int result;
-        if (version.isEmpty()) {
-            result = new DefaultVersion().bytecode();
-        } else {
-            result = new HexString(version.get(0)).decodeAsInt();
-        }
-        return result;
+        return this.child("version")
+            .map(XmlValue::new)
+            .map(XmlValue::bytes)
+            .map(XmlBytes::hex)
+            .map(HexString::decodeAsInt)
+            .orElse(new DefaultVersion().bytecode());
     }
+
+    /**
+     * Retrieve child node by name.
+     * @param name Name of the child node.
+     * @return Child node.
+     */
+    private Optional<XmlNode> child(final String name) {
+        return this.clazz.optchild("name", name);
+    }
+
 }
 

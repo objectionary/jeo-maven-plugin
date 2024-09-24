@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.ToString;
@@ -130,10 +131,8 @@ public class XmlField {
      * @return Text.
      */
     private Optional<HexString> find(final Attribute attribute) {
-        final String text = this.node.children()
-            .map(XmlNode::text)
-            .collect(Collectors.toList())
-            .get(attribute.ordinal());
+        final List<XmlNode> all = this.node.children().collect(Collectors.toList());
+        final String text = new XmlValue(all.get(attribute.ordinal())).bytes().text();
         final Optional<HexString> result;
         if (text.isEmpty()) {
             result = Optional.empty();
