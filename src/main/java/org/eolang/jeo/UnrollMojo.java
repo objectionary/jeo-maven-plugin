@@ -24,7 +24,6 @@
 package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
-import com.jcabi.xml.XMLDocument;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
