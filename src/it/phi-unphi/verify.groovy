@@ -37,12 +37,10 @@ private String assertionMessage(String message) {
 
 private void generateGitHubIssue() {
     new File(basedir, 'build.log').text
-
     copy('target/generated-sources/jeo-disassemble/org/eolang/hone/App.xmir', 'App.xmir.disassemble.txt')
     copy('target/generated-sources/eo-phi/org/eolang/hone/App.phi', 'App.phi.txt')
     copy('target/generated-sources/eo-unphi/org/eolang/hone/App.xmir', 'App.xmir.unphi.txt')
-
-
+    copy('target/generated-sources/jeo-unroll/org/eolang/hone/App.xmir', 'App.xmir.unroll.txt')
     def issue = new File(basedir, "issue.md")
     issue.text = '''I run the following [integration test](https://github.com/objectionary/jeo-maven-plugin/tree/master/src/it/phi-unphi):
  
