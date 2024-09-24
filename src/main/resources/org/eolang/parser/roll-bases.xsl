@@ -59,7 +59,7 @@ SOFTWARE.
           </xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
-      <xsl:for-each select="o[position()>1]">
+      <xsl:for-each select="o[position()&gt;1]">
         <xsl:copy-of select="."/>
       </xsl:for-each>
     </xsl:element>
