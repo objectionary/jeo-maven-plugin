@@ -25,6 +25,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import com.yegor256.xsline.Shift;
 import com.yegor256.xsline.StClasspath;
 import com.yegor256.xsline.StEndless;
 import com.yegor256.xsline.TrClasspath;
@@ -126,7 +127,7 @@ public final class CanonicalXmir {
      */
     private static XML unroll(final XML parsed) {
         return new Xsline(
-            new TrJoined<>(
+            new TrJoined<Shift>(
                 new TrClasspath<>(
                     "/org/eolang/parser/wrap-method-calls.xsl"
                 ).back(),
