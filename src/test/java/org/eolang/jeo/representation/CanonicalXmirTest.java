@@ -24,8 +24,6 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XMLDocument;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;

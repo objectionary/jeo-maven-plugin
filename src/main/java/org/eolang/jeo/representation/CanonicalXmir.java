@@ -42,7 +42,7 @@ import org.eolang.parser.xmir.Xmir;
  * <a href="https://github.com/objectionary/eo/issues/3373#issuecomment-2361337359">here</a>.
  * @since 0.6
  */
-final class CanonicalXmir {
+public final class CanonicalXmir {
 
     /**
      * Canonical XMIR after "phi/unphi" transformations.
@@ -53,7 +53,7 @@ final class CanonicalXmir {
      * Constructor.
      * @param canonical Significantly modified XMIR after "phi/unphi".
      */
-    CanonicalXmir(final XML canonical) {
+    public CanonicalXmir(final XML canonical) {
         this.canonical = canonical;
     }
 
@@ -61,7 +61,7 @@ final class CanonicalXmir {
      * Convert canonical XMIR to plain XMIR.
      * @return Plain XMIR.
      */
-    XML plain() {
+    public XML plain() {
         try {
             return CanonicalXmir.unroll(CanonicalXmir.parse(this.toEo()));
         } catch (final IOException exception) {
