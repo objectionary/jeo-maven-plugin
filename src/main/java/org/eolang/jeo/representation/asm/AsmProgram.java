@@ -166,7 +166,7 @@ public final class AsmProgram {
      * @param node Asm field node.
      * @return Domain field.
      */
-    private static Collection<BytecodeField> fields(final ClassNode node) {
+    private static List<BytecodeField> fields(final ClassNode node) {
         return node.fields.stream().map(AsmProgram::field).collect(Collectors.toList());
     }
 
@@ -191,7 +191,7 @@ public final class AsmProgram {
      * @param node Asm class node.
      * @return Domain methods.
      */
-    private static Collection<BytecodeMethod> methods(final ClassNode node) {
+    private static List<BytecodeMethod> methods(final ClassNode node) {
         return node.methods.stream().map(AsmProgram::method).collect(Collectors.toList());
     }
 
@@ -301,7 +301,7 @@ public final class AsmProgram {
      * @param node Asm class node.
      * @return Domain attributes.
      */
-    private static Collection<BytecodeAttribute> innerClasses(final ClassNode node) {
+    private static List<BytecodeAttribute> innerClasses(final ClassNode node) {
         return node.innerClasses.stream()
             .map(AsmProgram::innerClass)
             .collect(Collectors.toList());

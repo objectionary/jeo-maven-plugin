@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -52,12 +53,12 @@ public final class BytecodeClass implements Testable {
     /**
      * Methods.
      */
-    private final Collection<BytecodeMethod> methods;
+    private final List<BytecodeMethod> methods;
 
     /**
      * Fields.
      */
-    private final Collection<BytecodeField> fields;
+    private final List<BytecodeField> fields;
 
     /**
      * Annotations.
@@ -67,7 +68,7 @@ public final class BytecodeClass implements Testable {
     /**
      * Attributes.
      */
-    private final Collection<BytecodeAttribute> attributes;
+    private final List<BytecodeAttribute> attributes;
 
     /**
      * Class properties (access, signature, supername, interfaces).
@@ -124,7 +125,7 @@ public final class BytecodeClass implements Testable {
      */
     public BytecodeClass(
         final String name,
-        final Collection<BytecodeMethod> methods,
+        final List<BytecodeMethod> methods,
         final BytecodeClassProperties properties
     ) {
         this(
@@ -149,10 +150,10 @@ public final class BytecodeClass implements Testable {
      */
     public BytecodeClass(
         final String name,
-        final Collection<BytecodeMethod> methods,
-        final Collection<BytecodeField> fields,
+        final List<BytecodeMethod> methods,
+        final List<BytecodeField> fields,
         final BytecodeAnnotations annotations,
-        final Collection<BytecodeAttribute> attributes,
+        final List<BytecodeAttribute> attributes,
         final BytecodeClassProperties props
     ) {
         this.name = name;

@@ -24,6 +24,8 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XMLDocument;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
@@ -49,7 +51,7 @@ final class CanonicalXmirTest {
             "org.jeo",
             new BytecodeClass(
                 "App",
-                Collections.singleton(new BytecodeMethod("main")),
+                Collections.singletonList(new BytecodeMethod("main")),
                 new BytecodeClassProperties(1)
             )
         );
