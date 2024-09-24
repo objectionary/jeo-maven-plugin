@@ -27,8 +27,8 @@ SOFTWARE.
   This XSL rolls up data objects into the single one:
 
   <o base="org.eolang.int">
-    <o base="org.eolang.bytes">                 <o base="org.eolang.int" data="bytes">
-      <o base="bytes" data="bytes">0X-2A</o> =>   0X-2A
+    <o base="org.eolang.bytes">                 <o base="org.eolang.int">
+      <o base="bytes" data="bytes">0X-2A</o> =>   <o base="org.eolang.bytes" data="bytes">0X-2A</o>
     </o>                                        </o>
   </o>
   -->
@@ -40,8 +40,11 @@ SOFTWARE.
           <xsl:value-of select="."/>
         </xsl:attribute>
       </xsl:for-each>
-      <xsl:attribute name="data" select="'bytes'"/>
-      <xsl:value-of select="o[1]/o[1]/text()"/>
+      <xsl:element name="o">
+        <xsl:attribute name="base" select="'bytes'"/>
+        <xsl:attribute name="data" select="'bytes'"/>
+        <xsl:value-of select="o[1]/o[1]/text()"/>
+      </xsl:element>
     </xsl:element>
   </xsl:template>
   <xsl:template match="node()|@*">
