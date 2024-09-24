@@ -44,7 +44,6 @@ import org.xembly.Xembler;
 final class CanonicalXmirTest {
 
     @Test
-    @Disabled
     void transformsToPlainXmir() throws ImpossibleModificationException {
         final BytecodeProgram initial = new BytecodeProgram(
             "org.jeo",

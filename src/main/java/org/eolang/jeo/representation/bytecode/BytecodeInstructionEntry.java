@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.OpcodeName;
@@ -43,6 +44,7 @@ import org.xembly.Directive;
  * @since 0.1.0
  */
 @ToString
+@EqualsAndHashCode
 @SuppressWarnings("PMD.ExcessiveClassLength")
 public final class BytecodeInstructionEntry implements BytecodeEntry {
 

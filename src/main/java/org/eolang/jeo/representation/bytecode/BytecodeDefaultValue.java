@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesDefaultValue;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -33,6 +35,8 @@ import org.xembly.Directive;
  *
  * @since 0.3
  */
+@ToString
+@EqualsAndHashCode
 public final class BytecodeDefaultValue {
 
     /**

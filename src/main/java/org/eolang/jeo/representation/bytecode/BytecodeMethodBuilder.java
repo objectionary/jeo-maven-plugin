@@ -23,12 +23,16 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.objectweb.asm.Label;
 
 /**
  * Bytecode method builder.
  * @since 0.6
  */
+@ToString
+@EqualsAndHashCode
 public final class BytecodeMethodBuilder {
 
     /**

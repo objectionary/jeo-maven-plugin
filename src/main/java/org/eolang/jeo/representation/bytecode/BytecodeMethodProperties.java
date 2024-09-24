@@ -36,8 +36,8 @@ import org.objectweb.asm.Opcodes;
  * Bytecode method properties.
  * @since 0.1
  */
-@EqualsAndHashCode
 @ToString
+@EqualsAndHashCode
 public final class BytecodeMethodProperties implements Testable {
 
     /**
@@ -224,3 +224,4 @@ public final class BytecodeMethodProperties implements Testable {
         return visitor;
     }
 }
+

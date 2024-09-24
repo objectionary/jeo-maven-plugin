@@ -23,12 +23,16 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.objectweb.asm.Handle;
 
 /**
  * Bytecode handler.
  * @since 0.6
  */
+@ToString
+@EqualsAndHashCode
 public final class BytecodeHandler {
 
     /**
