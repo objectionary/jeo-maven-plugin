@@ -24,13 +24,16 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import com.yegor256.xsline.StClasspath;
 import com.yegor256.xsline.StEndless;
 import com.yegor256.xsline.TrClasspath;
 import com.yegor256.xsline.TrDefault;
 import com.yegor256.xsline.TrJoined;
 import com.yegor256.xsline.Xsline;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import org.cactoos.io.InputOf;
 import org.eolang.parser.EoSyntax;
 import org.eolang.parser.xmir.Xmir;
@@ -45,6 +48,11 @@ import org.eolang.parser.xmir.Xmir;
 public final class CanonicalXmir {
 
     /**
+     * Name of the XMIR.
+     */
+    private final String name;
+
+    /**
      * Canonical XMIR after "phi/unphi" transformations.
      */
     private final XML canonical;
@@ -54,6 +62,27 @@ public final class CanonicalXmir {
      * @param canonical Significantly modified XMIR after "phi/unphi".
      */
     public CanonicalXmir(final XML canonical) {
+        this("unknown", canonical);
+    }
+
+    /**
+     * Constructor.
+     * @param canonical Path to the xmir Significantly modified XMIR after "phi/unphi".
+     */
+    public CanonicalXmir(final Path canonical) throws FileNotFoundException {
+        this(
+            CanonicalXmir.nameWithoutExtension(canonical),
+            new XMLDocument(canonical)
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param name Name of the XMIR.
+     * @param canonical Significantly modified XMIR after "phi/unphi".
+     */
+    public CanonicalXmir(final String name, final XML canonical) {
+        this.name = name;
         this.canonical = canonical;
     }
 
@@ -63,13 +92,31 @@ public final class CanonicalXmir {
      */
     public XML plain() {
         try {
-            return CanonicalXmir.unroll(CanonicalXmir.parse(this.toEo()));
+            return CanonicalXmir.unroll(this.parse(this.toEo()));
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 "Can't parse the canonical XMIR",
                 exception
             );
         }
+    }
+
+    /**
+     * Convert XMIR to EO.
+     * @return EO.
+     */
+    private String toEo() {
+        return new Xmir.Default(this.canonical).toEO();
+    }
+
+    /**
+     * Parse XMIR.
+     * @param eoprog Eo program.
+     * @return Parsed XMIR.
+     * @throws IOException If fails.
+     */
+    private XML parse(final String eoprog) throws IOException {
+        return new EoSyntax(this.name, new InputOf(eoprog)).parsed();
     }
 
     /**
@@ -100,21 +147,18 @@ public final class CanonicalXmir {
     }
 
     /**
-     * Convert XMIR to EO.
-     * @return EO.
+     * Get name without an extension.
+     * @param path Path.
+     * @return Name without an extension.
      */
-    private String toEo() {
-        return new Xmir.Default(this.canonical).toEO();
+    private static String nameWithoutExtension(final Path path) {
+        final String result;
+        final String name = path.getFileName().toString();
+        if (name.lastIndexOf('.') == -1) {
+            result = name;
+        } else {
+            result = name.substring(0, path.getFileName().toString().lastIndexOf('.'));
+        }
+        return result;
     }
-
-    /**
-     * Parse XMIR.
-     * @param eoprog Eo program.
-     * @return Parsed XMIR.
-     * @throws IOException If fails.
-     */
-    private static XML parse(final String eoprog) throws IOException {
-        return new EoSyntax("name", new InputOf(eoprog)).parsed();
-    }
-
 }

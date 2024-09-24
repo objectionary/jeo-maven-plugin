@@ -99,7 +99,7 @@ public final class UnrollMojo extends AbstractMojo {
             Files.createDirectories(output.getParent());
             Files.write(
                 output,
-                new CanonicalXmir(new XMLDocument(path))
+                new CanonicalXmir(path)
                     .plain()
                     .toString()
                     .getBytes(StandardCharsets.UTF_8)
