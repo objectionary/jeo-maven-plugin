@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.log.Logger;
 import com.jcabi.xml.XMLDocument;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -66,7 +67,7 @@ public final class UnrollMojo extends AbstractMojo {
      */
     @Parameter(
         property = "jeo.unroll-phi.outputDir",
-        defaultValue = "${project.build.outputDirectory}/generated-sources/jeo-unrolled"
+        defaultValue = "${project.build.directory}/generated-sources/jeo-unrolled"
     )
     private File outputDir;
 
@@ -92,8 +93,12 @@ public final class UnrollMojo extends AbstractMojo {
      */
     private void unroll(final Path path) {
         try {
+            final Path output = this.outputDir.toPath()
+                .resolve(this.sourcesDir.toPath().relativize(path));
+            Logger.info(this, "Unrolling XMIR file '%s' to '%s'", path, output);
+            Files.createDirectories(output.getParent());
             Files.write(
-                this.outputDir.toPath().resolve(this.sourcesDir.toPath().relativize(path)),
+                output,
                 new CanonicalXmir(new XMLDocument(path))
                     .plain()
                     .toString()

@@ -42,6 +42,7 @@ SOFTWARE.
     <jeo.disassemble>${project.build.directory}/generated-sources/jeo-disassemble</jeo.disassemble>
     <eo.phi>${project.build.directory}/generated-sources/eo-phi</eo.phi>
     <eo.unphi>${project.build.directory}/generated-sources/eo-unphi</eo.unphi>
+    <eo.unroll>${project.build.directory}/generated-sources/jeo-unroll</eo.unroll>
   </properties>
   <build>
     <plugins>
@@ -61,8 +62,19 @@ SOFTWARE.
             </goals>
           </execution>
           <execution>
-            <id>xmir-to-bytecode</id>
+            <id>uroll-phi</id>
             <phase>prepare-package</phase>
+            <configuration>
+              <sourcesDir>${eo.unphi}</sourcesDir>
+              <outputDir>${jeo.unroll}</outputDir>
+            </configuration>
+            <goals>
+              <goal>unroll-phi</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>xmir-to-bytecode</id>
+            <phase>package</phase>
             <configuration>
               <sourcesDir>${eo.unphi}</sourcesDir>
             </configuration>
