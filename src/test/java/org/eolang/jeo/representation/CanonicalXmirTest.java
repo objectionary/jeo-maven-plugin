@@ -42,10 +42,18 @@ import org.xembly.Xembler;
 /**
  * Test case for {@link CanonicalXmir}.
  * @since 0.6
+ * @todo #705:90min Verify that PHI/UNPHI doesnt break the original bytecode.
+ *  We need to implement a test that will verify that the original bytecode is not broken after
+ *  applying PHI/UNPHI transformations.
+ *  To do so you need to enable {@link #transformsToPlainXmir()} test and add the necessary
+ *  PHI/UNPHI transformations to it.
+ *  Currently it's impossible to add these transformations because of this:
+ *  https://github.com/objectionary/eo/issues/3383
  */
 final class CanonicalXmirTest {
 
     @Test
+    @Disabled
     void transformsToPlainXmir() throws ImpossibleModificationException {
         final BytecodeProgram initial = new BytecodeProgram(
             "org.jeo",
