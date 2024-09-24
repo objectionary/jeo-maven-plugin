@@ -1,3 +1,5 @@
+import java.nio.file.Files
+
 /*
  * MIT License
  *
@@ -91,9 +93,10 @@ gh issue create \\
 }
 
 private void copy(final String source, final String destination) {
-    def sourceFile = new File(basedir, source)
-    def destinationFile = new File(basedir, destination)
-    if (sourceFile.renameTo(destinationFile)) {
+    def sourceFile = new File(basedir, source).toPath()
+    def destinationFile = new File(basedir, destination).toPath()
+    Files.copy(sourceFile, destinationFile);
+    if (Files.exists(destinationFile)) {
         println "'${source}' moved and renamed to '${destination}'!"
     } else {
         println "Failed to move the '${source}' file to '${destination}'."
