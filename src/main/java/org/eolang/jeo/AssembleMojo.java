@@ -103,18 +103,6 @@ public final class AssembleMojo extends AbstractMojo {
     )
     private boolean disabled;
 
-    /**
-     * Unrolling directory.
-     *
-     * @since 0.6
-     * @checkstyle MemberNameCheck (6 lines)
-     */
-    @Parameter(
-        property = "jeo.assemble.unrollOutputDir",
-        defaultValue = "${project.build.directory}/generated-sources/jeo-xmir-unrolled"
-    )
-    private File unrolledOutputDir;
-
     @Override
     public void execute() throws MojoExecutionException {
         try {
@@ -122,12 +110,8 @@ public final class AssembleMojo extends AbstractMojo {
             if (this.disabled) {
                 Logger.info(this, "Assemble mojo is disabled. Skipping.");
             } else {
-                new Unroller(
-                    this.sourcesDir.toPath(),
-                    this.unrolledOutputDir.toPath()
-                ).unroll();
                 new Assembler(
-                    this.unrolledOutputDir.toPath(),
+                    this.sourcesDir.toPath(),
                     this.outputDir.toPath(),
                     !this.skipVerification
                 ).assemble();
