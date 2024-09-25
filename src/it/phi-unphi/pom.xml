@@ -62,7 +62,7 @@ SOFTWARE.
             </goals>
           </execution>
           <execution>
-            <id>uroll-phi</id>
+            <id>unroll-phi</id>
             <phase>prepare-package</phase>
             <configuration>
               <sourcesDir>${eo.unphi}</sourcesDir>
