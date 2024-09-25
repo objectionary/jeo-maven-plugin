@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.UnrolledRepresentation;
 import org.eolang.jeo.representation.XmirRepresentation;
 
 /**
@@ -75,7 +74,7 @@ final class XmirRepresentations implements Representations {
         try {
             return Files.walk(path)
                 .filter(Files::isRegularFile)
-                .map(p -> new UnrolledRepresentation(p, new XmirRepresentation(p, this.verify)));
+                .map(p -> new XmirRepresentation(p, this.verify));
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't read folder '%s'", path),

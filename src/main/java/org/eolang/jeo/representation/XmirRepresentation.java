@@ -27,6 +27,7 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
@@ -141,7 +142,9 @@ public final class XmirRepresentation implements Representation {
         final XML xmir = this.xml.value();
         try {
             new Schema(xmir).check();
-            return new XmlProgram(xmir).bytecode().bytecode(this.verify);
+            return new XmlProgram(
+                new CanonicalXmir(Paths.get(this.source), xmir).plain()
+            ).bytecode().bytecode(this.verify);
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
                 String.format("Can't transform '%s' to bytecode", xmir),
