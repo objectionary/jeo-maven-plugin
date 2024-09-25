@@ -78,7 +78,11 @@ public final class XmlOperand {
                 .orElse(false)) {
                 result = null;
             } else {
-                result = new XmlBytes(base, this.raw.firstChild()).parse();
+                result = this.raw.children().findFirst()
+                    .map(ch -> new XmlBytes(base, ch))
+                    .map(XmlBytes::parse)
+                    .orElse(null);
+//                result = new XmlBytes(base, this.raw.firstChild()).parse();
             }
         }
         return result;
