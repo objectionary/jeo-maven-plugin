@@ -24,67 +24,38 @@
 package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.eolang.jeo.representation.CanonicalXmir;
 
-/**
- * This mojo unrolls all the changes made by PHI/UNPHI transformations.
- * In other words, it makes XMIR understandable by jeo-maven-plugin after PHI/UNPHI transformations.
- * @since 0.6
- */
-@Mojo(name = "unroll-phi", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
-public final class UnrollMojo extends AbstractMojo {
+public final class Unroller {
 
-    /**
-     * Source directory.
-     *
-     * @since 0.6
-     * @checkstyle MemberNameCheck (6 lines)
-     */
-    @Parameter(
-        property = "jeo.unroll-phi.sourcesDir",
-        defaultValue = "${project.build.directory}/generated-sources/jeo-xmir"
-    )
-    private File sourcesDir;
+    private final Path source;
 
-    /**
-     * Target directory.
-     *
-     * @since 0.6
-     * @checkstyle MemberNameCheck (6 lines)
-     */
-    @Parameter(
-        property = "jeo.unroll-phi.outputDir",
-        defaultValue = "${project.build.directory}/generated-sources/jeo-unrolled"
-    )
-    private File outputDir;
+    private final Path target;
 
-    @Override
-    public void execute() throws MojoFailureException {
-        new Unroller(this.sourcesDir.toPath(), this.outputDir.toPath()).unroll();
-//        try (Stream<Path> xmirs = Files.walk(this.sourcesDir.toPath())) {
-//            xmirs.filter(UnrollMojo::isXmir).forEach(this::unroll);
-//        } catch (final IOException exception) {
-//            throw new MojoFailureException(
-//                String.format(
-//                    "Failed to unroll XMIR files from '%s' directory to '%s'",
-//                    this.sourcesDir,
-//                    this.outputDir
-//                ),
-//                exception
-//            );
-//        }
+    public Unroller(final Path source, final Path target) {
+        this.source = source;
+        this.target = target;
+    }
+
+    public void unroll() {
+        try (Stream<Path> xmirs = Files.walk(this.source)) {
+            xmirs.filter(Unroller::isXmir).forEach(this::unroll);
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Failed to unroll XMIR files from '%s' directory to '%s'",
+                    this.source,
+                    this.target
+                ),
+                exception
+            );
+        }
     }
 
     /**
@@ -93,8 +64,7 @@ public final class UnrollMojo extends AbstractMojo {
      */
     private void unroll(final Path path) {
         try {
-            final Path output = this.outputDir.toPath()
-                .resolve(this.sourcesDir.toPath().relativize(path));
+            final Path output = this.target.resolve(this.source.relativize(path));
             Logger.info(this, "Unrolling XMIR file '%s' to '%s'", path, output);
             Files.createDirectories(output.getParent());
             Files.write(
