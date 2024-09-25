@@ -32,17 +32,38 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.CanonicalXmir;
 
+/**
+ * Unroller.
+ * This class unrolls all the formatting changes made by `phi/unphi` transformations.
+ * In other words, it makes XMIR understandable by jeo-maven-plugin after `phi/unphi`
+ * transformations.
+ * @since 0.6
+ */
 public final class Unroller {
 
+    /**
+     * Source directory with XMIR files that were changed by `phi/unphi` transformations.
+     */
     private final Path source;
 
+    /**
+     * Target directory where unrolled XMIR files will be saved.
+     */
     private final Path target;
 
+    /**
+     * Constructor.
+     * @param source Directory with XMIR files that were changed by `phi/unphi` transformations.
+     * @param target Target directory where unrolled XMIR files will be saved.
+     */
     public Unroller(final Path source, final Path target) {
         this.source = source;
         this.target = target;
     }
 
+    /**
+     * Unrolls all the XMIR files from the source directory to the target directory.
+     */
     public void unroll() {
         try (Stream<Path> xmirs = Files.walk(this.source)) {
             xmirs.filter(Unroller::isXmir).forEach(this::unroll);

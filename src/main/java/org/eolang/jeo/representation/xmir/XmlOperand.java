@@ -73,17 +73,10 @@ public final class XmlOperand {
             final XmlAnnotationProperty xml = new XmlAnnotationProperty(this.raw);
             result = xml.bytecode();
         } else {
-            if (this.raw.attribute("scope")
-                .map("nullable"::equals)
-                .orElse(false)) {
-                result = null;
-            } else {
-                result = this.raw.children().findFirst()
-                    .map(ch -> new XmlBytes(base, ch))
-                    .map(XmlBytes::parse)
-                    .orElse(null);
-//                result = new XmlBytes(base, this.raw.firstChild()).parse();
-            }
+            result = this.raw.children().findFirst()
+                .map(bytes -> new XmlBytes(base, bytes))
+                .map(XmlBytes::parse)
+                .orElse(null);
         }
         return result;
     }
