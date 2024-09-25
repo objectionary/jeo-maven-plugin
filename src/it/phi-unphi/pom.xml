@@ -61,22 +61,22 @@ SOFTWARE.
               <goal>disassemble</goal>
             </goals>
           </execution>
-<!--          <execution>-->
-<!--            <id>uroll-phi</id>-->
-<!--            <phase>prepare-package</phase>-->
-<!--            <configuration>-->
-<!--              <sourcesDir>${eo.unphi}</sourcesDir>-->
-<!--              <outputDir>${jeo.unroll}</outputDir>-->
-<!--            </configuration>-->
-<!--            <goals>-->
-<!--              <goal>unroll-phi</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
+          <execution>
+            <id>uroll-phi</id>
+            <phase>prepare-package</phase>
+            <configuration>
+              <sourcesDir>${eo.unphi}</sourcesDir>
+              <outputDir>${jeo.unroll}</outputDir>
+            </configuration>
+            <goals>
+              <goal>unroll-phi</goal>
+            </goals>
+          </execution>
           <execution>
             <id>xmir-to-bytecode</id>
             <phase>package</phase>
             <configuration>
-              <sourcesDir>${eo.unphi}</sourcesDir>
+              <sourcesDir>${jeo.unroll}</sourcesDir>
             </configuration>
             <goals>
               <goal>assemble</goal>
