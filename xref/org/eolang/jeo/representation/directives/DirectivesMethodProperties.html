@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * The MIT License (MIT)</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2023 Objectionary.com</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2024 Objectionary.com</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * Permission is hereby granted, free of charge, to any person obtaining a copy</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * of this software and associated documentation files (the "Software"), to deal</em>
@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">     * Constructor.</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">public</strong> <a name="DirectivesMethodProperties" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethodProperties.html#DirectivesMethodProperties">DirectivesMethodProperties</a>() {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">this</strong>(Opcodes.ACC_PUBLIC, <span class="jxr_string">"()V"</span>, <span class="jxr_string">""</span>, <span class="jxr_string">""</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">this</strong>(Opcodes.ACC_PUBLIC, <span class="jxr_string">"()V"</span>, <span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      }
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>      <em class="jxr_javadoccomment">/**</em>
@@ -99,53 +99,62 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>          <strong class="jxr_keyword">final</strong> String signature,
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>          <strong class="jxr_keyword">final</strong> String... exceptions
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>      ) {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          <strong class="jxr_keyword">this</strong>.access = access;
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">this</strong>.descriptor = Optional.ofNullable(descriptor).orElse(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>          <strong class="jxr_keyword">this</strong>.signature = Optional.ofNullable(signature).orElse(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <strong class="jxr_keyword">this</strong>.exceptions = Optional.ofNullable(exceptions).orElse(<strong class="jxr_keyword">new</strong> String[0]).clone();
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>          <strong class="jxr_keyword">this</strong>.max = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;(<strong class="jxr_keyword">new</strong> <a name="DirectivesMaxs" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMaxs.html#DirectivesMaxs">DirectivesMaxs</a>());
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>          <strong class="jxr_keyword">this</strong>.params = <strong class="jxr_keyword">new</strong> <a name="DirectivesMethodParams" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethodParams.html#DirectivesMethodParams">DirectivesMethodParams</a>(<strong class="jxr_keyword">this</strong>.descriptor);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     }
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">     * Set parameter annotation.</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">     * @param index Parameter index.</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">     * @param annotation Annotation.</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> paramAnnotation(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> index, <strong class="jxr_keyword">final</strong> <a name="DirectivesAnnotation" href="../../../../../org/eolang/jeo/representation/directives/DirectivesAnnotation.html#DirectivesAnnotation">DirectivesAnnotation</a> annotation) {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>         <strong class="jxr_keyword">this</strong>.params.annotation(index, annotation);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>     }
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">     * Set max stack and locals.</em>
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">     * @param stack Max stack size.</em>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">     * @param locals Max locals size.</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> maxs(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> stack, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> locals) {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>         <strong class="jxr_keyword">this</strong>.max.set(<strong class="jxr_keyword">new</strong> <a name="DirectivesMaxs" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMaxs.html#DirectivesMaxs">DirectivesMaxs</a>(stack, locals));
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>     }
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">     * Method descriptor.</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">     * @return Descriptor.</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>     <strong class="jxr_keyword">public</strong> String descr() {
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.descriptor;
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>     }
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>     @Override
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>     <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Directives()
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>             .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<span class="jxr_string">"access"</span>, <strong class="jxr_keyword">this</strong>.access))
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>             .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<span class="jxr_string">"descriptor"</span>, <strong class="jxr_keyword">this</strong>.descriptor))
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>             .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<span class="jxr_string">"signature"</span>, <strong class="jxr_keyword">this</strong>.signature))
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>             .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesTuple" href="../../../../../org/eolang/jeo/representation/directives/DirectivesTuple.html#DirectivesTuple">DirectivesTuple</a>(<span class="jxr_string">"exceptions"</span>, <strong class="jxr_keyword">this</strong>.exceptions))
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>             .append(<strong class="jxr_keyword">this</strong>.max.get())
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>             .append(<strong class="jxr_keyword">this</strong>.params)
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>             .iterator();
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>     }
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> }
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          <strong class="jxr_keyword">this</strong>(
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>              access,
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>              descriptor,
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>              signature,
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>              exceptions,
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>              <strong class="jxr_keyword">new</strong> <a name="DirectivesMaxs" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMaxs.html#DirectivesMaxs">DirectivesMaxs</a>(),
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>             <strong class="jxr_keyword">new</strong> <a name="DirectivesMethodParams" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethodParams.html#DirectivesMethodParams">DirectivesMethodParams</a>()
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>         );
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     }
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">     * Constructor.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">     * @param access Access modifiers.</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">     * @param descriptor Method descriptor.</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">     * @param signature Method signature.</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">     * @param exceptions Method exceptions.</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">     * @param max Max stack and locals.</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">     * @param params Method parameters.</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">     * @checkstyle ParameterNumberCheck (5 lines)</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     <strong class="jxr_keyword">public</strong> <a name="DirectivesMethodProperties" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethodProperties.html#DirectivesMethodProperties">DirectivesMethodProperties</a>(
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> access,
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>         <strong class="jxr_keyword">final</strong> String descriptor,
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>         <strong class="jxr_keyword">final</strong> String signature,
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>         <strong class="jxr_keyword">final</strong> String[] exceptions,
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>         <strong class="jxr_keyword">final</strong> <a name="DirectivesMaxs" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMaxs.html#DirectivesMaxs">DirectivesMaxs</a> max,
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>         <strong class="jxr_keyword">final</strong> <a name="DirectivesMethodParams" href="../../../../../org/eolang/jeo/representation/directives/DirectivesMethodParams.html#DirectivesMethodParams">DirectivesMethodParams</a> params
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     ) {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>         <strong class="jxr_keyword">this</strong>.access = access;
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>         <strong class="jxr_keyword">this</strong>.descriptor = Optional.ofNullable(descriptor).orElse(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>         <strong class="jxr_keyword">this</strong>.signature = Optional.ofNullable(signature).orElse(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>         <strong class="jxr_keyword">this</strong>.exceptions = Optional.ofNullable(exceptions).orElse(<strong class="jxr_keyword">new</strong> String[0]).clone();
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>         <strong class="jxr_keyword">this</strong>.max = <strong class="jxr_keyword">new</strong> AtomicReference&lt;&gt;(max);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>         <strong class="jxr_keyword">this</strong>.params = params;
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     }
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">     * Method descriptor.</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">     * @return Descriptor.</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     <strong class="jxr_keyword">public</strong> String descr() {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.descriptor;
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     }
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>     @Override
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>     <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Directives()
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>             .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<span class="jxr_string">"access"</span>, <strong class="jxr_keyword">this</strong>.access))
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>             .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<span class="jxr_string">"descriptor"</span>, <strong class="jxr_keyword">this</strong>.descriptor))
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>             .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<span class="jxr_string">"signature"</span>, <strong class="jxr_keyword">this</strong>.signature))
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>             .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesValues" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValues.html#DirectivesValues">DirectivesValues</a>(<span class="jxr_string">"exceptions"</span>, <strong class="jxr_keyword">this</strong>.exceptions))
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>             .append(<strong class="jxr_keyword">this</strong>.max.get())
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>             .append(<strong class="jxr_keyword">this</strong>.params)
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>             .iterator();
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>     }
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>

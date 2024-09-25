@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * The MIT License (MIT)</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2023 Objectionary.com</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2024 Objectionary.com</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * Permission is hereby granted, free of charge, to any person obtaining a copy</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * of this software and associated documentation files (the "Software"), to deal</em>
@@ -64,12 +64,12 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Directives()
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>              .add(<span class="jxr_string">"o"</span>)
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>              .attr(<span class="jxr_string">"base"</span>, <span class="jxr_string">"handle"</span>)
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<strong class="jxr_keyword">this</strong>.handle.getTag()))
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<strong class="jxr_keyword">this</strong>.handle.getOwner()))
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<strong class="jxr_keyword">this</strong>.handle.getName()))
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<strong class="jxr_keyword">this</strong>.handle.getDesc()))
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesData" href="../../../../../org/eolang/jeo/representation/directives/DirectivesData.html#DirectivesData">DirectivesData</a>(<strong class="jxr_keyword">this</strong>.handle.isInterface()))
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>              .attr(<span class="jxr_string">"base"</span>, <strong class="jxr_keyword">new</strong> <a name="JeoFqn" href="../../../../../org/eolang/jeo/representation/directives/JeoFqn.html#JeoFqn">JeoFqn</a>(<span class="jxr_string">"handle"</span>).fqn())
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.handle.getTag()))
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.handle.getOwner()))
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.handle.getName()))
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.handle.getDesc()))
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>              .append(<strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.handle.isInterface()))
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>              .up()
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>              .iterator();
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      }

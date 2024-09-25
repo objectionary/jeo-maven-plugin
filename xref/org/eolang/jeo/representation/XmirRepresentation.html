@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * The MIT License (MIT)</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2023 Objectionary.com</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2024 Objectionary.com</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * Permission is hereby granted, free of charge, to any person obtaining a copy</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * of this software and associated documentation files (the "Software"), to deal</em>
@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.Details;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.Representation;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.bytecode.Bytecode;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.xmir.XmlBytecode;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.xmir.XmlProgram;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.eolang.parser.Schema;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">/**</em>
@@ -146,57 +146,58 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>     @Override
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>     <strong class="jxr_keyword">public</strong> <a name="Bytecode" href="../../../../org/eolang/jeo/representation/bytecode/Bytecode.html#Bytecode">Bytecode</a> toBytecode() {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>             <strong class="jxr_keyword">new</strong> Schema(<strong class="jxr_keyword">this</strong>.xml.value()).check();
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlBytecode" href="../../../../org/eolang/jeo/representation/xmir/XmlBytecode.html#XmlBytecode">XmlBytecode</a>(<strong class="jxr_keyword">this</strong>.xml.value(), <strong class="jxr_keyword">this</strong>.verify).bytecode();
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IllegalArgumentException exception) {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>                 String.format(<span class="jxr_string">"Can't transform '%s' to bytecode"</span>, <strong class="jxr_keyword">this</strong>.xml.value()),
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>                 exception
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>             );
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>         }
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>     }
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">     * Retrieves class name from XMIR.</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">     * @return Class name.</em>
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>     <strong class="jxr_keyword">private</strong> String className() {
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassName" href="../../../../org/eolang/jeo/representation/ClassName.html#ClassName">ClassName</a>(
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>             <strong class="jxr_keyword">this</strong>.xml.value()
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>                 .xpath(<span class="jxr_string">"/program/metas/meta/tail/text()"</span>)
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>                 .stream()
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>                 .findFirst()
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>                 .orElse(<span class="jxr_string">""</span>),
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>             <strong class="jxr_keyword">this</strong>.xml.value().xpath(<span class="jxr_string">"/program/@name"</span>).get(0)
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>         ).full();
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>     }
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">     * Prestructor that converts a path to a lazy XML.</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">     * @param path Path to an XML file.</em>
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">     * @return Lazy XML.</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Unchecked&lt;XML&gt; fromFile(<strong class="jxr_keyword">final</strong> Path path) {
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Unchecked&lt;&gt;(<strong class="jxr_keyword">new</strong> Synced&lt;&gt;(<strong class="jxr_keyword">new</strong> Sticky&lt;&gt;(() -&gt; XmirRepresentation.open(path))));
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>     }
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">     * Convert path to XML.</em>
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">     * @param path Path to XML file.</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">     * @return XML.</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L181" href="#L181">181</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> XML open(<strong class="jxr_keyword">final</strong> Path path) {
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> XMLDocument(path.toFile());
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> FileNotFoundException exception) {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>                 String.format(<span class="jxr_string">"Can't find file '%s'"</span>, path),
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>                 exception
-<a class="jxr_linenumber" name="L188" href="#L188">188</a>             );
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>         }
-<a class="jxr_linenumber" name="L190" href="#L190">190</a>     }
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> }
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>         <strong class="jxr_keyword">final</strong> XML xmir = <strong class="jxr_keyword">this</strong>.xml.value();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>             <strong class="jxr_keyword">new</strong> Schema(xmir).check();
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlProgram" href="../../../../org/eolang/jeo/representation/xmir/XmlProgram.html#XmlProgram">XmlProgram</a>(xmir).bytecode().bytecode(<strong class="jxr_keyword">this</strong>.verify);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IllegalArgumentException exception) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>                 String.format(<span class="jxr_string">"Can't transform '%s' to bytecode"</span>, xmir),
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>                 exception
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>             );
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>         }
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>     }
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">     * Retrieves class name from XMIR.</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">     * @return Class name.</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>     <strong class="jxr_keyword">private</strong> String className() {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassName" href="../../../../org/eolang/jeo/representation/ClassName.html#ClassName">ClassName</a>(
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>             <strong class="jxr_keyword">this</strong>.xml.value()
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>                 .xpath(<span class="jxr_string">"/program/metas/meta/tail/text()"</span>)
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>                 .stream()
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>                 .findFirst()
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>                 .orElse(<span class="jxr_string">""</span>),
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>             <strong class="jxr_keyword">this</strong>.xml.value().xpath(<span class="jxr_string">"/program/@name"</span>).get(0)
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>         ).full();
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>     }
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">     * Prestructor that converts a path to a lazy XML.</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">     * @param path Path to an XML file.</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">     * @return Lazy XML.</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Unchecked&lt;XML&gt; fromFile(<strong class="jxr_keyword">final</strong> Path path) {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Unchecked&lt;&gt;(<strong class="jxr_keyword">new</strong> Synced&lt;&gt;(<strong class="jxr_keyword">new</strong> Sticky&lt;&gt;(() -&gt; XmirRepresentation.open(path))));
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>     }
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">     * Convert path to XML.</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">     * @param path Path to XML file.</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">     * @return XML.</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> XML open(<strong class="jxr_keyword">final</strong> Path path) {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> XMLDocument(path.toFile());
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> FileNotFoundException exception) {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>                 String.format(<span class="jxr_string">"Can't find file '%s'"</span>, path),
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>                 exception
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>             );
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>         }
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>     }
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>

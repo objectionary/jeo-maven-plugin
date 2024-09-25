@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * The MIT License (MIT)</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2023 Objectionary.com</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2024 Objectionary.com</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * Permission is hereby granted, free of charge, to any person obtaining a copy</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * of this software and associated documentation files (the "Software"), to deal</em>
@@ -54,11 +54,11 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>              ),
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>              xml,
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>              XhtmlMatchers.hasXPaths(
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  <span class="jxr_string">"/o[@base='field' and @name='unknown']"</span>,
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>                  <span class="jxr_string">"/o/o[@name='access-unknown' and contains(text(),'01')]"</span>,
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  <span class="jxr_string">"/o/o[@name='descriptor-unknown' and text()='49']"</span>,
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  <span class="jxr_string">"/o[contains(@base,'field') and contains(@name,'unknown')]"</span>,
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>                  <span class="jxr_string">"/o/o[@name='access-unknown']/o[contains(text(),'01')]"</span>,
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  <span class="jxr_string">"/o/o[@name='descriptor-unknown']/o[text()='49']"</span>,
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>                  <span class="jxr_string">"/o/o[@name='signature-unknown']"</span>,
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>                  <span class="jxr_string">"/o/o[@base='int' and @name='value-unknown' and contains(text(),'0')]"</span>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>                  <span class="jxr_string">"/o/o[contains(@base,'int') and @name='value-unknown']/o[contains(text(),'0')]"</span>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>              )
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>          );
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      }
@@ -81,11 +81,11 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>              ),
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>              xml,
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>              XhtmlMatchers.hasXPaths(
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  <span class="jxr_string">"/o[@base='field' and @name='serialVersionUID']"</span>,
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>                  <span class="jxr_string">"/o/o[@name='access-serialVersionUID' and contains(text(),'1A')]"</span>,
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>                  <span class="jxr_string">"/o/o[@name='descriptor-serialVersionUID' and text()='4A']"</span>,
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  <span class="jxr_string">"/o[contains(@base,'field') and contains(@name,'serialVersionUID')]"</span>,
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>                  <span class="jxr_string">"/o/o[@name='access-serialVersionUID']/o[contains(text(),'1A')]"</span>,
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>                  <span class="jxr_string">"/o/o[@name='descriptor-serialVersionUID']/o[text()='4A']"</span>,
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>                  <span class="jxr_string">"/o/o[@name='signature-serialVersionUID']"</span>,
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  <span class="jxr_string">"/o/o[@name='value-serialVersionUID' and text()='62 84 EB 5F 88 47 CD E1']"</span>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  <span class="jxr_string">"/o/o[@name='value-serialVersionUID']/o[text()='62 84 EB 5F 88 47 CD E1']"</span>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>              )
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>          );
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      }
