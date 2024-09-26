@@ -151,24 +151,4 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
                 .collect(Collectors.toList())
         );
     }
-
-    /**
-     * Descriptor.
-     * @return Descriptor.
-     */
-    public String descriptor() {
-        return this.descr;
-    }
-
-    /**
-     * Visible.
-     * @return Visible.
-     * @todo #627:30min Remove Getters From {@link BytecodeAnnotation}.
-     *  We opened {@link #descriptor()} and {@link #isVisible()} methods to simplify unit testing.
-     *  However, now we violate encapsulation idea at all.
-     *  It's better to find another way to test correct transformations.
-     */
-    public boolean isVisible() {
-        return this.visible;
-    }
 }
