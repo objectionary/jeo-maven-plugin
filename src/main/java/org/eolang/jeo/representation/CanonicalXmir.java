@@ -79,6 +79,15 @@ public final class CanonicalXmir {
 
     /**
      * Constructor.
+     * @param path Path to the xmir Significantly modified XMIR after "phi/unphi".
+     * @param canonical Significantly modified XMIR after "phi/unphi".
+     */
+    public CanonicalXmir(final Path path, final XML canonical) {
+        this(CanonicalXmir.nameWithoutExtension(path), canonical);
+    }
+
+    /**
+     * Constructor.
      * @param name Name of the XMIR.
      * @param canonical Significantly modified XMIR after "phi/unphi".
      */

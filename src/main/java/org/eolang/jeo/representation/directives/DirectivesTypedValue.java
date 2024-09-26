@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.directives;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Random;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.DataType;
 import org.objectweb.asm.Type;
@@ -36,8 +37,12 @@ import org.xembly.Directives;
  * Typed data directives.
  *
  * @since 0.3
+ * @todo #705:60min Do we need to add a scope attribute to the directives if the data is null?
+ *  If we do, then we need to add a test for this case.
+ *  If we don't, then we need to remove this puzzle and "scope" attribute from the directives.
  */
 @ToString
+@EqualsAndHashCode
 public final class DirectivesTypedValue implements Iterable<Directive> {
 
     /**
