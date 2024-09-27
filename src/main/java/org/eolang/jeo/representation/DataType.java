@@ -361,7 +361,7 @@ public enum DataType {
      * @return Data type.
      */
     private static DataType from(final Object data) {
-        DataType result;
+        final DataType result;
         if (data == null) {
             result = DataType.NULL;
         } else {

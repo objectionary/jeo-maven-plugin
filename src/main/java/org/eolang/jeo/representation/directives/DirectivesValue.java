@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.Random;
 import lombok.ToString;
 import org.eolang.jeo.representation.HexData;
@@ -67,9 +66,9 @@ public final class DirectivesValue implements Iterable<Directive> {
     /**
      * Constructor.
      *
-     * @param <T> Data type.
      * @param data Data.
      * @param name Name.
+     * @param <T> Data type.
      */
     public <T> DirectivesValue(final T data, final String name) {
         this(new HexData(data), name);

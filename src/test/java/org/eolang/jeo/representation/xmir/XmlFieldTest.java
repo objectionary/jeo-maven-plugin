@@ -85,15 +85,13 @@ final class XmlFieldTest {
         final int access = Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL;
         final String name = "serialVersionUID";
         final String descriptor = "Ljava/lang/String;";
-        final String xml = new Xembler(
-            new DirectivesField(access, name, descriptor, null, value)
-        ).xml();
-        System.out.println(xml);
         MatcherAssert.assertThat(
             "We expect the value to be the same",
             new XmlField(
                 new XmlNode(
-                    xml
+                    new Xembler(
+                        new DirectivesField(access, name, descriptor, null, value)
+                    ).xml()
                 )
             ).bytecode(),
             Matchers.equalTo(
