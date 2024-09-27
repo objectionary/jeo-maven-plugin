@@ -26,7 +26,7 @@ package org.eolang.jeo.representation.bytecode;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAttribute;
-import org.eolang.jeo.representation.directives.DirectivesNullable;
+import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.objectweb.asm.ClassVisitor;
 
 /**
@@ -87,10 +87,10 @@ public final class InnerClass implements BytecodeAttribute {
     public DirectivesAttribute directives() {
         return new DirectivesAttribute(
             "inner-class",
-            new DirectivesNullable("", this.name),
-            new DirectivesNullable("", this.outer),
-            new DirectivesNullable("", this.inner),
-            new DirectivesNullable("", this.access)
+            new DirectivesValue(this.name, ""),
+            new DirectivesValue(this.outer, ""),
+            new DirectivesValue(this.inner, ""),
+            new DirectivesValue(this.access, "")
         );
     }
 }
