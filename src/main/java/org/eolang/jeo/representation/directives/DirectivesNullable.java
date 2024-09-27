@@ -70,11 +70,11 @@ public final class DirectivesNullable implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Iterator<Directive> result;
-        if (this.data.isNull()) {
-            result = new DirectivesValue(this.name, "").iterator();
-        } else {
+//        if (this.data.isNull()) {
+//            result = new DirectivesValue("", this.name).iterator();
+//        } else {
             result = new DirectivesValue(this.data, this.name).iterator();
-        }
+//        }
         return result;
     }
 }
