@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation;
 
-import java.util.Objects;
 import lombok.ToString;
 
 /**
@@ -51,11 +50,7 @@ public final class HexData {
      * @param <T> Data type.
      */
     public <T> HexData(final T data) {
-        if (Objects.isNull(data)) {
-            this.data = "";
-        } else {
-            this.data = data;
-        }
+        this.data = data;
     }
 
     /**

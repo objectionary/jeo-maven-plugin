@@ -174,7 +174,8 @@ public final class DirectivesField implements Iterable<Directive> {
                 .append(new DirectivesValue(this.access, this.title("access")))
                 .append(new DirectivesValue(this.descriptor, this.title("descriptor")))
                 .append(new DirectivesValue(this.signature, this.title("signature")))
-                .append(new DirectivesTypedValue(this.title("value"), this.value, this.descriptor))
+//                .append(new DirectivesTypedValue(this.value, this.descriptor, this.title("value")))
+                .append(new DirectivesValue(this.value, this.title("value")))
                 .append(this.annotations)
                 .up()
                 .iterator();

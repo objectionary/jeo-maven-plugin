@@ -62,21 +62,23 @@ public final class DirectivesTypedValue implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Name of the value
+     *
      * @param data Value
      * @param descriptor Type descriptor
+     * @param name Name of the value
      */
-    public DirectivesTypedValue(final String name, final Object data, final String descriptor) {
-        this(name, data, Type.getType(descriptor));
+    public DirectivesTypedValue(final Object data, final String descriptor, final String name) {
+        this(data, Type.getType(descriptor), name);
     }
 
     /**
      * Constructor.
-     * @param name Name of the value
+     *
      * @param data Value
      * @param type Type of the value
+     * @param name Name of the value
      */
-    public DirectivesTypedValue(final String name, final Object data, final Type type) {
+    public DirectivesTypedValue(final Object data, final Type type, final String name) {
         this.name = name;
         this.data = data;
         this.type = type;

@@ -163,7 +163,12 @@ public enum DataType {
     CLASS_REFERENCE("class", Class.class, Class.class,
         value -> DataType.hexClass(Class.class.cast(value).getName()),
         bytes -> new String(bytes, StandardCharsets.UTF_8)
-    );
+    ),
+
+    /**
+     * Null.
+     */
+    NULL("nullable", null, null, value -> new byte[0], bytes -> null);
 
     /**
      * Base type.
@@ -356,20 +361,26 @@ public enum DataType {
      * @return Data type.
      */
     private static DataType from(final Object data) {
-        return Arrays.stream(DataType.values()).filter(type -> type.clazz.isInstance(data))
-            .findFirst()
-            .orElseThrow(
-                () -> new IllegalArgumentException(
-                    String.format(
-                        "Unknown data type of %s, class is %s",
-                        data,
-                        Optional.ofNullable(data)
-                            .map(Object::getClass)
-                            .map(Class::getName)
-                            .orElse("Nullable")
+        DataType result;
+        if (data == null) {
+            result = DataType.NULL;
+        } else {
+            result = Arrays.stream(DataType.values()).filter(type -> type.clazz.isInstance(data))
+                .findFirst()
+                .orElseThrow(
+                    () -> new IllegalArgumentException(
+                        String.format(
+                            "Unknown data type of %s, class is %s",
+                            data,
+                            Optional.ofNullable(data)
+                                .map(Object::getClass)
+                                .map(Class::getName)
+                                .orElse("Nullable")
+                        )
                     )
-                )
-            );
+                );
+        }
+        return result;
     }
 
     /**
