@@ -26,9 +26,14 @@ package org.eolang.jeo.representation.xmir;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.BytecodeInstructionEntry;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Opcodes;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlNode}.
@@ -89,27 +94,26 @@ final class XmlNodeTest {
     }
 
     @Test
-    void convertsToLabelEntry() {
+    void convertsToLabelEntry() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Can't convert to label entry",
             new XmlNode(
-                "<o base='org.eolang.jeo.label' data='bytes'>73 6F 6D 65</o>"
+                new Xembler(
+                    new BytecodeLabel("lbl").directives(false)
+                ).xml()
             ).toEntry(),
             Matchers.instanceOf(XmlLabel.class)
         );
     }
 
     @Test
-    void convertsToInstructionEntry() {
+    void convertsToInstructionEntry() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Can't convert to instruction entry",
             new XmlNode(
-                String.join(
-                    "\n",
-                    "<o base='opcode' line='999' name='ICONST_2-17'>",
-                    "<o base=\"int\" data=\"bytes\">00 00 00 00 00 00 00 05</o>",
-                    "</o>"
-                )
+                new Xembler(
+                    new BytecodeInstructionEntry(Opcodes.ICONST_2).directives(false)
+                ).xml()
             ).toEntry(),
             Matchers.instanceOf(XmlInstruction.class)
         );
