@@ -20,13 +20,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
       - run: mvn clean site -Psite
-      - uses: JamesIves/github-pages-deploy-action@v4.6.4
+      - uses: JamesIves/github-pages-deploy-action@v4.6.5
         with:
           branch: gh-pages
           folder: target/site
           target-folder: ${{ github.ref_name }}
           clean: false
-      - uses: JamesIves/github-pages-deploy-action@v4.6.4
+      - uses: JamesIves/github-pages-deploy-action@v4.6.5
         with:
           branch: gh-pages
           folder: target/site
