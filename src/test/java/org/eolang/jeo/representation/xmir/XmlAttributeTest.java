@@ -23,11 +23,14 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.InnerClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlAttribute}.
@@ -35,27 +38,13 @@ import org.junit.jupiter.api.Test;
  */
 final class XmlAttributeTest {
 
-    /**
-     * Example of an inner class in XMIR.
-     */
-    private static final String XMIR = String.join(
-        "\n",
-        "<o base='org.eolang.jeo.inner-class'>",
-        "  <o base='org.eolang.jeo.string'><o base='bytes' data='bytes'>6E 61 6D 65</o></o>",
-        "  <o base='org.eolang.jeo.string'><o base='bytes' data='bytes'>6F 75 74 65 72</o></o>",
-        "  <o base='org.eolang.jeo.string'><o base='bytes' data='bytes'>69 6E 6E 65 72</o></o>",
-        "  <o base='org.eolang.jeo.int'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 00</o></o>",
-        "</o>"
-    );
-
     @Test
-    void convertsToDomainInnerClass() {
+    void convertsToDomainInnerClass() throws ImpossibleModificationException {
+        final BytecodeAttribute expected = new InnerClass("name", "outer", "inner", 0);
         MatcherAssert.assertThat(
             "We expect the attribute to be converted to a correct  domain attribute (inner class)",
-            new XmlAttribute(XmlAttributeTest.XMIR).attribute(),
-            Matchers.equalTo(
-                new InnerClass("name", "outer", "inner", 0)
-            )
+            new XmlAttribute(new Xembler(expected.directives()).xml()).attribute(),
+            Matchers.equalTo(expected)
         );
     }
 
