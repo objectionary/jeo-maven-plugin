@@ -39,7 +39,6 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlProgram}.
- *
  * @since 0.1
  */
 final class XmlProgramTest {

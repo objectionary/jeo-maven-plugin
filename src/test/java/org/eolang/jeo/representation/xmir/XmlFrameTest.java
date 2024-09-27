@@ -28,6 +28,8 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlFrame}.
@@ -37,34 +39,18 @@ import org.objectweb.asm.Opcodes;
 final class XmlFrameTest {
 
     @Test
-    void parsesRawXmirNode() {
+    void parsesRawXmirNode() throws ImpossibleModificationException {
+        final BytecodeFrame expected = new BytecodeFrame(
+            Opcodes.F_NEW,
+            2,
+            new Object[]{"java/lang/Object", Opcodes.LONG},
+            3,
+            new Object[]{"java/lang/String", Opcodes.DOUBLE}
+        );
         MatcherAssert.assertThat(
             "Parsed frame type is not correct.",
-            new XmlFrame(
-                "<?xml version='1.0' encoding='UTF-8'?>\n",
-                "<o base='org.eolang.jeo.frame'>\n",
-                " <o base='org.eolang.jeo.int'><o base='bytes' data='bytes'>FF FF FF FF FF FF FF FF</o></o>\n",
-                " <o base='org.eolang.jeo.int'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 02</o></o>\n",
-                " <o base='org.eolang.jeo.tuple' star=''>\n",
-                "  <o base='org.eolang.jeo.string'><o base='bytes' data='bytes'>6A 61 76 61 2F 6C 61 6E 67 2F 4F 62 6A 65 63 74</o></o>\n",
-                "  <o base='org.eolang.jeo.int'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 04</o></o>\n",
-                " </o>\n",
-                " <o base='org.eolang.jeo.int'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 03</o></o>\n",
-                " <o base='org.eolang.jeo.tuple' star=''>\n",
-                "  <o base='org.eolang.jeo.string'><o base='bytes' data='bytes'>6A 61 76 61 2F 6C 61 6E 67 2F 53 74 72 69 6E 67</o></o>\n",
-                "  <o base='org.eolang.jeo.int'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 03</o></o>\n",
-                " </o>\n",
-                "</o>\n"
-            ).bytecode(),
-            Matchers.equalTo(
-                new BytecodeFrame(
-                    Opcodes.F_NEW,
-                    2,
-                    new Object[]{"java/lang/Object", Opcodes.LONG},
-                    3,
-                    new Object[]{"java/lang/String", Opcodes.DOUBLE}
-                )
-            )
+            new XmlFrame(new Xembler(expected.directives(false)).xml()).bytecode(),
+            Matchers.equalTo(expected)
         );
     }
 }

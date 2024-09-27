@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.bytecode.BytecodeInstructionEntry;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -31,44 +32,22 @@ import org.objectweb.asm.Opcodes;
 /**
  * Test case for {@link XmlInstruction}.
  * @since 0.1
- * @todo #715:60min Simplify Xml Transformation Tests
- *  Currently we compare XMLs with their String representations.
- *  It leads to significant efforts to update this XML when the structure changes.
- *  We should use domain classes from {@link org.eolang.jeo.representation.bytecode} package.
- *  We should refactor all "Xml..." tests to use these classes.
  */
 final class XmlInstructionTest {
 
     /**
      * Default instruction which we use for testing.
-     * This XML is compared with all other XMLs.
      */
-    private static final XmlInstruction INSTRUCTION =
-        new XmlInstruction(
-            new StringBuilder()
-                .append("<o base='org.eolang.jeo.opcode' line='999' name='INVOKESPECIAL'>")
-                .append(
-                    "<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 B7</o></o>"
-                )
-                .append(
-                    "<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 01</o></o>"
-                )
-                .append(
-                    "<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 02</o></o>"
-                )
-                .append(
-                    "<o base='org.eolang.jeo.int' data='bytes'><o base='bytes' data='bytes'>00 00 00 00 00 00 00 03</o></o>"
-                )
-                .append("</o>")
-                .toString()
-        );
+    private static final BytecodeInstructionEntry INST = new BytecodeInstructionEntry(
+        Opcodes.INVOKESPECIAL, 1, 2, 3
+    );
 
     @Test
     void comparesSuccessfullyWithSpaces() {
         MatcherAssert.assertThat(
             "Xml Instruction nodes with different empty spaces, but with the same content should be the same, but it wasn't",
-            new XmlInstruction(false, Opcodes.INVOKESPECIAL, 1, 2, 3),
-            Matchers.equalTo(XmlInstructionTest.INSTRUCTION)
+            new XmlInstruction(false, Opcodes.INVOKESPECIAL, 1, 2, 3).bytecode(),
+            Matchers.equalTo(XmlInstructionTest.INST)
         );
     }
 
@@ -77,7 +56,7 @@ final class XmlInstructionTest {
         MatcherAssert.assertThat(
             "Xml Instruction with different arguments should not be equal, but it was",
             new XmlInstruction(Opcodes.INVOKESPECIAL, 32, 23, 14),
-            Matchers.not(Matchers.equalTo(XmlInstructionTest.INSTRUCTION))
+            Matchers.not(Matchers.equalTo(XmlInstructionTest.INST))
         );
     }
 
@@ -86,7 +65,7 @@ final class XmlInstructionTest {
         MatcherAssert.assertThat(
             "Xml Instruction with different child content should not be equal, but it was",
             new XmlInstruction(Opcodes.INVOKESPECIAL),
-            Matchers.not(Matchers.equalTo(XmlInstructionTest.INSTRUCTION))
+            Matchers.not(Matchers.equalTo(XmlInstructionTest.INST))
         );
     }
 
@@ -95,7 +74,7 @@ final class XmlInstructionTest {
         MatcherAssert.assertThat(
             "Xml Instruction with different content should not be equal, but it was",
             new XmlInstruction(Opcodes.DUP),
-            Matchers.not(Matchers.equalTo(XmlInstructionTest.INSTRUCTION))
+            Matchers.not(Matchers.equalTo(XmlInstructionTest.INST))
         );
     }
 }

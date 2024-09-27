@@ -27,6 +27,8 @@ import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlLabel}.
@@ -35,15 +37,16 @@ import org.junit.jupiter.api.Test;
 final class XmlLabelTest {
 
     @Test
-    void retrievesLabelIdentifier() {
+    void retrievesLabelIdentifier() throws ImpossibleModificationException {
+        final BytecodeLabel expected = new BytecodeLabel("some");
         MatcherAssert.assertThat(
             "Can't retrieve correct label identifier",
             new XmlLabel(
                 new XmlNode(
-                    "<o base='org.eolang.jeo.label' data='bytes'>73 6F 6D 65 0A</o>"
+                    new Xembler(expected.directives(false)).xml()
                 )
             ).bytecode(),
-            Matchers.equalTo(new BytecodeLabel("some"))
+            Matchers.equalTo(expected)
         );
     }
 }

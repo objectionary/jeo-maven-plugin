@@ -28,6 +28,8 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlAnnotations}.
@@ -36,25 +38,15 @@ import org.junit.jupiter.api.Test;
 final class XmlAnnotationsTest {
 
     @Test
-    void parsesXmirAnnotations() {
+    void parsesXmirAnnotations() throws ImpossibleModificationException {
+        final BytecodeAnnotations expected = new BytecodeAnnotations(
+            new BytecodeAnnotation("java/lang/Override", true)
+        );
         MatcherAssert.assertThat(
             "We expect that XMIR annotations are parsed correctly",
-            new XmlAnnotations(
-                new XmlNode(
-                    String.join(
-                        "\n",
-                        "<o name='annotations'>",
-                        "  <o base='org.eolang.jeo.annotation' name='annotation-1015422024-amF2YS9sYW5nL092ZXJyaWRl'>",
-                        "    <o base='org.eolang.jeo.string'><o base='bytes' data='bytes'>6A 61 76 61 2F 6C 61 6E 67 2F 4F 76 65 72 72 69 64 65</o></o>",
-                        "    <o base='org.eolang.jeo.bool'><o base='bytes' data='bytes'>01</o></o>",
-                        "  </o>",
-                        "</o>"
-                    ))).bytecode(),
-            Matchers.equalTo(
-                new BytecodeAnnotations(
-                    new BytecodeAnnotation("java/lang/Override", true)
-                )
-            )
+            new XmlAnnotations(new XmlNode(new Xembler(expected.directives("")).xml()))
+                .bytecode(),
+            Matchers.equalTo(expected)
         );
     }
 }

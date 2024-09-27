@@ -21,31 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.bytecode;
 
-import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
-import org.objectweb.asm.Type;
-import org.xembly.ImpossibleModificationException;
-import org.xembly.Xembler;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.eolang.jeo.representation.directives.DirectivesSeq;
+import org.xembly.Directive;
 
 /**
- * Test cases for {@link XmlParam}.
+ * Bytecode attributes.
  * @since 0.6
  */
-final class XmlParamTest {
+public final class BytecodeAttributes {
 
-    @Test
-    void convertsToBytecode() throws ImpossibleModificationException {
-        final BytecodeMethodParameter expected = new BytecodeMethodParameter(0, Type.INT_TYPE);
-        MatcherAssert.assertThat(
-            "Can't convert XML param to bytecode",
-            new XmlParam(
-                new XmlNode(new Xembler(expected.directives()).xml())
-            ).bytecode(),
-            Matchers.equalTo(expected)
+    /**
+     * All attributes.
+     */
+    private final List<BytecodeAttribute> all;
+
+    /**
+     * Constructor.
+     * @param all All attributes.
+     */
+    public BytecodeAttributes(final BytecodeAttribute... all) {
+        this(Arrays.asList(all));
+    }
+
+    /**
+     * Constructor.
+     * @param all All attributes.
+     */
+    private BytecodeAttributes(final List<BytecodeAttribute> all) {
+        this.all = all;
+    }
+
+    /**
+     * Convert to directives.
+     * @param name Name of the attributes in EO representation.
+     * @return Directives.
+     */
+    public Iterable<Directive> directives(final String name) {
+        return new DirectivesSeq(
+            name,
+            this.all.stream().map(BytecodeAttribute::directives).collect(Collectors.toList())
         );
     }
 }

@@ -27,6 +27,8 @@ import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlTryCatchEntry}.
@@ -35,44 +37,20 @@ import org.junit.jupiter.api.Test;
 final class XmlTryCatchEntryTest {
 
     @Test
-    void transformsToBytecode() {
+    void transformsToBytecode() throws ImpossibleModificationException {
         final AllLabels labels = new AllLabels();
+        final BytecodeTryCatchBlock block = new BytecodeTryCatchBlock(
+            labels.label("a"),
+            labels.label("b"),
+            labels.label("c"),
+            "java/lang/Exception"
+        );
         MatcherAssert.assertThat(
             "Can't convert XML try-catch entry to the correct bytecode",
             new XmlTryCatchEntry(
-                new XmlNode(
-                    String.join(
-                        "\n",
-                        "<o base='trycatch'>\n",
-                        "  <o base='org.eolang.jeo.label' name='start'><o base='bytes' data='bytes'>30 65 65 66 66 62 37 37 2D 34 64 32 62 2D 34 63 31 38 2D 39 32 32 39 2D 36 32 65 39 66 61 66 39 34 61 34 34</o></o>\n",
-                        "  <o base='org.eolang.jeo.label' name='end'><o base='bytes' data='bytes'>62 31 65 65 38 61 34 32 2D 37 63 39 63 2D 34 63 66 39 2D 61 63 63 65 2D 39 35 62 39 38 36 38 34 34 65 36 35</o></o>\n",
-                        "  <o base='org.eolang.jeo.label' name='handler'><o base='bytes' data='bytes'>62 31 65 65 38 61 34 32 2D 37 63 39 63 2D 34 63 66 39 2D 61 63 63 65 2D 39 35 62 39 38 36 38 34 34 65 36 35</o></o>\n",
-                        "  <o base='org.eolang.jeo.string' name='type'><o base='bytes' data='bytes'>6A 61 76 61 2F 69 6F 2F 49 4F 45 78 63 65 70 74 69 6F 6E</o></o>\n",
-                        "</o>"
-                    )
-                ),
-                labels
+                new XmlNode(new Xembler(block.directives(false)).xml())
             ).bytecode(),
-            Matchers.equalTo(
-                new BytecodeTryCatchBlock(
-                    labels.label(
-                        new HexString(
-                            "30 65 65 66 66 62 37 37 2D 34 64 32 62 2D 34 63 31 38 2D 39 32 32 39 2D 36 32 65 39 66 61 66 39 34 61 34 34"
-                        ).decode()
-                    ),
-                    labels.label(
-                        new HexString(
-                            "62 31 65 65 38 61 34 32 2D 37 63 39 63 2D 34 63 66 39 2D 61 63 63 65 2D 39 35 62 39 38 36 38 34 34 65 36 35"
-                        ).decode()
-                    ),
-                    labels.label(
-                        new HexString(
-                            "62 31 65 65 38 61 34 32 2D 37 63 39 63 2D 34 63 66 39 2D 61 63 63 65 2D 39 35 62 39 38 36 38 34 34 65 36 35"
-                        ).decode()
-                    ),
-                    "java/io/IOException"
-                )
-            )
+            Matchers.equalTo(block)
         );
     }
 }
