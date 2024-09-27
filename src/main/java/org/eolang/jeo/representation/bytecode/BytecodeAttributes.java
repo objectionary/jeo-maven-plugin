@@ -21,35 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.bytecode;
 
-import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
-import org.eolang.jeo.representation.bytecode.InnerClass;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
-import org.xembly.ImpossibleModificationException;
-import org.xembly.Xembler;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.eolang.jeo.representation.directives.DirectivesSeq;
+import org.xembly.Directive;
 
 /**
- * Test case for {@link XmlAttributes}.
+ * Bytecode attributes.
  * @since 0.6
  */
-final class XmlAttributesTest {
+public final class BytecodeAttributes {
 
-    @Test
-    void convertsToBytecode() throws ImpossibleModificationException {
-        final InnerClass expected = new InnerClass("name", "outer", "inner", 0);
-        MatcherAssert.assertThat(
-            "We expect the attributes to be converted to a correct bytecode domain class",
-            new XmlAttributes(
-                new XmlNode(
-                    new Xembler(
-                        new BytecodeAttributes(expected).directives("attributes")
-                    ).xml()
-                )
-            ).attributes(),
-            Matchers.contains(expected)
+    /**
+     * All attributes.
+     */
+    private final List<BytecodeAttribute> all;
+
+    public BytecodeAttributes(final BytecodeAttribute... all) {
+        this(Arrays.asList(all));
+    }
+
+    public BytecodeAttributes(final List<BytecodeAttribute> all) {
+        this.all = all;
+    }
+
+    public Iterable<Directive> directives(final String name) {
+        return new DirectivesSeq(
+            name,
+            this.all.stream()
+                .map(BytecodeAttribute::directives)
+                .collect(Collectors.toList())
         );
     }
+
+
 }
