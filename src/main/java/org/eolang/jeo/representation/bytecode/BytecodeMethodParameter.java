@@ -90,7 +90,7 @@ public final class BytecodeMethodParameter {
      * Convert to directives.
      * @return Directives.
      */
-    Iterable<Directive> directives() {
+    public Iterable<Directive> directives() {
         return new DirectivesMethodParam(
             this.index,
             this.type,
