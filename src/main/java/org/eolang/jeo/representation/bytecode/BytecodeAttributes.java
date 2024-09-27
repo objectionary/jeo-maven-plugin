@@ -40,22 +40,31 @@ public final class BytecodeAttributes {
      */
     private final List<BytecodeAttribute> all;
 
+    /**
+     * Constructor.
+     * @param all All attributes.
+     */
     public BytecodeAttributes(final BytecodeAttribute... all) {
         this(Arrays.asList(all));
     }
 
-    public BytecodeAttributes(final List<BytecodeAttribute> all) {
+    /**
+     * Constructor.
+     * @param all All attributes.
+     */
+    private BytecodeAttributes(final List<BytecodeAttribute> all) {
         this.all = all;
     }
 
+    /**
+     * Convert to directives.
+     * @param name Name of the attributes in EO representation.
+     * @return Directives.
+     */
     public Iterable<Directive> directives(final String name) {
         return new DirectivesSeq(
             name,
-            this.all.stream()
-                .map(BytecodeAttribute::directives)
-                .collect(Collectors.toList())
+            this.all.stream().map(BytecodeAttribute::directives).collect(Collectors.toList())
         );
     }
-
-
 }
