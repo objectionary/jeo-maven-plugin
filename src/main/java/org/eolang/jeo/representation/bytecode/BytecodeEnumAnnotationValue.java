@@ -29,11 +29,22 @@ import org.eolang.jeo.representation.directives.DirectivesEnumAnnotationValue;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
+/**
+ * An annotation value that is an enumeration.
+ * @since 0.6
+ */
 @ToString
 @EqualsAndHashCode
 public final class BytecodeEnumAnnotationValue implements BytecodeAnnotationValue {
 
+    /**
+     * The name of the annotation property.
+     */
     private final String name;
+
+    /**
+     * The descriptor of the enumeration.
+     */
     private final String descriptor;
 
     /**
@@ -41,7 +52,15 @@ public final class BytecodeEnumAnnotationValue implements BytecodeAnnotationValu
      */
     private final String value;
 
-    public BytecodeEnumAnnotationValue(final String name, final String descriptor, final String value) {
+    /**
+     * Constructor.
+     * @param name The name of the annotation property.
+     * @param descriptor The descriptor of the enumeration.
+     * @param value The actual enumeration value.
+     */
+    public BytecodeEnumAnnotationValue(
+        final String name, final String descriptor, final String value
+    ) {
         this.name = name;
         this.descriptor = descriptor;
         this.value = value;
@@ -55,6 +74,5 @@ public final class BytecodeEnumAnnotationValue implements BytecodeAnnotationValu
     @Override
     public Iterable<Directive> directives() {
         return new DirectivesEnumAnnotationValue(this.name, this.descriptor, this.value);
-//        return DirectivesAnnotationProperty.enump(this.name, this.descriptor, this.value);
     }
 }

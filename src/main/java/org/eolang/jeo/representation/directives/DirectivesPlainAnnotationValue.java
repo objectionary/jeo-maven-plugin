@@ -29,18 +29,37 @@ import java.util.Optional;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
+/**
+ * An annotation value that is plain.
+ * @since 0.6
+ */
 public final class DirectivesPlainAnnotationValue implements Iterable<Directive> {
 
+    /**
+     * The name of the annotation property.
+     */
     private final String name;
+
+    /**
+     * The actual value.
+     */
     private final Object value;
 
-    public DirectivesPlainAnnotationValue() {
-        this("", "");
-    }
-
+    /**
+     * Constructor.
+     * @param name The name of the annotation property.
+     * @param value The actual value.
+     */
     public DirectivesPlainAnnotationValue(final String name, final Object value) {
         this.name = name;
         this.value = value;
+    }
+
+    /**
+     * Constructor.
+     */
+    DirectivesPlainAnnotationValue() {
+        this("", "");
     }
 
     @Override
@@ -85,17 +104,7 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
             } else {
                 res = new DirectivesValues("", (Object[]) value);
             }
-//            result = new DirectivesAnnotationProperty(
-//                DirectivesAnnotationProperty.Type.PLAIN,
-//                new DirectivesValue(Optional.ofNullable(name).orElse("")),
-//                res
-//            );
         } else {
-//            result = new DirectivesAnnotationProperty(
-//                DirectivesAnnotationProperty.Type.PLAIN,
-//                new DirectivesValue(Optional.ofNullable(name).orElse("")),
-//                new DirectivesValue(this.value)
-//            );
             res = new DirectivesValue(this.value);
         }
         return new Directives()

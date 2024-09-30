@@ -31,14 +31,32 @@ import org.eolang.jeo.representation.directives.DirectivesArrayAnnotationValue;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
+/**
+ * An annotation value that is an array.
+ * @since 0.6
+ */
 @ToString
 @EqualsAndHashCode
 public final class BytecodeArrayAnnotationValue implements BytecodeAnnotationValue {
 
+    /**
+     * The name of the annotation property.
+     */
     private final String name;
+
+    /**
+     * The actual values.
+     */
     private final List<BytecodeAnnotationValue> values;
 
-    public BytecodeArrayAnnotationValue(final String name, final List<BytecodeAnnotationValue> values) {
+    /**
+     * Constructor.
+     * @param name The name of the annotation property.
+     * @param values The actual values.
+     */
+    public BytecodeArrayAnnotationValue(
+        final String name, final List<BytecodeAnnotationValue> values
+    ) {
         this.name = name;
         this.values = values;
     }
@@ -58,11 +76,5 @@ public final class BytecodeArrayAnnotationValue implements BytecodeAnnotationVal
                 .map(BytecodeAnnotationValue::directives)
                 .collect(Collectors.toList())
         );
-//        return DirectivesAnnotationProperty.array(
-//            this.name,
-//            this.values.stream()
-//                .map(BytecodeAnnotationValue::directives)
-//                .collect(Collectors.toList())
-//        );
     }
 }

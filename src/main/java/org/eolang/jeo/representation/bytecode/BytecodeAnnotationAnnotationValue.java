@@ -31,15 +31,35 @@ import org.eolang.jeo.representation.directives.DirectivesAnnotationAnnotationVa
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
+/**
+ * An annotation value that is itself an annotation.
+ * @since 0.6
+ */
 @ToString
 @EqualsAndHashCode
 public final class BytecodeAnnotationAnnotationValue implements BytecodeAnnotationValue {
 
+    /**
+     * The name of the annotation property.
+     */
     private final String name;
+
+    /**
+     * The descriptor of the annotation.
+     */
     private final String descriptor;
 
+    /**
+     * The actual annotation values.
+     */
     private final List<BytecodeAnnotationValue> values;
 
+    /**
+     * Constructor.
+     * @param name The name of the annotation property.
+     * @param descriptor The descriptor of the annotation.
+     * @param values The actual annotation values.
+     */
     public BytecodeAnnotationAnnotationValue(
         final String name,
         final String descriptor,
@@ -66,12 +86,5 @@ public final class BytecodeAnnotationAnnotationValue implements BytecodeAnnotati
                 .map(BytecodeAnnotationValue::directives)
                 .collect(Collectors.toList())
         );
-//        return DirectivesAnnotationProperty.annotation(
-//            this.name,
-//            this.descriptor,
-//            this.values.stream()
-//                .map(BytecodeAnnotationValue::directives)
-//                .collect(Collectors.toList())
-//        );
     }
 }

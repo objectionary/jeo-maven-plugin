@@ -28,16 +28,30 @@ import java.util.List;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
+/**
+ * An annotation value that is an array.
+ * @since 0.6
+ */
 public final class DirectivesArrayAnnotationValue implements Iterable<Directive> {
 
+    /**
+     * The name of the annotation property.
+     */
     private final String name;
-    private List<Iterable<Directive>> children;
 
-    public DirectivesArrayAnnotationValue(
-        final String name, List<Iterable<Directive>> children
-    ) {
+    /**
+     * The actual values.
+     */
+    private List<Iterable<Directive>> values;
+
+    /**
+     * Constructor.
+     * @param name The name of the annotation property.
+     * @param children The actual values.
+     */
+    public DirectivesArrayAnnotationValue(final String name, List<Iterable<Directive>> children) {
         this.name = name;
-        this.children = children;
+        this.values = children;
     }
 
     @Override
@@ -47,11 +61,10 @@ public final class DirectivesArrayAnnotationValue implements Iterable<Directive>
             .append(new DirectivesValue("ARRAY"))
             .append(new DirectivesValue(this.name))
             .append(
-                this.children.stream()
+                this.values.stream()
                     .map(Directives::new)
                     .reduce(new Directives(), Directives::append))
             .up()
             .iterator();
     }
-
 }

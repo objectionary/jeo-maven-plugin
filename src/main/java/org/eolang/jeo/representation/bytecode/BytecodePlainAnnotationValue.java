@@ -29,14 +29,29 @@ import org.eolang.jeo.representation.directives.DirectivesPlainAnnotationValue;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
+/**
+ * An annotation value that is a plain value.
+ * @since 0.6
+ */
 @ToString
 @EqualsAndHashCode
 public final class BytecodePlainAnnotationValue implements BytecodeAnnotationValue {
 
+    /**
+     * The name of the annotation property.
+     */
     private final String name;
 
+    /**
+     * The actual value.
+     */
     private final Object value;
 
+    /**
+     * Constructor.
+     * @param name The name of the annotation property.
+     * @param value The actual value.
+     */
     public BytecodePlainAnnotationValue(final String name, final Object value) {
         this.name = name;
         this.value = value;
@@ -50,6 +65,5 @@ public final class BytecodePlainAnnotationValue implements BytecodeAnnotationVal
     @Override
     public Iterable<Directive> directives() {
         return new DirectivesPlainAnnotationValue(this.name, this.value);
-//        return DirectivesAnnotationProperty.plain(this.name, this.value);
     }
 }

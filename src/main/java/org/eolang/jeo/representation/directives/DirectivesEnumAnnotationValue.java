@@ -28,12 +28,33 @@ import java.util.Optional;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
+/**
+ * An annotation value that is an enumeration.
+ * @since 0.6
+ */
 public final class DirectivesEnumAnnotationValue implements Iterable<Directive> {
 
+    /**
+     * The name of the annotation property.
+     */
     private final String name;
+
+    /**
+     * The descriptor of the enumeration.
+     */
     private final String descriptor;
+
+    /**
+     * The actual enumeration value.
+     */
     private final String value;
 
+    /**
+     * Constructor.
+     * @param name The name of the annotation property.
+     * @param descriptor The descriptor of the enumeration.
+     * @param value The actual enumeration value.
+     */
     public DirectivesEnumAnnotationValue(
         final String name, final String descriptor, final String value
     ) {
