@@ -23,33 +23,55 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.directives.DirectivesPlainAnnotationValue;
+import org.eolang.jeo.representation.directives.DirectivesAnnotationAnnotationValue;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
 @ToString
 @EqualsAndHashCode
-public final class PlainAnnotationValue implements BytecodeAnnotationValue {
+public final class BytecodeAnnotationAnnotationValue implements BytecodeAnnotationValue {
 
     private final String name;
+    private final String descriptor;
 
-    private final Object value;
+    private final List<BytecodeAnnotationValue> values;
 
-    public PlainAnnotationValue(final String name, final Object value) {
+    public BytecodeAnnotationAnnotationValue(
+        final String name,
+        final String descriptor,
+        final List<BytecodeAnnotationValue> values
+    ) {
         this.name = name;
-        this.value = value;
+        this.descriptor = descriptor;
+        this.values = values;
     }
 
     @Override
     public void writeTo(final AnnotationVisitor visitor) {
-        visitor.visit(this.name, this.value);
+        final AnnotationVisitor annotation = visitor.visitAnnotation(this.name, this.descriptor);
+        this.values.forEach(value -> value.writeTo(annotation));
+        annotation.visitEnd();
     }
 
     @Override
     public Iterable<Directive> directives() {
-        return new DirectivesPlainAnnotationValue(this.name, this.value);
-//        return DirectivesAnnotationProperty.plain(this.name, this.value);
+        return new DirectivesAnnotationAnnotationValue(
+            this.name,
+            this.descriptor,
+            this.values.stream()
+                .map(BytecodeAnnotationValue::directives)
+                .collect(Collectors.toList())
+        );
+//        return DirectivesAnnotationProperty.annotation(
+//            this.name,
+//            this.descriptor,
+//            this.values.stream()
+//                .map(BytecodeAnnotationValue::directives)
+//                .collect(Collectors.toList())
+//        );
     }
 }

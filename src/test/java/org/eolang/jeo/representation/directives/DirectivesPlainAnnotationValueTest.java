@@ -24,7 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import org.eolang.jeo.representation.bytecode.PlainAnnotationValue;
+import org.eolang.jeo.representation.bytecode.BytecodePlainAnnotationValue;
 import org.eolang.jeo.representation.xmir.XmlAnnotationProperty;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
@@ -64,7 +64,7 @@ final class DirectivesPlainAnnotationValueTest {
                     new Xembler(new DirectivesPlainAnnotationValue(name, value)).xml()
                 )
             ).bytecode(),
-            Matchers.equalTo(new PlainAnnotationValue(name, value))
+            Matchers.equalTo(new BytecodePlainAnnotationValue(name, value))
         );
     }
 }

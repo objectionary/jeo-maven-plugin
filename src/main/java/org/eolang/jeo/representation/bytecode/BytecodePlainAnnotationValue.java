@@ -25,36 +25,31 @@ package org.eolang.jeo.representation.bytecode;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.directives.DirectivesEnumAnnotationValue;
+import org.eolang.jeo.representation.directives.DirectivesPlainAnnotationValue;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
 @ToString
 @EqualsAndHashCode
-public final class EnumAnnotationValue implements BytecodeAnnotationValue {
+public final class BytecodePlainAnnotationValue implements BytecodeAnnotationValue {
 
     private final String name;
-    private final String descriptor;
 
-    /**
-     * The actual enumeration value.
-     */
-    private final String value;
+    private final Object value;
 
-    public EnumAnnotationValue(final String name, final String descriptor, final String value) {
+    public BytecodePlainAnnotationValue(final String name, final Object value) {
         this.name = name;
-        this.descriptor = descriptor;
         this.value = value;
     }
 
     @Override
     public void writeTo(final AnnotationVisitor visitor) {
-        visitor.visitEnum(this.name, this.descriptor, this.value);
+        visitor.visit(this.name, this.value);
     }
 
     @Override
     public Iterable<Directive> directives() {
-        return new DirectivesEnumAnnotationValue(this.name, this.descriptor, this.value);
-//        return DirectivesAnnotationProperty.enump(this.name, this.descriptor, this.value);
+        return new DirectivesPlainAnnotationValue(this.name, this.value);
+//        return DirectivesAnnotationProperty.plain(this.name, this.value);
     }
 }

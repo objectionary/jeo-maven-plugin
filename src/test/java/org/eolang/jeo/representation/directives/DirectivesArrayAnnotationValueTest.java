@@ -25,7 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Collections;
-import org.eolang.jeo.representation.bytecode.ArrayAnnotationValue;
+import org.eolang.jeo.representation.bytecode.BytecodeArrayAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.xmir.XmlAnnotationProperty;
 import org.eolang.jeo.representation.xmir.XmlNode;
@@ -76,7 +76,7 @@ final class DirectivesArrayAnnotationValueTest {
                 )
             ).bytecode(),
             Matchers.equalTo(
-                new ArrayAnnotationValue(
+                new BytecodeArrayAnnotationValue(
                     name,
                     Collections.singletonList(new BytecodeAnnotation(descriptor, visible))
                 )

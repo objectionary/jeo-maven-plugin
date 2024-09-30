@@ -33,12 +33,12 @@ import org.xembly.Directive;
 
 @ToString
 @EqualsAndHashCode
-public final class ArrayAnnotationValue implements BytecodeAnnotationValue {
+public final class BytecodeArrayAnnotationValue implements BytecodeAnnotationValue {
 
     private final String name;
     private final List<BytecodeAnnotationValue> values;
 
-    public ArrayAnnotationValue(final String name, final List<BytecodeAnnotationValue> values) {
+    public BytecodeArrayAnnotationValue(final String name, final List<BytecodeAnnotationValue> values) {
         this.name = name;
         this.values = values;
     }

@@ -25,7 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import org.eolang.jeo.representation.DataType;
-import org.eolang.jeo.representation.bytecode.EnumAnnotationValue;
+import org.eolang.jeo.representation.bytecode.BytecodeEnumAnnotationValue;
 import org.eolang.jeo.representation.xmir.XmlAnnotationProperty;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
@@ -69,7 +69,7 @@ final class DirectivesEnumAnnotationValueTest {
                     new Xembler(new DirectivesEnumAnnotationValue(name, descriptor, value)).xml()
                 )
             ).bytecode(),
-            Matchers.equalTo(new EnumAnnotationValue(name, descriptor, value))
+            Matchers.equalTo(new BytecodeEnumAnnotationValue(name, descriptor, value))
         );
     }
 }
