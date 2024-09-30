@@ -21,40 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.bytecode;
+package org.eolang.jeo.representation.directives;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.eolang.jeo.representation.directives.DirectivesEnumAnnotationValue;
-import org.objectweb.asm.AnnotationVisitor;
+import java.util.Iterator;
+import java.util.List;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
-@ToString
-@EqualsAndHashCode
-public final class EnumAnnotationValue implements BytecodeAnnotationValue {
+public final class DirectivesAnnotationAnnotationValue implements Iterable<Directive> {
 
     private final String name;
+
     private final String descriptor;
+    private final List<Iterable<Directive>> values;
 
-    /**
-     * The actual enumeration value.
-     */
-    private final String value;
-
-    public EnumAnnotationValue(final String name, final String descriptor, final String value) {
+    public DirectivesAnnotationAnnotationValue(
+        final String name, final String descriptor, final List<Iterable<Directive>> values
+    ) {
         this.name = name;
         this.descriptor = descriptor;
-        this.value = value;
+        this.values = values;
     }
 
     @Override
-    public void writeTo(final AnnotationVisitor visitor) {
-        visitor.visitEnum(this.name, this.descriptor, this.value);
-    }
-
-    @Override
-    public Iterable<Directive> directives() {
-        return new DirectivesEnumAnnotationValue(this.name, this.descriptor, this.value);
-//        return DirectivesAnnotationProperty.enump(this.name, this.descriptor, this.value);
+    public Iterator<Directive> iterator() {
+        return new Directives()
+            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
+            .append(new DirectivesValue("ANNOTATION"))
+            .append(new DirectivesValue(this.name))
+            .append(new DirectivesValue(this.descriptor))
+            .append(
+                this.values.stream()
+                    .map(Directives::new)
+                    .reduce(new Directives(), Directives::append)
+            )
+            .up()
+            .iterator();
     }
 }

@@ -21,40 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.bytecode;
+package org.eolang.jeo.representation.directives;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.eolang.jeo.representation.directives.DirectivesEnumAnnotationValue;
-import org.objectweb.asm.AnnotationVisitor;
+import java.util.Iterator;
+import java.util.List;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
-@ToString
-@EqualsAndHashCode
-public final class EnumAnnotationValue implements BytecodeAnnotationValue {
+public final class DirectivesArrayAnnotationValue implements Iterable<Directive> {
 
     private final String name;
-    private final String descriptor;
+    private List<Iterable<Directive>> children;
 
-    /**
-     * The actual enumeration value.
-     */
-    private final String value;
-
-    public EnumAnnotationValue(final String name, final String descriptor, final String value) {
+    public DirectivesArrayAnnotationValue(
+        final String name, List<Iterable<Directive>> children
+    ) {
         this.name = name;
-        this.descriptor = descriptor;
-        this.value = value;
+        this.children = children;
     }
 
     @Override
-    public void writeTo(final AnnotationVisitor visitor) {
-        visitor.visitEnum(this.name, this.descriptor, this.value);
+    public Iterator<Directive> iterator() {
+        return new Directives()
+            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
+            .append(new DirectivesValue("ARRAY"))
+            .append(new DirectivesValue(this.name))
+            .append(
+                this.children.stream()
+                    .map(Directives::new)
+                    .reduce(new Directives(), Directives::append))
+            .up()
+            .iterator();
     }
 
-    @Override
-    public Iterable<Directive> directives() {
-        return new DirectivesEnumAnnotationValue(this.name, this.descriptor, this.value);
-//        return DirectivesAnnotationProperty.enump(this.name, this.descriptor, this.value);
-    }
 }

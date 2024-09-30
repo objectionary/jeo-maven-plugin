@@ -25,7 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.directives.DirectivesAnnotationProperty;
+import org.eolang.jeo.representation.directives.DirectivesPlainAnnotationValue;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
@@ -34,6 +34,7 @@ import org.xembly.Directive;
 public final class PlainAnnotationValue implements BytecodeAnnotationValue {
 
     private final String name;
+
     private final Object value;
 
     public PlainAnnotationValue(final String name, final Object value) {
@@ -48,6 +49,7 @@ public final class PlainAnnotationValue implements BytecodeAnnotationValue {
 
     @Override
     public Iterable<Directive> directives() {
-        return DirectivesAnnotationProperty.plain(this.name, this.value);
+        return new DirectivesPlainAnnotationValue(this.name, this.value);
+//        return DirectivesAnnotationProperty.plain(this.name, this.value);
     }
 }

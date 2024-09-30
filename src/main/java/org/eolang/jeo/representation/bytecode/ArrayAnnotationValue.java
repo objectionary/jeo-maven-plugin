@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.directives.DirectivesAnnotationProperty;
+import org.eolang.jeo.representation.directives.DirectivesArrayAnnotationValue;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
@@ -52,11 +52,17 @@ public final class ArrayAnnotationValue implements BytecodeAnnotationValue {
 
     @Override
     public Iterable<Directive> directives() {
-        return DirectivesAnnotationProperty.array(
+        return new DirectivesArrayAnnotationValue(
             this.name,
             this.values.stream()
                 .map(BytecodeAnnotationValue::directives)
                 .collect(Collectors.toList())
         );
+//        return DirectivesAnnotationProperty.array(
+//            this.name,
+//            this.values.stream()
+//                .map(BytecodeAnnotationValue::directives)
+//                .collect(Collectors.toList())
+//        );
     }
 }

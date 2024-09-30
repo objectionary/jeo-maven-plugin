@@ -21,40 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.bytecode;
+package org.eolang.jeo.representation.directives;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.eolang.jeo.representation.directives.DirectivesEnumAnnotationValue;
-import org.objectweb.asm.AnnotationVisitor;
+import java.util.Iterator;
+import java.util.Optional;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
-@ToString
-@EqualsAndHashCode
-public final class EnumAnnotationValue implements BytecodeAnnotationValue {
+public final class DirectivesEnumAnnotationValue implements Iterable<Directive> {
 
     private final String name;
     private final String descriptor;
-
-    /**
-     * The actual enumeration value.
-     */
     private final String value;
 
-    public EnumAnnotationValue(final String name, final String descriptor, final String value) {
+    public DirectivesEnumAnnotationValue(
+        final String name, final String descriptor, final String value
+    ) {
         this.name = name;
         this.descriptor = descriptor;
         this.value = value;
     }
 
     @Override
-    public void writeTo(final AnnotationVisitor visitor) {
-        visitor.visitEnum(this.name, this.descriptor, this.value);
-    }
-
-    @Override
-    public Iterable<Directive> directives() {
-        return new DirectivesEnumAnnotationValue(this.name, this.descriptor, this.value);
-//        return DirectivesAnnotationProperty.enump(this.name, this.descriptor, this.value);
+    public Iterator<Directive> iterator() {
+        final Directives directives = new Directives()
+            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
+            .append(new DirectivesValue("ENUM"));
+        directives.append(new DirectivesValue(Optional.ofNullable(this.name).orElse("")));
+        directives.append(new DirectivesValue(this.descriptor));
+        directives.append(new DirectivesValue(this.value));
+        return directives.up().iterator();
     }
 }
