@@ -34,6 +34,10 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
     private final String name;
     private final Object value;
 
+    public DirectivesPlainAnnotationValue() {
+        this("", "");
+    }
+
     public DirectivesPlainAnnotationValue(final String name, final Object value) {
         this.name = name;
         this.value = value;

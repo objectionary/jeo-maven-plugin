@@ -76,7 +76,7 @@ final class DirectivesAnnotationsTest {
                 new DirectivesAnnotation(
                     "Ljava/lang/Override;",
                     true,
-                    DirectivesAnnotationProperty.plain("name", "something")
+                    new DirectivesPlainAnnotationValue("name", "something")
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(
