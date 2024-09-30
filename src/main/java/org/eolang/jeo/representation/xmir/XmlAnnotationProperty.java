@@ -25,7 +25,11 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
+import org.eolang.jeo.representation.bytecode.AnnotationAnnotationValue;
+import org.eolang.jeo.representation.bytecode.ArrayAnnotationValue;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
+import org.eolang.jeo.representation.bytecode.EnumAnnotationValue;
+import org.eolang.jeo.representation.bytecode.PlainAnnotationValue;
 
 /**
  * Xmir annotation property.
@@ -50,8 +54,58 @@ public final class XmlAnnotationProperty {
      * Transform to bytecode.
      * @return Bytecode annotation property.
      */
-    public BytecodeAnnotationProperty bytecode() {
-        return BytecodeAnnotationProperty.byType(this.type(), this.params());
+    public BytecodeAnnotationValue bytecode() {
+        final List<Object> params = this.params();
+        switch (this.type()) {
+            case "PLAIN":
+                return new PlainAnnotationValue(
+                    String.valueOf(params.get(0)),
+                    params.get(1)
+                );
+            case "ARRAY":
+                return new ArrayAnnotationValue(
+                    String.valueOf(params.get(0)),
+                    params.stream()
+                        .skip(1)
+                        .map(BytecodeAnnotationValue.class::cast)
+//                        .map(XmlAnnotationProperty::bytecode)
+                        .collect(Collectors.toList())
+                );
+            case "ANNOTATION":
+                return new AnnotationAnnotationValue(
+                    String.valueOf(params.get(0)),
+                    String.valueOf(params.get(1)),
+                    params.stream()
+                        .skip(2)
+                        .map(BytecodeAnnotationValue.class::cast)
+                        .collect(Collectors.toList())
+                );
+//                return new BytecodeAnnotationProperty.Annotation(
+//                    params.get(0).toString(),
+//                    params.get(1).toString(),
+//                    params.stream()
+//                        .skip(2)
+//                        .map(XmlAnnotationProperty.class::cast)
+//                        .map(XmlAnnotationProperty::bytecode)
+//                        .collect(Collectors.toList())
+//                );
+            case "ENUM":
+                return new EnumAnnotationValue(
+                    String.valueOf(params.get(0)),
+                    String.valueOf(params.get(1)),
+                    String.valueOf(params.get(2))
+                );
+//                return new BytecodeAnnotationProperty.Enum(
+//                    params.get(0).toString(),
+//                    params.get(1).toString(),
+//                    params.get(2).toString()
+//                );
+            default:
+                throw new IllegalArgumentException(
+                    String.format("Unknown annotation property type: %s", this.type())
+                );
+        }
+//        return BytecodeAnnotationProperty.byType(this.type(), params);
     }
 
     /**

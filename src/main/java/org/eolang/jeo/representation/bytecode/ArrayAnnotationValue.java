@@ -25,10 +25,14 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAnnotationProperty;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
+@ToString
+@EqualsAndHashCode
 public final class ArrayAnnotationValue implements BytecodeAnnotationValue {
 
     private final String name;

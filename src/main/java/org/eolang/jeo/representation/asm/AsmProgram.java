@@ -35,7 +35,6 @@ import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.AnnotationAnnotationValue;
 import org.eolang.jeo.representation.bytecode.ArrayAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
@@ -590,16 +589,7 @@ public final class AsmProgram {
         if (value instanceof String[]) {
             final String[] params = (String[]) value;
             result = new EnumAnnotationValue(name, params[0], params[1]);
-//            result = BytecodeAnnotationProperty.enump(name, params[0], params[1]);
         } else if (value instanceof AnnotationNode) {
-//            final AnnotationNode cast = AnnotationNode.class.cast(value);
-//            result = BytecodeAnnotationProperty.annotation(
-//                name,
-//                cast.desc,
-//                cast.values.stream().map(
-//                    val -> AsmProgram.annotationProperty("", val)
-//                ).collect(Collectors.toList())
-//            );
             final AnnotationNode cast = AnnotationNode.class.cast(value);
             result = new AnnotationAnnotationValue(
                 name,
@@ -608,12 +598,6 @@ public final class AsmProgram {
                 ).collect(Collectors.toList())
             );
         } else if (value instanceof List) {
-//            result = BytecodeAnnotationProperty.array(
-//                name,
-//                ((Collection<?>) value).stream()
-//                    .map(val -> AsmProgram.annotationProperty("", val))
-//                    .collect(Collectors.toList())
-//            );
             result = new ArrayAnnotationValue(
                 name,
                 ((Collection<?>) value).stream()
@@ -621,7 +605,6 @@ public final class AsmProgram {
                     .collect(Collectors.toList())
             );
         } else {
-//            result = BytecodeAnnotationProperty.plain(name, value);
             result = new PlainAnnotationValue(name, value);
         }
         return result;

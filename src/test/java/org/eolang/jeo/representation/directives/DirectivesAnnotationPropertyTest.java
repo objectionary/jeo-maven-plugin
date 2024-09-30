@@ -24,10 +24,13 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import java.util.Arrays;
+import java.util.Collections;
 import org.eolang.jeo.representation.DataType;
+import org.eolang.jeo.representation.bytecode.AnnotationAnnotationValue;
+import org.eolang.jeo.representation.bytecode.ArrayAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotationProperty;
+import org.eolang.jeo.representation.bytecode.EnumAnnotationValue;
+import org.eolang.jeo.representation.bytecode.PlainAnnotationValue;
 import org.eolang.jeo.representation.xmir.XmlAnnotationProperty;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
@@ -122,7 +125,8 @@ final class DirectivesAnnotationPropertyTest {
                 )
             ).bytecode(),
             Matchers.equalTo(
-                BytecodeAnnotationProperty.byType("PLAIN", Arrays.asList(name, value))
+                new PlainAnnotationValue(name, value)
+//                BytecodeAnnotationProperty.byType("PLAIN", Arrays.asList(name, value))
             )
         );
     }
@@ -140,9 +144,10 @@ final class DirectivesAnnotationPropertyTest {
                 )
             ).bytecode(),
             Matchers.equalTo(
-                BytecodeAnnotationProperty.byType(
-                    "ENUM", Arrays.asList(name, descriptor, value)
-                )
+                new EnumAnnotationValue(name, descriptor, value)
+//                BytecodeAnnotationProperty.byType(
+//                    "ENUM", Arrays.asList(name, descriptor, value)
+//                )
             )
         );
     }
@@ -165,9 +170,13 @@ final class DirectivesAnnotationPropertyTest {
                 )
             ).bytecode(),
             Matchers.equalTo(
-                BytecodeAnnotationProperty.byType(
-                    "ARRAY", Arrays.asList(name, new BytecodeAnnotation(descriptor, visible))
+                new ArrayAnnotationValue(
+                    name,
+                    Collections.singletonList(new BytecodeAnnotation(descriptor, visible))
                 )
+//                BytecodeAnnotationProperty.byType(
+//                    "ARRAY", Arrays.asList(name, new BytecodeAnnotation(descriptor, visible))
+//                )
             )
         );
     }
@@ -191,10 +200,15 @@ final class DirectivesAnnotationPropertyTest {
                 )
             ).bytecode(),
             Matchers.equalTo(
-                BytecodeAnnotationProperty.byType(
-                    "ANNOTATION",
-                    Arrays.asList(name, descriptor, new BytecodeAnnotation(descriptor, visible))
+                new AnnotationAnnotationValue(
+                    name,
+                    descriptor,
+                    Collections.singletonList(new BytecodeAnnotation(descriptor, visible))
                 )
+//                BytecodeAnnotationProperty.byType(
+//                    "ANNOTATION",
+//                    Arrays.asList(name, descriptor, new BytecodeAnnotation(descriptor, visible))
+//                )
             )
         );
     }

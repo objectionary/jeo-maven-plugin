@@ -23,10 +23,14 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAnnotationProperty;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
+@ToString
+@EqualsAndHashCode
 public final class EnumAnnotationValue implements BytecodeAnnotationValue {
 
     private final String name;
