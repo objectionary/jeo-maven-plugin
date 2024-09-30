@@ -42,14 +42,16 @@ public final class DirectivesArrayAnnotationValue implements Iterable<Directive>
     /**
      * The actual values.
      */
-    private List<Iterable<Directive>> values;
+    private final List<Iterable<Directive>> values;
 
     /**
      * Constructor.
      * @param name The name of the annotation property.
      * @param children The actual values.
      */
-    public DirectivesArrayAnnotationValue(final String name, List<Iterable<Directive>> children) {
+    public DirectivesArrayAnnotationValue(
+        final String name, final List<Iterable<Directive>> children
+    ) {
         this.name = name;
         this.values = children;
     }
@@ -63,7 +65,8 @@ public final class DirectivesArrayAnnotationValue implements Iterable<Directive>
             .append(
                 this.values.stream()
                     .map(Directives::new)
-                    .reduce(new Directives(), Directives::append))
+                    .reduce(new Directives(), Directives::append)
+            )
             .up()
             .iterator();
     }

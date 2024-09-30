@@ -84,25 +84,25 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
             Class[].class,
             Object[].class,
         };
-        if (Arrays.stream(iterable).anyMatch(iter -> iter.equals(value.getClass()))) {
-            if (value.getClass().equals(int[].class)) {
-                res = new DirectivesValues("", (int[]) value);
-            } else if (value.getClass().equals(long[].class)) {
-                res = new DirectivesValues("", (long[]) value);
-            } else if (value.getClass().equals(float[].class)) {
-                res = new DirectivesValues("", (float[]) value);
-            } else if (value.getClass().equals(double[].class)) {
-                res = new DirectivesValues("", (double[]) value);
-            } else if (value.getClass().equals(boolean[].class)) {
-                res = new DirectivesValues("", (boolean[]) value);
-            } else if (value.getClass().equals(char[].class)) {
-                res = new DirectivesValues("", (char[]) value);
-            } else if (value.getClass().equals(byte[].class)) {
-                res = new DirectivesValues("", (byte[]) value);
-            } else if (value.getClass().equals(short[].class)) {
-                res = new DirectivesValues("", (short[]) value);
+        if (Arrays.stream(iterable).anyMatch(iter -> iter.equals(this.value.getClass()))) {
+            if (this.value.getClass().equals(int[].class)) {
+                res = new DirectivesValues("", (int[]) this.value);
+            } else if (this.value.getClass().equals(long[].class)) {
+                res = new DirectivesValues("", (long[]) this.value);
+            } else if (this.value.getClass().equals(float[].class)) {
+                res = new DirectivesValues("", (float[]) this.value);
+            } else if (this.value.getClass().equals(double[].class)) {
+                res = new DirectivesValues("", (double[]) this.value);
+            } else if (this.value.getClass().equals(boolean[].class)) {
+                res = new DirectivesValues("", (boolean[]) this.value);
+            } else if (this.value.getClass().equals(char[].class)) {
+                res = new DirectivesValues("", (char[]) this.value);
+            } else if (this.value.getClass().equals(byte[].class)) {
+                res = new DirectivesValues("", (byte[]) this.value);
+            } else if (this.value.getClass().equals(short[].class)) {
+                res = new DirectivesValues("", (short[]) this.value);
             } else {
-                res = new DirectivesValues("", (Object[]) value);
+                res = new DirectivesValues("", (Object[]) this.value);
             }
         } else {
             res = new DirectivesValue(this.value);
