@@ -25,6 +25,8 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -58,16 +60,26 @@ public final class DirectivesArrayAnnotationValue implements Iterable<Directive>
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
-            .append(new DirectivesValue("ARRAY"))
-            .append(new DirectivesValue(this.name))
-            .append(
+        return new DirectivesJeoObject(
+            "annotation-property",
+            Stream.concat(
+                Stream.of(
+                    new DirectivesValue("ARRAY"),
+                    new DirectivesValue(this.name)
+                ),
                 this.values.stream()
-                    .map(Directives::new)
-                    .reduce(new Directives(), Directives::append)
-            )
-            .up()
-            .iterator();
+            ).map(Directives::new).collect(Collectors.toList())
+        ).iterator();
+//        return new Directives()
+//            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
+//            .append(new DirectivesValue("ARRAY"))
+//            .append(new DirectivesValue(this.name))
+//            .append(
+//                this.values.stream()
+//                    .map(Directives::new)
+//                    .reduce(new Directives(), Directives::append)
+//            )
+//            .up()
+//            .iterator();
     }
 }

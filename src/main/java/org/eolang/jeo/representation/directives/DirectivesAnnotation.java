@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.Signature;
@@ -102,19 +104,33 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives().add("o")
-            .attr("base", new JeoFqn("annotation").fqn())
-            .attr(
-                "name",
-                new Signature(
-                    String.format("annotation-%d", new Random().nextInt(Integer.MAX_VALUE)),
-                    this.descriptor
-                ).encoded()
-            )
-            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-            .append(new DirectivesValue(this.descriptor))
-            .append(new DirectivesValue(this.visible));
-        this.properties.forEach(directives::append);
-        return directives.up().iterator();
+        return new DirectivesJeoObject(
+            "annotation",
+            new Signature(
+                String.format("annotation-%d", new Random().nextInt(Integer.MAX_VALUE)),
+                this.descriptor
+            ).encoded(),
+            Stream.concat(
+                Stream.of(
+                    new DirectivesValue(this.descriptor),
+                    new DirectivesValue(this.visible)
+                ),
+                this.properties.stream()
+            ).map(Directives::new).collect(Collectors.toList())
+        ).iterator();
+//        final Directives directives = new Directives().add("o")
+//            .attr("base", new JeoFqn("annotation").fqn())
+//            .attr(
+//                "name",
+//                new Signature(
+//                    String.format("annotation-%d", new Random().nextInt(Integer.MAX_VALUE)),
+//                    this.descriptor
+//                ).encoded()
+//            )
+//            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
+//            .append(new DirectivesValue(this.descriptor))
+//            .append(new DirectivesValue(this.visible));
+//        this.properties.forEach(directives::append);
+//        return directives.up().iterator();
     }
 }

@@ -25,6 +25,8 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -65,17 +67,28 @@ public final class DirectivesAnnotationAnnotationValue implements Iterable<Direc
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
-            .append(new DirectivesValue("ANNOTATION"))
-            .append(new DirectivesValue(this.name))
-            .append(new DirectivesValue(this.descriptor))
-            .append(
+        return new DirectivesJeoObject(
+            "annotation-property",
+            Stream.concat(
+                Stream.of(
+                    new DirectivesValue("ANNOTATION"),
+                    new DirectivesValue(this.name),
+                    new DirectivesValue(this.descriptor)
+                ),
                 this.values.stream()
-                    .map(Directives::new)
-                    .reduce(new Directives(), Directives::append)
-            )
-            .up()
-            .iterator();
+            ).map(Directives::new).collect(Collectors.toList())
+        ).iterator();
+//        return new Directives()
+//            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
+//            .append(new DirectivesValue("ANNOTATION"))
+//            .append(new DirectivesValue(this.name))
+//            .append(new DirectivesValue(this.descriptor))
+//            .append(
+//                this.values.stream()
+//                    .map(Directives::new)
+//                    .reduce(new Directives(), Directives::append)
+//            )
+//            .up()
+//            .iterator();
     }
 }
