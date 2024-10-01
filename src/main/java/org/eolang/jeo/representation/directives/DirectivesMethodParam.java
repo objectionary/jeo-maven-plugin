@@ -26,10 +26,8 @@ package org.eolang.jeo.representation.directives;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Iterator;
-import java.util.Random;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Directives for a method parameter.
@@ -86,21 +84,5 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
             ),
             this.annotations
         ).iterator();
-//        return new Directives().add("o")
-//            .attr("base", new JeoFqn("param").fqn())
-//            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-//            .attr(
-//                "name",
-//                String.format(
-//                    "param-%s-%d",
-//                    DirectivesMethodParam.ENCODER.encodeToString(
-//                        this.type.toString().getBytes(StandardCharsets.UTF_8)
-//                    ),
-//                    this.index
-//                )
-//            )
-//            .append(this.annotations)
-//            .up()
-//            .iterator();
     }
 }

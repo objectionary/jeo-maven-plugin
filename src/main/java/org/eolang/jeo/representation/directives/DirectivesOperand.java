@@ -43,7 +43,7 @@ public final class DirectivesOperand implements Iterable<Directive> {
      * Constructor.
      * @param operand Raw operand.
      */
-    public DirectivesOperand(final Object operand) {
+    DirectivesOperand(final Object operand) {
         this.raw = operand;
     }
 

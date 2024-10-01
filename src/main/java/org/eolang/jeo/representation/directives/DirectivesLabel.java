@@ -56,7 +56,7 @@ public final class DirectivesLabel implements Iterable<Directive> {
      * @param label Bytecode label.
      * @param name Label name.
      */
-    public DirectivesLabel(final Label label, final String name) {
+    private DirectivesLabel(final Label label, final String name) {
         this.label = label;
         this.name = name;
     }

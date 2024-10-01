@@ -30,6 +30,10 @@ import java.util.stream.Collectors;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
+/**
+ * Directives Abstract Object.
+ * @since 0.6
+ */
 public final class DirectivesAbstractObject implements Iterable<Directive> {
 
     /**
@@ -38,24 +42,33 @@ public final class DirectivesAbstractObject implements Iterable<Directive> {
     private final String name;
 
     /**
-     * The attributes.
+     * The inner objects.
      */
     private final List<Directives> inner;
 
+    /**
+     * Constructor.
+     * @param name The name of the object.
+     * @param inner Inner objects.
+     */
     @SafeVarargs
-    public DirectivesAbstractObject(final String name, Iterable<Directive>... inner) {
+    DirectivesAbstractObject(final String name, Iterable<Directive>... inner) {
         this(name, Arrays.asList(inner).stream().map(Directives::new).collect(Collectors.toList()));
     }
 
-    public DirectivesAbstractObject(final String name, final List<Directives> inner) {
+    /**
+     * Constructor.
+     * @param name The name of the object.
+     * @param inner Inner objects.
+     */
+    DirectivesAbstractObject(final String name, final List<Directives> inner) {
         this.name = name;
         this.inner = inner;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o")
+        return new Directives().add("o")
             .attr("name", this.name)
             .attr("abstract", "")
             .append(this.inner.stream().reduce(new Directives(), Directives::append))

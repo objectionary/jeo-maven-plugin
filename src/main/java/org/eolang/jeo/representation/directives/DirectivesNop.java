@@ -28,6 +28,7 @@ import org.xembly.Directive;
 import org.xembly.Directives;
 
 public final class DirectivesNop implements Iterable<Directive> {
+
     @Override
     public Iterator<Directive> iterator() {
         return new Directives()

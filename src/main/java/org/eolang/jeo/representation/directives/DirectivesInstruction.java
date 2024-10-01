@@ -86,28 +86,6 @@ public final class DirectivesInstruction implements Iterable<Directive> {
                 .map(Directives::new)
                 .collect(Collectors.toList())
         ).iterator();
-//        try {
-//            final Directives directives = new Directives();
-//            directives.add("o")
-//                .attr("name", this.name())
-//                .attr("line", "999")
-//                .attr("base", new JeoFqn("opcode").fqn());
-//            directives.append(new DirectivesOperand(this.opcode));
-//            for (final Object operand : this.arguments) {
-//                directives.append(new DirectivesOperand(operand));
-//            }
-//            directives.up();
-//            return directives.iterator();
-//        } catch (final IllegalStateException exception) {
-//            throw new IllegalStateException(
-//                String.format(
-//                    "Failed to convert instruction %s with arguments %s to xembly directives",
-//                    this.name(),
-//                    Arrays.toString(this.arguments)
-//                ),
-//                exception
-//            );
-//        }
     }
 
     /**

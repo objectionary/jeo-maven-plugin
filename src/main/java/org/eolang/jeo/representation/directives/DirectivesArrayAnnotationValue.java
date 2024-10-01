@@ -70,16 +70,5 @@ public final class DirectivesArrayAnnotationValue implements Iterable<Directive>
                 this.values.stream()
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
-//        return new Directives()
-//            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
-//            .append(new DirectivesValue("ARRAY"))
-//            .append(new DirectivesValue(this.name))
-//            .append(
-//                this.values.stream()
-//                    .map(Directives::new)
-//                    .reduce(new Directives(), Directives::append)
-//            )
-//            .up()
-//            .iterator();
     }
 }

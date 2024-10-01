@@ -51,38 +51,6 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
 
     /**
      * Constructor.
-     */
-    public DirectivesAnnotations() {
-        this(new ArrayList<>(0));
-    }
-
-    /**
-     * Constructor.
-     * @param name Name.
-     */
-    public DirectivesAnnotations(final String name) {
-        this(new ArrayList<>(0), name);
-    }
-
-    /**
-     * Constructor.
-     * @param name Name.
-     * @param annotations Annotations.
-     */
-    public DirectivesAnnotations(final String name, final DirectivesAnnotation... annotations) {
-        this(Arrays.asList(annotations), name);
-    }
-
-    /**
-     * Constructor.
-     * @param annotations Annotations.
-     */
-    public DirectivesAnnotations(final List<Iterable<Directive>> annotations) {
-        this(annotations, "annotations");
-    }
-
-    /**
-     * Constructor.
      * @param annotations Annotations.
      * @param name Name.
      */
@@ -99,6 +67,38 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
     public DirectivesAnnotations add(final DirectivesAnnotation annotation) {
         this.annotations.add(annotation);
         return this;
+    }
+
+    /**
+     * Constructor.
+     */
+    DirectivesAnnotations() {
+        this(new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param name Name.
+     */
+    DirectivesAnnotations(final String name) {
+        this(new ArrayList<>(0), name);
+    }
+
+    /**
+     * Constructor.
+     * @param name Name.
+     * @param annotations Annotations.
+     */
+    DirectivesAnnotations(final String name, final DirectivesAnnotation... annotations) {
+        this(Arrays.asList(annotations), name);
+    }
+
+    /**
+     * Constructor.
+     * @param annotations Annotations.
+     */
+    private DirectivesAnnotations(final List<Iterable<Directive>> annotations) {
+        this(annotations, "annotations");
     }
 
     @Override

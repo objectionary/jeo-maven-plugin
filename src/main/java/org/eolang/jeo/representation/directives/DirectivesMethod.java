@@ -184,22 +184,5 @@ public final class DirectivesMethod implements Iterable<Directive> {
                 this.dvalue.stream()
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
-
-//        final Directives directives = new Directives();
-//        directives.add("o")
-//            .attr("abstract", "")
-//            .attr("name", this.name.encoded())
-//            .append(this.properties)
-//            .append(this.annotations)
-//            .append(new DirectivesSeq("@", this.instructions))
-//            .append(
-//                new DirectivesSeq(
-//                    String.format("trycatchblocks-%s", this.name.name()),
-//                    this.exceptions
-//                )
-//            );
-//        this.dvalue.forEach(directives::append);
-//        directives.up();
-//        return directives.iterator();
     }
 }

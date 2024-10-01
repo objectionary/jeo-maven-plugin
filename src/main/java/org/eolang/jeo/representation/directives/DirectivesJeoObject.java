@@ -31,26 +31,63 @@ import java.util.stream.Collectors;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
+/**
+ * Directives that represent a pure JEO object.
+ * Similar to {@link DirectivesEoObject},
+ * but for objects that are parts of the JEO XMIR representation.
+ * @since 0.6
+ */
 public final class DirectivesJeoObject implements Iterable<Directive> {
 
+    /**
+     * The base of the object.
+     */
     private final String base;
 
+    /**
+     * The name of the object.
+     */
     private final String name;
+
+    /**
+     * Inner components.
+     */
     private final List<Directives> inner;
 
+    /**
+     * Constructor.
+     * @param base The base of the object.
+     * @param inner Inner components.
+     */
     @SafeVarargs
     public DirectivesJeoObject(final String base, final Iterable<Directive>... inner) {
         this(base, Arrays.stream(inner).map(Directives::new).toArray(Directives[]::new));
     }
 
+    /**
+     * Constructor.
+     * @param base The base of the object.
+     * @param inner Inner components.
+     */
     public DirectivesJeoObject(final String base, final Directives... inner) {
         this(base, Arrays.asList(inner));
     }
 
+    /**
+     * Constructor.
+     * @param base The base of the object.
+     * @param inner Inner components.
+     */
     public DirectivesJeoObject(final String base, final List<Directives> inner) {
         this(base, "", inner);
     }
 
+    /**
+     * Constructor.
+     * @param base The base of the object.
+     * @param name The name of the object.
+     * @param inner Inner components.
+     */
     @SafeVarargs
     public DirectivesJeoObject(
         final String base, final String name, final Iterable<Directive>... inner
@@ -58,10 +95,22 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
         this(base, name, Arrays.stream(inner).map(Directives::new).collect(Collectors.toList()));
     }
 
+    /**
+     * Constructor.
+     * @param base The base of the object.
+     * @param name The name of the object.
+     * @param inner Inner components.
+     */
     public DirectivesJeoObject(final String base, final String name, final Directives... inner) {
         this(base, name, Arrays.asList(inner));
     }
 
+    /**
+     * Constructor.
+     * @param base The base of the object.
+     * @param name The name of the object.
+     * @param inner Inner components.
+     */
     public DirectivesJeoObject(final String base, final String name, final List<Directives> inner) {
         this.base = base;
         this.name = name;

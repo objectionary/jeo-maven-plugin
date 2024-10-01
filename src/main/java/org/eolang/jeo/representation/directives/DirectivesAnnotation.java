@@ -118,19 +118,5 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
                 this.properties.stream()
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
-//        final Directives directives = new Directives().add("o")
-//            .attr("base", new JeoFqn("annotation").fqn())
-//            .attr(
-//                "name",
-//                new Signature(
-//                    String.format("annotation-%d", new Random().nextInt(Integer.MAX_VALUE)),
-//                    this.descriptor
-//                ).encoded()
-//            )
-//            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-//            .append(new DirectivesValue(this.descriptor))
-//            .append(new DirectivesValue(this.visible));
-//        this.properties.forEach(directives::append);
-//        return directives.up().iterator();
     }
 }

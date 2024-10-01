@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.directives;
 import java.util.Iterator;
 import org.objectweb.asm.Handle;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Directives Handle.

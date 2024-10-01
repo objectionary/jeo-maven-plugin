@@ -112,12 +112,5 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
             new DirectivesValue(Optional.ofNullable(this.name).orElse("")),
             res
         ).iterator();
-//        return new Directives()
-//            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
-//            .append(new DirectivesValue("PLAIN"))
-//            .append(new DirectivesValue(Optional.ofNullable(this.name).orElse("")))
-//            .append(res)
-//            .up()
-//            .iterator();
     }
 }

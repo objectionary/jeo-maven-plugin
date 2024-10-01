@@ -78,17 +78,5 @@ public final class DirectivesAnnotationAnnotationValue implements Iterable<Direc
                 this.values.stream()
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
-//        return new Directives()
-//            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
-//            .append(new DirectivesValue("ANNOTATION"))
-//            .append(new DirectivesValue(this.name))
-//            .append(new DirectivesValue(this.descriptor))
-//            .append(
-//                this.values.stream()
-//                    .map(Directives::new)
-//                    .reduce(new Directives(), Directives::append)
-//            )
-//            .up()
-//            .iterator();
     }
 }

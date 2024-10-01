@@ -24,9 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import java.util.Random;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Max stack and locals.
@@ -69,13 +67,5 @@ public final class DirectivesMaxs implements Iterable<Directive> {
             new DirectivesValue("stack", this.stack),
             new DirectivesValue("locals", this.locals)
         ).iterator();
-//        return new Directives().add("o")
-//            .attr("name", "maxs")
-//            .attr("abstract", "")
-//            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-//            .append(new DirectivesValue("stack", this.stack))
-//            .append(new DirectivesValue("locals", this.locals))
-//            .up()
-//            .iterator();
     }
 }

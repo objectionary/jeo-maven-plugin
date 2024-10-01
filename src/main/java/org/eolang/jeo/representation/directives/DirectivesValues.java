@@ -56,7 +56,7 @@ public final class DirectivesValues implements Iterable<Directive> {
      * @param <T> Values type.
      */
     @SafeVarargs
-    public <T> DirectivesValues(final T... vaues) {
+    <T> DirectivesValues(final T... vaues) {
         this("", vaues);
     }
 
@@ -67,7 +67,7 @@ public final class DirectivesValues implements Iterable<Directive> {
      * @param <T> Values type.
      */
     @SafeVarargs
-    public <T> DirectivesValues(final String name, final T... vals) {
+    <T> DirectivesValues(final String name, final T... vals) {
         this.name = name;
         this.values = vals.clone();
     }

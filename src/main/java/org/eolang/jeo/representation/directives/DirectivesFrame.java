@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Frame directives.
@@ -99,15 +98,5 @@ public final class DirectivesFrame implements Iterable<Directive> {
             new DirectivesValue(this.nstack),
             new DirectivesValues(this.stack)
         ).iterator();
-//        return new Directives()
-//            .add("o")
-//            .attr("base", new JeoFqn("frame").fqn())
-//            .append(new DirectivesValue(this.type))
-//            .append(new DirectivesValue(this.nlocal))
-//            .append(new DirectivesValues(this.locals))
-//            .append(new DirectivesValue(this.nstack))
-//            .append(new DirectivesValues(this.stack))
-//            .up()
-//            .iterator();
     }
 }

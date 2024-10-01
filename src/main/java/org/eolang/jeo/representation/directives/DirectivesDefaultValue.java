@@ -24,9 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import java.util.Random;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * This class represents a default annotation value.
@@ -61,12 +59,5 @@ public final class DirectivesDefaultValue implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "annotation-default-value", "annotation-defvalue", this.value
         ).iterator();
-//        final Directives directives = new Directives()
-//            .add("o")
-//            .attr("base", new JeoFqn("annotation-default-value").fqn())
-//            .attr("name", "annotation-defvalue")
-//            .attr("line", new Random().nextInt(Integer.MAX_VALUE));
-//        directives.append(this.value);
-//        return directives.up().iterator();
     }
 }

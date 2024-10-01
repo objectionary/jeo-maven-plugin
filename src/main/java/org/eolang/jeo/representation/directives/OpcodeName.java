@@ -76,7 +76,7 @@ public final class OpcodeName {
      * @param opcode Bytecode operation code.
      * @param counter Opcode counter.
      */
-    public OpcodeName(final int opcode, final AtomicInteger counter) {
+    OpcodeName(final int opcode, final AtomicInteger counter) {
         this.opcode = opcode;
         this.counter = counter;
     }

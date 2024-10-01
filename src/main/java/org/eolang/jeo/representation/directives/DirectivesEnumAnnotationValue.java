@@ -71,12 +71,5 @@ public final class DirectivesEnumAnnotationValue implements Iterable<Directive> 
             new DirectivesValue(this.descriptor),
             new DirectivesValue(this.value)
         ).iterator();
-//        final Directives directives = new Directives()
-//            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
-//            .append(new DirectivesValue("ENUM"));
-//        directives.append(new DirectivesValue(Optional.ofNullable(this.name).orElse("")));
-//        directives.append(new DirectivesValue(this.descriptor));
-//        directives.append(new DirectivesValue(this.value));
-//        return directives.up().iterator();
     }
 }

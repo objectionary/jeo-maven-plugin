@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cactoos.scalar.LengthOf;
 import org.cactoos.scalar.Unchecked;
@@ -52,10 +52,20 @@ public final class DirectivesSeq implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param name Name of the sequence.
+     * @param elements Elements to wrap.
+     */
+    public DirectivesSeq(final String name, final List<? extends Iterable<Directive>> elements) {
+        this.name = name;
+        this.directives = elements;
+    }
+
+    /**
+     * Constructor.
      * @param elements Elements to wrap.
      */
     @SafeVarargs
-    public DirectivesSeq(final Iterable<Directive>... elements) {
+    DirectivesSeq(final Iterable<Directive>... elements) {
         this("@", elements);
     }
 
@@ -66,19 +76,8 @@ public final class DirectivesSeq implements Iterable<Directive> {
      * @param elements Elements to wrap.
      */
     @SafeVarargs
-    public DirectivesSeq(final String name, final Iterable<Directive>... elements) {
+    private DirectivesSeq(final String name, final Iterable<Directive>... elements) {
         this(name, Arrays.asList(elements));
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param name Name of the sequence.
-     * @param elements Elements to wrap.
-     */
-    public DirectivesSeq(final String name, final List<? extends Iterable<Directive>> elements) {
-        this.name = name;
-        this.directives = elements;
     }
 
     @Override
@@ -86,15 +85,8 @@ public final class DirectivesSeq implements Iterable<Directive> {
         return new DirectivesEoObject(
             String.format("seq%d", this.size()),
             this.name,
-            this.stream().map(Directives::new).toArray(Directives[]::new)
+            this.stream().map(Directives::new).collect(Collectors.toList())
         ).iterator();
-//        return new Directives()
-//            .add("o")
-//            .attr("base", new EoFqn(String.format("seq%d", this.size())).fqn())
-//            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-//            .attr("name", this.name)
-//            .append(this.stream().reduce(new Directives(), Directives::append))
-//            .up().iterator();
     }
 
     /**

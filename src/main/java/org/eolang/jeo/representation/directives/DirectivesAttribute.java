@@ -60,7 +60,7 @@ public final class DirectivesAttribute implements Iterable<Directive> {
      * @param base The base of the attribute.
      * @param data Properties of an attribute.
      */
-    public DirectivesAttribute(final String base, final List<Iterable<Directive>> data) {
+    private DirectivesAttribute(final String base, final List<Iterable<Directive>> data) {
         this.base = base;
         this.data = data;
     }
@@ -71,10 +71,5 @@ public final class DirectivesAttribute implements Iterable<Directive> {
             this.base,
             this.data.stream().map(Directives::new).toArray(Directives[]::new)
         ).iterator();
-//        final Directives directives = new Directives()
-//            .add("o")
-//            .attr("base", new JeoFqn(this.base).fqn());
-//        this.data.forEach(directives::append);
-//        return directives.up().iterator();
     }
 }
