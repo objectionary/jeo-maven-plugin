@@ -27,7 +27,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicReference;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -47,38 +46,20 @@ public final class DirectivesProgram implements Iterable<Directive> {
      * This field uses atomic reference because the field can't be initialized in the constructor.
      * It is the Java ASM framework limitation.
      */
-    private final AtomicReference<DirectivesClass> klass;
+    private final DirectivesClass klass;
 
     /**
      * Metas.
      */
-    private final AtomicReference<DirectivesMetas> metas;
-
-    /**
-     * Simple constructor with empty listing.
-     */
-    public DirectivesProgram() {
-        this("");
-    }
+    private final DirectivesMetas metas;
 
     /**
      * Constructor.
-     * @param code Program listing.
-     * @param clazz Class.
+     * @param klass Top-level class.
      * @param metas Metas.
      */
-    public DirectivesProgram(
-        final String code, final DirectivesClass clazz, final DirectivesMetas metas
-    ) {
-        this(code, new AtomicReference<>(clazz), new AtomicReference<>(metas));
-    }
-
-    /**
-     * Constructor.
-     * @param code Program listing.
-     */
-    private DirectivesProgram(final String code) {
-        this(code, new AtomicReference<>(), new AtomicReference<>());
+    public DirectivesProgram(final DirectivesClass klass, final DirectivesMetas metas) {
+        this("", klass, metas);
     }
 
     /**
@@ -87,27 +68,14 @@ public final class DirectivesProgram implements Iterable<Directive> {
      * @param clazz Class.
      * @param name Metas.
      */
-    private DirectivesProgram(
+    public DirectivesProgram(
         final String code,
-        final AtomicReference<DirectivesClass> clazz,
-        final AtomicReference<DirectivesMetas> name
+        final DirectivesClass clazz,
+        final DirectivesMetas name
     ) {
         this.listing = code;
         this.klass = clazz;
         this.metas = name;
-    }
-
-    /**
-     * Append top-level class.
-     * @param meta Metas.
-     * @param clazz Top-level class.
-     * @return The same instance.
-     * @todo!!!!
-     */
-    public DirectivesProgram withClass(final DirectivesMetas meta, final DirectivesClass clazz) {
-        this.metas.set(meta);
-        this.klass.set(clazz);
-        return this;
     }
 
     @Override
@@ -116,7 +84,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
             .format(DateTimeFormatter.ISO_INSTANT);
         final Directives directives = new Directives();
         directives.add("program")
-            .attr("name", this.metas.get().className().name())
+            .attr("name", this.metas.className().name())
             .attr("version", "0.0.0")
             .attr("revision", "0.0.0")
             .attr("dob", now)
@@ -127,10 +95,10 @@ public final class DirectivesProgram implements Iterable<Directive> {
             .add("errors").up()
             .add("sheets").up()
             .add("license").up()
-            .append(this.metas.get())
+            .append(this.metas)
             .attr("ms", System.currentTimeMillis())
             .add("objects");
-        directives.append(this.klass.get());
+        directives.append(this.klass);
         directives.up();
         return directives.iterator();
     }

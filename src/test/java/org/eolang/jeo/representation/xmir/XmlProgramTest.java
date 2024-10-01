@@ -93,37 +93,35 @@ final class XmlProgramTest {
     private static String classWithGenericMethod() {
         final ClassName name = new ClassName("org.eolang.jeo.takes", "StrangeClass");
         return new Xembler(
-            new DirectivesProgram()
-                .withClass(
-                    new DirectivesMetas(name),
-                    new DirectivesClass(
-                        name,
-                        new DirectivesMethod(
-                            "printElement",
-                            new DirectivesMethodProperties(
-                                Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
-                                "(Ljava/lang/Object;)V",
-                                "<T:Ljava/lang/Object;>(TT;)V"
-                            )
+            new DirectivesProgram(
+                new DirectivesClass(
+                    name,
+                    new DirectivesMethod(
+                        "printElement",
+                        new DirectivesMethodProperties(
+                            Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
+                            "(Ljava/lang/Object;)V",
+                            "<T:Ljava/lang/Object;>(TT;)V"
                         )
-                            .withOpcode(
-                                Opcodes.GETSTATIC,
-                                "java/lang/System",
-                                "out",
-                                "Ljava/io/PrintStream;",
-                                false
-                            )
-                            .withOpcode(Opcodes.ALOAD, 0)
-                            .withOpcode(
-                                Opcodes.INVOKEVIRTUAL,
-                                "java/io/PrintStream",
-                                "println",
-                                "(Ljava/lang/Object;)V",
-                                false
-                            )
-                            .withOpcode(Opcodes.RETURN)
                     )
-                )
+                        .withOpcode(
+                            Opcodes.GETSTATIC,
+                            "java/lang/System",
+                            "out",
+                            "Ljava/io/PrintStream;",
+                            false
+                        )
+                        .withOpcode(Opcodes.ALOAD, 0)
+                        .withOpcode(
+                            Opcodes.INVOKEVIRTUAL,
+                            "java/io/PrintStream",
+                            "println",
+                            "(Ljava/lang/Object;)V",
+                            false
+                        )
+                        .withOpcode(Opcodes.RETURN)
+                ), new DirectivesMetas(name)
+            )
         ).xmlQuietly();
     }
 
@@ -142,35 +140,33 @@ final class XmlProgramTest {
     private static String classWithException() {
         final ClassName name = new ClassName("Foo");
         return new Xembler(
-            new DirectivesProgram()
-                .withClass(
-                    new DirectivesMetas(name),
-                    new DirectivesClass(
-                        name,
-                        new DirectivesMethod(
-                            "bar",
-                            new DirectivesMethodProperties(
-                                Opcodes.ACC_PUBLIC,
-                                "()V",
-                                null,
-                                "java/lang/Exception"
-                            )
+            new DirectivesProgram(
+                new DirectivesClass(
+                    name,
+                    new DirectivesMethod(
+                        "bar",
+                        new DirectivesMethodProperties(
+                            Opcodes.ACC_PUBLIC,
+                            "()V",
+                            null,
+                            "java/lang/Exception"
                         )
-                            .withOpcode(
-                                Opcodes.NEW,
-                                "java/lang/Exception"
-                            )
-                            .withOpcode(Opcodes.DUP)
-                            .withOpcode(
-                                Opcodes.INVOKESPECIAL,
-                                "java/lang/Exception",
-                                "<init>",
-                                "()V",
-                                false
-                            )
-                            .withOpcode(Opcodes.ATHROW)
                     )
-                )
+                        .withOpcode(
+                            Opcodes.NEW,
+                            "java/lang/Exception"
+                        )
+                        .withOpcode(Opcodes.DUP)
+                        .withOpcode(
+                            Opcodes.INVOKESPECIAL,
+                            "java/lang/Exception",
+                            "<init>",
+                            "()V",
+                            false
+                        )
+                        .withOpcode(Opcodes.ATHROW)
+                ), new DirectivesMetas(name)
+            )
         ).xmlQuietly();
     }
 }

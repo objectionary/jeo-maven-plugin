@@ -41,8 +41,7 @@ final class DirectivesProgramTest {
     void createsCorrectDirectives() {
         final ClassName name = new ClassName("Foo");
         final String actual = new Xembler(
-            new DirectivesProgram()
-                .withClass(new DirectivesMetas(name), new DirectivesClass(name)),
+            new DirectivesProgram(new DirectivesClass(name), new DirectivesMetas(name)),
             new Transformers.Node()
         ).xmlQuietly();
         MatcherAssert.assertThat(

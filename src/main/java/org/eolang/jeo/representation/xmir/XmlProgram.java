@@ -76,7 +76,7 @@ public final class XmlProgram {
             new XMLDocument(
                 new Xembler(
                     new DirectivesProgram(
-                        "", new DirectivesClass(name), new DirectivesMetas(name)
+                         new DirectivesClass(name), new DirectivesMetas(name)
                     )
                 ).xmlQuietly()
             ).node()
