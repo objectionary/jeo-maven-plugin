@@ -63,6 +63,6 @@ public final class DirectivesLabel implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesValue(this.label, this.name).iterator();
+        return new DirectivesValue(this.name, this.label).iterator();
     }
 }

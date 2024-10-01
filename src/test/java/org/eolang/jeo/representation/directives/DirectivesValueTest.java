@@ -43,7 +43,7 @@ final class DirectivesValueTest {
     void convertsInteger() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that integer value is converted to the correct XMIR",
-            new Xembler(new DirectivesValue(42, "access")).xml(),
+            new Xembler(new DirectivesValue("access", 42)).xml(),
             new SameXml(
                 String.join(
                     "\n",

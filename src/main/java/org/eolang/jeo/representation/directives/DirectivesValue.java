@@ -24,11 +24,9 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import java.util.Random;
 import lombok.ToString;
 import org.eolang.jeo.representation.HexData;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Data Object Directive in EO language.
@@ -60,26 +58,27 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param <T> Data type.
      */
     public <T> DirectivesValue(final T data) {
-        this(data, "");
+        this("", data);
     }
 
     /**
      * Constructor.
      *
-     * @param data Data.
-     * @param name Name.
      * @param <T> Data type.
+     * @param name Name.
+     * @param data Data.
      */
-    public <T> DirectivesValue(final T data, final String name) {
-        this(new HexData(data), name);
+    public <T> DirectivesValue(final String name, final T data) {
+        this(name, new HexData(data));
     }
 
     /**
      * Constructor.
-     * @param data Data.
+     *
      * @param name Name.
+     * @param data Data.
      */
-    public DirectivesValue(final HexData data, final String name) {
+    public DirectivesValue(final String name, final HexData data) {
         this.data = data;
         this.name = name;
     }

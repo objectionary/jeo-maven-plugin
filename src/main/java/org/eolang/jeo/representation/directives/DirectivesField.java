@@ -30,7 +30,6 @@ import lombok.ToString;
 import org.eolang.jeo.representation.PrefixedName;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Field directives.
@@ -169,10 +168,10 @@ public final class DirectivesField implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "field",
             new PrefixedName(this.name).encode(),
-            new DirectivesValue(this.access, this.title("access")),
-            new DirectivesValue(this.descriptor, this.title("descriptor")),
-            new DirectivesValue(this.signature, this.title("signature")),
-            new DirectivesValue(this.value, this.title("value")),
+            new DirectivesValue(this.title("access"), this.access),
+            new DirectivesValue(this.title("descriptor"), this.descriptor),
+            new DirectivesValue(this.title("signature"), this.signature),
+            new DirectivesValue(this.title("value"), this.value),
             this.annotations
         ).iterator();
 //        try {
