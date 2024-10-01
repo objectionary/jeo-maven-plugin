@@ -26,12 +26,16 @@ package org.eolang.jeo.representation.directives;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
 public final class DirectivesJeoObject implements Iterable<Directive> {
 
     private final String base;
+
+    private final String name;
     private final List<Directives> inner;
 
     @SafeVarargs
@@ -44,22 +48,36 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
     }
 
     public DirectivesJeoObject(final String base, final List<Directives> inner) {
+        this(base, "", inner);
+    }
+
+    @SafeVarargs
+    public DirectivesJeoObject(
+        final String base, final String name, final Iterable<Directive>... inner
+    ) {
+        this(base, name, Arrays.stream(inner).map(Directives::new).collect(Collectors.toList()));
+    }
+
+    public DirectivesJeoObject(final String base, final String name, final Directives... inner) {
+        this(base, name, Arrays.asList(inner));
+    }
+
+    public DirectivesJeoObject(final String base, final String name, final List<Directives> inner) {
         this.base = base;
+        this.name = name;
         this.inner = inner;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o")
-            .attr("base", new JeoFqn("handle").fqn())
-//            .append(new DirectivesValue(this.handle.getTag()))
-//            .append(new DirectivesValue(this.handle.getOwner()))
-//            .append(new DirectivesValue(this.handle.getName()))
-//            .append(new DirectivesValue(this.handle.getDesc()))
-//            .append(new DirectivesValue(this.handle.isInterface()))
+        final Directives directives = new Directives().add("o")
+            .attr("base", new JeoFqn(this.base).fqn());
+        if (!this.name.isEmpty()) {
+            directives.attr("name", this.name);
+            directives.attr("line", new Random().nextInt(Integer.MAX_VALUE));
+        }
+        return directives
             .append(this.inner.stream().reduce(new Directives(), Directives::append))
-            .up()
-            .iterator();
+            .up().iterator();
     }
 }

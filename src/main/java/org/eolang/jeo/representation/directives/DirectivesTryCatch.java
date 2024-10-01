@@ -25,6 +25,8 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.objectweb.asm.Label;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -77,29 +79,60 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives().add("o")
-            .attr("base", new JeoFqn("trycatch").fqn());
-        final Directives nop = new Directives().add("o").attr("base", new EoFqn("nop").fqn()).up();
-        if (Objects.nonNull(this.start)) {
-            directives.append(new DirectivesLabel(this.start));
+        return new DirectivesJeoObject(
+            "trycatch",
+            Stream.of(
+                    DirectivesTryCatch.nullable(this.start),
+                    DirectivesTryCatch.nullable(this.end),
+                    DirectivesTryCatch.nullable(this.handler),
+                    DirectivesTryCatch.nullable(this.type)
+                )
+                .map(Directives::new)
+                .collect(Collectors.toList())
+        ).iterator();
+//        final Directives directives = new Directives().add("o")
+//            .attr("base", new JeoFqn("trycatch").fqn());
+//        final Directives nop = new Directives().add("o").attr("base", new EoFqn("nop").fqn()).up();
+//        if (Objects.nonNull(this.start)) {
+//            directives.append(new DirectivesLabel(this.start));
+//        } else {
+//            directives.append(nop);
+//        }
+//        if (Objects.nonNull(this.end)) {
+//            directives.append(new DirectivesLabel(this.end));
+//        } else {
+//            directives.append(nop);
+//        }
+//        if (Objects.nonNull(this.handler)) {
+//            directives.append(new DirectivesLabel(this.handler));
+//        } else {
+//            directives.append(nop);
+//        }
+//        if (Objects.nonNull(this.type)) {
+//            directives.append(new DirectivesValue(this.type));
+//        } else {
+//            directives.append(nop);
+//        }
+//        return directives.up().iterator();
+    }
+
+    private static Iterable<Directive> nullable(final Label label) {
+        final Iterable<Directive> result;
+        if (Objects.nonNull(label)) {
+            result = new DirectivesLabel(label);
         } else {
-            directives.append(nop);
+            result = new DirectivesNop();
         }
-        if (Objects.nonNull(this.end)) {
-            directives.append(new DirectivesLabel(this.end));
+        return result;
+    }
+
+    private static Iterable<Directive> nullable(final String value) {
+        final Iterable<Directive> result;
+        if (Objects.nonNull(value)) {
+            result = new DirectivesValue(value);
         } else {
-            directives.append(nop);
+            result = new DirectivesNop();
         }
-        if (Objects.nonNull(this.handler)) {
-            directives.append(new DirectivesLabel(this.handler));
-        } else {
-            directives.append(nop);
-        }
-        if (Objects.nonNull(this.type)) {
-            directives.append(new DirectivesValue(this.type));
-        } else {
-            directives.append(nop);
-        }
-        return directives.up().iterator();
+        return result;
     }
 }

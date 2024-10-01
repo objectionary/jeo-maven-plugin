@@ -86,18 +86,23 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        try {
-            final Directives directives = new Directives().add("o")
-                .attr("base", new JeoFqn(this.data.type()).fqn())
-                .attr("line", new Random().nextInt(Integer.MAX_VALUE));
-            if (!this.name.isEmpty()) {
-                directives.attr("name", this.name);
-            }
-            return directives.append(new DirectivesBytes(this.data.value())).up().iterator();
-        } catch (final IllegalArgumentException exception) {
-            throw new IllegalStateException(
-                String.format("Failed to create directives for %s", this), exception
-            );
-        }
+        return new DirectivesJeoObject(
+            this.data.type(),
+            this.name,
+            new DirectivesBytes(this.data.value())
+        ).iterator();
+//        try {
+//            final Directives directives = new Directives().add("o")
+//                .attr("base", new JeoFqn(this.data.type()).fqn())
+//                .attr("line", new Random().nextInt(Integer.MAX_VALUE));
+//            if (!this.name.isEmpty()) {
+//                directives.attr("name", this.name);
+//            }
+//            return directives.append(new DirectivesBytes(this.data.value())).up().iterator();
+//        } catch (final IllegalArgumentException exception) {
+//            throw new IllegalStateException(
+//                String.format("Failed to create directives for %s", this), exception
+//            );
+//        }
     }
 }
