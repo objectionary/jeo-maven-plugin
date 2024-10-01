@@ -72,7 +72,7 @@ final class DirectivesClassTest {
     @Test
     void appendsField() {
         final String xml = new Xembler(
-            new DirectivesClass(new ClassName("Neo")).withField(new DirectivesField()),
+            new DirectivesClass(new ClassName("Neo"), new DirectivesField()),
             new Transformers.Node()
         ).xmlQuietly();
         MatcherAssert.assertThat(
@@ -88,7 +88,7 @@ final class DirectivesClassTest {
     @Test
     void appendsMethod() {
         final String xml = new Xembler(
-            new DirectivesClass(new ClassName("Neo")).withMethod(new DirectivesMethod("method")),
+            new DirectivesClass(new ClassName("Neo"), new DirectivesMethod("method")),
             new Transformers.Node()
         ).xmlQuietly();
         MatcherAssert.assertThat(

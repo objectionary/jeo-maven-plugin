@@ -81,15 +81,12 @@ final class XmlProgramTest {
      * Creates XML with class that contains generic method.
      * The XML representation of the following java class:
      * {@code
-     *
      * package org.eolang.jeo.takes;
-     *
      * public class StrangeClass {
      *   public static <T> void printElement(T element) {
      *     System.out.println(element);
      *   }
      * }
-     *
      * }
      * @return XML representation of the class.
      */
@@ -99,7 +96,8 @@ final class XmlProgramTest {
             new DirectivesProgram()
                 .withClass(
                     new DirectivesMetas(name),
-                    new DirectivesClass(name).withMethod(
+                    new DirectivesClass(
+                        name,
                         new DirectivesMethod(
                             "printElement",
                             new DirectivesMethodProperties(
@@ -133,15 +131,12 @@ final class XmlProgramTest {
      * Creates XML with class that contains method that declares exception.
      * The XML representation of the following java class:
      * {@code
-     *
      * public class Foo {
      *   public void bar() throws Exception {
      *     throw new Exception();
      *   }
      * }
-     *
      * }
-     *
      * @return XML representation of the class.
      */
     private static String classWithException() {
@@ -150,31 +145,31 @@ final class XmlProgramTest {
             new DirectivesProgram()
                 .withClass(
                     new DirectivesMetas(name),
-                    new DirectivesClass(name)
-                        .withMethod(
-                            new DirectivesMethod(
-                                "bar",
-                                new DirectivesMethodProperties(
-                                    Opcodes.ACC_PUBLIC,
-                                    "()V",
-                                    null,
-                                    "java/lang/Exception"
-                                )
+                    new DirectivesClass(
+                        name,
+                        new DirectivesMethod(
+                            "bar",
+                            new DirectivesMethodProperties(
+                                Opcodes.ACC_PUBLIC,
+                                "()V",
+                                null,
+                                "java/lang/Exception"
                             )
-                                .withOpcode(
-                                    Opcodes.NEW,
-                                    "java/lang/Exception"
-                                )
-                                .withOpcode(Opcodes.DUP)
-                                .withOpcode(
-                                    Opcodes.INVOKESPECIAL,
-                                    "java/lang/Exception",
-                                    "<init>",
-                                    "()V",
-                                    false
-                                )
-                                .withOpcode(Opcodes.ATHROW)
                         )
+                            .withOpcode(
+                                Opcodes.NEW,
+                                "java/lang/Exception"
+                            )
+                            .withOpcode(Opcodes.DUP)
+                            .withOpcode(
+                                Opcodes.INVOKESPECIAL,
+                                "java/lang/Exception",
+                                "<init>",
+                                "()V",
+                                false
+                            )
+                            .withOpcode(Opcodes.ATHROW)
+                    )
                 )
         ).xmlQuietly();
     }

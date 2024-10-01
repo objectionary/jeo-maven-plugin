@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import org.eolang.jeo.representation.ClassName;
@@ -86,34 +87,14 @@ public final class DirectivesClass implements Iterable<Directive> {
     /**
      * Constructor.
      * @param name Class name
-     * @param properties Class properties
+     * @param method Method
      */
-    public DirectivesClass(final ClassName name, final DirectivesClassProperties properties) {
-        this(name, properties, new ArrayList<>(0), new ArrayList<>(0));
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param name Class name
-     * @param properties Class properties
-     * @param fields Class fields
-     * @param methods Class methods
-     * @checkstyle ParameterNumberCheck (5 lines)
-     */
-    public DirectivesClass(
-        final ClassName name,
-        final DirectivesClassProperties properties,
-        final List<DirectivesField> fields,
-        final List<DirectivesMethod> methods
-    ) {
+    public DirectivesClass(final ClassName name, final DirectivesMethod method) {
         this(
             name,
-            properties,
-            fields,
-            methods,
-            new DirectivesAnnotations(),
-            new DirectivesAttributes()
+            new DirectivesClassProperties(),
+            new ArrayList<>(0),
+            Collections.singletonList(method)
         );
     }
 
@@ -144,23 +125,50 @@ public final class DirectivesClass implements Iterable<Directive> {
     }
 
     /**
-     * Add field to the directives.
+     * Constructor.
+     * @param name Class name
      * @param field Field
-     * @return The same instance of {@link DirectivesClass}.
      */
-    public DirectivesClass withField(final DirectivesField field) {
-        this.fields.add(field);
-        return this;
+    DirectivesClass(final ClassName name, final DirectivesField field) {
+        this(
+            name,
+            new DirectivesClassProperties(),
+            Collections.singletonList(field),
+            new ArrayList<>(0)
+        );
     }
 
     /**
-     * Add method to the directives.
-     * @param method Method
-     * @return The same instance of {@link DirectivesClass}.
+     * Constructor.
+     * @param name Class name
+     * @param properties Class properties
      */
-    public DirectivesClass withMethod(final DirectivesMethod method) {
-        this.methods.add(method);
-        return this;
+    DirectivesClass(final ClassName name, final DirectivesClassProperties properties) {
+        this(name, properties, new ArrayList<>(0), new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param name Class name
+     * @param properties Class properties
+     * @param fields Class fields
+     * @param methods Class methods
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    private DirectivesClass(
+        final ClassName name,
+        final DirectivesClassProperties properties,
+        final List<DirectivesField> fields,
+        final List<DirectivesMethod> methods
+    ) {
+        this(
+            name,
+            properties,
+            fields,
+            methods,
+            new DirectivesAnnotations(),
+            new DirectivesAttributes()
+        );
     }
 
     @Override
