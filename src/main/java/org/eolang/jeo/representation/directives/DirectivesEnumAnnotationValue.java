@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.directives;
 import java.util.Iterator;
 import java.util.Optional;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * An annotation value that is an enumeration.
@@ -65,12 +64,19 @@ public final class DirectivesEnumAnnotationValue implements Iterable<Directive> 
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives()
-            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
-            .append(new DirectivesValue("ENUM"));
-        directives.append(new DirectivesValue(Optional.ofNullable(this.name).orElse("")));
-        directives.append(new DirectivesValue(this.descriptor));
-        directives.append(new DirectivesValue(this.value));
-        return directives.up().iterator();
+        return new DirectivesJeoObject(
+            "annotation-property",
+            new DirectivesValue("ENUM"),
+            new DirectivesValue(Optional.ofNullable(this.name).orElse("")),
+            new DirectivesValue(this.descriptor),
+            new DirectivesValue(this.value)
+        ).iterator();
+//        final Directives directives = new Directives()
+//            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
+//            .append(new DirectivesValue("ENUM"));
+//        directives.append(new DirectivesValue(Optional.ofNullable(this.name).orElse("")));
+//        directives.append(new DirectivesValue(this.descriptor));
+//        directives.append(new DirectivesValue(this.value));
+//        return directives.up().iterator();
     }
 }

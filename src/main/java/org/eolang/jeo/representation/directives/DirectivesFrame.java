@@ -91,15 +91,23 @@ public final class DirectivesFrame implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o")
-            .attr("base", new JeoFqn("frame").fqn())
-            .append(new DirectivesValue(this.type))
-            .append(new DirectivesValue(this.nlocal))
-            .append(new DirectivesValues(this.locals))
-            .append(new DirectivesValue(this.nstack))
-            .append(new DirectivesValues(this.stack))
-            .up()
-            .iterator();
+        return new DirectivesJeoObject(
+            "frame",
+            new DirectivesValue(this.type),
+            new DirectivesValue(this.nlocal),
+            new DirectivesValues(this.locals),
+            new DirectivesValue(this.nstack),
+            new DirectivesValues(this.stack)
+        ).iterator();
+//        return new Directives()
+//            .add("o")
+//            .attr("base", new JeoFqn("frame").fqn())
+//            .append(new DirectivesValue(this.type))
+//            .append(new DirectivesValue(this.nlocal))
+//            .append(new DirectivesValues(this.locals))
+//            .append(new DirectivesValue(this.nstack))
+//            .append(new DirectivesValues(this.stack))
+//            .up()
+//            .iterator();
     }
 }
