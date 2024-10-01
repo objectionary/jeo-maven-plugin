@@ -23,59 +23,43 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Random;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
-/**
- * Max stack and locals.
- * @since 0.3
- */
-public final class DirectivesMaxs implements Iterable<Directive> {
+public final class DirectivesAbstractObject implements Iterable<Directive> {
 
     /**
-     * Max stack size.
+     * The name of the object.
      */
-    private final int stack;
+    private final String name;
 
     /**
-     * Max locals size.
+     * The attributes.
      */
-    private final int locals;
+    private final List<Directives> inner;
 
-    /**
-     * Constructor.
-     */
-    public DirectivesMaxs() {
-        this(0, 0);
+    @SafeVarargs
+    public DirectivesAbstractObject(final String name, Iterable<Directive>... inner) {
+        this(name, Arrays.asList(inner).stream().map(Directives::new).collect(Collectors.toList()));
     }
 
-    /**
-     * Constructor.
-     *
-     * @param stack Max stack size.
-     * @param locals Max locals size.
-     */
-    public DirectivesMaxs(final int stack, final int locals) {
-        this.stack = stack;
-        this.locals = locals;
+    public DirectivesAbstractObject(final String name, final List<Directives> inner) {
+        this.name = name;
+        this.inner = inner;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesAbstractObject(
-            "maxs",
-            new DirectivesValue("stack", this.stack),
-            new DirectivesValue("locals", this.locals)
-        ).iterator();
-//        return new Directives().add("o")
-//            .attr("name", "maxs")
-//            .attr("abstract", "")
-//            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-//            .append(new DirectivesValue("stack", this.stack))
-//            .append(new DirectivesValue("locals", this.locals))
-//            .up()
-//            .iterator();
+        return new Directives()
+            .add("o")
+            .attr("name", this.name)
+            .attr("abstract", "")
+            .append(this.inner.stream().reduce(new Directives(), Directives::append))
+            .up()
+            .iterator();
     }
 }
