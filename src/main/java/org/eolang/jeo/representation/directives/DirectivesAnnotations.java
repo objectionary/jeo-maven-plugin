@@ -60,16 +60,6 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
     }
 
     /**
-     * Add annotation.
-     * @param annotation Annotation.
-     * @return This object.
-     */
-    public DirectivesAnnotations add(final DirectivesAnnotation annotation) {
-        this.annotations.add(annotation);
-        return this;
-    }
-
-    /**
      * Constructor.
      */
     DirectivesAnnotations() {
@@ -104,5 +94,15 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         return new DirectivesSeq(this.name, this.annotations).iterator();
+    }
+
+    /**
+     * Add annotation.
+     * @param annotation Annotation.
+     * @return This object.
+     */
+    public DirectivesAnnotations add(final DirectivesAnnotation annotation) {
+        this.annotations.add(annotation);
+        return this;
     }
 }

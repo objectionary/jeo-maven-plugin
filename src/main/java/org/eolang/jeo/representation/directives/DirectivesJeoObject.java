@@ -61,7 +61,7 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
      */
     @SafeVarargs
     public DirectivesJeoObject(final String base, final Iterable<Directive>... inner) {
-        this(base, Arrays.stream(inner).map(Directives::new).toArray(Directives[]::new));
+        this(base, Arrays.stream(inner).map(Directives::new).collect(Collectors.toList()));
     }
 
     /**

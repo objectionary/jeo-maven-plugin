@@ -80,11 +80,9 @@ public final class DirectivesInstruction implements Iterable<Directive> {
             "opcode",
             this.name(),
             Stream.concat(
-                    Stream.of(new DirectivesOperand(this.opcode)),
-                    Arrays.stream(this.arguments).map(DirectivesOperand::new)
-                )
-                .map(Directives::new)
-                .collect(Collectors.toList())
+                Stream.of(new DirectivesOperand(this.opcode)),
+                Arrays.stream(this.arguments).map(DirectivesOperand::new)
+            ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
     }
 

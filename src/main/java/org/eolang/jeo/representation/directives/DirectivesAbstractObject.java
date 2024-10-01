@@ -52,8 +52,8 @@ public final class DirectivesAbstractObject implements Iterable<Directive> {
      * @param inner Inner objects.
      */
     @SafeVarargs
-    DirectivesAbstractObject(final String name, Iterable<Directive>... inner) {
-        this(name, Arrays.asList(inner).stream().map(Directives::new).collect(Collectors.toList()));
+    DirectivesAbstractObject(final String name, final Iterable<Directive>... inner) {
+        this(name, Arrays.stream(inner).map(Directives::new).collect(Collectors.toList()));
     }
 
     /**

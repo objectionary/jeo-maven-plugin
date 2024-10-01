@@ -63,10 +63,9 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Constructor.
-     *
-     * @param <T> Data type.
      * @param name Name.
      * @param data Data.
+     * @param <T> Data type.
      */
     public <T> DirectivesValue(final String name, final T data) {
         this(name, new HexData(data));
@@ -74,7 +73,6 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Constructor.
-     *
      * @param name Name.
      * @param data Data.
      */
