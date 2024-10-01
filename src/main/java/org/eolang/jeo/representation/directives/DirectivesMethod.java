@@ -26,6 +26,8 @@ package org.eolang.jeo.representation.directives;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.Signature;
 import org.xembly.Directive;
@@ -167,21 +169,37 @@ public final class DirectivesMethod implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives();
-        directives.add("o")
-            .attr("abstract", "")
-            .attr("name", this.name.encoded())
-            .append(this.properties)
-            .append(this.annotations)
-            .append(new DirectivesSeq("@", this.instructions))
-            .append(
-                new DirectivesSeq(
-                    String.format("trycatchblocks-%s", this.name.name()),
-                    this.exceptions
-                )
-            );
-        this.dvalue.forEach(directives::append);
-        directives.up();
-        return directives.iterator();
+        return new DirectivesAbstractObject(
+            this.name.encoded(),
+            Stream.concat(
+                Stream.of(
+                    this.properties,
+                    this.annotations,
+                    new DirectivesSeq("@", this.instructions),
+                    new DirectivesSeq(
+                        String.format("trycatchblocks-%s", this.name.name()),
+                        this.exceptions
+                    )
+                ),
+                this.dvalue.stream()
+            ).map(Directives::new).collect(Collectors.toList())
+        ).iterator();
+
+//        final Directives directives = new Directives();
+//        directives.add("o")
+//            .attr("abstract", "")
+//            .attr("name", this.name.encoded())
+//            .append(this.properties)
+//            .append(this.annotations)
+//            .append(new DirectivesSeq("@", this.instructions))
+//            .append(
+//                new DirectivesSeq(
+//                    String.format("trycatchblocks-%s", this.name.name()),
+//                    this.exceptions
+//                )
+//            );
+//        this.dvalue.forEach(directives::append);
+//        directives.up();
+//        return directives.iterator();
     }
 }
