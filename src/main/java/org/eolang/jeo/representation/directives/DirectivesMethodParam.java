@@ -75,21 +75,32 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives().add("o")
-            .attr("base", new JeoFqn("param").fqn())
-            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-            .attr(
-                "name",
-                String.format(
-                    "param-%s-%d",
-                    DirectivesMethodParam.ENCODER.encodeToString(
-                        this.type.toString().getBytes(StandardCharsets.UTF_8)
-                    ),
-                    this.index
-                )
-            )
-            .append(this.annotations)
-            .up()
-            .iterator();
+        return new DirectivesJeoObject(
+            "param",
+            String.format(
+                "param-%s-%d",
+                DirectivesMethodParam.ENCODER.encodeToString(
+                    this.type.toString().getBytes(StandardCharsets.UTF_8)
+                ),
+                this.index
+            ),
+            this.annotations
+        ).iterator();
+//        return new Directives().add("o")
+//            .attr("base", new JeoFqn("param").fqn())
+//            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
+//            .attr(
+//                "name",
+//                String.format(
+//                    "param-%s-%d",
+//                    DirectivesMethodParam.ENCODER.encodeToString(
+//                        this.type.toString().getBytes(StandardCharsets.UTF_8)
+//                    ),
+//                    this.index
+//                )
+//            )
+//            .append(this.annotations)
+//            .up()
+//            .iterator();
     }
 }

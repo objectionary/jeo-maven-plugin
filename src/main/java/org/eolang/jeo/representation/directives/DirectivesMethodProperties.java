@@ -32,11 +32,7 @@ import org.xembly.Directives;
 
 /**
  * Method properties as Xembly directives.
- * @since 0.1.0
- * @todo #91:60min Move all Directives* classes to a separate package.
- *  Right now they are in the same package as Xml* classes.
- *  We need to move them to a separate package. It will make it possible to hide
- *  some classes and probably remove prefixes like Directives*.
+ * @since 0.1
  */
 public final class DirectivesMethodProperties implements Iterable<Directive> {
 
@@ -127,14 +123,6 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         this.params = params;
     }
 
-    /**
-     * Method descriptor.
-     * @return Descriptor.
-     */
-    public String descr() {
-        return this.descriptor;
-    }
-
     @Override
     public Iterator<Directive> iterator() {
         return new Directives()
@@ -145,5 +133,13 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
             .append(this.max.get())
             .append(this.params)
             .iterator();
+    }
+
+    /**
+     * Method descriptor.
+     * @return Descriptor.
+     */
+    String descr() {
+        return this.descriptor;
     }
 }

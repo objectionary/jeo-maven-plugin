@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Optional;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * An annotation value that is plain.
@@ -107,12 +106,18 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
         } else {
             res = new DirectivesValue(this.value);
         }
-        return new Directives()
-            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
-            .append(new DirectivesValue("PLAIN"))
-            .append(new DirectivesValue(Optional.ofNullable(this.name).orElse("")))
-            .append(res)
-            .up()
-            .iterator();
+        return new DirectivesJeoObject(
+            "annotation-property",
+            new DirectivesValue("PLAIN"),
+            new DirectivesValue(Optional.ofNullable(this.name).orElse("")),
+            res
+        ).iterator();
+//        return new Directives()
+//            .add("o").attr("base", new JeoFqn("annotation-property").fqn())
+//            .append(new DirectivesValue("PLAIN"))
+//            .append(new DirectivesValue(Optional.ofNullable(this.name).orElse("")))
+//            .append(res)
+//            .up()
+//            .iterator();
     }
 }

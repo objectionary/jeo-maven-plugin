@@ -45,7 +45,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
     /**
      * Top-level class.
      * This field uses atomic reference because the field can't be initialized in the constructor.
-     * It is ASM framework limitation.
+     * It is the Java ASM framework limitation.
      */
     private final AtomicReference<DirectivesClass> klass;
 
@@ -102,6 +102,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
      * @param meta Metas.
      * @param clazz Top-level class.
      * @return The same instance.
+     * @todo!!!!
      */
     public DirectivesProgram withClass(final DirectivesMetas meta, final DirectivesClass clazz) {
         this.metas.set(meta);

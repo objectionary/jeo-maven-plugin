@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -58,11 +59,16 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives().add("o")
-            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-            .attr("name", "method-params")
-            .attr("base", new JeoFqn("params").fqn());
-        this.params.forEach(directives::append);
-        return directives.up().iterator();
+        return new DirectivesJeoObject(
+            "params",
+            "method-params",
+            this.params.stream().map(Directives::new).collect(Collectors.toList())
+        ).iterator();
+//        final Directives directives = new Directives().add("o")
+//            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
+//            .attr("name", "method-params")
+//            .attr("base", new JeoFqn("params").fqn());
+//        this.params.forEach(directives::append);
+//        return directives.up().iterator();
     }
 }
