@@ -83,12 +83,18 @@ public final class DirectivesSeq implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o")
-            .attr("base", new EoFqn(String.format("seq%d", this.size())).fqn())
-            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
-            .attr("name", this.name)
-            .append(this.stream().reduce(new Directives(), Directives::append)).up().iterator();
+        return new DirectivesEoObject(
+            String.format("seq%d", this.size()),
+            this.name,
+            this.stream().map(Directives::new).toArray(Directives[]::new)
+        ).iterator();
+//        return new Directives()
+//            .add("o")
+//            .attr("base", new EoFqn(String.format("seq%d", this.size())).fqn())
+//            .attr("line", new Random().nextInt(Integer.MAX_VALUE))
+//            .attr("name", this.name)
+//            .append(this.stream().reduce(new Directives(), Directives::append))
+//            .up().iterator();
     }
 
     /**
