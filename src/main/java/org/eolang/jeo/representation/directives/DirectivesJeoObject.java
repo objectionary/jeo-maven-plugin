@@ -23,40 +23,43 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.Arrays;
 import java.util.Iterator;
-import org.objectweb.asm.Handle;
+import java.util.List;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
-/**
- * Directives Handle.
- * This is the XMIR representation of the Java ASM Handle object.
- * @since 0.1
- */
-public final class DirectivesHandle implements Iterable<Directive> {
+public final class DirectivesJeoObject implements Iterable<Directive> {
 
-    /**
-     * ASM Handle object.
-     */
-    private final Handle handle;
+    private final String base;
+    private final List<Directives> inner;
 
-    /**
-     * Constructor.
-     * @param handle ASM Handle object.
-     */
-    public DirectivesHandle(final Handle handle) {
-        this.handle = handle;
+    @SafeVarargs
+    public DirectivesJeoObject(final String base, final Iterable<Directive>... inner) {
+        this(base, Arrays.stream(inner).map(Directives::new).toArray(Directives[]::new));
+    }
+
+    public DirectivesJeoObject(final String base, final Directives... inner) {
+        this(base, Arrays.asList(inner));
+    }
+
+    public DirectivesJeoObject(final String base, final List<Directives> inner) {
+        this.base = base;
+        this.inner = inner;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesJeoObject(
-            "handle",
-            new DirectivesValue(this.handle.getTag()),
-            new DirectivesValue(this.handle.getOwner()),
-            new DirectivesValue(this.handle.getName()),
-            new DirectivesValue(this.handle.getDesc()),
-            new DirectivesValue(this.handle.isInterface())
-        ).iterator();
+        return new Directives()
+            .add("o")
+            .attr("base", new JeoFqn("handle").fqn())
+//            .append(new DirectivesValue(this.handle.getTag()))
+//            .append(new DirectivesValue(this.handle.getOwner()))
+//            .append(new DirectivesValue(this.handle.getName()))
+//            .append(new DirectivesValue(this.handle.getDesc()))
+//            .append(new DirectivesValue(this.handle.isInterface()))
+            .append(this.inner.stream().reduce(new Directives(), Directives::append))
+            .up()
+            .iterator();
     }
 }
