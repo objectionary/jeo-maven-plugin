@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.directives;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 import org.eolang.jeo.representation.ClassName;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -165,15 +166,23 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives();
-        directives.add("o")
-            .attr("abstract", "")
-            .attr("name", this.name.name())
-            .append(this.properties);
-        this.fields.forEach(directives::append);
-        this.methods.forEach(directives::append);
-        directives.append(this.annotations);
-        directives.append(this.attributes);
-        return directives.up().iterator();
+        return new DirectivesAbstractObject(
+            this.name.name(),
+            this.properties,
+            this.fields.stream().map(Directives::new).reduce(new Directives(), Directives::append),
+            this.methods.stream().map(Directives::new).reduce(new Directives(), Directives::append),
+            this.annotations,
+            this.attributes
+        ).iterator();
+//        final Directives directives = new Directives();
+//        directives.add("o")
+//            .attr("abstract", "")
+//            .attr("name", this.name.name())
+//            .append(this.properties);
+//        this.fields.forEach(directives::append);
+//        this.methods.forEach(directives::append);
+//        directives.append(this.annotations);
+//        directives.append(this.attributes);
+//        return directives.up().iterator();
     }
 }
