@@ -235,25 +235,6 @@ public enum DataType {
     }
 
     /**
-     * Get a data type for some ASM type.
-     * @param type ASM Type.
-     * @return Data type.
-     */
-    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
-    public static DataType find(final Type type) {
-        return Arrays.stream(DataType.values())
-            .filter(
-                dataType -> {
-                    final Type real = Type.getType(dataType.clazz);
-                    final Type prim = Type.getType(dataType.primitive);
-                    return prim.equals(type) || real.equals(type);
-                }
-            )
-            .findFirst()
-            .orElse(DataType.CLASS_REFERENCE);
-    }
-
-    /**
      * Base fully qualified name.
      * @return FQN.
      */

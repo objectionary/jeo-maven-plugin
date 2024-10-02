@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.ToString;
@@ -93,7 +92,9 @@ public class XmlField {
      * @return Descriptor.
      */
     private String descriptor() {
-        return this.find(Attribute.DESCRIPTOR).map(HexString::decode).orElse(null);
+        return this.find(Attribute.DESCRIPTOR).map(HexString::decode)
+            .filter(descriptor -> !descriptor.isEmpty())
+            .orElse(null);
     }
 
     /**
@@ -101,7 +102,9 @@ public class XmlField {
      * @return Signature.
      */
     private String signature() {
-        return this.find(Attribute.SIGNATURE).map(HexString::decode).orElse(null);
+        return this.find(Attribute.SIGNATURE).map(HexString::decode)
+            .filter(signature -> !signature.isEmpty())
+            .orElse(null);
     }
 
     /**
@@ -131,15 +134,11 @@ public class XmlField {
      * @return Text.
      */
     private Optional<HexString> find(final Attribute attribute) {
-        final List<XmlNode> all = this.node.children().collect(Collectors.toList());
-        final String text = new XmlValue(all.get(attribute.ordinal())).bytes().text();
-        final Optional<HexString> result;
-        if (text.isEmpty()) {
-            result = Optional.empty();
-        } else {
-            result = Optional.of(new HexString(text));
-        }
-        return result;
+        return Optional.of(
+            new XmlValue(
+                this.node.children().collect(Collectors.toList()).get(attribute.ordinal())
+            ).bytes().hex()
+        );
     }
 
     /**

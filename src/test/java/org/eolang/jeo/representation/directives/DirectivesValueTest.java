@@ -175,7 +175,7 @@ final class DirectivesValueTest {
     }
 
     /**
-     * Arguments for {@link HexDataTest#determinesTypeCorrectly(Object, String)} test.
+     * Arguments for {@link DirectivesValueTest#determinesTypeCorrectly(Object, String)} test.
      * @return Stream of arguments.
      */
     static Stream<Arguments> types() {
@@ -186,14 +186,13 @@ final class DirectivesValueTest {
             Arguments.of(true, "bool"),
             Arguments.of(0.1f, "float"),
             Arguments.of(0.1d, "double"),
-            Arguments.of(HexDataTest.class, "class"),
+            Arguments.of(DirectivesValue.class, "class"),
             Arguments.of(' ', "char")
         );
     }
 
     /**
-     * Arguments for {@link HexDataTest#convertsRawDataIntoHexString(Object, String)}.
-     * Example for reference - {@link HexDataTest} is "org.eolang.jeo.representation.directives.HexDataTest"
+     * Arguments for {@link DirectivesValueTest#convertsRawDataIntoHexString(Object, String)}.
      * @return Stream of arguments.
      */
     static Stream<Arguments> values() {
@@ -206,15 +205,14 @@ final class DirectivesValueTest {
             Arguments.of('a', "00 61"),
             Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A"),
             Arguments.of(
-                HexDataTest.class,
-                "6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2F 64 69 72 65 63 74 69 76 65 73 2F 48 65 78 44 61 74 61 54 65 73 74"
+                DirectivesValueTest.class,
+                "6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2F 64 69 72 65 63 74 69 76 65 73 2F 44 69 72 65 63 74 69 76 65 73 56 61 6C 75 65 54 65 73 74"
             )
         );
     }
 
     /**
-     * Arguments for {@link HexDataTest#decodesEncodesCorrectly(Object, String)}.
-     * Example for reference - {@link HexDataTest} is "org.eolang.jeo.representation.directives.HexDataTest"
+     * Arguments for {@link DirectivesValueTest#decodesEncodesCorrectly(Object, String)}.
      * @return Stream of arguments.
      */
     static Stream<Arguments> encodedValues() {

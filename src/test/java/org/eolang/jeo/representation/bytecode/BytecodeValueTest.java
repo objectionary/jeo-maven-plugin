@@ -23,22 +23,19 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-public final class BytecodeValue<T> {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
-    private final T value;
+/**
+ * Test case for {@link BytecodeValue}.
+ * @since 0.6
+ */
+final class BytecodeValueTest {
 
-    public BytecodeValue(final T value) {
-        this.value = value;
-    }
-
-    public String type() {
-        System.out.println(this.value.getClass());
-        System.out.println(int.class);
-        return DataType.type(this.value);
-    }
-
-    public byte[] bytes() {
-        return DataType.toBytes(this.value);
+    @Test
+    void retrievesType() {
+        final BytecodeValue<Integer> value = new BytecodeValue<>(42);
+        assertEquals("int", value.type());
     }
 
 }

@@ -84,7 +84,7 @@ final class HexString {
      * @return Integer.
      */
     int decodeAsInt() {
-        return Integer.parseInt(this.hex.trim().replace(" ", ""), HexString.RADIX);
+        return Integer.parseInt(this.clean(), HexString.RADIX);
     }
 
     /**
@@ -92,7 +92,7 @@ final class HexString {
      * @return Long.
      */
     long decodeAsLong() {
-        return Long.parseLong(this.hex.trim().replace(" ", ""), HexString.RADIX);
+        return Long.parseLong(this.clean(), HexString.RADIX);
     }
 
     /**
@@ -100,7 +100,7 @@ final class HexString {
      * @return Boolean.
      */
     boolean decodeAsBoolean() {
-        final String value = this.hex.trim();
+        final String value = this.clean();
         if (value.length() != 2) {
             throw new IllegalArgumentException(
                 String.format(
@@ -117,7 +117,7 @@ final class HexString {
      * @return Double.
      */
     double decodeAsDouble() {
-        return (double) DataType.DOUBLE.decode(this.hex.replace(" ", ""));
+        return (double) DataType.DOUBLE.decode(this.clean());
     }
 
     /**
@@ -125,6 +125,37 @@ final class HexString {
      * @return Float.
      */
     float decodeAsFloat() {
-        return (float) DataType.FLOAT.decode(this.hex.replace(" ", ""));
+        return (float) DataType.FLOAT.decode(this.clean());
+    }
+
+    private String clean() {
+        return this.hex.trim().replaceAll(" ", "");
+    }
+
+    /**
+     * Convert bytes to data.
+     * @param raw Bytes.
+     * @return Data.
+     */
+    public byte[] decode(final String raw) {
+        final byte[] result;
+        if (raw == null) {
+            result = null;
+        } else {
+            final char[] chars = raw.trim().replace(" ", "").toCharArray();
+            final int length = chars.length;
+            final byte[] res = new byte[length / 2];
+            for (int index = 0; index < length; index += 2) {
+                res[index / 2] = (byte) Integer.parseInt(
+                    String.copyValueOf(new char[]{chars[index], chars[index + 1]}), 16
+                );
+            }
+            result = res;
+        }
+        return result;
+    }
+
+    public boolean isEmpty() {
+        return this.hex.isEmpty();
     }
 }
