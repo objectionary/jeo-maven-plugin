@@ -77,7 +77,6 @@ public final class XmlValue {
         }
     }
 
-
     /**
      * Convert hex string to boolean.
      * @return Boolean.

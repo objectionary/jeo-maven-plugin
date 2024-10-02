@@ -74,7 +74,7 @@ public final class XmlOperand {
             final XmlAnnotationProperty xml = new XmlAnnotationProperty(this.raw);
             result = xml.bytecode();
         } else {
-            DataType type = DataType.find(base);
+            final DataType type = DataType.find(base);
             result = this.raw.children().findFirst()
                 .map(bytes -> type.decode(bytes.text()))
                 .orElse(null);

@@ -38,7 +38,7 @@ final class UnrecognizedOpcode extends IllegalStateException {
      * Constructor.
      * @param opcode Opcode.
      */
-    public UnrecognizedOpcode(final int opcode) {
+    UnrecognizedOpcode(final int opcode) {
         super(String.format("Unrecognized opcode: %d", opcode));
     }
 }

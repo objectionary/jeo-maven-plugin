@@ -42,6 +42,7 @@ import org.xembly.Xembler;
  * Test case for {@link DirectivesValue}.
  * @since 0.3
  */
+@SuppressWarnings("PMD.TooManyMethods")
 final class DirectivesValueTest {
 
     @Test
@@ -84,7 +85,6 @@ final class DirectivesValueTest {
             Matchers.equalTo(new AllLabels().label("some-random"))
         );
     }
-
 
     @MethodSource("types")
     @ParameterizedTest

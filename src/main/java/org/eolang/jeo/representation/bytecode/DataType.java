@@ -46,7 +46,7 @@ public enum DataType {
     /**
      * Boolean.
      */
-    BOOL("bool", Boolean.class, boolean.class,
+    BOOL("bool", Boolean.class,
         value -> {
             final byte[] result;
             if (value instanceof Integer) {
@@ -64,7 +64,7 @@ public enum DataType {
     /**
      * Character.
      */
-    CHAR("char", Character.class, char.class,
+    CHAR("char", Character.class,
         value -> {
             final char val;
             if (value instanceof Integer) {
@@ -80,7 +80,7 @@ public enum DataType {
     /**
      * Byte.
      */
-    BYTE("byte", Byte.class, byte.class,
+    BYTE("byte", Byte.class,
         value -> ByteBuffer.allocate(Byte.BYTES).put((byte) (int) value).array(),
         bytes -> ByteBuffer.wrap(bytes).get()
     ),
@@ -88,7 +88,7 @@ public enum DataType {
     /**
      * Short.
      */
-    SHORT("short", Short.class, short.class,
+    SHORT("short", Short.class,
         value -> ByteBuffer.allocate(Short.BYTES).putShort((short) (int) value).array(),
         bytes -> ByteBuffer.wrap(bytes).getShort()
     ),
@@ -96,14 +96,14 @@ public enum DataType {
     /**
      * Integer.
      */
-    INT("int", Integer.class, int.class,
+    INT("int", Integer.class,
         value -> ByteBuffer.allocate(Long.BYTES).putLong((int) value).array(),
         bytes -> (int) ByteBuffer.wrap(bytes).getLong()
     ),
     /**
      * Long.
      */
-    LONG("long", Long.class, long.class,
+    LONG("long", Long.class,
         value -> ByteBuffer.allocate(Long.BYTES).putLong((long) value).array(),
         bytes -> ByteBuffer.wrap(bytes).getLong()
     ),
@@ -111,7 +111,7 @@ public enum DataType {
     /**
      * Float.
      */
-    FLOAT("float", Float.class, float.class,
+    FLOAT("float", Float.class,
         value -> ByteBuffer.allocate(Float.BYTES).putFloat((float) value).array(),
         bytes -> ByteBuffer.wrap(bytes).getFloat()
     ),
@@ -119,7 +119,7 @@ public enum DataType {
     /**
      * Double.
      */
-    DOUBLE("double", Double.class, double.class,
+    DOUBLE("double", Double.class,
         value -> ByteBuffer.allocate(Double.BYTES).putDouble((double) value).array(),
         bytes -> ByteBuffer.wrap(bytes).getDouble()
     ),
@@ -127,7 +127,7 @@ public enum DataType {
     /**
      * String.
      */
-    STRING("string", String.class, String.class,
+    STRING("string", String.class,
         value -> Optional.ofNullable(value).map(String::valueOf).map(String::getBytes).orElse(null),
         bytes -> new String(bytes, StandardCharsets.UTF_8)
     ),
@@ -135,7 +135,7 @@ public enum DataType {
     /**
      * Bytes.
      */
-    BYTES("bytes", byte[].class, Byte[].class,
+    BYTES("bytes", byte[].class,
         value -> byte[].class.cast(value),
         bytes -> bytes
     ),
@@ -143,7 +143,7 @@ public enum DataType {
     /**
      * Label.
      */
-    LABEL("label", Label.class, Label.class,
+    LABEL("label", Label.class,
         value -> new AllLabels().uid(Label.class.cast(value)).getBytes(StandardCharsets.UTF_8),
         bytes -> new AllLabels().label(new String(bytes, StandardCharsets.UTF_8))
     ),
@@ -152,14 +152,14 @@ public enum DataType {
      * Type reference.
      */
     TYPE_REFERENCE(
-        "type", Type.class, Type.class, DataType::typeBytes, bytes ->
+        "type", Type.class, DataType::typeBytes, bytes ->
         Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)))
     ),
 
     /**
      * Class reference.
      */
-    CLASS_REFERENCE("class", Class.class, Class.class,
+    CLASS_REFERENCE("class", Class.class,
         value -> DataType.hexClass(Class.class.cast(value).getName()),
         bytes -> new String(bytes, StandardCharsets.UTF_8)
     ),
@@ -167,7 +167,7 @@ public enum DataType {
     /**
      * Null.
      */
-    NULL("nullable", null, null, value -> new byte[0], bytes -> null);
+    NULL("nullable", null, value -> new byte[0], bytes -> null);
 
     /**
      * Base type.
@@ -178,11 +178,6 @@ public enum DataType {
      * Class.
      */
     private final Class<?> clazz;
-
-    /**
-     * Primitive class.
-     */
-    private final Class<?> primitive;
 
     /**
      * Converter to hex.
@@ -198,7 +193,6 @@ public enum DataType {
      * Constructor.
      * @param base Base type.
      * @param clazz Class.
-     * @param primitive Primitive class.
      * @param encoder Converter to hex.
      * @param decoder Converter from hex.
      * @checkstyle ParameterNumberCheck (5 lines)
@@ -206,13 +200,11 @@ public enum DataType {
     DataType(
         final String base,
         final Class<?> clazz,
-        final Class<?> primitive,
         final Function<Object, byte[]> encoder,
         final Function<byte[], Object> decoder
     ) {
         this.base = base;
         this.clazz = clazz;
-        this.primitive = primitive;
         this.encoder = encoder;
         this.decoder = decoder;
     }
@@ -270,6 +262,7 @@ public enum DataType {
      * @param data Some data.
      * @return Type.
      */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static String type(final Object data) {
         return DataType.from(data).base;
     }
@@ -279,6 +272,7 @@ public enum DataType {
      * @param data Data.
      * @return Hex representation of data.
      */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static byte[] toBytes(final Object data) {
         return DataType.from(data).encode(data);
     }
@@ -298,10 +292,20 @@ public enum DataType {
         return result;
     }
 
+    /**
+     * Encode data.
+     * @param data Data.
+     * @return Encoded data.
+     */
     private byte[] encode(final Object data) {
         return Optional.ofNullable(data).map(this.encoder).orElse(null);
     }
 
+    /**
+     * Decode data.
+     * @param data Data.
+     * @return Decoded data.
+     */
     private Object decode(final byte[] data) {
         return Optional.ofNullable(data).map(this.decoder).orElse(null);
     }
