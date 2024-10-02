@@ -23,11 +23,19 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * XML value.
  * @since 0.6
  */
 public final class XmlValue {
+
+    /**
+     * Hex radix.
+     */
+    private static final int RADIX = 16;
 
     /**
      * XML node.
@@ -43,14 +51,64 @@ public final class XmlValue {
     }
 
     /**
-     * Convert to bytes.
-     * @return Bytes.
+     * Convert hex string to human-readable string.
+     * Example:
+     *  "48 65 6C 6C 6F 20 57 6F 72 6C 64 21" -> "Hello World!"
+     * @return Human-readable string.
      */
-    public XmlBytes bytes() {
-        return new XmlBytes(
-            this.node.attribute("base")
-                .orElseThrow(() -> new IllegalStateException("Base attribute is missing")),
-            this.node.firstChild()
-        );
+    public String string() {
+        final String hex = this.hex();
+        try {
+            final String result;
+            if (hex.isEmpty()) {
+                result = "";
+            } else {
+                result = Arrays.stream(hex.split("(?<=\\G.{2})"))
+                    .map(ch -> (char) Integer.parseInt(ch, XmlValue.RADIX))
+                    .map(String::valueOf)
+                    .collect(Collectors.joining());
+            }
+            return result;
+        } catch (final NumberFormatException exception) {
+            throw new IllegalArgumentException(
+                String.format("Invalid hex string: %s", hex),
+                exception
+            );
+        }
+    }
+
+    /**
+     * Convert hex string to boolean.
+     * @return Boolean.
+     */
+    public boolean bool() {
+        final String value = this.hex();
+        if (value.length() != 2) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Invalid hex boolean string: %s, the expected size is 2: 01 or 00",
+                    value
+                )
+            );
+        }
+        return "01".equals(value);
+    }
+
+    /**
+     * Convert hex string to integer.
+     * @return Integer.
+     */
+    public int integer() {
+        return Integer.parseInt(this.hex(), XmlValue.RADIX);
+    }
+
+    /**
+     * Hex string.
+     * Example:
+     * - "20 57 6F 72 6C 64 21" -> "20576F726C6421"
+     * @return Hex string.
+     */
+    private String hex() {
+        return this.node.firstChild().text().trim().replaceAll(" ", "");
     }
 }

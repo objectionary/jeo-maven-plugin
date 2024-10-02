@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import org.eolang.jeo.matchers.SameXml;
-import org.eolang.jeo.representation.HexData;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
@@ -58,11 +57,11 @@ final class DirectivesAnnotationsTest {
                 "/o[contains(@base,'seq1') and @name='annotations']/o",
                 String.format(
                     "/o[contains(@base,'seq1') and @name='annotations']/o/o[1][contains(@base,'string')]/o[text()='%s']",
-                    new HexData(annotation).value()
+                    new DirectivesValue(annotation).hex()
                 ),
                 String.format(
                     "/o[contains(@base,'seq1') and @name='annotations']/o/o[2][contains(@base,'bool')]/o[text()='%s']",
-                    new HexData(true).value()
+                    new DirectivesValue(true).hex()
                 )
             )
         );

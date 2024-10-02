@@ -23,8 +23,8 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.DataType;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.bytecode.DataType;
 import org.objectweb.asm.Label;
 
 /**

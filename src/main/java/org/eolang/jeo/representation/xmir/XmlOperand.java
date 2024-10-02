@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.bytecode.DataType;
 import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
@@ -73,9 +74,9 @@ public final class XmlOperand {
             final XmlAnnotationProperty xml = new XmlAnnotationProperty(this.raw);
             result = xml.bytecode();
         } else {
+            final DataType type = DataType.find(base);
             result = this.raw.children().findFirst()
-                .map(bytes -> new XmlBytes(base, bytes))
-                .map(XmlBytes::parse)
+                .map(bytes -> type.decode(bytes.text()))
                 .orElse(null);
         }
         return result;

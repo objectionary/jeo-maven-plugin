@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.PrefixedName;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -307,7 +306,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                     String.format(
                         "%s/o[contains(@base,'int')]/o[@data='bytes' and text()='%s']/@base",
                         instruction,
-                        new HexData(this.opcode).value()
+                        new DirectivesValue(this.opcode).hex()
                     )
                 ),
                 this.arguments(instruction)
@@ -324,7 +323,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 .map(
                     arg -> {
                         final String result;
-                        final HexData hex = new HexData(arg);
+                        final DirectivesValue hex = new DirectivesValue(arg);
                         if (arg instanceof Label) {
                             result = String.format(
                                 "%s/o[contains(@base,'%s')]/o[@data='bytes']/@data",
@@ -336,7 +335,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                                 "%s/o[contains(@base,'%s')]/o[@data='bytes' and text()='%s']/@data",
                                 instruction,
                                 hex.type(),
-                                hex.value()
+                                hex.hex()
                             );
                         }
                         return result;
@@ -387,7 +386,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 String.format(
                     "%s/o[4][contains(@base,'string')]/o[text()='%s']/@data",
                     HasTryCatch.path(root),
-                    new HexData(this.type).value()
+                    new DirectivesValue(this.type).hex()
                 )
             );
         }
