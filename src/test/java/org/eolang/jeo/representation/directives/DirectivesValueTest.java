@@ -23,12 +23,17 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.stream.Stream;
 import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.bytecode.DataType;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.objectweb.asm.Type;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
@@ -77,6 +82,155 @@ final class DirectivesValueTest {
             "Decodes label from XML",
             DataType.find("org.eolang.jeo.label").decode("73 6F 6D 65 2D 72 61 6E 64 6F 6D"),
             Matchers.equalTo(new AllLabels().label("some-random"))
+        );
+    }
+
+
+    @MethodSource("types")
+    @ParameterizedTest
+    void determinesTypeCorrectly(final Object data, final String type) {
+        MatcherAssert.assertThat(
+            String.format(
+                "Expected and actual types differ, the type for '%s' should be '%s'",
+                data,
+                type
+            ),
+            new DirectivesValue(data).type(),
+            Matchers.equalTo(type)
+        );
+    }
+
+    @MethodSource("values")
+    @ParameterizedTest
+    void convertsRawDataIntoHexString(final Object data, final String hex) {
+        MatcherAssert.assertThat(
+            String.format(
+                String.format(
+                    "Expected and actual hex values differ, the value for '%s' should be '%s'",
+                    data,
+                    hex
+                )
+            ),
+            new DirectivesValue(data).hex(),
+            Matchers.equalTo(hex)
+        );
+    }
+
+    @Test
+    void convertsRawPrimitiveDataToHexString() {
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for '10' should be '00 00 00 00 00 00 00 0A'",
+            new DirectivesValue(10).hex(),
+            Matchers.equalTo("00 00 00 00 00 00 00 0A")
+        );
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for '0.1d' should be '3F B9 99 99 99 99 99 9A'",
+            new DirectivesValue(0.1d).hex(),
+            Matchers.equalTo("3F B9 99 99 99 99 99 9A")
+        );
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for '0.1f' should be '3D CC CC CD'",
+            new DirectivesValue(0.1f).hex(),
+            Matchers.equalTo("3D CC CC CD")
+        );
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for 'true' should be '01'",
+            new DirectivesValue(true).hex(),
+            Matchers.equalTo("01")
+        );
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for 'false' should be '00'",
+            new DirectivesValue(false).hex(),
+            Matchers.equalTo("00")
+        );
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for 'Hello!' should be '48 65 6C 6C 6F 21'",
+            new DirectivesValue(11L).type(),
+            Matchers.equalTo("long")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("encodedValues")
+    void decodesEncodesCorrectly(final Object origin, final String hex) {
+        MatcherAssert.assertThat(
+            "Decoding and encoding are not consistent",
+            origin,
+            Matchers.equalTo(
+                DataType.find(
+                    new JeoFqn(new DirectivesValue(origin).type()).fqn()
+                ).decode(hex)
+            )
+        );
+    }
+
+    @Test
+    void encodesType() {
+        final String value = new DirectivesValue(Type.INT_TYPE).hex();
+        MatcherAssert.assertThat(
+            "Expected and actual hex values differ, the value for 'Type.INT_TYPE' should be '69 6E 74'",
+            value,
+            Matchers.equalTo("49")
+        );
+    }
+
+    /**
+     * Arguments for {@link HexDataTest#determinesTypeCorrectly(Object, String)} test.
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> types() {
+        return Stream.of(
+            Arguments.of(1, "int"),
+            Arguments.of("Hello!", "string"),
+            Arguments.of(new byte[]{1, 2, 3}, "bytes"),
+            Arguments.of(true, "bool"),
+            Arguments.of(0.1f, "float"),
+            Arguments.of(0.1d, "double"),
+            Arguments.of(HexDataTest.class, "class"),
+            Arguments.of(' ', "char")
+        );
+    }
+
+    /**
+     * Arguments for {@link HexDataTest#convertsRawDataIntoHexString(Object, String)}.
+     * Example for reference - {@link HexDataTest} is "org.eolang.jeo.representation.directives.HexDataTest"
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> values() {
+        return Stream.of(
+            Arguments.of(10, "00 00 00 00 00 00 00 0A"),
+            Arguments.of("Hello!", "48 65 6C 6C 6F 21"),
+            Arguments.of(new byte[]{1, 2, 3}, "01 02 03"),
+            Arguments.of(true, "01"),
+            Arguments.of(false, "00"),
+            Arguments.of('a', "00 61"),
+            Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A"),
+            Arguments.of(
+                HexDataTest.class,
+                "6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2F 64 69 72 65 63 74 69 76 65 73 2F 48 65 78 44 61 74 61 54 65 73 74"
+            )
+        );
+    }
+
+    /**
+     * Arguments for {@link HexDataTest#decodesEncodesCorrectly(Object, String)}.
+     * Example for reference - {@link HexDataTest} is "org.eolang.jeo.representation.directives.HexDataTest"
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> encodedValues() {
+        return Stream.of(
+            Arguments.of(10, "00 00 00 00 00 00 00 0A"),
+            Arguments.of("Hello!", "48 65 6C 6C 6F 21"),
+            Arguments.of(new byte[]{1, 2, 3}, "01 02 03"),
+            Arguments.of('a', "00 61"),
+            Arguments.of(true, "01"),
+            Arguments.of(false, "00"),
+            Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A"),
+            Arguments.of(
+                "org/eolang/jeo/representation/HexDataTest",
+                "6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2F 48 65 78 44 61 74 61 54 65 73 74"
+            ),
+            Arguments.of(new AllLabels().label("some"), "73 6F 6D 65")
         );
     }
 }
