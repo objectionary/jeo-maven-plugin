@@ -84,7 +84,7 @@ public class XmlField {
      * @return Access modifiers.
      */
     private int access() {
-        return this.find(Attribute.ACCESS).map(HexString::decodeAsInt).orElse(0);
+        return this.find(Attribute.ACCESS).map(XmlValue::integer).orElse(0);
     }
 
     /**
@@ -92,7 +92,7 @@ public class XmlField {
      * @return Descriptor.
      */
     private String descriptor() {
-        return this.find(Attribute.DESCRIPTOR).map(HexString::decode)
+        return this.find(Attribute.DESCRIPTOR).map(XmlValue::string)
             .filter(descriptor -> !descriptor.isEmpty())
             .orElse(null);
     }
@@ -102,7 +102,7 @@ public class XmlField {
      * @return Signature.
      */
     private String signature() {
-        return this.find(Attribute.SIGNATURE).map(HexString::decode)
+        return this.find(Attribute.SIGNATURE).map(XmlValue::string)
             .filter(signature -> !signature.isEmpty())
             .orElse(null);
     }
@@ -133,11 +133,11 @@ public class XmlField {
      * @param attribute Attribute.
      * @return Text.
      */
-    private Optional<HexString> find(final Attribute attribute) {
+    private Optional<XmlValue> find(final Attribute attribute) {
         return Optional.of(
             new XmlValue(
                 this.node.children().collect(Collectors.toList()).get(attribute.ordinal())
-            ).hex()
+            )
         );
     }
 
