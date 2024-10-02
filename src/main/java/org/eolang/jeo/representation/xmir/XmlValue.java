@@ -46,11 +46,9 @@ public final class XmlValue {
      * Convert to bytes.
      * @return Bytes.
      */
-    public XmlBytes bytes() {
-        return new XmlBytes(
-            this.node.attribute("base")
-                .orElseThrow(() -> new IllegalStateException("Base attribute is missing")),
-            this.node.firstChild()
+    public HexString hex() {
+        return new HexString(
+            this.node.firstChild().text()
         );
     }
 }

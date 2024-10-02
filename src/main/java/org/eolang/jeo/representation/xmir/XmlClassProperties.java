@@ -73,8 +73,8 @@ public final class XmlClassProperties {
      */
     private int access() {
         return new XmlValue(this.clazz.child("name", "access"))
-            .bytes()
             .hex()
+//            .hex()
             .decodeAsInt();
     }
 
@@ -85,8 +85,8 @@ public final class XmlClassProperties {
     private String signature() {
         return this.child("signature")
             .map(XmlValue::new)
-            .map(XmlValue::bytes)
-            .map(XmlBytes::hex)
+            .map(XmlValue::hex)
+//            .map(XmlBytes::hex)
             .map(HexString::decode)
             .filter(s -> !s.isEmpty())
             .orElse(null);
@@ -99,8 +99,8 @@ public final class XmlClassProperties {
     private String supername() {
         return this.child("supername")
             .map(XmlValue::new)
-            .map(XmlValue::bytes)
-            .map(XmlBytes::hex)
+            .map(XmlValue::hex)
+//            .map(XmlBytes::hex)
             .map(HexString::decode)
             .filter(s -> !s.isEmpty())
             .orElse("java/lang/Object");
@@ -115,8 +115,8 @@ public final class XmlClassProperties {
             .map(
                 node -> node.children()
                     .map(XmlValue::new)
-                    .map(XmlValue::bytes)
-                    .map(XmlBytes::hex)
+                    .map(XmlValue::hex)
+//                    .map(XmlBytes::hex)
                     .map(HexString::decode)
                     .toArray(String[]::new)
             ).orElse(new String[0]);
@@ -129,8 +129,8 @@ public final class XmlClassProperties {
     private int version() {
         return this.child("version")
             .map(XmlValue::new)
-            .map(XmlValue::bytes)
-            .map(XmlBytes::hex)
+            .map(XmlValue::hex)
+//            .map(XmlBytes::hex)
             .map(HexString::decodeAsInt)
             .orElse(new DefaultVersion().bytecode());
     }

@@ -137,7 +137,7 @@ public class XmlField {
         return Optional.of(
             new XmlValue(
                 this.node.children().collect(Collectors.toList()).get(attribute.ordinal())
-            ).bytes().hex()
+            ).hex()
         );
     }
 

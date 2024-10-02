@@ -103,8 +103,8 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
         return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(3))
             .filter(node -> !node.hasAttribute("base", new EoFqn("nop").fqn()))
             .map(XmlValue::new)
-            .map(XmlValue::bytes)
-            .map(XmlBytes::hex)
+            .map(XmlValue::hex)
+//            .map(XmlBytes::hex)
             .map(HexString::decode)
             .filter(s -> !s.isEmpty())
             .orElse(null);
@@ -119,8 +119,8 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
         return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(id))
             .filter(node -> !node.hasAttribute("base", new EoFqn("nop").fqn()))
             .map(XmlValue::new)
-            .map(XmlValue::bytes)
-            .map(XmlBytes::hex)
+            .map(XmlValue::hex)
+//            .map(XmlBytes::hex)
             .map(HexString::decode);
     }
 }

@@ -189,7 +189,9 @@ public final class XmlMethod {
      * @return Access modifiers.
      */
     private int access() {
-        return new XmlValue(this.child(0)).bytes().hex().decodeAsInt();
+        return new XmlValue(this.child(0)).hex()
+//            .hex()
+            .decodeAsInt();
     }
 
     /**
@@ -198,7 +200,9 @@ public final class XmlMethod {
      * @return Descriptor.
      */
     private String descriptor() {
-        return new XmlValue(this.child(1)).bytes().hex().decode();
+        return new XmlValue(this.child(1)).hex()
+//            .hex()
+            .decode();
     }
 
     /**
@@ -207,7 +211,9 @@ public final class XmlMethod {
      * @return Signature.
      */
     private String signature() {
-        return new XmlValue(this.child(2)).bytes().hex().decode();
+        return new XmlValue(this.child(2)).hex()
+//            .hex()
+            .decode();
     }
 
     private XmlNode child(final int index) {
@@ -273,8 +279,8 @@ public final class XmlMethod {
         return this.child(3)
             .children()
             .map(XmlValue::new)
-            .map(XmlValue::bytes)
-            .map(XmlBytes::hex)
+            .map(XmlValue::hex)
+//            .map(XmlBytes::hex)
             .map(HexString::decode)
             .toArray(String[]::new);
     }
