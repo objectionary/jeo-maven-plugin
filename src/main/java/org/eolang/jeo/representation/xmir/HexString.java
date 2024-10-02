@@ -155,7 +155,4 @@ final class HexString {
         return result;
     }
 
-    public boolean isEmpty() {
-        return this.hex.isEmpty();
-    }
 }
