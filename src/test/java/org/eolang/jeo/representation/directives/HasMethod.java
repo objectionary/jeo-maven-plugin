@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.HexData;
 import org.eolang.jeo.representation.PrefixedName;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;

@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation;
+package org.eolang.jeo.representation.directives;
 
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.directives.JeoFqn;
+import org.eolang.jeo.representation.bytecode.DataType;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.objectweb.asm.Type;
 
 /**
- * Test cases for {@link org.eolang.jeo.representation.HexData}.
+ * Test cases for {@link HexData}.
  * @since 0.1
  */
 final class HexDataTest {
@@ -156,7 +156,7 @@ final class HexDataTest {
 
     /**
      * Arguments for {@link HexDataTest#convertsRawDataIntoHexString(Object, String)}.
-     * Example for reference - {@link HexDataTest} is "org.eolang.jeo.representation.HexDataTest"
+     * Example for reference - {@link HexDataTest} is "org.eolang.jeo.representation.directives.HexDataTest"
      * @return Stream of arguments.
      */
     static Stream<Arguments> values() {
@@ -170,14 +170,14 @@ final class HexDataTest {
             Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A"),
             Arguments.of(
                 HexDataTest.class,
-                "6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2F 48 65 78 44 61 74 61 54 65 73 74"
+                "6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2F 64 69 72 65 63 74 69 76 65 73 2F 48 65 78 44 61 74 61 54 65 73 74"
             )
         );
     }
 
     /**
      * Arguments for {@link HexDataTest#decodesEncodesCorrectly(Object, String)}.
-     * Example for reference - {@link HexDataTest} is "org.eolang.jeo.representation.HexDataTest"
+     * Example for reference - {@link HexDataTest} is "org.eolang.jeo.representation.directives.HexDataTest"
      * @return Stream of arguments.
      */
     static Stream<Arguments> encodedValues() {

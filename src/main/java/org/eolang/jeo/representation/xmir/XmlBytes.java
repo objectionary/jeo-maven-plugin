@@ -23,7 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.DataType;
+import org.eolang.jeo.representation.bytecode.DataType;
 
 /**
  * Xml representation of EO bytes.

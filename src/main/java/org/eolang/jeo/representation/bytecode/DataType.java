@@ -21,13 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation;
+package org.eolang.jeo.representation.bytecode;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.StringJoiner;
 import java.util.function.Function;
 import org.eolang.jeo.representation.directives.JeoFqn;
 import org.eolang.jeo.representation.xmir.AllLabels;
@@ -286,31 +285,11 @@ public enum DataType {
     }
 
     /**
-     * Convert data to hex string.
-     * @param data Data.
-     * @return Hex string.
-     */
-    public String toHexString(final Object data) {
-        final byte[] bytes = this.encode(data);
-        final String res;
-        if (bytes == null) {
-            res = null;
-        } else {
-            final StringJoiner out = new StringJoiner(" ");
-            for (final byte bty : bytes) {
-                out.add(String.format("%02X", bty));
-            }
-            res = out.toString();
-        }
-        return res;
-    }
-
-    /**
      * Get a type for some data.
      * @param data Some data.
      * @return Type.
      */
-    static String type(final Object data) {
+    public static String type(final Object data) {
         return DataType.from(data).base;
     }
 
@@ -319,7 +298,7 @@ public enum DataType {
      * @param data Data.
      * @return Hex representation of data.
      */
-    static byte[] toBytes(final Object data) {
+    public static byte[] toBytes(final Object data) {
         return DataType.from(data).encode(data);
     }
 

@@ -27,7 +27,7 @@ package org.eolang.jeo.representation.bytecode;
  * Unrecognized opcode.
  * @since 0.1
  */
-public final class UnrecognizedOpcode extends IllegalStateException {
+final class UnrecognizedOpcode extends IllegalStateException {
 
     /**
      * Serial version UID.

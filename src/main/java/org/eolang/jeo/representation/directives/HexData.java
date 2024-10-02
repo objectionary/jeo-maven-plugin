@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation;
+package org.eolang.jeo.representation.directives;
 
 import lombok.ToString;
+import org.eolang.jeo.representation.bytecode.DataType;
 
 /**
  * Hexadecimal data.
@@ -87,8 +88,9 @@ public final class HexData {
         if (bytes == null || bytes.length == 0) {
             res = "";
         } else {
-            final char[] hex = new char[bytes.length * 3];
-            for (int index = 0; index < bytes.length; ++index) {
+            final int length = bytes.length;
+            final char[] hex = new char[length * 3];
+            for (int index = 0; index < length; ++index) {
                 final int value = bytes[index] & 0xFF;
                 hex[index * 3] = HexData.HEX_ARRAY[value >>> 4];
                 hex[index * 3 + 1] = HexData.HEX_ARRAY[value & 0x0F];

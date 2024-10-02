@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import lombok.ToString;
-import org.eolang.jeo.representation.HexData;
 import org.xembly.Directive;
 
 /**
