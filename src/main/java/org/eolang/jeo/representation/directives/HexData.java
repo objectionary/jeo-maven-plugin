@@ -58,7 +58,7 @@ public final class HexData {
      * Value of the data.
      * @return Value
      */
-    public String value() {
+    public String hex() {
         return HexData.bytesToHex(DataType.toBytes(this.data));
     }
 

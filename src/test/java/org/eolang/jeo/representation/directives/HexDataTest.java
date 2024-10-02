@@ -65,7 +65,7 @@ final class HexDataTest {
                     hex
                 )
             ),
-            new HexData(data).value(),
+            new HexData(data).hex(),
             Matchers.equalTo(hex)
         );
     }
@@ -74,27 +74,27 @@ final class HexDataTest {
     void convertsRawPrimitiveDataToHexString() {
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '10' should be '00 00 00 00 00 00 00 0A'",
-            new HexData(10).value(),
+            new HexData(10).hex(),
             Matchers.equalTo("00 00 00 00 00 00 00 0A")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1d' should be '3F B9 99 99 99 99 99 9A'",
-            new HexData(0.1d).value(),
+            new HexData(0.1d).hex(),
             Matchers.equalTo("3F B9 99 99 99 99 99 9A")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1f' should be '3D CC CC CD'",
-            new HexData(0.1f).value(),
+            new HexData(0.1f).hex(),
             Matchers.equalTo("3D CC CC CD")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'true' should be '01'",
-            new HexData(true).value(),
+            new HexData(true).hex(),
             Matchers.equalTo("01")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'false' should be '00'",
-            new HexData(false).value(),
+            new HexData(false).hex(),
             Matchers.equalTo("00")
         );
         MatcherAssert.assertThat(
@@ -120,7 +120,7 @@ final class HexDataTest {
 
     @Test
     void encodesType() {
-        final String value = new HexData(Type.INT_TYPE).value();
+        final String value = new HexData(Type.INT_TYPE).hex();
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'Type.INT_TYPE' should be '69 6E 74'",
             value,

@@ -306,7 +306,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                     String.format(
                         "%s/o[contains(@base,'int')]/o[@data='bytes' and text()='%s']/@base",
                         instruction,
-                        new HexData(this.opcode).value()
+                        new HexData(this.opcode).hex()
                     )
                 ),
                 this.arguments(instruction)
@@ -335,7 +335,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                                 "%s/o[contains(@base,'%s')]/o[@data='bytes' and text()='%s']/@data",
                                 instruction,
                                 hex.type(),
-                                hex.value()
+                                hex.hex()
                             );
                         }
                         return result;
@@ -386,7 +386,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 String.format(
                     "%s/o[4][contains(@base,'string')]/o[text()='%s']/@data",
                     HasTryCatch.path(root),
-                    new HexData(this.type).value()
+                    new HexData(this.type).hex()
                 )
             );
         }
