@@ -28,17 +28,17 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link HexString}.
- * @since 0.1
+ * Test case for {@link XmlValue}.
+ * @since 0.6
  */
-final class HexStringTest {
+final class XmlValueTest {
 
     @Test
     void parsesHexStringAsInteger() {
         final int expected = 1057;
-        final int actual = new HexString(
-            "00 00 00 00 00 00 04 21"
-        ).decodeAsInt();
+        final int actual = new XmlValue(
+            new XmlNode("<o><o>00 00 00 00 00 00 04 21</o></o>")
+        ).integer();
         MatcherAssert.assertThat(
             String.format(
                 "Can't parse hex string as integer, or the result is wrong; expected %d, got %d",

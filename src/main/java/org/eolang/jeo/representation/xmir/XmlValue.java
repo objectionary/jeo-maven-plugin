@@ -42,6 +42,18 @@ public final class XmlValue {
         this.node = node;
     }
 
+    public String string() {
+        return this.hex().decode();
+    }
+
+    public boolean bool() {
+        return this.hex().decodeAsBoolean();
+    }
+
+    public int integer() {
+        return this.hex().decodeAsInt();
+    }
+
     /**
      * Convert to bytes.
      * @return Bytes.
