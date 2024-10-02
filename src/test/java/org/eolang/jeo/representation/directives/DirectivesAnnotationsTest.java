@@ -57,11 +57,11 @@ final class DirectivesAnnotationsTest {
                 "/o[contains(@base,'seq1') and @name='annotations']/o",
                 String.format(
                     "/o[contains(@base,'seq1') and @name='annotations']/o/o[1][contains(@base,'string')]/o[text()='%s']",
-                    new HexData(annotation).hex()
+                    new DirectivesValue(annotation).hex()
                 ),
                 String.format(
                     "/o[contains(@base,'seq1') and @name='annotations']/o/o[2][contains(@base,'bool')]/o[text()='%s']",
-                    new HexData(true).hex()
+                    new DirectivesValue(true).hex()
                 )
             )
         );

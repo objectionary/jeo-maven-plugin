@@ -92,7 +92,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * Value of the data.
      * @return Value
      */
-    private String hex() {
+    String hex() {
         return DirectivesValue.bytesToHex(DataType.toBytes(this.data));
     }
 
@@ -100,7 +100,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * Type of the data.
      * @return Type
      */
-    private String type() {
+    String type() {
         return DataType.type(this.data);
     }
 
