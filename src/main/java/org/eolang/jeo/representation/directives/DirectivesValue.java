@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Optional;
 import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeValue;
 import org.xembly.Directive;
@@ -101,7 +102,7 @@ public final class DirectivesValue implements Iterable<Directive> {
     public DirectivesValue(final String name, final String type, final byte[] bytes) {
         this.name = name;
         this.vtype = type;
-        this.bytes = bytes.clone();
+        this.bytes = Optional.ofNullable(bytes).map(byte[]::clone).orElse(null);
     }
 
     @Override
