@@ -25,32 +25,86 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.Locale;
 
+/**
+ * Bytecode value.
+ * Represents a typed value in bytecode format.
+ * @since 0.6
+ */
 public final class BytecodeValue {
 
+    /**
+     * Data type.
+     */
     private final DataType type;
+
+    /**
+     * Bytes.
+     */
     private final byte[] bytes;
+
+    /**
+     * Constructor.
+     * @param value Value.
+     */
     public BytecodeValue(final Object value) {
-        this(DataType.type(value), DataType.toBytes(value));
+        this(DataType.findByData(value), value);
     }
 
+    /**
+     * Constructor.
+     * @param type Value type.
+     * @param bytes Value bytes.
+     */
     public BytecodeValue(final String type, final byte[] bytes) {
-        this(DataType.find(type), bytes);
+        this(DataType.findByBase(type), bytes);
     }
 
-    public BytecodeValue(final DataType type, final byte[] bytes) {
+    /**
+     * Constructor.
+     * @param type Value type.
+     * @param value Value.
+     */
+    private BytecodeValue(DataType type, Object value) {
+        this(type, type.encode(value));
+    }
+
+    /**
+     * Constructor.
+     * @param type Value type.
+     * @param bytes Value bytes.
+     */
+    private BytecodeValue(final DataType type, final byte[] bytes) {
         this.type = type;
         this.bytes = bytes;
     }
 
+    /**
+     * Represent the value as an object.
+     * @return Object.
+     */
     public Object object() {
         return this.type.decode(this.bytes);
     }
 
+    /**
+     * Retrieve the type of the value.
+     * @return Type.
+     */
     public String type() {
         return this.type.base().toLowerCase(Locale.ROOT);
     }
 
+    /**
+     * Retrieve the bytes of the value.
+     * @return Bytes.
+     */
     public byte[] bytes() {
-        return this.bytes;
+        final byte[] result;
+        if (this.bytes == null) {
+            result = null;
+        } else {
+            result = this.bytes.clone();
+        }
+        return result;
     }
 }

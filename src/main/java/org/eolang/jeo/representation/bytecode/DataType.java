@@ -213,8 +213,7 @@ public enum DataType {
      * @param base Base type.
      * @return Type.
      */
-    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
-    public static DataType find(final String base) {
+    static DataType findByBase(final String base) {
         return Arrays.stream(DataType.values())
             .filter(type -> type.base.equals(base))
             .findFirst()
@@ -226,73 +225,11 @@ public enum DataType {
     }
 
     /**
-     * Get a type for some data.
-     * @param data Some data.
-     * @return Type.
-     */
-    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
-    public static String type(final Object data) {
-        return DataType.from(data).base;
-    }
-
-    /**
-     * Convert data to hex.
-     * @param data Data.
-     * @return Hex representation of data.
-     */
-    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
-    public static byte[] toBytes(final Object data) {
-        return DataType.from(data).encode(data);
-    }
-
-    /**
-     * Convert boolean to bytes.
-     * @param data Boolean.
-     * @return Bytes.
-     */
-    private static byte[] hexBoolean(final boolean data) {
-        final byte[] result;
-        if (data) {
-            result = new byte[]{0x01};
-        } else {
-            result = new byte[]{0x00};
-        }
-        return result;
-    }
-
-    /**
-     * Encode data.
-     * @param data Data.
-     * @return Encoded data.
-     */
-    private byte[] encode(final Object data) {
-        return Optional.ofNullable(data).map(this.encoder).orElse(null);
-    }
-
-    /**
-     * Decode data.
-     * @param data Data.
-     * @return Decoded data.
-     */
-    Object decode(final byte[] data) {
-        return Optional.ofNullable(data).map(this.decoder).orElse(null);
-    }
-
-    /**
-     * Convert class name to bytes.
-     * @param name Class name.
-     * @return Bytes.
-     */
-    private static byte[] hexClass(final String name) {
-        return name.replace('.', '/').getBytes(StandardCharsets.UTF_8);
-    }
-
-    /**
-     * Get a data type for some data.
+     * Find a type by data.
      * @param data Data.
      * @return Data type.
      */
-    private static DataType from(final Object data) {
+    static DataType findByData(final Object data) {
         final DataType result;
         if (data == null) {
             result = DataType.NULL;
@@ -316,6 +253,56 @@ public enum DataType {
     }
 
     /**
+     * Type name.
+     * @return Type name.
+     */
+    String base() {
+        return this.base;
+    }
+
+    /**
+     * Encode data.
+     * @param data Data.
+     * @return Encoded data.
+     */
+    byte[] encode(final Object data) {
+        return Optional.ofNullable(data).map(this.encoder).orElse(null);
+    }
+
+    /**
+     * Decode data.
+     * @param data Data.
+     * @return Decoded data.
+     */
+    Object decode(final byte[] data) {
+        return Optional.ofNullable(data).map(this.decoder).orElse(null);
+    }
+
+    /**
+     * Convert class name to bytes.
+     * @param name Class name.
+     * @return Bytes.
+     */
+    private static byte[] hexClass(final String name) {
+        return name.replace('.', '/').getBytes(StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Convert boolean to bytes.
+     * @param data Boolean.
+     * @return Bytes.
+     */
+    private static byte[] hexBoolean(final boolean data) {
+        final byte[] result;
+        if (data) {
+            result = new byte[]{0x01};
+        } else {
+            result = new byte[]{0x00};
+        }
+        return result;
+    }
+
+    /**
      * Convert type to bytes.
      * @param value Type.
      * @return Bytes.
@@ -328,9 +315,5 @@ public enum DataType {
                 String.format("Failed to get class name for %s", value), exception
             );
         }
-    }
-
-    public String base() {
-        return this.base;
     }
 }
