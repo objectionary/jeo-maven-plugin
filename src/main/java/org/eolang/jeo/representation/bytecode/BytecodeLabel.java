@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.nio.charset.StandardCharsets;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesLabel;
@@ -48,6 +49,14 @@ public final class BytecodeLabel implements BytecodeEntry {
      * All method labels.
      */
     private final AllLabels labels;
+
+    /**
+     * Constructor.
+     * @param uid Label identifier.
+     */
+    public BytecodeLabel(final byte[] uid) {
+        this(new String(uid, StandardCharsets.UTF_8));
+    }
 
     /**
      * Constructor.

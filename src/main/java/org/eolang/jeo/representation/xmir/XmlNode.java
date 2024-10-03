@@ -218,14 +218,6 @@ public final class XmlNode {
     }
 
     /**
-     * Convert to XML document.
-     * @return XML document.
-     */
-    XMLDocument asDocument() {
-        return new XMLDocument(this.node);
-    }
-
-    /**
      * Get optional child node.
      * @param name Child node name.
      * @return Child node.
