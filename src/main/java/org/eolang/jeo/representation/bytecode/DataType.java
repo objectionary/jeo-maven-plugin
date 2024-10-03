@@ -35,10 +35,6 @@ import org.objectweb.asm.Type;
 /**
  * All supported data types.
  * @since 0.3
- * @todo #518:90min Refactor DataType, HexData and HexString classes.
- *  This classes has some sort of intersection in their responsibilities.
- *  We should refactor them to make them more clear and separate. Maybe we can
- *  merge them into one class or split them into more classes.
  */
 public enum DataType {
 
