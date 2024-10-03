@@ -57,7 +57,7 @@ public final class DirectivesValue implements Iterable<Directive> {
     /**
      * Type.
      */
-    private final String type;
+    private final String vtype;
 
     /**
      * Bytes.
@@ -100,7 +100,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      */
     public DirectivesValue(final String name, final String type, final byte[] bytes) {
         this.name = name;
-        this.type = type;
+        this.vtype = type;
         this.bytes = bytes.clone();
     }
 
@@ -126,7 +126,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @return Type
      */
     String type() {
-        return this.type;
+        return this.vtype;
     }
 
     /**

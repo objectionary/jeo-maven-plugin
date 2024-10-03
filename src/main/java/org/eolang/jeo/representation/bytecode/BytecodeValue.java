@@ -35,7 +35,7 @@ public final class BytecodeValue {
     /**
      * Data type.
      */
-    private final DataType type;
+    private final DataType vtype;
 
     /**
      * Bytes.
@@ -74,7 +74,7 @@ public final class BytecodeValue {
      * @param bytes Value bytes.
      */
     private BytecodeValue(final DataType type, final byte[] bytes) {
-        this.type = type;
+        this.vtype = type;
         this.vbytes = bytes;
     }
 
@@ -83,7 +83,7 @@ public final class BytecodeValue {
      * @return Object.
      */
     public Object object() {
-        return this.type.decode(this.vbytes);
+        return this.vtype.decode(this.vbytes);
     }
 
     /**
@@ -91,7 +91,7 @@ public final class BytecodeValue {
      * @return Type.
      */
     public String type() {
-        return this.type.caption().toLowerCase(Locale.ROOT);
+        return this.vtype.caption().toLowerCase(Locale.ROOT);
     }
 
     /**

@@ -35,9 +35,9 @@ import org.objectweb.asm.Type;
 /**
  * Test case for {@link BytecodeValue}.
  * @since 0.6
+ * @checkstyle ParameterNumberCheck (500 lines)
  */
 final class BytecodeValueTest {
-
 
     @ParameterizedTest
     @MethodSource("arguments")
@@ -148,7 +148,9 @@ final class BytecodeValueTest {
             Arguments.of(
                 new BytecodeValue(BytecodeValue.class),
                 "class",
-                "org/eolang/jeo/representation/bytecode/BytecodeValue".getBytes(StandardCharsets.UTF_8),
+                "org/eolang/jeo/representation/bytecode/BytecodeValue".getBytes(
+                    StandardCharsets.UTF_8
+                ),
                 "org/eolang/jeo/representation/bytecode/BytecodeValue"
             ),
             Arguments.of(
