@@ -21,41 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.bytecode;
 
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
-import org.eolang.jeo.representation.bytecode.BytecodeValue;
-import org.eolang.jeo.representation.bytecode.DataType;
-import org.objectweb.asm.Label;
+public final class BytecodeValue {
 
-/**
- * XML representation of bytecode label.
- * @since 0.1
- */
-public final class XmlLabel implements XmlBytecodeEntry {
+    private final DataType type;
+    private final byte[] bytes;
 
-    /**
-     * Label node.
-     */
-    private final XmlNode node;
-
-    /**
-     * Constructor.
-     * @param node Label node.
-     */
-    XmlLabel(final XmlNode node) {
-        this.node = node;
+    public BytecodeValue(final DataType type, final byte[] bytes) {
+        this.type = type;
+        this.bytes = bytes;
     }
 
-    /**
-     * Converts label to bytecode.
-     * @return Bytecode label.
-     */
-    public BytecodeLabel bytecode() {
-        return new BytecodeLabel(
-            (Label) new BytecodeValue(DataType.LABEL, new XmlValue(this.node).bytes()).asObject(),
-            new AllLabels()
-        );
-//        return new BytecodeLabel((Label) DataType.LABEL.decode(this.node.text()), new AllLabels());
+    public Object asObject() {
+        return this.type.decode(this.bytes);
     }
 }

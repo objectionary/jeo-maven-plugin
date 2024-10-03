@@ -306,7 +306,7 @@ public enum DataType {
      * @param data Data.
      * @return Decoded data.
      */
-    private Object decode(final byte[] data) {
+    Object decode(final byte[] data) {
         return Optional.ofNullable(data).map(this.decoder).orElse(null);
     }
 

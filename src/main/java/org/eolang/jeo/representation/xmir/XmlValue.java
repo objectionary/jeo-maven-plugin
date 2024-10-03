@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +37,11 @@ public final class XmlValue {
      * Hex radix.
      */
     private static final int RADIX = 16;
+
+    /**
+     * Space pattern.
+     */
+    private static final Pattern SPACE = Pattern.compile(" ");
 
     /**
      * XML node.
@@ -103,12 +109,34 @@ public final class XmlValue {
     }
 
     /**
+     * Convert hex string to a byte array.
+     * @return Byte array.
+     */
+    public byte[] bytes() {
+        final String hex = this.hex();
+        final byte[] res;
+        if (hex.isEmpty()) {
+            res = null;
+        } else {
+            final char[] chars = hex.toCharArray();
+            final int length = chars.length;
+            res = new byte[length / 2];
+            for (int index = 0; index < length; index += 2) {
+                res[index / 2] = (byte) Integer.parseInt(
+                    String.copyValueOf(new char[]{chars[index], chars[index + 1]}), XmlValue.RADIX
+                );
+            }
+        }
+        return res;
+    }
+
+    /**
      * Hex string.
      * Example:
      * - "20 57 6F 72 6C 64 21" -> "20576F726C6421"
      * @return Hex string.
      */
     private String hex() {
-        return this.node.firstChild().text().trim().replaceAll(" ", "");
+        return XmlValue.SPACE.matcher(this.node.firstChild().text().trim()).replaceAll("");
     }
 }
