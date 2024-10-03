@@ -138,7 +138,7 @@ public final class XmlValue {
     public Object object() {
         final String base = this.base();
         final Object result;
-        if (base.equals("string")) {
+        if ("string".equals(base)) {
             result = this.string();
         } else {
             result = new BytecodeValue(base, this.bytes()).object();

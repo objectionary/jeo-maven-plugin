@@ -40,7 +40,7 @@ public final class BytecodeValue {
     /**
      * Bytes.
      */
-    private final byte[] bytes;
+    private final byte[] vbytes;
 
     /**
      * Constructor.
@@ -64,7 +64,7 @@ public final class BytecodeValue {
      * @param type Value type.
      * @param value Value.
      */
-    private BytecodeValue(DataType type, Object value) {
+    private BytecodeValue(final DataType type, final Object value) {
         this(type, type.encode(value));
     }
 
@@ -75,7 +75,7 @@ public final class BytecodeValue {
      */
     private BytecodeValue(final DataType type, final byte[] bytes) {
         this.type = type;
-        this.bytes = bytes;
+        this.vbytes = bytes;
     }
 
     /**
@@ -83,7 +83,7 @@ public final class BytecodeValue {
      * @return Object.
      */
     public Object object() {
-        return this.type.decode(this.bytes);
+        return this.type.decode(this.vbytes);
     }
 
     /**
@@ -91,7 +91,7 @@ public final class BytecodeValue {
      * @return Type.
      */
     public String type() {
-        return this.type.base().toLowerCase(Locale.ROOT);
+        return this.type.caption().toLowerCase(Locale.ROOT);
     }
 
     /**
@@ -100,10 +100,10 @@ public final class BytecodeValue {
      */
     public byte[] bytes() {
         final byte[] result;
-        if (this.bytes == null) {
+        if (this.vbytes == null) {
             result = null;
         } else {
-            result = this.bytes.clone();
+            result = this.vbytes.clone();
         }
         return result;
     }

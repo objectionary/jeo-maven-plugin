@@ -101,7 +101,7 @@ public final class DirectivesValue implements Iterable<Directive> {
     public DirectivesValue(final String name, final String type, final byte[] bytes) {
         this.name = name;
         this.type = type;
-        this.bytes = bytes;
+        this.bytes = bytes.clone();
     }
 
     @Override

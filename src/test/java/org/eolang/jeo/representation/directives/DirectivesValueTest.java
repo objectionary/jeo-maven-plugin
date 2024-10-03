@@ -140,7 +140,6 @@ final class DirectivesValueTest {
         );
     }
 
-
     @Test
     void encodesType() {
         final String value = new DirectivesValue(Type.INT_TYPE).hex();
@@ -187,6 +186,4 @@ final class DirectivesValueTest {
             )
         );
     }
-
-
 }

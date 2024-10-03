@@ -256,7 +256,7 @@ public enum DataType {
      * Type name.
      * @return Type name.
      */
-    String base() {
+    String caption() {
         return this.base;
     }
 
