@@ -361,4 +361,8 @@ public enum DataType {
             );
         }
     }
+
+    public String base() {
+        return this.base;
+    }
 }

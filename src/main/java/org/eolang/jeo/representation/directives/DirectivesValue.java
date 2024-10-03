@@ -25,7 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import lombok.ToString;
-import org.eolang.jeo.representation.bytecode.DataType;
+import org.eolang.jeo.representation.bytecode.BytecodeValue;
 import org.xembly.Directive;
 
 /**
@@ -52,12 +52,17 @@ public final class DirectivesValue implements Iterable<Directive> {
     /**
      * Data.
      */
-    private final Object data;
+//    private final Object data;
 
     /**
      * Name.
      */
     private final String name;
+
+    private final String type;
+
+    private final byte[] bytes;
+
 
     /**
      * Constructor.
@@ -75,8 +80,23 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param <T> Data type.
      */
     public <T> DirectivesValue(final String name, final T data) {
-        this.data = data;
+        this(name, new BytecodeValue(data));
+    }
+
+    public DirectivesValue(final String name, final BytecodeValue value) {
+        this(name, value.type(), value.bytes());
+    }
+
+    /**
+     * Constructor.
+     * @param name Name.
+     * @param type Type.
+     * @param bytes Bytes.
+     */
+    public DirectivesValue(final String name, final String type, final byte[] bytes) {
         this.name = name;
+        this.type = type;
+        this.bytes = bytes;
     }
 
     @Override
@@ -93,7 +113,8 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @return Value
      */
     String hex() {
-        return DirectivesValue.bytesToHex(DataType.toBytes(this.data));
+        return DirectivesValue.bytesToHex(this.bytes);
+//        return DirectivesValue.bytesToHex(DataType.toBytes(this.data));
     }
 
     /**
@@ -101,7 +122,8 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @return Type
      */
     String type() {
-        return DataType.type(this.data);
+        return this.type;
+//        return DataType.type(this.data);
     }
 
     /**

@@ -23,10 +23,16 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.Locale;
+
 public final class BytecodeValue {
 
     private final DataType type;
     private final byte[] bytes;
+
+    public BytecodeValue(final Object value) {
+        this(DataType.type(value), DataType.toBytes(value));
+    }
 
     public BytecodeValue(final String type, final byte[] bytes) {
         this(DataType.find(type), bytes);
@@ -39,5 +45,13 @@ public final class BytecodeValue {
 
     public Object asObject() {
         return this.type.decode(this.bytes);
+    }
+
+    public String type() {
+        return this.type.base().toLowerCase(Locale.ROOT);
+    }
+
+    public byte[] bytes() {
+        return this.bytes;
     }
 }
