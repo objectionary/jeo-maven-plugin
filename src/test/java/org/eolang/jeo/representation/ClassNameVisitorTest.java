@@ -40,7 +40,7 @@ final class ClassNameVisitorTest {
     void retrievesClassName() {
         final ClassNameVisitor name = new ClassNameVisitor();
         final String expected = "representation/asm/ClassNameTest";
-        new ClassReader(new BytecodeProgram(new BytecodeClass(expected)).bytecode().asBytes())
+        new ClassReader(new BytecodeProgram(new BytecodeClass(expected)).bytecode().bytes())
             .accept(name, 0);
         MatcherAssert.assertThat(
             "Can't retrieve class name, or it's incorrect",

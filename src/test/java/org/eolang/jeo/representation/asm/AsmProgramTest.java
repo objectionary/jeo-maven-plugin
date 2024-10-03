@@ -49,7 +49,7 @@ final class AsmProgramTest {
             .bytecode();
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode",
-            new AsmProgram(same.asBytes()).bytecode().bytecode(),
+            new AsmProgram(same.bytes()).bytecode().bytecode(),
             Matchers.equalTo(same)
         );
     }

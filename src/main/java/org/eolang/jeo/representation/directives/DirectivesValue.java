@@ -50,19 +50,19 @@ public final class DirectivesValue implements Iterable<Directive> {
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
     /**
-     * Data.
-     */
-//    private final Object data;
-
-    /**
      * Name.
      */
     private final String name;
 
+    /**
+     * Type.
+     */
     private final String type;
 
+    /**
+     * Bytes.
+     */
     private final byte[] bytes;
-
 
     /**
      * Constructor.
@@ -83,6 +83,11 @@ public final class DirectivesValue implements Iterable<Directive> {
         this(name, new BytecodeValue(data));
     }
 
+    /**
+     * Constructor.
+     * @param name Name.
+     * @param value Value.
+     */
     public DirectivesValue(final String name, final BytecodeValue value) {
         this(name, value.type(), value.bytes());
     }
@@ -114,7 +119,6 @@ public final class DirectivesValue implements Iterable<Directive> {
      */
     String hex() {
         return DirectivesValue.bytesToHex(this.bytes);
-//        return DirectivesValue.bytesToHex(DataType.toBytes(this.data));
     }
 
     /**
@@ -123,7 +127,6 @@ public final class DirectivesValue implements Iterable<Directive> {
      */
     String type() {
         return this.type;
-//        return DataType.type(this.data);
     }
 
     /**

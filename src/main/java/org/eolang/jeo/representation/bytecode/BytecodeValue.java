@@ -29,7 +29,6 @@ public final class BytecodeValue {
 
     private final DataType type;
     private final byte[] bytes;
-
     public BytecodeValue(final Object value) {
         this(DataType.type(value), DataType.toBytes(value));
     }
@@ -43,7 +42,7 @@ public final class BytecodeValue {
         this.bytes = bytes;
     }
 
-    public Object asObject() {
+    public Object object() {
         return this.type.decode(this.bytes);
     }
 

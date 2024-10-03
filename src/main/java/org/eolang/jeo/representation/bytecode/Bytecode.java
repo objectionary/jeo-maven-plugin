@@ -39,22 +39,22 @@ public final class Bytecode {
     /**
      * Bytecode Bytes.
      */
-    private final byte[] bytes;
+    private final byte[] codes;
 
     /**
      * Constructor.
      * @param bytes Bytecode bytes.
      */
     public Bytecode(final byte[] bytes) {
-        this.bytes = Arrays.copyOf(bytes, bytes.length);
+        this.codes = Arrays.copyOf(bytes, bytes.length);
     }
 
     /**
      * Get as bytes.
      * @return Bytecode bytes.
      */
-    public byte[] asBytes() {
-        return Arrays.copyOf(this.bytes, this.bytes.length);
+    public byte[] bytes() {
+        return Arrays.copyOf(this.codes, this.codes.length);
     }
 
     @Override
@@ -66,20 +66,20 @@ public final class Bytecode {
             result = false;
         } else {
             final Bytecode bytecode = (Bytecode) other;
-            result = Arrays.equals(this.bytes, bytecode.bytes);
+            result = Arrays.equals(this.codes, bytecode.codes);
         }
         return result;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(this.bytes);
+        return Arrays.hashCode(this.codes);
     }
 
     @Override
     public String toString() {
         final StringWriter out = new StringWriter();
-        new ClassReader(this.bytes)
+        new ClassReader(this.codes)
             .accept(new TraceClassVisitor(null, new Textifier(), new PrintWriter(out)), 0);
         return out.toString();
     }

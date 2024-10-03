@@ -72,20 +72,7 @@ public final class XmlOperand {
         } else if (new JeoFqn("annotation-property").fqn().equals(base)) {
             result = new XmlAnnotationProperty(this.raw).bytecode();
         } else {
-            final int i = base.lastIndexOf('.');
-            final String clear = i == -1 ? base : base.substring(i + 1);
             result = new XmlValue(this.raw).object();
-
-//            result = this.raw.children().findFirst()
-//                .map(XmlValue::new)
-//                .map(value -> value.object(clear))
-//                .orElse(null);
-//
-
-            //            final DataType type = DataType.find(base);
-//            result = this.raw.children().findFirst()
-//                .map(bytes -> type.decode(bytes.text()))
-//                .orElse(null);
         }
         return result;
     }

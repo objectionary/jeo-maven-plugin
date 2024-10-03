@@ -78,7 +78,7 @@ public final class BytecodeRepresentation implements Representation {
      * @param bytecode Bytecode
      */
     public BytecodeRepresentation(final Bytecode bytecode) {
-        this(BytecodeRepresentation.fromBytes(bytecode.asBytes()), "bytecode");
+        this(BytecodeRepresentation.fromBytes(bytecode.bytes()), "bytecode");
     }
 
     /**

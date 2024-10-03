@@ -136,22 +136,14 @@ public final class XmlValue {
      * @return Object.
      */
     public Object object() {
-        final String base = this.node.attribute("base")
-            .orElseThrow(
-                () -> new IllegalStateException(
-                    String.format(
-                        "'%s' is not an argument because it doesn't have 'base' attribute",
-                        this.node
-                    )
-                )
-            );
-        final int i = base.lastIndexOf('.');
-        final String clear = i == -1 ? base : base.substring(i + 1);
-        if (clear.equals("string")) {
-            return this.string();
+        final String base = this.base();
+        final Object result;
+        if (base.equals("string")) {
+            result = this.string();
+        } else {
+            result = new BytecodeValue(base, this.bytes()).object();
         }
-        final byte[] bytes = this.bytes();
-        return new BytecodeValue(clear, bytes).asObject();
+        return result;
     }
 
     /**
@@ -162,5 +154,29 @@ public final class XmlValue {
      */
     private String hex() {
         return XmlValue.SPACE.matcher(this.node.firstChild().text().trim()).replaceAll("");
+    }
+
+    /**
+     * Get the type of the object without a package.
+     * @return Type without package.
+     */
+    private String base() {
+        final String base = this.node.attribute("base")
+            .orElseThrow(
+                () -> new IllegalStateException(
+                    String.format(
+                        "'%s' is not an argument because it doesn't have 'base' attribute",
+                        this.node
+                    )
+                )
+            );
+        final String result;
+        final int last = base.lastIndexOf('.');
+        if (last == -1) {
+            result = base;
+        } else {
+            result = base.substring(last + 1);
+        }
+        return result;
     }
 }

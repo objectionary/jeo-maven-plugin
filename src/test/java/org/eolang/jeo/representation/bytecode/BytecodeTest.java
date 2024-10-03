@@ -39,7 +39,7 @@ final class BytecodeTest {
         final byte[] expected = {1, 2, 3};
         MatcherAssert.assertThat(
             "Bytecode should remain the same as we pass to the constructor",
-            new Bytecode(expected).asBytes(),
+            new Bytecode(expected).bytes(),
             Matchers.equalTo(expected)
         );
     }

@@ -28,7 +28,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
-import org.eolang.jeo.representation.directives.JeoFqn;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
@@ -224,37 +223,6 @@ public enum DataType {
                     String.format("Unknown data type '%s'", base)
                 )
             );
-    }
-
-    /**
-     * Base fully qualified name.
-     * @return FQN.
-     */
-    public String fqn() {
-        return new JeoFqn(this.base).fqn();
-    }
-
-    /**
-     * Convert bytes to data.
-     * @param raw Bytes.
-     * @return Data.
-     */
-    public Object decode(final String raw) {
-        final Object result;
-        if (raw == null) {
-            result = null;
-        } else {
-            final char[] chars = raw.trim().replace(" ", "").toCharArray();
-            final int length = chars.length;
-            final byte[] res = new byte[length / 2];
-            for (int index = 0; index < length; index += 2) {
-                res[index / 2] = (byte) Integer.parseInt(
-                    String.copyValueOf(new char[]{chars[index], chars[index + 1]}), 16
-                );
-            }
-            result = this.decode(res);
-        }
-        return result;
     }
 
     /**

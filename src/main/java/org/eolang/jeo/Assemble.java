@@ -56,7 +56,7 @@ public final class Assemble implements Translation {
         final Details details = representation.details();
         final String name = new PrefixedName(details.name()).decode();
         try {
-            final byte[] bytecode = representation.toBytecode().asBytes();
+            final byte[] bytecode = representation.toBytecode().bytes();
             final String[] subpath = name.split("\\.");
             subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
             final Path path = Paths.get(this.classes.toString(), subpath);
