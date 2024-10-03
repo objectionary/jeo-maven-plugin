@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.BytecodeValue;
 
 /**
  * XML value.
@@ -128,6 +129,29 @@ public final class XmlValue {
             }
         }
         return res;
+    }
+
+    /**
+     * Convert hex string to an object.
+     * @return Object.
+     */
+    public Object object() {
+        final String base = this.node.attribute("base")
+            .orElseThrow(
+                () -> new IllegalStateException(
+                    String.format(
+                        "'%s' is not an argument because it doesn't have 'base' attribute",
+                        this.node
+                    )
+                )
+            );
+        final int i = base.lastIndexOf('.');
+        final String clear = i == -1 ? base : base.substring(i + 1);
+        if (clear.equals("string")) {
+            return this.string();
+        }
+        final byte[] bytes = this.bytes();
+        return new BytecodeValue(clear, bytes).asObject();
     }
 
     /**

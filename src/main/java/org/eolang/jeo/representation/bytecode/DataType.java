@@ -217,7 +217,7 @@ public enum DataType {
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DataType find(final String base) {
         return Arrays.stream(DataType.values())
-            .filter(type -> type.fqn().equals(base))
+            .filter(type -> type.base.equals(base))
             .findFirst()
             .orElseThrow(
                 () -> new IllegalArgumentException(

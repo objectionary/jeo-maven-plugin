@@ -28,6 +28,10 @@ public final class BytecodeValue {
     private final DataType type;
     private final byte[] bytes;
 
+    public BytecodeValue(final String type, final byte[] bytes) {
+        this(DataType.find(type), bytes);
+    }
+
     public BytecodeValue(final DataType type, final byte[] bytes) {
         this.type = type;
         this.bytes = bytes;

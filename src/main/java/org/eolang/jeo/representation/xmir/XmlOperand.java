@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.xmir;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.bytecode.DataType;
 import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
@@ -71,13 +70,22 @@ public final class XmlOperand {
         } else if (new JeoFqn("annotation").fqn().equals(base)) {
             result = new XmlAnnotation(this.raw).bytecode();
         } else if (new JeoFqn("annotation-property").fqn().equals(base)) {
-            final XmlAnnotationProperty xml = new XmlAnnotationProperty(this.raw);
-            result = xml.bytecode();
+            result = new XmlAnnotationProperty(this.raw).bytecode();
         } else {
-            final DataType type = DataType.find(base);
-            result = this.raw.children().findFirst()
-                .map(bytes -> type.decode(bytes.text()))
-                .orElse(null);
+            final int i = base.lastIndexOf('.');
+            final String clear = i == -1 ? base : base.substring(i + 1);
+            result = new XmlValue(this.raw).object();
+
+//            result = this.raw.children().findFirst()
+//                .map(XmlValue::new)
+//                .map(value -> value.object(clear))
+//                .orElse(null);
+//
+
+            //            final DataType type = DataType.find(base);
+//            result = this.raw.children().findFirst()
+//                .map(bytes -> type.decode(bytes.text()))
+//                .orElse(null);
         }
         return result;
     }
