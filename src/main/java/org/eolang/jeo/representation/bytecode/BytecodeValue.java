@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Bytecode value.
@@ -75,7 +76,7 @@ public final class BytecodeValue {
      */
     private BytecodeValue(final DataType type, final byte[] bytes) {
         this.vtype = type;
-        this.vbytes = bytes;
+        this.vbytes = Optional.ofNullable(bytes).map(byte[]::clone).orElse(null);
     }
 
     /**
