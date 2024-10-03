@@ -27,7 +27,6 @@ import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Collections;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationAnnotationValue;
-import org.eolang.jeo.representation.bytecode.DataType;
 import org.eolang.jeo.representation.xmir.XmlAnnotationProperty;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
@@ -50,7 +49,7 @@ final class DirectivesAnnotationAnnotationValueTest {
             new Xembler(
                 new DirectivesAnnotationAnnotationValue(
                     "name",
-                    Type.getDescriptor(DataType.class),
+                    Type.getDescriptor(String.class),
                     Collections.singletonList(new DirectivesPlainAnnotationValue())
                 )
             ).xml(),

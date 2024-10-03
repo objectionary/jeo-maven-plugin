@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.stream.Stream;
 import org.eolang.jeo.matchers.SameXml;
-import org.eolang.jeo.representation.bytecode.DataType;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -74,15 +73,6 @@ final class DirectivesValueTest {
             new SameXml(
                 "<o base='org.eolang.jeo.label'><o base='bytes' data='bytes'>73 6F 6D 65 2D 72 61 6E 64 6F 6D</o></o>"
             )
-        );
-    }
-
-    @Test
-    void decodesLabel() {
-        MatcherAssert.assertThat(
-            "Decodes label from XML",
-            DataType.find("org.eolang.jeo.label").decode("73 6F 6D 65 2D 72 61 6E 64 6F 6D"),
-            Matchers.equalTo(new AllLabels().label("some-random"))
         );
     }
 
@@ -150,19 +140,6 @@ final class DirectivesValueTest {
         );
     }
 
-    @ParameterizedTest
-    @MethodSource("encodedValues")
-    void decodesEncodesCorrectly(final Object origin, final String hex) {
-        MatcherAssert.assertThat(
-            "Decoding and encoding are not consistent",
-            origin,
-            Matchers.equalTo(
-                DataType.find(
-                    new JeoFqn(new DirectivesValue(origin).type()).fqn()
-                ).decode(hex)
-            )
-        );
-    }
 
     @Test
     void encodesType() {
@@ -211,24 +188,5 @@ final class DirectivesValueTest {
         );
     }
 
-    /**
-     * Arguments for {@link DirectivesValueTest#decodesEncodesCorrectly(Object, String)}.
-     * @return Stream of arguments.
-     */
-    static Stream<Arguments> encodedValues() {
-        return Stream.of(
-            Arguments.of(10, "00 00 00 00 00 00 00 0A"),
-            Arguments.of("Hello!", "48 65 6C 6C 6F 21"),
-            Arguments.of(new byte[]{1, 2, 3}, "01 02 03"),
-            Arguments.of('a', "00 61"),
-            Arguments.of(true, "01"),
-            Arguments.of(false, "00"),
-            Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A"),
-            Arguments.of(
-                "org/eolang/jeo/representation/HexDataTest",
-                "6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2F 48 65 78 44 61 74 61 54 65 73 74"
-            ),
-            Arguments.of(new AllLabels().label("some"), "73 6F 6D 65")
-        );
-    }
+
 }

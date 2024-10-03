@@ -24,8 +24,8 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import java.time.DayOfWeek;
 import org.eolang.jeo.representation.bytecode.BytecodeEnumAnnotationValue;
-import org.eolang.jeo.representation.bytecode.DataType;
 import org.eolang.jeo.representation.xmir.XmlAnnotationProperty;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
@@ -47,7 +47,7 @@ final class DirectivesEnumAnnotationValueTest {
             "Can't create an enum property with a name and a value",
             new Xembler(
                 new DirectivesEnumAnnotationValue(
-                    "name", Type.getDescriptor(DataType.class), "BOOL"
+                    "name", Type.getDescriptor(DayOfWeek.class), "MONDAY"
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(

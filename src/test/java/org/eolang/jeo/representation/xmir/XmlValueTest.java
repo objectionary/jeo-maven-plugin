@@ -23,9 +23,15 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.stream.Stream;
+import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlValue}.
@@ -47,6 +53,38 @@ final class XmlValueTest {
             ),
             actual,
             Matchers.is(expected)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("values")
+    void decodesEncodesCorrectly(final Object origin) {
+        MatcherAssert.assertThat(
+            "Decoding and encoding are not consistent",
+            new XmlValue(
+                new XmlNode(new Xembler(new DirectivesValue(origin)).xmlQuietly())
+            ).object(),
+            Matchers.equalTo(origin)
+        );
+    }
+
+    /**
+     * Arguments for {@link XmlValue#decodesEncodesCorrectly(Object, String)}.
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> values() {
+        return Stream.of(
+            Arguments.of(10),
+            Arguments.of("Hello!"),
+            Arguments.of(new byte[]{1, 2, 3}),
+            Arguments.of('a'),
+            Arguments.of(true),
+            Arguments.of(false),
+            Arguments.of(0.1d),
+            Arguments.of(
+                "org/eolang/jeo/representation/HexDataTest"
+            ),
+            Arguments.of(new AllLabels().label("some"))
         );
     }
 }
