@@ -33,6 +33,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.OpcodeName;
 import org.eolang.jeo.representation.xmir.AllLabels;
+import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -46,7 +47,7 @@ import org.xembly.Directive;
 @ToString
 @EqualsAndHashCode
 @SuppressWarnings("PMD.ExcessiveClassLength")
-public final class BytecodeInstructionEntry implements BytecodeEntry {
+public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Opcode.
@@ -68,7 +69,7 @@ public final class BytecodeInstructionEntry implements BytecodeEntry {
      * @param opcode Opcode.
      * @param args Arguments.
      */
-    public BytecodeInstructionEntry(final int opcode, final Object... args) {
+    public BytecodeInstruction(final int opcode, final Object... args) {
         this(opcode, Arrays.asList(args));
     }
 
@@ -77,7 +78,7 @@ public final class BytecodeInstructionEntry implements BytecodeEntry {
      * @param opcode Opcode.
      * @param args Arguments.
      */
-    public BytecodeInstructionEntry(final int opcode, final List<Object> args) {
+    public BytecodeInstruction(final int opcode, final List<Object> args) {
         this(new AllLabels(), opcode, args);
     }
 
@@ -88,7 +89,7 @@ public final class BytecodeInstructionEntry implements BytecodeEntry {
      * @param opcode Opcode.
      * @param args Arguments.
      */
-    BytecodeInstructionEntry(
+    BytecodeInstruction(
         final AllLabels labels,
         final int opcode,
         final Object... args
@@ -102,7 +103,7 @@ public final class BytecodeInstructionEntry implements BytecodeEntry {
      * @param opcode Opcode.
      * @param args Arguments.
      */
-    BytecodeInstructionEntry(
+    BytecodeInstruction(
         final AllLabels labels,
         final int opcode,
         final List<Object> args
@@ -130,6 +131,42 @@ public final class BytecodeInstructionEntry implements BytecodeEntry {
     @Override
     public boolean isOpcode() {
         return true;
+    }
+
+    /**
+     * Is this instruction a variable instruction?
+     * @return True if it is.
+     */
+    public boolean isVarInstruction() {
+        return Instruction.find(this.opcode).isVarInstruction();
+    }
+
+    /**
+     * Local variable index.
+     * @return Local variable index.
+     */
+    public int local() {
+        if (!this.isVarInstruction()) {
+            throw new IllegalStateException(
+                String.format(
+                    "Instruction %s is not a variable instruction",
+                    new OpcodeName(this.opcode).simplified()
+                )
+            );
+        }
+        return (int) this.args.get(0);
+    }
+
+    public int size() {
+        if (!this.isVarInstruction()) {
+            throw new IllegalStateException(
+                String.format(
+                    "Instruction %s is not a variable instruction",
+                    new OpcodeName(this.opcode).simplified()
+                )
+            );
+        }
+        return Instruction.find(this.opcode).size();
     }
 
     @Override
@@ -1323,7 +1360,7 @@ public final class BytecodeInstructionEntry implements BytecodeEntry {
             visitor.visitInvokeDynamicInsn(
                 String.valueOf(arguments.get(0)),
                 String.valueOf(arguments.get(1)),
-                (org.objectweb.asm.Handle) arguments.get(2),
+                (Handle) arguments.get(2),
                 arguments.subList(3, arguments.size()).toArray()
             )
         ),
@@ -1486,6 +1523,72 @@ public final class BytecodeInstructionEntry implements BytecodeEntry {
                 }
             }
             throw new UnrecognizedOpcode(opcode);
+        }
+
+        /**
+         * Check if the instruction is a variable instruction.
+         * @return True if the instruction is a variable instruction.
+         */
+        boolean isVarInstruction() {
+            switch (this) {
+                case ILOAD:
+                case LLOAD:
+                case FLOAD:
+                case DLOAD:
+                case ALOAD:
+                case ISTORE:
+                case LSTORE:
+                case FSTORE:
+                case DSTORE:
+                case ASTORE:
+                case RET:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /**
+         * Local variable size
+         * @return Local variable size
+         */
+        public int size() {
+            if (!this.isVarInstruction()) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Instruction %s is not a variable instruction",
+                        this.name()
+                    )
+                );
+            }
+            int res;
+            switch (this) {
+                case ILOAD:
+                case FLOAD:
+                case ALOAD:
+                case ISTORE:
+                case FSTORE:
+                case ASTORE:
+                    res = 1;
+                    break;
+                case LLOAD:
+                case LSTORE:
+                case DLOAD:
+                case DSTORE:
+                    res = 2;
+                    break;
+                case RET:
+                    res = 0;
+                    break;
+                default:
+                    throw new IllegalStateException(
+                        String.format(
+                            "Unexpected instruction: %s",
+                            this.name()
+                        )
+                    );
+            }
+            return res;
         }
     }
 }

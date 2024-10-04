@@ -23,11 +23,9 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import it.JavaSourceClass;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.asm.AsmProgram;
@@ -380,7 +378,7 @@ final class BytecodeMethodTest {
             "MultiArray instruction wasn't visited successfully.",
             new Xembler(
                 new BytecodeMethod().entry(
-                    new BytecodeInstructionEntry(Opcodes.MULTIANEWARRAY, "java/lang/String", 2)
+                    new BytecodeInstruction(Opcodes.MULTIANEWARRAY, "java/lang/String", 2)
                 ).directives()
             ).xml(),
             Matchers.allOf(
@@ -396,7 +394,7 @@ final class BytecodeMethodTest {
             "Iinc instruction wasn't visited successfully.",
             new Xembler(
                 new BytecodeMethod().entry(
-                    new BytecodeInstructionEntry(Opcodes.IINC, 1, 2)
+                    new BytecodeInstruction(Opcodes.IINC, 1, 2)
                 ).directives()
             ).xml(),
             Matchers.allOf(
@@ -413,7 +411,7 @@ final class BytecodeMethodTest {
             "LookupSwitch instruction wasn't visited successfully.",
             new Xembler(
                 new BytecodeMethod().entry(
-                    new BytecodeInstructionEntry(
+                    new BytecodeInstruction(
                         Opcodes.LOOKUPSWITCH,
                         Stream.concat(
                             Stream.of(new Label()),
@@ -441,7 +439,7 @@ final class BytecodeMethodTest {
             "TableSwitch instruction wasn't visited successfully.",
             new Xembler(
                 new BytecodeMethod().entry(
-                    new BytecodeInstructionEntry(
+                    new BytecodeInstruction(
                         Opcodes.TABLESWITCH,
                         Stream.concat(
                             Stream.of(1, 3, new Label()),

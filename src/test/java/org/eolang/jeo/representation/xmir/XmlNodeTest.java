@@ -26,7 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeInstructionEntry;
+import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -112,7 +112,7 @@ final class XmlNodeTest {
             "Can't convert to instruction entry",
             new XmlNode(
                 new Xembler(
-                    new BytecodeInstructionEntry(Opcodes.ICONST_2).directives(false)
+                    new BytecodeInstruction(Opcodes.ICONST_2).directives(false)
                 ).xml()
             ).toEntry(),
             Matchers.instanceOf(XmlInstruction.class)

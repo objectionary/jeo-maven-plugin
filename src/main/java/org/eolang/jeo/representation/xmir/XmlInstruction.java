@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.bytecode.BytecodeInstructionEntry;
+import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
@@ -92,8 +92,8 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Convert to bytecode.
      * @return Bytecode instruction.
      */
-    public BytecodeInstructionEntry bytecode() {
-        return new BytecodeInstructionEntry(
+    public BytecodeInstruction bytecode() {
+        return new BytecodeInstruction(
             this.opcode(),
             this.operands().stream().map(XmlOperand::asObject).collect(Collectors.toList())
         );

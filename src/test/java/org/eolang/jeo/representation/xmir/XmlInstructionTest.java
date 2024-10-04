@@ -23,7 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.bytecode.BytecodeInstructionEntry;
+import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ final class XmlInstructionTest {
     /**
      * Default instruction which we use for testing.
      */
-    private static final BytecodeInstructionEntry INST = new BytecodeInstructionEntry(
+    private static final BytecodeInstruction INST = new BytecodeInstruction(
         Opcodes.INVOKESPECIAL, 1, 2, 3
     );
 

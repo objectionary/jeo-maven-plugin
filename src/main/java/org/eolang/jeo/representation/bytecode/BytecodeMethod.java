@@ -385,7 +385,7 @@ public final class BytecodeMethod implements Testable {
      * @return This object.
      */
     BytecodeMethod opcode(final int opcode, final Object... args) {
-        return this.entry(new BytecodeInstructionEntry(this.labels, opcode, args));
+        return this.entry(new BytecodeInstruction(this.labels, opcode, args));
     }
 
     /**
@@ -426,16 +426,23 @@ public final class BytecodeMethod implements Testable {
      * @return Max local variables.
      */
     private int computeLocals() {
-//        final Type[] types = Type.getArgumentTypes(this.properties.descriptor());
-//        int arguments = types[0].getSize();
-//
-
-        int res = Arrays.stream(Type.getArgumentTypes(this.properties.descriptor()))
+        int max = Arrays.stream(Type.getArgumentTypes(this.properties.descriptor()))
             .mapToInt(Type::getSize)
             .sum();
-        if (!this.properties.isStatic()) {
-            res++;
+        for (final BytecodeEntry instruction : this.instructions) {
+            if (instruction instanceof BytecodeInstruction) {
+                final BytecodeInstruction var = BytecodeInstruction.class.cast(instruction);
+                if (var.isVarInstruction()) {
+                    if (var.size() == 2)
+                        max = Math.max(max, var.local() + 1);
+                    else
+                        max = Math.max(max, var.local());
+                }
+            }
         }
-        return res;
+        if (!this.properties.isStatic()) {
+            max += 1;
+        }
+        return max;
     }
 }

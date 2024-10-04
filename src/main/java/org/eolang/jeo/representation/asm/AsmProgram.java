@@ -45,7 +45,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeEntry;
 import org.eolang.jeo.representation.bytecode.BytecodeEnumAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
 import org.eolang.jeo.representation.bytecode.BytecodeFrame;
-import org.eolang.jeo.representation.bytecode.BytecodeInstructionEntry;
+import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
@@ -344,31 +344,31 @@ public final class AsmProgram {
         final BytecodeEntry result;
         switch (node.getType()) {
             case AbstractInsnNode.INSN:
-                result = new BytecodeInstructionEntry(node.getOpcode());
+                result = new BytecodeInstruction(node.getOpcode());
                 break;
             case AbstractInsnNode.INT_INSN:
                 final IntInsnNode instr = IntInsnNode.class.cast(node);
-                result = new BytecodeInstructionEntry(
+                result = new BytecodeInstruction(
                     instr.getOpcode(),
                     instr.operand
                 );
                 break;
             case AbstractInsnNode.VAR_INSN:
                 final VarInsnNode varinstr = VarInsnNode.class.cast(node);
-                result = new BytecodeInstructionEntry(
+                result = new BytecodeInstruction(
                     varinstr.getOpcode(), varinstr.var
                 );
                 break;
             case AbstractInsnNode.TYPE_INSN:
                 final TypeInsnNode typeinstr = TypeInsnNode.class.cast(node);
-                result = new BytecodeInstructionEntry(
+                result = new BytecodeInstruction(
                     typeinstr.getOpcode(),
                     typeinstr.desc
                 );
                 break;
             case AbstractInsnNode.FIELD_INSN:
                 final FieldInsnNode field = FieldInsnNode.class.cast(node);
-                result = new BytecodeInstructionEntry(
+                result = new BytecodeInstruction(
                     field.getOpcode(),
                     field.owner,
                     field.name,
@@ -377,7 +377,7 @@ public final class AsmProgram {
                 break;
             case AbstractInsnNode.METHOD_INSN:
                 final MethodInsnNode method = MethodInsnNode.class.cast(node);
-                result = new BytecodeInstructionEntry(
+                result = new BytecodeInstruction(
                     method.getOpcode(),
                     method.owner,
                     method.name,
@@ -387,7 +387,7 @@ public final class AsmProgram {
                 break;
             case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
                 final InvokeDynamicInsnNode dynamic = InvokeDynamicInsnNode.class.cast(node);
-                result = new BytecodeInstructionEntry(
+                result = new BytecodeInstruction(
                     dynamic.getOpcode(),
                     Stream.concat(
                         Stream.of(
@@ -401,7 +401,7 @@ public final class AsmProgram {
                 break;
             case AbstractInsnNode.JUMP_INSN:
                 final JumpInsnNode jump = JumpInsnNode.class.cast(node);
-                result = new BytecodeInstructionEntry(
+                result = new BytecodeInstruction(
                     jump.getOpcode(),
                     jump.label.getLabel()
                 );
@@ -415,14 +415,14 @@ public final class AsmProgram {
                 break;
             case AbstractInsnNode.LDC_INSN:
                 final LdcInsnNode ldc = LdcInsnNode.class.cast(node);
-                result = new BytecodeInstructionEntry(
+                result = new BytecodeInstruction(
                     ldc.getOpcode(),
                     ldc.cst
                 );
                 break;
             case AbstractInsnNode.IINC_INSN:
                 final IincInsnNode iinc = IincInsnNode.class.cast(node);
-                result = new BytecodeInstructionEntry(
+                result = new BytecodeInstruction(
                     iinc.getOpcode(),
                     iinc.var,
                     iinc.incr
@@ -430,7 +430,7 @@ public final class AsmProgram {
                 break;
             case AbstractInsnNode.TABLESWITCH_INSN:
                 final TableSwitchInsnNode table = TableSwitchInsnNode.class.cast(node);
-                result = new BytecodeInstructionEntry(
+                result = new BytecodeInstruction(
                     table.getOpcode(),
                     Stream.concat(
                         Stream.of(table.min, table.max, table.dflt.getLabel()),
@@ -440,7 +440,7 @@ public final class AsmProgram {
                 break;
             case AbstractInsnNode.LOOKUPSWITCH_INSN:
                 final LookupSwitchInsnNode lookup = LookupSwitchInsnNode.class.cast(node);
-                result = new BytecodeInstructionEntry(
+                result = new BytecodeInstruction(
                     lookup.getOpcode(),
                     Stream.concat(
                         Stream.of(lookup.dflt.getLabel()),
@@ -453,7 +453,7 @@ public final class AsmProgram {
                 break;
             case AbstractInsnNode.MULTIANEWARRAY_INSN:
                 final MultiANewArrayInsnNode multiarr = MultiANewArrayInsnNode.class.cast(node);
-                result = new BytecodeInstructionEntry(
+                result = new BytecodeInstruction(
                     multiarr.getOpcode(),
                     multiarr.desc,
                     multiarr.dims
