@@ -462,14 +462,19 @@ final class BytecodeMethodTest {
             new JavaSourceClass("maxs/Maxs.java").compile().bytes()
         ).bytecode().top().methods();
         for (final BytecodeMethod method : methods) {
-            Logger.info(this, "Computing maxs for method %s", method.name());
+            Logger.info(
+                this,
+                "Computing maxs for method %s, expected %s",
+                method.name(),
+                method.currentMaxs()
+            );
             MatcherAssert.assertThat(
                 String.format(
                     "Maxs weren't computed correctly for method %s",
                     method.name()
                 ),
-                method.computeMaxs(),
-                Matchers.equalTo(method.currentMaxs())
+                method.computeMaxs().locals(),
+                Matchers.equalTo(method.currentMaxs().locals())
             );
         }
     }

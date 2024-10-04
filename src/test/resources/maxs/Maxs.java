@@ -62,4 +62,21 @@ public class Maxs {
     public static int sub(int a, int b) {
         return a - b;
     }
+
+    /**
+     * This method has 11 (including 'this') local variables and 1 stack element.
+     */
+    public int manyLocals() {
+        int a = (int) System.currentTimeMillis();
+        int b = (int) System.currentTimeMillis();
+        int c = (int) System.currentTimeMillis();
+        int d = (int) System.currentTimeMillis();
+        int e = (int) System.currentTimeMillis();
+        int f = (int) System.currentTimeMillis();
+        int g = (int) System.currentTimeMillis();
+        int h = (int) System.currentTimeMillis();
+        int i = (int) System.currentTimeMillis();
+        int j = (int) System.currentTimeMillis();
+        return a + b + c + d + e + f + g + h + i + j;
+    }
 }
