@@ -118,4 +118,183 @@ public class Maxs {
         long l = System.currentTimeMillis();
         return a + b + c + d + e + f + g + h + i + j + k + l;
     }
+
+    /**
+     * This method has 6 local variables (including 'this') and 3 stack elements.
+     * It includes a loop with a local variable declared inside.
+     * @param limit
+     * @return the sum from 0 to limit
+     */
+    public int sumWithLoop(int limit) {
+        int sum = 0;       // local variable 1
+        int i = 0;         // local variable 2
+        for (; i < limit; i++) { // 'i' is reused
+            int temp = i;   // local variable 3 (reused in each loop iteration)
+            sum += temp;
+        }
+        return sum;
+    }
+
+    /**
+     * This method has 4 local variables (including 'this') and 4 stack elements.
+     * It includes conditional statements with local variables declared inside branches.
+     * @param flag
+     * @return different values based on flag
+     */
+    public int conditionalMethod(boolean flag) {
+        if (flag) {
+            int a = 10;    // local variable 1
+            return a;
+        } else {
+            int b = 20;    // local variable 2
+            return b;
+        }
+    }
+
+    /**
+     * This method has 5 local variables (including 'this') and 5 stack elements.
+     * It includes a try-catch block with a local variable in the catch clause.
+     * @param x
+     * @param y
+     * @return division result or -1 if exception occurs
+     */
+    public int tryCatchMethod(int x, int y) {
+        try {
+            int result = x / y; // local variable 1
+            return result;
+        } catch (ArithmeticException e) { // local variable 2
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    /**
+     * This method has 7 local variables (including 'this') and 4 stack elements.
+     * It includes multiple return points and a finally block.
+     * @param a
+     * @param b
+     * @return the greater of a or b
+     */
+    public int multipleReturns(int a, int b) {
+        try {
+            if (a > b) {
+                return a; // return point 1
+            } else {
+                return b; // return point 2
+            }
+        } finally {
+            System.out.println("Finally block executed");
+        }
+    }
+
+    /**
+     * This method has 5 local variables (including 'this') and 3 stack elements.
+     * It uses a switch-case statement with local variables inside cases.
+     * @param option
+     * @return based on option
+     */
+    public String switchCaseMethod(int option) {
+        String result;
+        switch (option) {
+            case 1:
+                result = "One"; // local variable 1
+                break;
+            case 2:
+                result = "Two"; // local variable 2
+                break;
+            default:
+                result = "Other"; // local variable 3
+                break;
+        }
+        return result;
+    }
+
+    /**
+     * This method has 4 local variables (including 'this') and 2 stack elements.
+     * It uses recursion.
+     * @param n
+     * @return factorial of n
+     */
+    public int recursiveFactorial(int n) {
+        if (n <= 1) {
+            return 1;
+        }
+        return n * recursiveFactorial(n - 1);
+    }
+
+    /**
+     * This method has 8 local variables (including 'this') and 3 stack elements.
+     * It uses nested loops with multiple local variables.
+     * @return the product of sums
+     */
+    public int nestedLoops() {
+        int product = 1; // local variable 1
+        for (int i = 0; i < 5; i++) { // local variable 2
+            int sum = 0; // local variable 3
+            for (int j = 0; j < 5; j++) { // local variable 4
+                sum += j;
+            }
+            product *= sum;
+        }
+        return product;
+    }
+
+    /**
+     * This method has 9 local variables (including 'this') and 4 stack elements.
+     * It includes a loop with try-catch inside.
+     * @param numbers
+     * @return sum of numbers
+     */
+    public int loopWithTryCatch(int[] numbers) {
+        int sum = 0; // local variable 1
+        for (int i = 0; i < numbers.length; i++) { // local variable 2
+            try {
+                sum += numbers[i]; // local variable 3
+            } catch (ArrayIndexOutOfBoundsException e) { // local variable 4
+                e.printStackTrace();
+            }
+        }
+        return sum;
+    }
+
+    /**
+     * This method has 6 local variables (including 'this') and 3 stack elements.
+     * It uses an array and manipulates its elements.
+     * @param size
+     * @return the sum of array elements
+     */
+    public int arrayManipulation(int size) {
+        int[] array = new int[size]; // local variable 1
+        int sum = 0; // local variable 2
+        for (int i = 0; i < size; i++) { // local variable 3
+            array[i] = i * 2;
+            sum += array[i];
+        }
+        return sum;
+    }
+
+    /**
+     * This method has 7 local variables (including 'this') and 4 stack elements.
+     * It creates and uses an inner class instance.
+     * @return concatenated string
+     */
+    public String innerClassMethod() {
+        StringBuilder sb = new StringBuilder(); // local variable 1
+        Inner inner = new Inner(); // local variable 2
+        String part1 = inner.partOne(); // local variable 3
+        String part2 = inner.partTwo(); // local variable 4
+        sb.append(part1).append(part2);
+        return sb.toString();
+    }
+
+    // Inner class to add complexity
+    private class Inner {
+        public String partOne() {
+            return "Hello, ";
+        }
+
+        public String partTwo() {
+            return "World!";
+        }
+    }
 }
