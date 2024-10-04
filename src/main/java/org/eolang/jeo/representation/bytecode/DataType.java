@@ -36,7 +36,7 @@ import org.objectweb.asm.Type;
  * All supported data types.
  * @since 0.3
  */
-public enum DataType {
+enum DataType {
 
     /**
      * Boolean.

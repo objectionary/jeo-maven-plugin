@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
@@ -93,6 +94,21 @@ public final class BytecodeMethod implements Testable {
      */
     public BytecodeMethod(final String name) {
         this(name, "()V", Opcodes.ACC_PUBLIC);
+    }
+
+    /**
+     * Constructor.
+     * @param instructions Method instructions.
+     */
+    public BytecodeMethod(BytecodeEntry... instructions) {
+        this(
+            new ArrayList<>(0),
+            Arrays.asList(instructions),
+            new BytecodeAnnotations(),
+            new BytecodeMethodProperties("foo", "()V", "", Opcodes.ACC_PUBLIC),
+            new ArrayList<>(0),
+            new BytecodeMaxs(0, 0)
+        );
     }
 
     /**
@@ -343,6 +359,22 @@ public final class BytecodeMethod implements Testable {
                 exception
             );
         }
+    }
+
+    /**
+     * Compute maxs.
+     * @return Maxs.
+     */
+    BytecodeMaxs computeMaxs() {
+        return new BytecodeMaxs();
+    }
+
+    /**
+     * Current maxs.
+     * @return Maxs.
+     */
+    BytecodeMaxs currentMaxs() {
+        return this.maxs;
     }
 
     /**

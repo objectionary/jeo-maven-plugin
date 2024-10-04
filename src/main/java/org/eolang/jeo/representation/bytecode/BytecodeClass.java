@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
@@ -52,7 +53,7 @@ public final class BytecodeClass implements Testable {
     /**
      * Methods.
      */
-    private final List<BytecodeMethod> methods;
+    private final List<BytecodeMethod> cmethods;
 
     /**
      * Fields.
@@ -156,7 +157,7 @@ public final class BytecodeClass implements Testable {
         final BytecodeClassProperties props
     ) {
         this.name = name;
-        this.methods = methods;
+        this.cmethods = methods;
         this.fields = fields;
         this.annotations = annotations;
         this.attributes = attributes;
@@ -244,7 +245,7 @@ public final class BytecodeClass implements Testable {
     @Override
     public String testCode() {
         final StringBuilder builder = new StringBuilder(0);
-        for (final BytecodeMethod method : this.methods) {
+        for (final BytecodeMethod method : this.cmethods) {
             builder.append('.').append(method.testCode()).append('\n');
         }
         return String.format(
@@ -289,11 +290,19 @@ public final class BytecodeClass implements Testable {
     }
 
     /**
+     * Retrieve class methods.
+     * @return Class methods.
+     */
+    public List<BytecodeMethod> methods() {
+        return Collections.unmodifiableList(this.cmethods);
+    }
+
+    /**
      * Without methods.
      * @return The same class without methods.
      */
     public BytecodeClass withoutMethods() {
-        this.methods.clear();
+        this.cmethods.clear();
         return this;
     }
 
@@ -315,7 +324,7 @@ public final class BytecodeClass implements Testable {
             new ClassName(new PrefixedName(this.name).encode()),
             this.props.directives(),
             this.fields.stream().map(BytecodeField::directives).collect(Collectors.toList()),
-            this.methods.stream().map(method -> method.directives(counting))
+            this.cmethods.stream().map(method -> method.directives(counting))
                 .collect(Collectors.toList()),
             this.annotations.directives(),
             new DirectivesAttributes(
@@ -343,7 +352,7 @@ public final class BytecodeClass implements Testable {
             );
             this.annotations.write(visitor);
             this.fields.forEach(field -> field.write(visitor));
-            this.methods.forEach(method -> method.write(visitor));
+            this.cmethods.forEach(method -> method.write(visitor));
             this.attributes.forEach(attr -> attr.write(visitor));
             visitor.visitEnd();
         } catch (final IllegalArgumentException exception) {
@@ -368,7 +377,7 @@ public final class BytecodeClass implements Testable {
      * @return True if it has opcodes, false otherwise.
      */
     boolean hasOpcodes() {
-        return this.methods.stream().anyMatch(BytecodeMethod::hasOpcodes);
+        return this.cmethods.stream().anyMatch(BytecodeMethod::hasOpcodes);
     }
 
     /**
@@ -376,7 +385,7 @@ public final class BytecodeClass implements Testable {
      * @return True if it has labels, false otherwise.
      */
     boolean hasLabels() {
-        return this.methods.stream().anyMatch(BytecodeMethod::hasLabels);
+        return this.cmethods.stream().anyMatch(BytecodeMethod::hasLabels);
     }
 
     /**
@@ -385,7 +394,7 @@ public final class BytecodeClass implements Testable {
      * @return This object.
      */
     private BytecodeMethodBuilder withMethod(final BytecodeMethod method) {
-        this.methods.add(method);
+        this.cmethods.add(method);
         return new BytecodeMethodBuilder(this, method);
     }
 

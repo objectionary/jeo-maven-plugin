@@ -48,7 +48,7 @@ import org.eolang.jeo.representation.bytecode.Bytecode;
  * @since 0.1
  */
 @SuppressWarnings("JTCOP.RuleCorrectTestName")
-final class JavaSourceClass {
+public final class JavaSourceClass {
 
     /**
      * Name of Java class.
@@ -64,7 +64,7 @@ final class JavaSourceClass {
      * Constructor.
      * @param resource Resource of Java class.
      */
-    JavaSourceClass(final String resource) {
+    public JavaSourceClass(final String resource) {
         this(JavaSourceClass.filename(resource), new ResourceOf(resource));
     }
 
@@ -82,7 +82,7 @@ final class JavaSourceClass {
      * Compile the Java class.
      * @return Bytecode of compiled class.
      */
-    Bytecode compile() {
+    public Bytecode compile() {
         final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         final BytecodeManager manager = new BytecodeManager(compiler);
         final boolean successful = compiler.getTask(

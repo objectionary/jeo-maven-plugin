@@ -23,10 +23,14 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
+import it.JavaSourceClass;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.directives.HasMethod;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
@@ -450,5 +454,23 @@ final class BytecodeMethodTest {
                 Matchers.containsString("label")
             )
         );
+    }
+
+    @Test
+    void computesMaxsCorrectly() {
+        final List<BytecodeMethod> methods = new AsmProgram(
+            new JavaSourceClass("maxs/Maxs.java").compile().bytes()
+        ).bytecode().top().methods();
+        for (final BytecodeMethod method : methods) {
+            Logger.info(this, "Computing maxs for method %s", method.name());
+            MatcherAssert.assertThat(
+                String.format(
+                    "Maxs weren't computed correctly for method %s",
+                    method.name()
+                ),
+                method.computeMaxs(),
+                Matchers.equalTo(method.currentMaxs())
+            );
+        }
     }
 }
