@@ -366,7 +366,7 @@ public final class BytecodeMethod implements Testable {
      * @return Maxs.
      */
     BytecodeMaxs computeMaxs() {
-        return new BytecodeMaxs();
+        return new BytecodeMaxs(0, this.computeLocals());
     }
 
     /**
@@ -418,5 +418,14 @@ public final class BytecodeMethod implements Testable {
      */
     DirectivesMethod directives() {
         return this.directives(true);
+    }
+
+    /**
+     * Compute max local variables.
+     * @return Max local variables.
+     */
+    private int computeLocals() {
+        this.properties.descriptor();
+        return 0;
     }
 }

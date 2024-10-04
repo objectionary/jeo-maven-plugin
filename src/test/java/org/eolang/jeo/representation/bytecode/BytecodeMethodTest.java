@@ -36,6 +36,9 @@ import org.eolang.jeo.representation.xmir.AllLabels;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
@@ -456,26 +459,33 @@ final class BytecodeMethodTest {
         );
     }
 
-    @Test
-    void computesMaxsCorrectly() {
-        final List<BytecodeMethod> methods = new AsmProgram(
+    @ParameterizedTest(name = "Computing maxs for method {1}, expected  {2}")
+    @MethodSource("methods")
+    void computesMaxsCorrectly(
+        final BytecodeMethod method,
+        final String name,
+        final BytecodeMaxs expected
+    ) {
+        MatcherAssert.assertThat(
+            String.format(
+                "Maxs weren't computed correctly for method %s",
+                name
+            ),
+            method.computeMaxs().locals(),
+            Matchers.equalTo(expected.locals())
+        );
+    }
+
+    /**
+     * Provides methods for testing.
+     * Used in {@link #computesMaxsCorrectly(BytecodeMethod, String, BytecodeMaxs)}.
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> methods() {
+        return new AsmProgram(
             new JavaSourceClass("maxs/Maxs.java").compile().bytes()
-        ).bytecode().top().methods();
-        for (final BytecodeMethod method : methods) {
-            Logger.info(
-                this,
-                "Computing maxs for method %s, expected %s",
-                method.name(),
-                method.currentMaxs()
-            );
-            MatcherAssert.assertThat(
-                String.format(
-                    "Maxs weren't computed correctly for method %s",
-                    method.name()
-                ),
-                method.computeMaxs().locals(),
-                Matchers.equalTo(method.currentMaxs().locals())
-            );
-        }
+        ).bytecode().top().methods().stream().map(
+            method -> Arguments.of(method, method.name(), method.currentMaxs())
+        );
     }
 }
