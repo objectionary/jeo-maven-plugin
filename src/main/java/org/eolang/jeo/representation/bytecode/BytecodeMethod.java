@@ -36,6 +36,7 @@ import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
 /**
  * Bytecode method.
@@ -425,7 +426,16 @@ public final class BytecodeMethod implements Testable {
      * @return Max local variables.
      */
     private int computeLocals() {
-        this.properties.descriptor();
-        return 0;
+//        final Type[] types = Type.getArgumentTypes(this.properties.descriptor());
+//        int arguments = types[0].getSize();
+//
+
+        int res = Arrays.stream(Type.getArgumentTypes(this.properties.descriptor()))
+            .mapToInt(Type::getSize)
+            .sum();
+        if (!this.properties.isStatic()) {
+            res++;
+        }
+        return res;
     }
 }

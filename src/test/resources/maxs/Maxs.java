@@ -64,6 +64,26 @@ public class Maxs {
     }
 
     /**
+     * This method has 5 local variables ('double' types and 'this') and 2 stack elements.
+     * @param a
+     * @param b
+     * @return a / b
+     */
+    public double div(double a, double b) {
+        return a / b;
+    }
+
+    /**
+     * This method has 4 local ('long' types) variables and 2 stack elements.
+     * @param a
+     * @param b
+     * @return a * b
+     */
+    public static long mul(long a, long b) {
+        return a * b;
+    }
+
+    /**
      * This method has 11 (including 'this') local variables and 1 stack element.
      */
     public int manyLocals() {
@@ -78,5 +98,24 @@ public class Maxs {
         int i = (int) System.currentTimeMillis();
         int j = (int) System.currentTimeMillis();
         return a + b + c + d + e + f + g + h + i + j;
+    }
+
+    /**
+     * This method has 25 local variables because it uses 'long' types.
+     */
+    public long manyLocals2() {
+        long a = System.currentTimeMillis();
+        long b = System.currentTimeMillis();
+        long c = System.currentTimeMillis();
+        long d = System.currentTimeMillis();
+        long e = System.currentTimeMillis();
+        long f = System.currentTimeMillis();
+        long g = System.currentTimeMillis();
+        long h = System.currentTimeMillis();
+        long i = System.currentTimeMillis();
+        long j = System.currentTimeMillis();
+        long k = System.currentTimeMillis();
+        long l = System.currentTimeMillis();
+        return a + b + c + d + e + f + g + h + i + j + k + l;
     }
 }

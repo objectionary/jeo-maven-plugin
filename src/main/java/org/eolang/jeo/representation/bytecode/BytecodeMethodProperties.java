@@ -186,6 +186,14 @@ public final class BytecodeMethodProperties implements Testable {
     }
 
     /**
+     * Is method static.
+     * @return True if the method is static.
+     */
+    public boolean isStatic() {
+        return (this.access & Opcodes.ACC_STATIC) != 0;
+    }
+
+    /**
      * Convert to directives.
      * @param maxs Maxs.
      * @return Directives.
