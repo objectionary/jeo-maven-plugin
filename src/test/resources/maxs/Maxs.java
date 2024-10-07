@@ -375,7 +375,7 @@ public class Maxs {
     /**
      * Lookup switch example.
      */
-    public int lookupSwitchExample(int key) {
+    public int tableSwitchExample(int key) {
         switch (key) {
             case 1:
                 return 1;
@@ -391,22 +391,38 @@ public class Maxs {
     /**
      * Table switch example.
      */
-    public int tableSwitchExample(int key) {
+    public int lookupSwitchExample(int key) {
         switch (key) {
-            case 100:
+            case 1:
                 return 1;
-            case 200:
+            case 10:
                 return 2;
-            case 300:
+            case 100:
                 return 3;
-            case 7070:
+            case 1000:
                 return 4;
             default:
                 return -1;
         }
     }
 
+    private long invokeSpecial() {
+        return new Maxs().privateMethod(3, 4) * 2L;
+    }
 
+    private long privateMethod(long a, long b) {
+        System.out.println("Private method");
+        return a + b;
+    }
+
+    private static int invokeStatic() {
+        return staticMethod(10, 5) * 2;
+    }
+
+    private static int staticMethod(int a, int b) {
+        System.out.println("Static method");
+        return a - b;
+    }
 
     // Inner class to add complexity
     private class Inner {
