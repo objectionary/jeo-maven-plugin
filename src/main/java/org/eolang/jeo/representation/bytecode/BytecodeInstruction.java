@@ -451,11 +451,9 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 /* get dimensions from instruction operands */
                 return -(int) (this.args.get(1)) + 1;
             case TABLESWITCH:
-                // Pops value, pushes value
-                return 0;
+                return -1;
             case LOOKUPSWITCH:
-                // Pops value, pushes value
-                return 0;
+                return -1;
             default:
                 throw new UnsupportedOperationException(
                     String.format(
