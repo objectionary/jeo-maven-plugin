@@ -428,9 +428,26 @@ public class Maxs {
         if (initial > 10) {
             long a = 42L * System.currentTimeMillis();
             long b = 42L * System.currentTimeMillis();
+            int d = 10;
+            int x1 = 10;
+            int x2 = 20;
+            int x3 = 30;
+            int x4 = 40;
+            int x5 = 50;
+            int x6 = 60;
+            int x7 = 70;
+            a = a + b + x1 + x2 + x3 + x4 + x5 + x6 + x7;
+            a += d;
             System.out.println("Hello: " + a + b);
         } else {
-            System.out.println("World");
+            long a = 42L * System.currentTimeMillis();
+            int b = 10;
+            a = a + b;
+            int c = 112;
+            a += c;
+            b += c;
+            a += b;
+            System.out.println("World: " + a);
         }
     }
 

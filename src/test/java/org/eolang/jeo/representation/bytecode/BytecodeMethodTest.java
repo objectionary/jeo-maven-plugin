@@ -469,8 +469,8 @@ final class BytecodeMethodTest {
                 "Maxs weren't computed correctly for method %s",
                 name
             ),
-            method.computeMaxs().locals(),
-            Matchers.equalTo(expected.locals())
+            method.computeMaxs(),
+            Matchers.equalTo(expected)
         );
     }
 
