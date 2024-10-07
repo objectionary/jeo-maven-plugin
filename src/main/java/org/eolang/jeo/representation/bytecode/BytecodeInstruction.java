@@ -191,7 +191,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
     }
 
     public int stack() {
-        switch (Instruction.find(this.opcode)) {
+        final Instruction instruction = Instruction.find(this.opcode);
+        switch (instruction) {
             case NOP:
                 return 0;
             case ACONST_NULL:
@@ -392,42 +393,22 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 return 0;
             case IINC:
                 return 0;
-            case LDC:
-                final Type ldcType = Type.getType(this.args.get(0).getClass());
-                if (ldcType == Type.DOUBLE_TYPE || ldcType == Type.LONG_TYPE) {
+            case LDC: {
+                final Class<?> clazz = this.args.get(0).getClass();
+                if (clazz == Long.class || clazz == Double.class) {
                     return 2;
                 } else {
-                    return 1;
+                    return this.typeSize(Type.getType(clazz));
                 }
+            }
             case GETSTATIC:
-                final Type type = Type.getType(String.valueOf(this.args.get(2)));
-                if (type == Type.DOUBLE_TYPE || type == Type.LONG_TYPE) {
-                    return 2;
-                } else {
-                    return 1;
-                }
+                return this.typeSize(Type.getType(String.valueOf(this.args.get(2))));
             case PUTSTATIC:
-                final Type putType = Type.getType(String.valueOf(this.args.get(2)));
-                if (putType == Type.DOUBLE_TYPE || putType == Type.LONG_TYPE) {
-                    return -2;
-                } else {
-                    return -1;
-                }
+                return this.typeSize(Type.getType(String.valueOf(this.args.get(2)))) * -1;
             case GETFIELD:
-                final Type fieldType = Type.getType(String.valueOf(this.args.get(2)));
-                if (fieldType == Type.DOUBLE_TYPE || fieldType == Type.LONG_TYPE) {
-                    return 1;
-                } else {
-                    return 0;
-                }
+                return this.typeSize(Type.getType(String.valueOf(this.args.get(2)))) - 1;
             case PUTFIELD:
-                final Type putFieldType = Type.getType(String.valueOf(this.args.get(2)));
-                if (putFieldType == Type.DOUBLE_TYPE || putFieldType == Type.LONG_TYPE) {
-                    return -3;
-                } else {
-                    return -2;
-                }
-                // Invoke method instructions
+                return (this.typeSize(Type.getType(String.valueOf(this.args.get(2)))) * -1) - 1;
             case INVOKEVIRTUAL:
             case INVOKESPECIAL:
             case INVOKEINTERFACE: {
@@ -445,9 +426,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 return this.typeSize(ret) - args;
             }
             case INVOKEDYNAMIC: {
-                return 0;
+                return 0; //todo
             }
-            // New object
             case NEW:
                 return 1;
             case NEWARRAY:
