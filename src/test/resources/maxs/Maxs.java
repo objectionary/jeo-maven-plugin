@@ -31,6 +31,9 @@
  */
 public class Maxs {
 
+    public static final double DOUBLE_CONSTANT = 3.14d;
+    public static final float FLOAT_CONSTANT = 3.14f;
+
     public static void main(String[] args) {
         System.out.println(fortyTwo());
         System.out.println("passed");
@@ -285,6 +288,24 @@ public class Maxs {
         String part2 = inner.partTwo(); // local variable 4
         sb.append(part1).append(part2);
         return sb.toString();
+    }
+
+    /**
+     * Loads double constant.
+     * This method has 3 local variables (including 'this') and 4 stack elements.
+     */
+    public double loadDoubleConstant() {
+        double d = Maxs.DOUBLE_CONSTANT;
+        return d * 3d;
+    }
+
+    /**
+     * Loads float constant.
+     * This method has 2 local variables (including 'this') and 2 stack elements.
+     */
+    public float loadFloatConstant() {
+        float f = Maxs.FLOAT_CONSTANT;
+        return f * 3f;
     }
 
     // Inner class to add complexity

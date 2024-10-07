@@ -367,7 +367,7 @@ public final class BytecodeMethod implements Testable {
      * @return Maxs.
      */
     BytecodeMaxs computeMaxs() {
-        return new BytecodeMaxs(0, this.computeLocals());
+        return new BytecodeMaxs(this.computeStack(), this.computeLocals());
     }
 
     /**
@@ -419,6 +419,19 @@ public final class BytecodeMethod implements Testable {
      */
     DirectivesMethod directives() {
         return this.directives(true);
+    }
+
+    private int computeStack() {
+        int stack = 0;
+        int max = 0;
+        for (final BytecodeEntry instruction : this.instructions) {
+            if (instruction instanceof BytecodeInstruction) {
+                final BytecodeInstruction var = BytecodeInstruction.class.cast(instruction);
+                stack += var.stack();
+                max = Math.max(max, stack);
+            }
+        }
+        return max;
     }
 
     /**

@@ -37,6 +37,7 @@ import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import org.xembly.Directive;
 
 /**
@@ -188,6 +189,291 @@ public final class BytecodeInstruction implements BytecodeEntry {
         ).collect(Collectors.joining(", "));
         return String.format(".opcode(%s)", args);
     }
+
+    public int stack() {
+        switch (Instruction.find(this.opcode)) {
+            case NOP:
+                return 0;
+            case ACONST_NULL:
+            case ICONST_M1:
+            case ICONST_0:
+            case ICONST_1:
+            case ICONST_2:
+            case ICONST_3:
+            case ICONST_4:
+            case ICONST_5:
+            case FCONST_0:
+            case FCONST_1:
+            case FCONST_2:
+            case BIPUSH:
+            case SIPUSH:
+                return 1;
+            case LCONST_0:
+            case LCONST_1:
+            case DCONST_0:
+            case DCONST_1:
+                return 2;
+            case ILOAD:
+            case FLOAD:
+            case ALOAD:
+                return 1;
+            case LLOAD:
+            case DLOAD:
+                return 2;
+            case IALOAD:
+            case FALOAD:
+            case AALOAD:
+            case BALOAD:
+            case CALOAD:
+            case SALOAD:
+                // Pops arrayref and index (2 slots), pushes value (1 slot): -2 + 1 = -1
+                return -1;
+            case LALOAD:
+            case DALOAD:
+                // Pops arrayref and index (2 slots), pushes value (2 slots): -2 + 2 = 0
+                return 0;
+            // Store into local variable (pop from stack)
+            case ISTORE:
+            case FSTORE:
+            case ASTORE:
+                return -1;
+            case LSTORE:
+            case DSTORE:
+                return -2;
+            // Array store instructions
+            case IASTORE:
+            case FASTORE:
+            case AASTORE:
+            case BASTORE:
+            case CASTORE:
+            case SASTORE:
+                // Pops value, index, arrayref: -3
+                return -3;
+            case LASTORE:
+            case DASTORE:
+                // Pops value (2 slots), index, arrayref: -4
+                return -4;
+            // Stack manipulation
+            case POP:
+                return -1;
+            case POP2:
+                return -2;
+            case DUP:
+                return 1;
+            case DUP_X1:
+                return 1;
+            case DUP_X2:
+                return 1;
+            case DUP2:
+                return 2;
+            case DUP2_X1:
+                return 2;
+            case DUP2_X2:
+                return 2;
+            case SWAP:
+                return 0;
+            // Arithmetic instructions
+            // Two operands are popped and one result is pushed: -2 + 1 = -1
+            case IADD:
+            case ISUB:
+            case IMUL:
+            case IDIV:
+            case IREM:
+            case FADD:
+            case FSUB:
+            case FMUL:
+            case FDIV:
+            case FREM:
+            case LSHL:
+            case LSHR:
+            case LUSHR:
+                return -1;
+            // Long and double arithmetic: operands and result are 2 slots
+            // Pops 4 slots, pushes 2 slots: -4 + 2 = -2
+            case LADD:
+            case LSUB:
+            case LMUL:
+            case LDIV:
+            case LREM:
+            case DADD:
+            case DSUB:
+            case DMUL:
+            case DDIV:
+            case DREM:
+                return -2;
+            // Conversion instructions
+            case I2L:
+            case I2D:
+            case F2L:
+            case F2D:
+                // Pops 1 slot, pushes 2 slots: -1 + 2 = +1
+                return 1;
+            case L2I:
+            case L2F:
+            case D2I:
+            case D2F:
+                // Pops 2 slots, pushes 1 slot: -2 + 1 = -1
+                return -1;
+            case I2F:
+            case F2I:
+            case I2B:
+            case I2C:
+            case I2S:
+                return 0;
+            case L2D:
+            case D2L:
+                // Pops 2 slots, pushes 2 slots: -2 + 2 = 0
+                return 0;
+            // Comparison instructions
+            case LCMP:
+            case DCMPL:
+            case DCMPG:
+                // Pops two 2-slot values, pushes int result: -4 + 1 = -3
+                return -3;
+            case FCMPL:
+            case FCMPG:
+                // Pops two 1-slot values, pushes int result: -2 + 1 = -1
+                return -1;
+            // Conditional branch instructions (consume values)
+            case IFEQ:
+            case IFNE:
+            case IFLT:
+            case IFGE:
+            case IFGT:
+            case IFLE:
+                // Pops one value: -1
+                return -1;
+            case IF_ICMPEQ:
+            case IF_ICMPNE:
+            case IF_ICMPLT:
+            case IF_ICMPGE:
+            case IF_ICMPGT:
+            case IF_ICMPLE:
+            case IF_ACMPEQ:
+            case IF_ACMPNE:
+                // Pops two values: -2
+                return -2;
+            case GOTO:
+            case JSR:
+            case RET:
+                return 0;
+            // Return instructions
+            case IRETURN:
+            case FRETURN:
+            case ARETURN:
+                // Pops one value: -1
+                return -1;
+            case LRETURN:
+            case DRETURN:
+                // Pops two slots: -2
+                return -2;
+            case RETURN:
+                return 0;
+            // Get and put field
+            case GETSTATIC:
+                final Type type = Type.getType(String.valueOf(this.args.get(2)));
+                if (type == Type.DOUBLE_TYPE || type == Type.LONG_TYPE) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+                // Needs field descriptor to determine stack change
+                // Assuming we have a method to get field size (1 or 2 slots)
+                // For example:
+                // return getFieldSize(fieldDescriptor);
+                // For now, we'll assume it's 1 slot
+//                return 1;
+            case PUTSTATIC:
+                // Needs field descriptor
+                // Assuming it's 1 slot
+                return -1;
+
+            case GETFIELD:
+                // Pops objectref (1 slot), pushes field value
+                // Net change depends on field size
+                // Assuming field is 1 slot: -1 + 1 = 0
+                // For 2-slot fields (long/double): -1 + 2 = +1
+                // For now, we'll assume it's 1 slot
+                return 0;
+
+            case PUTFIELD:
+                // Pops objectref and value
+                // Net change depends on field size
+                // Assuming field is 1 slot: -2
+                // For 2-slot fields: value (2 slots) and objectref (1 slot): -3
+                // For now, we'll assume it's -2
+                return -2;
+
+            // Invoke method instructions
+            case INVOKEVIRTUAL:
+            case INVOKESPECIAL:
+            case INVOKEINTERFACE:
+            case INVOKESTATIC:
+                // Stack change depends on method descriptor
+                // Net stack change: -args + return value(s)
+                // For example:
+                // int argsSize = getArgumentsSize(methodDescriptor);
+                // int returnSize = getReturnSize(methodDescriptor);
+                // return -argsSize + returnSize;
+                // For now, we'll return 0 as a placeholder
+                return 0;
+
+            case INVOKEDYNAMIC:
+                // Similar to invoke methods
+                return 0;
+
+            // New object
+            case NEW:
+                // Pushes objectref: +1
+                return 1;
+
+            case NEWARRAY:
+            case ANEWARRAY:
+            case ARRAYLENGTH:
+                // Pops size, pushes arrayref: -1 + 1 = 0
+                return 0;
+
+            case ATHROW:
+                // Pops throwable objectref: -1
+                // Effectively clears the stack, but for stack computation, return -1
+                return -1;
+
+            case CHECKCAST:
+            case INSTANCEOF:
+                // Pops objectref, pushes objectref or int: -1 + 1 = 0
+                return 0;
+
+            // Monitor instructions
+            case MONITORENTER:
+            case MONITOREXIT:
+                // Pops objectref: -1
+                return -1;
+
+            // Multi-dimensional array
+            case MULTIANEWARRAY:
+                // Pops dimensions, pushes arrayref
+                // Assuming dimensions are given (from operands)
+                // For now, let's assume dimensions = dims
+//                int dims = /* get dimensions from instruction operands */;
+//                return -dims + 1;
+                return 0;
+            // Jump instructions with no stack effect
+            case IFNULL:
+            case IFNONNULL:
+                // Pops objectref: -1
+                return -1;
+
+            // Default case
+            default:
+                // For unrecognized opcodes, return 0 or throw an exception
+                throw new UnsupportedOperationException(
+                    String.format(
+                        "Unsupported opcode: %s", new OpcodeName(this.opcode).simplified()
+                    )
+                );
+        }
+    }
+
 
     /**
      * Bytecode Instruction.
@@ -1210,7 +1496,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
         /**
          * Return a long from a method.
          */
-        LRTURN(Opcodes.LRETURN, (visitor, arguments) ->
+        LRETURN(Opcodes.LRETURN, (visitor, arguments) ->
             visitor.visitInsn(Opcodes.LRETURN)
         ),
 
