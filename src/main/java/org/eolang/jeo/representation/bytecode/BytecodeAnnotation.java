@@ -38,11 +38,6 @@ import org.xembly.Directive;
 /**
  * Bytecode annotation.
  * @since 0.2
- * @todo #488:90min Refactor Annotations Implementation.
- *  Current implementation of annotations mapping is rather complicated.
- *  I would say it's over-engineered. We have a lot of classes and interfaces
- *  that are used to represent annotations in different formats. We should
- *  refactor this implementation to make it simpler and more readable.
  */
 @ToString
 @EqualsAndHashCode
