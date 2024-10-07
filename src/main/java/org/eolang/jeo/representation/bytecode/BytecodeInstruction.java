@@ -448,9 +448,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 // Pops dimensions, pushes arrayref
                 // Assuming dimensions are given (from operands)
                 // For now, let's assume dimensions = dims
-//                int dims = /* get dimensions from instruction operands */;
-//                return -dims + 1;
-                return 0;
+                /* get dimensions from instruction operands */
+                return -(int) (this.args.get(1)) + 1;
             case TABLESWITCH:
                 // Pops value, pushes value
                 return 0;
