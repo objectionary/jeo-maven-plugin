@@ -22,6 +22,9 @@
  * SOFTWARE.
  */
 
+import java.lang.Math;
+import javax.validation.constraints.Max;
+
 /**
  * This class contains many different methods with different number of local
  * variables and stack elements.
@@ -31,8 +34,10 @@
  */
 public class Maxs {
 
-    public static final double DOUBLE_CONSTANT = 3.14d;
-    public static final float FLOAT_CONSTANT = 3.14f;
+    public static double DOUBLE_CONSTANT = 3.14d;
+    public static float FLOAT_CONSTANT = 3.14f;
+    private int someIntField = 42;
+    private long someLongField = 42L;
 
     public static void main(String[] args) {
         System.out.println(fortyTwo());
@@ -295,7 +300,7 @@ public class Maxs {
      * This method has 3 local variables (including 'this') and 4 stack elements.
      */
     public double loadDoubleConstant() {
-        double d = Maxs.DOUBLE_CONSTANT;
+        double d = Math.PI;
         return d * 3d;
     }
 
@@ -306,6 +311,40 @@ public class Maxs {
     public float loadFloatConstant() {
         float f = Maxs.FLOAT_CONSTANT;
         return f * 3f;
+    }
+
+    /**
+     * Put double constant.
+     * This method has 1 local variables (including 'this') and 1 stack elements.
+     */
+    public long putDoubleConstant() {
+        Maxs.DOUBLE_CONSTANT = 42L;
+        return 3L;
+    }
+
+    /**
+     * Put float constant.
+     * This method has 1 local variables (including 'this') and 1 stack elements.
+     */
+    public int putFloatConstant() {
+        Maxs.FLOAT_CONSTANT = 42f;
+        return 3;
+    }
+
+    /**
+     * Loads int field
+     * This method has 1 local variables (including 'this') and 1 stack elements.
+     */
+    public int loadIntField() {
+        return this.someIntField;
+    }
+
+    /**
+     * Loads long field
+     * This method has 1 local variables (including 'this') and 2 stack elements.
+     */
+    public long loadLongField() {
+        return this.someLongField;
     }
 
     // Inner class to add complexity

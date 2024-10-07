@@ -369,7 +369,15 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 return -2;
             case RETURN:
                 return 0;
-            // Get and put field
+            case IINC:
+                return 0;
+            case LDC:
+                final Type ldcType = Type.getType(this.args.get(0).getClass());
+                if (ldcType == Type.DOUBLE_TYPE || ldcType == Type.LONG_TYPE) {
+                    return 2;
+                } else {
+                    return 1;
+                }
             case GETSTATIC:
                 final Type type = Type.getType(String.valueOf(this.args.get(2)));
                 if (type == Type.DOUBLE_TYPE || type == Type.LONG_TYPE) {
@@ -377,17 +385,13 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 } else {
                     return 1;
                 }
-                // Needs field descriptor to determine stack change
-                // Assuming we have a method to get field size (1 or 2 slots)
-                // For example:
-                // return getFieldSize(fieldDescriptor);
-                // For now, we'll assume it's 1 slot
-//                return 1;
             case PUTSTATIC:
-                // Needs field descriptor
-                // Assuming it's 1 slot
-                return -1;
-
+                final Type putType = Type.getType(String.valueOf(this.args.get(2)));
+                if (putType == Type.DOUBLE_TYPE || putType == Type.LONG_TYPE) {
+                    return -2;
+                } else {
+                    return -1;
+                }
             case GETFIELD:
                 // Pops objectref (1 slot), pushes field value
                 // Net change depends on field size
@@ -462,7 +466,6 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case IFNONNULL:
                 // Pops objectref: -1
                 return -1;
-
             // Default case
             default:
                 // For unrecognized opcodes, return 0 or throw an exception
