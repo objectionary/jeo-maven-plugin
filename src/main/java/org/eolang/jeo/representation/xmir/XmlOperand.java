@@ -70,7 +70,7 @@ public final class XmlOperand {
         } else if (new JeoFqn("annotation").fqn().equals(base)) {
             result = new XmlAnnotation(this.raw).bytecode();
         } else if (new JeoFqn("annotation-property").fqn().equals(base)) {
-            result = new XmlAnnotationProperty(this.raw).bytecode();
+            result = new XmlAnnotationValue(this.raw).bytecode();
         } else {
             result = new XmlValue(this.raw).object();
         }

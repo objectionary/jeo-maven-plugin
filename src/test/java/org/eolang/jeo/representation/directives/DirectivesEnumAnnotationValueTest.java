@@ -26,7 +26,7 @@ package org.eolang.jeo.representation.directives;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.time.DayOfWeek;
 import org.eolang.jeo.representation.bytecode.BytecodeEnumAnnotationValue;
-import org.eolang.jeo.representation.xmir.XmlAnnotationProperty;
+import org.eolang.jeo.representation.xmir.XmlAnnotationValue;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -64,7 +64,7 @@ final class DirectivesEnumAnnotationValueTest {
         final String value = "BOOL";
         MatcherAssert.assertThat(
             "Incorrect annotation property for enum property",
-            new XmlAnnotationProperty(
+            new XmlAnnotationValue(
                 new XmlNode(
                     new Xembler(new DirectivesEnumAnnotationValue(name, descriptor, value)).xml()
                 )

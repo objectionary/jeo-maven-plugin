@@ -35,7 +35,7 @@ import org.eolang.jeo.representation.bytecode.BytecodePlainAnnotationValue;
  * Xmir annotation property.
  * @since 0.3
  */
-public final class XmlAnnotationProperty {
+public final class XmlAnnotationValue {
 
     /**
      * Annotation property XML node.
@@ -46,7 +46,7 @@ public final class XmlAnnotationProperty {
      * Constructor.
      * @param xmlnode XML node.
      */
-    public XmlAnnotationProperty(final XmlNode xmlnode) {
+    public XmlAnnotationValue(final XmlNode xmlnode) {
         this.node = xmlnode;
     }
 

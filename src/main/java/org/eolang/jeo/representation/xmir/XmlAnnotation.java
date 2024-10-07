@@ -56,7 +56,7 @@ public class XmlAnnotation {
         return new BytecodeAnnotation(
             this.descriptor(),
             this.visible(),
-            this.props()
+            this.values()
         );
     }
 
@@ -85,13 +85,13 @@ public class XmlAnnotation {
      * Annotation properties.
      * @return Properties.
      */
-    private List<BytecodeAnnotationValue> props() {
+    private List<BytecodeAnnotationValue> values() {
         return this.node.children()
             .filter(
                 xmlnode -> xmlnode.hasAttribute("base", new JeoFqn("annotation-property").fqn())
             )
-            .map(XmlAnnotationProperty::new)
-            .map(XmlAnnotationProperty::bytecode)
+            .map(XmlAnnotationValue::new)
+            .map(XmlAnnotationValue::bytecode)
             .collect(Collectors.toList());
     }
 }
