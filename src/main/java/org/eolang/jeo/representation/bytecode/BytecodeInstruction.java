@@ -430,21 +430,23 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 // Invoke method instructions
             case INVOKEVIRTUAL:
             case INVOKESPECIAL:
-            case INVOKEINTERFACE:
-            case INVOKESTATIC:
-                // Stack change depends on method descriptor
-                // Net stack change: -args + return value(s)
-                // For example:
-                // int argsSize = getArgumentsSize(methodDescriptor);
-                // int returnSize = getReturnSize(methodDescriptor);
-                // return -argsSize + returnSize;
-                // For now, we'll return 0 as a placeholder
+            case INVOKEINTERFACE: {
+                final String descr = String.valueOf(this.args.get(2));
+                final Type ret = Type.getReturnType(descr);
+                final Type[] types = Type.getArgumentTypes(descr);
+                final int args = Arrays.stream(types).mapToInt(this::typeSize).sum();
+                return this.typeSize(ret) - 1 - args;
+            }
+            case INVOKESTATIC: {
+                final String descr = String.valueOf(this.args.get(2));
+                final Type ret = Type.getReturnType(descr);
+                final Type[] types = Type.getArgumentTypes(descr);
+                final int args = Arrays.stream(types).mapToInt(this::typeSize).sum();
+                return this.typeSize(ret) - args;
+            }
+            case INVOKEDYNAMIC: {
                 return 0;
-
-            case INVOKEDYNAMIC:
-                // Similar to invoke methods
-                return 0;
-
+            }
             // New object
             case NEW:
                 return 1;
@@ -482,6 +484,15 @@ public final class BytecodeInstruction implements BytecodeEntry {
                     )
                 );
         }
+    }
+
+    private int typeSize(final Type type) {
+        if (type == Type.DOUBLE_TYPE || type == Type.LONG_TYPE) {
+            return 2;
+        } else if (type == Type.VOID_TYPE) {
+            return 0;
+        }
+        return 1;
     }
 
 

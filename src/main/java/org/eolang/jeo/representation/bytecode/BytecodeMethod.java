@@ -324,7 +324,7 @@ public final class BytecodeMethod implements Testable {
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor));
                 this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
 //                mvisitor.visitMaxs(this.maxs.stack(), this.maxs.locals());
-                mvisitor.visitMaxs(computeStack(), computeLocals());
+                mvisitor.visitMaxs(this.computeStack(), this.computeLocals());
             }
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {
