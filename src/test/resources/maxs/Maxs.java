@@ -324,7 +324,6 @@ public class Maxs {
 
     /**
      * Put float constant.
-     * This method has 1 local variables (including 'this') and 1 stack elements.
      */
     public int putFloatConstant() {
         Maxs.FLOAT_CONSTANT = 42f;
@@ -333,19 +332,81 @@ public class Maxs {
 
     /**
      * Loads int field
-     * This method has 1 local variables (including 'this') and 1 stack elements.
      */
     public int loadIntField() {
-        return this.someIntField;
+        return new Maxs().someIntField;
     }
 
     /**
      * Loads long field
-     * This method has 1 local variables (including 'this') and 2 stack elements.
      */
     public long loadLongField() {
-        return this.someLongField;
+        return new Maxs().someLongField;
     }
+
+    /**
+     * Puts long field
+     * @param value Value to put
+     */
+    public void putsLongField(final long value) {
+        this.someLongField = value;
+    }
+
+    /**
+     * Puts int field
+     * @param value Value to put
+     */
+    public void putsIntField(final int value) {
+        this.someIntField = value;
+    }
+
+    /**
+     * Multiarray example.
+     */
+    public int[][][] multiarrayExample() {
+        int[][][] multiarray = new int[2][3][4];
+        long[][][][] longMultiarray = new long[2][3][4][5];
+        longMultiarray[1][2][3][4] = 42L;
+        longMultiarray[1][1][3][4] = 42L;
+        multiarray[1][2][3] = (int) longMultiarray[1][2][3][4] + (int) longMultiarray[1][1][3][4];
+        return multiarray;
+    }
+
+    /**
+     * Lookup switch example.
+     */
+    public int lookupSwitchExample(int key) {
+        switch (key) {
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+            case 3:
+                return 3;
+            default:
+                return -1;
+        }
+    }
+
+    /**
+     * Table switch example.
+     */
+    public int tableSwitchExample(int key) {
+        switch (key) {
+            case 100:
+                return 1;
+            case 200:
+                return 2;
+            case 300:
+                return 3;
+            case 7070:
+                return 4;
+            default:
+                return -1;
+        }
+    }
+
+
 
     // Inner class to add complexity
     private class Inner {

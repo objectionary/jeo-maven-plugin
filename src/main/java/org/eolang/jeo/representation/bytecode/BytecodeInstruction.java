@@ -353,6 +353,27 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case IF_ACMPNE:
                 // Pops two values: -2
                 return -2;
+            // Jump instructions with no stack effect
+            case IFNULL:
+            case IFNONNULL:
+                return -1;
+            case IOR:
+            case IAND:
+            case IXOR:
+                return -1;
+            case LOR:
+            case LAND:
+            case LXOR:
+                return -2;
+            case DNEG:
+            case FNEG:
+            case LNEG:
+            case INEG:
+                return 0;
+            case ISHL:
+            case ISHR:
+            case IUSHR:
+                return -1;
             case GOTO:
             case JSR:
             case RET:
@@ -393,22 +414,20 @@ public final class BytecodeInstruction implements BytecodeEntry {
                     return -1;
                 }
             case GETFIELD:
-                // Pops objectref (1 slot), pushes field value
-                // Net change depends on field size
-                // Assuming field is 1 slot: -1 + 1 = 0
-                // For 2-slot fields (long/double): -1 + 2 = +1
-                // For now, we'll assume it's 1 slot
-                return 0;
-
+                final Type fieldType = Type.getType(String.valueOf(this.args.get(2)));
+                if (fieldType == Type.DOUBLE_TYPE || fieldType == Type.LONG_TYPE) {
+                    return 1;
+                } else {
+                    return 0;
+                }
             case PUTFIELD:
-                // Pops objectref and value
-                // Net change depends on field size
-                // Assuming field is 1 slot: -2
-                // For 2-slot fields: value (2 slots) and objectref (1 slot): -3
-                // For now, we'll assume it's -2
-                return -2;
-
-            // Invoke method instructions
+                final Type putFieldType = Type.getType(String.valueOf(this.args.get(2)));
+                if (putFieldType == Type.DOUBLE_TYPE || putFieldType == Type.LONG_TYPE) {
+                    return -3;
+                } else {
+                    return -2;
+                }
+                // Invoke method instructions
             case INVOKEVIRTUAL:
             case INVOKESPECIAL:
             case INVOKEINTERFACE:
@@ -428,32 +447,21 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
             // New object
             case NEW:
-                // Pushes objectref: +1
                 return 1;
-
             case NEWARRAY:
             case ANEWARRAY:
             case ARRAYLENGTH:
-                // Pops size, pushes arrayref: -1 + 1 = 0
                 return 0;
-
             case ATHROW:
                 // Pops throwable objectref: -1
                 // Effectively clears the stack, but for stack computation, return -1
                 return -1;
-
             case CHECKCAST:
             case INSTANCEOF:
-                // Pops objectref, pushes objectref or int: -1 + 1 = 0
                 return 0;
-
-            // Monitor instructions
             case MONITORENTER:
             case MONITOREXIT:
-                // Pops objectref: -1
                 return -1;
-
-            // Multi-dimensional array
             case MULTIANEWARRAY:
                 // Pops dimensions, pushes arrayref
                 // Assuming dimensions are given (from operands)
@@ -461,14 +469,13 @@ public final class BytecodeInstruction implements BytecodeEntry {
 //                int dims = /* get dimensions from instruction operands */;
 //                return -dims + 1;
                 return 0;
-            // Jump instructions with no stack effect
-            case IFNULL:
-            case IFNONNULL:
-                // Pops objectref: -1
-                return -1;
-            // Default case
+            case TABLESWITCH:
+                // Pops value, pushes value
+                return 0;
+            case LOOKUPSWITCH:
+                // Pops value, pushes value
+                return 0;
             default:
-                // For unrecognized opcodes, return 0 or throw an exception
                 throw new UnsupportedOperationException(
                     String.format(
                         "Unsupported opcode: %s", new OpcodeName(this.opcode).simplified()
