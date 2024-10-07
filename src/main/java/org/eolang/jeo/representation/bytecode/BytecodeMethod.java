@@ -314,7 +314,8 @@ public final class BytecodeMethod implements Testable {
         try {
             final MethodVisitor mvisitor = this.properties.writeMethod(
                 visitor,
-                this.maxs.compute()
+//                this.maxs.compute()
+                false
             );
             this.annotations.write(mvisitor);
             this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));
@@ -322,7 +323,8 @@ public final class BytecodeMethod implements Testable {
                 mvisitor.visitCode();
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor));
                 this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
-                mvisitor.visitMaxs(this.maxs.stack(), this.maxs.locals());
+//                mvisitor.visitMaxs(this.maxs.stack(), this.maxs.locals());
+                mvisitor.visitMaxs(computeStack(), computeLocals());
             }
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {

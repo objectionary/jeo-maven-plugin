@@ -424,6 +424,16 @@ public class Maxs {
         return a - b;
     }
 
+    private void ifstatement(int initial) {
+        if (initial > 10) {
+            long a = 42L * System.currentTimeMillis();
+            long b = 42L * System.currentTimeMillis();
+            System.out.println("Hello: " + a + b);
+        } else {
+            System.out.println("World");
+        }
+    }
+
     // Inner class to add complexity
     private class Inner {
         public String partOne() {

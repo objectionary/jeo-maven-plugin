@@ -1656,13 +1656,13 @@ public final class BytecodeInstruction implements BytecodeEntry {
             visitor.visitInvokeDynamicInsn(
                 String.valueOf(arguments.get(0)),
                 String.valueOf(arguments.get(1)),
-                (Handle) arguments.get(2),
+                Handle.class.cast(arguments.get(2)),
                 arguments.subList(3, arguments.size()).toArray()
             )
         ),
 
         /**
-         * Create new object of type identified by class reference in constant pool index.
+         * Create a new object of a type identified by class reference in constant pool index.
          */
         NEW(Opcodes.NEW, (visitor, arguments) ->
             visitor.visitTypeInsn(
