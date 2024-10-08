@@ -23,7 +23,14 @@
  */
 
 import java.lang.Math;
-import javax.validation.constraints.Max;
+import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * This class contains many different methods with different number of local
@@ -449,6 +456,175 @@ public class Maxs {
             a += b;
             System.out.println("World: " + a);
         }
+    }
+
+    public int sumUpTo(int n) {
+        int sum = 0;
+        for (int i = 1; i <= n; i++) {
+            sum += i;
+        }
+        return sum;
+    }
+
+    public String categorizeNumber(int x) {
+        if (x > 0) {
+            if (x % 2 == 0) {
+                return "Positive Even";
+            } else {
+                return "Positive Odd";
+            }
+        } else {
+            return "Non-Positive";
+        }
+    }
+
+    public int divide(int a, int b) {
+        try {
+            return a / b;
+        } catch (ArithmeticException e) {
+            System.out.println("Division by zero!");
+            return 0;
+        }
+    }
+
+
+    public int factorial(int n) {
+        if (n <= 1) {
+            return 1;
+        } else {
+            return n * factorial(n - 1);
+        }
+    }
+
+    public boolean isEvenAndPositive(int x) {
+        return (x > 0) && (x % 2 == 0);
+    }
+
+    public boolean isEitherZeroOrNegative(int x) {
+        return (x == 0) || (x < 0);
+    }
+
+    public int countDown(int start) {
+        int count = start;
+        while (count > 0) {
+            count--;
+        }
+        return count;
+    }
+
+    public int findFirstPositive(int[] numbers) {
+        int index = 0;
+        int result = -1;
+        do {
+            if (numbers[index] > 0) {
+                result = numbers[index];
+                break;
+            }
+            index++;
+        } while (index < numbers.length);
+        return result;
+    }
+
+    public int sumElements(List<Integer> list) {
+        int sum = 0;
+        for (int num : list) {
+            sum += num;
+        }
+        return sum;
+    }
+
+    public int multiplyMatrices(int[][] matrixA, int[][] matrixB) {
+        int rows = matrixA.length;
+        int cols = matrixB[0].length;
+        int[][] result = new int[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                for (int k = 0; k < matrixA[0].length; k++) {
+                    result[i][j] += matrixA[i][k] * matrixB[k][j];
+                }
+            }
+        }
+        return result[0][0];
+    }
+
+    public void readFile(String filename) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(filename));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void processFile(String filename) {
+        try {
+            int number = Integer.parseInt(filename);
+            System.out.println("Number: " + number);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number format.");
+        } catch (Exception e) {
+            System.out.println("An error occurred.");
+        }
+    }
+
+    public void writeFile(String filename, String content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void infiniteLoopWithBreak() {
+        int i = 0;
+        while (true) {
+            if (i > 10) {
+                break;
+            }
+            i++;
+        }
+    }
+
+    public int sumOddNumbers(int[] numbers) {
+        int sum = 0;
+        for (int num : numbers) {
+            if (num % 2 == 0) {
+                continue;
+            }
+            sum += num;
+        }
+        return sum;
+    }
+
+    public void validateAge(int age) {
+        if (age < 0) {
+            throw new IllegalArgumentException("Age cannot be negative.");
+        }
+        System.out.println("Age is valid.");
+    }
+
+    public Function<String, Integer> stringLengthMethodRefStreamed() {
+        return String::length;
+    }
+
+    public long countEvenNumbersStreamed(List<Integer> numbers) {
+        return numbers.stream().filter(n -> n % 2 == 0).count();
+    }
+
+    public boolean isEvenAndPositiveStreamed(int x) {
+        return Stream.of(x).allMatch(n -> n > 0 && n % 2 == 0);
     }
 
     // Inner class to add complexity
