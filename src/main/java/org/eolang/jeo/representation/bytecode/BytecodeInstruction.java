@@ -497,6 +497,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case IF_ACMPNE:
             case IFNULL:
             case IFNONNULL:
+            case TABLESWITCH:
+            case LOOKUPSWITCH:
                 return true;
             default:
                 return false;
@@ -521,6 +523,18 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case IF_ACMPNE:
             case IFNULL:
             case IFNONNULL:
+            case TABLESWITCH:
+            case LOOKUPSWITCH:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public boolean isSwitchInstruction() {
+        switch (Instruction.find(this.opcode)) {
+            case TABLESWITCH:
+            case LOOKUPSWITCH:
                 return true;
             default:
                 return false;
@@ -538,6 +552,38 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 return true;
             default:
                 return false;
+        }
+    }
+
+    public List<Label> offsets() {
+        if (!this.isSwitchInstruction()) {
+            throw new IllegalStateException(
+                String.format(
+                    "Instruction %s is not a switch instruction",
+                    new OpcodeName(this.opcode).simplified()
+                )
+            );
+        }
+        switch (Instruction.find(this.opcode)) {
+            case TABLESWITCH: {
+                return this.args.stream()
+                    .filter(Label.class::isInstance)
+                    .map(Label.class::cast)
+                    .collect(Collectors.toList());
+            }
+            case LOOKUPSWITCH: {
+                return this.args.stream()
+                    .filter(Label.class::isInstance)
+                    .map(Label.class::cast)
+                    .collect(Collectors.toList());
+            }
+            default:
+                throw new IllegalStateException(
+                    String.format(
+                        "Instruction %s is not a switch instruction",
+                        new OpcodeName(this.opcode).simplified()
+                    )
+                );
         }
     }
 

@@ -457,20 +457,37 @@ public final class BytecodeMethod implements Testable {
 //                        current, (k, v) -> v == null ? finalStack : Math.max(v, finalStack)
 //                    );
                     if (var.isBranchInstruction()) {
-                        final int jump = this.index(var.offset());
-                        if (visited.get(jump) == null || visited.get(jump) < stack) {
-                            worklist.add(jump);
+                        if (var.isSwitchInstruction()) {
+                            final List<Label> offsets = var.offsets();
+                            for (Label offset : offsets) {
+                                final int target = this.index(offset);
+                                if (visited.get(target) == null || visited.get(target) < stack) {
+                                    worklist.add(target);
+                                }
+                            }
                             if (var.isConditionalBranchInstruction()) {
                                 final int next = current + 1;
                                 if (visited.get(next) == null || visited.get(next) < stack) {
                                     worklist.add(next);
                                 }
                             }
+                            break;
+                        } else {
+                            final int jump = this.index(var.offset());
+                            if (visited.get(jump) == null || visited.get(jump) < stack) {
+                                worklist.add(jump);
+                                if (var.isConditionalBranchInstruction()) {
+                                    final int next = current + 1;
+                                    if (visited.get(next) == null || visited.get(next) < stack) {
+                                        worklist.add(next);
+                                    }
+                                }
+                                break;
+                            }
                         }
-                        break;
-                    }
-                    if (var.isReturnInstruction()) {
-                        break;
+                        if (var.isReturnInstruction()) {
+                            break;
+                        }
                     }
                 }
                 current++;

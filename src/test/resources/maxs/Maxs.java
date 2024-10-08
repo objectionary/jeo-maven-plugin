@@ -632,6 +632,19 @@ public class Maxs {
         return obj.length();
     }
 
+    public int switchInsideLoopCase(byte x) {
+        for (int i = 0; i < 10; ++i) {
+            switch (x) {
+                case 1:
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unexpected value: " + x);
+            }
+        }
+        return 2;
+    }
+
+
     // Inner class to add complexity
     private class Inner {
         public String partOne() {
