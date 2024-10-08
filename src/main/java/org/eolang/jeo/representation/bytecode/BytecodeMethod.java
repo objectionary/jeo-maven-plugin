@@ -23,9 +23,13 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -424,16 +428,70 @@ public final class BytecodeMethod implements Testable {
     }
 
     private int computeStack() {
-        int stack = 0;
         int max = 0;
-        for (final BytecodeEntry instruction : this.instructions) {
-            if (instruction instanceof BytecodeInstruction) {
-                final BytecodeInstruction var = BytecodeInstruction.class.cast(instruction);
-                stack += var.stack();
+        final Deque<Integer> worklist = new ArrayDeque<>(0);
+        final int length = this.instructions.size();
+        worklist.add(0);
+        Map<Integer, Integer> visited = new HashMap<>(0);
+        while (!worklist.isEmpty()) {
+            int current = worklist.pop();
+            int stack = visited.get(current) == null ? 0 : visited.get(current);
+            while (current < length) {
+                BytecodeEntry entry = this.instructions.get(current);
+                stack += entry.stackImpact();
                 max = Math.max(max, stack);
+                final int finalStack = stack;
+                visited.compute(
+                    current, (k, v) -> v == null ? finalStack : Math.max(v, finalStack)
+                );
+                if (entry instanceof BytecodeInstruction) {
+                    final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
+//                    stack += var.stackImpact();
+//                    max = Math.max(max, stack);
+//                    final int finalStack = stack;
+//                    visited.compute(
+//                        current, (k, v) -> v == null ? finalStack : Math.max(v, finalStack)
+//                    );
+                    if (var.isBranchInstruction()) {
+                        final int jump = this.index(var.offset());
+                        if (visited.get(jump) == null || visited.get(jump) < stack) {
+                            worklist.add(jump);
+                            if (var.isConditionalBranchInstruction()) {
+                                final int next = current + 1;
+                                if (visited.get(next) == null || visited.get(next) < stack) {
+                                    worklist.add(next);
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    if (var.isReturnInstruction()) {
+                        break;
+                    }
+                }
+                current++;
             }
         }
+//        for (final BytecodeEntry instruction : this.instructions) {
+//            if (instruction instanceof BytecodeInstruction) {
+//                final BytecodeInstruction var = BytecodeInstruction.class.cast(instruction);
+//                stack += var.stackImpact();
+//                max = Math.max(max, stack);
+//            }
+//        }
         return max;
+    }
+
+    private int index(final Label label) {
+        for (int index = 0; index < this.instructions.size(); index++) {
+            final BytecodeEntry entry = this.instructions.get(index);
+            final BytecodeLabel obj = new BytecodeLabel(label, new AllLabels());
+            final boolean equals = entry.equals(obj);
+            if (equals) {
+                return index;
+            }
+        }
+        throw new IllegalStateException("Label not found");
     }
 
     /**

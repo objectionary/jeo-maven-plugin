@@ -43,4 +43,6 @@ public interface BytecodeEntry extends Testable {
     boolean isLabel();
 
     boolean isOpcode();
+
+    int stackImpact();
 }

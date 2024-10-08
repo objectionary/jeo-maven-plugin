@@ -139,6 +139,11 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
+    public int stackImpact() {
+        return 0;
+    }
+
+    @Override
     public String testCode() {
         return String.format(
             ".visitFrame(%d, %d, new Object[]{ %s }, %d, new Object[]{ %s })",

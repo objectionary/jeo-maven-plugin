@@ -110,6 +110,11 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     }
 
     @Override
+    public int stackImpact() {
+        return 0;
+    }
+
+    @Override
     public String testCode() {
         return "// Try-catch blocks are not supported in tests yet";
     }

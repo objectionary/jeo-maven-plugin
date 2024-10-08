@@ -106,6 +106,11 @@ public final class BytecodeLabel implements BytecodeEntry {
     }
 
     @Override
+    public int stackImpact() {
+        return 0;
+    }
+
+    @Override
     public String testCode() {
         return String.format(".label(\"%s\")", this.labels.uid(this.label));
     }

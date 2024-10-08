@@ -190,7 +190,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
         return String.format(".opcode(%s)", args);
     }
 
-    public int stack() {
+    public int stackImpact() {
         final Instruction instruction = Instruction.find(this.opcode);
         switch (instruction) {
             case NOP:
@@ -470,6 +470,110 @@ public final class BytecodeInstruction implements BytecodeEntry {
             return 0;
         }
         return 1;
+    }
+
+    public boolean isBranchInstruction() {
+        switch (Instruction.find(this.opcode)) {
+            case GOTO:
+            case JSR:
+            case RET:
+            case IFEQ:
+            case IFNE:
+            case IFLT:
+            case IFGE:
+            case IFGT:
+            case IFLE:
+            case IF_ICMPEQ:
+            case IF_ICMPNE:
+            case IF_ICMPLT:
+            case IF_ICMPGE:
+            case IF_ICMPGT:
+            case IF_ICMPLE:
+            case IF_ACMPEQ:
+            case IF_ACMPNE:
+            case IFNULL:
+            case IFNONNULL:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public boolean isConditionalBranchInstruction() {
+        switch (Instruction.find(this.opcode)) {
+            case IFEQ:
+            case IFNE:
+            case IFLT:
+            case IFGE:
+            case IFGT:
+            case IFLE:
+            case IF_ICMPEQ:
+            case IF_ICMPNE:
+            case IF_ICMPLT:
+            case IF_ICMPGE:
+            case IF_ICMPGT:
+            case IF_ICMPLE:
+            case IF_ACMPEQ:
+            case IF_ACMPNE:
+            case IFNULL:
+            case IFNONNULL:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public boolean isReturnInstruction() {
+        switch (Instruction.find(this.opcode)) {
+            case IRETURN:
+            case FRETURN:
+            case ARETURN:
+            case LRETURN:
+            case DRETURN:
+            case RETURN:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public Label offset() {
+        if (!this.isBranchInstruction()) {
+            throw new IllegalStateException(
+                String.format(
+                    "Instruction %s is not a branch instruction",
+                    new OpcodeName(this.opcode).simplified()
+                )
+            );
+        }
+        switch (Instruction.find(this.opcode)) {
+            case GOTO:
+            case JSR:
+            case IFEQ:
+            case IFNE:
+            case IFLT:
+            case IFGE:
+            case IFGT:
+            case IFLE:
+            case IF_ICMPEQ:
+            case IF_ICMPNE:
+            case IF_ICMPLT:
+            case IF_ICMPGE:
+            case IF_ICMPGT:
+            case IF_ICMPLE:
+            case IF_ACMPEQ:
+            case IF_ACMPNE:
+            case IFNULL:
+            case IFNONNULL:
+                return (Label) this.args.get(0);
+            default:
+                throw new IllegalStateException(
+                    String.format(
+                        "Instruction %s is not a branch instruction",
+                        new OpcodeName(this.opcode).simplified()
+                    )
+                );
+        }
     }
 
 

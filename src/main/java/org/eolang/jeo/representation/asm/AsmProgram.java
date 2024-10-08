@@ -485,6 +485,11 @@ public final class AsmProgram {
                     }
 
                     @Override
+                    public int stackImpact() {
+                        return 0;
+                    }
+
+                    @Override
                     public String testCode() {
                         return "";
                     }
