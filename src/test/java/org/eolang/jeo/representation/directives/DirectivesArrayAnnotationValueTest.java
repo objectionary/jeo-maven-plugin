@@ -27,7 +27,7 @@ import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Collections;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeArrayAnnotationValue;
-import org.eolang.jeo.representation.xmir.XmlAnnotationProperty;
+import org.eolang.jeo.representation.xmir.XmlAnnotationValue;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -65,7 +65,7 @@ final class DirectivesArrayAnnotationValueTest {
         final boolean visible = true;
         MatcherAssert.assertThat(
             "Incorrect array annotation property",
-            new XmlAnnotationProperty(
+            new XmlAnnotationValue(
                 new XmlNode(
                     new Xembler(
                         new DirectivesArrayAnnotationValue(

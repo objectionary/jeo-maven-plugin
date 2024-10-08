@@ -38,11 +38,6 @@ import org.xembly.Directive;
 /**
  * Bytecode annotation.
  * @since 0.2
- * @todo #488:90min Refactor Annotations Implementation.
- *  Current implementation of annotations mapping is rather complicated.
- *  I would say it's over-engineered. We have a lot of classes and interfaces
- *  that are used to represent annotations in different formats. We should
- *  refactor this implementation to make it simpler and more readable.
  */
 @ToString
 @EqualsAndHashCode
@@ -61,7 +56,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
     /**
      * Properties.
      */
-    private final List<BytecodeAnnotationValue> properties;
+    private final List<BytecodeAnnotationValue> values;
 
     /**
      * Constructor.
@@ -76,16 +71,16 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      * Constructor.
      * @param descriptor Descriptor.
      * @param visible Visible.
-     * @param properties Properties.
+     * @param vals Properties.
      */
     public BytecodeAnnotation(
         final String descriptor,
         final boolean visible,
-        final List<BytecodeAnnotationValue> properties
+        final List<BytecodeAnnotationValue> vals
     ) {
         this.descr = descriptor;
         this.visible = visible;
-        this.properties = properties;
+        this.values = vals;
     }
 
     /**
@@ -95,7 +90,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      */
     public BytecodeAnnotation write(final ClassVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
-        this.properties.forEach(property -> property.writeTo(avisitor));
+        this.values.forEach(property -> property.writeTo(avisitor));
         return this;
     }
 
@@ -106,7 +101,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      */
     public BytecodeAnnotation write(final MethodVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
-        this.properties.forEach(property -> property.writeTo(avisitor));
+        this.values.forEach(property -> property.writeTo(avisitor));
         return this;
     }
 
@@ -120,7 +115,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
         final AnnotationVisitor avisitor = visitor.visitParameterAnnotation(
             index, this.descr, this.visible
         );
-        this.properties.forEach(property -> property.writeTo(avisitor));
+        this.values.forEach(property -> property.writeTo(avisitor));
         return this;
     }
 
@@ -131,14 +126,14 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      */
     public BytecodeAnnotation write(final FieldVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
-        this.properties.forEach(property -> property.writeTo(avisitor));
+        this.values.forEach(property -> property.writeTo(avisitor));
         return this;
     }
 
     @Override
     public void writeTo(final AnnotationVisitor visitor) {
         final AnnotationVisitor inner = visitor.visitAnnotation(this.descr, this.descr);
-        this.properties.forEach(property -> property.writeTo(inner));
+        this.values.forEach(property -> property.writeTo(inner));
     }
 
     @Override
@@ -146,7 +141,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
         return new DirectivesAnnotation(
             this.descr,
             this.visible,
-            this.properties.stream()
+            this.values.stream()
                 .map(BytecodeAnnotationValue::directives)
                 .collect(Collectors.toList())
         );

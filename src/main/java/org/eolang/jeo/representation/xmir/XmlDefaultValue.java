@@ -53,7 +53,7 @@ public final class XmlDefaultValue {
     public Optional<BytecodeDefaultValue> bytecode() {
         return this.node.children().findFirst().map(
             property -> new BytecodeDefaultValue(
-                new XmlAnnotationProperty(property).bytecode()
+                new XmlAnnotationValue(property).bytecode()
             )
         );
     }
