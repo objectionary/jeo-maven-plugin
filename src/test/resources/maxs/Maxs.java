@@ -709,6 +709,25 @@ public class Maxs {
         return true;
     }
 
+    public int elseIf(int x) {
+        if (x > 0) {
+            return 1;
+        } else if (x < 0) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    public int complexPredicatesinIf(int x) {
+        if (x > 0 && x % 2 == 0) {
+            return 1;
+        } else if (x < 0 && x % 2 == 0) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
 
     // Inner class to add complexity
     private class Inner {

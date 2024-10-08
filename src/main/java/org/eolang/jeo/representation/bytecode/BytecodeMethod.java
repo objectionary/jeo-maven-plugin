@@ -475,7 +475,7 @@ public final class BytecodeMethod implements Testable {
                                 worklist.add(jump);
                                 if (var.isConditionalBranchInstruction()) {
                                     final int next = current + 1;
-                                    if (visited.get(next) == null || visited.get(next) < stack) {
+                                    if (visited.get(next) == null) {
                                         worklist.add(next);
                                     }
                                 }
