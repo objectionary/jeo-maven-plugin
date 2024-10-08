@@ -426,7 +426,11 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 return this.typeSize(ret) - args;
             }
             case INVOKEDYNAMIC: {
-                return 0; //todo
+                final String descr = String.valueOf(this.args.get(1));
+                final Type ret = Type.getReturnType(descr);
+                final Type[] types = Type.getArgumentTypes(descr);
+                final int args = Arrays.stream(types).mapToInt(this::typeSize).sum();
+                return this.typeSize(ret) - args;
             }
             case NEW:
                 return 1;
