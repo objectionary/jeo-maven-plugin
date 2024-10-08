@@ -523,8 +523,6 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case IF_ACMPNE:
             case IFNULL:
             case IFNONNULL:
-            case TABLESWITCH:
-            case LOOKUPSWITCH:
                 return true;
             default:
                 return false;

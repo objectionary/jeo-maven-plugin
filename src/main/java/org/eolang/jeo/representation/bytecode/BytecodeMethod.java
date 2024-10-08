@@ -458,31 +458,30 @@ public final class BytecodeMethod implements Testable {
                             final List<Label> offsets = var.offsets();
                             for (Label offset : offsets) {
                                 final int target = this.index(offset);
-                                if (visited.get(target) == null) {
+                                if (visited.get(target) == null || visited.get(target) < stack) {
                                     worklist.add(target);
                                 }
                             }
-//                            if (var.isConditionalBranchInstruction()) {
-//                                final int next = current + 1;
-//                                if (visited.get(next) == null || visited.get(next) < stack) {
-//                                    worklist.add(next);
-//                                }
-//                            }
                             break;
-                        } else {
+                        } else if (var.isConditionalBranchInstruction()) {
                             final int jump = this.index(var.offset());
-                            if (visited.get(jump) == null) {
+                            if (visited.get(jump) == null || visited.get(jump) < stack) {
                                 worklist.add(jump);
                                 if (var.isConditionalBranchInstruction()) {
                                     final int next = current + 1;
-                                    if (visited.get(next) == null) {
+                                    if (visited.get(next) == null || visited.get(next) < stack) {
                                         worklist.add(next);
                                     }
                                 }
-                                break;
                             }
-                        }
-                        if (var.isReturnInstruction()) {
+                            break;
+                        } else if (var.isReturnInstruction()) {
+                            break;
+                        } else {
+                            final int jump = this.index(var.offset());
+                            if (visited.get(jump) == null || visited.get(jump) < stack) {
+                                worklist.add(jump);
+                            }
                             break;
                         }
                     }
