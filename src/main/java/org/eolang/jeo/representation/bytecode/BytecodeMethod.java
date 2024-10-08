@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import com.jcabi.log.Logger;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -431,7 +432,9 @@ public final class BytecodeMethod implements Testable {
         return this.directives(true);
     }
 
+
     private int computeStack() {
+        Logger.info(this, "Computing stack for %s", this.properties);
         int max = 0;
         final Deque<Integer> worklist = new ArrayDeque<>(0);
         final int length = this.instructions.size();
@@ -450,31 +453,25 @@ public final class BytecodeMethod implements Testable {
                 );
                 if (entry instanceof BytecodeInstruction) {
                     final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
-//                    stack += var.stackImpact();
-//                    max = Math.max(max, stack);
-//                    final int finalStack = stack;
-//                    visited.compute(
-//                        current, (k, v) -> v == null ? finalStack : Math.max(v, finalStack)
-//                    );
                     if (var.isBranchInstruction()) {
                         if (var.isSwitchInstruction()) {
                             final List<Label> offsets = var.offsets();
                             for (Label offset : offsets) {
                                 final int target = this.index(offset);
-                                if (visited.get(target) == null || visited.get(target) < stack) {
+                                if (visited.get(target) == null) {
                                     worklist.add(target);
                                 }
                             }
-                            if (var.isConditionalBranchInstruction()) {
-                                final int next = current + 1;
-                                if (visited.get(next) == null || visited.get(next) < stack) {
-                                    worklist.add(next);
-                                }
-                            }
+//                            if (var.isConditionalBranchInstruction()) {
+//                                final int next = current + 1;
+//                                if (visited.get(next) == null || visited.get(next) < stack) {
+//                                    worklist.add(next);
+//                                }
+//                            }
                             break;
                         } else {
                             final int jump = this.index(var.offset());
-                            if (visited.get(jump) == null || visited.get(jump) < stack) {
+                            if (visited.get(jump) == null) {
                                 worklist.add(jump);
                                 if (var.isConditionalBranchInstruction()) {
                                     final int next = current + 1;
@@ -493,13 +490,6 @@ public final class BytecodeMethod implements Testable {
                 current++;
             }
         }
-//        for (final BytecodeEntry instruction : this.instructions) {
-//            if (instruction instanceof BytecodeInstruction) {
-//                final BytecodeInstruction var = BytecodeInstruction.class.cast(instruction);
-//                stack += var.stackImpact();
-//                max = Math.max(max, stack);
-//            }
-//        }
         return max;
     }
 

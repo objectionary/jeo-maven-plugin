@@ -31,6 +31,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import java.lang.reflect.Constructor;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 /**
  * This class contains many different methods with different number of local
@@ -45,6 +49,10 @@ public class Maxs {
     public static float FLOAT_CONSTANT = 3.14f;
     private int someIntField = 42;
     private long someLongField = 42L;
+    private Collection<Object> collection;
+    private int index;
+    private boolean growCollection;
+    private int maximumSize;
 
     public static void main(String[] args) {
         System.out.println(fortyTwo());
@@ -642,6 +650,63 @@ public class Maxs {
             }
         }
         return 2;
+    }
+
+    public Object getValue() {
+        growCollectionIfNecessary();
+        if (collection instanceof List) {
+            return ((List<Object>) collection).get(index);
+        } else {
+            int pos = 0;
+            for (Object o : collection) {
+                if (pos == index) {
+                    return o;
+                }
+                pos++;
+            }
+            throw new IllegalStateException(
+                "Failed to find indexed element " + index + ": " + collection);
+        }
+    }
+
+    public void setValue(Object newValue) {
+        growCollectionIfNecessary();
+        if (collection instanceof List) {
+            List<Object> list = (List<Object>) collection;
+            list.set(index, newValue);
+        } else {
+            throw new UnsupportedOperationException(
+                "Indexing not supported for type: " + collection.getClass().getName());
+        }
+    }
+
+    private void growCollectionIfNecessary() {
+        if (this.index >= this.collection.size()) {
+            if (this.growCollection) {
+                throw new IllegalStateException(
+                    "Collection index out of bounds: size=" + collection.size() + ", index=" + index + ", grow=" + new Object[]{this.collection.size(), this.index});
+            }
+            try {
+                Constructor<?> ctor = this.getDefaultConstructor(this.getClass());
+                for (int newElements = this.index - this.collection.size(); newElements >= 0; --newElements) {
+                    this.collection.add(ctor != null ? ctor.newInstance() : null);
+                }
+            } catch (Throwable e) {
+                throw new IllegalStateException("Something else: " + e.getMessage());
+            }
+        }
+    }
+
+    private Constructor<?> getDefaultConstructor(Class<?> type) {
+        try {
+            return type.getDeclaredConstructor();
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
+    }
+
+    public boolean isWritable() {
+        return true;
     }
 
 

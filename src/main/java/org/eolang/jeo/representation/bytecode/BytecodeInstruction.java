@@ -565,12 +565,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
             );
         }
         switch (Instruction.find(this.opcode)) {
-            case TABLESWITCH: {
-                return this.args.stream()
-                    .filter(Label.class::isInstance)
-                    .map(Label.class::cast)
-                    .collect(Collectors.toList());
-            }
+            case TABLESWITCH:
             case LOOKUPSWITCH: {
                 return this.args.stream()
                     .filter(Label.class::isInstance)
