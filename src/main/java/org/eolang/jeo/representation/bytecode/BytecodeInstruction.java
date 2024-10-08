@@ -146,7 +146,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * Local variable index.
      * @return Local variable index.
      */
-    public int local() {
+    public int localIndex() {
         if (!this.isVarInstruction()) {
             throw new IllegalStateException(
                 String.format(

@@ -28,8 +28,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -328,7 +330,9 @@ public final class BytecodeMethod implements Testable {
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor));
                 this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
 //                mvisitor.visitMaxs(this.maxs.stack(), this.maxs.locals());
-                mvisitor.visitMaxs(this.computeStack(), this.computeLocals());
+                final int stack = this.computeStack();
+                final int locals = this.computeLocals();
+                mvisitor.visitMaxs(stack, locals);
             }
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {
@@ -499,23 +503,44 @@ public final class BytecodeMethod implements Testable {
      * @return Max local variables.
      */
     private int computeLocals() {
-        int max = Arrays.stream(Type.getArgumentTypes(this.properties.descriptor()))
-            .mapToInt(Type::getSize)
-            .sum();
+        Map<Integer, Integer> variables = new HashMap<>(0);
+        int first = 0;
+        if (!this.properties.isStatic()) {
+            variables.put(0, 1);
+            first = 1;
+        }
+        final Type[] types = Type.getArgumentTypes(this.properties.descriptor());
+
+
+        for (int index = 0; index < types.length; index++) {
+            final Type type = types[index];
+            variables.put(index * type.getSize() + first, type.getSize());
+        }
+
+//        int max = Arrays.stream(types)
+//            .mapToInt(Type::getSize)
+//            .sum();
         for (final BytecodeEntry instruction : this.instructions) {
             if (instruction instanceof BytecodeInstruction) {
                 final BytecodeInstruction var = BytecodeInstruction.class.cast(instruction);
                 if (var.isVarInstruction()) {
-                    if (var.size() == 2)
-                        max = Math.max(max, var.local() + 1);
-                    else
-                        max = Math.max(max, var.local());
+                    if (var.size() == 2) {
+                        final int key = var.localIndex();
+                        variables.put(key, 2);
+                    }
+//                        max = Math.max(max, var.localIndex() + 1);
+                    else {
+                        final int key = var.localIndex();
+                        variables.put(key, 1);
+                    }
+//                        max = Math.max(max, var.localIndex());
                 }
             }
         }
-        if (!this.properties.isStatic()) {
-            max += 1;
-        }
+//        if (!this.properties.isStatic()) {
+//            max += 1;
+//        }
+        int max = variables.values().stream().mapToInt(Integer::intValue).sum();
         return max;
     }
 }

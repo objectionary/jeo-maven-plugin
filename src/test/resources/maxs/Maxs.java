@@ -627,6 +627,11 @@ public class Maxs {
         return Stream.of(x).allMatch(n -> n > 0 && n % 2 == 0);
     }
 
+    public static int problematicStatic(String[] args) {
+        String obj = args[0];
+        return obj.length();
+    }
+
     // Inner class to add complexity
     private class Inner {
         public String partOne() {
