@@ -568,6 +568,7 @@ public final class BytecodeMethod implements Testable {
 
 
     private int computeLocalsWithCFG() {
+        Logger.info(this, "Computing locals for %s", this.properties);
         Map<Integer, Integer> variables = new HashMap<>(0);
         int first = 0;
         if (!this.properties.isStatic()) {
@@ -633,7 +634,10 @@ public final class BytecodeMethod implements Testable {
                             max = Math.max(
                                 max,
                                 this.computeLocalsWithCFG(
-                                    new HashMap<>(variables), index1, new HashSet<>(visited))
+                                    new HashMap<>(variables),
+                                    index1,
+                                    new HashSet<>(visited)
+                                )
                             );
                         }
                     }
@@ -644,7 +648,8 @@ public final class BytecodeMethod implements Testable {
                         return variables.values().stream().mapToInt(Integer::intValue).sum();
                     } else {
                         visited.add(jump);
-                        return this.computeLocalsWithCFG(new HashMap<>(variables), jump, visited);
+                        return this.computeLocalsWithCFG(
+                            new HashMap<>(variables), jump, new HashSet<>(visited));
                     }
                 }
                 if (var.isVarInstruction()) {
