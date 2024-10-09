@@ -440,6 +440,15 @@ public final class BytecodeMethod implements Testable {
         final int length = this.instructions.size();
         worklist.add(0);
         Map<Integer, Integer> visited = new HashMap<>(0);
+
+        this.tryblocks.stream()
+            .map(BytecodeTryCatchBlock.class::cast)
+            .map(BytecodeTryCatchBlock::handler)
+            .map(this::index)
+            .peek(ind-> visited.put(ind, 1))
+            .forEach(worklist::add);
+
+
         while (!worklist.isEmpty()) {
             int current = worklist.pop();
             int stack = visited.get(current) == null ? 0 : visited.get(current);
@@ -493,6 +502,14 @@ public final class BytecodeMethod implements Testable {
             }
         }
         return max;
+    }
+
+    private String trackStack(final Map<Integer, Integer> visited) {
+        String res = "";
+        for (int i = 0; i < this.instructions.size(); i++) {
+            res += String.format("%s: %d\n", this.instructions.get(i).testCode(), visited.get(i));
+        }
+        return res;
     }
 
     private int index(final Label label) {

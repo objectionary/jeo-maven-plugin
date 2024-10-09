@@ -29,6 +29,7 @@ import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import java.lang.reflect.Constructor;
@@ -728,6 +729,27 @@ public class Maxs {
             return 0;
         }
     }
+
+    protected void protectedMethod(String variable) {
+        try {
+            String.format(variable, "UTF-8").toLowerCase(Locale.getDefault());
+        } catch (Exception var3) {
+            throw new IllegalStateException("Cant format the variable", var3);
+        }
+    }
+
+    protected void bindToSpringApplication(Object environment) {
+        try {
+            String envStr = String.valueOf(environment);
+            String key = "spring.main";
+            String thisStr = String.valueOf(this);
+            envStr.concat(key).concat(thisStr);
+            // The result is intentionally discarded to match the bytecode 'pop' instruction
+        } catch (Exception ex) {
+            throw new IllegalStateException("Cannot bind to SpringApplication", ex);
+        }
+    }
+
 
     // Inner class to add complexity
     private class Inner {

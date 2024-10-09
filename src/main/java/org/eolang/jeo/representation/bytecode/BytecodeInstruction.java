@@ -409,7 +409,14 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 return this.typeSize(Type.getType(String.valueOf(this.args.get(2)))) - 1;
             case PUTFIELD:
                 return (this.typeSize(Type.getType(String.valueOf(this.args.get(2)))) * -1) - 1;
-            case INVOKEVIRTUAL:
+            case INVOKEVIRTUAL:{
+                final String descr = String.valueOf(this.args.get(2));
+                final Type ret = Type.getReturnType(descr);
+                final Type[] types = Type.getArgumentTypes(descr);
+                final int args = Arrays.stream(types).mapToInt(this::typeSize).sum();
+                final int res = this.typeSize(ret) - 1 - args;
+                return res;
+            }
             case INVOKESPECIAL:
             case INVOKEINTERFACE: {
                 final String descr = String.valueOf(this.args.get(2));

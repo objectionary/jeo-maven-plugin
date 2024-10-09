@@ -118,4 +118,9 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     public String testCode() {
         return "// Try-catch blocks are not supported in tests yet";
     }
+
+    public Label handler() {
+        return this.handler;
+    }
+
 }
