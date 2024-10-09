@@ -170,6 +170,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
         return Instruction.find(this.opcode).size();
     }
 
+    @ToString.Include
     @Override
     public String testCode() {
         final String args = Stream.concat(

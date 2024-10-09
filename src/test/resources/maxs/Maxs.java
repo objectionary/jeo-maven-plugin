@@ -766,18 +766,12 @@ public class Maxs {
         }
     }
 
-    public long contentLength() throws IOException, URISyntaxException {
+    public long contentLength(int x) throws IOException, URISyntaxException {
         URL url = new URL("https://www.example.com");
         if (isEvenAndPositive(10)) {
             File file = new File(url.toURI());
             long length = file.length();
-            if (length == 0L && !file.exists()) {
-                throw new FileNotFoundException(
-                    url.toString() + " cannot be resolved in the file system for checking its content length"
-                );
-            } else {
-                return length;
-            }
+            return -10;
         } else {
             URLConnection connection = url.openConnection();
             if (connection instanceof HttpURLConnection) {

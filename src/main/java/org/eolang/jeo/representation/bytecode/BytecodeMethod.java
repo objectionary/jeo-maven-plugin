@@ -489,9 +489,9 @@ public final class BytecodeMethod implements Testable {
                             if (var.isConditionalBranchInstruction()) {
                                 final int next = current + 1;
                                 if (visited.get(next) == null
-                                        || visited.get(next) < stack
+                                    || visited.get(next) < stack
                                 ) {
-                                        visited.put(next, stack);
+                                    visited.put(next, stack);
                                     worklist.add(next);
                                 }
                             }
@@ -562,7 +562,8 @@ public final class BytecodeMethod implements Testable {
                         variables.put(key, 2);
                     } else {
                         final int key = var.localIndex();
-                        variables.put(key, 1);
+                        variables.putIfAbsent(key, 1);
+                        variables.compute(key, (k, v) -> v == 2 ? 2 : 1);
                     }
                 }
             }
