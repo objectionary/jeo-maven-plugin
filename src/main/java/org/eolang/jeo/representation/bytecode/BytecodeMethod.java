@@ -617,7 +617,10 @@ public final class BytecodeMethod implements Testable {
                         nxt = this.computeLocalsWithCFG(
                             new HashMap<>(variables), nextIndex, new HashSet<>(visited));
                     }
-                    return Math.max(branch, nxt);
+                    return Math.max(
+                        Math.max(branch, nxt),
+                        variables.values().stream().mapToInt(Integer::intValue).sum()
+                    );
                 } else if (var.isReturnInstruction()) {
                     return variables.values().stream().mapToInt(Integer::intValue).sum();
                 } else if (var.isSwitchInstruction()) {
