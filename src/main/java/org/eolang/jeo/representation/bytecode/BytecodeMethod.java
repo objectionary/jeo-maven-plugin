@@ -459,6 +459,7 @@ public final class BytecodeMethod implements Testable {
                             for (Label offset : offsets) {
                                 final int target = this.index(offset);
                                 if (visited.get(target) == null || visited.get(target) < stack) {
+                                    visited.put(target, stack);
                                     worklist.add(target);
                                 }
                             }
@@ -470,6 +471,7 @@ public final class BytecodeMethod implements Testable {
                                 if (var.isConditionalBranchInstruction()) {
                                     final int next = current + 1;
                                     if (visited.get(next) == null || visited.get(next) < stack) {
+                                        visited.put(next, stack);
                                         worklist.add(next);
                                     }
                                 }
@@ -480,6 +482,7 @@ public final class BytecodeMethod implements Testable {
                         } else {
                             final int jump = this.index(var.offset());
                             if (visited.get(jump) == null || visited.get(jump) < stack) {
+                                visited.put(jump, stack);
                                 worklist.add(jump);
                             }
                             break;
@@ -516,16 +519,10 @@ public final class BytecodeMethod implements Testable {
             first = 1;
         }
         final Type[] types = Type.getArgumentTypes(this.properties.descriptor());
-
-
         for (int index = 0; index < types.length; index++) {
             final Type type = types[index];
             variables.put(index * type.getSize() + first, type.getSize());
         }
-
-//        int max = Arrays.stream(types)
-//            .mapToInt(Type::getSize)
-//            .sum();
         for (final BytecodeEntry instruction : this.instructions) {
             if (instruction instanceof BytecodeInstruction) {
                 final BytecodeInstruction var = BytecodeInstruction.class.cast(instruction);
@@ -533,19 +530,13 @@ public final class BytecodeMethod implements Testable {
                     if (var.size() == 2) {
                         final int key = var.localIndex();
                         variables.put(key, 2);
-                    }
-//                        max = Math.max(max, var.localIndex() + 1);
-                    else {
+                    } else {
                         final int key = var.localIndex();
                         variables.put(key, 1);
                     }
-//                        max = Math.max(max, var.localIndex());
                 }
             }
         }
-//        if (!this.properties.isStatic()) {
-//            max += 1;
-//        }
         int max = variables.values().stream().mapToInt(Integer::intValue).sum();
         return max;
     }
