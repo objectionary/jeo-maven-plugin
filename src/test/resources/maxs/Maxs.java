@@ -22,21 +22,25 @@
  * SOFTWARE.
  */
 
-import java.lang.Math;
-import java.util.List;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import java.lang.reflect.Constructor;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 
 /**
  * This class contains many different methods with different number of local
@@ -762,6 +766,27 @@ public class Maxs {
         }
     }
 
+    public long contentLength() throws IOException, URISyntaxException {
+        URL url = new URL("https://www.example.com");
+        if (isEvenAndPositive(10)) {
+            File file = new File(url.toURI());
+            long length = file.length();
+            if (length == 0L && !file.exists()) {
+                throw new FileNotFoundException(
+                    url.toString() + " cannot be resolved in the file system for checking its content length"
+                );
+            } else {
+                return length;
+            }
+        } else {
+            URLConnection connection = url.openConnection();
+            if (connection instanceof HttpURLConnection) {
+                HttpURLConnection httpConn = (HttpURLConnection) connection;
+                httpConn.setRequestMethod("HEAD");
+            }
+            return connection.getContentLengthLong();
+        }
+    }
 
     // Inner class to add complexity
     private class Inner {

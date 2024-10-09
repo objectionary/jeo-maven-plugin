@@ -469,9 +469,9 @@ public final class BytecodeMethod implements Testable {
                             for (Label offset : offsets) {
                                 final int target = this.index(offset);
                                 if (visited.get(target) == null
-//                                    || visited.get(target) <= stack
+                                    || visited.get(target) < stack
                                 ) {
-//                                    visited.put(target, stack);
+                                    visited.put(target, stack);
                                     worklist.add(target);
                                 }
                             }
@@ -479,9 +479,9 @@ public final class BytecodeMethod implements Testable {
                         } else if (var.isConditionalBranchInstruction()) {
                             final int jump = this.index(var.offset());
                             if (visited.get(jump) == null
-//                                || visited.get(jump) <= stack
+                                || visited.get(jump) < stack
                             ) {
-//                                visited.put(jump, stack);
+                                visited.put(jump, stack);
                                 worklist.add(jump);
 
                             }
@@ -489,9 +489,9 @@ public final class BytecodeMethod implements Testable {
                             if (var.isConditionalBranchInstruction()) {
                                 final int next = current + 1;
                                 if (visited.get(next) == null
-//                                        || visited.get(next) <= stack
+                                        || visited.get(next) < stack
                                 ) {
-//                                        visited.put(next, stack);
+                                        visited.put(next, stack);
                                     worklist.add(next);
                                 }
                             }
@@ -502,9 +502,9 @@ public final class BytecodeMethod implements Testable {
                         } else {
                             final int jump = this.index(var.offset());
                             if (visited.get(jump) == null
-//                                || visited.get(jump) <= stack
+                                || visited.get(jump) < stack
                             ) {
-//                                visited.put(jump, stack);
+                                visited.put(jump, stack);
                                 worklist.add(jump);
                             }
                             break;
