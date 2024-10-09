@@ -433,7 +433,6 @@ public final class BytecodeMethod implements Testable {
         return this.directives(true);
     }
 
-
     private int computeStack() {
         Logger.info(this, "Computing stack for %s", this.properties);
         int max = 0;
@@ -441,15 +440,12 @@ public final class BytecodeMethod implements Testable {
         final int length = this.instructions.size();
         worklist.add(0);
         Map<Integer, Integer> visited = new TreeMap<>();
-
         this.tryblocks.stream()
             .map(BytecodeTryCatchBlock.class::cast)
             .map(BytecodeTryCatchBlock::handler)
             .map(this::index)
             .peek(ind -> visited.put(ind, 1))
             .forEach(worklist::add);
-
-
         while (!worklist.isEmpty()) {
             int current = worklist.pop();
             int stack = visited.get(current) == null ? 0 : visited.get(current);
@@ -485,17 +481,13 @@ public final class BytecodeMethod implements Testable {
                                 worklist.add(jump);
 
                             }
-
-                            if (var.isConditionalBranchInstruction()) {
-                                final int next = current + 1;
-                                if (visited.get(next) == null
-                                    || visited.get(next) < stack
-                                ) {
-                                    visited.put(next, stack);
-                                    worklist.add(next);
-                                }
+                            final int next = current + 1;
+                            if (visited.get(next) == null
+                                || visited.get(next) < stack
+                            ) {
+                                visited.put(next, stack);
+                                worklist.add(next);
                             }
-
                             break;
                         } else if (var.isReturnInstruction()) {
                             break;

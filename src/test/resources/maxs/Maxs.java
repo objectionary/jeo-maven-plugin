@@ -472,6 +472,18 @@ public class Maxs {
         }
     }
 
+    public void simpleIf(int x) {
+        if (x > 0) {
+            long a = 1L * System.currentTimeMillis();
+            int b = 10;
+            System.out.println("Hello: " + (a + b));
+        } else {
+            int a = 10;
+            long b = 1L * System.currentTimeMillis();
+            System.out.println("Bye: " + (a + b));
+        }
+    }
+
     public int sumUpTo(int n) {
         int sum = 0;
         for (int i = 1; i <= n; i++) {
