@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -439,13 +440,13 @@ public final class BytecodeMethod implements Testable {
         final Deque<Integer> worklist = new ArrayDeque<>(0);
         final int length = this.instructions.size();
         worklist.add(0);
-        Map<Integer, Integer> visited = new HashMap<>(0);
+        Map<Integer, Integer> visited = new TreeMap<>();
 
         this.tryblocks.stream()
             .map(BytecodeTryCatchBlock.class::cast)
             .map(BytecodeTryCatchBlock::handler)
             .map(this::index)
-            .peek(ind-> visited.put(ind, 1))
+            .peek(ind -> visited.put(ind, 1))
             .forEach(worklist::add);
 
 
@@ -467,31 +468,43 @@ public final class BytecodeMethod implements Testable {
                             final List<Label> offsets = var.offsets();
                             for (Label offset : offsets) {
                                 final int target = this.index(offset);
-                                if (visited.get(target) == null || visited.get(target) < stack) {
-                                    visited.put(target, stack);
+                                if (visited.get(target) == null
+//                                    || visited.get(target) <= stack
+                                ) {
+//                                    visited.put(target, stack);
                                     worklist.add(target);
                                 }
                             }
                             break;
                         } else if (var.isConditionalBranchInstruction()) {
                             final int jump = this.index(var.offset());
-                            if (visited.get(jump) == null || visited.get(jump) < stack) {
+                            if (visited.get(jump) == null
+//                                || visited.get(jump) <= stack
+                            ) {
+//                                visited.put(jump, stack);
                                 worklist.add(jump);
-                                if (var.isConditionalBranchInstruction()) {
-                                    final int next = current + 1;
-                                    if (visited.get(next) == null || visited.get(next) < stack) {
-                                        visited.put(next, stack);
-                                        worklist.add(next);
-                                    }
+
+                            }
+
+                            if (var.isConditionalBranchInstruction()) {
+                                final int next = current + 1;
+                                if (visited.get(next) == null
+//                                        || visited.get(next) <= stack
+                                ) {
+//                                        visited.put(next, stack);
+                                    worklist.add(next);
                                 }
                             }
+
                             break;
                         } else if (var.isReturnInstruction()) {
                             break;
                         } else {
                             final int jump = this.index(var.offset());
-                            if (visited.get(jump) == null || visited.get(jump) < stack) {
-                                visited.put(jump, stack);
+                            if (visited.get(jump) == null
+//                                || visited.get(jump) <= stack
+                            ) {
+//                                visited.put(jump, stack);
                                 worklist.add(jump);
                             }
                             break;

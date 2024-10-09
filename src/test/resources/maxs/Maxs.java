@@ -753,26 +753,10 @@ public class Maxs {
 
     protected void configurePropertySources(Object var1, String[] var2) {
         String var3 = String.valueOf(var1);
-
-        if (this.collection != null) {
-            String defaultProps = String.valueOf(this.collection);
-            // Simulate addOrMerge operation by concatenating strings
-            defaultProps.concat(var3);
-            // Result is intentionally discarded to match the original bytecode behavior
-        }
-
         if (this.growCollection && var2.length > 0) {
-            String var4 = "commandLineArgs";
-            if (var3.contains(var4)) {
+            if (var3.contains("commandLineArgs")) {
                 String var5 = var3;
-                StringBuilder var6 = new StringBuilder(var4);
-                var6.append("springApplicationCommandLineArgs");
-                var6.append(Arrays.toString(var2));
-                var6.append(var5);
-                // Simulate replace operation
-                var3 = var3.replace(var4, var6.toString());
             } else {
-                // Simulate addFirst operation by prepending strings
                 var3 = Arrays.toString(var2) + var3;
             }
         }
