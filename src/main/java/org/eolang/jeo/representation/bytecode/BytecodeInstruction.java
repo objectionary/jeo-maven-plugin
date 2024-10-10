@@ -186,7 +186,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * @return Stack impact.
      */
     public int impact() {
-        int result = 2;
+        final int result;
         final Instruction instruction = Instruction.find(this.opcode);
         switch (instruction) {
             case LASTORE:
@@ -352,6 +352,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case LDC: {
                 final Class<?> clazz = this.args.get(0).getClass();
                 if (clazz == Long.class || clazz == Double.class) {
+                    result = 2;
                     break;
                 } else {
                     result = BytecodeInstruction.size(Type.getType(clazz));
@@ -363,42 +364,30 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 break;
             case PUTSTATIC:
                 result = BytecodeInstruction.size(
-                    Type.getType(String.valueOf(this.args.get(2)))) * -1;
+                    Type.getType(String.valueOf(this.args.get(2)))
+                ) * -1;
                 break;
             case GETFIELD:
                 result = BytecodeInstruction.size(
-                    Type.getType(String.valueOf(this.args.get(2)))) - 1;
+                    Type.getType(String.valueOf(this.args.get(2)))
+                ) - 1;
                 break;
             case PUTFIELD:
                 result = (BytecodeInstruction.size(
-                    Type.getType(String.valueOf(this.args.get(2)))) * -1) - 1;
+                    Type.getType(String.valueOf(this.args.get(2)))
+                ) * -1) - 1;
                 break;
             case INVOKEVIRTUAL:
             case INVOKESPECIAL:
-            case INVOKEINTERFACE: {
-                final String descr = String.valueOf(this.args.get(2));
-                final Type ret = Type.getReturnType(descr);
-                final Type[] types = Type.getArgumentTypes(descr);
-                final int args = Arrays.stream(types).mapToInt(BytecodeInstruction::size).sum();
-                result = BytecodeInstruction.size(ret) - 1 - args;
+            case INVOKEINTERFACE:
+                result = this.methodImpact(String.valueOf(this.args.get(2))) - 1;
                 break;
-            }
-            case INVOKESTATIC: {
-                final String descr = String.valueOf(this.args.get(2));
-                final Type ret = Type.getReturnType(descr);
-                final Type[] types = Type.getArgumentTypes(descr);
-                final int args = Arrays.stream(types).mapToInt(BytecodeInstruction::size).sum();
-                result = BytecodeInstruction.size(ret) - args;
+            case INVOKESTATIC:
+                result = this.methodImpact(String.valueOf(this.args.get(2)));
                 break;
-            }
-            case INVOKEDYNAMIC: {
-                final String descr = String.valueOf(this.args.get(1));
-                final Type ret = Type.getReturnType(descr);
-                final Type[] types = Type.getArgumentTypes(descr);
-                final int args = Arrays.stream(types).mapToInt(BytecodeInstruction::size).sum();
-                result = BytecodeInstruction.size(ret) - args;
+            case INVOKEDYNAMIC:
+                result = this.methodImpact(String.valueOf(this.args.get(1)));
                 break;
-            }
             case MULTIANEWARRAY:
                 result = -(int) (this.args.get(1)) + 1;
                 break;
@@ -410,6 +399,18 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 );
         }
         return result;
+    }
+
+    /**
+     * Impact of the method invocation on stack.
+     * @param descriptor Method descriptor.
+     * @return Impact.
+     */
+    private int methodImpact(final String descriptor) {
+        return BytecodeInstruction.size(Type.getReturnType(descriptor)) -
+            Arrays.stream(Type.getArgumentTypes(descriptor))
+                .mapToInt(BytecodeInstruction::size)
+                .sum();
     }
 
     /**
@@ -1956,7 +1957,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
          * @return Local variable size
          */
         int size() {
-            int res;
+            final int res;
             switch (this) {
                 case ILOAD:
                 case FLOAD:

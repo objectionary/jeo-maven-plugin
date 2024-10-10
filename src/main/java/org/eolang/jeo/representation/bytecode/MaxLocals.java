@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import com.jcabi.log.Logger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +55,12 @@ final class MaxLocals {
      */
     private final List<BytecodeTryCatchBlock> blocks;
 
+    /**
+     * Constructor.
+     * @param props Method properties.
+     * @param instructions Instructions.
+     * @param catches Try-catch blocks.
+     */
     MaxLocals(
         final BytecodeMethodProperties props,
         final List<? extends BytecodeEntry> instructions,
@@ -64,6 +69,12 @@ final class MaxLocals {
         this(props, new InstructionsFlow(instructions), catches);
     }
 
+    /**
+     * Constructor.
+     * @param props Method properties.
+     * @param instructions Instructions.
+     * @param catches Try-catch blocks.
+     */
     private MaxLocals(
         final BytecodeMethodProperties props,
         final InstructionsFlow instructions,
@@ -75,7 +86,6 @@ final class MaxLocals {
     }
 
     public int value() {
-        Logger.info(this, "Computing locals for %s", this.props);
         Variables initial = new Variables();
         int first = 0;
         if (!this.props.isStatic()) {
@@ -87,8 +97,8 @@ final class MaxLocals {
             final Type type = types[index];
             initial.put(index * type.getSize() + first, type.getSize());
         }
-        Map<Integer, Variables> all = new TreeMap<>();
-        Map<Integer, Variables> worklist = new HashMap<>();
+        final Map<Integer, Variables> all = new TreeMap<>();
+        final Map<Integer, Variables> worklist = new HashMap<>(0);
         worklist.put(0, initial);
         final int total = this.instructions.size();
         Variables currentVars;
@@ -136,7 +146,7 @@ final class MaxLocals {
                     }
                 }
                 final Variables value = new Variables(currentVars);
-                this.catches(current).stream().forEach(ind -> {
+                this.suitableBlocks(current).stream().forEach(ind -> {
                     worklist.put(ind, new Variables(value));
                 });
                 all.put(current, value);
@@ -146,50 +156,82 @@ final class MaxLocals {
         return all.values().stream().mapToInt(Variables::size).max().orElse(0);
     }
 
-    private List<Integer> catches(final int instruction) {
-        return this.blocks.stream().map(BytecodeTryCatchBlock.class::cast)
-            .filter(
-                block -> {
-                    if (this.instructions.index(block.start()) > instruction) return false;
-                    return this.instructions.index(block.end()) >= instruction;
-                }
-            ).map(
-                block -> {
-                    return this.instructions.index(block.handler());
-                }
-            ).collect(Collectors.toList());
+    /**
+     * Which try-catch-blocks cover the instruction.
+     * @param instruction Instruction index.
+     * @return List of block indexes.
+     */
+    private List<Integer> suitableBlocks(final int instruction) {
+        return this.blocks.stream()
+            .map(BytecodeTryCatchBlock.class::cast)
+            .filter(block -> this.instructions.index(block.start()) <= instruction)
+            .filter(block -> this.instructions.index(block.end()) >= instruction)
+            .map(block -> this.instructions.index(block.handler()))
+            .collect(Collectors.toList());
     }
 
+    /**
+     * Variables.
+     * @since 0.6
+     */
     @ToString
     private static class Variables {
 
+        /**
+         * All variables.
+         */
         private final TreeMap<Integer, Integer> all;
 
-        public Variables() {
+        /**
+         * Constructor.
+         */
+        Variables() {
             this(new HashMap<>(0));
         }
 
-        public Variables(final Variables vars) {
+        /**
+         * Copy constructor.
+         * @param vars Variables to copy.
+         */
+        Variables(final Variables vars) {
             this(vars.all);
         }
 
-        public Variables(final Map<Integer, Integer> all) {
+        /**
+         * Constructor.
+         * @param all All variables.
+         */
+        private Variables(final Map<Integer, Integer> all) {
             this.all = new TreeMap<>(all);
         }
 
+        /**
+         * Get size.
+         * @return Size.
+         */
         int size() {
-            if (all.isEmpty()) {
-                return 0;
+            int result = 0;
+            if (!all.isEmpty()) {
+                final Map.Entry<Integer, Integer> entry = all.lastEntry();
+                result = (entry.getKey() + 1) + ((int) (entry.getValue() * 0.5));
             }
-            final Map.Entry<Integer, Integer> entry = all.lastEntry();
-            return (entry.getKey() + 1) + ((int) (entry.getValue() * 0.5));
+            return result;
         }
 
-        void put(BytecodeInstruction var) {
+        /**
+         * Put variable.
+         * @param var
+         */
+        void put(final BytecodeInstruction var) {
             this.put(var.varIndex(), var.varSize());
         }
 
-        void put(int index, int value) {
+        /**
+         * Put variable.
+         * @param index Index.
+         * @param value Value.
+         */
+        void put(final int index, final int value) {
             this.all.put(index, value);
         }
     }
