@@ -170,7 +170,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * @checkstyle JavaNCSSCheck (350 lines)
      * @checkstyle AvoidNestedBlocksCheck (350 lines)
      */
-    @SuppressWarnings("PMD.NcssCount")
+    @SuppressWarnings({"PMD.NcssCount", "PMD.ExcessiveMethodLength"})
     public int impact() {
         final int result;
         final Instruction instruction = Instruction.find(this.opcode);
