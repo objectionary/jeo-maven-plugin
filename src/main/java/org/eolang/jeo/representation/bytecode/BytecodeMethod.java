@@ -29,10 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
@@ -322,8 +320,8 @@ public final class BytecodeMethod implements Testable {
         try {
             final MethodVisitor mvisitor = this.properties.writeMethod(
                 visitor,
-//                this.maxs.compute()
                 false
+//                this.maxs.compute()
             );
             this.annotations.write(mvisitor);
             this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));
@@ -331,12 +329,7 @@ public final class BytecodeMethod implements Testable {
                 mvisitor.visitCode();
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor));
                 this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
-//                mvisitor.visitMaxs(this.maxs.stack(), this.maxs.locals());
-                final int stack = this.computeStack();
-//                final int locals = this.computeLocals();
-//                final int locals = this.computeLocalsWithCFG();
-                final int locals = this.computeLocalsWithCFG2();
-                mvisitor.visitMaxs(stack, locals);
+                mvisitor.visitMaxs(this.computeStack(), this.computeLocals());
             }
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {
@@ -381,7 +374,7 @@ public final class BytecodeMethod implements Testable {
      * @return Maxs.
      */
     BytecodeMaxs computeMaxs() {
-        return new BytecodeMaxs(this.computeStack(), this.computeLocalsWithCFG2());
+        return new BytecodeMaxs(this.computeStack(), this.computeLocals());
     }
 
     /**
@@ -511,159 +504,11 @@ public final class BytecodeMethod implements Testable {
         return max;
     }
 
-    private String trackStack(final Map<Integer, Integer> visited) {
-        String res = "";
-        for (int i = 0; i < this.instructions.size(); i++) {
-            res += String.format("%s: %d\n", this.instructions.get(i).testCode(), visited.get(i));
-        }
-        return res;
-    }
-
-    private int index(final Label label) {
-        for (int index = 0; index < this.instructions.size(); index++) {
-            final BytecodeEntry entry = this.instructions.get(index);
-            final BytecodeLabel obj = new BytecodeLabel(label, new AllLabels());
-            final boolean equals = entry.equals(obj);
-            if (equals) {
-                return index;
-            }
-        }
-        throw new IllegalStateException("Label not found");
-    }
-
     /**
      * Compute max local variables.
      * @return Max local variables.
      */
     private int computeLocals() {
-        Map<Integer, Integer> variables = new HashMap<>(0);
-        int first = 0;
-        if (!this.properties.isStatic()) {
-            variables.put(0, 1);
-            first = 1;
-        }
-        final Type[] types = Type.getArgumentTypes(this.properties.descriptor());
-        for (int index = 0; index < types.length; index++) {
-            final Type type = types[index];
-            variables.put(index * type.getSize() + first, type.getSize());
-        }
-        for (final BytecodeEntry instruction : this.instructions) {
-            if (instruction instanceof BytecodeInstruction) {
-                final BytecodeInstruction var = BytecodeInstruction.class.cast(instruction);
-                if (var.isVarInstruction()) {
-                    if (var.size() == 2) {
-                        final int key = var.localIndex();
-                        variables.put(key, 2);
-                    } else {
-                        final int key = var.localIndex();
-                        variables.putIfAbsent(key, 1);
-                        variables.compute(key, (k, v) -> v == 2 ? 2 : 1);
-                    }
-                }
-            }
-        }
-        int max = variables.values().stream().mapToInt(Integer::intValue).sum();
-        return max;
-    }
-
-
-    private int computeLocalsWithCFG() {
-        Logger.info(this, "Computing locals for %s", this.properties);
-        Map<Integer, Integer> variables = new HashMap<>(0);
-        int first = 0;
-        if (!this.properties.isStatic()) {
-            variables.put(0, 1);
-            first = 1;
-        }
-        final Type[] types = Type.getArgumentTypes(this.properties.descriptor());
-        for (int index = 0; index < types.length; index++) {
-            final Type type = types[index];
-            variables.put(index * type.getSize() + first, type.getSize());
-        }
-        Map<Integer, Map<Integer, Integer>> allVariables = new HashMap<>(1);
-        allVariables.put(0, variables);
-        Deque<Integer> worklist = new ArrayDeque<>(1);
-        worklist.add(0);
-        this.tryblocks.stream()
-            .map(BytecodeTryCatchBlock.class::cast)
-            .map(BytecodeTryCatchBlock::handler)
-            .map(this::index)
-            .forEach(worklist::add);
-        int MAX_RESULT = 0;
-        Map<Integer, Map<Integer, Integer>> visited = new HashMap<>(0);
-        while (!worklist.isEmpty()) {
-            int current = worklist.pop();
-            Map<Integer, Integer> vars = new HashMap<>(
-                allVariables.getOrDefault(current, new HashMap<>(0)));
-            while (current < this.instructions.size()) {
-                BytecodeEntry entry = this.instructions.get(current);
-                final String aopcode = entry.testCode();
-                System.out.println(aopcode);
-                if (entry instanceof BytecodeInstruction) {
-                    final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
-                    if (var.isBranchInstruction()) {
-                        if (var.isSwitchInstruction()) {
-                            final List<Label> offsets = var.offsets();
-                            for (Label offset : offsets) {
-                                final int target = this.index(offset);
-                                final int sum = this.size(vars);
-                                if (!visited.containsKey(target)
-                                    || size(visited.get(target)) < sum) {
-                                    visited.put(target, new HashMap<>(vars));
-                                    worklist.add(target);
-                                }
-                            }
-                            break;
-                        } else if (var.isConditionalBranchInstruction()) {
-                            final int jump = this.index(var.offset());
-                            final int sum = size(vars);
-                            if (!visited.containsKey(jump) || size(visited.get(jump)) < sum) {
-                                visited.put(jump, vars);
-                                worklist.add(jump);
-                            }
-                            final int next = current + 1;
-                            if (!visited.containsKey(next) || size(visited.get(next)) < sum) {
-                                visited.put(next, vars);
-                                worklist.add(next);
-                            }
-                            break;
-                        } else if (var.isReturnInstruction()) {
-                            break;
-                        } else {
-                            final int jump = this.index(var.offset());
-                            final int sum = size(vars);
-                            if (!visited.containsKey(jump) || size(visited.get(jump)) < sum) {
-                                visited.put(jump, vars);
-                                worklist.add(jump);
-                            }
-                            break;
-                        }
-                    }
-                    if (var.isVarInstruction()) {
-                        if (var.size() == 2) {
-                            final int key = var.localIndex();
-                            vars.put(key, 2);
-                        } else {
-                            final int key = var.localIndex();
-                            vars.put(key, 1);
-                        }
-                    }
-                    if (allVariables.get(current) == null || size(vars) > size(
-                        allVariables.get(current))) {
-                        allVariables.put(current, new HashMap<>(vars));
-                    }
-                }
-                current++;
-            }
-        }
-        return allVariables.values().stream()
-            .mapToInt(vars -> vars.values().stream().mapToInt(Integer::intValue).sum())
-            .max()
-            .orElse(0);
-    }
-
-
-    private int computeLocalsWithCFG2() {
         Logger.info(this, "Computing locals for %s", this.properties);
         Variables initial = new Variables();
         int first = 0;
@@ -730,82 +575,8 @@ public final class BytecodeMethod implements Testable {
                 current++;
             }
         }
-//        __________
-//        this.tryblocks.stream().map(BytecodeTryCatchBlock.class::cast)
-//            .forEach(block -> {
-//                    final int start = this.index(block.start());
-//                    final int end = this.index(block.end());
-//                    final List<Variables> collect = all.entrySet().stream().filter(
-//                        entry -> entry.getKey() >= start && entry.getKey() <= end
-//                    ).map(Map.Entry::getValue).collect(Collectors.toList());
-//                    if (!collect.isEmpty()) {
-//                        Variables max = collect.get(0);
-//                        for (final Variables variables : collect) {
-//                            if (variables.size() > max.size()) {
-//                                max = variables;
-//                            }
-//                        }
-//                        worklist.put(
-//                            this.index(block.handler()),
-//                            new Variables(max)
-//                        );
-//                    }
-//                }
-//            );
-// ----------
-//        while (!worklist.isEmpty()) {
-//            final Map.Entry<Integer, Variables> curr = worklist.entrySet()
-//                .stream()
-//                .findFirst()
-//                .orElseThrow(() -> new IllegalStateException(""));
-//            int current = curr.getKey();
-//            worklist.remove(current);
-//            if (all.get(current) != null && all.get(current).size() >= curr.getValue().size()) {
-//                continue;
-//            }
-//            currentVars = new Variables(curr.getValue());
-//            while (current < total) {
-//                BytecodeEntry entry = this.instructions.get(current);
-//                if (entry instanceof BytecodeInstruction) {
-//                    final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
-//                    if (var.isBranchInstruction()) {
-//                        if (var.isSwitchInstruction()) {
-//                            final List<Label> offsets = var.offsets();
-//                            for (Label offset : offsets) {
-//                                final int target = this.index(offset);
-//                                worklist.put(target, new Variables(currentVars));
-//                            }
-//                            break;
-//                        } else if (var.isConditionalBranchInstruction()) {
-//                            final int jump = this.index(var.offset());
-//                            worklist.put(jump, new Variables(currentVars));
-//                            final int next = current + 1;
-//                            worklist.put(next, new Variables(currentVars));
-//                            break;
-//                        } else {
-//                            final int jump = this.index(var.offset());
-//                            worklist.put(jump, new Variables(currentVars));
-//                            break;
-//                        }
-//                    } else if (var.isReturnInstruction()) {
-//                        break;
-//                    }
-//                    if (var.isVarInstruction()) {
-//                        currentVars.put(var);
-//                    }
-//                }
-//                final Variables value = new Variables(currentVars);
-//                this.catches(current).stream().forEach(ind -> {
-//                    worklist.put(ind, new Variables(value));
-//                });
-//                all.put(current, value);
-//                current++;
-//            }
-//        }
-
         return all.values().stream().mapToInt(Variables::size).max().orElse(0);
     }
-
 
     private List<Integer> catches(final int instruction) {
         return this.tryblocks.stream().map(BytecodeTryCatchBlock.class::cast)
@@ -815,6 +586,18 @@ public final class BytecodeMethod implements Testable {
             ).map(
                 block -> index(block.handler())
             ).collect(Collectors.toList());
+    }
+
+    private int index(final Label label) {
+        for (int index = 0; index < this.instructions.size(); index++) {
+            final BytecodeEntry entry = this.instructions.get(index);
+            final BytecodeLabel obj = new BytecodeLabel(label, new AllLabels());
+            final boolean equals = entry.equals(obj);
+            if (equals) {
+                return index;
+            }
+        }
+        throw new IllegalStateException("Label not found");
     }
 
     @ToString
@@ -840,7 +623,6 @@ public final class BytecodeMethod implements Testable {
             }
             final Map.Entry<Integer, Integer> entry = all.lastEntry();
             return (entry.getKey() + 1) + ((int) (entry.getValue() * 0.5));
-//            return this.all.values().stream().mapToInt(Integer::intValue).sum();
         }
 
         public void put(BytecodeInstruction var) {
@@ -850,86 +632,5 @@ public final class BytecodeMethod implements Testable {
         public void put(int index, int value) {
             this.all.put(index, value);
         }
-    }
-
-    private int size(Map<Integer, Integer> variables) {
-        return variables.values().stream().mapToInt(Integer::intValue).sum();
-    }
-
-    private int computeLocalsWithCFG(
-        Map<Integer, Integer> variables,
-        int currentIndex,
-        Set<Integer> visited
-    ) {
-        final int size = this.instructions.size();
-        for (int index = currentIndex; index < size; ++index) {
-            final BytecodeEntry instruction = this.instructions.get(index);
-            if (instruction instanceof BytecodeInstruction) {
-                final BytecodeInstruction var = BytecodeInstruction.class.cast(instruction);
-                if (var.isConditionalBranchInstruction()) {
-                    final int jump = this.index(var.offset());
-                    final int branch;
-                    if (visited.contains(jump)) {
-                        branch = 0;
-                    } else {
-                        visited.add(jump);
-                        branch = this.computeLocalsWithCFG(
-                            new HashMap<>(variables), jump, new HashSet<>(visited));
-                    }
-                    final int nextIndex = index + 1;
-                    final int nxt;
-                    if (visited.contains(nextIndex)) {
-                        nxt = 0;
-                    } else {
-                        visited.add(nextIndex);
-                        nxt = this.computeLocalsWithCFG(
-                            new HashMap<>(variables), nextIndex, new HashSet<>(visited));
-                    }
-                    return Math.max(
-                        Math.max(branch, nxt),
-                        variables.values().stream().mapToInt(Integer::intValue).sum()
-                    );
-                } else if (var.isReturnInstruction()) {
-                    return variables.values().stream().mapToInt(Integer::intValue).sum();
-                } else if (var.isSwitchInstruction()) {
-                    final List<Label> offsets = var.offsets();
-                    int max = 0;
-                    for (Label offset : offsets) {
-                        final int index1 = this.index(offset);
-                        if (!visited.contains(index1)) {
-                            visited.add(index1);
-                            max = Math.max(
-                                max,
-                                this.computeLocalsWithCFG(
-                                    new HashMap<>(variables),
-                                    index1,
-                                    new HashSet<>(visited)
-                                )
-                            );
-                        }
-                    }
-                    return max;
-                } else if (var.isBranchInstruction()) {
-                    final int jump = this.index(var.offset());
-                    if (visited.contains(jump)) {
-                        return variables.values().stream().mapToInt(Integer::intValue).sum();
-                    } else {
-                        visited.add(jump);
-                        return this.computeLocalsWithCFG(
-                            new HashMap<>(variables), jump, new HashSet<>(visited));
-                    }
-                }
-                if (var.isVarInstruction()) {
-                    if (var.size() == 2) {
-                        final int key = var.localIndex();
-                        variables.put(key, 2);
-                    } else {
-                        final int key = var.localIndex();
-                        variables.put(key, 1);
-                    }
-                }
-            }
-        }
-        return variables.values().stream().mapToInt(Integer::intValue).sum();
     }
 }

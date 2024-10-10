@@ -96,12 +96,12 @@ final class BytecodeClassTest {
     void createsBytecodeWithDefaultConstructor() {
         MatcherAssert.assertThat(
             "Can't create bytecode with default public constructor",
-            new BytecodeProgram(new BytecodeClass("DefaultConstructor")
-                .withConstructor(Opcodes.ACC_PUBLIC)
-                .opcode(Opcodes.RETURN)
-                .up()
-            )
-                .bytecode(),
+            new BytecodeProgram(
+                new BytecodeClass("DefaultConstructor")
+                    .withConstructor(Opcodes.ACC_PUBLIC)
+                    .opcode(Opcodes.RETURN)
+                    .up()
+            ).bytecode(),
             Matchers.notNullValue()
         );
     }
@@ -189,8 +189,7 @@ final class BytecodeClassTest {
             () -> new BytecodeProgram(new BytecodeClass("org/eolang/benchmark/F")
                 .withMethod("j$foo", "()I", 1025)
                 .up()
-            )
-                .bytecode(),
+            ).bytecode(),
             "We expect no exception here because all instructions are valid. This is an abstract method."
         );
     }
@@ -209,8 +208,7 @@ final class BytecodeClassTest {
                 .opcode(Opcodes.IRETURN)
                 .label(new Label())
                 .up()
-            )
-                .bytecode(),
+            ).bytecode(),
             "We expect an exception here because the bytecode is broken"
         );
     }
