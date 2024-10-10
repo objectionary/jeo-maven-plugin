@@ -23,13 +23,11 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import com.jcabi.log.Logger;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 
 /**
@@ -38,32 +36,54 @@ import org.objectweb.asm.Label;
  * that can be used by a method.
  * @since 0.6
  */
-public final class MaxStack {
+final class MaxStack {
 
-    private final BytecodeMethodProperties properties;
-    private final List<BytecodeEntry> instructions;
-    private final List<BytecodeTryCatchBlock> tryblocks;
+    /**
+     * Method instructions.
+     */
+    private final InstructionsFlow instructions;
 
-    public MaxStack(
-        final BytecodeMethodProperties properties, final List<BytecodeEntry> instructions,
+    /**
+     * Try-catch blocks.
+     */
+    private final List<BytecodeTryCatchBlock> blocks;
+
+    /**
+     * Constructor.
+     * @param instructions Instructions.
+     * @param tryblocks Try-catch blocks.
+     */
+    MaxStack(
+        final List<? extends BytecodeEntry> instructions,
         final List<BytecodeTryCatchBlock> tryblocks
     ) {
-        this.properties = properties;
-        this.instructions = instructions;
-        this.tryblocks = tryblocks;
+        this(new InstructionsFlow(instructions), tryblocks);
     }
 
+    /**
+     * Compute the maximum stack size.
+     * @param instructions Instructions.
+     * @param blocks Try-catch blocks.
+     */
+    public MaxStack(final InstructionsFlow instructions, final List<BytecodeTryCatchBlock> blocks) {
+        this.instructions = instructions;
+        this.blocks = blocks;
+    }
+
+    /**
+     * Compute the maximum stack size.
+     * @return Maximum stack size.
+     */
     public int value() {
-        Logger.info(this, "Computing stack for %s", this.properties);
         int max = 0;
         final Deque<Integer> worklist = new ArrayDeque<>(0);
         final int length = this.instructions.size();
         worklist.add(0);
         Map<Integer, Integer> visited = new TreeMap<>();
-        this.tryblocks.stream()
+        this.blocks.stream()
             .map(BytecodeTryCatchBlock.class::cast)
             .map(BytecodeTryCatchBlock::handler)
-            .map(this::index)
+            .map(this.instructions::index)
             .peek(ind -> visited.put(ind, 1))
             .forEach(worklist::add);
         while (!worklist.isEmpty()) {
@@ -83,7 +103,7 @@ public final class MaxStack {
                         if (var.isSwitchInstruction()) {
                             final List<Label> offsets = var.offsets();
                             for (Label offset : offsets) {
-                                final int target = this.index(offset);
+                                final int target = this.instructions.index(offset);
                                 if (visited.get(target) == null
                                     || visited.get(target) < stack
                                 ) {
@@ -93,7 +113,8 @@ public final class MaxStack {
                             }
                             break;
                         } else if (var.isConditionalBranchInstruction()) {
-                            final int jump = this.index(var.offset());
+                            final Label label = var.offset();
+                            final int jump = this.instructions.index(label);
                             if (visited.get(jump) == null
                                 || visited.get(jump) < stack
                             ) {
@@ -112,7 +133,8 @@ public final class MaxStack {
                         } else if (var.isReturnInstruction()) {
                             break;
                         } else {
-                            final int jump = this.index(var.offset());
+                            final Label label = var.offset();
+                            final int jump = this.instructions.index(label);
                             if (visited.get(jump) == null
                                 || visited.get(jump) < stack
                             ) {
@@ -127,18 +149,5 @@ public final class MaxStack {
             }
         }
         return max;
-    }
-
-
-    private int index(final Label label) {
-        for (int index = 0; index < this.instructions.size(); index++) {
-            final BytecodeEntry entry = this.instructions.get(index);
-            final BytecodeLabel obj = new BytecodeLabel(label, new AllLabels());
-            final boolean equals = entry.equals(obj);
-            if (equals) {
-                return index;
-            }
-        }
-        throw new IllegalStateException("Label not found");
     }
 }
