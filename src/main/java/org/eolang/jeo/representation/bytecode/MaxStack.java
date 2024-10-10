@@ -51,23 +51,26 @@ final class MaxStack {
     /**
      * Constructor.
      * @param instructions Instructions.
-     * @param tryblocks Try-catch blocks.
+     * @param catches Try-catch blocks.
      */
     MaxStack(
         final List<? extends BytecodeEntry> instructions,
-        final List<BytecodeTryCatchBlock> tryblocks
+        final List<BytecodeTryCatchBlock> catches
     ) {
-        this(new InstructionsFlow(instructions), tryblocks);
+        this(new InstructionsFlow(instructions), catches);
     }
 
     /**
      * Compute the maximum stack size.
      * @param instructions Instructions.
-     * @param blocks Try-catch blocks.
+     * @param catches Try-catch blocks.
      */
-    public MaxStack(final InstructionsFlow instructions, final List<BytecodeTryCatchBlock> blocks) {
+    private MaxStack(
+        final InstructionsFlow instructions,
+        final List<BytecodeTryCatchBlock> catches
+    ) {
         this.instructions = instructions;
-        this.blocks = blocks;
+        this.blocks = catches;
     }
 
     /**

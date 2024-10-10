@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import lombok.ToString;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 
@@ -43,17 +42,25 @@ import org.objectweb.asm.Type;
 final class MaxLocals {
 
     private final BytecodeMethodProperties props;
-    private final List<BytecodeEntry> instructions;
+    private final InstructionsFlow instructions;
     private final List<BytecodeTryCatchBlock> blocks;
 
     MaxLocals(
         final BytecodeMethodProperties props,
         final List<BytecodeEntry> instructions,
-        final List<BytecodeTryCatchBlock> blocks
+        final List<BytecodeTryCatchBlock> catches
+    ) {
+        this(props, new InstructionsFlow(instructions), catches);
+    }
+
+    private MaxLocals(
+        final BytecodeMethodProperties props,
+        final InstructionsFlow instructions,
+        final List<BytecodeTryCatchBlock> catches
     ) {
         this.props = props;
         this.instructions = instructions;
-        this.blocks = blocks;
+        this.blocks = catches;
     }
 
     public int value() {
@@ -93,18 +100,20 @@ final class MaxLocals {
                         if (var.isSwitchInstruction()) {
                             final List<Label> offsets = var.offsets();
                             for (Label offset : offsets) {
-                                final int target = this.index(offset);
+                                final int target = this.instructions.index(offset);
                                 worklist.put(target, new Variables(currentVars));
                             }
                             break;
                         } else if (var.isConditionalBranchInstruction()) {
-                            final int jump = this.index(var.offset());
+                            final Label label = var.offset();
+                            final int jump = this.instructions.index(label);
                             worklist.put(jump, new Variables(currentVars));
                             final int next = current + 1;
                             worklist.put(next, new Variables(currentVars));
                             break;
                         } else {
-                            final int jump = this.index(var.offset());
+                            final Label label = var.offset();
+                            final int jump = this.instructions.index(label);
                             worklist.put(jump, new Variables(currentVars));
                             break;
                         }
@@ -129,23 +138,15 @@ final class MaxLocals {
     private List<Integer> catches(final int instruction) {
         return this.blocks.stream().map(BytecodeTryCatchBlock.class::cast)
             .filter(
-                block -> index(block.start()) <= instruction
-                    && index(block.end()) >= instruction
+                block -> {
+                    if (this.instructions.index(block.start()) > instruction) return false;
+                    return this.instructions.index(block.end()) >= instruction;
+                }
             ).map(
-                block -> index(block.handler())
+                block -> {
+                    return this.instructions.index(block.handler());
+                }
             ).collect(Collectors.toList());
-    }
-
-    private int index(final Label label) {
-        for (int index = 0; index < this.instructions.size(); index++) {
-            final BytecodeEntry entry = this.instructions.get(index);
-            final BytecodeLabel obj = new BytecodeLabel(label, new AllLabels());
-            final boolean equals = entry.equals(obj);
-            if (equals) {
-                return index;
-            }
-        }
-        throw new IllegalStateException("Label not found");
     }
 
     @ToString
@@ -173,11 +174,11 @@ final class MaxLocals {
             return (entry.getKey() + 1) + ((int) (entry.getValue() * 0.5));
         }
 
-        public void put(BytecodeInstruction var) {
+        void put(BytecodeInstruction var) {
             this.put(var.localIndex(), var.size());
         }
 
-        public void put(int index, int value) {
+        void put(int index, int value) {
             this.all.put(index, value);
         }
     }
