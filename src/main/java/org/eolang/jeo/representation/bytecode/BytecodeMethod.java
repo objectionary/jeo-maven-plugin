@@ -677,15 +677,8 @@ public final class BytecodeMethod implements Testable {
             initial.put(index * type.getSize() + first, type.getSize());
         }
         Map<Integer, Variables> all = new TreeMap<>();
-//        all.put(0, initial);
         Map<Integer, Variables> worklist = new HashMap<>();
         worklist.put(0, initial);
-//        Variables tryVariables = new Variables(initial);
-//        this.tryblocks.stream()
-//            .map(BytecodeTryCatchBlock.class::cast)
-//            .map(BytecodeTryCatchBlock::handler)
-//            .map(this::index)
-//            .forEach(ind -> worklist.put(ind, tryVariables));
         final int total = this.instructions.size();
         Variables currentVars;
         while (!worklist.isEmpty()) {
@@ -695,17 +688,9 @@ public final class BytecodeMethod implements Testable {
                 .orElseThrow(() -> new IllegalStateException(""));
             int current = curr.getKey();
             worklist.remove(current);
-
-
             if (all.get(current) != null) {
                 continue;
             }
-
-//            catches(current).stream().forEach(ind -> {
-//                worklist.put(ind, new Variables(curr.getValue()));
-//            });
-
-
             currentVars = new Variables(curr.getValue());
             while (current < total) {
                 BytecodeEntry entry = this.instructions.get(current);
@@ -745,8 +730,82 @@ public final class BytecodeMethod implements Testable {
                 current++;
             }
         }
+//        __________
+//        this.tryblocks.stream().map(BytecodeTryCatchBlock.class::cast)
+//            .forEach(block -> {
+//                    final int start = this.index(block.start());
+//                    final int end = this.index(block.end());
+//                    final List<Variables> collect = all.entrySet().stream().filter(
+//                        entry -> entry.getKey() >= start && entry.getKey() <= end
+//                    ).map(Map.Entry::getValue).collect(Collectors.toList());
+//                    if (!collect.isEmpty()) {
+//                        Variables max = collect.get(0);
+//                        for (final Variables variables : collect) {
+//                            if (variables.size() > max.size()) {
+//                                max = variables;
+//                            }
+//                        }
+//                        worklist.put(
+//                            this.index(block.handler()),
+//                            new Variables(max)
+//                        );
+//                    }
+//                }
+//            );
+// ----------
+//        while (!worklist.isEmpty()) {
+//            final Map.Entry<Integer, Variables> curr = worklist.entrySet()
+//                .stream()
+//                .findFirst()
+//                .orElseThrow(() -> new IllegalStateException(""));
+//            int current = curr.getKey();
+//            worklist.remove(current);
+//            if (all.get(current) != null) {
+//                continue;
+//            }
+//            currentVars = new Variables(curr.getValue());
+//            while (current < total) {
+//                BytecodeEntry entry = this.instructions.get(current);
+//                if (entry instanceof BytecodeInstruction) {
+//                    final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
+//                    if (var.isBranchInstruction()) {
+//                        if (var.isSwitchInstruction()) {
+//                            final List<Label> offsets = var.offsets();
+//                            for (Label offset : offsets) {
+//                                final int target = this.index(offset);
+//                                worklist.put(target, new Variables(currentVars));
+//                            }
+//                            break;
+//                        } else if (var.isConditionalBranchInstruction()) {
+//                            final int jump = this.index(var.offset());
+//                            worklist.put(jump, new Variables(currentVars));
+//                            final int next = current + 1;
+//                            worklist.put(next, new Variables(currentVars));
+//                            break;
+//                        } else if (var.isReturnInstruction()) {
+//                            break;
+//                        } else {
+//                            final int jump = this.index(var.offset());
+//                            worklist.put(jump, new Variables(currentVars));
+//                            break;
+//                        }
+//                    }
+//                    if (var.isVarInstruction()) {
+//                        currentVars.put(var);
+//                    }
+//                }
+//                final Variables value = new Variables(currentVars);
+//                this.catches(current).stream().forEach(ind -> {
+//                    worklist.put(ind, new Variables(value));
+//                });
+//                all.put(current, value);
+//                current++;
+//            }
+//        }
+
         return all.values().stream().mapToInt(Variables::size).max().orElse(0);
     }
+
 
     private List<Integer> catches(final int instruction) {
         return this.tryblocks.stream().map(BytecodeTryCatchBlock.class::cast)

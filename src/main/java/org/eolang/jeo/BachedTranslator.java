@@ -54,7 +54,7 @@ public final class BachedTranslator implements Translator {
     @Override
     public Stream<Representation> apply(final Stream<? extends Representation> representations) {
         return representations
-//            .parallel()
+            .parallel()
             .map(this::translate);
     }
 
