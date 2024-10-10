@@ -32,7 +32,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.OptionalInt;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -335,7 +334,8 @@ public final class BytecodeMethod implements Testable {
 //                mvisitor.visitMaxs(this.maxs.stack(), this.maxs.locals());
                 final int stack = this.computeStack();
 //                final int locals = this.computeLocals();
-                final int locals = this.computeLocalsWithCFG();
+//                final int locals = this.computeLocalsWithCFG();
+                final int locals = this.computeLocalsWithCFG2();
                 mvisitor.visitMaxs(stack, locals);
             }
             mvisitor.visitEnd();
@@ -381,7 +381,7 @@ public final class BytecodeMethod implements Testable {
      * @return Maxs.
      */
     BytecodeMaxs computeMaxs() {
-        return new BytecodeMaxs(this.computeStack(), this.computeLocalsWithCFG());
+        return new BytecodeMaxs(this.computeStack(), this.computeLocalsWithCFG2());
     }
 
     /**
@@ -580,13 +580,201 @@ public final class BytecodeMethod implements Testable {
             final Type type = types[index];
             variables.put(index * type.getSize() + first, type.getSize());
         }
-        final OptionalInt tries = this.tryblocks.stream()
+        Map<Integer, Map<Integer, Integer>> allVariables = new HashMap<>(1);
+        allVariables.put(0, variables);
+        Deque<Integer> worklist = new ArrayDeque<>(1);
+        worklist.add(0);
+        this.tryblocks.stream()
             .map(BytecodeTryCatchBlock.class::cast)
             .map(BytecodeTryCatchBlock::handler)
             .map(this::index)
-            .mapToInt(index -> this.computeLocalsWithCFG(variables, index, new HashSet<>()))
-            .max();
-        return Math.max(tries.orElse(0), this.computeLocalsWithCFG(variables, 0, new HashSet<>()));
+            .forEach(worklist::add);
+        int MAX_RESULT = 0;
+        Map<Integer, Map<Integer, Integer>> visited = new HashMap<>(0);
+        while (!worklist.isEmpty()) {
+            int current = worklist.pop();
+            Map<Integer, Integer> vars = new HashMap<>(
+                allVariables.getOrDefault(current, new HashMap<>(0)));
+            while (current < this.instructions.size()) {
+                BytecodeEntry entry = this.instructions.get(current);
+                final String aopcode = entry.testCode();
+                System.out.println(aopcode);
+                if (entry instanceof BytecodeInstruction) {
+                    final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
+                    if (var.isBranchInstruction()) {
+                        if (var.isSwitchInstruction()) {
+                            final List<Label> offsets = var.offsets();
+                            for (Label offset : offsets) {
+                                final int target = this.index(offset);
+                                final int sum = this.size(vars);
+                                if (!visited.containsKey(target)
+                                    || size(visited.get(target)) < sum) {
+                                    visited.put(target, new HashMap<>(vars));
+                                    worklist.add(target);
+                                }
+                            }
+                            break;
+                        } else if (var.isConditionalBranchInstruction()) {
+                            final int jump = this.index(var.offset());
+                            final int sum = size(vars);
+                            if (!visited.containsKey(jump) || size(visited.get(jump)) < sum) {
+                                visited.put(jump, vars);
+                                worklist.add(jump);
+                            }
+                            final int next = current + 1;
+                            if (!visited.containsKey(next) || size(visited.get(next)) < sum) {
+                                visited.put(next, vars);
+                                worklist.add(next);
+                            }
+                            break;
+                        } else if (var.isReturnInstruction()) {
+                            break;
+                        } else {
+                            final int jump = this.index(var.offset());
+                            final int sum = size(vars);
+                            if (!visited.containsKey(jump) || size(visited.get(jump)) < sum) {
+                                visited.put(jump, vars);
+                                worklist.add(jump);
+                            }
+                            break;
+                        }
+                    }
+                    if (var.isVarInstruction()) {
+                        if (var.size() == 2) {
+                            final int key = var.localIndex();
+                            vars.put(key, 2);
+                        } else {
+                            final int key = var.localIndex();
+                            vars.put(key, 1);
+                        }
+                    }
+                    if (allVariables.get(current) == null || size(vars) > size(
+                        allVariables.get(current))) {
+                        allVariables.put(current, new HashMap<>(vars));
+                    }
+                }
+                current++;
+            }
+        }
+        return allVariables.values().stream()
+            .mapToInt(vars -> vars.values().stream().mapToInt(Integer::intValue).sum())
+            .max()
+            .orElse(0);
+    }
+
+
+    private int computeLocalsWithCFG2() {
+        Logger.info(this, "Computing locals for %s", this.properties);
+        Variables initial = new Variables();
+        int first = 0;
+        if (!this.properties.isStatic()) {
+            initial.put(0, 1);
+            first = 1;
+        }
+        final Type[] types = Type.getArgumentTypes(this.properties.descriptor());
+        for (int index = 0; index < types.length; index++) {
+            final Type type = types[index];
+            initial.put(index * type.getSize() + first, type.getSize());
+        }
+        Map<Integer, Variables> all = new TreeMap<>();
+//        all.put(0, initial);
+        Map<Integer, Variables> worklist = new HashMap<>();
+        worklist.put(0, initial);
+        this.tryblocks.stream()
+            .map(BytecodeTryCatchBlock.class::cast)
+            .map(BytecodeTryCatchBlock::handler)
+            .map(this::index)
+            .forEach(ind -> worklist.put(ind, new Variables()));
+        final int total = this.instructions.size();
+        Variables currentVars;
+        while (!worklist.isEmpty()) {
+            final Map.Entry<Integer, Variables> curr = worklist.entrySet()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException(""));
+            int current = curr.getKey();
+            worklist.remove(current);
+            if (all.get(current) != null) {
+                continue;
+            }
+            currentVars = new Variables(curr.getValue());
+            while (current < total) {
+                BytecodeEntry entry = this.instructions.get(current);
+                if (entry instanceof BytecodeInstruction) {
+                    final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
+                    if (var.isBranchInstruction()) {
+                        if (var.isSwitchInstruction()) {
+                            final List<Label> offsets = var.offsets();
+                            for (Label offset : offsets) {
+                                final int target = this.index(offset);
+                                worklist.put(target, new Variables(currentVars));
+                            }
+                            break;
+                        } else if (var.isConditionalBranchInstruction()) {
+                            final int jump = this.index(var.offset());
+                            worklist.put(jump, new Variables(currentVars));
+                            final int next = current + 1;
+                            worklist.put(next, new Variables(currentVars));
+                            break;
+                        } else if (var.isReturnInstruction()) {
+                            break;
+                        } else {
+                            final int jump = this.index(var.offset());
+                            worklist.put(jump, new Variables(currentVars));
+                            break;
+                        }
+                    }
+                    if (var.isVarInstruction()) {
+                        currentVars.put(var);
+                    }
+                }
+                all.put(current, new Variables(currentVars));
+                current++;
+            }
+        }
+        return all.values().stream().mapToInt(Variables::size).max().orElse(0);
+    }
+
+    @ToString
+    private static class Variables {
+
+        private final Map<Integer, Integer> all;
+
+        public Variables() {
+            this(new HashMap<>(0));
+        }
+
+        public Variables(final Variables vars) {
+            this(vars.all);
+        }
+
+        public Variables(final Map<Integer, Integer> all) {
+            this.all = new HashMap<>(all);
+        }
+
+        int size() {
+            return this.all.values().stream().mapToInt(Integer::intValue).sum();
+        }
+
+        public void put(BytecodeInstruction var) {
+            this.put(var.localIndex(), var.size());
+        }
+
+        public void put(int index, int value) {
+            this.all.put(index, value);
+        }
+
+        public void putSlot(int index) {
+            this.all.put(index, 1);
+        }
+
+        public void putTwoSlots(int index) {
+            this.all.put(index, 2);
+        }
+    }
+
+    private int size(Map<Integer, Integer> variables) {
+        return variables.values().stream().mapToInt(Integer::intValue).sum();
     }
 
     private int computeLocalsWithCFG(
