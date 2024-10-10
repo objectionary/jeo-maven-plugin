@@ -27,6 +27,10 @@ import java.util.List;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 
+/**
+ * Bytecode instructions flow.
+ * @since 0.6
+ */
 public final class InstructionsFlow {
 
     /**
@@ -34,18 +38,36 @@ public final class InstructionsFlow {
      */
     private final List<? extends BytecodeEntry> instructions;
 
-    public InstructionsFlow(final List<? extends BytecodeEntry> instructions) {
+    /**
+     * Constructor.
+     * @param instructions Instructions.
+     */
+    InstructionsFlow(final List<? extends BytecodeEntry> instructions) {
         this.instructions = instructions;
     }
 
+    /**
+     * Get size.
+     * @return Size.
+     */
     public int size() {
         return this.instructions.size();
     }
 
+    /**
+     * Get instruction.
+     * @param index Index.
+     * @return Instruction.
+     */
     public BytecodeEntry get(final int index) {
         return this.instructions.get(index);
     }
 
+    /**
+     * Index of the label.
+     * @param label Label.
+     * @return Index.
+     */
     int index(final Label label) {
         for (int index = 0; index < this.instructions.size(); index++) {
             final BytecodeEntry entry = this.instructions.get(index);

@@ -47,7 +47,7 @@ import org.xembly.Directive;
  */
 @ToString
 @EqualsAndHashCode
-@SuppressWarnings("PMD.ExcessiveClassLength")
+@SuppressWarnings({"PMD.ExcessiveClassLength", "PMD.GodClass"})
 public final class BytecodeInstruction implements BytecodeEntry {
 
     /**

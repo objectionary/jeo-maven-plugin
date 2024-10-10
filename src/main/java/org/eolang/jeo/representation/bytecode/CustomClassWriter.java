@@ -101,13 +101,13 @@ public final class CustomClassWriter extends ClassVisitor {
      * @param exceptions Method exceptions.
      * @param compute If frames should be computed.
      * @return Method visitor.
-     * @checkstyle ParameterNumberCheck (25 lines)
      * @todo #540:90min Compute StackMap frames for Java methods.
      *  Currently we compute only max locals and max stack values for the methods.
      *  See {@link BytecodeMethod#computeMaxs()} method.
      *  However it's not enough to compute only max locals and max stack values.
      *  We also need to compute StackMap frames for the methods.
      *  When we compute frames we can remove this class entirely.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     @SuppressWarnings("PMD.UseObjectForClearerAPI")
     MethodVisitor visitMethod(

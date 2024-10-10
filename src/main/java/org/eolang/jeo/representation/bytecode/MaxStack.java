@@ -35,6 +35,10 @@ import org.objectweb.asm.Label;
  * This class knows hot to compute the maximum size of the stack
  * that can be used by a method.
  * @since 0.6
+ * @todo #540:60min Refactor the MaxStack class.
+ *  The MaxLocals class has a high cognitive complexity. Refactor the class
+ *  to reduce the complexity. You might also extract some methods to make
+ *  the class more readable. Don't forget to remove the @SuppressWarnings.
  */
 final class MaxStack {
 
@@ -77,15 +81,17 @@ final class MaxStack {
      * Compute the maximum stack size.
      * @return Maximum stack size.
      */
+    @SuppressWarnings("CognitiveComplexity")
+
     public int value() {
         int max = 0;
         final Deque<Integer> worklist = new ArrayDeque<>(0);
         final int length = this.instructions.size();
         worklist.add(0);
-        Map<Integer, Integer> visited = new TreeMap<>();
+        final Map<Integer, Integer> visited = new TreeMap<>();
         this.blocks.stream()
             .map(BytecodeTryCatchBlock.class::cast)
-            .map(BytecodeTryCatchBlock::handler)
+            .map(BytecodeTryCatchBlock::handlerLabel)
             .map(this.instructions::index)
             .peek(ind -> visited.put(ind, 1))
             .forEach(worklist::add);
@@ -96,15 +102,15 @@ final class MaxStack {
                 BytecodeEntry entry = this.instructions.get(current);
                 stack += entry.impact();
                 max = Math.max(max, stack);
-                final int finalStack = stack;
+                final int fstack = stack;
                 visited.compute(
-                    current, (k, v) -> v == null ? finalStack : Math.max(v, finalStack)
+                    current, (k, v) -> v == null ? fstack : Math.max(v, fstack)
                 );
                 if (entry instanceof BytecodeInstruction) {
                     final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
                     if (var.isSwitch()) {
                         final List<Label> offsets = var.offsets();
-                        for (Label offset : offsets) {
+                        for (final Label offset : offsets) {
                             final int target = this.instructions.index(offset);
                             if (visited.get(target) == null
                                 || visited.get(target) < stack

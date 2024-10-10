@@ -100,7 +100,7 @@ public final class BytecodeMethod implements Testable {
      * Constructor.
      * @param instructions Method instructions.
      */
-    public BytecodeMethod(BytecodeEntry... instructions) {
+    public BytecodeMethod(final BytecodeEntry... instructions) {
         this(
             new ArrayList<>(0),
             Arrays.asList(instructions),

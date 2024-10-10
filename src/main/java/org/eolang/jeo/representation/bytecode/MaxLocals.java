@@ -37,6 +37,10 @@ import org.objectweb.asm.Type;
  * This class knows hot to compute the maximum number of local variables
  * that can be used by a method.
  * @since 0.6
+ * @todo #540:60min Refactor the MaxLocals class.
+ *  The MaxLocals class has a high cognitive complexity. Refactor the class
+ *  to reduce the complexity. You might also extract some methods to make
+ *  the class more readable. Don't forget to remove the @SuppressWarnings.
  */
 final class MaxLocals {
 
@@ -89,8 +93,9 @@ final class MaxLocals {
      * Compute the maximum number of local variables.
      * @return Maximum number of local variables.
      */
+    @SuppressWarnings("CognitiveComplexity")
     public int value() {
-        Variables initial = new Variables();
+        final Variables initial = new Variables();
         int first = 0;
         if (!this.props.isStatic()) {
             initial.put(0, 1);
@@ -118,12 +123,12 @@ final class MaxLocals {
             }
             currentVars = new Variables(curr.getValue());
             while (current < total) {
-                BytecodeEntry entry = this.instructions.get(current);
+                final BytecodeEntry entry = this.instructions.get(current);
                 if (entry instanceof BytecodeInstruction) {
                     final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
                     if (var.isSwitch()) {
                         final List<Label> offsets = var.offsets();
-                        for (Label offset : offsets) {
+                        for (final Label offset : offsets) {
                             final int target = this.instructions.index(offset);
                             worklist.put(target, new Variables(currentVars));
                         }
@@ -165,9 +170,9 @@ final class MaxLocals {
     private List<Integer> suitableBlocks(final int instruction) {
         return this.blocks.stream()
             .map(BytecodeTryCatchBlock.class::cast)
-            .filter(block -> this.instructions.index(block.start()) <= instruction)
-            .filter(block -> this.instructions.index(block.end()) >= instruction)
-            .map(block -> this.instructions.index(block.handler()))
+            .filter(block -> this.instructions.index(block.startLabel()) <= instruction)
+            .filter(block -> this.instructions.index(block.endLabel()) >= instruction)
+            .map(block -> this.instructions.index(block.handlerLabel()))
             .collect(Collectors.toList());
     }
 
@@ -181,6 +186,7 @@ final class MaxLocals {
         /**
          * All variables.
          */
+        @SuppressWarnings("PMD.LooseCoupling")
         private final TreeMap<Integer, Integer> all;
 
         /**
@@ -214,7 +220,7 @@ final class MaxLocals {
             int result = 0;
             if (!this.all.isEmpty()) {
                 final Map.Entry<Integer, Integer> entry = this.all.lastEntry();
-                result = (entry.getKey() + 1) + ((int) (entry.getValue() * 0.5));
+                result = entry.getKey() + 1 + (int) (entry.getValue() * 0.5);
             }
             return result;
         }
