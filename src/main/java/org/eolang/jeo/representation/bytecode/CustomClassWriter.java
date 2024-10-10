@@ -101,7 +101,13 @@ public final class CustomClassWriter extends ClassVisitor {
      * @param exceptions Method exceptions.
      * @param compute If frames should be computed.
      * @return Method visitor.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     * @checkstyle ParameterNumberCheck (25 lines)
+     * @todo #540:90min Compute StackMap frames for Java methods.
+     *  Currently we compute only max locals and max stack values for the methods.
+     *  See {@link BytecodeMethod#computeMaxs()} method.
+     *  However it's not enough to compute only max locals and max stack values.
+     *  We also need to compute StackMap frames for the methods.
+     *  When we compute frames we can remove this class entirely.
      */
     @SuppressWarnings("PMD.UseObjectForClearerAPI")
     MethodVisitor visitMethod(
@@ -129,15 +135,6 @@ public final class CustomClassWriter extends ClassVisitor {
      * @param signature Method signature.
      * @param exceptions Method exceptions.
      * @return Method visitor.
-     * @todo #528:90min Remove ad-hoc solution for method frames, stack and locals computation.
-     *  This method is a workaround for the issue with the ASM library that doesn't allow
-     *  to compute frames and stack values per method basis. Here I use reflection to change
-     *  the computation mode to COMPUTE_ALL_FRAMES and then restore it back to the original value.
-     *  This is a hacky solution and should be removed once the issue is fixed in the ASM library.
-     *  Another option is to compute all this values ourselves.
-     *  You can read more about this issue here:
-     *  https://stackoverflow.com/questions/78262674/how-to-mix-manual-and-automatic-calculation-of-max-locals-max-stack-and-frames
-     * @checkstyle ParameterNumberCheck (25 lines)
      */
     @SuppressWarnings({"PMD.AvoidAccessibilityAlteration", "PMD.UseObjectForClearerAPI"})
     private MethodVisitor visitMethodWithoutFrames(
