@@ -710,13 +710,13 @@ public final class BytecodeMethod implements Testable {
                             final int next = current + 1;
                             worklist.put(next, new Variables(currentVars));
                             break;
-                        } else if (var.isReturnInstruction()) {
-                            break;
                         } else {
                             final int jump = this.index(var.offset());
                             worklist.put(jump, new Variables(currentVars));
                             break;
                         }
+                    } else if (var.isReturnInstruction()) {
+                        break;
                     }
                     if (var.isVarInstruction()) {
                         currentVars.put(var);
@@ -760,7 +760,7 @@ public final class BytecodeMethod implements Testable {
 //                .orElseThrow(() -> new IllegalStateException(""));
 //            int current = curr.getKey();
 //            worklist.remove(current);
-//            if (all.get(current) != null) {
+//            if (all.get(current) != null && all.get(current).size() >= curr.getValue().size()) {
 //                continue;
 //            }
 //            currentVars = new Variables(curr.getValue());
@@ -782,13 +782,13 @@ public final class BytecodeMethod implements Testable {
 //                            final int next = current + 1;
 //                            worklist.put(next, new Variables(currentVars));
 //                            break;
-//                        } else if (var.isReturnInstruction()) {
-//                            break;
 //                        } else {
 //                            final int jump = this.index(var.offset());
 //                            worklist.put(jump, new Variables(currentVars));
 //                            break;
 //                        }
+//                    } else if (var.isReturnInstruction()) {
+//                        break;
 //                    }
 //                    if (var.isVarInstruction()) {
 //                        currentVars.put(var);
@@ -820,7 +820,7 @@ public final class BytecodeMethod implements Testable {
     @ToString
     private static class Variables {
 
-        private final Map<Integer, Integer> all;
+        private final TreeMap<Integer, Integer> all;
 
         public Variables() {
             this(new HashMap<>(0));
@@ -831,11 +831,16 @@ public final class BytecodeMethod implements Testable {
         }
 
         public Variables(final Map<Integer, Integer> all) {
-            this.all = new HashMap<>(all);
+            this.all = new TreeMap<>(all);
         }
 
         int size() {
-            return this.all.values().stream().mapToInt(Integer::intValue).sum();
+            if (all.isEmpty()) {
+                return 0;
+            }
+            final Map.Entry<Integer, Integer> entry = all.lastEntry();
+            return (entry.getKey() + 1) + ((int) (entry.getValue() * 0.5));
+//            return this.all.values().stream().mapToInt(Integer::intValue).sum();
         }
 
         public void put(BytecodeInstruction var) {
@@ -844,14 +849,6 @@ public final class BytecodeMethod implements Testable {
 
         public void put(int index, int value) {
             this.all.put(index, value);
-        }
-
-        public void putSlot(int index) {
-            this.all.put(index, 1);
-        }
-
-        public void putTwoSlots(int index) {
-            this.all.put(index, 2);
         }
     }
 
