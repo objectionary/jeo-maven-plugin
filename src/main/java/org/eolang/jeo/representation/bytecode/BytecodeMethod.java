@@ -508,73 +508,80 @@ public final class BytecodeMethod implements Testable {
      * @return Max local variables.
      */
     private int computeLocals() {
-        Logger.info(this, "Computing locals for %s", this.properties);
-        Variables initial = new Variables();
-        int first = 0;
-        if (!this.properties.isStatic()) {
-            initial.put(0, 1);
-            first = 1;
-        }
-        final Type[] types = Type.getArgumentTypes(this.properties.descriptor());
-        for (int index = 0; index < types.length; index++) {
-            final Type type = types[index];
-            initial.put(index * type.getSize() + first, type.getSize());
-        }
-        Map<Integer, Variables> all = new TreeMap<>();
-        Map<Integer, Variables> worklist = new HashMap<>();
-        worklist.put(0, initial);
-        final int total = this.instructions.size();
-        Variables currentVars;
-        while (!worklist.isEmpty()) {
-            final Map.Entry<Integer, Variables> curr = worklist.entrySet()
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException(""));
-            int current = curr.getKey();
-            worklist.remove(current);
-            if (all.get(current) != null) {
-                continue;
-            }
-            currentVars = new Variables(curr.getValue());
-            while (current < total) {
-                BytecodeEntry entry = this.instructions.get(current);
-                if (entry instanceof BytecodeInstruction) {
-                    final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
-                    if (var.isBranchInstruction()) {
-                        if (var.isSwitchInstruction()) {
-                            final List<Label> offsets = var.offsets();
-                            for (Label offset : offsets) {
-                                final int target = this.index(offset);
-                                worklist.put(target, new Variables(currentVars));
-                            }
-                            break;
-                        } else if (var.isConditionalBranchInstruction()) {
-                            final int jump = this.index(var.offset());
-                            worklist.put(jump, new Variables(currentVars));
-                            final int next = current + 1;
-                            worklist.put(next, new Variables(currentVars));
-                            break;
-                        } else {
-                            final int jump = this.index(var.offset());
-                            worklist.put(jump, new Variables(currentVars));
-                            break;
-                        }
-                    } else if (var.isReturnInstruction()) {
-                        break;
-                    }
-                    if (var.isVarInstruction()) {
-                        currentVars.put(var);
-                    }
-                }
-                final Variables value = new Variables(currentVars);
-                this.catches(current).stream().forEach(ind -> {
-                    worklist.put(ind, new Variables(value));
-                });
-                all.put(current, value);
-                current++;
-            }
-        }
-        return all.values().stream().mapToInt(Variables::size).max().orElse(0);
+        return new MaxLocals(
+            this.properties, this.instructions,
+            this.tryblocks.stream()
+                .filter(BytecodeTryCatchBlock.class::isInstance)
+                .map(BytecodeTryCatchBlock.class::cast)
+                .collect(Collectors.toList())
+        ).value();
+//        Logger.info(this, "Computing locals for %s", this.properties);
+//        Variables initial = new Variables();
+//        int first = 0;
+//        if (!this.properties.isStatic()) {
+//            initial.put(0, 1);
+//            first = 1;
+//        }
+//        final Type[] types = Type.getArgumentTypes(this.properties.descriptor());
+//        for (int index = 0; index < types.length; index++) {
+//            final Type type = types[index];
+//            initial.put(index * type.getSize() + first, type.getSize());
+//        }
+//        Map<Integer, Variables> all = new TreeMap<>();
+//        Map<Integer, Variables> worklist = new HashMap<>();
+//        worklist.put(0, initial);
+//        final int total = this.instructions.size();
+//        Variables currentVars;
+//        while (!worklist.isEmpty()) {
+//            final Map.Entry<Integer, Variables> curr = worklist.entrySet()
+//                .stream()
+//                .findFirst()
+//                .orElseThrow(() -> new IllegalStateException(""));
+//            int current = curr.getKey();
+//            worklist.remove(current);
+//            if (all.get(current) != null) {
+//                continue;
+//            }
+//            currentVars = new Variables(curr.getValue());
+//            while (current < total) {
+//                BytecodeEntry entry = this.instructions.get(current);
+//                if (entry instanceof BytecodeInstruction) {
+//                    final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
+//                    if (var.isBranchInstruction()) {
+//                        if (var.isSwitchInstruction()) {
+//                            final List<Label> offsets = var.offsets();
+//                            for (Label offset : offsets) {
+//                                final int target = this.index(offset);
+//                                worklist.put(target, new Variables(currentVars));
+//                            }
+//                            break;
+//                        } else if (var.isConditionalBranchInstruction()) {
+//                            final int jump = this.index(var.offset());
+//                            worklist.put(jump, new Variables(currentVars));
+//                            final int next = current + 1;
+//                            worklist.put(next, new Variables(currentVars));
+//                            break;
+//                        } else {
+//                            final int jump = this.index(var.offset());
+//                            worklist.put(jump, new Variables(currentVars));
+//                            break;
+//                        }
+//                    } else if (var.isReturnInstruction()) {
+//                        break;
+//                    }
+//                    if (var.isVarInstruction()) {
+//                        currentVars.put(var);
+//                    }
+//                }
+//                final Variables value = new Variables(currentVars);
+//                this.catches(current).stream().forEach(ind -> {
+//                    worklist.put(ind, new Variables(value));
+//                });
+//                all.put(current, value);
+//                current++;
+//            }
+//        }
+//        return all.values().stream().mapToInt(Variables::size).max().orElse(0);
     }
 
     private List<Integer> catches(final int instruction) {
