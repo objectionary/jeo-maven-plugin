@@ -680,11 +680,12 @@ public final class BytecodeMethod implements Testable {
 //        all.put(0, initial);
         Map<Integer, Variables> worklist = new HashMap<>();
         worklist.put(0, initial);
-        this.tryblocks.stream()
-            .map(BytecodeTryCatchBlock.class::cast)
-            .map(BytecodeTryCatchBlock::handler)
-            .map(this::index)
-            .forEach(ind -> worklist.put(ind, new Variables()));
+//        Variables tryVariables = new Variables(initial);
+//        this.tryblocks.stream()
+//            .map(BytecodeTryCatchBlock.class::cast)
+//            .map(BytecodeTryCatchBlock::handler)
+//            .map(this::index)
+//            .forEach(ind -> worklist.put(ind, tryVariables));
         final int total = this.instructions.size();
         Variables currentVars;
         while (!worklist.isEmpty()) {
@@ -694,9 +695,17 @@ public final class BytecodeMethod implements Testable {
                 .orElseThrow(() -> new IllegalStateException(""));
             int current = curr.getKey();
             worklist.remove(current);
+
+
             if (all.get(current) != null) {
                 continue;
             }
+
+            catches(current).stream().forEach(ind -> {
+                worklist.put(ind, new Variables(curr.getValue()));
+            });
+
+
             currentVars = new Variables(curr.getValue());
             while (current < total) {
                 BytecodeEntry entry = this.instructions.get(current);
@@ -728,11 +737,22 @@ public final class BytecodeMethod implements Testable {
                         currentVars.put(var);
                     }
                 }
-                all.put(current, new Variables(currentVars));
+                final Variables value = new Variables(currentVars);
+                all.put(current, value);
                 current++;
             }
         }
         return all.values().stream().mapToInt(Variables::size).max().orElse(0);
+    }
+
+    private List<Integer> catches(final int instruction) {
+        return this.tryblocks.stream().map(BytecodeTryCatchBlock.class::cast)
+            .filter(
+                block -> index(block.start()) <= instruction
+                    && index(block.end()) >= instruction
+            ).map(
+                block -> index(block.handler())
+            ).collect(Collectors.toList());
     }
 
     @ToString
