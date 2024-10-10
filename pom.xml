@@ -335,7 +335,7 @@ SOFTWARE.
             <configuration>
               <license>file:${basedir}/LICENSE.txt</license>
               <excludes>
-                <exclude>checkstyle:.*/BytecodeInstructionEntry.java</exclude>
+                <exclude>checkstyle:.*/BytecodeInstruction.java</exclude>
                 <exclude>pmd:/src/test/resources/.*</exclude>
                 <exclude>pmd:/src/it/.*</exclude>
                 <exclude>checkstyle:/src/site/.*</exclude>
