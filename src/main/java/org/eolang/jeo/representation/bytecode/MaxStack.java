@@ -102,48 +102,46 @@ final class MaxStack {
                 );
                 if (entry instanceof BytecodeInstruction) {
                     final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
-                    if (var.isBranch()) {
-                        if (var.isSwitch()) {
-                            final List<Label> offsets = var.offsets();
-                            for (Label offset : offsets) {
-                                final int target = this.instructions.index(offset);
-                                if (visited.get(target) == null
-                                    || visited.get(target) < stack
-                                ) {
-                                    visited.put(target, stack);
-                                    worklist.add(target);
-                                }
-                            }
-                            break;
-                        } else if (var.isConditionalBranch()) {
-                            final Label label = var.jump();
-                            final int jump = this.instructions.index(label);
-                            if (visited.get(jump) == null
-                                || visited.get(jump) < stack
+                    if (var.isSwitch()) {
+                        final List<Label> offsets = var.offsets();
+                        for (Label offset : offsets) {
+                            final int target = this.instructions.index(offset);
+                            if (visited.get(target) == null
+                                || visited.get(target) < stack
                             ) {
-                                visited.put(jump, stack);
-                                worklist.add(jump);
-
+                                visited.put(target, stack);
+                                worklist.add(target);
                             }
-                            final int next = current + 1;
-                            if (visited.get(next) == null
-                                || visited.get(next) < stack
-                            ) {
-                                visited.put(next, stack);
-                                worklist.add(next);
-                            }
-                            break;
-                        } else {
-                            final Label label = var.jump();
-                            final int jump = this.instructions.index(label);
-                            if (visited.get(jump) == null
-                                || visited.get(jump) < stack
-                            ) {
-                                visited.put(jump, stack);
-                                worklist.add(jump);
-                            }
-                            break;
                         }
+                        break;
+                    } else if (var.isBranch()) {
+                        final Label label = var.jump();
+                        final int jump = this.instructions.index(label);
+                        if (visited.get(jump) == null
+                            || visited.get(jump) < stack
+                        ) {
+                            visited.put(jump, stack);
+                            worklist.add(jump);
+
+                        }
+                        final int next = current + 1;
+                        if (visited.get(next) == null
+                            || visited.get(next) < stack
+                        ) {
+                            visited.put(next, stack);
+                            worklist.add(next);
+                        }
+                        break;
+                    } else if (var.isJump()) {
+                        final Label label = var.jump();
+                        final int jump = this.instructions.index(label);
+                        if (visited.get(jump) == null
+                            || visited.get(jump) < stack
+                        ) {
+                            visited.put(jump, stack);
+                            worklist.add(jump);
+                        }
+                        break;
                     } else if (var.isReturn()) {
                         break;
                     }

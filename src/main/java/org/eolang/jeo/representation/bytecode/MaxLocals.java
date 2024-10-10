@@ -85,6 +85,10 @@ final class MaxLocals {
         this.blocks = catches;
     }
 
+    /**
+     * Compute the maximum number of local variables.
+     * @return Maximum number of local variables.
+     */
     public int value() {
         Variables initial = new Variables();
         int first = 0;
@@ -117,31 +121,28 @@ final class MaxLocals {
                 BytecodeEntry entry = this.instructions.get(current);
                 if (entry instanceof BytecodeInstruction) {
                     final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
-                    if (var.isBranch()) {
-                        if (var.isSwitch()) {
-                            final List<Label> offsets = var.offsets();
-                            for (Label offset : offsets) {
-                                final int target = this.instructions.index(offset);
-                                worklist.put(target, new Variables(currentVars));
-                            }
-                            break;
-                        } else if (var.isConditionalBranch()) {
-                            final Label label = var.jump();
-                            final int jump = this.instructions.index(label);
-                            worklist.put(jump, new Variables(currentVars));
-                            final int next = current + 1;
-                            worklist.put(next, new Variables(currentVars));
-                            break;
-                        } else {
-                            final Label label = var.jump();
-                            final int jump = this.instructions.index(label);
-                            worklist.put(jump, new Variables(currentVars));
-                            break;
+                    if (var.isSwitch()) {
+                        final List<Label> offsets = var.offsets();
+                        for (Label offset : offsets) {
+                            final int target = this.instructions.index(offset);
+                            worklist.put(target, new Variables(currentVars));
                         }
+                        break;
+                    } else if (var.isBranch()) {
+                        final Label label = var.jump();
+                        final int jump = this.instructions.index(label);
+                        worklist.put(jump, new Variables(currentVars));
+                        final int next = current + 1;
+                        worklist.put(next, new Variables(currentVars));
+                        break;
+                    } else if (var.isJump()) {
+                        final Label label = var.jump();
+                        final int jump = this.instructions.index(label);
+                        worklist.put(jump, new Variables(currentVars));
+                        break;
                     } else if (var.isReturn()) {
                         break;
-                    }
-                    if (var.isVarInstruction()) {
+                    } else if (var.isVarInstruction()) {
                         currentVars.put(var);
                     }
                 }
@@ -211,8 +212,8 @@ final class MaxLocals {
          */
         int size() {
             int result = 0;
-            if (!all.isEmpty()) {
-                final Map.Entry<Integer, Integer> entry = all.lastEntry();
+            if (!this.all.isEmpty()) {
+                final Map.Entry<Integer, Integer> entry = this.all.lastEntry();
                 result = (entry.getKey() + 1) + ((int) (entry.getValue() * 0.5));
             }
             return result;

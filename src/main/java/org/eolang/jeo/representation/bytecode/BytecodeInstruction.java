@@ -414,47 +414,18 @@ public final class BytecodeInstruction implements BytecodeEntry {
     }
 
     /**
-     * Is this instruction a branch instruction?
+     * Is this instruction a jump instruction?
      * @return True if it is.
      */
-    boolean isBranch() {
-        final boolean result;
-        switch (Instruction.find(this.opcode)) {
-            case GOTO:
-            case JSR:
-            case RET:
-            case IFEQ:
-            case IFNE:
-            case IFLT:
-            case IFGE:
-            case IFGT:
-            case IFLE:
-            case IF_ICMPEQ:
-            case IF_ICMPNE:
-            case IF_ICMPLT:
-            case IF_ICMPGE:
-            case IF_ICMPGT:
-            case IF_ICMPLE:
-            case IF_ACMPEQ:
-            case IF_ACMPNE:
-            case IFNULL:
-            case IFNONNULL:
-            case TABLESWITCH:
-            case LOOKUPSWITCH:
-                result = true;
-                break;
-            default:
-                result = false;
-                break;
-        }
-        return result;
+    boolean isJump() {
+        return Instruction.find(this.opcode) == Instruction.GOTO;
     }
 
     /**
      * Is this instruction a conditional branch instruction?
      * @return True if it is.
      */
-    boolean isConditionalBranch() {
+    boolean isBranch() {
         final boolean result;
         switch (Instruction.find(this.opcode)) {
             case IFEQ:
