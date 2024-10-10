@@ -701,9 +701,9 @@ public final class BytecodeMethod implements Testable {
                 continue;
             }
 
-            catches(current).stream().forEach(ind -> {
-                worklist.put(ind, new Variables(curr.getValue()));
-            });
+//            catches(current).stream().forEach(ind -> {
+//                worklist.put(ind, new Variables(curr.getValue()));
+//            });
 
 
             currentVars = new Variables(curr.getValue());
@@ -738,6 +738,9 @@ public final class BytecodeMethod implements Testable {
                     }
                 }
                 final Variables value = new Variables(currentVars);
+                this.catches(current).stream().forEach(ind -> {
+                    worklist.put(ind, new Variables(value));
+                });
                 all.put(current, value);
                 current++;
             }

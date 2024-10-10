@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import java.util.ArrayList;
 
 
 /**
@@ -793,6 +794,40 @@ public class Maxs {
             return connection.getContentLengthLong();
         }
     }
+    private final Object statusListenerListLock = new Object();
+    private final List<Object> statusListenerList = new ArrayList<>();
+
+    public boolean add(Object listener) {
+        synchronized (this.statusListenerListLock) {
+            if (listener instanceof String) {
+                boolean isPresent = this.checkForPresence(this.statusListenerList, listener.getClass());
+                if (isPresent) {
+                    return false;
+                }
+            }
+            this.statusListenerList.add(listener);
+            return true;
+        }
+    }
+
+    private boolean checkForPresence(List<Object> list, Class<?> cls) {
+        for (Object obj : list) {
+            if (obj.getClass().equals(cls)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void displayListeners() {
+        synchronized (this.statusListenerListLock) {
+            System.out.println("Current Listeners:");
+            for (Object listener : statusListenerList) {
+                System.out.println(" - " + listener + " (" + listener.getClass().getSimpleName() + ")");
+            }
+        }
+    }
+
 
     // Inner class to add complexity
     private class Inner {
