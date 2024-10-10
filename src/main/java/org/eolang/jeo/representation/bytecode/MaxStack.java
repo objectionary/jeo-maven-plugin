@@ -39,6 +39,10 @@ import org.objectweb.asm.Label;
  *  The MaxLocals class has a high cognitive complexity. Refactor the class
  *  to reduce the complexity. You might also extract some methods to make
  *  the class more readable. Don't forget to remove the @SuppressWarnings.
+ * @checkstyle CyclomaticComplexityCheck (500 lines)
+ * @checkstyle JavaNCSSCheck (500 lines)
+ * @checkstyle AvoidInlineConditionalsCheck (500 lines)
+ * @checkstyle NestedIfDepthCheck (500 lines)
  */
 final class MaxStack {
 
@@ -81,8 +85,7 @@ final class MaxStack {
      * Compute the maximum stack size.
      * @return Maximum stack size.
      */
-    @SuppressWarnings("CognitiveComplexity")
-
+    @SuppressWarnings("PMD.CognitiveComplexity")
     public int value() {
         int max = 0;
         final Deque<Integer> worklist = new ArrayDeque<>(0);
@@ -99,7 +102,7 @@ final class MaxStack {
             int current = worklist.pop();
             int stack = visited.get(current) == null ? 0 : visited.get(current);
             while (current < length) {
-                BytecodeEntry entry = this.instructions.get(current);
+                final BytecodeEntry entry = this.instructions.get(current);
                 stack += entry.impact();
                 max = Math.max(max, stack);
                 final int fstack = stack;
@@ -128,7 +131,6 @@ final class MaxStack {
                         ) {
                             visited.put(jump, stack);
                             worklist.add(jump);
-
                         }
                         final int next = current + 1;
                         if (visited.get(next) == null
@@ -152,7 +154,7 @@ final class MaxStack {
                         break;
                     }
                 }
-                current++;
+                ++current;
             }
         }
         return max;

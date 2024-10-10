@@ -135,6 +135,7 @@ public final class CustomClassWriter extends ClassVisitor {
      * @param signature Method signature.
      * @param exceptions Method exceptions.
      * @return Method visitor.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     @SuppressWarnings({"PMD.AvoidAccessibilityAlteration", "PMD.UseObjectForClearerAPI"})
     private MethodVisitor visitMethodWithoutFrames(

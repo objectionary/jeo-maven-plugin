@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -42,12 +43,12 @@ import org.xembly.Directive;
 
 /**
  * Bytecode instruction.
- *
- * @since 0.1.0
+ * @since 0.1
+ * @checkstyle FileLengthCheck (2000 lines)
  */
 @ToString
 @EqualsAndHashCode
-@SuppressWarnings({"PMD.ExcessiveClassLength", "PMD.GodClass"})
+@SuppressWarnings({"PMD.ExcessiveClassLength", "PMD.GodClass", "PMD.TooManyMethods"})
 public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
@@ -100,7 +101,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Constructor.
-     *
+     * @param labels All labels.
      * @param opcode Opcode.
      * @param args Arguments.
      */
@@ -134,57 +135,42 @@ public final class BytecodeInstruction implements BytecodeEntry {
         return true;
     }
 
-    /**
-     * Is this instruction a variable instruction?
-     * @return True if it is.
-     */
-    public boolean isVarInstruction() {
-        return Instruction.find(this.opcode).isVarInstruction();
-    }
-
-    /**
-     * Local variable index.
-     * @return Local variable index.
-     */
-    int varIndex() {
-        this.assertVarInstruction();
-        return (int) this.args.get(0);
-    }
-
-    /**
-     * Local variable size.
-     * @return Local variable size.
-     */
-    int varSize() {
-        this.assertVarInstruction();
-        return Instruction.find(this.opcode).size();
-    }
-
     @ToString.Include
     @Override
     public String testCode() {
-        final String args = Stream.concat(
-            Stream.of(String.format("Opcodes.%s", new OpcodeName(this.opcode).simplified())),
-            this.args.stream().map(arg -> {
-                if (arg instanceof String) {
-                    return String.format("\"%s\"", arg);
-                }
-                if (arg instanceof Label) {
-                    return String.format(
-                        "labels.label(\"%s\")",
-                        this.labels.uid((Label) arg)
-                    );
-                }
-                return String.valueOf(arg);
-            })
-        ).collect(Collectors.joining(", "));
-        return String.format(".opcode(%s)", args);
+        return String.format(
+            ".opcode(%s)",
+            Stream.concat(
+                Stream.of(String.format("Opcodes.%s", new OpcodeName(this.opcode).simplified())),
+                this.args.stream().map(
+                    arg -> {
+                        final String result;
+                        if (arg instanceof String) {
+                            result = String.format("\"%s\"", arg);
+                        } else if (arg instanceof Label) {
+                            result = String.format(
+                                "labels.label(\"%s\")",
+                                this.labels.uid((Label) arg)
+                            );
+                        } else {
+                            result = String.valueOf(arg);
+                        }
+                        return result;
+                    }
+                )
+            ).collect(Collectors.joining(", "))
+        );
     }
 
     /**
      * Impact of each instruction on the stack.
      * @return Stack impact.
+     * @checkstyle CyclomaticComplexityCheck (350 lines)
+     * @checkstyle MethodLengthCheck (350 lines)
+     * @checkstyle JavaNCSSCheck (350 lines)
+     * @checkstyle AvoidNestedBlocksCheck (350 lines)
      */
+    @SuppressWarnings("PMD.NcssCount")
     public int impact() {
         final int result;
         final Instruction instruction = Instruction.find(this.opcode);
@@ -373,20 +359,20 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 ) - 1;
                 break;
             case PUTFIELD:
-                result = (BytecodeInstruction.size(
+                result = BytecodeInstruction.size(
                     Type.getType(String.valueOf(this.args.get(2)))
-                ) * -1) - 1;
+                ) * -1 - 1;
                 break;
             case INVOKEVIRTUAL:
             case INVOKESPECIAL:
             case INVOKEINTERFACE:
-                result = this.methodImpact(String.valueOf(this.args.get(2))) - 1;
+                result = BytecodeInstruction.methodImpact(String.valueOf(this.args.get(2))) - 1;
                 break;
             case INVOKESTATIC:
-                result = this.methodImpact(String.valueOf(this.args.get(2)));
+                result = BytecodeInstruction.methodImpact(String.valueOf(this.args.get(2)));
                 break;
             case INVOKEDYNAMIC:
-                result = this.methodImpact(String.valueOf(this.args.get(1)));
+                result = BytecodeInstruction.methodImpact(String.valueOf(this.args.get(1)));
                 break;
             case MULTIANEWARRAY:
                 result = -(int) (this.args.get(1)) + 1;
@@ -402,15 +388,29 @@ public final class BytecodeInstruction implements BytecodeEntry {
     }
 
     /**
-     * Impact of the method invocation on stack.
-     * @param descriptor Method descriptor.
-     * @return Impact.
+     * Is this instruction a variable instruction?
+     * @return True if it is.
      */
-    private int methodImpact(final String descriptor) {
-        return BytecodeInstruction.size(Type.getReturnType(descriptor)) -
-            Arrays.stream(Type.getArgumentTypes(descriptor))
-                .mapToInt(BytecodeInstruction::size)
-                .sum();
+    boolean isVarInstruction() {
+        return Instruction.find(this.opcode).isVarInstruction();
+    }
+
+    /**
+     * Local variable index.
+     * @return Local variable index.
+     */
+    int varIndex() {
+        this.assertVarInstruction();
+        return (int) this.args.get(0);
+    }
+
+    /**
+     * Local variable size.
+     * @return Local variable size.
+     */
+    int varSize() {
+        this.assertVarInstruction();
+        return Instruction.find(this.opcode).size();
     }
 
     /**
@@ -424,6 +424,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
     /**
      * Is this instruction a conditional branch instruction?
      * @return True if it is.
+     * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
     boolean isBranch() {
         final boolean result;
@@ -476,6 +477,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * @return True if it is.
      */
     boolean isReturn() {
+        final boolean result;
         switch (Instruction.find(this.opcode)) {
             case IRETURN:
             case FRETURN:
@@ -483,12 +485,19 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case LRETURN:
             case DRETURN:
             case RETURN:
-                return true;
+                result = true;
+                break;
             default:
-                return false;
+                result = false;
+                break;
         }
+        return result;
     }
 
+    /**
+     * Switch offcests.
+     * @return Offsets.
+     */
     List<Label> offsets() {
         switch (Instruction.find(this.opcode)) {
             case TABLESWITCH:
@@ -511,6 +520,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * Jump to a label.
      * Where to jump.
      * @return Jump label.
+     * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
     Label jump() {
         switch (Instruction.find(this.opcode)) {
@@ -565,14 +575,26 @@ public final class BytecodeInstruction implements BytecodeEntry {
      */
     private static int size(final Type type) {
         final int result;
-        if (type == Type.DOUBLE_TYPE || type == Type.LONG_TYPE) {
+        if (Objects.equals(type, Type.DOUBLE_TYPE) || Objects.equals(type, Type.LONG_TYPE)) {
             result = 2;
-        } else if (type == Type.VOID_TYPE) {
+        } else if (Objects.equals(type, Type.VOID_TYPE)) {
             result = 0;
         } else {
             result = 1;
         }
         return result;
+    }
+
+    /**
+     * Impact of the method invocation on stack.
+     * @param descriptor Method descriptor.
+     * @return Impact.
+     */
+    private static int methodImpact(final String descriptor) {
+        return BytecodeInstruction.size(Type.getReturnType(descriptor))
+            - Arrays.stream(Type.getArgumentTypes(descriptor))
+            .mapToInt(BytecodeInstruction::size)
+            .sum();
     }
 
     /**
@@ -598,7 +620,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
         ),
 
         /**
-         * Load the int value −1 onto the stack
+         * Load the int value −1 onto the stack.
          */
         ICONST_M1(Opcodes.ICONST_M1, (visitor, arguments) ->
             visitor.visitInsn(Opcodes.ICONST_M1)
@@ -1529,7 +1551,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
         ),
 
         /**
-         * Jump to subroutine at branchoffset
+         * Jump to subroutine at branch offset.
          */
         JSR(Opcodes.JSR, (visitor, arguments) ->
             visitor.visitJumpInsn(
@@ -1571,17 +1593,17 @@ public final class BytecodeInstruction implements BytecodeEntry {
          * continues from the instruction at that address
          */
         LOOKUPSWITCH(Opcodes.LOOKUPSWITCH, (visitor, arguments) -> {
-            final List<Label> labels = arguments.stream()
+            final List<Label> lbls = arguments.stream()
                 .filter(Label.class::isInstance)
                 .map(Label.class::cast)
                 .collect(Collectors.toList());
             visitor.visitLookupSwitchInsn(
-                labels.get(0),
+                lbls.get(0),
                 arguments.stream()
                     .filter(Integer.class::isInstance)
                     .mapToInt(Integer.class::cast)
                     .toArray(),
-                labels.subList(1, labels.size()).toArray(new Label[0])
+                lbls.subList(1, lbls.size()).toArray(new Label[0])
             );
         }
         ),
@@ -1899,6 +1921,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
         /**
          * Check if the instruction is a variable instruction.
          * @return True if the instruction is a variable instruction.
+         * @checkstyle CyclomaticComplexityCheck (50 lines)
          */
         boolean isVarInstruction() {
             final boolean result;
@@ -1924,8 +1947,9 @@ public final class BytecodeInstruction implements BytecodeEntry {
         }
 
         /**
-         * Local variable size
-         * @return Local variable size
+         * Local variable size.
+         * @return Local variable size.
+         * @checkstyle CyclomaticComplexityCheck (50 lines)
          */
         int size() {
             final int res;

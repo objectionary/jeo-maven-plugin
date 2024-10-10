@@ -41,6 +41,10 @@ import org.objectweb.asm.Type;
  *  The MaxLocals class has a high cognitive complexity. Refactor the class
  *  to reduce the complexity. You might also extract some methods to make
  *  the class more readable. Don't forget to remove the @SuppressWarnings.
+ * @checkstyle CyclomaticComplexityCheck (500 lines)
+ * @checkstyle JavaNCSSCheck (500 lines)
+ * @checkstyle AvoidInlineConditionalsCheck (500 lines)
+ * @checkstyle NestedIfDepthCheck (500 lines)
  */
 final class MaxLocals {
 
@@ -92,8 +96,9 @@ final class MaxLocals {
     /**
      * Compute the maximum number of local variables.
      * @return Maximum number of local variables.
+     * @checkstyle ExecutableStatementCountCheck (100 lines)
      */
-    @SuppressWarnings("CognitiveComplexity")
+    @SuppressWarnings("PMD.CognitiveComplexity")
     public int value() {
         final Variables initial = new Variables();
         int first = 0;
@@ -102,7 +107,7 @@ final class MaxLocals {
             first = 1;
         }
         final Type[] types = Type.getArgumentTypes(this.props.descriptor());
-        for (int index = 0; index < types.length; index++) {
+        for (int index = 0; index < types.length; ++index) {
             final Type type = types[index];
             initial.put(index * type.getSize() + first, type.getSize());
         }
@@ -110,7 +115,7 @@ final class MaxLocals {
         final Map<Integer, Variables> worklist = new HashMap<>(0);
         worklist.put(0, initial);
         final int total = this.instructions.size();
-        Variables currentVars;
+        Variables currentv;
         while (!worklist.isEmpty()) {
             final Map.Entry<Integer, Variables> curr = worklist.entrySet()
                 .stream()
@@ -121,7 +126,7 @@ final class MaxLocals {
             if (all.get(current) != null) {
                 continue;
             }
-            currentVars = new Variables(curr.getValue());
+            currentv = new Variables(curr.getValue());
             while (current < total) {
                 final BytecodeEntry entry = this.instructions.get(current);
                 if (entry instanceof BytecodeInstruction) {
@@ -130,33 +135,32 @@ final class MaxLocals {
                         final List<Label> offsets = var.offsets();
                         for (final Label offset : offsets) {
                             final int target = this.instructions.index(offset);
-                            worklist.put(target, new Variables(currentVars));
+                            worklist.put(target, new Variables(currentv));
                         }
                         break;
                     } else if (var.isBranch()) {
                         final Label label = var.jump();
                         final int jump = this.instructions.index(label);
-                        worklist.put(jump, new Variables(currentVars));
+                        worklist.put(jump, new Variables(currentv));
                         final int next = current + 1;
-                        worklist.put(next, new Variables(currentVars));
+                        worklist.put(next, new Variables(currentv));
                         break;
                     } else if (var.isJump()) {
                         final Label label = var.jump();
                         final int jump = this.instructions.index(label);
-                        worklist.put(jump, new Variables(currentVars));
+                        worklist.put(jump, new Variables(currentv));
                         break;
                     } else if (var.isReturn()) {
                         break;
                     } else if (var.isVarInstruction()) {
-                        currentVars.put(var);
+                        currentv.put(var);
                     }
                 }
-                final Variables value = new Variables(currentVars);
-                this.suitableBlocks(current).stream().forEach(ind -> {
-                    worklist.put(ind, new Variables(value));
-                });
+                final Variables value = new Variables(currentv);
+                this.suitableBlocks(current)
+                    .forEach(ind -> worklist.put(ind, new Variables(value)));
                 all.put(current, value);
-                current++;
+                ++current;
             }
         }
         return all.values().stream().mapToInt(Variables::size).max().orElse(0);
@@ -185,6 +189,7 @@ final class MaxLocals {
 
         /**
          * All variables.
+         * @checkstyle IllegalTypeCheck (5 lines)
          */
         @SuppressWarnings("PMD.LooseCoupling")
         private final TreeMap<Integer, Integer> all;
@@ -227,7 +232,7 @@ final class MaxLocals {
 
         /**
          * Put variable.
-         * @param var
+         * @param var Variable.
          */
         void put(final BytecodeInstruction var) {
             this.put(var.varIndex(), var.varSize());

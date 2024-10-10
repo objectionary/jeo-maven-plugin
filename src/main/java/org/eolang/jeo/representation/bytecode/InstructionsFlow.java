@@ -69,11 +69,8 @@ public final class InstructionsFlow {
      * @return Index.
      */
     int index(final Label label) {
-        for (int index = 0; index < this.instructions.size(); index++) {
-            final BytecodeEntry entry = this.instructions.get(index);
-            final BytecodeLabel obj = new BytecodeLabel(label, new AllLabels());
-            final boolean equals = entry.equals(obj);
-            if (equals) {
+        for (int index = 0; index < this.instructions.size(); ++index) {
+            if (this.instructions.get(index).equals(new BytecodeLabel(label, new AllLabels()))) {
                 return index;
             }
         }
