@@ -139,7 +139,7 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
-    public int stackImpact() {
+    public int impact() {
         return 0;
     }
 

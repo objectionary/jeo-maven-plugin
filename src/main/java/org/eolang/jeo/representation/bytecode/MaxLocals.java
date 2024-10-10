@@ -41,13 +41,24 @@ import org.objectweb.asm.Type;
  */
 final class MaxLocals {
 
+    /**
+     * Method properties.
+     */
     private final BytecodeMethodProperties props;
+
+    /**
+     * Method instructions.
+     */
     private final InstructionsFlow instructions;
+
+    /**
+     * Try-catch blocks.
+     */
     private final List<BytecodeTryCatchBlock> blocks;
 
     MaxLocals(
         final BytecodeMethodProperties props,
-        final List<BytecodeEntry> instructions,
+        final List<? extends BytecodeEntry> instructions,
         final List<BytecodeTryCatchBlock> catches
     ) {
         this(props, new InstructionsFlow(instructions), catches);
@@ -96,28 +107,28 @@ final class MaxLocals {
                 BytecodeEntry entry = this.instructions.get(current);
                 if (entry instanceof BytecodeInstruction) {
                     final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
-                    if (var.isBranchInstruction()) {
-                        if (var.isSwitchInstruction()) {
+                    if (var.isBranch()) {
+                        if (var.isSwitch()) {
                             final List<Label> offsets = var.offsets();
                             for (Label offset : offsets) {
                                 final int target = this.instructions.index(offset);
                                 worklist.put(target, new Variables(currentVars));
                             }
                             break;
-                        } else if (var.isConditionalBranchInstruction()) {
-                            final Label label = var.offset();
+                        } else if (var.isConditionalBranch()) {
+                            final Label label = var.jump();
                             final int jump = this.instructions.index(label);
                             worklist.put(jump, new Variables(currentVars));
                             final int next = current + 1;
                             worklist.put(next, new Variables(currentVars));
                             break;
                         } else {
-                            final Label label = var.offset();
+                            final Label label = var.jump();
                             final int jump = this.instructions.index(label);
                             worklist.put(jump, new Variables(currentVars));
                             break;
                         }
-                    } else if (var.isReturnInstruction()) {
+                    } else if (var.isReturn()) {
                         break;
                     }
                     if (var.isVarInstruction()) {
@@ -175,7 +186,7 @@ final class MaxLocals {
         }
 
         void put(BytecodeInstruction var) {
-            this.put(var.localIndex(), var.size());
+            this.put(var.varIndex(), var.varSize());
         }
 
         void put(int index, int value) {

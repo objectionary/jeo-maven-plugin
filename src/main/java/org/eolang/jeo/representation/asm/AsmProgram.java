@@ -485,7 +485,7 @@ public final class AsmProgram {
                     }
 
                     @Override
-                    public int stackImpact() {
+                    public int impact() {
                         return 0;
                     }
 

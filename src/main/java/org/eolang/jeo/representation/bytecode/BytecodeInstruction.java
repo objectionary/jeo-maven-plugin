@@ -146,27 +146,17 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * Local variable index.
      * @return Local variable index.
      */
-    public int localIndex() {
-        if (!this.isVarInstruction()) {
-            throw new IllegalStateException(
-                String.format(
-                    "Instruction %s is not a variable instruction",
-                    new OpcodeName(this.opcode).simplified()
-                )
-            );
-        }
+    int varIndex() {
+        this.assertVarInstruction();
         return (int) this.args.get(0);
     }
 
-    public int size() {
-        if (!this.isVarInstruction()) {
-            throw new IllegalStateException(
-                String.format(
-                    "Instruction %s is not a variable instruction",
-                    new OpcodeName(this.opcode).simplified()
-                )
-            );
-        }
+    /**
+     * Local variable size.
+     * @return Local variable size.
+     */
+    int varSize() {
+        this.assertVarInstruction();
         return Instruction.find(this.opcode).size();
     }
 
@@ -191,91 +181,63 @@ public final class BytecodeInstruction implements BytecodeEntry {
         return String.format(".opcode(%s)", args);
     }
 
-    public int stackImpact() {
+    /**
+     * Impact of each instruction on the stack.
+     * @return Stack impact.
+     */
+    public int impact() {
+        int result = 2;
         final Instruction instruction = Instruction.find(this.opcode);
         switch (instruction) {
-            case NOP:
-                return 0;
-            case ACONST_NULL:
-            case ICONST_M1:
-            case ICONST_0:
-            case ICONST_1:
-            case ICONST_2:
-            case ICONST_3:
-            case ICONST_4:
-            case ICONST_5:
-            case FCONST_0:
-            case FCONST_1:
-            case FCONST_2:
-            case BIPUSH:
-            case SIPUSH:
-                return 1;
-            case LCONST_0:
-            case LCONST_1:
-            case DCONST_0:
-            case DCONST_1:
-                return 2;
-            case ILOAD:
-            case FLOAD:
-            case ALOAD:
-                return 1;
-            case LLOAD:
-            case DLOAD:
-                return 2;
-            case IALOAD:
-            case FALOAD:
-            case AALOAD:
-            case BALOAD:
-            case CALOAD:
-            case SALOAD:
-                // Pops arrayref and index (2 slots), pushes value (1 slot): -2 + 1 = -1
-                return -1;
-            case LALOAD:
-            case DALOAD:
-                // Pops arrayref and index (2 slots), pushes value (2 slots): -2 + 2 = 0
-                return 0;
-            // Store into local variable (pop from stack)
-            case ISTORE:
-            case FSTORE:
-            case ASTORE:
-                return -1;
-            case LSTORE:
-            case DSTORE:
-                return -2;
-            // Array store instructions
+            case LASTORE:
+            case DASTORE:
+                result = -4;
+                break;
             case IASTORE:
             case FASTORE:
             case AASTORE:
             case BASTORE:
             case CASTORE:
             case SASTORE:
-                // Pops value, index, arrayref: -3
-                return -3;
-            case LASTORE:
-            case DASTORE:
-                // Pops value (2 slots), index, arrayref: -4
-                return -4;
-            // Stack manipulation
-            case POP:
-                return -1;
+            case LCMP:
+            case DCMPL:
+            case DCMPG:
+                result = -3;
+                break;
+            case LSTORE:
+            case DSTORE:
             case POP2:
-                return -2;
-            case DUP:
-                return 1;
-            case DUP_X1:
-                return 1;
-            case DUP_X2:
-                return 1;
-            case DUP2:
-                return 2;
-            case DUP2_X1:
-                return 2;
-            case DUP2_X2:
-                return 2;
-            case SWAP:
-                return 0;
-            // Arithmetic instructions
-            // Two operands are popped and one result is pushed: -2 + 1 = -1
+            case LADD:
+            case LSUB:
+            case LMUL:
+            case LDIV:
+            case LREM:
+            case DADD:
+            case DSUB:
+            case DMUL:
+            case DDIV:
+            case DREM:
+            case IF_ICMPEQ:
+            case IF_ICMPNE:
+            case IF_ICMPLT:
+            case IF_ICMPGE:
+            case IF_ICMPGT:
+            case IF_ICMPLE:
+            case IF_ACMPEQ:
+            case IF_ACMPNE:
+            case LOR:
+            case LAND:
+            case LXOR:
+            case LRETURN:
+            case DRETURN:
+                result = -2;
+                break;
+            case IALOAD:
+            case FALOAD:
+            case AALOAD:
+            case BALOAD:
+            case CALOAD:
+            case SALOAD:
             case IADD:
             case ISUB:
             case IMUL:
@@ -289,183 +251,157 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case LSHL:
             case LSHR:
             case LUSHR:
-                return -1;
-            // Long and double arithmetic: operands and result are 2 slots
-            // Pops 4 slots, pushes 2 slots: -4 + 2 = -2
-            case LADD:
-            case LSUB:
-            case LMUL:
-            case LDIV:
-            case LREM:
-            case DADD:
-            case DSUB:
-            case DMUL:
-            case DDIV:
-            case DREM:
-                return -2;
-            // Conversion instructions
-            case I2L:
-            case I2D:
-            case F2L:
-            case F2D:
-                // Pops 1 slot, pushes 2 slots: -1 + 2 = +1
-                return 1;
+            case POP:
+            case FCMPL:
+            case FCMPG:
             case L2I:
             case L2F:
             case D2I:
             case D2F:
-                // Pops 2 slots, pushes 1 slot: -2 + 1 = -1
-                return -1;
-            case I2F:
-            case F2I:
-            case I2B:
-            case I2C:
-            case I2S:
-                return 0;
-            case L2D:
-            case D2L:
-                // Pops 2 slots, pushes 2 slots: -2 + 2 = 0
-                return 0;
-            // Comparison instructions
-            case LCMP:
-            case DCMPL:
-            case DCMPG:
-                // Pops two 2-slot values, pushes int result: -4 + 1 = -3
-                return -3;
-            case FCMPL:
-            case FCMPG:
-                // Pops two 1-slot values, pushes int result: -2 + 1 = -1
-                return -1;
-            // Conditional branch instructions (consume values)
+            case ISTORE:
+            case FSTORE:
+            case ASTORE:
             case IFEQ:
             case IFNE:
             case IFLT:
             case IFGE:
             case IFGT:
             case IFLE:
-                // Pops one value: -1
-                return -1;
-            case IF_ICMPEQ:
-            case IF_ICMPNE:
-            case IF_ICMPLT:
-            case IF_ICMPGE:
-            case IF_ICMPGT:
-            case IF_ICMPLE:
-            case IF_ACMPEQ:
-            case IF_ACMPNE:
-                // Pops two values: -2
-                return -2;
-            // Jump instructions with no stack effect
             case IFNULL:
             case IFNONNULL:
-                return -1;
             case IOR:
             case IAND:
             case IXOR:
-                return -1;
-            case LOR:
-            case LAND:
-            case LXOR:
-                return -2;
+            case ISHL:
+            case ISHR:
+            case IUSHR:
+            case IRETURN:
+            case FRETURN:
+            case ARETURN:
+            case MONITORENTER:
+            case MONITOREXIT:
+            case TABLESWITCH:
+            case LOOKUPSWITCH:
+            case ATHROW:
+                result = -1;
+                break;
+            case NOP:
+            case SWAP:
+            case I2F:
+            case F2I:
+            case I2B:
+            case I2C:
+            case I2S:
+            case L2D:
+            case D2L:
+            case LALOAD:
+            case DALOAD:
             case DNEG:
             case FNEG:
             case LNEG:
             case INEG:
-                return 0;
-            case ISHL:
-            case ISHR:
-            case IUSHR:
-                return -1;
             case GOTO:
             case JSR:
             case RET:
-                return 0;
-            // Return instructions
-            case IRETURN:
-            case FRETURN:
-            case ARETURN:
-                // Pops one value: -1
-                return -1;
-            case LRETURN:
-            case DRETURN:
-                // Pops two slots: -2
-                return -2;
             case RETURN:
-                return 0;
             case IINC:
-                return 0;
+            case NEWARRAY:
+            case ANEWARRAY:
+            case ARRAYLENGTH:
+            case CHECKCAST:
+            case INSTANCEOF:
+                result = 0;
+                break;
+            case ACONST_NULL:
+            case ICONST_M1:
+            case ICONST_0:
+            case ICONST_1:
+            case ICONST_2:
+            case ICONST_3:
+            case ICONST_4:
+            case ICONST_5:
+            case FCONST_0:
+            case FCONST_1:
+            case FCONST_2:
+            case BIPUSH:
+            case SIPUSH:
+            case ILOAD:
+            case FLOAD:
+            case ALOAD:
+            case DUP:
+            case DUP_X1:
+            case DUP_X2:
+            case I2L:
+            case I2D:
+            case F2L:
+            case F2D:
+            case NEW:
+                result = 1;
+                break;
+            case LCONST_0:
+            case LCONST_1:
+            case DCONST_0:
+            case DCONST_1:
+            case LLOAD:
+            case DLOAD:
+            case DUP2:
+            case DUP2_X1:
+            case DUP2_X2:
+                result = 2;
+                break;
             case LDC: {
                 final Class<?> clazz = this.args.get(0).getClass();
                 if (clazz == Long.class || clazz == Double.class) {
-                    return 2;
+                    break;
                 } else {
-                    return this.typeSize(Type.getType(clazz));
+                    result = BytecodeInstruction.size(Type.getType(clazz));
+                    break;
                 }
             }
             case GETSTATIC:
-                return this.typeSize(Type.getType(String.valueOf(this.args.get(2))));
+                result = BytecodeInstruction.size(Type.getType(String.valueOf(this.args.get(2))));
+                break;
             case PUTSTATIC:
-                return this.typeSize(Type.getType(String.valueOf(this.args.get(2)))) * -1;
+                result = BytecodeInstruction.size(
+                    Type.getType(String.valueOf(this.args.get(2)))) * -1;
+                break;
             case GETFIELD:
-                return this.typeSize(Type.getType(String.valueOf(this.args.get(2)))) - 1;
+                result = BytecodeInstruction.size(
+                    Type.getType(String.valueOf(this.args.get(2)))) - 1;
+                break;
             case PUTFIELD:
-                return (this.typeSize(Type.getType(String.valueOf(this.args.get(2)))) * -1) - 1;
-            case INVOKEVIRTUAL: {
-                final String descr = String.valueOf(this.args.get(2));
-                final Type ret = Type.getReturnType(descr);
-                final Type[] types = Type.getArgumentTypes(descr);
-                final int args = Arrays.stream(types).mapToInt(this::typeSize).sum();
-                final int res = this.typeSize(ret) - 1 - args;
-                return res;
-            }
+                result = (BytecodeInstruction.size(
+                    Type.getType(String.valueOf(this.args.get(2)))) * -1) - 1;
+                break;
+            case INVOKEVIRTUAL:
             case INVOKESPECIAL:
             case INVOKEINTERFACE: {
                 final String descr = String.valueOf(this.args.get(2));
                 final Type ret = Type.getReturnType(descr);
                 final Type[] types = Type.getArgumentTypes(descr);
-                final int args = Arrays.stream(types).mapToInt(this::typeSize).sum();
-                return this.typeSize(ret) - 1 - args;
+                final int args = Arrays.stream(types).mapToInt(BytecodeInstruction::size).sum();
+                result = BytecodeInstruction.size(ret) - 1 - args;
+                break;
             }
             case INVOKESTATIC: {
                 final String descr = String.valueOf(this.args.get(2));
                 final Type ret = Type.getReturnType(descr);
                 final Type[] types = Type.getArgumentTypes(descr);
-                final int args = Arrays.stream(types).mapToInt(this::typeSize).sum();
-                return this.typeSize(ret) - args;
+                final int args = Arrays.stream(types).mapToInt(BytecodeInstruction::size).sum();
+                result = BytecodeInstruction.size(ret) - args;
+                break;
             }
             case INVOKEDYNAMIC: {
                 final String descr = String.valueOf(this.args.get(1));
                 final Type ret = Type.getReturnType(descr);
                 final Type[] types = Type.getArgumentTypes(descr);
-                final int args = Arrays.stream(types).mapToInt(this::typeSize).sum();
-                return this.typeSize(ret) - args;
+                final int args = Arrays.stream(types).mapToInt(BytecodeInstruction::size).sum();
+                result = BytecodeInstruction.size(ret) - args;
+                break;
             }
-            case NEW:
-                return 1;
-            case NEWARRAY:
-            case ANEWARRAY:
-            case ARRAYLENGTH:
-                return 0;
-            case ATHROW:
-                // Pops throwable objectref: -1
-                // Effectively clears the stack, but for stack computation, return -1
-                return -1;
-            case CHECKCAST:
-            case INSTANCEOF:
-                return 0;
-            case MONITORENTER:
-            case MONITOREXIT:
-                return -1;
             case MULTIANEWARRAY:
-                // Pops dimensions, pushes arrayref
-                // Assuming dimensions are given (from operands)
-                // For now, let's assume dimensions = dims
-                /* get dimensions from instruction operands */
-                return -(int) (this.args.get(1)) + 1;
-            case TABLESWITCH:
-                return -1;
-            case LOOKUPSWITCH:
-                return -1;
+                result = -(int) (this.args.get(1)) + 1;
+                break;
             default:
                 throw new UnsupportedOperationException(
                     String.format(
@@ -473,18 +409,15 @@ public final class BytecodeInstruction implements BytecodeEntry {
                     )
                 );
         }
+        return result;
     }
 
-    private int typeSize(final Type type) {
-        if (type == Type.DOUBLE_TYPE || type == Type.LONG_TYPE) {
-            return 2;
-        } else if (type == Type.VOID_TYPE) {
-            return 0;
-        }
-        return 1;
-    }
-
-    public boolean isBranchInstruction() {
+    /**
+     * Is this instruction a branch instruction?
+     * @return True if it is.
+     */
+    boolean isBranch() {
+        final boolean result;
         switch (Instruction.find(this.opcode)) {
             case GOTO:
             case JSR:
@@ -507,13 +440,21 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case IFNONNULL:
             case TABLESWITCH:
             case LOOKUPSWITCH:
-                return true;
+                result = true;
+                break;
             default:
-                return false;
+                result = false;
+                break;
         }
+        return result;
     }
 
-    public boolean isConditionalBranchInstruction() {
+    /**
+     * Is this instruction a conditional branch instruction?
+     * @return True if it is.
+     */
+    boolean isConditionalBranch() {
+        final boolean result;
         switch (Instruction.find(this.opcode)) {
             case IFEQ:
             case IFNE:
@@ -531,23 +472,38 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case IF_ACMPNE:
             case IFNULL:
             case IFNONNULL:
-                return true;
+                result = true;
+                break;
             default:
-                return false;
+                result = false;
+                break;
         }
+        return result;
     }
 
-    public boolean isSwitchInstruction() {
+    /**
+     * Is this instruction a switch instruction?
+     * @return True if it is.
+     */
+    boolean isSwitch() {
+        final boolean result;
         switch (Instruction.find(this.opcode)) {
             case TABLESWITCH:
             case LOOKUPSWITCH:
-                return true;
+                result = true;
+                break;
             default:
-                return false;
+                result = false;
+                break;
         }
+        return result;
     }
 
-    public boolean isReturnInstruction() {
+    /**
+     * Is this instruction a return instruction?
+     * @return True if it is.
+     */
+    boolean isReturn() {
         switch (Instruction.find(this.opcode)) {
             case IRETURN:
             case FRETURN:
@@ -561,23 +517,14 @@ public final class BytecodeInstruction implements BytecodeEntry {
         }
     }
 
-    public List<Label> offsets() {
-        if (!this.isSwitchInstruction()) {
-            throw new IllegalStateException(
-                String.format(
-                    "Instruction %s is not a switch instruction",
-                    new OpcodeName(this.opcode).simplified()
-                )
-            );
-        }
+    List<Label> offsets() {
         switch (Instruction.find(this.opcode)) {
             case TABLESWITCH:
-            case LOOKUPSWITCH: {
+            case LOOKUPSWITCH:
                 return this.args.stream()
                     .filter(Label.class::isInstance)
                     .map(Label.class::cast)
                     .collect(Collectors.toList());
-            }
             default:
                 throw new IllegalStateException(
                     String.format(
@@ -588,15 +535,12 @@ public final class BytecodeInstruction implements BytecodeEntry {
         }
     }
 
-    public Label offset() {
-        if (!this.isBranchInstruction()) {
-            throw new IllegalStateException(
-                String.format(
-                    "Instruction %s is not a branch instruction",
-                    new OpcodeName(this.opcode).simplified()
-                )
-            );
-        }
+    /**
+     * Jump to a label.
+     * Where to jump.
+     * @return Jump label.
+     */
+    Label jump() {
         switch (Instruction.find(this.opcode)) {
             case GOTO:
             case JSR:
@@ -627,6 +571,37 @@ public final class BytecodeInstruction implements BytecodeEntry {
         }
     }
 
+    /**
+     * Is this instruction a variable instruction?
+     * @throws IllegalStateException If it is not.
+     */
+    private void assertVarInstruction() {
+        if (!this.isVarInstruction()) {
+            throw new IllegalStateException(
+                String.format(
+                    "Instruction %s is not a variable instruction",
+                    new OpcodeName(this.opcode).simplified()
+                )
+            );
+        }
+    }
+
+    /**
+     * Size of the type.
+     * @param type Type.
+     * @return Size.
+     */
+    private static int size(final Type type) {
+        final int result;
+        if (type == Type.DOUBLE_TYPE || type == Type.LONG_TYPE) {
+            result = 2;
+        } else if (type == Type.VOID_TYPE) {
+            result = 0;
+        } else {
+            result = 1;
+        }
+        return result;
+    }
 
     /**
      * Bytecode Instruction.
@@ -1950,25 +1925,11 @@ public final class BytecodeInstruction implements BytecodeEntry {
         }
 
         /**
-         * Get instruction by opcode.
-         *
-         * @param opcode Opcode.
-         * @return Instruction.
-         */
-        static Instruction find(final int opcode) {
-            for (final Instruction instruction : Instruction.values()) {
-                if (instruction.opcode == opcode) {
-                    return instruction;
-                }
-            }
-            throw new UnrecognizedOpcode(opcode);
-        }
-
-        /**
          * Check if the instruction is a variable instruction.
          * @return True if the instruction is a variable instruction.
          */
         boolean isVarInstruction() {
+            final boolean result;
             switch (this) {
                 case ILOAD:
                 case LLOAD:
@@ -1981,25 +1942,20 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 case DSTORE:
                 case ASTORE:
                 case RET:
-                    return true;
+                    result = true;
+                    break;
                 default:
-                    return false;
+                    result = false;
+                    break;
             }
+            return result;
         }
 
         /**
          * Local variable size
          * @return Local variable size
          */
-        public int size() {
-            if (!this.isVarInstruction()) {
-                throw new IllegalStateException(
-                    String.format(
-                        "Instruction %s is not a variable instruction",
-                        this.name()
-                    )
-                );
-            }
+        int size() {
             int res;
             switch (this) {
                 case ILOAD:
@@ -2022,12 +1978,27 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 default:
                     throw new IllegalStateException(
                         String.format(
-                            "Unexpected instruction: %s",
+                            "Instruction %s is not a variable instruction",
                             this.name()
                         )
                     );
             }
             return res;
+        }
+
+        /**
+         * Get instruction by opcode.
+         *
+         * @param opcode Opcode.
+         * @return Instruction.
+         */
+        static Instruction find(final int opcode) {
+            for (final Instruction instruction : Instruction.values()) {
+                if (instruction.opcode == opcode) {
+                    return instruction;
+                }
+            }
+            throw new UnrecognizedOpcode(opcode);
         }
     }
 }

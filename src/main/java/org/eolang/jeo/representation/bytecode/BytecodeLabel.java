@@ -106,7 +106,7 @@ public final class BytecodeLabel implements BytecodeEntry {
     }
 
     @Override
-    public int stackImpact() {
+    public int impact() {
         return 0;
     }
 

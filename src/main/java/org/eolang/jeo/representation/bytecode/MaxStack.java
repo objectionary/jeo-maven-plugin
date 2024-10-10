@@ -94,7 +94,7 @@ final class MaxStack {
             int stack = visited.get(current) == null ? 0 : visited.get(current);
             while (current < length) {
                 BytecodeEntry entry = this.instructions.get(current);
-                stack += entry.stackImpact();
+                stack += entry.impact();
                 max = Math.max(max, stack);
                 final int finalStack = stack;
                 visited.compute(
@@ -102,8 +102,8 @@ final class MaxStack {
                 );
                 if (entry instanceof BytecodeInstruction) {
                     final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
-                    if (var.isBranchInstruction()) {
-                        if (var.isSwitchInstruction()) {
+                    if (var.isBranch()) {
+                        if (var.isSwitch()) {
                             final List<Label> offsets = var.offsets();
                             for (Label offset : offsets) {
                                 final int target = this.instructions.index(offset);
@@ -115,8 +115,8 @@ final class MaxStack {
                                 }
                             }
                             break;
-                        } else if (var.isConditionalBranchInstruction()) {
-                            final Label label = var.offset();
+                        } else if (var.isConditionalBranch()) {
+                            final Label label = var.jump();
                             final int jump = this.instructions.index(label);
                             if (visited.get(jump) == null
                                 || visited.get(jump) < stack
@@ -133,10 +133,8 @@ final class MaxStack {
                                 worklist.add(next);
                             }
                             break;
-                        } else if (var.isReturnInstruction()) {
-                            break;
                         } else {
-                            final Label label = var.offset();
+                            final Label label = var.jump();
                             final int jump = this.instructions.index(label);
                             if (visited.get(jump) == null
                                 || visited.get(jump) < stack
@@ -146,6 +144,8 @@ final class MaxStack {
                             }
                             break;
                         }
+                    } else if (var.isReturn()) {
+                        break;
                     }
                 }
                 current++;
