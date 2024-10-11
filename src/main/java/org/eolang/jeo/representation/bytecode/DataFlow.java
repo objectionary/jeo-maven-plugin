@@ -23,47 +23,27 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.objectweb.asm.Label;
 
-public final class DataFlow<T extends DataFlow.Something<T>> {
+public final class DataFlow<T extends DataFlow.Reducible<T>> {
     private final InstructionsFlow instructions;
-
     private final List<BytecodeTryCatchBlock> blocks;
 
-    private final T initial;
-
-    private final Function<BytecodeInstruction, T> generate;
-
-    public DataFlow(
-        final InstructionsFlow instructions,
-        final List<BytecodeTryCatchBlock> blocks,
-        final T initial,
-        Function<BytecodeInstruction, T> generator
-    ) {
-        this.instructions = instructions;
-        this.blocks = blocks;
-        this.initial = initial;
-        this.generate = generator;
+    DataFlow(final InstructionsFlow instr, final List<BytecodeTryCatchBlock> catches) {
+        this.instructions = instr;
+        this.blocks = new ArrayList<>(catches);
     }
 
-    //        this.blocks.stream()
-//            .map(BytecodeTryCatchBlock.class::cast)
-//            .map(BytecodeTryCatchBlock::handlerLabel)
-//            .map(this.instructions::index)
-//            .peek(ind -> visited.put(ind, 1))
-//            .forEach(worklist::add);
-
-
-    public T max() {
+    public T max(T initial, Function<BytecodeInstruction, T> generator) {
         final Map<Integer, T> visited = new HashMap<>(0);
         final Map<Integer, T> worklist = new HashMap<>(0);
-        worklist.put(0, this.initial);
+        worklist.put(0, initial);
         final int total = this.instructions.size();
         T current;
         while (!worklist.isEmpty()) {
@@ -83,7 +63,7 @@ public final class DataFlow<T extends DataFlow.Something<T>> {
                 final BytecodeEntry entry = this.instructions.get(index);
                 if (entry instanceof BytecodeInstruction) {
                     final BytecodeInstruction instruction = BytecodeInstruction.class.cast(entry);
-                    current = current.add(this.generate.apply(instruction));
+                    current = current.add(generator.apply(instruction));
                     final T updated = current;
                     if (instruction.isSwitch()) {
                         final List<Label> offsets = instruction.offsets();
@@ -112,8 +92,7 @@ public final class DataFlow<T extends DataFlow.Something<T>> {
                         break;
                     }
                     this.suitableBlocks(index)
-                        .forEach(ind -> worklist.put(ind, updated.initBlock())
-                        );
+                        .forEach(ind -> worklist.put(ind, updated.enterBlock()));
                     visited.putIfAbsent(index, updated);
                     visited.computeIfPresent(index, (k, v) -> this.max(v, updated));
                 } else {
@@ -142,15 +121,15 @@ public final class DataFlow<T extends DataFlow.Something<T>> {
             .collect(Collectors.toList());
     }
 
-    private T max(final T a, final T b) {
-        return a.compareTo(b) > 0 ? a : b;
+    private T max(final T first, final T second) {
+        return first.compareTo(second) > 0 ? first : second;
     }
 
-    interface Something<T> extends Comparable<T> {
+    interface Reducible<T> extends Comparable<T> {
 
         T add(T other);
 
-        T initBlock();
+        T enterBlock();
 
     }
 }

@@ -23,14 +23,8 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-import java.util.TreeMap;
 import lombok.ToString;
-import org.objectweb.asm.Label;
 
 public final class MaxStackFlow {
 
@@ -74,105 +68,33 @@ public final class MaxStackFlow {
      * Compute the maximum stack size.
      * @return Maximum stack size.
      */
-    @SuppressWarnings("PMD.CognitiveComplexity")
     public int value() {
-        return new DataFlow<>(
-            this.instructions,
-            this.blocks,
-            new Stack(0),
-            Stack::new
-        ).max().value;
-
-//        int max = 0;
-//        final int length = this.instructions.size();
-//        final Deque<Integer> worklist = new ArrayDeque<>(0);
-//        worklist.add(0);
-//        final Map<Integer, Integer> visited = new TreeMap<>();
-//        this.blocks.stream()
-//            .map(BytecodeTryCatchBlock.class::cast)
-//            .map(BytecodeTryCatchBlock::handlerLabel)
-//            .map(this.instructions::index)
-//            .peek(ind -> visited.put(ind, 1))
-//            .forEach(worklist::add);
-//        while (!worklist.isEmpty()) {
-//            int current = worklist.pop();
-//            int stack = visited.get(current) == null ? 0 : visited.get(current);
-//            while (current < length) {
-//                final BytecodeEntry entry = this.instructions.get(current);
-//                stack += entry.impact();
-//                max = Math.max(max, stack);
-//                final int fstack = stack;
-//                visited.compute(
-//                    current, (k, v) -> v == null ? fstack : Math.max(v, fstack)
-//                );
-//                if (entry instanceof BytecodeInstruction) {
-//                    final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
-//                    if (var.isSwitch()) {
-//                        final List<Label> offsets = var.offsets();
-//                        for (final Label offset : offsets) {
-//                            final int target = this.instructions.index(offset);
-//                            if (visited.get(target) == null
-//                                || visited.get(target) < stack
-//                            ) {
-//                                visited.put(target, stack);
-//                                worklist.add(target);
-//                            }
-//                        }
-//                        break;
-//                    } else if (var.isBranch()) {
-//                        final Label label = var.jump();
-//                        final int jump = this.instructions.index(label);
-//                        if (visited.get(jump) == null
-//                            || visited.get(jump) < stack
-//                        ) {
-//                            visited.put(jump, stack);
-//                            worklist.add(jump);
-//                        }
-//                        final int next = current + 1;
-//                        if (visited.get(next) == null
-//                            || visited.get(next) < stack
-//                        ) {
-//                            visited.put(next, stack);
-//                            worklist.add(next);
-//                        }
-//                        break;
-//                    } else if (var.isJump()) {
-//                        final Label label = var.jump();
-//                        final int jump = this.instructions.index(label);
-//                        if (visited.get(jump) == null
-//                            || visited.get(jump) < stack
-//                        ) {
-//                            visited.put(jump, stack);
-//                            worklist.add(jump);
-//                        }
-//                        break;
-//                    } else if (var.isReturn()) {
-//                        break;
-//                    }
-//                }
-//                ++current;
-//            }
-//        }
-//        return max;
+        return new DataFlow<Stack>(this.instructions, this.blocks)
+            .max(new Stack(0), Stack::new)
+            .value();
     }
 
     @ToString
-    private static class Stack implements DataFlow.Something<Stack> {
+    private static class Stack implements DataFlow.Reducible<Stack> {
 
         private final int value;
         private final String source;
 
-        private Stack(final int value) {
+        Stack(final int value) {
             this(value, "");
         }
 
-        private Stack(final BytecodeInstruction instruction) {
+        Stack(final BytecodeInstruction instruction) {
             this(instruction.impact(), instruction.testCode());
         }
 
         private Stack(final int value, final String source) {
             this.value = value;
             this.source = source;
+        }
+
+        int value() {
+            return this.value;
         }
 
         @Override
@@ -186,8 +108,7 @@ public final class MaxStackFlow {
         }
 
         @Override
-        public Stack initBlock() {
-//            return this.add(new Stack(1));
+        public Stack enterBlock() {
             return new Stack(1);
         }
     }
