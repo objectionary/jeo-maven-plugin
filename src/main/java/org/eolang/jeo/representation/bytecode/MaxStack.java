@@ -88,8 +88,8 @@ final class MaxStack {
     @SuppressWarnings("PMD.CognitiveComplexity")
     public int value() {
         int max = 0;
-        final Deque<Integer> worklist = new ArrayDeque<>(0);
         final int length = this.instructions.size();
+        final Deque<Integer> worklist = new ArrayDeque<>(0);
         worklist.add(0);
         final Map<Integer, Integer> visited = new TreeMap<>();
         this.blocks.stream()
