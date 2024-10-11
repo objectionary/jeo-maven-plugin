@@ -31,6 +31,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.objectweb.asm.Label;
 
+/**
+ * Data-flow analysis.
+ * This class knows how to compute the maximum value of a reducible element based
+ * on the instruction flow.
+ * @param <T> Type of the reducible element.
+ * @since 0.6
+ */
 public final class DataFlow<T extends DataFlow.Reducible<T>> {
     private final InstructionsFlow instructions;
     private final List<BytecodeTryCatchBlock> blocks;
@@ -54,10 +61,8 @@ public final class DataFlow<T extends DataFlow.Reducible<T>> {
             int index = curr.getKey();
             current = curr.getValue();
             worklist.remove(index);
-            if (visited.get(index) != null) {
-                if (visited.get(index).compareTo(current) >= 0) {
-                    continue;
-                }
+            if (visited.get(index) != null || visited.get(index).compareTo(current) >= 0) {
+                continue;
             }
             while (index < total) {
                 final BytecodeEntry entry = this.instructions.get(index);
@@ -121,10 +126,20 @@ public final class DataFlow<T extends DataFlow.Reducible<T>> {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Max of two reducible elements.
+     * @param first First element.
+     * @param second Second element.
+     * @return Max element.
+     */
     private T max(final T first, final T second) {
         return first.compareTo(second) > 0 ? first : second;
     }
 
+    /**
+     * Reducible element in the data-flow analysis.
+     * @param <T> Type of the element.
+     */
     interface Reducible<T> extends Comparable<T> {
 
         T add(T other);

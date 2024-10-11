@@ -79,6 +79,11 @@ final class MaxStack {
             .integer();
     }
 
+    /**
+     * Reducible stack.
+     * Used during data-flow analysis to compute the maximum stack size.
+     * @since 0.6
+     */
     @ToString
     private static final class Stack implements DataFlow.Reducible<Stack> {
 
