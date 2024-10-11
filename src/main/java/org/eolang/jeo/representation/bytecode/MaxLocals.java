@@ -23,13 +23,15 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 import lombok.ToString;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 
 /**
@@ -37,14 +39,6 @@ import org.objectweb.asm.Type;
  * This class knows hot to compute the maximum number of local variables
  * that can be used by a method.
  * @since 0.6
- * @todo #540:60min Refactor the MaxLocals class.
- *  The MaxLocals class has a high cognitive complexity. Refactor the class
- *  to reduce the complexity. You might also extract some methods to make
- *  the class more readable. Don't forget to remove the @SuppressWarnings.
- * @checkstyle CyclomaticComplexityCheck (500 lines)
- * @checkstyle JavaNCSSCheck (500 lines)
- * @checkstyle AvoidInlineConditionalsCheck (500 lines)
- * @checkstyle NestedIfDepthCheck (500 lines)
  */
 final class MaxLocals {
 
@@ -81,140 +75,122 @@ final class MaxLocals {
      * Constructor.
      * @param props Method properties.
      * @param instructions Instructions.
-     * @param catches Try-catch blocks.
+     * @param blocks Try-catch blocks.
      */
     private MaxLocals(
         final BytecodeMethodProperties props,
         final InstructionsFlow instructions,
-        final List<BytecodeTryCatchBlock> catches
+        final List<BytecodeTryCatchBlock> blocks
     ) {
         this.props = props;
         this.instructions = instructions;
-        this.blocks = catches;
+        this.blocks = blocks;
     }
 
     /**
      * Compute the maximum number of local variables.
      * @return Maximum number of local variables.
-     * @checkstyle ExecutableStatementCountCheck (100 lines)
      */
-    @SuppressWarnings("PMD.CognitiveComplexity")
     public int value() {
-        final Variables initial = new Variables();
-        int first = 0;
-        if (!this.props.isStatic()) {
-            initial.put(0, 1);
-            first = 1;
-        }
-        final Type[] types = Type.getArgumentTypes(this.props.descriptor());
-        for (int index = 0; index < types.length; ++index) {
-            final Type type = types[index];
-            initial.put(index * type.getSize() + first, type.getSize());
-        }
-        final Map<Integer, Variables> all = new TreeMap<>();
-        final Map<Integer, Variables> worklist = new HashMap<>(0);
-        worklist.put(0, initial);
-        final int total = this.instructions.size();
-        Variables currentv;
-        while (!worklist.isEmpty()) {
-            final Map.Entry<Integer, Variables> curr = worklist.entrySet()
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException(""));
-            int current = curr.getKey();
-            worklist.remove(current);
-            if (all.get(current) != null) {
-                continue;
-            }
-            currentv = new Variables(curr.getValue());
-            while (current < total) {
-                final BytecodeEntry entry = this.instructions.get(current);
-                if (entry instanceof BytecodeInstruction) {
-                    final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
-                    if (var.isSwitch()) {
-                        final List<Label> offsets = var.offsets();
-                        for (final Label offset : offsets) {
-                            final int target = this.instructions.index(offset);
-                            worklist.put(target, new Variables(currentv));
-                        }
-                        break;
-                    } else if (var.isBranch()) {
-                        final Label label = var.jump();
-                        final int jump = this.instructions.index(label);
-                        worklist.put(jump, new Variables(currentv));
-                        final int next = current + 1;
-                        worklist.put(next, new Variables(currentv));
-                        break;
-                    } else if (var.isJump()) {
-                        final Label label = var.jump();
-                        final int jump = this.instructions.index(label);
-                        worklist.put(jump, new Variables(currentv));
-                        break;
-                    } else if (var.isReturn()) {
-                        break;
-                    } else if (var.isVarInstruction()) {
-                        currentv.put(var);
+        return new DataFlow<Variables>(this.instructions, this.blocks)
+            .max(
+                this.initial(),
+                instr -> {
+                    if (instr.isVarInstruction()) {
+                        return new Variables(instr);
+                    } else {
+                        return new Variables();
                     }
                 }
-                final Variables value = new Variables(currentv);
-                this.suitableBlocks(current)
-                    .forEach(ind -> worklist.put(ind, new Variables(value)));
-                all.put(current, value);
-                ++current;
-            }
+            ).size();
+    }
+
+    /**
+     * Initial variables.
+     * @return Variables.
+     */
+    private Variables initial() {
+        final ArrayList<Integer> init = new ArrayList<>(0);
+        if (!this.props.isStatic()) {
+            init.add(1);
         }
-        return all.values().stream().mapToInt(Variables::size).max().orElse(0);
+        Arrays.stream(Type.getArgumentTypes(this.props.descriptor()))
+            .map(Type::getSize)
+            .forEach(init::add);
+        Map<Integer, Integer> initial = new HashMap<>(0);
+        int curr = 0;
+        while (curr < init.size()) {
+            final Integer size = init.get(curr);
+            initial.put(curr, size);
+            curr += size;
+        }
+        return new Variables(initial);
     }
 
-    /**
-     * Which try-catch-blocks cover the instruction.
-     * @param instruction Instruction index.
-     * @return List of block indexes.
-     */
-    private List<Integer> suitableBlocks(final int instruction) {
-        return this.blocks.stream()
-            .map(BytecodeTryCatchBlock.class::cast)
-            .filter(block -> this.instructions.index(block.startLabel()) <= instruction)
-            .filter(block -> this.instructions.index(block.endLabel()) >= instruction)
-            .map(block -> this.instructions.index(block.handlerLabel()))
-            .collect(Collectors.toList());
-    }
-
-    /**
-     * Variables.
-     * @since 0.6
-     */
     @ToString
-    private static class Variables {
+    private static final class Variables implements DataFlow.Reducible<Variables> {
 
         /**
-         * All variables.
-         * @checkstyle IllegalTypeCheck (5 lines)
+         * All variables with their sizes.
          */
-        @SuppressWarnings("PMD.LooseCoupling")
-        private final TreeMap<Integer, Integer> all;
+        private final NavigableMap<Integer, Integer> all;
 
         /**
          * Constructor.
          */
         Variables() {
-            this(new HashMap<>(0));
+            this(new TreeMap<>());
         }
 
         /**
          * Copy constructor.
          * @param vars Variables to copy.
          */
-        Variables(final Variables vars) {
+        Variables(Variables vars) {
             this(vars.all);
+        }
+
+        /**
+         * Constructor.
+         * @param instr Bytecode instruction.
+         */
+        Variables(final BytecodeInstruction instr) {
+            this(instr.varIndex(), instr.varSize());
+        }
+
+        /**
+         * Constructor.
+         * @param index Instruction index.
+         * @param size Corresponding variable size.
+         */
+        Variables(final int index, final int size) {
+            this(Collections.singletonMap(index, size));
         }
 
         /**
          * Constructor.
          * @param all All variables.
          */
-        private Variables(final Map<Integer, Integer> all) {
+        Variables(final Map<Integer, Integer> all) {
             this.all = new TreeMap<>(all);
+        }
+
+        @Override
+        public int compareTo(final Variables o) {
+            return Integer.compare(this.size(), o.size());
+        }
+
+        @Override
+        public Variables add(final Variables other) {
+            Map<Integer, Integer> variables = new HashMap<>();
+            variables.putAll(this.all);
+            variables.putAll(other.all);
+            return new Variables(variables);
+        }
+
+        @Override
+        public Variables enterBlock() {
+            return new Variables(this);
         }
 
         /**
@@ -222,29 +198,14 @@ final class MaxLocals {
          * @return Size.
          */
         int size() {
-            int result = 0;
-            if (!this.all.isEmpty()) {
-                final Map.Entry<Integer, Integer> entry = this.all.lastEntry();
-                result = entry.getKey() + 1 + (int) (entry.getValue() * 0.5);
+            final int result;
+            if (this.all.isEmpty()) {
+                result = 0;
+            } else {
+                final Map.Entry<Integer, Integer> biggest = this.all.lastEntry();
+                result = biggest.getKey() + 1 + (int) (biggest.getValue() * 0.5);
             }
             return result;
-        }
-
-        /**
-         * Put variable.
-         * @param var Variable.
-         */
-        void put(final BytecodeInstruction var) {
-            this.put(var.varIndex(), var.varSize());
-        }
-
-        /**
-         * Put variable.
-         * @param index Index.
-         * @param value Value.
-         */
-        void put(final int index, final int value) {
-            this.all.put(index, value);
         }
     }
 }

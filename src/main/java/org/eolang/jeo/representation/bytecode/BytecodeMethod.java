@@ -447,7 +447,7 @@ public final class BytecodeMethod implements Testable {
 //                .map(BytecodeTryCatchBlock.class::cast)
 //                .collect(Collectors.toList())
 //        ).value();
-        return new MaxLocalsFlow(
+        return new MaxLocals(
             this.properties,
             this.instructions,
             this.tryblocks.stream()
