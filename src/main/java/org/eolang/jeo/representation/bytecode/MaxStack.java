@@ -80,7 +80,7 @@ final class MaxStack {
     }
 
     @ToString
-    private static class Stack implements DataFlow.Reducible<Stack> {
+    private static final class Stack implements DataFlow.Reducible<Stack> {
 
         /**
          * Stack integer value;
