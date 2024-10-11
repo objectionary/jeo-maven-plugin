@@ -82,11 +82,13 @@ final class MaxLocals {
             .max(
                 this.initial(),
                 instr -> {
+                    final Variables result;
                     if (instr.isVarInstruction()) {
-                        return new Variables(instr);
+                        result = new Variables(instr);
                     } else {
-                        return new Variables();
+                        result = new Variables();
                     }
+                    return result;
                 }
             ).size();
     }
@@ -103,7 +105,7 @@ final class MaxLocals {
         Arrays.stream(Type.getArgumentTypes(this.props.descriptor()))
             .map(Type::getSize)
             .forEach(init::add);
-        Map<Integer, Integer> initial = new HashMap<>(0);
+        final Map<Integer, Integer> initial = new HashMap<>(0);
         int curr = 0;
         while (curr < init.size()) {
             final Integer size = init.get(curr);
@@ -113,6 +115,11 @@ final class MaxLocals {
         return new Variables(initial);
     }
 
+    /**
+     * Reducible variables.
+     * Used during data-flow analysis to compute the maximum number of local variables.
+     * @since 0.6
+     */
     @ToString
     private static final class Variables implements InstructionsFlow.Reducible<Variables> {
 
@@ -132,7 +139,7 @@ final class MaxLocals {
          * Copy constructor.
          * @param vars Variables to copy.
          */
-        Variables(Variables vars) {
+        Variables(final Variables vars) {
             this(vars.all);
         }
 
@@ -162,13 +169,13 @@ final class MaxLocals {
         }
 
         @Override
-        public int compareTo(final Variables o) {
-            return Integer.compare(this.size(), o.size());
+        public int compareTo(final Variables other) {
+            return Integer.compare(this.size(), other.size());
         }
 
         @Override
         public Variables add(final Variables other) {
-            Map<Integer, Integer> variables = new HashMap<>();
+            final Map<Integer, Integer> variables = new HashMap<>();
             variables.putAll(this.all);
             variables.putAll(other.all);
             return new Variables(variables);

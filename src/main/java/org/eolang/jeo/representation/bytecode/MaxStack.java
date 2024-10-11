@@ -76,7 +76,7 @@ final class MaxStack {
     private static final class Stack implements InstructionsFlow.Reducible<Stack> {
 
         /**
-         * Stack integer value;
+         * Stack integer value.
          */
         private final int value;
 
@@ -114,8 +114,8 @@ final class MaxStack {
         }
 
         @Override
-        public int compareTo(final Stack o) {
-            return Integer.compare(this.value, o.value);
+        public int compareTo(final Stack other) {
+            return Integer.compare(this.value, other.value);
         }
 
         @Override

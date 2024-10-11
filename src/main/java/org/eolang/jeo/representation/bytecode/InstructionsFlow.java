@@ -69,7 +69,8 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
      * @param generator Function to generate the reducible element from the instruction.
      * @return Maximum value.
      */
-    public T max(T initial, Function<BytecodeInstruction, T> generator) {
+    @SuppressWarnings("PMD.CognitiveComplexity")
+    public T max(final T initial, final Function<BytecodeInstruction, T> generator) {
         final Map<Integer, T> visited = new HashMap<>(0);
         final Map<Integer, T> worklist = new HashMap<>(0);
         worklist.put(0, initial);
@@ -83,7 +84,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
             int index = curr.getKey();
             current = curr.getValue();
             worklist.remove(index);
-            if (visited.get(index) != null || visited.get(index).compareTo(current) >= 0) {
+            if (visited.get(index) != null || current.compareTo(visited.get(index)) < 0) {
                 continue;
             }
             while (index < total) {
@@ -93,11 +94,10 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                     current = current.add(generator.apply(instruction));
                     final T updated = current;
                     if (instruction.isSwitch()) {
-                        final List<Label> offsets = instruction.offsets();
-                        for (final Label offset : offsets) {
-                            final int target = this.index(offset);
-                            worklist.put(target, updated);
-                        }
+                        instruction.offsets()
+                            .stream()
+                            .map(this::index)
+                            .forEach(ind -> worklist.put(ind, updated));
                         visited.put(index, updated);
                         break;
                     } else if (instruction.isBranch()) {
@@ -121,7 +121,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                     this.suitableBlocks(index)
                         .forEach(ind -> worklist.put(ind, updated.enterBlock()));
                     visited.putIfAbsent(index, updated);
-                    visited.computeIfPresent(index, (k, v) -> this.max(v, updated));
+                    visited.computeIfPresent(index, (k, v) -> InstructionsFlow.max(v, updated));
                 } else {
                     visited.put(index, current);
                 }
@@ -166,15 +166,23 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
      * Max of two reducible elements.
      * @param first First element.
      * @param second Second element.
+     * @param <T> Type of the element.
      * @return Max element.
      */
-    private T max(final T first, final T second) {
-        return first.compareTo(second) > 0 ? first : second;
+    private static <T extends InstructionsFlow.Reducible<T>> T max(final T first, final T second) {
+        final T result;
+        if (first.compareTo(second) > 0) {
+            result = first;
+        } else {
+            result = second;
+        }
+        return result;
     }
 
     /**
      * Reducible element in the data-flow analysis.
      * @param <T> Type of the element.
+     * @since 0.6
      */
     interface Reducible<T> extends Comparable<T> {
 
