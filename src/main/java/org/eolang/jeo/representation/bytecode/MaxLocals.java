@@ -50,7 +50,7 @@ final class MaxLocals {
     /**
      * Method instructions.
      */
-    private final InstructionsFlow instructions;
+    private final List<? extends BytecodeEntry> instructions;
 
     /**
      * Try-catch blocks.
@@ -61,25 +61,11 @@ final class MaxLocals {
      * Constructor.
      * @param props Method properties.
      * @param instructions Instructions.
-     * @param catches Try-catch blocks.
+     * @param blocks Try-catch blocks.
      */
     MaxLocals(
         final BytecodeMethodProperties props,
         final List<? extends BytecodeEntry> instructions,
-        final List<BytecodeTryCatchBlock> catches
-    ) {
-        this(props, new InstructionsFlow(instructions), catches);
-    }
-
-    /**
-     * Constructor.
-     * @param props Method properties.
-     * @param instructions Instructions.
-     * @param blocks Try-catch blocks.
-     */
-    private MaxLocals(
-        final BytecodeMethodProperties props,
-        final InstructionsFlow instructions,
         final List<BytecodeTryCatchBlock> blocks
     ) {
         this.props = props;
@@ -92,7 +78,7 @@ final class MaxLocals {
      * @return Maximum number of local variables.
      */
     public int value() {
-        return new DataFlow<Variables>(this.instructions, this.blocks)
+        return new InstructionsFlow<Variables>(this.instructions, this.blocks)
             .max(
                 this.initial(),
                 instr -> {
@@ -128,7 +114,7 @@ final class MaxLocals {
     }
 
     @ToString
-    private static final class Variables implements DataFlow.Reducible<Variables> {
+    private static final class Variables implements InstructionsFlow.Reducible<Variables> {
 
         /**
          * All variables with their sizes.

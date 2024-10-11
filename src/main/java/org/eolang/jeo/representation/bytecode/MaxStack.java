@@ -37,7 +37,7 @@ final class MaxStack {
     /**
      * Method instructions.
      */
-    private final InstructionsFlow instructions;
+    private final List<? extends BytecodeEntry> instructions;
 
     /**
      * Try-catch blocks.
@@ -45,24 +45,12 @@ final class MaxStack {
     private final List<BytecodeTryCatchBlock> blocks;
 
     /**
-     * Constructor.
+     * Compute the maximum stack size.
      * @param instructions Instructions.
      * @param catches Try-catch blocks.
      */
     MaxStack(
         final List<? extends BytecodeEntry> instructions,
-        final List<BytecodeTryCatchBlock> catches
-    ) {
-        this(new InstructionsFlow(instructions), catches);
-    }
-
-    /**
-     * Compute the maximum stack size.
-     * @param instructions Instructions.
-     * @param catches Try-catch blocks.
-     */
-    private MaxStack(
-        final InstructionsFlow instructions,
         final List<BytecodeTryCatchBlock> catches
     ) {
         this.instructions = instructions;
@@ -74,7 +62,7 @@ final class MaxStack {
      * @return Maximum stack size.
      */
     public int value() {
-        return new DataFlow<Stack>(this.instructions, this.blocks)
+        return new InstructionsFlow<Stack>(this.instructions, this.blocks)
             .max(new Stack(0), Stack::new)
             .integer();
     }
@@ -85,7 +73,7 @@ final class MaxStack {
      * @since 0.6
      */
     @ToString
-    private static final class Stack implements DataFlow.Reducible<Stack> {
+    private static final class Stack implements InstructionsFlow.Reducible<Stack> {
 
         /**
          * Stack integer value;

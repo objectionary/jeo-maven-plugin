@@ -23,15 +23,23 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 
 /**
- * Bytecode instructions flow.
+ * Data-flow analysis.
+ * This class knows how to compute the maximum value of a reducible element based
+ * on the instruction flow.
+ * @param <T> Type of the reducible element.
  * @since 0.6
  */
-public final class InstructionsFlow {
+public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
 
     /**
      * Method instructions.
@@ -39,28 +47,105 @@ public final class InstructionsFlow {
     private final List<? extends BytecodeEntry> instructions;
 
     /**
+     * Try-catch blocks.
+     */
+    private final List<BytecodeTryCatchBlock> blocks;
+
+    /**
      * Constructor.
-     * @param instructions Instructions.
+     * @param instr Instructions.
+     * @param catches Try-catch blocks.
      */
-    InstructionsFlow(final List<? extends BytecodeEntry> instructions) {
-        this.instructions = instructions;
+    InstructionsFlow(
+        final List<? extends BytecodeEntry> instr, final List<BytecodeTryCatchBlock> catches
+    ) {
+        this.instructions = instr;
+        this.blocks = new ArrayList<>(catches);
     }
 
     /**
-     * Get size.
-     * @return Size.
+     * Compute the maximum value.
+     * @param initial Initial value.
+     * @param generator Function to generate the reducible element from the instruction.
+     * @return Maximum value.
      */
-    public int size() {
-        return this.instructions.size();
+    public T max(T initial, Function<BytecodeInstruction, T> generator) {
+        final Map<Integer, T> visited = new HashMap<>(0);
+        final Map<Integer, T> worklist = new HashMap<>(0);
+        worklist.put(0, initial);
+        final int total = this.instructions.size();
+        T current;
+        while (!worklist.isEmpty()) {
+            final Map.Entry<Integer, T> curr = worklist.entrySet()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Cannot find first worklist element"));
+            int index = curr.getKey();
+            current = curr.getValue();
+            worklist.remove(index);
+            if (visited.get(index) != null || visited.get(index).compareTo(current) >= 0) {
+                continue;
+            }
+            while (index < total) {
+                final BytecodeEntry entry = this.instructions.get(index);
+                if (entry instanceof BytecodeInstruction) {
+                    final BytecodeInstruction instruction = BytecodeInstruction.class.cast(entry);
+                    current = current.add(generator.apply(instruction));
+                    final T updated = current;
+                    if (instruction.isSwitch()) {
+                        final List<Label> offsets = instruction.offsets();
+                        for (final Label offset : offsets) {
+                            final int target = this.index(offset);
+                            worklist.put(target, updated);
+                        }
+                        visited.put(index, updated);
+                        break;
+                    } else if (instruction.isBranch()) {
+                        final Label label = instruction.jump();
+                        final int jump = this.index(label);
+                        worklist.put(jump, updated);
+                        final int next = index + 1;
+                        worklist.put(next, updated);
+                        visited.put(index, updated);
+                        break;
+                    } else if (instruction.isJump()) {
+                        final Label label = instruction.jump();
+                        final int jump = this.index(label);
+                        worklist.put(jump, updated);
+                        visited.put(index, updated);
+                        break;
+                    } else if (instruction.isReturn()) {
+                        visited.put(index, updated);
+                        break;
+                    }
+                    this.suitableBlocks(index)
+                        .forEach(ind -> worklist.put(ind, updated.enterBlock()));
+                    visited.putIfAbsent(index, updated);
+                    visited.computeIfPresent(index, (k, v) -> this.max(v, updated));
+                } else {
+                    visited.put(index, current);
+                }
+                ++index;
+            }
+        }
+        return visited.values()
+            .stream()
+            .max(T::compareTo)
+            .orElseThrow(() -> new IllegalStateException("Cannot find max value"));
     }
 
     /**
-     * Get instruction.
-     * @param index Index.
-     * @return Instruction.
+     * Which try-catch-blocks cover the instruction.
+     * @param instruction Instruction index.
+     * @return List of block indexes.
      */
-    public BytecodeEntry get(final int index) {
-        return this.instructions.get(index);
+    private List<Integer> suitableBlocks(final int instruction) {
+        return this.blocks.stream()
+            .map(BytecodeTryCatchBlock.class::cast)
+            .filter(block -> this.index(block.startLabel()) <= instruction)
+            .filter(block -> this.index(block.endLabel()) >= instruction)
+            .map(block -> this.index(block.handlerLabel()))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -68,12 +153,34 @@ public final class InstructionsFlow {
      * @param label Label.
      * @return Index.
      */
-    int index(final Label label) {
+    private int index(final Label label) {
         for (int index = 0; index < this.instructions.size(); ++index) {
             if (this.instructions.get(index).equals(new BytecodeLabel(label, new AllLabels()))) {
                 return index;
             }
         }
         throw new IllegalStateException(String.format("Label %s not found", label));
+    }
+
+    /**
+     * Max of two reducible elements.
+     * @param first First element.
+     * @param second Second element.
+     * @return Max element.
+     */
+    private T max(final T first, final T second) {
+        return first.compareTo(second) > 0 ? first : second;
+    }
+
+    /**
+     * Reducible element in the data-flow analysis.
+     * @param <T> Type of the element.
+     */
+    interface Reducible<T> extends Comparable<T> {
+
+        T add(T other);
+
+        T enterBlock();
+
     }
 }
