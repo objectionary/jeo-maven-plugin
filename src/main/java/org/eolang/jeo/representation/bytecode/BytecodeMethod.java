@@ -425,13 +425,6 @@ public final class BytecodeMethod implements Testable {
      * @return Max stack.
      */
     private int computeStack() {
-//        return new MaxStack(
-//            this.instructions,
-//            this.tryblocks.stream()
-//                .filter(BytecodeTryCatchBlock.class::isInstance)
-//                .map(BytecodeTryCatchBlock.class::cast)
-//                .collect(Collectors.toList())
-//        ).value();
         return new MaxStack(
             this.instructions,
             this.tryblocks.stream()
@@ -446,7 +439,15 @@ public final class BytecodeMethod implements Testable {
      * @return Max local variables.
      */
     private int computeLocals() {
-        return new MaxLocals(
+//        return new MaxLocals(
+//            this.properties,
+//            this.instructions,
+//            this.tryblocks.stream()
+//                .filter(BytecodeTryCatchBlock.class::isInstance)
+//                .map(BytecodeTryCatchBlock.class::cast)
+//                .collect(Collectors.toList())
+//        ).value();
+        return new MaxLocalsFlow(
             this.properties,
             this.instructions,
             this.tryblocks.stream()

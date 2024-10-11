@@ -23,8 +23,13 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import lombok.ToString;
+import org.objectweb.asm.Type;
 
 public final class MaxLocalsFlow {
 
@@ -78,31 +83,105 @@ public final class MaxLocalsFlow {
      * @return Maximum number of local variables.
      */
     public int value() {
+        final Variables initial = new Variables();
+        int first = 0;
+        if (!this.props.isStatic()) {
+            initial.put(0, 1);
+            first = 1;
+        }
+        final Type[] types = Type.getArgumentTypes(this.props.descriptor());
+        for (int index = 0; index < types.length; ++index) {
+            final Type type = types[index];
+            initial.put(index * type.getSize() + first, type.getSize());
+        }
         return new DataFlow<Variables>(this.instructions, this.blocks)
-            .max(new Variables(), instr -> new Variables())
+            .max(initial, instr -> {
+                if (instr.isVarInstruction()) {
+                    return new Variables(instr);
+                } else {
+                    return new Variables();
+                }
+            })
             .size();
     }
 
     @ToString
     private static final class Variables implements DataFlow.Reducible<Variables> {
 
+        /**
+         * All variables with their sizes.
+         */
+        private final TreeMap<Integer, Integer> all;
+
+        /**
+         * Constructor.
+         */
+        Variables() {
+            this(new TreeMap<>());
+        }
+
+        /**
+         * Copy constructor.
+         * @param vars Variables to copy.
+         */
+        Variables(Variables vars) {
+            this(vars.all);
+        }
+
+        Variables(final BytecodeInstruction instr) {
+            this(instr.varIndex(), instr.varSize());
+        }
+
+        Variables(final int index, final int size) {
+            this(Collections.singletonMap(index, size));
+        }
+
+        /**
+         * Constructor.
+         * @param all All variables.
+         */
+        private Variables(final Map<Integer, Integer> all) {
+            this.all = new TreeMap<>(all);
+        }
+
         @Override
         public int compareTo(final Variables o) {
-            return 0;
+            return Integer.compare(this.size(), o.size());
         }
 
         @Override
         public Variables add(final Variables other) {
-            return null;
+            Map<Integer, Integer> variables = new HashMap<>();
+            variables.putAll(this.all);
+            variables.putAll(other.all);
+            return new Variables(variables);
         }
 
         @Override
         public Variables enterBlock() {
-            return this;
+            return new Variables(this);
         }
 
+        /**
+         * Get size.
+         * @return Size.
+         */
         int size() {
-            return 0;
+            int result = 0;
+            if (!this.all.isEmpty()) {
+                final Map.Entry<Integer, Integer> entry = this.all.lastEntry();
+                result = entry.getKey() + 1 + (int) (entry.getValue() * 0.5);
+            }
+            return result;
+        }
+
+        /**
+         * Put variable.
+         * @param index Index.
+         * @param value Value.
+         */
+        void put(final int index, final int value) {
+            this.all.put(index, value);
         }
     }
 }
