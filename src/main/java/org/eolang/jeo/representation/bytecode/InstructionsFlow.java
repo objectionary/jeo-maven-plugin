@@ -84,10 +84,8 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
             int index = curr.getKey();
             current = curr.getValue();
             worklist.remove(index);
-            if (visited.get(index) != null) {
-                if (visited.get(index).compareTo(current) >= 0) {
-                    continue;
-                }
+            if (visited.get(index) != null && visited.get(index).compareTo(current) >= 0) {
+                continue;
             }
             while (index < total) {
                 final BytecodeEntry entry = this.instructions.get(index);
