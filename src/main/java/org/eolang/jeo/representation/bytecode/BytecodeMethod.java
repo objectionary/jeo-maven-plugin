@@ -432,7 +432,7 @@ public final class BytecodeMethod implements Testable {
 //                .map(BytecodeTryCatchBlock.class::cast)
 //                .collect(Collectors.toList())
 //        ).value();
-        return new MaxStackFlow(
+        return new MaxStack(
             this.instructions,
             this.tryblocks.stream()
                 .filter(BytecodeTryCatchBlock.class::isInstance)

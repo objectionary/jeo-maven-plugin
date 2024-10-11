@@ -23,26 +23,14 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import org.objectweb.asm.Label;
+import lombok.ToString;
 
 /**
  * Bytecode method max stack.
  * This class knows hot to compute the maximum size of the stack
  * that can be used by a method.
  * @since 0.6
- * @todo #540:60min Refactor the MaxStack class.
- *  The MaxLocals class has a high cognitive complexity. Refactor the class
- *  to reduce the complexity. You might also extract some methods to make
- *  the class more readable. Don't forget to remove the @SuppressWarnings.
- * @checkstyle CyclomaticComplexityCheck (500 lines)
- * @checkstyle JavaNCSSCheck (500 lines)
- * @checkstyle AvoidInlineConditionalsCheck (500 lines)
- * @checkstyle NestedIfDepthCheck (500 lines)
  */
 final class MaxStack {
 
@@ -85,78 +73,74 @@ final class MaxStack {
      * Compute the maximum stack size.
      * @return Maximum stack size.
      */
-    @SuppressWarnings("PMD.CognitiveComplexity")
     public int value() {
-        int max = 0;
-        final int length = this.instructions.size();
-        final Deque<Integer> worklist = new ArrayDeque<>(0);
-        worklist.add(0);
-        final Map<Integer, Integer> visited = new TreeMap<>();
-        this.blocks.stream()
-            .map(BytecodeTryCatchBlock.class::cast)
-            .map(BytecodeTryCatchBlock::handlerLabel)
-            .map(this.instructions::index)
-            .peek(ind -> visited.put(ind, 1))
-            .forEach(worklist::add);
-        while (!worklist.isEmpty()) {
-            int current = worklist.pop();
-            int stack = visited.get(current) == null ? 0 : visited.get(current);
-            while (current < length) {
-                final BytecodeEntry entry = this.instructions.get(current);
-                stack += entry.impact();
-                max = Math.max(max, stack);
-                final int fstack = stack;
-                visited.compute(
-                    current, (k, v) -> v == null ? fstack : Math.max(v, fstack)
-                );
-                if (entry instanceof BytecodeInstruction) {
-                    final BytecodeInstruction var = BytecodeInstruction.class.cast(entry);
-                    if (var.isSwitch()) {
-                        final List<Label> offsets = var.offsets();
-                        for (final Label offset : offsets) {
-                            final int target = this.instructions.index(offset);
-                            if (visited.get(target) == null
-                                || visited.get(target) < stack
-                            ) {
-                                visited.put(target, stack);
-                                worklist.add(target);
-                            }
-                        }
-                        break;
-                    } else if (var.isBranch()) {
-                        final Label label = var.jump();
-                        final int jump = this.instructions.index(label);
-                        if (visited.get(jump) == null
-                            || visited.get(jump) < stack
-                        ) {
-                            visited.put(jump, stack);
-                            worklist.add(jump);
-                        }
-                        final int next = current + 1;
-                        if (visited.get(next) == null
-                            || visited.get(next) < stack
-                        ) {
-                            visited.put(next, stack);
-                            worklist.add(next);
-                        }
-                        break;
-                    } else if (var.isJump()) {
-                        final Label label = var.jump();
-                        final int jump = this.instructions.index(label);
-                        if (visited.get(jump) == null
-                            || visited.get(jump) < stack
-                        ) {
-                            visited.put(jump, stack);
-                            worklist.add(jump);
-                        }
-                        break;
-                    } else if (var.isReturn()) {
-                        break;
-                    }
-                }
-                ++current;
-            }
+        return new DataFlow<Stack>(this.instructions, this.blocks)
+            .max(new Stack(0), Stack::new)
+            .integer();
+    }
+
+    @ToString
+    private static class Stack implements DataFlow.Reducible<Stack> {
+
+        /**
+         * Stack integer value;
+         */
+        private final int value;
+
+        /**
+         * Where this stack value comes from.
+         * This field is needed for debug purposes only.
+         * If it creates performance issues, it can be removed.
+         */
+        private final String source;
+
+        /**
+         * Constructor.
+         * @param value Stack value.
+         */
+        Stack(final int value) {
+            this(value, "");
         }
-        return max;
+
+        /**
+         * Constructor.
+         * @param instruction Bytecode instruction.
+         */
+        Stack(final BytecodeInstruction instruction) {
+            this(instruction.impact(), instruction.testCode());
+        }
+
+        /**
+         * Constructor.
+         * @param value Stack value.
+         * @param source Source of the value.
+         */
+        private Stack(final int value, final String source) {
+            this.value = value;
+            this.source = source;
+        }
+
+        @Override
+        public int compareTo(final Stack o) {
+            return Integer.compare(this.value, o.value);
+        }
+
+        @Override
+        public Stack add(final Stack other) {
+            return new Stack(this.value + other.value, other.source);
+        }
+
+        @Override
+        public Stack enterBlock() {
+            return new Stack(1, this.source);
+        }
+
+        /**
+         * Get integer value.
+         * @return Integer value.
+         */
+        int integer() {
+            return this.value;
+        }
     }
 }
