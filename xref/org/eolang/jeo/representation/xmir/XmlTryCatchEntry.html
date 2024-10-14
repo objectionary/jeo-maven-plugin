@@ -111,27 +111,23 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a>         <strong class="jxr_keyword">return</strong> Optional.ofNullable(<strong class="jxr_keyword">this</strong>.xmlnode.children().collect(Collectors.toList()).get(3))
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>             .filter(node -&gt; !node.hasAttribute(<span class="jxr_string">"base"</span>, <strong class="jxr_keyword">new</strong> <a name="EoFqn" href="../../../../../org/eolang/jeo/representation/directives/EoFqn.html#EoFqn">EoFqn</a>(<span class="jxr_string">"nop"</span>).fqn()))
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>             .map(XmlValue::<strong class="jxr_keyword">new</strong>)
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>             .map(XmlValue::bytes)
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>             .map(XmlBytes::hex)
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>             .map(HexString::decode)
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>             .filter(s -&gt; !s.isEmpty())
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>             .orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>     }
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">     * Retrieves the label.</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">     * @param id Label uid.</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">     * @return Label.</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>     <strong class="jxr_keyword">private</strong> Optional&lt;String&gt; label(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> id) {
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>         <strong class="jxr_keyword">return</strong> Optional.ofNullable(<strong class="jxr_keyword">this</strong>.xmlnode.children().collect(Collectors.toList()).get(id))
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>             .filter(node -&gt; !node.hasAttribute(<span class="jxr_string">"base"</span>, <strong class="jxr_keyword">new</strong> <a name="EoFqn" href="../../../../../org/eolang/jeo/representation/directives/EoFqn.html#EoFqn">EoFqn</a>(<span class="jxr_string">"nop"</span>).fqn()))
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>             .map(XmlValue::<strong class="jxr_keyword">new</strong>)
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>             .map(XmlValue::bytes)
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>             .map(XmlBytes::hex)
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>             .map(HexString::decode);
-<a class="jxr_linenumber" name="L125" href="#L125">125</a>     }
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> }
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>             .map(XmlValue::string)
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>             .filter(s -&gt; !s.isEmpty())
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>             .orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     }
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">     * Retrieves the label.</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">     * @param id Label uid.</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">     * @return Label.</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">private</strong> Optional&lt;String&gt; label(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> id) {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>         <strong class="jxr_keyword">return</strong> Optional.ofNullable(<strong class="jxr_keyword">this</strong>.xmlnode.children().collect(Collectors.toList()).get(id))
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>             .filter(node -&gt; !node.hasAttribute(<span class="jxr_string">"base"</span>, <strong class="jxr_keyword">new</strong> <a name="EoFqn" href="../../../../../org/eolang/jeo/representation/directives/EoFqn.html#EoFqn">EoFqn</a>(<span class="jxr_string">"nop"</span>).fqn()))
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>             .map(XmlValue::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>             .map(XmlValue::string);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>     }
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>

@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BytecodeAnnotation" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeAnnotation.html#BytecodeAnnotation">BytecodeAnnotation</a>(
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>              <strong class="jxr_keyword">this</strong>.descriptor(),
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>              <strong class="jxr_keyword">this</strong>.visible(),
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>              <strong class="jxr_keyword">this</strong>.props()
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>              <strong class="jxr_keyword">this</strong>.values()
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>          );
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      }
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">     * @return Descriptor.</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">private</strong> String descriptor() {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlValue" href="../../../../../org/eolang/jeo/representation/xmir/XmlValue.html#XmlValue">XmlValue</a>(<strong class="jxr_keyword">this</strong>.child(0)).bytes().hex().decode();
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlValue" href="../../../../../org/eolang/jeo/representation/xmir/XmlValue.html#XmlValue">XmlValue</a>(<strong class="jxr_keyword">this</strong>.child(0)).string();
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      }
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>      <em class="jxr_javadoccomment">/**</em>
@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">     * @return True if visible at runtime, false otherwise.</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> visible() {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlValue" href="../../../../../org/eolang/jeo/representation/xmir/XmlValue.html#XmlValue">XmlValue</a>(<strong class="jxr_keyword">this</strong>.child(1)).bytes().hex().decodeAsBoolean();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlValue" href="../../../../../org/eolang/jeo/representation/xmir/XmlValue.html#XmlValue">XmlValue</a>(<strong class="jxr_keyword">this</strong>.child(1)).bool();
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      }
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>      <strong class="jxr_keyword">private</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a> child(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> index) {
@@ -93,13 +93,13 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">     * Annotation properties.</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">     * @return Properties.</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">private</strong> List&lt;BytecodeAnnotationValue&gt; props() {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <strong class="jxr_keyword">private</strong> List&lt;BytecodeAnnotationValue&gt; values() {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>              .filter(
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>                  xmlnode -&gt; xmlnode.hasAttribute(<span class="jxr_string">"base"</span>, <strong class="jxr_keyword">new</strong> <a name="JeoFqn" href="../../../../../org/eolang/jeo/representation/directives/JeoFqn.html#JeoFqn">JeoFqn</a>(<span class="jxr_string">"annotation-property"</span>).fqn())
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>              )
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>              .map(XmlAnnotationProperty::<strong class="jxr_keyword">new</strong>)
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>              .map(XmlAnnotationProperty::bytecode)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>              .map(XmlAnnotationValue::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>              .map(XmlAnnotationValue::bytecode)
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>              .collect(Collectors.toList());
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>      }
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  }

@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Collectors;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> lombok.EqualsAndHashCode;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> lombok.ToString;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.bytecode.BytecodeInstructionEntry;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.DirectivesInstruction;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.xembly.Transformers;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.xembly.Xembler;
@@ -100,8 +100,8 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     * Convert to bytecode.</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     * @return Bytecode instruction.</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">public</strong> <a name="BytecodeInstructionEntry" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeInstructionEntry.html#BytecodeInstructionEntry">BytecodeInstructionEntry</a> bytecode() {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BytecodeInstructionEntry" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeInstructionEntry.html#BytecodeInstructionEntry">BytecodeInstructionEntry</a>(
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">public</strong> BytecodeInstruction bytecode() {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BytecodeInstruction(
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>              <strong class="jxr_keyword">this</strong>.opcode(),
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>              <strong class="jxr_keyword">this</strong>.operands().stream().map(XmlOperand::asObject).collect(Collectors.toList())
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>          );
@@ -113,7 +113,7 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>     @EqualsAndHashCode.Include
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> opcode() {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="HexString" href="../../../../../org/eolang/jeo/representation/xmir/HexString.html#HexString">HexString</a>(<strong class="jxr_keyword">this</strong>.node.firstChild().text()).decodeAsInt();
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlValue" href="../../../../../org/eolang/jeo/representation/xmir/XmlValue.html#XmlValue">XmlValue</a>(<strong class="jxr_keyword">this</strong>.node).integer();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a>     }
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
 <a class="jxr_linenumber" name="L111" href="#L111">111</a>     <em class="jxr_javadoccomment">/**</em>

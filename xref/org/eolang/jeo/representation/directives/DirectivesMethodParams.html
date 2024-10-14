@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.Iterator;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.List;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.Random;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Collectors;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.xembly.Directive;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.xembly.Directives;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
@@ -66,14 +66,13 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>      @Override
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          <strong class="jxr_keyword">final</strong> Directives directives = <strong class="jxr_keyword">new</strong> Directives().add(<span class="jxr_string">"o"</span>)
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>              .attr(<span class="jxr_string">"line"</span>, <strong class="jxr_keyword">new</strong> Random().nextInt(Integer.MAX_VALUE))
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>              .attr(<span class="jxr_string">"name"</span>, <span class="jxr_string">"method-params"</span>)
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>              .attr(<span class="jxr_string">"base"</span>, <strong class="jxr_keyword">new</strong> <a name="JeoFqn" href="../../../../../org/eolang/jeo/representation/directives/JeoFqn.html#JeoFqn">JeoFqn</a>(<span class="jxr_string">"params"</span>).fqn());
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">this</strong>.params.forEach(directives::append);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">return</strong> directives.up().iterator();
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      }
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  }
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a>(
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>              <span class="jxr_string">"params"</span>,
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>              <span class="jxr_string">"method-params"</span>,
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>              <strong class="jxr_keyword">this</strong>.params.stream().map(Directives::<strong class="jxr_keyword">new</strong>).collect(Collectors.toList())
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          ).iterator();
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>

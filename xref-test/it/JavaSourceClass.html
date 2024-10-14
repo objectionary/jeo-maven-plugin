@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * @since 0.1</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  @SuppressWarnings(<span class="jxr_string">"JTCOP.RuleCorrectTestName"</span>)
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="JavaSourceClass" href="../it/JavaSourceClass.html#JavaSourceClass">JavaSourceClass</a> {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="JavaSourceClass" href="../it/JavaSourceClass.html#JavaSourceClass">JavaSourceClass</a> {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">     * Name of Java class.</em>
@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     * Constructor.</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">     * @param resource Resource of Java class.</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <a name="JavaSourceClass" href="../it/JavaSourceClass.html#JavaSourceClass">JavaSourceClass</a>(<strong class="jxr_keyword">final</strong> String resource) {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">public</strong> <a name="JavaSourceClass" href="../it/JavaSourceClass.html#JavaSourceClass">JavaSourceClass</a>(<strong class="jxr_keyword">final</strong> String resource) {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">this</strong>(JavaSourceClass.filename(resource), <strong class="jxr_keyword">new</strong> ResourceOf(resource));
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      }
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">     * Compile the Java class.</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">     * @return Bytecode of compiled class.</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      Bytecode compile() {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      <strong class="jxr_keyword">public</strong> Bytecode compile() {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>          <strong class="jxr_keyword">final</strong> JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">final</strong> BytecodeManager manager = <strong class="jxr_keyword">new</strong> BytecodeManager(compiler);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> successful = compiler.getTask(

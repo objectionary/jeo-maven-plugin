@@ -68,20 +68,19 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     * @param base The base of the attribute.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     * @param data Properties of an attribute.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">public</strong> <a name="DirectivesAttribute" href="../../../../../org/eolang/jeo/representation/directives/DirectivesAttribute.html#DirectivesAttribute">DirectivesAttribute</a>(<strong class="jxr_keyword">final</strong> String base, <strong class="jxr_keyword">final</strong> List&lt;Iterable&lt;Directive&gt;&gt; data) {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">private</strong> <a name="DirectivesAttribute" href="../../../../../org/eolang/jeo/representation/directives/DirectivesAttribute.html#DirectivesAttribute">DirectivesAttribute</a>(<strong class="jxr_keyword">final</strong> String base, <strong class="jxr_keyword">final</strong> List&lt;Iterable&lt;Directive&gt;&gt; data) {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">this</strong>.base = base;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">this</strong>.data = data;
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      @Override
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">final</strong> Directives directives = <strong class="jxr_keyword">new</strong> Directives()
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>              .add(<span class="jxr_string">"o"</span>)
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>              .attr(<span class="jxr_string">"base"</span>, <strong class="jxr_keyword">new</strong> <a name="JeoFqn" href="../../../../../org/eolang/jeo/representation/directives/JeoFqn.html#JeoFqn">JeoFqn</a>(<strong class="jxr_keyword">this</strong>.base).fqn());
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>          <strong class="jxr_keyword">this</strong>.data.forEach(directives::append);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">return</strong> directives.up().iterator();
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      }
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  }
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a>(
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>              <strong class="jxr_keyword">this</strong>.base,
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>              <strong class="jxr_keyword">this</strong>.data.stream().map(Directives::<strong class="jxr_keyword">new</strong>).toArray(Directives[]::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          ).iterator();
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      }
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
