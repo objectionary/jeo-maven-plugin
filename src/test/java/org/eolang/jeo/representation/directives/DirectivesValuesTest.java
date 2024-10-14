@@ -24,7 +24,10 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -44,6 +47,21 @@ final class DirectivesValuesTest {
                 "./o[contains(@base,'seq1') and @name='name']",
                 "./o[contains(@base,'seq1') and @name='name']/o/o[@data='bytes' and text()='76 61 6C 75 65']"
             )
+        );
+    }
+
+    @RepeatedTest(100)
+    void generatesRandomNameWithoutFirstDigit() {
+        MatcherAssert.assertThat(
+            "We expect that the name of the tuple will be generated randomly and will not start with a digit",
+            new XmlNode(
+                new Xembler(
+                    new DirectivesValues("", "some-value")
+                ).xmlQuietly()).attribute("name")
+                .orElseThrow(
+                    () -> new IllegalStateException("Name attribute is absent")
+                ),
+            Matchers.matchesRegex("^[^0-9].*")
         );
     }
 }

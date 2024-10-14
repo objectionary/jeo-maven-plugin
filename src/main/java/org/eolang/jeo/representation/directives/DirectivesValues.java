@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.xembly.Directive;
 
@@ -39,6 +40,11 @@ import org.xembly.Directive;
  * @since 0.6
  */
 public final class DirectivesValues implements Iterable<Directive> {
+
+    /**
+     * Pattern to remove all non-digits from the beginning of a string.
+     */
+    private static final Pattern DIGITS = Pattern.compile("^[0-9]");
 
     /**
      * Tuple name.
@@ -90,10 +96,20 @@ public final class DirectivesValues implements Iterable<Directive> {
     private String nonEmptyName() {
         final String result;
         if (this.name.isEmpty()) {
-            result = UUID.randomUUID().toString().toLowerCase(Locale.getDefault());
+            result = DirectivesValues.randomName();
         } else {
             result = this.name;
         }
         return result;
+    }
+
+    /**
+     * Generate random name.
+     * @return Random name.
+     */
+    private static String randomName() {
+        return DirectivesValues.DIGITS.matcher(
+            UUID.randomUUID().toString().toLowerCase(Locale.getDefault())
+        ).replaceAll("a");
     }
 }
