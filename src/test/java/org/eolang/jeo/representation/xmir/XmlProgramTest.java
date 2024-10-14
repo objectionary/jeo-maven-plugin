@@ -33,8 +33,10 @@ import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
+import org.xembly.Directives;
 import org.xembly.Xembler;
 
 /**
@@ -74,6 +76,28 @@ final class XmlProgramTest {
             "Can't convert method with exception into bytecode",
             new XmlProgram(XmlProgramTest.classWithException()).bytecode().bytecode(),
             Matchers.notNullValue()
+        );
+    }
+
+    @Test
+    void catchesProgramParsingException() {
+        MatcherAssert.assertThat(
+            "Exception message doesn't contain the expected text",
+            Assertions.assertThrows(
+                ParsingException.class,
+                () -> new XmlProgram(
+                    new Xembler(
+                        new Directives(
+                            new BytecodeProgram(
+                                "com.example", new BytecodeClass("Foo", 0)
+                            ).directives("")
+                        ).xpath(".//objects").remove()
+                    ).xmlQuietly()
+                ).bytecode()
+            ).getMessage(),
+            Matchers.containsString(
+                "Unexpected exception during parsing the program in package 'com.example'"
+            )
         );
     }
 
