@@ -147,6 +147,11 @@ public final class XmirRepresentation implements Representation {
                 String.format("Can't transform '%s' to bytecode", xmir),
                 exception
             );
+        } catch (final IllegalStateException exception) {
+            throw new IllegalStateException(
+                String.format("Can't transform XMIR to bytecode from the '%s' source", this.source),
+                exception
+            );
         }
     }
 

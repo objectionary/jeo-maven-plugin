@@ -102,7 +102,17 @@ public final class XmlProgram {
      * @return Bytecode program.
      */
     public BytecodeProgram bytecode() {
-        return new BytecodeProgram(this.pckg(), this.top().bytecode());
+        try {
+            return new BytecodeProgram(this.pckg(), this.top().bytecode());
+        } catch (final IllegalStateException exception) {
+            throw new XmirParsingException(
+                String.format(
+                    "Unexpected exception during parsing the program in package '%s'",
+                    this.pckg()
+                ),
+                exception
+            );
+        }
     }
 
     /**

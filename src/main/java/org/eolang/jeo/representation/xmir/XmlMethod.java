@@ -109,26 +109,36 @@ public final class XmlMethod {
      * @return Bytecode method.
      */
     public BytecodeMethod bytecode() {
-        return new BytecodeMethod(
-            this.trycatchEntries()
-                .stream()
-                .map(XmlTryCatchEntry::bytecode)
-                .collect(Collectors.toList()),
-            this.instructions()
-                .stream()
-                .map(XmlBytecodeEntry::bytecode)
-                .collect(Collectors.toList()),
-            this.annotations(),
-            this.properties(),
-            this.defvalue()
-                .map(XmlDefaultValue::bytecode)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(Collections::singletonList)
-                .orElse(Collections.emptyList()),
-            this.maxs().map(XmlMaxs::bytecode)
-                .orElse(new BytecodeMaxs(0, 0))
-        );
+        try {
+            return new BytecodeMethod(
+                this.trycatchEntries()
+                    .stream()
+                    .map(XmlTryCatchEntry::bytecode)
+                    .collect(Collectors.toList()),
+                this.instructions()
+                    .stream()
+                    .map(XmlBytecodeEntry::bytecode)
+                    .collect(Collectors.toList()),
+                this.annotations(),
+                this.properties(),
+                this.defvalue()
+                    .map(XmlDefaultValue::bytecode)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .map(Collections::singletonList)
+                    .orElse(Collections.emptyList()),
+                this.maxs().map(XmlMaxs::bytecode)
+                    .orElse(new BytecodeMaxs(0, 0))
+            );
+        } catch (final IllegalStateException exception) {
+            throw new XmirParsingException(
+                String.format(
+                    "Unexpected exception during parsing the method '%s'",
+                    this.name()
+                ),
+                exception
+            );
+        }
     }
 
     /**

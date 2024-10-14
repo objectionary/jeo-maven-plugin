@@ -94,21 +94,31 @@ public final class XmlClass {
      * @return Bytecode class.
      */
     public BytecodeClass bytecode() {
-        return new BytecodeClass(
-            new PrefixedName(this.name()).decode(),
-            this.methods().stream().map(XmlMethod::bytecode)
-                .collect(Collectors.toList()),
-            this.fields().stream()
-                .map(XmlField::bytecode)
-                .collect(Collectors.toList()),
-            this.annotations()
-                .map(XmlAnnotations::bytecode)
-                .orElse(new BytecodeAnnotations()),
-            this.attributes()
-                .map(XmlAttributes::attributes)
-                .orElse(new ArrayList<>(0)),
-            this.properties().bytecode()
-        );
+        try {
+            return new BytecodeClass(
+                new PrefixedName(this.name()).decode(),
+                this.methods().stream().map(XmlMethod::bytecode)
+                    .collect(Collectors.toList()),
+                this.fields().stream()
+                    .map(XmlField::bytecode)
+                    .collect(Collectors.toList()),
+                this.annotations()
+                    .map(XmlAnnotations::bytecode)
+                    .orElse(new BytecodeAnnotations()),
+                this.attributes()
+                    .map(XmlAttributes::attributes)
+                    .orElse(new ArrayList<>(0)),
+                this.properties().bytecode()
+            );
+        } catch (final IllegalStateException exception) {
+            throw new XmirParsingException(
+                String.format(
+                    "Unexpected exception during parsing the class '%s'",
+                    this.name()
+                ),
+                exception
+            );
+        }
     }
 
     /**
