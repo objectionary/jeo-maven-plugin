@@ -53,14 +53,14 @@ final class DirectivesValuesTest {
     @RepeatedTest(100)
     void generatesRandomNameWithoutFirstDigit() {
         MatcherAssert.assertThat(
-            "We expect that the name of the tuple will be generated randomly and will not start with a digit",
+            "We expect that the name of the sequence will be generated randomly and will not start with a digit",
             new XmlNode(
                 new Xembler(
                     new DirectivesValues("", "some-value")
-                ).xmlQuietly()).attribute("name")
-                .orElseThrow(
-                    () -> new IllegalStateException("Name attribute is absent")
-                ),
+                ).xmlQuietly()
+            ).attribute("name").orElseThrow(
+                () -> new IllegalStateException("Name attribute is absent")
+            ),
             Matchers.matchesRegex("^[^0-9].*")
         );
     }
