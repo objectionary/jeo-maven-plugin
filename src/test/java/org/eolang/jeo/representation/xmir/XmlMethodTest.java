@@ -103,13 +103,15 @@ final class XmlMethodTest {
             Assertions.assertThrows(
                 ParsingException.class,
                 () -> new XmlMethod(
-                    new XmlNode(new Xembler(
-                        new Directives(
-                            new BytecodeMethod(
-                                "someMethodName"
-                            ).directives(false)
-                        ).xpath(".//o[@name='exceptions']").append(new DirectivesBytes("???"))
-                    ).xmlQuietly())
+                    new XmlNode(
+                        new Xembler(
+                            new Directives(
+                                new BytecodeMethod(
+                                    "someMethodName"
+                                ).directives(false)
+                            ).xpath(".//o[@name='exceptions']").append(new DirectivesBytes("???"))
+                        ).xmlQuietly()
+                    )
                 ).bytecode()
             ).getMessage(),
             Matchers.containsString(
