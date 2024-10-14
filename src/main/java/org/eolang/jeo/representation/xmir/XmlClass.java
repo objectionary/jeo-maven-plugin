@@ -111,7 +111,7 @@ public final class XmlClass {
                 this.properties().bytecode()
             );
         } catch (final IllegalStateException exception) {
-            throw new XmirParsingException(
+            throw new ParsingException(
                 String.format(
                     "Unexpected exception during parsing the class '%s'",
                     this.name()

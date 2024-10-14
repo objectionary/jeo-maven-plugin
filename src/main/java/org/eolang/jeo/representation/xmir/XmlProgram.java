@@ -105,7 +105,7 @@ public final class XmlProgram {
         try {
             return new BytecodeProgram(this.pckg(), this.top().bytecode());
         } catch (final IllegalStateException exception) {
-            throw new XmirParsingException(
+            throw new ParsingException(
                 String.format(
                     "Unexpected exception during parsing the program in package '%s'",
                     this.pckg()

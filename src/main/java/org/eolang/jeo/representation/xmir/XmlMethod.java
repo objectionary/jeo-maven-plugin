@@ -131,7 +131,7 @@ public final class XmlMethod {
                     .orElse(new BytecodeMaxs(0, 0))
             );
         } catch (final IllegalStateException exception) {
-            throw new XmirParsingException(
+            throw new ParsingException(
                 String.format(
                     "Unexpected exception during parsing the method '%s'",
                     this.name()
@@ -183,14 +183,24 @@ public final class XmlMethod {
      * @return Properties.
      */
     private BytecodeMethodProperties properties() {
-        return new BytecodeMethodProperties(
-            this.access(),
-            this.name(),
-            this.descriptor(),
-            this.signature(),
-            this.params(),
-            this.exceptions()
-        );
+        try {
+            return new BytecodeMethodProperties(
+                this.access(),
+                this.name(),
+                this.descriptor(),
+                this.signature(),
+                this.params(),
+                this.exceptions()
+            );
+        } catch (final IllegalStateException exception) {
+            throw new ParsingException(
+                String.format(
+                    "Unexpected exception during parsing the method '%s' properties",
+                    this.name()
+                ),
+                exception
+            );
+        }
     }
 
     /**

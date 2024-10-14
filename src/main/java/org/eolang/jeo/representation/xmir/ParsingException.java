@@ -28,7 +28,7 @@ package org.eolang.jeo.representation.xmir;
  * This exception is thrown when XMIR parsing fails.
  * @since 0.6
  */
-final class XmirParsingException extends IllegalStateException {
+final class ParsingException extends IllegalStateException {
 
     /**
      * Serial version UID.
@@ -40,7 +40,7 @@ final class XmirParsingException extends IllegalStateException {
      * @param message Message.
      * @param cause Cause.
      */
-    XmirParsingException(final String message, final Throwable cause) {
+    ParsingException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }
