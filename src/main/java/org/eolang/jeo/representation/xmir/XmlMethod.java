@@ -138,6 +138,14 @@ public final class XmlMethod {
                 ),
                 exception
             );
+        } catch (final IllegalArgumentException exception){
+            throw new ParsingException(
+                String.format(
+                    "Can't transform method '%s' to bytecode",
+                    this.name()
+                ),
+                exception
+            );
         }
     }
 

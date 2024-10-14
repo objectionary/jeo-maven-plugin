@@ -43,7 +43,7 @@ public final class DirectivesBytes implements Iterable<Directive> {
      * Constructor.
      * @param hex Hex representation of bytes.
      */
-    DirectivesBytes(final String hex) {
+    public DirectivesBytes(final String hex) {
         this.hex = hex;
     }
 

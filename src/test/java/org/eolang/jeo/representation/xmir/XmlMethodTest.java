@@ -26,10 +26,14 @@ package org.eolang.jeo.representation.xmir;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
+import org.eolang.jeo.representation.directives.DirectivesBytes;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
+import org.xembly.Directives;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlMethod}.
@@ -89,6 +93,28 @@ final class XmlMethodTest {
             "We expect that max stack and max locals will be correctly parsed",
             new XmlMethod(1, 2).bytecode(),
             Matchers.equalTo(new BytecodeMethod("foo", new BytecodeMaxs(1, 2)))
+        );
+    }
+
+    @Test
+    void catchesMethodParsingException() {
+        MatcherAssert.assertThat(
+            "Exception message doesn't contain the expected text related to the method parsing",
+            Assertions.assertThrows(
+                ParsingException.class,
+                () -> new XmlMethod(
+                    new XmlNode(new Xembler(
+                        new Directives(
+                            new BytecodeMethod(
+                                "someMethodName"
+                            ).directives(false)
+                        ).xpath(".//o[@name='exceptions']").append(new DirectivesBytes("???"))
+                    ).xmlQuietly())
+                ).bytecode()
+            ).getMessage(),
+            Matchers.containsString(
+                "Unexpected exception during parsing the method 'someMethodName'"
+            )
         );
     }
 }
