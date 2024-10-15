@@ -53,11 +53,21 @@ public class XmlAnnotation {
      * @return Bytecode annotation.
      */
     public BytecodeAnnotation bytecode() {
-        return new BytecodeAnnotation(
-            this.descriptor(),
-            this.visible(),
-            this.values()
-        );
+        try {
+            return new BytecodeAnnotation(
+                this.descriptor(),
+                this.visible(),
+                this.values()
+            );
+        } catch (final IllegalStateException | IllegalArgumentException exception) {
+            throw new ParsingException(
+                String.format(
+                    "Failed to convert annotation %s to bytecode",
+                    this.node.toString()
+                ),
+                exception
+            );
+        }
     }
 
     /**
@@ -77,8 +87,23 @@ public class XmlAnnotation {
         return new XmlValue(this.child(1)).bool();
     }
 
+    /**
+     * Get child by index.
+     * @param index Index.
+     * @return Child.
+     */
     private XmlNode child(final int index) {
-        return this.node.children().collect(Collectors.toList()).get(index);
+        final List<XmlNode> all = this.node.children().collect(Collectors.toList());
+        if (index >= all.size()) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Annotation %s has no child at index %d",
+                    this.node,
+                    index
+                )
+            );
+        }
+        return all.get(index);
     }
 
     /**
