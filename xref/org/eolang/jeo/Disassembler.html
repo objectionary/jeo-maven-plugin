@@ -88,12 +88,15 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>          ).apply(<strong class="jxr_keyword">new</strong> <a name="BytecodeRepresentations" href="../../../org/eolang/jeo/BytecodeRepresentations.html#BytecodeRepresentations">BytecodeRepresentations</a>(<strong class="jxr_keyword">this</strong>.classes).all());
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>          stream.forEach(
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>              terminated -&gt; Logger.info(
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>                  <strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Dissembling of '%s' finished successfully."</span>, terminated.details().name()
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>              )
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          );
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>          stream.close();
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      }
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  }
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>                  <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>                  <span class="jxr_string">"Dissembling of '%s.xmir' (%[size]s) finished successfully."</span>,
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>                  terminated.details().name(),
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>                  terminated.size()
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>              )
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          );
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          stream.close();
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      }
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
