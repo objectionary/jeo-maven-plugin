@@ -146,6 +146,14 @@ public final class XmlMethod {
                 ),
                 exception
             );
+        } catch (final IndexOutOfBoundsException exception) {
+            throw new ParsingException(
+                String.format(
+                    "Can't transform method '%s' to bytecode, because of index out of bounds, most probably due to broken XMIR",
+                    this.name()
+                ),
+                exception
+            );
         }
     }
 
