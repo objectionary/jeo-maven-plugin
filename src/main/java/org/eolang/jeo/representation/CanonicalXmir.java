@@ -149,8 +149,7 @@ public final class CanonicalXmir {
                 ),
                 new TrClasspath<>(
                     "/org/eolang/parser/add-refs.xsl",
-                    "/org/eolang/parser/vars-float-down.xsl",
-                    "/org/eolang/parser/roll-data.xsl"
+                    "/org/eolang/parser/vars-float-down.xsl"
                 ).back()
             )
         ).pass(parsed);

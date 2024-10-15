@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import java.util.Collections;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
@@ -34,6 +35,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -71,6 +73,55 @@ final class CanonicalXmirTest {
                 ).plain()
             ).bytecode(),
             Matchers.equalTo(initial)
+        );
+    }
+
+    @Test
+    void unrollsSequenceOfValuesCorrectly() {
+        MatcherAssert.assertThat(
+            "We expect that after the unrolling we will get correct sequence of string values.",
+            new CanonicalXmir(
+                new XMLDocument(
+                    new Xembler(
+                        new Directives()
+                            .add("program")
+                            .add("objects")
+                            .append(
+                                new XMLDocument(
+                                    String.join(
+                                        "\n",
+                                        "<o base='.seq1' name='interfaces'> ",
+                                        " <o base='.eolang'> ",
+                                        "  <o base='.org'> ",
+                                        "   <o base='Q'/></o> ",
+                                        " </o> ",
+                                        " <o as='0' base='.string'> ",
+                                        "  <o base='.jeo'> ",
+                                        "   <o base='.eolang'> ",
+                                        "    <o base='.org'> ",
+                                        "     <o base='Q'/></o> ",
+                                        "   </o> ",
+                                        "  </o> ",
+                                        "  <o as='0' base='.bytes'> ",
+                                        "   <o base='.eolang'> ",
+                                        "    <o base='.org'> ",
+                                        "     <o base='Q'/></o> ",
+                                        "   </o> ",
+                                        "   <o base='org.eolang.bytes' data='bytes'>6A 61 76 61 2F 69 6F 2F 43 6C 6F 73 65 61 62 6C 65</o> ",
+                                        "  </o> ",
+                                        " </o> ",
+                                        "</o>"
+                                    )
+                                ).node()
+                            )
+                            .up()
+                            .up()
+                    ).xmlQuietly()
+                )
+            ).plain().toString(),
+            XhtmlMatchers.hasXPath(
+                ".//o[@base='org.eolang.seq1']/o[@base='org.eolang.jeo.string']/o[@base='bytes']"
+            )
         );
     }
 }
