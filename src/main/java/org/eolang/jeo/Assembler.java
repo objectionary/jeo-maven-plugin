@@ -83,7 +83,10 @@ final class Assembler {
         ).apply(new XmirRepresentations(this.input, this.verify).all());
         stream.forEach(
             terminated -> Logger.info(
-                this, "Assembling of '%s' finished successfully.", terminated.details().name()
+                this,
+                "Assembling of '%s.class' (%[size]s) finished successfully.",
+                terminated.details().name(),
+                terminated.size()
             )
         );
         stream.close();

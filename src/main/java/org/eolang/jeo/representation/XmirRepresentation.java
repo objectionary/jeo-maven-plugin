@@ -26,6 +26,7 @@ package org.eolang.jeo.representation;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
@@ -153,6 +154,11 @@ public final class XmirRepresentation implements Representation {
                 exception
             );
         }
+    }
+
+    @Override
+    public long size() {
+        return this.xml.value().toString().getBytes(StandardCharsets.UTF_8).length;
     }
 
     /**

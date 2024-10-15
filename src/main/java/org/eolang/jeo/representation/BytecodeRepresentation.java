@@ -150,6 +150,11 @@ public final class BytecodeRepresentation implements Representation {
         return new Bytecode(new UncheckedBytes(new BytesOf(this.input.value())).asBytes());
     }
 
+    @Override
+    public long size() {
+        return this.input.value().length;
+    }
+
     /**
      * Read class name from bytecode.
      *

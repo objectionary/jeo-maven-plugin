@@ -80,7 +80,10 @@ public class Disassembler {
         ).apply(new BytecodeRepresentations(this.classes).all());
         stream.forEach(
             terminated -> Logger.info(
-                this, "Dissembling of '%s' finished successfully.", terminated.details().name()
+                this,
+                "Dissembling of '%s.xmir' (%[size]s) finished successfully.",
+                terminated.details().name(),
+                terminated.size()
             )
         );
         stream.close();
