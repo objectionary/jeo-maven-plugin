@@ -25,6 +25,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import com.yegor256.xsline.Shift;
 import com.yegor256.xsline.StClasspath;
 import com.yegor256.xsline.StEndless;
 import com.yegor256.xsline.TrClasspath;
@@ -135,29 +136,29 @@ public final class CanonicalXmir {
      */
     private static XML unroll(final XML parsed) {
         return new Xsline(
-            new TrJoined<>(
-                new TrClasspath<>(
+            new TrJoined<Shift>(
+                new TrClasspath<Shift>(
                     "/org/eolang/parser/wrap-method-calls.xsl"
                 ).back(),
-                new TrDefault<>(
+                new TrDefault<Shift>(
                     new StEndless(
                         new StClasspath(
                             "/org/eolang/parser/roll-bases.xsl"
                         )
                     )
                 ),
-                new TrClasspath<>(
+                new TrClasspath<Shift>(
                     "/org/eolang/parser/add-refs.xsl",
                     "/org/eolang/parser/add-cuts.xsl"
                 ).back(),
-                new TrDefault<>(
+                new TrDefault<Shift>(
                     new StEndless(
                         new StClasspath(
                             "/org/eolang/parser/vars-float-down.xsl"
                         )
                     )
                 ),
-                new TrClasspath<>(
+                new TrClasspath<Shift>(
                     "/org/eolang/parser/remove-cuts.xsl"
                 ).back()
             )
