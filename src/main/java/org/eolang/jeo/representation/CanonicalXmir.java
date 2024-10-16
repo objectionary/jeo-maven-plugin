@@ -136,7 +136,7 @@ public final class CanonicalXmir {
      */
     private static XML unroll(final XML parsed) {
         return new Xsline(
-            new TrJoined<Shift>(
+            new TrJoined<>(
                 new TrClasspath<>(
                     "/org/eolang/parser/wrap-method-calls.xsl"
                 ).back(),
@@ -149,7 +149,17 @@ public final class CanonicalXmir {
                 ),
                 new TrClasspath<>(
                     "/org/eolang/parser/add-refs.xsl",
-                    "/org/eolang/parser/vars-float-down.xsl"
+                    "/org/eolang/parser/add-cuts.xsl"
+                ).back(),
+                new TrDefault<>(
+                    new StEndless(
+                        new StClasspath(
+                            "/org/eolang/parser/vars-float-down.xsl"
+                        )
+                    )
+                ),
+                new TrClasspath<>(
+                    "/org/eolang/parser/remove-cuts.xsl"
                 ).back()
             )
         ).pass(parsed);

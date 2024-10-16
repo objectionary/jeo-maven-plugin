@@ -24,7 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="vars-float-down" version="2.0">
   <!--
-  The transformation does the opposite of "/org/eolang/parser/vars-float-up.xsl".
+  The transformation does almost the opposite of "/org/eolang/parser/vars-float-up.xsl".
 
   At the level of EO it looks like:
 
@@ -32,7 +32,8 @@ SOFTWARE.
     opcode > somebody       seq > @
       42               =>     opcode > somebody
     seq > @                     42
-      somebody
+      somebody.             opcode > somebody
+                              42
 
   In XMIR it works via "ref" and "line" attributes, it the transformation must
   be applied after "/org/eolang/parser/add-refs.xsl"
@@ -43,17 +44,26 @@ SOFTWARE.
   ...
   <o line="22" base="xyz" name="hello"/>
 
+  To achieve the right result, the transformation must be applied a several times.
   -->
   <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:template match="//o[@ref and @ref!='']">
-    <xsl:variable name="reference" select="@ref"/>
-    <xsl:variable name="found" select="//o[@line=$reference]"/>
-    <xsl:copy-of select="$found"/>
-  </xsl:template>
   <xsl:template match="node()|@*">
     <xsl:copy>
       <xsl:apply-templates select="node()|@*"/>
     </xsl:copy>
   </xsl:template>
-  <xsl:template match="o[@line=//o[@ref]/@ref and not(preceding-sibling::o[@ref=@line])]"/>
+  <xsl:template match="//o[@ref and @ref!='' and not(ancestor::o[@ref])]">
+    <xsl:variable name="reference" select="@ref"/>
+    <xsl:variable name="found" select="//o[@line=$reference]"/>
+    <xsl:element name="o">
+      <xsl:for-each select="$found/@*[name()!='cut']">
+        <xsl:attribute name="{name()}">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+      </xsl:for-each>
+      <xsl:for-each select="$found/o">
+        <xsl:apply-templates select="."/>
+      </xsl:for-each>
+    </xsl:element>
+  </xsl:template>
 </xsl:stylesheet>
