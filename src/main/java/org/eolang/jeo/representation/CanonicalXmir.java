@@ -25,7 +25,6 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import com.yegor256.xsline.Shift;
 import com.yegor256.xsline.StClasspath;
 import com.yegor256.xsline.StEndless;
 import com.yegor256.xsline.TrClasspath;
