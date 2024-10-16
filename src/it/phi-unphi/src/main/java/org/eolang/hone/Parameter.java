@@ -23,18 +23,13 @@
  */
 package org.eolang.hone;
 
-/**
- * App.
- * @since 0.1
- */
-@Parameter("some-parameter")
-public class App {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public static void main(String[] args) {
-        double angle = 42.0;
-        double sin = Math.sin(angle);
-        System.out.printf("sin(%f) = %f\n", angle, sin);
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface Parameter {
+    String value();
 }
