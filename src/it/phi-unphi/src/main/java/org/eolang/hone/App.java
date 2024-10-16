@@ -27,7 +27,11 @@ package org.eolang.hone;
  * App.
  * @since 0.1
  */
+
 public class App {
+
+    @Deprecated
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         double angle = 42.0;
         double sin = Math.sin(angle);
