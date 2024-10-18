@@ -75,7 +75,6 @@ final class OpcodeNameTest {
      * Provides test actual and expected arguments.
      * PMD argues that this method is unused, but it is used by JUnit.
      * So we just suppress this warning.
-     *
      * @return Stream of arguments.
      */
     @SuppressWarnings("PMD.UnusedPrivateMethod")
