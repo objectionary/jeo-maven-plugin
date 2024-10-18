@@ -93,7 +93,7 @@ public final class OpcodeName {
      * Opcode.
      * @return Opcode
      * @todo #770:35min Get rid of code() method.
-     *  This method looks like a getter. For now this method used by
+     *  This method looks like a getter. For now this method should be used by
      *  <a href="https://github.com/objectionary/opeo-maven-plugin">opeo</a>
      *  in it/AgentsIT.java. Let's remove code() method, so this class will be
      *  getter-free.
