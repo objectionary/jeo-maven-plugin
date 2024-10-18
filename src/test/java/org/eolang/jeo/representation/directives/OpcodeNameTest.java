@@ -28,12 +28,14 @@ import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.objectweb.asm.Opcodes;
 
 /**
  * Test case for {@link OpcodeName}.
+ *
  * @since 0.1
  */
 final class OpcodeNameTest {
@@ -53,10 +55,27 @@ final class OpcodeNameTest {
         );
     }
 
+    @Test
+    void returnsOpcode() {
+        final int expected = 0;
+        final int code = new OpcodeName(expected, OpcodeNameTest.COUNTER)
+            .code();
+        MatcherAssert.assertThat(
+            String.format(
+                "Opcode code: %s does not matches with expected: %s",
+                code,
+                expected
+            ),
+            code,
+            Matchers.equalTo(expected)
+        );
+    }
+
     /**
      * Provides test actual and expected arguments.
      * PMD argues that this method is unused, but it is used by JUnit.
      * So we just suppress this warning.
+     *
      * @return Stream of arguments.
      */
     @SuppressWarnings("PMD.UnusedPrivateMethod")

@@ -90,6 +90,14 @@ public final class OpcodeName {
     }
 
     /**
+     * Opcode.
+     * @return Opcode
+     */
+    public int code() {
+        return this.opcode;
+    }
+
+    /**
      * Get string representation of a bytecode.
      * @return String representation of a bytecode.
      */
