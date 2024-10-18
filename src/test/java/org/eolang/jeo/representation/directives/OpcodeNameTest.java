@@ -61,7 +61,7 @@ final class OpcodeNameTest {
             .code();
         MatcherAssert.assertThat(
             String.format(
-                "Opcode code: %s does not matches with expected: %s",
+                "Opcode code: %d does not matches with expected: %d",
                 code,
                 expected
             ),
