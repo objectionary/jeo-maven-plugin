@@ -35,7 +35,6 @@ import org.objectweb.asm.Opcodes;
 
 /**
  * Test case for {@link OpcodeName}.
- *
  * @since 0.1
  */
 final class OpcodeNameTest {
