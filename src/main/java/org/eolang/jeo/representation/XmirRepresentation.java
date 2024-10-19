@@ -55,26 +55,11 @@ public final class XmirRepresentation implements Representation {
     private final String source;
 
     /**
-     * Verify bytecode.
-     * @since 0.2
-     */
-    private final boolean verify;
-
-    /**
      * Constructor.
      * @param path Path to XML file.
      */
     public XmirRepresentation(final Path path) {
-        this(path, true);
-    }
-
-    /**
-     * Constructor.
-     * @param path Path to XML file.
-     * @param verify Verify bytecode.
-     */
-    public XmirRepresentation(final Path path, final boolean verify) {
-        this(XmirRepresentation.fromFile(path), path.toAbsolutePath().toString(), verify);
+        this(XmirRepresentation.fromFile(path), path.toAbsolutePath().toString());
     }
 
     /**
@@ -94,37 +79,20 @@ public final class XmirRepresentation implements Representation {
         final XML xml,
         final String source
     ) {
-        this(xml, source, true);
-    }
-
-    /**
-     * Constructor.
-     * @param xml XML.
-     * @param source Source of the XML.
-     * @param verify Verify bytecode.
-     */
-    public XmirRepresentation(
-        final XML xml,
-        final String source,
-        final boolean verify
-    ) {
-        this(new Unchecked<>(() -> xml), source, verify);
+        this(new Unchecked<>(() -> xml), source);
     }
 
     /**
      * Constructor.
      * @param xml XML source.
      * @param source Source of the XML.
-     * @param verify Verify bytecode.
      */
     private XmirRepresentation(
         final Unchecked<XML> xml,
-        final String source,
-        final boolean verify
+        final String source
     ) {
         this.xml = xml;
         this.source = source;
-        this.verify = verify;
     }
 
     @Override
@@ -142,7 +110,7 @@ public final class XmirRepresentation implements Representation {
         final XML xmir = this.xml.value();
         try {
             new Schema(xmir).check();
-            return new XmlProgram(xmir).bytecode().bytecode(this.verify);
+            return new XmlProgram(xmir).bytecode().bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
                 String.format("Can't transform '%s' to bytecode", xmir),

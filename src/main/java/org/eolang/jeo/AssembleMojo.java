@@ -111,8 +111,7 @@ public final class AssembleMojo extends AbstractMojo {
             } else {
                 new Assembler(
                     this.sourcesDir.toPath(),
-                    this.outputDir.toPath(),
-                    false
+                    this.outputDir.toPath()
                 ).assemble();
                 if (this.skipVerification) {
                     Logger.info(this, "Verification is disabled. Skipping.");

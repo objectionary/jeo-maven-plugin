@@ -45,27 +45,11 @@ final class XmirRepresentations implements Representations {
     private final Path objectspath;
 
     /**
-     * Verify bytecode.
-     * @since 0.2
-     */
-    private final boolean verify;
-
-    /**
      * Constructor.
      * @param objectspath Where to read objects from.
      */
     XmirRepresentations(final Path objectspath) {
-        this(objectspath, true);
-    }
-
-    /**
-     * Constructor.
-     * @param objectspath Where to read objects from.
-     * @param verify Verify bytecode.
-     */
-    XmirRepresentations(final Path objectspath, final boolean verify) {
         this.objectspath = objectspath;
-        this.verify = verify;
     }
 
     @Override
@@ -74,7 +58,7 @@ final class XmirRepresentations implements Representations {
         try {
             return Files.walk(path)
                 .filter(Files::isRegularFile)
-                .map(p -> new XmirRepresentation(p, this.verify));
+                .map(XmirRepresentation::new);
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't read folder '%s'", path),
