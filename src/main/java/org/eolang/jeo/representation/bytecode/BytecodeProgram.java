@@ -24,21 +24,17 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.xml.XML;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.util.CheckClassAdapter;
 
 /**
  * Bytecode program.
