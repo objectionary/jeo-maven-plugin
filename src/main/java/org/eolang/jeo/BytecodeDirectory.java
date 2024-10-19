@@ -64,7 +64,7 @@ final class BytecodeDirectory {
     /**
      * Verify bytecode in the folder.
      */
-    public void verify() {
+    void verify() {
         try (
             Stream<Path> classess = Files.walk(this.input)
                 .filter(Files::isRegularFile)

@@ -106,15 +106,21 @@ public final class AssembleMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException {
         try {
-            new PluginStartup(this.project).init();
             if (this.disabled) {
                 Logger.info(this, "Assemble mojo is disabled. Skipping.");
             } else {
                 new Assembler(
                     this.sourcesDir.toPath(),
                     this.outputDir.toPath(),
-                    !this.skipVerification
+                    false
                 ).assemble();
+                if (this.skipVerification) {
+                    Logger.info(this, "Verification is disabled. Skipping.");
+                } else {
+                    Logger.info(this, "Verification of all the generated classes.");
+                    new PluginStartup(this.project).init();
+                    new BytecodeDirectory(this.outputDir.toPath()).verify();
+                }
             }
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);
