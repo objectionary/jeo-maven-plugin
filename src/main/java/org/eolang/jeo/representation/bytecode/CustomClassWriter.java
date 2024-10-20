@@ -24,25 +24,13 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.DefaultVersion;
-import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.analysis.Analyzer;
-import org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.objectweb.asm.tree.analysis.SimpleVerifier;
-import org.objectweb.asm.util.CheckClassAdapter;
 
 /**
  * Custom class writer.
@@ -60,10 +48,9 @@ public final class CustomClassWriter extends ClassVisitor {
 
     /**
      * Constructor.
-     * @param verify Verify bytecode.
      */
-    CustomClassWriter(final boolean verify) {
-        this(CustomClassWriter.prestructor(verify));
+    CustomClassWriter() {
+        this(new ClassesAwareWriter());
     }
 
     /**
@@ -168,21 +155,6 @@ public final class CustomClassWriter extends ClassVisitor {
     }
 
     /**
-     * Which class writer to use.
-     * @param verify Verify bytecode.
-     * @return A verified class writer if verify is true, otherwise custom class writer.
-     */
-    private static ClassesAwareWriter prestructor(final boolean verify) {
-        final ClassesAwareWriter result;
-        if (verify) {
-            result = new VerifiedClassWriter();
-        } else {
-            result = new ClassesAwareWriter();
-        }
-        return result;
-    }
-
-    /**
      * Class writer that knows about additional classes loaded.
      * This class works in couple with {@link PluginStartup#init()} ()} method that sets
      * the maven classloader as the current thread classloader.
@@ -206,7 +178,7 @@ public final class CustomClassWriter extends ClassVisitor {
          * Constructor.
          * Do not compute frames automatically.
          */
-        private ClassesAwareWriter() {
+        ClassesAwareWriter() {
             this(0);
         }
 
@@ -221,58 +193,6 @@ public final class CustomClassWriter extends ClassVisitor {
         @Override
         public final ClassLoader getClassLoader() {
             return Thread.currentThread().getContextClassLoader();
-        }
-    }
-
-    /**
-     * Class writer that verifies the bytecode.
-     * @since 0.2
-     */
-    @ToString
-    @EqualsAndHashCode(callSuper = false)
-    private static final class VerifiedClassWriter extends ClassesAwareWriter {
-
-        @Override
-        public byte[] toByteArray() {
-            final byte[] bytes = super.toByteArray();
-            VerifiedClassWriter.verify(bytes);
-            return bytes;
-        }
-
-        /**
-         * Verify the bytecode.
-         * @param bytes The bytecode to verify.
-         */
-        private static void verify(final byte[] bytes) {
-            final ClassNode clazz = new ClassNode();
-            new ClassReader(bytes)
-                .accept(new CheckClassAdapter(clazz, false), ClassReader.SKIP_DEBUG);
-            final Optional<Type> syper = Optional.ofNullable(clazz.superName)
-                .map(Type::getObjectType);
-            final List<Type> interfaces = clazz.interfaces.stream().map(Type::getObjectType)
-                .collect(Collectors.toList());
-            for (final MethodNode method : clazz.methods) {
-                try {
-                    final SimpleVerifier verifier =
-                        new SimpleVerifier(
-                            Type.getObjectType(clazz.name),
-                            syper.orElse(null),
-                            interfaces,
-                            (clazz.access & Opcodes.ACC_INTERFACE) != 0
-                        );
-                    verifier.setClassLoader(Thread.currentThread().getContextClassLoader());
-                    new Analyzer<>(verifier).analyze(clazz.name, method);
-                } catch (final ClassFormatError | AnalyzerException exception) {
-                    throw new IllegalStateException(
-                        String.format(
-                            "Bytecode verification failed for the class '%s' and method '%s'",
-                            clazz.name,
-                            method.name
-                        ),
-                        exception
-                    );
-                }
-            }
         }
     }
 }

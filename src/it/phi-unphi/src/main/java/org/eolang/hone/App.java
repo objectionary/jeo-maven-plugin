@@ -23,6 +23,8 @@
  */
 package org.eolang.hone;
 
+import org.eolang.hone.param.Parameter;
+
 /**
  * App.
  * @since 0.1

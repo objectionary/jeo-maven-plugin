@@ -73,7 +73,7 @@ public final class JeoClassLoader extends ClassLoader {
      * @param classes Classes as file paths.
      */
     JeoClassLoader(final ClassLoader parent, final List<String> classes) {
-        this(parent, prestructor(classes));
+        this(parent, JeoClassLoader.prestructor(classes));
     }
 
     /**

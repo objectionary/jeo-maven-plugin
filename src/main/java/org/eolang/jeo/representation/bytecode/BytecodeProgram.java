@@ -24,21 +24,17 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.xml.XML;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.PluginStartup;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.util.CheckClassAdapter;
 
 /**
  * Bytecode program.
@@ -103,28 +99,11 @@ public final class BytecodeProgram {
 
     /**
      * Generate bytecode.
-     * <p>
-     * In this method we intentionally use the Thread.currentThread().getContextClassLoader()
-     * for the class loader of the
-     * {@link CheckClassAdapter#verify(ClassReader, ClassLoader, boolean, PrintWriter)}
-     * instead of default implementation. This is because the default class loader doesn't
-     * know about classes compiled on the previous maven step.
-     * You can read more about the problem here:
-     * {@link PluginStartup#init()} ()}
-     * </p>
+     * Traverse XML and build bytecode class.
      * @return Bytecode.
      */
     public Bytecode bytecode() {
-        return this.bytecode(true);
-    }
-
-    /**
-     * Traverse XML and build bytecode class.
-     * @param verify Verify bytecode.
-     * @return Bytecode.
-     */
-    public Bytecode bytecode(final boolean verify) {
-        final CustomClassWriter writer = new CustomClassWriter(verify);
+        final CustomClassWriter writer = new CustomClassWriter();
         this.top().writeTo(writer, this.pckg);
         return writer.bytecode();
     }

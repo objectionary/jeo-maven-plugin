@@ -45,20 +45,13 @@ final class Assembler {
     private final Path output;
 
     /**
-     * Whether to verify the assembled classes.
-     */
-    private final boolean verify;
-
-    /**
      * Constructor.
      * @param input Input folder with "xmir" files.
      * @param output Output folder for the assembled classes.
-     * @param verify Whether to verify the assembled classes.
      */
-    Assembler(final Path input, final Path output, final boolean verify) {
+    Assembler(final Path input, final Path output) {
         this.input = input;
         this.output = output;
-        this.verify = verify;
     }
 
     /**
@@ -80,7 +73,7 @@ final class Assembler {
                     new Assemble(this.output)
                 )
             )
-        ).apply(new XmirRepresentations(this.input, this.verify).all());
+        ).apply(new XmirRepresentations(this.input).all());
         stream.forEach(
             terminated -> Logger.info(
                 this,
