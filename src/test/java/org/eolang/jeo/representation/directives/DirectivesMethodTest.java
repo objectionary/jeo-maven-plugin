@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
@@ -92,6 +93,15 @@ final class DirectivesMethodTest {
                     )
                 )
             )
+        );
+    }
+
+    @Test
+    void addsSuffixToTheMethodName() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect that 'j$' suffix will be added to the method name",
+            new Xembler(new BytecodeMethod("φTerm").directives(false)).xml(),
+            XhtmlMatchers.hasXPaths("./o[contains(@name, j$φTerm)]")
         );
     }
 }
