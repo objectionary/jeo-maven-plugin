@@ -169,7 +169,8 @@ public final class XmlMethod {
                     this.node.attribute("name")
                         .orElseThrow(
                             () -> new IllegalStateException(
-                                "Method 'name' attribute is not present")
+                                "Method 'name' attribute is not present"
+                            )
                         )
                 ).name()
             ).decode()
