@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.MethodName;
+import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.Signature;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -170,7 +171,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         return new DirectivesAbstractObject(
-            this.name.encoded(),
+            new PrefixedName(this.name.encoded()).encode(),
             Stream.concat(
                 Stream.of(
                     this.properties,
