@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.MethodName;
+import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.Signature;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
@@ -163,12 +164,15 @@ public final class XmlMethod {
      */
     private String name() {
         return new MethodName(
-            new Signature(
-                this.node.attribute("name")
-                    .orElseThrow(
-                        () -> new IllegalStateException("Method 'name' attribute is not present")
-                    )
-            ).name()
+            new PrefixedName(
+                new Signature(
+                    this.node.attribute("name")
+                        .orElseThrow(
+                            () -> new IllegalStateException(
+                                "Method 'name' attribute is not present")
+                        )
+                ).name()
+            ).decode()
         ).bytecode();
     }
 
