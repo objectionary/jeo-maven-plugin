@@ -93,7 +93,7 @@ public final class LoggedTranslation implements Translation {
      * @param source Initial path.
      */
     private void logStartWithSize(final Path source) {
-        Logger.info(
+        Logger.debug(
             this,
             "%s '%[file]s' (%[size]s)",
             this.process,

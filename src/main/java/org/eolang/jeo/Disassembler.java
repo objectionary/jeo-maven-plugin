@@ -70,7 +70,7 @@ public class Disassembler {
             disassembled,
             this.classes,
             this.target,
-            new BachedTranslator(
+            new BatchedTranslator(
                 new LoggedTranslation(
                     process,
                     disassembled,
@@ -81,7 +81,8 @@ public class Disassembler {
         stream.forEach(
             terminated -> Logger.info(
                 this,
-                "Dissembling of '%s.xmir' (%[size]s) finished successfully.",
+                "%s of '%s.xmir' (%[size]s) finished successfully.",
+                process,
                 terminated.details().name(),
                 terminated.size()
             )
