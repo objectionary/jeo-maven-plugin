@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
@@ -140,6 +141,8 @@ public final class XmlProgram {
             .xpath("/program/metas/meta[head='package']/tail/text()")
             .stream()
             .findFirst()
+            .map(PrefixedName::new)
+            .map(PrefixedName::decode)
             .orElse("");
     }
 }

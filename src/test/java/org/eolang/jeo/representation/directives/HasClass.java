@@ -84,8 +84,18 @@ public final class HasClass extends TypeSafeMatcher<String> {
      */
     public HasClass inside(final String pckg) {
         this.additional.add("/program/metas/meta/head[text()='package']/text()");
-        this.additional.add(String.format("/program/metas/meta/tail[text()='%s']/text()", pckg));
-        this.additional.add(String.format("/program/metas/meta/part[text()='%s']/text()", pckg));
+        this.additional.add(
+            String.format(
+                "/program/metas/meta/tail[text()='%s']/text()",
+                new PrefixedName(pckg).encode()
+            ))
+        ;
+        this.additional.add(
+            String.format(
+                "/program/metas/meta/part[text()='%s']/text()",
+                new PrefixedName(pckg).encode()
+            )
+        );
         return this;
     }
 

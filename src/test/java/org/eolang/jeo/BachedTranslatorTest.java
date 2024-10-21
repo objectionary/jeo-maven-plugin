@@ -67,7 +67,8 @@ final class BachedTranslatorTest {
                 .getBytes(StandardCharsets.UTF_8)
         );
         new BachedTranslator(new Disassemble(temp))
-            .apply(Stream.of(new XmirRepresentation(clazz))).collect(Collectors.toList());
+            .apply(Stream.of(new XmirRepresentation(clazz)))
+            .collect(Collectors.toList());
         MatcherAssert.assertThat(
             "XML file was not saved",
             temp.resolve(this.expected).toFile(),
