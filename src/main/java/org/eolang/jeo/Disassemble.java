@@ -61,11 +61,7 @@ public final class Disassemble implements Translation {
         //   This is dangerous and should be removed as soon as possible.
         //   Moreover, we have the same solution in {@link Assemble} class.
         new AllLabels().clearCache();
-        final String name = new PrefixedName(
-            new PrefixedName(
-                representation.details().name()
-            ).decode()
-        ).decode();
+        final String name = new PrefixedName(representation.details().name()).decode();
         final Path path = this.target
             .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
         try {

@@ -54,11 +54,7 @@ public final class Assemble implements Translation {
     public Representation apply(final Representation representation) {
         new AllLabels().clearCache();
         final Details details = representation.details();
-        final String name = new PrefixedName(
-            new PrefixedName(
-                details.name()
-            ).decode()
-        ).decode();
+        final String name = new PrefixedName(details.name()).decode();
         try {
             final byte[] bytecode = representation.toBytecode().bytes();
             final String[] subpath = name.split("\\.");
