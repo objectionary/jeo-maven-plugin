@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo.representation;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import lombok.ToString;
 
 /**
@@ -76,9 +78,9 @@ public final class PrefixedName {
         if (this.origin.replace(" ", "").isEmpty()) {
             throw new IllegalArgumentException(PrefixedName.BLANK);
         } else if (this.origin.contains(PrefixedName.DELIMITER)) {
-            final String[] split = this.origin.split(PrefixedName.DELIMITER);
-            split[split.length - 1] = new PrefixedName(split[split.length - 1]).encode();
-            res = String.join(PrefixedName.DELIMITER, split);
+            res = Arrays.stream(this.origin.split(PrefixedName.DELIMITER))
+                .map(each -> String.format("%s%s", PrefixedName.PREFIX, each))
+                .collect(Collectors.joining(PrefixedName.DELIMITER));
         } else {
             res = String.format("%s%s", PrefixedName.PREFIX, this.origin);
         }
@@ -93,15 +95,29 @@ public final class PrefixedName {
         final String res;
         if (this.origin.replace(" ", "").isEmpty()) {
             throw new IllegalArgumentException(PrefixedName.BLANK);
-        } else if (this.origin.startsWith(PrefixedName.PREFIX)) {
-            res = this.origin.substring(PrefixedName.PREFIX.length());
-        } else if (this.origin.contains(PrefixedName.DELIMITER)) {
-            final String[] split = this.origin.split(PrefixedName.DELIMITER);
-            split[split.length - 1] = new PrefixedName(split[split.length - 1]).decode();
-            res = String.join(PrefixedName.DELIMITER, split);
-        } else {
-            res = this.origin;
         }
+//        else if (this.origin.contains(PrefixedName.DELIMITER)) {
+
+//            final String[] split = this.origin.split(PrefixedName.DELIMITER);
+//            split[split.length - 1] = new PrefixedName(split[split.length - 1]).decode();
+//            res = String.join(PrefixedName.DELIMITER, split);
+        res = Arrays.stream(this.origin.split(PrefixedName.DELIMITER))
+//            .filter(each -> each.startsWith(PrefixedName.PREFIX))
+//            .map(each -> each.substring(PrefixedName.PREFIX.length()))
+            .map(PrefixedName::cut)
+            .collect(Collectors.joining(PrefixedName.DELIMITER));
+
+//        } else {
+//            res = this.origin;
+//        }
         return res;
+    }
+
+    private static String cut(final String prefixed) {
+        if (prefixed.startsWith(PrefixedName.PREFIX)) {
+            return prefixed.substring(PrefixedName.PREFIX.length());
+        } else {
+            return prefixed;
+        }
     }
 }
