@@ -92,32 +92,27 @@ public final class PrefixedName {
      * @return Decoded name.
      */
     public String decode() {
-        final String res;
         if (this.origin.replace(" ", "").isEmpty()) {
             throw new IllegalArgumentException(PrefixedName.BLANK);
         }
-//        else if (this.origin.contains(PrefixedName.DELIMITER)) {
-
-//            final String[] split = this.origin.split(PrefixedName.DELIMITER);
-//            split[split.length - 1] = new PrefixedName(split[split.length - 1]).decode();
-//            res = String.join(PrefixedName.DELIMITER, split);
-        res = Arrays.stream(this.origin.split(PrefixedName.DELIMITER))
-//            .filter(each -> each.startsWith(PrefixedName.PREFIX))
-//            .map(each -> each.substring(PrefixedName.PREFIX.length()))
+        return Arrays.stream(this.origin.split(PrefixedName.DELIMITER))
             .map(PrefixedName::cut)
             .collect(Collectors.joining(PrefixedName.DELIMITER));
-
-//        } else {
-//            res = this.origin;
-//        }
-        return res;
     }
 
+    /**
+     * Cut prefix from prefixed string.
+     * If the passed string doesn't contain prefix, nothing is removed.
+     * @param prefixed Prefixed string.
+     * @return String without prefix.
+     */
     private static String cut(final String prefixed) {
+        final String result;
         if (prefixed.startsWith(PrefixedName.PREFIX)) {
-            return prefixed.substring(PrefixedName.PREFIX.length());
+            result = prefixed.substring(PrefixedName.PREFIX.length());
         } else {
-            return prefixed;
+            result = prefixed;
         }
+        return result;
     }
 }
