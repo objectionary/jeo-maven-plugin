@@ -47,8 +47,8 @@ final class DirectivesMetasTest {
             ).xmlQuietly(),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath("/metas/meta/head[text()='package']"),
-                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='path.to']"),
-                XhtmlMatchers.hasXPath("/metas/meta/part[text()='path.to']")
+                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='j$path.to']"),
+                XhtmlMatchers.hasXPath("/metas/meta/part[text()='j$path.to']")
             )
         );
     }
@@ -94,8 +94,8 @@ final class DirectivesMetasTest {
             ).xmlQuietly(),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath("/metas/meta/head[text()='package']"),
-                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='path.to']"),
-                XhtmlMatchers.hasXPath("/metas/meta/part[text()='path.to']"),
+                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='j$path.to']"),
+                XhtmlMatchers.hasXPath("/metas/meta/part[text()='j$path.to']"),
                 Matchers.not(
                     XhtmlMatchers.hasXPath("/metas/meta/tail[text()='org.eolang.jeo.label']")
                 ),
