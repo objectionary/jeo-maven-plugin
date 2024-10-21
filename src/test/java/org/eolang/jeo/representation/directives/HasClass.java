@@ -88,8 +88,8 @@ public final class HasClass extends TypeSafeMatcher<String> {
             String.format(
                 "/program/metas/meta/tail[text()='%s']/text()",
                 new PrefixedName(pckg).encode()
-            ))
-        ;
+            )
+        );
         this.additional.add(
             String.format(
                 "/program/metas/meta/part[text()='%s']/text()",
