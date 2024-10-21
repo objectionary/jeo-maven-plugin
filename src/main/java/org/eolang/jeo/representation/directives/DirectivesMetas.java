@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.directives;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.PrefixedName;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -132,12 +133,29 @@ public final class DirectivesMetas implements Iterable<Directive> {
             .add("metas")
             .add("meta")
             .add("head").set("package").up()
-            .add("tail").set(this.name.pckg()).up()
-            .add("part").set(this.name.pckg()).up()
+            .add("tail").set(this.pckg()).up()
+            .add("part").set(this.pckg()).up()
             .up()
             .append(opdirs)
             .append(labeldirs)
             .up()
             .iterator();
+    }
+
+    /**
+     * Prefixed package name.
+     * We intentionally add prefix to the packages, because sometimes they can be really
+     * strange, <a href="https://github.com/objectionary/jeo-maven-plugin/issues/779">see</a>
+     * @return Prefixed package name.
+     */
+    private String pckg() {
+        final String result;
+        final String original = this.name.pckg();
+        if (original.isEmpty()) {
+            result = "";
+        } else {
+            result = new PrefixedName(original).encode();
+        }
+        return result;
     }
 }
