@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  *
  * @since 0.2
  */
-public final class BachedTranslator implements Translator {
+public final class BatchedTranslator implements Translator {
 
     /**
      * Original translation.
@@ -46,7 +46,7 @@ public final class BachedTranslator implements Translator {
      * Constructor.
      * @param translation Original translation.
      */
-    BachedTranslator(final Translation translation) {
+    BatchedTranslator(final Translation translation) {
         this.translation = translation;
         this.loader = Thread.currentThread().getContextClassLoader();
     }

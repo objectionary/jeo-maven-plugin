@@ -66,7 +66,7 @@ final class Assembler {
             assembled,
             this.input,
             this.output,
-            new BachedTranslator(
+            new BatchedTranslator(
                 new LoggedTranslation(
                     assembling,
                     assembled,
