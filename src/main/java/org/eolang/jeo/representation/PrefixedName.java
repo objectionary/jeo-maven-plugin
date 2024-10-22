@@ -30,10 +30,9 @@ import lombok.ToString;
 /**
  * Java name.
  * This class is used to represent any java class or method name and to avoid
- * naming conflicts with EO reserved words.
+ * naming conflicts with EO-reserved words.
  * You can read more about the problem
  * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/276">here</a>
- * In the first implementation of this class it just added a 'j' prefix to any name.
  *
  * @since 0.1
  */
