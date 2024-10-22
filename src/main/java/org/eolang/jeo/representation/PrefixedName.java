@@ -23,8 +23,8 @@
  */
 package org.eolang.jeo.representation;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lombok.ToString;
 
 /**
@@ -51,9 +51,21 @@ public final class PrefixedName {
     private static final String BLANK = "Name can't be blank";
 
     /**
-     * Delimiter.
+     * Blank name pattern.
      */
-    private static final String DELIMITER = "/";
+    private static final Pattern BLANKED = Pattern.compile("^\\s*$");
+
+    /**
+     * Delimiter lookbehind pattern.
+     */
+    private static final Pattern DELIMITED = Pattern.compile("(?<=^|[./])");
+
+    /**
+     * Prefixed name pattern.
+     */
+    private static final Pattern PREFIXED = Pattern.compile(
+        String.format("(?<=^|[./])%s", Matcher.quoteReplacement(PrefixedName.PREFIX))
+    );
 
     /**
      * Original name.
@@ -74,17 +86,12 @@ public final class PrefixedName {
      * @return Encoded name.
      */
     public String encode() {
-        final String res;
-        if (this.origin.replace(" ", "").isEmpty()) {
+        if (PrefixedName.BLANKED.matcher(this.origin).matches()) {
             throw new IllegalArgumentException(PrefixedName.BLANK);
-        } else if (this.origin.contains(PrefixedName.DELIMITER)) {
-            res = Arrays.stream(this.origin.split(PrefixedName.DELIMITER))
-                .map(each -> String.format("%s%s", PrefixedName.PREFIX, each))
-                .collect(Collectors.joining(PrefixedName.DELIMITER));
-        } else {
-            res = String.format("%s%s", PrefixedName.PREFIX, this.origin);
         }
-        return res;
+        return PrefixedName.DELIMITED
+            .matcher(this.origin)
+            .replaceAll(Matcher.quoteReplacement(PrefixedName.PREFIX));
     }
 
     /**
@@ -92,27 +99,9 @@ public final class PrefixedName {
      * @return Decoded name.
      */
     public String decode() {
-        if (this.origin.replace(" ", "").isEmpty()) {
+        if (PrefixedName.BLANKED.matcher(this.origin).matches()) {
             throw new IllegalArgumentException(PrefixedName.BLANK);
         }
-        return Arrays.stream(this.origin.split(PrefixedName.DELIMITER))
-            .map(PrefixedName::cut)
-            .collect(Collectors.joining(PrefixedName.DELIMITER));
-    }
-
-    /**
-     * Cut prefix from prefixed string.
-     * If the passed string doesn't contain prefix, nothing is removed.
-     * @param prefixed Prefixed string.
-     * @return String without prefix.
-     */
-    private static String cut(final String prefixed) {
-        final String result;
-        if (prefixed.startsWith(PrefixedName.PREFIX)) {
-            result = prefixed.substring(PrefixedName.PREFIX.length());
-        } else {
-            result = prefixed;
-        }
-        return result;
+        return PrefixedName.PREFIXED.matcher(this.origin).replaceAll("");
     }
 }

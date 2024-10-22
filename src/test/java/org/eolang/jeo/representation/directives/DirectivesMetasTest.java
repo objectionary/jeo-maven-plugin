@@ -94,8 +94,8 @@ final class DirectivesMetasTest {
             ).xmlQuietly(),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath("/metas/meta/head[text()='package']"),
-                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='j$path.to']"),
-                XhtmlMatchers.hasXPath("/metas/meta/part[text()='j$path.to']"),
+                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='j$path.j$to']"),
+                XhtmlMatchers.hasXPath("/metas/meta/part[text()='j$path.j$to']"),
                 Matchers.not(
                     XhtmlMatchers.hasXPath("/metas/meta/tail[text()='org.eolang.jeo.label']")
                 ),

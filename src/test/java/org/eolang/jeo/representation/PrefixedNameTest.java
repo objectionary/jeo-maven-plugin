@@ -42,7 +42,8 @@ final class PrefixedNameTest {
         "ClassName, j$ClassName",
         "someLongName, j$someLongName",
         "j$j, j$j$j",
-        "jeo/xmir/Fake, j$jeo/j$xmir/j$Fake"
+        "jeo/xmir/Fake, j$jeo/j$xmir/j$Fake",
+        "EOorg.EOeolang, j$EOorg.j$EOeolang"
     })
     void encodesName(final String origin, final String encoded) {
         MatcherAssert.assertThat(
@@ -59,7 +60,8 @@ final class PrefixedNameTest {
         "j$someLongName, someLongName",
         "j$j$j, j$j",
         "someName, someName",
-        "j$jeo/j$xmir/j$Fake, jeo/xmir/Fake"
+        "j$jeo/j$xmir/j$Fake, jeo/xmir/Fake",
+        "j$EOorg.j$EOeolang, EOorg.EOeolang"
     })
     void decodesName(final String encoded, final String origin) {
         MatcherAssert.assertThat(
