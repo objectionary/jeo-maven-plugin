@@ -47,7 +47,7 @@ final class XmirRepresentationTest {
     @Test
     void retrievesName() {
         final String name = "Math";
-        final String expected = "j$org/eolang/foo/j$Math";
+        final String expected = "j$org/j$eolang/j$foo/j$Math";
         final String actual = new XmirRepresentation(
             new BytecodeProgram(
                 "org/eolang/foo",
