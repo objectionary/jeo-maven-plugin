@@ -29,12 +29,14 @@ import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 
 /**
  * Test case for {@link org.eolang.jeo.representation.bytecode.BytecodeClass}.
+ *
  * @since 0.1
  */
 @SuppressWarnings({"PMD.ExcessiveMethodLength", "PMD.TooManyMethods"})
@@ -221,6 +223,46 @@ final class BytecodeClassTest {
                     .withMethod("j$foo", "()S", Opcodes.ACC_PUBLIC)
                     .opcode(Opcodes.SIPUSH, 256)
                     .opcode(Opcodes.IRETURN)
+                    .up()
+            ).bytecode(),
+            "We expect no exception here because all instructions are valid"
+        );
+    }
+
+    @Test
+    @Disabled
+    // @todo #793:60min Enable test that generates bytecode for SSLSocket java class.
+    //  Currently, this test fails due to java.lang.IllegalStateException:
+    //  Bytecode creation for the 'SSLSocket' class is not possible due to
+    //  unmet  preconditions.
+    void generatesBytecodeForSslSocketClass() {
+        Assertions.assertDoesNotThrow(
+            () -> new BytecodeProgram(
+                new BytecodeClass("SSLSocket")
+                    .withMethod("<init>", "()V", 1)
+                    .opcode(Opcodes.ALOAD, 0)
+                    .opcode(
+                        Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>",
+                        "()V", false
+                    )
+                    .opcode(Opcodes.RETURN)
+                    .label("ea1f15b1-60af-4b99-9c9b-0356134a6b4f")
+                    .up()
+                    .withMethod("attach", "(JJ)I", 265)
+                    .up()
+                    .withMethod("handshake", "(J)I", 265)
+                    .up()
+                    .withMethod("renegotiate", "(J)I", 265)
+                    .up()
+                    .withMethod("setVerify", "(JII)V", 265)
+                    .up()
+                    .withMethod("getInfoB", "(JI)[B", 265)
+                    .up()
+                    .withMethod("getInfoS", "(JI)Ljava/lang/String;", 265)
+                    .up()
+                    .withMethod("getInfoI", "(JI)I", 265)
+                    .up()
+                    .withMethod("getALPN", "(J[B)I", 265)
                     .up()
             ).bytecode(),
             "We expect no exception here because all instructions are valid"
