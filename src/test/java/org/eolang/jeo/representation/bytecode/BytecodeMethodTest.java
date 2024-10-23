@@ -458,8 +458,25 @@ final class BytecodeMethodTest {
     }
 
     @ParameterizedTest(name = "Computing maxs for method {1}, expected  {2}")
-    @MethodSource("methods")
-    void computesMaxsCorrectly(
+    @MethodSource("implementedMethods")
+    void computesMaxsCorrectlyForImplementedMethods(
+        final BytecodeMethod method,
+        final String name,
+        final BytecodeMaxs expected
+    ) {
+        MatcherAssert.assertThat(
+            String.format(
+                "Maxs weren't computed correctly for method %s",
+                name
+            ),
+            method.computeMaxs(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @ParameterizedTest(name = "Computing maxs for method {1}, expected  {2}")
+    @MethodSource("abstractMethods")
+    void computesMaxsCorrectlyForAbstractMethods(
         final BytecodeMethod method,
         final String name,
         final BytecodeMaxs expected
@@ -475,13 +492,33 @@ final class BytecodeMethodTest {
     }
 
     /**
-     * Provides methods for testing.
-     * Used in {@link #computesMaxsCorrectly(BytecodeMethod, String, BytecodeMaxs)}.
+     * Provides implemented methods for testing.
+     * These methods contain different number of local variables and stack elements.
+     * Used in {@link #computesMaxsCorrectlyForImplementedMethods(BytecodeMethod, String, BytecodeMaxs)}.
      * @return Stream of arguments.
      */
-    static Stream<Arguments> methods() {
+    static Stream<Arguments> implementedMethods() {
+        return BytecodeMethodTest.methods("maxs/Maxs.java");
+    }
+
+    /**
+     * Provides methods for testing.
+     * These methods are abstract.
+     * Used in {@link #computesMaxsCorrectlyForImplementedMethods(BytecodeMethod, String, BytecodeMaxs)}.
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> abstractMethods() {
+        return BytecodeMethodTest.methods("maxs/MaxInterface.java");
+    }
+
+    /**
+     * Provides methods for testing.
+     * @param clazz Resource class name.
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> methods(final String clazz) {
         return new AsmProgram(
-            new JavaSourceClass("maxs/Maxs.java").compile().bytes()
+            new JavaSourceClass(clazz).compile().bytes()
         ).bytecode().top().methods().stream().map(
             method -> Arguments.of(method, method.name(), method.currentMaxs())
         );
