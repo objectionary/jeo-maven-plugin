@@ -46,11 +46,6 @@ public final class BytecodeLabel implements BytecodeEntry {
     private final Label label;
 
     /**
-     * All method labels.
-     */
-    private final AllLabels labels;
-
-    /**
      * Constructor.
      * @param uid Label identifier.
      */
@@ -72,17 +67,15 @@ public final class BytecodeLabel implements BytecodeEntry {
      * @param labels All labels.
      */
     public BytecodeLabel(final String identifier, final AllLabels labels) {
-        this(labels.label(identifier), labels);
+        this(labels.label(identifier));
     }
 
     /**
      * Constructor.
      * @param label Label.
-     * @param labels All labels.
      */
-    public BytecodeLabel(final Label label, final AllLabels labels) {
+    public BytecodeLabel(final Label label) {
         this.label = label;
-        this.labels = labels;
     }
 
     @Override

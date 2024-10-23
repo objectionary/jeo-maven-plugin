@@ -63,6 +63,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
     /**
      * All labels.
      */
+    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final AllLabels labels;
 
     /**

@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
 
 /**
@@ -155,7 +154,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
      */
     private int index(final Label label) {
         for (int index = 0; index < this.instructions.size(); ++index) {
-            if (this.instructions.get(index).equals(new BytecodeLabel(label, new AllLabels()))) {
+            if (this.instructions.get(index).equals(new BytecodeLabel(label))) {
                 return index;
             }
         }

@@ -223,7 +223,7 @@ public final class BytecodeMethod {
      * @return This object.
      */
     public BytecodeMethod label(final Label label) {
-        return this.entry(new BytecodeLabel(label, this.labels));
+        return this.entry(new BytecodeLabel(label));
     }
 
     /**
