@@ -90,7 +90,7 @@ final class MaxLocals {
                     }
                     return result;
                 }
-            ).size();
+            ).orElse(new Variables()).size();
     }
 
     /**

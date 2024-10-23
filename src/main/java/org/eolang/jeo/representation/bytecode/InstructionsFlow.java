@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.xmir.AllLabels;
@@ -70,7 +71,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
      * @return Maximum value.
      */
     @SuppressWarnings("PMD.CognitiveComplexity")
-    public T max(final T initial, final Function<BytecodeInstruction, T> generator) {
+    public Optional<T> max(final T initial, final Function<BytecodeInstruction, T> generator) {
         final Map<Integer, T> visited = new HashMap<>(0);
         final Map<Integer, T> worklist = new HashMap<>(0);
         worklist.put(0, initial);
@@ -130,8 +131,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
         }
         return visited.values()
             .stream()
-            .max(T::compareTo)
-            .orElseThrow(() -> new IllegalStateException("Cannot find max value"));
+            .max(T::compareTo);
     }
 
     /**
