@@ -135,33 +135,6 @@ public final class BytecodeInstruction implements BytecodeEntry {
         return true;
     }
 
-    @ToString.Include
-    @Override
-    public String testCode() {
-        return String.format(
-            ".opcode(%s)",
-            Stream.concat(
-                Stream.of(String.format("Opcodes.%s", new OpcodeName(this.opcode).simplified())),
-                this.args.stream().map(
-                    arg -> {
-                        final String result;
-                        if (arg instanceof String) {
-                            result = String.format("\"%s\"", arg);
-                        } else if (arg instanceof Label) {
-                            result = String.format(
-                                "labels.label(\"%s\")",
-                                this.labels.uid((Label) arg)
-                            );
-                        } else {
-                            result = String.valueOf(arg);
-                        }
-                        return result;
-                    }
-                )
-            ).collect(Collectors.joining(", "))
-        );
-    }
-
     /**
      * Impact of each instruction on the stack.
      * @return Stack impact.

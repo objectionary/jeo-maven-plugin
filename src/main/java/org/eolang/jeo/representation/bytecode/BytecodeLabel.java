@@ -109,9 +109,4 @@ public final class BytecodeLabel implements BytecodeEntry {
     public int impact() {
         return 0;
     }
-
-    @Override
-    public String testCode() {
-        return String.format(".label(\"%s\")", this.labels.uid(this.label));
-    }
 }

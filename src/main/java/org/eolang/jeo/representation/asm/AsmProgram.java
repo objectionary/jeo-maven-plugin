@@ -488,11 +488,6 @@ public final class AsmProgram {
                     public int impact() {
                         return 0;
                     }
-
-                    @Override
-                    public String testCode() {
-                        return "";
-                    }
                 };
                 break;
             default:

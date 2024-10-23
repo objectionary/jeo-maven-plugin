@@ -143,18 +143,6 @@ public final class BytecodeFrame implements BytecodeEntry {
         return 0;
     }
 
-    @Override
-    public String testCode() {
-        return String.format(
-            ".visitFrame(%d, %d, new Object[]{ %s }, %d, new Object[]{ %s })",
-            this.type,
-            this.nlocal,
-            Arrays.toString(this.locals),
-            this.nstack,
-            Arrays.toString(this.stack)
-        );
-    }
-
     /**
      * Convert a list to array.
      * @param list List of objects.
