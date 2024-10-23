@@ -494,7 +494,8 @@ final class BytecodeMethodTest {
     /**
      * Provides implemented methods for testing.
      * These methods contain different number of local variables and stack elements.
-     * Used in {@link #computesMaxsCorrectlyForImplementedMethods(BytecodeMethod, String, BytecodeMaxs)}.
+     * Used in
+     * {@link #computesMaxsCorrectlyForImplementedMethods(BytecodeMethod, String, BytecodeMaxs)}.
      * @return Stream of arguments.
      */
     static Stream<Arguments> implementedMethods() {
@@ -504,7 +505,8 @@ final class BytecodeMethodTest {
     /**
      * Provides methods for testing.
      * These methods are abstract.
-     * Used in {@link #computesMaxsCorrectlyForImplementedMethods(BytecodeMethod, String, BytecodeMaxs)}.
+     * Used in
+     * {@link #computesMaxsCorrectlyForImplementedMethods(BytecodeMethod, String, BytecodeMaxs)}.
      * @return Stream of arguments.
      */
     static Stream<Arguments> abstractMethods() {
