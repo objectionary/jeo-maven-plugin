@@ -599,7 +599,10 @@ public final class AsmProgram {
             result = new BytecodeAnnotationAnnotationValue(
                 name,
                 cast.desc,
-                cast.values.stream().map(val -> AsmProgram.annotationProperty("", val))
+                Optional.ofNullable(cast.values)
+                    .map(Collection::stream)
+                    .orElseGet(Stream::empty)
+                    .map(val -> AsmProgram.annotationProperty("", val))
                     .collect(Collectors.toList())
             );
         } else if (value instanceof List) {
