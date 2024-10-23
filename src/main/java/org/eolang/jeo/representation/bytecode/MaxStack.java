@@ -64,6 +64,7 @@ final class MaxStack {
     public int value() {
         return new InstructionsFlow<Stack>(this.instructions, this.blocks)
             .max(new Stack(0), Stack::new)
+            .orElse(new Stack(0))
             .integer();
     }
 

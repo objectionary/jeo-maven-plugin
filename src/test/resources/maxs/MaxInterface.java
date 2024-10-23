@@ -53,13 +53,22 @@ import java.util.ArrayList;
 public interface MaxInterface {
 
     /**
-     * Method with no local variables and no stack elements.
+     * Method with one local variable (this) and no stack elements.
+     * Attention! Abstract methods don't have local variables and stack elements.
      */
     void noVariablesNoStack();
 
     /**
-     * Method with one local variable and no stack elements.
+     * Method without local variables and with one stack element.
+     * Attention! Abstract methods don't have local variables and stack elements.
      */
     void oneVariableNoStack(int var);
+
+    /**
+     * Method with one local variable (this) and two stack elements.
+     */
+    default void noVariablesNoStackDefault() {
+        System.out.println("Hello, world!");
+    }
 
 }
