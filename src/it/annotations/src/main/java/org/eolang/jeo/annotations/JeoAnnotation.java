@@ -34,6 +34,7 @@ public @interface JeoAnnotation {
 
     InnerEnum innerEnum() default InnerEnum.ONE;
 
+    NestedAnnotation nestedEmpty();
     enum InnerEnum {
         ONE, TWO, THREE
     }

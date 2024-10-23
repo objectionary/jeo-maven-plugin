@@ -23,7 +23,8 @@ import java.util.Arrays;
     nestedArray = {
         @NestedAnnotation(name = "nested1"),
         @NestedAnnotation(name = "nested2")
-    }
+    },
+    nestedEmpty = @NestedAnnotation
 )
 public class AnnotationsApplication {
 
@@ -83,6 +84,9 @@ public class AnnotationsApplication {
             }
             if (annotation.nestedArray().length != 2) {
                 throw new IllegalStateException("nestedArray length is not 2");
+            }
+            if (annotation.nestedEmpty() == null) {
+                throw new IllegalStateException("nestedEmpty is null");
             }
             if (annotation.innerEnum() != JeoAnnotation.InnerEnum.TWO) {
                 throw new IllegalStateException("innerEnum is not TWO");
