@@ -35,9 +35,9 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.HashMap;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.List;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.function.Function;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Collectors;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.xmir.AllLabels;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.Optional;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.function.Function;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Collectors;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.objectweb.asm.Label;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">/**</em>
@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     * @return Maximum value.</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>      @SuppressWarnings(<span class="jxr_string">"PMD.CognitiveComplexity"</span>)
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">public</strong> T max(<strong class="jxr_keyword">final</strong> T initial, <strong class="jxr_keyword">final</strong> Function&lt;BytecodeInstruction, T&gt; generator) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">public</strong> Optional&lt;T&gt; max(<strong class="jxr_keyword">final</strong> T initial, <strong class="jxr_keyword">final</strong> Function&lt;BytecodeInstruction, T&gt; generator) {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">final</strong> Map&lt;Integer, T&gt; visited = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;(0);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">final</strong> Map&lt;Integer, T&gt; worklist = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;(0);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          worklist.put(0, initial);
@@ -138,68 +138,67 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>         }
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>         <strong class="jxr_keyword">return</strong> visited.values()
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>             .stream()
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>             .max(T::compareTo)
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>             .orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Cannot find max value"</span>));
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>     }
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">     * Which try-catch-blocks cover the instruction.</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">     * @param instruction Instruction index.</em>
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">     * @return List of block indexes.</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>     <strong class="jxr_keyword">private</strong> List&lt;Integer&gt; suitableBlocks(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> instruction) {
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.blocks.stream()
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>             .map(BytecodeTryCatchBlock.<strong class="jxr_keyword">class</strong>::<strong class="jxr_keyword">cast</strong>)
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>             .filter(block -&gt; <strong class="jxr_keyword">this</strong>.index(block.startLabel()) &lt;= instruction)
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>             .filter(block -&gt; <strong class="jxr_keyword">this</strong>.index(block.endLabel()) &gt;= instruction)
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>             .map(block -&gt; <strong class="jxr_keyword">this</strong>.index(block.handlerLabel()))
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>             .collect(Collectors.toList());
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>     }
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">     * Index of the label.</em>
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">     * @param label Label.</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">     * @return Index.</em>
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> index(<strong class="jxr_keyword">final</strong> Label label) {
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> index = 0; index &lt; <strong class="jxr_keyword">this</strong>.instructions.size(); ++index) {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>             <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.instructions.get(index).equals(<strong class="jxr_keyword">new</strong> <a name="BytecodeLabel" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeLabel.html#BytecodeLabel">BytecodeLabel</a>(label, <strong class="jxr_keyword">new</strong> <a name="AllLabels" href="../../../../../org/eolang/jeo/representation/xmir/AllLabels.html#AllLabels">AllLabels</a>()))) {
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>                 <strong class="jxr_keyword">return</strong> index;
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>             }
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>         }
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(String.format(<span class="jxr_string">"Label %s not found"</span>, label));
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>     }
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">     * Max of two reducible elements.</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">     * @param first First element.</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">     * @param second Second element.</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">     * @param &lt;T&gt; Type of the element.</em>
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">     * @return Max element.</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> InstructionsFlow.Reducible&lt;T&gt;&gt; T max(<strong class="jxr_keyword">final</strong> T first, <strong class="jxr_keyword">final</strong> T second) {
-<a class="jxr_linenumber" name="L173" href="#L173">173</a>         <strong class="jxr_keyword">final</strong> T result;
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>         <strong class="jxr_keyword">if</strong> (first.compareTo(second) &gt; 0) {
-<a class="jxr_linenumber" name="L175" href="#L175">175</a>             result = first;
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>             result = second;
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>         }
-<a class="jxr_linenumber" name="L179" href="#L179">179</a>         <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L180" href="#L180">180</a>     }
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">     * Reducible element in the data-flow analysis.</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">     * @param &lt;T&gt; Type of the element.</em>
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">     * @since 0.6</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a>     <strong class="jxr_keyword">interface</strong> Reducible&lt;T&gt; <strong class="jxr_keyword">extends</strong> Comparable&lt;T&gt; {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 
-<a class="jxr_linenumber" name="L189" href="#L189">189</a>         T add(T other);
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>         T enterBlock();
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>     }
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> }
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>             .max(T::compareTo);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     }
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">     * Which try-catch-blocks cover the instruction.</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">     * @param instruction Instruction index.</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">     * @return List of block indexes.</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>     <strong class="jxr_keyword">private</strong> List&lt;Integer&gt; suitableBlocks(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> instruction) {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.blocks.stream()
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>             .map(BytecodeTryCatchBlock.<strong class="jxr_keyword">class</strong>::<strong class="jxr_keyword">cast</strong>)
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>             .filter(block -&gt; <strong class="jxr_keyword">this</strong>.index(block.startLabel()) &lt;= instruction)
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>             .filter(block -&gt; <strong class="jxr_keyword">this</strong>.index(block.endLabel()) &gt;= instruction)
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>             .map(block -&gt; <strong class="jxr_keyword">this</strong>.index(block.handlerLabel()))
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>             .collect(Collectors.toList());
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>     }
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">     * Index of the label.</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">     * @param label Label.</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">     * @return Index.</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> index(<strong class="jxr_keyword">final</strong> Label label) {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> index = 0; index &lt; <strong class="jxr_keyword">this</strong>.instructions.size(); ++index) {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>             <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.instructions.get(index).equals(<strong class="jxr_keyword">new</strong> <a name="BytecodeLabel" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeLabel.html#BytecodeLabel">BytecodeLabel</a>(label))) {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>                 <strong class="jxr_keyword">return</strong> index;
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>             }
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>         }
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(String.format(<span class="jxr_string">"Label %s not found"</span>, label));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>     }
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">     * Max of two reducible elements.</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">     * @param first First element.</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">     * @param second Second element.</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">     * @param &lt;T&gt; Type of the element.</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">     * @return Max element.</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> InstructionsFlow.Reducible&lt;T&gt;&gt; T max(<strong class="jxr_keyword">final</strong> T first, <strong class="jxr_keyword">final</strong> T second) {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>         <strong class="jxr_keyword">final</strong> T result;
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>         <strong class="jxr_keyword">if</strong> (first.compareTo(second) &gt; 0) {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>             result = first;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>             result = second;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>         }
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>     }
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">     * Reducible element in the data-flow analysis.</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">     * @param &lt;T&gt; Type of the element.</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">     * @since 0.6</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>     <strong class="jxr_keyword">interface</strong> Reducible&lt;T&gt; <strong class="jxr_keyword">extends</strong> Comparable&lt;T&gt; {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>         T add(T other);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>         T enterBlock();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>     }
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
