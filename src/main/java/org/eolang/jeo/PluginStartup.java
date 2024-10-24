@@ -23,11 +23,12 @@
  */
 package org.eolang.jeo;
 
+import java.util.List;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 
 /**
- * All mojos initialization step.
+ * All mojo's initialization step.
  * This class is responsible for initializing classloader.
  *
  * @since 0.1
@@ -35,16 +36,20 @@ import org.apache.maven.project.MavenProject;
 public final class PluginStartup {
 
     /**
-     * Maven project.
+     * All the folders with classes.
      */
-    private final MavenProject project;
+    private final List<String> folders;
 
     /**
      * Constructor.
      * @param project Maven project.
      */
-    PluginStartup(final MavenProject project) {
-        this.project = project;
+    PluginStartup(final MavenProject project) throws DependencyResolutionRequiredException {
+        this(project.getRuntimeClasspathElements());
+    }
+
+    public PluginStartup(final List<String> folders) {
+        this.folders = folders;
     }
 
     /**
@@ -64,7 +69,7 @@ public final class PluginStartup {
         Thread.currentThread().setContextClassLoader(
             new JeoClassLoader(
                 Thread.currentThread().getContextClassLoader(),
-                this.project.getRuntimeClasspathElements()
+                this.folders
             )
         );
     }
