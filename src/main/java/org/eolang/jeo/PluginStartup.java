@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo;
 
+import java.util.Arrays;
 import java.util.List;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
@@ -43,12 +44,25 @@ public final class PluginStartup {
     /**
      * Constructor.
      * @param project Maven project.
+     * @throws DependencyResolutionRequiredException If a problem happened during loading classes.
      */
     PluginStartup(final MavenProject project) throws DependencyResolutionRequiredException {
         this(project.getRuntimeClasspathElements());
     }
 
-    public PluginStartup(final List<String> folders) {
+    /**
+     * Constructor.
+     * @param folders Folders with classes.
+     */
+    PluginStartup(final String... folders) {
+        this(Arrays.asList(folders));
+    }
+
+    /**
+     * Constructor.
+     * @param folders Folders with classes.
+     */
+    private PluginStartup(final List<String> folders) {
         this.folders = folders;
     }
 
@@ -62,10 +76,8 @@ public final class PluginStartup {
      * We need this to solve the problem with computing maxs in ASM library:
      * - https://gitlab.ow2.org/asm/asm/-/issues/317918
      * - https://stackoverflow.com/questions/11292701/error-while-instrumenting-class-files-asm-classwriter-getcommonsuperclass
-     *
-     * @throws DependencyResolutionRequiredException If a problem happened during loading classes.
      */
-    void init() throws DependencyResolutionRequiredException {
+    void init() {
         Thread.currentThread().setContextClassLoader(
             new JeoClassLoader(
                 Thread.currentThread().getContextClassLoader(),
