@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
