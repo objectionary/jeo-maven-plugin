@@ -23,7 +23,9 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.log.Logger;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,7 +43,7 @@ public final class PluginStartup {
     /**
      * All the folders with classes.
      */
-    private final List<String> folders;
+    private final Collection<String> folders;
 
     /**
      * Constructor.
@@ -56,7 +58,7 @@ public final class PluginStartup {
                     project.getCompileClasspathElements().stream()
                 ),
                 project.getTestClasspathElements().stream()
-            ).collect(Collectors.toList())
+            ).collect(Collectors.toSet())
         );
     }
 
@@ -72,7 +74,7 @@ public final class PluginStartup {
      * Constructor.
      * @param folders Folders with classes.
      */
-    private PluginStartup(final List<String> folders) {
+    private PluginStartup(final Collection<String> folders) {
         this.folders = folders;
     }
 
@@ -88,6 +90,13 @@ public final class PluginStartup {
      * - https://stackoverflow.com/questions/11292701/error-while-instrumenting-class-files-asm-classwriter-getcommonsuperclass
      */
     void init() {
+        Logger.info(
+            this,
+            String.format(
+                "Trying to load assembled classes from %s",
+                this.folders.stream().collect(Collectors.joining(", ", "[", "]"))
+            )
+        );
         Thread.currentThread().setContextClassLoader(
             new JeoClassLoader(
                 Thread.currentThread().getContextClassLoader(),
