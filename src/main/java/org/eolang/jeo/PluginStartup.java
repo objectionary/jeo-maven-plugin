@@ -25,6 +25,8 @@ package org.eolang.jeo;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 
@@ -47,7 +49,15 @@ public final class PluginStartup {
      * @throws DependencyResolutionRequiredException If a problem happened during loading classes.
      */
     PluginStartup(final MavenProject project) throws DependencyResolutionRequiredException {
-        this(project.getRuntimeClasspathElements());
+        this(
+            Stream.concat(
+                Stream.concat(
+                    project.getRuntimeClasspathElements().stream(),
+                    project.getCompileClasspathElements().stream()
+                ),
+                project.getTestClasspathElements().stream()
+            ).collect(Collectors.toList())
+        );
     }
 
     /**
