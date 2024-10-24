@@ -23,15 +23,21 @@
  */
 package org.eolang.jeo.spring;
 
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Greeter bean.
  * @since 0.2
  */
-@Component
+@RestController
 public class Receptionist {
-    public void sayHello(final String who) {
-        System.out.printf("Glad to see you, %s...%n", who);
+
+    @GetMapping("/hello")
+    public String greetings(
+        @RequestParam(defaultValue = "Fat Spring") final String who
+    ) {
+        return String.format("Glad to see you, %s...%n", who);
     }
 }
