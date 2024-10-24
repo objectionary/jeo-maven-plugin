@@ -44,7 +44,7 @@ import org.objectweb.asm.Opcodes;
 @ToString
 @EqualsAndHashCode
 @SuppressWarnings("PMD.TooManyMethods")
-public final class BytecodeMethod implements Testable {
+public final class BytecodeMethod {
 
     /**
      * Try-catch blocks.
@@ -223,7 +223,7 @@ public final class BytecodeMethod implements Testable {
      * @return This object.
      */
     public BytecodeMethod label(final Label label) {
-        return this.entry(new BytecodeLabel(label, this.labels));
+        return this.entry(new BytecodeLabel(label));
     }
 
     /**
@@ -262,23 +262,6 @@ public final class BytecodeMethod implements Testable {
      */
     public String name() {
         return this.properties.name();
-    }
-
-    @Override
-    @SuppressWarnings("PMD.InsufficientStringBufferDeclaration")
-    public String testCode() {
-        final StringBuilder res = new StringBuilder(
-            String.format(
-                "withMethod(%s)%n//maxs %s",
-                this.properties.testCode(),
-                this.maxs
-            )
-        );
-        for (final BytecodeEntry instruction : this.instructions) {
-            res.append(instruction.testCode()).append('\n');
-        }
-        res.append(".up()");
-        return res.toString();
     }
 
     /**

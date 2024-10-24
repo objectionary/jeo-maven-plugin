@@ -38,7 +38,7 @@ import org.objectweb.asm.Opcodes;
  */
 @ToString
 @EqualsAndHashCode
-public final class BytecodeMethodProperties implements Testable {
+public final class BytecodeMethodProperties {
 
     /**
      * Access modifiers.
@@ -170,11 +170,6 @@ public final class BytecodeMethodProperties implements Testable {
      */
     public String descriptor() {
         return this.descr;
-    }
-
-    @Override
-    public String testCode() {
-        return String.format("\"%s\", \"%s\", %d", this.name, this.descr, this.access);
     }
 
     /**

@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
@@ -64,6 +63,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
     /**
      * All labels.
      */
+    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final AllLabels labels;
 
     /**
@@ -133,33 +133,6 @@ public final class BytecodeInstruction implements BytecodeEntry {
     @Override
     public boolean isOpcode() {
         return true;
-    }
-
-    @ToString.Include
-    @Override
-    public String testCode() {
-        return String.format(
-            ".opcode(%s)",
-            Stream.concat(
-                Stream.of(String.format("Opcodes.%s", new OpcodeName(this.opcode).simplified())),
-                this.args.stream().map(
-                    arg -> {
-                        final String result;
-                        if (arg instanceof String) {
-                            result = String.format("\"%s\"", arg);
-                        } else if (arg instanceof Label) {
-                            result = String.format(
-                                "labels.label(\"%s\")",
-                                this.labels.uid((Label) arg)
-                            );
-                        } else {
-                            result = String.valueOf(arg);
-                        }
-                        return result;
-                    }
-                )
-            ).collect(Collectors.joining(", "))
-        );
     }
 
     /**

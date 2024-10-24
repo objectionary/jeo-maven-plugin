@@ -56,7 +56,6 @@ import org.eolang.jeo.representation.bytecode.BytecodePlainAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.bytecode.InnerClass;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
@@ -409,8 +408,7 @@ public final class AsmProgram {
             case AbstractInsnNode.LABEL:
                 final LabelNode label = LabelNode.class.cast(node);
                 result = new BytecodeLabel(
-                    label.getLabel(),
-                    new AllLabels()
+                    label.getLabel()
                 );
                 break;
             case AbstractInsnNode.LDC_INSN:
@@ -487,11 +485,6 @@ public final class AsmProgram {
                     @Override
                     public int impact() {
                         return 0;
-                    }
-
-                    @Override
-                    public String testCode() {
-                        return "";
                     }
                 };
                 break;

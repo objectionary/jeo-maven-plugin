@@ -114,11 +114,6 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
         return 0;
     }
 
-    @Override
-    public String testCode() {
-        return "// Try-catch blocks are not supported in tests yet";
-    }
-
     /**
      * Start label.
      * @return Label.

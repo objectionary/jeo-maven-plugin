@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
@@ -141,18 +140,6 @@ public final class BytecodeFrame implements BytecodeEntry {
     @Override
     public int impact() {
         return 0;
-    }
-
-    @Override
-    public String testCode() {
-        return String.format(
-            ".visitFrame(%d, %d, new Object[]{ %s }, %d, new Object[]{ %s })",
-            this.type,
-            this.nlocal,
-            Arrays.toString(this.locals),
-            this.nstack,
-            Arrays.toString(this.stack)
-        );
     }
 
     /**
