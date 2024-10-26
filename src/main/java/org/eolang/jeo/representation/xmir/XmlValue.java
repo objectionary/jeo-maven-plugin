@@ -24,9 +24,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeValue;
 
 /**
@@ -71,17 +69,13 @@ public final class XmlValue {
             if (hex.isEmpty()) {
                 result = "";
             } else {
-                final String[] split = hex.split("(?<=\\G.{2})");
-                byte[] bytes = new byte[split.length];
-                for (int i = 0; i < split.length; i++) {
-                    bytes[i] = (byte) Integer.parseInt(split[i], XmlValue.RADIX);
+                final String[] chars = hex.split("(?<=\\G.{2})");
+                final int length = chars.length;
+                final byte[] bytes = new byte[length];
+                for (int index = 0; index < length; ++index) {
+                    bytes[index] = (byte) Integer.parseInt(chars[index], XmlValue.RADIX);
                 }
                 result = new String(bytes, StandardCharsets.UTF_8);
-
-//                result = Arrays.stream(hex.split("(?<=\\G.{2})"))
-//                    .map(ch -> (char) Integer.parseInt(ch, XmlValue.RADIX))
-//                    .map(String::valueOf)
-//                    .collect(Collectors.joining());
             }
             return result;
         } catch (final NumberFormatException exception) {
