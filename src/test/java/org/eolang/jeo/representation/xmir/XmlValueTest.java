@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.hamcrest.MatcherAssert;
@@ -75,17 +76,27 @@ final class XmlValueTest {
         "Φ", "Ψ", "Ω", "Ϊ", "Ϋ", "ά", "έ", "ή", "ί", "ΰ", "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ", "λ", "μ",
     })
     void decodesUnicodeCharacters(final String unicode) throws ImpossibleModificationException {
+        final String xml = new Xembler(
+            new DirectivesValue(unicode)
+        ).xml();
+        System.out.println(xml);
         MatcherAssert.assertThat(
             "Can't decode unicode characters",
             new XmlValue(
                 new XmlNode(
-                    new Xembler(
-                        new DirectivesValue(unicode)
-                    ).xml()
+                    xml
                 )
             ).string(),
             Matchers.equalTo(unicode)
         );
+    }
+
+    @Test
+    void test() {
+        System.out.println(
+            new String(new byte[]{(byte) 0xCE, (byte) 0xA6}, StandardCharsets.UTF_8));
+//        CEA6
+//        new String({ce, a6});
     }
 
     /**
