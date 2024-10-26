@@ -32,7 +32,7 @@ import org.eolang.hone.param.Parameter;
 @Parameter("some-parameter")
 public class App {
 
-    private static final String Φ = "We have the field with the unicaode character 'Φ'";
+    private static final String Φ = "We have the field with the unicode character 'Φ'";
 
     @Deprecated
     @SuppressWarnings("unchecked")
