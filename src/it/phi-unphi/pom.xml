@@ -43,7 +43,7 @@ SOFTWARE.
     <eo.phi>${project.build.directory}/generated-sources/eo-phi</eo.phi>
     <eo.unphi>${project.build.directory}/generated-sources/eo-unphi</eo.unphi>
     <jeo.unroll>${project.build.directory}/generated-sources/jeo-unroll</jeo.unroll>
-    <jeo.assemble>${project.build.directory}/generated-sources/jeo-assemble</jeo.assemble>
+    <jeo.assemble>jeo-assemble</jeo.assemble>
   </properties>
   <build>
     <plugins>

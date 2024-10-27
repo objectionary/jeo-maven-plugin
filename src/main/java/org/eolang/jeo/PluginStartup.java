@@ -99,7 +99,7 @@ public final class PluginStartup {
         Logger.info(
             this,
             String.format(
-                "Trying to load assembled classes from %s",
+                "Trying to load classes for bytecode verification from %s",
                 this.folders.stream().collect(Collectors.joining(", ", "[", "]"))
             )
         );
