@@ -117,7 +117,7 @@ public final class AssembleMojo extends AbstractMojo {
                     Logger.info(this, "Verification is disabled. Skipping.");
                 } else {
                     Logger.info(this, "Verification of all the generated classes.");
-                    new PluginStartup(this.project).init();
+                    new PluginStartup(this.project, this.outputDir.toPath()).init();
                     new BytecodeDirectory(this.outputDir.toPath()).verify();
                 }
             }

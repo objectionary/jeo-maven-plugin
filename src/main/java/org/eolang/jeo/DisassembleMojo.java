@@ -95,7 +95,7 @@ public final class DisassembleMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException {
         try {
-            new PluginStartup(this.project).init();
+            new PluginStartup(this.project, this.sourcesDir.toPath()).init();
             if (this.disabled) {
                 Logger.info(this, "Disassemble mojo is disabled. Skipping.");
             } else {
