@@ -24,6 +24,7 @@
 package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -47,16 +48,22 @@ public final class PluginStartup {
     /**
      * Constructor.
      * @param project Maven project.
+     * @param additional Additional folders with classes.
      * @throws DependencyResolutionRequiredException If a problem happened during loading classes.
      */
-    PluginStartup(final MavenProject project) throws DependencyResolutionRequiredException {
+    PluginStartup(
+        final MavenProject project, final Path... additional
+    ) throws DependencyResolutionRequiredException {
         this(
             Stream.concat(
                 Stream.concat(
                     project.getRuntimeClasspathElements().stream(),
                     project.getCompileClasspathElements().stream()
                 ),
-                project.getTestClasspathElements().stream()
+                Stream.concat(
+                    project.getTestClasspathElements().stream(),
+                    Arrays.stream(additional).map(Path::toString)
+                )
             ).collect(Collectors.toSet())
         );
     }
