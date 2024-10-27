@@ -125,7 +125,9 @@ public final class JeoClassLoader extends ClassLoader {
             .map(Paths::get)
             .filter(Files::exists)
             .flatMap(JeoClassLoader::clazzes)
-            .collect(Collectors.toMap(MapEntry::getKey, MapEntry::getValue));
+            .collect(
+                Collectors.toMap(MapEntry::getKey, MapEntry::getValue, (first, second) -> first)
+            );
     }
 
     /**
