@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -130,19 +129,25 @@ final class XmirRepresentationTest {
 
     @Test
     void failsToOpenBrokenXmirRepresentationFromFile(@TempDir final Path dir) throws IOException {
-        final BytecodeProgram program = new BytecodeProgram(
-            new BytecodeClass("org/eolang/foo/Math")
-        );
         final Path xmir = dir.resolve("Math.xmir");
-        Files.write(xmir, program.xml().toString()
-            .substring(42)
-            .getBytes(StandardCharsets.UTF_8));
+        Files.write(
+            xmir,
+            new BytecodeProgram(
+                new BytecodeClass("org/eolang/foo/Math")
+            ).xml().toString().substring(42).getBytes(StandardCharsets.UTF_8)
+        );
         MatcherAssert.assertThat(
+            "We expect that the error message will be easily understandable by developers",
             Assertions.assertThrows(
                 IllegalStateException.class,
                 () -> new XmirRepresentation(xmir).toBytecode()
             ).getMessage(),
-            Matchers.containsString(String.format("Can't parse XML from the file '%s'", xmir))
+            Matchers.containsString(
+                String.format(
+                    "Can't parse XML from the file '%s'",
+                    xmir
+                )
+            )
         );
     }
 }

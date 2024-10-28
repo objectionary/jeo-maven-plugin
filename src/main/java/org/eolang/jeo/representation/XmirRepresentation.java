@@ -168,7 +168,10 @@ public final class XmirRepresentation implements Representation {
             );
         } catch (final IllegalArgumentException broken) {
             throw new IllegalStateException(
-                String.format("Can't parse XML from the file '%s'", path),
+                String.format(
+                    "Can't parse XML from the file '%s'",
+                    path
+                ),
                 broken
             );
         }
