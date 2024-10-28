@@ -82,6 +82,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Cannot find first worklist element"));
             int index = curr.getKey();
+            int initialIndex = curr.getKey();
             worklist.remove(index);
             if (visited.get(index) != null && visited.get(index).compareTo(curr.getValue()) >= 0) {
                 continue;
@@ -98,7 +99,9 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                             .stream()
                             .map(this::index)
                             .forEach(ind -> worklist.put(ind, updated));
-                        visited.put(index, updated);
+//                        visited.put(index, updated);
+                        visited.putIfAbsent(index, updated);
+                        visited.computeIfPresent(index, (k, v) -> InstructionsFlow.max(v, updated));
                         break;
                     } else if (instruction.isBranch()) {
                         final Label label = instruction.jump();
@@ -106,25 +109,33 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                         worklist.put(jump, updated);
                         final int next = index + 1;
                         worklist.put(next, updated);
-                        visited.put(index, updated);
+//                        visited.put(index, updated);
+                        visited.putIfAbsent(index, updated);
+                        visited.computeIfPresent(index, (k, v) -> InstructionsFlow.max(v, updated));
                         break;
                     } else if (instruction.isJump()) {
                         final Label label = instruction.jump();
                         final int jump = this.index(label);
                         worklist.put(jump, updated);
-                        visited.put(index, updated);
+//                        visited.put(index, updated);
+                        visited.putIfAbsent(index, updated);
+                        visited.computeIfPresent(index, (k, v) -> InstructionsFlow.max(v, updated));
                         break;
-                    } else if (instruction.isReturn()) {
-                        visited.put(index, updated);
+                    } else if (instruction.isReturn() || instruction.isThrow()) {
+//                        visited.put(index, updated);
+                        visited.putIfAbsent(index, updated);
+                        visited.computeIfPresent(index, (k, v) -> InstructionsFlow.max(v, updated));
                         break;
                     }
-                    this.suitableBlocks(index)
-                        .forEach(ind -> worklist.put(ind, updated.enterBlock()));
+//                    visited.put(index, updated);
                     visited.putIfAbsent(index, updated);
                     visited.computeIfPresent(index, (k, v) -> InstructionsFlow.max(v, updated));
                 } else {
-                    visited.put(index, current);
+//                    visited.put(index, updated);
+                    visited.putIfAbsent(index, updated);
+                    visited.computeIfPresent(index, (k, v) -> InstructionsFlow.max(v, updated));
                 }
+                this.suitableBlocks(index).forEach(ind -> worklist.put(ind, updated.enterBlock()));
                 ++index;
             }
         }

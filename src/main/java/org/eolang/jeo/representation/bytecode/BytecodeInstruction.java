@@ -578,6 +578,10 @@ public final class BytecodeInstruction implements BytecodeEntry {
             .sum();
     }
 
+    public boolean isThrow() {
+        return Instruction.find(this.opcode) == Instruction.ATHROW;
+    }
+
     /**
      * Bytecode Instruction.
      *
