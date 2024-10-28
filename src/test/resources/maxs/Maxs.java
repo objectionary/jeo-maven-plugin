@@ -41,6 +41,8 @@ import java.util.Locale;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -825,6 +827,94 @@ public class Maxs {
             for (Object listener : statusListenerList) {
                 System.out.println(" - " + listener + " (" + listener.getClass().getSimpleName() + ")");
             }
+        }
+    }
+
+    private enum BindState {
+        UNBOUND,
+        SOCKET_CLOSED_ON_STOP,
+        BOUND
+    }
+
+    private BindState bindState = BindState.BOUND;
+    private Map<String, SSLConfig> sslHostConfigs = new HashMap<>();
+    private String defaultSSLHostConfigName = "default";
+
+    public void addSslHostConfig(SSLConfig config, boolean flag) throws IllegalArgumentException {
+        String hostName = config.getHostName();
+        if (hostName != null && hostName.length() != 0) {
+            if (this.bindState != BindState.UNBOUND && this.bindState != BindState.SOCKET_CLOSED_ON_STOP && this.isSSLEnabled()) {
+                try {
+                    this.createSSLContext(config);
+                } catch (IllegalArgumentException e) {
+                    throw e;
+                } catch (Exception e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+            SSLConfig oldConfig;
+            if (flag) {
+                oldConfig = this.sslHostConfigs.put(hostName, config);
+                if (hostName.equals(this.getDefaultSSLHostConfigName())) {
+                    this.setDefaultSslHostConfig(config);
+                }
+                if (oldConfig != null) {
+                    this.unregisterJmx(oldConfig);
+                }
+                this.registerJmx(config);
+            } else {
+                oldConfig = this.sslHostConfigs.putIfAbsent(hostName, config);
+                if (oldConfig != null) {
+                    this.releaseSSLContext(config);
+                    throw new IllegalArgumentException("Duplicate SSL host name: " + hostName);
+                }
+                this.registerJmx(config);
+            }
+
+        } else {
+            throw new IllegalArgumentException("No SSL host name provided");
+        }
+    }
+
+    // Supporting methods and classes
+    public boolean isSSLEnabled() {
+        // Simulate SSL being enabled
+        return true;
+    }
+
+    public void createSSLContext(SSLConfig config) throws Exception {
+        // Simulate creating an SSL context
+    }
+
+    public void releaseSSLContext(SSLConfig config) {
+        // Simulate releasing an SSL context
+    }
+
+    public void setDefaultSslHostConfig(SSLConfig config) {
+        // Set the default SSL host config
+    }
+
+    public String getDefaultSSLHostConfigName() {
+        return this.defaultSSLHostConfigName;
+    }
+
+    public void registerJmx(SSLConfig config) {
+        // Simulate JMX registration
+    }
+
+    public void unregisterJmx(SSLConfig config) {
+        // Simulate JMX unregistration
+    }
+
+    class SSLConfig {
+        private String hostName;
+
+        public SSLConfig(String hostName) {
+            this.hostName = hostName;
+        }
+
+        public String getHostName() {
+            return hostName;
         }
     }
 
