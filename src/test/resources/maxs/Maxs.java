@@ -796,13 +796,15 @@ public class Maxs {
             return connection.getContentLengthLong();
         }
     }
+
     private final Object statusListenerListLock = new Object();
     private final List<Object> statusListenerList = new ArrayList<>();
 
     public boolean add(Object listener) {
         synchronized (this.statusListenerListLock) {
             if (listener instanceof String) {
-                boolean isPresent = this.checkForPresence(this.statusListenerList, listener.getClass());
+                boolean isPresent = this.checkForPresence(
+                    this.statusListenerList, listener.getClass());
                 if (isPresent) {
                     return false;
                 }
@@ -825,7 +827,8 @@ public class Maxs {
         synchronized (this.statusListenerListLock) {
             System.out.println("Current Listeners:");
             for (Object listener : statusListenerList) {
-                System.out.println(" - " + listener + " (" + listener.getClass().getSimpleName() + ")");
+                System.out.println(
+                    " - " + listener + " (" + listener.getClass().getSimpleName() + ")");
             }
         }
     }
@@ -837,8 +840,9 @@ public class Maxs {
     }
 
     private BindState bindState = BindState.BOUND;
-    private Map<String, SSLConfig> sslHostConfigs = new HashMap<>();
+    private Map<String, SSLConf> sslHostConfigs = new HashMap<>();
     private String defaultSSLHostConfigName = "default";
+    private final static SSLConfig sm = new SSLConfig("123");
 
     public void addSslHostConfig(SSLConfig config, boolean flag) throws IllegalArgumentException {
         String hostName = config.getHostName();
@@ -854,7 +858,7 @@ public class Maxs {
             }
             SSLConfig oldConfig;
             if (flag) {
-                oldConfig = this.sslHostConfigs.put(hostName, config);
+                oldConfig = (SSLConfig) this.sslHostConfigs.put(hostName, config);
                 if (hostName.equals(this.getDefaultSSLHostConfigName())) {
                     this.setDefaultSslHostConfig(config);
                 }
@@ -863,14 +867,14 @@ public class Maxs {
                 }
                 this.registerJmx(config);
             } else {
-                oldConfig = this.sslHostConfigs.putIfAbsent(hostName, config);
+                oldConfig = (SSLConfig) this.sslHostConfigs.putIfAbsent(hostName, config);
                 if (oldConfig != null) {
                     this.releaseSSLContext(config);
-                    throw new IllegalArgumentException("Duplicate SSL host name: " + hostName);
+                    throw new IllegalArgumentException(
+                        sm.getString("Duplicate SSL host name: ", new Object[]{hostName}));
                 }
                 this.registerJmx(config);
             }
-
         } else {
             throw new IllegalArgumentException("No SSL host name provided");
         }
@@ -882,15 +886,15 @@ public class Maxs {
         return true;
     }
 
-    public void createSSLContext(SSLConfig config) throws Exception {
+    public void createSSLContext(SSLConf config) throws Exception {
         // Simulate creating an SSL context
     }
 
-    public void releaseSSLContext(SSLConfig config) {
+    public void releaseSSLContext(SSLConf config) {
         // Simulate releasing an SSL context
     }
 
-    public void setDefaultSslHostConfig(SSLConfig config) {
+    public void setDefaultSslHostConfig(SSLConf config) {
         // Set the default SSL host config
     }
 
@@ -898,15 +902,19 @@ public class Maxs {
         return this.defaultSSLHostConfigName;
     }
 
-    public void registerJmx(SSLConfig config) {
+    public void registerJmx(SSLConf config) {
         // Simulate JMX registration
     }
 
-    public void unregisterJmx(SSLConfig config) {
+    public void unregisterJmx(SSLConf config) {
         // Simulate JMX unregistration
     }
 
-    class SSLConfig {
+    static interface SSLConf {
+
+    }
+
+    static class SSLConfig implements SSLConf{
         private String hostName;
 
         public SSLConfig(String hostName) {
@@ -915,6 +923,10 @@ public class Maxs {
 
         public String getHostName() {
             return hostName;
+        }
+
+        public String getString(final String key, Object... values) {
+            return String.format(key, values);
         }
     }
 
