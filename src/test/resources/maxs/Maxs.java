@@ -876,7 +876,7 @@ public class Maxs {
                 this.registerJmx(config);
             }
         } else {
-            throw new IllegalArgumentException("No SSL host name provided");
+            throw new IllegalArgumentException(sm.getString("No SSL host name provided"));
         }
     }
 
@@ -914,7 +914,7 @@ public class Maxs {
 
     }
 
-    static class SSLConfig implements SSLConf{
+    static class SSLConfig implements SSLConf {
         private String hostName;
 
         public SSLConfig(String hostName) {
