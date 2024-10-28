@@ -287,6 +287,15 @@ public final class BytecodeMethod {
         );
     }
 
+    public String instructionsView() {
+        return this.instructions.stream()
+            .filter(inst -> BytecodeInstruction.class.isInstance(inst))
+            .map(BytecodeInstruction.class::cast)
+            .map(instruction -> instruction.opcode())
+            .map(String::valueOf)
+            .collect(Collectors.joining("\n"));
+    }
+
     /**
      * Generate bytecode.
      * @param visitor Visitor.
@@ -304,7 +313,8 @@ public final class BytecodeMethod {
                 mvisitor.visitCode();
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor));
                 this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
-                mvisitor.visitMaxs(this.computeStack(), this.computeLocals());
+                final BytecodeMaxs computed = this.computeMaxs();
+                mvisitor.visitMaxs(computed.stack(), computed.locals());
             }
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {

@@ -70,7 +70,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
      * @return Maximum value.
      */
     @SuppressWarnings("PMD.CognitiveComplexity")
-    public Optional<T> max(final T initial, final Function<BytecodeInstruction, T> generator) {
+    public Optional<T> max(final T initial, final Function<BytecodeEntry, T> generator) {
         final Map<Integer, T> visited = new HashMap<>(0);
         final Map<Integer, T> worklist = new HashMap<>(0);
         worklist.put(0, initial);
@@ -82,17 +82,17 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Cannot find first worklist element"));
             int index = curr.getKey();
-            current = curr.getValue();
             worklist.remove(index);
-            if (visited.get(index) != null && visited.get(index).compareTo(current) >= 0) {
+            if (visited.get(index) != null && visited.get(index).compareTo(curr.getValue()) >= 0) {
                 continue;
             }
+            current = curr.getValue();
             while (index < total) {
                 final BytecodeEntry entry = this.instructions.get(index);
+                current = current.add(generator.apply(entry));
+                final T updated = current;
                 if (entry instanceof BytecodeInstruction) {
                     final BytecodeInstruction instruction = BytecodeInstruction.class.cast(entry);
-                    current = current.add(generator.apply(instruction));
-                    final T updated = current;
                     if (instruction.isSwitch()) {
                         instruction.offsets()
                             .stream()
@@ -128,9 +128,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                 ++index;
             }
         }
-        return visited.values()
-            .stream()
-            .max(T::compareTo);
+        return visited.values().stream().max(T::compareTo);
     }
 
     /**

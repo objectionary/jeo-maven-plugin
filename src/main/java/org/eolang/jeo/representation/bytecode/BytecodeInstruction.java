@@ -490,6 +490,14 @@ public final class BytecodeInstruction implements BytecodeEntry {
     }
 
     /**
+     * Instruction opcode.
+     * @return Opcode.
+     */
+    int opcode() {
+        return this.opcode;
+    }
+
+    /**
      * Jump to a label.
      * Where to jump.
      * @return Jump label.

@@ -23,14 +23,25 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import it.JavaSourceClass;
+import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.cactoos.bytes.BytesOf;
+import org.cactoos.bytes.UncheckedBytes;
+import org.eolang.jeo.representation.BytecodeRepresentation;
+import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.directives.HasMethod;
 import org.eolang.jeo.representation.xmir.AllLabels;
+import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -489,6 +500,56 @@ final class BytecodeMethodTest {
             method.computeMaxs(),
             Matchers.equalTo(expected)
         );
+    }
+
+    @Test
+    void custom() throws FileNotFoundException {
+        final List<BytecodeMethod> bmethods = new AsmProgram(
+            new BytecodeRepresentation(
+                Paths.get(
+                    "/Users/lombrozo/Workspace/EOlang/jeo-maven-plugin/target/it/spring-fat/target/classes/org/apache/tomcat/util/net/AbstractEndpoint.class"
+                )
+            ).toBytecode().bytes()
+        ).bytecode().top()
+            .methods().stream().filter(method -> {
+                return method.name().equals("addSslHostConfig");
+            }).collect(Collectors.toList());
+        final BytecodeMethod bmethod = bmethods.get(1);
+        final BytecodeMaxs bmethodCurrMaxs = bmethod.currentMaxs();
+        final BytecodeMaxs bmethodCompMaxs = bmethod.computeMaxs();
+
+        String bmethodString = bmethod.toString();
+        final String first = bmethod.instructionsView();
+
+        final Path path = Paths.get(
+            "/Users/lombrozo/Workspace/EOlang/jeo-maven-plugin/target/it/spring-fat/target/generated-sources/jeo-xmir/org/apache/tomcat/util/net/AbstractEndpoint.xmir"
+        );
+        final List<BytecodeMethod> methods = new XmlProgram(
+            new XMLDocument(path.toFile())).bytecode().top()
+            .methods().stream().filter(method -> {
+                return method.name().equals("addSslHostConfig");
+            }).collect(Collectors.toList());
+
+        final BytecodeMethod problematic = methods.get(1);
+        final BytecodeMaxs curr = problematic.currentMaxs();
+        final BytecodeMaxs comp = problematic.computeMaxs();
+        final String problematicString = problematic.toString();
+        final String second = problematic.instructionsView();
+        for (final BytecodeMethod method : methods) {
+            final BytecodeMaxs current = method.currentMaxs();
+            final BytecodeMaxs actual = method.computeMaxs();
+            Logger.info(
+                this,
+                "Method %s: current maxs: %s, computed maxs: %s",
+                method.name(),
+                current,
+                actual
+            );
+            MatcherAssert.assertThat(
+                actual,
+                Matchers.equalTo(current)
+            );
+        }
     }
 
     /**

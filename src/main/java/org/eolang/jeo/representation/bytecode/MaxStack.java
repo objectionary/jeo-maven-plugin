@@ -100,7 +100,7 @@ final class MaxStack {
          * Constructor.
          * @param instruction Bytecode instruction.
          */
-        Stack(final BytecodeInstruction instruction) {
+        Stack(final BytecodeEntry instruction) {
             this(instruction.impact());
         }
 

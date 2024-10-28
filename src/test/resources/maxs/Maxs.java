@@ -833,6 +833,42 @@ public class Maxs {
         }
     }
 
+    public void severalThrows() throws Throwable {
+        try {
+            throw new FileNotFoundException("File not found");
+        } catch (FileNotFoundException e) {
+            throw new IllegalArgumentException("Invalid argument", e);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("Illegal state", e);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException("Runtime exception", e);
+        } catch (RuntimeException e) {
+            throw new Error("Error", e);
+        } catch (Error e) {
+            throw new Exception("Exception", e);
+        } catch (Exception e) {
+            throw new Throwable("Throwable", e);
+        } catch (Throwable e) {
+            throw new RuntimeException("Runtime exception", e);
+        }
+    }
+
+    public void cascadeThrows() {
+        try {
+            try {
+                try {
+                    throw new FileNotFoundException("File not found");
+                } catch (FileNotFoundException e) {
+                    throw new IllegalArgumentException("Invalid argument", e);
+                }
+            } catch (final IllegalArgumentException exception) {
+                throw new IllegalStateException("Illegal state", exception);
+            }
+        } catch (final IllegalStateException exception) {
+            throw new RuntimeException("Runtime exception", exception);
+        }
+    }
+
     private enum BindState {
         UNBOUND,
         SOCKET_CLOSED_ON_STOP,
