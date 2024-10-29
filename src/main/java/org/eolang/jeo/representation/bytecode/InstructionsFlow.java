@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.objectweb.asm.Label;
@@ -64,34 +66,30 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
     }
 
     /**
-     * Compute the maximum value.
+     * Compute the maximum value for stack or variables.
      * @param initial Initial value.
      * @param generator Function to generate the reducible element from the instruction.
      * @return Maximum value.
      */
-    @SuppressWarnings("PMD.CognitiveComplexity")
     public Optional<T> max(final T initial, final Function<BytecodeEntry, T> generator) {
         final Map<Integer, T> visited = new HashMap<>(0);
-        final Map<Integer, T> worklist = new HashMap<>(0);
+        final NavigableMap<Integer, T> worklist = new TreeMap<>();
         worklist.put(0, initial);
         final int total = this.instructions.size();
         T current;
         while (!worklist.isEmpty()) {
-            final Map.Entry<Integer, T> curr = worklist.entrySet()
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Cannot find first worklist element"));
-            int index = curr.getKey();
+            final Map.Entry<Integer, T> starting = worklist.firstEntry();
+            int index = starting.getKey();
             worklist.remove(index);
-            if (visited.get(index) != null && visited.get(index).compareTo(curr.getValue()) >= 0) {
+            if (visited.get(index) != null && visited.get(index)
+                .compareTo(starting.getValue()) >= 0) {
                 continue;
             }
-            current = curr.getValue();
+            current = starting.getValue();
             while (index < total) {
                 final BytecodeEntry entry = this.instructions.get(index);
                 current = current.add(generator.apply(entry));
                 final T updated = current;
-//                if (entry instanceof BytecodeInstruction) {
                 final BytecodeEntry instruction = entry;
                 if (instruction.isSwitch()) {
                     instruction.jumps()
@@ -118,12 +116,8 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                     visited.merge(index, updated, InstructionsFlow::max);
                     break;
                 }
-                this.suitableBlocks(index)
-                    .forEach(ind -> worklist.put(ind, updated.enterBlock()));
+                this.suitableBlocks(index).forEach(ind -> worklist.put(ind, updated.enterBlock()));
                 visited.merge(index, updated, InstructionsFlow::max);
-//                } else {
-//                    visited.merge(index, updated, InstructionsFlow::max);
-//                }
                 ++index;
             }
         }
