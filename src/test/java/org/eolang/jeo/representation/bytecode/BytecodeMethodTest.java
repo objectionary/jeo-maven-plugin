@@ -23,22 +23,15 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import it.JavaSourceClass;
-import java.io.FileNotFoundException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cactoos.bytes.BytesOf;
-import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.BytecodeRepresentation;
-import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.directives.HasMethod;
 import org.eolang.jeo.representation.xmir.AllLabels;
