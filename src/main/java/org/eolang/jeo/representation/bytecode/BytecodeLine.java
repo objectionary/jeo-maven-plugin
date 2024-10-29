@@ -63,7 +63,7 @@ public final class BytecodeLine implements BytecodeEntry {
 
     @Override
     public void writeTo(final MethodVisitor visitor) {
-        visitor.visitLineNumber(this.line, this.label);
+        // Here we intentionally skip writing visitor.visitLineNumber(this.line, this.label);
     }
 
     @Override
