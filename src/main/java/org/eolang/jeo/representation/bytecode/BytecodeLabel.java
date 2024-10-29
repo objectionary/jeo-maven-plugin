@@ -24,6 +24,8 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesLabel;
@@ -94,6 +96,31 @@ public final class BytecodeLabel implements BytecodeEntry {
     }
 
     @Override
+    public boolean isSwitch() {
+        return false;
+    }
+
+    @Override
+    public boolean isGoto() {
+        return false;
+    }
+
+    @Override
+    public boolean isIf() {
+        return false;
+    }
+
+    @Override
+    public boolean isReturn() {
+        return false;
+    }
+
+    @Override
+    public boolean isThrow() {
+        return false;
+    }
+
+    @Override
     public boolean isOpcode() {
         return false;
     }
@@ -101,5 +128,10 @@ public final class BytecodeLabel implements BytecodeEntry {
     @Override
     public int impact() {
         return 0;
+    }
+
+    @Override
+    public List<Label> jumps() {
+        return Collections.emptyList();
     }
 }

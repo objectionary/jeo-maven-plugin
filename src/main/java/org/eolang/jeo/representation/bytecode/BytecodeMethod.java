@@ -304,7 +304,8 @@ public final class BytecodeMethod {
                 mvisitor.visitCode();
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor));
                 this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
-                mvisitor.visitMaxs(this.computeStack(), this.computeLocals());
+                final BytecodeMaxs computed = this.computeMaxs();
+                mvisitor.visitMaxs(computed.stack(), computed.locals());
             }
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {

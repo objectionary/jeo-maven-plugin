@@ -70,7 +70,7 @@ public class Disassembler {
             disassembled,
             this.classes,
             this.target,
-            new BachedTranslator(
+            new BatchedTranslator(
                 new LoggedTranslation(
                     process,
                     disassembled,

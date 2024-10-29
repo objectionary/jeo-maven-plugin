@@ -39,11 +39,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link BachedTranslator}.
+ * Test case for {@link BatchedTranslator}.
  *
  * @since 0.1.0
  */
-final class BachedTranslatorTest {
+final class BatchedTranslatorTest {
 
     /**
      * Where the XML file is expected to be saved.
@@ -66,7 +66,7 @@ final class BachedTranslatorTest {
                 .toString()
                 .getBytes(StandardCharsets.UTF_8)
         );
-        new BachedTranslator(new Disassemble(temp))
+        new BatchedTranslator(new Disassemble(temp))
             .apply(Stream.of(new XmirRepresentation(clazz)))
             .collect(Collectors.toList());
         MatcherAssert.assertThat(
@@ -78,7 +78,7 @@ final class BachedTranslatorTest {
 
     @Test
     void overwritesXml(@TempDir final Path temp) {
-        final BachedTranslator footprint = new BachedTranslator(
+        final BatchedTranslator footprint = new BatchedTranslator(
             new Disassemble(temp)
         );
         final Representation repr = new XmirRepresentation(
@@ -99,7 +99,7 @@ final class BachedTranslatorTest {
     @Test
     void assemblesSuccessfully(@TempDir final Path temp) {
         final String fake = "Fake";
-        new BachedTranslator(new Assemble(temp)).apply(
+        new BatchedTranslator(new Assemble(temp)).apply(
             Stream.of(
                 new XmirRepresentation(
                     new BytecodeProgram("jeo/xmir", new BytecodeClass(fake)).xml()

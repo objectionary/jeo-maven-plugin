@@ -41,6 +41,8 @@ import java.util.Locale;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -794,13 +796,15 @@ public class Maxs {
             return connection.getContentLengthLong();
         }
     }
+
     private final Object statusListenerListLock = new Object();
     private final List<Object> statusListenerList = new ArrayList<>();
 
     public boolean add(Object listener) {
         synchronized (this.statusListenerListLock) {
             if (listener instanceof String) {
-                boolean isPresent = this.checkForPresence(this.statusListenerList, listener.getClass());
+                boolean isPresent = this.checkForPresence(
+                    this.statusListenerList, listener.getClass());
                 if (isPresent) {
                     return false;
                 }
@@ -823,8 +827,142 @@ public class Maxs {
         synchronized (this.statusListenerListLock) {
             System.out.println("Current Listeners:");
             for (Object listener : statusListenerList) {
-                System.out.println(" - " + listener + " (" + listener.getClass().getSimpleName() + ")");
+                System.out.println(
+                    " - " + listener + " (" + listener.getClass().getSimpleName() + ")");
             }
+        }
+    }
+
+    public void severalThrows() throws Throwable {
+        try {
+            throw new FileNotFoundException("File not found");
+        } catch (FileNotFoundException e) {
+            throw new IllegalArgumentException("Invalid argument", e);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("Illegal state", e);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException("Runtime exception", e);
+        } catch (RuntimeException e) {
+            throw new Error("Error", e);
+        } catch (Error e) {
+            throw new Exception("Exception", e);
+        } catch (Exception e) {
+            throw new Throwable("Throwable", e);
+        } catch (Throwable e) {
+            throw new RuntimeException("Runtime exception", e);
+        }
+    }
+
+    public void cascadeThrows() {
+        try {
+            try {
+                try {
+                    throw new FileNotFoundException("File not found");
+                } catch (FileNotFoundException e) {
+                    throw new IllegalArgumentException("Invalid argument", e);
+                }
+            } catch (final IllegalArgumentException exception) {
+                throw new IllegalStateException("Illegal state", exception);
+            }
+        } catch (final IllegalStateException exception) {
+            throw new RuntimeException("Runtime exception", exception);
+        }
+    }
+
+    private enum BindState {
+        UNBOUND,
+        SOCKET_CLOSED_ON_STOP,
+        BOUND
+    }
+
+    private BindState bindState = BindState.BOUND;
+    private Map<String, SSLConf> sslHostConfigs = new HashMap<>();
+    private String defaultSSLHostConfigName = "default";
+    private final static SSLConfig sm = new SSLConfig("123");
+
+    public void addSslHostConfig(SSLConfig config, boolean flag) throws IllegalArgumentException {
+        String hostName = config.getHostName();
+        if (hostName != null && hostName.length() != 0) {
+            if (this.bindState != BindState.UNBOUND && this.bindState != BindState.SOCKET_CLOSED_ON_STOP && this.isSSLEnabled()) {
+                try {
+                    this.createSSLContext(config);
+                } catch (IllegalArgumentException e) {
+                    throw e;
+                } catch (Exception e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+            SSLConfig oldConfig;
+            if (flag) {
+                oldConfig = (SSLConfig) this.sslHostConfigs.put(hostName, config);
+                if (hostName.equals(this.getDefaultSSLHostConfigName())) {
+                    this.setDefaultSslHostConfig(config);
+                }
+                if (oldConfig != null) {
+                    this.unregisterJmx(oldConfig);
+                }
+                this.registerJmx(config);
+            } else {
+                oldConfig = (SSLConfig) this.sslHostConfigs.putIfAbsent(hostName, config);
+                if (oldConfig != null) {
+                    this.releaseSSLContext(config);
+                    throw new IllegalArgumentException(
+                        sm.getString("Duplicate SSL host name: ", new Object[]{hostName}));
+                }
+                this.registerJmx(config);
+            }
+        } else {
+            throw new IllegalArgumentException(sm.getString("No SSL host name provided"));
+        }
+    }
+
+    // Supporting methods and classes
+    public boolean isSSLEnabled() {
+        // Simulate SSL being enabled
+        return true;
+    }
+
+    public void createSSLContext(SSLConf config) throws Exception {
+        // Simulate creating an SSL context
+    }
+
+    public void releaseSSLContext(SSLConf config) {
+        // Simulate releasing an SSL context
+    }
+
+    public void setDefaultSslHostConfig(SSLConf config) {
+        // Set the default SSL host config
+    }
+
+    public String getDefaultSSLHostConfigName() {
+        return this.defaultSSLHostConfigName;
+    }
+
+    public void registerJmx(SSLConf config) {
+        // Simulate JMX registration
+    }
+
+    public void unregisterJmx(SSLConf config) {
+        // Simulate JMX unregistration
+    }
+
+    static interface SSLConf {
+
+    }
+
+    static class SSLConfig implements SSLConf {
+        private String hostName;
+
+        public SSLConfig(String hostName) {
+            this.hostName = hostName;
+        }
+
+        public String getHostName() {
+            return hostName;
+        }
+
+        public String getString(final String key, Object... values) {
+            return String.format(key, values);
         }
     }
 

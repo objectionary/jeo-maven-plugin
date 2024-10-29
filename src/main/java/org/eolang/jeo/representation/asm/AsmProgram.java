@@ -47,6 +47,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeField;
 import org.eolang.jeo.representation.bytecode.BytecodeFrame;
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.bytecode.BytecodeLine;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
@@ -57,7 +58,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.bytecode.InnerClass;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
@@ -80,7 +80,6 @@ import org.objectweb.asm.tree.TableSwitchInsnNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
-import org.xembly.Directive;
 
 /**
  * ASM bytecode parser.
@@ -462,31 +461,7 @@ public final class AsmProgram {
                 result = new BytecodeFrame(frame.type, frame.local, frame.stack);
                 break;
             case AbstractInsnNode.LINE:
-                result = new BytecodeEntry() {
-                    @Override
-                    public void writeTo(final MethodVisitor ignore) {
-                    }
-
-                    @Override
-                    public Iterable<Directive> directives(final boolean counting) {
-                        return Collections.emptyList();
-                    }
-
-                    @Override
-                    public boolean isLabel() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isOpcode() {
-                        return false;
-                    }
-
-                    @Override
-                    public int impact() {
-                        return 0;
-                    }
-                };
+                result = new BytecodeLine();
                 break;
             default:
                 throw new IllegalStateException(
