@@ -391,7 +391,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * Is this instruction a jump instruction?
      * @return True if it is.
      */
-    boolean isGoto() {
+    @Override
+    public boolean isGoto() {
         return Instruction.find(this.opcode) == Instruction.GOTO;
     }
 
@@ -400,7 +401,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * @return True if it is.
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
-    boolean isBranch() {
+    @Override
+    public boolean isIf() {
         final boolean result;
         switch (Instruction.find(this.opcode)) {
             case IFEQ:
@@ -432,7 +434,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * Is this instruction a switch instruction?
      * @return True if it is.
      */
-    boolean isSwitch() {
+    @Override
+    public boolean isSwitch() {
         final boolean result;
         switch (Instruction.find(this.opcode)) {
             case TABLESWITCH:
@@ -450,7 +453,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * Is this instruction a return instruction?
      * @return True if it is.
      */
-    boolean isReturn() {
+    @Override
+    public boolean isReturn() {
         final boolean result;
         switch (Instruction.find(this.opcode)) {
             case IRETURN:
@@ -474,7 +478,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * @return Jump label.
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
-    List<Label> jumps() {
+    public List<Label> jumps() {
         final List<Label> result;
         switch (Instruction.find(this.opcode)) {
             case GOTO:

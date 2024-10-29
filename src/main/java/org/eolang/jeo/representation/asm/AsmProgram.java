@@ -47,6 +47,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeField;
 import org.eolang.jeo.representation.bytecode.BytecodeFrame;
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.bytecode.BytecodeLine;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
@@ -72,6 +73,7 @@ import org.objectweb.asm.tree.InvokeDynamicInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -462,31 +464,8 @@ public final class AsmProgram {
                 result = new BytecodeFrame(frame.type, frame.local, frame.stack);
                 break;
             case AbstractInsnNode.LINE:
-                result = new BytecodeEntry() {
-                    @Override
-                    public void writeTo(final MethodVisitor ignore) {
-                    }
-
-                    @Override
-                    public Iterable<Directive> directives(final boolean counting) {
-                        return Collections.emptyList();
-                    }
-
-                    @Override
-                    public boolean isLabel() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isOpcode() {
-                        return false;
-                    }
-
-                    @Override
-                    public int impact() {
-                        return 0;
-                    }
-                };
+                final LineNumberNode line = LineNumberNode.class.cast(node);
+                result = new BytecodeLine(line.line, line.start.getLabel());
                 break;
             default:
                 throw new IllegalStateException(

@@ -91,39 +91,39 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                 final BytecodeEntry entry = this.instructions.get(index);
                 current = current.add(generator.apply(entry));
                 final T updated = current;
-                if (entry instanceof BytecodeInstruction) {
-                    final BytecodeInstruction instruction = BytecodeInstruction.class.cast(entry);
-                    if (instruction.isSwitch()) {
-                        instruction.jumps()
-                            .stream()
-                            .map(this::index)
-                            .forEach(ind -> worklist.put(ind, updated));
-                        visited.merge(index, updated, InstructionsFlow::max);
-                        break;
-                    } else if (instruction.isBranch()) {
-                        final Label label = instruction.jumps().get(0);
-                        final int jump = this.index(label);
-                        worklist.put(jump, updated);
-                        final int next = index + 1;
-                        worklist.put(next, updated);
-                        visited.merge(index, updated, InstructionsFlow::max);
-                        break;
-                    } else if (instruction.isGoto()) {
-                        final Label label = instruction.jumps().get(0);
-                        final int jump = this.index(label);
-                        worklist.put(jump, updated);
-                        visited.merge(index, updated, InstructionsFlow::max);
-                        break;
-                    } else if (instruction.isReturn() || instruction.isThrow()) {
-                        visited.merge(index, updated, InstructionsFlow::max);
-                        break;
-                    }
-                    this.suitableBlocks(index)
-                        .forEach(ind -> worklist.put(ind, updated.enterBlock()));
+//                if (entry instanceof BytecodeInstruction) {
+                final BytecodeEntry instruction = entry;
+                if (instruction.isSwitch()) {
+                    instruction.jumps()
+                        .stream()
+                        .map(this::index)
+                        .forEach(ind -> worklist.put(ind, updated));
                     visited.merge(index, updated, InstructionsFlow::max);
-                } else {
+                    break;
+                } else if (instruction.isIf()) {
+                    final Label label = instruction.jumps().get(0);
+                    final int jump = this.index(label);
+                    worklist.put(jump, updated);
+                    final int next = index + 1;
+                    worklist.put(next, updated);
                     visited.merge(index, updated, InstructionsFlow::max);
+                    break;
+                } else if (instruction.isGoto()) {
+                    final Label label = instruction.jumps().get(0);
+                    final int jump = this.index(label);
+                    worklist.put(jump, updated);
+                    visited.merge(index, updated, InstructionsFlow::max);
+                    break;
+                } else if (instruction.isReturn() || instruction.isThrow()) {
+                    visited.merge(index, updated, InstructionsFlow::max);
+                    break;
                 }
+                this.suitableBlocks(index)
+                    .forEach(ind -> worklist.put(ind, updated.enterBlock()));
+                visited.merge(index, updated, InstructionsFlow::max);
+//                } else {
+//                    visited.merge(index, updated, InstructionsFlow::max);
+//                }
                 ++index;
             }
         }
