@@ -83,7 +83,8 @@ final class MaxLocals {
                 this.initial(),
                 instr -> {
                     final Variables result;
-                    if (instr instanceof BytecodeInstruction && ((BytecodeInstruction) instr).isVarInstruction()) {
+                    if (instr instanceof BytecodeInstruction
+                        && ((BytecodeInstruction) instr).isVarInstruction()) {
                         result = new Variables((BytecodeInstruction) instr);
                     } else {
                         result = new Variables();

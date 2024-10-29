@@ -506,7 +506,7 @@ final class BytecodeMethodTest {
             .top()
             .methods()
             .stream()
-            .filter(method -> method.name().equals("addSslHostConfig"))
+            .filter(method -> "addSslHostConfig".equals(method.name()))
             .collect(Collectors.toList())
             .get(1);
         MatcherAssert.assertThat(

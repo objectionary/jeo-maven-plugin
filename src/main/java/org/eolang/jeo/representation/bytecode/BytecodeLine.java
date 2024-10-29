@@ -46,6 +46,9 @@ public final class BytecodeLine implements BytecodeEntry {
      */
     private final int line;
 
+    /**
+     * Label.
+     */
     private final Label label;
 
     /**
