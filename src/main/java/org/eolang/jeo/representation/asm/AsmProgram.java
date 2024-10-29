@@ -72,7 +72,6 @@ import org.objectweb.asm.tree.InvokeDynamicInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -462,8 +461,7 @@ public final class AsmProgram {
                 result = new BytecodeFrame(frame.type, frame.local, frame.stack);
                 break;
             case AbstractInsnNode.LINE:
-                final LineNumberNode line = LineNumberNode.class.cast(node);
-                result = new BytecodeLine(line.line, line.start.getLabel());
+                result = new BytecodeLine();
                 break;
             default:
                 throw new IllegalStateException(

@@ -41,29 +41,9 @@ import org.xembly.Directive;
 @ToString
 public final class BytecodeLine implements BytecodeEntry {
 
-    /**
-     * Line number.
-     */
-    private final int line;
-
-    /**
-     * Label.
-     */
-    private final Label label;
-
-    /**
-     * Constructor.
-     * @param lnum Line number.
-     * @param lbl Label.
-     */
-    public BytecodeLine(final int lnum, final Label lbl) {
-        this.line = lnum;
-        this.label = lbl;
-    }
-
     @Override
     public void writeTo(final MethodVisitor visitor) {
-        // Here we intentionally skip writing visitor.visitLineNumber(this.line, this.label);
+        // nothing to write
     }
 
     @Override
