@@ -157,6 +157,11 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
     private static class MaxValueMap<K, V extends Reducible<V>> extends HashMap<K, V> {
 
         /**
+         * Serial version UID.
+         */
+        private static final long serialVersionUID = 6517835829882158842L;
+
+        /**
          * Constructor.
          */
         MaxValueMap() {
