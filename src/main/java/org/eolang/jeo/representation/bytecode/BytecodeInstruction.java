@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -390,7 +391,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * Is this instruction a jump instruction?
      * @return True if it is.
      */
-    boolean isJump() {
+    boolean isGoto() {
         return Instruction.find(this.opcode) == Instruction.GOTO;
     }
 
@@ -468,42 +469,13 @@ public final class BytecodeInstruction implements BytecodeEntry {
     }
 
     /**
-     * Switch offcests.
-     * @return Offsets.
-     */
-    List<Label> offsets() {
-        switch (Instruction.find(this.opcode)) {
-            case TABLESWITCH:
-            case LOOKUPSWITCH:
-                return this.args.stream()
-                    .filter(Label.class::isInstance)
-                    .map(Label.class::cast)
-                    .collect(Collectors.toList());
-            default:
-                throw new IllegalStateException(
-                    String.format(
-                        "Instruction %s is not a switch instruction",
-                        new OpcodeName(this.opcode).simplified()
-                    )
-                );
-        }
-    }
-
-    /**
-     * Instruction opcode.
-     * @return Opcode.
-     */
-    int opcode() {
-        return this.opcode;
-    }
-
-    /**
      * Jump to a label.
      * Where to jump.
      * @return Jump label.
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
-    Label jump() {
+    List<Label> jumps() {
+        final List<Label> result;
         switch (Instruction.find(this.opcode)) {
             case GOTO:
             case JSR:
@@ -523,7 +495,15 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case IF_ACMPNE:
             case IFNULL:
             case IFNONNULL:
-                return (Label) this.args.get(0);
+                result = Collections.singletonList((Label) this.args.get(0));
+                break;
+            case TABLESWITCH:
+            case LOOKUPSWITCH:
+                result = this.args.stream()
+                    .filter(Label.class::isInstance)
+                    .map(Label.class::cast)
+                    .collect(Collectors.toList());
+                break;
             default:
                 throw new IllegalStateException(
                     String.format(
@@ -532,6 +512,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
                     )
                 );
         }
+        return result;
     }
 
     /**

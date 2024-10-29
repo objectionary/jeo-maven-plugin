@@ -94,22 +94,22 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                 if (entry instanceof BytecodeInstruction) {
                     final BytecodeInstruction instruction = BytecodeInstruction.class.cast(entry);
                     if (instruction.isSwitch()) {
-                        instruction.offsets()
+                        instruction.jumps()
                             .stream()
                             .map(this::index)
                             .forEach(ind -> worklist.put(ind, updated));
                         visited.merge(index, updated, InstructionsFlow::max);
                         break;
                     } else if (instruction.isBranch()) {
-                        final Label label = instruction.jump();
+                        final Label label = instruction.jumps().get(0);
                         final int jump = this.index(label);
                         worklist.put(jump, updated);
                         final int next = index + 1;
                         worklist.put(next, updated);
                         visited.merge(index, updated, InstructionsFlow::max);
                         break;
-                    } else if (instruction.isJump()) {
-                        final Label label = instruction.jump();
+                    } else if (instruction.isGoto()) {
+                        final Label label = instruction.jumps().get(0);
                         final int jump = this.index(label);
                         worklist.put(jump, updated);
                         visited.merge(index, updated, InstructionsFlow::max);
@@ -118,7 +118,8 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                         visited.merge(index, updated, InstructionsFlow::max);
                         break;
                     }
-                    this.suitableBlocks(index).forEach(ind -> worklist.put(ind, updated.enterBlock()));
+                    this.suitableBlocks(index)
+                        .forEach(ind -> worklist.put(ind, updated.enterBlock()));
                     visited.merge(index, updated, InstructionsFlow::max);
                 } else {
                     visited.merge(index, updated, InstructionsFlow::max);

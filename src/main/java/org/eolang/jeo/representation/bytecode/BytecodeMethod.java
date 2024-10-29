@@ -287,15 +287,6 @@ public final class BytecodeMethod {
         );
     }
 
-    public String instructionsView() {
-        return this.instructions.stream()
-            .filter(inst -> BytecodeInstruction.class.isInstance(inst))
-            .map(BytecodeInstruction.class::cast)
-            .map(instruction -> instruction.opcode())
-            .map(String::valueOf)
-            .collect(Collectors.joining("\n"));
-    }
-
     /**
      * Generate bytecode.
      * @param visitor Visitor.
