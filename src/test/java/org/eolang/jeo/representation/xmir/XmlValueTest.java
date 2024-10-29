@@ -31,6 +31,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
@@ -65,6 +67,24 @@ final class XmlValueTest {
                 new XmlNode(new Xembler(new DirectivesValue(origin)).xmlQuietly())
             ).object(),
             Matchers.equalTo(origin)
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "Φ", "Ψ", "Ω", "Ϊ", "Ϋ", "ά", "έ", "ή", "ί", "ΰ", "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ", "λ", "μ"
+    })
+    void decodesUnicodeCharacters(final String unicode) throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Can't decode unicode characters",
+            new XmlValue(
+                new XmlNode(
+                    new Xembler(
+                        new DirectivesValue(unicode)
+                    ).xml()
+                )
+            ).string(),
+            Matchers.equalTo(unicode)
         );
     }
 

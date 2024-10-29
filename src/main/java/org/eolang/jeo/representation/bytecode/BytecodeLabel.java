@@ -24,6 +24,8 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesLabel;
@@ -44,11 +46,6 @@ public final class BytecodeLabel implements BytecodeEntry {
      * Label.
      */
     private final Label label;
-
-    /**
-     * All method labels.
-     */
-    private final AllLabels labels;
 
     /**
      * Constructor.
@@ -72,17 +69,15 @@ public final class BytecodeLabel implements BytecodeEntry {
      * @param labels All labels.
      */
     public BytecodeLabel(final String identifier, final AllLabels labels) {
-        this(labels.label(identifier), labels);
+        this(labels.label(identifier));
     }
 
     /**
      * Constructor.
      * @param label Label.
-     * @param labels All labels.
      */
-    public BytecodeLabel(final Label label, final AllLabels labels) {
+    public BytecodeLabel(final Label label) {
         this.label = label;
-        this.labels = labels;
     }
 
     @Override
@@ -101,6 +96,31 @@ public final class BytecodeLabel implements BytecodeEntry {
     }
 
     @Override
+    public boolean isSwitch() {
+        return false;
+    }
+
+    @Override
+    public boolean isGoto() {
+        return false;
+    }
+
+    @Override
+    public boolean isIf() {
+        return false;
+    }
+
+    @Override
+    public boolean isReturn() {
+        return false;
+    }
+
+    @Override
+    public boolean isThrow() {
+        return false;
+    }
+
+    @Override
     public boolean isOpcode() {
         return false;
     }
@@ -111,7 +131,7 @@ public final class BytecodeLabel implements BytecodeEntry {
     }
 
     @Override
-    public String testCode() {
-        return String.format(".label(\"%s\")", this.labels.uid(this.label));
+    public List<Label> jumps() {
+        return Collections.emptyList();
     }
 }

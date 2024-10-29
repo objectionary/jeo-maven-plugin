@@ -123,7 +123,9 @@ enum DataType {
      * String.
      */
     STRING("string", String.class,
-        value -> Optional.ofNullable(value).map(String::valueOf).map(String::getBytes).orElse(null),
+        value -> Optional.ofNullable(value).map(String::valueOf)
+            .map(unicode -> unicode.getBytes(StandardCharsets.UTF_8))
+            .orElse(null),
         bytes -> new String(bytes, StandardCharsets.UTF_8)
     ),
 

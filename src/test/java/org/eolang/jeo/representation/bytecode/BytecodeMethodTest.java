@@ -27,10 +27,15 @@ import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import it.JavaSourceClass;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.cactoos.bytes.BytesOf;
+import org.cactoos.io.ResourceOf;
+import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.directives.HasMethod;
 import org.eolang.jeo.representation.xmir.AllLabels;
+import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -488,6 +493,26 @@ final class BytecodeMethodTest {
             ),
             method.computeMaxs(),
             Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void computesMaxForRealClassAfterAllTransformations() throws Exception {
+        final BytecodeMethod problematic = new XmlProgram(
+            new BytecodeRepresentation(
+                new Bytecode(new BytesOf(new ResourceOf("AbstractEndpoint.class")).asBytes())
+            ).toEO()
+        ).bytecode()
+            .top()
+            .methods()
+            .stream()
+            .filter(method -> "addSslHostConfig".equals(method.name()))
+            .collect(Collectors.toList())
+            .get(1);
+        MatcherAssert.assertThat(
+            "Maxs weren't computed correctly for real class with tricky exception table",
+            problematic.computeMaxs(),
+            Matchers.equalTo(problematic.currentMaxs())
         );
     }
 

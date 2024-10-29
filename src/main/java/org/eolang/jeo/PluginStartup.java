@@ -23,11 +23,17 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.log.Logger;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 
 /**
- * All mojos initialization step.
+ * All mojo's initialization step.
  * This class is responsible for initializing classloader.
  *
  * @since 0.1
@@ -35,16 +41,47 @@ import org.apache.maven.project.MavenProject;
 public final class PluginStartup {
 
     /**
-     * Maven project.
+     * All the folders with classes.
      */
-    private final MavenProject project;
+    private final Collection<String> folders;
 
     /**
      * Constructor.
      * @param project Maven project.
+     * @param additional Additional folders with classes.
+     * @throws DependencyResolutionRequiredException If a problem happened during loading classes.
      */
-    PluginStartup(final MavenProject project) {
-        this.project = project;
+    PluginStartup(
+        final MavenProject project, final Path... additional
+    ) throws DependencyResolutionRequiredException {
+        this(
+            Stream.concat(
+                Stream.concat(
+                    project.getRuntimeClasspathElements().stream(),
+                    project.getCompileClasspathElements().stream()
+                ),
+                Stream.concat(
+                    project.getTestClasspathElements().stream(),
+                    Arrays.stream(additional).map(Path::toString)
+                )
+            ).collect(Collectors.toSet())
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param folders Folders with classes.
+     */
+    PluginStartup(final String... folders) {
+        this(Arrays.asList(folders));
+    }
+
+    /**
+     * Constructor.
+     * @param folders Folders with classes.
+     */
+    private PluginStartup(final Collection<String> folders) {
+        this.folders = folders;
     }
 
     /**
@@ -57,14 +94,19 @@ public final class PluginStartup {
      * We need this to solve the problem with computing maxs in ASM library:
      * - https://gitlab.ow2.org/asm/asm/-/issues/317918
      * - https://stackoverflow.com/questions/11292701/error-while-instrumenting-class-files-asm-classwriter-getcommonsuperclass
-     *
-     * @throws DependencyResolutionRequiredException If a problem happened during loading classes.
      */
-    void init() throws DependencyResolutionRequiredException {
+    void init() {
+        Logger.info(
+            this,
+            String.format(
+                "Trying to load classes for bytecode verification from %s",
+                this.folders.stream().collect(Collectors.joining(", ", "[", "]"))
+            )
+        );
         Thread.currentThread().setContextClassLoader(
             new JeoClassLoader(
                 Thread.currentThread().getContextClassLoader(),
-                this.project.getRuntimeClasspathElements()
+                this.folders
             )
         );
     }

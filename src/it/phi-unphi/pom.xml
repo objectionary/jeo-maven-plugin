@@ -43,6 +43,7 @@ SOFTWARE.
     <eo.phi>${project.build.directory}/generated-sources/eo-phi</eo.phi>
     <eo.unphi>${project.build.directory}/generated-sources/eo-unphi</eo.unphi>
     <jeo.unroll>${project.build.directory}/generated-sources/jeo-unroll</jeo.unroll>
+    <jeo.assemble>jeo-assemble</jeo.assemble>
   </properties>
   <build>
     <plugins>
@@ -77,6 +78,7 @@ SOFTWARE.
             <phase>package</phase>
             <configuration>
               <sourcesDir>${jeo.unroll}</sourcesDir>
+              <outputDir>${jeo.assemble}</outputDir>
             </configuration>
             <goals>
               <goal>assemble</goal>
@@ -87,7 +89,7 @@ SOFTWARE.
       <plugin>
         <groupId>org.eolang</groupId>
         <artifactId>eo-maven-plugin</artifactId>
-        <version>0.39.2</version>
+        <version>0.40.1</version>
         <executions>
           <execution>
             <id>xmir-to-phi</id>
@@ -116,7 +118,7 @@ SOFTWARE.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>3.4.1</version>
+        <version>3.5.0</version>
         <executions>
           <execution>
             <phase>
@@ -131,10 +133,36 @@ SOFTWARE.
           <executable>java</executable>
           <arguments>
             <argument>-classpath</argument>
-            <argument>${project.build.outputDirectory}</argument>
+            <argument>${jeo.assemble}</argument>
             <argument>org.eolang.hone.App</argument>
           </arguments>
         </configuration>
+      </plugin>
+      <!--
+        We clean target/classes directory to be sure
+        that bytecode verification works without old
+        class files.
+      -->
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.4.0</version>
+        <executions>
+          <execution>
+            <id>clean target</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <configuration>
+              <excludeDefaultDirectories>true</excludeDefaultDirectories>
+              <filesets>
+                <fileset>
+                  <directory>target/classes</directory>
+                </fileset>
+              </filesets>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

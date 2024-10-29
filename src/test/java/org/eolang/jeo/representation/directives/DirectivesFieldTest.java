@@ -24,8 +24,11 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import org.eolang.jeo.representation.bytecode.BytecodeField;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -78,6 +81,33 @@ final class DirectivesFieldTest {
                 "/o/o[@name='descriptor-serialVersionUID']/o[text()='4A']",
                 "/o/o[@name='signature-serialVersionUID']",
                 "/o/o[@name='value-serialVersionUID']/o[text()='62 84 EB 5F 88 47 CD E1']"
+            )
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "Φ", "Ψ", "Ω", "Δ", "Σ", "Θ", "Λ", "Ξ", "Π", "Υ", "\u03A3", "\u03A6", "\u03A8", "\u03A9"
+    })
+    void convertsDirectivesFieldWithUnicodeName(
+        final String original
+    ) throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect the field name with unicode characters to be successfully converted to directives",
+            new Xembler(
+                new BytecodeField(
+                    original,
+                    "I",
+                    "",
+                    0,
+                    Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL
+                ).directives()
+            ).xml(),
+            XhtmlMatchers.hasXPaths(
+                String.format(
+                    "/o[contains(@base,'field') and contains(@name,'%s')]",
+                    original
+                )
             )
         );
     }

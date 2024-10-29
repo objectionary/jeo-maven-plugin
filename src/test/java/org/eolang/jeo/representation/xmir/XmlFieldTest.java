@@ -34,6 +34,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -131,6 +132,26 @@ final class XmlFieldTest {
                     )
                 )
             )
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "Φ", "Ψ", "Ω", "Δ", "Σ", "Θ", "Λ", "Ξ", "Π", "Υ", "\u03A3", "\u03A6", "\u03A8", "\u03A9"
+    })
+    void parsesXmirFieldWithUnicodeCharacterInTheName(final String original)
+        throws ImpossibleModificationException {
+        final BytecodeField expected = new BytecodeField(
+            original,
+            "I",
+            null,
+            0,
+            Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL
+        );
+        MatcherAssert.assertThat(
+            "We expect the field name with unicode characters to be successfully parsed from directives",
+            new XmlField(new XmlNode(new Xembler(expected.directives()).xml())).bytecode(),
+            Matchers.equalTo(expected)
         );
     }
 

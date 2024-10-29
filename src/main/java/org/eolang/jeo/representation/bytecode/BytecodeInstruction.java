@@ -24,11 +24,11 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
@@ -64,6 +64,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
     /**
      * All labels.
      */
+    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final AllLabels labels;
 
     /**
@@ -133,33 +134,6 @@ public final class BytecodeInstruction implements BytecodeEntry {
     @Override
     public boolean isOpcode() {
         return true;
-    }
-
-    @ToString.Include
-    @Override
-    public String testCode() {
-        return String.format(
-            ".opcode(%s)",
-            Stream.concat(
-                Stream.of(String.format("Opcodes.%s", new OpcodeName(this.opcode).simplified())),
-                this.args.stream().map(
-                    arg -> {
-                        final String result;
-                        if (arg instanceof String) {
-                            result = String.format("\"%s\"", arg);
-                        } else if (arg instanceof Label) {
-                            result = String.format(
-                                "labels.label(\"%s\")",
-                                this.labels.uid((Label) arg)
-                            );
-                        } else {
-                            result = String.valueOf(arg);
-                        }
-                        return result;
-                    }
-                )
-            ).collect(Collectors.joining(", "))
-        );
     }
 
     /**
@@ -417,7 +391,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * Is this instruction a jump instruction?
      * @return True if it is.
      */
-    boolean isJump() {
+    @Override
+    public boolean isGoto() {
         return Instruction.find(this.opcode) == Instruction.GOTO;
     }
 
@@ -426,7 +401,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * @return True if it is.
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
-    boolean isBranch() {
+    @Override
+    public boolean isIf() {
         final boolean result;
         switch (Instruction.find(this.opcode)) {
             case IFEQ:
@@ -458,7 +434,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * Is this instruction a switch instruction?
      * @return True if it is.
      */
-    boolean isSwitch() {
+    @Override
+    public boolean isSwitch() {
         final boolean result;
         switch (Instruction.find(this.opcode)) {
             case TABLESWITCH:
@@ -476,7 +453,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * Is this instruction a return instruction?
      * @return True if it is.
      */
-    boolean isReturn() {
+    @Override
+    public boolean isReturn() {
         final boolean result;
         switch (Instruction.find(this.opcode)) {
             case IRETURN:
@@ -495,34 +473,13 @@ public final class BytecodeInstruction implements BytecodeEntry {
     }
 
     /**
-     * Switch offcests.
-     * @return Offsets.
-     */
-    List<Label> offsets() {
-        switch (Instruction.find(this.opcode)) {
-            case TABLESWITCH:
-            case LOOKUPSWITCH:
-                return this.args.stream()
-                    .filter(Label.class::isInstance)
-                    .map(Label.class::cast)
-                    .collect(Collectors.toList());
-            default:
-                throw new IllegalStateException(
-                    String.format(
-                        "Instruction %s is not a switch instruction",
-                        new OpcodeName(this.opcode).simplified()
-                    )
-                );
-        }
-    }
-
-    /**
      * Jump to a label.
      * Where to jump.
      * @return Jump label.
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
-    Label jump() {
+    public List<Label> jumps() {
+        final List<Label> result;
         switch (Instruction.find(this.opcode)) {
             case GOTO:
             case JSR:
@@ -542,7 +499,15 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case IF_ACMPNE:
             case IFNULL:
             case IFNONNULL:
-                return (Label) this.args.get(0);
+                result = Collections.singletonList((Label) this.args.get(0));
+                break;
+            case TABLESWITCH:
+            case LOOKUPSWITCH:
+                result = this.args.stream()
+                    .filter(Label.class::isInstance)
+                    .map(Label.class::cast)
+                    .collect(Collectors.toList());
+                break;
             default:
                 throw new IllegalStateException(
                     String.format(
@@ -551,6 +516,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
                     )
                 );
         }
+        return result;
     }
 
     /**
@@ -595,6 +561,10 @@ public final class BytecodeInstruction implements BytecodeEntry {
             - Arrays.stream(Type.getArgumentTypes(descriptor))
             .mapToInt(BytecodeInstruction::size)
             .sum();
+    }
+
+    public boolean isThrow() {
+        return Instruction.find(this.opcode) == Instruction.ATHROW;
     }
 
     /**

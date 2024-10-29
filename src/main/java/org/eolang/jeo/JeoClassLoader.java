@@ -28,8 +28,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -72,7 +72,7 @@ public final class JeoClassLoader extends ClassLoader {
      * @param parent Parent class loader.
      * @param classes Classes as file paths.
      */
-    JeoClassLoader(final ClassLoader parent, final List<String> classes) {
+    JeoClassLoader(final ClassLoader parent, final Collection<String> classes) {
         this(parent, JeoClassLoader.prestructor(classes));
     }
 
@@ -119,13 +119,15 @@ public final class JeoClassLoader extends ClassLoader {
      * @param classes File paths.
      * @return Map of classes.
      */
-    private static Map<String, byte[]> prestructor(final List<String> classes) {
+    private static Map<String, byte[]> prestructor(final Collection<String> classes) {
         return classes.stream()
             .parallel()
             .map(Paths::get)
             .filter(Files::exists)
             .flatMap(JeoClassLoader::clazzes)
-            .collect(Collectors.toMap(MapEntry::getKey, MapEntry::getValue));
+            .collect(
+                Collectors.toMap(MapEntry::getKey, MapEntry::getValue, (first, second) -> first)
+            );
     }
 
     /**

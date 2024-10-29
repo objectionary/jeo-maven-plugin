@@ -42,7 +42,7 @@ import org.objectweb.asm.Opcodes;
 @SuppressWarnings("PMD.TooManyMethods")
 @ToString
 @EqualsAndHashCode
-public final class BytecodeClass implements Testable {
+public final class BytecodeClass {
 
     /**
      * Class name.
@@ -242,19 +242,6 @@ public final class BytecodeClass implements Testable {
         return this.withMethod(new BytecodeMethod(mname, descriptor, modifiers));
     }
 
-    @Override
-    public String testCode() {
-        final StringBuilder builder = new StringBuilder(0);
-        for (final BytecodeMethod method : this.cmethods) {
-            builder.append('.').append(method.testCode()).append('\n');
-        }
-        return String.format(
-            "AllLabels labels = new AllLabels();\nnew BytecodeClass(\"%s\")\n%s.bytecode();",
-            this.name,
-            builder
-        );
-    }
-
     /**
      * Hello world bytecode.
      *
@@ -363,9 +350,8 @@ public final class BytecodeClass implements Testable {
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(
                 String.format(
-                    "Bytecode creation for the '%s' class is not possible due to unmet preconditions. To reproduce the problem, you can write the following test: %n%s%n",
-                    this.name,
-                    this.testCode()
+                    "Bytecode creation for the '%s' class is not possible due to unmet preconditions.",
+                    this.name
                 ),
                 exception
             );

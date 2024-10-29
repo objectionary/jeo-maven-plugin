@@ -24,12 +24,13 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesFrame;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.LabelNode;
 import org.xembly.Directive;
@@ -134,6 +135,31 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
+    public boolean isSwitch() {
+        return false;
+    }
+
+    @Override
+    public boolean isGoto() {
+        return false;
+    }
+
+    @Override
+    public boolean isIf() {
+        return false;
+    }
+
+    @Override
+    public boolean isReturn() {
+        return false;
+    }
+
+    @Override
+    public boolean isThrow() {
+        return false;
+    }
+
+    @Override
     public boolean isOpcode() {
         return false;
     }
@@ -144,15 +170,8 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
-    public String testCode() {
-        return String.format(
-            ".visitFrame(%d, %d, new Object[]{ %s }, %d, new Object[]{ %s })",
-            this.type,
-            this.nlocal,
-            Arrays.toString(this.locals),
-            this.nstack,
-            Arrays.toString(this.stack)
-        );
+    public List<Label> jumps() {
+        return Collections.emptyList();
     }
 
     /**

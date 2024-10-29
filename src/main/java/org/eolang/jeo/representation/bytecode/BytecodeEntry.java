@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.List;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
@@ -31,7 +33,7 @@ import org.xembly.Directive;
  * Might be a label, a jump, a method call, etc.
  * @since 0.1
  */
-public interface BytecodeEntry extends Testable {
+public interface BytecodeEntry {
     /**
      * Write instruction to the method visitor.
      * @param visitor Method visitor.
@@ -40,9 +42,58 @@ public interface BytecodeEntry extends Testable {
 
     Iterable<Directive> directives(boolean counting);
 
+    /**
+     * Is this instruction a label?
+     * @return True if it is.
+     */
     boolean isLabel();
 
+    /**
+     * Is this instruction a switch?
+     * @return True if it is.
+     */
+    boolean isSwitch();
+
+    /**
+     * Is this instruction a goto?
+     * @return True if it is.
+     */
+    boolean isGoto();
+
+    /**
+     * Is this instruction a conditional branch?
+     * @return True if it is.
+     */
+    boolean isIf();
+
+    /**
+     * Is this instruction a return statement?
+     * @return True if it is.
+     */
+    boolean isReturn();
+
+    /**
+     * Is this instruction a throw statement?
+     * @return True if it is.
+     */
+    boolean isThrow();
+
+    /**
+     * Is this instruction a regular opcode?
+     * @return True if it is.
+     */
     boolean isOpcode();
 
+    /**
+     * Impact of the instruction on the stack.
+     * @return Stack impact.
+     */
     int impact();
+
+    /**
+     * Jump to a label.
+     * Where to jump.
+     * @return Jumps.
+     */
+    List<Label> jumps();
 }

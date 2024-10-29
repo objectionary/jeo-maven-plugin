@@ -23,82 +23,32 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import com.jcabi.log.Logger;
 import java.util.Collections;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.directives.DirectivesTryCatch;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
 /**
- * Bytecode try-catch block.
- * @since 0.1
+ * Bytecode line.
+ * This class represents the reference to a source line from a bytecode instruction.
+ * Since the purpose of this class is rather informative, we just ignore it.
+ * @since 0.6
  */
-@ToString
 @EqualsAndHashCode
-public final class BytecodeTryCatchBlock implements BytecodeEntry {
-
-    /**
-     * Start label.
-     */
-    private final Label start;
-
-    /**
-     * End label.
-     */
-    private final Label end;
-
-    /**
-     * Handler label.
-     */
-    private final Label handler;
-
-    /**
-     * Exception type.
-     */
-    private final String type;
-
-    /**
-     * Constructor.
-     * @param startlabel Start label.
-     * @param endlabel End label.
-     * @param handlerlabel Handler label.
-     * @param exception Exception type.
-     * @checkstyle ParameterNumberCheck (5 lines)
-     */
-    public BytecodeTryCatchBlock(
-        final Label startlabel,
-        final Label endlabel,
-        final Label handlerlabel,
-        final String exception
-    ) {
-        this.start = startlabel;
-        this.end = endlabel;
-        this.handler = handlerlabel;
-        this.type = exception;
-    }
+@ToString
+public final class BytecodeLine implements BytecodeEntry {
 
     @Override
     public void writeTo(final MethodVisitor visitor) {
-        Logger.debug(
-            this,
-            String.format(
-                "Writing try-catch entry into the method with the following values: start=%s, end=%s, handler=%s, type=%s",
-                this.start,
-                this.end,
-                this.handler,
-                this.type
-            )
-        );
-        visitor.visitTryCatchBlock(this.start, this.end, this.handler, this.type);
+        // nothing to write
     }
 
     @Override
     public Iterable<Directive> directives(final boolean counting) {
-        return new DirectivesTryCatch(this.start, this.end, this.handler, this.type);
+        return Collections.emptyList();
     }
 
     @Override
@@ -143,31 +93,6 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
 
     @Override
     public List<Label> jumps() {
-        return Collections.singletonList(this.handler);
+        return Collections.emptyList();
     }
-
-    /**
-     * Start label.
-     * @return Label.
-     */
-    Label startLabel() {
-        return this.start;
-    }
-
-    /**
-     * End label.
-     * @return Label.
-     */
-    Label endLabel() {
-        return this.end;
-    }
-
-    /**
-     * Handler label.
-     * @return Label.
-     */
-    Label handlerLabel() {
-        return this.handler;
-    }
-
 }
