@@ -25,14 +25,12 @@ SOFTWARE.
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.eolang</groupId>
-  <artifactId>phi-unphi-it</artifactId>
+  <artifactId>jna-it</artifactId>
   <version>@project.version@</version>
   <packaging>jar</packaging>
   <description>
-     This test resembles the hone-maven-plugin integration test that can be
-     found here: (https://github.com/objectionary/hone-maven-plugin/tree/master/src/it/simple
-     When it is needed, I will update this test according
-     to the changes made in the hone-maven-plugin integration test.
+     This integration test was added in order to mitigate the problem
+     with JNA usage: https://github.com/objectionary/hone-maven-plugin/issues/58
   </description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,8 +43,38 @@ SOFTWARE.
     <jeo.unroll>${project.build.directory}/generated-sources/jeo-unroll</jeo.unroll>
     <jeo.assemble>jeo-assemble</jeo.assemble>
   </properties>
+  <dependencies>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>5.15.0</version>
+    </dependency>
+  </dependencies>
   <build>
     <plugins>
+       <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.8.1</version>
+            <executions>
+              <execution>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>net.java.dev.jna</groupId>
+                      <artifactId>jna</artifactId>
+                      <version>5.15.0</version>
+                      <type>jar</type>
+                    </artifactItem>
+                  </artifactItems>
+                  <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
       <plugin>
         <groupId>org.eolang</groupId>
         <artifactId>jeo-maven-plugin</artifactId>

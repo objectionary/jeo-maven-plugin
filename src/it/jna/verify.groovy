@@ -1,5 +1,7 @@
+import java.nio.file.Files
+
 /*
- * The MIT License (MIT)
+ * MIT License
  *
  * Copyright (c) 2016-2024 Objectionary.com
  *
@@ -10,34 +12,26 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.hone;
+String log = new File(basedir, 'build.log').text;
+assert log.contains("BUILD SUCCESS"): assertionMessage("BUILD FAILED")
+assert log.contains("Hello from JNA!"): assertionMessage("We can't find the 'Hello from JNA!' message")
 
-import org.eolang.hone.param.Parameter;
-
-/**
- * App.
- * @since 0.1
- */
-@Parameter("some-parameter")
-public class App {
-    private static final String Φ = "We have the field with the unicode character 'Φ'";
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public static void main(String[] args) {
-        double angle = 42.0;
-        double sin = Math.sin(angle);
-        System.out.printf("sin(%f) = %f\n", angle, sin);
-        System.out.println(Φ);
-    }
+private String assertionMessage(String message) {
+    return String.format(
+      "'%s', you can find the entire log in the 'file://%s' file",
+      message,
+      new File(basedir, 'build.log').absolutePath)
 }
+
+true
