@@ -27,17 +27,22 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
 import com.sun.jna.Memory;
+import com.sun.jna.Pointer;
 
 public class JnaPrinter {
 
     public String hello() {
-        Memory buffer = new Memory(100);
+        Pointer buffer = new Pointer(Native.malloc(100));
         int length = CLibrary.INSTANCE.sprintf(
             buffer,
             "Hello from %s! Running on %s\n", "JNA",
             Platform.isWindows() ? "Windows" : "Unix"
         );
-        return buffer.getString(0);
+        try {
+            return buffer.getString(0);
+        } finally {
+            Native.free(Pointer.nativeValue(buffer));
+        }
     }
 
     public interface CLibrary extends Library {
@@ -46,7 +51,7 @@ public class JnaPrinter {
             CLibrary.class
         );
 
-        int sprintf(Memory buffer, String format, Object... args);
+        int sprintf(Pointer buffer, String format, Object... args);
 
         void printf(String format, Object... args);
     }
