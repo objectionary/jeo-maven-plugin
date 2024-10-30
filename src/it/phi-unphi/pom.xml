@@ -45,8 +45,38 @@ SOFTWARE.
     <jeo.unroll>${project.build.directory}/generated-sources/jeo-unroll</jeo.unroll>
     <jeo.assemble>jeo-assemble</jeo.assemble>
   </properties>
+  <dependencies>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>5.15.0</version>
+    </dependency>
+  </dependencies>
   <build>
     <plugins>
+       <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.8.1</version>
+            <executions>
+              <execution>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>net.java.dev.jna</groupId>
+                      <artifactId>jna</artifactId>
+                      <version>5.15.0</version>
+                      <type>jar</type>
+                    </artifactItem>
+                  </artifactItems>
+                  <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
       <plugin>
         <groupId>org.eolang</groupId>
         <artifactId>jeo-maven-plugin</artifactId>
