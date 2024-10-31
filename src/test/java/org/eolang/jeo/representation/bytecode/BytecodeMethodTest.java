@@ -496,23 +496,20 @@ final class BytecodeMethodTest {
         );
     }
 
-    @Test
-    void computesMaxForRealClassAfterAllTransformations() throws Exception {
-        final BytecodeMethod problematic = new XmlProgram(
-            new BytecodeRepresentation(
-                new Bytecode(new BytesOf(new ResourceOf("AbstractEndpoint.class")).asBytes())
-            ).toEO()
-        ).bytecode()
-            .top()
-            .methods()
-            .stream()
-            .filter(method -> "addSslHostConfig".equals(method.name()))
-            .collect(Collectors.toList())
-            .get(1);
+    @ParameterizedTest(name = "Computing maxs for method {1}, expected  {2}")
+    @MethodSource("realMethods")
+    void computesMaxForRealClassAfterAllTransformations(
+        final BytecodeMethod method,
+        final String name,
+        final BytecodeMaxs expected
+    ) {
         MatcherAssert.assertThat(
-            "Maxs weren't computed correctly for real class with tricky exception table",
-            problematic.computeMaxs(),
-            Matchers.equalTo(problematic.currentMaxs())
+            String.format(
+                "Maxs weren't computed correctly for real class method %s",
+                name
+            ),
+            method.computeMaxs(),
+            Matchers.equalTo(expected)
         );
     }
 
@@ -536,6 +533,32 @@ final class BytecodeMethodTest {
      */
     static Stream<Arguments> abstractMethods() {
         return BytecodeMethodTest.methods("maxs/MaxInterface.java");
+    }
+
+
+    static Stream<Arguments> realMethods() throws Exception {
+        return Stream.concat(
+            BytecodeMethodTest.disassembleAssemble("AbstractEndpoint.class"),
+            BytecodeMethodTest.disassembleAssemble(
+                "ByteArrayClassLoader$ChildFirst$PrependingEnumeration.class")
+        );
+    }
+
+    /**
+     * Disassembles and assembles the given compiled class.
+     * @param compiled Compiled class as a path to the resource.
+     * @return Stream of methods.
+     * @throws Exception If something goes wrong.
+     */
+    static Stream<Arguments> disassembleAssemble(final String compiled) throws Exception {
+        return new XmlProgram(
+            new BytecodeRepresentation(
+                new Bytecode(new BytesOf(new ResourceOf(compiled)).asBytes())
+            ).toEO()
+        ).bytecode()
+            .top()
+            .methods().stream()
+            .map(method -> Arguments.of(method, method.name(), method.currentMaxs()));
     }
 
     /**
