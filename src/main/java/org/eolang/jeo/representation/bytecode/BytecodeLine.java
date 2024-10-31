@@ -62,7 +62,7 @@ public final class BytecodeLine implements BytecodeEntry {
     }
 
     @Override
-    public boolean isGoto() {
+    public boolean isJump() {
         return false;
     }
 
@@ -94,5 +94,10 @@ public final class BytecodeLine implements BytecodeEntry {
     @Override
     public List<Label> jumps() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public String view() {
+        return "line";
     }
 }

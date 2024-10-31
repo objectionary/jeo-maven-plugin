@@ -140,7 +140,7 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
-    public boolean isGoto() {
+    public boolean isJump() {
         return false;
     }
 
@@ -172,6 +172,16 @@ public final class BytecodeFrame implements BytecodeEntry {
     @Override
     public List<Label> jumps() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public String view() {
+        return String.format(
+            "Frame %d locals %d stack %d",
+            this.type,
+            this.nlocal,
+            this.nstack
+        );
     }
 
     /**

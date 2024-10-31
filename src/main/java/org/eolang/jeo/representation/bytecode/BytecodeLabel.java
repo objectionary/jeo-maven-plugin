@@ -101,7 +101,7 @@ public final class BytecodeLabel implements BytecodeEntry {
     }
 
     @Override
-    public boolean isGoto() {
+    public boolean isJump() {
         return false;
     }
 
@@ -133,5 +133,10 @@ public final class BytecodeLabel implements BytecodeEntry {
     @Override
     public List<Label> jumps() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public String view() {
+        return String.format("label %s", this.label);
     }
 }
