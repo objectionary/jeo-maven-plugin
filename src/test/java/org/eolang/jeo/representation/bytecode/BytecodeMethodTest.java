@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import it.JavaSourceClass;
 import java.util.UUID;
@@ -502,10 +503,12 @@ final class BytecodeMethodTest {
         final String name,
         final BytecodeMaxs expected
     ) {
+
         MatcherAssert.assertThat(
             String.format(
-                "Maxs weren't computed correctly for real class method %s",
-                name
+                "Maxs weren't computed correctly for real class method %s, with the following insturcitons: %n%s%n",
+                name,
+                method.instructionsView()
             ),
             method.computeMaxs(),
             Matchers.equalTo(expected)

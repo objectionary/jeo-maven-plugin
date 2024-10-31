@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -402,6 +403,16 @@ public final class BytecodeMethod {
      */
     DirectivesMethod directives() {
         return this.directives(true);
+    }
+
+    /**
+     * Prints instructions in human-readable format.
+     * @return Instructions view in human-readable format.
+     */
+    String instructionsView() {
+        return this.instructions.stream()
+            .map(BytecodeEntry::view)
+            .collect(Collectors.joining("\n"));
     }
 
     /**
