@@ -148,7 +148,7 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>     }
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>     @Override
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isGoto() {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isJump() {
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>         <strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>     }
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 
@@ -182,30 +182,40 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a>         <strong class="jxr_keyword">return</strong> Collections.emptyList();
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>     }
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">     * Convert a list to array.</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">     * @param list List of objects.</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">     * @return Array of objects.</em>
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object[] toArray(<strong class="jxr_keyword">final</strong> List&lt;Object&gt; list) {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">return</strong> list.stream().map(BytecodeFrame::extract).toArray(Object[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L184" href="#L184">184</a>     }
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
-<a class="jxr_linenumber" name="L186" href="#L186">186</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">     * Extract an object.</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">     * @param argument Argument.</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">     * @return Object.</em>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object extract(<strong class="jxr_keyword">final</strong> Object argument) {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>         <strong class="jxr_keyword">final</strong> Object result;
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>         <strong class="jxr_keyword">if</strong> (argument instanceof LabelNode) {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a>             result = ((LabelNode) argument).getLabel();
-<a class="jxr_linenumber" name="L195" href="#L195">195</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L196" href="#L196">196</a>             result = argument;
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>         }
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>         <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L199" href="#L199">199</a>     }
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> }
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>     @Override
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>     <strong class="jxr_keyword">public</strong> String view() {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>         <strong class="jxr_keyword">return</strong> String.format(
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>             <span class="jxr_string">"Frame %d locals %d stack %d"</span>,
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>             <strong class="jxr_keyword">this</strong>.type,
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>             <strong class="jxr_keyword">this</strong>.nlocal,
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>             <strong class="jxr_keyword">this</strong>.nstack
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>         );
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>     }
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">     * Convert a list to array.</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">     * @param list List of objects.</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">     * @return Array of objects.</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object[] toArray(<strong class="jxr_keyword">final</strong> List&lt;Object&gt; list) {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>         <strong class="jxr_keyword">return</strong> list.stream().map(BytecodeFrame::extract).toArray(Object[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>     }
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">     * Extract an object.</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">     * @param argument Argument.</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">     * @return Object.</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object extract(<strong class="jxr_keyword">final</strong> Object argument) {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>         <strong class="jxr_keyword">final</strong> Object result;
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>         <strong class="jxr_keyword">if</strong> (argument instanceof LabelNode) {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>             result = ((LabelNode) argument).getLabel();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a>             result = argument;
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>         }
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>     }
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>

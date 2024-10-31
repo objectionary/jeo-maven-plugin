@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      }
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      @Override
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isGoto() {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isJump() {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      }
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
@@ -103,7 +103,12 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">public</strong> List&lt;Label&gt; jumps() {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>          <strong class="jxr_keyword">return</strong> Collections.emptyList();
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>      }
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      @Override
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>     <strong class="jxr_keyword">public</strong> String view() {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>         <strong class="jxr_keyword">return</strong> <span class="jxr_string">"line"</span>;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>     }
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
