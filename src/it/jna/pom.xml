@@ -53,6 +53,11 @@ SOFTWARE.
   <profiles>
     <profile>
       <id>short</id>
+      <activation>
+        <activeByDefault>
+      true
+</activeByDefault>
+      </activation>
       <build>
         <plugins>
           <plugin>
@@ -152,7 +157,7 @@ SOFTWARE.
       </build>
     </profile>
     <profile>
-      <id>long</id>
+      <id>full</id>
       <build>
         <plugins>
           <plugin>
