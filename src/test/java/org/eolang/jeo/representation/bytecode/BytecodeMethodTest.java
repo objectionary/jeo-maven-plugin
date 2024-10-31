@@ -541,31 +541,40 @@ final class BytecodeMethodTest {
      * Provides methods for testing from real bytecode that is used in real projects.
      * Before that, we disassemble and assemble the compiled class.
      * @return Stream of arguments.
-     * @throws Exception If something goes wrong.
      */
-    static Stream<Arguments> realMethods() throws Exception {
-        return Stream.concat(
-            BytecodeMethodTest.disassembleAssemble("AbstractEndpoint.class"),
-            BytecodeMethodTest.disassembleAssemble(
-                "ByteArrayClassLoader$ChildFirst$PrependingEnumeration.class")
-        );
+    static Stream<Arguments> realMethods() {
+        return Stream.of(
+            "AbstractEndpoint.class",
+            "FastHttpDateFormat.class",
+            "ByteArrayClassLoader$ChildFirst$PrependingEnumeration.class"
+        ).flatMap(BytecodeMethodTest::disassembleAssemble);
     }
 
     /**
      * Disassembles and assembles the given compiled class.
      * @param compiled Compiled class as a path to the resource.
      * @return Stream of methods.
-     * @throws Exception If something goes wrong.
      */
-    static Stream<Arguments> disassembleAssemble(final String compiled) throws Exception {
-        return new XmlProgram(
-            new BytecodeRepresentation(
-                new Bytecode(new BytesOf(new ResourceOf(compiled)).asBytes())
-            ).toEO()
-        ).bytecode()
-            .top()
-            .methods().stream()
-            .map(method -> Arguments.of(method, method.name(), method.currentMaxs()));
+    static Stream<Arguments> disassembleAssemble(final String compiled) {
+        try {
+            return new XmlProgram(
+                new BytecodeRepresentation(
+                    new Bytecode(new BytesOf(new ResourceOf(compiled)).asBytes())
+                ).toEO()
+            ).bytecode()
+                .top()
+                .methods().stream()
+                .map(method -> Arguments.of(method, method.name(), method.currentMaxs()));
+        } catch (final Exception ex) {
+            throw new IllegalStateException(
+                String.format(
+                    "Can't disassemble and assemble the class %s",
+                    compiled
+                ),
+                ex
+            );
+        }
+
     }
 
     /**
