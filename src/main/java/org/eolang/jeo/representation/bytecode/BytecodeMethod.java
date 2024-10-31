@@ -405,6 +405,16 @@ public final class BytecodeMethod {
     }
 
     /**
+     * Prints instructions in human-readable format.
+     * @return Instructions view in human-readable format.
+     */
+    String instructionsView() {
+        return this.instructions.stream()
+            .map(BytecodeEntry::view)
+            .collect(Collectors.joining("\n"));
+    }
+
+    /**
      * Compute max stack.
      * @return Max stack.
      */

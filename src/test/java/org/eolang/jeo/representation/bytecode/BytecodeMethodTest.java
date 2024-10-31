@@ -27,7 +27,6 @@ import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import it.JavaSourceClass;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
@@ -496,23 +495,21 @@ final class BytecodeMethodTest {
         );
     }
 
-    @Test
-    void computesMaxForRealClassAfterAllTransformations() throws Exception {
-        final BytecodeMethod problematic = new XmlProgram(
-            new BytecodeRepresentation(
-                new Bytecode(new BytesOf(new ResourceOf("AbstractEndpoint.class")).asBytes())
-            ).toEO()
-        ).bytecode()
-            .top()
-            .methods()
-            .stream()
-            .filter(method -> "addSslHostConfig".equals(method.name()))
-            .collect(Collectors.toList())
-            .get(1);
+    @ParameterizedTest(name = "Computing maxs for method {1}, expected  {2}")
+    @MethodSource("realMethods")
+    void computesMaxForRealClassAfterAllTransformations(
+        final BytecodeMethod method,
+        final String name,
+        final BytecodeMaxs expected
+    ) {
         MatcherAssert.assertThat(
-            "Maxs weren't computed correctly for real class with tricky exception table",
-            problematic.computeMaxs(),
-            Matchers.equalTo(problematic.currentMaxs())
+            String.format(
+                "Maxs weren't computed correctly for real class method %s, with the following insturcitons: %n%s%n",
+                name,
+                method.instructionsView()
+            ),
+            method.computeMaxs(),
+            Matchers.equalTo(expected)
         );
     }
 
@@ -536,6 +533,47 @@ final class BytecodeMethodTest {
      */
     static Stream<Arguments> abstractMethods() {
         return BytecodeMethodTest.methods("maxs/MaxInterface.java");
+    }
+
+    /**
+     * Provides methods for testing from real bytecode that is used in real projects.
+     * Before that, we disassemble and assemble the compiled class.
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> realMethods() {
+        return Stream.of(
+            "AbstractEndpoint.class",
+            "FastHttpDateFormat.class",
+            "ByteArrayClassLoader$ChildFirst$PrependingEnumeration.class"
+        ).flatMap(BytecodeMethodTest::disassembleAssemble);
+    }
+
+    /**
+     * Disassembles and assembles the given compiled class.
+     * @param compiled Compiled class as a path to the resource.
+     * @return Stream of methods.
+     * @checkstyle IllegalCatchCheck (25 lines)
+     */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    static Stream<Arguments> disassembleAssemble(final String compiled) {
+        try {
+            return new XmlProgram(
+                new BytecodeRepresentation(
+                    new Bytecode(new BytesOf(new ResourceOf(compiled)).asBytes())
+                ).toEO()
+            ).bytecode()
+                .top()
+                .methods().stream()
+                .map(method -> Arguments.of(method, method.name(), method.currentMaxs()));
+        } catch (final Exception ex) {
+            throw new IllegalStateException(
+                String.format(
+                    "Can't disassemble and assemble the class %s",
+                    compiled
+                ),
+                ex
+            );
+        }
     }
 
     /**

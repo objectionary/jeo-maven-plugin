@@ -389,11 +389,13 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Is this instruction a jump instruction?
+     * Is it a goto or jsr?
      * @return True if it is.
      */
     @Override
-    public boolean isGoto() {
-        return Instruction.find(this.opcode) == Instruction.GOTO;
+    public boolean isJump() {
+        return Instruction.find(this.opcode) == Instruction.GOTO
+            || Instruction.find(this.opcode) == Instruction.JSR;
     }
 
     /**
@@ -517,6 +519,15 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 );
         }
         return result;
+    }
+
+    @Override
+    public String view() {
+        return String.format(
+            "%s %s",
+            new OpcodeName(this.opcode).simplified(),
+            this.args.stream().map(Object::toString).collect(Collectors.joining(" "))
+        );
     }
 
     /**

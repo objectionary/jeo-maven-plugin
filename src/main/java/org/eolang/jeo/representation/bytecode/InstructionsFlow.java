@@ -99,7 +99,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                     worklist.push(new Entry<>(next, updated));
                     visited.putIfGreater(index, updated);
                     break;
-                } else if (instruction.isGoto()) {
+                } else if (instruction.isJump()) {
                     final Label label = instruction.jumps().get(0);
                     final int jump = this.index(label);
                     worklist.push(new Entry<>(jump, updated));

@@ -112,7 +112,7 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     }
 
     @Override
-    public boolean isGoto() {
+    public boolean isJump() {
         return false;
     }
 
@@ -144,6 +144,17 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     @Override
     public List<Label> jumps() {
         return Collections.singletonList(this.handler);
+    }
+
+    @Override
+    public String view() {
+        return String.format(
+            "try-catch %s %s %s %s",
+            this.start,
+            this.end,
+            this.handler,
+            this.type
+        );
     }
 
     /**
