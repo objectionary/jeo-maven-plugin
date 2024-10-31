@@ -56,9 +56,10 @@ public interface BytecodeEntry {
 
     /**
      * Is this instruction a goto?
+     * Is it a goto or jsr?
      * @return True if it is.
      */
-    boolean isGoto();
+    boolean isJump();
 
     /**
      * Is this instruction a conditional branch?
@@ -96,4 +97,10 @@ public interface BytecodeEntry {
      * @return Jumps.
      */
     List<Label> jumps();
+
+    /**
+     * Human-readable representation.
+     * @return Text.
+     */
+    String view();
 }
