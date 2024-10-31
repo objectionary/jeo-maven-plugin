@@ -23,21 +23,36 @@
  */
 package org.eolang.hone;
 
-import org.eolang.hone.param.Parameter;
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Platform;
+import com.sun.jna.Memory;
+import com.sun.jna.Pointer;
 
-/**
- * App.
- * @since 0.1
- */
-@Parameter("some-parameter")
-public class App {
-    private static final String Φ = "We have the field with the unicode character 'Φ'";
-    @Deprecated
-    @SuppressWarnings("unchecked")
-    public static void main(String[] args) {
-        double angle = 42.0;
-        double sin = Math.sin(angle);
-        System.out.printf("sin(%f) = %f\n", angle, sin);
-        System.out.println(Φ);
+public class JnaPrinter {
+
+    public String hello() {
+        Pointer buffer = new Pointer(Native.malloc(100));
+        int length = CLibrary.INSTANCE.sprintf(
+            buffer,
+            "Hello from %s! Running on %s\n", "JNA",
+            Platform.isWindows() ? "Windows" : "Unix"
+        );
+        try {
+            return buffer.getString(0);
+        } finally {
+            Native.free(Pointer.nativeValue(buffer));
+        }
+    }
+
+    public interface CLibrary extends Library {
+        CLibrary INSTANCE = (CLibrary) Native.load(
+            Platform.isWindows() ? "msvcrt" : "c",
+            CLibrary.class
+        );
+
+        int sprintf(Pointer buffer, String format, Object... args);
+
+        void printf(String format, Object... args);
     }
 }
