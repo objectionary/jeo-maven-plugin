@@ -43,20 +43,11 @@ SOFTWARE.
     <jeo.unroll>${project.build.directory}/generated-sources/jeo-unroll</jeo.unroll>
     <jeo.assemble>target/classes</jeo.assemble>
   </properties>
-  <dependencies>
-    <dependency>
-      <groupId>net.java.dev.jna</groupId>
-      <artifactId>jna</artifactId>
-      <version>5.15.0</version>
-    </dependency>
-  </dependencies>
   <profiles>
     <profile>
       <id>short</id>
       <activation>
-        <activeByDefault>
-      true
-</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <build>
         <plugins>
@@ -147,6 +138,9 @@ SOFTWARE.
                   <filesets>
                     <fileset>
                       <directory>target/classes</directory>
+                      <includes>
+                        <include>**/*.class</include>
+                      </includes>
                     </fileset>
                   </filesets>
                 </configuration>
@@ -287,6 +281,9 @@ SOFTWARE.
                   <filesets>
                     <fileset>
                       <directory>target/classes</directory>
+                      <includes>
+                        <include>**/*.class</include>
+                      </includes>
                     </fileset>
                   </filesets>
                 </configuration>
