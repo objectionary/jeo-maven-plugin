@@ -108,8 +108,7 @@ final class MaxLocals {
             .forEach(init::add);
         final Map<Integer, Integer> initial = new HashMap<>(0);
         int curr = 0;
-        while (curr < init.size()) {
-            final Integer size = init.get(curr);
+        for (final Integer size : init) {
             initial.put(curr, size);
             curr += size;
         }
