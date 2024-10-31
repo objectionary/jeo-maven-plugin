@@ -27,7 +27,6 @@ import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import it.JavaSourceClass;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
@@ -535,7 +534,12 @@ final class BytecodeMethodTest {
         return BytecodeMethodTest.methods("maxs/MaxInterface.java");
     }
 
-
+    /**
+     * Provides methods for testing from real bytecode that is used in real projects.
+     * Before that, we disassemble and assemble the compiled class.
+     * @return Stream of arguments.
+     * @throws Exception If something goes wrong.
+     */
     static Stream<Arguments> realMethods() throws Exception {
         return Stream.concat(
             BytecodeMethodTest.disassembleAssemble("AbstractEndpoint.class"),
