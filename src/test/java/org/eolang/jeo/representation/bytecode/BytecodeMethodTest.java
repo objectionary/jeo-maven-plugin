@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.bytecode;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import it.JavaSourceClass;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 import org.cactoos.bytes.BytesOf;
@@ -462,7 +463,7 @@ final class BytecodeMethodTest {
     }
 
     @ParameterizedTest(name = "Computing maxs for method {1}, expected  {2}")
-    @MethodSource("implementedMethods")
+    @MethodSource("implementedMaxs")
     void computesMaxsCorrectlyForImplementedMethods(
         final BytecodeMethod method,
         final String name,
@@ -479,7 +480,7 @@ final class BytecodeMethodTest {
     }
 
     @ParameterizedTest(name = "Computing maxs for method {1}, expected  {2}")
-    @MethodSource("abstractMethods")
+    @MethodSource("abstractMaxs")
     void computesMaxsCorrectlyForAbstractMethods(
         final BytecodeMethod method,
         final String name,
@@ -496,7 +497,7 @@ final class BytecodeMethodTest {
     }
 
     @ParameterizedTest(name = "Computing maxs for method {1}, expected  {2}")
-    @MethodSource("realMethods")
+    @MethodSource("realMaxs")
     void computesMaxForRealClassAfterAllTransformations(
         final BytecodeMethod method,
         final String name,
@@ -513,6 +514,33 @@ final class BytecodeMethodTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("implementedFrames")
+    void computesStackMapFramesForSomeMethods(
+        final BytecodeMethod method,
+        final String name,
+        final List<BytecodeFrame> expected
+    ) {
+        MatcherAssert.assertThat(
+            String.format(
+                "Stack map frames weren't computed correctly for method %s",
+                name
+            ),
+            method.computeFrames(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    /**
+     * Provides implemented methods for testing.
+     * These methods contain different stack map frames.
+     * Used in {@link #computesStackMapFramesForSomeMethods(BytecodeMethod, String, List)}.
+     * @return Stream of argumentsForTesting().
+     */
+    static Stream<Arguments> implementedFrames() {
+        return BytecodeMethodTest.methodFrames("maxs/Maxs.java");
+    }
+
     /**
      * Provides implemented methods for testing.
      * These methods contain different number of local variables and stack elements.
@@ -520,8 +548,8 @@ final class BytecodeMethodTest {
      * {@link #computesMaxsCorrectlyForImplementedMethods(BytecodeMethod, String, BytecodeMaxs)}.
      * @return Stream of arguments.
      */
-    static Stream<Arguments> implementedMethods() {
-        return BytecodeMethodTest.methods("maxs/Maxs.java");
+    static Stream<Arguments> implementedMaxs() {
+        return BytecodeMethodTest.methodMaxs("maxs/Maxs.java");
     }
 
     /**
@@ -531,8 +559,8 @@ final class BytecodeMethodTest {
      * {@link #computesMaxsCorrectlyForImplementedMethods(BytecodeMethod, String, BytecodeMaxs)}.
      * @return Stream of arguments.
      */
-    static Stream<Arguments> abstractMethods() {
-        return BytecodeMethodTest.methods("maxs/MaxInterface.java");
+    static Stream<Arguments> abstractMaxs() {
+        return BytecodeMethodTest.methodMaxs("maxs/MaxInterface.java");
     }
 
     /**
@@ -540,12 +568,12 @@ final class BytecodeMethodTest {
      * Before that, we disassemble and assemble the compiled class.
      * @return Stream of arguments.
      */
-    static Stream<Arguments> realMethods() {
+    static Stream<Arguments> realMaxs() {
         return Stream.of(
             "AbstractEndpoint.class",
             "FastHttpDateFormat.class",
             "ByteArrayClassLoader$ChildFirst$PrependingEnumeration.class"
-        ).flatMap(BytecodeMethodTest::disassembleAssemble);
+        ).flatMap(BytecodeMethodTest::realMaxs);
     }
 
     /**
@@ -555,7 +583,7 @@ final class BytecodeMethodTest {
      * @checkstyle IllegalCatchCheck (25 lines)
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    static Stream<Arguments> disassembleAssemble(final String compiled) {
+    static Stream<Arguments> realMaxs(final String compiled) {
         try {
             return new XmlProgram(
                 new BytecodeRepresentation(
@@ -581,11 +609,24 @@ final class BytecodeMethodTest {
      * @param clazz Resource class name.
      * @return Stream of arguments.
      */
-    static Stream<Arguments> methods(final String clazz) {
+    static Stream<Arguments> methodMaxs(final String clazz) {
         return new AsmProgram(
             new JavaSourceClass(clazz).compile().bytes()
         ).bytecode().top().methods().stream().map(
             method -> Arguments.of(method, method.name(), method.currentMaxs())
+        );
+    }
+
+    /**
+     * Provides method frames for testing.
+     * @param clazz Resource class name.
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> methodFrames(final String clazz) {
+        return new AsmProgram(
+            new JavaSourceClass(clazz).compile().bytes()
+        ).bytecode().top().methods().stream().map(
+            method -> Arguments.of(method, method.name(), method.currentFrames())
         );
     }
 }

@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
@@ -359,6 +360,25 @@ public final class BytecodeMethod {
      */
     BytecodeMaxs currentMaxs() {
         return this.maxs;
+    }
+
+    /**
+     * Compute frames.
+     * @return Frames.
+     */
+    List<BytecodeFrame> computeFrames() {
+        return Collections.emptyList();
+    }
+
+    /**
+     * Current frames.
+     * @return Frames.
+     */
+    List<BytecodeFrame> currentFrames() {
+        return this.instructions.stream()
+            .filter(BytecodeFrame.class::isInstance)
+            .map(BytecodeFrame.class::cast)
+            .collect(Collectors.toList());
     }
 
     /**
