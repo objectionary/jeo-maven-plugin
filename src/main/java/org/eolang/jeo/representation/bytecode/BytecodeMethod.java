@@ -367,7 +367,13 @@ public final class BytecodeMethod {
      * @return Frames.
      */
     List<BytecodeFrame> computeFrames() {
-        return Collections.emptyList();
+        return new StackMapFrames(
+            this.instructions,
+            this.tryblocks.stream()
+                .filter(BytecodeTryCatchBlock.class::isInstance)
+                .map(BytecodeTryCatchBlock.class::cast)
+                .collect(Collectors.toList())
+        ).frames();
     }
 
     /**
