@@ -60,6 +60,7 @@ public final class XmlParam {
     public BytecodeMethodParameter bytecode() {
         return new BytecodeMethodParameter(
             this.index(),
+            this.pure(),
             this.type(),
             this.annotations()
         );
@@ -70,7 +71,15 @@ public final class XmlParam {
      * @return Index.
      */
     private int index() {
-        return Integer.parseInt(this.suffix(2));
+        return Integer.parseInt(this.suffix(3));
+    }
+
+    /**
+     * Pure name of the parameter.
+     * @return Name.
+     */
+    private String pure() {
+        return this.suffix(2);
     }
 
     /**

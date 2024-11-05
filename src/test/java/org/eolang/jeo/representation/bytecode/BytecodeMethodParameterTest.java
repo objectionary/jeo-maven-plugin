@@ -60,10 +60,12 @@ final class BytecodeMethodParameterTest {
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> parameters() {
         return Stream.of(
-            Arguments.of(0, Type.INT_TYPE, "/o[contains(@base,'param') and @name='param-SQ==-0']"),
-            Arguments.of(1, Type.INT_TYPE, "/o[contains(@base,'param') and @name='param-SQ==-1']"),
             Arguments.of(
-                2, Type.DOUBLE_TYPE, "/o[contains(@base,'param') and @name='param-RA==-2']"
+                0, Type.INT_TYPE, "/o[contains(@base,'param') and @name='param-SQ==-arg0-0']"),
+            Arguments.of(
+                1, Type.INT_TYPE, "/o[contains(@base,'param') and @name='param-SQ==-arg1-1']"),
+            Arguments.of(
+                2, Type.DOUBLE_TYPE, "/o[contains(@base,'param') and @name='param-RA==-arg2-2']"
             )
         );
     }

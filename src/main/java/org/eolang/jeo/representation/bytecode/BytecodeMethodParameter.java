@@ -44,6 +44,11 @@ public final class BytecodeMethodParameter {
     private final int index;
 
     /**
+     * Name of the parameter.
+     */
+    private final String name;
+
+    /**
      * Type of the parameter.
      */
     private final Type type;
@@ -73,7 +78,24 @@ public final class BytecodeMethodParameter {
         final Type type,
         final BytecodeAnnotations annotations
     ) {
+        this(index, String.format("arg%d", index), type, annotations);
+    }
+
+    /**
+     * Constructor.
+     * @param index Index of the parameter.
+     * @param name Name of the parameter.
+     * @param type Type of the parameter.
+     * @param annotations Annotations of the parameter.
+     */
+    public BytecodeMethodParameter(
+        final int index,
+        final String name,
+        final Type type,
+        final BytecodeAnnotations annotations
+    ) {
         this.index = index;
+        this.name = name;
         this.type = type;
         this.annotations = annotations;
     }
@@ -93,6 +115,7 @@ public final class BytecodeMethodParameter {
     public Iterable<Directive> directives() {
         return new DirectivesMethodParam(
             this.index,
+            this.name,
             this.type,
             this.annotations.directives(String.format("param-annotations-%d", this.index))
         );

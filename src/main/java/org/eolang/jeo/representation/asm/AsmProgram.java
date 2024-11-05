@@ -254,6 +254,7 @@ public final class AsmProgram {
                     AsmProgram.safe(invisible[index], false).collect(Collectors.toList())
                 );
             }
+//            node.parameters.get(index).name;
             params.add(
                 new BytecodeMethodParameter(
                     index,
