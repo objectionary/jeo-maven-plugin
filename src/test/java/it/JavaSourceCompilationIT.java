@@ -90,7 +90,7 @@ final class JavaSourceCompilationIT {
             System.err,
             "-g:none",
             "-source", "11",
-            "-target", "11",
+            "-parameters",
             src.toString()
         );
         return new Bytecode(
