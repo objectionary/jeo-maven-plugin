@@ -105,6 +105,7 @@ public final class BytecodeMethodParameter {
      * @param visitor Method visitor.
      */
     public void write(final MethodVisitor visitor) {
+        visitor.visitParameter(this.name, 0);
         this.annotations.write(this.index, visitor);
     }
 

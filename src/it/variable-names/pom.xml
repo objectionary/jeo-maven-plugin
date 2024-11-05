@@ -45,18 +45,18 @@ SOFTWARE.
         <artifactId>jeo-maven-plugin</artifactId>
         <version>@project.version@</version>
         <executions>
-          <execution>
-            <id>bytecode-to-eo</id>
-            <goals>
-              <goal>disassemble</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>eo-to-bytecode</id>
-            <goals>
-              <goal>assemble</goal>
-            </goals>
-          </execution>
+<!--          <execution>-->
+<!--            <id>bytecode-to-eo</id>-->
+<!--            <goals>-->
+<!--              <goal>disassemble</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
+<!--          <execution>-->
+<!--            <id>eo-to-bytecode</id>-->
+<!--            <goals>-->
+<!--              <goal>assemble</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
         </executions>
       </plugin>
       <plugin>

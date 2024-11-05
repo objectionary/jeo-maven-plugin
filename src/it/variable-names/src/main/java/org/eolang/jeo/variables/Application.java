@@ -34,10 +34,13 @@ import java.util.HashSet;
  */
 public class Application {
     public static void main(String[] args) throws Exception {
-        Method someMethod = Application.class.getMethods()[1];
         Set<String> names = new HashSet(0);
-        for (Parameter parameter : someMethod.getParameters()) {
-            names.add(parameter.getName());
+        for (Method someMethod : Application.class.getMethods()) {
+            if (someMethod.getName().equals("someMethod")) {
+                for (Parameter parameter : someMethod.getParameters()) {
+                    names.add(parameter.getName());
+                }
+            }
         }
         if (names.size() != 2) {
             throw new Exception(
