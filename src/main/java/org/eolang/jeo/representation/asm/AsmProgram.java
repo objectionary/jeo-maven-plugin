@@ -58,6 +58,7 @@ import org.eolang.jeo.representation.bytecode.BytecodePlainAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.bytecode.InnerClass;
+import org.eolang.jeo.representation.bytecode.LocalVariable;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
@@ -230,14 +231,12 @@ public final class AsmProgram {
      */
     private static BytecodeAttributes attributes(final MethodNode node) {
         final List<LocalVariableNode> variables = node.localVariables;
-        if (node.attrs == null) {
+        if (variables == null) {
             return new BytecodeAttributes();
         }
-        for (final Attribute attr : node.attrs) {
-            final String type = attr.type;
-            System.out.println(type);
-        }
-        return new BytecodeAttributes();
+        return new BytecodeAttributes(
+            variables.stream().map(LocalVariable::new).toArray(BytecodeAttribute[]::new)
+        );
     }
 
     /**
