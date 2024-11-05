@@ -28,6 +28,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAttribute;
 import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.MethodVisitor;
 
 /**
  * Inner class attribute.
@@ -79,8 +80,18 @@ public final class InnerClass implements BytecodeAttribute {
     }
 
     @Override
-    public void write(final ClassVisitor bytecode) {
-        bytecode.visitInnerClass(this.name, this.outer, this.inner, this.access);
+    public void write(final ClassVisitor clazz) {
+        clazz.visitInnerClass(this.name, this.outer, this.inner, this.access);
+    }
+
+    @Override
+    public void write(final MethodVisitor method) {
+        throw new UnsupportedOperationException(
+            String.format(
+                "Inner class '%s' cannot be written to method attributes",
+                this
+            )
+        );
     }
 
     @Override

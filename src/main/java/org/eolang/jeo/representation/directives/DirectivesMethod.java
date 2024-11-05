@@ -75,6 +75,11 @@ public final class DirectivesMethod implements Iterable<Directive> {
     private final List<Iterable<Directive>> dvalue;
 
     /**
+     * Method attributes.
+     */
+    private final DirectivesAttributes attributes;
+
+    /**
      * Opcodes counting.
      */
     private final boolean counting;
@@ -114,6 +119,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
             new ArrayList<>(0),
             new DirectivesAnnotations(),
             new ArrayList<>(0),
+            new DirectivesAttributes(),
             counting
         );
     }
@@ -126,6 +132,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @param exceptions Method exceptions
      * @param annotations Method annotations
      * @param dvalue Annotation default value
+     * @param attributes Method attributes
      * @param counting Opcodes counting
      * @checkstyle ParameterNumberCheck (10 lines)
      */
@@ -136,6 +143,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final List<Iterable<Directive>> exceptions,
         final DirectivesAnnotations annotations,
         final List<Iterable<Directive>> dvalue,
+        final DirectivesAttributes attributes,
         final boolean counting
     ) {
         this.name = name;
@@ -144,6 +152,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         this.exceptions = exceptions;
         this.annotations = annotations;
         this.dvalue = dvalue;
+        this.attributes = attributes;
         this.counting = counting;
     }
 
@@ -182,7 +191,10 @@ public final class DirectivesMethod implements Iterable<Directive> {
                         this.exceptions
                     )
                 ),
-                this.dvalue.stream()
+                Stream.concat(
+                    this.dvalue.stream(),
+                    Stream.of(this.attributes)
+                )
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
     }

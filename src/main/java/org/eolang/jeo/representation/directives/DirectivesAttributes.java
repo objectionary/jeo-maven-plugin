@@ -36,6 +36,11 @@ import org.xembly.Directive;
 public final class DirectivesAttributes implements Iterable<Directive> {
 
     /**
+     * Name.
+     */
+    private final String name;
+
+    /**
      * Attributes.
      */
     private final List<DirectivesAttribute> attributes;
@@ -45,6 +50,11 @@ public final class DirectivesAttributes implements Iterable<Directive> {
      * @param attributes Separate attributes.
      */
     public DirectivesAttributes(final List<DirectivesAttribute> attributes) {
+        this("attributes", attributes);
+    }
+
+    public DirectivesAttributes(final String name, final List<DirectivesAttribute> attributes) {
+        this.name = name;
         this.attributes = attributes;
     }
 
@@ -65,6 +75,6 @@ public final class DirectivesAttributes implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesSeq("attributes", this.attributes).iterator();
+        return new DirectivesSeq(this.name, this.attributes).iterator();
     }
 }

@@ -48,10 +48,9 @@ final class BytecodeMethodParametersTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@base,'params')]",
-                "/o[contains(@base,'params')]/o[contains(@base,'param') and @name='param-SQ==-0']",
-                "/o[contains(@base,'params')]/o[contains(@base,'param') and @name='param-SQ==-1']"
+                "/o[contains(@base,'params')]/o[contains(@base,'param') and @name='param-SQ==-arg0-0-0']",
+                "/o[contains(@base,'params')]/o[contains(@base,'param') and @name='param-SQ==-arg1-0-1']"
             )
         );
     }
-
 }

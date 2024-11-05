@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import org.eolang.jeo.representation.directives.DirectivesAttribute;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.MethodVisitor;
 
 /**
  * Bytecode attribute.
@@ -33,10 +34,16 @@ import org.objectweb.asm.ClassVisitor;
 public interface BytecodeAttribute {
 
     /**
-     * Write to bytecode.
-     * @param bytecode Bytecode where to write.
+     * Write to class.
+     * @param clazz Bytecode where to write.
      */
-    void write(ClassVisitor bytecode);
+    void write(ClassVisitor clazz);
+
+    /**
+     * Write to method.
+     * @param method Bytecode where to write.
+     */
+    void write(MethodVisitor method);
 
     /**
      * Converts to directives.
