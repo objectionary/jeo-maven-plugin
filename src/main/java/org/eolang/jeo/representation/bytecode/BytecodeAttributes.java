@@ -28,8 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.directives.DirectivesSeq;
-import org.xembly.Directive;
+import org.eolang.jeo.representation.directives.DirectivesAttributes;
 
 /**
  * Bytecode attributes.
@@ -65,8 +64,8 @@ public final class BytecodeAttributes {
      * @param name Name of the attributes in EO representation.
      * @return Directives.
      */
-    public Iterable<Directive> directives(final String name) {
-        return new DirectivesSeq(
+    public DirectivesAttributes directives(final String name) {
+        return new DirectivesAttributes(
             name,
             this.all.stream().map(BytecodeAttribute::directives).collect(Collectors.toList())
         );

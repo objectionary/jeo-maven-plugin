@@ -294,6 +294,7 @@ public final class BytecodeMethod {
             this.defvalues.stream()
                 .map(BytecodeDefaultValue::directives)
                 .collect(Collectors.toList()),
+            this.attributes.directives("local-variable-table"),
             counting
         );
     }
