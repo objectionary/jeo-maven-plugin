@@ -190,7 +190,10 @@ public final class DirectivesMethod implements Iterable<Directive> {
                         this.exceptions
                     )
                 ),
-                this.dvalue.stream()
+                Stream.concat(
+                    this.dvalue.stream(),
+                    Stream.of(this.attributes)
+                )
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
     }

@@ -24,6 +24,7 @@
 package it;
 
 import com.github.lombrozo.jsmith.RandomJavaClass;
+import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

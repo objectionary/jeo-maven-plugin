@@ -77,7 +77,6 @@ public final class BytecodeAttributes {
         this.all.forEach(attr -> attr.write(method));
     }
 
-
     /**
      * Convert to directives.
      * @param name Name of the attributes in EO representation.

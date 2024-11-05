@@ -319,6 +319,7 @@ public final class BytecodeMethod {
                 final BytecodeMaxs computed = this.computeMaxs();
                 mvisitor.visitMaxs(computed.stack(), computed.locals());
             }
+            this.attributes.write(mvisitor);
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {
             throw new IllegalStateException(

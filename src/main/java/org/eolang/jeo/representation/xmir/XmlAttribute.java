@@ -97,6 +97,8 @@ public final class XmlAttribute {
                     .map(Integer.class::cast)
                     .orElse(0)
             );
+        } else if (new JeoFqn("local-variable").fqn().equals(base)) {
+            return new XmlLocalVariable(this.node).attribute();
         } else {
             throw new IllegalArgumentException(
                 String.format("Unknown attribute base '%s'", base)

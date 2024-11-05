@@ -160,6 +160,10 @@ public final class XmlMethod {
         }
     }
 
+    /**
+     * Method attributes.
+     * @return Attributes.
+     */
     private BytecodeAttributes attrs() {
         return this.node.children()
             .filter(element -> element.hasAttribute("name", "local-variable-table"))
@@ -167,9 +171,6 @@ public final class XmlMethod {
             .map(XmlAttributes::new)
             .map(XmlAttributes::attributes)
             .orElseGet(BytecodeAttributes::new);
-
-        //todo!
-//        return new BytecodeAttributes();
     }
 
     /**

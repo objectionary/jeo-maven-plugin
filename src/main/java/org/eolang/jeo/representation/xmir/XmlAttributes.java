@@ -23,9 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.List;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 
 /**
