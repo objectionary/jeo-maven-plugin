@@ -523,8 +523,9 @@ final class BytecodeMethodTest {
     ) {
         MatcherAssert.assertThat(
             String.format(
-                "Stack map frames weren't computed correctly for method %s",
-                name
+                "Stack map frames weren't computed correctly for method '%s', with the following instructions: %n%s%n",
+                name,
+                method.instructionsView()
             ),
             method.computeFrames(),
             Matchers.equalTo(expected)

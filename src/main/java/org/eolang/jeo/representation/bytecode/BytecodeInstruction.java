@@ -136,6 +136,15 @@ public final class BytecodeInstruction implements BytecodeEntry {
         return true;
     }
 
+
+    public int localIndex() {
+        return this.varIndex();
+    }
+
+    public Object localType() {
+        return 1;
+    }
+
     /**
      * Impact of each instruction on the stack.
      * @return Stack impact.
