@@ -54,6 +54,7 @@ public class Application {
             throw new Exception(
                 "Expected parameter 'secondParam' not found. All found methods: " + names);
         }
+        someMethod("firstParam", "secondParam");
     }
 
     public static void someMethod(final String firstParam, final String secondParam) {
