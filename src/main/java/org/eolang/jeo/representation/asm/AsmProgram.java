@@ -258,12 +258,29 @@ public final class AsmProgram {
                 new BytecodeMethodParameter(
                     index,
                     AsmProgram.paramName(node, index),
+                    AsmProgram.paramAccess(node, index),
                     types[index],
                     new BytecodeAnnotations(annotations)
                 )
             );
         }
         return new BytecodeMethodParameters(params);
+    }
+
+    /**
+     * Retrieve method parameter access from asm method.
+     * @param node Asm method node.
+     * @param index Parameter index.
+     * @return Parameter access.
+     */
+    private static int paramAccess(final MethodNode node, final int index) {
+        final int result;
+        if (node.parameters != null && node.parameters.size() > index) {
+            result = node.parameters.get(index).access;
+        } else {
+            result = 0;
+        }
+        return result;
     }
 
     /**

@@ -61,17 +61,20 @@ public final class XmlParam {
         return new BytecodeMethodParameter(
             this.index(),
             this.pure(),
+            this.access(),
             this.type(),
             this.annotations()
         );
     }
 
     /**
-     * Index of the parameter in the method.
-     * @return Index.
+     * Type of the parameter.
+     * @return Type.
      */
-    private int index() {
-        return Integer.parseInt(this.suffix(3));
+    private Type type() {
+        return Type.getType(
+            new String(XmlParam.DECODER.decode(this.suffix(1)), StandardCharsets.UTF_8)
+        );
     }
 
     /**
@@ -83,13 +86,19 @@ public final class XmlParam {
     }
 
     /**
-     * Type of the parameter.
-     * @return Type.
+     * Access modifier of the parameter.
+     * @return Access.
      */
-    private Type type() {
-        return Type.getType(
-            new String(XmlParam.DECODER.decode(this.suffix(1)), StandardCharsets.UTF_8)
-        );
+    private int access() {
+        return Integer.parseInt(this.suffix(3));
+    }
+
+    /**
+     * Index of the parameter in the method.
+     * @return Index.
+     */
+    private int index() {
+        return Integer.parseInt(this.suffix(4));
     }
 
     /**

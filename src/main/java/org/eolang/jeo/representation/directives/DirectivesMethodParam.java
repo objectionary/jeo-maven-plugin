@@ -51,6 +51,11 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
     private final String name;
 
     /**
+     * Method parameter access modifier.
+     */
+    private final int access;
+
+    /**
      * Type of the parameter.
      */
     private final Type type;
@@ -69,11 +74,13 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
     public DirectivesMethodParam(
         final int index,
         final String name,
+        final int access,
         final Type type,
         final DirectivesAnnotations annotations
     ) {
         this.index = index;
         this.name = name;
+        this.access = access;
         this.type = type;
         this.annotations = annotations;
     }
@@ -83,11 +90,12 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "param",
             String.format(
-                "param-%s-%s-%d",
+                "param-%s-%s-%d-%d",
                 DirectivesMethodParam.ENCODER.encodeToString(
                     this.type.toString().getBytes(StandardCharsets.UTF_8)
                 ),
                 this.name,
+                this.access,
                 this.index
             ),
             this.annotations

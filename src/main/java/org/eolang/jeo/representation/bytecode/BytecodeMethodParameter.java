@@ -49,6 +49,11 @@ public final class BytecodeMethodParameter {
     private final String name;
 
     /**
+     * Method parameter access.
+     */
+    private final int access;
+
+    /**
      * Type of the parameter.
      */
     private final Type type;
@@ -94,8 +99,27 @@ public final class BytecodeMethodParameter {
         final Type type,
         final BytecodeAnnotations annotations
     ) {
+        this(index, name, 0, type, annotations);
+    }
+
+    /**
+     * Constructor.
+     * @param index Index of the parameter.
+     * @param name Name of the parameter.
+     * @param access Method parameter access.
+     * @param type Type of the parameter.
+     * @param annotations Annotations of the parameter.
+     */
+    public BytecodeMethodParameter(
+        final int index,
+        final String name,
+        final int access,
+        final Type type,
+        final BytecodeAnnotations annotations
+    ) {
         this.index = index;
         this.name = name;
+        this.access = access;
         this.type = type;
         this.annotations = annotations;
     }
@@ -105,7 +129,7 @@ public final class BytecodeMethodParameter {
      * @param visitor Method visitor.
      */
     public void write(final MethodVisitor visitor) {
-        visitor.visitParameter(this.name, 0);
+        visitor.visitParameter(this.name, this.access);
         this.annotations.write(this.index, visitor);
     }
 
@@ -117,6 +141,7 @@ public final class BytecodeMethodParameter {
         return new DirectivesMethodParam(
             this.index,
             this.name,
+            this.access,
             this.type,
             this.annotations.directives(String.format("param-annotations-%d", this.index))
         );
