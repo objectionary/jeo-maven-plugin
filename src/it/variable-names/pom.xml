@@ -40,36 +40,35 @@ SOFTWARE.
   </properties>
   <build>
     <plugins>
-    <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <compilerArgs>
-                        <arg>-parameters</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <compilerArgs>
+            <arg>-parameters</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.eolang</groupId>
         <artifactId>jeo-maven-plugin</artifactId>
         <version>@project.version@</version>
         <executions>
-<!--          <execution>-->
-<!--            <id>bytecode-to-eo</id>-->
-<!--            <goals>-->
-<!--              <goal>disassemble</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
-<!--          <execution>-->
-<!--            <id>eo-to-bytecode</id>-->
-<!--            <goals>-->
-<!--              <goal>assemble</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
+          <execution>
+            <id>bytecode-to-eo</id>
+            <goals>
+              <goal>disassemble</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>eo-to-bytecode</id>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
