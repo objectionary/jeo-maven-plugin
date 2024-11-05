@@ -71,8 +71,9 @@ public final class XmlAttribute {
                     String.format("Attribute base is missing in XML node %s", this.node)
                 )
             );
+        final BytecodeAttribute result;
         if (new JeoFqn("inner-class").fqn().equals(base)) {
-            return new InnerClass(
+            result = new InnerClass(
                 Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(0))
                     .map(XmlOperand::new)
                     .map(XmlOperand::asObject)
@@ -98,11 +99,12 @@ public final class XmlAttribute {
                     .orElse(0)
             );
         } else if (new JeoFqn("local-variable").fqn().equals(base)) {
-            return new XmlLocalVariable(this.node).attribute();
+            result = new XmlLocalVariable(this.node).attribute();
         } else {
             throw new IllegalArgumentException(
                 String.format("Unknown attribute base '%s'", base)
             );
         }
+        return result;
     }
 }

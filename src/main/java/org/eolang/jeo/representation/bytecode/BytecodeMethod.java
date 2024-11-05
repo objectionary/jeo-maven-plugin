@@ -191,6 +191,7 @@ public final class BytecodeMethod {
      * @param properties Method properties.
      * @param defvalues Default values.
      * @param maxs Max stack and locals.
+     * @param attributes Method attributes.
      * @checkstyle ParameterNumberCheck (10 lines)
      */
     public BytecodeMethod(

@@ -62,22 +62,6 @@ public final class BytecodeAttributes {
     }
 
     /**
-     * Write to class.
-     * @param clazz Bytecode where to write.
-     */
-    void write(ClassVisitor clazz) {
-        this.all.forEach(attr -> attr.write(clazz));
-    }
-
-    /**
-     * Write to method.
-     * @param method Bytecode where to write.
-     */
-    void write(MethodVisitor method) {
-        this.all.forEach(attr -> attr.write(method));
-    }
-
-    /**
      * Convert to directives.
      * @param name Name of the attributes in EO representation.
      * @return Directives.
@@ -87,5 +71,21 @@ public final class BytecodeAttributes {
             name,
             this.all.stream().map(BytecodeAttribute::directives).collect(Collectors.toList())
         );
+    }
+
+    /**
+     * Write to class.
+     * @param clazz Bytecode where to write.
+     */
+    void write(final ClassVisitor clazz) {
+        this.all.forEach(attr -> attr.write(clazz));
+    }
+
+    /**
+     * Write to method.
+     * @param method Bytecode where to write.
+     */
+    void write(final MethodVisitor method) {
+        this.all.forEach(attr -> attr.write(method));
     }
 }

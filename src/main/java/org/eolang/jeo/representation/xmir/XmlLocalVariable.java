@@ -33,6 +33,7 @@ import org.objectweb.asm.Label;
  * Xml representation of a local variable.
  * @since 0.6
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class XmlLocalVariable {
 
     /**
@@ -63,42 +64,86 @@ public final class XmlLocalVariable {
         );
     }
 
+    /**
+     * Local variable index.
+     * @return Local variable index.
+     */
     private int index() {
         return this.integer(0);
     }
 
+    /**
+     * Name.
+     * @return Name.
+     */
     private String name() {
         return this.string(1);
     }
 
+    /**
+     * Descriptor.
+     * @return Descriptor.
+     */
     private String descriptor() {
         return this.string(2);
     }
 
+    /**
+     * Local variable signature.
+     * @return Signature.
+     */
     private String signature() {
         return this.string(3);
     }
 
+    /**
+     * Start label.
+     * @return Label.
+     */
     private Label start() {
         return this.label(4);
     }
 
+    /**
+     * End label.
+     * @return Label.
+     */
     private Label end() {
         return this.label(5);
     }
 
+    /**
+     * Get integer by index.
+     * @param index Index.
+     * @return Integer.
+     */
     private int integer(final int index) {
         return this.operand(index).map(Integer.class::cast).orElse(0);
     }
 
+    /**
+     * Get string by index.
+     * @param index Index.
+     * @return String.
+     */
     private String string(final int index) {
         return this.operand(index).map(String.class::cast).orElse(null);
     }
 
+    /**
+     * Get label by index.
+     * @param index Index.
+     * @return Label.
+     */
     private Label label(final int index) {
         return this.operand(index).map(Label.class::cast).orElse(null);
     }
 
+    /**
+     * Get operand by index.
+     * @param index Index.
+     * @return Optional operand.
+     */
     private Optional<Object> operand(final int index) {
         return Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(index))
             .map(XmlOperand::new)

@@ -132,6 +132,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @param exceptions Method exceptions
      * @param annotations Method annotations
      * @param dvalue Annotation default value
+     * @param attributes Method attributes
      * @param counting Opcodes counting
      * @checkstyle ParameterNumberCheck (10 lines)
      */
