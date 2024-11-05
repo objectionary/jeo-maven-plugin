@@ -68,8 +68,11 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
     /**
      * Constructor.
      * @param index Index of the parameter.
+     * @param name Name of the parameter.
+     * @param access Access modifier of the parameter.
      * @param type Type of the parameter.
      * @param annotations Annotations of the parameter.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesMethodParam(
         final int index,

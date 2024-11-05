@@ -92,6 +92,7 @@ public final class BytecodeMethodParameter {
      * @param name Name of the parameter.
      * @param type Type of the parameter.
      * @param annotations Annotations of the parameter.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeMethodParameter(
         final int index,
@@ -109,6 +110,7 @@ public final class BytecodeMethodParameter {
      * @param access Method parameter access.
      * @param type Type of the parameter.
      * @param annotations Annotations of the parameter.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeMethodParameter(
         final int index,
