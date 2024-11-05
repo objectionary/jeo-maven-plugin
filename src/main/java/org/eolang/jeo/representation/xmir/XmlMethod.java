@@ -33,6 +33,7 @@ import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.Signature;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
@@ -129,7 +130,8 @@ public final class XmlMethod {
                     .map(Collections::singletonList)
                     .orElse(Collections.emptyList()),
                 this.maxs().map(XmlMaxs::bytecode)
-                    .orElse(new BytecodeMaxs(0, 0))
+                    .orElse(new BytecodeMaxs(0, 0)),
+                this.attrs()
             );
         } catch (final IllegalStateException exception) {
             throw new ParsingException(
@@ -156,6 +158,11 @@ public final class XmlMethod {
                 exception
             );
         }
+    }
+
+    private BytecodeAttributes attrs() {
+        //todo!
+        return new BytecodeAttributes();
     }
 
     /**

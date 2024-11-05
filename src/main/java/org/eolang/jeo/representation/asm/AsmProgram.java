@@ -38,6 +38,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeArrayAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeDefaultValue;
@@ -57,6 +58,7 @@ import org.eolang.jeo.representation.bytecode.BytecodePlainAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.bytecode.InnerClass;
+import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -72,6 +74,7 @@ import org.objectweb.asm.tree.InvokeDynamicInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -215,8 +218,26 @@ public final class AsmProgram {
                 node.exceptions.toArray(new String[0])
             ),
             AsmProgram.defvalues(node),
-            AsmProgram.maxs(node)
+            AsmProgram.maxs(node),
+            AsmProgram.attributes(node)
         );
+    }
+
+    /**
+     * Convert asm method to domain method attributes.
+     * @param node Asm method node.
+     * @return Domain method attributes.
+     */
+    private static BytecodeAttributes attributes(final MethodNode node) {
+        final List<LocalVariableNode> variables = node.localVariables;
+        if (node.attrs == null) {
+            return new BytecodeAttributes();
+        }
+        for (final Attribute attr : node.attrs) {
+            final String type = attr.type;
+            System.out.println(type);
+        }
+        return new BytecodeAttributes();
     }
 
     /**
