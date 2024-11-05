@@ -68,14 +68,18 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>      @SuppressWarnings(<span class="jxr_string">"PMD.UnusedPrivateMethod"</span>)
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Stream&lt;Arguments&gt; parameters() {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">return</strong> Stream.of(
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>              Arguments.of(0, Type.INT_TYPE, <span class="jxr_string">"/o[contains(@base,'param') and @name='param-SQ==-0']"</span>),
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>              Arguments.of(1, Type.INT_TYPE, <span class="jxr_string">"/o[contains(@base,'param') and @name='param-SQ==-1']"</span>),
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>              Arguments.of(
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>                  2, Type.DOUBLE_TYPE, <span class="jxr_string">"/o[contains(@base,'param') and @name='param-RA==-2']"</span>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>              )
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          );
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      }
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  }
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>              Arguments.of(
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>                  0, Type.INT_TYPE, <span class="jxr_string">"/o[contains(@base,'param') and @name='param-SQ==-arg0-0-0']"</span>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>              ),
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>              Arguments.of(
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>                  1, Type.INT_TYPE, <span class="jxr_string">"/o[contains(@base,'param') and @name='param-SQ==-arg1-0-1']"</span>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>              ),
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>              Arguments.of(
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>                  2, Type.DOUBLE_TYPE, <span class="jxr_string">"/o[contains(@base,'param') and @name='param-RA==-arg2-0-2']"</span>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>              )
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          );
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>      }
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
