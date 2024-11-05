@@ -23,9 +23,8 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.List;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 
 /**
  * Xml representation of a class attributes.
@@ -50,10 +49,12 @@ public final class XmlAttributes {
      * Get attributes.
      * @return Attributes.
      */
-    public List<BytecodeAttribute> attributes() {
-        return this.node.children()
-            .map(XmlAttribute::new)
-            .map(XmlAttribute::attribute)
-            .collect(Collectors.toList());
+    public BytecodeAttributes attributes() {
+        return new BytecodeAttributes(
+            this.node.children()
+                .map(XmlAttribute::new)
+                .map(XmlAttribute::attribute)
+                .collect(Collectors.toList())
+        );
     }
 }

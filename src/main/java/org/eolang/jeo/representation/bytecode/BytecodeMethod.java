@@ -82,6 +82,11 @@ public final class BytecodeMethod {
     private final AllLabels labels;
 
     /**
+     * Bytecode method attributes.
+     */
+    private final BytecodeAttributes attributes;
+
+    /**
      * Constructor for tests.
      */
     public BytecodeMethod() {
@@ -107,7 +112,8 @@ public final class BytecodeMethod {
             new BytecodeAnnotations(),
             new BytecodeMethodProperties("foo", "()V", "", Opcodes.ACC_PUBLIC),
             new ArrayList<>(0),
-            new BytecodeMaxs(0, 0)
+            new BytecodeMaxs(0, 0),
+            new BytecodeAttributes()
         );
     }
 
@@ -123,7 +129,8 @@ public final class BytecodeMethod {
             annotations,
             new BytecodeMethodProperties(name, "()V", "", Opcodes.ACC_PUBLIC),
             new ArrayList<>(0),
-            new BytecodeMaxs(0, 0)
+            new BytecodeMaxs(0, 0),
+            new BytecodeAttributes()
         );
     }
 
@@ -171,7 +178,8 @@ public final class BytecodeMethod {
             new BytecodeAnnotations(),
             properties,
             new ArrayList<>(0),
-            maxs
+            maxs,
+            new BytecodeAttributes()
         );
     }
 
@@ -183,6 +191,7 @@ public final class BytecodeMethod {
      * @param properties Method properties.
      * @param defvalues Default values.
      * @param maxs Max stack and locals.
+     * @param attributes Method attributes.
      * @checkstyle ParameterNumberCheck (10 lines)
      */
     public BytecodeMethod(
@@ -191,7 +200,8 @@ public final class BytecodeMethod {
         final BytecodeAnnotations annotations,
         final BytecodeMethodProperties properties,
         final List<BytecodeDefaultValue> defvalues,
-        final BytecodeMaxs maxs
+        final BytecodeMaxs maxs,
+        final BytecodeAttributes attributes
     ) {
         this.tryblocks = tryblocks;
         this.instructions = instructions;
@@ -199,6 +209,7 @@ public final class BytecodeMethod {
         this.properties = properties;
         this.defvalues = defvalues;
         this.maxs = maxs;
+        this.attributes = attributes;
         this.labels = new AllLabels();
     }
 
@@ -213,7 +224,8 @@ public final class BytecodeMethod {
             this.annotations,
             this.properties,
             this.defvalues,
-            new BytecodeMaxs()
+            new BytecodeMaxs(),
+            this.attributes
         );
     }
 
@@ -283,6 +295,7 @@ public final class BytecodeMethod {
             this.defvalues.stream()
                 .map(BytecodeDefaultValue::directives)
                 .collect(Collectors.toList()),
+            this.attributes.directives("local-variable-table"),
             counting
         );
     }
@@ -307,6 +320,7 @@ public final class BytecodeMethod {
                 final BytecodeMaxs computed = this.computeMaxs();
                 mvisitor.visitMaxs(computed.stack(), computed.locals());
             }
+            this.attributes.write(mvisitor);
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {
             throw new IllegalStateException(

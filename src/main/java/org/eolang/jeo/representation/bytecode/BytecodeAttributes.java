@@ -26,13 +26,18 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.directives.DirectivesSeq;
-import org.xembly.Directive;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesAttributes;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.MethodVisitor;
 
 /**
  * Bytecode attributes.
  * @since 0.6
  */
+@ToString
+@EqualsAndHashCode
 public final class BytecodeAttributes {
 
     /**
@@ -52,7 +57,7 @@ public final class BytecodeAttributes {
      * Constructor.
      * @param all All attributes.
      */
-    private BytecodeAttributes(final List<BytecodeAttribute> all) {
+    public BytecodeAttributes(final List<BytecodeAttribute> all) {
         this.all = all;
     }
 
@@ -61,10 +66,26 @@ public final class BytecodeAttributes {
      * @param name Name of the attributes in EO representation.
      * @return Directives.
      */
-    public Iterable<Directive> directives(final String name) {
-        return new DirectivesSeq(
+    public DirectivesAttributes directives(final String name) {
+        return new DirectivesAttributes(
             name,
             this.all.stream().map(BytecodeAttribute::directives).collect(Collectors.toList())
         );
+    }
+
+    /**
+     * Write to class.
+     * @param clazz Bytecode where to write.
+     */
+    void write(final ClassVisitor clazz) {
+        this.all.forEach(attr -> attr.write(clazz));
+    }
+
+    /**
+     * Write to method.
+     * @param method Bytecode where to write.
+     */
+    void write(final MethodVisitor method) {
+        this.all.forEach(attr -> attr.write(method));
     }
 }

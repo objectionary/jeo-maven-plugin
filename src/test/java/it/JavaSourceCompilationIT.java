@@ -88,7 +88,7 @@ final class JavaSourceCompilationIT {
             System.in,
             System.out,
             System.err,
-            "-g:none",
+            "-g:vars",
             "-source", "11",
             "-parameters",
             src.toString()

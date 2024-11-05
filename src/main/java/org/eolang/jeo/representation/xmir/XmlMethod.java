@@ -33,6 +33,7 @@ import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.Signature;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
@@ -129,7 +130,8 @@ public final class XmlMethod {
                     .map(Collections::singletonList)
                     .orElse(Collections.emptyList()),
                 this.maxs().map(XmlMaxs::bytecode)
-                    .orElse(new BytecodeMaxs(0, 0))
+                    .orElse(new BytecodeMaxs(0, 0)),
+                this.attrs()
             );
         } catch (final IllegalStateException exception) {
             throw new ParsingException(
@@ -156,6 +158,19 @@ public final class XmlMethod {
                 exception
             );
         }
+    }
+
+    /**
+     * Method attributes.
+     * @return Attributes.
+     */
+    private BytecodeAttributes attrs() {
+        return this.node.children()
+            .filter(element -> element.hasAttribute("name", "local-variable-table"))
+            .findFirst()
+            .map(XmlAttributes::new)
+            .map(XmlAttributes::attributes)
+            .orElseGet(BytecodeAttributes::new);
     }
 
     /**
@@ -251,6 +266,11 @@ public final class XmlMethod {
         return new XmlValue(this.child(2)).string();
     }
 
+    /**
+     * Get child by index.
+     * @param index Index.
+     * @return Child.
+     */
     private XmlNode child(final int index) {
         return this.node.children().collect(Collectors.toList()).get(index);
     }
