@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAttributes;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.MethodVisitor;
 
 /**
  * Bytecode attributes.
@@ -55,9 +57,26 @@ public final class BytecodeAttributes {
      * Constructor.
      * @param all All attributes.
      */
-    private BytecodeAttributes(final List<BytecodeAttribute> all) {
+    public BytecodeAttributes(final List<BytecodeAttribute> all) {
         this.all = all;
     }
+
+    /**
+     * Write to class.
+     * @param clazz Bytecode where to write.
+     */
+    void write(ClassVisitor clazz) {
+        this.all.forEach(attr -> attr.write(clazz));
+    }
+
+    /**
+     * Write to method.
+     * @param method Bytecode where to write.
+     */
+    void write(MethodVisitor method) {
+        this.all.forEach(attr -> attr.write(method));
+    }
+
 
     /**
      * Convert to directives.

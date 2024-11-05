@@ -39,17 +39,15 @@ final class XmlAttributesTest {
 
     @Test
     void convertsToBytecode() throws ImpossibleModificationException {
-        final InnerClass expected = new InnerClass("name", "outer", "inner", 0);
+        final BytecodeAttributes expected = new BytecodeAttributes(
+            new InnerClass("name", "outer", "inner", 0)
+        );
         MatcherAssert.assertThat(
             "We expect the attributes to be converted to a correct bytecode domain class",
             new XmlAttributes(
-                new XmlNode(
-                    new Xembler(
-                        new BytecodeAttributes(expected).directives("attributes")
-                    ).xml()
-                )
+                new XmlNode(new Xembler(expected.directives("attributes")).xml())
             ).attributes(),
-            Matchers.contains(expected)
+            Matchers.equalTo(expected)
         );
     }
 }

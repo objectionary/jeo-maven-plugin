@@ -356,10 +356,12 @@ public final class AsmProgram {
      * @param node Asm class node.
      * @return Domain attributes.
      */
-    private static List<BytecodeAttribute> innerClasses(final ClassNode node) {
-        return node.innerClasses.stream()
-            .map(AsmProgram::innerClass)
-            .collect(Collectors.toList());
+    private static BytecodeAttributes innerClasses(final ClassNode node) {
+        return new BytecodeAttributes(
+            node.innerClasses.stream()
+                .map(AsmProgram::innerClass)
+                .collect(Collectors.toList())
+        );
     }
 
     /**

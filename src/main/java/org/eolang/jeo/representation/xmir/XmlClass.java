@@ -32,6 +32,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
@@ -107,7 +108,7 @@ public final class XmlClass {
                     .orElse(new BytecodeAnnotations()),
                 this.attributes()
                     .map(XmlAttributes::attributes)
-                    .orElse(new ArrayList<>(0)),
+                    .orElseGet(BytecodeAttributes::new),
                 this.properties().bytecode()
             );
         } catch (final IllegalStateException exception) {

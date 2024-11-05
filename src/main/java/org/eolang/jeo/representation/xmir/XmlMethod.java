@@ -161,8 +161,15 @@ public final class XmlMethod {
     }
 
     private BytecodeAttributes attrs() {
+        return this.node.children()
+            .filter(element -> element.hasAttribute("name", "local-variable-table"))
+            .findFirst()
+            .map(XmlAttributes::new)
+            .map(XmlAttributes::attributes)
+            .orElseGet(BytecodeAttributes::new);
+
         //todo!
-        return new BytecodeAttributes();
+//        return new BytecodeAttributes();
     }
 
     /**
@@ -258,6 +265,11 @@ public final class XmlMethod {
         return new XmlValue(this.child(2)).string();
     }
 
+    /**
+     * Get child by index.
+     * @param index Index.
+     * @return Child.
+     */
     private XmlNode child(final int index) {
         return this.node.children().collect(Collectors.toList()).get(index);
     }
