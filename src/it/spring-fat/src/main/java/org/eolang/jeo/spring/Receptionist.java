@@ -35,9 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class Receptionist {
 
     @GetMapping("/hello")
-    public String greetings(
-        @RequestParam(defaultValue = "Fat Spring") final String who
-    ) {
+    public String greetings(@RequestParam final String who) {
         return String.format("Glad to see you, %s...%n", who);
     }
 }

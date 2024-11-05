@@ -48,7 +48,7 @@ class ApplicationTest {
     @Test
     void startupsServerAndMakesGetRequest() {
         final ResponseEntity<String> resp = this.template.getForEntity(
-            String.format("http://localhost:%d/hello", this.port),
+            String.format("http://localhost:%d/hello?who=FatSpring", this.port),
             String.class
         );
         Assertions.assertEquals(
