@@ -152,29 +152,6 @@ SOFTWARE.
       <!--                </execution>-->
       <!--              </executions>-->
       <!--            </plugin>-->
-<!--      <plugin>-->
-<!--        <groupId>org.codehaus.mojo</groupId>-->
-<!--        <artifactId>exec-maven-plugin</artifactId>-->
-<!--        <version>3.5.0</version>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <phase>-->
-<!--              process-classes-->
-<!--            </phase>-->
-<!--            <goals>-->
-<!--              <goal>exec</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--        <configuration>-->
-<!--          <executable>java</executable>-->
-<!--          <arguments>-->
-<!--            <argument>-classpath</argument>-->
-<!--            <argument>${project.build.outputDirectory}</argument>-->
-<!--            <argument>org.eolang.jeo.spring.Application</argument>-->
-<!--          </arguments>-->
-<!--        </configuration>-->
-<!--      </plugin>-->
     </plugins>
   </build>
 </project>
