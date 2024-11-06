@@ -88,9 +88,9 @@ final class JavaSourceCompilationIT {
             System.in,
             System.out,
             System.err,
-            "-g:none",
+            "-g:vars",
             "-source", "11",
-            "-target", "11",
+            "-parameters",
             src.toString()
         );
         return new Bytecode(

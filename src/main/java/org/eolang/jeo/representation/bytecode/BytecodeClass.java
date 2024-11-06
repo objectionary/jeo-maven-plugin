@@ -31,7 +31,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
-import org.eolang.jeo.representation.directives.DirectivesAttributes;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.objectweb.asm.Opcodes;
 
@@ -68,7 +67,7 @@ public final class BytecodeClass {
     /**
      * Attributes.
      */
-    private final List<BytecodeAttribute> attributes;
+    private final BytecodeAttributes attributes;
 
     /**
      * Class properties (access, signature, supername, interfaces).
@@ -133,7 +132,7 @@ public final class BytecodeClass {
             methods,
             new ArrayList<>(0),
             new BytecodeAnnotations(),
-            new ArrayList<>(0),
+            new BytecodeAttributes(),
             properties
         );
     }
@@ -153,7 +152,7 @@ public final class BytecodeClass {
         final List<BytecodeMethod> methods,
         final List<BytecodeField> fields,
         final BytecodeAnnotations annotations,
-        final List<BytecodeAttribute> attributes,
+        final BytecodeAttributes attributes,
         final BytecodeClassProperties props
     ) {
         this.name = name;
@@ -314,11 +313,7 @@ public final class BytecodeClass {
             this.cmethods.stream().map(method -> method.directives(counting))
                 .collect(Collectors.toList()),
             this.annotations.directives(),
-            new DirectivesAttributes(
-                this.attributes.stream()
-                    .map(BytecodeAttribute::directives)
-                    .collect(Collectors.toList())
-            )
+            this.attributes.directives("attributes")
         );
     }
 
@@ -340,7 +335,7 @@ public final class BytecodeClass {
             this.annotations.write(visitor);
             this.fields.forEach(field -> field.write(visitor));
             this.cmethods.forEach(method -> method.write(visitor));
-            this.attributes.forEach(attr -> attr.write(visitor));
+            this.attributes.write(visitor);
             visitor.visitEnd();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(

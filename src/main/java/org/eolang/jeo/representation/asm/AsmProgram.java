@@ -38,6 +38,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeArrayAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeDefaultValue;
@@ -57,6 +58,7 @@ import org.eolang.jeo.representation.bytecode.BytecodePlainAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.bytecode.InnerClass;
+import org.eolang.jeo.representation.bytecode.LocalVariable;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -72,6 +74,7 @@ import org.objectweb.asm.tree.InvokeDynamicInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -215,8 +218,27 @@ public final class AsmProgram {
                 node.exceptions.toArray(new String[0])
             ),
             AsmProgram.defvalues(node),
-            AsmProgram.maxs(node)
+            AsmProgram.maxs(node),
+            AsmProgram.attributes(node)
         );
+    }
+
+    /**
+     * Convert asm method to domain method attributes.
+     * @param node Asm method node.
+     * @return Domain method attributes.
+     */
+    private static BytecodeAttributes attributes(final MethodNode node) {
+        final List<LocalVariableNode> variables = node.localVariables;
+        final BytecodeAttributes result;
+        if (variables == null) {
+            result = new BytecodeAttributes();
+        } else {
+            result = new BytecodeAttributes(
+                variables.stream().map(LocalVariable::new).toArray(BytecodeAttribute[]::new)
+            );
+        }
+        return result;
     }
 
     /**
@@ -257,12 +279,46 @@ public final class AsmProgram {
             params.add(
                 new BytecodeMethodParameter(
                     index,
+                    AsmProgram.paramName(node, index),
+                    AsmProgram.paramAccess(node, index),
                     types[index],
                     new BytecodeAnnotations(annotations)
                 )
             );
         }
         return new BytecodeMethodParameters(params);
+    }
+
+    /**
+     * Retrieve method parameter access from asm method.
+     * @param node Asm method node.
+     * @param index Parameter index.
+     * @return Parameter access.
+     */
+    private static int paramAccess(final MethodNode node, final int index) {
+        final int result;
+        if (node.parameters != null && node.parameters.size() > index) {
+            result = node.parameters.get(index).access;
+        } else {
+            result = 0;
+        }
+        return result;
+    }
+
+    /**
+     * Retrieve method parameter name from asm method.
+     * @param node Asm method node.
+     * @param index Parameter index.
+     * @return Parameter name.
+     */
+    private static String paramName(final MethodNode node, final int index) {
+        final String result;
+        if (node.parameters != null && node.parameters.size() > index) {
+            result = node.parameters.get(index).name;
+        } else {
+            result = String.format("arg%d", index);
+        }
+        return result;
     }
 
     /**
@@ -302,10 +358,12 @@ public final class AsmProgram {
      * @param node Asm class node.
      * @return Domain attributes.
      */
-    private static List<BytecodeAttribute> innerClasses(final ClassNode node) {
-        return node.innerClasses.stream()
-            .map(AsmProgram::innerClass)
-            .collect(Collectors.toList());
+    private static BytecodeAttributes innerClasses(final ClassNode node) {
+        return new BytecodeAttributes(
+            node.innerClasses.stream()
+                .map(AsmProgram::innerClass)
+                .collect(Collectors.toList())
+        );
     }
 
     /**
