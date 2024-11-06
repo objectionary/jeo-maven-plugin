@@ -48,7 +48,7 @@ class ApplicationTest {
     @Test
     void startupsServerAndMakesGetRequest() {
         final ResponseEntity<String> resp = this.template.getForEntity(
-            String.format("http://localhost:%d/hello?who=FatSpring", this.port),
+            String.format("http://localhost:%d/hello", this.port),
             String.class
         );
         Assertions.assertEquals(
@@ -60,7 +60,7 @@ class ApplicationTest {
             resp.getBody(),
             "Response body is empty"
         );
-        final String expected = "Glad to see you, Fat Spring";
+        final String expected = "Glad to see you, Fat Spring...";
         System.out.printf("Expected %s%n", expected);
         Assertions.assertTrue(
             resp.getBody().contains(expected),
