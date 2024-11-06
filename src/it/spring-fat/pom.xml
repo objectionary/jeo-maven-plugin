@@ -117,16 +117,6 @@ SOFTWARE.
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <compilerArgs>
-            <arg>-parameters</arg>
-          </compilerArgs>
-        </configuration>
-      </plugin>
       <!--
         @todo #627:30min Too Long PHI Printing In Spring-Fat IT
          We need to optimize PHI pringint in `eo-maven-plugin`
