@@ -382,6 +382,7 @@ public final class BytecodeMethod {
      */
     List<BytecodeFrame> computeFrames() {
         return new StackMapFrames(
+            this.properties,
             this.instructions,
             this.tryblocks.stream()
                 .filter(BytecodeTryCatchBlock.class::isInstance)

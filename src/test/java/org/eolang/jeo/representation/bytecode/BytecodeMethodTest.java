@@ -523,8 +523,10 @@ final class BytecodeMethodTest {
     ) {
         MatcherAssert.assertThat(
             String.format(
-                "Stack map frames weren't computed correctly for method '%s', with the following instructions: %n%s%n",
+                "Stack map frames weren't computed correctly for method '%s' with 'max_stack=%d' and 'max_locals=%d, with the following instructions: %n%s%n",
                 name,
+                method.currentMaxs().stack(),
+                method.currentMaxs().locals(),
                 method.instructionsView()
             ),
             method.computeFrames(),

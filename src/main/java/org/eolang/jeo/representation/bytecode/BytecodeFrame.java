@@ -32,6 +32,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesFrame;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.LabelNode;
 import org.xembly.Directive;
 
@@ -176,12 +177,100 @@ public final class BytecodeFrame implements BytecodeEntry {
 
     @Override
     public String view() {
+        final String name;
+        switch (this.type) {
+            case Opcodes.F_NEW:
+                name = "NEW";
+                break;
+            case Opcodes.F_FULL:
+                name = "FULL";
+                break;
+            case Opcodes.F_APPEND:
+                name = "APPEND";
+                break;
+            case Opcodes.F_CHOP:
+                name = "CHOP";
+                break;
+            case Opcodes.F_SAME:
+                name = "SAME";
+                break;
+            case Opcodes.F_SAME1:
+                name = "SAME1";
+                break;
+            default:
+                name = "UNKNOWN";
+        }
         return String.format(
-            "Frame %d locals %d stack %d",
-            this.type,
+            "Frame %s locals %d stack %d",
+            name,
             this.nlocal,
             this.nstack
         );
+    }
+
+    public int stackDiff(final BytecodeFrame other) {
+        return this.nstack - other.nstack;
+    }
+
+
+    public boolean stackOneElement() {
+        return this.nstack == 1;
+    }
+
+    public boolean stackEmpty() {
+        return this.nstack == 0;
+    }
+
+    public BytecodeFrame withType(final int type) {
+        return new BytecodeFrame(
+            type,
+            this.nlocal,
+            this.locals,
+            this.nstack,
+            this.stack
+        );
+    }
+
+    public BytecodeFrame substract(final BytecodeFrame other) {
+        final int length = this.nlocal - other.nlocal;
+        final Object[] locals;
+        if (length <= 0) {
+            locals = new Object[0];
+        } else {
+            locals = new Object[length];
+            System.arraycopy(this.locals, length - 1, locals, 0, length);
+        }
+        final int stackLength = this.nstack - other.nstack;
+        final Object[] stack = new Object[stackLength];
+        System.arraycopy(this.stack, 0, stack, 0, stackLength);
+        return new BytecodeFrame(
+            this.type,
+            length,
+            locals,
+            stackLength,
+            stack
+        );
+    }
+
+    public int localsDiff(final BytecodeFrame previous) {
+        return this.nlocal - previous.nlocal;
+    }
+
+    /**
+     * Check if the frame has the same locals.
+     * @param frame Frame to compare.
+     * @return True if the frame has the same locals.
+     */
+    public boolean sameLocals(final BytecodeFrame frame) {
+        final boolean size = this.nlocal == frame.nlocal;
+        final Object[] current = this.locals;
+        final Object[] other = frame.locals;
+        for (int index = 0; index < this.nlocal; ++index) {
+            if (!current[index].equals(other[index])) {
+                return false;
+            }
+        }
+        return size;
     }
 
     /**
