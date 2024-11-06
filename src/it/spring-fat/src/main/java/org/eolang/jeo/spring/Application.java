@@ -23,8 +23,6 @@
  */
 package org.eolang.jeo.spring;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -33,17 +31,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 0.2
  */
 @SpringBootApplication
-public class Application implements CommandLineRunner {
-
-    @Autowired
-    private Receptionist receptionist;
+public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-    }
-
-    @Override
-    public void run(final String... args) {
-        this.receptionist.sayHello("Fat Spring");
     }
 }
