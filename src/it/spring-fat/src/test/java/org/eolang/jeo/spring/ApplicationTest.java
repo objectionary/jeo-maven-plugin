@@ -61,7 +61,6 @@ class ApplicationTest {
             "Response body is empty"
         );
         final String expected = "Glad to see you, Fat Spring...";
-        System.out.printf("Expected %s%n", expected);
         Assertions.assertTrue(
             resp.getBody().contains(expected),
             String.format(
