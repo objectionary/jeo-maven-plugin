@@ -99,7 +99,6 @@ public final class AsmClass {
             full.name(),
             AsmClass.methods(this.node),
             AsmClass.fields(this.node),
-//            AsmClass.annotations(this.node),
             new AsmAnnotations(this.node).annotations(),
             AsmClass.innerClasses(this.node),
             new BytecodeClassProperties(
@@ -118,23 +117,10 @@ public final class AsmClass {
      * @return Domain field.
      */
     private static List<BytecodeField> fields(final ClassNode node) {
-        return node.fields.stream().map(AsmClass::field).collect(Collectors.toList());
-    }
-
-    /**
-     * Convert asm field to domain field.
-     * @param node Asm field node.
-     * @return Domain field.
-     */
-    private static BytecodeField field(final FieldNode node) {
-        return new BytecodeField(
-            node.name,
-            node.desc,
-            node.signature,
-            node.value,
-            node.access,
-            new AsmAnnotations(node).annotations()
-        );
+        return node.fields.stream()
+            .map(AsmField::new)
+            .map(AsmField::bytecode)
+            .collect(Collectors.toList());
     }
 
     /**
