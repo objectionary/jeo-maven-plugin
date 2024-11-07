@@ -26,12 +26,10 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.objectweb.asm.Label;
@@ -99,14 +97,14 @@ final class StackMapFrames {
                     final BytecodeInstruction instr = (BytecodeInstruction) entry;
                     final Entry updated;
                     if (res.containsKey(index)) {
-                        updated = current.join(res.get(index));
+                        updated = current.append(res.get(index));
                     } else {
                         updated = Entry.fromInstruction(index, instr, current);
                     }
                     if (instr.isIf()) {
-                        worklist.push(updated.copy(this.index(instr.jumps().get(0))));
+                        worklist.push(updated.join(this.index(instr.jumps().get(0))));
                     } else if (instr.isJump()) {
-                        worklist.push(updated.copy(this.index(instr.jumps().get(0))));
+                        worklist.push(updated.join(this.index(instr.jumps().get(0))));
                         res.put(index, updated);
                         break;
                     } else if (instr.isReturn() || instr.isThrow()) {
@@ -117,11 +115,17 @@ final class StackMapFrames {
                     current = updated;
                 } else {
                     res.put(index, current);
+                    current = current.copy(index);
                 }
             }
         }
         this.logEntires(res);
-        return this.computeFrames(new ArrayList<>(res.values()));
+        return this.computeFrames(
+            res.values()
+                .stream()
+                .filter(Entry::joined)
+                .collect(Collectors.toList())
+        );
     }
 
     private void logEntires(final Map<Integer, Entry> res) {
@@ -173,7 +177,7 @@ final class StackMapFrames {
             }
             indx += type.getSize();
         }
-        return new Entry(0, locals, new LinkedHashMap<>(0));
+        return new Entry(0, locals, new LinkedHashMap<>(0), true);
     }
 
 
@@ -228,6 +232,7 @@ final class StackMapFrames {
 
         private final Map<Integer, Object> stack;
 
+        @EqualsAndHashCode.Exclude
         private final boolean join;
 
         public Entry(final int indx) {
@@ -237,10 +242,17 @@ final class StackMapFrames {
         private Entry(
             final int indx, final Map<Integer, Object> locals, final Map<Integer, Object> stack
         ) {
+            this(indx, locals, stack, false);
+        }
+
+        public Entry(
+            final int indx, final Map<Integer, Object> locals, final Map<Integer, Object> stack,
+            final boolean join
+        ) {
             this.indx = indx;
             this.locals = locals;
             this.stack = stack;
-            this.join = false;
+            this.join = join;
         }
 
         static Entry fromInstruction(
@@ -266,14 +278,6 @@ final class StackMapFrames {
             }
         }
 
-        Entry copy(final int indx) {
-            return new Entry(
-                indx,
-                this.locals,
-                this.stack
-            );
-        }
-
         int indx() {
             return this.indx;
         }
@@ -286,7 +290,15 @@ final class StackMapFrames {
             return this.stack.size();
         }
 
-        Entry join(final Entry next) {
+        Entry join(final int indx) {
+            return new Entry(indx, this.locals, this.stack, true);
+        }
+
+        Entry copy(final int indx) {
+            return new Entry(indx, this.locals, this.stack, false);
+        }
+
+        Entry append(final Entry next) {
             final int max = Math.max(
                 this.locals.keySet().stream().mapToInt(Integer::intValue).max().orElse(0),
                 next.locals.keySet().stream().mapToInt(Integer::intValue).max().orElse(0)
@@ -301,48 +313,8 @@ final class StackMapFrames {
                     map.put(i, a);
                 }
             }
-//            final Map<Integer, Object> map = Stream.concat(
-//                this.locals.entrySet().stream(),
-//                next.locals.entrySet().stream()
-//            ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> {
-//                if (a.equals(b)) {
-//                    return a;
-//                } else {
-//                    return Opcodes.TOP;
-//                }
-//            }));
-            return new Entry(
-                next.indx(),
-                map,
-                next.stack
-            );
+            return new Entry(next.indx(), map, next.stack, false);
         }
-
-//        Entry append(final int indx, final BytecodeInstruction instruction) {
-//            if (instruction.isVarInstruction()) {
-//                final LinkedHashMap<Integer, Object> copy = new LinkedHashMap<>(this.locals);
-//                if (copy.containsKey(instruction.localIndex())) {
-//                    final Object current = copy.get(instruction.localIndex());
-//                    final Object instr = instruction.elementType();
-//                    if (!current.equals(instr)) {
-//                        copy.put(instruction.localIndex(), Opcodes.TOP);
-//                    }
-//                } else {
-//                    copy.put(instruction.localIndex(), instruction.elementType());
-//                }
-//                return new Entry(
-//                    indx,
-//                    copy,
-//                    this.stack
-//                );
-//            } else {
-//                return new Entry(
-//                    indx,
-//                    this.locals,
-//                    this.stack
-//                );
-//            }
-//        }
 
         BytecodeFrame toFrame() {
             return new BytecodeFrame(
@@ -352,6 +324,10 @@ final class StackMapFrames {
                 this.nstack(),
                 this.stack.values().toArray()
             );
+        }
+
+        public boolean joined() {
+            return this.join;
         }
     }
 
