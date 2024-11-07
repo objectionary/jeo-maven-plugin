@@ -28,14 +28,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.ClassName;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeArrayAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
@@ -138,43 +137,6 @@ public final class AsmClass {
         );
     }
 
-
-    /**
-     * Safe annotations.
-     * @param nodes Annotation nodes.
-     * @param visible Is it visible?
-     * @return Annotations.
-     */
-    private static Stream<BytecodeAnnotation> safe(
-        final List<AnnotationNode> nodes, final boolean visible
-    ) {
-        return Optional.ofNullable(nodes)
-            .orElse(new ArrayList<>(0))
-            .stream()
-            .map(ann -> AsmClass.annotation(ann, visible));
-    }
-
-    /**
-     * Convert asm annotation to domain annotation.
-     * @param node Asm annotation node.
-     * @param visible Is it visible?
-     * @return Domain annotation.
-     */
-    private static BytecodeAnnotation annotation(final AnnotationNode node, final boolean visible) {
-        final List<BytecodeAnnotationValue> properties = new ArrayList<>(0);
-        final List<Object> values = Optional.ofNullable(node.values)
-            .orElse(new ArrayList<>(0));
-        for (int index = 0; index < values.size(); index += 2) {
-            properties.add(
-                AsmClass.annotationProperty(
-                    (String) values.get(index),
-                    values.get(index + 1)
-                )
-            );
-        }
-        return new BytecodeAnnotation(node.desc, visible, properties);
-    }
-
     /**
      * Convert asm methods to domain methods.
      * @param node Asm class node.
@@ -233,45 +195,32 @@ public final class AsmClass {
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static BytecodeMethodParameters parameters(final MethodNode node) {
-        final List<AnnotationNode>[] invisible;
-        if (node.invisibleParameterAnnotations == null) {
-            invisible = new List[Optional.ofNullable(node.visibleParameterAnnotations)
-                .orElse(new List[0]).length];
-        } else {
-            invisible = node.invisibleParameterAnnotations;
-        }
-        final List<AnnotationNode>[] visible;
-        if (node.visibleParameterAnnotations == null) {
-            visible = new List[Optional.ofNullable(node.invisibleParameterAnnotations)
-                .orElse(new List[0]).length];
-        } else {
-            visible = node.visibleParameterAnnotations;
-        }
         final Type[] types = Type.getArgumentTypes(node.desc);
         final List<BytecodeMethodParameter> params = new ArrayList<>(types.length);
         for (int index = 0; index < types.length; ++index) {
-            final List<BytecodeAnnotation> annotations = new ArrayList<>(0);
-            if (visible.length > index) {
-                annotations.addAll(
-                    AsmClass.safe(visible[index], true).collect(Collectors.toList())
-                );
-            }
-            if (invisible.length > index) {
-                annotations.addAll(
-                    AsmClass.safe(invisible[index], false).collect(Collectors.toList())
-                );
-            }
             params.add(
                 new BytecodeMethodParameter(
                     index,
                     AsmClass.paramName(node, index),
                     AsmClass.paramAccess(node, index),
                     types[index],
-                    new BytecodeAnnotations(annotations)
+                    new AsmAnnotations(
+                        AsmClass.paramAnnotations(node.visibleParameterAnnotations, index),
+                        AsmClass.paramAnnotations(node.invisibleParameterAnnotations, index)
+                    ).annotations()
                 )
             );
         }
         return new BytecodeMethodParameters(params);
+    }
+
+    static List<AnnotationNode> paramAnnotations(
+        final List<AnnotationNode>[] all, final int index
+    ) {
+        if (Objects.isNull(all)) {
+            return new ArrayList<>(0);
+        }
+        return all.length > index ? all[index] : new ArrayList<>(0);
     }
 
     /**
