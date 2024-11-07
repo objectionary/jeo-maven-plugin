@@ -27,37 +27,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeDefaultValue;
 import org.eolang.jeo.representation.bytecode.BytecodeEntry;
-import org.eolang.jeo.representation.bytecode.BytecodeFrame;
-import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
-import org.eolang.jeo.representation.bytecode.BytecodeLine;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.bytecode.LocalVariable;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FrameNode;
-import org.objectweb.asm.tree.IincInsnNode;
-import org.objectweb.asm.tree.IntInsnNode;
-import org.objectweb.asm.tree.InvokeDynamicInsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.LocalVariableNode;
-import org.objectweb.asm.tree.LookupSwitchInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.MultiANewArrayInsnNode;
-import org.objectweb.asm.tree.TableSwitchInsnNode;
-import org.objectweb.asm.tree.TypeInsnNode;
-import org.objectweb.asm.tree.VarInsnNode;
 
 /**
  * Asm method.
@@ -86,7 +66,7 @@ final class AsmMethod {
     BytecodeMethod bytecode() {
         return new BytecodeMethod(
             this.tryblocks(),
-            AsmMethod.instructions(this.node),
+            this.instructions(),
             new AsmAnnotations(this.node).annotations(),
             new BytecodeMethodProperties(
                 this.node.access,
@@ -149,151 +129,13 @@ final class AsmMethod {
 
     /**
      * Convert asm class to domain class.
-     * @param node Asm class node.
      * @return Domain class.
      */
-    private static List<BytecodeEntry> instructions(final MethodNode node) {
-        return Arrays.stream(node.instructions.toArray())
-            .map(AsmMethod::instruction)
+    private List<BytecodeEntry> instructions() {
+        return Arrays.stream(this.node.instructions.toArray())
+            .map(AsmInstruction::new)
+            .map(AsmInstruction::bytecode)
             .collect(Collectors.toList());
-    }
-
-    /**
-     * Convert asm instruction to domain instruction.
-     * @param node Asm instruction node.
-     * @return Domain instruction.
-     */
-    private static BytecodeEntry instruction(final AbstractInsnNode node) {
-        final BytecodeEntry result;
-        switch (node.getType()) {
-            case AbstractInsnNode.INSN:
-                result = new BytecodeInstruction(node.getOpcode());
-                break;
-            case AbstractInsnNode.INT_INSN:
-                final IntInsnNode instr = IntInsnNode.class.cast(node);
-                result = new BytecodeInstruction(
-                    instr.getOpcode(),
-                    instr.operand
-                );
-                break;
-            case AbstractInsnNode.VAR_INSN:
-                final VarInsnNode varinstr = VarInsnNode.class.cast(node);
-                result = new BytecodeInstruction(
-                    varinstr.getOpcode(), varinstr.var
-                );
-                break;
-            case AbstractInsnNode.TYPE_INSN:
-                final TypeInsnNode typeinstr = TypeInsnNode.class.cast(node);
-                result = new BytecodeInstruction(
-                    typeinstr.getOpcode(),
-                    typeinstr.desc
-                );
-                break;
-            case AbstractInsnNode.FIELD_INSN:
-                final FieldInsnNode field = FieldInsnNode.class.cast(node);
-                result = new BytecodeInstruction(
-                    field.getOpcode(),
-                    field.owner,
-                    field.name,
-                    field.desc
-                );
-                break;
-            case AbstractInsnNode.METHOD_INSN:
-                final MethodInsnNode method = MethodInsnNode.class.cast(node);
-                result = new BytecodeInstruction(
-                    method.getOpcode(),
-                    method.owner,
-                    method.name,
-                    method.desc,
-                    method.itf
-                );
-                break;
-            case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
-                final InvokeDynamicInsnNode dynamic = InvokeDynamicInsnNode.class.cast(node);
-                result = new BytecodeInstruction(
-                    dynamic.getOpcode(),
-                    Stream.concat(
-                        Stream.of(
-                            dynamic.name,
-                            dynamic.desc,
-                            dynamic.bsm
-                        ),
-                        Arrays.stream(dynamic.bsmArgs)
-                    ).toArray(Object[]::new)
-                );
-                break;
-            case AbstractInsnNode.JUMP_INSN:
-                final JumpInsnNode jump = JumpInsnNode.class.cast(node);
-                result = new BytecodeInstruction(
-                    jump.getOpcode(),
-                    jump.label.getLabel()
-                );
-                break;
-            case AbstractInsnNode.LABEL:
-                final LabelNode label = LabelNode.class.cast(node);
-                result = new BytecodeLabel(
-                    label.getLabel()
-                );
-                break;
-            case AbstractInsnNode.LDC_INSN:
-                final LdcInsnNode ldc = LdcInsnNode.class.cast(node);
-                result = new BytecodeInstruction(
-                    ldc.getOpcode(),
-                    ldc.cst
-                );
-                break;
-            case AbstractInsnNode.IINC_INSN:
-                final IincInsnNode iinc = IincInsnNode.class.cast(node);
-                result = new BytecodeInstruction(
-                    iinc.getOpcode(),
-                    iinc.var,
-                    iinc.incr
-                );
-                break;
-            case AbstractInsnNode.TABLESWITCH_INSN:
-                final TableSwitchInsnNode table = TableSwitchInsnNode.class.cast(node);
-                result = new BytecodeInstruction(
-                    table.getOpcode(),
-                    Stream.concat(
-                        Stream.of(table.min, table.max, table.dflt.getLabel()),
-                        table.labels.stream().map(LabelNode::getLabel)
-                    ).toArray(Object[]::new)
-                );
-                break;
-            case AbstractInsnNode.LOOKUPSWITCH_INSN:
-                final LookupSwitchInsnNode lookup = LookupSwitchInsnNode.class.cast(node);
-                result = new BytecodeInstruction(
-                    lookup.getOpcode(),
-                    Stream.concat(
-                        Stream.of(lookup.dflt.getLabel()),
-                        Stream.concat(
-                            lookup.keys.stream(),
-                            lookup.labels.stream().map(LabelNode::getLabel)
-                        )
-                    ).toArray(Object[]::new)
-                );
-                break;
-            case AbstractInsnNode.MULTIANEWARRAY_INSN:
-                final MultiANewArrayInsnNode multiarr = MultiANewArrayInsnNode.class.cast(node);
-                result = new BytecodeInstruction(
-                    multiarr.getOpcode(),
-                    multiarr.desc,
-                    multiarr.dims
-                );
-                break;
-            case AbstractInsnNode.FRAME:
-                final FrameNode frame = FrameNode.class.cast(node);
-                result = new BytecodeFrame(frame.type, frame.local, frame.stack);
-                break;
-            case AbstractInsnNode.LINE:
-                result = new BytecodeLine();
-                break;
-            default:
-                throw new IllegalStateException(
-                    String.format("Unknown instruction type: %s", node)
-                );
-        }
-        return result;
     }
 
     /**
