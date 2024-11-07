@@ -56,7 +56,6 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.MultiANewArrayInsnNode;
 import org.objectweb.asm.tree.TableSwitchInsnNode;
-import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
@@ -86,7 +85,7 @@ final class AsmMethod {
      */
     BytecodeMethod bytecode() {
         return new BytecodeMethod(
-            AsmMethod.tryblocks(this.node),
+            this.tryblocks(),
             AsmMethod.instructions(this.node),
             new AsmAnnotations(this.node).annotations(),
             new BytecodeMethodProperties(
@@ -133,25 +132,19 @@ final class AsmMethod {
 
     /**
      * Convert asm method to domain method tryblocks.
-     * @param node Asm method node.
      * @return Domain method tryblocks.
      */
-    private static List<BytecodeEntry> tryblocks(final MethodNode node) {
-        return node.tryCatchBlocks.stream().map(AsmMethod::tryblock).collect(Collectors.toList());
-    }
-
-    /**
-     * Convert asm try-catch block to domain try-catch block.
-     * @param node Asm try-catch block node.
-     * @return Domain try-catch block.
-     */
-    private static BytecodeEntry tryblock(final TryCatchBlockNode node) {
-        return new BytecodeTryCatchBlock(
-            node.start.getLabel(),
-            node.end.getLabel(),
-            node.handler.getLabel(),
-            node.type
-        );
+    private List<BytecodeEntry> tryblocks() {
+        return this.node.tryCatchBlocks.stream()
+            .map(
+                block -> new BytecodeTryCatchBlock(
+                    block.start.getLabel(),
+                    block.end.getLabel(),
+                    block.handler.getLabel(),
+                    block.type
+                )
+            )
+            .collect(Collectors.toList());
     }
 
     /**
