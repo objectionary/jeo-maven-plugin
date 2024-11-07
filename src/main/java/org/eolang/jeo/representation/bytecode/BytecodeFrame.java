@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesFrame;
@@ -232,23 +233,35 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     public BytecodeFrame substract(final BytecodeFrame other) {
-        final int length = this.nlocal - other.nlocal;
-        final Object[] locals;
-        if (length <= 0) {
-            locals = new Object[0];
-        } else {
-            locals = new Object[length];
-            System.arraycopy(this.locals, length - 1, locals, 0, length);
+        List<Object> result = new ArrayList<>(0);
+        final Object[] tlocals = this.locals;
+        final Object[] olocals = other.locals;
+        int size = Math.max(tlocals.length, olocals.length);
+        for (int i = 0; i < size; ++i) {
+            final Object tlocal;
+            if (tlocals.length <= i) {
+                tlocal = Opcodes.TOP;
+            } else {
+                tlocal = tlocals[i];
+            }
+            final Object olocal;
+            if (olocals.length <= i) {
+                olocal = Opcodes.TOP;
+            } else {
+                olocal = olocals[i];
+            }
+            if (!tlocal.equals(olocal)) {
+                result.add(tlocal);
+            }
         }
-        final int stackLength = this.nstack - other.nstack;
-        final Object[] stack = new Object[stackLength];
-        System.arraycopy(this.stack, 0, stack, 0, stackLength);
+        Object[] res = result.stream().filter(arg -> !arg.equals(Opcodes.TOP))
+            .toArray();
         return new BytecodeFrame(
             this.type,
-            length,
-            locals,
-            stackLength,
-            stack
+            res.length,
+            res,
+            this.nstack,
+            this.stack
         );
     }
 
@@ -262,15 +275,27 @@ public final class BytecodeFrame implements BytecodeEntry {
      * @return True if the frame has the same locals.
      */
     public boolean sameLocals(final BytecodeFrame frame) {
-        final boolean size = this.nlocal == frame.nlocal;
+        final int size = Math.max(this.nlocal, frame.nlocal);
         final Object[] current = this.locals;
         final Object[] other = frame.locals;
-        for (int index = 0; index < this.nlocal; ++index) {
-            if (!current[index].equals(other[index])) {
+        for (int index = 0; index < size; ++index) {
+            final Object curr;
+            if (current.length <= index) {
+                curr = Opcodes.TOP;
+            } else {
+                curr = current[index];
+            }
+            final Object oth;
+            if (other.length <= index) {
+                oth = Opcodes.TOP;
+            } else {
+                oth = other[index];
+            }
+            if (!curr.equals(oth)) {
                 return false;
             }
         }
-        return size;
+        return true;
     }
 
     /**

@@ -194,7 +194,7 @@ final class StackMapFrames {
         for (final Entry entry : all) {
             final BytecodeFrame difference = this.difference(previous, entry);
             res.add(difference);
-            previous = difference;
+            previous = entry.toFrame();
         }
         return res;
     }
