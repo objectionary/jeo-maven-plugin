@@ -25,15 +25,13 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.objectweb.asm.Label;
@@ -82,50 +80,61 @@ final class StackMapFrames {
      * @return The list of frames.
      */
     List<BytecodeFrame> frames() {
+        // Initialization
         final Deque<Entry> worklist = new ArrayDeque<>(0);
-        final Collection<Integer> visited = new HashSet<>(0);
         final Map<Integer, Entry> res = new LinkedHashMap<>(0);
         final int size = this.entries.size();
+        //Work
         final Entry initial = this.initial();
-        res.put(0, initial);
+//        res.put(0, initial);
         worklist.push(initial);
         while (!worklist.isEmpty()) {
             Entry current = worklist.pop();
-            if (visited.contains(current.indx) && current.equals(res.get(current.indx))) {
-                continue;
-            }
             for (int index = current.indx(); index < size; ++index) {
                 final BytecodeEntry entry = this.entries.get(index);
-                if (!(entry instanceof BytecodeInstruction)) {
-                    continue;
+                if (res.containsKey(index) && res.get(index).equals(current)) {
+                    break;
                 }
-                final BytecodeInstruction instr = (BytecodeInstruction) entry;
-                final Entry updated = current.append(index, instr);
-                if (instr.isIf()) {
-                    final Label label = instr.jumps().get(0);
-                    final int jump = this.index(label);
-                    final Entry next = updated.copy(jump);
-                    res.put(jump, next);
-                    visited.add(jump);
-                    worklist.push(next);
-                } else if (instr.isJump()) {
-                    final Label label = instr.jumps().get(0);
-                    final int jump = this.index(label);
-                    final Entry next = updated.copy(jump);
-                    res.put(jump, next);
-                    visited.add(jump);
-                    worklist.push(next);
-                    break;
-                } else if (instr.isReturn() || instr.isThrow()) {
-                    visited.add(index);
-                    break;
+                if (entry instanceof BytecodeInstruction) {
+                    final BytecodeInstruction instr = (BytecodeInstruction) entry;
+                    final Entry updated;
+                    if (res.containsKey(index)) {
+                        updated = current.join(res.get(index));
+                    } else {
+                        updated = Entry.fromInstruction(index, instr, current);
+                    }
+                    if (instr.isIf()) {
+                        worklist.push(updated.copy(this.index(instr.jumps().get(0))));
+                    } else if (instr.isJump()) {
+                        worklist.push(updated.copy(this.index(instr.jumps().get(0))));
+                        res.put(index, updated);
+                        break;
+                    } else if (instr.isReturn() || instr.isThrow()) {
+                        res.put(index, updated);
+                        break;
+                    }
+                    res.put(index, updated);
+                    current = updated;
                 } else {
-                    visited.add(index);
+                    res.put(index, current);
                 }
-                current = updated;
             }
         }
+        this.logEntires(res);
         return this.computeFrames(new ArrayList<>(res.values()));
+    }
+
+    private void logEntires(final Map<Integer, Entry> res) {
+        final int size = this.entries.size();
+        for (int index = 0; index < size; ++index) {
+            final Entry entry = res.getOrDefault(index, new Entry(index));
+            System.out.printf(
+                "%-30s\tEntry\t%d:\t%-75s%n",
+                this.entries.get(index).view(),
+                index,
+                entry
+            );
+        }
     }
 
     private Entry initial() {
@@ -219,12 +228,42 @@ final class StackMapFrames {
 
         private final Map<Integer, Object> stack;
 
+        private final boolean join;
+
+        public Entry(final int indx) {
+            this(indx, new LinkedHashMap<>(0), new LinkedHashMap<>(0));
+        }
+
         private Entry(
             final int indx, final Map<Integer, Object> locals, final Map<Integer, Object> stack
         ) {
             this.indx = indx;
             this.locals = locals;
             this.stack = stack;
+            this.join = false;
+        }
+
+        static Entry fromInstruction(
+            final int indx,
+            final BytecodeInstruction instruction,
+            final Entry prev
+        ) {
+            if (instruction.isVarInstruction()) {
+                final LinkedHashMap<Integer, Object> copy = new LinkedHashMap<>(prev.locals);
+                copy.put(instruction.localIndex(), instruction.elementType());
+                return new Entry(
+                    indx,
+                    copy,
+                    new LinkedHashMap<>(0)
+                );
+            } else {
+                return new Entry(
+                    indx,
+                    new LinkedHashMap<>(prev.locals),
+                    new LinkedHashMap<>(0)
+
+                );
+            }
         }
 
         Entry copy(final int indx) {
@@ -247,31 +286,63 @@ final class StackMapFrames {
             return this.stack.size();
         }
 
-        Entry append(final int indx, final BytecodeInstruction instruction) {
-            if (instruction.isVarInstruction()) {
-                final LinkedHashMap<Integer, Object> copy = new LinkedHashMap<>(this.locals);
-                if (copy.containsKey(instruction.localIndex())) {
-                    final Object current = copy.get(instruction.localIndex());
-                    final Object instr = instruction.elementType();
-                    if (!current.equals(instr)) {
-                        copy.put(instruction.localIndex(), Opcodes.TOP);
-                    }
+        Entry join(final Entry next) {
+            final int max = Math.max(
+                this.locals.keySet().stream().mapToInt(Integer::intValue).max().orElse(0),
+                next.locals.keySet().stream().mapToInt(Integer::intValue).max().orElse(0)
+            ) + 1;
+            final Map<Integer, Object> map = new LinkedHashMap<>(max);
+            for (int i = 0; i < max; ++i) {
+                final Object a = this.locals.getOrDefault(i, Opcodes.TOP);
+                final Object b = next.locals.getOrDefault(i, Opcodes.TOP);
+                if (!a.equals(b)) {
+                    map.put(i, Opcodes.TOP);
                 } else {
-                    copy.put(instruction.localIndex(), instruction.elementType());
+                    map.put(i, a);
                 }
-                return new Entry(
-                    indx,
-                    copy,
-                    this.stack
-                );
-            } else {
-                return new Entry(
-                    indx,
-                    this.locals,
-                    this.stack
-                );
             }
+//            final Map<Integer, Object> map = Stream.concat(
+//                this.locals.entrySet().stream(),
+//                next.locals.entrySet().stream()
+//            ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> {
+//                if (a.equals(b)) {
+//                    return a;
+//                } else {
+//                    return Opcodes.TOP;
+//                }
+//            }));
+            return new Entry(
+                next.indx(),
+                map,
+                next.stack
+            );
         }
+
+//        Entry append(final int indx, final BytecodeInstruction instruction) {
+//            if (instruction.isVarInstruction()) {
+//                final LinkedHashMap<Integer, Object> copy = new LinkedHashMap<>(this.locals);
+//                if (copy.containsKey(instruction.localIndex())) {
+//                    final Object current = copy.get(instruction.localIndex());
+//                    final Object instr = instruction.elementType();
+//                    if (!current.equals(instr)) {
+//                        copy.put(instruction.localIndex(), Opcodes.TOP);
+//                    }
+//                } else {
+//                    copy.put(instruction.localIndex(), instruction.elementType());
+//                }
+//                return new Entry(
+//                    indx,
+//                    copy,
+//                    this.stack
+//                );
+//            } else {
+//                return new Entry(
+//                    indx,
+//                    this.locals,
+//                    this.stack
+//                );
+//            }
+//        }
 
         BytecodeFrame toFrame() {
             return new BytecodeFrame(
