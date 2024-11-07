@@ -74,7 +74,7 @@ final class AsmAnnotationProperty {
      * @return Domain annotation.
      */
     BytecodeAnnotationValue bytecode() {
-        return AsmAnnotationProperty.annotationProperty(this.name, this.value);
+        return AsmAnnotationProperty.property(this.name, this.value);
     }
 
     /**
@@ -83,9 +83,7 @@ final class AsmAnnotationProperty {
      * @param value Property value.
      * @return Domain annotation.
      */
-    private static BytecodeAnnotationValue annotationProperty(
-        final String name, final Object value
-    ) {
+    private static BytecodeAnnotationValue property(final String name, final Object value) {
         final BytecodeAnnotationValue result;
         if (value instanceof String[]) {
             final String[] params = (String[]) value;
@@ -98,14 +96,14 @@ final class AsmAnnotationProperty {
                 Optional.ofNullable(cast.values)
                     .map(Collection::stream)
                     .orElseGet(Stream::empty)
-                    .map(val -> AsmAnnotationProperty.annotationProperty("", val))
+                    .map(val -> AsmAnnotationProperty.property("", val))
                     .collect(Collectors.toList())
             );
         } else if (value instanceof List) {
             result = new BytecodeArrayAnnotationValue(
                 name,
                 ((Collection<?>) value).stream()
-                    .map(val -> AsmAnnotationProperty.annotationProperty("", val))
+                    .map(val -> AsmAnnotationProperty.property("", val))
                     .collect(Collectors.toList())
             );
         } else {

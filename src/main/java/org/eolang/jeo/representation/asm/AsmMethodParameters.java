@@ -62,15 +62,17 @@ final class AsmMethodParameters {
             params.add(
                 new BytecodeMethodParameter(
                     index,
-                    AsmMethodParameters.paramName(this.node, index),
-                    AsmMethodParameters.paramAccess(this.node, index),
+                    AsmMethodParameters.name(this.node, index),
+                    AsmMethodParameters.access(this.node, index),
                     types[index],
                     new AsmAnnotations(
                         AsmMethodParameters.annotations(
-                            this.node.visibleParameterAnnotations, index),
+                            this.node.visibleParameterAnnotations, index
+                        ),
                         AsmMethodParameters.annotations(
-                            this.node.invisibleParameterAnnotations, index)
-                    ).annotations()
+                            this.node.invisibleParameterAnnotations, index
+                        )
+                    ).bytecode()
                 )
             );
         }
@@ -87,14 +89,10 @@ final class AsmMethodParameters {
         final List<AnnotationNode>[] all, final int index
     ) {
         final List<AnnotationNode> result;
-        if (Objects.isNull(all)) {
+        if (Objects.isNull(all) || all.length <= index) {
             result = new ArrayList<>(0);
         } else {
-            if (all.length > index) {
-                result = all[index];
-            } else {
-                result = new ArrayList<>(0);
-            }
+            result = all[index];
         }
         return result;
     }
@@ -105,7 +103,7 @@ final class AsmMethodParameters {
      * @param index Parameter index.
      * @return Parameter access.
      */
-    private static int paramAccess(final MethodNode node, final int index) {
+    private static int access(final MethodNode node, final int index) {
         final int result;
         if (node.parameters != null && node.parameters.size() > index) {
             result = node.parameters.get(index).access;
@@ -121,7 +119,7 @@ final class AsmMethodParameters {
      * @param index Parameter index.
      * @return Parameter name.
      */
-    private static String paramName(final MethodNode node, final int index) {
+    private static String name(final MethodNode node, final int index) {
         final String result;
         if (node.parameters != null && node.parameters.size() > index) {
             result = node.parameters.get(index).name;
@@ -130,5 +128,4 @@ final class AsmMethodParameters {
         }
         return result;
     }
-
 }

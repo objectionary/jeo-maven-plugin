@@ -46,14 +46,29 @@ import org.objectweb.asm.tree.TableSwitchInsnNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-public final class AsmInstruction {
+/**
+ * Asm instruction.
+ * @since 0.6
+ */
+final class AsmInstruction {
 
+    /**
+     * Instruction node.
+     */
     private final AbstractInsnNode node;
 
-    public AsmInstruction(final AbstractInsnNode node) {
+    /**
+     * Constructor.
+     * @param node Instruction node.
+     */
+    AsmInstruction(final AbstractInsnNode node) {
         this.node = node;
     }
 
+    /**
+     * Convert asm instruction to domain instruction.
+     * @return Domain instruction.
+     */
     BytecodeEntry bytecode() {
         final BytecodeEntry result;
         switch (this.node.getType()) {
@@ -165,7 +180,8 @@ public final class AsmInstruction {
                 );
                 break;
             case AbstractInsnNode.MULTIANEWARRAY_INSN:
-                final MultiANewArrayInsnNode multiarr = MultiANewArrayInsnNode.class.cast(this.node);
+                final MultiANewArrayInsnNode multiarr = MultiANewArrayInsnNode.class.cast(
+                    this.node);
                 result = new BytecodeInstruction(
                     multiarr.getOpcode(),
                     multiarr.desc,

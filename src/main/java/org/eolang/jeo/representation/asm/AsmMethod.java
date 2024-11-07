@@ -67,7 +67,7 @@ final class AsmMethod {
         return new BytecodeMethod(
             this.tryblocks(),
             this.instructions(),
-            new AsmAnnotations(this.node).annotations(),
+            new AsmAnnotations(this.node).bytecode(),
             new BytecodeMethodProperties(
                 this.node.access,
                 this.node.name,
@@ -100,7 +100,6 @@ final class AsmMethod {
         }
         return result;
     }
-
 
     /**
      * Convert asm method to domain method maxs.
