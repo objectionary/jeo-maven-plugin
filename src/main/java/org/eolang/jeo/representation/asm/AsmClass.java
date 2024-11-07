@@ -100,7 +100,8 @@ public final class AsmClass {
             full.name(),
             AsmClass.methods(this.node),
             AsmClass.fields(this.node),
-            AsmClass.annotations(this.node),
+//            AsmClass.annotations(this.node),
+            new AsmAnnotations(this.node).annotations(),
             AsmClass.innerClasses(this.node),
             new BytecodeClassProperties(
                 this.node.version,
@@ -133,51 +134,10 @@ public final class AsmClass {
             node.signature,
             node.value,
             node.access,
-            AsmClass.annotations(node)
+            new AsmAnnotations(node).annotations()
         );
     }
 
-    /**
-     * Retrieve domain annotations from asm field.
-     * @param node Asm field node.
-     * @return Domain annotations.
-     */
-    private static BytecodeAnnotations annotations(final FieldNode node) {
-        return new BytecodeAnnotations(
-            Stream.concat(
-                AsmClass.safe(node.visibleAnnotations, true),
-                AsmClass.safe(node.invisibleAnnotations, false)
-            )
-        );
-    }
-
-    /**
-     * Retrieve domain annotations from asm method.
-     * @param node Asm method node.
-     * @return Domain annotations.
-     */
-    private static BytecodeAnnotations annotations(final MethodNode node) {
-        return new BytecodeAnnotations(
-            Stream.concat(
-                AsmClass.safe(node.visibleAnnotations, true),
-                AsmClass.safe(node.invisibleAnnotations, false)
-            ).collect(Collectors.toList())
-        );
-    }
-
-    /**
-     * Retrieve domain annotations from asm class.
-     * @param node Asm class node.
-     * @return Domain annotations.
-     */
-    private static BytecodeAnnotations annotations(final ClassNode node) {
-        return new BytecodeAnnotations(
-            Stream.concat(
-                AsmClass.safe(node.visibleAnnotations, true),
-                AsmClass.safe(node.invisibleAnnotations, false)
-            ).collect(Collectors.toList())
-        );
-    }
 
     /**
      * Safe annotations.
@@ -233,7 +193,7 @@ public final class AsmClass {
         return new BytecodeMethod(
             AsmClass.tryblocks(node),
             AsmClass.instructions(node),
-            AsmClass.annotations(node),
+            new AsmAnnotations(node).annotations(),
             new BytecodeMethodProperties(
                 node.access,
                 node.name,
