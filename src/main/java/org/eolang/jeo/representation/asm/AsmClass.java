@@ -113,5 +113,4 @@ public final class AsmClass {
             ).collect(Collectors.toList())
         );
     }
-
 }

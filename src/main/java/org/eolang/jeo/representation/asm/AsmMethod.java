@@ -25,21 +25,15 @@ package org.eolang.jeo.representation.asm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotationAnnotationValue;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
-import org.eolang.jeo.representation.bytecode.BytecodeArrayAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeDefaultValue;
 import org.eolang.jeo.representation.bytecode.BytecodeEntry;
-import org.eolang.jeo.representation.bytecode.BytecodeEnumAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeFrame;
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
@@ -49,7 +43,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
-import org.eolang.jeo.representation.bytecode.BytecodePlainAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.bytecode.LocalVariable;
 import org.objectweb.asm.Type;
@@ -394,46 +387,9 @@ final class AsmMethod {
         } else {
             result = Collections.singletonList(
                 new BytecodeDefaultValue(
-                    AsmMethod.annotationProperty(null, node.annotationDefault)
+                    new AsmAnnotationProperty(node.annotationDefault).bytecode()
                 )
             );
-        }
-        return result;
-    }
-
-    /**
-     * Convert asm annotation property to domain annotation property.
-     * @param name Property name.
-     * @param value Property value.
-     * @return Domain annotation.
-     */
-    private static BytecodeAnnotationValue annotationProperty(
-        final String name, final Object value
-    ) {
-        final BytecodeAnnotationValue result;
-        if (value instanceof String[]) {
-            final String[] params = (String[]) value;
-            result = new BytecodeEnumAnnotationValue(name, params[0], params[1]);
-        } else if (value instanceof AnnotationNode) {
-            final AnnotationNode cast = AnnotationNode.class.cast(value);
-            result = new BytecodeAnnotationAnnotationValue(
-                name,
-                cast.desc,
-                Optional.ofNullable(cast.values)
-                    .map(Collection::stream)
-                    .orElseGet(Stream::empty)
-                    .map(val -> AsmMethod.annotationProperty("", val))
-                    .collect(Collectors.toList())
-            );
-        } else if (value instanceof List) {
-            result = new BytecodeArrayAnnotationValue(
-                name,
-                ((Collection<?>) value).stream()
-                    .map(val -> AsmMethod.annotationProperty("", val))
-                    .collect(Collectors.toList())
-            );
-        } else {
-            result = new BytecodePlainAnnotationValue(name, value);
         }
         return result;
     }

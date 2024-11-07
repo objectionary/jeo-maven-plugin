@@ -23,100 +23,42 @@
  */
 package org.eolang.jeo.representation.asm;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeArrayAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeEnumAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodePlainAnnotationValue;
 import org.objectweb.asm.tree.AnnotationNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.MethodNode;
 
-public final class AsmAnnotations {
+/**
+ * Asm annotation property.
+ * @since 0.6
+ */
+final class AsmAnnotationProperty {
 
-    /**
-     * Visible annotations.
-     */
-    private final List<AnnotationNode> visible;
+    private final String name;
+    private final Object value;
 
-    /**
-     * Invisible annotations.
-     */
-    private final List<AnnotationNode> invisible;
-
-    public AsmAnnotations(final ClassNode node) {
-        this(node.visibleAnnotations, node.invisibleAnnotations);
+    AsmAnnotationProperty(final Object value) {
+        this(null, value);
     }
 
-    public AsmAnnotations(final MethodNode node) {
-        this(node.visibleAnnotations, node.invisibleAnnotations);
-    }
-
-    public AsmAnnotations(final FieldNode node) {
-        this(node.visibleAnnotations, node.invisibleAnnotations);
-    }
-
-    public AsmAnnotations(
-        final List<AnnotationNode> visible,
-        final List<AnnotationNode> invisible
-    ) {
-        this.visible = visible;
-        this.invisible = invisible;
-    }
-
-    public BytecodeAnnotations annotations() {
-        return new BytecodeAnnotations(
-            Stream.concat(
-                AsmAnnotations.safe(this.visible, true),
-                AsmAnnotations.safe(this.invisible, false)
-            ).collect(Collectors.toList())
-        );
+    AsmAnnotationProperty(final String name, final Object value) {
+        this.name = name;
+        this.value = value;
     }
 
     /**
-     * Safe annotations.
-     * @param nodes Annotation nodes.
-     * @param visible Is it visible?
-     * @return Annotations.
-     */
-    private static Stream<BytecodeAnnotation> safe(
-        final List<AnnotationNode> nodes, final boolean visible
-    ) {
-        return Optional.ofNullable(nodes)
-            .orElse(new ArrayList<>(0))
-            .stream()
-            .map(ann -> AsmAnnotations.annotation(ann, visible));
-    }
-
-
-    /**
-     * Convert asm annotation to domain annotation.
-     * @param node Asm annotation node.
-     * @param visible Is it visible?
+     * Convert asm annotation property to domain annotation property.
      * @return Domain annotation.
      */
-    private static BytecodeAnnotation annotation(final AnnotationNode node, final boolean visible) {
-        final List<BytecodeAnnotationValue> properties = new ArrayList<>(0);
-        final List<Object> values = Optional.ofNullable(node.values)
-            .orElse(new ArrayList<>(0));
-        for (int index = 0; index < values.size(); index += 2) {
-            properties.add(
-                new AsmAnnotationProperty(
-                    (String) values.get(index),
-                    values.get(index + 1)
-                ).bytecode()
-            );
-        }
-        return new BytecodeAnnotation(node.desc, visible, properties);
+    BytecodeAnnotationValue bytecode() {
+        return AsmAnnotationProperty.annotationProperty(this.name, this.value);
     }
 
     /**
@@ -140,14 +82,14 @@ public final class AsmAnnotations {
                 Optional.ofNullable(cast.values)
                     .map(Collection::stream)
                     .orElseGet(Stream::empty)
-                    .map(val -> AsmAnnotations.annotationProperty("", val))
+                    .map(val -> AsmAnnotationProperty.annotationProperty("", val))
                     .collect(Collectors.toList())
             );
         } else if (value instanceof List) {
             result = new BytecodeArrayAnnotationValue(
                 name,
                 ((Collection<?>) value).stream()
-                    .map(val -> AsmAnnotations.annotationProperty("", val))
+                    .map(val -> AsmAnnotationProperty.annotationProperty("", val))
                     .collect(Collectors.toList())
             );
         } else {
@@ -155,4 +97,5 @@ public final class AsmAnnotations {
         }
         return result;
     }
+
 }
