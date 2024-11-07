@@ -23,11 +23,9 @@
  */
 package org.eolang.jeo.representation.asm;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
@@ -40,14 +38,10 @@ import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeLine;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
-import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
-import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.bytecode.LocalVariable;
-import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.IincInsnNode;
@@ -100,107 +94,41 @@ final class AsmMethod {
                 this.node.name,
                 this.node.desc,
                 this.node.signature,
-                AsmMethod.parameters(this.node),
+                new AsmMethodParameters(this.node).bytecode(),
                 this.node.exceptions.toArray(new String[0])
             ),
-            AsmMethod.defvalues(this.node),
-            AsmMethod.maxs(this.node),
-            AsmMethod.attributes(this.node)
+            this.defvalue(),
+            this.maxs(),
+            this.attributes()
         );
     }
 
     /**
      * Convert asm method to domain method attributes.
-     * @param node Asm method node.
      * @return Domain method attributes.
      */
-    private static BytecodeAttributes attributes(final MethodNode node) {
-        final List<LocalVariableNode> variables = node.localVariables;
+    private BytecodeAttributes attributes() {
+        final List<LocalVariableNode> variables = this.node.localVariables;
         final BytecodeAttributes result;
         if (variables == null) {
             result = new BytecodeAttributes();
         } else {
             result = new BytecodeAttributes(
-                variables.stream().map(LocalVariable::new).toArray(BytecodeAttribute[]::new)
+                variables.stream()
+                    .map(LocalVariable::new)
+                    .toArray(BytecodeAttribute[]::new)
             );
         }
         return result;
     }
 
-    /**
-     * Convert asm method to domain method parameters.
-     * @param node Asm method node.
-     * @return Domain method parameters.
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static BytecodeMethodParameters parameters(final MethodNode node) {
-        final Type[] types = Type.getArgumentTypes(node.desc);
-        final List<BytecodeMethodParameter> params = new ArrayList<>(types.length);
-        for (int index = 0; index < types.length; ++index) {
-            params.add(
-                new BytecodeMethodParameter(
-                    index,
-                    AsmMethod.paramName(node, index),
-                    AsmMethod.paramAccess(node, index),
-                    types[index],
-                    new AsmAnnotations(
-                        AsmMethod.paramAnnotations(node.visibleParameterAnnotations, index),
-                        AsmMethod.paramAnnotations(node.invisibleParameterAnnotations, index)
-                    ).annotations()
-                )
-            );
-        }
-        return new BytecodeMethodParameters(params);
-    }
-
-    static List<AnnotationNode> paramAnnotations(
-        final List<AnnotationNode>[] all, final int index
-    ) {
-        if (Objects.isNull(all)) {
-            return new ArrayList<>(0);
-        }
-        return all.length > index ? all[index] : new ArrayList<>(0);
-    }
-
-    /**
-     * Retrieve method parameter access from asm method.
-     * @param node Asm method node.
-     * @param index Parameter index.
-     * @return Parameter access.
-     */
-    private static int paramAccess(final MethodNode node, final int index) {
-        final int result;
-        if (node.parameters != null && node.parameters.size() > index) {
-            result = node.parameters.get(index).access;
-        } else {
-            result = 0;
-        }
-        return result;
-    }
-
-    /**
-     * Retrieve method parameter name from asm method.
-     * @param node Asm method node.
-     * @param index Parameter index.
-     * @return Parameter name.
-     */
-    private static String paramName(final MethodNode node, final int index) {
-        final String result;
-        if (node.parameters != null && node.parameters.size() > index) {
-            result = node.parameters.get(index).name;
-        } else {
-            result = String.format("arg%d", index);
-        }
-        return result;
-    }
 
     /**
      * Convert asm method to domain method maxs.
-     * @param node Asm method node.
      * @return Domain method maxs.
      */
-    private static BytecodeMaxs maxs(final MethodNode node) {
-        return new BytecodeMaxs(node.maxStack, node.maxLocals);
+    private BytecodeMaxs maxs() {
+        return new BytecodeMaxs(this.node.maxStack, this.node.maxLocals);
     }
 
     /**
@@ -377,17 +305,16 @@ final class AsmMethod {
 
     /**
      * Convert asm default value to domain default value.
-     * @param node Asm method node.
      * @return Domain default value.
      */
-    private static List<BytecodeDefaultValue> defvalues(final MethodNode node) {
+    private List<BytecodeDefaultValue> defvalue() {
         final List<BytecodeDefaultValue> result;
-        if (node.annotationDefault == null) {
+        if (this.node.annotationDefault == null) {
             result = Collections.emptyList();
         } else {
             result = Collections.singletonList(
                 new BytecodeDefaultValue(
-                    new AsmAnnotationProperty(node.annotationDefault).bytecode()
+                    new AsmAnnotationProperty(this.node.annotationDefault).bytecode()
                 )
             );
         }

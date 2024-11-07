@@ -41,13 +41,29 @@ import org.objectweb.asm.tree.AnnotationNode;
  */
 final class AsmAnnotationProperty {
 
+    /**
+     * Property name.
+     */
     private final String name;
+
+    /**
+     * Property value.
+     */
     private final Object value;
 
+    /**
+     * Constructor.
+     * @param value Property value.
+     */
     AsmAnnotationProperty(final Object value) {
         this(null, value);
     }
 
+    /**
+     * Constructor.
+     * @param name Property name.
+     * @param value Property value.
+     */
     AsmAnnotationProperty(final String name, final Object value) {
         this.name = name;
         this.value = value;

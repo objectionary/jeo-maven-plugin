@@ -64,7 +64,7 @@ public final class AsmClass {
             this.methods(),
             this.fields(),
             new AsmAnnotations(this.node).annotations(),
-            this.innerClasses(),
+            this.attributes(),
             new BytecodeClassProperties(
                 this.node.version,
                 this.node.access,
@@ -101,7 +101,7 @@ public final class AsmClass {
      * Retrieve domain attributes from asm class.
      * @return Domain attributes.
      */
-    private BytecodeAttributes innerClasses() {
+    private BytecodeAttributes attributes() {
         return new BytecodeAttributes(
             this.node.innerClasses.stream().map(
                 clazz -> new InnerClass(
