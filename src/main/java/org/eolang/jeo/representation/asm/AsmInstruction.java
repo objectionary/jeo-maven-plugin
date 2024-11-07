@@ -71,7 +71,7 @@ final class AsmInstruction {
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      * @checkstyle JavaNCSSCheck (100 lines)
      */
-    @SuppressWarnings("PMD.NcssCount")
+    @SuppressWarnings({"PMD.NcssCount", "PMD.ExcessiveMethodLength"})
     BytecodeEntry bytecode() {
         final BytecodeEntry result;
         switch (this.node.getType()) {
