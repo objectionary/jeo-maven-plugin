@@ -23,63 +23,16 @@
  */
 package org.eolang.jeo.representation.asm;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.eolang.jeo.representation.ClassName;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotationAnnotationValue;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
-import org.eolang.jeo.representation.bytecode.BytecodeArrayAnnotationValue;
-import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
-import org.eolang.jeo.representation.bytecode.BytecodeDefaultValue;
-import org.eolang.jeo.representation.bytecode.BytecodeEntry;
-import org.eolang.jeo.representation.bytecode.BytecodeEnumAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
-import org.eolang.jeo.representation.bytecode.BytecodeFrame;
-import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
-import org.eolang.jeo.representation.bytecode.BytecodeLine;
-import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
-import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
-import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
-import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
-import org.eolang.jeo.representation.bytecode.BytecodePlainAnnotationValue;
-import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.bytecode.InnerClass;
-import org.eolang.jeo.representation.bytecode.LocalVariable;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.FrameNode;
-import org.objectweb.asm.tree.IincInsnNode;
-import org.objectweb.asm.tree.InnerClassNode;
-import org.objectweb.asm.tree.IntInsnNode;
-import org.objectweb.asm.tree.InvokeDynamicInsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.LocalVariableNode;
-import org.objectweb.asm.tree.LookupSwitchInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.MultiANewArrayInsnNode;
-import org.objectweb.asm.tree.TableSwitchInsnNode;
-import org.objectweb.asm.tree.TryCatchBlockNode;
-import org.objectweb.asm.tree.TypeInsnNode;
-import org.objectweb.asm.tree.VarInsnNode;
 
 /**
  * ASM bytecode parser for a class.
@@ -87,20 +40,31 @@ import org.objectweb.asm.tree.VarInsnNode;
  */
 public final class AsmClass {
 
+    /**
+     * Class node.
+     */
     private final ClassNode node;
 
-    public AsmClass(final ClassNode node) {
+    /**
+     * Constructor.
+     * @param node Class node.
+     */
+    AsmClass(final ClassNode node) {
         this.node = node;
     }
 
+    /**
+     * Convert asm class to domain class.
+     * @return Domain class.
+     */
     public BytecodeClass bytecode() {
         final ClassName full = new ClassName(this.node.name);
         return new BytecodeClass(
             full.name(),
-            AsmClass.methods(this.node),
-            AsmClass.fields(this.node),
+            this.methods(),
+            this.fields(),
             new AsmAnnotations(this.node).annotations(),
-            AsmClass.innerClasses(this.node),
+            this.innerClasses(),
             new BytecodeClassProperties(
                 this.node.version,
                 this.node.access,
@@ -113,11 +77,10 @@ public final class AsmClass {
 
     /**
      * Convert asm field to domain field.
-     * @param node Asm field node.
      * @return Domain field.
      */
-    private static List<BytecodeField> fields(final ClassNode node) {
-        return node.fields.stream()
+    private List<BytecodeField> fields() {
+        return this.node.fields.stream()
             .map(AsmField::new)
             .map(AsmField::bytecode)
             .collect(Collectors.toList());
@@ -125,65 +88,30 @@ public final class AsmClass {
 
     /**
      * Convert asm methods to domain methods.
-     * @param node Asm class node.
      * @return Domain methods.
      */
-    private static List<BytecodeMethod> methods(final ClassNode node) {
-        return node.methods.stream().map(AsmClass::method).collect(Collectors.toList());
+    private List<BytecodeMethod> methods() {
+        return this.node.methods.stream()
+            .map(AsmMethod::new)
+            .map(AsmMethod::bytecode)
+            .collect(Collectors.toList());
     }
-
-    /**
-     * Convert asm method to domain method.
-     * @param node Asm method node.
-     * @return Domain method.
-     */
-    private static BytecodeMethod method(final MethodNode node) {
-        return new AsmMethod(node).bytecode();
-
-//        return new BytecodeMethod(
-//            AsmClass.tryblocks(node),
-//            AsmClass.instructions(node),
-//            new AsmAnnotations(node).annotations(),
-//            new BytecodeMethodProperties(
-//                node.access,
-//                node.name,
-//                node.desc,
-//                node.signature,
-//                AsmClass.parameters(node),
-//                node.exceptions.toArray(new String[0])
-//            ),
-//            AsmClass.defvalues(node),
-//            AsmClass.maxs(node),
-//            AsmClass.attributes(node)
-//        );
-    }
-
-
 
     /**
      * Retrieve domain attributes from asm class.
-     * @param node Asm class node.
      * @return Domain attributes.
      */
-    private static BytecodeAttributes innerClasses(final ClassNode node) {
+    private BytecodeAttributes innerClasses() {
         return new BytecodeAttributes(
-            node.innerClasses.stream()
-                .map(AsmClass::innerClass)
-                .collect(Collectors.toList())
+            this.node.innerClasses.stream().map(
+                clazz -> new InnerClass(
+                    clazz.name,
+                    clazz.outerName,
+                    clazz.innerName,
+                    clazz.access
+                )
+            ).collect(Collectors.toList())
         );
     }
 
-    /**
-     * Convert asm inner class to domain inner class.
-     * @param node Asm inner class node.
-     * @return Domain inner class.
-     */
-    private static BytecodeAttribute innerClass(final InnerClassNode node) {
-        return new InnerClass(
-            node.name,
-            node.outerName,
-            node.innerName,
-            node.access
-        );
-    }
 }
