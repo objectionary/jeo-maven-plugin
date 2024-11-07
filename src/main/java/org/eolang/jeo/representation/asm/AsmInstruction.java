@@ -68,7 +68,10 @@ final class AsmInstruction {
     /**
      * Convert asm instruction to domain instruction.
      * @return Domain instruction.
+     * @checkstyle CyclomaticComplexityCheck (100 lines)
+     * @checkstyle JavaNCSSCheck (100 lines)
      */
+    @SuppressWarnings("PMD.NcssCount")
     BytecodeEntry bytecode() {
         final BytecodeEntry result;
         switch (this.node.getType()) {
@@ -181,7 +184,8 @@ final class AsmInstruction {
                 break;
             case AbstractInsnNode.MULTIANEWARRAY_INSN:
                 final MultiANewArrayInsnNode multiarr = MultiANewArrayInsnNode.class.cast(
-                    this.node);
+                    this.node
+                );
                 result = new BytecodeInstruction(
                     multiarr.getOpcode(),
                     multiarr.desc,
