@@ -23,46 +23,41 @@
  */
 package org.eolang.jeo.representation.asm;
 
-import org.eolang.jeo.representation.ClassName;
-import org.eolang.jeo.representation.bytecode.BytecodeProgram;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.tree.ClassNode;
+import org.eolang.jeo.representation.bytecode.BytecodeField;
+import org.objectweb.asm.tree.FieldNode;
 
 /**
- * ASM bytecode parser.
- * We used to use the Visitor pattern, but it's too verbose and not very readable.
- * So, we decided to switch to a Tree-API-based approach.
- * You can read more about different approaches right here:
- * <a href="https://asm.ow2.io/asm4-guide.pdf">https://asm.ow2.io/asm4-guide.pdf</a>
- * The recent version with the Visitor pattern is still available in the history:
- * <a href="https://github.com/objectionary/jeo-maven-plugin/tree/29daa0a167b5c2ba4caaceafb6e6bafc381ac05c">github</a>
+ * Asm field.
+ * Asm parser for a field.
  * @since 0.6
  */
-public final class AsmProgram {
+final class AsmField {
 
     /**
-     * Bytecode as plain bytes.
+     * Field node.
      */
-    private final byte[] bytes;
+    private final FieldNode node;
 
     /**
      * Constructor.
-     * @param bytes Bytes.
+     * @param node Field node.
      */
-    public AsmProgram(final byte... bytes) {
-        this.bytes = bytes.clone();
+    AsmField(final FieldNode node) {
+        this.node = node;
     }
 
     /**
-     * Convert to bytecode.
-     * @return Bytecode.
+     * Convert asm field to domain field.
+     * @return Domain field.
      */
-    public BytecodeProgram bytecode() {
-        final ClassNode node = new ClassNode();
-        new ClassReader(this.bytes).accept(node, 0);
-        return new BytecodeProgram(
-            new ClassName(node.name).pckg(),
-            new AsmClass(node).bytecode()
+    BytecodeField bytecode() {
+        return new BytecodeField(
+            this.node.name,
+            this.node.desc,
+            this.node.signature,
+            this.node.value,
+            this.node.access,
+            new AsmAnnotations(this.node).bytecode()
         );
     }
 }
