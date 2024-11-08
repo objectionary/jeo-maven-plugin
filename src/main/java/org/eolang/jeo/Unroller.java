@@ -39,7 +39,7 @@ import org.eolang.jeo.representation.CanonicalXmir;
  * transformations.
  * @since 0.6
  */
-public final class Unroller {
+final class Unroller {
 
     /**
      * Source directory with XMIR files that were changed by `phi/unphi` transformations.
@@ -56,17 +56,18 @@ public final class Unroller {
      * @param source Directory with XMIR files that were changed by `phi/unphi` transformations.
      * @param target Target directory where unrolled XMIR files will be saved.
      */
-    public Unroller(final Path source, final Path target) {
+    Unroller(final Path source, final Path target) {
         this.source = source;
         this.target = target;
     }
 
     /**
      * Unrolls all the XMIR files from the source directory to the target directory.
+     * @return The number of unrolled XMIR files.
      */
-    public void unroll() {
+    long unroll() {
         try (Stream<Path> xmirs = Files.walk(this.source)) {
-            xmirs.filter(Unroller::isXmir).forEach(this::unroll);
+            return xmirs.filter(Unroller::isXmir).peek(this::unroll).count();
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format(

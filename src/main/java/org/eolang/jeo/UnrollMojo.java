@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.log.Logger;
 import java.io.File;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -63,6 +64,14 @@ public final class UnrollMojo extends AbstractMojo {
 
     @Override
     public void execute() {
-        new Unroller(this.sourcesDir.toPath(), this.outputDir.toPath()).unroll();
+        Logger.info(this, "Unrolling PHI/UNPHI transformations");
+        long start = System.currentTimeMillis();
+        final long count = new Unroller(this.sourcesDir.toPath(), this.outputDir.toPath()).unroll();
+        Logger.info(
+            this,
+            "Total %d PHI/UNPHI transformations were unrolled in %[ms]s",
+            count,
+            System.currentTimeMillis() - start
+        );
     }
 }
