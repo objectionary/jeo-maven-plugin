@@ -65,7 +65,7 @@ public final class UnrollMojo extends AbstractMojo {
     @Override
     public void execute() {
         Logger.info(this, "Unrolling PHI/UNPHI transformations");
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
         final long count = new Unroller(this.sourcesDir.toPath(), this.outputDir.toPath()).unroll();
         Logger.info(
             this,

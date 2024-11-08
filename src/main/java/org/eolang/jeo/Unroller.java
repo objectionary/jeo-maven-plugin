@@ -30,8 +30,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import org.eolang.jeo.representation.CanonicalXmir;
 
 /**
@@ -129,6 +127,7 @@ final class Unroller {
      * Otherwise, the class loader won't be able to find `net.sf.saxon.TransformerFactoryImpl`.
      * This method is a workaround for the problem with class loading during the unrolling process.
      */
+    @SuppressWarnings("PMD.UseProperClassLoader")
     private void prepareThread() {
         System.setProperty(
             "javax.xml.transform.TransformerFactory",
