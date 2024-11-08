@@ -118,8 +118,19 @@ final class StackMapFrames {
                     res.put(index, updated);
                     current = updated;
                 } else {
-                    res.put(index, current);
-                    current = current.copy(index);
+//                    OLD
+//                    res.put(index, current);
+//                    current = current.copy(index);
+                    if (res.containsKey(index)) {
+                        final Entry updated = current.append(res.get(index));
+                        res.put(index, updated);
+                        current = updated;
+                    } else {
+                        res.put(index, current);
+                        current = current.copy(index);
+                    }
+
+
                 }
             }
         }
@@ -273,22 +284,33 @@ final class StackMapFrames {
             final BytecodeInstruction instruction,
             final Entry prev
         ) {
+            //I stopped here!
+            LinkedHashMap<Integer, Object> stack = Entry.stackType(indx, instruction);
             if (instruction.isVarInstruction()) {
                 final LinkedHashMap<Integer, Object> copy = new LinkedHashMap<>(prev.locals);
                 copy.put(instruction.localIndex(), instruction.elementType());
                 return new Entry(
                     indx,
                     copy,
-                    new LinkedHashMap<>(0)
+                    stack
                 );
             } else {
                 return new Entry(
                     indx,
                     new LinkedHashMap<>(prev.locals),
-                    new LinkedHashMap<>(0)
-
+                    stack
                 );
             }
+        }
+
+        private static LinkedHashMap<Integer, Object> stackType(
+            final int indx,
+            final BytecodeInstruction instruction
+        ) {
+            LinkedHashMap<Integer, Object> res = new LinkedHashMap<>(0);
+            final Object o = instruction.elementType();
+            res.put(indx, o);
+            return res;
         }
 
         int indx() {
@@ -330,7 +352,7 @@ final class StackMapFrames {
                     map.put(i, a);
                 }
             }
-            return new Entry(next.indx(), map, next.stack, false);
+            return new Entry(next.indx(), map, next.stack, this.join || next.join);
         }
 
         BytecodeFrame toFrame() {
