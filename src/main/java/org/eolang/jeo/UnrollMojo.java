@@ -63,6 +63,7 @@ public final class UnrollMojo extends AbstractMojo {
     private File outputDir;
 
     @Override
+    @SuppressWarnings("PMD.GuardLogStatement")
     public void execute() {
         Logger.info(this, "Unrolling PHI/UNPHI transformations");
         final long start = System.currentTimeMillis();
