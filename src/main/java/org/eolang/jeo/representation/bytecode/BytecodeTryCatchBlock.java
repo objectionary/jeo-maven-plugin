@@ -186,7 +186,13 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
      * @return Type.
      */
     String descriptor() {
-        return this.type;
+        final String result;
+        if (this.type == null) {
+            result = "java/lang/Throwable";
+        } else {
+            result = this.type;
+        }
+        return result;
     }
 
 }
