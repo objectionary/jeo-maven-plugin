@@ -30,6 +30,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import org.eolang.jeo.representation.CanonicalXmir;
 
 /**
@@ -66,8 +68,13 @@ final class Unroller {
      * @return The number of unrolled XMIR files.
      */
     long unroll() {
+        System.setProperty(
+            "javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
         try (Stream<Path> xmirs = Files.walk(this.source)) {
-            return xmirs.filter(Unroller::isXmir).peek(this::unroll).count();
+            return xmirs.filter(Unroller::isXmir)
+                .parallel()
+                .peek(this::unroll)
+                .count();
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format(
@@ -86,6 +93,21 @@ final class Unroller {
      */
     private void unroll(final Path path) {
         try {
+//            try {
+//                System.setProperty(
+//                    "javax.xml.transform.TransformerFactory",
+//                    "net.sf.saxon.TransformerFactoryImpl"
+//                );
+//                TransformerFactory factory = TransformerFactory.newInstance();
+//                System.out.println("FOUND FACTORY: " + factory.getClass().getName());
+//            } catch (TransformerFactoryConfigurationError e) {
+//                e.printStackTrace();
+//                Throwable cause = e.getCause();
+//                if (cause != null) {
+//                    cause.printStackTrace();
+//                }
+//            }
+            Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
             final Path output = this.target.resolve(this.source.relativize(path));
             Logger.info(this, "Unrolling XMIR file '%s' to '%s'", path, output);
             Files.createDirectories(output.getParent());
