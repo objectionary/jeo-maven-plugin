@@ -68,8 +68,6 @@ final class Unroller {
      * @return The number of unrolled XMIR files.
      */
     long unroll() {
-        System.setProperty(
-            "javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
         try (Stream<Path> xmirs = Files.walk(this.source)) {
             return xmirs.filter(Unroller::isXmir)
                 .parallel()
@@ -93,21 +91,7 @@ final class Unroller {
      */
     private void unroll(final Path path) {
         try {
-//            try {
-//                System.setProperty(
-//                    "javax.xml.transform.TransformerFactory",
-//                    "net.sf.saxon.TransformerFactoryImpl"
-//                );
-//                TransformerFactory factory = TransformerFactory.newInstance();
-//                System.out.println("FOUND FACTORY: " + factory.getClass().getName());
-//            } catch (TransformerFactoryConfigurationError e) {
-//                e.printStackTrace();
-//                Throwable cause = e.getCause();
-//                if (cause != null) {
-//                    cause.printStackTrace();
-//                }
-//            }
-            Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
+            this.prepareThread();
             final Path output = this.target.resolve(this.source.relativize(path));
             Logger.info(this, "Unrolling XMIR file '%s' to '%s'", path, output);
             Files.createDirectories(output.getParent());
@@ -135,6 +119,22 @@ final class Unroller {
                 exception
             );
         }
+    }
+
+    /**
+     * Prepares the thread for unrolling.
+     * ATTENTION! DO NOT REMOVE THIS METHOD!
+     * This method was added to solve the problem with class loading during the unrolling process.
+     * Since we unroll files in parallel, we need to set the context class loader for each thread.
+     * Otherwise, the class loader won't be able to find `net.sf.saxon.TransformerFactoryImpl`.
+     * This method is a workaround for the problem with class loading during the unrolling process.
+     */
+    private void prepareThread() {
+        System.setProperty(
+            "javax.xml.transform.TransformerFactory",
+            "net.sf.saxon.TransformerFactoryImpl"
+        );
+        Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
     }
 
     /**
