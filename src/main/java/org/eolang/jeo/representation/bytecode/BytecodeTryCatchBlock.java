@@ -181,4 +181,12 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
         return this.handler;
     }
 
+    /**
+     * Exception type.
+     * @return Type.
+     */
+    String descriptor() {
+        return this.type;
+    }
+
 }

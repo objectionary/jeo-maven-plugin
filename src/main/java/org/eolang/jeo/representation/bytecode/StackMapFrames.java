@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -78,14 +79,12 @@ final class StackMapFrames {
      * @return The list of frames.
      */
     List<BytecodeFrame> frames() {
-        // Initialization
         final Deque<Entry> worklist = new ArrayDeque<>(0);
         final Map<Integer, Entry> res = new LinkedHashMap<>(0);
         final int size = this.entries.size();
-        //Work
         final Entry initial = this.initial();
-//        res.put(0, initial);
         worklist.push(initial);
+        this.blocks.stream().map(this::block).forEach(worklist::push);
         while (!worklist.isEmpty()) {
             Entry current = worklist.pop();
             for (int index = current.indx(); index < size; ++index) {
@@ -124,6 +123,7 @@ final class StackMapFrames {
             res.values()
                 .stream()
                 .filter(Entry::joined)
+                .sorted(Comparator.comparingInt(Entry::indx))
                 .collect(Collectors.toList())
         );
     }
@@ -141,12 +141,20 @@ final class StackMapFrames {
         }
     }
 
+    private Entry block(final BytecodeTryCatchBlock block) {
+        final int index = this.index(block.handlerLabel());
+        final Entry initial = this.initial();
+        final LinkedHashMap<Integer, Object> stack = new LinkedHashMap<>(0);
+        stack.put(0, block.descriptor());
+        return initial.withStack(stack).join(index);
+    }
+
     private Entry initial() {
         final String descriptor = this.props.descriptor();
         final boolean stat = this.props.isStatic();
         final Type[] types = Type.getArgumentTypes(descriptor);
         int indx = stat ? 0 : 1;
-        LinkedHashMap<Integer, Object> locals = new LinkedHashMap<>(0);
+        final LinkedHashMap<Integer, Object> locals = new LinkedHashMap<>(0);
         if (!stat) {
             locals.put(0, Opcodes.TOP);
         }
@@ -296,6 +304,10 @@ final class StackMapFrames {
 
         Entry copy(final int indx) {
             return new Entry(indx, this.locals, this.stack, false);
+        }
+
+        Entry withStack(final LinkedHashMap<Integer, Object> stack) {
+            return new Entry(this.indx, this.locals, stack, this.join);
         }
 
         Entry append(final Entry next) {

@@ -174,7 +174,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 break;
             case Opcodes.ALOAD:
             case Opcodes.ASTORE:
-                result = Opcodes.NULL;
+                result = Opcodes.TOP;
                 break;
             default:
                 throw new IllegalStateException(
