@@ -139,10 +139,10 @@ final class BytecodeClassTest {
             ),
             xmir.toString(),
             XhtmlMatchers.hasXPaths(
-                "//o[@base='org.eolang.jeo.opcode' and @name='getstatic']",
-                "//o[@base='org.eolang.jeo.opcode' and @name='ldc']",
-                "//o[@base='org.eolang.jeo.opcode' and @name='invokevirtual']",
-                "//o[@base='org.eolang.jeo.opcode' and @name='return']"
+                "//o[@base='jeo.opcode' and @name='getstatic']",
+                "//o[@base='jeo.opcode' and @name='ldc']",
+                "//o[@base='jeo.opcode' and @name='invokevirtual']",
+                "//o[@base='jeo.opcode' and @name='return']"
             )
         );
     }

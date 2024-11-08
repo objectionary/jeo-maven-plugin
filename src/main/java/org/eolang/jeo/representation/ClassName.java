@@ -84,7 +84,7 @@ public final class ClassName {
 
     /**
      * Package.
-     * @return Package name in the following format: "org.eolang.jeo.representation.directives".
+     * @return Package name in the following format: "jeo.representation.directives".
      */
     public String pckg() {
         final String result;

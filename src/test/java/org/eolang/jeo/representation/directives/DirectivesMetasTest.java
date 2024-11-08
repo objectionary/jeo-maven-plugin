@@ -63,8 +63,8 @@ final class DirectivesMetasTest {
             ).xmlQuietly(),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath("/metas/meta/head[text()='alias']"),
-                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='org.eolang.jeo.opcode']"),
-                XhtmlMatchers.hasXPath("/metas/meta/part[text()='org.eolang.jeo.opcode']")
+                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='jeo.opcode']"),
+                XhtmlMatchers.hasXPath("/metas/meta/part[text()='jeo.opcode']")
             )
         );
     }
@@ -78,8 +78,8 @@ final class DirectivesMetasTest {
                 new Transformers.Node()
             ).xmlQuietly(),
             Matchers.allOf(
-                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='org.eolang.jeo.label']"),
-                XhtmlMatchers.hasXPath("/metas/meta/part[text()='org.eolang.jeo.label']")
+                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='jeo.label']"),
+                XhtmlMatchers.hasXPath("/metas/meta/part[text()='jeo.label']")
             )
         );
     }

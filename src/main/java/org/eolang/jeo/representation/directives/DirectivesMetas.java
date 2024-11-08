@@ -110,8 +110,8 @@ public final class DirectivesMetas implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final String opcode = "org.eolang.jeo.opcode";
-        final String label = "org.eolang.jeo.label";
+        final String opcode = "jeo.opcode";
+        final String label = "jeo.label";
         final String alias = "alias";
         final Directives opdirs = new Directives();
         if (this.opcodes.get()) {

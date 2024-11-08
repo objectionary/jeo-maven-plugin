@@ -115,7 +115,7 @@ final class XmlProgramTest {
      * @return XML representation of the class.
      */
     private static String classWithGenericMethod() {
-        final ClassName name = new ClassName("org.eolang.jeo.takes", "StrangeClass");
+        final ClassName name = new ClassName("jeo.takes", "StrangeClass");
         return new Xembler(
             new DirectivesProgram(
                 new DirectivesClass(

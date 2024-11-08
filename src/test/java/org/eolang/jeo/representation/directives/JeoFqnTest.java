@@ -36,9 +36,9 @@ final class JeoFqnTest {
 
     @ParameterizedTest
     @CsvSource({
-        "opcode, org.eolang.jeo.opcode",
-        "representation, org.eolang.jeo.representation",
-        "int, org.eolang.jeo.int"
+        "opcode, jeo.opcode",
+        "representation, jeo.representation",
+        "int, jeo.int"
     })
     void convertsToDomainFqn(final String base, final String expected) {
         MatcherAssert.assertThat(
