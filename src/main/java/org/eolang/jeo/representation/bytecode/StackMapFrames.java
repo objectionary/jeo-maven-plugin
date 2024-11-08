@@ -106,6 +106,11 @@ final class StackMapFrames {
                         worklist.push(updated.join(this.index(instr.jumps().get(0))));
                         res.put(index, updated);
                         break;
+                    } else if (instr.isSwitch()) {
+                        instr.jumps()
+                            .forEach(jump -> worklist.push(updated.join(this.index(jump))));
+                        res.put(index, updated);
+                        break;
                     } else if (instr.isReturn() || instr.isThrow()) {
                         res.put(index, updated);
                         break;
