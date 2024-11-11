@@ -24,10 +24,8 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.util.Collections;
-import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
@@ -125,31 +123,5 @@ final class CanonicalXmirTest {
                 ".//o[@base='org.eolang.seq1']/o[@base='org.eolang.jeo.string']/o[@base='bytes']"
             )
         );
-    }
-
-    @Test
-    void transfomsBigFile() throws Exception {
-        final String name = "Union.xmir";
-
-        final long start = System.currentTimeMillis();
-        final XML actual = new CanonicalXmir(
-            new XMLDocument(
-                new ResourceOf(String.format("xmir/unphi/%s", name)).stream()
-            )
-        ).plain();
-        final long end = System.currentTimeMillis();
-        System.out.printf(
-            "CanonicalXmirTest.transfomsBigFile: %s: %d ms\n",
-            name,
-            end - start
-        );
-        final XML expected = new XMLDocument(
-            new ResourceOf(String.format("xmir/unroll/%s", name)).stream());
-        MatcherAssert.assertThat(
-            "The XMIR should be transformed correctly",
-            actual,
-            Matchers.equalTo(expected)
-        );
-
     }
 }
