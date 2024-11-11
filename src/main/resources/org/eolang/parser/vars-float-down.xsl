@@ -59,14 +59,8 @@ SOFTWARE.
     <xsl:variable name="reference" select="@ref"/>
     <xsl:variable name="found" select="key('o-by-line', $reference)"/>
     <xsl:element name="o">
-      <xsl:for-each select="$found/@*[name()!='cut']">
-        <xsl:attribute name="{name()}">
-          <xsl:value-of select="."/>
-        </xsl:attribute>
-      </xsl:for-each>
-      <xsl:for-each select="$found/o">
-        <xsl:apply-templates select="."/>
-      </xsl:for-each>
+      <xsl:copy-of select="$found/@*[name() != 'cut']"/>
+      <xsl:apply-templates select="$found/o"/>
     </xsl:element>
   </xsl:template>
 </xsl:stylesheet>
