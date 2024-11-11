@@ -55,7 +55,13 @@ SOFTWARE.
       <xsl:apply-templates select="node()|@*"/>
     </xsl:copy>
   </xsl:template>
-  <xsl:template match="o[@ref and @ref!='' and not(ancestor::o[@ref])]">
+  <xsl:template match="o[@ref]">
+    <xsl:apply-templates select="." mode="non-empty-ref"/>
+  </xsl:template>
+  <xsl:template match="o[@ref!='']" mode="non-empty-ref">
+    <xsl:apply-templates select="." mode="without-top-ref"/>
+  </xsl:template>
+  <xsl:template match="o[not(ancestor::o[@ref])]" mode="without-top-ref">
     <xsl:variable name="reference" select="@ref"/>
     <xsl:variable name="found" select="key('o-by-line', $reference)"/>
     <xsl:element name="o">

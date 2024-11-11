@@ -165,7 +165,7 @@ public final class CanonicalXmir {
                     ).back()
                 ),
                 CanonicalXmir.class,
-                20
+                5
             )
         ).pass(parsed);
     }
