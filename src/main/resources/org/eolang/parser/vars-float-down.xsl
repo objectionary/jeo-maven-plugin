@@ -47,9 +47,7 @@ SOFTWARE.
   To achieve the right result, the transformation must be applied several times.
   -->
   <xsl:output encoding="UTF-8" method="xml"/>
-
   <xsl:key name="o-by-line" match="o" use="@line"/>
-
   <xsl:template match="node()|@*">
     <xsl:copy>
       <xsl:apply-templates select="node()|@*"/>
