@@ -30,6 +30,7 @@ import com.yegor256.xsline.StClasspath;
 import com.yegor256.xsline.StEndless;
 import com.yegor256.xsline.TrClasspath;
 import com.yegor256.xsline.TrDefault;
+import com.yegor256.xsline.TrFast;
 import com.yegor256.xsline.TrJoined;
 import com.yegor256.xsline.Xsline;
 import java.io.FileNotFoundException;
@@ -136,31 +137,33 @@ public final class CanonicalXmir {
      */
     private static XML unroll(final XML parsed) {
         return new Xsline(
-            new TrJoined<Shift>(
-                new TrClasspath<Shift>(
-                    "/org/eolang/parser/wrap-method-calls.xsl"
-                ).back(),
-                new TrDefault<Shift>(
-                    new StEndless(
-                        new StClasspath(
-                            "/org/eolang/parser/roll-bases.xsl"
+            new TrFast(
+                new TrJoined<Shift>(
+                    new TrClasspath<Shift>(
+                        "/org/eolang/parser/wrap-method-calls.xsl"
+                    ).back(),
+                    new TrDefault<Shift>(
+                        new StEndless(
+                            new StClasspath(
+                                "/org/eolang/parser/roll-bases.xsl"
+                            )
                         )
-                    )
-                ),
-                new TrClasspath<Shift>(
-                    "/org/eolang/parser/add-refs.xsl",
-                    "/org/eolang/parser/add-cuts.xsl"
-                ).back(),
-                new TrDefault<Shift>(
-                    new StEndless(
-                        new StClasspath(
-                            "/org/eolang/parser/vars-float-down.xsl"
+                    ),
+                    new TrClasspath<Shift>(
+                        "/org/eolang/parser/add-refs.xsl",
+                        "/org/eolang/parser/add-cuts.xsl"
+                    ).back(),
+                    new TrDefault<Shift>(
+                        new StEndless(
+                            new StClasspath(
+                                "/org/eolang/parser/vars-float-down.xsl"
+                            )
                         )
-                    )
-                ),
-                new TrClasspath<Shift>(
-                    "/org/eolang/parser/remove-cuts.xsl"
-                ).back()
+                    ),
+                    new TrClasspath<Shift>(
+                        "/org/eolang/parser/remove-cuts.xsl"
+                    ).back()
+                )
             )
         ).pass(parsed);
     }
