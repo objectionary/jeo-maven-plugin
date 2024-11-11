@@ -44,17 +44,20 @@ SOFTWARE.
   ...
   <o line="22" base="xyz" name="hello"/>
 
-  To achieve the right result, the transformation must be applied a several times.
+  To achieve the right result, the transformation must be applied several times.
   -->
   <xsl:output encoding="UTF-8" method="xml"/>
+
+  <xsl:key name="o-by-line" match="o" use="@line"/>
+
   <xsl:template match="node()|@*">
     <xsl:copy>
       <xsl:apply-templates select="node()|@*"/>
     </xsl:copy>
   </xsl:template>
-  <xsl:template match="//o[@ref and @ref!='' and not(ancestor::o[@ref])]">
+  <xsl:template match="o[@ref and @ref!='' and not(ancestor::o[@ref])]">
     <xsl:variable name="reference" select="@ref"/>
-    <xsl:variable name="found" select="//o[@line=$reference]"/>
+    <xsl:variable name="found" select="key('o-by-line', $reference)"/>
     <xsl:element name="o">
       <xsl:for-each select="$found/@*[name()!='cut']">
         <xsl:attribute name="{name()}">

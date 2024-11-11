@@ -163,7 +163,9 @@ public final class CanonicalXmir {
                     new TrClasspath<Shift>(
                         "/org/eolang/parser/remove-cuts.xsl"
                     ).back()
-                )
+                ),
+                CanonicalXmir.class,
+                20
             )
         ).pass(parsed);
     }
