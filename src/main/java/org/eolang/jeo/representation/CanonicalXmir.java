@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation;
 
+import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import com.yegor256.xsline.Shift;
@@ -127,7 +128,16 @@ public final class CanonicalXmir {
      * @throws IOException If fails.
      */
     private XML parse(final String eoprog) throws IOException {
-        return new EoSyntax(this.name, new InputOf(eoprog)).parsed();
+        final long start = System.currentTimeMillis();
+        final XML parsed = new EoSyntax(this.name, new InputOf(eoprog)).parsed();
+        final long end = System.currentTimeMillis();
+        Logger.info(
+            this,
+            "We need to parse XMIR by using EoSyntax#parsed to make unrolling. The '%s' was parsed in %[ms]s",
+            this.name,
+            end - start
+        );
+        return parsed;
     }
 
     /**

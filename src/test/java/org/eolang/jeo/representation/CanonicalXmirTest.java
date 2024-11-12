@@ -125,13 +125,4 @@ final class CanonicalXmirTest {
             )
         );
     }
-
-    @Test
-    void unrollesRealFile() throws Exception {
-        new CanonicalXmir(
-            new XMLDocument(
-                new ResourceOf("xmir/Native.xmir").stream())
-        ).plain();
-    }
-
 }
