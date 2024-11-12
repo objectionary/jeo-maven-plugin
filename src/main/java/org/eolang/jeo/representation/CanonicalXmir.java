@@ -127,6 +127,7 @@ public final class CanonicalXmir {
      * @return Parsed XMIR.
      * @throws IOException If fails.
      */
+    @SuppressWarnings("PMD.GuardLogStatement")
     private XML parse(final String eoprog) throws IOException {
         final long start = System.currentTimeMillis();
         final XML parsed = new EoSyntax(this.name, new InputOf(eoprog)).parsed();
