@@ -26,6 +26,7 @@ package org.eolang.jeo.representation;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import java.util.Collections;
+import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
@@ -124,4 +125,13 @@ final class CanonicalXmirTest {
             )
         );
     }
+
+    @Test
+    void unrollesRealFile() throws Exception {
+        new CanonicalXmir(
+            new XMLDocument(
+                new ResourceOf("xmir/Native.xmir").stream())
+        ).plain();
+    }
+
 }
