@@ -40,7 +40,7 @@ import org.objectweb.asm.util.TraceClassVisitor;
 public final class BytecodeListing {
 
     /**
-     * Raw bytecode
+     * Raw bytecode.
      */
     private final byte[] bytecode;
 
