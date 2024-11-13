@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo.representation;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -55,6 +57,11 @@ public final class DecodedString {
      * @return Encoded string.
      */
     public String encode() {
-        return DecodedString.ENCODER.encodeToString(this.original.getBytes(StandardCharsets.UTF_8));
+        try {
+            return URLEncoder.encode(this.original, StandardCharsets.UTF_8.name());
+        } catch (final UnsupportedEncodingException exception) {
+            throw new RuntimeException(exception);
+        }
+//        return DecodedString.ENCODER.encodeToString(this.original.getBytes(StandardCharsets.UTF_8));
     }
 }

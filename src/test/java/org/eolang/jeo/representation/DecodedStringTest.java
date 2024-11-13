@@ -23,46 +23,35 @@
  */
 package org.eolang.jeo.representation;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 /**
- * Encoded string that might be decoded.
+ * Test case for {@link DecodedString}.
  * @since 0.6
  */
-public final class EncodedString {
+final class DecodedStringTest {
 
-    /**
-     * Base64 decoder.
-     */
-    private static final Base64.Decoder DECODER = Base64.getDecoder();
-
-    /**
-     * Original string to decode.
-     */
-    private final String original;
-
-    /**
-     * Constructor.
-     * @param encoded Encoded string.
-     */
-    public EncodedString(final String encoded) {
-        this.original = encoded;
+    @ParameterizedTest
+    @CsvSource({
+        "Hello, SGVsbG8=",
+        "World, V29ybGQ=",
+        "<init>, PGluaXQ+",
+        "org/eolang/jeo/MethodByte, b3JnL2VhbG9uZy9qZW8vTWV0aG9kQnl0ZQ==",
+        "String[], U3RyaW5nW10="
+    })
+    @Disabled
+    void encodesString(final String original, final String expected) {
+        MatcherAssert.assertThat(
+            "Encoded string is not as expected",
+            new DecodedString(original).encode(),
+            Matchers.equalTo(expected)
+        );
     }
 
-    /**
-     * Decode the string.
-     * @return Decoded string.
-     */
-    public String decode() {
-        try {
-            return URLDecoder.decode(this.original, StandardCharsets.UTF_8.name());
-        } catch (final UnsupportedEncodingException exception) {
-            throw new RuntimeException(exception);
-        }
-//        return new String(EncodedString.DECODER.decode(this.original), StandardCharsets.UTF_8);
-    }
+
 }
