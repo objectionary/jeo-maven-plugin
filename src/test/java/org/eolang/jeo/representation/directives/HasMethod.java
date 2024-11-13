@@ -304,7 +304,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 Stream.of(
                     instruction.concat("/@base"),
                     String.format(
-                        "%s/o[contains(@base,'int')]/o[@data='bytes' and text()='%s']/@base",
+                        "%s/o[contains(@base,'int')]/o[@base='org.eolang.bytes' and text()='%s']/@base",
                         instruction,
                         new DirectivesValue(this.opcode).hex()
                     )
@@ -326,13 +326,13 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                         final DirectivesValue hex = new DirectivesValue(arg);
                         if (arg instanceof Label) {
                             result = String.format(
-                                "%s/o[contains(@base,'%s')]/o[@data='bytes']/@data",
+                                "%s/o[contains(@base,'%s')]/o[@base='org.eolang.bytes']/@base",
                                 instruction,
                                 hex.type()
                             );
                         } else {
                             result = String.format(
-                                "%s/o[contains(@base,'%s')]/o[@data='bytes' and text()='%s']/@data",
+                                "%s/o[contains(@base,'%s')]/o[@base='org.eolang.bytes' and text()='%s']/@base",
                                 instruction,
                                 hex.type(),
                                 hex.hex()
@@ -384,7 +384,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                     "%s/o[4][contains(@base,'string')]/@base", HasTryCatch.path(root)
                 ),
                 String.format(
-                    "%s/o[4][contains(@base,'string')]/o[text()='%s']/@data",
+                    "%s/o[4][contains(@base,'string')]/o[text()='%s']/@base",
                     HasTryCatch.path(root),
                     new DirectivesValue(this.type).hex()
                 )
@@ -421,7 +421,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         static Stream<String> checks(final String root) {
             return Stream.of(
                 String.format(
-                    "%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'label')]/o[@data='bytes']/@data",
+                    "%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'label')]/o[@base='org.eolang.bytes']/@base",
                     root
                 )
             );
