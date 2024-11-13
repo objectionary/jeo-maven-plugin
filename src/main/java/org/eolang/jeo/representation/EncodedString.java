@@ -23,40 +23,38 @@
  */
 package org.eolang.jeo.representation;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.util.TraceClassVisitor;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
- * This is pretty-printing of bytecode.
+ * Encoded string that might be decoded.
  * @since 0.6
- * @todo #845:90min Decompile Bytecode Listing.
- *  Currently we print bytecode listing to XMIR without decompiling it.
- *  It's just raw, but human-readable bytecode.
- *  We can make one step forward and try to decompile this code to Java.
- *  This would be a great improvement for readability of this listing.
  */
-public final class BytecodeListing {
+public final class EncodedString {
 
     /**
-     * Raw bytecode.
+     * Base64 decoder.
      */
-    private final byte[] bytecode;
+    private static final Base64.Decoder DECODER = Base64.getDecoder();
+
+    /**
+     * Original string to decode.
+     */
+    private final String original;
 
     /**
      * Constructor.
-     * @param bytecode Bytecode.
+     * @param encoded Encoded string.
      */
-    BytecodeListing(final byte... bytecode) {
-        this.bytecode = bytecode.clone();
+    public EncodedString(final String encoded) {
+        this.original = encoded;
     }
 
-    @Override
-    public String toString() {
-        final ClassReader reader = new ClassReader(this.bytecode);
-        final StringWriter writer = new StringWriter();
-        reader.accept(new TraceClassVisitor(new PrintWriter(writer)), 0);
-        return writer.toString();
+    /**
+     * Decode the string.
+     * @return Decoded string.
+     */
+    public String decode() {
+        return new String(EncodedString.DECODER.decode(this.original), StandardCharsets.UTF_8);
     }
 }
