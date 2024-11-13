@@ -23,9 +23,6 @@
  */
 package org.eolang.jeo.representation;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
 /**
  * Method name.
  * Represents java method name.
@@ -34,16 +31,6 @@ import java.util.Base64;
  * @since 0.5
  */
 public final class Signature {
-
-    /**
-     * Base64 decoder.
-     */
-    private static final Base64.Decoder DECODER = Base64.getDecoder();
-
-    /**
-     * Base64 encoder.
-     */
-    private static final Base64.Encoder ENCODER = Base64.getEncoder();
 
     /**
      * Human-readable method name in source code.
@@ -81,7 +68,7 @@ public final class Signature {
         return String.format(
             "%s-%s",
             this.original,
-            Signature.ENCODER.encodeToString(this.descr.getBytes(StandardCharsets.UTF_8))
+            new DecodedString(this.descr).encode()
         );
     }
 
@@ -123,9 +110,6 @@ public final class Signature {
      * @return Method descriptor.
      */
     private static String suffix(final String encoded) {
-        return new String(
-            Signature.DECODER.decode(encoded.substring(encoded.indexOf('-') + 1)),
-            StandardCharsets.UTF_8
-        );
+        return new EncodedString(encoded.substring(encoded.indexOf('-') + 1)).decode();
     }
 }

@@ -23,8 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import org.eolang.jeo.representation.EncodedString;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
 import org.objectweb.asm.Type;
@@ -34,11 +33,6 @@ import org.objectweb.asm.Type;
  * @since 0.4
  */
 public final class XmlParam {
-
-    /**
-     * Base64 decoder.
-     */
-    private static final Base64.Decoder DECODER = Base64.getDecoder();
 
     /**
      * Root node from which we will get all required data.
@@ -72,9 +66,7 @@ public final class XmlParam {
      * @return Type.
      */
     private Type type() {
-        return Type.getType(
-            new String(XmlParam.DECODER.decode(this.suffix(1)), StandardCharsets.UTF_8)
-        );
+        return Type.getType(new EncodedString(this.suffix(1)).decode());
     }
 
     /**

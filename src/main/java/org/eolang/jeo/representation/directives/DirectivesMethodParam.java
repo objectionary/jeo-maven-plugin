@@ -23,9 +23,8 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Iterator;
+import org.eolang.jeo.representation.DecodedString;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
 
@@ -34,11 +33,6 @@ import org.xembly.Directive;
  * @since 0.6
  */
 public final class DirectivesMethodParam implements Iterable<Directive> {
-
-    /**
-     * Base64 decoder.
-     */
-    private static final Base64.Encoder ENCODER = Base64.getEncoder();
 
     /**
      * Index of the parameter.
@@ -94,9 +88,7 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
             "param",
             String.format(
                 "param-%s-%s-%d-%d",
-                DirectivesMethodParam.ENCODER.encodeToString(
-                    this.type.toString().getBytes(StandardCharsets.UTF_8)
-                ),
+                new DecodedString(this.type.toString()).encode(),
                 this.name,
                 this.access,
                 this.index
