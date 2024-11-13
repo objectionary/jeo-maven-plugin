@@ -121,7 +121,7 @@ public final class BytecodeRepresentation implements Representation {
     public XML toEO(final boolean count) {
         final DirectivesProgram directives = new AsmProgram(this.input.value())
             .bytecode()
-            .directives(new Base64Bytecode(this.input.value()).asString(), count);
+            .directives(new BytecodeListing(this.input.value()).toString(), count);
         try {
             return new VerifiedEo(directives).asXml();
         } catch (final IllegalStateException exception) {
