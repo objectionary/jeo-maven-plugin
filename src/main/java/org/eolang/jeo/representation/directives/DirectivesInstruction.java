@@ -80,7 +80,10 @@ public final class DirectivesInstruction implements Iterable<Directive> {
             "opcode",
             this.name(),
             Stream.concat(
-                Stream.of(new DirectivesOperand(this.opcode)),
+                Stream.of(
+                    new DirectivesComment(this.comment()),
+                    new DirectivesOperand(this.opcode)
+                ),
                 Arrays.stream(this.arguments).map(DirectivesOperand::new)
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
@@ -98,5 +101,16 @@ public final class DirectivesInstruction implements Iterable<Directive> {
             result = new OpcodeName(this.opcode).simplified();
         }
         return result;
+    }
+
+
+    /**
+     * Instruction comment.
+     * Later this message will be converted to the XML comment, like:
+     * <!-- INVOKESPECIAL 183, "java/lang/Object", "<init>", "()V", FALSE -->
+     * @return String comment.
+     */
+    private String comment() {
+        return "INVOKESPECIAL, 183, java/lang/Object, <init>, ()V, FALSE";
     }
 }
