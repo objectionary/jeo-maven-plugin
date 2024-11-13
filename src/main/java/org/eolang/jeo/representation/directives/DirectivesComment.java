@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -47,6 +46,9 @@ public final class DirectivesComment implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
+        if (this.comment.isEmpty()) {
+            return new Directives().iterator();
+        }
         return new Directives().comment(this.escaped()).iterator();
     }
 
@@ -61,6 +63,7 @@ public final class DirectivesComment implements Iterable<Directive> {
             .replace(">", "&gt;")
             .replace("\"", "&quot;")
             .replace("'", "&apos;")
+            .replace("-", "&#45;")
             .replace("--", "&#45;&#45;");
 
     }

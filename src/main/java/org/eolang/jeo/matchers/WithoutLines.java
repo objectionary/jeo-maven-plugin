@@ -31,7 +31,7 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * The same XML, but without lines.
+ * The same XML, but without lines and comments.
  *
  * @since 0.6
  */
@@ -55,7 +55,9 @@ public final class WithoutLines implements Scalar<XML> {
         try {
             return new XMLDocument(
                 new Xembler(
-                    new Directives().xpath(".//o[@line]/@line").remove()
+                    new Directives()
+                        .xpath(".//o[@line]/@line").remove()
+                        .xpath("//comment()").remove()
                 ).apply(this.original.node())
             );
         } catch (final ImpossibleModificationException exception) {

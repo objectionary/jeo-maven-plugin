@@ -54,7 +54,7 @@ final class DirectivesCommentTest {
             new Xembler(
                 new Directives().append(new DirectivesComment("Hello -- <world> ---!"))
             ).xml(),
-            Matchers.containsString("<!--Hello &#45;&#45; &lt;world&gt; &#45;&#45;-!-->")
+            Matchers.containsString("<!--Hello &#45;&#45; &lt;world&gt; &#45;&#45;&#45;!-->")
         );
     }
 }
