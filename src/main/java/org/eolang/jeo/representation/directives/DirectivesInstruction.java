@@ -113,8 +113,9 @@ public final class DirectivesInstruction implements Iterable<Directive> {
         return String.format(
             "#%d:%s(%s)",
             this.opcode,
-            this.name(),
-            Arrays.stream(this.arguments).map(Object::toString)
+            new OpcodeName(this.opcode).simplified(),
+            Arrays.stream(this.arguments)
+                .map(Object::toString)
                 .collect(Collectors.joining(", "))
         );
     }
