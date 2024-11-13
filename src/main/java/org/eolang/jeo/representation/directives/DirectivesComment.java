@@ -41,6 +41,39 @@ public final class DirectivesComment implements Iterable<Directive> {
     private static final Pattern UNSAFE_CHARS = Pattern.compile("[&<>\"'-]");
 
     /**
+     * Chars that are discouraged in XML.
+     * By this pattern, we remove all discouraged characters from the comment.
+     */
+    private static final Pattern DISCOURAGED = Pattern.compile(
+        String.join(
+            "|",
+            "[\\x00-\\x08]",
+            "[\\x{1}-\\x{8}]",
+            "[\\x{B}-\\x{C}]",
+            "[\\x{E}-\\x{1F}]",
+            "[\\x{7F}-\\x{84}]",
+            "[\\x{86}-\\x{9F}]",
+            "[\\x{FDD0}-\\x{FDDF}]",
+            "[\\x{1FFFE}-\\x{1FFFF}]",
+            "[\\x{2FFFE}-\\x{2FFFF}]",
+            "[\\x{3FFFE}-\\x{3FFFF}]",
+            "[\\x{4FFFE}-\\x{4FFFF}]",
+            "[\\x{5FFFE}-\\x{5FFFF}]",
+            "[\\x{6FFFE}-\\x{6FFFF}]",
+            "[\\x{7FFFE}-\\x{7FFFF}]",
+            "[\\x{8FFFE}-\\x{8FFFF}]",
+            "[\\x{9FFFE}-\\x{9FFFF}]",
+            "[\\x{AFFFE}-\\x{AFFFF}]",
+            "[\\x{BFFFE}-\\x{BFFFF}]",
+            "[\\x{CFFFE}-\\x{CFFFF}]",
+            "[\\x{DFFFE}-\\x{DFFFF}]",
+            "[\\x{EFFFE}-\\x{EFFFF}]",
+            "[\\x{FFFFE}-\\x{FFFFF}]",
+            "[\\x{10FFFE}-\\x{10FFFF}]"
+        )
+    );
+
+    /**
      * Comment.
      */
     private final String comment;
@@ -100,11 +133,6 @@ public final class DirectivesComment implements Iterable<Directive> {
             matcher.appendReplacement(result, replacement);
         }
         matcher.appendTail(result);
-        Pattern discouragedChars = Pattern.compile(
-            "[\\x00-\\x08]|[\\x{1}-\\x{8}]|[\\x{B}-\\x{C}]|[\\x{E}-\\x{1F}]|[\\x{7F}-\\x{84}]|[\\x{86}-\\x{9F}]|[\\x{FDD0}-\\x{FDDF}]" +
-                "|[\\x{1FFFE}-\\x{1FFFF}]|[\\x{2FFFE}-\\x{2FFFF}]|[\\x{3FFFE}-\\x{3FFFF}]|[\\x{4FFFE}-\\x{4FFFF}]|[\\x{5FFFE}-\\x{5FFFF}]|[\\x{6FFFE}-\\x{6FFFF}]|[\\x{7FFFE}-\\x{7FFFF}]|[\\x{8FFFE}-\\x{8FFFF}]|[\\x{9FFFE}-\\x{9FFFF}]|[\\x{AFFFE}-\\x{AFFFF}]|[\\x{BFFFE}-\\x{BFFFF}]|[\\x{CFFFE}-\\x{CFFFF}]|[\\x{DFFFE}-\\x{DFFFF}]|[\\x{EFFFE}-\\x{EFFFF}]|[\\x{FFFFE}-\\x{FFFFF}]|[\\x{10FFFE}-\\x{10FFFF}]"
-        );
-
-        return discouragedChars.matcher(result).replaceAll("");
+        return DirectivesComment.DISCOURAGED.matcher(result).replaceAll("");
     }
 }
