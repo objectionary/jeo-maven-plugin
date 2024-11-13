@@ -31,6 +31,11 @@ import org.objectweb.asm.util.TraceClassVisitor;
 /**
  * This is pretty-printing of bytecode.
  * @since 0.6
+ * @todo #845:90min Decompile Bytecode Listing.
+ *  Currently we print bytecode listing to XMIR without decompiling it.
+ *  It's just raw, but human-readable bytecode.
+ *  We can make one step forward and try to decompile this code to Java.
+ *  This would be a great improvement for readability of this listing.
  */
 public final class BytecodeListing {
 
