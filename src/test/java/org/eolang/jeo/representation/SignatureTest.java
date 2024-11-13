@@ -76,13 +76,13 @@ final class SignatureTest {
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> namesDescriptorsAndEncoded() {
         return Stream.of(
-            Arguments.of("foo", "()I", "foo-KClJ"),
-            Arguments.of("@init@", "()V", "@init@-KClW"),
-            Arguments.of("bar", "(Ljava/lang/String;)V", "bar-KExqYXZhL2xhbmcvU3RyaW5nOylW"),
+            Arguments.of("foo", "()I", "foo-%28%29I"),
+            Arguments.of("@init@", "()V", "@init@-%28%29V"),
+            Arguments.of("bar", "(Ljava/lang/String;)V", "bar-%28Ljava%2Flang%2FString%3B%29V"),
             Arguments.of(
                 "baz",
                 "(Ljava/lang/String;Ljava/lang/String;)V",
-                "baz-KExqYXZhL2xhbmcvU3RyaW5nO0xqYXZhL2xhbmcvU3RyaW5nOylW"
+                "baz-%28Ljava%2Flang%2FString%3BLjava%2Flang%2FString%3B%29V"
             )
         );
     }

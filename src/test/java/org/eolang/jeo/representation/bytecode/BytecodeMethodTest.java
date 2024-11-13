@@ -146,8 +146,8 @@ final class BytecodeMethodTest {
             xml,
             new HasMethod(method)
                 .inside(clazz)
-                .withParameter("param-SQ==-arg0-0-0")
-                .withParameter("param-SQ==-arg1-0-1")
+                .withParameter("param-I-arg0-0-0")
+                .withParameter("param-I-arg1-0-1")
         );
     }
 
