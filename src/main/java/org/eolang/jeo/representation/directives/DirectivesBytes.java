@@ -52,6 +52,7 @@ public final class DirectivesBytes implements Iterable<Directive> {
         return new Directives()
             .add("o")
             .attr("base", "org.eolang.bytes")
+            .attr("data", "bytes")
             .set(this.hex)
             .up().iterator();
     }
