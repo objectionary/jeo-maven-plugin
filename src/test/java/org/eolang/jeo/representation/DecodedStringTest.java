@@ -25,8 +25,6 @@ package org.eolang.jeo.representation;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -38,13 +36,12 @@ final class DecodedStringTest {
 
     @ParameterizedTest
     @CsvSource({
-        "Hello, SGVsbG8=",
-        "World, V29ybGQ=",
-        "<init>, PGluaXQ+",
-        "org/eolang/jeo/MethodByte, b3JnL2VhbG9uZy9qZW8vTWV0aG9kQnl0ZQ==",
-        "String[], U3RyaW5nW10="
+        "Hello, Hello",
+        "World, World",
+        "<init>, %3Cinit%3E",
+        "org/eolang/jeo/MethodByte, org%2Feolang%2Fjeo%2FMethodByte",
+        "String[], String%5B%5D"
     })
-    @Disabled
     void encodesString(final String original, final String expected) {
         MatcherAssert.assertThat(
             "Encoded string is not as expected",
@@ -52,6 +49,4 @@ final class DecodedStringTest {
             Matchers.equalTo(expected)
         );
     }
-
-
 }
