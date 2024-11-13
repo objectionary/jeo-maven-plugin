@@ -84,13 +84,13 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      @SuppressWarnings(<span class="jxr_string">"PMD.UnusedPrivateMethod"</span>)
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Stream&lt;Arguments&gt; namesDescriptorsAndEncoded() {
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>          <strong class="jxr_keyword">return</strong> Stream.of(
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>              Arguments.of(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"()I"</span>, <span class="jxr_string">"foo-KClJ"</span>),
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>              Arguments.of(<span class="jxr_string">"@init@"</span>, <span class="jxr_string">"()V"</span>, <span class="jxr_string">"@init@-KClW"</span>),
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>              Arguments.of(<span class="jxr_string">"bar"</span>, <span class="jxr_string">"(Ljava/lang/String;)V"</span>, <span class="jxr_string">"bar-KExqYXZhL2xhbmcvU3RyaW5nOylW"</span>),
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>              Arguments.of(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"()I"</span>, <span class="jxr_string">"foo-%28%29I"</span>),
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>              Arguments.of(<span class="jxr_string">"@init@"</span>, <span class="jxr_string">"()V"</span>, <span class="jxr_string">"@init@-%28%29V"</span>),
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>              Arguments.of(<span class="jxr_string">"bar"</span>, <span class="jxr_string">"(Ljava/lang/String;)V"</span>, <span class="jxr_string">"bar-%28Ljava%2Flang%2FString%3B%29V"</span>),
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>              Arguments.of(
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>                  <span class="jxr_string">"baz"</span>,
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>                  <span class="jxr_string">"(Ljava/lang/String;Ljava/lang/String;)V"</span>,
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>                  <span class="jxr_string">"baz-KExqYXZhL2xhbmcvU3RyaW5nO0xqYXZhL2xhbmcvU3RyaW5nOylW"</span>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>                  <span class="jxr_string">"baz-%28Ljava%2Flang%2FString%3BLjava%2Flang%2FString%3B%29V"</span>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>              )
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>          );
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>      }

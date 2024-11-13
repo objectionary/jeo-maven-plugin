@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.xembly.Xembler;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * The same XML, but without lines.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * The same XML, but without lines and comments.</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * @since 0.6</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
@@ -63,16 +63,18 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>              <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> XMLDocument(
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>                  <strong class="jxr_keyword">new</strong> Xembler(
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>                      <strong class="jxr_keyword">new</strong> Directives().xpath(<span class="jxr_string">".//o[@line]/@line"</span>).remove()
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>                  ).apply(<strong class="jxr_keyword">this</strong>.original.node())
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>              );
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> ImpossibleModificationException exception) {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>                  <span class="jxr_string">"Failed to remove 'line' attributes"</span>, exception
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>              );
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>          }
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  }
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>                      <strong class="jxr_keyword">new</strong> Directives()
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>                          .xpath(<span class="jxr_string">".//o[@line]/@line"</span>).remove()
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>                          .xpath(<span class="jxr_string">"//comment()"</span>).remove()
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>                  ).apply(<strong class="jxr_keyword">this</strong>.original.node())
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>              );
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> ImpossibleModificationException exception) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>                  <span class="jxr_string">"Failed to remove 'line' attributes"</span>, exception
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>              );
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>          }
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      }
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
