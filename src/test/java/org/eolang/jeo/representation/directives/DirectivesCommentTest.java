@@ -23,39 +23,38 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.util.Iterator;
-import org.xembly.Directive;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 import org.xembly.Directives;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
- * Directives for bytes.
+ * Test case for {@link DirectivesComment}.
  * @since 0.6
  */
-public final class DirectivesBytes implements Iterable<Directive> {
+final class DirectivesCommentTest {
 
-    /**
-     * Hex representation of bytes.
-     * For example,
-     * "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F"
-     */
-    private final String hex;
-
-    /**
-     * Constructor.
-     * @param hex Hex representation of bytes.
-     */
-    public DirectivesBytes(final String hex) {
-        this.hex = hex;
+    @Test
+    void createsComment() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Can't create proper xml a comment",
+            new Xembler(
+                new Directives().append(new DirectivesComment("Hello, world!"))
+            ).xml(),
+            Matchers.containsString("<!--Hello, world!-->")
+        );
     }
 
-    @Override
-    public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o")
-            .attr("base", "org.eolang.bytes")
-            .attr("data", "bytes")
-            .set(this.hex)
-            .up()
-            .iterator();
+    @Test
+    void escapesUnsafeCharacters() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Can't escape unsafe characters",
+            new Xembler(
+                new Directives().append(new DirectivesComment("Hello -- <world> ---!"))
+            ).xml(),
+            Matchers.containsString("<!--Hello &#45;&#45; &lt;world&gt; &#45;&#45;-!-->")
+        );
     }
 }

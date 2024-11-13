@@ -55,15 +55,8 @@ public final class DirectivesValue implements Iterable<Directive> {
      */
     private final String name;
 
-    /**
-     * Type.
-     */
-    private final String vtype;
+    private final BytecodeValue value;
 
-    /**
-     * Bytes.
-     */
-    private final byte[] bytes;
 
     /**
      * Constructor.
@@ -90,19 +83,8 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param value Value.
      */
     public DirectivesValue(final String name, final BytecodeValue value) {
-        this(name, value.type(), value.bytes());
-    }
-
-    /**
-     * Constructor.
-     * @param name Name.
-     * @param type Type.
-     * @param bytes Bytes.
-     */
-    public DirectivesValue(final String name, final String type, final byte[] bytes) {
         this.name = name;
-        this.vtype = type;
-        this.bytes = Optional.ofNullable(bytes).map(byte[]::clone).orElse(null);
+        this.value = value;
     }
 
     @Override
@@ -110,6 +92,7 @@ public final class DirectivesValue implements Iterable<Directive> {
         return new DirectivesJeoObject(
             this.type(),
             this.name,
+            new DirectivesComment(this.comment()),
             new DirectivesBytes(this.hex())
         ).iterator();
     }
@@ -119,7 +102,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @return Value
      */
     String hex() {
-        return DirectivesValue.bytesToHex(this.bytes);
+        return DirectivesValue.bytesToHex(this.value.bytes());
     }
 
     /**
@@ -127,7 +110,15 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @return Type
      */
     String type() {
-        return this.vtype;
+        return this.value.type();
+    }
+
+    /**
+     * Bytes of the representative comment.
+     * @return Sting comment.
+     */
+    private String comment() {
+        return String.valueOf(this.value.object());
     }
 
     /**

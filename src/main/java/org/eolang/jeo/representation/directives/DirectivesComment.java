@@ -23,39 +23,45 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
 /**
- * Directives for bytes.
- * @since 0.6
+ * Directives for a comment.
  */
-public final class DirectivesBytes implements Iterable<Directive> {
-
+public final class DirectivesComment implements Iterable<Directive> {
     /**
-     * Hex representation of bytes.
-     * For example,
-     * "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F"
+     * Comment.
      */
-    private final String hex;
+    private final String comment;
 
     /**
      * Constructor.
-     * @param hex Hex representation of bytes.
+     * @param comment Comment.
      */
-    public DirectivesBytes(final String hex) {
-        this.hex = hex;
+    DirectivesComment(final String comment) {
+        this.comment = comment;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o")
-            .attr("base", "org.eolang.bytes")
-            .attr("data", "bytes")
-            .set(this.hex)
-            .up()
-            .iterator();
+        return new Directives().comment(this.escaped()).iterator();
+    }
+
+    /**
+     * Escapes unsafe characters.
+     * @return Escaped comment.
+     */
+    private String escaped() {
+        return this.comment
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace("\"", "&quot;")
+            .replace("'", "&apos;")
+            .replace("--", "&#45;&#45;");
+
     }
 }
