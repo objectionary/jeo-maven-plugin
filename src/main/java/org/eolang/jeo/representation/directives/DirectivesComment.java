@@ -24,13 +24,22 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
 /**
  * Directives for a comment.
+ * @since 0.6
  */
 public final class DirectivesComment implements Iterable<Directive> {
+
+    /**
+     * Unsafe characters.
+     */
+    private static final Pattern UNSAFE_CHARS = Pattern.compile("[&<>\"'-]");
+
     /**
      * Comment.
      */
@@ -46,10 +55,13 @@ public final class DirectivesComment implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
+        final Iterator<Directive> result;
         if (this.comment.isEmpty()) {
-            return new Directives().iterator();
+            result = new Directives().iterator();
+        } else {
+            result = new Directives().comment(this.escaped()).iterator();
         }
-        return new Directives().comment(this.escaped()).iterator();
+        return result;
     }
 
     /**
@@ -57,14 +69,37 @@ public final class DirectivesComment implements Iterable<Directive> {
      * @return Escaped comment.
      */
     private String escaped() {
-        return this.comment
-            .replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace("\"", "&quot;")
-            .replace("'", "&apos;")
-            .replace("-", "&#45;")
-            .replace("--", "&#45;&#45;");
-
+        final Matcher matcher = DirectivesComment.UNSAFE_CHARS.matcher(this.comment);
+        final StringBuffer result = new StringBuffer(0);
+        while (matcher.find()) {
+            final String replacement;
+            switch (matcher.group()) {
+                case "&":
+                    replacement = "&amp;";
+                    break;
+                case "<":
+                    replacement = "&lt;";
+                    break;
+                case ">":
+                    replacement = "&gt;";
+                    break;
+                case "\"":
+                    replacement = "&quot;";
+                    break;
+                case "'":
+                    replacement = "&apos;";
+                    break;
+                case "-":
+                    replacement = "&#45;";
+                    break;
+                default:
+                    throw new IllegalStateException(
+                        String.format("Unexpected value: %s", matcher.group())
+                    );
+            }
+            matcher.appendReplacement(result, replacement);
+        }
+        matcher.appendTail(result);
+        return result.toString();
     }
 }

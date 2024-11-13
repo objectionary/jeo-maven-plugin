@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import java.util.Optional;
 import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeValue;
 import org.xembly.Directive;
@@ -55,8 +54,10 @@ public final class DirectivesValue implements Iterable<Directive> {
      */
     private final String name;
 
+    /**
+     * Value.
+     */
     private final BytecodeValue value;
-
 
     /**
      * Constructor.
