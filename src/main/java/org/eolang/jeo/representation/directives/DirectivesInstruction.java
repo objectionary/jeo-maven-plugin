@@ -103,14 +103,19 @@ public final class DirectivesInstruction implements Iterable<Directive> {
         return result;
     }
 
-
     /**
      * Instruction comment.
      * Later this message will be converted to the XML comment, like:
-     * <!-- INVOKESPECIAL 183, "java/lang/Object", "<init>", "()V", FALSE -->
+     * <!-- INVOKESPECIAL 183, "java/lang/Object", "<init>", "()V" -->
      * @return String comment.
      */
     private String comment() {
-        return "INVOKESPECIAL, 183, java/lang/Object, <init>, ()V, FALSE";
+        return String.format(
+            "#%d:%s(%s)",
+            this.opcode,
+            this.name(),
+            Arrays.stream(this.arguments).map(Object::toString)
+                .collect(Collectors.joining(", "))
+        );
     }
 }
