@@ -23,7 +23,14 @@
  */
 package org.eolang.jeo;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Cached transformation test.
@@ -33,23 +40,111 @@ import org.junit.jupiter.api.Test;
 final class CachedTransTest {
 
     @Test
-    void skipsOriginalTransformationSinceAlreadyTransformed() {
-
+    void skipsOriginalTransformationSinceAlreadyTransformed(@TempDir final Path temp) {
+        final MockTrans mock = new MockTrans(temp);
+        mock.createFrom();
+        mock.createTo();
+        MatcherAssert.assertThat(
+            "Cached transformation should skip original transformation and return the cached result",
+            new String(new CachedTrans(mock).transform(), StandardCharsets.UTF_8),
+            Matchers.equalTo(MockTrans.OLD_TO)
+        );
     }
 
     @Test
-    void performsTransformationSinceNotYetTransformed() {
-
+    void performsTransformationSinceModified(@TempDir final Path temp) {
+        final MockTrans mock = new MockTrans(temp);
+        mock.createTo();
+        mock.createFrom();
+        MatcherAssert.assertThat(
+            "Cached transformation should perform original transformation since the source file is modified",
+            new String(new CachedTrans(mock).transform(), StandardCharsets.UTF_8),
+            Matchers.equalTo(MockTrans.PERFORMED)
+        );
     }
 
     @Test
-    void performsTransformationSinceModified() {
-
+    void performsTransformationSinceNotYetTransformed(@TempDir final Path temp) {
+        final MockTrans mock = new MockTrans(temp);
+        mock.createFrom();
+        MatcherAssert.assertThat(
+            "Cached transformation should perform original transformation and return the result",
+            new String(new CachedTrans(mock).transform(), StandardCharsets.UTF_8),
+            Matchers.equalTo(MockTrans.PERFORMED)
+        );
     }
 
-    @Test
-    void trowsExceptionIfOriginalTransformationFails() {
+    private static class MockTrans implements FileTransformation {
 
+        /**
+         * Transformation is performed.
+         */
+        private static String PERFORMED = "Transformation is performed";
+
+        /**
+         * Old content of 'to' file.
+         */
+        private static String OLD_TO = "Old content of 'to' file";
+
+        /**
+         * Temporary directory.
+         */
+        private final Path temp;
+
+        /**
+         * Constructor.
+         * @param temp Temporary directory.
+         */
+        MockTrans(final Path temp) {
+            this.temp = temp;
+        }
+
+        @Override
+        public Path from() {
+            return this.temp.resolve("from.xmir");
+        }
+
+        @Override
+        public Path to() {
+            return this.temp.resolve("to.xmir");
+        }
+
+        @Override
+        public byte[] transform() {
+            return MockTrans.PERFORMED.getBytes(StandardCharsets.UTF_8);
+        }
+
+        /**
+         * Create 'from' file.
+         */
+        void createFrom() {
+            this.create(this.from(), "Old content of 'from' file".getBytes(StandardCharsets.UTF_8));
+        }
+
+        /**
+         * Create 'to' file.
+         */
+        void createTo() {
+            this.create(this.to(), MockTrans.OLD_TO.getBytes(StandardCharsets.UTF_8));
+        }
+
+        /**
+         * Create file.
+         * @param path Path to the file.
+         * @param content Content of the file.
+         */
+        private void create(final Path path, byte[] content) {
+            try {
+                Files.write(path, content);
+            } catch (final IOException exception) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Failed to create file '%s'",
+                        this.from()
+                    ),
+                    exception
+                );
+            }
+        }
     }
-
 }
