@@ -90,13 +90,11 @@ final class Unroller {
     private void unroll(final Path xmir) {
         try {
             this.prepareThread();
-            final Path output = this.target.resolve(this.source.relativize(xmir));
+            final UnrollTrans trans = new UnrollTrans(this.source, this.target, xmir);
+            final Path output = trans.to();
             Logger.info(this, "Unrolling XMIR file '%s' to '%s'", xmir, output);
             final long start = System.currentTimeMillis();
-            final byte[] bytes = new CanonicalXmir(xmir)
-                .plain()
-                .toString()
-                .getBytes(StandardCharsets.UTF_8);
+            final byte[] bytes = trans.transform();
             final long end = System.currentTimeMillis() - start;
             Files.createDirectories(output.getParent());
             Files.write(output, bytes);
@@ -105,14 +103,6 @@ final class Unroller {
                 "XMIR file '%s' was unrolled in %[ms]s",
                 output.getFileName(),
                 end
-            );
-        } catch (final FileNotFoundException exception) {
-            throw new IllegalStateException(
-                String.format(
-                    "Failed to unroll XMIR file '%s', most probably the file does not exist",
-                    xmir
-                ),
-                exception
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(
