@@ -87,7 +87,6 @@ public final class CachedTrans implements FileTransformation {
                 this.to()
             );
             return Files.readAllBytes(this.to());
-
         } else {
             return this.origin.transform();
         }

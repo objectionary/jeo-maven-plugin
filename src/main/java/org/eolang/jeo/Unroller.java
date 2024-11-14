@@ -90,7 +90,9 @@ final class Unroller {
     private void unroll(final Path xmir) {
         try {
             this.prepareThread();
-            final UnrollTrans trans = new UnrollTrans(this.source, this.target, xmir);
+            final FileTransformation trans = new CachedTrans(
+                new UnrollTrans(this.source, this.target, xmir)
+            );
             final Path output = trans.to();
             Logger.info(this, "Unrolling XMIR file '%s' to '%s'", xmir, output);
             final long start = System.currentTimeMillis();

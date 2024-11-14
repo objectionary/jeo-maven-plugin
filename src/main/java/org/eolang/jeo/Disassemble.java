@@ -61,7 +61,9 @@ public final class Disassemble implements Translation {
         //   This is dangerous and should be removed as soon as possible.
         //   Moreover, we have the same solution in {@link Assemble} class.
         new AllLabels().clearCache();
-        final DisassembleTrans trans = new DisassembleTrans(this.target, representation);
+        final FileTransformation trans = new CachedTrans(
+            new DisassembleTrans(this.target, representation)
+        );
         final Path to = trans.to();
         try {
             Files.createDirectories(to.getParent());

@@ -66,7 +66,9 @@ public final class Assemble implements Translation {
 //            throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
 //        }
         try {
-            final FileTransformation trans = new AssembleTrans(this.classes, representation);
+            final FileTransformation trans = new CachedTrans(
+                new AssembleTrans(this.classes, representation)
+            );
             final Path target = trans.to();
             Files.createDirectories(target.getParent());
             Files.write(target, trans.transform());
