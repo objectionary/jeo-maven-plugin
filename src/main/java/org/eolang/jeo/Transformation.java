@@ -24,35 +24,32 @@
 package org.eolang.jeo;
 
 import java.nio.file.Path;
-import org.eolang.jeo.representation.BytecodeRepresentation;
-import org.eolang.jeo.representation.xmir.AllLabels;
 
 /**
- * Assemble a representation.
- * @since 0.2
+ * Transformation.
+ * @since 0.6
+ * @todo #784:90min Refactor Transformation, Translation and Translator.
+ *  These abstractions are overcomplicated. Most probably, we can remove some of them.
+ *  They were added to solve the immediate issues without thinking about the long-term
+ *  architecture. Let's refactor them to make the code simpler and more maintainable.
  */
-public final class Assemble implements Translation {
+public interface Transformation {
 
     /**
-     * Classes path.
+     * The path to the file to be transformed.
+     * @return Path to the file.
      */
-    private final Path classes;
+    Path source();
 
     /**
-     * Constructor.
-     * @param classes Classes path.
+     * The path to the transformed file.
+     * @return Path to the transformed file.
      */
-    public Assemble(final Path classes) {
-        this.classes = classes;
-    }
+    Path target();
 
-    @Override
-    public Representation apply(final Representation representation) {
-        new AllLabels().clearCache();
-        final Transformation trans = new Caching(
-            new Assembling(this.classes, representation)
-        );
-        trans.transform();
-        return new BytecodeRepresentation(trans.target());
-    }
+    /**
+     * Transform the file.
+     * @return Transformed file.
+     */
+    byte[] transform();
 }

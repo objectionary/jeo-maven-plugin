@@ -24,13 +24,10 @@
 package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.CanonicalXmir;
 
 /**
  * Unroller.
@@ -85,44 +82,24 @@ final class Unroller {
 
     /**
      * Unrolls the XMIR file.
-     * @param path The path to the XMIR file.
+     * @param xmir The path to the XMIR file.
      */
-    private void unroll(final Path path) {
-        try {
-            this.prepareThread();
-            final Path output = this.target.resolve(this.source.relativize(path));
-            Logger.info(this, "Unrolling XMIR file '%s' to '%s'", path, output);
-            final long start = System.currentTimeMillis();
-            final byte[] bytes = new CanonicalXmir(path)
-                .plain()
-                .toString()
-                .getBytes(StandardCharsets.UTF_8);
-            final long end = System.currentTimeMillis() - start;
-            Files.createDirectories(output.getParent());
-            Files.write(output, bytes);
-            Logger.info(
-                this,
-                "XMIR file '%s' was unrolled in %[ms]s",
-                output.getFileName(),
-                end
-            );
-        } catch (final FileNotFoundException exception) {
-            throw new IllegalStateException(
-                String.format(
-                    "Failed to unroll XMIR file '%s', most probably the file does not exist",
-                    path
-                ),
-                exception
-            );
-        } catch (final IOException exception) {
-            throw new IllegalStateException(
-                String.format(
-                    "Failed to unroll XMIR file '%s', most probably an I/O error occurred",
-                    path
-                ),
-                exception
-            );
-        }
+    private void unroll(final Path xmir) {
+        this.prepareThread();
+        final Transformation trans = new Caching(
+            new Unroll(this.source, this.target, xmir)
+        );
+        final Path output = trans.target();
+        Logger.info(this, "Unrolling XMIR file '%s' to '%s'", xmir, output);
+        final long start = System.currentTimeMillis();
+        trans.transform();
+        final long end = System.currentTimeMillis() - start;
+        Logger.info(
+            this,
+            "XMIR file '%s' was unrolled in %[ms]s",
+            output.getFileName(),
+            end
+        );
     }
 
     /**
