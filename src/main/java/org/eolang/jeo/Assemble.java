@@ -28,7 +28,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.eolang.jeo.representation.BytecodeRepresentation;
-import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.xmir.AllLabels;
 
 /**
@@ -53,18 +52,29 @@ public final class Assemble implements Translation {
     @Override
     public Representation apply(final Representation representation) {
         new AllLabels().clearCache();
-        final Details details = representation.details();
-        final String name = new PrefixedName(details.name()).decode();
+//        final Details details = representation.details();
+//        final String name = new PrefixedName(details.name()).decode();
+//        try {
+//            final byte[] bytecode = representation.toBytecode().bytes();
+//            final String[] subpath = name.split("\\.");
+//            subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
+//            final Path path = Paths.get(this.classes.toString(), subpath);
+//            Files.createDirectories(path.getParent());
+//            Files.write(path, bytecode);
+//            return new BytecodeRepresentation(path);
+//        } catch (final IOException exception) {
+//            throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
+//        }
         try {
-            final byte[] bytecode = representation.toBytecode().bytes();
-            final String[] subpath = name.split("\\.");
-            subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
-            final Path path = Paths.get(this.classes.toString(), subpath);
-            Files.createDirectories(path.getParent());
-            Files.write(path, bytecode);
-            return new BytecodeRepresentation(path);
+            final FileTransformation trans = new AssembleTrans(this.classes, representation);
+            final Path target = trans.to();
+            Files.createDirectories(target.getParent());
+            Files.write(target, trans.transform());
+            return new BytecodeRepresentation(target);
         } catch (final IOException exception) {
-            throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
+            throw new IllegalStateException(
+                String.format("Can't recompile '%s'", representation.details().name()), exception
+            );
         }
     }
 }

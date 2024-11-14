@@ -85,15 +85,15 @@ final class Unroller {
 
     /**
      * Unrolls the XMIR file.
-     * @param path The path to the XMIR file.
+     * @param xmir The path to the XMIR file.
      */
-    private void unroll(final Path path) {
+    private void unroll(final Path xmir) {
         try {
             this.prepareThread();
-            final Path output = this.target.resolve(this.source.relativize(path));
-            Logger.info(this, "Unrolling XMIR file '%s' to '%s'", path, output);
+            final Path output = this.target.resolve(this.source.relativize(xmir));
+            Logger.info(this, "Unrolling XMIR file '%s' to '%s'", xmir, output);
             final long start = System.currentTimeMillis();
-            final byte[] bytes = new CanonicalXmir(path)
+            final byte[] bytes = new CanonicalXmir(xmir)
                 .plain()
                 .toString()
                 .getBytes(StandardCharsets.UTF_8);
@@ -110,7 +110,7 @@ final class Unroller {
             throw new IllegalStateException(
                 String.format(
                     "Failed to unroll XMIR file '%s', most probably the file does not exist",
-                    path
+                    xmir
                 ),
                 exception
             );
@@ -118,7 +118,7 @@ final class Unroller {
             throw new IllegalStateException(
                 String.format(
                     "Failed to unroll XMIR file '%s', most probably an I/O error occurred",
-                    path
+                    xmir
                 ),
                 exception
             );
