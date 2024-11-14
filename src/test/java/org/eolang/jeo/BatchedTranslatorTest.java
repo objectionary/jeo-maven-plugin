@@ -78,7 +78,7 @@ final class BatchedTranslatorTest {
 
     @Test
     void overwritesXml(@TempDir final Path temp) throws IOException {
-        Path path = Paths.get(temp.toString(), "Application.xml");
+        final Path path = Paths.get(temp.toString(), "Application.xml");
         Files.createDirectories(path.getParent());
         Files.write(
             path,
@@ -103,7 +103,7 @@ final class BatchedTranslatorTest {
     @Test
     void assemblesSuccessfully(@TempDir final Path temp) throws IOException {
         final String fake = "Fake";
-        Path path = temp.resolve("jeo")
+        final Path path = temp.resolve("jeo")
             .resolve("xmir")
             .resolve(String.format("%s.xml", fake));
         Files.createDirectories(path.getParent());
