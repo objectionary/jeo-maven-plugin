@@ -61,16 +61,15 @@ public final class Disassemble implements Translation {
         //   This is dangerous and should be removed as soon as possible.
         //   Moreover, we have the same solution in {@link Assemble} class.
         new AllLabels().clearCache();
-        final String name = new PrefixedName(representation.details().name()).decode();
-        final Path path = this.target
-            .resolve(String.format("%s.xmir", name.replace('/', File.separatorChar)));
+        final DisassembleTrans trans = new DisassembleTrans(this.target, representation);
+        final Path to = trans.to();
         try {
-            Files.createDirectories(path.getParent());
-            Files.write(path, representation.toEO().toString().getBytes(StandardCharsets.UTF_8));
-            return new XmirRepresentation(path);
+            Files.createDirectories(to.getParent());
+            Files.write(to, trans.transform());
+            return new XmirRepresentation(to);
         } catch (final IOException exception) {
             throw new IllegalStateException(
-                String.format("Can't save XML to %s", path),
+                String.format("Can't save XML to %s", to),
                 exception
             );
         }
