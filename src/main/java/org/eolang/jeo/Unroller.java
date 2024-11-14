@@ -88,33 +88,21 @@ final class Unroller {
      * @param xmir The path to the XMIR file.
      */
     private void unroll(final Path xmir) {
-        try {
-            this.prepareThread();
-            final FileTransformation trans = new CachedTrans(
-                new UnrollTrans(this.source, this.target, xmir)
-            );
-            final Path output = trans.to();
-            Logger.info(this, "Unrolling XMIR file '%s' to '%s'", xmir, output);
-            final long start = System.currentTimeMillis();
-            final byte[] bytes = trans.transform();
-            final long end = System.currentTimeMillis() - start;
-            Files.createDirectories(output.getParent());
-            Files.write(output, bytes);
-            Logger.info(
-                this,
-                "XMIR file '%s' was unrolled in %[ms]s",
-                output.getFileName(),
-                end
-            );
-        } catch (final IOException exception) {
-            throw new IllegalStateException(
-                String.format(
-                    "Failed to unroll XMIR file '%s', most probably an I/O error occurred",
-                    xmir
-                ),
-                exception
-            );
-        }
+        this.prepareThread();
+        final FileTransformation trans = new CachedTrans(
+            new UnrollTrans(this.source, this.target, xmir)
+        );
+        final Path output = trans.to();
+        Logger.info(this, "Unrolling XMIR file '%s' to '%s'", xmir, output);
+        final long start = System.currentTimeMillis();
+        trans.transform();
+        final long end = System.currentTimeMillis() - start;
+        Logger.info(
+            this,
+            "XMIR file '%s' was unrolled in %[ms]s",
+            output.getFileName(),
+            end
+        );
     }
 
     /**

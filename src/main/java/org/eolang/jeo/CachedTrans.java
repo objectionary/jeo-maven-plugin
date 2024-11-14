@@ -79,16 +79,20 @@ public final class CachedTrans implements FileTransformation {
      * @throws IOException If something goes wrong.
      */
     private byte[] tryTransform() throws IOException {
+        final Path to = this.to();
         if (this.alreadyTransformed()) {
             Logger.info(
                 this,
                 "The file '%s' is already transformed to '%s'. Skipping.",
                 this.from(),
-                this.to()
+                to
             );
-            return Files.readAllBytes(this.to());
+            return Files.readAllBytes(to);
         } else {
-            return this.origin.transform();
+            final byte[] transform = this.origin.transform();
+            Files.createDirectories(to.getParent());
+            Files.write(to, transform);
+            return transform;
         }
     }
 

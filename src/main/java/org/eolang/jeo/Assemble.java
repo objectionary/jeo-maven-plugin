@@ -65,18 +65,10 @@ public final class Assemble implements Translation {
 //        } catch (final IOException exception) {
 //            throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
 //        }
-        try {
-            final FileTransformation trans = new CachedTrans(
-                new AssembleTrans(this.classes, representation)
-            );
-            final Path target = trans.to();
-            Files.createDirectories(target.getParent());
-            Files.write(target, trans.transform());
-            return new BytecodeRepresentation(target);
-        } catch (final IOException exception) {
-            throw new IllegalStateException(
-                String.format("Can't recompile '%s'", representation.details().name()), exception
-            );
-        }
+        final FileTransformation trans = new CachedTrans(
+            new AssembleTrans(this.classes, representation)
+        );
+        trans.transform();
+        return new BytecodeRepresentation(trans.to());
     }
 }

@@ -64,16 +64,7 @@ public final class Disassemble implements Translation {
         final FileTransformation trans = new CachedTrans(
             new DisassembleTrans(this.target, representation)
         );
-        final Path to = trans.to();
-        try {
-            Files.createDirectories(to.getParent());
-            Files.write(to, trans.transform());
-            return new XmirRepresentation(to);
-        } catch (final IOException exception) {
-            throw new IllegalStateException(
-                String.format("Can't save XML to %s", to),
-                exception
-            );
-        }
+        trans.transform();
+        return new XmirRepresentation(trans.to());
     }
 }
