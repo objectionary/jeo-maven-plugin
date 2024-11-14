@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
+import java.util.concurrent.TimeUnit;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -42,8 +44,8 @@ final class CachingTest {
     @Test
     void skipsOriginalTransformationSinceAlreadyTransformed(@TempDir final Path temp) {
         final MockTrans mock = new MockTrans(temp);
-        mock.createFrom();
-        mock.createTo();
+        mock.createFrom(0);
+        mock.createTo(1);
         MatcherAssert.assertThat(
             "Cached transformation should skip original transformation and return the cached result",
             new String(new Caching(mock).transform(), StandardCharsets.UTF_8),
@@ -54,8 +56,8 @@ final class CachingTest {
     @Test
     void performsTransformationSinceModified(@TempDir final Path temp) {
         final MockTrans mock = new MockTrans(temp);
-        mock.createTo();
-        mock.createFrom();
+        mock.createTo(0);
+        mock.createFrom(1);
         MatcherAssert.assertThat(
             "Cached transformation should perform original transformation since the source file is modified",
             new String(new Caching(mock).transform(), StandardCharsets.UTF_8),
@@ -66,7 +68,7 @@ final class CachingTest {
     @Test
     void performsTransformationSinceNotYetTransformed(@TempDir final Path temp) {
         final MockTrans mock = new MockTrans(temp);
-        mock.createFrom();
+        mock.createFrom(0);
         MatcherAssert.assertThat(
             "Cached transformation should perform original transformation and return the result",
             new String(new Caching(mock).transform(), StandardCharsets.UTF_8),
@@ -117,17 +119,23 @@ final class CachingTest {
         /**
          * Create 'from' file.
          */
-        void createFrom() {
+        void createFrom(final int seconds) {
             this.create(
-                this.source(), "Old content of 'from' file".getBytes(StandardCharsets.UTF_8)
+                this.source(),
+                "Old content of 'from' file".getBytes(StandardCharsets.UTF_8),
+                seconds
             );
         }
 
         /**
          * Create 'to' file.
          */
-        void createTo() {
-            this.create(this.target(), MockTrans.OLD_TO.getBytes(StandardCharsets.UTF_8));
+        void createTo(final int seconds) {
+            this.create(
+                this.target(),
+                MockTrans.OLD_TO.getBytes(StandardCharsets.UTF_8),
+                seconds
+            );
         }
 
         /**
@@ -135,9 +143,10 @@ final class CachingTest {
          * @param path Path to the file.
          * @param content Content of the file.
          */
-        private void create(final Path path, final byte[] content) {
+        private void create(final Path path, final byte[] content, final int seconds) {
             try {
                 Files.write(path, content);
+                Files.setLastModifiedTime(path, FileTime.from(seconds, TimeUnit.SECONDS));
             } catch (final IOException exception) {
                 throw new IllegalStateException(
                     String.format(
