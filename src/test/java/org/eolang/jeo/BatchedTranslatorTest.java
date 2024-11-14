@@ -77,16 +77,20 @@ final class BatchedTranslatorTest {
     }
 
     @Test
-    void overwritesXml(@TempDir final Path temp) {
-        final BatchedTranslator footprint = new BatchedTranslator(
-            new Disassemble(temp)
-        );
-        final Representation repr = new XmirRepresentation(
+    void overwritesXml(@TempDir final Path temp) throws IOException {
+        Path path = Paths.get(temp.toString(), "Application.xml");
+        Files.createDirectories(path.getParent());
+        Files.write(
+            path,
             new BytecodeProgram(
                 "org/eolang/jeo",
                 new BytecodeClass("Application")
-            ).xml()
+            ).xml().toString().getBytes(StandardCharsets.UTF_8)
         );
+        final BatchedTranslator footprint = new BatchedTranslator(
+            new Disassemble(temp)
+        );
+        final Representation repr = new XmirRepresentation(path);
         footprint.apply(Stream.of(repr)).collect(Collectors.toList());
         footprint.apply(Stream.of(repr)).collect(Collectors.toList());
         MatcherAssert.assertThat(
@@ -97,14 +101,21 @@ final class BatchedTranslatorTest {
     }
 
     @Test
-    void assemblesSuccessfully(@TempDir final Path temp) {
+    void assemblesSuccessfully(@TempDir final Path temp) throws IOException {
         final String fake = "Fake";
+        Path path = temp.resolve("jeo")
+            .resolve("xmir")
+            .resolve(String.format("%s.xml", fake));
+        Files.createDirectories(path.getParent());
+        Files.write(
+            path,
+            new BytecodeProgram(
+                "jeo/xmir",
+                new BytecodeClass(fake)
+            ).xml().toString().getBytes(StandardCharsets.UTF_8)
+        );
         new BatchedTranslator(new Assemble(temp)).apply(
-            Stream.of(
-                new XmirRepresentation(
-                    new BytecodeProgram("jeo/xmir", new BytecodeClass(fake)).xml()
-                )
-            )
+            Stream.of(new XmirRepresentation(path))
         ).collect(Collectors.toList());
         MatcherAssert.assertThat(
             String.format(
