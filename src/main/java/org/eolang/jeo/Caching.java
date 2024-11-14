@@ -32,29 +32,29 @@ import java.nio.file.Path;
  * Cached transformation.
  * @since 0.6
  */
-public final class CachedTrans implements FileTransformation {
+public final class Caching implements Transformation {
 
     /**
      * Original transformation.
      */
-    private final FileTransformation origin;
+    private final Transformation origin;
 
     /**
      * Constructor.
      * @param origin Original transformation.
      */
-    public CachedTrans(final FileTransformation origin) {
+    Caching(final Transformation origin) {
         this.origin = origin;
     }
 
     @Override
-    public Path from() {
-        return this.origin.from();
+    public Path source() {
+        return this.origin.source();
     }
 
     @Override
-    public Path to() {
-        return this.origin.to();
+    public Path target() {
+        return this.origin.target();
     }
 
     @Override
@@ -65,8 +65,8 @@ public final class CachedTrans implements FileTransformation {
             throw new IllegalStateException(
                 String.format(
                     "Failed to transform of '%s' to '%s'",
-                    this.from(),
-                    this.to()
+                    this.source(),
+                    this.target()
                 ),
                 exception
             );
@@ -79,21 +79,23 @@ public final class CachedTrans implements FileTransformation {
      * @throws IOException If something goes wrong.
      */
     private byte[] tryTransform() throws IOException {
-        final Path to = this.to();
+        final byte[] result;
+        final Path target = this.target();
         if (this.alreadyTransformed()) {
             Logger.info(
                 this,
                 "The file '%s' is already transformed to '%s'. Skipping.",
-                this.from(),
-                to
+                this.source(),
+                target
             );
-            return Files.readAllBytes(to);
+            result = Files.readAllBytes(target);
         } else {
             final byte[] transform = this.origin.transform();
-            Files.createDirectories(to.getParent());
-            Files.write(to, transform);
-            return transform;
+            Files.createDirectories(target.getParent());
+            Files.write(target, transform);
+            result = transform;
         }
+        return result;
     }
 
     /**
@@ -102,8 +104,8 @@ public final class CachedTrans implements FileTransformation {
      * @throws IOException If something goes wrong.
      */
     private boolean alreadyTransformed() throws IOException {
-        final Path source = this.from();
-        final Path target = this.to();
+        final Path source = this.source();
+        final Path target = this.target();
         return Files.exists(target)
             && Files.exists(source)
             && Files.getLastModifiedTime(target).compareTo(Files.getLastModifiedTime(source)) >= 0;

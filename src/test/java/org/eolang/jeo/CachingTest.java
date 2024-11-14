@@ -34,10 +34,10 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Cached transformation test.
- * Test cases for {@link CachedTrans}.
+ * Test cases for {@link Caching}.
  * @since 0.6
  */
-final class CachedTransTest {
+final class CachingTest {
 
     @Test
     void skipsOriginalTransformationSinceAlreadyTransformed(@TempDir final Path temp) {
@@ -46,7 +46,7 @@ final class CachedTransTest {
         mock.createTo();
         MatcherAssert.assertThat(
             "Cached transformation should skip original transformation and return the cached result",
-            new String(new CachedTrans(mock).transform(), StandardCharsets.UTF_8),
+            new String(new Caching(mock).transform(), StandardCharsets.UTF_8),
             Matchers.equalTo(MockTrans.OLD_TO)
         );
     }
@@ -58,7 +58,7 @@ final class CachedTransTest {
         mock.createFrom();
         MatcherAssert.assertThat(
             "Cached transformation should perform original transformation since the source file is modified",
-            new String(new CachedTrans(mock).transform(), StandardCharsets.UTF_8),
+            new String(new Caching(mock).transform(), StandardCharsets.UTF_8),
             Matchers.equalTo(MockTrans.PERFORMED)
         );
     }
@@ -69,22 +69,22 @@ final class CachedTransTest {
         mock.createFrom();
         MatcherAssert.assertThat(
             "Cached transformation should perform original transformation and return the result",
-            new String(new CachedTrans(mock).transform(), StandardCharsets.UTF_8),
+            new String(new Caching(mock).transform(), StandardCharsets.UTF_8),
             Matchers.equalTo(MockTrans.PERFORMED)
         );
     }
 
-    private static class MockTrans implements FileTransformation {
+    private static class MockTrans implements Transformation {
 
         /**
          * Transformation is performed.
          */
-        private static String PERFORMED = "Transformation is performed";
+        private static final String PERFORMED = "Transformation is performed";
 
         /**
          * Old content of 'to' file.
          */
-        private static String OLD_TO = "Old content of 'to' file";
+        private static final String OLD_TO = "Old content of 'to' file";
 
         /**
          * Temporary directory.
@@ -100,12 +100,12 @@ final class CachedTransTest {
         }
 
         @Override
-        public Path from() {
+        public Path source() {
             return this.temp.resolve("from.xmir");
         }
 
         @Override
-        public Path to() {
+        public Path target() {
             return this.temp.resolve("to.xmir");
         }
 
@@ -118,14 +118,16 @@ final class CachedTransTest {
          * Create 'from' file.
          */
         void createFrom() {
-            this.create(this.from(), "Old content of 'from' file".getBytes(StandardCharsets.UTF_8));
+            this.create(
+                this.source(), "Old content of 'from' file".getBytes(StandardCharsets.UTF_8)
+            );
         }
 
         /**
          * Create 'to' file.
          */
         void createTo() {
-            this.create(this.to(), MockTrans.OLD_TO.getBytes(StandardCharsets.UTF_8));
+            this.create(this.target(), MockTrans.OLD_TO.getBytes(StandardCharsets.UTF_8));
         }
 
         /**
@@ -133,14 +135,14 @@ final class CachedTransTest {
          * @param path Path to the file.
          * @param content Content of the file.
          */
-        private void create(final Path path, byte[] content) {
+        private void create(final Path path, final byte[] content) {
             try {
                 Files.write(path, content);
             } catch (final IOException exception) {
                 throw new IllegalStateException(
                     String.format(
                         "Failed to create file '%s'",
-                        this.from()
+                        this.source()
                     ),
                     exception
                 );

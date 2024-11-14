@@ -23,47 +23,58 @@
  */
 package org.eolang.jeo;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.eolang.jeo.representation.PrefixedName;
 
-public final class DisassembleTrans implements FileTransformation {
+/**
+ * Assembling transformation.
+ * @since 0.6
+ */
+public final class Assembling implements Transformation {
 
-    private final Path target;
-    private final Representation representation;
+    /**
+     * Target folder where to save the assembled class.
+     */
+    private final Path folder;
 
-    public DisassembleTrans(final Path target, final Representation representation) {
-        this.target = target;
-        this.representation = representation;
+    /**
+     * Representation to assemble.
+     */
+    private final Representation repr;
+
+    /**
+     * Constructor.
+     * @param target Target folder.
+     * @param representation Representation to assemble.
+     */
+    Assembling(final Path target, final Representation representation) {
+        this.folder = target;
+        this.repr = representation;
     }
 
     @Override
-    public Path from() {
-        return this.representation.details().source().orElseThrow(
+    public Path source() {
+        return this.repr.details().source().orElseThrow(
             () -> new IllegalStateException(
                 String.format(
-                    "Source is not defined for disassembling '%s'",
-                    this.representation.details()
+                    "Source is not defined for assembling '%s'",
+                    this.repr.details()
                 )
             )
         );
     }
 
     @Override
-    public Path to() {
-        return this.target.resolve(
-            String.format(
-                "%s.xmir",
-                new PrefixedName(
-                    this.representation.details().name()
-                ).decode().replace('/', File.separatorChar)
-            )
-        );
+    public Path target() {
+        final String name = new PrefixedName(this.repr.details().name()).decode();
+        final String[] subpath = name.split("\\.");
+        subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
+        return Paths.get(this.folder.toString(), subpath);
     }
 
     @Override
     public byte[] transform() {
-        return this.representation.toEO().toString().getBytes(StandardCharsets.UTF_8);
+        return this.repr.toBytecode().bytes();
     }
 }

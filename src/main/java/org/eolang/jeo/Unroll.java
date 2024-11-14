@@ -28,27 +28,47 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import org.eolang.jeo.representation.CanonicalXmir;
 
-public final class UnrollTrans implements FileTransformation {
+/**
+ * Unroll XMIR file.
+ * @since 0.6
+ */
+public final class Unroll implements Transformation {
 
+    /**
+     * Source path.
+     */
+    private final Path src;
 
-    private final Path source;
-    private final Path target;
+    /**
+     * Target path.
+     */
+    private final Path trgt;
+
+    /**
+     * XMIR path.
+     */
     private final Path xmir;
 
-    public UnrollTrans(final Path source, final Path target, final Path xmir) {
-        this.source = source;
-        this.target = target;
+    /**
+     * Constructor.
+     * @param source Source folder path.
+     * @param target Target folder path.
+     * @param xmir XMIR file path.
+     */
+    public Unroll(final Path source, final Path target, final Path xmir) {
+        this.src = source;
+        this.trgt = target;
         this.xmir = xmir;
     }
 
     @Override
-    public Path from() {
+    public Path source() {
         return this.xmir;
     }
 
     @Override
-    public Path to() {
-        return this.target.resolve(this.source.relativize(this.xmir));
+    public Path target() {
+        return this.trgt.resolve(this.src.relativize(this.xmir));
     }
 
     @Override

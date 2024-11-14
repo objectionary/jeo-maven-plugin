@@ -25,22 +25,27 @@ package org.eolang.jeo;
 
 import java.nio.file.Path;
 
-public interface FileTransformation {
+/**
+ * Transformation.
+ * @since 0.6
+ */
+public interface Transformation {
 
     /**
      * The path to the file to be transformed.
      * @return Path to the file.
      */
-    Path from();
+    Path source();
 
     /**
      * The path to the transformed file.
      * @return Path to the transformed file.
      */
-    Path to();
+    Path target();
 
     /**
      * Transform the file.
+     * @return Transformed file.
      */
     byte[] transform();
 }

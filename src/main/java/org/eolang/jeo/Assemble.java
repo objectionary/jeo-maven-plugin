@@ -23,10 +23,7 @@
  */
 package org.eolang.jeo;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.xmir.AllLabels;
 
@@ -52,23 +49,10 @@ public final class Assemble implements Translation {
     @Override
     public Representation apply(final Representation representation) {
         new AllLabels().clearCache();
-//        final Details details = representation.details();
-//        final String name = new PrefixedName(details.name()).decode();
-//        try {
-//            final byte[] bytecode = representation.toBytecode().bytes();
-//            final String[] subpath = name.split("\\.");
-//            subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
-//            final Path path = Paths.get(this.classes.toString(), subpath);
-//            Files.createDirectories(path.getParent());
-//            Files.write(path, bytecode);
-//            return new BytecodeRepresentation(path);
-//        } catch (final IOException exception) {
-//            throw new IllegalStateException(String.format("Can't recompile '%s'", name), exception);
-//        }
-        final FileTransformation trans = new CachedTrans(
-            new AssembleTrans(this.classes, representation)
+        final Transformation trans = new Caching(
+            new Assembling(this.classes, representation)
         );
         trans.transform();
-        return new BytecodeRepresentation(trans.to());
+        return new BytecodeRepresentation(trans.target());
     }
 }

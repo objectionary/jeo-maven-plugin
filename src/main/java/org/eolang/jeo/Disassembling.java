@@ -23,42 +23,63 @@
  */
 package org.eolang.jeo;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.eolang.jeo.representation.PrefixedName;
 
-public final class AssembleTrans implements FileTransformation {
+/**
+ * Disassembling transformation.
+ * @since 0.6
+ */
+public final class Disassembling implements Transformation {
 
-    private final Path target;
-    private final Representation representation;
+    /**
+     * Target folder where to save the disassembled class.
+     */
+    private final Path folder;
 
-    AssembleTrans(final Path target, final Representation representation) {
-        this.target = target;
-        this.representation = representation;
+    /**
+     * Representation to disassemble.
+     */
+    private final Representation repr;
+
+    /**
+     * Constructor.
+     * @param target Target folder.
+     * @param representation Representation to disassemble.
+     */
+    Disassembling(final Path target, final Representation representation) {
+        this.folder = target;
+        this.repr = representation;
     }
 
     @Override
-    public Path from() {
-        return this.representation.details().source().orElseThrow(
+    public Path source() {
+        return this.repr.details().source().orElseThrow(
             () -> new IllegalStateException(
                 String.format(
-                    "Source is not defined for assembling '%s'",
-                    this.representation.details()
+                    "Source is not defined for disassembling '%s'",
+                    this.repr.details()
                 )
             )
         );
     }
 
     @Override
-    public Path to() {
-        final String name = new PrefixedName(this.representation.details().name()).decode();
-        final String[] subpath = name.split("\\.");
-        subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
-        return Paths.get(this.target.toString(), subpath);
+    public Path target() {
+        return this.folder.resolve(
+            String.format(
+                "%s.xmir",
+                new PrefixedName(
+                    this.repr.details().name()
+                ).decode().replace('/', File.separatorChar)
+            )
+        );
     }
 
     @Override
     public byte[] transform() {
-        return this.representation.toBytecode().bytes();
+        return this.repr.toEO().toString().getBytes(StandardCharsets.UTF_8);
     }
 }

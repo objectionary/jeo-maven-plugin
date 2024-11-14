@@ -23,12 +23,7 @@
  */
 package org.eolang.jeo;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.xmir.AllLabels;
 
@@ -61,10 +56,10 @@ public final class Disassemble implements Translation {
         //   This is dangerous and should be removed as soon as possible.
         //   Moreover, we have the same solution in {@link Assemble} class.
         new AllLabels().clearCache();
-        final FileTransformation trans = new CachedTrans(
-            new DisassembleTrans(this.target, representation)
+        final Transformation trans = new Caching(
+            new Disassembling(this.target, representation)
         );
         trans.transform();
-        return new XmirRepresentation(trans.to());
+        return new XmirRepresentation(trans.target());
     }
 }

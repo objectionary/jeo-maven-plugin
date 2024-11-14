@@ -24,13 +24,10 @@
 package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.CanonicalXmir;
 
 /**
  * Unroller.
@@ -89,10 +86,10 @@ final class Unroller {
      */
     private void unroll(final Path xmir) {
         this.prepareThread();
-        final FileTransformation trans = new CachedTrans(
-            new UnrollTrans(this.source, this.target, xmir)
+        final Transformation trans = new Caching(
+            new Unroll(this.source, this.target, xmir)
         );
-        final Path output = trans.to();
+        final Path output = trans.target();
         Logger.info(this, "Unrolling XMIR file '%s' to '%s'", xmir, output);
         final long start = System.currentTimeMillis();
         trans.transform();
