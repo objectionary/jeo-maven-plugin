@@ -61,35 +61,35 @@ final class DirectivesInstructionTest {
                 new BytecodeInstruction(
                     Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V"
                 ),
-                "<!--#183:invokespecial(java/lang/Object, &lt;init&gt;, ()V)-->"
+                "<!-- #183:invokespecial(java/lang/Object, &lt;init&gt;, ()V) -->"
             ),
             Arguments.of(
                 new BytecodeInstruction(
                     Opcodes.INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;"
                 ),
-                "<!--#182:invokevirtual(java/lang/Object, toString, ()Ljava/lang/String;)-->"
+                "<!-- #182:invokevirtual(java/lang/Object, toString, ()Ljava/lang/String;) -->"
             ),
             Arguments.of(
                 new BytecodeInstruction(
                     Opcodes.INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J"
                 ),
-                "<!--#184:invokestatic(java/lang/System, currentTimeMillis, ()J)-->"
+                "<!-- #184:invokestatic(java/lang/System, currentTimeMillis, ()J) -->"
             ),
             Arguments.of(
                 new BytecodeInstruction(
                     Opcodes.INVOKEINTERFACE, "java/util/List", "size", "()I"
                 ),
-                "<!--#185:invokeinterface(java/util/List, size, ()I)-->"
+                "<!-- #185:invokeinterface(java/util/List, size, ()I) -->"
             ),
             Arguments.of(
                 new BytecodeInstruction(
                     Opcodes.INVOKEVIRTUAL, "java/lang/String", "length", "()I"
                 ),
-                "<!--#182:invokevirtual(java/lang/String, length, ()I)-->"
+                "<!-- #182:invokevirtual(java/lang/String, length, ()I) -->"
             ),
-            Arguments.of(new BytecodeInstruction(Opcodes.RETURN), "<!--#177:return()-->"),
-            Arguments.of(new BytecodeInstruction(Opcodes.ARETURN), "<!--#176:areturn()-->"),
-            Arguments.of(new BytecodeInstruction(Opcodes.DUP), "<!--#89:dup()-->")
+            Arguments.of(new BytecodeInstruction(Opcodes.RETURN), "<!-- #177:return() -->"),
+            Arguments.of(new BytecodeInstruction(Opcodes.ARETURN), "<!-- #176:areturn() -->"),
+            Arguments.of(new BytecodeInstruction(Opcodes.DUP), "<!-- #89:dup() -->")
         );
     }
 }

@@ -92,7 +92,9 @@ public final class DirectivesComment implements Iterable<Directive> {
         if (this.comment.isEmpty()) {
             result = new Directives().iterator();
         } else {
-            result = new Directives().comment(this.escaped()).iterator();
+            result = new Directives().comment(
+                String.format(" %s ", this.escaped())
+            ).iterator();
         }
         return result;
     }
