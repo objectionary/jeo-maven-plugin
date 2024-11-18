@@ -101,11 +101,6 @@ public final class XmirRepresentation implements Representation {
     }
 
     @Override
-    public XML toEO() {
-        return this.xml.value();
-    }
-
-    @Override
     public Bytecode toBytecode() {
         final XML xmir = this.xml.value();
         try {

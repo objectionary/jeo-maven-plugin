@@ -108,7 +108,10 @@ public final class BytecodeRepresentation implements Representation {
         return new Details(this.className(), this.source);
     }
 
-    @Override
+    /**
+     * Convert to EOlang XML representation (XMIR).
+     * @return XML.
+     */
     public XML toEO() {
         return this.toEO(true);
     }

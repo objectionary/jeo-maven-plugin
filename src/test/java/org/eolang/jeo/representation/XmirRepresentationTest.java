@@ -75,9 +75,7 @@ final class XmirRepresentationTest {
     void returnsXmlRepresentationOfEo() {
         MatcherAssert.assertThat(
             "The XML representation of the EO object is not correct",
-            new XmirRepresentation(
-                new BytecodeProgram(new BytecodeClass("org/eolang/foo/Math")).xml()
-            ).toEO(),
+            new BytecodeProgram(new BytecodeClass("org/eolang/foo/Math")).xml(),
             XhtmlMatchers.hasXPath("/program[@name='j$Math']")
         );
     }

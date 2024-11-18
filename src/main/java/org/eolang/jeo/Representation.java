@@ -42,12 +42,6 @@ public interface Representation {
     Details details();
 
     /**
-     * Convert to EOlang XML representation (XMIR).
-     * @return XML.
-     */
-    XML toEO();
-
-    /**
      * Convert to bytecode.
      * @return Array of bytes.
      */
