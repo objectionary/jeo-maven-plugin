@@ -29,13 +29,10 @@ import java.util.Arrays;
 import lombok.ToString;
 import org.cactoos.Input;
 import org.cactoos.bytes.BytesOf;
-import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
-import org.eolang.jeo.Details;
-import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
@@ -51,7 +48,7 @@ import org.xembly.ImpossibleModificationException;
  */
 @ToString
 @SuppressWarnings("PMD.UseObjectForClearerAPI")
-public final class BytecodeRepresentation implements Representation {
+public final class BytecodeRepresentation {
 
     /**
      * Input source.
@@ -103,13 +100,15 @@ public final class BytecodeRepresentation implements Representation {
         this.source = source;
     }
 
+    /**
+     * Read class name from bytecode.
+     *
+     * @return Class name.
+     */
     public String name() {
-        return this.className();
-    }
-
-    @Override
-    public Details details() {
-        return new Details(this.className(), this.source);
+        final ClassNameVisitor name = new ClassNameVisitor();
+        new ClassReader(this.input.value()).accept(name, 0);
+        return name.asString();
     }
 
     /**
@@ -135,7 +134,7 @@ public final class BytecodeRepresentation implements Representation {
             throw new IllegalStateException(
                 String.format(
                     "Something went wrong during transformation %s into XML by using directives %n%s%n",
-                    this.className(),
+                    this.name(),
                     directives
                 ),
                 exception
@@ -150,17 +149,6 @@ public final class BytecodeRepresentation implements Representation {
                 exception
             );
         }
-    }
-
-    /**
-     * Read class name from bytecode.
-     *
-     * @return Class name.
-     */
-    private String className() {
-        final ClassNameVisitor name = new ClassNameVisitor();
-        new ClassReader(this.input.value()).accept(name, 0);
-        return name.asString();
     }
 
     /**
