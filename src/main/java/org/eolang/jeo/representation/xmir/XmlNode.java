@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,14 @@ public final class XmlNode {
      */
     public XmlNode(final String xml) {
         this(new XMLDocument(xml).node().getFirstChild());
+    }
+
+    /**
+     * Constructor.
+     * @param xml XML document
+     */
+    public XmlNode(final XML xml) {
+        this(xml.node());
     }
 
     /**
@@ -224,13 +233,10 @@ public final class XmlNode {
      */
     private Optional<XmlNode> optchild(final String name) {
         Optional<XmlNode> result = Optional.empty();
-        final NodeList children = this.node.getChildNodes();
-        for (int index = 0; index < children.getLength(); ++index) {
-            final Node current = children.item(index);
-            if (current.getNodeName().equals(name)) {
-                result = Optional.of(new XmlNode(current));
-                break;
-            }
+        final XML doc = new XMLDocument(this.node);
+        final List<XML> nodes = doc.nodes(name);
+        if (!nodes.isEmpty()) {
+            result = Optional.of(new XmlNode(nodes.get(0)));
         }
         return result;
     }
