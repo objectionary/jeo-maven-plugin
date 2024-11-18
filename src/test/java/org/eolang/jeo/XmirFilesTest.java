@@ -39,11 +39,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link XmirRepresentations}.
+ * Test case for {@link XmirFiles}.
  *
  * @since 0.1.0
  */
-final class XmirRepresentationsTest {
+final class XmirFilesTest {
 
     @Test
     void retrievesObjectsSuccessfully(@TempDir final Path temp) throws IOException {
@@ -62,7 +62,7 @@ final class XmirRepresentationsTest {
         );
         MatcherAssert.assertThat(
             String.format("Objects were not retrieved, we expected '%d' objects", expected),
-            new XmirRepresentations(temp).all().collect(Collectors.toList()),
+            new XmirFiles(temp).all().collect(Collectors.toList()),
             Matchers.hasSize(expected)
         );
     }
@@ -72,7 +72,7 @@ final class XmirRepresentationsTest {
         Files.createDirectories(temp.resolve("some-path"));
         MatcherAssert.assertThat(
             "Objects were not retrieved, we expected empty list",
-            new XmirRepresentations(temp).all().collect(Collectors.toList()),
+            new XmirFiles(temp).all().collect(Collectors.toList()),
             Matchers.empty()
         );
     }
@@ -81,7 +81,7 @@ final class XmirRepresentationsTest {
     void throwsExceptionIfFolderDoesNotExist(@TempDir final Path temp) {
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> new XmirRepresentations(temp.resolve("missing")).all(),
+            () -> new XmirFiles(temp.resolve("missing")).all(),
             "Exception was not thrown when folder does not exist"
         );
     }
@@ -96,7 +96,7 @@ final class XmirRepresentationsTest {
             new BytecodeProgram(new BytecodeClass("OpeoClass")).xml().toString()
                 .getBytes(StandardCharsets.UTF_8)
         );
-        final Stream<Path> all = new XmirRepresentations(path).all();
+        final Stream<Path> all = new XmirFiles(path).all();
         MatcherAssert.assertThat(
             String.format(
                 "Objects were not retrieved, we expected exactly one object was read from %s",

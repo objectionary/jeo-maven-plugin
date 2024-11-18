@@ -26,28 +26,29 @@ package org.eolang.jeo;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Project compiled classes.
- * @since 0.1
+ * EO objects.
+ * Reads all EO objects from the folder.
+ *
+ * @since 0.1.0
  */
-final class BytecodeRepresentations {
+final class XmirFiles {
 
     /**
-     * Project compiled classes.
+     * Where to read objects from.
+     * Usually it's a folder with the name "generated-sources".
+     * See <a href="https://maven.apache.org/guides/mini/guide-generating-sources.html">generated-sources</a>.
      */
-    private final Path classpath;
+    private final Path objectspath;
 
     /**
      * Constructor.
-     * @param classes Folder with compiled classes.
+     * @param objectspath Where to read objects from.
      */
-    BytecodeRepresentations(final Path classes) {
-        this.classpath = classes;
+    XmirFiles(final Path objectspath) {
+        this.objectspath = objectspath;
     }
 
     /**
@@ -55,41 +56,14 @@ final class BytecodeRepresentations {
      * @return All representations.
      */
     public Stream<Path> all() {
+        final Path path = this.objectspath;
         try {
-            return this.classes().stream();
+            return Files.walk(path).filter(Files::isRegularFile);
         } catch (final IOException exception) {
             throw new IllegalStateException(
-                String.format(
-                    "Can't disassemble bytecode from '%s'. ",
-                    this.classpath
-                ),
+                String.format("Can't read folder '%s'", path),
                 exception
             );
-        }
-    }
-
-    /**
-     * Find all bytecode files.
-     * @return Collection of bytecode files
-     * @throws java.io.IOException If some I/O problem arises
-     */
-    private Collection<Path> classes() throws IOException {
-        if (Objects.isNull(this.classpath)) {
-            throw new IllegalStateException(
-                "The classes directory is not set, jeo-maven-plugin does not know where to look for classes."
-            );
-        }
-        if (!Files.exists(this.classpath)) {
-            throw new IllegalStateException(
-                String.format(
-                    "The classes directory '%s' does not exist, jeo-maven-plugin does not know where to look for classes.",
-                    this.classpath
-                )
-            );
-        }
-        try (Stream<Path> walk = Files.walk(this.classpath)) {
-            return walk.filter(path -> path.toString().endsWith(".class"))
-                .collect(Collectors.toList());
         }
     }
 }

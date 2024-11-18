@@ -23,12 +23,8 @@
  */
 package org.eolang.jeo;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import lombok.ToString;
 
 /**
@@ -88,26 +84,6 @@ public class Details {
      */
     public String name() {
         return this.storage.get(Details.NAME_KEY);
-    }
-
-    /**
-     * Original source of the representation.
-     * It could be a file name or a URL.
-     * @return Optional Source.
-     */
-    public Optional<Path> source() {
-        final Optional<Path> result;
-        if (this.storage.containsKey(Details.SOURCE_KEY)) {
-            final Path path = Paths.get(this.storage.get(Details.SOURCE_KEY)).toAbsolutePath();
-            if (Files.exists(path)) {
-                result = Optional.of(path);
-            } else {
-                result = Optional.empty();
-            }
-        } else {
-            result = Optional.empty();
-        }
-        return result;
     }
 
     /**
