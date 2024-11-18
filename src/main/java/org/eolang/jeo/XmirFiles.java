@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.XmirRepresentation;
 
 /**
  * EO objects.
@@ -35,7 +34,7 @@ import org.eolang.jeo.representation.XmirRepresentation;
  *
  * @since 0.1.0
  */
-final class XmirRepresentations implements Representations {
+final class XmirFiles {
 
     /**
      * Where to read objects from.
@@ -48,17 +47,18 @@ final class XmirRepresentations implements Representations {
      * Constructor.
      * @param objectspath Where to read objects from.
      */
-    XmirRepresentations(final Path objectspath) {
+    XmirFiles(final Path objectspath) {
         this.objectspath = objectspath;
     }
 
-    @Override
-    public Stream<? extends Representation> all() {
+    /**
+     * All representations.
+     * @return All representations.
+     */
+    public Stream<Path> all() {
         final Path path = this.objectspath;
         try {
-            return Files.walk(path)
-                .filter(Files::isRegularFile)
-                .map(XmirRepresentation::new);
+            return Files.walk(path).filter(Files::isRegularFile);
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't read folder '%s'", path),
@@ -66,5 +66,4 @@ final class XmirRepresentations implements Representations {
             );
         }
     }
-
 }

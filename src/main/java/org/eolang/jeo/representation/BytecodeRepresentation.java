@@ -29,13 +29,10 @@ import java.util.Arrays;
 import lombok.ToString;
 import org.cactoos.Input;
 import org.cactoos.bytes.BytesOf;
-import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
-import org.eolang.jeo.Details;
-import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
@@ -44,14 +41,11 @@ import org.xembly.ImpossibleModificationException;
 
 /**
  * Intermediate representation of a class files which can be optimized from bytecode.
- * You can also use that site to check if bytecode is correct:
- * <a href="https://godbolt.org">https://godbolt.org/</a>
- *
- * @since 0.1.0
+ * @since 0.1
  */
 @ToString
 @SuppressWarnings("PMD.UseObjectForClearerAPI")
-public final class BytecodeRepresentation implements Representation {
+public final class BytecodeRepresentation {
 
     /**
      * Input source.
@@ -59,17 +53,12 @@ public final class BytecodeRepresentation implements Representation {
     private final Unchecked<byte[]> input;
 
     /**
-     * The source of the input.
-     */
-    private final String source;
-
-    /**
      * Constructor.
      *
      * @param clazz Path to the class file
      */
     public BytecodeRepresentation(final Path clazz) {
-        this(BytecodeRepresentation.fromFile(clazz), String.valueOf(clazz));
+        this(BytecodeRepresentation.fromFile(clazz));
     }
 
     /**
@@ -78,7 +67,7 @@ public final class BytecodeRepresentation implements Representation {
      * @param bytecode Bytecode
      */
     public BytecodeRepresentation(final Bytecode bytecode) {
-        this(BytecodeRepresentation.fromBytes(bytecode.bytes()), "bytecode");
+        this(BytecodeRepresentation.fromBytes(bytecode.bytes()));
     }
 
     /**
@@ -87,28 +76,32 @@ public final class BytecodeRepresentation implements Representation {
      * @param input Input source
      */
     BytecodeRepresentation(final Input input) {
-        this(BytecodeRepresentation.fromInput(input), "bytecode");
+        this(BytecodeRepresentation.fromInput(input));
     }
 
     /**
      * Constructor.
      * @param input Input.
-     * @param source The source of the input.
      */
-    public BytecodeRepresentation(
-        final Unchecked<byte[]> input,
-        final String source
-    ) {
+    private BytecodeRepresentation(final Unchecked<byte[]> input) {
         this.input = input;
-        this.source = source;
     }
 
-    @Override
-    public Details details() {
-        return new Details(this.className(), this.source);
+    /**
+     * Read class name from bytecode.
+     *
+     * @return Class name.
+     */
+    public String name() {
+        final ClassNameVisitor name = new ClassNameVisitor();
+        new ClassReader(this.input.value()).accept(name, 0);
+        return name.asString();
     }
 
-    @Override
+    /**
+     * Convert to EOlang XML representation (XMIR).
+     * @return XML.
+     */
     public XML toEO() {
         return this.toEO(true);
     }
@@ -128,7 +121,7 @@ public final class BytecodeRepresentation implements Representation {
             throw new IllegalStateException(
                 String.format(
                     "Something went wrong during transformation %s into XML by using directives %n%s%n",
-                    this.className(),
+                    this.name(),
                     directives
                 ),
                 exception
@@ -143,27 +136,6 @@ public final class BytecodeRepresentation implements Representation {
                 exception
             );
         }
-    }
-
-    @Override
-    public Bytecode toBytecode() {
-        return new Bytecode(new UncheckedBytes(new BytesOf(this.input.value())).asBytes());
-    }
-
-    @Override
-    public long size() {
-        return this.input.value().length;
-    }
-
-    /**
-     * Read class name from bytecode.
-     *
-     * @return Class name.
-     */
-    private String className() {
-        final ClassNameVisitor name = new ClassNameVisitor();
-        new ClassReader(this.input.value()).accept(name, 0);
-        return name.asString();
     }
 
     /**

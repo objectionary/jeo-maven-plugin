@@ -30,14 +30,12 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.BytecodeRepresentation;
 
 /**
  * Project compiled classes.
- *
- * @since 0.1.0
+ * @since 0.1
  */
-public final class BytecodeRepresentations implements Representations {
+final class BytecodeClasses {
 
     /**
      * Project compiled classes.
@@ -48,14 +46,17 @@ public final class BytecodeRepresentations implements Representations {
      * Constructor.
      * @param classes Folder with compiled classes.
      */
-    public BytecodeRepresentations(final Path classes) {
+    BytecodeClasses(final Path classes) {
         this.classpath = classes;
     }
 
-    @Override
-    public Stream<? extends Representation> all() {
+    /**
+     * All representations.
+     * @return All representations.
+     */
+    public Stream<Path> all() {
         try {
-            return this.bytecode();
+            return this.classes().stream();
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format(
@@ -65,17 +66,6 @@ public final class BytecodeRepresentations implements Representations {
                 exception
             );
         }
-    }
-
-    /**
-     * Get all bytecode files as a collection of {@link org.eolang.jeo.Representation}.
-     * @return Collection of {@link org.eolang.jeo.Representation}
-     * @throws IOException If some I/O problem arises.
-     */
-    private Stream<? extends Representation> bytecode() throws IOException {
-        return this.classes()
-            .stream()
-            .map(BytecodeRepresentation::new);
     }
 
     /**

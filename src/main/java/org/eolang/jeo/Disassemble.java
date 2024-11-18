@@ -24,7 +24,6 @@
 package org.eolang.jeo;
 
 import java.nio.file.Path;
-import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.xmir.AllLabels;
 
 /**
@@ -47,7 +46,7 @@ public final class Disassemble implements Translation {
     }
 
     @Override
-    public Representation apply(final Representation representation) {
+    public Path apply(final Path representation) {
         // @checkstyle MethodBodyCommentsCheck (6 lines)
         //  @todo #499:90min Use AllLabels properly to avoid the need to clear the cache.
         //   It's better to create a new instance of AllLabels for each method that is parsed.
@@ -60,6 +59,6 @@ public final class Disassemble implements Translation {
             new Disassembling(this.target, representation)
         );
         trans.transform();
-        return new XmirRepresentation(trans.target());
+        return trans.target();
     }
 }

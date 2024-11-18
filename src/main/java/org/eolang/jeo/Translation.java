@@ -23,6 +23,8 @@
  */
 package org.eolang.jeo;
 
+import java.nio.file.Path;
+
 /**
  * Single translation.
  * @since 0.2
@@ -34,5 +36,5 @@ public interface Translation {
      * @param representation Original representation.
      * @return Translated representation.
      */
-    Representation apply(Representation representation);
+    Path apply(Path representation);
 }

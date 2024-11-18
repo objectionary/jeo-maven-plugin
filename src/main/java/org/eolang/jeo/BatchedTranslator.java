@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo;
 
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
 /**
@@ -52,7 +53,7 @@ public final class BatchedTranslator implements Translator {
     }
 
     @Override
-    public Stream<Representation> apply(final Stream<? extends Representation> representations) {
+    public Stream<Path> apply(final Stream<Path> representations) {
         return representations
             .parallel()
             .map(this::translate);
@@ -66,7 +67,7 @@ public final class BatchedTranslator implements Translator {
      * @param rep Representation to translate.
      * @return Translated representation.
      */
-    private Representation translate(final Representation rep) {
+    private Path translate(final Path rep) {
         Thread.currentThread().setContextClassLoader(this.loader);
         return this.translation.apply(rep);
     }

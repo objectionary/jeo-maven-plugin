@@ -24,6 +24,8 @@
 package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -65,7 +67,7 @@ public class Disassembler {
     public void disassemble() {
         final String process = "Disassembling";
         final String disassembled = "disassembled";
-        final Stream<? extends Representation> stream = new LoggedTranslator(
+        final Stream<Path> stream = new LoggedTranslator(
             process,
             disassembled,
             this.classes,
@@ -77,14 +79,26 @@ public class Disassembler {
                     new Disassemble(this.target)
                 )
             )
-        ).apply(new BytecodeRepresentations(this.classes).all());
+        ).apply(new BytecodeClasses(this.classes).all());
         stream.forEach(
-            terminated -> Logger.info(
-                this,
-                "Dissembling of '%s.xmir' (%[size]s) finished successfully.",
-                terminated.details().name(),
-                terminated.size()
-            )
+            terminated -> {
+                try {
+                    Logger.info(
+                        this,
+                        "Dissembling of '%s' (%[size]s) finished successfully.",
+                        terminated,
+                        Files.size(terminated)
+                    );
+                } catch (final IOException exception) {
+                    throw new IllegalStateException(
+                        String.format(
+                            "Filed to get size of '%s'",
+                            terminated
+                        ),
+                        exception
+                    );
+                }
+            }
         );
         stream.close();
     }

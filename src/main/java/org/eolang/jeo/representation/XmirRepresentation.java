@@ -26,13 +26,10 @@ package org.eolang.jeo.representation;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
-import org.eolang.jeo.Details;
-import org.eolang.jeo.Representation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.eolang.parser.Schema;
@@ -42,7 +39,7 @@ import org.eolang.parser.Schema;
  *
  * @since 0.1.0
  */
-public final class XmirRepresentation implements Representation {
+public final class XmirRepresentation {
 
     /**
      * XML.
@@ -75,7 +72,7 @@ public final class XmirRepresentation implements Representation {
      * @param xml XML.
      * @param source Source of the XML.
      */
-    public XmirRepresentation(
+    private XmirRepresentation(
         final XML xml,
         final String source
     ) {
@@ -95,17 +92,25 @@ public final class XmirRepresentation implements Representation {
         this.source = source;
     }
 
-    @Override
-    public Details details() {
-        return new Details(this.className(), this.source);
+    /**
+     * Retrieves class name from XMIR.
+     * @return Class name.
+     */
+    public String name() {
+        return new ClassName(
+            this.xml.value()
+                .xpath("/program/metas/meta/tail/text()")
+                .stream()
+                .findFirst()
+                .orElse(""),
+            this.xml.value().xpath("/program/@name").get(0)
+        ).full();
     }
 
-    @Override
-    public XML toEO() {
-        return this.xml.value();
-    }
-
-    @Override
+    /**
+     * Convert to bytecode.
+     * @return Array of bytes.
+     */
     public Bytecode toBytecode() {
         final XML xmir = this.xml.value();
         try {
@@ -124,26 +129,6 @@ public final class XmirRepresentation implements Representation {
         }
     }
 
-    @Override
-    public long size() {
-        return this.xml.value().toString().getBytes(StandardCharsets.UTF_8).length;
-    }
-
-    /**
-     * Retrieves class name from XMIR.
-     * @return Class name.
-     */
-    private String className() {
-        return new ClassName(
-            this.xml.value()
-                .xpath("/program/metas/meta/tail/text()")
-                .stream()
-                .findFirst()
-                .orElse(""),
-            this.xml.value().xpath("/program/@name").get(0)
-        ).full();
-    }
-
     /**
      * Prestructor that converts a path to a lazy XML.
      * @param path Path to an XML file.
@@ -154,7 +139,7 @@ public final class XmirRepresentation implements Representation {
     }
 
     /**
-     * Convert path to XML.
+     * Convert a path to XML.
      * @param path Path to XML file.
      * @return XML.
      */

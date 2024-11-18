@@ -26,6 +26,7 @@ package org.eolang.jeo;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.eolang.jeo.representation.PrefixedName;
+import org.eolang.jeo.representation.XmirRepresentation;
 
 /**
  * Assembling transformation.
@@ -41,33 +42,27 @@ public final class Assembling implements Transformation {
     /**
      * Representation to assemble.
      */
-    private final Representation repr;
+    private final Path from;
 
     /**
      * Constructor.
      * @param target Target folder.
      * @param representation Representation to assemble.
      */
-    Assembling(final Path target, final Representation representation) {
+    Assembling(final Path target, final Path representation) {
         this.folder = target;
-        this.repr = representation;
+        this.from = representation;
     }
 
     @Override
     public Path source() {
-        return this.repr.details().source().orElseThrow(
-            () -> new IllegalStateException(
-                String.format(
-                    "Source is not defined for assembling '%s'",
-                    this.repr.details()
-                )
-            )
-        );
+        return this.from;
     }
 
     @Override
     public Path target() {
-        final String name = new PrefixedName(this.repr.details().name()).decode();
+        final XmirRepresentation repr = new XmirRepresentation(this.from);
+        final String name = new PrefixedName(repr.name()).decode();
         final String[] subpath = name.split("\\.");
         subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
         return Paths.get(this.folder.toString(), subpath);
@@ -75,6 +70,6 @@ public final class Assembling implements Transformation {
 
     @Override
     public byte[] transform() {
-        return this.repr.toBytecode().bytes();
+        return new XmirRepresentation(this.from).toBytecode().bytes();
     }
 }
