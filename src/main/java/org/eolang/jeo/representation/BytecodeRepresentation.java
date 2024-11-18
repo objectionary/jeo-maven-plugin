@@ -41,10 +41,7 @@ import org.xembly.ImpossibleModificationException;
 
 /**
  * Intermediate representation of a class files which can be optimized from bytecode.
- * You can also use that site to check if bytecode is correct:
- * <a href="https://godbolt.org">https://godbolt.org/</a>
- *
- * @since 0.1.0
+ * @since 0.1
  */
 @ToString
 @SuppressWarnings("PMD.UseObjectForClearerAPI")
@@ -56,17 +53,12 @@ public final class BytecodeRepresentation {
     private final Unchecked<byte[]> input;
 
     /**
-     * The source of the input.
-     */
-    private final String source;
-
-    /**
      * Constructor.
      *
      * @param clazz Path to the class file
      */
     public BytecodeRepresentation(final Path clazz) {
-        this(BytecodeRepresentation.fromFile(clazz), String.valueOf(clazz));
+        this(BytecodeRepresentation.fromFile(clazz));
     }
 
     /**
@@ -75,7 +67,7 @@ public final class BytecodeRepresentation {
      * @param bytecode Bytecode
      */
     public BytecodeRepresentation(final Bytecode bytecode) {
-        this(BytecodeRepresentation.fromBytes(bytecode.bytes()), "bytecode");
+        this(BytecodeRepresentation.fromBytes(bytecode.bytes()));
     }
 
     /**
@@ -84,20 +76,15 @@ public final class BytecodeRepresentation {
      * @param input Input source
      */
     BytecodeRepresentation(final Input input) {
-        this(BytecodeRepresentation.fromInput(input), "bytecode");
+        this(BytecodeRepresentation.fromInput(input));
     }
 
     /**
      * Constructor.
      * @param input Input.
-     * @param source The source of the input.
      */
-    public BytecodeRepresentation(
-        final Unchecked<byte[]> input,
-        final String source
-    ) {
+    private BytecodeRepresentation(final Unchecked<byte[]> input) {
         this.input = input;
-        this.source = source;
     }
 
     /**

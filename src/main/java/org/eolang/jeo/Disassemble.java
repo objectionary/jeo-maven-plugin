@@ -24,7 +24,6 @@
 package org.eolang.jeo;
 
 import java.nio.file.Path;
-import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.xmir.AllLabels;
 
 /**

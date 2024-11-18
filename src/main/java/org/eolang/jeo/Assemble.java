@@ -24,7 +24,6 @@
 package org.eolang.jeo;
 
 import java.nio.file.Path;
-import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.xmir.AllLabels;
 
 /**
@@ -53,10 +52,6 @@ public final class Assemble implements Translation {
             new Assembling(this.classes, representation)
         );
         trans.transform();
-        final Path target = trans.target();
-//        new BytecodeRepresentation(target);
-        return target;
+        return trans.target();
     }
-
-
 }

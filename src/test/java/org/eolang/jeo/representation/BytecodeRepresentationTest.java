@@ -23,10 +23,7 @@
  */
 package org.eolang.jeo.representation;
 
-import org.cactoos.bytes.BytesOf;
-import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
-import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
