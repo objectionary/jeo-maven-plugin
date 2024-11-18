@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo;
 
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
 /**
@@ -36,7 +37,7 @@ public interface Translator {
      * @param representations IRs to translate.
      * @return Translated IRs.
      */
-    Stream<? extends Representation> apply(
-        Stream<? extends Representation> representations
+    Stream<Path> apply(
+        Stream<Path> representations
     );
 }

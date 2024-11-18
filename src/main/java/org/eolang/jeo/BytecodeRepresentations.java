@@ -52,6 +52,20 @@ public final class BytecodeRepresentations implements Representations {
         this.classpath = classes;
     }
 
+    public Stream<Path> paths() {
+        try {
+            return this.classes().stream();
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Can't disassemble bytecode from '%s'. ",
+                    this.classpath
+                ),
+                exception
+            );
+        }
+    }
+
     @Override
     public Stream<? extends Representation> all() {
         try {

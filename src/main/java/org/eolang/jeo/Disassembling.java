@@ -26,6 +26,7 @@ package org.eolang.jeo;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.PrefixedName;
 
 /**
@@ -42,37 +43,39 @@ public final class Disassembling implements Transformation {
     /**
      * Representation to disassemble.
      */
-    private final Representation repr;
+    private final Path repr;
 
     /**
      * Constructor.
      * @param target Target folder.
      * @param representation Representation to disassemble.
      */
-    Disassembling(final Path target, final Representation representation) {
+    Disassembling(final Path target, final Path representation) {
         this.folder = target;
         this.repr = representation;
     }
 
     @Override
     public Path source() {
-        return this.repr.details().source().orElseThrow(
-            () -> new IllegalStateException(
-                String.format(
-                    "Source is not defined for disassembling '%s'",
-                    this.repr.details()
-                )
-            )
-        );
+        return this.repr;
+//        return this.repr.details().source().orElseThrow(
+//            () -> new IllegalStateException(
+//                String.format(
+//                    "Source is not defined for disassembling '%s'",
+//                    this.repr.details()
+//                )
+//            )
+//        );
     }
 
     @Override
     public Path target() {
+        Representation representation = new BytecodeRepresentation(this.repr);
         return this.folder.resolve(
             String.format(
                 "%s.xmir",
                 new PrefixedName(
-                    this.repr.details().name()
+                    representation.details().name()
                 ).decode().replace('/', File.separatorChar)
             )
         );
@@ -80,6 +83,7 @@ public final class Disassembling implements Transformation {
 
     @Override
     public byte[] transform() {
-        return this.repr.toEO().toString().getBytes(StandardCharsets.UTF_8);
+        return new BytecodeRepresentation(this.repr).toEO().toString()
+            .getBytes(StandardCharsets.UTF_8);
     }
 }

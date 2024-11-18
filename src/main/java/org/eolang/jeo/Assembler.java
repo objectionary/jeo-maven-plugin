@@ -24,6 +24,8 @@
 package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -61,7 +63,7 @@ final class Assembler {
     void assemble() {
         final String assembling = "Assembling";
         final String assembled = "assembled";
-        final Stream<? extends Representation> stream = new LoggedTranslator(
+        final Stream<Path> stream = new LoggedTranslator(
             assembling,
             assembled,
             this.input,
@@ -73,14 +75,23 @@ final class Assembler {
                     new Assemble(this.output)
                 )
             )
-        ).apply(new XmirRepresentations(this.input).all());
+        ).apply(new XmirRepresentations(this.input).paths());
         stream.forEach(
-            terminated -> Logger.info(
-                this,
-                "Assembling of '%s.class' (%[size]s) finished successfully.",
-                terminated.details().name(),
-                terminated.size()
-            )
+            terminated -> {
+                try {
+                    Logger.info(
+                        this,
+                        "Assembling of '%s' (%[size]s) finished successfully.",
+                        terminated,
+                        Files.size(terminated)
+                    );
+                } catch (final IOException exception) {
+                    throw new IllegalStateException(
+                        String.format("Can't get size of '%s'", terminated),
+                        exception
+                    );
+                }
+            }
         );
         stream.close();
     }

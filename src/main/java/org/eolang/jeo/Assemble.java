@@ -47,12 +47,16 @@ public final class Assemble implements Translation {
     }
 
     @Override
-    public Representation apply(final Representation representation) {
+    public Path apply(final Path representation) {
         new AllLabels().clearCache();
         final Transformation trans = new Caching(
             new Assembling(this.classes, representation)
         );
         trans.transform();
-        return new BytecodeRepresentation(trans.target());
+        final Path target = trans.target();
+//        new BytecodeRepresentation(target);
+        return target;
     }
+
+
 }

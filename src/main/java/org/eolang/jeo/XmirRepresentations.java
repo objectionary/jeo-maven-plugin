@@ -52,6 +52,18 @@ final class XmirRepresentations implements Representations {
         this.objectspath = objectspath;
     }
 
+    public Stream<Path> paths(){
+        final Path path = this.objectspath;
+        try {
+            return Files.walk(path).filter(Files::isRegularFile);
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format("Can't read folder '%s'", path),
+                exception
+            );
+        }
+    }
+
     @Override
     public Stream<? extends Representation> all() {
         final Path path = this.objectspath;

@@ -67,7 +67,7 @@ final class BatchedTranslatorTest {
                 .getBytes(StandardCharsets.UTF_8)
         );
         new BatchedTranslator(new Disassemble(temp))
-            .apply(Stream.of(new XmirRepresentation(clazz)))
+            .apply(Stream.of(clazz))
             .collect(Collectors.toList());
         MatcherAssert.assertThat(
             "XML file was not saved",
@@ -90,9 +90,8 @@ final class BatchedTranslatorTest {
         final BatchedTranslator footprint = new BatchedTranslator(
             new Disassemble(temp)
         );
-        final Representation repr = new XmirRepresentation(path);
-        footprint.apply(Stream.of(repr)).collect(Collectors.toList());
-        footprint.apply(Stream.of(repr)).collect(Collectors.toList());
+        footprint.apply(Stream.of(path)).collect(Collectors.toList());
+        footprint.apply(Stream.of(path)).collect(Collectors.toList());
         MatcherAssert.assertThat(
             "XML file was not successfully overwritten",
             temp.resolve(this.expected).toFile(),
@@ -115,7 +114,7 @@ final class BatchedTranslatorTest {
             ).xml().toString().getBytes(StandardCharsets.UTF_8)
         );
         new BatchedTranslator(new Assemble(temp)).apply(
-            Stream.of(new XmirRepresentation(path))
+            Stream.of(path)
         ).collect(Collectors.toList());
         MatcherAssert.assertThat(
             String.format(

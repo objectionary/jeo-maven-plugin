@@ -85,9 +85,7 @@ public final class LoggedTranslator implements Translator {
     }
 
     @Override
-    public Stream<? extends Representation> apply(
-        final Stream<? extends Representation> representations
-    ) {
+    public Stream<Path> apply(final Stream<Path> representations) {
         Logger.info(
             this,
             "%s files from '%[file]s' to '%[file]s'",

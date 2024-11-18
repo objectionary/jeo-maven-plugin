@@ -76,15 +76,13 @@ public final class LoggedTranslation implements Translation {
     }
 
     @Override
-    public Representation apply(final Representation representation) {
-        final Representation result;
-        final Path source = representation.details().source().orElse(LoggedTranslation.UNKNOWN);
-        this.logStartWithSize(source);
+    public Path apply(final Path representation) {
+        final Path result;
+        this.logStartWithSize(representation);
         final long start = System.currentTimeMillis();
         result = this.original.apply(representation);
         final long time = System.currentTimeMillis() - start;
-        final Path after = result.details().source().orElse(LoggedTranslation.UNKNOWN);
-        this.logEndWithSize(source, after, time);
+        this.logEndWithSize(representation, result, time);
         return result;
     }
 
