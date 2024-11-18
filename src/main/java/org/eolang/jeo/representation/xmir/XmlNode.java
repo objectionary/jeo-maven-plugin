@@ -33,7 +33,6 @@ import java.util.stream.Stream;
 import org.eolang.jeo.representation.directives.JeoFqn;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * XML smart element.
@@ -260,12 +259,11 @@ public final class XmlNode {
      * Objects.
      * @return Stream of class objects.
      */
-    private Stream<Node> objects() {
-        final NodeList children = this.node.getChildNodes();
-        final List<Node> res = new ArrayList<>(children.getLength());
-        for (int index = 0; index < children.getLength(); ++index) {
-            final Node child = children.item(index);
-            if ("o".equals(child.getNodeName())) {
+    private Stream<XML> objects() {
+        final List<XML> nodes = new XMLDocument(this.node).nodes("node()");
+        final List<XML> res = new ArrayList<>(nodes.size());
+        for (final XML child : nodes) {
+            if ("o".equals(child.node().getNodeName())) {
                 res.add(child);
             }
         }

@@ -23,9 +23,12 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.cactoos.list.ListOf;
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.hamcrest.MatcherAssert;
@@ -108,6 +111,25 @@ final class XmlNodeTest {
             ),
             child,
             new IsEqual<>(new XmlNode(expected))
+        );
+    }
+
+    @Test
+    void retrievesChildObjects() {
+        final List<XmlNode> objects = new XmlNode(
+            "<program><o>o1</o><o>o2</o></program>"
+        ).children().collect(Collectors.toList());
+        final List<XmlNode> expected = new ListOf<>(
+            new XmlNode("<o>o1</o>"),
+            new XmlNode("<o>o2</o>")
+        );
+        MatcherAssert.assertThat(
+            String.format(
+            "Retrieved child objects: %s don't match with expected: %s",
+                objects,
+                expected
+            ),
+            objects, new IsEqual<>(expected)
         );
     }
 
