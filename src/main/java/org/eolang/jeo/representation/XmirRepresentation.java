@@ -124,11 +124,6 @@ public final class XmirRepresentation implements Representation {
         }
     }
 
-    @Override
-    public long size() {
-        return this.xml.value().toString().getBytes(StandardCharsets.UTF_8).length;
-    }
-
     /**
      * Retrieves class name from XMIR.
      * @return Class name.

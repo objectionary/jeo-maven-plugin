@@ -42,7 +42,7 @@ public final class Assembling implements Transformation {
     /**
      * Representation to assemble.
      */
-    private final Path repr;
+    private final Path from;
 
     /**
      * Constructor.
@@ -51,25 +51,17 @@ public final class Assembling implements Transformation {
      */
     Assembling(final Path target, final Path representation) {
         this.folder = target;
-        this.repr = representation;
+        this.from = representation;
     }
 
     @Override
     public Path source() {
-        return repr;
-//        return this.repr.details().source().orElseThrow(
-//            () -> new IllegalStateException(
-//                String.format(
-//                    "Source is not defined for assembling '%s'",
-//                    this.repr.details()
-//                )
-//            )
-//        );
+        return this.from;
     }
 
     @Override
     public Path target() {
-        final Representation representation = new XmirRepresentation(this.repr);
+        final Representation representation = new XmirRepresentation(this.from);
         final String name = new PrefixedName(representation.details().name()).decode();
         final String[] subpath = name.split("\\.");
         subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
@@ -78,6 +70,6 @@ public final class Assembling implements Transformation {
 
     @Override
     public byte[] transform() {
-        return new XmirRepresentation(this.repr).toBytecode().bytes();
+        return new XmirRepresentation(this.from).toBytecode().bytes();
     }
 }

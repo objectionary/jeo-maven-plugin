@@ -52,10 +52,4 @@ public interface Representation {
      * @return Array of bytes.
      */
     Bytecode toBytecode();
-
-    /**
-     * Size of the representation.
-     * @return Size.
-     */
-    long size();
 }
