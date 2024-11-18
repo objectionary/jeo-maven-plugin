@@ -43,7 +43,7 @@ public final class Disassembling implements Transformation {
     /**
      * Representation to disassemble.
      */
-    private final Path repr;
+    private final Path from;
 
     /**
      * Constructor.
@@ -52,30 +52,21 @@ public final class Disassembling implements Transformation {
      */
     Disassembling(final Path target, final Path representation) {
         this.folder = target;
-        this.repr = representation;
+        this.from = representation;
     }
 
     @Override
     public Path source() {
-        return this.repr;
-//        return this.repr.details().source().orElseThrow(
-//            () -> new IllegalStateException(
-//                String.format(
-//                    "Source is not defined for disassembling '%s'",
-//                    this.repr.details()
-//                )
-//            )
-//        );
+        return this.from;
     }
 
     @Override
     public Path target() {
-        Representation representation = new BytecodeRepresentation(this.repr);
         return this.folder.resolve(
             String.format(
                 "%s.xmir",
                 new PrefixedName(
-                    representation.details().name()
+                    new BytecodeRepresentation(this.from).name()
                 ).decode().replace('/', File.separatorChar)
             )
         );
@@ -83,7 +74,9 @@ public final class Disassembling implements Transformation {
 
     @Override
     public byte[] transform() {
-        return new BytecodeRepresentation(this.repr).toEO().toString()
+        return new BytecodeRepresentation(this.from)
+            .toEO()
+            .toString()
             .getBytes(StandardCharsets.UTF_8);
     }
 }

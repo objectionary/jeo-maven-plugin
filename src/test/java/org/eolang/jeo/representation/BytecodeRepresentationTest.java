@@ -56,7 +56,7 @@ final class BytecodeRepresentationTest {
     @Test
     void retrievesName() {
         final ResourceOf input = new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE);
-        final String actual = new BytecodeRepresentation(input).details().name();
+        final String actual = new BytecodeRepresentation(input).name();
         final String expected = "org/eolang/jeo/MethodByte";
         MatcherAssert.assertThat(
             String.format(

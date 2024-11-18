@@ -61,8 +61,8 @@ public final class Assembling implements Transformation {
 
     @Override
     public Path target() {
-        final Representation representation = new XmirRepresentation(this.from);
-        final String name = new PrefixedName(representation.details().name()).decode();
+        final XmirRepresentation representation = new XmirRepresentation(this.from);
+        final String name = new PrefixedName(representation.name()).decode();
         final String[] subpath = name.split("\\.");
         subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
         return Paths.get(this.folder.toString(), subpath);

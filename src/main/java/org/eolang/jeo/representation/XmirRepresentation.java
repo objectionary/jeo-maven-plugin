@@ -95,6 +95,14 @@ public final class XmirRepresentation implements Representation {
         this.source = source;
     }
 
+    /**
+     * Retrieves class name from XMIR.
+     * @return Class name.
+     */
+    public String name() {
+        return this.className();
+    }
+
     @Override
     public Details details() {
         return new Details(this.className(), this.source);

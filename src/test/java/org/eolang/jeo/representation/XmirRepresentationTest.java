@@ -59,7 +59,7 @@ final class XmirRepresentationTest {
                 "org/eolang/foo",
                 new BytecodeClass(name)
             ).xml()
-        ).details().name();
+        ).name();
         MatcherAssert.assertThat(
             String.format(
                 "The name of the class is not retrieved correctly, we expected '%s', but got '%s'",

@@ -103,6 +103,10 @@ public final class BytecodeRepresentation implements Representation {
         this.source = source;
     }
 
+    public String name() {
+        return this.className();
+    }
+
     @Override
     public Details details() {
         return new Details(this.className(), this.source);
