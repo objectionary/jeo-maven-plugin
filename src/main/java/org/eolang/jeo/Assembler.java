@@ -75,7 +75,7 @@ final class Assembler {
                     new Assemble(this.output)
                 )
             )
-        ).apply(new XmirRepresentations(this.input).paths());
+        ).apply(new XmirRepresentations(this.input).all());
         stream.forEach(
             terminated -> {
                 try {

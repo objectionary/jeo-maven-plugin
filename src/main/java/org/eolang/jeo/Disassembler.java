@@ -79,7 +79,7 @@ public class Disassembler {
                     new Disassemble(this.target)
                 )
             )
-        ).apply(new BytecodeRepresentations(this.classes).paths());
+        ).apply(new BytecodeRepresentations(this.classes).all());
         stream.forEach(
             terminated -> {
                 try {

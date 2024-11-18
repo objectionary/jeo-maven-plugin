@@ -96,7 +96,7 @@ final class XmirRepresentationsTest {
             new BytecodeProgram(new BytecodeClass("OpeoClass")).xml().toString()
                 .getBytes(StandardCharsets.UTF_8)
         );
-        final Stream<? extends Representation> all = new XmirRepresentations(path).all();
+        final Stream<Path> all = new XmirRepresentations(path).all();
         MatcherAssert.assertThat(
             String.format(
                 "Objects were not retrieved, we expected exactly one object was read from %s",
