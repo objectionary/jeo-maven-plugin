@@ -100,7 +100,10 @@ public final class XmirRepresentation implements Representation {
         return new Details(this.className(), this.source);
     }
 
-    @Override
+    /**
+     * Convert to bytecode.
+     * @return Array of bytes.
+     */
     public Bytecode toBytecode() {
         final XML xmir = this.xml.value();
         try {

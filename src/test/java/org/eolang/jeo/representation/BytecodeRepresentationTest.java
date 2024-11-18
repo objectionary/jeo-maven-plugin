@@ -54,18 +54,6 @@ final class BytecodeRepresentationTest {
     }
 
     @Test
-    void returnsTheSameBytes() {
-        final ResourceOf input = new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE);
-        final Bytecode expected = new Bytecode(new UncheckedBytes(new BytesOf(input)).asBytes());
-        final Bytecode actual = new BytecodeRepresentation(input).toBytecode();
-        MatcherAssert.assertThat(
-            "The bytes should be the same",
-            expected,
-            Matchers.equalTo(actual)
-        );
-    }
-
-    @Test
     void retrievesName() {
         final ResourceOf input = new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE);
         final String actual = new BytecodeRepresentation(input).details().name();

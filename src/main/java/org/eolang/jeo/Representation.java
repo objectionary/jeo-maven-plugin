@@ -23,9 +23,6 @@
  */
 package org.eolang.jeo;
 
-import com.jcabi.xml.XML;
-import org.eolang.jeo.representation.bytecode.Bytecode;
-
 /**
  * Intermediate representation of objects or class files which can be translated.
  *
@@ -40,10 +37,4 @@ public interface Representation {
      * @return Representation details instance.
      */
     Details details();
-
-    /**
-     * Convert to bytecode.
-     * @return Array of bytes.
-     */
-    Bytecode toBytecode();
 }
