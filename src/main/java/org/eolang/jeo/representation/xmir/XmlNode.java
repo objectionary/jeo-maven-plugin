@@ -233,8 +233,7 @@ public final class XmlNode {
      */
     private Optional<XmlNode> optchild(final String name) {
         Optional<XmlNode> result = Optional.empty();
-        final XML doc = new XMLDocument(this.node);
-        final List<XML> nodes = doc.nodes(name);
+        final List<XML> nodes = new XMLDocument(this.node).nodes(name);
         if (!nodes.isEmpty()) {
             result = Optional.of(new XmlNode(nodes.get(0)));
         }
