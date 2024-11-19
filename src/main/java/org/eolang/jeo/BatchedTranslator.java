@@ -24,11 +24,11 @@
 package org.eolang.jeo;
 
 import java.nio.file.Path;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
  * Translator that applies a translation to a batch of representations.
- *
  * @since 0.2
  */
 public final class BatchedTranslator implements Translator {
@@ -36,7 +36,7 @@ public final class BatchedTranslator implements Translator {
     /**
      * Original translation.
      */
-    private final Translation translation;
+    private final Function<? super Path, ? extends Path> translation;
 
     /**
      * Class loader.
@@ -47,7 +47,7 @@ public final class BatchedTranslator implements Translator {
      * Constructor.
      * @param translation Original translation.
      */
-    BatchedTranslator(final Translation translation) {
+    BatchedTranslator(final Function<? super Path, ? extends Path> translation) {
         this.translation = translation;
         this.loader = Thread.currentThread().getContextClassLoader();
     }

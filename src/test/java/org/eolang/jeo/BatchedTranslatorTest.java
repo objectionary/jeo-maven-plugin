@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
@@ -47,15 +48,11 @@ final class BatchedTranslatorTest {
     /**
      * Where the XML file is expected to be saved.
      */
-    private final Path expected = Paths.get("")
-        .resolve("org")
-        .resolve("eolang")
-        .resolve("jeo")
-        .resolve("Application.xmir");
+    private final Path expected = Paths.get("Application.xmir");
 
     @Test
     void savesXml(@TempDir final Path temp) throws IOException {
-        final Path clazz = temp.resolve("Application.xml");
+        final Path clazz = temp.resolve("Application.class");
         Files.write(
             clazz,
             new BytecodeProgram(
@@ -63,7 +60,7 @@ final class BatchedTranslatorTest {
                 new BytecodeClass("Application")
             ).bytecode().bytes()
         );
-        new BatchedTranslator(new Disassemble(temp))
+        new BatchedTranslator(BatchedTranslatorTest::transform)
             .apply(Stream.of(clazz))
             .collect(Collectors.toList());
         MatcherAssert.assertThat(
@@ -75,7 +72,7 @@ final class BatchedTranslatorTest {
 
     @Test
     void overwritesXml(@TempDir final Path temp) throws IOException {
-        final Path path = Paths.get(temp.toString(), "Application.xml");
+        final Path path = Paths.get(temp.toString(), "Application.class");
         Files.createDirectories(path.getParent());
         Files.write(
             path,
@@ -84,9 +81,7 @@ final class BatchedTranslatorTest {
                 new BytecodeClass("Application")
             ).bytecode().bytes()
         );
-        final BatchedTranslator footprint = new BatchedTranslator(
-            new Disassemble(temp)
-        );
+        final BatchedTranslator footprint = new BatchedTranslator(BatchedTranslatorTest::transform);
         footprint.apply(Stream.of(path)).collect(Collectors.toList());
         footprint.apply(Stream.of(path)).collect(Collectors.toList());
         MatcherAssert.assertThat(
@@ -101,7 +96,7 @@ final class BatchedTranslatorTest {
         final String fake = "Fake";
         final Path path = temp.resolve("jeo")
             .resolve("xmir")
-            .resolve(String.format("%s.xml", fake));
+            .resolve(String.format("%s.xmir", fake));
         Files.createDirectories(path.getParent());
         Files.write(
             path,
@@ -110,7 +105,7 @@ final class BatchedTranslatorTest {
                 new BytecodeClass(fake)
             ).xml().toString().getBytes(StandardCharsets.UTF_8)
         );
-        new BatchedTranslator(new Assemble(temp))
+        new BatchedTranslator(BatchedTranslatorTest::transform)
             .apply(Stream.of(path))
             .collect(Collectors.toList());
         MatcherAssert.assertThat(
@@ -124,5 +119,34 @@ final class BatchedTranslatorTest {
                 .toFile(),
             FileMatchers.anExistingFile()
         );
+    }
+
+    /**
+     * Transform the path.
+     * @param path Path to transform.
+     * @return Transformed path.
+     */
+    private static Path transform(final Path path) {
+        final Path result;
+        try {
+            final String name = path.getFileName().toString();
+            if (name.endsWith(".class")) {
+                final Path target = path.resolveSibling(name.toString().replace(".class", ".xmir"));
+                Files.copy(path, target, StandardCopyOption.REPLACE_EXISTING);
+                result = target;
+            } else if (name.endsWith(".xmir")) {
+                final Path target = path.resolveSibling(name.toString().replace(".xmir", ".class"));
+                Files.copy(path, target, StandardCopyOption.REPLACE_EXISTING);
+                result = target;
+            } else {
+                throw new IllegalArgumentException(String.format("Unexpected file type: %s", name));
+            }
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format("Can't transform file '%s'", path),
+                exception
+            );
+        }
+        return result;
     }
 }

@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.xmir.AllLabels;
 
 /**
  * Assembler.
@@ -68,10 +69,28 @@ final class Assembler {
             assembled,
             this.input,
             this.output,
-            new BatchedTranslator(new Assemble(this.output))
+            new BatchedTranslator(this::assemble)
         ).apply(new XmirFiles(this.input).all());
         stream.forEach(this::log);
         stream.close();
+    }
+
+    /**
+     * Assemble a single "xmir" file.
+     * @param path Path to the "xmir" file.
+     * @return Path to the assembled class.
+     */
+    private Path assemble(final Path path) {
+        new AllLabels().clearCache();
+        final Transformation trans = new Logging(
+            "Assembling",
+            "assembled",
+            new Caching(
+                new Assembling(this.input, path)
+            )
+        );
+        trans.transform();
+        return trans.target();
     }
 
     /**

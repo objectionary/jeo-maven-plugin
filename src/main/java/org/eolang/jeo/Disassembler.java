@@ -28,12 +28,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.xmir.AllLabels;
 
 /**
  * This class disassembles the project's compiled classes.
  * It is used to transpile the project's compiled bytecode classes into EO.
- *
- * @since 0.1.0
+ * @since 0.1
  */
 public class Disassembler {
 
@@ -72,10 +72,35 @@ public class Disassembler {
             disassembled,
             this.classes,
             this.target,
-            new BatchedTranslator(new Disassemble(this.target))
+            new BatchedTranslator(this::disassemble)
         ).apply(new BytecodeClasses(this.classes).all());
         stream.forEach(this::log);
         stream.close();
+    }
+
+    /**
+     * Disassemble a single bytecode file.
+     * @param path Path to the bytecode file.
+     * @return Path to the decompiled file.
+     */
+    private Path disassemble(final Path path) {
+        // @checkstyle MethodBodyCommentsCheck (6 lines)
+        //  @todo #499:90min Use AllLabels properly to avoid the need to clear the cache.
+        //   It's better to create a new instance of AllLabels for each method that is parsed.
+        //   AllLabels shouldn't share common cache between different methods.
+        //   The following line were added to optimize the performance of the code.
+        //   This is dangerous and should be removed as soon as possible.
+        //   Moreover, we have the same solution in {@link Assemble} class.
+        new AllLabels().clearCache();
+        final Transformation trans = new Logging(
+            "Disassembling",
+            "disassembled",
+            new Caching(
+                new Disassembling(this.target, path)
+            )
+        );
+        trans.transform();
+        return trans.target();
     }
 
     /**
