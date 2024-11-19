@@ -127,7 +127,8 @@ final class XmlNodeTest {
                 objects,
                 expected
             ),
-            objects, new IsEqual<>(expected)
+            objects,
+            new IsEqual<>(expected)
         );
     }
 
