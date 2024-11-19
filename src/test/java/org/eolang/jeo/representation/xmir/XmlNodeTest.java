@@ -103,7 +103,7 @@ final class XmlNodeTest {
         final String expected = "<o>text</o>";
         MatcherAssert.assertThat(
             String.format(
-            "Retrieved XML: %s does not match with expected %s",
+                "Retrieved XML: %s does not match with expected %s",
                 child,
                 expected
             ),
@@ -123,7 +123,7 @@ final class XmlNodeTest {
         );
         MatcherAssert.assertThat(
             String.format(
-            "Retrieved child objects: %s don't match with expected: %s",
+                "Retrieved child objects: %s don't match with expected: %s",
                 objects,
                 expected
             ),
