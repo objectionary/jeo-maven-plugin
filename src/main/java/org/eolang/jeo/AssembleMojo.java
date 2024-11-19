@@ -118,7 +118,7 @@ public final class AssembleMojo extends AbstractMojo {
                 } else {
                     Logger.info(this, "Verification of all the generated classes.");
                     new PluginStartup(this.project, this.outputDir.toPath()).init();
-                    new BytecodeDirectory(this.outputDir.toPath()).verify();
+                    new BytecodeClasses(this.outputDir.toPath()).verify();
                 }
             }
         } catch (final DependencyResolutionRequiredException exception) {
