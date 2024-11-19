@@ -81,9 +81,9 @@ final class ParallelTranslatorTest {
                 new BytecodeClass("Application")
             ).bytecode().bytes()
         );
-        final ParallelTranslator footprint = new ParallelTranslator(ParallelTranslatorTest::transform);
-        footprint.apply(Stream.of(path)).collect(Collectors.toList());
-        footprint.apply(Stream.of(path)).collect(Collectors.toList());
+        final ParallelTranslator trans = new ParallelTranslator(ParallelTranslatorTest::transform);
+        trans.apply(Stream.of(path)).collect(Collectors.toList());
+        trans.apply(Stream.of(path)).collect(Collectors.toList());
         MatcherAssert.assertThat(
             "XML file was not successfully overwritten",
             temp.resolve(this.expected).toFile(),
@@ -131,11 +131,11 @@ final class ParallelTranslatorTest {
         try {
             final String name = path.getFileName().toString();
             if (name.endsWith(".class")) {
-                final Path target = path.resolveSibling(name.toString().replace(".class", ".xmir"));
+                final Path target = path.resolveSibling(name.replace(".class", ".xmir"));
                 Files.copy(path, target, StandardCopyOption.REPLACE_EXISTING);
                 result = target;
             } else if (name.endsWith(".xmir")) {
-                final Path target = path.resolveSibling(name.toString().replace(".xmir", ".class"));
+                final Path target = path.resolveSibling(name.replace(".xmir", ".class"));
                 Files.copy(path, target, StandardCopyOption.REPLACE_EXISTING);
                 result = target;
             } else {
