@@ -64,15 +64,15 @@ final class Assembler {
     void assemble() {
         final String assembling = "Assembling";
         final String assembled = "assembled";
-        final Stream<Path> stream = new LoggedTranslator(
+        final Stream<Path> all = new Summary(
             assembling,
             assembled,
             this.input,
             this.output,
-            new BatchedTranslator(this::assemble)
+            new ParallelTranslator(this::assemble)
         ).apply(new XmirFiles(this.input).all());
-        stream.forEach(this::log);
-        stream.close();
+        all.forEach(this::log);
+        all.close();
     }
 
     /**

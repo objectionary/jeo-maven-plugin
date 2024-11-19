@@ -67,12 +67,12 @@ public class Disassembler {
     public void disassemble() {
         final String process = "Disassembling";
         final String disassembled = "disassembled";
-        final Stream<Path> stream = new LoggedTranslator(
+        final Stream<Path> stream = new Summary(
             process,
             disassembled,
             this.classes,
             this.target,
-            new BatchedTranslator(this::disassemble)
+            new ParallelTranslator(this::disassemble)
         ).apply(new BytecodeClasses(this.classes).all());
         stream.forEach(this::log);
         stream.close();

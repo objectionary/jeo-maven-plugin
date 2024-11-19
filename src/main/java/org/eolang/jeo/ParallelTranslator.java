@@ -24,45 +24,50 @@
 package org.eolang.jeo;
 
 import java.nio.file.Path;
-import org.eolang.jeo.representation.xmir.AllLabels;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
- * Disassemble a representation to a file.
+ * Translator that applies a translation to a batch of representations in parallel.
  * @since 0.2
  */
-public final class Disassemble implements Translation {
+public final class ParallelTranslator implements Translator {
 
     /**
-     * Where to save the EO.
+     * Original translation.
      */
-    private final Path target;
+    private final Function<? super Path, ? extends Path> translation;
+
+    /**
+     * Class loader.
+     */
+    private final ClassLoader loader;
 
     /**
      * Constructor.
-     * @param target Where to save the EO.
+     * @param translation Original translation.
      */
-    public Disassemble(final Path target) {
-        this.target = target;
+    ParallelTranslator(final Function<? super Path, ? extends Path> translation) {
+        this.translation = translation;
+        this.loader = Thread.currentThread().getContextClassLoader();
     }
 
     @Override
-    public Path apply(final Path representation) {
-        // @checkstyle MethodBodyCommentsCheck (6 lines)
-        //  @todo #499:90min Use AllLabels properly to avoid the need to clear the cache.
-        //   It's better to create a new instance of AllLabels for each method that is parsed.
-        //   AllLabels shouldn't share common cache between different methods.
-        //   The following line were added to optimize the performance of the code.
-        //   This is dangerous and should be removed as soon as possible.
-        //   Moreover, we have the same solution in {@link Assemble} class.
-        new AllLabels().clearCache();
-        final Transformation trans = new Logging(
-            "Disassembling",
-            "disassembled",
-            new Caching(
-                new Disassembling(this.target, representation)
-            )
-        );
-        trans.transform();
-        return trans.target();
+    public Stream<Path> apply(final Stream<Path> representations) {
+        return representations.parallel().map(this::translate);
     }
+
+    /**
+     * Translate a representation.
+     * This method is run in parallel.
+     * Pay attention to the class loader;
+     * It's set for each sub-thread to avoid class loading issues.
+     * @param rep Representation to translate.
+     * @return Translated representation.
+     */
+    private Path translate(final Path rep) {
+        Thread.currentThread().setContextClassLoader(this.loader);
+        return this.translation.apply(rep);
+    }
+
 }

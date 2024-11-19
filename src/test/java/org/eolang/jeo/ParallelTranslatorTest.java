@@ -39,11 +39,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link BatchedTranslator}.
+ * Test case for {@link ParallelTranslator}.
  *
  * @since 0.1.0
  */
-final class BatchedTranslatorTest {
+final class ParallelTranslatorTest {
 
     /**
      * Where the XML file is expected to be saved.
@@ -60,7 +60,7 @@ final class BatchedTranslatorTest {
                 new BytecodeClass("Application")
             ).bytecode().bytes()
         );
-        new BatchedTranslator(BatchedTranslatorTest::transform)
+        new ParallelTranslator(ParallelTranslatorTest::transform)
             .apply(Stream.of(clazz))
             .collect(Collectors.toList());
         MatcherAssert.assertThat(
@@ -81,7 +81,7 @@ final class BatchedTranslatorTest {
                 new BytecodeClass("Application")
             ).bytecode().bytes()
         );
-        final BatchedTranslator footprint = new BatchedTranslator(BatchedTranslatorTest::transform);
+        final ParallelTranslator footprint = new ParallelTranslator(ParallelTranslatorTest::transform);
         footprint.apply(Stream.of(path)).collect(Collectors.toList());
         footprint.apply(Stream.of(path)).collect(Collectors.toList());
         MatcherAssert.assertThat(
@@ -105,7 +105,7 @@ final class BatchedTranslatorTest {
                 new BytecodeClass(fake)
             ).xml().toString().getBytes(StandardCharsets.UTF_8)
         );
-        new BatchedTranslator(BatchedTranslatorTest::transform)
+        new ParallelTranslator(ParallelTranslatorTest::transform)
             .apply(Stream.of(path))
             .collect(Collectors.toList());
         MatcherAssert.assertThat(

@@ -28,10 +28,6 @@ import java.nio.file.Path;
 /**
  * Transformation.
  * @since 0.6
- * @todo #784:90min Refactor Transformation, Translation and Translator.
- *  These abstractions are overcomplicated. Most probably, we can remove some of them.
- *  They were added to solve the immediate issues without thinking about the long-term
- *  architecture. Let's refactor them to make the code simpler and more maintainable.
  */
 public interface Transformation {
 

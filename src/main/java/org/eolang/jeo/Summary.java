@@ -29,10 +29,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 /**
- * Translation log.
+ * Translation summary log.
  * @since 0.2
  */
-public final class LoggedTranslator implements Translator {
+public final class Summary implements Translator {
 
     /**
      * Process name.
@@ -70,7 +70,7 @@ public final class LoggedTranslator implements Translator {
      * @param original Original translator.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    public LoggedTranslator(
+    Summary(
         final String process,
         final String participle,
         final Path input,
