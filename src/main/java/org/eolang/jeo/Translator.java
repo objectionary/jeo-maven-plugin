@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 /**
  * Translator that applies a translation to a batch of representations.
- * @since 0.1.0
+ * @since 0.1
  */
 public interface Translator {
 
@@ -37,7 +37,5 @@ public interface Translator {
      * @param representations IRs to translate.
      * @return Translated IRs.
      */
-    Stream<Path> apply(
-        Stream<Path> representations
-    );
+    Stream<Path> apply(Stream<Path> representations);
 }

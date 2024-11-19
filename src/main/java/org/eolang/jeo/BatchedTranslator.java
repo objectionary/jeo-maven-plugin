@@ -54,9 +54,7 @@ public final class BatchedTranslator implements Translator {
 
     @Override
     public Stream<Path> apply(final Stream<Path> representations) {
-        return representations
-            .parallel()
-            .map(this::translate);
+        return representations.parallel().map(this::translate);
     }
 
     /**

@@ -55,8 +55,12 @@ public final class Disassemble implements Translation {
         //   This is dangerous and should be removed as soon as possible.
         //   Moreover, we have the same solution in {@link Assemble} class.
         new AllLabels().clearCache();
-        final Transformation trans = new Caching(
-            new Disassembling(this.target, representation)
+        final Transformation trans = new Logging(
+            "Disassembling",
+            "disassembled",
+            new Caching(
+                new Disassembling(this.target, representation)
+            )
         );
         trans.transform();
         return trans.target();

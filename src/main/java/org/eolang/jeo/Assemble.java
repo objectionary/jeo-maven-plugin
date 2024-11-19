@@ -48,8 +48,12 @@ public final class Assemble implements Translation {
     @Override
     public Path apply(final Path representation) {
         new AllLabels().clearCache();
-        final Transformation trans = new Caching(
-            new Assembling(this.classes, representation)
+        final Transformation trans = new Logging(
+            "Assembling",
+            "assembled",
+            new Caching(
+                new Assembling(this.classes, representation)
+            )
         );
         trans.transform();
         return trans.target();

@@ -27,18 +27,12 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Translation that leaves a log message before and after applying the original translation.
- * @since 0.2
+ * @since 0.6
  */
-public final class LoggedTranslation implements Translation {
-
-    /**
-     * Unknown path.
-     */
-    private static final Path UNKNOWN = Paths.get("Unknown");
+public final class Logging implements Transformation {
 
     /**
      * Process name.
@@ -55,34 +49,40 @@ public final class LoggedTranslation implements Translation {
     private final String participle;
 
     /**
-     * Original translation.
+     * Original transformation.
      */
-    private final Translation original;
+    private final Transformation origin;
 
     /**
      * Constructor.
      * @param process Process name.
      * @param participle Participle of the process.
-     * @param original Original translation.
+     * @param origin Original transformation.
      */
-    public LoggedTranslation(
-        final String process,
-        final String participle,
-        final Translation original
-    ) {
+    public Logging(final String process, final String participle, final Transformation origin) {
         this.process = process;
         this.participle = participle;
-        this.original = original;
+        this.origin = origin;
     }
 
     @Override
-    public Path apply(final Path representation) {
-        final Path result;
-        this.logStartWithSize(representation);
+    public Path source() {
+        return this.origin.source();
+    }
+
+    @Override
+    public Path target() {
+        return this.origin.target();
+    }
+
+    @Override
+    public byte[] transform() {
+        final byte[] result;
+        this.logStartWithSize(this.source());
         final long start = System.currentTimeMillis();
-        result = this.original.apply(representation);
+        result = this.origin.transform();
         final long time = System.currentTimeMillis() - start;
-        this.logEndWithSize(representation, result, time);
+        this.logEndWithSize(this.source(), this.target(), time);
         return result;
     }
 
@@ -96,7 +96,7 @@ public final class LoggedTranslation implements Translation {
             "%s '%[file]s' (%[size]s)",
             this.process,
             source,
-            LoggedTranslation.size(source)
+            Logging.size(source)
         );
     }
 
@@ -113,7 +113,7 @@ public final class LoggedTranslation implements Translation {
             source,
             this.participle,
             after,
-            LoggedTranslation.size(after),
+            Logging.size(after),
             time
         );
     }
@@ -126,7 +126,7 @@ public final class LoggedTranslation implements Translation {
     private static long size(final Path path) {
         try {
             final long result;
-            if (Files.exists(path) && !path.equals(LoggedTranslation.UNKNOWN)) {
+            if (Files.exists(path)) {
                 result = Files.size(path);
             } else {
                 result = 0L;

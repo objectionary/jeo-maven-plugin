@@ -68,18 +68,12 @@ final class Assembler {
             assembled,
             this.input,
             this.output,
-            new BatchedTranslator(
-                new LoggedTranslation(
-                    assembling,
-                    assembled,
-                    new Assemble(this.output)
-                )
-            )
+            new BatchedTranslator(new Assemble(this.output))
         ).apply(new XmirFiles(this.input).all());
         stream.forEach(
             terminated -> {
                 try {
-                    Logger.info(
+                    Logger.debug(
                         this,
                         "Assembling of '%s' (%[size]s) finished successfully.",
                         terminated,

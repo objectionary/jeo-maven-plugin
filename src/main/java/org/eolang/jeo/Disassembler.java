@@ -72,18 +72,12 @@ public class Disassembler {
             disassembled,
             this.classes,
             this.target,
-            new BatchedTranslator(
-                new LoggedTranslation(
-                    process,
-                    disassembled,
-                    new Disassemble(this.target)
-                )
-            )
+            new BatchedTranslator(new Disassemble(this.target))
         ).apply(new BytecodeClasses(this.classes).all());
         stream.forEach(
             terminated -> {
                 try {
-                    Logger.info(
+                    Logger.debug(
                         this,
                         "Dissembling of '%s' (%[size]s) finished successfully.",
                         terminated,
