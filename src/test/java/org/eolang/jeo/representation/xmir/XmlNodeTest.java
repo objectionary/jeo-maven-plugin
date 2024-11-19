@@ -23,8 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
