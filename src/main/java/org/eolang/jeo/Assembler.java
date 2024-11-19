@@ -70,23 +70,27 @@ final class Assembler {
             this.output,
             new BatchedTranslator(new Assemble(this.output))
         ).apply(new XmirFiles(this.input).all());
-        stream.forEach(
-            terminated -> {
-                try {
-                    Logger.debug(
-                        this,
-                        "Assembling of '%s' (%[size]s) finished successfully.",
-                        terminated,
-                        Files.size(terminated)
-                    );
-                } catch (final IOException exception) {
-                    throw new IllegalStateException(
-                        String.format("Can't get size of '%s'", terminated),
-                        exception
-                    );
-                }
-            }
-        );
+        stream.forEach(this::log);
         stream.close();
+    }
+
+    /**
+     * Log the result.
+     * @param disassembled Disassembled file.
+     */
+    private void log(final Path disassembled) {
+        try {
+            Logger.debug(
+                this,
+                "Assembling of '%s' (%[size]s) finished successfully.",
+                disassembled,
+                Files.size(disassembled)
+            );
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format("Can't get size of '%s'", disassembled),
+                exception
+            );
+        }
     }
 }

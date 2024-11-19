@@ -74,26 +74,30 @@ public class Disassembler {
             this.target,
             new BatchedTranslator(new Disassemble(this.target))
         ).apply(new BytecodeClasses(this.classes).all());
-        stream.forEach(
-            terminated -> {
-                try {
-                    Logger.debug(
-                        this,
-                        "Dissembling of '%s' (%[size]s) finished successfully.",
-                        terminated,
-                        Files.size(terminated)
-                    );
-                } catch (final IOException exception) {
-                    throw new IllegalStateException(
-                        String.format(
-                            "Filed to get size of '%s'",
-                            terminated
-                        ),
-                        exception
-                    );
-                }
-            }
-        );
+        stream.forEach(this::log);
         stream.close();
+    }
+
+    /**
+     * Log the disassembling process.
+     * @param disassembled The disassembled file path.
+     */
+    private void log(final Path disassembled) {
+        try {
+            Logger.debug(
+                this,
+                "Dissembling of '%s' (%[size]s) finished successfully.",
+                disassembled,
+                Files.size(disassembled)
+            );
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "Filed to get size of '%s'",
+                    disassembled
+                ),
+                exception
+            );
+        }
     }
 }
