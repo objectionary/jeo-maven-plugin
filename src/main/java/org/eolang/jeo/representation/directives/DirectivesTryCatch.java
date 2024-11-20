@@ -27,6 +27,8 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.bytecode.BytecodeEntry;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.objectweb.asm.Label;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -40,17 +42,17 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
     /**
      * Start label.
      */
-    private final Label start;
+    private final BytecodeLabel start;
 
     /**
      * End label.
      */
-    private final Label end;
+    private final BytecodeLabel end;
 
     /**
      * Handler label.
      */
-    private final Label handler;
+    private final BytecodeLabel handler;
 
     /**
      * Exception type.
@@ -66,9 +68,9 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesTryCatch(
-        final Label start,
-        final Label end,
-        final Label handler,
+        final BytecodeLabel start,
+        final BytecodeLabel end,
+        final BytecodeLabel handler,
         final String type
     ) {
         this.start = start;
@@ -82,27 +84,12 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "trycatch",
             Stream.of(
-                DirectivesTryCatch.nullable(this.start),
-                DirectivesTryCatch.nullable(this.end),
-                DirectivesTryCatch.nullable(this.handler),
+                this.start.directives(false),
+                this.end.directives(false),
+                this.handler.directives(false),
                 DirectivesTryCatch.nullable(this.type)
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
-    }
-
-    /**
-     * Wraps a nullable label into a directive.
-     * @param label The label that may be null.
-     * @return The directives.
-     */
-    private static Iterable<Directive> nullable(final Label label) {
-        final Iterable<Directive> result;
-        if (Objects.nonNull(label)) {
-            result = new DirectivesLabel(label);
-        } else {
-            result = new DirectivesEoObject("nop");
-        }
-        return result;
     }
 
     /**

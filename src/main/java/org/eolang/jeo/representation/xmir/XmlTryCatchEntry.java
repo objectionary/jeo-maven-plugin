@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.directives.EoFqn;
 import org.objectweb.asm.Label;
@@ -75,24 +76,24 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      * Retrieves the start label.
      * @return Start label.
      */
-    private Label start() {
-        return this.label(0).map(this.labels::label).orElse(null);
+    private BytecodeLabel start() {
+        return this.label(0).orElse(null);
     }
 
     /**
      * Retrieves the end label.
      * @return End label.
      */
-    private Label end() {
-        return this.label(1).map(this.labels::label).orElse(null);
+    private BytecodeLabel end() {
+        return this.label(1).orElse(null);
     }
 
     /**
      * Retrieves the handler label.
      * @return Handler label.
      */
-    private Label handler() {
-        return this.label(2).map(this.labels::label).orElse(null);
+    private BytecodeLabel handler() {
+        return this.label(2).orElse(null);
     }
 
     /**
@@ -113,10 +114,11 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      * @param id Label uid.
      * @return Label.
      */
-    private Optional<String> label(final int id) {
+    private Optional<BytecodeLabel> label(final int id) {
         return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(id))
             .filter(node -> !node.hasAttribute("base", new EoFqn("nop").fqn()))
             .map(XmlValue::new)
-            .map(XmlValue::string);
+            .map(XmlValue::string)
+            .map(BytecodeLabel::new);
     }
 }

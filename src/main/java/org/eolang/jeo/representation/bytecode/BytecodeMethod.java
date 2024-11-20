@@ -31,6 +31,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.Signature;
+import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Label;
@@ -234,7 +235,7 @@ public final class BytecodeMethod {
      * @param label Label.
      * @return This object.
      */
-    public BytecodeMethod label(final Label label) {
+    public BytecodeMethod label(final String label) {
         return this.entry(new BytecodeLabel(label));
     }
 
@@ -313,14 +314,15 @@ public final class BytecodeMethod {
             );
             this.annotations.write(mvisitor);
             this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));
+            final AsmLabels all = new AsmLabels();
             if (!this.properties.isAbstract()) {
                 mvisitor.visitCode();
-                this.tryblocks.forEach(block -> block.writeTo(mvisitor));
-                this.instructions.forEach(instruction -> instruction.writeTo(mvisitor));
+                this.tryblocks.forEach(block -> block.writeTo(mvisitor, all));
+                this.instructions.forEach(instruction -> instruction.writeTo(mvisitor, all));
                 final BytecodeMaxs computed = this.computeMaxs();
                 mvisitor.visitMaxs(computed.stack(), computed.locals());
             }
-            this.attributes.write(mvisitor);
+            this.attributes.write(mvisitor, all);
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {
             throw new IllegalStateException(
@@ -383,15 +385,6 @@ public final class BytecodeMethod {
      */
     BytecodeMethod opcode(final int opcode, final Object... args) {
         return this.entry(new BytecodeInstruction(this.labels, opcode, args));
-    }
-
-    /**
-     * Add label.
-     * @param uid Label uid.
-     * @return This object.
-     */
-    BytecodeMethod label(final String uid) {
-        return this.label(this.labels.label(uid));
     }
 
     /**

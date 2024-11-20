@@ -117,9 +117,9 @@ final class AsmMethod {
         return this.node.tryCatchBlocks.stream()
             .map(
                 block -> new BytecodeTryCatchBlock(
-                    block.start.getLabel(),
-                    block.end.getLabel(),
-                    block.handler.getLabel(),
+                    block.start.getLabel().toString(),
+                    block.end.getLabel().toString(),
+                    block.handler.getLabel().toString(),
                     block.type
                 )
             )

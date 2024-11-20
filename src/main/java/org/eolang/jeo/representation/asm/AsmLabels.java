@@ -21,48 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.directives;
+package org.eolang.jeo.representation.asm;
 
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.objectweb.asm.Label;
-import org.xembly.Directive;
 
-/**
- * Xml directives for label entry in byrecode.
- * @since 0.1
- */
-public final class DirectivesLabel implements Iterable<Directive> {
-
+public final class AsmLabels {
     /**
-     * Bytecode label.
+     * All the labels.
      */
-    private final String label;
+    private final Map<String, Label> labels;
 
-    /**
-     * Label name.
-     */
-    private final String name;
-
-    /**
-     * Constructor.
-     * @param label Bytecode label.
-     */
-    public DirectivesLabel(final String label) {
-        this(label, "");
+    public AsmLabels() {
+        this(new HashMap<>(0));
     }
 
     /**
      * Constructor.
-     * @param label Bytecode label.
-     * @param name Label name.
+     * @param labels All the labels.
      */
-    private DirectivesLabel(final String label, final String name) {
-        this.label = label;
-        this.name = name;
+    public AsmLabels(final Map<String, Label> labels) {
+        this.labels = labels;
     }
 
-    @Override
-    public Iterator<Directive> iterator() {
-        return new DirectivesValue(this.name, this.label).iterator();
+    /**
+     * Get label by UID.
+     * @param label Bytecode label.
+     * @return Label.
+     */
+    public Label label(final BytecodeLabel label) {
+        return this.labels.computeIfAbsent(label.uid(), id -> new Label());
     }
 }

@@ -92,7 +92,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                     visited.putIfGreater(index, updated);
                     break;
                 } else if (instruction.isIf()) {
-                    final Label label = instruction.jumps().get(0);
+                    final BytecodeLabel label = instruction.jumps().get(0);
                     final int jump = this.index(label);
                     worklist.push(new Entry<>(jump, updated));
                     final int next = index + 1;
@@ -100,7 +100,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                     visited.putIfGreater(index, updated);
                     break;
                 } else if (instruction.isJump()) {
-                    final Label label = instruction.jumps().get(0);
+                    final BytecodeLabel label = instruction.jumps().get(0);
                     final int jump = this.index(label);
                     worklist.push(new Entry<>(jump, updated));
                     visited.putIfGreater(index, updated);
@@ -138,9 +138,9 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
      * @param label Label.
      * @return Index.
      */
-    private int index(final Label label) {
+    private int index(final BytecodeLabel label) {
         for (int index = 0; index < this.instructions.size(); ++index) {
-            if (this.instructions.get(index).equals(new BytecodeLabel(label))) {
+            if (this.instructions.get(index).equals(new BytecodeLabel(label.toString()))) {
                 return index;
             }
         }

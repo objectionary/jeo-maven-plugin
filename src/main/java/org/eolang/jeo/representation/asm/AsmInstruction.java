@@ -140,9 +140,7 @@ final class AsmInstruction {
                 break;
             case AbstractInsnNode.LABEL:
                 final LabelNode label = LabelNode.class.cast(this.node);
-                result = new BytecodeLabel(
-                    label.getLabel()
-                );
+                result = new BytecodeLabel(label.getLabel().toString());
                 break;
             case AbstractInsnNode.LDC_INSN:
                 final LdcInsnNode ldc = LdcInsnNode.class.cast(this.node);

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesAttributes;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -85,7 +86,7 @@ public final class BytecodeAttributes {
      * Write to method.
      * @param method Bytecode where to write.
      */
-    void write(final MethodVisitor method) {
-        this.all.forEach(attr -> attr.write(method));
+    void write(final MethodVisitor method, final AsmLabels labels) {
+        this.all.forEach(attr -> attr.write(method, labels));
     }
 }

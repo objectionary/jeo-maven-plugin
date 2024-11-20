@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.List;
+import org.eolang.jeo.representation.asm.AsmLabels;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
@@ -38,8 +39,13 @@ public interface BytecodeEntry {
      * Write instruction to the method visitor.
      * @param visitor Method visitor.
      */
-    void writeTo(MethodVisitor visitor);
+    void writeTo(MethodVisitor visitor, AsmLabels labels);
 
+    /**
+     * Convert entry to directives.
+     * @param counting Do we need to add numbers to entry names?
+     * @return Directives.
+     */
     Iterable<Directive> directives(boolean counting);
 
     /**
@@ -96,7 +102,7 @@ public interface BytecodeEntry {
      * Where to jump.
      * @return Jumps.
      */
-    List<Label> jumps();
+    List<BytecodeLabel> jumps();
 
     /**
      * Human-readable representation.

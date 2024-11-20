@@ -76,16 +76,6 @@ public final class BytecodeMethodBuilder {
     }
 
     /**
-     * Add label.
-     * @param label Label.
-     * @return This object.
-     */
-    public BytecodeMethodBuilder label(final Label label) {
-        this.method.label(label);
-        return this;
-    }
-
-    /**
      * Add instruction.
      * @param opcode Opcode.
      * @param args Arguments.
