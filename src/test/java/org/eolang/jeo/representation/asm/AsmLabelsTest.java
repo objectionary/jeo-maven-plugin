@@ -21,26 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.asm;
 
 import java.util.UUID;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Label;
 
 /**
- * Test case for {@link AllLabels}.
- * @since 0.1
+ * Test case for {@link AsmLabels}.
+ * @since 0.6
  */
-final class AllLabelsTest {
+final class AsmLabelsTest {
 
     @Test
     void retrievesLabelIfItAbsent() {
         final String id = UUID.randomUUID().toString();
         MatcherAssert.assertThat(
             String.format("Label with id '%s' was not retrieved", id),
-            new AllLabels().label(id),
+            new AsmLabels().label(new BytecodeLabel(id)),
             Matchers.notNullValue()
         );
     }
@@ -48,9 +49,9 @@ final class AllLabelsTest {
     @Test
     void retrievesTheSameLabelIfItExists() {
         final String id = UUID.randomUUID().toString();
-        final AllLabels all = new AllLabels();
-        final Label first = all.label(id);
-        final Label second = all.label(id);
+        final AsmLabels all = new AsmLabels();
+        final Label first = all.label(new BytecodeLabel(id));
+        final Label second = all.label(new BytecodeLabel(id));
         MatcherAssert.assertThat(
             String.format(
                 "We should retrieve the same label if it exists, but labels '%s' and '%s' are different",
@@ -59,32 +60,6 @@ final class AllLabelsTest {
             ),
             first,
             Matchers.sameInstance(second)
-        );
-    }
-
-    @Test
-    void generatesUidForNewLabel() {
-        MatcherAssert.assertThat(
-            "We should generate uid for new label",
-            new AllLabels().uid(new Label()),
-            Matchers.notNullValue()
-        );
-    }
-
-    @Test
-    void retrievesSameUidForSameLabel() {
-        final AllLabels all = new AllLabels();
-        final Label label = new Label();
-        final String first = all.uid(label);
-        final String second = all.uid(label);
-        MatcherAssert.assertThat(
-            String.format(
-                "We should retrieve the same uid for the same label, but we got %s and %s",
-                first,
-                second
-            ),
-            first,
-            Matchers.equalTo(second)
         );
     }
 }

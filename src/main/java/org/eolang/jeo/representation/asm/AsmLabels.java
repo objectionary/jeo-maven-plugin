@@ -28,12 +28,21 @@ import java.util.Map;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.objectweb.asm.Label;
 
+/**
+ * Asm Method Labels.
+ * Used during method generation to keep track of all the labels.
+ * @since 0.6
+ */
 public final class AsmLabels {
+
     /**
-     * All the labels.
+     * All the method labels.
      */
     private final Map<String, Label> labels;
 
+    /**
+     * Constructor.
+     */
     public AsmLabels() {
         this(new HashMap<>(0));
     }
