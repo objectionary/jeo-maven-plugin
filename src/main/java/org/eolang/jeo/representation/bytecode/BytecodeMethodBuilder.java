@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.objectweb.asm.Label;
@@ -63,6 +64,10 @@ public final class BytecodeMethodBuilder {
     @SuppressWarnings("PMD.ShortMethodName")
     public BytecodeClass up() {
         return this.clazz;
+    }
+
+    public BytecodeMethodBuilder label() {
+        return this.label(UUID.randomUUID().toString());
     }
 
     /**

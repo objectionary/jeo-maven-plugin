@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesAttribute;
 import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.objectweb.asm.ClassVisitor;
@@ -85,7 +86,7 @@ public final class InnerClass implements BytecodeAttribute {
     }
 
     @Override
-    public void write(final MethodVisitor method) {
+    public void write(final MethodVisitor method, final AsmLabels labels) {
         throw new UnsupportedOperationException(
             String.format(
                 "Inner class '%s' cannot be written to method attributes",

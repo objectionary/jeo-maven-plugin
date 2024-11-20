@@ -140,9 +140,9 @@ enum DataType {
     /**
      * Label.
      */
-    LABEL("label", Label.class,
-        value -> new AllLabels().uid(Label.class.cast(value)).getBytes(StandardCharsets.UTF_8),
-        bytes -> new AllLabels().label(new String(bytes, StandardCharsets.UTF_8))
+    LABEL("label", BytecodeLabel.class,
+        value -> BytecodeLabel.class.cast(value).uid().getBytes(StandardCharsets.UTF_8),
+        bytes -> new BytecodeLabel(new String(bytes, StandardCharsets.UTF_8))
     ),
 
     /**

@@ -26,8 +26,8 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.LocalVariable;
-import org.objectweb.asm.Label;
 
 /**
  * Xml representation of a local variable.
@@ -100,7 +100,7 @@ public final class XmlLocalVariable {
      * Start label.
      * @return Label.
      */
-    private Label start() {
+    private BytecodeLabel start() {
         return this.label(4);
     }
 
@@ -108,7 +108,7 @@ public final class XmlLocalVariable {
      * End label.
      * @return Label.
      */
-    private Label end() {
+    private BytecodeLabel end() {
         return this.label(5);
     }
 
@@ -135,8 +135,8 @@ public final class XmlLocalVariable {
      * @param index Index.
      * @return Label.
      */
-    private Label label(final int index) {
-        return this.operand(index).map(Label.class::cast).orElse(null);
+    private BytecodeLabel label(final int index) {
+        return this.operand(index).map(BytecodeLabel.class::cast).orElse(null);
     }
 
     /**

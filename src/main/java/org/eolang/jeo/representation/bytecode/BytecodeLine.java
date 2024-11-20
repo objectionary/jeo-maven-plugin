@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.objectweb.asm.Label;
+import org.eolang.jeo.representation.asm.AsmLabels;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
@@ -42,7 +42,7 @@ import org.xembly.Directive;
 public final class BytecodeLine implements BytecodeEntry {
 
     @Override
-    public void writeTo(final MethodVisitor visitor) {
+    public void writeTo(final MethodVisitor visitor, final AsmLabels labels) {
         // nothing to write
     }
 
@@ -92,7 +92,7 @@ public final class BytecodeLine implements BytecodeEntry {
     }
 
     @Override
-    public List<Label> jumps() {
+    public List<BytecodeLabel> jumps() {
         return Collections.emptyList();
     }
 

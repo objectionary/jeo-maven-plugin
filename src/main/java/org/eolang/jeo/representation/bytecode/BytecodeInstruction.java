@@ -31,6 +31,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.OpcodeName;
 import org.eolang.jeo.representation.xmir.AllLabels;
@@ -117,8 +118,23 @@ public final class BytecodeInstruction implements BytecodeEntry {
     }
 
     @Override
-    public void writeTo(final MethodVisitor visitor) {
-        Instruction.find(this.opcode).generate(visitor, this.args);
+    public void writeTo(final MethodVisitor visitor, final AsmLabels labels) {
+        Instruction.find(this.opcode)
+            .generate(
+                visitor,
+                this.args.stream()
+                    .map(
+                        arg -> {
+                            final Object result;
+                            if (arg instanceof BytecodeLabel) {
+                                result = labels.label((BytecodeLabel) arg);
+                            } else {
+                                result = arg;
+                            }
+                            return result;
+                        }
+                    ).collect(Collectors.toList())
+            );
     }
 
     @Override
@@ -480,8 +496,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * @return Jump label.
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
-    public List<Label> jumps() {
-        final List<Label> result;
+    public List<BytecodeLabel> jumps() {
+        final List<BytecodeLabel> result;
         switch (Instruction.find(this.opcode)) {
             case GOTO:
             case JSR:
@@ -501,13 +517,13 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case IF_ACMPNE:
             case IFNULL:
             case IFNONNULL:
-                result = Collections.singletonList((Label) this.args.get(0));
+                result = Collections.singletonList((BytecodeLabel) this.args.get(0));
                 break;
             case TABLESWITCH:
             case LOOKUPSWITCH:
                 result = this.args.stream()
-                    .filter(Label.class::isInstance)
-                    .map(Label.class::cast)
+                    .filter(BytecodeLabel.class::isInstance)
+                    .map(BytecodeLabel.class::cast)
                     .collect(Collectors.toList());
                 break;
             default:

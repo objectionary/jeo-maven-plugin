@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
@@ -47,6 +48,13 @@ public final class BytecodeLabel implements BytecodeEntry {
      * Label.
      */
     private final String identifier;
+
+    /**
+     * Constructor.
+     */
+    public BytecodeLabel() {
+        this(UUID.randomUUID().toString());
+    }
 
     /**
      * Constructor.

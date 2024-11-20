@@ -52,7 +52,7 @@ public final class DirectivesOperand implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final Iterator<Directive> result;
         if (this.raw instanceof Label) {
-            result = new BytecodeLabel(((Label) this.raw).toString()).directives(false).iterator();
+            result = new BytecodeLabel(this.raw.toString()).directives(false).iterator();
         } else if (this.raw instanceof Handle) {
             result = new DirectivesHandle((Handle) this.raw).iterator();
         } else {

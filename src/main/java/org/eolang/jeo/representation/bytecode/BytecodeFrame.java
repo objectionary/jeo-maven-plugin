@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesFrame;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.LabelNode;
 import org.xembly.Directive;
@@ -108,7 +108,7 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
-    public void writeTo(final MethodVisitor visitor) {
+    public void writeTo(final MethodVisitor visitor, final AsmLabels labels) {
         visitor.visitFrame(
             this.type,
             this.nlocal,
@@ -170,7 +170,7 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
-    public List<Label> jumps() {
+    public List<BytecodeLabel> jumps() {
         return Collections.emptyList();
     }
 

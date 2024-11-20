@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.eolang.jeo.representation.xmir.XmlTryCatchEntry;
@@ -45,9 +46,9 @@ final class DirectivesTryCatchTest {
 
     @Test
     void convertsToXmir() throws ImpossibleModificationException {
-        final Label start = new Label();
-        final Label end = new Label();
-        final Label handler = new Label();
+        final BytecodeLabel start = new BytecodeLabel();
+        final BytecodeLabel end = new BytecodeLabel();
+        final BytecodeLabel handler = new BytecodeLabel();
         final String type = "java/lang/Exception";
         MatcherAssert.assertThat(
             "We expected to convert try-catch directives to correct bytecode.",
@@ -74,9 +75,9 @@ final class DirectivesTryCatchTest {
     @ParameterizedTest
     @MethodSource("cases")
     void convertsToXmirIfSomeLabelsAreAbsent(
-        final Label start,
-        final Label end,
-        final Label handler,
+        final BytecodeLabel start,
+        final BytecodeLabel end,
+        final BytecodeLabel handler,
         final String type
     ) throws ImpossibleModificationException {
         MatcherAssert.assertThat(
@@ -94,16 +95,16 @@ final class DirectivesTryCatchTest {
 
     /**
      * Test cases.
-     * For {@link #convertsToXmirIfSomeLabelsAreAbsent(Label, Label, Label, String)}.
+     * For {@link #convertsToXmirIfSomeLabelsAreAbsent(BytecodeLabel, BytecodeLabel, BytecodeLabel, String)}.
      * @return Test cases.
      */
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> cases() {
         return Stream.of(
-            Arguments.of(new Label(), new Label(), new Label(), "java/lang/Exception"),
-            Arguments.of(new Label(), new Label(), new Label(), null),
-            Arguments.of(new Label(), new Label(), null, null),
-            Arguments.of(new Label(), null, null, null),
+            Arguments.of(new BytecodeLabel(), new BytecodeLabel(), new BytecodeLabel(), "java/lang/Exception"),
+            Arguments.of(new BytecodeLabel(), new BytecodeLabel(), new BytecodeLabel(), null),
+            Arguments.of(new BytecodeLabel(), new BytecodeLabel(), null, null),
+            Arguments.of(new BytecodeLabel(), null, null, null),
             Arguments.of(null, null, null, null)
         );
     }

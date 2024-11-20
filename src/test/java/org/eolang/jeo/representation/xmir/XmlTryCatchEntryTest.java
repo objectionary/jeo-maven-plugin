@@ -38,11 +38,10 @@ final class XmlTryCatchEntryTest {
 
     @Test
     void transformsToBytecode() throws ImpossibleModificationException {
-        final AllLabels labels = new AllLabels();
         final BytecodeTryCatchBlock block = new BytecodeTryCatchBlock(
-            labels.label("a"),
-            labels.label("b"),
-            labels.label("c"),
+            "a",
+            "b",
+            "c",
             "java/lang/Exception"
         );
         MatcherAssert.assertThat(

@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XML;
+import java.util.UUID;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -153,7 +154,7 @@ final class BytecodeClassTest {
             () -> {
                 new BytecodeClass("Some")
                     .withMethod("j$main", "([Ljava/lang/String;)V", 137)
-                    .label(new Label())
+                    .label()
                     .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
                     .opcode(Opcodes.LDC, "Hello %d")
                     .opcode(Opcodes.ICONST_1)
@@ -175,9 +176,9 @@ final class BytecodeClassTest {
                         "(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/PrintStream;"
                     )
                     .opcode(Opcodes.POP)
-                    .label(new Label())
+                    .label()
                     .opcode(Opcodes.RETURN)
-                    .label(new Label())
+                    .label()
                     .up();
             }, "We expect no exception here because all instructions are valid"
         );
@@ -200,13 +201,13 @@ final class BytecodeClassTest {
             IllegalStateException.class,
             () -> new BytecodeProgram(new BytecodeClass("Broken")
                 .withMethod("j$bar", "()I", Opcodes.ACC_PUBLIC)
-                .label(new Label())
+                .label()
                 .opcode(Opcodes.ALOAD, 0)
                 .opcode(Opcodes.INVOKEVIRTUAL, "com/exam/BA", "foo", "()I")
                 .opcode(Opcodes.ICONST_2)
                 .opcode(Opcodes.IADD)
                 .opcode(Opcodes.IRETURN)
-                .label(new Label())
+                .label()
                 .up()
             ).bytecode(),
             "We expect an exception here because the bytecode is broken"
