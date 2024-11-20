@@ -297,7 +297,7 @@ final class BytecodeMethodTest {
                 .opcode(Opcodes.DLOAD, 1)
                 .opcode(Opcodes.DCONST_0)
                 .opcode(Opcodes.DCMPL)
-                .opcode(Opcodes.IFLE, label)
+                .opcode(Opcodes.IFLE, new BytecodeLabel(label))
                 .opcode(Opcodes.ICONST_5)
                 .opcode(Opcodes.IRETURN)
                 .label(label)
@@ -313,7 +313,7 @@ final class BytecodeMethodTest {
             xml,
             new HasMethod("bar")
                 .inside("Foo")
-                .withInstruction(Opcodes.IFLE, label)
+                .withInstruction(Opcodes.IFLE, new BytecodeLabel(label))
                 .withLabel()
         );
     }
