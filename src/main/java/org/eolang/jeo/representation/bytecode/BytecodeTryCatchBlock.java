@@ -61,13 +61,21 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
      */
     private final String type;
 
+    /**
+     * Constructor.
+     * @param start Start label.
+     * @param end End label.
+     * @param handler Handler label.
+     * @param type Exception type.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
     public BytecodeTryCatchBlock(
-        final String srart,
+        final String start,
         final String end,
         final String handler,
         final String type
     ) {
-        this(new BytecodeLabel(srart), new BytecodeLabel(end), new BytecodeLabel(handler), type);
+        this(new BytecodeLabel(start), new BytecodeLabel(end), new BytecodeLabel(handler), type);
     }
 
     /**

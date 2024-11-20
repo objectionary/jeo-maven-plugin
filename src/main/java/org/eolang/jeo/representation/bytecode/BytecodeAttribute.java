@@ -43,6 +43,7 @@ public interface BytecodeAttribute {
     /**
      * Write to method.
      * @param method Bytecode where to write.
+     * @param labels Method labels.
      */
     void write(MethodVisitor method, AsmLabels labels);
 

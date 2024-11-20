@@ -85,6 +85,7 @@ public final class BytecodeAttributes {
     /**
      * Write to method.
      * @param method Bytecode where to write.
+     * @param labels Method labels.
      */
     void write(final MethodVisitor method, final AsmLabels labels) {
         this.all.forEach(attr -> attr.write(method, labels));

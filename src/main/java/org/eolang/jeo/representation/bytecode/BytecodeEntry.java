@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.List;
 import org.eolang.jeo.representation.asm.AsmLabels;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
@@ -38,6 +37,7 @@ public interface BytecodeEntry {
     /**
      * Write instruction to the method visitor.
      * @param visitor Method visitor.
+     * @param labels Method labels.
      */
     void writeTo(MethodVisitor visitor, AsmLabels labels);
 

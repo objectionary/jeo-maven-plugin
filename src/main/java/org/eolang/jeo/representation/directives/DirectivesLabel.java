@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import org.objectweb.asm.Label;
 import org.xembly.Directive;
 
 /**

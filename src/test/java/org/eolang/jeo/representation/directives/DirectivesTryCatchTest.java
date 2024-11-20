@@ -34,7 +34,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.objectweb.asm.Label;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -95,13 +94,16 @@ final class DirectivesTryCatchTest {
 
     /**
      * Test cases.
-     * For {@link #convertsToXmirIfSomeLabelsAreAbsent(BytecodeLabel, BytecodeLabel, BytecodeLabel, String)}.
      * @return Test cases.
      */
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
-    private static Stream<Arguments> cases() {
+    static Stream<Arguments> cases() {
         return Stream.of(
-            Arguments.of(new BytecodeLabel(), new BytecodeLabel(), new BytecodeLabel(), "java/lang/Exception"),
+            Arguments.of(
+                new BytecodeLabel(),
+                new BytecodeLabel(),
+                new BytecodeLabel(),
+                "java/lang/Exception"
+            ),
             Arguments.of(new BytecodeLabel(), new BytecodeLabel(), new BytecodeLabel(), null),
             Arguments.of(new BytecodeLabel(), new BytecodeLabel(), null, null),
             Arguments.of(new BytecodeLabel(), null, null, null),

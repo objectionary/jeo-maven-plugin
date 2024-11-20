@@ -25,13 +25,11 @@ package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XML;
-import java.util.UUID;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 
 /**

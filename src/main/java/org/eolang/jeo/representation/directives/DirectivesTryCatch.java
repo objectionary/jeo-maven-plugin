@@ -28,10 +28,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.bytecode.BytecodeEntry;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -69,6 +66,7 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
      * @param type Exception type
      * @checkstyle ParameterNumberCheck (5 lines)
      */
+    @SuppressWarnings("PMD.ConstructorOnlyInitializesOrCallOtherConstructors")
     public DirectivesTryCatch(
         final BytecodeLabel start,
         final BytecodeLabel end,

@@ -28,7 +28,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
@@ -195,20 +194,36 @@ public final class BytecodeFrame implements BytecodeEntry {
         return list.stream().map(BytecodeFrame::extract).toArray(Object[]::new);
     }
 
+    /**
+     * Convert stack to ASM format.
+     * @param labels Method labels.
+     * @return Stack in ASM format.
+     */
     private Object[] asmStack(final AsmLabels labels) {
-        return asmOperands(this.stack, labels);
+        return BytecodeFrame.asmOperands(this.stack, labels);
     }
 
+    /**
+     * Convert locals to ASM format.
+     * @param labels Method labels.
+     * @return Locals in ASM format.
+     */
     private Object[] asmLocals(final AsmLabels labels) {
-        return asmOperands(this.locals, labels);
+        return BytecodeFrame.asmOperands(this.locals, labels);
     }
 
-    private Object[] asmOperands(final Object[] arr, final AsmLabels labels) {
+    /**
+     * Convert operands to ASM format.
+     * @param arr Operands.
+     * @param labels Method labels.
+     * @return Operands in ASM format.
+     */
+    private static Object[] asmOperands(final Object[] arr, final AsmLabels labels) {
         return Arrays.stream(arr).map(
             obj -> {
                 final Object result;
                 if (obj instanceof BytecodeLabel) {
-                    result = labels.label(((BytecodeLabel) obj));
+                    result = labels.label((BytecodeLabel) obj);
                 } else {
                     result = obj;
                 }
