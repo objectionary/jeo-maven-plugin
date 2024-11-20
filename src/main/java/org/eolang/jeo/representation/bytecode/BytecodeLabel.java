@@ -45,7 +45,7 @@ import org.xembly.Directive;
 public final class BytecodeLabel implements BytecodeEntry {
 
     /**
-     * Label.
+     * Simple string identifier.
      */
     private final String identifier;
 
@@ -58,7 +58,7 @@ public final class BytecodeLabel implements BytecodeEntry {
 
     /**
      * Constructor.
-     * @param uid Label identifier.
+     * @param uid Identifier.
      */
     public BytecodeLabel(final byte[] uid) {
         this(new String(uid, StandardCharsets.UTF_8));
@@ -66,7 +66,7 @@ public final class BytecodeLabel implements BytecodeEntry {
 
     /**
      * Constructor.
-     * @param label Label.
+     * @param label Identifier.
      */
     public BytecodeLabel(final String label) {
         this.identifier = label;

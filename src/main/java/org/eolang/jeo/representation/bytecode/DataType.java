@@ -162,7 +162,7 @@ enum DataType {
     /**
      * Null.
      */
-    NULL("nullable", null, value -> new byte[0], bytes -> null);
+    NULL("nullable", Void.class, value -> new byte[0], bytes -> null);
 
     /**
      * Base type.

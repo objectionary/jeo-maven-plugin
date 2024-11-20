@@ -24,9 +24,11 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
@@ -112,9 +114,9 @@ public final class BytecodeFrame implements BytecodeEntry {
         visitor.visitFrame(
             this.type,
             this.nlocal,
-            this.locals,
+            this.asmLocals(labels),
             this.nstack,
-            this.stack
+            this.asmStack(labels)
         );
     }
 
@@ -193,6 +195,28 @@ public final class BytecodeFrame implements BytecodeEntry {
         return list.stream().map(BytecodeFrame::extract).toArray(Object[]::new);
     }
 
+    private Object[] asmStack(final AsmLabels labels) {
+        return asmOperands(this.stack, labels);
+    }
+
+    private Object[] asmLocals(final AsmLabels labels) {
+        return asmOperands(this.locals, labels);
+    }
+
+    private Object[] asmOperands(final Object[] arr, final AsmLabels labels) {
+        return Arrays.stream(arr).map(
+            obj -> {
+                final Object result;
+                if (obj instanceof BytecodeLabel) {
+                    result = labels.label(((BytecodeLabel) obj));
+                } else {
+                    result = obj;
+                }
+                return result;
+            }
+        ).toArray();
+    }
+
     /**
      * Extract an object.
      * @param argument Argument.
@@ -201,7 +225,7 @@ public final class BytecodeFrame implements BytecodeEntry {
     private static Object extract(final Object argument) {
         final Object result;
         if (argument instanceof LabelNode) {
-            result = ((LabelNode) argument).getLabel();
+            result = new BytecodeLabel(((LabelNode) argument).getLabel().toString());
         } else {
             result = argument;
         }

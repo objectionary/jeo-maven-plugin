@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.objectweb.asm.Label;
 
 /**
  * Data-flow analysis.

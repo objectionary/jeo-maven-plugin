@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.objectweb.asm.Label;
 
 /**
  * Bytecode method builder.
