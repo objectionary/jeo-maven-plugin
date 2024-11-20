@@ -80,7 +80,7 @@ SOFTWARE.
       <plugin>
         <groupId>org.eolang</groupId>
         <artifactId>eo-maven-plugin</artifactId>
-        <version>0.41.3</version>
+        <version>0.42.0</version>
         <executions>
           <execution>
             <id>convert-xmir-to-phi</id>
