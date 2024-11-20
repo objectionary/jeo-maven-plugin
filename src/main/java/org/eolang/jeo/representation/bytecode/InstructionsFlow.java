@@ -140,7 +140,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
      */
     private int index(final BytecodeLabel label) {
         for (int index = 0; index < this.instructions.size(); ++index) {
-            if (this.instructions.get(index).equals(new BytecodeLabel(label.toString()))) {
+            if (this.instructions.get(index).equals(label)) {
                 return index;
             }
         }
