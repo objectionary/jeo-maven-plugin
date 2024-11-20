@@ -95,7 +95,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     public BytecodeInstruction bytecode() {
         return new BytecodeInstruction(
             this.opcode(),
-            this.operands().stream().map(XmlOperand::asObject).collect(Collectors.toList())
+            this.operands().stream().map(XmlOperand::asObject).toArray()
         );
     }
 

@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.xmir.AllLabels;
 
 /**
  * Assembler.
@@ -81,7 +80,6 @@ final class Assembler {
      * @return Path to the assembled class.
      */
     private Path assemble(final Path path) {
-        new AllLabels().clearCache();
         final Transformation trans = new Logging(
             "Assembling",
             "assembled",

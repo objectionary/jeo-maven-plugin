@@ -30,6 +30,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeFrame;
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeLine;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FrameNode;
@@ -135,14 +136,12 @@ final class AsmInstruction {
                 final JumpInsnNode jump = JumpInsnNode.class.cast(this.node);
                 result = new BytecodeInstruction(
                     jump.getOpcode(),
-                    jump.label.getLabel()
+                    new BytecodeLabel(jump.label.getLabel().toString())
                 );
                 break;
             case AbstractInsnNode.LABEL:
                 final LabelNode label = LabelNode.class.cast(this.node);
-                result = new BytecodeLabel(
-                    label.getLabel()
-                );
+                result = new BytecodeLabel(label.getLabel().toString());
                 break;
             case AbstractInsnNode.LDC_INSN:
                 final LdcInsnNode ldc = LdcInsnNode.class.cast(this.node);
@@ -164,8 +163,16 @@ final class AsmInstruction {
                 result = new BytecodeInstruction(
                     table.getOpcode(),
                     Stream.concat(
-                        Stream.of(table.min, table.max, table.dflt.getLabel()),
-                        table.labels.stream().map(LabelNode::getLabel)
+                        Stream.of(
+                            table.min,
+                            table.max,
+                            new BytecodeLabel(table.dflt.getLabel().toString())
+                        ),
+                        table.labels
+                            .stream()
+                            .map(LabelNode::getLabel)
+                            .map(Label::toString)
+                            .map(BytecodeLabel::new)
                     ).toArray(Object[]::new)
                 );
                 break;
@@ -174,10 +181,13 @@ final class AsmInstruction {
                 result = new BytecodeInstruction(
                     lookup.getOpcode(),
                     Stream.concat(
-                        Stream.of(lookup.dflt.getLabel()),
+                        Stream.of(new BytecodeLabel(lookup.dflt.getLabel().toString())),
                         Stream.concat(
                             lookup.keys.stream(),
-                            lookup.labels.stream().map(LabelNode::getLabel)
+                            lookup.labels.stream()
+                                .map(LabelNode::getLabel)
+                                .map(Label::toString)
+                                .map(BytecodeLabel::new)
                         )
                     ).toArray(Object[]::new)
                 );
@@ -194,7 +204,11 @@ final class AsmInstruction {
                 break;
             case AbstractInsnNode.FRAME:
                 final FrameNode frame = FrameNode.class.cast(this.node);
-                result = new BytecodeFrame(frame.type, frame.local, frame.stack);
+                result = new BytecodeFrame(
+                    frame.type,
+                    frame.local,
+                    frame.stack
+                );
                 break;
             case AbstractInsnNode.LINE:
                 result = new BytecodeLine();

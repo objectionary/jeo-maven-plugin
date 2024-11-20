@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import org.objectweb.asm.Label;
 import org.xembly.Directive;
 
 /**
@@ -36,7 +35,7 @@ public final class DirectivesLabel implements Iterable<Directive> {
     /**
      * Bytecode label.
      */
-    private final Label label;
+    private final String label;
 
     /**
      * Label name.
@@ -47,7 +46,7 @@ public final class DirectivesLabel implements Iterable<Directive> {
      * Constructor.
      * @param label Bytecode label.
      */
-    public DirectivesLabel(final Label label) {
+    public DirectivesLabel(final String label) {
         this(label, "");
     }
 
@@ -56,7 +55,7 @@ public final class DirectivesLabel implements Iterable<Directive> {
      * @param label Bytecode label.
      * @param name Label name.
      */
-    private DirectivesLabel(final Label label, final String name) {
+    private DirectivesLabel(final String label, final String name) {
         this.label = label;
         this.name = name;
     }

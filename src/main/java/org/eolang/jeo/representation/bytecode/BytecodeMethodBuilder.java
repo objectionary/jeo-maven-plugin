@@ -23,9 +23,9 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.objectweb.asm.Label;
 
 /**
  * Bytecode method builder.
@@ -65,6 +65,10 @@ public final class BytecodeMethodBuilder {
         return this.clazz;
     }
 
+    public BytecodeMethodBuilder label() {
+        return this.label(UUID.randomUUID().toString());
+    }
+
     /**
      * Add label.
      * @param uid Label uid.
@@ -72,16 +76,6 @@ public final class BytecodeMethodBuilder {
      */
     public BytecodeMethodBuilder label(final String uid) {
         this.method.label(uid);
-        return this;
-    }
-
-    /**
-     * Add label.
-     * @param label Label.
-     * @return This object.
-     */
-    public BytecodeMethodBuilder label(final Label label) {
-        this.method.label(label);
         return this;
     }
 

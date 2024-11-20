@@ -31,9 +31,9 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.OpcodeName;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -62,12 +62,6 @@ public final class BytecodeInstruction implements BytecodeEntry {
     private final List<Object> args;
 
     /**
-     * All labels.
-     */
-    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private final AllLabels labels;
-
-    /**
      * Constructor.
      * @param opcode Opcode.
      * @param args Arguments.
@@ -81,44 +75,32 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * @param opcode Opcode.
      * @param args Arguments.
      */
-    public BytecodeInstruction(final int opcode, final List<Object> args) {
-        this(new AllLabels(), opcode, args);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param labels All labels.
-     * @param opcode Opcode.
-     * @param args Arguments.
-     */
-    BytecodeInstruction(
-        final AllLabels labels,
-        final int opcode,
-        final Object... args
-    ) {
-        this(labels, opcode, Arrays.asList(args));
-    }
-
-    /**
-     * Constructor.
-     * @param labels All labels.
-     * @param opcode Opcode.
-     * @param args Arguments.
-     */
-    BytecodeInstruction(
-        final AllLabels labels,
+    private BytecodeInstruction(
         final int opcode,
         final List<Object> args
     ) {
-        this.labels = labels;
         this.opcode = opcode;
         this.args = args;
     }
 
     @Override
-    public void writeTo(final MethodVisitor visitor) {
-        Instruction.find(this.opcode).generate(visitor, this.args);
+    public void writeTo(final MethodVisitor visitor, final AsmLabels labels) {
+        Instruction.find(this.opcode)
+            .generate(
+                visitor,
+                this.args.stream()
+                    .map(
+                        arg -> {
+                            final Object result;
+                            if (arg instanceof BytecodeLabel) {
+                                result = labels.label((BytecodeLabel) arg);
+                            } else {
+                                result = arg;
+                            }
+                            return result;
+                        }
+                    ).collect(Collectors.toList())
+            );
     }
 
     @Override
@@ -480,8 +462,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * @return Jump label.
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
-    public List<Label> jumps() {
-        final List<Label> result;
+    public List<BytecodeLabel> jumps() {
+        final List<BytecodeLabel> result;
         switch (Instruction.find(this.opcode)) {
             case GOTO:
             case JSR:
@@ -501,13 +483,13 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case IF_ACMPNE:
             case IFNULL:
             case IFNONNULL:
-                result = Collections.singletonList((Label) this.args.get(0));
+                result = Collections.singletonList((BytecodeLabel) this.args.get(0));
                 break;
             case TABLESWITCH:
             case LOOKUPSWITCH:
                 result = this.args.stream()
-                    .filter(Label.class::isInstance)
-                    .map(Label.class::cast)
+                    .filter(BytecodeLabel.class::isInstance)
+                    .map(BytecodeLabel.class::cast)
                     .collect(Collectors.toList());
                 break;
             default:

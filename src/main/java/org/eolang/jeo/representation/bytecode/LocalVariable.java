@@ -25,11 +25,10 @@ package org.eolang.jeo.representation.bytecode;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesAttribute;
-import org.eolang.jeo.representation.directives.DirectivesLabel;
 import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.LocalVariableNode;
 
@@ -65,12 +64,12 @@ public final class LocalVariable implements BytecodeAttribute {
     /**
      * Start label.
      */
-    private final Label start;
+    private final BytecodeLabel start;
 
     /**
      * End label.
      */
-    private final Label end;
+    private final BytecodeLabel end;
 
     /**
      * Constructor.
@@ -82,8 +81,8 @@ public final class LocalVariable implements BytecodeAttribute {
             variable.name,
             variable.desc,
             variable.signature,
-            variable.start.getLabel(),
-            variable.end.getLabel()
+            new BytecodeLabel(variable.start.getLabel().toString()),
+            new BytecodeLabel(variable.end.getLabel().toString())
         );
     }
 
@@ -102,8 +101,8 @@ public final class LocalVariable implements BytecodeAttribute {
         final String name,
         final String descriptor,
         final String signature,
-        final Label start,
-        final Label end
+        final BytecodeLabel start,
+        final BytecodeLabel end
     ) {
         this.index = index;
         this.name = name;
@@ -124,13 +123,13 @@ public final class LocalVariable implements BytecodeAttribute {
     }
 
     @Override
-    public void write(final MethodVisitor method) {
+    public void write(final MethodVisitor method, final AsmLabels labels) {
         method.visitLocalVariable(
             this.name,
             this.descriptor,
             this.signature,
-            this.start,
-            this.end,
+            labels.label(this.start),
+            labels.label(this.end),
             this.index
         );
     }
@@ -143,8 +142,8 @@ public final class LocalVariable implements BytecodeAttribute {
             new DirectivesValue("", this.name),
             new DirectivesValue("", this.descriptor),
             new DirectivesValue("", this.signature),
-            new DirectivesLabel(this.start),
-            new DirectivesLabel(this.end)
+            this.start.directives(false),
+            this.end.directives(false)
         );
     }
 }

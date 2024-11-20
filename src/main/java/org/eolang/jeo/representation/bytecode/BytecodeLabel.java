@@ -26,11 +26,13 @@ package org.eolang.jeo.representation.bytecode;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.directives.DirectivesLabel;
-import org.eolang.jeo.representation.xmir.AllLabels;
-import org.objectweb.asm.Label;
+import org.eolang.jeo.representation.asm.AsmLabels;
+import org.eolang.jeo.representation.directives.DirectivesEoObject;
+import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
@@ -43,13 +45,20 @@ import org.xembly.Directive;
 public final class BytecodeLabel implements BytecodeEntry {
 
     /**
-     * Label.
+     * Simple string identifier.
      */
-    private final Label label;
+    private final String identifier;
 
     /**
      * Constructor.
-     * @param uid Label identifier.
+     */
+    public BytecodeLabel() {
+        this(UUID.randomUUID().toString());
+    }
+
+    /**
+     * Constructor.
+     * @param uid Identifier.
      */
     public BytecodeLabel(final byte[] uid) {
         this(new String(uid, StandardCharsets.UTF_8));
@@ -57,37 +66,28 @@ public final class BytecodeLabel implements BytecodeEntry {
 
     /**
      * Constructor.
-     * @param identifier Label identifier.
+     * @param label Identifier.
      */
-    public BytecodeLabel(final String identifier) {
-        this(identifier, new AllLabels());
-    }
-
-    /**
-     * Constructor.
-     * @param identifier Label identifier.
-     * @param labels All labels.
-     */
-    public BytecodeLabel(final String identifier, final AllLabels labels) {
-        this(labels.label(identifier));
-    }
-
-    /**
-     * Constructor.
-     * @param label Label.
-     */
-    public BytecodeLabel(final Label label) {
-        this.label = label;
+    public BytecodeLabel(final String label) {
+        this.identifier = label;
     }
 
     @Override
-    public void writeTo(final MethodVisitor visitor) {
-        visitor.visitLabel(this.label);
+    public void writeTo(final MethodVisitor visitor, final AsmLabels labels) {
+        if (Objects.nonNull(this.identifier)) {
+            visitor.visitLabel(labels.label(this));
+        }
     }
 
     @Override
     public Iterable<Directive> directives(final boolean counting) {
-        return new DirectivesLabel(this.label);
+        final Iterable<Directive> result;
+        if (Objects.isNull(this.identifier)) {
+            result = new DirectivesEoObject("nop");
+        } else {
+            result = new DirectivesValue(this);
+        }
+        return result;
     }
 
     @Override
@@ -131,12 +131,16 @@ public final class BytecodeLabel implements BytecodeEntry {
     }
 
     @Override
-    public List<Label> jumps() {
+    public List<BytecodeLabel> jumps() {
         return Collections.emptyList();
     }
 
     @Override
     public String view() {
-        return String.format("label %s", this.label);
+        return String.format("label %s", this.identifier);
+    }
+
+    public String uid() {
+        return this.identifier;
     }
 }

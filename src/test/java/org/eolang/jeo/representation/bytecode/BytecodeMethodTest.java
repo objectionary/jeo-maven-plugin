@@ -33,7 +33,6 @@ import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.directives.HasMethod;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -291,15 +290,14 @@ final class BytecodeMethodTest {
      */
     @Test
     void parsesIfStatementCorrectly() {
-        final AllLabels labels = new AllLabels();
-        final Label label = labels.label(UUID.randomUUID().toString());
+        final String label = UUID.randomUUID().toString();
         final String xml = new BytecodeProgram(
             new BytecodeClass("Foo")
                 .withMethod("bar", "(D)I", 0)
                 .opcode(Opcodes.DLOAD, 1)
                 .opcode(Opcodes.DCONST_0)
                 .opcode(Opcodes.DCMPL)
-                .opcode(Opcodes.IFLE, label)
+                .opcode(Opcodes.IFLE, new BytecodeLabel(label))
                 .opcode(Opcodes.ICONST_5)
                 .opcode(Opcodes.IRETURN)
                 .label(label)
@@ -315,7 +313,7 @@ final class BytecodeMethodTest {
             xml,
             new HasMethod("bar")
                 .inside("Foo")
-                .withInstruction(Opcodes.IFLE, label)
+                .withInstruction(Opcodes.IFLE, new BytecodeLabel(label))
                 .withLabel()
         );
     }
@@ -336,10 +334,9 @@ final class BytecodeMethodTest {
      */
     @Test
     void parsesTryCatchInstructions() {
-        final AllLabels labels = new AllLabels();
-        final Label start = labels.label(UUID.randomUUID().toString());
-        final Label end = labels.label(UUID.randomUUID().toString());
-        final Label handler = labels.label(UUID.randomUUID().toString());
+        final String start = UUID.randomUUID().toString();
+        final String end = UUID.randomUUID().toString();
+        final String handler = UUID.randomUUID().toString();
         final String xml = new BytecodeProgram(
             new BytecodeClass("Foo")
                 .withMethod("bar", "()V", Opcodes.ACC_PUBLIC)

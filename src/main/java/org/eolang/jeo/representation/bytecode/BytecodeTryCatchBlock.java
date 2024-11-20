@@ -28,8 +28,8 @@ import java.util.Collections;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesTryCatch;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
@@ -44,22 +44,39 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     /**
      * Start label.
      */
-    private final Label start;
+    private final BytecodeLabel start;
 
     /**
      * End label.
      */
-    private final Label end;
+    private final BytecodeLabel end;
 
     /**
      * Handler label.
      */
-    private final Label handler;
+    private final BytecodeLabel handler;
 
     /**
      * Exception type.
      */
     private final String type;
+
+    /**
+     * Constructor.
+     * @param start Start label.
+     * @param end End label.
+     * @param handler Handler label.
+     * @param type Exception type.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    public BytecodeTryCatchBlock(
+        final String start,
+        final String end,
+        final String handler,
+        final String type
+    ) {
+        this(new BytecodeLabel(start), new BytecodeLabel(end), new BytecodeLabel(handler), type);
+    }
 
     /**
      * Constructor.
@@ -70,9 +87,9 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeTryCatchBlock(
-        final Label startlabel,
-        final Label endlabel,
-        final Label handlerlabel,
+        final BytecodeLabel startlabel,
+        final BytecodeLabel endlabel,
+        final BytecodeLabel handlerlabel,
         final String exception
     ) {
         this.start = startlabel;
@@ -82,7 +99,7 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     }
 
     @Override
-    public void writeTo(final MethodVisitor visitor) {
+    public void writeTo(final MethodVisitor visitor, final AsmLabels labels) {
         Logger.debug(
             this,
             String.format(
@@ -93,7 +110,12 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
                 this.type
             )
         );
-        visitor.visitTryCatchBlock(this.start, this.end, this.handler, this.type);
+        visitor.visitTryCatchBlock(
+            labels.label(this.start),
+            labels.label(this.end),
+            labels.label(this.handler),
+            this.type
+        );
     }
 
     @Override
@@ -142,7 +164,7 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     }
 
     @Override
-    public List<Label> jumps() {
+    public List<BytecodeLabel> jumps() {
         return Collections.singletonList(this.handler);
     }
 
@@ -161,7 +183,7 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
      * Start label.
      * @return Label.
      */
-    Label startLabel() {
+    BytecodeLabel startLabel() {
         return this.start;
     }
 
@@ -169,7 +191,7 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
      * End label.
      * @return Label.
      */
-    Label endLabel() {
+    BytecodeLabel endLabel() {
         return this.end;
     }
 
@@ -177,7 +199,7 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
      * Handler label.
      * @return Label.
      */
-    Label handlerLabel() {
+    BytecodeLabel handlerLabel() {
         return this.handler;
     }
 

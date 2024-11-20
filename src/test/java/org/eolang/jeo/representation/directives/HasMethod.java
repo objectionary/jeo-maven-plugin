@@ -30,9 +30,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.PrefixedName;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.objectweb.asm.Label;
 
 /**
  * Matcher to check if the received XMIR document has a method inside a class with a given name.
@@ -324,7 +324,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                     arg -> {
                         final String result;
                         final DirectivesValue hex = new DirectivesValue(arg);
-                        if (arg instanceof Label) {
+                        if (arg instanceof BytecodeLabel) {
                             result = String.format(
                                 "%s/o[contains(@base,'%s')]/o[@base='org.eolang.bytes']/@base",
                                 instruction,

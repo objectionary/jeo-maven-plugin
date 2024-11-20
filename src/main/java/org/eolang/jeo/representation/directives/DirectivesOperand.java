@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.xembly.Directive;
@@ -51,7 +52,7 @@ public final class DirectivesOperand implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final Iterator<Directive> result;
         if (this.raw instanceof Label) {
-            result = new DirectivesLabel((Label) this.raw).iterator();
+            result = new BytecodeLabel(this.raw.toString()).directives(false).iterator();
         } else if (this.raw instanceof Handle) {
             result = new DirectivesHandle((Handle) this.raw).iterator();
         } else {

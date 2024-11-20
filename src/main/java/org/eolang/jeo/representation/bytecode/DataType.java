@@ -28,8 +28,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
-import org.eolang.jeo.representation.xmir.AllLabels;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 
 /**
@@ -140,9 +138,9 @@ enum DataType {
     /**
      * Label.
      */
-    LABEL("label", Label.class,
-        value -> new AllLabels().uid(Label.class.cast(value)).getBytes(StandardCharsets.UTF_8),
-        bytes -> new AllLabels().label(new String(bytes, StandardCharsets.UTF_8))
+    LABEL("label", BytecodeLabel.class,
+        value -> BytecodeLabel.class.cast(value).uid().getBytes(StandardCharsets.UTF_8),
+        bytes -> new BytecodeLabel(new String(bytes, StandardCharsets.UTF_8))
     ),
 
     /**
@@ -164,7 +162,7 @@ enum DataType {
     /**
      * Null.
      */
-    NULL("nullable", null, value -> new byte[0], bytes -> null);
+    NULL("nullable", Void.class, value -> new byte[0], bytes -> null);
 
     /**
      * Base type.

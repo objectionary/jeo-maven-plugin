@@ -56,7 +56,7 @@ public final class DirectivesEoObject implements Iterable<Directive> {
      * Constructor.
      * @param base The base of the object.
      */
-    DirectivesEoObject(final String base) {
+    public DirectivesEoObject(final String base) {
         this(base, "", new ArrayList<>(0));
     }
 

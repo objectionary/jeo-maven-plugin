@@ -24,13 +24,14 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesFrame;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.LabelNode;
 import org.xembly.Directive;
@@ -108,13 +109,13 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
-    public void writeTo(final MethodVisitor visitor) {
+    public void writeTo(final MethodVisitor visitor, final AsmLabels labels) {
         visitor.visitFrame(
             this.type,
             this.nlocal,
-            this.locals,
+            this.asmLocals(labels),
             this.nstack,
-            this.stack
+            this.asmStack(labels)
         );
     }
 
@@ -170,7 +171,7 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
-    public List<Label> jumps() {
+    public List<BytecodeLabel> jumps() {
         return Collections.emptyList();
     }
 
@@ -194,6 +195,44 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     /**
+     * Convert stack to ASM format.
+     * @param labels Method labels.
+     * @return Stack in ASM format.
+     */
+    private Object[] asmStack(final AsmLabels labels) {
+        return BytecodeFrame.asmOperands(this.stack, labels);
+    }
+
+    /**
+     * Convert locals to ASM format.
+     * @param labels Method labels.
+     * @return Locals in ASM format.
+     */
+    private Object[] asmLocals(final AsmLabels labels) {
+        return BytecodeFrame.asmOperands(this.locals, labels);
+    }
+
+    /**
+     * Convert operands to ASM format.
+     * @param arr Operands.
+     * @param labels Method labels.
+     * @return Operands in ASM format.
+     */
+    private static Object[] asmOperands(final Object[] arr, final AsmLabels labels) {
+        return Arrays.stream(arr).map(
+            obj -> {
+                final Object result;
+                if (obj instanceof BytecodeLabel) {
+                    result = labels.label((BytecodeLabel) obj);
+                } else {
+                    result = obj;
+                }
+                return result;
+            }
+        ).toArray();
+    }
+
+    /**
      * Extract an object.
      * @param argument Argument.
      * @return Object.
@@ -201,7 +240,7 @@ public final class BytecodeFrame implements BytecodeEntry {
     private static Object extract(final Object argument) {
         final Object result;
         if (argument instanceof LabelNode) {
-            result = ((LabelNode) argument).getLabel();
+            result = new BytecodeLabel(((LabelNode) argument).getLabel().toString());
         } else {
             result = argument;
         }

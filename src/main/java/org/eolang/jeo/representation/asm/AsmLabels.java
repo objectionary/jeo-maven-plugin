@@ -21,35 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.asm;
 
-import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
-import org.xembly.ImpossibleModificationException;
-import org.xembly.Xembler;
+import java.util.HashMap;
+import java.util.Map;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.objectweb.asm.Label;
 
 /**
- * Test case for {@link XmlTryCatchEntry}.
- * @since 0.1
+ * Asm Method Labels.
+ * Used during method generation to keep track of all the labels.
+ * @since 0.6
  */
-final class XmlTryCatchEntryTest {
+public final class AsmLabels {
 
-    @Test
-    void transformsToBytecode() throws ImpossibleModificationException {
-        final BytecodeTryCatchBlock block = new BytecodeTryCatchBlock(
-            "a",
-            "b",
-            "c",
-            "java/lang/Exception"
-        );
-        MatcherAssert.assertThat(
-            "Can't convert XML try-catch entry to the correct bytecode",
-            new XmlTryCatchEntry(
-                new XmlNode(new Xembler(block.directives(false)).xml())
-            ).bytecode(),
-            Matchers.equalTo(block)
-        );
+    /**
+     * All the method labels.
+     */
+    private final Map<String, Label> labels;
+
+    /**
+     * Constructor.
+     */
+    public AsmLabels() {
+        this(new HashMap<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param labels All the labels.
+     */
+    public AsmLabels(final Map<String, Label> labels) {
+        this.labels = labels;
+    }
+
+    /**
+     * Get label by UID.
+     * @param label Bytecode label.
+     * @return Label.
+     */
+    public Label label(final BytecodeLabel label) {
+        return this.labels.computeIfAbsent(label.uid(), id -> new Label());
     }
 }

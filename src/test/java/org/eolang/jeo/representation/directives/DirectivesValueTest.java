@@ -25,7 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.stream.Stream;
 import org.eolang.jeo.matchers.SameXml;
-import org.eolang.jeo.representation.xmir.AllLabels;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -66,7 +66,7 @@ final class DirectivesValueTest {
             "Converts label to XML",
             new Xembler(
                 new DirectivesValue(
-                    new AllLabels().label("some-random")
+                    new BytecodeLabel("some-random")
                 ),
                 new Transformers.Node()
             ).xml(),
