@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public final class XmlNode {
     /**
      * Parent node.
      */
-    private final Node node;
+    private final XML node;
 
     /**
      * Constructor.
@@ -57,9 +58,17 @@ public final class XmlNode {
 
     /**
      * Constructor.
-     * @param parent Parent node.
+     * @param parent XML document
      */
     public XmlNode(final Node parent) {
+        this(new XMLDocument(parent));
+    }
+
+    /**
+     * Constructor.
+     * @param parent Parent node.
+     */
+    public XmlNode(final XML parent) {
         this.node = parent;
     }
 
@@ -67,7 +76,7 @@ public final class XmlNode {
     public boolean equals(final Object obj) {
         final boolean res;
         if (obj instanceof XmlNode) {
-            res = new XMLDocument(this.node).equals(new XMLDocument(((XmlNode) obj).node));
+            res = this.node.equals(((XmlNode) obj).node);
         } else {
             res = false;
         }
@@ -81,7 +90,7 @@ public final class XmlNode {
 
     @Override
     public String toString() {
-        return new XMLDocument(this.node).toString();
+        return this.node.toString();
     }
 
     /**
@@ -97,7 +106,7 @@ public final class XmlNode {
      * @return Text content.
      */
     public String text() {
-        return this.node.getTextContent();
+        return this.node.node().getTextContent();
     }
 
     /**
@@ -107,7 +116,7 @@ public final class XmlNode {
      */
     public Optional<String> attribute(final String name) {
         final Optional<String> result;
-        final NamedNodeMap attrs = this.node.getAttributes();
+        final NamedNodeMap attrs = this.node.node().getAttributes();
         if (attrs == null) {
             result = Optional.empty();
         } else {
@@ -131,7 +140,7 @@ public final class XmlNode {
      * @return List of elements.
      */
     List<String> xpath(final String xpath) {
-        return new XMLDocument(this.node).xpath(xpath);
+        return this.node.xpath(xpath);
     }
 
     /**
@@ -173,7 +182,7 @@ public final class XmlNode {
                 () -> new IllegalStateException(
                     String.format(
                         "Can't find any child nodes in '%s'",
-                        new XMLDocument(this.node)
+                        this.node
                     )
                 )
             );
@@ -197,7 +206,7 @@ public final class XmlNode {
      * @return Class.
      */
     XmlClass toClass() {
-        return new XmlClass(this.node);
+        return new XmlClass(this.node.node());
     }
 
     /**
@@ -224,13 +233,9 @@ public final class XmlNode {
      */
     private Optional<XmlNode> optchild(final String name) {
         Optional<XmlNode> result = Optional.empty();
-        final NodeList children = this.node.getChildNodes();
-        for (int index = 0; index < children.getLength(); ++index) {
-            final Node current = children.item(index);
-            if (current.getNodeName().equals(name)) {
-                result = Optional.of(new XmlNode(current));
-                break;
-            }
+        final List<XML> nodes = this.node.nodes(name);
+        if (!nodes.isEmpty()) {
+            result = Optional.of(new XmlNode(nodes.get(0)));
         }
         return result;
     }
@@ -245,7 +250,7 @@ public final class XmlNode {
             String.format(
                 "Can't find %s in '%s'",
                 name,
-                new XMLDocument(this.node)
+                this.node
             )
         );
     }
@@ -255,7 +260,7 @@ public final class XmlNode {
      * @return Stream of class objects.
      */
     private Stream<Node> objects() {
-        final NodeList children = this.node.getChildNodes();
+        final NodeList children = this.node.node().getChildNodes();
         final List<Node> res = new ArrayList<>(children.getLength());
         for (int index = 0; index < children.getLength(); ++index) {
             final Node child = children.item(index);

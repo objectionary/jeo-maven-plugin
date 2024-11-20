@@ -26,10 +26,12 @@ package org.eolang.jeo.representation.xmir;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.cactoos.list.ListOf;
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
@@ -90,6 +92,43 @@ final class XmlNodeTest {
             "Can't retrieve the text, or the text is not the expected one",
             new XmlNode("<o>text</o>").text(),
             Matchers.equalTo("text")
+        );
+    }
+
+    @Test
+    void retrievesChild() {
+        final XmlNode child = new XmlNode(
+            "<program><o>text</o></program>"
+        ).child("o");
+        final String expected = "<o>text</o>";
+        MatcherAssert.assertThat(
+            String.format(
+                "Retrieved XML: %s does not match with expected %s",
+                child,
+                expected
+            ),
+            child,
+            new IsEqual<>(new XmlNode(expected))
+        );
+    }
+
+    @Test
+    void retrievesChildObjects() {
+        final List<XmlNode> objects = new XmlNode(
+            "<program><o>o1</o><o>o2</o></program>"
+        ).children().collect(Collectors.toList());
+        final List<XmlNode> expected = new ListOf<>(
+            new XmlNode("<o>o1</o>"),
+            new XmlNode("<o>o2</o>")
+        );
+        MatcherAssert.assertThat(
+            String.format(
+                "Retrieved child objects: %s don't match with expected: %s",
+                objects,
+                expected
+            ),
+            objects,
+            new IsEqual<>(expected)
         );
     }
 
