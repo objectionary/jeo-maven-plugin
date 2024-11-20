@@ -47,15 +47,10 @@ import org.junit.jupiter.api.io.TempDir;
  * - Transform XMIR back into bytecode
  * - Compare the original bytecode with the transformed one.
  * In this class we compare bytecode as strings because the order of values in
- * the bytecode constant pool might differ, however the bytecode is still the same.
+ * the bytecode constant pool might differ, however, the bytecode is still the same.
+ * Moreover, we don't care about line numbers and other supplementary information.
+ * We ignore it by using `-g:vars` compiler option.
  * @since 0.1
- * @todo #218:90min Add debug information to bytecode.
- *  Currently we do not add any debug information to the bytecode.
- *  We added -g:none flag to the compiler in order to avoid adding
- *  any debug information.
- *  See {@link #transformsRandomJavaSourceCodeIntoEoAndBack(java.nio.file.Path)} for more info.
- *  We have to add debug information to the bytecode.
- *  When it is done, we have to remove -g:none flag from the test.
  */
 final class JavaSourceCompilationIT {
 
