@@ -25,11 +25,13 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeEntry;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -73,9 +75,10 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
         final BytecodeLabel handler,
         final String type
     ) {
-        this.start = start;
-        this.end = end;
-        this.handler = handler;
+        final BytecodeLabel empty = new BytecodeLabel((String) null);
+        this.start = Optional.ofNullable(start).orElse(empty);
+        this.end = Optional.ofNullable(end).orElse(empty);
+        this.handler = Optional.ofNullable(handler).orElse(empty);
         this.type = type;
     }
 

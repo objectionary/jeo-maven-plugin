@@ -34,7 +34,6 @@ import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.OpcodeName;
-import org.eolang.jeo.representation.xmir.AllLabels;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -63,12 +62,6 @@ public final class BytecodeInstruction implements BytecodeEntry {
     private final List<Object> args;
 
     /**
-     * All labels.
-     */
-    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    private final AllLabels labels;
-
-    /**
      * Constructor.
      * @param opcode Opcode.
      * @param args Arguments.
@@ -82,37 +75,10 @@ public final class BytecodeInstruction implements BytecodeEntry {
      * @param opcode Opcode.
      * @param args Arguments.
      */
-    public BytecodeInstruction(final int opcode, final List<Object> args) {
-        this(new AllLabels(), opcode, args);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param labels All labels.
-     * @param opcode Opcode.
-     * @param args Arguments.
-     */
-    BytecodeInstruction(
-        final AllLabels labels,
-        final int opcode,
-        final Object... args
-    ) {
-        this(labels, opcode, Arrays.asList(args));
-    }
-
-    /**
-     * Constructor.
-     * @param labels All labels.
-     * @param opcode Opcode.
-     * @param args Arguments.
-     */
-    BytecodeInstruction(
-        final AllLabels labels,
+    private BytecodeInstruction(
         final int opcode,
         final List<Object> args
     ) {
-        this.labels = labels;
         this.opcode = opcode;
         this.args = args;
     }

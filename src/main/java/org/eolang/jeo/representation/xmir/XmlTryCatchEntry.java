@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.directives.EoFqn;
-import org.objectweb.asm.Label;
 
 /**
  * XML try-catch entry.
@@ -42,26 +41,11 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
     private final XmlNode xmlnode;
 
     /**
-     * Method Labels.
-     */
-    private final AllLabels labels;
-
-    /**
-     * Constructor.
-     * @param xmlnode XML node
-     */
-    public XmlTryCatchEntry(final XmlNode xmlnode) {
-        this(xmlnode, new AllLabels());
-    }
-
-    /**
      * Constructor.
      * @param node XML node
-     * @param labels Labels
      */
-    XmlTryCatchEntry(final XmlNode node, final AllLabels labels) {
+    public XmlTryCatchEntry(final XmlNode node) {
         this.xmlnode = node;
-        this.labels = labels;
     }
 
     /**

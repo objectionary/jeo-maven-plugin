@@ -32,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesEoObject;
-import org.eolang.jeo.representation.directives.DirectivesLabel;
+import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
@@ -85,7 +85,7 @@ public final class BytecodeLabel implements BytecodeEntry {
         if (Objects.isNull(this.identifier)) {
             result = new DirectivesEoObject("nop");
         } else {
-            result = new DirectivesLabel(this.identifier);
+            result = new DirectivesValue(this);
         }
         return result;
     }

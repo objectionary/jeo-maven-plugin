@@ -33,8 +33,6 @@ import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.Signature;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
-import org.eolang.jeo.representation.xmir.AllLabels;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -76,11 +74,6 @@ public final class BytecodeMethod {
      * Max stack and locals.
      */
     private final BytecodeMaxs maxs;
-
-    /**
-     * All Method Labels.
-     */
-    private final AllLabels labels;
 
     /**
      * Bytecode method attributes.
@@ -211,7 +204,6 @@ public final class BytecodeMethod {
         this.defvalues = defvalues;
         this.maxs = maxs;
         this.attributes = attributes;
-        this.labels = new AllLabels();
     }
 
     /**
@@ -384,7 +376,7 @@ public final class BytecodeMethod {
      * @return This object.
      */
     BytecodeMethod opcode(final int opcode, final Object... args) {
-        return this.entry(new BytecodeInstruction(this.labels, opcode, args));
+        return this.entry(new BytecodeInstruction(opcode, args));
     }
 
     /**
