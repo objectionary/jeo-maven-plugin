@@ -44,10 +44,13 @@ final class XmlInstructionTest {
 
     @Test
     void comparesSuccessfullyWithSpaces() {
+        final BytecodeInstruction bytecode = new XmlInstruction(
+            false, Opcodes.INVOKESPECIAL, 1, 2, 3).bytecode();
+        final BytecodeInstruction inst = XmlInstructionTest.INST;
         MatcherAssert.assertThat(
             "Xml Instruction nodes with different empty spaces, but with the same content should be the same, but it wasn't",
-            new XmlInstruction(false, Opcodes.INVOKESPECIAL, 1, 2, 3).bytecode(),
-            Matchers.equalTo(XmlInstructionTest.INST)
+            bytecode,
+            Matchers.equalTo(inst)
         );
     }
 
