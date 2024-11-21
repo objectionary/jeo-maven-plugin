@@ -255,6 +255,7 @@ public final class BytecodeClass {
             Opcodes.ACC_STATIC
         );
         return this.withMethod(properties)
+            .label()
             .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
             .opcode(Opcodes.LDC, "Hello, world!")
             .opcode(
@@ -264,6 +265,7 @@ public final class BytecodeClass {
                 "(Ljava/lang/String;)V",
                 false
             )
+            .label()
             .opcode(Opcodes.RETURN)
             .up();
     }

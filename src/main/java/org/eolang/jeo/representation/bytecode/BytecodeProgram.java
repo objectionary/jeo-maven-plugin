@@ -143,11 +143,11 @@ public final class BytecodeProgram {
 
     /**
      * Convert to directives.
-     * @param code Program listing.
+     * @param listing Program listing.
      * @return Directives program.
      */
-    public DirectivesProgram directives(final String code) {
-        return this.directives(code, true);
+    public DirectivesProgram directives(final String listing) {
+        return this.directives(listing, true);
     }
 
     /**
