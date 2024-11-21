@@ -54,6 +54,9 @@ SOFTWARE.
         <groupId>org.eolang</groupId>
         <artifactId>jeo-maven-plugin</artifactId>
         <version>@project.version@</version>
+        <configuration>
+        <mode>debug</mode>
+</configuration>
         <executions>
           <execution>
             <id>bytecode-to-eo</id>

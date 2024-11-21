@@ -25,6 +25,7 @@ package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
 import java.io.File;
+import jdk.jpackage.internal.Log;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -32,6 +33,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.eolang.jeo.representation.asm.DisassembleMode;
 
 /**
  * Converts bytecode to EO.
@@ -92,6 +94,22 @@ public final class DisassembleMojo extends AbstractMojo {
     )
     private boolean disabled;
 
+    /**
+     * Mode in which to disassemble the bytecode.
+     * Can be either 'plain' or 'debug':
+     * - 'short' mode will disassemble the bytecode without any additional information.
+     * - 'debug' mode will disassemble the bytecode with additional information like line numbers.
+     * Default is 'short'.
+     *
+     * @since 0.6
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(
+        property = "jeo.disassemble.mode",
+        defaultValue = "short"
+    )
+    private String mode;
+
     @Override
     public void execute() throws MojoExecutionException {
         try {
@@ -99,8 +117,11 @@ public final class DisassembleMojo extends AbstractMojo {
             if (this.disabled) {
                 Logger.info(this, "Disassemble mojo is disabled. Skipping.");
             } else {
+                Logger.info(this, "Disassembling is started with mode '%s'", this.mode);
                 new Disassembler(
-                    this.sourcesDir.toPath(), this.outputDir.toPath()
+                    this.sourcesDir.toPath(),
+                    this.outputDir.toPath(),
+                    DisassembleMode.fromString(this.mode)
                 ).disassemble();
             }
         } catch (final DependencyResolutionRequiredException exception) {

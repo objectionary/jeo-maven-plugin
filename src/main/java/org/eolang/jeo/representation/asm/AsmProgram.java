@@ -58,8 +58,17 @@ public final class AsmProgram {
      * @return Bytecode.
      */
     public BytecodeProgram bytecode() {
+        return this.bytecode(ClassReader.SKIP_DEBUG);
+    }
+
+    /**
+     * Convert to bytecode.
+     * @param flags Flags.
+     * @return Bytecode.
+     */
+    public BytecodeProgram bytecode(final int flags) {
         final ClassNode node = new ClassNode();
-        new ClassReader(this.bytes).accept(node, ClassReader.SKIP_DEBUG);
+        new ClassReader(this.bytes).accept(node, flags);
         return new BytecodeProgram(
             new ClassName(node.name).pckg(),
             new AsmClass(node).bytecode()

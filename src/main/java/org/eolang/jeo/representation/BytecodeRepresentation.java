@@ -34,6 +34,7 @@ import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.asm.AsmProgram;
+import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.objectweb.asm.ClassReader;
@@ -103,7 +104,7 @@ public final class BytecodeRepresentation {
      * @return XML.
      */
     public XML toEO() {
-        return this.toEO(true);
+        return this.toEO(true, DisassembleMode.SHORT);
     }
 
     /**
@@ -112,8 +113,18 @@ public final class BytecodeRepresentation {
      * @return XML representation of bytecode.
      */
     public XML toEO(final boolean count) {
+        return this.toEO(count, DisassembleMode.SHORT);
+    }
+
+    /**
+     * Converts bytecode into XML.
+     * @param count Do we add number to opcode name or not?
+     * @param mode Disassemble mode.
+     * @return XML representation of bytecode.
+     */
+    public XML toEO(final boolean count, final DisassembleMode mode) {
         final DirectivesProgram directives = new AsmProgram(this.input.value())
-            .bytecode()
+            .bytecode(mode.asmOptions())
             .directives(new BytecodeListing(this.input.value()).toString(), count);
         try {
             return new VerifiedEo(directives).asXml();

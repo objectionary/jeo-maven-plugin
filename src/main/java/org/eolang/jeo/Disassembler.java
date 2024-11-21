@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.asm.DisassembleMode;
 
 /**
  * This class disassembles the project's compiled classes.
@@ -47,8 +48,12 @@ public class Disassembler {
     private final Path target;
 
     /**
+     * Disassemble mode.
+     */
+    private final DisassembleMode mode;
+
+    /**
      * Constructor.
-     *
      * @param classes Project compiled classes.
      * @param target Project default target directory.
      */
@@ -56,8 +61,23 @@ public class Disassembler {
         final Path classes,
         final Path target
     ) {
+        this(classes, target, DisassembleMode.SHORT);
+    }
+
+    /**
+     * Constructor.
+     * @param classes Project compiled classes.
+     * @param target Project default target directory.
+     * @param mode Disassemble mode.
+     */
+    public Disassembler(
+        final Path classes,
+        final Path target,
+        final DisassembleMode mode
+    ) {
         this.classes = classes;
         this.target = target;
+        this.mode = mode;
     }
 
     /**
@@ -87,7 +107,7 @@ public class Disassembler {
             "Disassembling",
             "disassembled",
             new Caching(
-                new Disassembling(this.target, path)
+                new Disassembling(this.target, path, this.mode)
             )
         );
         trans.transform();

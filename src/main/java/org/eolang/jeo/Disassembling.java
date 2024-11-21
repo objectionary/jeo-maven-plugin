@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.PrefixedName;
+import org.eolang.jeo.representation.asm.DisassembleMode;
 
 /**
  * Disassembling transformation.
@@ -46,13 +47,20 @@ public final class Disassembling implements Transformation {
     private final Path from;
 
     /**
+     * Disassemble mode.
+     */
+    private final DisassembleMode mode;
+
+    /**
      * Constructor.
      * @param target Target folder.
      * @param representation Representation to disassemble.
+     * @param mode Disassemble mode.
      */
-    Disassembling(final Path target, final Path representation) {
+    Disassembling(final Path target, final Path representation, final DisassembleMode mode) {
         this.folder = target;
         this.from = representation;
+        this.mode = mode;
     }
 
     @Override
@@ -75,7 +83,7 @@ public final class Disassembling implements Transformation {
     @Override
     public byte[] transform() {
         return new BytecodeRepresentation(this.from)
-            .toEO()
+            .toEO(true, this.mode)
             .toString()
             .getBytes(StandardCharsets.UTF_8);
     }
