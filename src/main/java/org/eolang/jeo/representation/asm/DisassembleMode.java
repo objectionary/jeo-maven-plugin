@@ -28,6 +28,12 @@ import org.objectweb.asm.ClassReader;
 /**
  * Disassemble mode.
  * @since 0.6
+ * @todo #884:30min Refactor DisassembleMode Usage.
+ *  Actually, we have much more disassembling options, than mode.
+ *  Maybe it make sense to cobine them in this class.
+ *  For example, 'counting' option, that will count the number of instructions in the method.
+ *  So, let's refactor DisassembleMode to DisassembleOptions and add a new option 'counting'.
+ *  We also should simplify the code on our way.
  */
 public enum DisassembleMode {
     /**
