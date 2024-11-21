@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
@@ -291,6 +292,14 @@ public final class BytecodeMethod {
             this.attributes.directives("local-variable-table"),
             counting
         );
+    }
+
+    /**
+     * Method instructions
+     * @return Instructions.
+     */
+    public List<BytecodeEntry> intructions() {
+        return Collections.unmodifiableList(this.instructions);
     }
 
     /**

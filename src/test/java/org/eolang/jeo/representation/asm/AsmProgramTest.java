@@ -23,10 +23,15 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import java.util.List;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeEntry;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.bytecode.BytecodeLine;
+import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.hamcrest.MatcherAssert;
@@ -52,6 +57,23 @@ final class AsmProgramTest {
             new AsmProgram(same.bytes()).bytecode().bytecode(),
             Matchers.equalTo(same)
         );
+    }
+
+    @Test
+    void skipsDebugLabels() throws Exception {
+        MatcherAssert.assertThat(
+            "We expect to skip debug labels and lines",
+            new AsmProgram(new BytesOf(new ResourceOf("MethodByte.class")).asBytes())
+                .bytecode()
+                .top()
+                .methods()
+                .get(1)
+                .intructions()
+                .stream()
+                .anyMatch(entry -> entry instanceof BytecodeLabel || entry instanceof BytecodeLine),
+            Matchers.is(false)
+        );
+
     }
 
     @Test

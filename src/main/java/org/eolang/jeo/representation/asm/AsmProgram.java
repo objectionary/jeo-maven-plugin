@@ -59,7 +59,7 @@ public final class AsmProgram {
      */
     public BytecodeProgram bytecode() {
         final ClassNode node = new ClassNode();
-        new ClassReader(this.bytes).accept(node, 0);
+        new ClassReader(this.bytes).accept(node, ClassReader.SKIP_DEBUG);
         return new BytecodeProgram(
             new ClassName(node.name).pckg(),
             new AsmClass(node).bytecode()
