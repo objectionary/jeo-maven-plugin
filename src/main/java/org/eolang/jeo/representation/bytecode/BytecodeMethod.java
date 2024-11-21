@@ -295,7 +295,7 @@ public final class BytecodeMethod {
     }
 
     /**
-     * Method instructions
+     * Method instructions.
      * @return Instructions.
      */
     public List<BytecodeEntry> intructions() {

@@ -56,15 +56,20 @@ public enum DisassembleMode {
      * @param mode Mode.
      * @return Disassemble mode.
      */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DisassembleMode fromString(final String mode) {
+        final DisassembleMode result;
         switch (mode) {
             case "short":
-                return DisassembleMode.SHORT;
+                result = DisassembleMode.SHORT;
+                break;
             case "debug":
-                return DisassembleMode.DEBUG;
+                result = DisassembleMode.DEBUG;
+                break;
             default:
                 throw new IllegalArgumentException(String.format(DisassembleMode.UNKNOWN, mode));
         }
+        return result;
     }
 
     /**
@@ -72,13 +77,17 @@ public enum DisassembleMode {
      * @return ASM options.
      */
     public int asmOptions() {
+        final int result;
         switch (this) {
             case SHORT:
-                return ClassReader.SKIP_DEBUG;
+                result = ClassReader.SKIP_DEBUG;
+                break;
             case DEBUG:
-                return 0;
+                result = 0;
+                break;
             default:
                 throw new IllegalArgumentException(String.format(DisassembleMode.UNKNOWN, this));
         }
+        return result;
     }
 }

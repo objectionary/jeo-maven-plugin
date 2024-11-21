@@ -23,15 +23,12 @@
  */
 package org.eolang.jeo.representation.asm;
 
-import java.util.List;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.eolang.jeo.representation.bytecode.BytecodeEntry;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeLine;
-import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.hamcrest.MatcherAssert;
@@ -73,7 +70,6 @@ final class AsmProgramTest {
                 .anyMatch(entry -> entry instanceof BytecodeLabel || entry instanceof BytecodeLine),
             Matchers.is(false)
         );
-
     }
 
     @Test
