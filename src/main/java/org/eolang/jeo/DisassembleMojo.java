@@ -25,7 +25,6 @@ package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
 import java.io.File;
-import jdk.jpackage.internal.Log;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
