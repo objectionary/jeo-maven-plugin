@@ -25,6 +25,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
@@ -440,5 +441,9 @@ public final class BytecodeMethod {
                 .map(BytecodeTryCatchBlock.class::cast)
                 .collect(Collectors.toList())
         ).value();
+    }
+
+    public List<String> objects() {
+        return Collections.emptyList();
     }
 }

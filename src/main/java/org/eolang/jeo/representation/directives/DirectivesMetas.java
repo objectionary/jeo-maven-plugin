@@ -23,7 +23,10 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
@@ -42,14 +45,9 @@ public final class DirectivesMetas implements Iterable<Directive> {
     private final ClassName name;
 
     /**
-     * Whether to include "opcodes" import.
+     * Objects.
      */
-    private final AtomicBoolean opcodes;
-
-    /**
-     * Whether to include "labels" import.
-     */
-    private final AtomicBoolean labels;
+    private final List<String> objects;
 
     /**
      * Constructor.
@@ -63,23 +61,20 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * @param classname Class name.
      */
     public DirectivesMetas(final ClassName classname) {
-        this(classname, false, false);
+        this(classname, Collections.emptyList());
     }
 
     /**
      * Constructor.
      * @param classname Class name.
-     * @param opcodes Whether to include opcodes.
-     * @param labels Whether to include labels.
+     * @param objects Objects used in all methods
      */
     public DirectivesMetas(
         final ClassName classname,
-        final boolean opcodes,
-        final boolean labels
+        final List<String> objects
     ) {
         this.name = classname;
-        this.opcodes = new AtomicBoolean(opcodes);
-        this.labels = new AtomicBoolean(labels);
+        this.objects = new ArrayList<>(objects);
     }
 
     /**
@@ -95,7 +90,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * @return The same instance with opcodes.
      */
     public DirectivesMetas withOpcodes() {
-        this.opcodes.set(true);
+        this.objects.add("jeo.opcode");
         return this;
     }
 
@@ -104,42 +99,31 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * @return The same instance with labels.
      */
     public DirectivesMetas withLabels() {
-        this.labels.set(true);
+        this.objects.add("jeo.label");
         return this;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        final String opcode = "jeo.opcode";
-        final String label = "jeo.label";
         final String alias = "alias";
-        final Directives opdirs = new Directives();
-        if (this.opcodes.get()) {
-            opdirs.add("meta")
-                .add("head").set(alias).up()
-                .add("tail").set(opcode).up()
-                .add("part").set(opcode).up()
-                .up();
-        }
-        final Directives labeldirs = new Directives();
-        if (this.labels.get()) {
-            labeldirs.add("meta")
-                .add("head").set(alias).up()
-                .add("tail").set(label).up()
-                .add("part").set(label).up()
-                .up();
-        }
-        return new Directives()
+        final Directives metas = new Directives()
             .add("metas")
             .add("meta")
             .add("head").set("package").up()
             .add("tail").set(this.pckg()).up()
             .add("part").set(this.pckg()).up()
-            .up()
-            .append(opdirs)
-            .append(labeldirs)
-            .up()
-            .iterator();
+            .up();
+        for (final String object : this.objects) {
+            metas.append(
+                new Directives()
+                    .add("meta")
+                    .add("head").set(alias).up()
+                    .add("tail").set(object).up()
+                    .add("part").set(object).up()
+                    .up()
+            );
+        }
+        return metas.up().iterator();
     }
 
     /**

@@ -164,8 +164,7 @@ public final class BytecodeProgram {
             top.directives(counting),
             new DirectivesMetas(
                 classname,
-                top.hasOpcodes(),
-                top.hasLabels()
+                top.objects()
             )
         );
     }

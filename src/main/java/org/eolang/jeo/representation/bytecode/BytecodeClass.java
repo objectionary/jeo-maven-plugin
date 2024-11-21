@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.ClassName;
@@ -354,19 +355,14 @@ public final class BytecodeClass {
     }
 
     /**
-     * Whether the class has opcodes.
-     * @return True if it has opcodes, false otherwise.
+     * List of used objects.
+     * @return List of objects.
      */
-    boolean hasOpcodes() {
-        return this.cmethods.stream().anyMatch(BytecodeMethod::hasOpcodes);
-    }
-
-    /**
-     * Whether the class has labels.
-     * @return True if it has labels, false otherwise.
-     */
-    boolean hasLabels() {
-        return this.cmethods.stream().anyMatch(BytecodeMethod::hasLabels);
+    List<String> objects() {
+        return this.cmethods.stream()
+            .map(BytecodeMethod::objects)
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
     }
 
     /**
