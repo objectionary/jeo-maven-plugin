@@ -61,7 +61,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * @param classname Class name.
      */
     public DirectivesMetas(final ClassName classname) {
-        this(classname, Collections.emptyList());
+        this(classname, new ArrayList<>(0));
     }
 
     /**
@@ -113,7 +113,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
             .add("part").set(this.pckg()).up()
             .up();
         this.objects.stream()
-            .filter(String::isEmpty)
+            .filter(object -> !object.isEmpty())
             .map(DirectivesMetas::alias)
             .forEach(metas::append);
         return metas.up().iterator();

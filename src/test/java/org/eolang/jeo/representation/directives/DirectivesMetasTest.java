@@ -89,20 +89,22 @@ final class DirectivesMetasTest {
 
     @Test
     void addsAliasesForAllTheRequiredObjects() throws ImpossibleModificationException {
-        final DirectivesProgram directives = new BytecodeProgram(
-            new BytecodeClass().helloWorldMethod())
-            .directives("");
-        final String resulting = new Xembler(directives).xml();
+        final String resulting = new Xembler(
+            new BytecodeProgram(new BytecodeClass().helloWorldMethod()).directives("")
+        ).xml();
         System.out.println(resulting);
         MatcherAssert.assertThat(
             "Can't create corresponding xembly directives for all the required objects",
             resulting,
             Matchers.allOf(
-//                XhtmlMatchers.hasXPath("/program/metas/meta/head[text()='alias']"),
-//                XhtmlMatchers.hasXPath("/program/metas/meta/tail[text()='jeo.opcode']"),
-//                XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.opcode']"),
-//                XhtmlMatchers.hasXPath("/program/metas/meta/tail[text()='jeo.label']"),
-//                XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.label']")
+                XhtmlMatchers.hasXPath("/program/metas/meta/head[text()='alias']"),
+                XhtmlMatchers.hasXPath("/program/metas/meta/tail[text()='jeo.opcode']"),
+                XhtmlMatchers.hasXPath("/program/metas/meta/tail[text()='jeo.label']"),
+                XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.int']"),
+                XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.string']"),
+                XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.bool']"),
+                XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.param']"),
+                XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.params']")
             )
         );
     }
