@@ -23,6 +23,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="SNAPSHOT" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo>XML schema for XMIR documents</xs:appinfo>
+    <xs:documentation>
+      Every XMIR document is essentially an XML document that
+      contains objects found in a EOLANG program together with
+      supplementary information, such as metas, license, and so on.
+    </xs:documentation>
+  </xs:annotation>
   <xs:simpleType name="empty">
     <xs:restriction base="xs:string">
       <xs:length value="0"/>
@@ -34,23 +42,34 @@ SOFTWARE.
     </xs:sequence>
     <xs:attribute name="line" type="xs:decimal"/>
     <xs:attribute name="pos" type="xs:decimal"/>
-    <xs:attribute name="scope" type="xs:string"/>
     <xs:attribute name="name"/>
     <xs:attribute name="base"/>
-    <xs:attribute name="data"/>
+    <xs:attribute name="star" type="empty"/>
     <xs:attribute name="as"/>
     <xs:attribute name="atom"/>
-    <xs:attribute name="flags"/>
     <xs:attribute name="loc"/>
     <xs:attribute name="abstract" type="empty"/>
-    <xs:attribute name="vararg" type="empty"/>
     <xs:attribute name="method" type="empty"/>
     <xs:attribute name="const" type="empty"/>
-    <xs:attribute name="copy" type="empty"/>
   </xs:complexType>
   <xs:complexType name="program">
-    <xs:sequence>
+    <xs:all>
       <xs:element name="listing" type="xs:string"/>
+      <xs:element name="comments" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="comment" minOccurs="0" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string">
+                    <xs:attribute name="line" use="required" type="xs:decimal"/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="errors">
         <xs:complexType>
           <xs:sequence>
@@ -58,7 +77,8 @@ SOFTWARE.
               <xs:complexType>
                 <xs:simpleContent>
                   <xs:extension base="xs:string">
-                    <xs:attribute name="line" use="required"/>
+                    <xs:attribute name="check"/>
+                    <xs:attribute name="line" type="xs:decimal"/>
                     <xs:attribute name="severity" use="required">
                       <xs:simpleType>
                         <xs:restriction base="xs:string">
@@ -93,7 +113,7 @@ SOFTWARE.
                   <xs:element name="tail" type="xs:string"/>
                   <xs:element name="part" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
-                <xs:attribute name="line" type="xs:decimal"/>
+                <xs:attribute name="line"/>
               </xs:complexType>
             </xs:element>
           </xs:sequence>
@@ -106,7 +126,7 @@ SOFTWARE.
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-    </xs:sequence>
+    </xs:all>
     <xs:attribute name="ms" type="xs:decimal" use="required"/>
     <xs:attribute name="name" type="xs:string" use="required"/>
     <xs:attribute name="time" type="xs:dateTime" use="required"/>
