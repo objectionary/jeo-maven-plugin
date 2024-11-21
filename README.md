@@ -85,6 +85,20 @@ configuration to your `pom.xml` file:
 </build>
 ```
 
+### Include debug information
+
+In order to include debug information in the generated EO files, you can set
+`debug` option.
+
+```xml
+<configuration>
+  <mode>debug</mode>
+</configuration>
+```
+
+This option will add line numbers and local variable names to the EO files 
+together with their corresponding labels.
+
 ### Disable bytecode verification
 
 Each time the plugin converts EO back to bytecode, it verifies it. If the
