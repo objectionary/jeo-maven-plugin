@@ -23,15 +23,15 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import com.jcabi.xml.XMLDocument;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Set;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.xembly.Directive;
 import org.xembly.Directives;
+import org.xembly.Xembler;
 
 /**
  * Directives for meta-information of a class.
@@ -45,62 +45,30 @@ public final class DirectivesMetas implements Iterable<Directive> {
     private final ClassName name;
 
     /**
-     * Objects.
+     * Class directives.
      */
-    private final List<String> objects;
+    private final DirectivesClass clazz;
 
-    /**
-     * Constructor.
-     */
-    public DirectivesMetas() {
-        this(new ClassName());
-    }
 
     /**
      * Constructor.
      * @param classname Class name.
      */
     public DirectivesMetas(final ClassName classname) {
-        this(classname, new ArrayList<>(0));
+        this(classname, new DirectivesClass(new ClassName("SomeClass")));
     }
 
     /**
      * Constructor.
      * @param classname Class name.
-     * @param objects Objects used in all methods
+     * @param clazz Class directives.
      */
     public DirectivesMetas(
         final ClassName classname,
-        final List<String> objects
+        final DirectivesClass clazz
     ) {
         this.name = classname;
-        this.objects = new ArrayList<>(objects);
-    }
-
-    /**
-     * Class name.
-     * @return The class name.
-     */
-    public ClassName className() {
-        return this.name;
-    }
-
-    /**
-     * With opcodes.
-     * @return The same instance with opcodes.
-     */
-    public DirectivesMetas withOpcodes() {
-        this.objects.add("jeo.opcode");
-        return this;
-    }
-
-    /**
-     * With labels.
-     * @return The same instance with labels.
-     */
-    public DirectivesMetas withLabels() {
-        this.objects.add("jeo.label");
-        return this;
+        this.clazz = clazz;
     }
 
     @Override
@@ -112,11 +80,20 @@ public final class DirectivesMetas implements Iterable<Directive> {
             .add("tail").set(this.pckg()).up()
             .add("part").set(this.pckg()).up()
             .up();
-        this.objects.stream()
+        Set<String> objects = this.jeo();
+        objects.stream()
             .filter(object -> !object.isEmpty())
             .map(DirectivesMetas::alias)
             .forEach(metas::append);
         return metas.up().iterator();
+    }
+
+    /**
+     * Class name.
+     * @return The class name.
+     */
+    ClassName className() {
+        return this.name;
     }
 
     /**
@@ -134,6 +111,20 @@ public final class DirectivesMetas implements Iterable<Directive> {
             result = new PrefixedName(original).encode();
         }
         return result;
+    }
+
+    /**
+     * Find all jeo objects.
+     * @return Set of jeo objects.
+     */
+    private Set<String> jeo() {
+        return new HashSet<>(
+            new XMLDocument(
+                new Xembler(
+                    new Directives(this.clazz)
+                ).xmlQuietly()
+            ).xpath(".//o[starts-with(@base, 'jeo.')]/@base")
+        );
     }
 
     /**

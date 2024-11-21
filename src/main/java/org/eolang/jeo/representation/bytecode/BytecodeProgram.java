@@ -33,6 +33,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
+import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
 
@@ -159,12 +160,13 @@ public final class BytecodeProgram {
     public DirectivesProgram directives(final String code, final boolean counting) {
         final BytecodeClass top = this.top();
         final ClassName classname = new ClassName(this.pckg, new PrefixedName(top.name()).encode());
+        final DirectivesClass clazz = top.directives(counting);
         return new DirectivesProgram(
             code,
-            top.directives(counting),
+            clazz,
             new DirectivesMetas(
                 classname,
-                top.objects()
+                clazz
             )
         );
     }

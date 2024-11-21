@@ -397,6 +397,14 @@ public final class BytecodeMethod {
     }
 
     /**
+     * All the Jeo objects used in the method.
+     * @return Jeo Objects.
+     */
+    public List<String> objects() {
+        return Collections.emptyList();
+    }
+
+    /**
      * Convert to directives with opcodes' counting.
      * @return Directives.
      */
@@ -441,9 +449,5 @@ public final class BytecodeMethod {
                 .map(BytecodeTryCatchBlock.class::cast)
                 .collect(Collectors.toList())
         ).value();
-    }
-
-    public List<String> objects() {
-        return Collections.emptyList();
     }
 }

@@ -57,45 +57,12 @@ final class DirectivesMetasTest {
     }
 
     @Test
-    void addsInitialAliasesForOpcodes() {
-        MatcherAssert.assertThat(
-            "Can't create corresponding xembly directives for opcode alias",
-            new Xembler(
-                new DirectivesMetas().withOpcodes(),
-                new Transformers.Node()
-            ).xmlQuietly(),
-            Matchers.allOf(
-                XhtmlMatchers.hasXPath("/metas/meta/head[text()='alias']"),
-                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='jeo.opcode']"),
-                XhtmlMatchers.hasXPath("/metas/meta/part[text()='jeo.opcode']")
-            )
-        );
-    }
-
-    @Test
-    void addsInitalAliasesForLabels() {
-        MatcherAssert.assertThat(
-            "Can't create corresponding xembly directives for label alias",
-            new Xembler(
-                new DirectivesMetas().withLabels(),
-                new Transformers.Node()
-            ).xmlQuietly(),
-            Matchers.allOf(
-                XhtmlMatchers.hasXPath("/metas/meta/tail[text()='jeo.label']"),
-                XhtmlMatchers.hasXPath("/metas/meta/part[text()='jeo.label']")
-            )
-        );
-    }
-
-    @Test
     void addsAliasesForAllTheRequiredObjects() throws ImpossibleModificationException {
-        final String resulting = new Xembler(
-            new BytecodeProgram(new BytecodeClass().helloWorldMethod()).directives("")
-        ).xml();
-        System.out.println(resulting);
         MatcherAssert.assertThat(
             "Can't create corresponding xembly directives for all the required objects",
-            resulting,
+            new Xembler(
+                new BytecodeProgram(new BytecodeClass().helloWorldMethod()).directives("")
+            ).xml(),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath("/program/metas/meta/head[text()='alias']"),
                 XhtmlMatchers.hasXPath("/program/metas/meta/tail[text()='jeo.opcode']"),
