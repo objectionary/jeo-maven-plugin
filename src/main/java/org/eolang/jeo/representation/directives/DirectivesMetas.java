@@ -49,7 +49,6 @@ public final class DirectivesMetas implements Iterable<Directive> {
      */
     private final DirectivesClass clazz;
 
-
     /**
      * Constructor.
      * @param classname Class name.
@@ -80,8 +79,8 @@ public final class DirectivesMetas implements Iterable<Directive> {
             .add("tail").set(this.pckg()).up()
             .add("part").set(this.pckg()).up()
             .up();
-        Set<String> objects = this.jeo();
-        objects.stream()
+        this.jeo()
+            .stream()
             .filter(object -> !object.isEmpty())
             .map(DirectivesMetas::alias)
             .forEach(metas::append);
@@ -116,6 +115,10 @@ public final class DirectivesMetas implements Iterable<Directive> {
     /**
      * Find all jeo objects.
      * @return Set of jeo objects.
+     * @todo #883:90min Optimize jeo.* Objects Collection for Metas.
+     *  Currently, we are required to pre-build a part of XML, find all the jeo objects
+     *  by using Xpath and then build the XML. This is not efficient.
+     *  We should find a way to collect all the jeo objects on the way.
      */
     private Set<String> jeo() {
         return new HashSet<>(

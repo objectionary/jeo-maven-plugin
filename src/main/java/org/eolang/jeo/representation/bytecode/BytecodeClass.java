@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.ClassName;
@@ -354,17 +353,6 @@ public final class BytecodeClass {
                 exception
             );
         }
-    }
-
-    /**
-     * List of used objects.
-     * @return List of objects.
-     */
-    List<String> objects() {
-        return this.cmethods.stream()
-            .map(BytecodeMethod::objects)
-            .flatMap(List::stream)
-            .collect(Collectors.toList());
     }
 
     /**

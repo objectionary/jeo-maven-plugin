@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
@@ -378,30 +377,6 @@ public final class BytecodeMethod {
      */
     BytecodeMethod opcode(final int opcode, final Object... args) {
         return this.entry(new BytecodeInstruction(opcode, args));
-    }
-
-    /**
-     * Whether the method has opcodes.
-     * @return True if method has opcodes.
-     */
-    boolean hasOpcodes() {
-        return this.instructions.stream().anyMatch(BytecodeEntry::isOpcode);
-    }
-
-    /**
-     * Whether the method has labels.
-     * @return True if method has labels.
-     */
-    boolean hasLabels() {
-        return this.instructions.stream().anyMatch(BytecodeEntry::isLabel);
-    }
-
-    /**
-     * All the Jeo objects used in the method.
-     * @return Jeo Objects.
-     */
-    public List<String> objects() {
-        return Collections.emptyList();
     }
 
     /**
