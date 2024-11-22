@@ -85,9 +85,9 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "trycatch",
             Stream.of(
-                this.start.directives(false),
-                this.end.directives(false),
-                this.handler.directives(false),
+                this.start.directives(),
+                this.end.directives(),
+                this.handler.directives(),
                 DirectivesTryCatch.nullable(this.type)
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();

@@ -119,7 +119,7 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives(final boolean counting) {
+    public Iterable<Directive> directives() {
         return new DirectivesTryCatch(this.start, this.end, this.handler, this.type);
     }
 

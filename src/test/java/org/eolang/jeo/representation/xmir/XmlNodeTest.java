@@ -138,7 +138,7 @@ final class XmlNodeTest {
             "Can't convert to label entry",
             new XmlNode(
                 new Xembler(
-                    new BytecodeLabel("lbl").directives(false)
+                    new BytecodeLabel("lbl").directives()
                 ).xml()
             ).toEntry(),
             Matchers.instanceOf(XmlLabel.class)
@@ -151,7 +151,7 @@ final class XmlNodeTest {
             "Can't convert to instruction entry",
             new XmlNode(
                 new Xembler(
-                    new BytecodeInstruction(Opcodes.ICONST_2).directives(false)
+                    new BytecodeInstruction(Opcodes.ICONST_2).directives()
                 ).xml()
             ).toEntry(),
             Matchers.instanceOf(XmlInstruction.class)

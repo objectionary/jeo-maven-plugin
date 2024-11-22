@@ -272,26 +272,23 @@ public final class BytecodeMethod {
 
     /**
      * Generate directives.
-     * @param counting Whether to count opcodes.
      * @return Directives.
      */
-    public DirectivesMethod directives(boolean counting) {
-        final boolean count = true;
+    public DirectivesMethod directives() {
         return new DirectivesMethod(
             new Signature(
                 new MethodName(this.properties.name()).xmir(), this.properties.descriptor()
             ),
             this.properties.directives(this.maxs),
-            this.instructions.stream().map(entry -> entry.directives(count))
+            this.instructions.stream().map(BytecodeEntry::directives)
                 .collect(Collectors.toList()),
-            this.tryblocks.stream().map(entry -> entry.directives(count))
+            this.tryblocks.stream().map(BytecodeEntry::directives)
                 .collect(Collectors.toList()),
             this.annotations.directives(),
             this.defvalues.stream()
                 .map(BytecodeDefaultValue::directives)
                 .collect(Collectors.toList()),
-            this.attributes.directives("local-variable-table"),
-            count
+            this.attributes.directives("local-variable-table")
         );
     }
 
@@ -387,14 +384,6 @@ public final class BytecodeMethod {
      */
     BytecodeMethod opcode(final int opcode, final Object... args) {
         return this.entry(new BytecodeInstruction(opcode, args));
-    }
-
-    /**
-     * Convert to directives with opcodes' counting.
-     * @return Directives.
-     */
-    DirectivesMethod directives() {
-        return this.directives(true);
     }
 
     /**

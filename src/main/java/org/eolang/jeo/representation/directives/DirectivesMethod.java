@@ -80,11 +80,6 @@ public final class DirectivesMethod implements Iterable<Directive> {
     private final DirectivesAttributes attributes;
 
     /**
-     * Opcodes counting.
-     */
-    private final boolean counting;
-
-    /**
      * Constructor.
      * @param name Method name
      */
@@ -97,19 +92,8 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @param name Method name
      * @param properties Method properties
      */
-    public DirectivesMethod(final String name, final DirectivesMethodProperties properties) {
-        this(name, true, properties);
-    }
-
-    /**
-     * Constructor.
-     * @param name Method name
-     * @param counting Opcodes counting
-     * @param properties Method properties
-     */
     public DirectivesMethod(
         final String name,
-        final boolean counting,
         final DirectivesMethodProperties properties
     ) {
         this(
@@ -119,8 +103,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
             new ArrayList<>(0),
             new DirectivesAnnotations(),
             new ArrayList<>(0),
-            new DirectivesAttributes(),
-            counting
+            new DirectivesAttributes()
         );
     }
 
@@ -133,7 +116,6 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @param annotations Method annotations
      * @param dvalue Annotation default value
      * @param attributes Method attributes
-     * @param counting Opcodes counting
      * @checkstyle ParameterNumberCheck (10 lines)
      */
     public DirectivesMethod(
@@ -143,8 +125,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final List<Iterable<Directive>> exceptions,
         final DirectivesAnnotations annotations,
         final List<Iterable<Directive>> dvalue,
-        final DirectivesAttributes attributes,
-        final boolean counting
+        final DirectivesAttributes attributes
     ) {
         this.name = name;
         this.properties = properties;
@@ -153,7 +134,6 @@ public final class DirectivesMethod implements Iterable<Directive> {
         this.annotations = annotations;
         this.dvalue = dvalue;
         this.attributes = attributes;
-        this.counting = counting;
     }
 
     /**
@@ -163,7 +143,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @return This object
      */
     public DirectivesMethod withOpcode(final int opcode, final Object... operands) {
-        this.instructions.add(new DirectivesInstruction(opcode, this.counting, operands));
+        this.instructions.add(new DirectivesInstruction(opcode, operands));
         return this;
     }
 

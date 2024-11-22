@@ -80,7 +80,7 @@ public final class BytecodeLabel implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives(final boolean counting) {
+    public Iterable<Directive> directives() {
         final Iterable<Directive> result;
         if (Objects.isNull(this.identifier)) {
             result = new DirectivesEoObject("nop");

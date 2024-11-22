@@ -104,28 +104,18 @@ public final class BytecodeRepresentation {
      * @return XML.
      */
     public XML toEO() {
-        return this.toEO(true, DisassembleMode.SHORT);
+        return this.toEO(DisassembleMode.SHORT);
     }
 
     /**
      * Converts bytecode into XML.
-     * @param count Do we add number to opcode name or not?
-     * @return XML representation of bytecode.
-     */
-    public XML toEO(final boolean count) {
-        return this.toEO(count, DisassembleMode.SHORT);
-    }
-
-    /**
-     * Converts bytecode into XML.
-     * @param count Do we add number to opcode name or not?
      * @param mode Disassemble mode.
      * @return XML representation of bytecode.
      */
-    public XML toEO(final boolean count, final DisassembleMode mode) {
+    public XML toEO(final DisassembleMode mode) {
         final DirectivesProgram directives = new AsmProgram(this.input.value())
             .bytecode(mode.asmOptions())
-            .directives(new BytecodeListing(this.input.value()).toString(), count);
+            .directives(new BytecodeListing(this.input.value()).toString());
         try {
             return new VerifiedEo(directives).asXml();
         } catch (final IllegalStateException exception) {

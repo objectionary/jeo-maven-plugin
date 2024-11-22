@@ -142,8 +142,8 @@ public final class LocalVariable implements BytecodeAttribute {
             new DirectivesValue("", this.name),
             new DirectivesValue("", this.descriptor),
             new DirectivesValue("", this.signature),
-            this.start.directives(false),
-            this.end.directives(false)
+            this.start.directives(),
+            this.end.directives()
         );
     }
 }

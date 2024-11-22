@@ -62,7 +62,7 @@ final class JavaSourceCompilationIT {
         MatcherAssert.assertThat(
             "Bytecode is not equal to the original one, check that transformation is correct and does not change the bytecode",
             new XmirRepresentation(
-                new BytecodeRepresentation(expected).toEO(true, DisassembleMode.DEBUG)
+                new BytecodeRepresentation(expected).toEO(DisassembleMode.DEBUG)
             ).toBytecode().toString(),
             Matchers.equalTo(expected.toString())
         );

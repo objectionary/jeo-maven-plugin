@@ -49,7 +49,7 @@ final class XmlFrameTest {
         );
         MatcherAssert.assertThat(
             "Parsed frame type is not correct.",
-            new XmlFrame(new Xembler(expected.directives(false)).xml()).bytecode(),
+            new XmlFrame(new Xembler(expected.directives()).xml()).bytecode(),
             Matchers.equalTo(expected)
         );
     }

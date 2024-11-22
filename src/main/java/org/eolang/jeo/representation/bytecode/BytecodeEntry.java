@@ -43,10 +43,9 @@ public interface BytecodeEntry {
 
     /**
      * Convert entry to directives.
-     * @param counting Do we need to add numbers to entry names?
      * @return Directives.
      */
-    Iterable<Directive> directives(boolean counting);
+    Iterable<Directive> directives();
 
     /**
      * Is this instruction a label?

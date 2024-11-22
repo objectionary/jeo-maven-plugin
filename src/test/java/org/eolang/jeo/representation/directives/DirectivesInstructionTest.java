@@ -44,7 +44,7 @@ final class DirectivesInstructionTest {
     void addsBeautifulComment(final BytecodeInstruction instr, final String comment) {
         MatcherAssert.assertThat(
             "We expect, that during convertation to XML, we will get a beautiful comment for bytecode instruction",
-            new Xembler(instr.directives(false)).xmlQuietly(),
+            new Xembler(instr.directives()).xmlQuietly(),
             Matchers.containsString(comment)
         );
     }

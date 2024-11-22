@@ -38,7 +38,7 @@ final class XmlInstructionTest {
     /**
      * Default instruction which we use for testing.
      */
-    private static final BytecodeInstruction INST = new BytecodeInstruction(
+    private static final BytecodeInstruction EXPECTED = new BytecodeInstruction(
         Opcodes.INVOKESPECIAL, 1, 2, 3
     );
 
@@ -46,8 +46,8 @@ final class XmlInstructionTest {
     void comparesSuccessfullyWithSpaces() {
         MatcherAssert.assertThat(
             "Xml Instruction nodes with different empty spaces, but with the same content should be the same, but it wasn't",
-            new XmlInstruction(false, Opcodes.INVOKESPECIAL, 1, 2, 3).bytecode(),
-            Matchers.equalTo(XmlInstructionTest.INST)
+            new XmlInstruction(Opcodes.INVOKESPECIAL, 1, 2, 3).bytecode(),
+            Matchers.equalTo(XmlInstructionTest.EXPECTED)
         );
     }
 
@@ -56,7 +56,7 @@ final class XmlInstructionTest {
         MatcherAssert.assertThat(
             "Xml Instruction with different arguments should not be equal, but it was",
             new XmlInstruction(Opcodes.INVOKESPECIAL, 32, 23, 14),
-            Matchers.not(Matchers.equalTo(XmlInstructionTest.INST))
+            Matchers.not(Matchers.equalTo(XmlInstructionTest.EXPECTED))
         );
     }
 
@@ -65,7 +65,7 @@ final class XmlInstructionTest {
         MatcherAssert.assertThat(
             "Xml Instruction with different child content should not be equal, but it was",
             new XmlInstruction(Opcodes.INVOKESPECIAL),
-            Matchers.not(Matchers.equalTo(XmlInstructionTest.INST))
+            Matchers.not(Matchers.equalTo(XmlInstructionTest.EXPECTED))
         );
     }
 
@@ -74,7 +74,7 @@ final class XmlInstructionTest {
         MatcherAssert.assertThat(
             "Xml Instruction with different content should not be equal, but it was",
             new XmlInstruction(Opcodes.DUP),
-            Matchers.not(Matchers.equalTo(XmlInstructionTest.INST))
+            Matchers.not(Matchers.equalTo(XmlInstructionTest.EXPECTED))
         );
     }
 }

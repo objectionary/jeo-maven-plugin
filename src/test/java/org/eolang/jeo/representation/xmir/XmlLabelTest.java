@@ -43,7 +43,7 @@ final class XmlLabelTest {
             "Can't retrieve correct label identifier",
             new XmlLabel(
                 new XmlNode(
-                    new Xembler(expected.directives(false)).xml()
+                    new Xembler(expected.directives()).xml()
                 )
             ).bytecode(),
             Matchers.equalTo(expected)

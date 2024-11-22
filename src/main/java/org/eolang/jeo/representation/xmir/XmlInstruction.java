@@ -52,20 +52,10 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @param args Arguments.
      */
     XmlInstruction(final int opcode, final Object... args) {
-        this(true, opcode, args);
-    }
-
-    /**
-     * Constructor.
-     * @param counting Add numbers for instruction names in XML.
-     * @param opcode Opcode.
-     * @param args Arguments.
-     */
-    XmlInstruction(final boolean counting, final int opcode, final Object... args) {
         this(
             new XmlNode(
                 new Xembler(
-                    new DirectivesInstruction(opcode, counting, args),
+                    new DirectivesInstruction(opcode, args),
                     new Transformers.Node()
                 ).xmlQuietly()
             )

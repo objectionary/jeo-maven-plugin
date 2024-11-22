@@ -47,7 +47,7 @@ public final class BytecodeLine implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives(final boolean counting) {
+    public Iterable<Directive> directives() {
         return Collections.emptyList();
     }
 

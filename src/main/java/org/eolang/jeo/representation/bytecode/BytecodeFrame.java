@@ -120,7 +120,7 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives(final boolean counting) {
+    public Iterable<Directive> directives() {
         return new DirectivesFrame(
             this.type,
             this.nlocal,

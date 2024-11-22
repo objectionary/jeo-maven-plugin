@@ -295,24 +295,15 @@ public final class BytecodeClass {
     }
 
     /**
-     * Convert to directives with opcodes' counting.
+     * Convert to directives.
      * @return Directives.
      */
     public DirectivesClass directives() {
-        return this.directives(true);
-    }
-
-    /**
-     * Convert to directives.
-     * @param counting Whether to count opcodes.
-     * @return Directives.
-     */
-    public DirectivesClass directives(final boolean counting) {
         return new DirectivesClass(
             new ClassName(new PrefixedName(this.name).encode()),
             this.props.directives(),
             this.fields.stream().map(BytecodeField::directives).collect(Collectors.toList()),
-            this.cmethods.stream().map(method -> method.directives(counting))
+            this.cmethods.stream().map(BytecodeMethod::directives)
                 .collect(Collectors.toList()),
             this.annotations.directives(),
             this.attributes.directives("attributes")

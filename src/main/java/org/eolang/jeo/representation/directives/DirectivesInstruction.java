@@ -49,28 +49,15 @@ public final class DirectivesInstruction implements Iterable<Directive> {
     private final Object[] arguments;
 
     /**
-     * Opcodes counting.
-     * Do we add number to opcode name or not?
-     * if true, then we add number to opcode name:
-     *   RETURN -> RETURN-1
-     * if false, then we do not add number to opcode name:
-     *   RETURN -> RETURN
-     */
-    private final boolean counting;
-
-    /**
      * Constructor.
      * @param opcode Opcode
-     * @param counting Opcodes counting
      * @param arguments Instruction arguments
      */
     public DirectivesInstruction(
         final int opcode,
-        final boolean counting,
         final Object... arguments
     ) {
         this.opcode = opcode;
-        this.counting = counting;
         this.arguments = arguments.clone();
     }
 
@@ -94,13 +81,7 @@ public final class DirectivesInstruction implements Iterable<Directive> {
      * @return Opcode name.
      */
     private String name() {
-        final String result;
-        if (this.counting) {
-            result = new OpcodeName(this.opcode).asString();
-        } else {
-            result = new OpcodeName(this.opcode).simplified();
-        }
-        return result;
+        return new OpcodeName(this.opcode).asString();
     }
 
     /**

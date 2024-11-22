@@ -100,7 +100,7 @@ final class DirectivesMethodTest {
     void addsPrefixToTheMethodName() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that 'j$' prefix will be added to the method name",
-            new Xembler(new BytecodeMethod("φTerm").directives(false)).xml(),
+            new Xembler(new BytecodeMethod("φTerm").directives()).xml(),
             XhtmlMatchers.hasXPaths("./o[contains(@name, 'j$φTerm')]")
         );
     }
