@@ -275,22 +275,23 @@ public final class BytecodeMethod {
      * @param counting Whether to count opcodes.
      * @return Directives.
      */
-    public DirectivesMethod directives(final boolean counting) {
+    public DirectivesMethod directives(boolean counting) {
+        final boolean count = true;
         return new DirectivesMethod(
             new Signature(
                 new MethodName(this.properties.name()).xmir(), this.properties.descriptor()
             ),
             this.properties.directives(this.maxs),
-            this.instructions.stream().map(entry -> entry.directives(counting))
+            this.instructions.stream().map(entry -> entry.directives(count))
                 .collect(Collectors.toList()),
-            this.tryblocks.stream().map(entry -> entry.directives(counting))
+            this.tryblocks.stream().map(entry -> entry.directives(count))
                 .collect(Collectors.toList()),
             this.annotations.directives(),
             this.defvalues.stream()
                 .map(BytecodeDefaultValue::directives)
                 .collect(Collectors.toList()),
             this.attributes.directives("local-variable-table"),
-            counting
+            count
         );
     }
 
