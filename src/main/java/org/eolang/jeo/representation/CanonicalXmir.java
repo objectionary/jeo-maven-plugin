@@ -147,6 +147,7 @@ public final class CanonicalXmir {
      * @return Unrolled XMIR.
      */
     private static XML unroll(final XML parsed) {
+//        TODO: We can remove roll-data!
         return new Xsline(
             new TrFast(
                 new TrJoined<Shift>(

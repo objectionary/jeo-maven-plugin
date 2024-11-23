@@ -33,7 +33,7 @@ SOFTWARE.
   </o>
   -->
   <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:template match="o[count(o)=1 and o[count(o)=1 and o[@data='bytes']]]">
+  <xsl:template match="o[count(o)=1 and o[count(o)=1 and o[@base='bytes']]]">
     <xsl:element name="o">
       <xsl:for-each select="@*">
         <xsl:attribute name="{name()}">
@@ -42,7 +42,6 @@ SOFTWARE.
       </xsl:for-each>
       <xsl:element name="o">
         <xsl:attribute name="base" select="'bytes'"/>
-        <xsl:attribute name="data" select="'bytes'"/>
         <xsl:value-of select="o[1]/o[1]/text()"/>
       </xsl:element>
     </xsl:element>
