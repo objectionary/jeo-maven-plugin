@@ -116,6 +116,11 @@ SOFTWARE.
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>com.jcabi</groupId>
+      <artifactId>jcabi-manifests</artifactId>
+      <!-- version from parent POM -->
+    </dependency>
+    <dependency>
       <groupId>org.cactoos</groupId>
       <artifactId>cactoos</artifactId>
       <version>0.56.1</version>
@@ -313,6 +318,7 @@ SOFTWARE.
         <version>3.4.2</version>
         <configuration>
           <archive>
+              <index>true</index>
             <manifestEntries>
               <JEO-Version>${project.version}</JEO-Version>
               <JEO-Title>${project.name}</JEO-Title>

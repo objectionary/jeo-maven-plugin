@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import com.jcabi.manifests.Manifests;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -85,9 +86,9 @@ public final class DirectivesProgram implements Iterable<Directive> {
         final Directives directives = new Directives();
         directives.add("program")
             .attr("name", this.metas.className().name())
-            .attr("version", "0.0.0")
-            .attr("revision", "0.0.0")
-            .attr("dob", now)
+            .attr("version", Manifests.read("JEO-Version"))
+            .attr("revision", Manifests.read("JEO-Revision"))
+            .attr("dob", Manifests.read("JEO-Dob"))
             .attr("time", now)
             .add("listing")
             .set(this.listing)
