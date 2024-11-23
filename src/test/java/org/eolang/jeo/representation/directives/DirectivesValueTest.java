@@ -150,6 +150,15 @@ final class DirectivesValueTest {
         );
     }
 
+    @Test
+    void createsStringWithQuotedComment() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect that string value will be quoted in the comment",
+            new Xembler(new DirectivesValue("java/lang/Object")).xml(),
+            Matchers.containsString("<!-- \"java/lang/Object\" -->")
+        );
+    }
+
     /**
      * Arguments for {@link DirectivesValueTest#determinesTypeCorrectly(Object, String)} test.
      * @return Stream of arguments.
