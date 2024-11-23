@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>              <span class="jxr_string">"Can't convert XML try-catch entry to the correct bytecode"</span>,
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>              <strong class="jxr_keyword">new</strong> XmlTryCatchEntry(
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>                  <strong class="jxr_keyword">new</strong> XmlNode(<strong class="jxr_keyword">new</strong> Xembler(block.directives(false)).xml())
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>                  <strong class="jxr_keyword">new</strong> XmlNode(<strong class="jxr_keyword">new</strong> Xembler(block.directives()).xml())
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>              ).bytecode(),
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>              Matchers.equalTo(block)
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>          );

@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>             <span class="jxr_string">"Can't convert to label entry"</span>,
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>             <strong class="jxr_keyword">new</strong> XmlNode(
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>                 <strong class="jxr_keyword">new</strong> Xembler(
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>                     <strong class="jxr_keyword">new</strong> BytecodeLabel(<span class="jxr_string">"lbl"</span>).directives(false)
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>                     <strong class="jxr_keyword">new</strong> BytecodeLabel(<span class="jxr_string">"lbl"</span>).directives()
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>                 ).xml()
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>             ).toEntry(),
 <a class="jxr_linenumber" name="L144" href="#L144">144</a>             Matchers.instanceOf(XmlLabel.<strong class="jxr_keyword">class</strong>)
@@ -159,7 +159,7 @@
 <a class="jxr_linenumber" name="L151" href="#L151">151</a>             <span class="jxr_string">"Can't convert to instruction entry"</span>,
 <a class="jxr_linenumber" name="L152" href="#L152">152</a>             <strong class="jxr_keyword">new</strong> XmlNode(
 <a class="jxr_linenumber" name="L153" href="#L153">153</a>                 <strong class="jxr_keyword">new</strong> Xembler(
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>                     <strong class="jxr_keyword">new</strong> BytecodeInstruction(Opcodes.ICONST_2).directives(false)
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>                     <strong class="jxr_keyword">new</strong> BytecodeInstruction(Opcodes.ICONST_2).directives()
 <a class="jxr_linenumber" name="L155" href="#L155">155</a>                 ).xml()
 <a class="jxr_linenumber" name="L156" href="#L156">156</a>             ).toEntry(),
 <a class="jxr_linenumber" name="L157" href="#L157">157</a>             Matchers.instanceOf(XmlInstruction.<strong class="jxr_keyword">class</strong>)

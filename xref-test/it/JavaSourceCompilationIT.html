@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>              <span class="jxr_string">"Bytecode is not equal to the original one, check that transformation is correct and does not change the bytecode"</span>,
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>              <strong class="jxr_keyword">new</strong> XmirRepresentation(
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>                  <strong class="jxr_keyword">new</strong> BytecodeRepresentation(expected).toEO(<strong class="jxr_keyword">true</strong>, DisassembleMode.DEBUG)
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>                  <strong class="jxr_keyword">new</strong> BytecodeRepresentation(expected).toEO(DisassembleMode.DEBUG)
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>              ).toBytecode().toString(),
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>              Matchers.equalTo(expected.toString())
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          );
