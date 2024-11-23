@@ -26,8 +26,11 @@ package org.eolang.jeo.representation.directives;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
+import org.xembly.ImpossibleModificationException;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -51,6 +54,23 @@ final class DirectivesProgramTest {
             ),
             actual,
             XhtmlMatchers.hasXPath("/program/objects/o[@name='Foo']")
+        );
+    }
+
+    @Test
+    void setsVersion() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect that version and revision number will be set from MANIFEST.MF file",
+            new Xembler(
+                new BytecodeProgram(
+                    new BytecodeClass("Some")
+                ).directives("")
+            ).xml(),
+            XhtmlMatchers.hasXPaths(
+                "/program[@version='1.2.3']",
+                "/program[@revision='1234567']",
+                "/program[@dob='2023-03-19T00:00:00']"
+            )
         );
     }
 }
