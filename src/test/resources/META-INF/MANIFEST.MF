@@ -1,0 +1,5 @@
+JEO-Version: 1.2.3
+JEO-Revision: 1234567
+JEO-Dob: 2023-03-19T00:00:00
+JEO-Vendor: org.eolang
+JEO-Title: jeo

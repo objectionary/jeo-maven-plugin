@@ -245,6 +245,7 @@ SOFTWARE.
           <include>**/*.eo</include>
           <include>**/*.yaml</include>
           <include>**/*.xmir</include>
+          <include>**/*.MF</include>
         </includes>
       </testResource>
     </testResources>
@@ -318,7 +319,7 @@ SOFTWARE.
         <version>3.4.2</version>
         <configuration>
           <archive>
-              <index>true</index>
+            <index>true</index>
             <manifestEntries>
               <JEO-Version>${project.version}</JEO-Version>
               <JEO-Title>${project.name}</JEO-Title>
