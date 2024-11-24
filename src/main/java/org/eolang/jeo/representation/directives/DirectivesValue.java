@@ -119,7 +119,14 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @return Sting comment.
      */
     private String comment() {
-        return String.valueOf(this.value.object());
+        final String result;
+        final Object object = this.value.object();
+        if (object instanceof String) {
+            result = String.format("\"%s\"", object);
+        } else {
+            result = String.valueOf(object);
+        }
+        return result;
     }
 
     /**

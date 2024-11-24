@@ -38,7 +38,7 @@ public final class DirectivesComment implements Iterable<Directive> {
     /**
      * Unsafe characters.
      */
-    private static final Pattern UNSAFE_CHARS = Pattern.compile("[&<>\"'-]");
+    private static final Pattern UNSAFE_CHARS = Pattern.compile("[&<>'-]");
 
     /**
      * Chars that are discouraged in XML.
@@ -117,9 +117,6 @@ public final class DirectivesComment implements Iterable<Directive> {
                     break;
                 case ">":
                     replacement = "&gt;";
-                    break;
-                case "\"":
-                    replacement = "&quot;";
                     break;
                 case "'":
                     replacement = "&apos;";
