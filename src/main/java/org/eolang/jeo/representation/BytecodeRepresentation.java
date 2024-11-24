@@ -38,7 +38,6 @@ import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.objectweb.asm.ClassReader;
-import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 
 /**
@@ -114,15 +113,11 @@ public final class BytecodeRepresentation {
      * @return XML representation of bytecode.
      */
     public XML toEO(final DisassembleMode mode) {
-        final long start = System.currentTimeMillis();
         final DirectivesProgram directives = new AsmProgram(this.input.value())
             .bytecode(mode.asmOptions())
             .directives(new BytecodeListing(this.input.value()).toString());
-        final long end = System.currentTimeMillis();
         try {
-            return new VerifiedEo(
-                new Directives(directives).xpath("/program").attr("ms", end - start)
-            ).asXml();
+            return new MeasuredEo(new VerifiedEo(directives)).asXml();
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(
                 String.format(
