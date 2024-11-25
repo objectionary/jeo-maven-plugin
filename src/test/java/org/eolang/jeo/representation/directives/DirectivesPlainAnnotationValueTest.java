@@ -48,7 +48,7 @@ final class DirectivesPlainAnnotationValueTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[contains(@base,'annotation-property') and count(o) = 3]",
-                "./o[contains(@base,'annotation-property')]/o[1]/o[text()='50 4C 41 49 4E']"
+                "./o[contains(@base,'annotation-property')]/o[1]/o[text()='50-4C-41-49-4E']"
             )
         );
     }

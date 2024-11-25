@@ -46,7 +46,7 @@ final class XmlValueTest {
     void parsesHexStringAsInteger() {
         final int expected = 1057;
         final int actual = new XmlValue(
-            new XmlNode("<o><o>00 00 00 00 00 00 04 21</o></o>")
+            new XmlNode("<o><o>00-00-00-00-00-00-04-21</o></o>")
         ).integer();
         MatcherAssert.assertThat(
             String.format(

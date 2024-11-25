@@ -107,7 +107,7 @@ final class CanonicalXmirTest {
                                         "    <o base='.org'> ",
                                         "     <o base='Q'/></o> ",
                                         "   </o> ",
-                                        "   <o base='org.eolang.bytes' data='bytes'>6A 61 76 61 2F 69 6F 2F 43 6C 6F 73 65 61 62 6C 65</o> ",
+                                        "   <o base='org.eolang.bytes' data='bytes'>6A-61-76-61-2F-69-6F-2F-43-6C-6F-73-65-61-62-6C-65</o> ",
                                         "  </o> ",
                                         " </o> ",
                                         "</o>"

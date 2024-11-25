@@ -53,7 +53,7 @@ final class DirectivesValueTest {
                 String.join(
                     "\n",
                     "<o base='jeo.int' name='access'>",
-                    "  <o base='org.eolang.bytes'>00 00 00 00 00 00 00 2A</o>",
+                    "  <o base='org.eolang.bytes'>00-00-00-00-00-00-00-2A</o>",
                     "</o>"
                 )
             )
@@ -71,7 +71,7 @@ final class DirectivesValueTest {
                 new Transformers.Node()
             ).xml(),
             new SameXml(
-                "<o base='jeo.label'><o base='org.eolang.bytes'>73 6F 6D 65 2D 72 61 6E 64 6F 6D</o></o>"
+                "<o base='jeo.label'><o base='org.eolang.bytes'>73-6F-6D-65-2D-72-61-6E-64-6F-6D</o></o>"
             )
         );
     }
@@ -111,17 +111,17 @@ final class DirectivesValueTest {
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '10' should be '00 00 00 00 00 00 00 0A'",
             new DirectivesValue(10).hex(),
-            Matchers.equalTo("00 00 00 00 00 00 00 0A")
+            Matchers.equalTo("00-00-00-00-00-00-00-0A")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1d' should be '3F B9 99 99 99 99 99 9A'",
             new DirectivesValue(0.1d).hex(),
-            Matchers.equalTo("3F B9 99 99 99 99 99 9A")
+            Matchers.equalTo("3F-B9-99-99-99-99-99-9A")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1f' should be '3D CC CC CD'",
             new DirectivesValue(0.1f).hex(),
-            Matchers.equalTo("3D CC CC CD")
+            Matchers.equalTo("3D-CC-CC-CD")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'true' should be '01'",
@@ -182,16 +182,16 @@ final class DirectivesValueTest {
      */
     static Stream<Arguments> values() {
         return Stream.of(
-            Arguments.of(10, "00 00 00 00 00 00 00 0A"),
-            Arguments.of("Hello!", "48 65 6C 6C 6F 21"),
-            Arguments.of(new byte[]{1, 2, 3}, "01 02 03"),
+            Arguments.of(10, "00-00-00-00-00-00-00-0A"),
+            Arguments.of("Hello!", "48-65-6C-6C-6F-21"),
+            Arguments.of(new byte[]{1, 2, 3}, "01-02-03"),
             Arguments.of(true, "01"),
             Arguments.of(false, "00"),
-            Arguments.of('a', "00 61"),
-            Arguments.of(0.1d, "3F B9 99 99 99 99 99 9A"),
+            Arguments.of('a', "00-61"),
+            Arguments.of(0.1d, "3F-B9-99-99-99-99-99-9A"),
             Arguments.of(
                 DirectivesValueTest.class,
-                "6F 72 67 2F 65 6F 6C 61 6E 67 2F 6A 65 6F 2F 72 65 70 72 65 73 65 6E 74 61 74 69 6F 6E 2F 64 69 72 65 63 74 69 76 65 73 2F 44 69 72 65 63 74 69 76 65 73 56 61 6C 75 65 54 65 73 74"
+                "6F-72-67-2F-65-6F-6C-61-6E-67-2F-6A-65-6F-2F-72-65-70-72-65-73-65-6E-74-61-74-69-6F-6E-2F-64-69-72-65-63-74-69-76-65-73-2F-44-69-72-65-63-74-69-76-65-73-56-61-6C-75-65-54-65-73-74"
             )
         );
     }

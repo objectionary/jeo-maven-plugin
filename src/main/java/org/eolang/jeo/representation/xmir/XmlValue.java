@@ -41,7 +41,7 @@ public final class XmlValue {
     /**
      * Space pattern.
      */
-    private static final Pattern SPACE = Pattern.compile(" ");
+    private static final Pattern DELIMITER = Pattern.compile("-");
 
     /**
      * XML node.
@@ -155,7 +155,7 @@ public final class XmlValue {
      * @return Hex string.
      */
     private String hex() {
-        return XmlValue.SPACE.matcher(this.node.firstChild().text().trim()).replaceAll("");
+        return XmlValue.DELIMITER.matcher(this.node.firstChild().text().trim()).replaceAll("");
     }
 
     /**

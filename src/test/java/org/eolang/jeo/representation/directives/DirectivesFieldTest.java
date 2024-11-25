@@ -80,7 +80,7 @@ final class DirectivesFieldTest {
                 "/o/o[@name='access-serialVersionUID']/o[contains(text(),'1A')]",
                 "/o/o[@name='descriptor-serialVersionUID']/o[text()='4A']",
                 "/o/o[@name='signature-serialVersionUID']",
-                "/o/o[@name='value-serialVersionUID']/o[text()='62 84 EB 5F 88 47 CD E1']"
+                "/o/o[@name='value-serialVersionUID']/o[text()='62-84-EB-5F-88-47-CD-E1']"
             )
         );
     }

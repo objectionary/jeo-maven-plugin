@@ -153,7 +153,7 @@ public final class DirectivesValue implements Iterable<Directive> {
                 final int value = bytes[index] & 0xFF;
                 hex[index * 3] = DirectivesValue.HEX_ARRAY[value >>> 4];
                 hex[index * 3 + 1] = DirectivesValue.HEX_ARRAY[value & 0x0F];
-                hex[index * 3 + 2] = ' ';
+                hex[index * 3 + 2] = '-';
             }
             res = new String(hex, 0, hex.length - 1);
         }
