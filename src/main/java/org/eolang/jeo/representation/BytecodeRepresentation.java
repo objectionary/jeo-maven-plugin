@@ -117,7 +117,7 @@ public final class BytecodeRepresentation {
             .bytecode(mode.asmOptions())
             .directives(new BytecodeListing(this.input.value()).toString());
         try {
-            return new VerifiedEo(directives).asXml();
+            return new MeasuredEo(new VerifiedEo(directives)).asXml();
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(
                 String.format(

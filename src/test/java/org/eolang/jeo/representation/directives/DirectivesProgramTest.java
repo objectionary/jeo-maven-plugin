@@ -73,4 +73,20 @@ final class DirectivesProgramTest {
             )
         );
     }
+
+    @Test
+    void setsMilliseconds() throws ImpossibleModificationException {
+        final ClassName clazz = new ClassName("Some");
+        final DirectivesProgram program = new DirectivesProgram(
+            "some code",
+            10,
+            new DirectivesClass(clazz),
+            new DirectivesMetas(clazz)
+        );
+        MatcherAssert.assertThat(
+            "We expect that milliseconds will be set",
+            new Xembler(program).xml(),
+            XhtmlMatchers.hasXPath("/program[@ms='10']")
+        );
+    }
 }
