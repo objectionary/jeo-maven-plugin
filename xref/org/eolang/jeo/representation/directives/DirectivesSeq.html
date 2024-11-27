@@ -90,8 +90,8 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      @Override
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesEoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesEoObject.html#DirectivesEoObject">DirectivesEoObject</a>(
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>              String.format(<span class="jxr_string">"seq%d"</span>, <strong class="jxr_keyword">this</strong>.size()),
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a>(
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>              String.format(<span class="jxr_string">"seq.of%d"</span>, <strong class="jxr_keyword">this</strong>.size()),
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>              <strong class="jxr_keyword">this</strong>.name,
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>              <strong class="jxr_keyword">this</strong>.stream().map(Directives::<strong class="jxr_keyword">new</strong>).collect(Collectors.toList())
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          ).iterator();

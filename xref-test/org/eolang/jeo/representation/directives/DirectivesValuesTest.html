@@ -52,8 +52,8 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>              <span class="jxr_string">"We expect that array of values will be converted to correct Xembly directives"</span>,
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>              <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesValues(<span class="jxr_string">"name"</span>, <span class="jxr_string">"value"</span>)).xml(),
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>              XhtmlMatchers.hasXPaths(
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>                  <span class="jxr_string">"./o[contains(@base,'seq1') and @name='name']"</span>,
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>                  <span class="jxr_string">"./o[contains(@base,'seq1') and @name='name']/o/o[@base='org.eolang.bytes' and text()='76 61 6C 75 65']"</span>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>                  <span class="jxr_string">"./o[contains(@base,'seq.of1') and @name='name']"</span>,
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>                  <span class="jxr_string">"./o[contains(@base,'seq.of1') and @name='name']/o/o[@base='org.eolang.bytes' and text()='76-61-6C-75-65']"</span>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>              )
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>          );
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      }
