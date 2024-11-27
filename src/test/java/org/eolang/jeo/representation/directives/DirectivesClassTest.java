@@ -60,9 +60,9 @@ final class DirectivesClassTest {
                     "<o base='jeo.int' name='access'><o base='org.eolang.bytes'>00-00-00-00-00-00-00-00</o></o>",
                     "<o base='jeo.string' name='signature'><o base='org.eolang.bytes'/></o>",
                     "<o base='jeo.string' name='supername'><o base='org.eolang.bytes'/></o>",
-                    "<o base='org.eolang.seq0' name='interfaces'/>",
-                    "<o base='org.eolang.seq0' name='annotations'/>",
-                    "<o base='org.eolang.seq0' name='attributes'/>",
+                    "<o base='jeo.seq.of0' name='interfaces'/>",
+                    "<o base='jeo.seq.of0' name='annotations'/>",
+                    "<o base='jeo.seq.of0' name='attributes'/>",
                     "</o>"
                 )
             )
