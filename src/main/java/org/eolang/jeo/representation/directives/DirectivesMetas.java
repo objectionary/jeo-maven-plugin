@@ -54,7 +54,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * @param classname Class name.
      */
     public DirectivesMetas(final ClassName classname) {
-        this(classname, new DirectivesClass(new ClassName("org.jeo","SomeClass")));
+        this(classname, new DirectivesClass(new ClassName("org.jeo", "SomeClass")));
     }
 
     /**

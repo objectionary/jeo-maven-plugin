@@ -62,14 +62,6 @@ public final class CanonicalXmir {
 
     /**
      * Constructor.
-     * @param canonical Significantly modified XMIR after "phi/unphi".
-     */
-    public CanonicalXmir(final XML canonical) {
-        this("unknown", canonical);
-    }
-
-    /**
-     * Constructor.
      * @param canonical Path to the xmir Significantly modified XMIR after "phi/unphi".
      */
     public CanonicalXmir(final Path canonical) throws FileNotFoundException {
@@ -81,11 +73,10 @@ public final class CanonicalXmir {
 
     /**
      * Constructor.
-     * @param path Path to the xmir Significantly modified XMIR after "phi/unphi".
      * @param canonical Significantly modified XMIR after "phi/unphi".
      */
-    public CanonicalXmir(final Path path, final XML canonical) {
-        this(CanonicalXmir.nameWithoutExtension(path), canonical);
+    CanonicalXmir(final XML canonical) {
+        this("unknown", canonical);
     }
 
     /**
@@ -93,7 +84,7 @@ public final class CanonicalXmir {
      * @param name Name of the XMIR.
      * @param canonical Significantly modified XMIR after "phi/unphi".
      */
-    public CanonicalXmir(final String name, final XML canonical) {
+    private CanonicalXmir(final String name, final XML canonical) {
         this.name = name;
         this.canonical = canonical;
     }
@@ -147,7 +138,6 @@ public final class CanonicalXmir {
      * @return Unrolled XMIR.
      */
     private static XML unroll(final XML parsed) {
-//        TODO: We can remove roll-data!
         return new Xsline(
             new TrFast(
                 new TrJoined<Shift>(
