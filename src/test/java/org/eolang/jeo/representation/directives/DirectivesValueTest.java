@@ -126,12 +126,12 @@ final class DirectivesValueTest {
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'true' should be '01'",
             new DirectivesValue(true).hex(),
-            Matchers.equalTo("01")
+            Matchers.equalTo("01-")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'false' should be '00'",
             new DirectivesValue(false).hex(),
-            Matchers.equalTo("00")
+            Matchers.equalTo("00-")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'Hello!' should be '48 65 6C 6C 6F 21'",
@@ -146,7 +146,7 @@ final class DirectivesValueTest {
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'Type.INT_TYPE' should be '69 6E 74'",
             value,
-            Matchers.equalTo("49")
+            Matchers.equalTo("49-")
         );
     }
 
@@ -185,8 +185,8 @@ final class DirectivesValueTest {
             Arguments.of(10, "00-00-00-00-00-00-00-0A"),
             Arguments.of("Hello!", "48-65-6C-6C-6F-21"),
             Arguments.of(new byte[]{1, 2, 3}, "01-02-03"),
-            Arguments.of(true, "01"),
-            Arguments.of(false, "00"),
+            Arguments.of(true, "01-"),
+            Arguments.of(false, "00-"),
             Arguments.of('a', "00-61"),
             Arguments.of(0.1d, "3F-B9-99-99-99-99-99-9A"),
             Arguments.of(

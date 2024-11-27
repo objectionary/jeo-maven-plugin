@@ -47,8 +47,8 @@ final class DirectivesSeqTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@base,'seq2') and @name='@']",
-                "/o[contains(@base,'seq2') and @name='@']/o[contains(@base,'string')]/o[@base='org.eolang.bytes' and text()='31']",
-                "/o[contains(@base,'seq2') and @name='@']/o[contains(@base,'string')]/o[@base='org.eolang.bytes' and text()='32']"
+                "/o[contains(@base,'seq2') and @name='@']/o[contains(@base,'string')]/o[@base='org.eolang.bytes' and text()='31-']",
+                "/o[contains(@base,'seq2') and @name='@']/o[contains(@base,'string')]/o[@base='org.eolang.bytes' and text()='32-']"
             )
         );
     }

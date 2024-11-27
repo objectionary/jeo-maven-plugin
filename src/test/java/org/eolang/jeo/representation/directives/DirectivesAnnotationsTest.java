@@ -81,7 +81,7 @@ final class DirectivesAnnotationsTest {
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@base,'annotation') and count(o) = 3]",
                 "/o[contains(@base,'annotation')]/o[1]/o[text()='4C-6A-61-76-61-2F-6C-61-6E-67-2F-4F-76-65-72-72-69-64-65-3B']",
-                "/o[contains(@base,'annotation')]/o[2]/o[text()='01']",
+                "/o[contains(@base,'annotation')]/o[2]/o[text()='01-']",
                 "/o[contains(@base,'annotation')]/o[contains(@base,'annotation-property')]"
             )
         );
