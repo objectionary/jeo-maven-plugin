@@ -75,7 +75,10 @@ final class XmirRepresentationTest {
     void returnsXmlRepresentationOfEo() {
         MatcherAssert.assertThat(
             "The XML representation of the EO object is not correct",
-            new BytecodeProgram(new BytecodeClass("org/eolang/foo/Math")).xml(),
+            new BytecodeProgram(
+                "org.eolang",
+                new BytecodeClass("org/eolang/foo/Math")
+            ).xml(),
             XhtmlMatchers.hasXPath("/program[@name='j$Math']")
         );
     }
@@ -84,9 +87,12 @@ final class XmirRepresentationTest {
     void returnsBytecodeRepresentationOfEo() {
         final String name = "Bar";
         final BytecodeClass clazz = new BytecodeClass(name);
-        final Bytecode expected = new BytecodeProgram(new BytecodeClass(name)).bytecode();
+        final Bytecode expected = new BytecodeProgram(
+            "org.jeo",
+            new BytecodeClass(name)
+        ).bytecode();
         final Bytecode actual = new XmirRepresentation(
-            new BytecodeProgram(clazz).xml()
+            new BytecodeProgram("org.jeo", clazz).xml()
         ).toBytecode();
         MatcherAssert.assertThat(
             String.format(XmirRepresentationTest.MESSAGE, expected, actual),
@@ -97,8 +103,9 @@ final class XmirRepresentationTest {
 
     @Test
     void returnsBytecodeRepresentationOfEoObjectWithFields() {
-        final Bytecode expected = new BytecodeProgram(new BytecodeClass("Fields")
-            .withField("foo")
+        final Bytecode expected = new BytecodeProgram(
+            "org.jeo",
+            new BytecodeClass("Fields").withField("foo")
         ).bytecode();
         final Bytecode actual = new XmirRepresentation(
             new BytecodeRepresentation(expected).toEO()
@@ -112,8 +119,9 @@ final class XmirRepresentationTest {
 
     @Test
     void convertsHelloWordEoRepresentationIntoBytecode() {
-        final Bytecode expected = new BytecodeProgram(new BytecodeClass("Application")
-            .helloWorldMethod()
+        final Bytecode expected = new BytecodeProgram(
+            "org.jeo",
+            new BytecodeClass("Application").helloWorldMethod()
         ).bytecode();
         final Bytecode actual = new XmirRepresentation(
             new BytecodeRepresentation(expected).toEO()

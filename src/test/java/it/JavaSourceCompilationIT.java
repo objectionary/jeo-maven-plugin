@@ -78,8 +78,19 @@ final class JavaSourceCompilationIT {
         final Path where,
         final RandomJavaClass clazz
     ) throws IOException {
-        final Path src = where.resolve(String.format("%s.java", clazz.name()));
-        Files.write(src, clazz.src().getBytes(StandardCharsets.UTF_8));
+        final Path src = where.resolve("HelloWorld.java");
+        Files.write(
+            src,
+            String.join(
+                "\n",
+                "package org.eolang.jeo.representation.bytecode;",
+                "public class HelloWorld {",
+                "    public static void main(String[] args) {",
+                "        System.out.println(\"Hello, World!\");",
+                "    }",
+                "}"
+            ).getBytes(StandardCharsets.UTF_8)
+        );
         ToolProvider.getSystemJavaCompiler().run(
             System.in,
             System.out,

@@ -55,7 +55,6 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
-     *
      * @param clazz Path to the class file
      */
     public BytecodeRepresentation(final Path clazz) {
@@ -64,7 +63,6 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
-     *
      * @param bytecode Bytecode
      */
     public BytecodeRepresentation(final Bytecode bytecode) {
@@ -73,7 +71,6 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
-     *
      * @param input Input source
      */
     BytecodeRepresentation(final Input input) {

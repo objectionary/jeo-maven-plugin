@@ -128,6 +128,7 @@ final class BytecodeClassTest {
     void transformsBytecodeIntoEoWithoutCountingOpcodes() {
         final XML xmir = new BytecodeRepresentation(
             new BytecodeProgram(
+                "org.jeo",
                 new BytecodeClass("Hello").helloWorldMethod()
             ).bytecode()
         ).toEO();

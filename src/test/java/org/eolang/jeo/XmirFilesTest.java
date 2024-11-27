@@ -52,12 +52,12 @@ final class XmirFilesTest {
         Files.createDirectories(directory);
         Files.write(
             directory.resolve("first.xmir"),
-            new BytecodeProgram(new BytecodeClass("First")).xml().toString()
+            new BytecodeProgram(new BytecodeClass("org.jeo.First")).xml().toString()
                 .getBytes(StandardCharsets.UTF_8)
         );
         Files.write(
             directory.resolve("second.xmir"),
-            new BytecodeProgram(new BytecodeClass("Second")).xml().toString()
+            new BytecodeProgram(new BytecodeClass("org.jeo.Second")).xml().toString()
                 .getBytes(StandardCharsets.UTF_8)
         );
         MatcherAssert.assertThat(
@@ -93,7 +93,7 @@ final class XmirFilesTest {
         Files.createDirectories(path);
         Files.write(
             path.resolve("opeo-class.xmir"),
-            new BytecodeProgram(new BytecodeClass("OpeoClass")).xml().toString()
+            new BytecodeProgram(new BytecodeClass("org.jeo.OpeoClass")).xml().toString()
                 .getBytes(StandardCharsets.UTF_8)
         );
         final Stream<Path> all = new XmirFiles(path).all();
