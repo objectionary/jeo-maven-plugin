@@ -82,8 +82,8 @@ public final class DirectivesSeq implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesEoObject(
-            String.format("seq%d", this.size()),
+        return new DirectivesJeoObject(
+            String.format("seq.of%d", this.size()),
             this.name,
             this.stream().map(Directives::new).collect(Collectors.toList())
         ).iterator();
