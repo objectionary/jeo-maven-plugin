@@ -117,16 +117,6 @@ public final class DirectivesProgram implements Iterable<Directive> {
             .add("listing")
             .set(this.listing)
             .up()
-            .add("errors")
-            .add("error").attr("severity", "warning").set(DirectivesProgram.help()).up()
-            .up()
-            .add("sheets")
-            .add("sheet").set(DirectivesProgram.help()).up()
-            .up()
-            .add("comments")
-            .add("comment").attr("line", "42").set(DirectivesProgram.help())
-            .up()
-            .up()
             .add("license").set(DirectivesProgram.license()).up()
             .append(this.metas)
             .attr("ms", this.milliseconds)
@@ -134,21 +124,6 @@ public final class DirectivesProgram implements Iterable<Directive> {
         directives.append(this.klass);
         directives.up();
         return directives.iterator();
-    }
-
-    /**
-     * Help message.
-     * @return Help message.
-     */
-    private static String help() {
-        return String.join(
-            "\n",
-            "This element was added to pass XSD validation.",
-            "There is no documentation or explanation as to why this element is required.",
-            "If you know why this element is required or what should be placed here, please let us know and add the ticket here:",
-            "https://github.com/objectionary/jeo-maven-plugin/issues",
-            "We would be happy to fix this."
-        );
     }
 
     /**
