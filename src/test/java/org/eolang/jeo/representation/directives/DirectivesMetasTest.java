@@ -99,7 +99,7 @@ final class DirectivesMetasTest {
     }
 
     @Test
-    void createdDirectivesWithEmptyPackage() throws ImpossibleModificationException {
+    void createsDirectivesWithEmptyPackage() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that <metas>/<package> won't be created if package is empty",
             new Xembler(
