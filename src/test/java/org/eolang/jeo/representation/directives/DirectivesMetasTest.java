@@ -97,4 +97,18 @@ final class DirectivesMetasTest {
             )
         );
     }
+
+    @Test
+    void createdDirectivesWithEmptyPackage() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect that <metas>/<package> won't be created if package is empty",
+            new Xembler(
+                new DirectivesMetas(new ClassName("WithoutPackage")),
+                new Transformers.Node()
+            ).xml(),
+            Matchers.not(
+                XhtmlMatchers.hasXPath("/metas/meta/head[text()='package']")
+            )
+        );
+    }
 }
