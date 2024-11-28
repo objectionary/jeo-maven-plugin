@@ -72,13 +72,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives metas = new Directives()
-            .add("metas")
-            .add("meta")
-            .add("head").set("package").up()
-            .add("tail").set(this.pckg()).up()
-            .add("part").set(this.pckg()).up()
-            .up();
+        final Directives metas = new Directives().add("metas").append(this.pckgDirs());
         this.jeo()
             .stream()
             .filter(object -> !object.isEmpty())
@@ -93,6 +87,35 @@ public final class DirectivesMetas implements Iterable<Directive> {
      */
     ClassName className() {
         return this.name;
+    }
+
+    /**
+     * Prefixed package.
+     * We intentionally add prefix to the packages, because sometimes they can be really
+     * strange, <a href="https://github.com/objectionary/jeo-maven-plugin/issues/779">see</a>
+     * @return Prefixed package name.
+     */
+    private Directives pckgDirs() {
+        final Directives result;
+        final String original = this.name.pckg();
+        if (original.isEmpty()) {
+            result = new Directives();
+        } else {
+            String txt = new PrefixedName(original).encode();
+            result = new Directives()
+                .add("meta")
+                .add("head").set("package").up()
+                .add("tail").set(txt).up()
+                .add("part").set(txt).up()
+                .up();
+        }
+        return result;
+//        return new Directives()
+//            .add("meta")
+//            .add("head").set("package").up()
+//            .add("tail").set(this.pckg()).up()
+//            .add("part").set(this.pckg()).up()
+//            .up();
     }
 
     /**
