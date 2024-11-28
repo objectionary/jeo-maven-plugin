@@ -101,7 +101,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
         if (original.isEmpty()) {
             result = new Directives();
         } else {
-            String prefixed = new PrefixedName(original).encode();
+            final String prefixed = new PrefixedName(original).encode();
             result = new Directives()
                 .add("meta")
                 .add("head").set("package").up()
