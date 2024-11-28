@@ -80,42 +80,42 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      @Override
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">final</strong> Directives metas = <strong class="jxr_keyword">new</strong> Directives()
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>              .add(<span class="jxr_string">"metas"</span>)
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>              .add(<span class="jxr_string">"meta"</span>)
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>              .add(<span class="jxr_string">"head"</span>).set(<span class="jxr_string">"package"</span>).up()
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>              .add(<span class="jxr_string">"tail"</span>).set(<strong class="jxr_keyword">this</strong>.pckg()).up()
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>              .add(<span class="jxr_string">"part"</span>).set(<strong class="jxr_keyword">this</strong>.pckg()).up()
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>              .up();
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">this</strong>.jeo()
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>              .stream()
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>              .filter(object -&gt; !object.isEmpty())
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>              .map(DirectivesMetas::alias)
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>              .forEach(metas::append);
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">return</strong> metas.up().iterator();
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      }
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     * Class name.</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     * @return The class name.</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>      <a name="ClassName" href="../../../../../org/eolang/jeo/representation/ClassName.html#ClassName">ClassName</a> className() {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.name;
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>      }
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">     * Prefixed package name.</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">     * We intentionally add prefix to the packages, because sometimes they can be really</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">     * strange, &lt;a href="<a href="https://github.com/objectionary/jeo-maven-plugin/issues/779" target="alexandria_uri">https://github.com/objectionary/jeo-maven-plugin/issues/779</a>"&gt;see&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">     * @return Prefixed package name.</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">private</strong> String pckg() {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>         <strong class="jxr_keyword">final</strong> String result;
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>         <strong class="jxr_keyword">final</strong> String original = <strong class="jxr_keyword">this</strong>.name.pckg();
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>         <strong class="jxr_keyword">if</strong> (original.isEmpty()) {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>             result = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>             result = <strong class="jxr_keyword">new</strong> <a name="PrefixedName" href="../../../../../org/eolang/jeo/representation/PrefixedName.html#PrefixedName">PrefixedName</a>(original).encode();
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">final</strong> Directives metas = <strong class="jxr_keyword">new</strong> Directives().add(<span class="jxr_string">"metas"</span>).append(<strong class="jxr_keyword">this</strong>.pckg());
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          <strong class="jxr_keyword">this</strong>.jeo()
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>              .stream()
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>              .filter(object -&gt; !object.isEmpty())
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>              .map(DirectivesMetas::alias)
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>              .forEach(metas::append);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>          <strong class="jxr_keyword">return</strong> metas.up().iterator();
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      }
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">     * Class name.</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">     * @return The class name.</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      <a name="ClassName" href="../../../../../org/eolang/jeo/representation/ClassName.html#ClassName">ClassName</a> className() {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.name;
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      }
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     * Prefixed package.</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">     * We intentionally add prefix to the packages, because sometimes they can be really</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">     * strange, &lt;a href="<a href="https://github.com/objectionary/jeo-maven-plugin/issues/779" target="alexandria_uri">https://github.com/objectionary/jeo-maven-plugin/issues/779</a>"&gt;see&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">     * @return Prefixed package name.</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <strong class="jxr_keyword">private</strong> Directives pckg() {
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          <strong class="jxr_keyword">final</strong> Directives result;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         <strong class="jxr_keyword">final</strong> String original = <strong class="jxr_keyword">this</strong>.name.pckg();
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>         <strong class="jxr_keyword">if</strong> (original.isEmpty()) {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>             result = <strong class="jxr_keyword">new</strong> Directives();
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>             <strong class="jxr_keyword">final</strong> String prefixed = <strong class="jxr_keyword">new</strong> <a name="PrefixedName" href="../../../../../org/eolang/jeo/representation/PrefixedName.html#PrefixedName">PrefixedName</a>(original).encode();
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>             result = <strong class="jxr_keyword">new</strong> Directives()
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>                 .add(<span class="jxr_string">"meta"</span>)
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>                 .add(<span class="jxr_string">"head"</span>).set(<span class="jxr_string">"package"</span>).up()
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>                 .add(<span class="jxr_string">"tail"</span>).set(prefixed).up()
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>                 .add(<span class="jxr_string">"part"</span>).set(prefixed).up()
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>                 .up();
 <a class="jxr_linenumber" name="L111" href="#L111">111</a>         }
 <a class="jxr_linenumber" name="L112" href="#L112">112</a>         <strong class="jxr_keyword">return</strong> result;
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>     }
