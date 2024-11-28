@@ -56,7 +56,6 @@ final class CanonicalXmirTest {
     @Disabled
     void transformsToPlainXmir() throws ImpossibleModificationException {
         final BytecodeProgram initial = new BytecodeProgram(
-            "org.jeo",
             new BytecodeClass(
                 "App",
                 Collections.singletonList(new BytecodeMethod("main")),

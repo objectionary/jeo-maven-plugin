@@ -72,7 +72,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives metas = new Directives().add("metas").append(this.pckgDirs());
+        final Directives metas = new Directives().add("metas").append(this.pckg());
         this.jeo()
             .stream()
             .filter(object -> !object.isEmpty())
@@ -95,42 +95,19 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * strange, <a href="https://github.com/objectionary/jeo-maven-plugin/issues/779">see</a>
      * @return Prefixed package name.
      */
-    private Directives pckgDirs() {
+    private Directives pckg() {
         final Directives result;
         final String original = this.name.pckg();
         if (original.isEmpty()) {
             result = new Directives();
         } else {
-            String txt = new PrefixedName(original).encode();
+            String prefixed = new PrefixedName(original).encode();
             result = new Directives()
                 .add("meta")
                 .add("head").set("package").up()
-                .add("tail").set(txt).up()
-                .add("part").set(txt).up()
+                .add("tail").set(prefixed).up()
+                .add("part").set(prefixed).up()
                 .up();
-        }
-        return result;
-//        return new Directives()
-//            .add("meta")
-//            .add("head").set("package").up()
-//            .add("tail").set(this.pckg()).up()
-//            .add("part").set(this.pckg()).up()
-//            .up();
-    }
-
-    /**
-     * Prefixed package name.
-     * We intentionally add prefix to the packages, because sometimes they can be really
-     * strange, <a href="https://github.com/objectionary/jeo-maven-plugin/issues/779">see</a>
-     * @return Prefixed package name.
-     */
-    private String pckg() {
-        final String result;
-        final String original = this.name.pckg();
-        if (original.isEmpty()) {
-            result = "";
-        } else {
-            result = new PrefixedName(original).encode();
         }
         return result;
     }

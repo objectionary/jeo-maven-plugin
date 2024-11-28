@@ -107,7 +107,6 @@ final class BytecodeMethodTest {
         final String clazz = "ParametersExample";
         final String method = "printSum";
         final String xml = new BytecodeProgram(
-            "org.jeo",
             new BytecodeClass(clazz)
                 .withMethod(
                     new BytecodeMethodProperties(
@@ -169,7 +168,6 @@ final class BytecodeMethodTest {
     @Test
     void parsesConstructor() {
         final String xml = new BytecodeProgram(
-            "org.jeo",
             new BytecodeClass("ConstructorExample")
                 .withConstructor(Opcodes.ACC_PUBLIC)
                 .opcode(Opcodes.ALOAD, 0)
@@ -231,7 +229,6 @@ final class BytecodeMethodTest {
     void parsesConstructorWithParameters() {
         final String clazz = "ConstructorParams";
         final String xml = new BytecodeProgram(
-            "org.jeo",
             new BytecodeClass(clazz)
                 .withConstructor("(II)V", Opcodes.ACC_PUBLIC)
                 .opcode(Opcodes.ALOAD, 0)
@@ -295,7 +292,6 @@ final class BytecodeMethodTest {
     void parsesIfStatementCorrectly() {
         final String label = UUID.randomUUID().toString();
         final String xml = new BytecodeProgram(
-            "org.jeo",
             new BytecodeClass("Foo")
                 .withMethod("bar", "(D)I", 0)
                 .opcode(Opcodes.DLOAD, 1)
@@ -342,7 +338,6 @@ final class BytecodeMethodTest {
         final String end = UUID.randomUUID().toString();
         final String handler = UUID.randomUUID().toString();
         final String xml = new BytecodeProgram(
-            "org.jeo",
             new BytecodeClass("Foo")
                 .withMethod("bar", "()V", Opcodes.ACC_PUBLIC)
                 .label(start)
@@ -373,7 +368,7 @@ final class BytecodeMethodTest {
     void doesNotContainTryCatchBlock() {
         MatcherAssert.assertThat(
             "We expect that method without try-catch block doesn't contain try-catch directives.",
-            new BytecodeProgram("org.jeo", new BytecodeClass().helloWorldMethod()).xml().toString(),
+            new BytecodeProgram(new BytecodeClass().helloWorldMethod()).xml().toString(),
             XhtmlMatchers.hasXPath(
                 ".//o[contains(@base,'seq.of0') and @name='trycatchblocks-main']"
             )
