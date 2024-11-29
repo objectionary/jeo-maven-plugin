@@ -24,14 +24,16 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -42,7 +44,9 @@ import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.XmlProgram;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 /**
  * Intermediate representation of a class files from XMIR.
@@ -54,12 +58,17 @@ public final class XmirRepresentation {
     /**
      * XPath's factory.
      */
-    private static final XPathFactory FACTORY = XPathFactory.newInstance();
+    private static final XPathFactory XPATH_FACTORY = XPathFactory.newInstance();
+
+    /**
+     * XML document factory.
+     */
+    private static final DocumentBuilderFactory DOC_FACTORY = DocumentBuilderFactory.newInstance();
 
     /**
      * XML.
      */
-    private final Unchecked<XML> xml;
+    private final Unchecked<Node> xml;
 
     /**
      * Source of the XML.
@@ -79,7 +88,7 @@ public final class XmirRepresentation {
      * @param xml XML.
      */
     public XmirRepresentation(final XML xml) {
-        this(xml, "Unknown");
+        this(xml.node(), "Unknown");
     }
 
     /**
@@ -88,7 +97,7 @@ public final class XmirRepresentation {
      * @param source Source of the XML.
      */
     private XmirRepresentation(
-        final XML xml,
+        final Node xml,
         final String source
     ) {
         this(new Unchecked<>(() -> xml), source);
@@ -100,7 +109,7 @@ public final class XmirRepresentation {
      * @param source Source of the XML.
      */
     private XmirRepresentation(
-        final Unchecked<XML> xml,
+        final Unchecked<Node> xml,
         final String source
     ) {
         this.xml = xml;
@@ -114,8 +123,8 @@ public final class XmirRepresentation {
      * @return Class name.
      */
     public String name() {
-        final Node node = this.xml.value().node();
-        final XPath xpath = XmirRepresentation.FACTORY.newXPath();
+        final Node node = this.xml.value();
+        final XPath xpath = XmirRepresentation.XPATH_FACTORY.newXPath();
         try {
             return new ClassName(
                 Optional.ofNullable(
@@ -146,9 +155,9 @@ public final class XmirRepresentation {
      * @return Array of bytes.
      */
     public Bytecode toBytecode() {
-        final XML xmir = this.xml.value();
+        final Node xmir = this.xml.value();
         try {
-            new OptimizedSchema(xmir.node()).check();
+            new OptimizedSchema(xmir).check();
             return new XmlProgram(xmir).bytecode().bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
@@ -168,7 +177,7 @@ public final class XmirRepresentation {
      * @param path Path to an XML file.
      * @return Lazy XML.
      */
-    private static Unchecked<XML> fromFile(final Path path) {
+    private static Unchecked<Node> fromFile(final Path path) {
         return new Unchecked<>(new Synced<>(new Sticky<>(() -> XmirRepresentation.open(path))));
     }
 
@@ -177,15 +186,18 @@ public final class XmirRepresentation {
      * @param path Path to XML file.
      * @return XML.
      */
-    private static XML open(final Path path) {
+    private static Node open(final Path path) {
         try {
-            return new XMLDocument(path.toFile());
+            DocumentBuilder builder = XmirRepresentation.DOC_FACTORY.newDocumentBuilder();
+            Document document = builder.parse(new java.io.FileInputStream(path.toFile()));
+            return document.getDocumentElement();
         } catch (final FileNotFoundException exception) {
             throw new IllegalStateException(
                 String.format("Can't find file '%s'", path),
                 exception
             );
-        } catch (final IllegalArgumentException broken) {
+        } catch (final IllegalArgumentException | ParserConfigurationException | IOException |
+                       SAXException broken) {
             throw new IllegalStateException(
                 String.format(
                     "Can't parse XML from the file '%s'",
@@ -199,24 +211,24 @@ public final class XmirRepresentation {
 
     private static class OptimizedSchema {
         private final Node node;
+        private final SchemaFactory factory;
 
-        public OptimizedSchema(final Node node) {
+        OptimizedSchema(final Node node) {
             this.node = node;
+            this.factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
         }
 
-        public void check() {
-            SchemaFactory schemaFactory = SchemaFactory.newInstance(
-                "http://www.w3.org/2001/XMLSchema"
-            );
+        void check() {
             try {
-                javax.xml.validation.Schema schema = schemaFactory.newSchema(
-                    new StreamSource(new ResourceOf("XMIR.xsd").stream()));
-                final Validator validator = schema.newValidator();
-                validator.validate(new DOMSource(this.node));
+                this.factory.newSchema(
+                    new StreamSource(new ResourceOf("XMIR.xsd").stream())
+                ).newValidator().validate(new DOMSource(this.node));
             } catch (final Exception exception) {
                 throw new IllegalStateException(
                     String.format(
-                        "There are 1 XSD violation(s), see the log", exception.getMessage()),
+                        "There are XSD violations, see the log",
+                        exception.getMessage()
+                    ),
                     exception
                 );
             }
