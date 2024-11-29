@@ -28,16 +28,20 @@ import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.Optional;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import org.cactoos.io.ResourceOf;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.XmlProgram;
-import org.eolang.parser.Schema;
 import org.w3c.dom.Node;
 
 /**
@@ -144,7 +148,7 @@ public final class XmirRepresentation {
     public Bytecode toBytecode() {
         final XML xmir = this.xml.value();
         try {
-            new Schema(xmir).check();
+            new OptimizedSchema(xmir.node()).check();
             return new XmlProgram(xmir).bytecode().bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
@@ -189,6 +193,34 @@ public final class XmirRepresentation {
                 ),
                 broken
             );
+        }
+    }
+
+
+    private static class OptimizedSchema {
+        private final Node node;
+
+        public OptimizedSchema(final Node node) {
+            this.node = node;
+        }
+
+        public void check() {
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(
+                "http://www.w3.org/2001/XMLSchema"
+            );
+            try {
+                javax.xml.validation.Schema schema = schemaFactory.newSchema(
+                    new StreamSource(new ResourceOf("XMIR.xsd").stream()));
+                final Validator validator = schema.newValidator();
+                validator.validate(new DOMSource(this.node));
+            } catch (final Exception exception) {
+                throw new IllegalStateException(
+                    String.format(
+                        "There are 1 XSD violation(s), see the log", exception.getMessage()),
+                    exception
+                );
+            }
+
         }
     }
 }

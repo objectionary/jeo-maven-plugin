@@ -25,6 +25,8 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -191,6 +193,23 @@ final class XmirRepresentationTest {
             attempts,
             end - start
         );
+    }
 
+    @Test
+    void throwsExceptionIfXmirIsInvalid() {
+        MatcherAssert.assertThat(
+            "We excpect that XSD violation message will be easily understandable by developers",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new XmirRepresentation(
+                    new XMLDocument(
+                        new BytecodeProgram(
+                            new BytecodeClass("org/eolang/foo/Math")
+                        ).xml().toString().replace("<head>package</head>", "")
+                    )
+                ).toBytecode()
+            ).getCause().getMessage(),
+            Matchers.containsString("There are XSD violations, see the log")
+        );
     }
 }
