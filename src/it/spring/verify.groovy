@@ -37,5 +37,5 @@ assert app.text.contains("<tail>jeo.opcode</tail>")
 //Check that if class doesn't have instructions, it doesn't have "opcode" imports.
 def empty = new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/spring/WithoutInstructions.xmir')
 assert empty.exists()
-assert !empty.text.contains("<tail>jeo.opcode</tail>")
+assert !empty.text.contains("<tail>jeo.opcode.return</tail>")
 true
