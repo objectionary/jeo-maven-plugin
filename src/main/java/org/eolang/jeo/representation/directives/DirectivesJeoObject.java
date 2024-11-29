@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.directives;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -123,7 +122,6 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
             .attr("base", new JeoFqn(this.base).fqn());
         if (!this.name.isEmpty()) {
             directives.attr("name", this.name);
-            directives.attr("line", new Random().nextInt(Integer.MAX_VALUE));
         }
         return directives
             .append(this.inner.stream().reduce(new Directives(), Directives::append))

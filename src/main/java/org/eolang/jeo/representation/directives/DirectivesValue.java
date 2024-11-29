@@ -32,12 +32,6 @@ import org.xembly.Directive;
  * Data Object Directive in EO language.
  *
  * @since 0.1.0
- * @todo #627:90min Remove 'line' attribute usages.
- *  We add 'line' attribute in many places to be able print XMIR representation as PHI expressions.
- *  Actually we shouldn't add any artificial attributes to the representation.
- *  When the following issue will be solved we should remove 'line' attribute from all places
- *  where it used:
- *  https://github.com/objectionary/eo/issues/3189
  */
 @ToString
 public final class DirectivesValue implements Iterable<Directive> {
