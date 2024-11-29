@@ -58,13 +58,11 @@ final class DirectivesMetasTest {
 
     @Test
     void addsAliasesForAllTheRequiredObjects() throws ImpossibleModificationException {
-        final String xml = new Xembler(
-            new BytecodeProgram(new BytecodeClass().helloWorldMethod()).directives("")
-        ).xml();
-        System.out.println(xml);
         MatcherAssert.assertThat(
             "Can't create corresponding xembly directives for all the required objects",
-            xml,
+            new Xembler(
+                new BytecodeProgram(new BytecodeClass().helloWorldMethod()).directives("")
+            ).xml(),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath("/program/metas/meta/head[text()='alias']"),
                 XhtmlMatchers.hasXPath("/program/metas/meta/tail[text()='jeo.opcode.return']"),
