@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.List;

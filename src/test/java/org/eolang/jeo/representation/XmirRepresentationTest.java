@@ -185,12 +185,11 @@ final class XmirRepresentationTest {
             );
         }
         final long end = System.currentTimeMillis();
-        final long l = end - start;
         Logger.info(
             this,
             "We made %d attempts to convert bytecode to xmir and back in %[ms]s",
             attempts,
-            l
+            end - start
         );
 
     }
