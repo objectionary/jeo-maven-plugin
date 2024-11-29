@@ -27,12 +27,18 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
+import java.util.Optional;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.eolang.parser.Schema;
+import org.w3c.dom.Node;
 
 /**
  * Intermediate representation of a class files from XMIR.
@@ -40,6 +46,11 @@ import org.eolang.parser.Schema;
  * @since 0.1.0
  */
 public final class XmirRepresentation {
+
+    /**
+     * XPath's factory.
+     */
+    private static final XPathFactory FACTORY = XPathFactory.newInstance();
 
     /**
      * XML.
@@ -94,17 +105,36 @@ public final class XmirRepresentation {
 
     /**
      * Retrieves class name from XMIR.
+     * This method intentionally uses classes from `org.w3c.dom` instead of `com.jcabi.xml`
+     * by performance reasons.
      * @return Class name.
      */
     public String name() {
-        return new ClassName(
-            this.xml.value()
-                .xpath("/program/metas/meta/tail/text()")
-                .stream()
-                .findFirst()
-                .orElse(""),
-            this.xml.value().xpath("/program/@name").get(0)
-        ).full();
+        final Node node = this.xml.value().node();
+        final XPath xpath = XmirRepresentation.FACTORY.newXPath();
+        try {
+            return new ClassName(
+                Optional.ofNullable(
+                    ((Node) xpath.evaluate(
+                        "/program/metas/meta/tail/text()",
+                        node,
+                        XPathConstants.NODE
+                    )).getTextContent()
+                ).orElse(""),
+                String.valueOf(
+                    xpath.evaluate(
+                        "/program/@name",
+                        node,
+                        XPathConstants.STRING
+                    )
+                )
+            ).full();
+        } catch (final XPathExpressionException exception) {
+            throw new IllegalStateException(
+                String.format("Can't extract class name from the '%s' source", this.source),
+                exception
+            );
+        }
     }
 
     /**

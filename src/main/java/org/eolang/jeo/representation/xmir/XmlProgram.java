@@ -89,7 +89,7 @@ public final class XmlProgram {
      *
      * @param root Root node.
      */
-    private XmlProgram(final Node root) {
+    public XmlProgram(final Node root) {
         this.root = root;
     }
 

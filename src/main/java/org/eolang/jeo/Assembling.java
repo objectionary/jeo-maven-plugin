@@ -45,6 +45,11 @@ public final class Assembling implements Transformation {
     private final Path from;
 
     /**
+     * XMIR representation.
+     */
+    private final XmirRepresentation repr;
+
+    /**
      * Constructor.
      * @param target Target folder.
      * @param representation Representation to assemble.
@@ -52,6 +57,7 @@ public final class Assembling implements Transformation {
     Assembling(final Path target, final Path representation) {
         this.folder = target;
         this.from = representation;
+        this.repr = new XmirRepresentation(this.from);
     }
 
     @Override
@@ -61,8 +67,7 @@ public final class Assembling implements Transformation {
 
     @Override
     public Path target() {
-        final XmirRepresentation repr = new XmirRepresentation(this.from);
-        final String name = new PrefixedName(repr.name()).decode();
+        final String name = new PrefixedName(this.repr.name()).decode();
         final String[] subpath = name.split("\\.");
         subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
         return Paths.get(this.folder.toString(), subpath);
@@ -70,6 +75,6 @@ public final class Assembling implements Transformation {
 
     @Override
     public byte[] transform() {
-        return new XmirRepresentation(this.from).toBytecode().bytes();
+        return this.repr.toBytecode().bytes();
     }
 }
