@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation;
 
+import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -34,6 +35,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -152,5 +154,43 @@ final class XmirRepresentationTest {
                 )
             )
         );
+    }
+
+    /**
+     * This is a performance test, which is disabled by default.
+     * It is used to measure the performance of the conversion of the EO object
+     * into the bytecode representation and back.
+     * Timings before the optimization were: 21s, 23s, 21s, 21s (500 attempts)
+     */
+    @Test
+    @Disabled
+    void convertsToXmirAndBack() {
+        final Bytecode before = new BytecodeProgram(
+            new BytecodeClass("org/eolang/foo/Math")
+                .helloWorldMethod()
+        ).bytecode();
+        final int attempts = 500;
+        final long start = System.currentTimeMillis();
+        for (int current = 0; current < attempts; ++current) {
+            final Bytecode actual = new XmirRepresentation(
+                new BytecodeRepresentation(
+                    before
+                ).toEO()
+            ).toBytecode();
+            MatcherAssert.assertThat(
+                String.format(XmirRepresentationTest.MESSAGE, before, actual),
+                actual,
+                Matchers.equalTo(before)
+            );
+        }
+        final long end = System.currentTimeMillis();
+        final long l = end - start;
+        Logger.info(
+            this,
+            "We made %d attempts to convert bytecode to xmir and back in %[ms]s",
+            attempts,
+            l
+        );
+
     }
 }
