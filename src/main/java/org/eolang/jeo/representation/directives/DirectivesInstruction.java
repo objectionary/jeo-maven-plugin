@@ -64,7 +64,7 @@ public final class DirectivesInstruction implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
-            "opcode",
+            this.base(),
             this.name(),
             Stream.concat(
                 Stream.of(
@@ -82,6 +82,14 @@ public final class DirectivesInstruction implements Iterable<Directive> {
      */
     private String name() {
         return new OpcodeName(this.opcode).asString();
+    }
+
+    /**
+     * Base of the instruction.
+     * @return String base.
+     */
+    private String base() {
+        return String.format("%s.%s", "opcode", new OpcodeName(this.opcode).simplified());
     }
 
     /**

@@ -138,10 +138,10 @@ final class BytecodeClassTest {
             ),
             xmir.toString(),
             XhtmlMatchers.hasXPaths(
-                "//o[@base='jeo.opcode' and contains(@name,'getstatic')]",
-                "//o[@base='jeo.opcode' and contains(@name,'ldc')]",
-                "//o[@base='jeo.opcode' and contains(@name,'invokevirtual')]",
-                "//o[@base='jeo.opcode' and contains(@name,'return')]"
+                "//o[@base='jeo.opcode.getstatic' and contains(@name,'getstatic')]",
+                "//o[@base='jeo.opcode.ldc' and contains(@name,'ldc')]",
+                "//o[@base='jeo.opcode.invokevirtual' and contains(@name,'invokevirtual')]",
+                "//o[@base='jeo.opcode.return' and contains(@name,'return')]"
             )
         );
     }
