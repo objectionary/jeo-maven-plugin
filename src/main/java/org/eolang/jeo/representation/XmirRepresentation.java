@@ -210,7 +210,13 @@ public final class XmirRepresentation {
 
     /**
      * Optimized schema for XMIR.
+     * It is an optimized version of {@link org.eolang.parser.Schema} class.
      * @since 0.6
+     * @todo #889:30min Use the `Schema` class instead of `OptimizedSchema`.
+     *  The `OptimizedSchema` class is a temporary solution to avoid the performance
+     *  issues with the `Schema` class. We will be able to remove this class after
+     *  the following issue is resolved:
+     *  https://github.com/jcabi/jcabi-xml/issues/277
      */
     private static class OptimizedSchema {
         /**

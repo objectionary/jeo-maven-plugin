@@ -43,7 +43,13 @@ import org.w3c.dom.NodeList;
 public final class XmlNode {
 
     /**
-     * Parent node.
+     * XML node.
+     * Attention!
+     * Here we use the {@link Node} class instead of the {@link com.jcabi.xml.XML}
+     * by performance reasons.
+     * In some cases {@link Node} 10 times faster than {@link com.jcabi.xml.XML}.
+     * You can read more about it here:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/pull/924">Optimization</a>
      */
     private final Node node;
 
@@ -57,7 +63,7 @@ public final class XmlNode {
 
     /**
      * Constructor.
-     * @param parent Parent node.
+     * @param parent Xml node.
      */
     public XmlNode(final Node parent) {
         this.node = parent;

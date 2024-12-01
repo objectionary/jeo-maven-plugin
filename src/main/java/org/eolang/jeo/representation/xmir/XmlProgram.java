@@ -43,6 +43,11 @@ public final class XmlProgram {
 
     /**
      * Root node.
+     * Here we use the {@link Node} class instead of the {@link com.jcabi.xml.XML}
+     * by performance reasons.
+     * In some cases {@link Node} 10 times faster than {@link com.jcabi.xml.XML}.
+     * You can read more about it here:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/pull/924">Optimization</a>
      */
     private final Node root;
 
