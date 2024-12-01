@@ -64,7 +64,7 @@ public final class XmlProgram {
      * @param xml Raw XMIR.
      */
     public XmlProgram(final XML xml) {
-        this(xml.node());
+        this(xml.node().getFirstChild());
     }
 
     /**
@@ -80,7 +80,7 @@ public final class XmlProgram {
                         new DirectivesClass(name), new DirectivesMetas(name)
                     )
                 ).xmlQuietly()
-            ).node()
+            )
         );
     }
 
@@ -123,7 +123,7 @@ public final class XmlProgram {
      */
     private XmlClass top() {
         return new XmlNode(this.root)
-            .child(XmlProgram.PROGRAM)
+//            .child(XmlProgram.PROGRAM)
             .child("objects")
             .child("o")
             .toClass();
