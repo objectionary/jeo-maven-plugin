@@ -25,7 +25,6 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
-import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -164,7 +163,7 @@ final class XmirRepresentationTest {
      * into the bytecode representation and back.
      * 1) Timings before the optimization were: 21s, 23s, 21s, 21s (500 attempts)
      * 2) `XMLDocument` -> `org.w3c.Node` optimization: 11s, 10s, 11s, 10s (500 attempts)
-     * 3) Remove `XMLDocument` from the `XmirRepresentation` constructor: 10s, 9s, 9s, 9s (500 attempts)
+     * 3) Remove `XMLDocument` usage: 10s, 9s, 9s, 9s (500 attempts)
      */
     @Test
     @Disabled

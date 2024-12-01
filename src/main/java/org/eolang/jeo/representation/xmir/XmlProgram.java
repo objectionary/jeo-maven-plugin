@@ -40,10 +40,6 @@ import org.xembly.Xembler;
  * @since 0.1
  */
 public final class XmlProgram {
-    /**
-     * Program node name.
-     */
-    private static final String PROGRAM = "program";
 
     /**
      * Root node.
@@ -123,7 +119,6 @@ public final class XmlProgram {
      */
     private XmlClass top() {
         return new XmlNode(this.root)
-//            .child(XmlProgram.PROGRAM)
             .child("objects")
             .child("o")
             .toClass();

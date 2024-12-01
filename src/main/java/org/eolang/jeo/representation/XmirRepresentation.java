@@ -28,9 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
@@ -39,12 +37,12 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.io.UncheckedInput;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.XmlProgram;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -185,19 +183,21 @@ public final class XmirRepresentation {
      * Convert a path to XML.
      * @param path Path to XML file.
      * @return XML.
+     * @checkstyle IllegalCatchCheck (20 lines)
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static Node open(final Path path) {
         try {
-            DocumentBuilder builder = XmirRepresentation.DOC_FACTORY.newDocumentBuilder();
-            Document document = builder.parse(new java.io.FileInputStream(path.toFile()));
-            return document.getDocumentElement();
+            return XmirRepresentation.DOC_FACTORY
+                .newDocumentBuilder()
+                .parse(path.toFile())
+                .getDocumentElement();
         } catch (final FileNotFoundException exception) {
             throw new IllegalStateException(
                 String.format("Can't find file '%s'", path),
                 exception
             );
-        } catch (final IllegalArgumentException | ParserConfigurationException | IOException |
-                       SAXException broken) {
+        } catch (final Exception broken) {
             throw new IllegalStateException(
                 String.format(
                     "Can't parse XML from the file '%s'",
@@ -208,22 +208,48 @@ public final class XmirRepresentation {
         }
     }
 
-
+    /**
+     * Optimized schema for XMIR.
+     * @since 0.6
+     */
     private static class OptimizedSchema {
+        /**
+         * Node.
+         */
         private final Node node;
+
+        /**
+         * Schema factory.
+         */
         private final SchemaFactory factory;
 
+        /**
+         * Constructor.
+         * @param node Node.
+         */
         OptimizedSchema(final Node node) {
-            this.node = node;
-            this.factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+            this(node, SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema"));
         }
 
+        /**
+         * Constructor.
+         * @param node Node.
+         * @param factory Schema factory.
+         */
+        private OptimizedSchema(final Node node, final SchemaFactory factory) {
+            this.node = node;
+            this.factory = factory;
+        }
+
+        /**
+         * Check the node.
+         */
         void check() {
             try {
                 this.factory.newSchema(
-                    new StreamSource(new ResourceOf("XMIR.xsd").stream())
+                    new StreamSource(new UncheckedInput(new ResourceOf("XMIR.xsd")).stream())
                 ).newValidator().validate(new DOMSource(this.node));
-            } catch (final Exception exception) {
+            } catch (final IOException | SAXException exception) {
                 throw new IllegalStateException(
                     String.format(
                         "There are XSD violations, see the log",
@@ -232,7 +258,6 @@ public final class XmirRepresentation {
                     exception
                 );
             }
-
         }
     }
 }
