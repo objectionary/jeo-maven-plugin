@@ -167,6 +167,7 @@ final class XmirRepresentationTest {
      */
     @Test
     @Disabled
+    @SuppressWarnings("PMD.GuardLogStatement")
     void convertsToXmirAndBack() {
         final Bytecode before = new BytecodeProgram(
             new BytecodeClass("org/eolang/foo/Math")

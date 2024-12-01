@@ -79,7 +79,7 @@ final class DirectivesSeqTest {
      * Sequences to test.
      * @return Stream of arguments.
      */
-    private static Stream<Arguments> sequences() {
+    static Stream<Arguments> sequences() {
         return Stream.of(
             Arguments.of(
                 new DirectivesSeq(
