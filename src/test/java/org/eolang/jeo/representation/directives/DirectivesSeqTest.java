@@ -60,7 +60,7 @@ final class DirectivesSeqTest {
 
     @ParameterizedTest
     @MethodSource("sequences")
-    void correctlyComputesSize(
+    void computesSize(
         final DirectivesSeq actual, final int expected
     ) throws ImpossibleModificationException {
         MatcherAssert.assertThat(
