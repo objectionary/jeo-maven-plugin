@@ -27,6 +27,7 @@ import java.util.Iterator;
 import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeValue;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
  * Data Object Directive in EO language.
@@ -84,12 +85,24 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesJeoObject(
-            this.type(),
-            this.name,
-            new DirectivesComment(this.comment()),
-            new DirectivesBytes(this.hex())
-        ).iterator();
+        final String type = this.type();
+        final Iterable<Directive> res;
+        if ("string".equals(type)) {
+            res = new DirectivesEoObject(
+                type,
+                this.name,
+                new DirectivesComment(this.comment()),
+                new DirectivesBytes(this.hex())
+            );
+        } else {
+            res = new DirectivesJeoObject(
+                type,
+                this.name,
+                new DirectivesComment(this.comment()),
+                new DirectivesBytes(this.hex())
+            );
+        }
+        return res.iterator();
     }
 
     /**
