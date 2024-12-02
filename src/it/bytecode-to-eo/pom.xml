@@ -83,19 +83,38 @@ SOFTWARE.
               <phiOutputDir>${project.build.directory}/generated-sources/jeo-phi</phiOutputDir>
             </configuration>
           </execution>
-          <execution>
-            <id>convert-xmir-to-eo</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>print</goal>
-            </goals>
-            <configuration>
-              <printSourcesDir>${project.build.directory}/generated-sources/jeo-xmir</printSourcesDir>
-              <printOutputDir>${project.build.directory}/generated-sources/jeo-eo</printOutputDir>
-            </configuration>
-          </execution>
         </executions>
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>Print EO</id>
+      <activation>
+        <jdk>[11,)</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eolang</groupId>
+            <artifactId>eo-maven-plugin</artifactId>
+            <version>0.44.0</version>
+            <executions>
+              <execution>
+                <id>convert-xmir-to-eo</id>
+                <phase>process-classes</phase>
+                <goals>
+                  <goal>print</goal>
+                </goals>
+                <configuration>
+                  <printSourcesDir>${project.build.directory}/generated-sources/jeo-xmir</printSourcesDir>
+                  <printOutputDir>${project.build.directory}/generated-sources/jeo-eo</printOutputDir>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
