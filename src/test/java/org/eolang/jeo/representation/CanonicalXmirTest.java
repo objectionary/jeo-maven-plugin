@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation;
 
-import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import java.util.Collections;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
@@ -35,7 +34,6 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
