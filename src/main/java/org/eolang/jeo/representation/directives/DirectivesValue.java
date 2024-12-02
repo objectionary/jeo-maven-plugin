@@ -27,7 +27,6 @@ import java.util.Iterator;
 import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeValue;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Data Object Directive in EO language.

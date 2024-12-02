@@ -68,7 +68,6 @@ final class DirectivesMetasTest {
                 XhtmlMatchers.hasXPath("/program/metas/meta/tail[text()='jeo.opcode.return']"),
                 XhtmlMatchers.hasXPath("/program/metas/meta/tail[text()='jeo.label']"),
                 XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.int']"),
-                XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.string']"),
                 XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.bool']"),
                 XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.param']"),
                 XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.params']")

@@ -67,7 +67,7 @@ public final class DirectivesEoObject implements Iterable<Directive> {
      * @param name The name of the object.
      * @param inner Inner components.
      */
-    @SuppressWarnings("unchecked")
+    @SafeVarargs
     DirectivesEoObject(final String base, final String name, final Iterable<Directive>... inner) {
         this(base, name, Arrays.stream(inner).map(Directives::new).collect(Collectors.toList()));
     }
