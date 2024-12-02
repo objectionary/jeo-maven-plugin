@@ -24,15 +24,27 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import org.cactoos.io.ResourceOf;
+import org.cactoos.io.UncheckedInput;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.XmlProgram;
-import org.eolang.parser.Schema;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 /**
  * Intermediate representation of a class files from XMIR.
@@ -42,9 +54,19 @@ import org.eolang.parser.Schema;
 public final class XmirRepresentation {
 
     /**
+     * XPath's factory.
+     */
+    private static final XPathFactory XPATH_FACTORY = XPathFactory.newInstance();
+
+    /**
+     * XML document factory.
+     */
+    private static final DocumentBuilderFactory DOC_FACTORY = DocumentBuilderFactory.newInstance();
+
+    /**
      * XML.
      */
-    private final Unchecked<XML> xml;
+    private final Unchecked<Node> xml;
 
     /**
      * Source of the XML.
@@ -64,7 +86,7 @@ public final class XmirRepresentation {
      * @param xml XML.
      */
     public XmirRepresentation(final XML xml) {
-        this(xml, "Unknown");
+        this(xml.node().getFirstChild(), "Unknown");
     }
 
     /**
@@ -73,7 +95,7 @@ public final class XmirRepresentation {
      * @param source Source of the XML.
      */
     private XmirRepresentation(
-        final XML xml,
+        final Node xml,
         final String source
     ) {
         this(new Unchecked<>(() -> xml), source);
@@ -85,7 +107,7 @@ public final class XmirRepresentation {
      * @param source Source of the XML.
      */
     private XmirRepresentation(
-        final Unchecked<XML> xml,
+        final Unchecked<Node> xml,
         final String source
     ) {
         this.xml = xml;
@@ -94,17 +116,36 @@ public final class XmirRepresentation {
 
     /**
      * Retrieves class name from XMIR.
+     * This method intentionally uses classes from `org.w3c.dom` instead of `com.jcabi.xml`
+     * by performance reasons.
      * @return Class name.
      */
     public String name() {
-        return new ClassName(
-            this.xml.value()
-                .xpath("/program/metas/meta/tail/text()")
-                .stream()
-                .findFirst()
-                .orElse(""),
-            this.xml.value().xpath("/program/@name").get(0)
-        ).full();
+        final Node node = this.xml.value();
+        final XPath xpath = XmirRepresentation.XPATH_FACTORY.newXPath();
+        try {
+            return new ClassName(
+                Optional.ofNullable(
+                    ((Node) xpath.evaluate(
+                        "/program/metas/meta/tail/text()",
+                        node,
+                        XPathConstants.NODE
+                    )).getTextContent()
+                ).orElse(""),
+                String.valueOf(
+                    xpath.evaluate(
+                        "/program/@name",
+                        node,
+                        XPathConstants.STRING
+                    )
+                )
+            ).full();
+        } catch (final XPathExpressionException exception) {
+            throw new IllegalStateException(
+                String.format("Can't extract class name from the '%s' source", this.source),
+                exception
+            );
+        }
     }
 
     /**
@@ -112,9 +153,9 @@ public final class XmirRepresentation {
      * @return Array of bytes.
      */
     public Bytecode toBytecode() {
-        final XML xmir = this.xml.value();
+        final Node xmir = this.xml.value();
         try {
-            new Schema(xmir).check();
+            new OptimizedSchema(xmir).check();
             return new XmlProgram(xmir).bytecode().bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
@@ -134,7 +175,7 @@ public final class XmirRepresentation {
      * @param path Path to an XML file.
      * @return Lazy XML.
      */
-    private static Unchecked<XML> fromFile(final Path path) {
+    private static Unchecked<Node> fromFile(final Path path) {
         return new Unchecked<>(new Synced<>(new Sticky<>(() -> XmirRepresentation.open(path))));
     }
 
@@ -142,16 +183,21 @@ public final class XmirRepresentation {
      * Convert a path to XML.
      * @param path Path to XML file.
      * @return XML.
+     * @checkstyle IllegalCatchCheck (20 lines)
      */
-    private static XML open(final Path path) {
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    private static Node open(final Path path) {
         try {
-            return new XMLDocument(path.toFile());
+            return XmirRepresentation.DOC_FACTORY
+                .newDocumentBuilder()
+                .parse(path.toFile())
+                .getDocumentElement();
         } catch (final FileNotFoundException exception) {
             throw new IllegalStateException(
                 String.format("Can't find file '%s'", path),
                 exception
             );
-        } catch (final IllegalArgumentException broken) {
+        } catch (final Exception broken) {
             throw new IllegalStateException(
                 String.format(
                     "Can't parse XML from the file '%s'",
@@ -159,6 +205,65 @@ public final class XmirRepresentation {
                 ),
                 broken
             );
+        }
+    }
+
+    /**
+     * Optimized schema for XMIR.
+     * It is an optimized version of {@link org.eolang.parser.Schema} class.
+     * @since 0.6
+     * @todo #889:30min Use the `Schema` class instead of `OptimizedSchema`.
+     *  The `OptimizedSchema` class is a temporary solution to avoid the performance
+     *  issues with the `Schema` class. We will be able to remove this class after
+     *  the following issue is resolved:
+     *  https://github.com/jcabi/jcabi-xml/issues/277
+     */
+    private static class OptimizedSchema {
+        /**
+         * Node.
+         */
+        private final Node node;
+
+        /**
+         * Schema factory.
+         */
+        private final SchemaFactory factory;
+
+        /**
+         * Constructor.
+         * @param node Node.
+         */
+        OptimizedSchema(final Node node) {
+            this(node, SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema"));
+        }
+
+        /**
+         * Constructor.
+         * @param node Node.
+         * @param factory Schema factory.
+         */
+        private OptimizedSchema(final Node node, final SchemaFactory factory) {
+            this.node = node;
+            this.factory = factory;
+        }
+
+        /**
+         * Check the node.
+         */
+        void check() {
+            try {
+                this.factory.newSchema(
+                    new StreamSource(new UncheckedInput(new ResourceOf("XMIR.xsd")).stream())
+                ).newValidator().validate(new DOMSource(this.node));
+            } catch (final IOException | SAXException exception) {
+                throw new IllegalStateException(
+                    String.format(
+                        "There are XSD violations, see the log",
+                        exception.getMessage()
+                    ),
+                    exception
+                );
+            }
         }
     }
 }

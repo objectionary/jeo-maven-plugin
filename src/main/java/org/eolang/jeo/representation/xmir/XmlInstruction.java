@@ -64,14 +64,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
 
     /**
      * Constructor.
-     * @param xml XML string that represents an instruction.
-     */
-    XmlInstruction(final String xml) {
-        this(new XmlNode(xml));
-    }
-
-    /**
-     * Constructor.
      * @param xmlnode Instruction node.
      */
     XmlInstruction(final XmlNode xmlnode) {

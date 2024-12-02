@@ -23,7 +23,9 @@
  */
 package org.eolang.jeo.representation;
 
+import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -34,6 +36,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -151,6 +154,60 @@ final class XmirRepresentationTest {
                     xmir
                 )
             )
+        );
+    }
+
+    /**
+     * This is a performance test, which is disabled by default.
+     * It is used to measure the performance of the conversion of the EO object
+     * into the bytecode representation and back.
+     */
+    @Test
+    @Disabled
+    @SuppressWarnings("PMD.GuardLogStatement")
+    void convertsToXmirAndBack() {
+        final Bytecode before = new BytecodeProgram(
+            new BytecodeClass("org/eolang/foo/Math")
+                .helloWorldMethod()
+        ).bytecode();
+        final int attempts = 500;
+        final long start = System.currentTimeMillis();
+        for (int current = 0; current < attempts; ++current) {
+            final Bytecode actual = new XmirRepresentation(
+                new BytecodeRepresentation(
+                    before
+                ).toEO()
+            ).toBytecode();
+            MatcherAssert.assertThat(
+                String.format(XmirRepresentationTest.MESSAGE, before, actual),
+                actual,
+                Matchers.equalTo(before)
+            );
+        }
+        final long end = System.currentTimeMillis();
+        Logger.info(
+            this,
+            "We made %d attempts to convert bytecode to xmir and back in %[ms]s",
+            attempts,
+            end - start
+        );
+    }
+
+    @Test
+    void throwsExceptionIfXmirIsInvalid() {
+        MatcherAssert.assertThat(
+            "We excpect that XSD violation message will be easily understandable by developers",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new XmirRepresentation(
+                    new XMLDocument(
+                        new BytecodeProgram(
+                            new BytecodeClass("org/eolang/foo/Math")
+                        ).xml().toString().replace("<head>package</head>", "")
+                    )
+                ).toBytecode()
+            ).getCause().getMessage(),
+            Matchers.containsString("There are XSD violations, see the log")
         );
     }
 }

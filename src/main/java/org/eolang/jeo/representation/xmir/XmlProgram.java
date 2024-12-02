@@ -40,13 +40,14 @@ import org.xembly.Xembler;
  * @since 0.1
  */
 public final class XmlProgram {
-    /**
-     * Program node name.
-     */
-    private static final String PROGRAM = "program";
 
     /**
      * Root node.
+     * Here we use the {@link Node} class instead of the {@link com.jcabi.xml.XML}
+     * by performance reasons.
+     * In some cases {@link Node} 10 times faster than {@link com.jcabi.xml.XML}.
+     * You can read more about it here:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/pull/924">Optimization</a>
      */
     private final Node root;
 
@@ -64,7 +65,7 @@ public final class XmlProgram {
      * @param xml Raw XMIR.
      */
     public XmlProgram(final XML xml) {
-        this(xml.node());
+        this(xml.node().getFirstChild());
     }
 
     /**
@@ -80,7 +81,7 @@ public final class XmlProgram {
                         new DirectivesClass(name), new DirectivesMetas(name)
                     )
                 ).xmlQuietly()
-            ).node()
+            )
         );
     }
 
@@ -89,7 +90,7 @@ public final class XmlProgram {
      *
      * @param root Root node.
      */
-    private XmlProgram(final Node root) {
+    public XmlProgram(final Node root) {
         this.root = root;
     }
 
@@ -123,7 +124,6 @@ public final class XmlProgram {
      */
     private XmlClass top() {
         return new XmlNode(this.root)
-            .child(XmlProgram.PROGRAM)
             .child("objects")
             .child("o")
             .toClass();
