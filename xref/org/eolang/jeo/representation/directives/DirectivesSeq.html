@@ -90,32 +90,27 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      @Override
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a>(
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>              String.format(<span class="jxr_string">"seq.of%d"</span>, <strong class="jxr_keyword">this</strong>.size()),
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>              <strong class="jxr_keyword">this</strong>.name,
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>              <strong class="jxr_keyword">this</strong>.stream().map(Directives::<strong class="jxr_keyword">new</strong>).collect(Collectors.toList())
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>          ).iterator();
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      }
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     * Size of the sequence.</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">     * @return Size.</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">long</strong> size() {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.stream().count();
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>      }
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">     * Stream of directives.</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">     * @return Stream of directives.</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">private</strong> Stream&lt;Directives&gt; stream() {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.directives.stream()
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>             .filter(Objects::nonNull)
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>             .filter(dirs -&gt; <strong class="jxr_keyword">new</strong> Unchecked&lt;&gt;(<strong class="jxr_keyword">new</strong> LengthOf(dirs)).value() &gt; 0)
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>             .map(Directives::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>     }
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">final</strong> List&lt;Directives&gt; all = <strong class="jxr_keyword">this</strong>.stream()
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>              .map(Directives::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>              .collect(Collectors.toList());
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a>(
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>              String.format(<span class="jxr_string">"seq.of%d"</span>, all.size()),
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">this</strong>.name,
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>              all
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          ).iterator();
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>      }
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">     * Stream of directives.</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">     * @return Stream of directives.</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      <strong class="jxr_keyword">private</strong> Stream&lt;Directives&gt; stream() {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.directives.stream()
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>             .filter(Objects::nonNull)
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>             .filter(dirs -&gt; <strong class="jxr_keyword">new</strong> Unchecked&lt;&gt;(<strong class="jxr_keyword">new</strong> LengthOf(dirs)).value() &gt; 0)
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>             .map(Directives::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>     }
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
