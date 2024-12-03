@@ -151,7 +151,7 @@ public final class DirectivesValue implements Iterable<Directive> {
     private static String bytesToHex(final byte[] bytes) {
         final String res;
         if (bytes == null || bytes.length == 0) {
-            res = "";
+            res = "--";
         } else {
             final int length = bytes.length;
             final char[] hex = new char[length * 3];
