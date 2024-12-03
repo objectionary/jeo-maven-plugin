@@ -136,6 +136,12 @@ public final class CanonicalXmir {
      * Unroll all the changes made by the "phi/unphi" transformations.
      * @param parsed Parsed XMIR.
      * @return Unrolled XMIR.
+     * @todo #923:30min Do we need all the transformations in the unroll method?
+     *  Most probably, some of the steps might be skipped and removed from the unroll method.
+     *  We need to investigate which steps are necessary and which are not.
+     *  This issue implies that it's possible:
+     *  https://github.com/objectionary/jeo-maven-plugin/issues/923
+     *  At least for add-cuts.xsl, remove-cuts.xsl, and vars-float-down.xsl.
      */
     private static XML unroll(final XML parsed) {
         return new Xsline(
@@ -152,7 +158,18 @@ public final class CanonicalXmir {
                         )
                     ),
                     new TrClasspath<Shift>(
-                        "/org/eolang/parser/add-refs.xsl"
+                        "/org/eolang/parser/add-refs.xsl",
+                        "/org/eolang/parser/add-cuts.xsl"
+                    ).back(),
+                    new TrDefault<Shift>(
+                        new StEndless(
+                            new StClasspath(
+                                "/org/eolang/parser/vars-float-down.xsl"
+                            )
+                        )
+                    ),
+                    new TrClasspath<Shift>(
+                        "/org/eolang/parser/remove-cuts.xsl"
                     ).back()
                 ),
                 CanonicalXmir.class,
