@@ -152,18 +152,7 @@ public final class CanonicalXmir {
                         )
                     ),
                     new TrClasspath<Shift>(
-                        "/org/eolang/parser/add-refs.xsl",
-                        "/org/eolang/parser/add-cuts.xsl"
-                    ).back(),
-                    new TrDefault<Shift>(
-                        new StEndless(
-                            new StClasspath(
-                                "/org/eolang/parser/vars-float-down.xsl"
-                            )
-                        )
-                    ),
-                    new TrClasspath<Shift>(
-                        "/org/eolang/parser/remove-cuts.xsl"
+                        "/org/eolang/parser/add-refs.xsl"
                     ).back()
                 ),
                 CanonicalXmir.class,
