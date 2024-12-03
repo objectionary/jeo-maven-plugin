@@ -76,14 +76,6 @@ public final class DirectivesInstruction implements Iterable<Directive> {
     }
 
     /**
-     * Get opcode name.
-     * @return Opcode name.
-     */
-    private String name() {
-        return new OpcodeName(this.opcode).asString();
-    }
-
-    /**
      * Base of the instruction.
      * @return String base.
      */
