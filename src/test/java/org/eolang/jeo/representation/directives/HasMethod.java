@@ -296,9 +296,8 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          */
         Stream<String> checks(final String root) {
             final String instruction = String.format(
-                "%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'opcode') and contains(@name,'%s')]",
-                root,
-                new OpcodeName(this.opcode).simplified()
+                "%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'opcode')]",
+                root
             );
             return Stream.concat(
                 Stream.of(
