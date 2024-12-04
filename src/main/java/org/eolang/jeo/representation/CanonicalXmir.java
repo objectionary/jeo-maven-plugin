@@ -39,7 +39,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.cactoos.io.InputOf;
 import org.eolang.parser.EoSyntax;
-import org.eolang.parser.xmir.Xmir;
+import org.eolang.parser.Xmir;
 
 /**
  * Canonical XMIR.
@@ -109,7 +109,7 @@ public final class CanonicalXmir {
      * @return EO.
      */
     private String toEo() {
-        return new Xmir.Default(this.canonical).toEO();
+        return new Xmir(this.canonical).toEO();
     }
 
     /**

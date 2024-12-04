@@ -23,9 +23,9 @@
  */
 package org.eolang.jeo.representation;
 
+import com.jcabi.xml.StrictXML;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import org.eolang.parser.Schema;
 import org.xembly.Directive;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -58,7 +58,7 @@ final class VerifiedEo {
      */
     XML asXml() throws ImpossibleModificationException {
         final XML res = new XMLDocument(new Xembler(this.directives).xml());
-        new Schema(res).check();
+        new StrictXML(res).validate();
         return res;
     }
 
