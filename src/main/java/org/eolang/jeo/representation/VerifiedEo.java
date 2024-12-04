@@ -61,5 +61,4 @@ final class VerifiedEo {
         new StrictXML(res).validate();
         return res;
     }
-
 }
