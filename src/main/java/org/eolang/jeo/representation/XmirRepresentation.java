@@ -150,7 +150,7 @@ public final class XmirRepresentation {
     public Bytecode toBytecode() {
         final Node xmir = this.xml.value();
         try {
-            new StrictXML(new XMLDocument(xmir)).validate();
+            new StrictXML(new XMLDocument(new XMLDocument(xmir).toString())).validate();
             return new XmlProgram(xmir).bytecode().bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
