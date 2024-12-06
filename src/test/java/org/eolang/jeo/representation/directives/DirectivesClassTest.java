@@ -55,7 +55,7 @@ final class DirectivesClassTest {
             new SameXml(
                 String.join(
                     "",
-                    "<o abstract='' name='Neo'>",
+                    "<o base='jeo.class' name='Neo'>",
                     "<o base='jeo.int' name='version'><o base='org.eolang.bytes'>00-00-00-00-00-00-00-34</o></o>",
                     "<o base='jeo.int' name='access'><o base='org.eolang.bytes'>00-00-00-00-00-00-00-00</o></o>",
                     "<o base='org.eolang.string' name='signature'><o base='org.eolang.bytes'>--</o></o>",

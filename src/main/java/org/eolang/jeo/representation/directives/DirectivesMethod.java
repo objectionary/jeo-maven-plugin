@@ -159,7 +159,8 @@ public final class DirectivesMethod implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesAbstractObject(
+        return new DirectivesJeoObject(
+            "method",
             new PrefixedName(this.name.encoded()).encode(),
             Stream.concat(
                 Stream.of(

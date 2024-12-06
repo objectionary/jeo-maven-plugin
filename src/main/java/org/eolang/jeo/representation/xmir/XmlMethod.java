@@ -202,7 +202,7 @@ public final class XmlMethod {
      * @return Maxs.
      */
     private Optional<XmlMaxs> maxs() {
-        return this.node.optchild("name", "maxs").map(XmlMaxs::new);
+        return this.node.optchild("base", "jeo.maxs").map(XmlMaxs::new);
     }
 
     /**
