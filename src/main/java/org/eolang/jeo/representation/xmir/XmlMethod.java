@@ -189,7 +189,7 @@ public final class XmlMethod {
      * @return Instructions.
      */
     private List<XmlBytecodeEntry> instructions() {
-        return this.node.child("name", "@")
+        return this.node.child("name", "body")
             .children()
             .filter(element -> element.attribute("base").isPresent())
             .map(XmlNode::toEntry)
