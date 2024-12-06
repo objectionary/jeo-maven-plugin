@@ -17,8 +17,11 @@ optimized performance.
 
 # How to use
 
-The plugin can be run using several approaches but for all of them you need
-at least Maven 3.1.+ and Java 8+.
+The plugin can be run using several approaches, but for all of them, you need at
+least Maven 3.1+ and Java 11+. (Actually, the plugin requires Java 8+, but since
+the main dependency [eo](https://github.com/objectionary/eo) requires Java 11,
+we are obligated to use it as well.)
+
 The plugin can convert compiled classes into EOlang by using
 the `disassemble` goal. The `assemble` goal can convert EOlang back
 into bytecode. The default phase for the plugin
@@ -91,12 +94,13 @@ In order to include debug information in the generated EO files, you can set
 `debug` option.
 
 ```xml
+
 <configuration>
   <mode>debug</mode>
 </configuration>
 ```
 
-This option will add line numbers and local variable names to the EO files 
+This option will add line numbers and local variable names to the EO files
 together with their corresponding labels.
 
 ### Disable bytecode verification
@@ -385,5 +389,5 @@ before sending us your pull request please run full Maven build:
 $ mvn clean install -Pqulice
 ```
 
-You will need [Maven 3.3+](https://maven.apache.org) and Java 8+ installed.
+You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
 
