@@ -66,7 +66,7 @@ public final class DirectivesSeq implements Iterable<Directive> {
      */
     @SafeVarargs
     DirectivesSeq(final Iterable<Directive>... elements) {
-        this("@", elements);
+        this("seq", elements);
     }
 
     /**

@@ -198,7 +198,7 @@ final class XmirRepresentationTest {
         MatcherAssert.assertThat(
             "We excpect that XSD violation message will be easily understandable by developers",
             Assertions.assertThrows(
-                IllegalStateException.class,
+                IllegalArgumentException.class,
                 () -> new XmirRepresentation(
                     new XMLDocument(
                         new BytecodeProgram(
@@ -207,7 +207,24 @@ final class XmirRepresentationTest {
                     )
                 ).toBytecode()
             ).getCause().getMessage(),
-            Matchers.containsString("There are XSD violations, see the log")
+            Matchers.containsString(
+                "1 error(s) in XML document: -1:-1: cvc-complex-type.2.4.a: Invalid content was found starting with element 'tail'. One of '{head}' is expected."
+            )
+        );
+    }
+
+    @Test
+    void createsXmirRepresentationFromFile(@TempDir final Path path) throws IOException {
+        final BytecodeProgram program = new BytecodeProgram(
+            new BytecodeClass("org/eolang/foo/Math").helloWorldMethod()
+        );
+        final Bytecode expected = program.bytecode();
+        final Path address = path.resolve("Math.xmir");
+        Files.write(address, program.xml().toString().getBytes(StandardCharsets.UTF_8));
+        MatcherAssert.assertThat(
+            "We expect that Xmir representation will be created from the file successfully",
+            new XmirRepresentation(address).toBytecode(),
+            Matchers.equalTo(expected)
         );
     }
 }
