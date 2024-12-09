@@ -28,6 +28,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
+import org.cactoos.scalar.Sticky;
 import org.eolang.jeo.representation.License;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -118,7 +119,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
             .add("listing")
             .set(this.listing)
             .up()
-            .add("license").set(new License()).up()
+            .add("license").set(new Sticky<>(new License())).up()
             .append(this.metas)
             .attr("ms", this.milliseconds)
             .add("objects");

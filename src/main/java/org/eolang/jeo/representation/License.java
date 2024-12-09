@@ -23,9 +23,12 @@
  */
 package org.eolang.jeo.representation;
 
+import com.jcabi.http.request.JdkRequest;
+import jakarta.ws.rs.HttpMethod;
+import jakarta.ws.rs.core.HttpHeaders;
+import java.io.IOException;
 import org.cactoos.Scalar;
-import org.cactoos.io.ResourceOf;
-import org.cactoos.text.TextOf;
+import org.cactoos.text.FormattedText;
 
 /**
  * Representation of project license.
@@ -35,29 +38,44 @@ import org.cactoos.text.TextOf;
 public final class License implements Scalar<String> {
 
     /**
-     * The name of file with license.
+     * Request url.
      */
-    private final String name;
+    private final String url;
 
     /**
      * Ctor with default value.
      */
     public License() {
-        this("LICENSE.txt");
+        this(
+            new FormattedText(
+                "%s://%s%s",
+                "https",
+                "raw.githubusercontent.com",
+                "/objectionary/jeo-maven-plugin/refs/heads/master/LICENSE.txt"
+            ).toString()
+        );
     }
 
     /**
      * Primary ctor.
      *
-     * @param name The name of file with license.
+     * @param url The url to fetch the license.
      */
-    public License(final String name) {
-        this.name = name;
+    public License(final String url) {
+        this.url = url;
     }
 
     @Override
     public String value() {
-        return new TextOf(new ResourceOf(this.name)).toString();
+        try {
+            return new JdkRequest(this.url)
+                .method(HttpMethod.GET)
+                .header(HttpHeaders.ACCEPT, "text/html")
+                .fetch()
+                .body();
+        } catch (final IOException exc) {
+            throw new IllegalStateException("Can't fetch the license", exc);
+        }
     }
 
     @Override

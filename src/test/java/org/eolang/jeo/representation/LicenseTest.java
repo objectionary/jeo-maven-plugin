@@ -23,16 +23,19 @@
  */
 package org.eolang.jeo.representation;
 
+import com.yegor256.WeAreOnline;
 import org.cactoos.text.FormattedText;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
  * Test suite for {@link License}.
  *
  * @since 0.6.27
  */
+@ExtendWith(WeAreOnline.class)
 final class LicenseTest {
 
     @Test
@@ -40,10 +43,10 @@ final class LicenseTest {
         final String name = "LICENSE.txt";
         MatcherAssert.assertThat(
             new FormattedText(
-                "Unexpected file:'%s' content",
+                "Unexpected license content",
                 name
             ).asString(),
-            new License(name).value(),
+            new License().value(),
             Matchers.containsString("MIT")
         );
     }
