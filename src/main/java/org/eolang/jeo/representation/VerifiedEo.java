@@ -23,9 +23,13 @@
  */
 package org.eolang.jeo.representation;
 
+import com.jcabi.xml.StrictXML;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import org.eolang.parser.Schema;
+import java.io.IOException;
+import java.util.Collection;
+import org.eolang.lints.Defect;
+import org.eolang.lints.Program;
 import org.xembly.Directive;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -58,8 +62,24 @@ final class VerifiedEo {
      */
     XML asXml() throws ImpossibleModificationException {
         final XML res = new XMLDocument(new Xembler(this.directives).xml());
-        new Schema(res).check();
+        try {
+            final Collection<Defect> defects = new Program(
+                new StrictXML(res)
+            ).defects();
+            if (defects.size() > 0) {
+                throw new IllegalStateException(
+                    String.format(
+                        "EO is incorrect: %s",
+                        defects
+                    )
+                );
+            }
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                "Failed to verify EO",
+                exception
+            );
+        }
         return res;
     }
-
 }
