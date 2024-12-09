@@ -121,6 +121,11 @@ SOFTWARE.
       <!-- version from parent POM -->
     </dependency>
     <dependency>
+      <groupId>org.eolang</groupId>
+      <artifactId>lints</artifactId>
+      <version>0.0.21</version>
+    </dependency>
+    <dependency>
       <groupId>org.cactoos</groupId>
       <artifactId>cactoos</artifactId>
       <version>0.56.1</version>
