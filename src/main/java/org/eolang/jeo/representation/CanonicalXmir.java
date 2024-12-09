@@ -147,17 +147,17 @@ public final class CanonicalXmir {
         return new Xsline(
             new TrFast(
                 new TrJoined<Shift>(
-                    new TrClasspath<Shift>(
+                    new TrClasspath<>(
                         "/org/eolang/parser/wrap-method-calls.xsl"
                     ).back(),
-                    new TrDefault<Shift>(
+                    new TrDefault<>(
                         new StEndless(
                             new StClasspath(
                                 "/org/eolang/parser/roll-bases.xsl"
                             )
                         )
                     ),
-                    new TrClasspath<Shift>(
+                    new TrClasspath<>(
                         "/org/eolang/parser/add-refs.xsl",
                         "/org/eolang/parser/add-cuts.xsl"
                     ).back(),
@@ -169,7 +169,9 @@ public final class CanonicalXmir {
                         )
                     ),
                     new TrClasspath<Shift>(
-                        "/org/eolang/parser/remove-cuts.xsl"
+                        "/org/eolang/parser/remove-cuts.xsl",
+                        "/org/eolang/parser/add-default-package.xsl",
+                        "/org/eolang/parser/explicit-data.xsl"
                     ).back()
                 ),
                 CanonicalXmir.class,
