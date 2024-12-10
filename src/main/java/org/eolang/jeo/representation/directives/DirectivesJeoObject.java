@@ -23,11 +23,9 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -39,8 +37,6 @@ import org.xembly.Directives;
  * @since 0.6
  */
 public final class DirectivesJeoObject implements Iterable<Directive> {
-
-    private final static Random RANDOM = new SecureRandom();
 
     /**
      * The base of the object.
@@ -122,14 +118,14 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final int number = Math.abs(DirectivesJeoObject.RANDOM.nextInt());
         final Directives directives = new Directives().add("o")
             .attr("base", new JeoFqn(this.base).fqn());
         if (!this.name.isEmpty()) {
-            directives.attr("name", String.format("%s-%d", this.name, number));
+            directives.attr("name", this.name);
         }
         return directives
             .append(this.inner.stream().reduce(new Directives(), Directives::append))
-            .up().iterator();
+            .up()
+            .iterator();
     }
 }
