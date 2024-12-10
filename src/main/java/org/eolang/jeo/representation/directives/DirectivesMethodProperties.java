@@ -38,8 +38,6 @@ import org.xembly.Directives;
  */
 public final class DirectivesMethodProperties implements Iterable<Directive> {
 
-    private static final Random RANDOM = new SecureRandom();
-
     /**
      * Method access modifiers.
      */
@@ -129,12 +127,11 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final int number = Math.abs(DirectivesMethodProperties.RANDOM.nextInt());
         return new Directives()
-            .append(new DirectivesValue(String.format("access-%d", number), this.access))
-            .append(new DirectivesValue(String.format("descriptor-%d", number), this.descriptor))
-            .append(new DirectivesValue(String.format("signature-%d", number), this.signature))
-            .append(new DirectivesValues(String.format("exceptions-%d", number), this.exceptions))
+            .append(new DirectivesValue("access", this.access))
+            .append(new DirectivesValue("descriptor", this.descriptor))
+            .append(new DirectivesValue("signature", this.signature))
+            .append(new DirectivesValues("exceptions", this.exceptions))
             .append(this.max.get())
             .append(this.params)
             .iterator();
