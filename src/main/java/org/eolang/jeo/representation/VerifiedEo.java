@@ -27,7 +27,9 @@ import com.jcabi.xml.StrictXML;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Program;
@@ -65,9 +67,12 @@ final class VerifiedEo {
     XML asXml() throws ImpossibleModificationException {
         final XML res = new XMLDocument(new Xembler(this.directives).xml());
         try {
-            final Collection<Defect> defects = new Program(
-                new StrictXML(res)
-            ).defects().stream().filter(defect -> defect.severity().equals(Severity.ERROR))
+            final Collection<Defect> defects = Optional.ofNullable(new Program(
+                        new StrictXML(res)
+                    ).defects()
+                ).orElse(new ArrayList<>(0))
+                .stream()
+                .filter(defect -> defect.severity().equals(Severity.ERROR))
                 .collect(Collectors.toList());
             if (defects.size() > 0) {
                 throw new IllegalStateException(
