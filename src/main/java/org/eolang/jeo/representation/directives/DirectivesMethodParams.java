@@ -60,7 +60,6 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "params",
-//            "method-params",
             this.params.stream().map(Directives::new).collect(Collectors.toList())
         ).iterator();
     }

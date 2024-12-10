@@ -53,6 +53,11 @@ final class XmirRepresentationTest {
     private static final String MESSAGE =
         "The bytecode representation of the EO object is not correct,%nexpected:%n%s%nbut got:%n%s";
 
+    /**
+     * Math class name.
+     */
+    private static final String MATH = "org/eolang/foo/Math";
+
     @Test
     void retrievesName() {
         final String name = "Math";
@@ -80,7 +85,7 @@ final class XmirRepresentationTest {
             "The XML representation of the EO object is not correct",
             new BytecodeProgram(
                 "org.eolang",
-                new BytecodeClass("org/eolang/foo/Math")
+                new BytecodeClass(XmirRepresentationTest.MATH)
             ).xml(),
             XhtmlMatchers.hasXPath("/program[@name='j$Math']")
         );
@@ -139,7 +144,7 @@ final class XmirRepresentationTest {
         Files.write(
             xmir,
             new BytecodeProgram(
-                new BytecodeClass("org/eolang/foo/Math")
+                new BytecodeClass(XmirRepresentationTest.MATH)
             ).xml().toString().substring(42).getBytes(StandardCharsets.UTF_8)
         );
         MatcherAssert.assertThat(
@@ -167,7 +172,7 @@ final class XmirRepresentationTest {
     @SuppressWarnings("PMD.GuardLogStatement")
     void convertsToXmirAndBack() {
         final Bytecode before = new BytecodeProgram(
-            new BytecodeClass("org/eolang/foo/Math")
+            new BytecodeClass(XmirRepresentationTest.MATH)
                 .helloWorldMethod()
         ).bytecode();
         final int attempts = 500;
@@ -202,7 +207,7 @@ final class XmirRepresentationTest {
                 () -> new XmirRepresentation(
                     new XMLDocument(
                         new BytecodeProgram(
-                            new BytecodeClass("org/eolang/foo/Math")
+                            new BytecodeClass(XmirRepresentationTest.MATH)
                         ).xml().toString().replace("<head>package</head>", "")
                     )
                 ).toBytecode()
@@ -216,7 +221,7 @@ final class XmirRepresentationTest {
     @Test
     void createsXmirRepresentationFromFile(@TempDir final Path path) throws IOException {
         final BytecodeProgram program = new BytecodeProgram(
-            new BytecodeClass("org/eolang/foo/Math").helloWorldMethod()
+            new BytecodeClass(XmirRepresentationTest.MATH).helloWorldMethod()
         );
         final Bytecode expected = program.bytecode();
         final Path address = path.resolve("Math.xmir");

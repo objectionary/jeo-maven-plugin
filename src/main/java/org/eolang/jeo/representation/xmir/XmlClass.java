@@ -142,8 +142,6 @@ public final class XmlClass {
      */
     private Optional<XmlAnnotations> annotations() {
         return this.node.children()
-//            .filter(o -> o.attribute("name").isPresent())
-//            .filter(o -> o.attribute("name").get().startsWith("annotations"))
             .filter(o -> o.hasAttribute("name", "annotations"))
             .findFirst()
             .map(XmlAnnotations::new);

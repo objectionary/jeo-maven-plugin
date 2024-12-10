@@ -23,10 +23,8 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;

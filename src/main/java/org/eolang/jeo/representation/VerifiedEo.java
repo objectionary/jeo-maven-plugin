@@ -27,9 +27,7 @@ import com.jcabi.xml.StrictXML;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Program;
@@ -63,15 +61,18 @@ final class VerifiedEo {
      * We also check if the EO is correct.
      * @return XML representation.
      * @throws ImpossibleModificationException If something goes wrong.
+     * @todo #939:60min Fix All The Warnings in the EO Representation.
+     *  Here we just catch only the errors in the EO representation.
+     *  We need to fix all the warnings in the EO representation as well.
      */
     XML asXml() throws ImpossibleModificationException {
         final XML res = new XMLDocument(new Xembler(this.directives).xml());
         try {
-            final Collection<Defect> defects = VerifiedEo.defects(res)
+            final Collection<Defect> defects = new Program(new StrictXML(res)).defects()
                 .stream()
-                .filter(defect -> defect.severity().equals(Severity.ERROR))
+                .filter(defect -> defect.severity() == Severity.ERROR)
                 .collect(Collectors.toList());
-            if (defects.size() > 0) {
+            if (!defects.isEmpty()) {
                 throw new IllegalStateException(
                     String.format(
                         "EO is incorrect: %s, %n%s%n",
@@ -82,19 +83,10 @@ final class VerifiedEo {
             }
         } catch (final IOException exception) {
             throw new IllegalStateException(
-                "Failed to verify EO",
+                String.format("Failed to verify EO: %n%s%n", res),
                 exception
             );
         }
         return res;
-    }
-
-    private static Collection<Defect> defects(final XML res) throws IOException {
-//        return Optional.ofNullable(
-//            new Program(
-//                new StrictXML(res)
-//            ).defects()
-//        ).orElse(new ArrayList<>(0));
-        return new Program(new StrictXML(res)).defects();
     }
 }

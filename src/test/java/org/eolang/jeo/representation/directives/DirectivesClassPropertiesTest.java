@@ -32,7 +32,6 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link org.eolang.jeo.representation.directives.DirectivesClassProperties}.
- *
  * @since 0.1.0
  */
 final class DirectivesClassPropertiesTest {
@@ -59,9 +58,7 @@ final class DirectivesClassPropertiesTest {
                 "/o/o[contains(@base,'org.eolang.string') and contains(@name,'signature')]",
                 "/o/o[contains(@base,'org.eolang.string') and contains(@name,'supername')]",
                 "/o/o[contains(@base,'jeo.seq.of1') and contains(@name,'interfaces')]"
-
             )
         );
     }
-
 }

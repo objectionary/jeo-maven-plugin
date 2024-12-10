@@ -41,6 +41,9 @@ import org.xembly.Directive;
 @EqualsAndHashCode
 public final class DirectivesAnnotations implements Iterable<Directive> {
 
+    /**
+     * Random number generator.
+     */
     private static final Random RANDOM = new SecureRandom();
 
     /**

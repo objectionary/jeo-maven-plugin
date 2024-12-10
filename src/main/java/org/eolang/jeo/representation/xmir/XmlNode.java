@@ -112,24 +112,17 @@ public final class XmlNode {
      * @return Attribute.
      */
     public Optional<String> attribute(final String name) {
+        Optional<String> result = Optional.empty();
         final NamedNodeMap attributes = this.node.getAttributes();
         final int length = attributes.getLength();
-        for (int index = 0; index < length; index++) {
+        for (int index = 0; index < length; ++index) {
             final Node item = attributes.item(index);
             if (item.getNodeName().startsWith(name)) {
-                return Optional.of(item.getTextContent());
+                result = Optional.of(item.getTextContent());
+                break;
             }
         }
-        return Optional.empty();
-
-//        final Optional<String> result;
-//        final NamedNodeMap attrs = this.node.getAttributes();
-//        if (attrs == null) {
-//            result = Optional.empty();
-//        } else {
-//            result = Optional.ofNullable(attrs.getNamedItem(name)).map(Node::getTextContent);
-//        }
-//        return result;
+        return result;
     }
 
     /**
