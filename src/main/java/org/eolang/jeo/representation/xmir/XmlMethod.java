@@ -290,6 +290,8 @@ public final class XmlMethod {
      */
     private BytecodeAnnotations annotations() {
         return this.node.children()
+//            .filter(o -> o.attribute("name").isPresent())
+//            .filter(o -> o.attribute("name").get().startsWith("annotations"))
             .filter(element -> element.hasAttribute("name", "annotations"))
             .findFirst()
             .map(XmlAnnotations::new)

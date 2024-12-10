@@ -23,10 +23,12 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cactoos.scalar.LengthOf;
@@ -80,14 +82,17 @@ public final class DirectivesSeq implements Iterable<Directive> {
         this(name, Arrays.asList(elements));
     }
 
+    private final static Random RANDOM = new SecureRandom();
+
     @Override
     public Iterator<Directive> iterator() {
+        final int number = RANDOM.nextInt();
         final List<Directives> all = this.stream()
             .map(Directives::new)
             .collect(Collectors.toList());
         return new DirectivesJeoObject(
             String.format("seq.of%d", all.size()),
-            this.name,
+            String.format("%s-%d", this.name, number),
             all
         ).iterator();
     }
