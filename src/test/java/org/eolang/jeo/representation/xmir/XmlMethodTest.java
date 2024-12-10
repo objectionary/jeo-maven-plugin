@@ -109,7 +109,9 @@ final class XmlMethodTest {
                                 new BytecodeMethod(
                                     "someMethodName"
                                 ).directives()
-                            ).xpath(".//o[@name='exceptions']").append(new DirectivesBytes("???"))
+                            ).xpath(
+                                ".//o[contains(@name,'exceptions')]"
+                            ).append(new DirectivesBytes("???"))
                         ).xmlQuietly()
                     )
                 ).bytecode()

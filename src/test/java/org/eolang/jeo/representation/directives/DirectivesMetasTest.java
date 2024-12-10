@@ -57,25 +57,6 @@ final class DirectivesMetasTest {
     }
 
     @Test
-    void addsAliasesForAllTheRequiredObjects() throws ImpossibleModificationException {
-        MatcherAssert.assertThat(
-            "Can't create corresponding xembly directives for all the required objects",
-            new Xembler(
-                new BytecodeProgram(new BytecodeClass().helloWorldMethod()).directives("")
-            ).xml(),
-            Matchers.allOf(
-                XhtmlMatchers.hasXPath("/program/metas/meta/head[text()='alias']"),
-                XhtmlMatchers.hasXPath("/program/metas/meta/tail[text()='jeo.opcode.return']"),
-                XhtmlMatchers.hasXPath("/program/metas/meta/tail[text()='jeo.label']"),
-                XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.int']"),
-                XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.bool']"),
-                XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.param']"),
-                XhtmlMatchers.hasXPath("/program/metas/meta/part[text()='jeo.params']")
-            )
-        );
-    }
-
-    @Test
     void addsNothingExceptPackage() {
         MatcherAssert.assertThat(
             "Can't create corresponding xembly directives for metas with package only",

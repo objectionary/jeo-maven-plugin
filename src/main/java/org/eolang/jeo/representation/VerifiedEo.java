@@ -67,10 +67,7 @@ final class VerifiedEo {
     XML asXml() throws ImpossibleModificationException {
         final XML res = new XMLDocument(new Xembler(this.directives).xml());
         try {
-            final Collection<Defect> defects = Optional.ofNullable(new Program(
-                        new StrictXML(res)
-                    ).defects()
-                ).orElse(new ArrayList<>(0))
+            final Collection<Defect> defects = VerifiedEo.defects(res)
                 .stream()
                 .filter(defect -> defect.severity().equals(Severity.ERROR))
                 .collect(Collectors.toList());
@@ -90,5 +87,14 @@ final class VerifiedEo {
             );
         }
         return res;
+    }
+
+    private static Collection<Defect> defects(final XML res) throws IOException {
+//        return Optional.ofNullable(
+//            new Program(
+//                new StrictXML(res)
+//            ).defects()
+//        ).orElse(new ArrayList<>(0));
+        return new Program(new StrictXML(res)).defects();
     }
 }
