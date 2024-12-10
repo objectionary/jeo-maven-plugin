@@ -58,7 +58,14 @@ SOFTWARE.
     <xsl:variable name="found" select="key('o-by-line', $reference)"/>
     <xsl:element name="o">
       <xsl:copy-of select="$found/@*[name() != 'cut']"/>
-      <xsl:apply-templates select="$found/o"/>
+      <xsl:choose>
+        <xsl:when test="$found/o">
+          <xsl:apply-templates select="$found/o"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$found"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:element>
   </xsl:template>
 </xsl:stylesheet>

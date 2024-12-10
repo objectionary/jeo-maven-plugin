@@ -154,10 +154,7 @@ public final class BytecodeProgram {
         return new DirectivesProgram(
             listing,
             clazz,
-            new DirectivesMetas(
-                classname,
-                clazz
-            )
+            new DirectivesMetas(classname)
         );
     }
 }

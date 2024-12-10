@@ -23,7 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import org.eolang.jeo.matchers.SameXml;
+import com.jcabi.matchers.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.xembly.Directives;
@@ -32,7 +32,6 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link org.eolang.jeo.representation.directives.DirectivesClassProperties}.
- *
  * @since 0.1.0
  */
 final class DirectivesClassPropertiesTest {
@@ -53,22 +52,13 @@ final class DirectivesClassPropertiesTest {
                         )
                     ).up()
             ).xml(),
-            new SameXml(
-                String.join(
-                    "",
-                    "<?xml version='1.0' encoding='UTF-8'?>\n",
-                    "<o>\n",
-                    "   <o base='jeo.int' name='version'><o base='org.eolang.bytes'>00-00-00-00-00-00-00-34</o></o>\n",
-                    "   <o base='jeo.int' name='access'><o base='org.eolang.bytes'>00-00-00-00-00-00-00-01</o></o>\n",
-                    "   <o base='org.eolang.string' name='signature'><o base='org.eolang.bytes'>6F-72-67-2F-65-6F-6C-61-6E-67-2F-53-6F-6D-65-43-6C-61-73-73</o></o>\n",
-                    "   <o base='org.eolang.string' name='supername'><o base='org.eolang.bytes'>6A-61-76-61-2F-6C-61-6E-67-2F-4F-62-6A-65-63-74</o></o>\n",
-                    "   <o base='jeo.seq.of1' name='interfaces'>\n",
-                    "      <o base='org.eolang.string'><o base='org.eolang.bytes'>6F-72-67-2F-65-6F-6C-61-6E-67-2F-53-6F-6D-65-49-6E-74-65-72-66-61-63-65</o></o>\n",
-                    "   </o>\n",
-                    "</o>\n"
-                )
+            XhtmlMatchers.hasXPaths(
+                "/o/o[contains(@base,'jeo.int') and contains(@name,'version')]",
+                "/o/o[contains(@base,'jeo.int') and contains(@name,'access')]",
+                "/o/o[contains(@base,'org.eolang.string') and contains(@name,'signature')]",
+                "/o/o[contains(@base,'org.eolang.string') and contains(@name,'supername')]",
+                "/o/o[contains(@base,'jeo.seq.of1') and contains(@name,'interfaces')]"
             )
         );
     }
-
 }

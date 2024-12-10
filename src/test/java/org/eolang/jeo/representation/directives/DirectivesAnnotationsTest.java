@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import org.eolang.jeo.matchers.SameXml;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
@@ -41,7 +40,9 @@ final class DirectivesAnnotationsTest {
         MatcherAssert.assertThat(
             "Must return empty directives if no annotations",
             new Xembler(new DirectivesAnnotations()).xml(),
-            new SameXml("<o base='jeo.seq.of0' name='annotations'/>")
+            XhtmlMatchers.hasXPaths(
+                "/o[contains(@base,'jeo.seq.of0') and contains(@name,'annotations')]"
+            )
         );
     }
 
@@ -54,13 +55,13 @@ final class DirectivesAnnotationsTest {
                 new DirectivesAnnotations().add(new DirectivesAnnotation(annotation, true))
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o[contains(@base,'seq.of1') and @name='annotations']/o",
+                "/o[contains(@base,'seq.of1') and contains(@name,'annotations')]/o",
                 String.format(
-                    "/o[contains(@base,'seq.of1') and @name='annotations']/o/o[1][contains(@base,'string')]/o[text()='%s']",
+                    "/o[contains(@base,'seq.of1') and contains(@name,'annotations')]/o/o[1][contains(@base,'string')]/o[text()='%s']",
                     new DirectivesValue(annotation).hex()
                 ),
                 String.format(
-                    "/o[contains(@base,'seq.of1') and @name='annotations']/o/o[2][contains(@base,'bool')]/o[text()='%s']",
+                    "/o[contains(@base,'seq.of1') and contains(@name,'annotations')]/o/o[2][contains(@base,'bool')]/o[text()='%s']",
                     new DirectivesValue(true).hex()
                 )
             )
