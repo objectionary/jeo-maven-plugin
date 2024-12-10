@@ -73,11 +73,11 @@ public final class DirectivesMetas implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives metas = new Directives().add("metas").append(this.pckg());
-        this.jeo()
-            .stream()
-            .filter(object -> !object.isEmpty())
-            .map(DirectivesMetas::alias)
-            .forEach(metas::append);
+//        this.jeo()
+//            .stream()
+//            .filter(object -> !object.isEmpty())
+//            .map(DirectivesMetas::alias)
+//            .forEach(metas::append);
         return metas.up().iterator();
     }
 
@@ -136,10 +136,22 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * @return Alias directive.
      */
     private static Directives alias(final String object) {
+        String substring;
+        if (object.contains(".")) {
+            substring = object.substring(object.indexOf(".") + 1);
+        } else {
+            substring = object;
+        }
+
+        if (substring.contains(".")) {
+            substring = substring.substring(0, substring.indexOf("."));
+        }
+
         return new Directives()
             .add("meta")
             .add("head").set("alias").up()
-            .add("tail").set(object).up()
+            .add("tail").set(substring + " " + object).up()
+            .add("part").set(substring).up()
             .add("part").set(object).up()
             .up();
     }

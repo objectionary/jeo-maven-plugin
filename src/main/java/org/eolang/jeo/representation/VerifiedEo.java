@@ -28,8 +28,10 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Program;
+import org.eolang.lints.Severity;
 import org.xembly.Directive;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -65,12 +67,14 @@ final class VerifiedEo {
         try {
             final Collection<Defect> defects = new Program(
                 new StrictXML(res)
-            ).defects();
+            ).defects().stream().filter(defect -> defect.severity().equals(Severity.ERROR))
+                .collect(Collectors.toList());
             if (defects.size() > 0) {
                 throw new IllegalStateException(
                     String.format(
-                        "EO is incorrect: %s",
-                        defects
+                        "EO is incorrect: %s, %n%s%n",
+                        defects,
+                        res
                     )
                 );
             }

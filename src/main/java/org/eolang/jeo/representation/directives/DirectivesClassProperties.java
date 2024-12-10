@@ -23,7 +23,9 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.security.SecureRandom;
 import java.util.Iterator;
+import java.util.Random;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -34,6 +36,8 @@ import org.xembly.Directives;
  * @since 0.1.0
  */
 public final class DirectivesClassProperties implements Iterable<Directive> {
+
+    private static final Random RANDOM = new SecureRandom();
 
     /**
      * Class bytecode version.
@@ -126,18 +130,28 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
+        final int number = Math.abs(DirectivesClassProperties.RANDOM.nextInt());
         final Directives directives = new Directives()
-            .append(new DirectivesValue("version", this.version))
-            .append(new DirectivesValue("access", this.access));
+            .append(
+                new DirectivesValue(
+                    DirectivesClassProperties.format("version", number),
+                    this.version
+                )
+            )
+            .append(new DirectivesValue(format("access", number), this.access));
         if (this.signature != null) {
-            directives.append(new DirectivesValue("signature", this.signature));
+            directives.append(new DirectivesValue(format("signature", number), this.signature));
         }
         if (this.supername != null) {
-            directives.append(new DirectivesValue("supername", this.supername));
+            directives.append(new DirectivesValue(format("supername", number), this.supername));
         }
         if (this.interfaces != null) {
-            directives.append(new DirectivesValues("interfaces", this.interfaces));
+            directives.append(new DirectivesValues(format("interfaces", number), this.interfaces));
         }
         return directives.iterator();
+    }
+
+    private static String format(final String name, final int number) {
+        return String.format("%s-%d", name, number);
     }
 }

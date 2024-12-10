@@ -23,7 +23,9 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.security.SecureRandom;
 import java.util.Iterator;
+import java.util.Random;
 import org.xembly.Directive;
 
 /**
@@ -31,6 +33,8 @@ import org.xembly.Directive;
  * @since 0.3
  */
 public final class DirectivesMaxs implements Iterable<Directive> {
+
+    private static final Random RANDOM = new SecureRandom();
 
     /**
      * Max stack size.
@@ -62,10 +66,11 @@ public final class DirectivesMaxs implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
+        final int number = Math.abs(DirectivesMaxs.RANDOM.nextInt());
         return new DirectivesJeoObject(
             "maxs",
-            new DirectivesValue("stack", this.stack),
-            new DirectivesValue("locals", this.locals)
+            new DirectivesValue(String.format("stack-%d", number), this.stack),
+            new DirectivesValue(String.format("locals-%d", number), this.locals)
         ).iterator();
     }
 }

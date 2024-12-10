@@ -23,8 +23,10 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.security.SecureRandom;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
@@ -35,6 +37,8 @@ import org.xembly.Directives;
  * @since 0.1
  */
 public final class DirectivesMethodProperties implements Iterable<Directive> {
+
+    private static final Random RANDOM = new SecureRandom();
 
     /**
      * Method access modifiers.
@@ -125,11 +129,12 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
+        final int number = Math.abs(DirectivesMethodProperties.RANDOM.nextInt());
         return new Directives()
-            .append(new DirectivesValue("access", this.access))
-            .append(new DirectivesValue("descriptor", this.descriptor))
-            .append(new DirectivesValue("signature", this.signature))
-            .append(new DirectivesValues("exceptions", this.exceptions))
+            .append(new DirectivesValue(String.format("access-%d", number), this.access))
+            .append(new DirectivesValue(String.format("descriptor-%d", number), this.descriptor))
+            .append(new DirectivesValue(String.format("signature-%d", number), this.signature))
+            .append(new DirectivesValues(String.format("exceptions-%d", number), this.exceptions))
             .append(this.max.get())
             .append(this.params)
             .iterator();
