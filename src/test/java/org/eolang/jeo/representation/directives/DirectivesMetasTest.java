@@ -25,12 +25,9 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import org.eolang.jeo.representation.ClassName;
-import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.xembly.ImpossibleModificationException;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -79,16 +76,11 @@ final class DirectivesMetasTest {
     }
 
     @Test
-    void createsDirectivesWithEmptyPackage() throws ImpossibleModificationException {
+    void createsDirectivesWithEmptyPackage() {
         MatcherAssert.assertThat(
             "We expect that <metas>/<package> won't be created if package is empty",
-            new Xembler(
-                new DirectivesMetas(new ClassName("WithoutPackage")),
-                new Transformers.Node()
-            ).xml(),
-            Matchers.not(
-                XhtmlMatchers.hasXPath("/metas/meta/head[text()='package']")
-            )
+            new DirectivesMetas(new ClassName("WithoutPackage")),
+            Matchers.emptyIterable()
         );
     }
 }

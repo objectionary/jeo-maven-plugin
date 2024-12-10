@@ -97,7 +97,7 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
             String.format(
                 String.format(
                     "annotations-%d",
-                    DirectivesAnnotations.RANDOM.nextInt()
+                    Math.abs(DirectivesAnnotations.RANDOM.nextInt())
                 )
             )
         );

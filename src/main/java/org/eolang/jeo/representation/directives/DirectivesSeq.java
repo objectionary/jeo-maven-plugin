@@ -41,6 +41,10 @@ import org.xembly.Directives;
  * @since 0.6
  */
 public final class DirectivesSeq implements Iterable<Directive> {
+    /**
+     * Random number generator.
+     */
+    private static final Random RANDOM = new SecureRandom();
 
     /**
      * Name of the sequence.
@@ -82,11 +86,9 @@ public final class DirectivesSeq implements Iterable<Directive> {
         this(name, Arrays.asList(elements));
     }
 
-    private final static Random RANDOM = new SecureRandom();
-
     @Override
     public Iterator<Directive> iterator() {
-        final int number = RANDOM.nextInt();
+        final int number = Math.abs(DirectivesSeq.RANDOM.nextInt());
         final List<Directives> all = this.stream()
             .map(Directives::new)
             .collect(Collectors.toList());
