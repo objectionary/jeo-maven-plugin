@@ -24,7 +24,9 @@
 package org.eolang.jeo.representation;
 
 import org.cactoos.Scalar;
+import org.cactoos.Text;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.text.Sticky;
 import org.cactoos.text.TextOf;
 
 /**
@@ -37,7 +39,7 @@ public final class License implements Scalar<String> {
     /**
      * The name of file with license.
      */
-    private final String name;
+    private final Text content;
 
     /**
      * Ctor with default value.
@@ -49,15 +51,15 @@ public final class License implements Scalar<String> {
     /**
      * Primary ctor.
      *
-     * @param name The name of file with license.
+     * @param content The name of file with license.
      */
-    public License(final String name) {
-        this.name = name;
+    public License(final String content) {
+        this.content = new Sticky(new TextOf(new ResourceOf(content)));
     }
 
     @Override
     public String value() {
-        return new TextOf(new ResourceOf(this.name)).toString();
+        return this.content.toString();
     }
 
     @Override
