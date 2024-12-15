@@ -201,7 +201,7 @@ final class XmirRepresentationTest {
     @Test
     void throwsExceptionIfXmirIsInvalid() {
         MatcherAssert.assertThat(
-            "We excpect that XSD violation message will be easily understandable by developers",
+            "We expect that XSD violation message will be easily understandable by developers",
             Assertions.assertThrows(
                 IllegalArgumentException.class,
                 () -> new XmirRepresentation(
@@ -213,7 +213,7 @@ final class XmirRepresentationTest {
                 ).toBytecode()
             ).getCause().getMessage(),
             Matchers.containsString(
-                "1 error(s) in XML document: -1:-1: cvc-complex-type.2.4.a: Invalid content was found starting with element 'tail'. One of '{head}' is expected."
+                "1 error(s) in XML document: cvc-complex-type.2.4.a: Invalid content was found starting with element 'tail'. One of '{head}' is expected."
             )
         );
     }

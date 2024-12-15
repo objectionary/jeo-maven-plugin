@@ -210,6 +210,6 @@ public final class XmlClass {
                 new DirectivesClass(classname, props),
                 new Transformers.Node()
             ).xmlQuietly()
-        ).node().getFirstChild();
+        ).deepCopy().getFirstChild();
     }
 }

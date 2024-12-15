@@ -81,7 +81,7 @@ public final class XmirRepresentation {
      * @param xml XML.
      */
     public XmirRepresentation(final XML xml) {
-        this(xml.node().getFirstChild(), "Unknown");
+        this(xml.inner().getFirstChild(), "Unknown");
     }
 
     /**

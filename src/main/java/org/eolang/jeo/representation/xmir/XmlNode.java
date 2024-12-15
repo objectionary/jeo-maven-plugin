@@ -58,7 +58,7 @@ public final class XmlNode {
      * @param xml XML string.
      */
     public XmlNode(final String xml) {
-        this(new XMLDocument(xml).node().getFirstChild());
+        this(new XMLDocument(xml).inner().getFirstChild());
     }
 
     /**
