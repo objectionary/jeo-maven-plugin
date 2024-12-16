@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.BytecodeRepresentation;
-import org.eolang.parser.xmir.Xmir;
+import org.eolang.parser.Xmir;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Disabled;
@@ -69,7 +69,7 @@ final class JavaToEoTest {
                 eolang,
                 java,
                 actual,
-                new Xmir.Default(actual).toEO()
+                new Xmir(actual).toEO()
             ),
             actual,
             Matchers.equalTo(new EoSource(eolang).parse())

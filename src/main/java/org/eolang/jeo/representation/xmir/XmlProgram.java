@@ -65,7 +65,7 @@ public final class XmlProgram {
      * @param xml Raw XMIR.
      */
     public XmlProgram(final XML xml) {
-        this(xml.node().getFirstChild());
+        this(xml.inner().getFirstChild());
     }
 
     /**

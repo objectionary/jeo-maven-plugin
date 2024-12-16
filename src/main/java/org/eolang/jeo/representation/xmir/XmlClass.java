@@ -161,7 +161,7 @@ public final class XmlClass {
      */
     private List<XmlMethod> methods() {
         return this.node.children()
-            .filter(o -> !o.attribute("base").isPresent())
+            .filter(o -> o.attribute("base").map("jeo.method"::equals).orElse(false))
             .map(XmlMethod::new)
             .collect(Collectors.toList());
     }
@@ -210,6 +210,6 @@ public final class XmlClass {
                 new DirectivesClass(classname, props),
                 new Transformers.Node()
             ).xmlQuietly()
-        ).node().getFirstChild();
+        ).deepCopy().getFirstChild();
     }
 }
