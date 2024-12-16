@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Program;
 import org.eolang.lints.Severity;
+import org.eolang.parser.StrictXmir;
 import org.xembly.Directive;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -68,7 +69,7 @@ final class VerifiedEo {
     XML asXml() throws ImpossibleModificationException {
         final XML res = new XMLDocument(new Xembler(this.directives).xml());
         try {
-            final Collection<Defect> defects = new Program(new StrictXML(res)).defects()
+            final Collection<Defect> defects = new Program(new StrictXmir(res)).defects()
                 .stream()
                 .filter(defect -> defect.severity() == Severity.ERROR)
                 .collect(Collectors.toList());
