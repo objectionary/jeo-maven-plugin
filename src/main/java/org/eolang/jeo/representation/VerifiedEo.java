@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation;
 
-import com.jcabi.xml.StrictXML;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
