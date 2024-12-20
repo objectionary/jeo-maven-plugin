@@ -58,7 +58,7 @@ public final class XmlNode {
      * @param xml XML string.
      */
     public XmlNode(final String xml) {
-        this(new XMLDocument(xml).node().getFirstChild());
+        this(new XMLDocument(xml).inner().getFirstChild());
     }
 
     /**
@@ -112,12 +112,15 @@ public final class XmlNode {
      * @return Attribute.
      */
     public Optional<String> attribute(final String name) {
-        final Optional<String> result;
-        final NamedNodeMap attrs = this.node.getAttributes();
-        if (attrs == null) {
-            result = Optional.empty();
-        } else {
-            result = Optional.ofNullable(attrs.getNamedItem(name)).map(Node::getTextContent);
+        Optional<String> result = Optional.empty();
+        final NamedNodeMap attributes = this.node.getAttributes();
+        final int length = attributes.getLength();
+        for (int index = 0; index < length; ++index) {
+            final Node item = attributes.item(index);
+            if (item.getNodeName().startsWith(name)) {
+                result = Optional.of(item.getTextContent());
+                break;
+            }
         }
         return result;
     }
@@ -194,7 +197,7 @@ public final class XmlNode {
     boolean hasAttribute(final String name, final String value) {
         return this.attribute(name)
             .map(String::valueOf)
-            .map(val -> val.equals(value))
+            .map(val -> val.startsWith(value))
             .orElse(false);
     }
 

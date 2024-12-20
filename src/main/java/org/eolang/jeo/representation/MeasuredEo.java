@@ -62,7 +62,7 @@ final class MeasuredEo {
                 new Directives()
                     .xpath("/program[@ms]/@ms")
                     .set(String.format("%d", end - start))
-            ).apply(xml.node())
+            ).apply(xml.deepCopy())
         );
     }
 }

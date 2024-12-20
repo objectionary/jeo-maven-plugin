@@ -25,7 +25,13 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import org.eolang.parser.Schema;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import org.eolang.lints.Defect;
+import org.eolang.lints.Program;
+import org.eolang.lints.Severity;
+import org.eolang.parser.StrictXmir;
 import org.xembly.Directive;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -55,11 +61,32 @@ final class VerifiedEo {
      * We also check if the EO is correct.
      * @return XML representation.
      * @throws ImpossibleModificationException If something goes wrong.
+     * @todo #939:60min Fix All The Warnings in the EO Representation.
+     *  Here we just catch only the errors in the EO representation.
+     *  We need to fix all the warnings in the EO representation as well.
      */
     XML asXml() throws ImpossibleModificationException {
         final XML res = new XMLDocument(new Xembler(this.directives).xml());
-        new Schema(res).check();
+        try {
+            final Collection<Defect> defects = new Program(new StrictXmir(res)).defects()
+                .stream()
+                .filter(defect -> defect.severity() == Severity.ERROR)
+                .collect(Collectors.toList());
+            if (!defects.isEmpty()) {
+                throw new IllegalStateException(
+                    String.format(
+                        "EO is incorrect: %s, %n%s%n",
+                        defects,
+                        res
+                    )
+                );
+            }
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format("Failed to verify EO: %n%s%n", res),
+                exception
+            );
+        }
         return res;
     }
-
 }

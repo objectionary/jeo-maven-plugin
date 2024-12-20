@@ -370,7 +370,7 @@ final class BytecodeMethodTest {
             "We expect that method without try-catch block doesn't contain try-catch directives.",
             new BytecodeProgram(new BytecodeClass().helloWorldMethod()).xml().toString(),
             XhtmlMatchers.hasXPath(
-                ".//o[contains(@base,'seq.of0') and @name='trycatchblocks-main']"
+                ".//o[contains(@base,'seq.of0') and contains(@name,'trycatchblocks-main')]"
             )
         );
     }

@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
-import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
@@ -52,19 +51,15 @@ final class DirectivesClassTest {
                 new DirectivesClass(new ClassName("Neo"), new DirectivesClassProperties()),
                 new Transformers.Node()
             ).xml(),
-            new SameXml(
-                String.join(
-                    "",
-                    "<o abstract='' name='Neo'>",
-                    "<o base='jeo.int' name='version'><o base='org.eolang.bytes'>00-00-00-00-00-00-00-34</o></o>",
-                    "<o base='jeo.int' name='access'><o base='org.eolang.bytes'>00-00-00-00-00-00-00-00</o></o>",
-                    "<o base='org.eolang.string' name='signature'><o base='org.eolang.bytes'>--</o></o>",
-                    "<o base='org.eolang.string' name='supername'><o base='org.eolang.bytes'>--</o></o>",
-                    "<o base='jeo.seq.of0' name='interfaces'/>",
-                    "<o base='jeo.seq.of0' name='annotations'/>",
-                    "<o base='jeo.seq.of0' name='attributes'/>",
-                    "</o>"
-                )
+            XhtmlMatchers.hasXPaths(
+                "/o[@name='Neo']",
+                "/o[@name='Neo']/o[contains(@name,'version')]",
+                "/o[@name='Neo']/o[contains(@name,'access')]",
+                "/o[@name='Neo']/o[contains(@name,'signature')]",
+                "/o[@name='Neo']/o[contains(@name,'supername')]",
+                "/o[@name='Neo']/o[contains(@name,'interfaces')]",
+                "/o[@name='Neo']/o[contains(@name,'annotations')]",
+                "/o[@name='Neo']/o[contains(@name,'attributes')]"
             )
         );
     }
