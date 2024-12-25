@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation;
 
-import com.jcabi.xml.StrictXML;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
@@ -39,6 +38,7 @@ import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.XmlProgram;
+import org.eolang.parser.StrictXmir;
 import org.w3c.dom.Node;
 
 /**
@@ -150,7 +150,7 @@ public final class XmirRepresentation {
     public Bytecode toBytecode() {
         final Node xmir = this.xml.value();
         try {
-            new StrictXML(new XMLDocument(new XMLDocument(xmir).toString())).validate();
+            new StrictXmir(new XMLDocument(new XMLDocument(xmir).toString())).inner();
             return new XmlProgram(xmir).bytecode().bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
