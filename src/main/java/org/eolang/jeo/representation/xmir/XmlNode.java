@@ -54,21 +54,21 @@ public interface XmlNode {
      * @param name Attribute name.
      * @return Attribute.
      */
-    Optional<String> attribute(final String name);
+    Optional<String> attribute(String name);
 
     /**
      * Get child node.
      * @param name Child node name.
      * @return Child node.
      */
-    XmlNode child(final String name);
+    XmlNode child(String name);
 
     /**
      * Find elements by xpath.
      * @param xpath XPath.
      * @return List of elements.
      */
-    List<String> xpath(final String xpath);
+    List<String> xpath(String xpath);
 
     /**
      * Get child node by attribute.
@@ -76,7 +76,7 @@ public interface XmlNode {
      * @param value Attribute value.
      * @return Child node.
      */
-    XmlNode child(final String attribute, final String value);
+    XmlNode child(String attribute, String value);
 
     /**
      * Get optional child node by attribute.
@@ -84,7 +84,7 @@ public interface XmlNode {
      * @param value Attribute value.
      * @return Child node.
      */
-    Optional<XmlNode> optchild(final String attribute, final String value);
+    Optional<XmlNode> optchild(String attribute, String value);
 
     /**
      * Get first child.
@@ -98,7 +98,7 @@ public interface XmlNode {
      * @param value Attribute value.
      * @return True if an attribute with specified value exists.
      */
-    boolean hasAttribute(final String name, final String value);
+    boolean hasAttribute(String name, String value);
 
     void validate();
 

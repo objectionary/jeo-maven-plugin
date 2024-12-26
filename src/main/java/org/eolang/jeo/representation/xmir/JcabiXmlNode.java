@@ -36,8 +36,13 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * Jcabi XML node.
+ * @since 0.8
+ */
 @ToString
 @EqualsAndHashCode
+@SuppressWarnings("PMD.TooManyMethods")
 public final class JcabiXmlNode implements XmlNode {
 
     /**

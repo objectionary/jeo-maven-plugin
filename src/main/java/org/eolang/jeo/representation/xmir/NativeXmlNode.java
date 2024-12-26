@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
-import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -45,6 +44,7 @@ import org.w3c.dom.NodeList;
  * Utility class that simplifies work with XML.
  * @since 0.1
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class NativeXmlNode implements XmlNode {
 
     /**
@@ -100,12 +100,10 @@ public final class NativeXmlNode implements XmlNode {
         return this.node.toString();
     }
 
-
     @Override
     public Stream<XmlNode> children() {
         return this.objects().map(NativeXmlNode::new);
     }
-
 
     @Override
     public String text() {
@@ -140,21 +138,27 @@ public final class NativeXmlNode implements XmlNode {
     public List<String> xpath(final String xpath) {
         final XPath path = NativeXmlNode.XPATH_FACTORY.newXPath();
         try {
-            final QName nodeset = XPathConstants.NODESET;
-            final NodeList evaluate = (NodeList) path.evaluate(
+            final NodeList all = (NodeList) path.evaluate(
                 xpath,
-                node,
-                nodeset
+                this.node,
+                XPathConstants.NODESET
             );
-            final int length = evaluate.getLength();
+            final int length = all.getLength();
             final List<String> res = new ArrayList<>(0);
             for (int index = 0; index < length; ++index) {
-                final Node item = evaluate.item(index);
+                final Node item = all.item(index);
                 res.add(item.getNodeValue());
             }
             return Collections.unmodifiableList(res);
         } catch (final XPathExpressionException exception) {
-            throw new RuntimeException(exception);
+            throw new IllegalStateException(
+                String.format(
+                    "Can't evaluate xpath '%s' in '%s'",
+                    xpath,
+                    this.node
+                ),
+                exception
+            );
         }
     }
 
@@ -202,7 +206,6 @@ public final class NativeXmlNode implements XmlNode {
     public void validate() {
         new StrictXmir(new XMLDocument(new XMLDocument(this.node).toString())).inner();
     }
-
 
     /**
      * Get optional child node.

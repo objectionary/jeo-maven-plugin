@@ -37,7 +37,7 @@ public final class JcabiXmlDoc implements XmlDoc {
     /**
      * XML.
      */
-    private final XmlNode root;
+    private final XmlNode doc;
 
     /**
      * Constructor.
@@ -60,17 +60,17 @@ public final class JcabiXmlDoc implements XmlDoc {
      * @param root Root node
      */
     private JcabiXmlDoc(final XmlNode root) {
-        this.root = root;
+        this.doc = root;
     }
 
     @Override
     public XmlNode root() {
-        return this.root;
+        return this.doc;
     }
 
     @Override
     public void validate() {
-        this.root.validate();
+        this.doc.validate();
     }
 
     /**

@@ -198,6 +198,7 @@ public final class XmlMethod {
 
     /**
      * Convert to an entry.
+     * @param node Node.
      * @return Bytecode entry.
      */
     private static XmlBytecodeEntry toEntry(final XmlNode node) {

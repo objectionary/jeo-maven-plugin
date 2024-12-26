@@ -50,8 +50,8 @@ final class NativeXmlNodeTest {
     @Test
     void retrievesChildren() {
         final List<XmlNode> children = new NativeXmlNode(
-            "<o><o name='inner1'/><o name='inner2'/></o>")
-            .children().collect(Collectors.toList());
+            "<o><o name='inner1'/><o name='inner2'/></o>"
+        ).children().collect(Collectors.toList());
         MatcherAssert.assertThat(
             "Size of children is not as expected",
             children,
