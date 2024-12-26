@@ -23,12 +23,9 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XMLDocument;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 
 /**
  * XML document node.
@@ -44,7 +41,7 @@ public interface MyXmlNode {
      * Get all child nodes.
      * @return Child nodes.
      */
-    Stream<XmlNode> children();
+    Stream<MyXmlNode> children();
 
     /**
      * Retrieve node text content.
@@ -64,7 +61,7 @@ public interface MyXmlNode {
      * @param name Child node name.
      * @return Child node.
      */
-    XmlNode child(final String name);
+    MyXmlNode child(final String name);
 
     /**
      * Find elements by xpath.
@@ -79,7 +76,7 @@ public interface MyXmlNode {
      * @param value Attribute value.
      * @return Child node.
      */
-    XmlNode child(final String attribute, final String value);
+    MyXmlNode child(final String attribute, final String value);
 
     /**
      * Get optional child node by attribute.
@@ -87,13 +84,13 @@ public interface MyXmlNode {
      * @param value Attribute value.
      * @return Child node.
      */
-    Optional<XmlNode> optchild(final String attribute, final String value);
+    Optional<MyXmlNode> optchild(final String attribute, final String value);
 
     /**
      * Get first child.
      * @return First child node.
      */
-    XmlNode firstChild();
+    MyXmlNode firstChild();
 
     /**
      * Check if an attribute exists.
