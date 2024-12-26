@@ -49,7 +49,8 @@ final class NativeXmlNodeTest {
 
     @Test
     void retrievesChildren() {
-        final List<XmlNode> children = new NativeXmlNode("<o><o name='inner1'/><o name='inner2'/></o>")
+        final List<XmlNode> children = new NativeXmlNode(
+            "<o><o name='inner1'/><o name='inner2'/></o>")
             .children().collect(Collectors.toList());
         MatcherAssert.assertThat(
             "Size of children is not as expected",
@@ -124,6 +125,23 @@ final class NativeXmlNodeTest {
             ),
             objects,
             new IsEqual<>(expected)
+        );
+    }
+
+    @Test
+    void retrievesByXpath() {
+        final List<String> atual = new NativeXmlNode(
+            "<program><o>o1</o><o>o2</o></program>"
+        ).xpath("//o/text()");
+        final List<String> expected = new ListOf<>("o1", "o2");
+        MatcherAssert.assertThat(
+            String.format(
+                "Retrieved xpath: %s don't match with expected: %s",
+                atual,
+                expected
+            ),
+            atual,
+            Matchers.equalTo(expected)
         );
     }
 }
