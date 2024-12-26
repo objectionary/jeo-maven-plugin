@@ -204,7 +204,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         return this.params.stream()
             .map(
                 param -> String.format(
-                    "%s/o[contains(@base,'params')]/o[@name='%s' and contains(@base,'param')]/@name",
+                    "%s/o[contains(@base,'params')]/o[contains(@name,'%s') and contains(@base,'param')]/@name",
                     root,
                     param
                 )
@@ -247,7 +247,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      */
     private String root() {
         return String.format(
-            "/program/objects/o[@name='%s']/o[contains(@name,'%s')]",
+            "/program/objects/o[contains(@name,'%s')]/o[contains(@name,'%s')]",
             this.clazz,
             this.name
         );
@@ -296,7 +296,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          */
         Stream<String> checks(final String root) {
             final String instruction = String.format(
-                "%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'opcode')]",
+                "%s/o[contains(@base,'seq') and contains(@name,'body')]/o[contains(@base,'opcode')]",
                 root
             );
             return Stream.concat(
@@ -420,7 +420,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         static Stream<String> checks(final String root) {
             return Stream.of(
                 String.format(
-                    "%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'label')]/o[@base='org.eolang.bytes']/@base",
+                    "%s/o[contains(@base,'seq') and contains(@name,'body')]/o[contains(@base,'label')]/o[@base='org.eolang.bytes']/@base",
                     root
                 )
             );

@@ -62,10 +62,10 @@ public final class DirectivesMaxs implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesAbstractObject(
+        return new DirectivesJeoObject(
             "maxs",
-            new DirectivesValue("stack", this.stack),
-            new DirectivesValue("locals", this.locals)
+            new DirectivesValue(this.stack),
+            new DirectivesValue(this.locals)
         ).iterator();
     }
 }

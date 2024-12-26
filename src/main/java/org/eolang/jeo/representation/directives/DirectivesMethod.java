@@ -159,13 +159,14 @@ public final class DirectivesMethod implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesAbstractObject(
+        return new DirectivesJeoObject(
+            "method",
             new PrefixedName(this.name.encoded()).encode(),
             Stream.concat(
                 Stream.of(
                     this.properties,
                     this.annotations,
-                    new DirectivesSeq("@", this.instructions),
+                    new DirectivesSeq("body", this.instructions),
                     new DirectivesSeq(
                         String.format("trycatchblocks-%s", this.name.name()),
                         this.exceptions

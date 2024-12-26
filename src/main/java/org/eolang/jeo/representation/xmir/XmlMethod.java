@@ -189,7 +189,7 @@ public final class XmlMethod {
      * @return Instructions.
      */
     private List<XmlBytecodeEntry> instructions() {
-        return this.node.child("name", "@")
+        return this.node.child("name", "body")
             .children()
             .filter(element -> element.attribute("base").isPresent())
             .map(XmlNode::toEntry)
@@ -202,7 +202,7 @@ public final class XmlMethod {
      * @return Maxs.
      */
     private Optional<XmlMaxs> maxs() {
-        return this.node.optchild("name", "maxs").map(XmlMaxs::new);
+        return this.node.optchild("base", "jeo.maxs").map(XmlMaxs::new);
     }
 
     /**
@@ -279,7 +279,7 @@ public final class XmlMethod {
                     .map(s -> s.contains("trycatchblocks"))
                     .orElse(false))
             .flatMap(XmlNode::children)
-            .map(entry -> new XmlTryCatchEntry(entry))
+            .map(XmlTryCatchEntry::new)
             .collect(Collectors.toList());
     }
 

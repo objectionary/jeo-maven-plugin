@@ -109,11 +109,13 @@ public final class DirectivesProgram implements Iterable<Directive> {
             .format(DateTimeFormatter.ISO_INSTANT);
         final Directives directives = new Directives();
         directives.add("program")
+            .attr("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
             .attr("name", this.metas.className().name())
             .attr("version", Manifests.read("JEO-Version"))
             .attr("revision", Manifests.read("JEO-Revision"))
             .attr("dob", Manifests.read("JEO-Dob"))
             .attr("time", now)
+            .attr("xsi:noNamespaceSchemaLocation", "https://www.eolang.org/xsd/XMIR-0.49.4.xsd")
             .add("listing")
             .set(this.listing)
             .up()

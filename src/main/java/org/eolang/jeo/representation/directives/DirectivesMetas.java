@@ -23,15 +23,11 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import com.jcabi.xml.XMLDocument;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.xembly.Directive;
 import org.xembly.Directives;
-import org.xembly.Xembler;
 
 /**
  * Directives for meta-information of a class.
@@ -45,40 +41,22 @@ public final class DirectivesMetas implements Iterable<Directive> {
     private final ClassName name;
 
     /**
-     * Class directives.
-     */
-    private final DirectivesClass clazz;
-
-    /**
      * Constructor.
      * @param classname Class name.
      */
     public DirectivesMetas(final ClassName classname) {
-        this(classname, new DirectivesClass(new ClassName("org.jeo", "SomeClass")));
-    }
-
-    /**
-     * Constructor.
-     * @param classname Class name.
-     * @param clazz Class directives.
-     */
-    public DirectivesMetas(
-        final ClassName classname,
-        final DirectivesClass clazz
-    ) {
         this.name = classname;
-        this.clazz = clazz;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives metas = new Directives().add("metas").append(this.pckg());
-        this.jeo()
-            .stream()
-            .filter(object -> !object.isEmpty())
-            .map(DirectivesMetas::alias)
-            .forEach(metas::append);
-        return metas.up().iterator();
+        final Iterator<Directive> result;
+        if (this.name.pckg().isEmpty()) {
+            result = new Directives().iterator();
+        } else {
+            result = new Directives().add("metas").append(this.pckg()).up().iterator();
+        }
+        return result;
     }
 
     /**
@@ -110,37 +88,5 @@ public final class DirectivesMetas implements Iterable<Directive> {
                 .up();
         }
         return result;
-    }
-
-    /**
-     * Find all jeo objects.
-     * @return Set of jeo objects.
-     * @todo #883:90min Optimize jeo.* Objects Collection for Metas.
-     *  Currently, we are required to pre-build a part of XML, find all the jeo objects
-     *  by using Xpath and then build the XML. This is not efficient.
-     *  We should find a way to collect all the jeo objects on the way.
-     */
-    private Set<String> jeo() {
-        return new HashSet<>(
-            new XMLDocument(
-                new Xembler(
-                    new Directives(this.clazz)
-                ).xmlQuietly()
-            ).xpath(".//o[starts-with(@base, 'jeo.')]/@base")
-        );
-    }
-
-    /**
-     * Alias directive for an object.
-     * @param object Some object name.
-     * @return Alias directive.
-     */
-    private static Directives alias(final String object) {
-        return new Directives()
-            .add("meta")
-            .add("head").set("alias").up()
-            .add("tail").set(object).up()
-            .add("part").set(object).up()
-            .up();
     }
 }

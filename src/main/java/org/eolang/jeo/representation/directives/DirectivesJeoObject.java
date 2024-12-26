@@ -125,6 +125,7 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
         }
         return directives
             .append(this.inner.stream().reduce(new Directives(), Directives::append))
-            .up().iterator();
+            .up()
+            .iterator();
     }
 }

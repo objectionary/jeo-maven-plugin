@@ -58,7 +58,7 @@ public final class WithoutLines implements Scalar<XML> {
                     new Directives()
                         .xpath(".//o[@line]/@line").remove()
                         .xpath("//comment()").remove()
-                ).apply(this.original.node())
+                ).apply(this.original.inner())
             );
         } catch (final ImpossibleModificationException exception) {
             throw new IllegalStateException(

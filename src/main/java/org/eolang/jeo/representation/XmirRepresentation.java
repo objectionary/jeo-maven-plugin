@@ -24,27 +24,22 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.SchemaFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import org.cactoos.io.ResourceOf;
-import org.cactoos.io.UncheckedInput;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.XmlProgram;
+import org.eolang.parser.StrictXmir;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 /**
  * Intermediate representation of a class files from XMIR.
@@ -86,7 +81,7 @@ public final class XmirRepresentation {
      * @param xml XML.
      */
     public XmirRepresentation(final XML xml) {
-        this(xml.node().getFirstChild(), "Unknown");
+        this(xml.inner().getFirstChild(), "Unknown");
     }
 
     /**
@@ -155,7 +150,7 @@ public final class XmirRepresentation {
     public Bytecode toBytecode() {
         final Node xmir = this.xml.value();
         try {
-            new OptimizedSchema(xmir).check();
+            new StrictXmir(new XMLDocument(new XMLDocument(xmir).toString())).inner();
             return new XmlProgram(xmir).bytecode().bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
@@ -205,65 +200,6 @@ public final class XmirRepresentation {
                 ),
                 broken
             );
-        }
-    }
-
-    /**
-     * Optimized schema for XMIR.
-     * It is an optimized version of {@link org.eolang.parser.Schema} class.
-     * @since 0.6
-     * @todo #889:30min Use the `Schema` class instead of `OptimizedSchema`.
-     *  The `OptimizedSchema` class is a temporary solution to avoid the performance
-     *  issues with the `Schema` class. We will be able to remove this class after
-     *  the following issue is resolved:
-     *  https://github.com/jcabi/jcabi-xml/issues/277
-     */
-    private static class OptimizedSchema {
-        /**
-         * Node.
-         */
-        private final Node node;
-
-        /**
-         * Schema factory.
-         */
-        private final SchemaFactory factory;
-
-        /**
-         * Constructor.
-         * @param node Node.
-         */
-        OptimizedSchema(final Node node) {
-            this(node, SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema"));
-        }
-
-        /**
-         * Constructor.
-         * @param node Node.
-         * @param factory Schema factory.
-         */
-        private OptimizedSchema(final Node node, final SchemaFactory factory) {
-            this.node = node;
-            this.factory = factory;
-        }
-
-        /**
-         * Check the node.
-         */
-        void check() {
-            try {
-                this.factory.newSchema(
-                    new StreamSource(new UncheckedInput(new ResourceOf("XMIR.xsd")).stream())
-                ).newValidator().validate(new DOMSource(this.node));
-            } catch (final IOException | SAXException exception) {
-                throw new IllegalStateException(
-                    String.format(
-                        "There are XSD violations, see the log",
-                        exception.getMessage()
-                    ),
-                    exception
-                );
-            }
         }
     }
 }

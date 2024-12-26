@@ -53,6 +53,11 @@ final class XmirRepresentationTest {
     private static final String MESSAGE =
         "The bytecode representation of the EO object is not correct,%nexpected:%n%s%nbut got:%n%s";
 
+    /**
+     * Math class name.
+     */
+    private static final String MATH = "org/eolang/foo/Math";
+
     @Test
     void retrievesName() {
         final String name = "Math";
@@ -80,7 +85,7 @@ final class XmirRepresentationTest {
             "The XML representation of the EO object is not correct",
             new BytecodeProgram(
                 "org.eolang",
-                new BytecodeClass("org/eolang/foo/Math")
+                new BytecodeClass(XmirRepresentationTest.MATH)
             ).xml(),
             XhtmlMatchers.hasXPath("/program[@name='j$Math']")
         );
@@ -139,7 +144,7 @@ final class XmirRepresentationTest {
         Files.write(
             xmir,
             new BytecodeProgram(
-                new BytecodeClass("org/eolang/foo/Math")
+                new BytecodeClass(XmirRepresentationTest.MATH)
             ).xml().toString().substring(42).getBytes(StandardCharsets.UTF_8)
         );
         MatcherAssert.assertThat(
@@ -167,7 +172,7 @@ final class XmirRepresentationTest {
     @SuppressWarnings("PMD.GuardLogStatement")
     void convertsToXmirAndBack() {
         final Bytecode before = new BytecodeProgram(
-            new BytecodeClass("org/eolang/foo/Math")
+            new BytecodeClass(XmirRepresentationTest.MATH)
                 .helloWorldMethod()
         ).bytecode();
         final int attempts = 500;
@@ -196,18 +201,35 @@ final class XmirRepresentationTest {
     @Test
     void throwsExceptionIfXmirIsInvalid() {
         MatcherAssert.assertThat(
-            "We excpect that XSD violation message will be easily understandable by developers",
+            "We expect that XSD violation message will be easily understandable by developers",
             Assertions.assertThrows(
-                IllegalStateException.class,
+                IllegalArgumentException.class,
                 () -> new XmirRepresentation(
                     new XMLDocument(
                         new BytecodeProgram(
-                            new BytecodeClass("org/eolang/foo/Math")
+                            new BytecodeClass(XmirRepresentationTest.MATH)
                         ).xml().toString().replace("<head>package</head>", "")
                     )
                 ).toBytecode()
             ).getCause().getMessage(),
-            Matchers.containsString("There are XSD violations, see the log")
+            Matchers.containsString(
+                "1 error(s) in XML document: cvc-complex-type.2.4.a: Invalid content was found starting with element 'tail'. One of '{head}' is expected."
+            )
+        );
+    }
+
+    @Test
+    void createsXmirRepresentationFromFile(@TempDir final Path path) throws IOException {
+        final BytecodeProgram program = new BytecodeProgram(
+            new BytecodeClass(XmirRepresentationTest.MATH).helloWorldMethod()
+        );
+        final Bytecode expected = program.bytecode();
+        final Path address = path.resolve("Math.xmir");
+        Files.write(address, program.xml().toString().getBytes(StandardCharsets.UTF_8));
+        MatcherAssert.assertThat(
+            "We expect that Xmir representation will be created from the file successfully",
+            new XmirRepresentation(address).toBytecode(),
+            Matchers.equalTo(expected)
         );
     }
 }
