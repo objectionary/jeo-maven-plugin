@@ -31,23 +31,16 @@ import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesProgram;
-import org.w3c.dom.Node;
 import org.xembly.Xembler;
 
 /**
  * XMIR Program.
- *
  * @since 0.1
  */
 public final class XmlProgram {
 
     /**
      * Root node.
-     * Here we use the {@link Node} class instead of the {@link com.jcabi.xml.XML}
-     * by performance reasons.
-     * In some cases {@link Node} 10 times faster than {@link com.jcabi.xml.XML}.
-     * You can read more about it here:
-     * <a href="https://github.com/objectionary/jeo-maven-plugin/pull/924">Optimization</a>
      */
     private final XmlNode root;
 
@@ -61,16 +54,14 @@ public final class XmlProgram {
 
     /**
      * Constructor.
-     *
      * @param xml Raw XMIR.
      */
     public XmlProgram(final XML xml) {
-        this(xml.inner().getFirstChild());
+        this(new NativeXmlNode(xml.inner().getFirstChild()));
     }
 
     /**
      * Constructor.
-     *
      * @param name Class name.
      */
     XmlProgram(final ClassName name) {
@@ -87,13 +78,8 @@ public final class XmlProgram {
 
     /**
      * Constructor.
-     *
      * @param root Root node.
      */
-    public XmlProgram(final Node root) {
-        this.root = new NativeXmlNode(root);
-    }
-
     public XmlProgram(final XmlNode root) {
         this.root = root;
     }

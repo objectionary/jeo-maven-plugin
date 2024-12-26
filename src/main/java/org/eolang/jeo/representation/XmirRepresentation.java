@@ -24,25 +24,12 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
-import java.io.FileNotFoundException;
 import java.nio.file.Path;
-import java.util.Optional;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import org.cactoos.scalar.Sticky;
-import org.cactoos.scalar.Synced;
-import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.NativeXmlDoc;
 import org.eolang.jeo.representation.xmir.XmlDoc;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.eolang.jeo.representation.xmir.XmlProgram;
-import org.eolang.parser.StrictXmir;
-import org.w3c.dom.Node;
 
 /**
  * Intermediate representation of a class files from XMIR.
@@ -50,16 +37,6 @@ import org.w3c.dom.Node;
  * @since 0.1.0
  */
 public final class XmirRepresentation {
-
-    /**
-     * XPath's factory.
-     */
-    private static final XPathFactory XPATH_FACTORY = XPathFactory.newInstance();
-
-    /**
-     * XML document factory.
-     */
-    private static final DocumentBuilderFactory DOC_FACTORY = DocumentBuilderFactory.newInstance();
 
     /**
      * XML.
@@ -92,26 +69,7 @@ public final class XmirRepresentation {
      * @param xml XML.
      * @param source Source of the XML.
      */
-//    private XmirRepresentation(
-//        final Node xml,
-//        final String source
-//    ) {
-//        this(new Unchecked<>(() -> xml), source);
-//    }
-
-    /**
-     * Constructor.
-     * @param xml XML source.
-     * @param source Source of the XML.
-     */
-//    private XmirRepresentation(
-//        final Unchecked<Node> xml,
-//        final String source
-//    ) {
-//        this.xml = xml;
-//        this.source = source;
-//    }
-    public XmirRepresentation(final XmlDoc xml, final String source) {
+    private XmirRepresentation(final XmlDoc xml, final String source) {
         this.xml = xml;
         this.source = source;
     }
@@ -128,32 +86,6 @@ public final class XmirRepresentation {
             root.xpath("/program/metas/meta/tail/text()").get(0),
             root.xpath("/program/@name").get(0)
         ).full();
-
-//        final Node node = this.xml.value();
-//        final XPath xpath = XmirRepresentation.XPATH_FACTORY.newXPath();
-//        try {
-//            return new ClassName(
-//                Optional.ofNullable(
-//                    ((Node) xpath.evaluate(
-//                        "/program/metas/meta/tail/text()",
-//                        node,
-//                        XPathConstants.NODE
-//                    )).getTextContent()
-//                ).orElse(""),
-//                String.valueOf(
-//                    xpath.evaluate(
-//                        "/program/@name",
-//                        node,
-//                        XPathConstants.STRING
-//                    )
-//                )
-//            ).full();
-//        } catch (final XPathExpressionException exception) {
-//            throw new IllegalStateException(
-//                String.format("Can't extract class name from the '%s' source", this.source),
-//                exception
-//            );
-//        }
     }
 
     /**
@@ -161,11 +93,8 @@ public final class XmirRepresentation {
      * @return Array of bytes.
      */
     public Bytecode toBytecode() {
-//        this.xml.root();
-//        final Node xmir = this.xml.value();
         try {
             this.xml.validate();
-//            new StrictXmir(new XMLDocument(new XMLDocument(xmir).toString())).inner();
             return new XmlProgram(this.xml.root()).bytecode().bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
@@ -176,44 +105,6 @@ public final class XmirRepresentation {
             throw new IllegalStateException(
                 String.format("Can't transform XMIR to bytecode from the '%s' source", this.source),
                 exception
-            );
-        }
-    }
-
-    /**
-     * Prestructor that converts a path to a lazy XML.
-     * @param path Path to an XML file.
-     * @return Lazy XML.
-     */
-    private static Unchecked<Node> fromFile(final Path path) {
-        return new Unchecked<>(new Synced<>(new Sticky<>(() -> XmirRepresentation.open(path))));
-    }
-
-    /**
-     * Convert a path to XML.
-     * @param path Path to XML file.
-     * @return XML.
-     * @checkstyle IllegalCatchCheck (20 lines)
-     */
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    private static Node open(final Path path) {
-        try {
-            return XmirRepresentation.DOC_FACTORY
-                .newDocumentBuilder()
-                .parse(path.toFile())
-                .getDocumentElement();
-        } catch (final FileNotFoundException exception) {
-            throw new IllegalStateException(
-                String.format("Can't find file '%s'", path),
-                exception
-            );
-        } catch (final Exception broken) {
-            throw new IllegalStateException(
-                String.format(
-                    "Can't parse XML from the file '%s'",
-                    path
-                ),
-                broken
             );
         }
     }

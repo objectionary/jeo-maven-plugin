@@ -23,14 +23,12 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
-import org.eolang.parser.StrictXmir;
 import org.w3c.dom.Node;
 
 /**

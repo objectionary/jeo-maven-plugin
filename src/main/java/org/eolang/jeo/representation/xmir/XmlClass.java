@@ -37,7 +37,6 @@ import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
 import org.eolang.jeo.representation.directives.JeoFqn;
 import org.objectweb.asm.Opcodes;
-import org.w3c.dom.Node;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -79,14 +78,6 @@ public final class XmlClass {
      */
     XmlClass(final String classname, final DirectivesClassProperties properties) {
         this(XmlClass.withProps(classname, properties));
-    }
-
-    /**
-     * Constructor.
-     * @param xml Class node.
-     */
-    XmlClass(final Node xml) {
-        this(new NativeXmlNode(xml));
     }
 
     /**
@@ -194,7 +185,7 @@ public final class XmlClass {
      * @param classname Class name.
      * @return Class node.
      */
-    private static Node empty(final String classname) {
+    private static XmlNode empty(final String classname) {
         return XmlClass.withProps(classname, new DirectivesClassProperties(Opcodes.ACC_PUBLIC));
     }
 
@@ -204,12 +195,16 @@ public final class XmlClass {
      * @param props Class properties.
      * @return Class node.
      */
-    private static Node withProps(final String classname, final DirectivesClassProperties props) {
-        return new XMLDocument(
-            new Xembler(
-                new DirectivesClass(classname, props),
-                new Transformers.Node()
-            ).xmlQuietly()
-        ).deepCopy().getFirstChild();
+    private static XmlNode withProps(
+        final String classname, final DirectivesClassProperties props
+    ) {
+        return new NativeXmlNode(
+            new XMLDocument(
+                new Xembler(
+                    new DirectivesClass(classname, props),
+                    new Transformers.Node()
+                ).xmlQuietly()
+            ).deepCopy().getFirstChild()
+        );
     }
 }
