@@ -123,10 +123,11 @@ public final class XmlProgram {
      * @return Class.
      */
     private XmlClass top() {
-        return new XmlNode(this.root)
-            .child("objects")
-            .child("o")
-            .toClass();
+        return new XmlClass(
+            new XmlNode(this.root)
+                .child("objects")
+                .child("o")
+        );
     }
 
     /**

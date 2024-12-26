@@ -202,14 +202,6 @@ public final class XmlNode {
     }
 
     /**
-     * Convert to class.
-     * @return Class.
-     */
-    XmlClass toClass() {
-        return new XmlClass(this.node);
-    }
-
-    /**
      * Convert to an entry.
      * @return Bytecode entry.
      */
