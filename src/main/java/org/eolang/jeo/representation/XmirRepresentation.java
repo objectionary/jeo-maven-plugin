@@ -52,6 +52,11 @@ public final class XmirRepresentation {
     /**
      * Constructor.
      * @param path Path to XML file.
+     * @todo #948:90min Use {@link JcabiXmlDoc} instead of {@link NativeXmlDoc}.
+     *  This class should use {@link JcabiXmlDoc} instead of {@link NativeXmlDoc}
+     *  because it's more human-readable and easier to maintain. However the current
+     *  implementation creates some issues in the integration tests.
+     *  Most probably, we will need to fix them first.
      */
     public XmirRepresentation(final Path path) {
         this(new NativeXmlDoc(path), path.toAbsolutePath().toString());
