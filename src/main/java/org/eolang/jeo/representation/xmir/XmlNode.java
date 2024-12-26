@@ -202,23 +202,6 @@ public final class XmlNode {
     }
 
     /**
-     * Convert to an entry.
-     * @return Bytecode entry.
-     */
-    XmlBytecodeEntry toEntry() {
-        final XmlBytecodeEntry result;
-        final Optional<String> base = this.attribute("base");
-        if (base.isPresent() && new JeoFqn("label").fqn().equals(base.get())) {
-            result = new XmlLabel(this);
-        } else if (base.isPresent() && new JeoFqn("frame").fqn().equals(base.get())) {
-            result = new XmlFrame(this);
-        } else {
-            result = new XmlInstruction(this);
-        }
-        return result;
-    }
-
-    /**
      * Get optional child node.
      * @param name Child node name.
      * @return Child node.

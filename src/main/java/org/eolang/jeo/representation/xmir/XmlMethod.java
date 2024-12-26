@@ -192,8 +192,25 @@ public final class XmlMethod {
         return this.node.child("name", "body")
             .children()
             .filter(element -> element.attribute("base").isPresent())
-            .map(XmlNode::toEntry)
+            .map(XmlMethod::toEntry)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Convert to an entry.
+     * @return Bytecode entry.
+     */
+    private static XmlBytecodeEntry toEntry(final XmlNode node) {
+        final XmlBytecodeEntry result;
+        final Optional<String> base = node.attribute("base");
+        if (base.isPresent() && new JeoFqn("label").fqn().equals(base.get())) {
+            result = new XmlLabel(node);
+        } else if (base.isPresent() && new JeoFqn("frame").fqn().equals(base.get())) {
+            result = new XmlFrame(node);
+        } else {
+            result = new XmlInstruction(node);
+        }
+        return result;
     }
 
     /**

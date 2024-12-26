@@ -27,15 +27,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.cactoos.list.ListOf;
-import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.Opcodes;
-import org.xembly.ImpossibleModificationException;
-import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlNode}.
@@ -129,32 +124,6 @@ final class XmlNodeTest {
             ),
             objects,
             new IsEqual<>(expected)
-        );
-    }
-
-    @Test
-    void convertsToLabelEntry() throws ImpossibleModificationException {
-        MatcherAssert.assertThat(
-            "Can't convert to label entry",
-            new XmlNode(
-                new Xembler(
-                    new BytecodeLabel("lbl").directives()
-                ).xml()
-            ).toEntry(),
-            Matchers.instanceOf(XmlLabel.class)
-        );
-    }
-
-    @Test
-    void convertsToInstructionEntry() throws ImpossibleModificationException {
-        MatcherAssert.assertThat(
-            "Can't convert to instruction entry",
-            new XmlNode(
-                new Xembler(
-                    new BytecodeInstruction(Opcodes.ICONST_2).directives()
-                ).xml()
-            ).toEntry(),
-            Matchers.instanceOf(XmlInstruction.class)
         );
     }
 }
