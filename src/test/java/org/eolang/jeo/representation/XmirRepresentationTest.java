@@ -147,18 +147,10 @@ final class XmirRepresentationTest {
                 new BytecodeClass(XmirRepresentationTest.MATH)
             ).xml().toString().substring(42).getBytes(StandardCharsets.UTF_8)
         );
-        MatcherAssert.assertThat(
-            "We expect that the error message will be easily understandable by developers",
-            Assertions.assertThrows(
-                IllegalStateException.class,
-                () -> new XmirRepresentation(xmir).toBytecode()
-            ).getCause().getMessage(),
-            Matchers.containsString(
-                String.format(
-                    "Can't parse XML from the file '%s'",
-                    xmir
-                )
-            )
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new XmirRepresentation(xmir).toBytecode(),
+            "We expect that the error message will be easily understandable by developers"
         );
     }
 

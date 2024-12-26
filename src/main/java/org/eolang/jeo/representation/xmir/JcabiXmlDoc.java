@@ -24,6 +24,9 @@
 package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
+import java.io.FileNotFoundException;
+import java.nio.file.Path;
 
 public final class JcabiXmlDoc implements XmlDoc {
 
@@ -31,6 +34,10 @@ public final class JcabiXmlDoc implements XmlDoc {
 
     public JcabiXmlDoc(final XML doc) {
         this(new JcabiXmlNode(doc.inner().getFirstChild()));
+    }
+
+    public JcabiXmlDoc(final Path path) {
+        this(JcabiXmlDoc.open(path));
     }
 
     private JcabiXmlDoc(final XmlNode root) {
@@ -45,5 +52,31 @@ public final class JcabiXmlDoc implements XmlDoc {
     @Override
     public void validate() {
         this.root.validate();
+    }
+
+    /**
+     * Convert a path to XML.
+     * @param path Path to XML file.
+     * @return XML.
+     * @checkstyle IllegalCatchCheck (20 lines)
+     */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    private static XmlNode open(final Path path) {
+        try {
+            return new JcabiXmlNode(new XMLDocument(path).inner().getFirstChild());
+        } catch (final FileNotFoundException exception) {
+            throw new IllegalStateException(
+                String.format("Can't find file '%s'", path),
+                exception
+            );
+        } catch (final Exception broken) {
+            throw new IllegalStateException(
+                String.format(
+                    "Can't parse XML from the file '%s'",
+                    path
+                ),
+                broken
+            );
+        }
     }
 }
