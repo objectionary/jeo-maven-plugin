@@ -29,8 +29,8 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
+import org.eolang.jeo.representation.xmir.NativeXmlNode;
 import org.eolang.jeo.representation.xmir.XmlMethod;
-import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ final class DirectivesMethodTest {
         MatcherAssert.assertThat(
             "We expect that directives will generate correct method",
             new XmlMethod(
-                new XmlNode(
+                new NativeXmlNode(
                     new Xembler(
                         new DirectivesMethod(
                             name,
@@ -78,7 +78,7 @@ final class DirectivesMethodTest {
         MatcherAssert.assertThat(
             "We expect that annotation dirictes will be added to the method",
             new XmlMethod(
-                new XmlNode(
+                new NativeXmlNode(
                     new Xembler(
                         new DirectivesMethod(name)
                             .withAnnotation(new DirectivesAnnotation(descriptor, visible))

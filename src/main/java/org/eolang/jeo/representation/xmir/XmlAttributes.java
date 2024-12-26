@@ -35,13 +35,13 @@ public final class XmlAttributes {
     /**
      * XML node of attributes.
      */
-    private final XmlNode node;
+    private final MyXmlNode node;
 
     /**
      * Constructor.
      * @param xmlnode XML node.
      */
-    XmlAttributes(final XmlNode xmlnode) {
+    XmlAttributes(final MyXmlNode xmlnode) {
         this.node = xmlnode;
     }
 

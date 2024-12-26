@@ -36,13 +36,13 @@ public final class XmlParams {
     /**
      * Xml representation of a method params.
      */
-    private final XmlNode node;
+    private final MyXmlNode node;
 
     /**
      * Constructor.
      * @param node Xml representation of a method params.
      */
-    public XmlParams(final XmlNode node) {
+    public XmlParams(final MyXmlNode node) {
         this.node = node;
     }
 

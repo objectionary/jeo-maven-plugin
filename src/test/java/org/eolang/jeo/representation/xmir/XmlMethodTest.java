@@ -103,7 +103,7 @@ final class XmlMethodTest {
             Assertions.assertThrows(
                 ParsingException.class,
                 () -> new XmlMethod(
-                    new XmlNode(
+                    new NativeXmlNode(
                         new Xembler(
                             new Directives(
                                 new BytecodeMethod(

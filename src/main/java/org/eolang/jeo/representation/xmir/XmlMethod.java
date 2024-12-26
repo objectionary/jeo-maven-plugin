@@ -60,13 +60,13 @@ public final class XmlMethod {
     /**
      * Method node.
      */
-    private final XmlNode node;
+    private final MyXmlNode node;
 
     /**
      * Constructor.
      * @param xmlnode Method node.
      */
-    public XmlMethod(final XmlNode xmlnode) {
+    public XmlMethod(final MyXmlNode xmlnode) {
         this.node = xmlnode;
     }
 
@@ -200,7 +200,7 @@ public final class XmlMethod {
      * Convert to an entry.
      * @return Bytecode entry.
      */
-    private static XmlBytecodeEntry toEntry(final XmlNode node) {
+    private static XmlBytecodeEntry toEntry(final MyXmlNode node) {
         final XmlBytecodeEntry result;
         final Optional<String> base = node.attribute("base");
         if (base.isPresent() && new JeoFqn("label").fqn().equals(base.get())) {
@@ -280,7 +280,7 @@ public final class XmlMethod {
      * @param index Index.
      * @return Child.
      */
-    private XmlNode child(final int index) {
+    private MyXmlNode child(final int index) {
         return this.node.children().collect(Collectors.toList()).get(index);
     }
 
@@ -295,7 +295,7 @@ public final class XmlMethod {
                 element -> element.attribute("name")
                     .map(s -> s.contains("trycatchblocks"))
                     .orElse(false))
-            .flatMap(XmlNode::children)
+            .flatMap(MyXmlNode::children)
             .map(XmlTryCatchEntry::new)
             .collect(Collectors.toList());
     }
@@ -348,7 +348,7 @@ public final class XmlMethod {
     }
 
     /**
-     * Create Method XmlNode by directives.
+     * Create Method MyXmlNode by directives.
      *
      * @param name Method name.
      * @param access Method access modifiers.
@@ -356,10 +356,10 @@ public final class XmlMethod {
      * @param stack Max stack.
      * @param locals Max locals.
      * @param exceptions Method exceptions.
-     * @return Method XmlNode.
+     * @return Method MyXmlNode.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    private static XmlNode prestructor(
+    private static MyXmlNode prestructor(
         final String name,
         final int access,
         final String descriptor,
@@ -367,7 +367,7 @@ public final class XmlMethod {
         final int locals,
         final String... exceptions
     ) {
-        return new XmlNode(
+        return new NativeXmlNode(
             new Xembler(
                 new DirectivesMethod(
                     name,

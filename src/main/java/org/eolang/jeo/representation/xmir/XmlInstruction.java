@@ -44,7 +44,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Instruction node.
      */
     @EqualsAndHashCode.Exclude
-    private final XmlNode node;
+    private final MyXmlNode node;
 
     /**
      * Constructor.
@@ -53,7 +53,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      */
     XmlInstruction(final int opcode, final Object... args) {
         this(
-            new XmlNode(
+            new NativeXmlNode(
                 new Xembler(
                     new DirectivesInstruction(opcode, args),
                     new Transformers.Node()
@@ -66,7 +66,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Constructor.
      * @param xmlnode Instruction node.
      */
-    XmlInstruction(final XmlNode xmlnode) {
+    XmlInstruction(final MyXmlNode xmlnode) {
         this.node = xmlnode;
     }
 

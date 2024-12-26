@@ -40,7 +40,7 @@ final class XmlAnnotationTest {
         Assertions.assertThrows(
             ParsingException.class,
             () -> new XmlAnnotation(
-                new XmlNode(
+                new NativeXmlNode(
                     new Xembler(
                         new Directives(
                             new BytecodeAnnotation(

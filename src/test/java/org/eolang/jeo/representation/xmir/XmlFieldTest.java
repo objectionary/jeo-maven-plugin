@@ -55,7 +55,7 @@ final class XmlFieldTest {
         MatcherAssert.assertThat(
             "Failed to parse XMIR field",
             new XmlField(
-                new XmlNode(
+                new NativeXmlNode(
                     new Xembler(
                         new DirectivesField(
                             access,
@@ -89,7 +89,7 @@ final class XmlFieldTest {
         MatcherAssert.assertThat(
             "We expect the value to be the same",
             new XmlField(
-                new XmlNode(
+                new NativeXmlNode(
                     new Xembler(
                         new DirectivesField(access, name, descriptor, null, value)
                     ).xml()
@@ -110,7 +110,7 @@ final class XmlFieldTest {
         MatcherAssert.assertThat(
             "Annotations are not found",
             new XmlField(
-                new XmlNode(
+                new NativeXmlNode(
                     new Xembler(
                         new DirectivesField(
                             new DirectivesAnnotation(override, true),
@@ -150,7 +150,7 @@ final class XmlFieldTest {
         );
         MatcherAssert.assertThat(
             "We expect the field name with unicode characters to be successfully parsed from directives",
-            new XmlField(new XmlNode(new Xembler(expected.directives()).xml())).bytecode(),
+            new XmlField(new NativeXmlNode(new Xembler(expected.directives()).xml())).bytecode(),
             Matchers.equalTo(expected)
         );
     }

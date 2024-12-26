@@ -46,7 +46,7 @@ final class XmlValueTest {
     void parsesHexStringAsInteger() {
         final int expected = 1057;
         final int actual = new XmlValue(
-            new XmlNode("<o><o>00-00-00-00-00-00-04-21</o></o>")
+            new NativeXmlNode("<o><o>00-00-00-00-00-00-04-21</o></o>")
         ).integer();
         MatcherAssert.assertThat(
             String.format(
@@ -65,7 +65,7 @@ final class XmlValueTest {
         MatcherAssert.assertThat(
             "Decoding and encoding are not consistent",
             new XmlValue(
-                new XmlNode(new Xembler(new DirectivesValue(origin)).xmlQuietly())
+                new NativeXmlNode(new Xembler(new DirectivesValue(origin)).xmlQuietly())
             ).object(),
             Matchers.equalTo(origin)
         );
@@ -79,7 +79,7 @@ final class XmlValueTest {
         MatcherAssert.assertThat(
             "Can't decode unicode characters",
             new XmlValue(
-                new XmlNode(
+                new NativeXmlNode(
                     new Xembler(
                         new DirectivesValue(unicode)
                     ).xml()

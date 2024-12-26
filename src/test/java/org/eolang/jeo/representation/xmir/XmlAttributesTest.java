@@ -45,7 +45,7 @@ final class XmlAttributesTest {
         MatcherAssert.assertThat(
             "We expect the attributes to be converted to a correct bytecode domain class",
             new XmlAttributes(
-                new XmlNode(new Xembler(expected.directives("attributes")).xml())
+                new NativeXmlNode(new Xembler(expected.directives("attributes")).xml())
             ).attributes(),
             Matchers.equalTo(expected)
         );

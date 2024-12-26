@@ -26,7 +26,7 @@ package org.eolang.jeo.representation.directives;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
-import org.eolang.jeo.representation.xmir.XmlNode;
+import org.eolang.jeo.representation.xmir.NativeXmlNode;
 import org.eolang.jeo.representation.xmir.XmlTryCatchEntry;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -52,7 +52,7 @@ final class DirectivesTryCatchTest {
         MatcherAssert.assertThat(
             "We expected to convert try-catch directives to correct bytecode.",
             new XmlTryCatchEntry(
-                new XmlNode(
+                new NativeXmlNode(
                     new Xembler(
                         new DirectivesTryCatch(start, end, handler, type)
                     ).xml()
@@ -82,7 +82,7 @@ final class DirectivesTryCatchTest {
         MatcherAssert.assertThat(
             "We failed to convert try-catch directives to correct XML.",
             new XmlTryCatchEntry(
-                new XmlNode(
+                new NativeXmlNode(
                     new Xembler(
                         new DirectivesTryCatch(start, end, handler, type)
                     ).xml()

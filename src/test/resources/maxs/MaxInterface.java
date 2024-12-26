@@ -22,27 +22,6 @@
  * SOFTWARE.
  */
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.net.HttpURLConnection;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.function.Function;
-import java.util.stream.Stream;
-import java.util.ArrayList;
-
-
 /**
  * This class contains many different methods with different number of local
  * variables and stack elements.

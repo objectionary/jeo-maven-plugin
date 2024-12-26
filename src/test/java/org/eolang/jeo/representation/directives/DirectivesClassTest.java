@@ -28,8 +28,8 @@ import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
+import org.eolang.jeo.representation.xmir.NativeXmlNode;
 import org.eolang.jeo.representation.xmir.XmlClass;
-import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -106,7 +106,7 @@ final class DirectivesClassTest {
         MatcherAssert.assertThat(
             "We expect that class created from directives is equal to expected",
             new XmlClass(
-                new XmlNode(
+                new NativeXmlNode(
                     new Xembler(
                         new DirectivesClass(
                             name,

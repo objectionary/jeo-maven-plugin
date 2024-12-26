@@ -39,13 +39,13 @@ public final class XmlLocalVariable {
     /**
      * XML node of local variable.
      */
-    private final XmlNode node;
+    private final MyXmlNode node;
 
     /**
      * Constructor.
      * @param node XML node.
      */
-    XmlLocalVariable(final XmlNode node) {
+    XmlLocalVariable(final MyXmlNode node) {
         this.node = node;
     }
 

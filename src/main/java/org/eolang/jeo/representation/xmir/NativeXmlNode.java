@@ -70,7 +70,7 @@ public final class NativeXmlNode implements MyXmlNode {
     @Override
     public boolean equals(final Object obj) {
         final boolean res;
-        if (obj instanceof XmlNode) {
+        if (obj instanceof NativeXmlNode) {
             res = new XMLDocument(this.node).equals(new XMLDocument(((NativeXmlNode) obj).node));
         } else {
             res = false;

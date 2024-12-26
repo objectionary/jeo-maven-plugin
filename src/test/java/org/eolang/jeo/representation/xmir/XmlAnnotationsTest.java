@@ -44,7 +44,7 @@ final class XmlAnnotationsTest {
         );
         MatcherAssert.assertThat(
             "We expect that XMIR annotations are parsed correctly",
-            new XmlAnnotations(new XmlNode(new Xembler(expected.directives("")).xml()))
+            new XmlAnnotations(new NativeXmlNode(new Xembler(expected.directives("")).xml()))
                 .bytecode(),
             Matchers.equalTo(expected)
         );

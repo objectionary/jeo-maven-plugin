@@ -42,21 +42,21 @@ public final class XmlAttribute {
     /**
      * XML node of an attribute.
      */
-    private final XmlNode node;
+    private final MyXmlNode node;
 
     /**
      * Constructor.
      * @param node XML node as string.
      */
     XmlAttribute(final String node) {
-        this(new XmlNode(node));
+        this(new NativeXmlNode(node));
     }
 
     /**
      * Constructor.
      * @param node XML node.
      */
-    XmlAttribute(final XmlNode node) {
+    XmlAttribute(final MyXmlNode node) {
         this.node = node;
     }
 

@@ -37,13 +37,13 @@ public final class XmlParam {
     /**
      * Root node from which we will get all required data.
      */
-    private final XmlNode root;
+    private final MyXmlNode root;
 
     /**
      * Constructor.
      * @param root Parameter xml node.
      */
-    public XmlParam(final XmlNode root) {
+    public XmlParam(final MyXmlNode root) {
         this.root = root;
     }
 

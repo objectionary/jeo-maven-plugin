@@ -24,7 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import org.eolang.jeo.representation.xmir.XmlNode;
+import org.eolang.jeo.representation.xmir.NativeXmlNode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
@@ -54,7 +54,7 @@ final class DirectivesValuesTest {
     void generatesRandomNameWithoutFirstDigit() {
         MatcherAssert.assertThat(
             "We expect that the name of the sequence will be generated randomly and will not start with a digit",
-            new XmlNode(
+            new NativeXmlNode(
                 new Xembler(
                     new DirectivesValues("", "some-value")
                 ).xmlQuietly()

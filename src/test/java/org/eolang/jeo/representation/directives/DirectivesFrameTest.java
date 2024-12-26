@@ -24,8 +24,8 @@
 package org.eolang.jeo.representation.directives;
 
 import org.eolang.jeo.representation.bytecode.BytecodeFrame;
+import org.eolang.jeo.representation.xmir.NativeXmlNode;
 import org.eolang.jeo.representation.xmir.XmlFrame;
-import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ final class DirectivesFrameTest {
         ).xml();
         MatcherAssert.assertThat(
             "We failed to create correct directives for bytecode frame.",
-            new XmlFrame(new XmlNode(xml)).bytecode(),
+            new XmlFrame(new NativeXmlNode(xml)).bytecode(),
             Matchers.equalTo(new BytecodeFrame(type, nlocal, locals, nstack, stack))
         );
     }

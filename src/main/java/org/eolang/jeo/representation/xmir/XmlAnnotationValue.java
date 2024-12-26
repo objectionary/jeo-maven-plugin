@@ -40,13 +40,13 @@ public final class XmlAnnotationValue {
     /**
      * Annotation property XML node.
      */
-    private final XmlNode node;
+    private final MyXmlNode node;
 
     /**
      * Constructor.
      * @param xmlnode XML node.
      */
-    public XmlAnnotationValue(final XmlNode xmlnode) {
+    public XmlAnnotationValue(final MyXmlNode xmlnode) {
         this.node = xmlnode;
     }
 

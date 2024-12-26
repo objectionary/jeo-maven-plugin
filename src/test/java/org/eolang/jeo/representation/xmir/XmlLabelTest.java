@@ -42,7 +42,7 @@ final class XmlLabelTest {
         MatcherAssert.assertThat(
             "Can't retrieve correct label identifier",
             new XmlLabel(
-                new XmlNode(
+                new NativeXmlNode(
                     new Xembler(expected.directives()).xml()
                 )
             ).bytecode(),

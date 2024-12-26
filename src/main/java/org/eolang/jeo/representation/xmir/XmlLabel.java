@@ -34,13 +34,13 @@ public final class XmlLabel implements XmlBytecodeEntry {
     /**
      * Label node.
      */
-    private final XmlNode node;
+    private final MyXmlNode node;
 
     /**
      * Constructor.
      * @param node Label node.
      */
-    XmlLabel(final XmlNode node) {
+    XmlLabel(final MyXmlNode node) {
         this.node = node;
     }
 

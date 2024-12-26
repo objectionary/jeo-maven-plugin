@@ -36,13 +36,13 @@ public class XmlAnnotations {
     /**
      * XML node representing annotations.
      */
-    private final XmlNode node;
+    private final MyXmlNode node;
 
     /**
      * Constructor.
      * @param xmlnode XML node.
      */
-    XmlAnnotations(final XmlNode xmlnode) {
+    XmlAnnotations(final MyXmlNode xmlnode) {
         this.node = xmlnode;
     }
 

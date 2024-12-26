@@ -46,13 +46,13 @@ public final class XmlValue {
     /**
      * XML node.
      */
-    private final XmlNode node;
+    private final MyXmlNode node;
 
     /**
      * Constructor.
      * @param node XML node.
      */
-    public XmlValue(final XmlNode node) {
+    public XmlValue(final MyXmlNode node) {
         this.node = node;
     }
 

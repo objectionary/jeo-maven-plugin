@@ -54,13 +54,13 @@ public final class XmlClass {
      * Class node from entire XML.
      */
     @ToString.Include
-    private final XmlNode node;
+    private final MyXmlNode node;
 
     /**
      * Constructor.
      * @param node Class node.
      */
-    public XmlClass(final XmlNode node) {
+    public XmlClass(final MyXmlNode node) {
         this.node = node;
     }
 
@@ -86,7 +86,7 @@ public final class XmlClass {
      * @param xml Class node.
      */
     XmlClass(final Node xml) {
-        this(new XmlNode(xml));
+        this(new NativeXmlNode(xml));
     }
 
     /**

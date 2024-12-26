@@ -43,7 +43,7 @@ final class XmlParamTest {
         MatcherAssert.assertThat(
             "Can't convert XML param to bytecode",
             new XmlParam(
-                new XmlNode(new Xembler(expected.directives()).xml())
+                new NativeXmlNode(new Xembler(expected.directives()).xml())
             ).bytecode(),
             Matchers.equalTo(expected)
         );

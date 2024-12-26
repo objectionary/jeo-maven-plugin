@@ -25,8 +25,8 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import org.eolang.jeo.representation.bytecode.BytecodePlainAnnotationValue;
+import org.eolang.jeo.representation.xmir.NativeXmlNode;
 import org.eolang.jeo.representation.xmir.XmlAnnotationValue;
-import org.eolang.jeo.representation.xmir.XmlNode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,7 @@ final class DirectivesPlainAnnotationValueTest {
         MatcherAssert.assertThat(
             "Incorrect annotation property for plain property",
             new XmlAnnotationValue(
-                new XmlNode(
+                new NativeXmlNode(
                     new Xembler(new DirectivesPlainAnnotationValue(name, value)).xml()
                 )
             ).bytecode(),
