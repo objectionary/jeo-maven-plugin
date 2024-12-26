@@ -44,7 +44,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Instruction node.
      */
     @EqualsAndHashCode.Exclude
-    private final MyXmlNode node;
+    private final XmlNode node;
 
     /**
      * Constructor.
@@ -66,7 +66,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Constructor.
      * @param xmlnode Instruction node.
      */
-    XmlInstruction(final MyXmlNode xmlnode) {
+    XmlInstruction(final XmlNode xmlnode) {
         this.node = xmlnode;
     }
 

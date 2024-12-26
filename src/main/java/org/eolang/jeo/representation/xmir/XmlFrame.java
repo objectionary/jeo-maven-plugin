@@ -37,13 +37,13 @@ public final class XmlFrame implements XmlBytecodeEntry {
     /**
      * Xmir node.
      */
-    private final MyXmlNode node;
+    private final XmlNode node;
 
     /**
      * Constructor.
      * @param xmlnode Xmir node
      */
-    public XmlFrame(final MyXmlNode xmlnode) {
+    public XmlFrame(final XmlNode xmlnode) {
         this.node = xmlnode;
     }
 

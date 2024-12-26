@@ -49,7 +49,7 @@ final class NativeXmlNodeTest {
 
     @Test
     void retrievesChildren() {
-        final List<MyXmlNode> children = new NativeXmlNode("<o><o name='inner1'/><o name='inner2'/></o>")
+        final List<XmlNode> children = new NativeXmlNode("<o><o name='inner1'/><o name='inner2'/></o>")
             .children().collect(Collectors.toList());
         MatcherAssert.assertThat(
             "Size of children is not as expected",
@@ -92,7 +92,7 @@ final class NativeXmlNodeTest {
 
     @Test
     void retrievesChild() {
-        final MyXmlNode child = new NativeXmlNode(
+        final XmlNode child = new NativeXmlNode(
             "<program><o>text</o></program>"
         ).child("o");
         final String expected = "<o>text</o>";
@@ -109,7 +109,7 @@ final class NativeXmlNodeTest {
 
     @Test
     void retrievesChildObjects() {
-        final List<MyXmlNode> objects = new NativeXmlNode(
+        final List<XmlNode> objects = new NativeXmlNode(
             "<program><o>o1</o><o>o2</o></program>"
         ).children().collect(Collectors.toList());
         final List<NativeXmlNode> expected = new ListOf<>(

@@ -41,14 +41,14 @@ public final class XmlMaxs {
      * XML node.
      */
     @EqualsAndHashCode.Exclude
-    private final MyXmlNode node;
+    private final XmlNode node;
 
     /**
      * Constructor.
      *
      * @param node XML node.
      */
-    XmlMaxs(final MyXmlNode node) {
+    XmlMaxs(final XmlNode node) {
         this.node = node;
     }
 

@@ -60,13 +60,13 @@ public final class XmlMethod {
     /**
      * Method node.
      */
-    private final MyXmlNode node;
+    private final XmlNode node;
 
     /**
      * Constructor.
      * @param xmlnode Method node.
      */
-    public XmlMethod(final MyXmlNode xmlnode) {
+    public XmlMethod(final XmlNode xmlnode) {
         this.node = xmlnode;
     }
 
@@ -200,7 +200,7 @@ public final class XmlMethod {
      * Convert to an entry.
      * @return Bytecode entry.
      */
-    private static XmlBytecodeEntry toEntry(final MyXmlNode node) {
+    private static XmlBytecodeEntry toEntry(final XmlNode node) {
         final XmlBytecodeEntry result;
         final Optional<String> base = node.attribute("base");
         if (base.isPresent() && new JeoFqn("label").fqn().equals(base.get())) {
@@ -280,7 +280,7 @@ public final class XmlMethod {
      * @param index Index.
      * @return Child.
      */
-    private MyXmlNode child(final int index) {
+    private XmlNode child(final int index) {
         return this.node.children().collect(Collectors.toList()).get(index);
     }
 
@@ -295,7 +295,7 @@ public final class XmlMethod {
                 element -> element.attribute("name")
                     .map(s -> s.contains("trycatchblocks"))
                     .orElse(false))
-            .flatMap(MyXmlNode::children)
+            .flatMap(XmlNode::children)
             .map(XmlTryCatchEntry::new)
             .collect(Collectors.toList());
     }
@@ -359,7 +359,7 @@ public final class XmlMethod {
      * @return Method MyXmlNode.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    private static MyXmlNode prestructor(
+    private static XmlNode prestructor(
         final String name,
         final int access,
         final String descriptor,

@@ -39,13 +39,13 @@ public final class XmlOperand {
      * Raw XML node which represents an instruction operand.
      */
     @EqualsAndHashCode.Exclude
-    private final MyXmlNode raw;
+    private final XmlNode raw;
 
     /**
      * Constructor.
      * @param node Raw XML operand node.
      */
-    XmlOperand(final MyXmlNode node) {
+    XmlOperand(final XmlNode node) {
         this.raw = node;
     }
 

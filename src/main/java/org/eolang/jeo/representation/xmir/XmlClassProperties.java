@@ -36,13 +36,13 @@ public final class XmlClassProperties {
     /**
      * XML representation of a class.
      */
-    private final MyXmlNode clazz;
+    private final XmlNode clazz;
 
     /**
      * Constructor.
      * @param xmlclass XMl representation of a class.
      */
-    XmlClassProperties(final MyXmlNode xmlclass) {
+    XmlClassProperties(final XmlNode xmlclass) {
         this.clazz = xmlclass;
     }
 
@@ -129,7 +129,7 @@ public final class XmlClassProperties {
      * @param name Name of the child node.
      * @return Child node.
      */
-    private Optional<MyXmlNode> child(final String name) {
+    private Optional<XmlNode> child(final String name) {
         return this.clazz.optchild("name", name);
     }
 

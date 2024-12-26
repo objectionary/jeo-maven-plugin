@@ -38,13 +38,13 @@ public class XmlAnnotation {
     /**
      * Xmir node.
      */
-    private final MyXmlNode node;
+    private final XmlNode node;
 
     /**
      * Constructor.
      * @param xmlnode XML node.
      */
-    XmlAnnotation(final MyXmlNode xmlnode) {
+    XmlAnnotation(final XmlNode xmlnode) {
         this.node = xmlnode;
     }
 
@@ -92,8 +92,8 @@ public class XmlAnnotation {
      * @param index Index.
      * @return Child.
      */
-    private MyXmlNode child(final int index) {
-        final List<MyXmlNode> all = this.node.children().collect(Collectors.toList());
+    private XmlNode child(final int index) {
+        final List<XmlNode> all = this.node.children().collect(Collectors.toList());
         if (index >= all.size()) {
             throw new IllegalArgumentException(
                 String.format(

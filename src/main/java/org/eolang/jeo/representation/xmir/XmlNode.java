@@ -35,13 +35,13 @@ import java.util.stream.Stream;
  * - another native implementation
  * @since 0.7
  */
-public interface MyXmlNode {
+public interface XmlNode {
 
     /**
      * Get all child nodes.
      * @return Child nodes.
      */
-    Stream<MyXmlNode> children();
+    Stream<XmlNode> children();
 
     /**
      * Retrieve node text content.
@@ -61,7 +61,7 @@ public interface MyXmlNode {
      * @param name Child node name.
      * @return Child node.
      */
-    MyXmlNode child(final String name);
+    XmlNode child(final String name);
 
     /**
      * Find elements by xpath.
@@ -76,7 +76,7 @@ public interface MyXmlNode {
      * @param value Attribute value.
      * @return Child node.
      */
-    MyXmlNode child(final String attribute, final String value);
+    XmlNode child(final String attribute, final String value);
 
     /**
      * Get optional child node by attribute.
@@ -84,13 +84,13 @@ public interface MyXmlNode {
      * @param value Attribute value.
      * @return Child node.
      */
-    Optional<MyXmlNode> optchild(final String attribute, final String value);
+    Optional<XmlNode> optchild(final String attribute, final String value);
 
     /**
      * Get first child.
      * @return First child node.
      */
-    MyXmlNode firstChild();
+    XmlNode firstChild();
 
     /**
      * Check if an attribute exists.

@@ -36,13 +36,13 @@ public final class XmlDefaultValue {
     /**
      * Default value XMIR node.
      */
-    private final MyXmlNode node;
+    private final XmlNode node;
 
     /**
      * Constructor.
      * @param node Default value XMIR node.
      */
-    XmlDefaultValue(final MyXmlNode node) {
+    XmlDefaultValue(final XmlNode node) {
         this.node = node;
     }
 

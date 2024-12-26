@@ -38,7 +38,7 @@ import org.w3c.dom.NodeList;
  * Utility class that simplifies work with XML.
  * @since 0.1
  */
-public final class NativeXmlNode implements MyXmlNode {
+public final class NativeXmlNode implements XmlNode {
 
     /**
      * XML node.
@@ -90,7 +90,7 @@ public final class NativeXmlNode implements MyXmlNode {
 
 
     @Override
-    public Stream<MyXmlNode> children() {
+    public Stream<XmlNode> children() {
         return this.objects().map(NativeXmlNode::new);
     }
 
@@ -116,7 +116,7 @@ public final class NativeXmlNode implements MyXmlNode {
     }
 
     @Override
-    public MyXmlNode child(final String name) {
+    public XmlNode child(final String name) {
         return this.optchild(name).orElseThrow(() -> this.notFound(name));
     }
 
@@ -130,7 +130,7 @@ public final class NativeXmlNode implements MyXmlNode {
     }
 
     @Override
-    public MyXmlNode child(final String attribute, final String value) {
+    public XmlNode child(final String attribute, final String value) {
         return this.children()
             .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
             .findFirst()
@@ -142,14 +142,14 @@ public final class NativeXmlNode implements MyXmlNode {
     }
 
     @Override
-    public Optional<MyXmlNode> optchild(final String attribute, final String value) {
+    public Optional<XmlNode> optchild(final String attribute, final String value) {
         return this.children()
             .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
             .findFirst();
     }
 
     @Override
-    public MyXmlNode firstChild() {
+    public XmlNode firstChild() {
         return this.children().findFirst()
             .orElseThrow(
                 () -> new IllegalStateException(
@@ -175,8 +175,8 @@ public final class NativeXmlNode implements MyXmlNode {
      * @param name Child node name.
      * @return Child node.
      */
-    private Optional<MyXmlNode> optchild(final String name) {
-        Optional<MyXmlNode> result = Optional.empty();
+    private Optional<XmlNode> optchild(final String name) {
+        Optional<XmlNode> result = Optional.empty();
         final NodeList children = this.node.getChildNodes();
         final int length = children.getLength();
         for (int index = 0; index < length; ++index) {

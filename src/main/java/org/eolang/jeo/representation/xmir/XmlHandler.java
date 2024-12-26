@@ -37,13 +37,13 @@ final class XmlHandler {
     /**
      * XML node.
      */
-    private final MyXmlNode node;
+    private final XmlNode node;
 
     /**
      * Constructor.
      * @param xmlnode Node.
      */
-    XmlHandler(final MyXmlNode xmlnode) {
+    XmlHandler(final XmlNode xmlnode) {
         this.node = xmlnode;
     }
 

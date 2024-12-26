@@ -49,7 +49,7 @@ public final class XmlProgram {
      * You can read more about it here:
      * <a href="https://github.com/objectionary/jeo-maven-plugin/pull/924">Optimization</a>
      */
-    private final MyXmlNode root;
+    private final XmlNode root;
 
     /**
      * Constructor.
