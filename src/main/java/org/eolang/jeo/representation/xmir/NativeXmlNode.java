@@ -25,10 +25,16 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
+import javax.xml.namespace.QName;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -39,6 +45,11 @@ import org.w3c.dom.NodeList;
  * @since 0.1
  */
 public final class NativeXmlNode implements XmlNode {
+
+    /**
+     * XPath's factory.
+     */
+    private static final XPathFactory XPATH_FACTORY = XPathFactory.newInstance();
 
     /**
      * XML node.
@@ -126,7 +137,25 @@ public final class NativeXmlNode implements XmlNode {
      * @return List of elements.
      */
     public List<String> xpath(final String xpath) {
-        return new XMLDocument(this.node).xpath(xpath);
+        final XPath path = NativeXmlNode.XPATH_FACTORY.newXPath();
+        try {
+            final QName nodeset = XPathConstants.NODESET;
+            final NodeList evaluate = (NodeList) path.evaluate(
+                xpath,
+                node,
+                nodeset
+            );
+            final int length = evaluate.getLength();
+            final List<String> res = new ArrayList<>(0);
+            for (int index = 0; index < length; ++index) {
+                final Node item = evaluate.item(index);
+                res.add(item.getNodeValue());
+            }
+            return Collections.unmodifiableList(res);
+        } catch (final XPathExpressionException exception) {
+            throw new RuntimeException(exception);
+        }
+//        return new XMLDocument(this.node).xpath(path);
     }
 
     @Override

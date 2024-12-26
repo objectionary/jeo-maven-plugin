@@ -38,6 +38,11 @@ import org.cactoos.scalar.Unchecked;
 public final class NativeXmlDoc implements XmlDoc {
 
     /**
+     * XPath's factory.
+     */
+    private static final XPathFactory XPATH_FACTORY = XPathFactory.newInstance();
+
+    /**
      * XML document factory.
      */
     private static final DocumentBuilderFactory DOC_FACTORY = DocumentBuilderFactory.newInstance();
