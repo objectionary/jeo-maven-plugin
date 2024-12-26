@@ -26,7 +26,6 @@ package org.eolang.jeo.representation.xmir;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPathFactory;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
@@ -36,11 +35,6 @@ import org.cactoos.scalar.Unchecked;
  * @since 0.7
  */
 public final class NativeXmlDoc implements XmlDoc {
-
-    /**
-     * XPath's factory.
-     */
-    private static final XPathFactory XPATH_FACTORY = XPathFactory.newInstance();
 
     /**
      * XML document factory.
@@ -53,21 +47,15 @@ public final class NativeXmlDoc implements XmlDoc {
     private final Unchecked<XmlNode> xml;
 
     /**
-     * Source of the XML.
-     */
-    private final String source;
-
-    /**
      * Constructor.
      * @param path Path to XML file.
      */
     public NativeXmlDoc(final Path path) {
-        this(fromFile(path), path.toAbsolutePath().toString());
+        this(NativeXmlDoc.fromFile(path));
     }
 
-    private NativeXmlDoc(final Unchecked<XmlNode> xml, final String source) {
+    private NativeXmlDoc(final Unchecked<XmlNode> xml) {
         this.xml = xml;
-        this.source = source;
     }
 
     @Override

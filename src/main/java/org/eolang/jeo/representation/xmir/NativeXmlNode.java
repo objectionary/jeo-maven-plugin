@@ -155,7 +155,6 @@ public final class NativeXmlNode implements XmlNode {
         } catch (final XPathExpressionException exception) {
             throw new RuntimeException(exception);
         }
-//        return new XMLDocument(this.node).xpath(path);
     }
 
     @Override
