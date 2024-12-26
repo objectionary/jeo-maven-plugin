@@ -49,7 +49,7 @@ public final class XmlProgram {
      * You can read more about it here:
      * <a href="https://github.com/objectionary/jeo-maven-plugin/pull/924">Optimization</a>
      */
-    private final Node root;
+    private final XmlNode root;
 
     /**
      * Constructor.
@@ -91,12 +91,12 @@ public final class XmlProgram {
      * @param root Root node.
      */
     public XmlProgram(final Node root) {
-        this.root = root;
+        this.root = new XmlNode(root);
     }
 
     @Override
     public String toString() {
-        return new XMLDocument(this.root).toString();
+        return this.root.toString();
     }
 
     /**
@@ -123,11 +123,7 @@ public final class XmlProgram {
      * @return Class.
      */
     private XmlClass top() {
-        return new XmlClass(
-            new XmlNode(this.root)
-                .child("objects")
-                .child("o")
-        );
+        return new XmlClass(this.root.child("objects").child("o"));
     }
 
     /**
@@ -138,7 +134,7 @@ public final class XmlProgram {
      * @return Package.
      */
     private String pckg() {
-        return new XmlNode(this.root)
+        return this.root
             .xpath("/program/metas/meta[head='package']/tail/text()")
             .stream()
             .findFirst()
