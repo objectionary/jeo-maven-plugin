@@ -104,7 +104,7 @@ final class JcabiXmlNodeTest {
                 expected
             ),
             child,
-            new IsEqual<>(new JcabiXmlNode(expected))
+            Matchers.equalTo(new JcabiXmlNode(expected))
         );
     }
 

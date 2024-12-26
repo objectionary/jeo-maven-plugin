@@ -39,16 +39,31 @@ import org.w3c.dom.NodeList;
 @EqualsAndHashCode
 public final class JcabiXmlNode implements XmlNode {
 
+    /**
+     * XML document.
+     */
     private final XMLDocument doc;
 
-    public JcabiXmlNode(final String s) {
-        this(new XMLDocument(s));
+    /**
+     * Ctor.
+     * @param xml XML string.
+     */
+    public JcabiXmlNode(final String xml) {
+        this(new XMLDocument(xml).inner().getFirstChild());
     }
 
+    /**
+     * Ctor.
+     * @param item XML node.
+     */
     public JcabiXmlNode(final Node item) {
         this(new XMLDocument(item));
     }
 
+    /**
+     * Ctor.
+     * @param root XML document.
+     */
     public JcabiXmlNode(final XMLDocument root) {
         this.doc = root;
     }
@@ -97,22 +112,42 @@ public final class JcabiXmlNode implements XmlNode {
 
     @Override
     public XmlNode child(final String attribute, final String value) {
-        return null;
+        return this.children()
+            .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
+            .findFirst()
+            .orElseThrow(
+                () -> this.notFound(
+                    String.format("object with attribute %s='%s'", attribute, value)
+                )
+            );
     }
 
     @Override
     public Optional<XmlNode> optchild(final String attribute, final String value) {
-        return Optional.empty();
+        return this.children()
+            .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
+            .findFirst();
     }
 
     @Override
     public XmlNode firstChild() {
-        return null;
+        return this.children().findFirst()
+            .orElseThrow(
+                () -> new IllegalStateException(
+                    String.format(
+                        "Can't find any child nodes in '%s'",
+                        this.doc
+                    )
+                )
+            );
     }
 
     @Override
     public boolean hasAttribute(final String name, final String value) {
-        return false;
+        return this.attribute(name)
+            .map(String::valueOf)
+            .map(val -> val.startsWith(value))
+            .orElse(false);
     }
 
     @Override
@@ -132,7 +167,7 @@ public final class JcabiXmlNode implements XmlNode {
         for (int index = 0; index < length; ++index) {
             final Node current = children.item(index);
             if (current.getNodeName().equals(name)) {
-                result = Optional.of(new NativeXmlNode(current));
+                result = Optional.of(new JcabiXmlNode(current));
                 break;
             }
         }
