@@ -23,14 +23,27 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-public final class JcabiXmlDoc implements XmlDoc{
+import com.jcabi.xml.XML;
+
+public final class JcabiXmlDoc implements XmlDoc {
+
+    private final XmlNode root;
+
+    public JcabiXmlDoc(final XML doc) {
+        this(new JcabiXmlNode(doc.inner().getFirstChild()));
+    }
+
+    private JcabiXmlDoc(final XmlNode root) {
+        this.root = root;
+    }
+
     @Override
     public XmlNode root() {
-        return null;
+        return this.root;
     }
 
     @Override
     public void validate() {
-
+        this.root.validate();
     }
 }

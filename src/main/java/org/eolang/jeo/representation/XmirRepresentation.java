@@ -26,6 +26,7 @@ package org.eolang.jeo.representation;
 import com.jcabi.xml.XML;
 import java.nio.file.Path;
 import org.eolang.jeo.representation.bytecode.Bytecode;
+import org.eolang.jeo.representation.xmir.JcabiXmlDoc;
 import org.eolang.jeo.representation.xmir.NativeXmlDoc;
 import org.eolang.jeo.representation.xmir.XmlDoc;
 import org.eolang.jeo.representation.xmir.XmlNode;
@@ -61,7 +62,7 @@ public final class XmirRepresentation {
      * @param xml XML.
      */
     public XmirRepresentation(final XML xml) {
-        this(new NativeXmlDoc(xml.inner().getFirstChild()), "Unknown");
+        this(new JcabiXmlDoc(xml), "Unknown");
     }
 
     /**

@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public final class JcabiXmlNode implements XmlNode {
     /**
      * XML document.
      */
-    private final XMLDocument doc;
+    private final XML doc;
 
     /**
      * Ctor.
@@ -64,20 +65,13 @@ public final class JcabiXmlNode implements XmlNode {
      * Ctor.
      * @param root XML document.
      */
-    public JcabiXmlNode(final XMLDocument root) {
+    public JcabiXmlNode(final XML root) {
         this.doc = root;
     }
 
     @Override
     public Stream<XmlNode> children() {
-        final NodeList nodes = this.doc.inner().getChildNodes();
-        final int length = nodes.getLength();
-        final List<XmlNode> res = new ArrayList<>(length);
-        for (int index = 0; index < length; ++index) {
-            res.add(new JcabiXmlNode(nodes.item(index)));
-        }
-        return res.stream();
-
+        return this.objects().map(JcabiXmlNode::new);
     }
 
     @Override
@@ -187,5 +181,21 @@ public final class JcabiXmlNode implements XmlNode {
                 this.doc
             )
         );
+    }
+
+    /**
+     * Objects.
+     * @return Stream of class objects.
+     */
+    private Stream<Node> objects() {
+        final NodeList children = this.doc.inner().getChildNodes();
+        final List<Node> res = new ArrayList<>(children.getLength());
+        for (int index = 0; index < children.getLength(); ++index) {
+            final Node child = children.item(index);
+            if ("o".equals(child.getNodeName())) {
+                res.add(child);
+            }
+        }
+        return res.stream();
     }
 }

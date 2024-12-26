@@ -29,7 +29,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
-import org.w3c.dom.Node;
 
 /**
  * Native XML document.
@@ -57,10 +56,6 @@ public final class NativeXmlDoc implements XmlDoc {
 
     private NativeXmlDoc(final Unchecked<XmlNode> xml) {
         this.xml = xml;
-    }
-
-    public NativeXmlDoc(final Node child) {
-        this(new Unchecked<>(() -> new NativeXmlNode(child)));
     }
 
     @Override
