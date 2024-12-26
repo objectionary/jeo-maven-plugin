@@ -28,18 +28,37 @@ import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 
+/**
+ * Jcabi XML document.
+ * @since 0.8
+ */
 public final class JcabiXmlDoc implements XmlDoc {
 
+    /**
+     * XML.
+     */
     private final XmlNode root;
 
+    /**
+     * Constructor.
+     * @param doc XML
+     */
     public JcabiXmlDoc(final XML doc) {
         this(new JcabiXmlNode(doc.inner().getFirstChild()));
     }
 
+    /**
+     * Constructor.
+     * @param path Path to XML file.
+     */
     public JcabiXmlDoc(final Path path) {
         this(JcabiXmlDoc.open(path));
     }
 
+    /**
+     * Constructor.
+     * @param root Root node
+     */
     private JcabiXmlDoc(final XmlNode root) {
         this.root = root;
     }
