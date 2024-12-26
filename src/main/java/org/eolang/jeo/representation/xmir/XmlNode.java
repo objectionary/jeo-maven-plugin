@@ -100,4 +100,6 @@ public interface XmlNode {
      */
     boolean hasAttribute(final String name, final String value);
 
+    void validate();
+
 }

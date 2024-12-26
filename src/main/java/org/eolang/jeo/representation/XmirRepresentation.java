@@ -37,6 +37,9 @@ import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.bytecode.Bytecode;
+import org.eolang.jeo.representation.xmir.NativeXmlDoc;
+import org.eolang.jeo.representation.xmir.XmlDoc;
+import org.eolang.jeo.representation.xmir.XmlNode;
 import org.eolang.jeo.representation.xmir.XmlProgram;
 import org.eolang.parser.StrictXmir;
 import org.w3c.dom.Node;
@@ -61,7 +64,7 @@ public final class XmirRepresentation {
     /**
      * XML.
      */
-    private final Unchecked<Node> xml;
+    private final XmlDoc xml;
 
     /**
      * Source of the XML.
@@ -73,7 +76,7 @@ public final class XmirRepresentation {
      * @param path Path to XML file.
      */
     public XmirRepresentation(final Path path) {
-        this(XmirRepresentation.fromFile(path), path.toAbsolutePath().toString());
+        this(new NativeXmlDoc(path), path.toAbsolutePath().toString());
     }
 
     /**
@@ -81,7 +84,7 @@ public final class XmirRepresentation {
      * @param xml XML.
      */
     public XmirRepresentation(final XML xml) {
-        this(xml.inner().getFirstChild(), "Unknown");
+        this(new NativeXmlDoc(xml.inner().getFirstChild()), "Unknown");
     }
 
     /**
@@ -89,22 +92,26 @@ public final class XmirRepresentation {
      * @param xml XML.
      * @param source Source of the XML.
      */
-    private XmirRepresentation(
-        final Node xml,
-        final String source
-    ) {
-        this(new Unchecked<>(() -> xml), source);
-    }
+//    private XmirRepresentation(
+//        final Node xml,
+//        final String source
+//    ) {
+//        this(new Unchecked<>(() -> xml), source);
+//    }
 
     /**
      * Constructor.
      * @param xml XML source.
      * @param source Source of the XML.
      */
-    private XmirRepresentation(
-        final Unchecked<Node> xml,
-        final String source
-    ) {
+//    private XmirRepresentation(
+//        final Unchecked<Node> xml,
+//        final String source
+//    ) {
+//        this.xml = xml;
+//        this.source = source;
+//    }
+    public XmirRepresentation(final XmlDoc xml, final String source) {
         this.xml = xml;
         this.source = source;
     }
@@ -116,31 +123,37 @@ public final class XmirRepresentation {
      * @return Class name.
      */
     public String name() {
-        final Node node = this.xml.value();
-        final XPath xpath = XmirRepresentation.XPATH_FACTORY.newXPath();
-        try {
-            return new ClassName(
-                Optional.ofNullable(
-                    ((Node) xpath.evaluate(
-                        "/program/metas/meta/tail/text()",
-                        node,
-                        XPathConstants.NODE
-                    )).getTextContent()
-                ).orElse(""),
-                String.valueOf(
-                    xpath.evaluate(
-                        "/program/@name",
-                        node,
-                        XPathConstants.STRING
-                    )
-                )
-            ).full();
-        } catch (final XPathExpressionException exception) {
-            throw new IllegalStateException(
-                String.format("Can't extract class name from the '%s' source", this.source),
-                exception
-            );
-        }
+        final XmlNode root = this.xml.root();
+        return new ClassName(
+            root.xpath("/program/metas/meta/tail/text()").get(0),
+            root.xpath("/program/@name").get(0)
+        ).full();
+
+//        final Node node = this.xml.value();
+//        final XPath xpath = XmirRepresentation.XPATH_FACTORY.newXPath();
+//        try {
+//            return new ClassName(
+//                Optional.ofNullable(
+//                    ((Node) xpath.evaluate(
+//                        "/program/metas/meta/tail/text()",
+//                        node,
+//                        XPathConstants.NODE
+//                    )).getTextContent()
+//                ).orElse(""),
+//                String.valueOf(
+//                    xpath.evaluate(
+//                        "/program/@name",
+//                        node,
+//                        XPathConstants.STRING
+//                    )
+//                )
+//            ).full();
+//        } catch (final XPathExpressionException exception) {
+//            throw new IllegalStateException(
+//                String.format("Can't extract class name from the '%s' source", this.source),
+//                exception
+//            );
+//        }
     }
 
     /**
@@ -148,13 +161,15 @@ public final class XmirRepresentation {
      * @return Array of bytes.
      */
     public Bytecode toBytecode() {
-        final Node xmir = this.xml.value();
+//        this.xml.root();
+//        final Node xmir = this.xml.value();
         try {
-            new StrictXmir(new XMLDocument(new XMLDocument(xmir).toString())).inner();
-            return new XmlProgram(xmir).bytecode().bytecode();
+            this.xml.validate();
+//            new StrictXmir(new XMLDocument(new XMLDocument(xmir).toString())).inner();
+            return new XmlProgram(this.xml.root()).bytecode().bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
-                String.format("Can't transform '%s' to bytecode", xmir),
+                String.format("Can't transform '%s' to bytecode", this.xml),
                 exception
             );
         } catch (final IllegalStateException exception) {

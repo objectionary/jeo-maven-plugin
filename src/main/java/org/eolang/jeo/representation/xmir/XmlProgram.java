@@ -94,6 +94,10 @@ public final class XmlProgram {
         this.root = new NativeXmlNode(root);
     }
 
+    public XmlProgram(final XmlNode root) {
+        this.root = root;
+    }
+
     @Override
     public String toString() {
         return this.root.toString();

@@ -152,7 +152,7 @@ final class XmirRepresentationTest {
             Assertions.assertThrows(
                 IllegalStateException.class,
                 () -> new XmirRepresentation(xmir).toBytecode()
-            ).getMessage(),
+            ).getCause().getMessage(),
             Matchers.containsString(
                 String.format(
                     "Can't parse XML from the file '%s'",

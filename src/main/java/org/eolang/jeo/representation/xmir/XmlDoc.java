@@ -38,4 +38,5 @@ public interface XmlDoc {
      */
     XmlNode root();
 
+    void validate();
 }
