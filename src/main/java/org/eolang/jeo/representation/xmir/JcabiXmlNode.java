@@ -54,8 +54,8 @@ public final class JcabiXmlNode implements XmlNode {
      * Ctor.
      * @param xml XML string.
      */
-    JcabiXmlNode(final String xml) {
-        this(new XMLDocument(xml).inner().getFirstChild());
+    JcabiXmlNode(final String... xml) {
+        this(new XMLDocument(String.join("\n", xml)).inner().getFirstChild());
     }
 
     /**

@@ -88,10 +88,10 @@ public final class JcabiXmlDoc implements XmlDoc {
                 String.format("Can't find file '%s'", path),
                 exception
             );
-        } catch (final Exception broken) {
+        } catch (final RuntimeException broken) {
             throw new IllegalStateException(
                 String.format(
-                    "Can't parse XML from the file '%s'",
+                    "Can't parse Jcabi XML from the file '%s'",
                     path
                 ),
                 broken

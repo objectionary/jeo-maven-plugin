@@ -27,7 +27,6 @@ import com.jcabi.xml.XML;
 import java.nio.file.Path;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.JcabiXmlDoc;
-import org.eolang.jeo.representation.xmir.NativeXmlDoc;
 import org.eolang.jeo.representation.xmir.XmlDoc;
 import org.eolang.jeo.representation.xmir.XmlNode;
 import org.eolang.jeo.representation.xmir.XmlProgram;

@@ -24,14 +24,8 @@
 package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
-import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
-import org.eolang.jeo.representation.directives.DirectivesClass;
-import org.eolang.jeo.representation.directives.DirectivesMetas;
-import org.eolang.jeo.representation.directives.DirectivesProgram;
-import org.xembly.Xembler;
 
 /**
  * XMIR Program.
@@ -49,7 +43,7 @@ public final class XmlProgram {
      * @param lines Xmir lines.
      */
     public XmlProgram(final String... lines) {
-        this(new XMLDocument(String.join("\n", lines)));
+        this(new JcabiXmlNode(lines));
     }
 
     /**
@@ -57,23 +51,7 @@ public final class XmlProgram {
      * @param xml Raw XMIR.
      */
     public XmlProgram(final XML xml) {
-        this(new NativeXmlNode(xml.inner().getFirstChild()));
-    }
-
-    /**
-     * Constructor.
-     * @param name Class name.
-     */
-    XmlProgram(final ClassName name) {
-        this(
-            new XMLDocument(
-                new Xembler(
-                    new DirectivesProgram(
-                        new DirectivesClass(name), new DirectivesMetas(name)
-                    )
-                ).xmlQuietly()
-            )
-        );
+        this(new JcabiXmlDoc(xml).root());
     }
 
     /**

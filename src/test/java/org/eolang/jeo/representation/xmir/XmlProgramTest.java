@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
@@ -51,7 +52,18 @@ final class XmlProgramTest {
         final String name = "FooBar";
         MatcherAssert.assertThat(
             "Can't convert program to bytecode.",
-            new XmlProgram(new ClassName(pckg, name)).bytecode(),
+            new XmlProgram(
+                new XMLDocument(
+                    new Xembler(
+                        new DirectivesProgram(
+                            new DirectivesClass(new ClassName(pckg, name)),
+                            new DirectivesMetas(
+                                new ClassName(pckg, name)
+                            )
+                        )
+                    ).xmlQuietly()
+                )
+            ).bytecode(),
             Matchers.equalTo(
                 new BytecodeProgram(
                     pckg,
