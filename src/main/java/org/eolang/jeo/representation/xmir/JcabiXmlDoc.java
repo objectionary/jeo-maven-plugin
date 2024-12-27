@@ -41,18 +41,18 @@ public final class JcabiXmlDoc implements XmlDoc {
 
     /**
      * Constructor.
-     * @param doc XML
-     */
-    public JcabiXmlDoc(final XML doc) {
-        this(new JcabiXmlNode(doc.inner().getFirstChild()));
-    }
-
-    /**
-     * Constructor.
      * @param path Path to XML file.
      */
     public JcabiXmlDoc(final Path path) {
         this(JcabiXmlDoc.open(path));
+    }
+
+    /**
+     * Constructor.
+     * @param doc XML
+     */
+    public JcabiXmlDoc(final XML doc) {
+        this(new JcabiXmlNode(doc));
     }
 
     /**
@@ -65,7 +65,7 @@ public final class JcabiXmlDoc implements XmlDoc {
 
     @Override
     public XmlNode root() {
-        return this.doc;
+        return this.doc.child("program");
     }
 
     @Override
@@ -80,9 +80,9 @@ public final class JcabiXmlDoc implements XmlDoc {
      * @checkstyle IllegalCatchCheck (20 lines)
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    private static XmlNode open(final Path path) {
+    private static XML open(final Path path) {
         try {
-            return new JcabiXmlNode(new XMLDocument(path).inner().getFirstChild());
+            return new XMLDocument(path);
         } catch (final FileNotFoundException exception) {
             throw new IllegalStateException(
                 String.format("Can't find file '%s'", path),

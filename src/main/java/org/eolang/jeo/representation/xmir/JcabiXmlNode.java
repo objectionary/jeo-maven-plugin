@@ -54,7 +54,7 @@ public final class JcabiXmlNode implements XmlNode {
      * Ctor.
      * @param xml XML string.
      */
-    public JcabiXmlNode(final String xml) {
+    JcabiXmlNode(final String xml) {
         this(new XMLDocument(xml).inner().getFirstChild());
     }
 
@@ -62,7 +62,7 @@ public final class JcabiXmlNode implements XmlNode {
      * Ctor.
      * @param item XML node.
      */
-    public JcabiXmlNode(final Node item) {
+    JcabiXmlNode(final Node item) {
         this(new XMLDocument(item));
     }
 
@@ -70,7 +70,7 @@ public final class JcabiXmlNode implements XmlNode {
      * Ctor.
      * @param root XML document.
      */
-    public JcabiXmlNode(final XML root) {
+    JcabiXmlNode(final XML root) {
         this.doc = root;
     }
 
