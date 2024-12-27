@@ -52,4 +52,16 @@ final class JcabiXmlDocTest {
             org.hamcrest.Matchers.equalTo("1")
         );
     }
+
+    @Test
+    void findsFirstChildInFileWithComment(@TempDir final Path dir) throws IOException {
+        final Path path = dir.resolve("test.xml");
+        Files.write(path, String.format("<!-- Some comment -->%s", JcabiXmlDocTest.XML)
+            .getBytes(StandardCharsets.UTF_8));
+        MatcherAssert.assertThat(
+            "Can't read XML from file",
+            new JcabiXmlDoc(path).root().firstChild(),
+            org.hamcrest.Matchers.equalTo("2")
+        );
+    }
 }
