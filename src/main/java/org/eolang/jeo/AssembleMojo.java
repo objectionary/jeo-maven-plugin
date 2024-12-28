@@ -105,7 +105,6 @@ public final class AssembleMojo extends AbstractMojo {
     )
     private boolean xmirVerification;
 
-
     /**
      * Whether the plugin is disabled.
      * If it's disabled, then it won't do anything.

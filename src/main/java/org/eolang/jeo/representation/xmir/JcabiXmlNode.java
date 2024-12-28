@@ -41,7 +41,6 @@ import org.eolang.parser.StrictXmir;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xembly.ImpossibleModificationException;
 
 /**
  * Jcabi XML node.
