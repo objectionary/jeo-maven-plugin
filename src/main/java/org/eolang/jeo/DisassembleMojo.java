@@ -109,6 +109,21 @@ public final class DisassembleMojo extends AbstractMojo {
     )
     private String mode;
 
+    /**
+     * Xmir verification after disassembling.
+     * After disassembling, we verify all the xmir files.
+     * If any of them are invalid or corrupted, we stop the process.
+     * If you want to skip this verification, set this parameter to false.
+     *
+     * @since 0.2.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(
+        property = "jeo.assemble.xmir.verification",
+        defaultValue = "true"
+    )
+    private boolean xmirVerification;
+
     @Override
     public void execute() throws MojoExecutionException {
         try {
