@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -134,6 +135,27 @@ final class XmirFilesTest {
             IllegalArgumentException.class,
             () -> new XmirFiles(temp).verify(),
             "We expected an exception when verifying the invalid xmir files"
+        );
+    }
+
+    @Test
+    void throwsExceptionIfXmirIsInvalid(@TempDir final Path temp) throws IOException {
+        Files.write(
+            temp.resolve("MethodByte.xmir"),
+            new BytecodeProgram(
+                new BytecodeClass("org/eolang/foo/Math")
+            ).xml().toString().replace("<head>package</head>", "")
+                .getBytes(StandardCharsets.UTF_8)
+        );
+        MatcherAssert.assertThat(
+            "We expect that XSD violation message will be easily understandable by developers",
+            Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new XmirFiles(temp).verify()
+            ).getMessage(),
+            Matchers.containsString(
+                "1 error(s) in XML document: cvc-complex-type.2.4.a: Invalid content was found starting with element 'tail'. One of '{head}' is expected."
+            )
         );
     }
 }

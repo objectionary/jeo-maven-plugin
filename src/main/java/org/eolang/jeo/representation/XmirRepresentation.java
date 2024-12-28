@@ -94,7 +94,6 @@ public final class XmirRepresentation {
      */
     public Bytecode toBytecode() {
         try {
-            this.xml.validate();
             return new XmlProgram(this.xml.root()).bytecode().bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(

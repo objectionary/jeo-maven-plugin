@@ -191,26 +191,6 @@ final class XmirRepresentationTest {
     }
 
     @Test
-    void throwsExceptionIfXmirIsInvalid() {
-        MatcherAssert.assertThat(
-            "We expect that XSD violation message will be easily understandable by developers",
-            Assertions.assertThrows(
-                IllegalArgumentException.class,
-                () -> new XmirRepresentation(
-                    new XMLDocument(
-                        new BytecodeProgram(
-                            new BytecodeClass(XmirRepresentationTest.MATH)
-                        ).xml().toString().replace("<head>package</head>", "")
-                    )
-                ).toBytecode()
-            ).getCause().getMessage(),
-            Matchers.containsString(
-                "1 error(s) in XML document: cvc-complex-type.2.4.a: Invalid content was found starting with element 'tail'. One of '{head}' is expected."
-            )
-        );
-    }
-
-    @Test
     void createsXmirRepresentationFromFile(@TempDir final Path path) throws IOException {
         final BytecodeProgram program = new BytecodeProgram(
             new BytecodeClass(XmirRepresentationTest.MATH).helloWorldMethod()
