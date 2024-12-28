@@ -30,6 +30,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.cactoos.io.ResourceOf;
+import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.hamcrest.MatcherAssert;
@@ -104,6 +106,34 @@ final class XmirFilesTest {
             ),
             all.collect(Collectors.toList()),
             Matchers.hasSize(1)
+        );
+    }
+
+    @Test
+    void verifiesXmirFilesGeneratedFromBytecode(@TempDir final Path temp) throws IOException {
+        Files.write(
+            temp.resolve("MethodByte.xmir"),
+            new BytecodeRepresentation(new ResourceOf("MethodByte.class"))
+                .toEO()
+                .toString()
+                .getBytes(StandardCharsets.UTF_8)
+        );
+        Assertions.assertDoesNotThrow(
+            () -> new XmirFiles(temp).verify(),
+            "We expected no exceptions when verifying the correct xmir files"
+        );
+    }
+
+    @Test
+    void failsOnInvalidXmirFile(@TempDir final Path temp) throws IOException {
+        Files.write(
+            temp.resolve("Invalid.xmir"),
+            "<program></program>".getBytes(StandardCharsets.UTF_8)
+        );
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> new XmirFiles(temp).verify(),
+            "We expected an exception when verifying the invalid xmir files"
         );
     }
 }

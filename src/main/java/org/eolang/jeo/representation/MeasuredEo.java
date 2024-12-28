@@ -25,6 +25,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import org.eolang.jeo.representation.directives.DirectivesProgram;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -38,13 +39,21 @@ final class MeasuredEo {
     /**
      * Original transformation.
      */
-    private final VerifiedEo xmir;
+    private final XML xmir;
 
     /**
-     * Constructor.
-     * @param xmir Original transformation
+     * Ctor.
+     * @param directives Directives to build the EO from.
      */
-    MeasuredEo(final VerifiedEo xmir) {
+    MeasuredEo(final DirectivesProgram directives) {
+        this(new XMLDocument(new Xembler(directives).xmlQuietly()));
+    }
+
+    /**
+     * Ctor.
+     * @param xmir Original xmir representation.
+     */
+    private MeasuredEo(final XML xmir) {
         this.xmir = xmir;
     }
 
@@ -55,14 +64,13 @@ final class MeasuredEo {
      */
     XML asXml() throws ImpossibleModificationException {
         final long start = System.currentTimeMillis();
-        final XML xml = this.xmir.asXml();
         final long end = System.currentTimeMillis();
         return new XMLDocument(
             new Xembler(
                 new Directives()
                     .xpath("/program[@ms]/@ms")
                     .set(String.format("%d", end - start))
-            ).apply(xml.deepCopy())
+            ).apply(this.xmir.deepCopy())
         );
     }
 }

@@ -41,6 +41,7 @@ import org.eolang.parser.StrictXmir;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xembly.ImpossibleModificationException;
 
 /**
  * Jcabi XML node.
@@ -158,6 +159,10 @@ public final class JcabiXmlNode implements XmlNode {
     @Override
     public void validate() {
         try {
+            // @checkstyle MethodBodyCommentsCheck (4 lines)
+            // @todo #939:60min Fix All The Warnings in the EO Representation.
+            //  Here we just catch only the errors in the EO representation.
+            //  We need to fix all the warnings in the EO representation as well.
             final Collection<Defect> defects = new Program(new StrictXmir(this.doc)).defects()
                 .stream()
                 .filter(defect -> defect.severity() == Severity.ERROR)

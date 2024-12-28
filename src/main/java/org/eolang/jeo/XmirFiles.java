@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.xmir.JcabiXmlDoc;
 
 /**
  * EO objects.
@@ -65,5 +66,12 @@ final class XmirFiles {
                 exception
             );
         }
+    }
+
+    /**
+     * Verify all the xmir files.
+     */
+    public void verify() {
+        this.all().map(JcabiXmlDoc::new).forEach(JcabiXmlDoc::validate);
     }
 }

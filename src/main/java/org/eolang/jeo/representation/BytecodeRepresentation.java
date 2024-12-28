@@ -73,7 +73,7 @@ public final class BytecodeRepresentation {
      * Constructor.
      * @param input Input source
      */
-    BytecodeRepresentation(final Input input) {
+    public BytecodeRepresentation(final Input input) {
         this(BytecodeRepresentation.fromInput(input));
     }
 
@@ -114,7 +114,7 @@ public final class BytecodeRepresentation {
             .bytecode(mode.asmOptions())
             .directives(new BytecodeListing(this.input.value()).toString());
         try {
-            return new MeasuredEo(new VerifiedEo(directives)).asXml();
+            return new MeasuredEo(directives).asXml();
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(
                 String.format(
