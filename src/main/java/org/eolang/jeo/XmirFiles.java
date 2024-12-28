@@ -42,14 +42,14 @@ final class XmirFiles {
      * Usually it's a folder with the name "generated-sources".
      * See <a href="https://maven.apache.org/guides/mini/guide-generating-sources.html">generated-sources</a>.
      */
-    private final Path objectspath;
+    private final Path root;
 
     /**
      * Constructor.
-     * @param objectspath Where to read objects from.
+     * @param xmirs Where to read objects from.
      */
-    XmirFiles(final Path objectspath) {
-        this.objectspath = objectspath;
+    XmirFiles(final Path xmirs) {
+        this.root = xmirs;
     }
 
     /**
@@ -57,7 +57,7 @@ final class XmirFiles {
      * @return All representations.
      */
     public Stream<Path> all() {
-        final Path path = this.objectspath;
+        final Path path = this.root;
         try {
             return Files.walk(path).filter(Files::isRegularFile);
         } catch (final IOException exception) {

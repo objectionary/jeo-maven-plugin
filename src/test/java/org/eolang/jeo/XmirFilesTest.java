@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo;
 
-import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

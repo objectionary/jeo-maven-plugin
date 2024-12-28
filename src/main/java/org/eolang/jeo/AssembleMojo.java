@@ -96,7 +96,7 @@ public final class AssembleMojo extends AbstractMojo {
      * If any of them are invalid or corrupted, we stop the process.
      * If you want to skip this verification, set this parameter to false.
      *
-     * @since 0.2.0
+     * @since 0.8
      * @checkstyle MemberNameCheck (6 lines)
      */
     @Parameter(
@@ -126,10 +126,10 @@ public final class AssembleMojo extends AbstractMojo {
                 Logger.info(this, "Assemble mojo is disabled. Skipping.");
             } else {
                 if (this.xmirVerification) {
-                    Logger.info(this, "Verifying all the xmir files.");
-                    //todo: implement this
+                    Logger.info(this, "Verifying all the xmir files before assembling.");
+                    new XmirFiles(this.sourcesDir.toPath()).verify();
                 } else {
-                    Logger.info(this, "Xmir verification is disabled. Skipping.");
+                    Logger.info(this, "Xmir verification before assembling is disabled. Skipping.");
                 }
                 new Assembler(
                     this.sourcesDir.toPath(),
