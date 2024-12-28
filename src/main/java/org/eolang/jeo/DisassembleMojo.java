@@ -137,6 +137,12 @@ public final class DisassembleMojo extends AbstractMojo {
                     this.outputDir.toPath(),
                     DisassembleMode.fromString(this.mode)
                 ).disassemble();
+                if (this.xmirVerification) {
+                    Logger.info(this, "Verifying all the xmir files.");
+                    //todo: implement this
+                } else {
+                    Logger.info(this, "Xmir verification is disabled. Skipping.");
+                }
             }
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(

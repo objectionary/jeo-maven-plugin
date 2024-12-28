@@ -125,14 +125,20 @@ public final class AssembleMojo extends AbstractMojo {
             if (this.disabled) {
                 Logger.info(this, "Assemble mojo is disabled. Skipping.");
             } else {
+                if (this.xmirVerification) {
+                    Logger.info(this, "Verifying all the xmir files.");
+                    //todo: implement this
+                } else {
+                    Logger.info(this, "Xmir verification is disabled. Skipping.");
+                }
                 new Assembler(
                     this.sourcesDir.toPath(),
                     this.outputDir.toPath()
                 ).assemble();
                 if (this.skipVerification) {
-                    Logger.info(this, "Verification is disabled. Skipping.");
+                    Logger.info(this, "Bytecode verification is disabled. Skipping.");
                 } else {
-                    Logger.info(this, "Verification of all the generated classes.");
+                    Logger.info(this, "Bytecode verification of all the generated classes.");
                     new PluginStartup(this.project, this.outputDir.toPath()).init();
                     new BytecodeClasses(this.outputDir.toPath()).verify();
                 }
