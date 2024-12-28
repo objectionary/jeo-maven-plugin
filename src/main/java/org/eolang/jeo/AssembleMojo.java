@@ -94,14 +94,14 @@ public final class AssembleMojo extends AbstractMojo {
      * Xmir verification before assembling.
      * Before assembling, we verify all the xmir files.
      * If any of them are invalid or corrupted, we stop the process.
-     * If you want to skip this verification, set this parameter to false.
+     * If you want to run this verification, set this parameter to true.
      *
      * @since 0.8
      * @checkstyle MemberNameCheck (6 lines)
      */
     @Parameter(
         property = "jeo.assemble.xmir.verification",
-        defaultValue = "true"
+        defaultValue = "false"
     )
     private boolean xmirVerification;
 

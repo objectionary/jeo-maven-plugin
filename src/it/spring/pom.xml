@@ -64,6 +64,9 @@ SOFTWARE.
         <groupId>org.eolang</groupId>
         <artifactId>jeo-maven-plugin</artifactId>
         <version>@project.version@</version>
+        <configuration>
+          <xmirVerification>true</xmirVerification>
+        </configuration>
         <executions>
           <execution>
             <id>bytecode-to-eo</id>

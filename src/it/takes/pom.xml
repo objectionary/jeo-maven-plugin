@@ -55,6 +55,9 @@ SOFTWARE.
         <groupId>org.eolang</groupId>
         <artifactId>jeo-maven-plugin</artifactId>
         <version>@project.version@</version>
+        <configuration>
+          <xmirVerification>true</xmirVerification>
+        </configuration>
         <dependencies>
           <dependency>
             <groupId>org.takes</groupId>
