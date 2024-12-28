@@ -25,12 +25,18 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.lints.Defect;
+import org.eolang.lints.Program;
+import org.eolang.lints.Severity;
 import org.eolang.parser.StrictXmir;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -151,7 +157,26 @@ public final class JcabiXmlNode implements XmlNode {
 
     @Override
     public void validate() {
-        new StrictXmir(this.doc).inner();
+        try {
+            final Collection<Defect> defects = new Program(new StrictXmir(this.doc)).defects()
+                .stream()
+                .filter(defect -> defect.severity() == Severity.ERROR)
+                .collect(Collectors.toList());
+            if (!defects.isEmpty()) {
+                throw new IllegalStateException(
+                    String.format(
+                        "XMIR is incorrect: %s, %n%s%n",
+                        defects,
+                        this.doc
+                    )
+                );
+            }
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format("Failed to verify XMIR document: %n%s%n", this.doc),
+                exception
+            );
+        }
     }
 
     /**

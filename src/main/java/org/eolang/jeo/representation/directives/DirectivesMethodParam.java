@@ -24,6 +24,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Random;
 import org.eolang.jeo.representation.DecodedString;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
@@ -33,6 +34,11 @@ import org.xembly.Directive;
  * @since 0.6
  */
 public final class DirectivesMethodParam implements Iterable<Directive> {
+
+    /**
+     * Random number generator.
+     */
+    private static final Random RANDOM = new Random();
 
     /**
      * Index of the parameter.
@@ -87,11 +93,12 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "param",
             String.format(
-                "param-%s-%s-%d-%d",
+                "param-%s-%s-%d-%d-%d",
                 new DecodedString(this.type.toString()).encode(),
                 this.name,
                 this.access,
-                this.index
+                this.index,
+                DirectivesMethodParam.RANDOM.nextInt()
             ),
             this.annotations
         ).iterator();
