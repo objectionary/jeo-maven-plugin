@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>              <span class="jxr_string">"Can't convert XML param to bytecode"</span>,
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>              <strong class="jxr_keyword">new</strong> XmlParam(
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>                  <strong class="jxr_keyword">new</strong> XmlNode(<strong class="jxr_keyword">new</strong> Xembler(expected.directives()).xml())
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>                  <strong class="jxr_keyword">new</strong> NativeXmlNode(<strong class="jxr_keyword">new</strong> Xembler(expected.directives()).xml())
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>              ).bytecode(),
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>              Matchers.equalTo(expected)
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>          );

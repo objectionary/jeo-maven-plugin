@@ -61,13 +61,13 @@
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">0.6.26</strong>
+                                    <strong itemprop="version">0.7.0</strong>
                                 </li>
                                 <li>
                                     
-                                    <time itemprop="datePublished" datetime="2024-12-03T11:17:04Z">
+                                    <time itemprop="datePublished" datetime="2024-12-28T01:17:27Z">
                                         
-                                        03-Dec-2024
+                                        28-Dec-2024
                                     </time>
                                 </li>
                                 <li class="menu-button">menu</li>
@@ -81,7 +81,7 @@
                             <section>
 <h2><a name="jeo:assemble"></a>jeo:assemble</h2><a name="jeo:assemble"></a>
 <p><strong>Full name</strong>:</p>
-<p>org.eolang:jeo-maven-plugin:0.6.26:assemble</p>
+<p>org.eolang:jeo-maven-plugin:0.7.0:assemble</p>
 <p><strong>Description</strong>:</p>
 <p>Converts EO to bytecode. In other words, it assembles low-lever representation EO to bytecode that JVM can execute. The mojo that converts EO to bytecode only. It does not apply any improvements.</p>
 <p><strong>Attributes</strong>:</p>
@@ -116,7 +116,12 @@
 <td align="left"><a href="#sourcesDir"><code>&lt;sourcesDir&gt;</code></a></td>
 <td><code>File</code></td>
 <td><code>0.2.0</code></td>
-<td>Source directory.<br /><strong>Default</strong>: <code>${project.build.directory}/generated-sources/jeo-xmir</code><br /><strong>User Property</strong>: <code>jeo.assemble.sourcesDir</code></td></tr></table></section><section>
+<td>Source directory.<br /><strong>Default</strong>: <code>${project.build.directory}/generated-sources/jeo-xmir</code><br /><strong>User Property</strong>: <code>jeo.assemble.sourcesDir</code></td></tr>
+<tr class="b">
+<td align="left"><a href="#xmirVerification"><code>&lt;xmirVerification&gt;</code></a></td>
+<td><code>boolean</code></td>
+<td><code>0.8</code></td>
+<td>Xmir verification before assembling. Before assembling, we verify all the xmir files. If any of them are invalid or corrupted, we stop the process. If you want to run this verification, set this parameter to true.<br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>jeo.assemble.xmir.verification</code></td></tr></table></section><section>
 <h3><a name="Parameter_Details"></a>Parameter Details</h3><a name="Parameter_Details"></a><a name="disabled"></a><section>
 <h4><a name="a.3Cdisabled.3E"></a>&lt;disabled&gt;</h4><a name="a.3Cdisabled.3E"></a>
 <div>Whether the plugin is disabled. If it's disabled, then it won't do anything.</div>
@@ -149,7 +154,15 @@
 <li><strong>Since</strong>: <code>0.2.0</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
 <li><strong>User Property</strong>: <code>jeo.assemble.sourcesDir</code></li>
-<li><strong>Default</strong>: <code>${project.build.directory}/generated-sources/jeo-xmir</code></li></ul></section></section></section>
+<li><strong>Default</strong>: <code>${project.build.directory}/generated-sources/jeo-xmir</code></li></ul><hr /></section><a name="xmirVerification"></a><section>
+<h4><a name="a.3CxmirVerification.3E"></a>&lt;xmirVerification&gt;</h4><a name="a.3CxmirVerification.3E"></a>
+<div>Xmir verification before assembling. Before assembling, we verify all the xmir files. If any of them are invalid or corrupted, we stop the process. If you want to run this verification, set this parameter to true.</div>
+<ul>
+<li><strong>Type</strong>: <code>boolean</code></li>
+<li><strong>Since</strong>: <code>0.8</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.assemble.xmir.verification</code></li>
+<li><strong>Default</strong>: <code>false</code></li></ul></section></section></section>
                         </article>
                     </div>
                 </main>

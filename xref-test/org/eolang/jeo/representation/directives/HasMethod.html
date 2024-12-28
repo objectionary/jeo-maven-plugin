@@ -212,7 +212,7 @@
 <a class="jxr_linenumber" name="L204" href="#L204">204</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.params.stream()
 <a class="jxr_linenumber" name="L205" href="#L205">205</a>             .map(
 <a class="jxr_linenumber" name="L206" href="#L206">206</a>                 param -&gt; String.format(
-<a class="jxr_linenumber" name="L207" href="#L207">207</a>                     <span class="jxr_string">"%s/o[contains(@base,'params')]/o[@name='%s' and contains(@base,'param')]/@name"</span>,
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>                     <span class="jxr_string">"%s/o[contains(@base,'params')]/o[contains(@name,'%s') and contains(@base,'param')]/@name"</span>,
 <a class="jxr_linenumber" name="L208" href="#L208">208</a>                     root,
 <a class="jxr_linenumber" name="L209" href="#L209">209</a>                     param
 <a class="jxr_linenumber" name="L210" href="#L210">210</a>                 )
@@ -255,7 +255,7 @@
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L248" href="#L248">248</a>     <strong class="jxr_keyword">private</strong> String root() {
 <a class="jxr_linenumber" name="L249" href="#L249">249</a>         <strong class="jxr_keyword">return</strong> String.format(
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>             <span class="jxr_string">"/program/objects/o[@name='%s']/o[contains(@name,'%s')]"</span>,
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>             <span class="jxr_string">"/program/objects/o[contains(@name,'%s')]/o[contains(@name,'%s')]"</span>,
 <a class="jxr_linenumber" name="L251" href="#L251">251</a>             <strong class="jxr_keyword">this</strong>.clazz,
 <a class="jxr_linenumber" name="L252" href="#L252">252</a>             <strong class="jxr_keyword">this</strong>.name
 <a class="jxr_linenumber" name="L253" href="#L253">253</a>         );
@@ -304,7 +304,7 @@
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">         */</em>
 <a class="jxr_linenumber" name="L297" href="#L297">297</a>         Stream&lt;String&gt; checks(<strong class="jxr_keyword">final</strong> String root) {
 <a class="jxr_linenumber" name="L298" href="#L298">298</a>             <strong class="jxr_keyword">final</strong> String instruction = String.format(
-<a class="jxr_linenumber" name="L299" href="#L299">299</a>                 <span class="jxr_string">"%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'opcode')]"</span>,
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>                 <span class="jxr_string">"%s/o[contains(@base,'seq') and contains(@name,'body')]/o[contains(@base,'opcode')]"</span>,
 <a class="jxr_linenumber" name="L300" href="#L300">300</a>                 root
 <a class="jxr_linenumber" name="L301" href="#L301">301</a>             );
 <a class="jxr_linenumber" name="L302" href="#L302">302</a>             <strong class="jxr_keyword">return</strong> Stream.concat(
@@ -428,7 +428,7 @@
 <a class="jxr_linenumber" name="L420" href="#L420">420</a>         <strong class="jxr_keyword">static</strong> Stream&lt;String&gt; checks(<strong class="jxr_keyword">final</strong> String root) {
 <a class="jxr_linenumber" name="L421" href="#L421">421</a>             <strong class="jxr_keyword">return</strong> Stream.of(
 <a class="jxr_linenumber" name="L422" href="#L422">422</a>                 String.format(
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>                     <span class="jxr_string">"%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'label')]/o[@base='org.eolang.bytes']/@base"</span>,
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>                     <span class="jxr_string">"%s/o[contains(@base,'seq') and contains(@name,'body')]/o[contains(@base,'label')]/o[@base='org.eolang.bytes']/@base"</span>,
 <a class="jxr_linenumber" name="L424" href="#L424">424</a>                     root
 <a class="jxr_linenumber" name="L425" href="#L425">425</a>                 )
 <a class="jxr_linenumber" name="L426" href="#L426">426</a>             );

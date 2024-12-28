@@ -378,7 +378,7 @@
 <a class="jxr_linenumber" name="L370" href="#L370">370</a>             <span class="jxr_string">"We expect that method without try-catch block doesn't contain try-catch directives."</span>,
 <a class="jxr_linenumber" name="L371" href="#L371">371</a>             <strong class="jxr_keyword">new</strong> BytecodeProgram(<strong class="jxr_keyword">new</strong> BytecodeClass().helloWorldMethod()).xml().toString(),
 <a class="jxr_linenumber" name="L372" href="#L372">372</a>             XhtmlMatchers.hasXPath(
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>                 <span class="jxr_string">".//o[contains(@base,'seq.of0') and @name='trycatchblocks-main']"</span>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>                 <span class="jxr_string">".//o[contains(@base,'seq.of0') and contains(@name,'trycatchblocks-main')]"</span>
 <a class="jxr_linenumber" name="L374" href="#L374">374</a>             )
 <a class="jxr_linenumber" name="L375" href="#L375">375</a>         );
 <a class="jxr_linenumber" name="L376" href="#L376">376</a>     }

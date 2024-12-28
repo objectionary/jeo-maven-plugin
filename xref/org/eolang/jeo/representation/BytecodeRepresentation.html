@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">     * Constructor.</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">     * @param input Input source</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <a name="BytecodeRepresentation" href="../../../../org/eolang/jeo/representation/BytecodeRepresentation.html#BytecodeRepresentation">BytecodeRepresentation</a>(<strong class="jxr_keyword">final</strong> Input input) {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      <strong class="jxr_keyword">public</strong> <a name="BytecodeRepresentation" href="../../../../org/eolang/jeo/representation/BytecodeRepresentation.html#BytecodeRepresentation">BytecodeRepresentation</a>(<strong class="jxr_keyword">final</strong> Input input) {
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">this</strong>(BytecodeRepresentation.fromInput(input));
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      }
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
@@ -122,7 +122,7 @@
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>             .bytecode(mode.asmOptions())
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>             .directives(<strong class="jxr_keyword">new</strong> <a name="BytecodeListing" href="../../../../org/eolang/jeo/representation/BytecodeListing.html#BytecodeListing">BytecodeListing</a>(<strong class="jxr_keyword">this</strong>.input.value()).toString());
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="MeasuredEo" href="../../../../org/eolang/jeo/representation/MeasuredEo.html#MeasuredEo">MeasuredEo</a>(<strong class="jxr_keyword">new</strong> <a name="VerifiedEo" href="../../../../org/eolang/jeo/representation/VerifiedEo.html#VerifiedEo">VerifiedEo</a>(directives)).asXml();
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="MeasuredEo" href="../../../../org/eolang/jeo/representation/MeasuredEo.html#MeasuredEo">MeasuredEo</a>(directives).asXml();
 <a class="jxr_linenumber" name="L118" href="#L118">118</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> IllegalStateException exception) {
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>                 String.format(
