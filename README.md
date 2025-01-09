@@ -7,33 +7,32 @@
 ![Lines of code](https://sloc.xyz/github/objectionary/jeo-maven-plugin)
 [![codecov](https://codecov.io/gh/objectionary/jeo-maven-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/objectionary/jeo-maven-plugin)
 
-**jeo** stands for "Java EOlang Optimizations". **jeo-maven-plugin** is a Maven
-plugin dedicated to optimizing Java bytecode. The process involves translating
-the Java bytecode into the [EOlang](https://github.com/objectionary/eo)
-programming language. Utilizing the optimization steps provided by EOlang, the
-original code undergoes an enhancement process. Upon completion, the optimized
-EOlang program is translated back to Java bytecode, achieving efficient and
-optimized performance.
+**jeo-maven-plugin** is a Maven plugin dedicated to disassembling Java bytecode.
+The process involves translating the Java bytecode into
+the [EO](https://github.com/objectionary/eo)
+programming language.
+The plugin also provides the ability to assemble EO back into Java bytecode.
 
 # How to use
 
-The plugin can be run using several approaches, but for all of them, you need at
-least Maven 3.1+ and Java 11+. (Actually, the plugin requires Java 8+, but since
-the main dependency [eo](https://github.com/objectionary/eo) requires Java 11,
+You need at least **Maven 3.1+** and **Java 11+** to run the plugin.
+(Actually, the plugin requires **Java 8+**, but since the main
+dependency [eo](https://github.com/objectionary/eo) requires **Java 11**,
 we are obligated to use it as well.)
 
-The plugin can convert compiled classes into EOlang by using
-the `disassemble` goal. The `assemble` goal can convert EOlang back
-into bytecode. The default phase for the plugin
+The plugin can convert compiled `.class` files into EO by using
+the `disassemble` goal.
+The `assemble` goal can convert EO back into bytecode.
+The default phase for the plugin
 is [process-classes](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#default-lifecycle).
-If you are a developer of optimizations in EOlang you probably need to
-use the both goals in the following order:
 
-* `disassemble` create EOlang files in the `target/generated-sources`
+To optimize java bytecode you need to use both goals in the following order:
+
+* `disassemble` create EO files in the `target/generated-sources`
   directory.
-* Provide your optimizations are applied to the EOlang files
+* Provide your optimizations are applied to the EO files
   in the `target/generated-sources` directory.
-* `assemble` scans the `target/generated-sources` directory for EOlang
+* `assemble` scans the `target/generated-sources` directory for EO
   files and converts them back to Java bytecode.
 
 More details about plugin usage you can find in our
