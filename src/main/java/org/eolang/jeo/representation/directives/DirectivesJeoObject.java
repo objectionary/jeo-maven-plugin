@@ -35,6 +35,13 @@ import org.xembly.Directives;
  * Similar to {@link DirectivesEoObject},
  * but for objects that are parts of the JEO XMIR representation.
  * @since 0.6
+ * @todo #946:60min Generate Documentation from The Source Code.
+ *  We might try to generate documentation about jeo objects from the source code.
+ *  See the "Full List of Jeo Objects" section in the README file.
+ *  This was originally suggested here:
+ *  <a href="https://github.com/objectionary/jeo-maven-plugin/pull/961#discussion_r1908445938">
+ *      PR comment.
+ *  </a>.
  */
 public final class DirectivesJeoObject implements Iterable<Directive> {
 
