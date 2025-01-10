@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -157,28 +156,21 @@ public final class JcabiXmlNode implements XmlNode {
 
     @Override
     public void validate() {
-        try {
-            // @checkstyle MethodBodyCommentsCheck (4 lines)
-            // @todo #939:60min Fix All The Warnings in the EO Representation.
-            //  Here we just catch only the errors in the EO representation.
-            //  We need to fix all the warnings in the EO representation as well.
-            final Collection<Defect> defects = new Program(new StrictXmir(this.doc)).defects()
-                .stream()
-                .filter(defect -> defect.severity() == Severity.ERROR)
-                .collect(Collectors.toList());
-            if (!defects.isEmpty()) {
-                throw new IllegalStateException(
-                    String.format(
-                        "XMIR is incorrect: %s, %n%s%n",
-                        defects,
-                        this.doc
-                    )
-                );
-            }
-        } catch (final IOException exception) {
+        // @checkstyle MethodBodyCommentsCheck (4 lines)
+        // @todo #939:60min Fix All The Warnings in the EO Representation.
+        //  Here we just catch only the errors in the EO representation.
+        //  We need to fix all the warnings in the EO representation as well.
+        final Collection<Defect> defects = new Program(new StrictXmir(this.doc)).defects()
+            .stream()
+            .filter(defect -> defect.severity() == Severity.ERROR)
+            .collect(Collectors.toList());
+        if (!defects.isEmpty()) {
             throw new IllegalStateException(
-                String.format("Failed to verify XMIR document: %n%s%n", this.doc),
-                exception
+                String.format(
+                    "XMIR is incorrect: %s, %n%s%n",
+                    defects,
+                    this.doc
+                )
             );
         }
     }
