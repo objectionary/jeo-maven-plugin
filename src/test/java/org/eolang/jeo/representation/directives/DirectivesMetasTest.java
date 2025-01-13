@@ -79,8 +79,17 @@ final class DirectivesMetasTest {
     void createsDirectivesWithEmptyPackage() {
         MatcherAssert.assertThat(
             "We expect that <metas>/<package> won't be created if package is empty",
-            new DirectivesMetas(new ClassName("WithoutPackage")),
-            Matchers.emptyIterable()
+            new Xembler(new DirectivesMetas(new ClassName("WithoutPackage"))).xmlQuietly(),
+            Matchers.not(XhtmlMatchers.hasXPath("/metas/meta[head[text()='package']]"))
+        );
+    }
+
+    @Test
+    void createsDirectivesWithVersion() {
+        MatcherAssert.assertThat(
+            "We expect that <metas>/<version> will be created",
+            new Xembler(new DirectivesMetas(new ClassName("WithVersion"))).xmlQuietly(),
+            XhtmlMatchers.hasXPath("/metas/meta[head[text()='version']]")
         );
     }
 }
