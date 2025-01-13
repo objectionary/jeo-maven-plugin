@@ -75,15 +75,13 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * @return Prefixed package name.
      */
     private Directives pckg() {
-        final Directives result;
         final String prefixed = new PrefixedName(this.name.pckg()).encode();
-        result = new Directives()
+        return new Directives()
             .add("meta")
             .add("head").set("package").up()
             .add("tail").set(prefixed).up()
             .add("part").set(prefixed).up()
             .up();
-        return result;
     }
 
     /**
