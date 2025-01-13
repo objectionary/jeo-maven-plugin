@@ -157,13 +157,15 @@ public final class JcabiXmlNode implements XmlNode {
 
     @Override
     public void validate() {
-        final Collection<String> ignore = new HashSet<>(Arrays.asList(
-            "mandatory-home",
-            "name-outside-of-abstract-object",
-            "empty-object",
-            "incorrect-package",
-            "object-does-not-match-filename"
-        ));
+        final Collection<String> ignore = new HashSet<>(
+            Arrays.asList(
+                "mandatory-home",
+                "name-outside-of-abstract-object",
+                "empty-object",
+                "incorrect-package",
+                "object-does-not-match-filename"
+            )
+        );
         final Collection<Defect> defects = new Program(new StrictXmir(this.doc))
             .defects()
             .stream()

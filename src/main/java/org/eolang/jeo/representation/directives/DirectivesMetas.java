@@ -55,8 +55,8 @@ public final class DirectivesMetas implements Iterable<Directive> {
         if (!this.name.pckg().isEmpty()) {
             result.append(this.pckg());
         }
-        result.append(this.unlint());
-        result.append(this.version());
+        result.append(DirectivesMetas.unlint());
+        result.append(DirectivesMetas.version());
         return result.up().iterator();
     }
 
@@ -90,7 +90,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * The version directives of jeo-maven-plugin.
      * @return Version directives.
      */
-    private Directives version() {
+    private static Directives version() {
         return new Directives()
             .add("meta")
             .add("head").set("version").up()
@@ -102,7 +102,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * Ignored XMIR checks.
      * @return Directives for ignored checks.
      */
-    private Directives unlint() {
+    private static Directives unlint() {
         return new Directives()
             .add("meta")
             .add("head").set("unlint").up()
