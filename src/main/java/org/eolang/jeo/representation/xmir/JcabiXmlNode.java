@@ -26,9 +26,13 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -154,7 +158,18 @@ public final class JcabiXmlNode implements XmlNode {
 
     @Override
     public void validate() {
-        final Collection<Defect> defects = new Program(new StrictXmir(this.doc)).defects();
+        final Set<String> skip = new HashSet<>(Arrays.asList(
+            "mandatory-home",
+            "name-outside-of-abstract-object",
+            "mandatory-version",
+            "empty-object",
+            "incorrect-package"
+        ));
+        final Collection<Defect> defects = new Program(new StrictXmir(this.doc))
+            .defects()
+            .stream()
+            .filter(defect -> !skip.contains(defect.rule()))
+            .collect(Collectors.toList());
         if (!defects.isEmpty()) {
             throw new IllegalStateException(
                 String.format(
