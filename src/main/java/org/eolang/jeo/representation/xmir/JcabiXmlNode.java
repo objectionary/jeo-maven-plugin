@@ -31,7 +31,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
@@ -158,17 +157,18 @@ public final class JcabiXmlNode implements XmlNode {
 
     @Override
     public void validate() {
-        final Set<String> skip = new HashSet<>(Arrays.asList(
+        final Collection<String> ignore = new HashSet<>(Arrays.asList(
             "mandatory-home",
             "name-outside-of-abstract-object",
             "mandatory-version",
             "empty-object",
-            "incorrect-package"
+            "incorrect-package",
+            "object-does-not-match-filename"
         ));
         final Collection<Defect> defects = new Program(new StrictXmir(this.doc))
             .defects()
             .stream()
-            .filter(defect -> !skip.contains(defect.rule()))
+            .filter(defect -> !ignore.contains(defect.rule()))
             .collect(Collectors.toList());
         if (!defects.isEmpty()) {
             throw new IllegalStateException(

@@ -322,6 +322,7 @@ SOFTWARE.
           <pomExcludes>
             <exclude>spring-fat/pom.xml</exclude>
           </pomExcludes>
+          <parallelThreads>10</parallelThreads>
         </configuration>
       </plugin>
       <plugin>
@@ -528,6 +529,7 @@ SOFTWARE.
                 All integration tests are enabled in the 'long' profile.
               -->
               <pomExcludes/>
+              <parallelThreads>10</parallelThreads>
             </configuration>
           </plugin>
         </plugins>
