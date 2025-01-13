@@ -158,9 +158,9 @@ public final class JcabiXmlNode implements XmlNode {
     @Override
     public void validate() {
         //@checkstyle MethodBodyCommentsCheck (10 lines)
-        //@todo #946:30min Remove the ignore list from the 'validate' method.
-        // The ignore list is used to ignore some defects that we haven't implemented yet.
-        // We should remove the ignore list and fix the defects that are being ignored.
+        // @todo #946:30min Remove the ignore list from the 'validate' method.
+        //  The ignore list is used to ignore some defects that we haven't implemented yet.
+        //  We should remove the ignore list and fix the defects that are being ignored.
         final Collection<String> ignore = new HashSet<>(
             Arrays.asList(
                 "mandatory-home",
