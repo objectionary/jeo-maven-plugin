@@ -25,6 +25,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -61,11 +62,13 @@ final class XmirRepresentationTest {
     void retrievesName() {
         final String name = "Math";
         final String expected = "j$org/j$eolang/j$foo/j$Math";
+        final XML xml = new BytecodeProgram(
+            "org/eolang/foo",
+            new BytecodeClass(name)
+        ).xml();
+        System.out.println(xml);
         final String actual = new XmirRepresentation(
-            new BytecodeProgram(
-                "org/eolang/foo",
-                new BytecodeClass(name)
-            ).xml()
+            xml
         ).name();
         MatcherAssert.assertThat(
             String.format(

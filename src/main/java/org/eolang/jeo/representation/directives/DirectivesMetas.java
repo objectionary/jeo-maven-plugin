@@ -52,10 +52,11 @@ public final class DirectivesMetas implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives result = new Directives().add("metas");
-        result.append(this.version());
         if (!this.name.pckg().isEmpty()) {
             result.append(this.pckg());
         }
+        result.append(this.unlint());
+        result.append(this.version());
         return result.up().iterator();
     }
 
@@ -75,18 +76,13 @@ public final class DirectivesMetas implements Iterable<Directive> {
      */
     private Directives pckg() {
         final Directives result;
-        final String original = this.name.pckg();
-//        if (original.isEmpty()) {
-//            result = new Directives();
-//        } else {
-            final String prefixed = new PrefixedName(original).encode();
-            result = new Directives()
-                .add("meta")
-                .add("head").set("package").up()
-                .add("tail").set(prefixed).up()
-                .add("part").set(prefixed).up()
-                .up();
-//        }
+        final String prefixed = new PrefixedName(this.name.pckg()).encode();
+        result = new Directives()
+            .add("meta")
+            .add("head").set("package").up()
+            .add("tail").set(prefixed).up()
+            .add("part").set(prefixed).up()
+            .up();
         return result;
     }
 
@@ -99,6 +95,18 @@ public final class DirectivesMetas implements Iterable<Directive> {
             .add("meta")
             .add("head").set("version").up()
             .add("tail").set(Manifests.read("JEO-Version")).up()
+            .up();
+    }
+
+    /**
+     * Ignored XMIR checks.
+     * @return Directives for ignored checks.
+     */
+    private Directives unlint() {
+        return new Directives()
+            .add("meta")
+            .add("head").set("unlint").up()
+            .add("tail").set("mandatory-package").up()
             .up();
     }
 }
