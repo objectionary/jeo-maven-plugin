@@ -51,15 +51,18 @@ SOFTWARE.
         <groupId>org.eolang</groupId>
         <artifactId>jeo-maven-plugin</artifactId>
         <version>@project.version@</version>
-        <configuration>
-          <xmirVerification>true</xmirVerification>
-        </configuration>
         <executions>
           <execution>
             <id>bytecode-to-xmir</id>
             <phase>process-classes</phase>
             <configuration>
               <outputDir>${jeo.disassemble}</outputDir>
+              <!--
+                  We intentionally added the xmirVerification parameter only here.
+                  See more details here:
+                  https://github.com/objectionary/eo/issues/3812
+              -->
+              <xmirVerification>true</xmirVerification>
             </configuration>
             <goals>
               <goal>disassemble</goal>
@@ -82,6 +85,11 @@ SOFTWARE.
             <configuration>
               <sourcesDir>${jeo.unroll}</sourcesDir>
               <outputDir>${jeo.assemble}</outputDir>
+              <!--
+                We intentionally don't add the xmirVerification parameter here.
+                See more details here:
+                https://github.com/objectionary/eo/issues/3812
+              -->
             </configuration>
             <goals>
               <goal>assemble</goal>
