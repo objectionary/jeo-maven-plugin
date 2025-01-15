@@ -117,6 +117,22 @@ setting the `skipVerification` parameter to `true`:
 
 At times, it might be beneficial to generate intentionally flawed bytecode.
 
+### Enable XMIR Verification
+
+After generation XMIR or before `assemble` goal,
+you might need to check its correctness.
+We do it by using [objectionary/lints](https://github.com/objectionary/lints)
+repository.
+By default, the plugin does not run lints.
+To enable them, you need to set `xmirVerification` to `true`:
+
+```xml
+
+<configuration>
+  <xmirVerification>true</xmirVerification>
+</configuration>
+```
+
 ## Disassembling Example
 
 The plugin can transform Java bytecode into EO and back. Usually, the plugin
