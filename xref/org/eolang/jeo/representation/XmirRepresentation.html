@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">public</strong> String name() {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">final</strong> <a name="XmlNode" href="../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a> root = <strong class="jxr_keyword">this</strong>.xml.root();
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassName" href="../../../../org/eolang/jeo/representation/ClassName.html#ClassName">ClassName</a>(
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>              root.xpath(<span class="jxr_string">"/program/metas/meta/tail/text()"</span>).get(0),
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>              root.xpath(<span class="jxr_string">"/program/metas/meta[head[text()]='package']/tail/text()"</span>).get(0),
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>              root.xpath(<span class="jxr_string">"/program/@name"</span>).get(0)
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>          ).full();
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>      }
@@ -118,6 +118,6 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2023&#x2013;2024 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2023&#x2013;2025 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
 </body>
 </html>
