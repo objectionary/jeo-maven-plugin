@@ -1,5 +1,7 @@
 architect:
   - volodya-lombrozo
+ec2:
+  type: t2.2xlarge
 docker:
   image: lombrozo/rultor-image-java:pr-4
 assets:
