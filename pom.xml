@@ -32,7 +32,7 @@ SOFTWARE.
   <groupId>org.eolang</groupId>
   <artifactId>jeo-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.1.0-SNAPSHOT</version>
   <name>jeo</name>
   <url>https://objectionary.github.io/jeo-maven-plugin</url>
   <description>Optimisation of Java Bytecode via EOLANG</description>
@@ -322,6 +322,7 @@ SOFTWARE.
           <pomExcludes>
             <exclude>spring-fat/pom.xml</exclude>
           </pomExcludes>
+          <parallelThreads>10</parallelThreads>
         </configuration>
       </plugin>
       <plugin>
@@ -528,6 +529,7 @@ SOFTWARE.
                 All integration tests are enabled in the 'long' profile.
               -->
               <pomExcludes/>
+              <parallelThreads>10</parallelThreads>
             </configuration>
           </plugin>
         </plugins>

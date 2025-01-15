@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import com.jcabi.manifests.Manifests;
 import java.util.Iterator;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
@@ -50,13 +51,13 @@ public final class DirectivesMetas implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Iterator<Directive> result;
-        if (this.name.pckg().isEmpty()) {
-            result = new Directives().iterator();
-        } else {
-            result = new Directives().add("metas").append(this.pckg()).up().iterator();
+        final Directives result = new Directives().add("metas");
+        if (!this.name.pckg().isEmpty()) {
+            result.append(this.pckg());
         }
-        return result;
+        result.append(DirectivesMetas.unlint());
+        result.append(DirectivesMetas.version());
+        return result.up().iterator();
     }
 
     /**
@@ -74,19 +75,36 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * @return Prefixed package name.
      */
     private Directives pckg() {
-        final Directives result;
-        final String original = this.name.pckg();
-        if (original.isEmpty()) {
-            result = new Directives();
-        } else {
-            final String prefixed = new PrefixedName(original).encode();
-            result = new Directives()
-                .add("meta")
-                .add("head").set("package").up()
-                .add("tail").set(prefixed).up()
-                .add("part").set(prefixed).up()
-                .up();
-        }
-        return result;
+        final String prefixed = new PrefixedName(this.name.pckg()).encode();
+        return new Directives()
+            .add("meta")
+            .add("head").set("package").up()
+            .add("tail").set(prefixed).up()
+            .add("part").set(prefixed).up()
+            .up();
+    }
+
+    /**
+     * The version directives of jeo-maven-plugin.
+     * @return Version directives.
+     */
+    private static Directives version() {
+        return new Directives()
+            .add("meta")
+            .add("head").set("version").up()
+            .add("tail").set(Manifests.read("JEO-Version")).up()
+            .up();
+    }
+
+    /**
+     * Ignored XMIR checks.
+     * @return Directives for ignored checks.
+     */
+    private static Directives unlint() {
+        return new Directives()
+            .add("meta")
+            .add("head").set("unlint").up()
+            .add("tail").set("mandatory-package").up()
+            .up();
     }
 }

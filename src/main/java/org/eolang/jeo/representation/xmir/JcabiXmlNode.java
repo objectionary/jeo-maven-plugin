@@ -26,7 +26,9 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,7 +37,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Program;
-import org.eolang.lints.Severity;
 import org.eolang.parser.StrictXmir;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -156,13 +157,23 @@ public final class JcabiXmlNode implements XmlNode {
 
     @Override
     public void validate() {
-        // @checkstyle MethodBodyCommentsCheck (4 lines)
-        // @todo #939:60min Fix All The Warnings in the EO Representation.
-        //  Here we just catch only the errors in the EO representation.
-        //  We need to fix all the warnings in the EO representation as well.
-        final Collection<Defect> defects = new Program(new StrictXmir(this.doc)).defects()
+        //@checkstyle MethodBodyCommentsCheck (10 lines)
+        // @todo #946:30min Remove the ignore list from the 'validate' method.
+        //  The ignore list is used to ignore some defects that we haven't implemented yet.
+        //  We should remove the ignore list and fix the defects that are being ignored.
+        final Collection<String> ignore = new HashSet<>(
+            Arrays.asList(
+                "mandatory-home",
+                "name-outside-of-abstract-object",
+                "empty-object",
+                "incorrect-package",
+                "object-does-not-match-filename"
+            )
+        );
+        final Collection<Defect> defects = new Program(new StrictXmir(this.doc))
+            .defects()
             .stream()
-            .filter(defect -> defect.severity() == Severity.ERROR)
+            .filter(defect -> !ignore.contains(defect.rule()))
             .collect(Collectors.toList());
         if (!defects.isEmpty()) {
             throw new IllegalStateException(
