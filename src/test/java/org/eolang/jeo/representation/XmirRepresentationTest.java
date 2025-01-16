@@ -25,7 +25,6 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
-import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -40,7 +39,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.w3c.dom.Node;
 import org.xembly.Directives;
 import org.xembly.Xembler;
 
@@ -101,7 +99,6 @@ final class XmirRepresentationTest {
             actual,
             Matchers.equalTo(expected)
         );
-
     }
 
     @Test
