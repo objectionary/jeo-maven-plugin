@@ -38,10 +38,8 @@ private String assertionMessage(String message) {
 
 private void generateGitHubIssue() {
     new File(basedir, 'build.log').text
-    copy('target/generated-sources/jeo-disassemble/org/eolang/hone/App.xmir', 'App.xmir.disassemble.txt')
-    copy('target/generated-sources/eo-phi/org/eolang/hone/App.phi', 'App.phi.txt')
-    copy('target/generated-sources/eo-unphi/org/eolang/hone/App.xmir', 'App.xmir.unphi.txt')
-    copy('target/generated-sources/jeo-unroll/org/eolang/hone/App.xmir', 'App.xmir.unroll.txt')
+    copyAll('org/eolang/hone/App')
+    copyAll('org/eolang/hone/param/Parameter')
     def issue = new File(basedir, "issue.md")
     issue.text = '''I run the following [integration test](https://github.com/objectionary/jeo-maven-plugin/tree/master/src/it/phi-unphi):
  
@@ -89,6 +87,14 @@ gh issue create \\
     def file = new File(basedir, "create_issue.sh")
     file.text = bashScript
     println "Bash script generated: file://${basedir}/create_issue.sh"
+}
+
+private void copyAll(final String subpath) {
+    def name = subpath.tokenize('/').last()
+    copy('target/generated-sources/jeo-disassemble/' + subpath + ".xmir", name + '.xmir.disassemble.txt')
+    copy('target/generated-sources/eo-phi/' + subpath + ".phi", name + '.phi.txt')
+    copy('target/generated-sources/eo-unphi/' + subpath + '.xmir', name + '.xmir.unphi.txt')
+    copy('target/generated-sources/jeo-unroll/' + subpath + '.xmir', name + '.xmir.unroll.txt')
 }
 
 private void copy(final String source, final String destination) {
