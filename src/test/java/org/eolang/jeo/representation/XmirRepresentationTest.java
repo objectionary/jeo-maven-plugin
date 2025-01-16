@@ -25,6 +25,8 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -38,6 +40,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.w3c.dom.Node;
+import org.xembly.Directives;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmirRepresentation}.
@@ -76,6 +81,27 @@ final class XmirRepresentationTest {
             actual,
             Matchers.equalTo(expected)
         );
+    }
+
+    @Test
+    void retrievesEmptyPackageWhenXmirWithoutMetas() {
+        final String actual = new XmirRepresentation(
+            new XMLDocument(
+                new Xembler(new Directives().xpath("/program/metas").remove())
+                    .applyQuietly(new BytecodeProgram(new BytecodeClass("Math")).xml().inner())
+            )
+        ).name();
+        final String expected = "j$Math";
+        MatcherAssert.assertThat(
+            String.format(
+                "The name of the class (without package) is not retrieved correctly, we expected '%s', but got '%s'",
+                expected,
+                actual
+            ),
+            actual,
+            Matchers.equalTo(expected)
+        );
+
     }
 
     @Test
