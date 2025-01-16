@@ -173,7 +173,7 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesJeoObject(
+        return new DirectivesGlobalObject(
             "class",
             this.name.name(),
             this.properties,

@@ -164,7 +164,7 @@ public final class JcabiXmlNode implements XmlNode {
         final Collection<String> ignore = new HashSet<>(
             Arrays.asList(
                 "mandatory-home",
-                "name-outside-of-abstract-object",
+//                "name-outside-of-abstract-object",
                 "empty-object",
                 "incorrect-package",
                 "object-does-not-match-filename"

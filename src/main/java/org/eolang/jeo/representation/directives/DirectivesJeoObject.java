@@ -128,7 +128,7 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
         final Directives directives = new Directives().add("o")
             .attr("base", new JeoFqn(this.base).fqn());
         if (!this.name.isEmpty()) {
-            directives.attr("name", this.name);
+            directives.attr("as", this.name);
         }
         return directives
             .append(this.inner.stream().reduce(new Directives(), Directives::append))
