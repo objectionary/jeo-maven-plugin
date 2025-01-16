@@ -53,11 +53,11 @@ final class DirectivesClassPropertiesTest {
                     ).up()
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o/o[contains(@base,'jeo.int') and contains(@name,'version')]",
-                "/o/o[contains(@base,'jeo.int') and contains(@name,'access')]",
-                "/o/o[contains(@base,'org.eolang.string') and contains(@name,'signature')]",
-                "/o/o[contains(@base,'org.eolang.string') and contains(@name,'supername')]",
-                "/o/o[contains(@base,'jeo.seq.of1') and contains(@name,'interfaces')]"
+                "/o/o[contains(@base,'jeo.int') and contains(@as,'version')]",
+                "/o/o[contains(@base,'jeo.int') and contains(@as,'access')]",
+                "/o/o[contains(@base,'org.eolang.string') and contains(@as,'signature')]",
+                "/o/o[contains(@base,'org.eolang.string') and contains(@as,'supername')]",
+                "/o/o[contains(@base,'jeo.seq.of1') and contains(@as,'interfaces')]"
             )
         );
     }

@@ -46,7 +46,7 @@ final class DirectivesAttributesTest {
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "./o[contains(@name, 'attributes') and contains(@base, 'seq.of2')]",
+                "./o[contains(@as, 'attributes') and contains(@base, 'seq.of2')]",
                 "./o[contains(@base, 'seq.of2')]/o[contains(@base, 'first')]",
                 "./o[contains(@base, 'seq.of2')]/o[contains(@base, 'second')]"
             )

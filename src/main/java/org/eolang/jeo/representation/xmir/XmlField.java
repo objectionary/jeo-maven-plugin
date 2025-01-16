@@ -71,7 +71,7 @@ public class XmlField {
      */
     private String name() {
         return new PrefixedName(
-            this.node.attribute("name").orElseThrow(
+            this.node.attribute("as").orElseThrow(
                 () -> new IllegalStateException(
                     String.format("Can't find field name in '%s'", this.node)
                 )
@@ -124,7 +124,7 @@ public class XmlField {
      * @return Annotations.
      */
     private Optional<XmlAnnotations> annotations() {
-        return this.node.optchild("name", String.format("annotations-%s", this.name()))
+        return this.node.optchild("as", String.format("annotations-%s", this.name()))
             .map(XmlAnnotations::new);
     }
 

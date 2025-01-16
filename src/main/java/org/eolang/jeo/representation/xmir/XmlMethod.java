@@ -158,7 +158,7 @@ public final class XmlMethod {
      */
     private BytecodeAttributes attrs() {
         return this.node.children()
-            .filter(element -> element.hasAttribute("name", "local-variable-table"))
+            .filter(element -> element.hasAttribute("as", "local-variable-table"))
             .findFirst()
             .map(XmlAttributes::new)
             .map(XmlAttributes::attributes)
@@ -173,7 +173,7 @@ public final class XmlMethod {
         return new MethodName(
             new PrefixedName(
                 new Signature(
-                    this.node.attribute("name")
+                    this.node.attribute("as")
                         .orElseThrow(
                             () -> new IllegalStateException(
                                 "Method 'name' attribute is not present"
@@ -189,7 +189,7 @@ public final class XmlMethod {
      * @return Instructions.
      */
     private List<XmlBytecodeEntry> instructions() {
-        return this.node.child("name", "body")
+        return this.node.child("as", "body")
             .children()
             .filter(element -> element.attribute("base").isPresent())
             .map(XmlMethod::toEntry)
@@ -293,7 +293,7 @@ public final class XmlMethod {
     private List<XmlTryCatchEntry> trycatchEntries() {
         return this.node.children()
             .filter(
-                element -> element.attribute("name")
+                element -> element.attribute("as")
                     .map(s -> s.contains("trycatchblocks"))
                     .orElse(false))
             .flatMap(XmlNode::children)
@@ -308,7 +308,7 @@ public final class XmlMethod {
      */
     private BytecodeAnnotations annotations() {
         return this.node.children()
-            .filter(element -> element.hasAttribute("name", "annotations"))
+            .filter(element -> element.hasAttribute("as", "annotations"))
             .findFirst()
             .map(XmlAnnotations::new)
             .map(XmlAnnotations::bytecode)

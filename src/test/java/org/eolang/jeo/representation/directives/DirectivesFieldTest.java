@@ -49,11 +49,11 @@ final class DirectivesFieldTest {
             ),
             xml,
             XhtmlMatchers.hasXPaths(
-                "/o[contains(@base,'field') and contains(@name,'unknown')]",
-                "/o/o[@name='access-unknown']/o[contains(text(),'01')]",
-                "/o/o[@name='descriptor-unknown']/o[text()='49-']",
-                "/o/o[@name='signature-unknown']",
-                "/o/o[contains(@base,'int') and @name='value-unknown']/o[contains(text(),'0')]"
+                "/o[contains(@base,'field') and contains(@as,'unknown')]",
+                "/o/o[@as='access-unknown']/o[contains(text(),'01')]",
+                "/o/o[@as='descriptor-unknown']/o[text()='49-']",
+                "/o/o[@as='signature-unknown']",
+                "/o/o[contains(@base,'int') and @as='value-unknown']/o[contains(text(),'0')]"
             )
         );
     }
@@ -76,11 +76,11 @@ final class DirectivesFieldTest {
             ),
             xml,
             XhtmlMatchers.hasXPaths(
-                "/o[contains(@base,'field') and contains(@name,'serialVersionUID')]",
-                "/o/o[@name='access-serialVersionUID']/o[contains(text(),'1A')]",
-                "/o/o[@name='descriptor-serialVersionUID']/o[text()='4A-']",
-                "/o/o[@name='signature-serialVersionUID']",
-                "/o/o[@name='value-serialVersionUID']/o[text()='62-84-EB-5F-88-47-CD-E1']"
+                "/o[contains(@base,'field') and contains(@as,'serialVersionUID')]",
+                "/o/o[@as='access-serialVersionUID']/o[contains(text(),'1A')]",
+                "/o/o[@as='descriptor-serialVersionUID']/o[text()='4A-']",
+                "/o/o[@as='signature-serialVersionUID']",
+                "/o/o[@as='value-serialVersionUID']/o[text()='62-84-EB-5F-88-47-CD-E1']"
             )
         );
     }
@@ -105,7 +105,7 @@ final class DirectivesFieldTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 String.format(
-                    "/o[contains(@base,'field') and contains(@name,'%s')]",
+                    "/o[contains(@base,'field') and contains(@as,'%s')]",
                     original
                 )
             )

@@ -52,7 +52,7 @@ final class DirectivesValueTest {
             new SameXml(
                 String.join(
                     "\n",
-                    "<o base='jeo.int' name='access'>",
+                    "<o base='jeo.int' as='access'>",
                     "  <o base='org.eolang.bytes'>00-00-00-00-00-00-00-2A</o>",
                     "</o>"
                 )

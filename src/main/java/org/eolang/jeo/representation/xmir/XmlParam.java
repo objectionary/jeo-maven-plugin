@@ -100,7 +100,7 @@ public final class XmlParam {
     private BytecodeAnnotations annotations() {
         return this.root.children()
             .filter(
-                node -> node.attribute("name")
+                node -> node.attribute("as")
                     .map(name -> name.startsWith("param-annotations-"))
                     .orElse(false)
             )
@@ -126,7 +126,7 @@ public final class XmlParam {
      * @return Name attribute.
      */
     private String name() {
-        return this.root.attribute("name").orElseThrow(
+        return this.root.attribute("as").orElseThrow(
             () -> new IllegalStateException(
                 String.format("'name' attribute is not present in xml param %n%s%n", this.root)
             )

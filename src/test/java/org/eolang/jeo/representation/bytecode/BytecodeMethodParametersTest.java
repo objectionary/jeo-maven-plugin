@@ -48,8 +48,8 @@ final class BytecodeMethodParametersTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@base,'params')]",
-                "/o[contains(@base,'params')]/o[contains(@base,'param') and contains(@name,'param-I-arg0-0-0')]",
-                "/o[contains(@base,'params')]/o[contains(@base,'param') and contains(@name,'param-I-arg1-0-1')]"
+                "/o[contains(@base,'params')]/o[contains(@base,'param') and contains(@as,'param-I-arg0-0-0')]",
+                "/o[contains(@base,'params')]/o[contains(@base,'param') and contains(@as,'param-I-arg1-0-1')]"
             )
         );
     }

@@ -101,7 +101,7 @@ final class DirectivesMethodTest {
         MatcherAssert.assertThat(
             "We expect that 'j$' prefix will be added to the method name",
             new Xembler(new BytecodeMethod("φTerm").directives()).xml(),
-            XhtmlMatchers.hasXPaths("./o[contains(@name, 'j$φTerm')]")
+            XhtmlMatchers.hasXPaths("./o[contains(@as, 'j$φTerm')]")
         );
     }
 }

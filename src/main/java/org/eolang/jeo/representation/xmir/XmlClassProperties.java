@@ -72,7 +72,7 @@ public final class XmlClassProperties {
      * @return Access modifiers.
      */
     private int access() {
-        return new XmlValue(this.clazz.child("name", "access")).integer();
+        return new XmlValue(this.clazz.child("as", "access")).integer();
     }
 
     /**
@@ -130,7 +130,7 @@ public final class XmlClassProperties {
      * @return Child node.
      */
     private Optional<XmlNode> child(final String name) {
-        return this.clazz.optchild("name", name);
+        return this.clazz.optchild("as", name);
     }
 
 }
