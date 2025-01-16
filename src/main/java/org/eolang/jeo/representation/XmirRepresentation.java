@@ -83,7 +83,10 @@ public final class XmirRepresentation {
     public String name() {
         final XmlNode root = this.xml.root();
         return new ClassName(
-            root.xpath("/program/metas/meta[head[text()]='package']/tail/text()").get(0),
+            root.xpath("/program/metas/meta[head[text()]='package']/tail/text()")
+                .stream()
+                .findFirst()
+                .orElse(""),
             root.xpath("/program/@name").get(0)
         ).full();
     }
