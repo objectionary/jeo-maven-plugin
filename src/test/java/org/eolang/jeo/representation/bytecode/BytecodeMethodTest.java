@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -370,7 +370,7 @@ final class BytecodeMethodTest {
             "We expect that method without try-catch block doesn't contain try-catch directives.",
             new BytecodeProgram(new BytecodeClass().helloWorldMethod()).xml().toString(),
             XhtmlMatchers.hasXPath(
-                ".//o[contains(@base,'seq.of0') and contains(@name,'trycatchblocks-main')]"
+                ".//o[contains(@base,'seq.of0') and contains(@as,'trycatchblocks-main')]"
             )
         );
     }

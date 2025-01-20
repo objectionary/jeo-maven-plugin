@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -170,8 +170,8 @@ public final class CanonicalXmir {
                     ),
                     new TrClasspath<Shift>(
                         "/org/eolang/parser/remove-cuts.xsl",
-                        "/org/eolang/parser/add-default-package.xsl",
-                        "/org/eolang/parser/explicit-data.xsl"
+                        "/org/eolang/parser/shake/add-default-package.xsl",
+                        "/org/eolang/parser/shake/explicit-data.xsl"
                     ).back()
                 ),
                 CanonicalXmir.class,

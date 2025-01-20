@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -53,13 +53,13 @@ final class DirectivesClassTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[@name='Neo']",
-                "/o[@name='Neo']/o[contains(@name,'version')]",
-                "/o[@name='Neo']/o[contains(@name,'access')]",
-                "/o[@name='Neo']/o[contains(@name,'signature')]",
-                "/o[@name='Neo']/o[contains(@name,'supername')]",
-                "/o[@name='Neo']/o[contains(@name,'interfaces')]",
-                "/o[@name='Neo']/o[contains(@name,'annotations')]",
-                "/o[@name='Neo']/o[contains(@name,'attributes')]"
+                "/o[@name='Neo']/o[contains(@as,'version')]",
+                "/o[@name='Neo']/o[contains(@as,'access')]",
+                "/o[@name='Neo']/o[contains(@as,'signature')]",
+                "/o[@name='Neo']/o[contains(@as,'supername')]",
+                "/o[@name='Neo']/o[contains(@as,'interfaces')]",
+                "/o[@name='Neo']/o[contains(@as,'annotations')]",
+                "/o[@name='Neo']/o[contains(@as,'attributes')]"
             )
         );
     }
@@ -92,7 +92,7 @@ final class DirectivesClassTest {
                 new XMLDocument(xml)
             ),
             xml,
-            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[contains(@name,'method')]")
+            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[contains(@as,'method')]")
         );
     }
 

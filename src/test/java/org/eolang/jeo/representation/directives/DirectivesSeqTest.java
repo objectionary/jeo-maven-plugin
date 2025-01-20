@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -51,9 +51,9 @@ final class DirectivesSeqTest {
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o[contains(@base,'seq.of2') and contains(@name,'seq')]",
-                "/o[contains(@base,'seq.of2') and contains(@name,'seq')]/o[contains(@base,'string')]/o[@base='org.eolang.bytes' and text()='31-']",
-                "/o[contains(@base,'seq.of2') and contains(@name,'seq')]/o[contains(@base,'string')]/o[@base='org.eolang.bytes' and text()='32-']"
+                "/o[contains(@base,'seq.of2') and contains(@as,'seq')]",
+                "/o[contains(@base,'seq.of2') and contains(@as,'seq')]/o[contains(@base,'string')]/o[@base='org.eolang.bytes' and text()='31-']",
+                "/o[contains(@base,'seq.of2') and contains(@as,'seq')]/o[contains(@base,'string')]/o[@base='org.eolang.bytes' and text()='32-']"
             )
         );
     }
@@ -68,7 +68,7 @@ final class DirectivesSeqTest {
             new Xembler(actual).xml(),
             XhtmlMatchers.hasXPath(
                 String.format(
-                    "/o[contains(@base,'seq.of%d') and contains(@name,'seq')]",
+                    "/o[contains(@base,'seq.of%d') and contains(@as,'seq')]",
                     expected
                 )
             )

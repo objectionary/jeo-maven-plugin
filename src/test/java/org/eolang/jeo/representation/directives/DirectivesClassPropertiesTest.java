@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -53,11 +53,11 @@ final class DirectivesClassPropertiesTest {
                     ).up()
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o/o[contains(@base,'jeo.int') and contains(@name,'version')]",
-                "/o/o[contains(@base,'jeo.int') and contains(@name,'access')]",
-                "/o/o[contains(@base,'org.eolang.string') and contains(@name,'signature')]",
-                "/o/o[contains(@base,'org.eolang.string') and contains(@name,'supername')]",
-                "/o/o[contains(@base,'jeo.seq.of1') and contains(@name,'interfaces')]"
+                "/o/o[contains(@base,'jeo.int') and contains(@as,'version')]",
+                "/o/o[contains(@base,'jeo.int') and contains(@as,'access')]",
+                "/o/o[contains(@base,'org.eolang.string') and contains(@as,'signature')]",
+                "/o/o[contains(@base,'org.eolang.string') and contains(@as,'supername')]",
+                "/o/o[contains(@base,'jeo.seq.of1') and contains(@as,'interfaces')]"
             )
         );
     }

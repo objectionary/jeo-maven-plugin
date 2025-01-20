@@ -23,7 +23,6 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -32,11 +31,11 @@ import org.xembly.Directive;
 import org.xembly.Directives;
 
 /**
- * Directives that represent a pure EO object.
- * Similar to {@link DirectivesJeoObject}, but for objects that are parts of the EO language.
- * @since 0.6
+ * Directives that represent a global object.
+ * Similar to {@link DirectivesJeoObject}, but instead of 'as' attribute, it has 'name' attribute.
+ * @since 0.8
  */
-public final class DirectivesEoObject implements Iterable<Directive> {
+public final class DirectivesGlobalObject implements Iterable<Directive> {
 
     /**
      * The base of the object.
@@ -56,19 +55,13 @@ public final class DirectivesEoObject implements Iterable<Directive> {
     /**
      * Constructor.
      * @param base The base of the object.
-     */
-    public DirectivesEoObject(final String base) {
-        this(base, "", new ArrayList<>(0));
-    }
-
-    /**
-     * Constructor.
-     * @param base The base of the object.
      * @param name The name of the object.
      * @param inner Inner components.
      */
     @SafeVarargs
-    DirectivesEoObject(final String base, final String name, final Iterable<Directive>... inner) {
+    public DirectivesGlobalObject(
+        final String base, final String name, final Iterable<Directive>... inner
+    ) {
         this(base, name, Arrays.stream(inner).map(Directives::new).collect(Collectors.toList()));
     }
 
@@ -78,7 +71,19 @@ public final class DirectivesEoObject implements Iterable<Directive> {
      * @param name The name of the object.
      * @param inner Inner components.
      */
-    DirectivesEoObject(final String base, final String name, final List<Directives> inner) {
+    public DirectivesGlobalObject(final String base, final String name, final Directives... inner) {
+        this(base, name, Arrays.asList(inner));
+    }
+
+    /**
+     * Constructor.
+     * @param base The base of the object.
+     * @param name The name of the object.
+     * @param inner Inner components.
+     */
+    public DirectivesGlobalObject(
+        final String base, final String name, final List<Directives> inner
+    ) {
         this.base = base;
         this.name = name;
         this.inner = inner;
@@ -87,12 +92,13 @@ public final class DirectivesEoObject implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives().add("o")
-            .attr("base", new EoFqn(this.base).fqn());
+            .attr("base", new JeoFqn(this.base).fqn());
         if (!this.name.isEmpty()) {
-            directives.attr("as", this.name);
+            directives.attr("name", this.name);
         }
         return directives
             .append(this.inner.stream().reduce(new Directives(), Directives::append))
-            .up().iterator();
+            .up()
+            .iterator();
     }
 }

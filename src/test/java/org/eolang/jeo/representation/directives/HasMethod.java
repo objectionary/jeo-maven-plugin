@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -190,7 +190,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
     private Stream<String> definition() {
         final String root = this.root();
         return Stream.of(
-            root.concat("/@name"),
+            root.concat("/@as"),
             root.concat("/o[contains(@base,'seq')]/@base")
         );
     }
@@ -204,7 +204,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         return this.params.stream()
             .map(
                 param -> String.format(
-                    "%s/o[contains(@base,'params')]/o[contains(@name,'%s') and contains(@base,'param')]/@name",
+                    "%s/o[contains(@base,'params')]/o[contains(@as,'%s') and contains(@base,'param')]/@as",
                     root,
                     param
                 )
@@ -247,7 +247,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      */
     private String root() {
         return String.format(
-            "/program/objects/o[contains(@name,'%s')]/o[contains(@name,'%s')]",
+            "/program/objects/o[contains(@name,'%s')]/o[contains(@as,'%s')]",
             this.clazz,
             this.name
         );
@@ -296,7 +296,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          */
         Stream<String> checks(final String root) {
             final String instruction = String.format(
-                "%s/o[contains(@base,'seq') and contains(@name,'body')]/o[contains(@base,'opcode')]",
+                "%s/o[contains(@base,'seq') and contains(@as,'body')]/o[contains(@base,'opcode')]",
                 root
             );
             return Stream.concat(
@@ -397,7 +397,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          */
         private static String path(final String root) {
             return String.format(
-                "%s/o[contains(@base,'seq') and contains(@name, 'trycatchblocks')]/o[contains(@base,'trycatch')]",
+                "%s/o[contains(@base,'seq') and contains(@as, 'trycatchblocks')]/o[contains(@base,'trycatch')]",
                 root
             );
         }
@@ -420,7 +420,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         static Stream<String> checks(final String root) {
             return Stream.of(
                 String.format(
-                    "%s/o[contains(@base,'seq') and contains(@name,'body')]/o[contains(@base,'label')]/o[@base='org.eolang.bytes']/@base",
+                    "%s/o[contains(@base,'seq') and contains(@as,'body')]/o[contains(@base,'label')]/o[@base='org.eolang.bytes']/@base",
                     root
                 )
             );

@@ -2,7 +2,7 @@
 <!--
 The MIT License (MIT)
 
-Copyright (c) 2016-2024 Objectionary.com
+Copyright (c) 2016-2025 Objectionary.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ SOFTWARE.
   <groupId>org.eolang</groupId>
   <artifactId>jeo-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <name>jeo</name>
   <url>https://objectionary.github.io/jeo-maven-plugin</url>
   <description>Optimisation of Java Bytecode via EOLANG</description>
@@ -195,7 +195,7 @@ SOFTWARE.
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.50.0</version>
+      <version>0.50.1</version>
     </dependency>
     <dependency>
       <groupId>com.github.volodya-lombrozo</groupId>

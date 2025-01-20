@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ final class DirectivesAnnotationsTest {
             "Must return empty directives if no annotations",
             new Xembler(new DirectivesAnnotations()).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o[contains(@base,'jeo.seq.of0') and contains(@name,'annotations')]"
+                "/o[contains(@base,'jeo.seq.of0') and contains(@as,'annotations')]"
             )
         );
     }
@@ -55,13 +55,13 @@ final class DirectivesAnnotationsTest {
                 new DirectivesAnnotations().add(new DirectivesAnnotation(annotation, true))
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o[contains(@base,'seq.of1') and contains(@name,'annotations')]/o",
+                "/o[contains(@base,'seq.of1') and contains(@as,'annotations')]/o",
                 String.format(
-                    "/o[contains(@base,'seq.of1') and contains(@name,'annotations')]/o/o[1][contains(@base,'string')]/o[text()='%s']",
+                    "/o[contains(@base,'seq.of1') and contains(@as,'annotations')]/o/o[1][contains(@base,'string')]/o[text()='%s']",
                     new DirectivesValue(annotation).hex()
                 ),
                 String.format(
-                    "/o[contains(@base,'seq.of1') and contains(@name,'annotations')]/o/o[2][contains(@base,'bool')]/o[text()='%s']",
+                    "/o[contains(@base,'seq.of1') and contains(@as,'annotations')]/o/o[2][contains(@base,'bool')]/o[text()='%s']",
                     new DirectivesValue(true).hex()
                 )
             )

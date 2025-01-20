@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -133,7 +133,7 @@ public final class XmlClass {
      */
     private Optional<XmlAnnotations> annotations() {
         return this.node.children()
-            .filter(o -> o.hasAttribute("name", "annotations"))
+            .filter(o -> o.hasAttribute("as", "annotations"))
             .findFirst()
             .map(XmlAnnotations::new);
     }
@@ -175,7 +175,7 @@ public final class XmlClass {
      */
     private Optional<XmlAttributes> attributes() {
         return this.node.children()
-            .filter(o -> o.hasAttribute("name", "attributes"))
+            .filter(o -> o.hasAttribute("as", "attributes"))
             .findFirst()
             .map(XmlAttributes::new);
     }

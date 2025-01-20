@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -100,7 +100,7 @@ public final class XmlParam {
     private BytecodeAnnotations annotations() {
         return this.root.children()
             .filter(
-                node -> node.attribute("name")
+                node -> node.attribute("as")
                     .map(name -> name.startsWith("param-annotations-"))
                     .orElse(false)
             )
@@ -126,7 +126,7 @@ public final class XmlParam {
      * @return Name attribute.
      */
     private String name() {
-        return this.root.attribute("name").orElseThrow(
+        return this.root.attribute("as").orElseThrow(
             () -> new IllegalStateException(
                 String.format("'name' attribute is not present in xml param %n%s%n", this.root)
             )

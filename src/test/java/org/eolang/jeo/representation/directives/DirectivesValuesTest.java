@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,8 +44,8 @@ final class DirectivesValuesTest {
             "We expect that array of values will be converted to correct Xembly directives",
             new Xembler(new DirectivesValues("name", "value")).xml(),
             XhtmlMatchers.hasXPaths(
-                "./o[contains(@base,'seq.of1') and contains(@name,'name')]",
-                "./o[contains(@base,'seq.of1') and contains(@name,'name')]/o/o[@base='org.eolang.bytes' and text()='76-61-6C-75-65']"
+                "./o[contains(@base,'seq.of1') and contains(@as,'name')]",
+                "./o[contains(@base,'seq.of1') and contains(@as,'name')]/o/o[@base='org.eolang.bytes' and text()='76-61-6C-75-65']"
             )
         );
     }
@@ -58,7 +58,7 @@ final class DirectivesValuesTest {
                 new Xembler(
                     new DirectivesValues("", "some-value")
                 ).xmlQuietly()
-            ).attribute("name").orElseThrow(
+            ).attribute("as").orElseThrow(
                 () -> new IllegalStateException("Name attribute is absent")
             ),
             Matchers.matchesRegex("^[^0-9].*")

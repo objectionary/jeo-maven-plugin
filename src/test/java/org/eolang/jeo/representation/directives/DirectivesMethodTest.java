@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -101,7 +101,7 @@ final class DirectivesMethodTest {
         MatcherAssert.assertThat(
             "We expect that 'j$' prefix will be added to the method name",
             new Xembler(new BytecodeMethod("φTerm").directives()).xml(),
-            XhtmlMatchers.hasXPaths("./o[contains(@name, 'j$φTerm')]")
+            XhtmlMatchers.hasXPaths("./o[contains(@as, 'j$φTerm')]")
         );
     }
 }

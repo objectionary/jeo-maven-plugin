@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -128,7 +128,7 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
         final Directives directives = new Directives().add("o")
             .attr("base", new JeoFqn(this.base).fqn());
         if (!this.name.isEmpty()) {
-            directives.attr("name", this.name);
+            directives.attr("as", this.name);
         }
         return directives
             .append(this.inner.stream().reduce(new Directives(), Directives::append))

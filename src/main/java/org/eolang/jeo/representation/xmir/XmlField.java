@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -71,7 +71,7 @@ public class XmlField {
      */
     private String name() {
         return new PrefixedName(
-            this.node.attribute("name").orElseThrow(
+            this.node.attribute("as").orElseThrow(
                 () -> new IllegalStateException(
                     String.format("Can't find field name in '%s'", this.node)
                 )
@@ -124,7 +124,7 @@ public class XmlField {
      * @return Annotations.
      */
     private Optional<XmlAnnotations> annotations() {
-        return this.node.optchild("name", String.format("annotations-%s", this.name()))
+        return this.node.optchild("as", String.format("annotations-%s", this.name()))
             .map(XmlAnnotations::new);
     }
 
