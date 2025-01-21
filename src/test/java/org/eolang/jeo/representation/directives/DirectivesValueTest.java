@@ -60,6 +60,27 @@ final class DirectivesValueTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("numbers")
+    void convertsNumbers(
+        Number number, final String base, final String bytes
+    ) throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect that number value is converted to the correct XMIR",
+            new Xembler(new DirectivesValue(base, number)).xml(),
+            new SameXml(
+                String.join(
+                    "\n",
+                    String.format("<o base='%s' as='access'>", base),
+                    "<o base='org.eolang.number'>",
+                    String.format("  <o base='org.eolang.bytes'>%s</o>", bytes),
+                    "</o></o>"
+                )
+            )
+        );
+
+    }
+
     @Test
     void convertsLabel() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
@@ -195,6 +216,21 @@ final class DirectivesValueTest {
                 DirectivesValueTest.class,
                 "6F-72-67-2F-65-6F-6C-61-6E-67-2F-6A-65-6F-2F-72-65-70-72-65-73-65-6E-74-61-74-69-6F-6E-2F-64-69-72-65-63-74-69-76-65-73-2F-44-69-72-65-63-74-69-76-65-73-56-61-6C-75-65-54-65-73-74"
             )
+        );
+    }
+
+    /**
+     * Arguments for {@link DirectivesValueTest#convertsNumbers(Number, String, String)}.
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> numbers() {
+        return Stream.of(
+            Arguments.of(1, "jeo.int", "00-00-00-00-00-00-00-01"),
+            Arguments.of(1L, "jeo.long", "00-00-00-00-00-00-00-01"),
+            Arguments.of(1.0f, "jeo.float", "3F-80-00-00"),
+            Arguments.of(1.0d, "jeo.double", "3F-F0-00-00-00-00-00-00"),
+            Arguments.of((short) 1, "jeo.short", "00-01"),
+            Arguments.of((byte) 1, "jeo.byte", "01")
         );
     }
 }
