@@ -74,7 +74,7 @@ enum DataType {
      * Byte.
      */
     BYTE("byte", Byte.class,
-        value -> ByteBuffer.allocate(Byte.BYTES).put((byte) (int) value).array(),
+        value -> ByteBuffer.allocate(Byte.BYTES).put((byte) value).array(),
         bytes -> ByteBuffer.wrap(bytes).get()
     ),
 
@@ -82,7 +82,7 @@ enum DataType {
      * Short.
      */
     SHORT("short", Short.class,
-        value -> ByteBuffer.allocate(Short.BYTES).putShort((short) (int) value).array(),
+        value -> ByteBuffer.allocate(Short.BYTES).putShort((short) value).array(),
         bytes -> ByteBuffer.wrap(bytes).getShort()
     ),
 

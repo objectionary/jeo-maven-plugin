@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import java.util.stream.Stream;
 import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
@@ -65,20 +66,21 @@ final class DirectivesValueTest {
     void convertsNumbers(
         Number number, final String base, final String bytes
     ) throws ImpossibleModificationException {
+        final String xml = new Xembler(new DirectivesValue("access", number)).xml();
         MatcherAssert.assertThat(
-            "We expect that number value is converted to the correct XMIR",
-            new Xembler(new DirectivesValue(base, number)).xml(),
-            new SameXml(
-                String.join(
-                    "\n",
-                    String.format("<o base='%s' as='access'>", base),
-                    "<o base='org.eolang.number'>",
-                    String.format("  <o base='org.eolang.bytes'>%s</o>", bytes),
-                    "</o></o>"
+            String.format(
+                "We expect that number value is converted to the correct XMIR, but got the incorrect one: %n%s%n",
+                xml
+            ),
+            xml,
+            XhtmlMatchers.hasXPath(
+                String.format(
+                    "./o[@base='%s' and @as='access']/o[@base='org.eolang.number']/o[@base='org.eolang.bytes' and text()='%s']",
+                    base,
+                    bytes
                 )
             )
         );
-
     }
 
     @Test
@@ -224,13 +226,14 @@ final class DirectivesValueTest {
      * @return Stream of arguments.
      */
     static Stream<Arguments> numbers() {
+        final String same = "3F-F0-00-00-00-00-00-00";
         return Stream.of(
-            Arguments.of(1, "jeo.int", "00-00-00-00-00-00-00-01"),
-            Arguments.of(1L, "jeo.long", "00-00-00-00-00-00-00-01"),
-            Arguments.of(1.0f, "jeo.float", "3F-80-00-00"),
-            Arguments.of(1.0d, "jeo.double", "3F-F0-00-00-00-00-00-00"),
-            Arguments.of((short) 1, "jeo.short", "00-01"),
-            Arguments.of((byte) 1, "jeo.byte", "01")
+            Arguments.of(1, "jeo.int", same),
+            Arguments.of(1L, "jeo.long", same),
+            Arguments.of(1.0f, "jeo.float", same),
+            Arguments.of(1.0d, "jeo.double", same),
+            Arguments.of((short) 1, "jeo.short", same),
+            Arguments.of((byte) 1, "jeo.byte", same)
         );
     }
 }

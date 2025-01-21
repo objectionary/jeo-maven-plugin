@@ -86,22 +86,54 @@ public final class DirectivesValue implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final String type = this.type();
         final Iterable<Directive> res;
-        if ("string".equals(type)) {
-            res = new DirectivesEoObject(
-                type,
-                this.name,
-                new DirectivesComment(this.comment()),
-                new DirectivesBytes(this.hex())
-            );
-        } else {
-            res = new DirectivesJeoObject(
-                type,
-                this.name,
-                new DirectivesComment(this.comment()),
-                new DirectivesBytes(this.hex())
-            );
+        switch (type) {
+            case "byte":
+            case "short":
+            case "int":
+            case "long":
+            case "float":
+            case "double":
+                res = new DirectivesJeoObject(
+                    type,
+                    this.name,
+                    new DirectivesComment(this.comment()),
+                    new DirectivesNumberBytes((Number) this.value.object())
+                );
+                break;
+            case "string":
+                res = new DirectivesEoObject(
+                    type,
+                    this.name,
+                    new DirectivesComment(this.comment()),
+                    new DirectivesBytes(this.hex())
+                );
+                break;
+            default:
+                res = new DirectivesJeoObject(
+                    type,
+                    this.name,
+                    new DirectivesComment(this.comment()),
+                    new DirectivesBytes(this.hex())
+                );
+                break;
         }
         return res.iterator();
+//        if ("string".equals(type)) {
+//            res = new DirectivesEoObject(
+//                type,
+//                this.name,
+//                new DirectivesComment(this.comment()),
+//                new DirectivesBytes(this.hex())
+//            );
+//        } else {
+//            res = new DirectivesJeoObject(
+//                type,
+//                this.name,
+//                new DirectivesComment(this.comment()),
+//                new DirectivesBytes(this.hex())
+//            );
+//        }
+//        return res.iterator();
     }
 
     /**
