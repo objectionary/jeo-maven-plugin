@@ -132,7 +132,11 @@ public final class XmlValue {
                 result = (int) ByteBuffer.wrap(this.bytes()).getDouble();
                 break;
             case "long":
-                result = (long) ByteBuffer.wrap(this.bytes()).getDouble();
+                if (this.node.child("o").hasAttribute("base", "org.eolang.number")) {
+                    result = (long) ByteBuffer.wrap(this.bytes()).getDouble();
+                } else {
+                    result = ByteBuffer.wrap(this.bytes()).getLong();
+                }
                 break;
             case "float":
                 result = (float) ByteBuffer.wrap(this.bytes()).getDouble();

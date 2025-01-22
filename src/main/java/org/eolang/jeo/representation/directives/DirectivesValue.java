@@ -93,13 +93,11 @@ public final class DirectivesValue implements Iterable<Directive> {
             case "long":
             case "float":
             case "double":
-                final Object object1 = this.value.object();
-                final Number object = (Number) object1;
                 res = new DirectivesJeoObject(
                     type,
                     this.name,
                     new DirectivesComment(this.comment()),
-                    new DirectivesNumberBytes(object)
+                    new DirectivesNumberBytes((Number) this.value.object())
                 );
                 break;
             case "string":

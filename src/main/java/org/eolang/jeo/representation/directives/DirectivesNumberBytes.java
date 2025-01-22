@@ -37,6 +37,18 @@ public final class DirectivesNumberBytes implements Iterable<Directive> {
      */
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
+    /**
+     * Maximum long value that can be represented as double.
+     * Any value greater than this will be represented incorrectly.
+     */
+    private static final long MAX_LONG_DOUBLE = 9_007_199_254_740_992L;
+
+    /**
+     * Minimum long value that can be represented as double.
+     * Any value less than this will be represented incorrectly.
+     */
+    private static final long MIN_LONG_DOUBLE = -9_007_199_254_740_992L;
+
     private final Number number;
 
     public DirectivesNumberBytes(final Number number) {
@@ -45,12 +57,28 @@ public final class DirectivesNumberBytes implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o")
-            .attr("base", "org.eolang.number")
-            .append(new DirectivesBytes(this.bytes()))
-            .up()
-            .iterator();
+        if (this.number.longValue() >= DirectivesNumberBytes.MIN_LONG_DOUBLE
+            && this.number.longValue() <= DirectivesNumberBytes.MAX_LONG_DOUBLE) {
+            return new Directives()
+                .add("o")
+                .attr("base", "org.eolang.number")
+                .append(new DirectivesBytes(this.bytes()))
+                .up()
+                .iterator();
+        } else {
+            return new DirectivesBytes(
+                DirectivesNumberBytes.bytesToHex(
+                    new BytecodeValue(this.number.longValue()).bytes()
+                )
+            ).iterator();
+        }
+
+//        return new Directives()
+//            .add("o")
+//            .attr("base", "org.eolang.number")
+//            .append(new DirectivesBytes(this.bytes()))
+//            .up()
+//            .iterator();
     }
 
     private String bytes() {
