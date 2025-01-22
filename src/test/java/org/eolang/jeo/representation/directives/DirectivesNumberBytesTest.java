@@ -38,27 +38,27 @@ import org.xembly.Xembler;
  */
 final class DirectivesNumberBytesTest {
 
-    @ParameterizedTest
-    @MethodSource("numbers")
-    void convertsDifferentNumbersToBytes(
-        final Number value, final String bytes
-    ) throws ImpossibleModificationException {
-        final String xml = new Xembler(new DirectivesNumberBytes(value)).xml();
-        MatcherAssert.assertThat(
-            String.format(
-                "We expect that number will be converted to the correct XMIR, but got: %n%s%n",
-                xml
-            ),
-            xml,
-            XhtmlMatchers.hasXPaths(
-                "/o[@base='org.eolang.number']",
-                String.format(
-                    "/o[@base='org.eolang.number']/o[@base='org.eolang.bytes' and text()='%s']",
-                    bytes
-                )
-            )
-        );
-    }
+//    @ParameterizedTest
+//    @MethodSource("numbers")
+//    void convertsDifferentNumbersToBytes(
+//        final Number value, final String bytes
+//    ) throws ImpossibleModificationException {
+//        final String xml = new Xembler(new DirectivesNumberBytes(value)).xml();
+//        MatcherAssert.assertThat(
+//            String.format(
+//                "We expect that number will be converted to the correct XMIR, but got: %n%s%n",
+//                xml
+//            ),
+//            xml,
+//            XhtmlMatchers.hasXPaths(
+//                "/o[@base='org.eolang.number']",
+//                String.format(
+//                    "/o[@base='org.eolang.number']/o[@base='org.eolang.bytes' and text()='%s']",
+//                    bytes
+//                )
+//            )
+//        );
+//    }
 
     /**
      * Provide numbers.

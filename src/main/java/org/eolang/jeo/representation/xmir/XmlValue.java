@@ -26,7 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
-import org.eolang.jeo.representation.bytecode.BytecodeValue;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 
 /**
  * XML value.
@@ -106,7 +106,7 @@ public final class XmlValue {
 
     /**
      * Convert hex string to integer.
-     * @todo: Replace with {@link BytecodeValue#object()}.
+     * @todo: Replace with {@link BytecodeObject#object()}.
      * @return Integer.
      */
     public int integer() {
@@ -148,7 +148,7 @@ public final class XmlValue {
                 result = this.string();
                 break;
             default:
-                result = new BytecodeValue(base, this.bytes()).object();
+                result = new BytecodeObject(base, this.bytes()).object();
                 break;
         }
         return result;

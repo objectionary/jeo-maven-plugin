@@ -25,7 +25,10 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import lombok.ToString;
-import org.eolang.jeo.representation.bytecode.BytecodeValue;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
+import org.eolang.jeo.representation.bytecode.Codec;
+import org.eolang.jeo.representation.bytecode.EoCodec;
+import org.eolang.jeo.representation.bytecode.EoLargeCodec;
 import org.xembly.Directive;
 
 /**
@@ -44,6 +47,18 @@ public final class DirectivesValue implements Iterable<Directive> {
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
     /**
+     * Maximum long value that can be represented as double.
+     * Any value greater than this will be represented incorrectly.
+     */
+    private static final long MAX_LONG_DOUBLE = 9_007_199_254_740_992L;
+
+    /**
+     * Minimum long value that can be represented as double.
+     * Any value less than this will be represented incorrectly.
+     */
+    private static final long MIN_LONG_DOUBLE = -9_007_199_254_740_992L;
+
+    /**
      * Name.
      */
     private final String name;
@@ -51,7 +66,7 @@ public final class DirectivesValue implements Iterable<Directive> {
     /**
      * Value.
      */
-    private final BytecodeValue value;
+    private final BytecodeObject value;
 
     /**
      * Constructor.
@@ -69,7 +84,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param <T> Data type.
      */
     public <T> DirectivesValue(final String name, final T data) {
-        this(name, new BytecodeValue(data));
+        this(name, new BytecodeObject(data));
     }
 
     /**
@@ -77,7 +92,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param name Name.
      * @param value Value.
      */
-    public DirectivesValue(final String name, final BytecodeValue value) {
+    public DirectivesValue(final String name, final BytecodeObject value) {
         this.name = name;
         this.value = value;
     }
@@ -90,14 +105,13 @@ public final class DirectivesValue implements Iterable<Directive> {
             case "byte":
             case "short":
             case "int":
-            case "long":
             case "float":
             case "double":
                 res = new DirectivesJeoObject(
                     type,
                     this.name,
                     new DirectivesComment(this.comment()),
-                    new DirectivesNumberBytes((Number) this.value.object())
+                    new DirectivesNumberBytes(this.hex())
                 );
                 break;
             case "string":
@@ -107,6 +121,24 @@ public final class DirectivesValue implements Iterable<Directive> {
                     new DirectivesComment(this.comment()),
                     new DirectivesBytes(this.hex())
                 );
+                break;
+            case "long":
+                final long val = ((Number) value.object()).longValue();
+                if (val >= DirectivesValue.MIN_LONG_DOUBLE && val <= DirectivesValue.MAX_LONG_DOUBLE) {
+                    res = new DirectivesJeoObject(
+                        type,
+                        this.name,
+                        new DirectivesComment(this.comment()),
+                        new DirectivesNumberBytes(this.hex())
+                    );
+                } else {
+                    res = new DirectivesJeoObject(
+                        type,
+                        this.name,
+                        new DirectivesComment(this.comment()),
+                        new DirectivesBytes(this.hex(new EoLargeCodec()))
+                    );
+                }
                 break;
             default:
                 res = new DirectivesJeoObject(
@@ -125,7 +157,11 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @return Value
      */
     String hex() {
-        return DirectivesValue.bytesToHex(this.value.bytes());
+        return this.hex(new EoCodec());
+    }
+
+    String hex(Codec codec) {
+        return DirectivesValue.bytesToHex(this.value.encode(codec));
     }
 
     /**

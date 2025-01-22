@@ -24,27 +24,34 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.nio.ByteBuffer;
-import org.apache.bcel.classfile.Code;
 
-public final class EoLongCodec implements Codec {
+public final class EoLargeCodec implements Codec {
 
-    private final Codec origin;
+    private final EoCodec origin;
 
-    public EoLongCodec(final Codec origin) {
+    public EoLargeCodec() {
+        this(new EoCodec());
+    }
+
+    public EoLargeCodec(final EoCodec origin) {
         this.origin = origin;
     }
 
     @Override
-    public byte[] bytes(final Object object, final DataType type) {
-        return this.origin.bytes(object, type);
+    public byte[] encode(final Object object, final DataType type) {
+        if (type == DataType.LONG) {
+            return this.origin.encode(object, type);
+        }
+        //todo
+        return this.origin.encode(object, type);
     }
 
     @Override
-    public Object object(final byte[] bytes, final DataType type) {
+    public Object decode(final byte[] bytes, final DataType type) {
         if (type == DataType.LONG) {
             return ByteBuffer.wrap(bytes).getLong();
         } else {
-            return this.origin.object(bytes, type);
+            return this.origin.decode(bytes, type);
         }
     }
 }

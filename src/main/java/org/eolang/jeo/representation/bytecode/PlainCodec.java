@@ -32,7 +32,7 @@ final class PlainCodec implements Codec {
     private static final byte[] EMPTY = new byte[0];
 
     @Override
-    public byte[] bytes(final Object value, final DataType type) {
+    public byte[] encode(final Object value, final DataType type) {
         switch (type) {
             case BOOL:
                 final byte[] result;
@@ -82,7 +82,7 @@ final class PlainCodec implements Codec {
     }
 
     @Override
-    public Object object(final byte[] bytes, final DataType type) {
+    public Object decode(final byte[] bytes, final DataType type) {
         switch (type) {
             case BOOL:
                 return Boolean.valueOf(bytes[0] != 0);

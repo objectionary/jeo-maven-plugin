@@ -53,7 +53,7 @@ public final class EoCodec implements Codec {
     }
 
     @Override
-    public byte[] bytes(final Object object, final DataType type) {
+    public byte[] encode(final Object object, final DataType type) {
         switch (type) {
             case BOOL:
             case CHAR:
@@ -63,18 +63,21 @@ public final class EoCodec implements Codec {
             case TYPE_REFERENCE:
             case CLASS_REFERENCE:
             case NULL:
-                return this.origin.bytes(object, type);
+                return this.origin.encode(object, type);
             case BYTE:
             case SHORT:
             case INT:
             case FLOAT:
             case DOUBLE:
-                return ByteBuffer.allocate(Double.BYTES).putDouble((double) object).array();
+                return ByteBuffer.allocate(Double.BYTES).putDouble(((Number) object).doubleValue())
+                    .array();
             case LONG:
                 if (EoCodec.MIN_LONG_DOUBLE <= (long) object && (long) object <= EoCodec.MAX_LONG_DOUBLE) {
-                    return this.origin.bytes(object, type);
+                    return ByteBuffer.allocate(Long.BYTES)
+                        .putDouble(((Number) object).doubleValue())
+                        .array();
                 } else {
-                    return ByteBuffer.allocate(Long.BYTES).putLong((long) object).array();
+                    return this.origin.encode(object, type);
                 }
             default:
                 throw new IllegalArgumentException(
@@ -84,7 +87,7 @@ public final class EoCodec implements Codec {
     }
 
     @Override
-    public Object object(final byte[] bytes, final DataType type) {
+    public Object decode(final byte[] bytes, final DataType type) {
         switch (type) {
             case BOOL:
             case CHAR:
@@ -94,7 +97,7 @@ public final class EoCodec implements Codec {
             case TYPE_REFERENCE:
             case CLASS_REFERENCE:
             case NULL:
-                return this.origin.object(bytes, type);
+                return this.origin.decode(bytes, type);
             case BYTE:
                 return (byte) ByteBuffer.wrap(bytes).getDouble();
             case SHORT:

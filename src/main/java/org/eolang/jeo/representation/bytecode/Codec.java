@@ -23,9 +23,9 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-interface Codec {
+public interface Codec {
 
-    byte[] bytes(final Object object, final DataType type);
+    byte[] encode(final Object object, final DataType type);
 
-    Object object(final byte[] bytes, final DataType type);
+    Object decode(final byte[] bytes, final DataType type);
 }

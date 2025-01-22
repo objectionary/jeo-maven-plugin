@@ -24,92 +24,25 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import org.eolang.jeo.representation.bytecode.BytecodeValue;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
 public final class DirectivesNumberBytes implements Iterable<Directive> {
 
-    /**
-     * Array of hexadecimal characters.
-     * Used for converting bytes to hexadecimal.
-     * See {@link #bytesToHex(byte[])}.
-     */
-    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
-    /**
-     * Maximum long value that can be represented as double.
-     * Any value greater than this will be represented incorrectly.
-     */
-    private static final long MAX_LONG_DOUBLE = 9_007_199_254_740_992L;
+    private final String value;
 
-    /**
-     * Minimum long value that can be represented as double.
-     * Any value less than this will be represented incorrectly.
-     */
-    private static final long MIN_LONG_DOUBLE = -9_007_199_254_740_992L;
-
-    private final Number number;
-
-    public DirectivesNumberBytes(final Number number) {
-        this.number = number;
+    public DirectivesNumberBytes(final String hex) {
+        this.value = hex;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        if (this.number.longValue() >= DirectivesNumberBytes.MIN_LONG_DOUBLE
-            && this.number.longValue() <= DirectivesNumberBytes.MAX_LONG_DOUBLE) {
-            return new Directives()
-                .add("o")
-                .attr("base", "org.eolang.number")
-                .append(new DirectivesBytes(this.bytes()))
-                .up()
-                .iterator();
-        } else {
-            return new DirectivesBytes(
-                DirectivesNumberBytes.bytesToHex(
-                    new BytecodeValue(this.number.longValue()).bytes()
-                )
-            ).iterator();
-        }
-
-//        return new Directives()
-//            .add("o")
-//            .attr("base", "org.eolang.number")
-//            .append(new DirectivesBytes(this.bytes()))
-//            .up()
-//            .iterator();
-    }
-
-    private String bytes() {
-        final double value = this.number.doubleValue();
-        return DirectivesNumberBytes.bytesToHex(
-            new BytecodeValue(value).bytes()
-        );
-    }
-
-    /**
-     * @todo Duplicate!
-     */
-    private static String bytesToHex(final byte[] bytes) {
-        final String res;
-        if (bytes == null || bytes.length == 0) {
-            res = "--";
-        } else {
-            final int length = bytes.length;
-            final char[] hex = new char[length * 3];
-            for (int index = 0; index < length; ++index) {
-                final int value = bytes[index] & 0xFF;
-                hex[index * 3] = HEX_ARRAY[value >>> 4];
-                hex[index * 3 + 1] = HEX_ARRAY[value & 0x0F];
-                hex[index * 3 + 2] = '-';
-            }
-            if (hex.length == 3) {
-                res = new String(hex);
-            } else {
-                res = new String(hex, 0, hex.length - 1);
-            }
-        }
-        return res;
+        return new Directives()
+            .add("o")
+            .attr("base", "org.eolang.number")
+            .append(new DirectivesBytes(this.value))
+            .up()
+            .iterator();
     }
 }

@@ -26,12 +26,7 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.Locale;
 import java.util.Optional;
 
-/**
- * Bytecode value.
- * Represents a typed value in bytecode format.
- * @since 0.6
- */
-public final class BytecodeValue {
+public final class BytecodeBytes {
 
     /**
      * Data type.
@@ -43,11 +38,13 @@ public final class BytecodeValue {
      */
     private final byte[] vbytes;
 
+    private final Codec codec;
+
     /**
      * Constructor.
      * @param value Value.
      */
-    public BytecodeValue(final Object value) {
+    public BytecodeBytes(final Object value) {
         this(DataType.findByData(value), value);
     }
 
@@ -56,7 +53,7 @@ public final class BytecodeValue {
      * @param type Value type.
      * @param bytes Value bytes.
      */
-    public BytecodeValue(final String type, final byte[] bytes) {
+    public BytecodeBytes(final String type, final byte[] bytes) {
         this(DataType.findByBase(type), bytes);
     }
 
@@ -65,8 +62,12 @@ public final class BytecodeValue {
      * @param type Value type.
      * @param value Value.
      */
-    private BytecodeValue(final DataType type, final Object value) {
-        this(type, type.encode(value));
+    private BytecodeBytes(final DataType type, final Object value) {
+        this(type, value, new EoLargeCodec());
+    }
+
+    private BytecodeBytes(final DataType type, final Object value, final Codec codec) {
+        this(type, codec.encode(value, type), codec);
     }
 
     /**
@@ -74,9 +75,14 @@ public final class BytecodeValue {
      * @param type Value type.
      * @param bytes Value bytes.
      */
-    private BytecodeValue(final DataType type, final byte[] bytes) {
-        this.vtype = type;
-        this.vbytes = Optional.ofNullable(bytes).map(byte[]::clone).orElse(null);
+    private BytecodeBytes(final DataType type, final byte[] bytes) {
+        this(type, bytes, new EoCodec());
+    }
+
+    private BytecodeBytes(final DataType vtype, final byte[] vbytes, final Codec codec) {
+        this.vtype = vtype;
+        this.vbytes = Optional.ofNullable(vbytes).map(byte[]::clone).orElse(null);
+        this.codec = codec;
     }
 
     /**
@@ -84,7 +90,7 @@ public final class BytecodeValue {
      * @return Object.
      */
     public Object object() {
-        return this.vtype.decode(this.vbytes);
+        return this.codec.decode(this.vbytes, this.vtype);
     }
 
     /**
@@ -95,17 +101,4 @@ public final class BytecodeValue {
         return this.vtype.caption().toLowerCase(Locale.ROOT);
     }
 
-    /**
-     * Retrieve the bytes of the value.
-     * @return Bytes.
-     */
-    public byte[] bytes() {
-        final byte[] result;
-        if (this.vbytes == null) {
-            result = null;
-        } else {
-            result = this.vbytes.clone();
-        }
-        return result;
-    }
 }
