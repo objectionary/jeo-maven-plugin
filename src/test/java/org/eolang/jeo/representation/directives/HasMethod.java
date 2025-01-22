@@ -303,9 +303,9 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 Stream.of(
                     instruction.concat("/@base"),
                     String.format(
-                        "%s/o[contains(@base,'int')]/o[@base='org.eolang.bytes' and text()='%s']/@base",
+                        "%s/o[contains(@base,'int')]/o[contains(@base,'number')]/o[contains(@base,'bytes') and text()='%s']/@base",
                         instruction,
-                        new DirectivesValue(this.opcode).hex()
+                        new DirectivesValue((double) this.opcode).hex()
                     )
                 ),
                 this.arguments(instruction)
@@ -322,16 +322,30 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 .map(
                     arg -> {
                         final String result;
-                        final DirectivesValue hex = new DirectivesValue(arg);
-                        if (arg instanceof BytecodeLabel) {
+                        if (arg instanceof Number) {
+                            final DirectivesValue simple = new DirectivesValue(
+                                arg
+                            );
+                            final DirectivesValue hex = new DirectivesValue(
+                                ((Number) arg).doubleValue()
+                            );
                             result = String.format(
-                                "%s/o[contains(@base,'%s')]/o[@base='org.eolang.bytes']/@base",
+                                "%s/o[contains(@base,'%s')]/o[contains(@base,'number')]/o[contains(@base,'bytes') and text()='%s']/@base",
+                                instruction,
+                                simple.type(),
+                                hex.hex()
+                            );
+                        } else if (arg instanceof BytecodeLabel) {
+                            final DirectivesValue hex = new DirectivesValue(arg);
+                            result = String.format(
+                                "%s/o[contains(@base,'%s')]/o[contains(@base,'bytes')]/@base",
                                 instruction,
                                 hex.type()
                             );
                         } else {
+                            final DirectivesValue hex = new DirectivesValue(arg);
                             result = String.format(
-                                "%s/o[contains(@base,'%s')]/o[@base='org.eolang.bytes' and text()='%s']/@base",
+                                "%s/o[contains(@base,'%s')]/o[contains(@base,'bytes') and text()='%s']/@base",
                                 instruction,
                                 hex.type(),
                                 hex.hex()
