@@ -76,6 +76,7 @@ enum DataType {
     BYTE("byte", Byte.class,
         value -> ByteBuffer.allocate(Byte.BYTES).put((byte) value).array(),
         bytes -> ByteBuffer.wrap(bytes).get()
+//        bytes -> (byte) ByteBuffer.wrap(bytes).getDouble()
     ),
 
     /**
@@ -84,6 +85,7 @@ enum DataType {
     SHORT("short", Short.class,
         value -> ByteBuffer.allocate(Short.BYTES).putShort((short) value).array(),
         bytes -> ByteBuffer.wrap(bytes).getShort()
+//        bytes -> (short) ByteBuffer.wrap(bytes).getDouble()
     ),
 
     /**
@@ -92,6 +94,8 @@ enum DataType {
     INT("int", Integer.class,
         value -> ByteBuffer.allocate(Long.BYTES).putLong((int) value).array(),
         bytes -> (int) ByteBuffer.wrap(bytes).getLong()
+//        bytes -> (int) ByteBuffer.wrap(bytes).getDouble()
+
     ),
     /**
      * Long.
@@ -99,6 +103,7 @@ enum DataType {
     LONG("long", Long.class,
         value -> ByteBuffer.allocate(Long.BYTES).putLong((long) value).array(),
         bytes -> ByteBuffer.wrap(bytes).getLong()
+//        bytes -> (long) ByteBuffer.wrap(bytes).getDouble()
     ),
 
     /**
@@ -107,6 +112,7 @@ enum DataType {
     FLOAT("float", Float.class,
         value -> ByteBuffer.allocate(Float.BYTES).putFloat((float) value).array(),
         bytes -> ByteBuffer.wrap(bytes).getFloat()
+//        bytes -> (float) ByteBuffer.wrap(bytes).getDouble()
     ),
 
     /**

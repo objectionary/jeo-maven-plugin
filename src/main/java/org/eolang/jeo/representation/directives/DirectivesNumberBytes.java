@@ -54,8 +54,10 @@ public final class DirectivesNumberBytes implements Iterable<Directive> {
     }
 
     private String bytes() {
+        final double value = this.number.doubleValue();
         return DirectivesNumberBytes.bytesToHex(
-            new BytecodeValue(this.number.doubleValue()).bytes());
+            new BytecodeValue(value).bytes()
+        );
     }
 
     /**

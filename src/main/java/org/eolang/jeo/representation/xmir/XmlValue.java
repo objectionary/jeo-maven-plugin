@@ -23,6 +23,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 import org.eolang.jeo.representation.bytecode.BytecodeValue;
@@ -105,10 +106,48 @@ public final class XmlValue {
 
     /**
      * Convert hex string to integer.
+     * @todo: Replace with {@link BytecodeValue#object()}.
      * @return Integer.
      */
     public int integer() {
         return Integer.parseInt(this.hex(), XmlValue.RADIX);
+    }
+
+    /**
+     * Convert hex string to an object.
+     * @todo: Refactor
+     * @return Object.
+     */
+    public Object object() {
+        final String base = this.base();
+        final Object result;
+        switch (base) {
+            case "byte":
+                result = (byte) ByteBuffer.wrap(this.bytes()).getDouble();
+                break;
+            case "short":
+                result = (short) ByteBuffer.wrap(this.bytes()).getDouble();
+                break;
+            case "int":
+                result = (int) ByteBuffer.wrap(this.bytes()).getDouble();
+                break;
+            case "long":
+                result = (long) ByteBuffer.wrap(this.bytes()).getDouble();
+                break;
+            case "float":
+                result = (float) ByteBuffer.wrap(this.bytes()).getDouble();
+                break;
+            case "double":
+                result = ByteBuffer.wrap(this.bytes()).getDouble();
+                break;
+            case "string":
+                result = this.string();
+                break;
+            default:
+                result = new BytecodeValue(base, this.bytes()).object();
+                break;
+        }
+        return result;
     }
 
     /**
@@ -131,21 +170,6 @@ public final class XmlValue {
             }
         }
         return res;
-    }
-
-    /**
-     * Convert hex string to an object.
-     * @return Object.
-     */
-    public Object object() {
-        final String base = this.base();
-        final Object result;
-        if ("string".equals(base)) {
-            result = this.string();
-        } else {
-            result = new BytecodeValue(base, this.bytes()).object();
-        }
-        return result;
     }
 
     /**

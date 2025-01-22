@@ -255,7 +255,7 @@ public final class XmlMethod {
      * @return Access modifiers.
      */
     private int access() {
-        return new XmlValue(this.child(0)).integer();
+        return (int) new XmlValue(this.child(0)).object();
     }
 
     /**

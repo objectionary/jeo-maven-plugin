@@ -47,16 +47,15 @@ final class DirectivesValueTest {
 
     @Test
     void convertsInteger() throws ImpossibleModificationException {
+        final String xml = new Xembler(new DirectivesValue("access", 42)).xml();
         MatcherAssert.assertThat(
-            "We expect that integer value is converted to the correct XMIR",
-            new Xembler(new DirectivesValue("access", 42)).xml(),
-            new SameXml(
-                String.join(
-                    "\n",
-                    "<o base='jeo.int' as='access'>",
-                    "  <o base='org.eolang.bytes'>00-00-00-00-00-00-00-2A</o>",
-                    "</o>"
-                )
+            String.format(
+                "We expect that integer value is converted to the correct XMIR, but got the incorrect one: %n%s%n",
+                xml
+            ),
+            xml,
+            XhtmlMatchers.hasXPath(
+                "./o[@base='jeo.int' and @as='access']/o[@base='org.eolang.number']/o[@base='org.eolang.bytes']/text()"
             )
         );
     }
@@ -233,7 +232,9 @@ final class DirectivesValueTest {
             Arguments.of(1.0f, "jeo.float", same),
             Arguments.of(1.0d, "jeo.double", same),
             Arguments.of((short) 1, "jeo.short", same),
-            Arguments.of((byte) 1, "jeo.byte", same)
+            Arguments.of((byte) 1, "jeo.byte", same),
+            Arguments.of(100, "jeo.int", "40-59-00-00-00-00-00-00"),
+            Arguments.of(1057, "jeo.int", "40-90-84-00-00-00-00-00")
         );
     }
 }

@@ -45,9 +45,9 @@ final class XmlValueTest {
     @Test
     void parsesHexStringAsInteger() {
         final int expected = 1057;
-        final int actual = new XmlValue(
-            new NativeXmlNode("<o><o>00-00-00-00-00-00-04-21</o></o>")
-        ).integer();
+        final int actual = (int) new XmlValue(
+            new NativeXmlNode("<o base='jeo.int'><o>40-90-84-00-00-00-00-00</o></o>")
+        ).object();
         MatcherAssert.assertThat(
             String.format(
                 "Can't parse hex string as integer, or the result is wrong; expected %d, got %d",
@@ -62,10 +62,12 @@ final class XmlValueTest {
     @ParameterizedTest
     @MethodSource("values")
     void decodesEncodesCorrectly(final Object origin) {
+        final String xml = new Xembler(new DirectivesValue(origin)).xmlQuietly();
+        System.out.println(xml);
         MatcherAssert.assertThat(
             "Decoding and encoding are not consistent",
             new XmlValue(
-                new NativeXmlNode(new Xembler(new DirectivesValue(origin)).xmlQuietly())
+                new NativeXmlNode(xml)
             ).object(),
             Matchers.equalTo(origin)
         );
@@ -90,7 +92,7 @@ final class XmlValueTest {
     }
 
     /**
-     * Arguments for {@link XmlValue#decodesEncodesCorrectly(Object, String)}.
+     * Arguments for {@link XmlValueTest#decodesEncodesCorrectly(Object)}.
      * @return Stream of arguments.
      */
     static Stream<Arguments> values() {
