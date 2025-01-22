@@ -118,22 +118,6 @@ public final class DirectivesValue implements Iterable<Directive> {
                 break;
         }
         return res.iterator();
-//        if ("string".equals(type)) {
-//            res = new DirectivesEoObject(
-//                type,
-//                this.name,
-//                new DirectivesComment(this.comment()),
-//                new DirectivesBytes(this.hex())
-//            );
-//        } else {
-//            res = new DirectivesJeoObject(
-//                type,
-//                this.name,
-//                new DirectivesComment(this.comment()),
-//                new DirectivesBytes(this.hex())
-//            );
-//        }
-//        return res.iterator();
     }
 
     /**

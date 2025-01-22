@@ -28,7 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import org.objectweb.asm.Type;
 
-public final class PlainCodec implements Codec {
+final class PlainCodec implements Codec {
     private static final byte[] EMPTY = new byte[0];
 
     @Override
