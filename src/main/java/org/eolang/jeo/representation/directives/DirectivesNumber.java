@@ -27,13 +27,23 @@ import java.util.Iterator;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
-public final class DirectivesNumber implements Iterable<Directive> {
+/**
+ * Directives for an EO number.
+ * @since 0.8
+ */
+final class DirectivesNumber implements Iterable<Directive> {
 
+    /**
+     * Hex value.
+     */
+    private final String hex;
 
-    private final String value;
-
-    public DirectivesNumber(final String hex) {
-        this.value = hex;
+    /**
+     * Constructor.
+     * @param hex Hex number.
+     */
+    DirectivesNumber(final String hex) {
+        this.hex = hex;
     }
 
     @Override
@@ -41,7 +51,7 @@ public final class DirectivesNumber implements Iterable<Directive> {
         return new Directives()
             .add("o")
             .attr("base", "org.eolang.number")
-            .append(new DirectivesBytes(this.value))
+            .append(new DirectivesBytes(this.hex))
             .up()
             .iterator();
     }

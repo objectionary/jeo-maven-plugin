@@ -70,7 +70,7 @@ final class EoCodecTest {
             {42L, DataType.LONG, new byte[]{64, 69, 0, 0, 0, 0, 0, 0}},
             {42.0f, DataType.FLOAT, new byte[]{64, 69, 0, 0, 0, 0, 0, 0}},
             {42.0, DataType.DOUBLE, new byte[]{64, 69, 0, 0, 0, 0, 0, 0}},
-            {"Hello, world!", DataType.STRING, "Hello, world!".getBytes()}
+            {"Hello, world!", DataType.STRING, "Hello, world!".getBytes()},
         };
     }
 }

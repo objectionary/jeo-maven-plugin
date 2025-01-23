@@ -32,6 +32,7 @@ import org.objectweb.asm.Type;
  * Plain codec.
  * Converts objects to bytes and vice versa using Java type sizes.
  * @since 0.8
+ * @checkstyle CyclomaticComplexityCheck (500 lines)
  */
 public final class JavaCodec implements Codec {
 

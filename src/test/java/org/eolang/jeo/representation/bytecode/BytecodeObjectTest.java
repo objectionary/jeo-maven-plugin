@@ -39,21 +39,6 @@ import org.objectweb.asm.Type;
  */
 final class BytecodeObjectTest {
 
-//    @ParameterizedTest
-//    @MethodSource("arguments")
-//    void convertsToBytes(
-//        final BytecodeObject value,
-//        final String type,
-//        final byte[] bytes,
-//        final Object object
-//    ) {
-//        MatcherAssert.assertThat(
-//            "We expect that value will be converted to bytes correctly",
-//            value.bytes(),
-//            Matchers.equalTo(bytes)
-//        );
-//    }
-
     @ParameterizedTest
     @MethodSource("arguments")
     void detectsType(

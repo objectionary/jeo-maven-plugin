@@ -26,6 +26,10 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.Locale;
 import java.util.Optional;
 
+/**
+ * Bytecode byte array.
+ * @since 0.8
+ */
 public final class BytecodeBytes {
 
     /**
