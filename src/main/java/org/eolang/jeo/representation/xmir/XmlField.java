@@ -84,7 +84,7 @@ public class XmlField {
      * @return Access modifiers.
      */
     private int access() {
-        return this.find(Attribute.ACCESS).map(XmlValue::integer).orElse(0);
+        return this.find(Attribute.ACCESS).map(XmlValue::object).map(Integer.class::cast).orElse(0);
     }
 
     /**

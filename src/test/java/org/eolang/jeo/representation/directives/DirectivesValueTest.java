@@ -23,9 +23,12 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import java.util.stream.Stream;
 import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.bytecode.Codec;
+import org.eolang.jeo.representation.bytecode.JavaCodec;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -44,17 +47,41 @@ import org.xembly.Xembler;
 @SuppressWarnings("PMD.TooManyMethods")
 final class DirectivesValueTest {
 
+    /**
+     * Codec for tests.
+     */
+    private final Codec codec = new JavaCodec();
+
     @Test
     void convertsInteger() throws ImpossibleModificationException {
+        final String xml = new Xembler(new DirectivesValue("access", 42)).xml();
         MatcherAssert.assertThat(
-            "We expect that integer value is converted to the correct XMIR",
-            new Xembler(new DirectivesValue("access", 42)).xml(),
-            new SameXml(
-                String.join(
-                    "\n",
-                    "<o base='jeo.int' as='access'>",
-                    "  <o base='org.eolang.bytes'>00-00-00-00-00-00-00-2A</o>",
-                    "</o>"
+            String.format(
+                "We expect that integer value is converted to the correct XMIR, but got the incorrect one: %n%s%n",
+                xml
+            ),
+            xml,
+            XhtmlMatchers.hasXPath(
+                "./o[@base='jeo.int' and @as='access']/o[@base='org.eolang.number']/o[@base='org.eolang.bytes']/text()"
+            )
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("numbers")
+    void convertsNumbers(final Number number, final String base, final String bytes) {
+        final String xml = new Xembler(new DirectivesValue("access", number)).xmlQuietly();
+        MatcherAssert.assertThat(
+            String.format(
+                "We expect that number value is converted to the correct XMIR, but got the incorrect one: %n%s%n",
+                xml
+            ),
+            xml,
+            XhtmlMatchers.hasXPath(
+                String.format(
+                    "./o[@base='%s' and @as='access']/o[@base='org.eolang.number']/o[@base='org.eolang.bytes' and text()='%s']",
+                    base,
+                    bytes
                 )
             )
         );
@@ -101,7 +128,7 @@ final class DirectivesValueTest {
                     hex
                 )
             ),
-            new DirectivesValue(data).hex(),
+            new DirectivesValue(data).hex(this.codec),
             Matchers.equalTo(hex)
         );
     }
@@ -110,39 +137,34 @@ final class DirectivesValueTest {
     void convertsRawPrimitiveDataToHexString() {
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '10' should be '00 00 00 00 00 00 00 0A'",
-            new DirectivesValue(10).hex(),
+            new DirectivesValue(10).hex(this.codec),
             Matchers.equalTo("00-00-00-00-00-00-00-0A")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1d' should be '3F B9 99 99 99 99 99 9A'",
-            new DirectivesValue(0.1d).hex(),
+            new DirectivesValue(0.1d).hex(this.codec),
             Matchers.equalTo("3F-B9-99-99-99-99-99-9A")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1f' should be '3D CC CC CD'",
-            new DirectivesValue(0.1f).hex(),
+            new DirectivesValue(0.1f).hex(this.codec),
             Matchers.equalTo("3D-CC-CC-CD")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'true' should be '01'",
-            new DirectivesValue(true).hex(),
+            new DirectivesValue(true).hex(this.codec),
             Matchers.equalTo("01-")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'false' should be '00'",
-            new DirectivesValue(false).hex(),
+            new DirectivesValue(false).hex(this.codec),
             Matchers.equalTo("00-")
-        );
-        MatcherAssert.assertThat(
-            "Expected and actual hex values differ, the value for 'Hello!' should be '48 65 6C 6C 6F 21'",
-            new DirectivesValue(11L).type(),
-            Matchers.equalTo("long")
         );
     }
 
     @Test
     void encodesType() {
-        final String value = new DirectivesValue(Type.INT_TYPE).hex();
+        final String value = new DirectivesValue(Type.INT_TYPE).hex(this.codec);
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'Type.INT_TYPE' should be '69 6E 74'",
             value,
@@ -195,6 +217,24 @@ final class DirectivesValueTest {
                 DirectivesValueTest.class,
                 "6F-72-67-2F-65-6F-6C-61-6E-67-2F-6A-65-6F-2F-72-65-70-72-65-73-65-6E-74-61-74-69-6F-6E-2F-64-69-72-65-63-74-69-76-65-73-2F-44-69-72-65-63-74-69-76-65-73-56-61-6C-75-65-54-65-73-74"
             )
+        );
+    }
+
+    /**
+     * Arguments for {@link DirectivesValueTest#convertsNumbers(Number, String, String)}.
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> numbers() {
+        final String same = "3F-F0-00-00-00-00-00-00";
+        return Stream.of(
+            Arguments.of(1, "jeo.int", same),
+            Arguments.of(1L, "jeo.long", same),
+            Arguments.of(1.0f, "jeo.float", same),
+            Arguments.of(1.0d, "jeo.double", same),
+            Arguments.of((short) 1, "jeo.short", same),
+            Arguments.of((byte) 1, "jeo.byte", same),
+            Arguments.of(100, "jeo.int", "40-59-00-00-00-00-00-00"),
+            Arguments.of(1057, "jeo.int", "40-90-84-00-00-00-00-00")
         );
     }
 }

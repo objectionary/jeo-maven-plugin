@@ -21,34 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.directives;
 
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import com.jcabi.matchers.XhtmlMatchers;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Test;
+import org.xembly.Xembler;
 
 /**
- * XML representation of bytecode label.
- * @since 0.1
+ * Test case for {@link DirectivesNumber}.
+ * @since 0.8
  */
-public final class XmlLabel implements XmlBytecodeEntry {
+final class DirectivesNumberTest {
 
-    /**
-     * Label node.
-     */
-    private final XmlNode node;
-
-    /**
-     * Constructor.
-     * @param node Label node.
-     */
-    XmlLabel(final XmlNode node) {
-        this.node = node;
-    }
-
-    /**
-     * Converts label to bytecode.
-     * @return Bytecode label.
-     */
-    public BytecodeLabel bytecode() {
-        return (BytecodeLabel) new XmlValue(this.node).object();
+    @Test
+    void convertsToXml() {
+        MatcherAssert.assertThat(
+            "We can't convert number to XML",
+            new Xembler(new DirectivesNumber("42")).xmlQuietly(),
+            XhtmlMatchers.hasXPaths(
+                "/o[@base='org.eolang.number']",
+                "/o[@base='org.eolang.number']/o[@base='org.eolang.bytes' and text()='42']"
+            )
+        );
     }
 }

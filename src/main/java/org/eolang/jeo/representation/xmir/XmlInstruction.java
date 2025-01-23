@@ -87,7 +87,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      */
     @EqualsAndHashCode.Include
     private int opcode() {
-        return new XmlValue(this.node).integer();
+        return (int) new XmlValue(this.node.firstChild()).object();
     }
 
     /**

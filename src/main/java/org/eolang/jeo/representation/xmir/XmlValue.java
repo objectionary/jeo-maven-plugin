@@ -23,9 +23,11 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
-import org.eolang.jeo.representation.bytecode.BytecodeValue;
+import org.eolang.jeo.representation.bytecode.BytecodeBytes;
+import org.eolang.jeo.representation.bytecode.Codec;
+import org.eolang.jeo.representation.bytecode.EoCodec;
+import org.eolang.jeo.representation.bytecode.PlainLongCodec;
 
 /**
  * XML value.
@@ -59,63 +61,32 @@ public final class XmlValue {
     /**
      * Convert hex string to human-readable string.
      * Example:
+     * {@code
      *  "48 65 6C 6C 6F 20 57 6F 72 6C 64 21" -> "Hello World!"
+     *  }
      * @return Human-readable string.
      */
     public String string() {
-        final String hex = this.hex();
-        try {
-            final String result;
-            if (hex.isEmpty()) {
-                result = "";
-            } else {
-                final String[] chars = hex.split("(?<=\\G.{2})");
-                final int length = chars.length;
-                final byte[] bytes = new byte[length];
-                for (int index = 0; index < length; ++index) {
-                    bytes[index] = (byte) Integer.parseInt(chars[index], XmlValue.RADIX);
-                }
-                result = new String(bytes, StandardCharsets.UTF_8);
-            }
-            return result;
-        } catch (final NumberFormatException exception) {
-            throw new IllegalArgumentException(
-                String.format("Invalid hex string: %s", hex),
-                exception
-            );
-        }
+        return (String) this.object();
     }
 
     /**
-     * Convert hex string to boolean.
-     * @return Boolean.
+     * Convert hex string to an object.
+     * @return Object.
      */
-    public boolean bool() {
-        final String value = this.hex();
-        if (value.length() != 2) {
-            throw new IllegalArgumentException(
-                String.format(
-                    "Invalid hex boolean string: %s, the expected size is 2: 01 or 00",
-                    value
-                )
-            );
+    public Object object() {
+        Codec codec = new EoCodec();
+        if (!this.node.child("o").hasAttribute("base", "org.eolang.number")) {
+            codec = new PlainLongCodec(codec);
         }
-        return "01".equals(value);
-    }
-
-    /**
-     * Convert hex string to integer.
-     * @return Integer.
-     */
-    public int integer() {
-        return Integer.parseInt(this.hex(), XmlValue.RADIX);
+        return new BytecodeBytes(this.base(), this.bytes()).object(codec);
     }
 
     /**
      * Convert hex string to a byte array.
      * @return Byte array.
      */
-    public byte[] bytes() {
+    private byte[] bytes() {
         final String hex = this.hex();
         final byte[] res;
         if (hex.isEmpty()) {
@@ -131,21 +102,6 @@ public final class XmlValue {
             }
         }
         return res;
-    }
-
-    /**
-     * Convert hex string to an object.
-     * @return Object.
-     */
-    public Object object() {
-        final String base = this.base();
-        final Object result;
-        if ("string".equals(base)) {
-            result = this.string();
-        } else {
-            result = new BytecodeValue(base, this.bytes()).object();
-        }
-        return result;
     }
 
     /**

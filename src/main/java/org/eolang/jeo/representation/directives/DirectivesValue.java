@@ -25,12 +25,14 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import lombok.ToString;
-import org.eolang.jeo.representation.bytecode.BytecodeValue;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
+import org.eolang.jeo.representation.bytecode.Codec;
+import org.eolang.jeo.representation.bytecode.EoCodec;
+import org.eolang.jeo.representation.bytecode.PlainLongCodec;
 import org.xembly.Directive;
 
 /**
  * Data Object Directive in EO language.
- *
  * @since 0.1.0
  */
 @ToString
@@ -44,6 +46,23 @@ public final class DirectivesValue implements Iterable<Directive> {
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
     /**
+     * Maximum long value that can be represented as double.
+     * Any value greater than this will be represented incorrectly.
+     */
+    private static final long MAX_LONG_DOUBLE = 9_007_199_254_740_992L;
+
+    /**
+     * Minimum long value that can be represented as double.
+     * Any value less than this will be represented incorrectly.
+     */
+    private static final long MIN_LONG_DOUBLE = -9_007_199_254_740_992L;
+
+    /**
+     * Default codec.
+     */
+    private static final Codec CODEC = new EoCodec();
+
+    /**
      * Name.
      */
     private final String name;
@@ -51,7 +70,7 @@ public final class DirectivesValue implements Iterable<Directive> {
     /**
      * Value.
      */
-    private final BytecodeValue value;
+    private final BytecodeObject value;
 
     /**
      * Constructor.
@@ -69,7 +88,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param <T> Data type.
      */
     public <T> DirectivesValue(final String name, final T data) {
-        this(name, new BytecodeValue(data));
+        this(name, new BytecodeObject(data));
     }
 
     /**
@@ -77,7 +96,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param name Name.
      * @param value Value.
      */
-    public DirectivesValue(final String name, final BytecodeValue value) {
+    public DirectivesValue(final String name, final BytecodeObject value) {
         this.name = name;
         this.value = value;
     }
@@ -86,30 +105,39 @@ public final class DirectivesValue implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final String type = this.type();
         final Iterable<Directive> res;
-        if ("string".equals(type)) {
-            res = new DirectivesEoObject(
-                type,
-                this.name,
-                new DirectivesComment(this.comment()),
-                new DirectivesBytes(this.hex())
-            );
-        } else {
-            res = new DirectivesJeoObject(
-                type,
-                this.name,
-                new DirectivesComment(this.comment()),
-                new DirectivesBytes(this.hex())
-            );
+        final Codec codec = DirectivesValue.CODEC;
+        switch (type) {
+            case "byte":
+            case "short":
+            case "int":
+            case "float":
+            case "double":
+                res = this.jeoNumber(type, codec);
+                break;
+            case "long":
+                if (this.fits()) {
+                    res = this.jeoNumber(type, codec);
+                } else {
+                    res = this.jeoObject(type, new PlainLongCodec(codec));
+                }
+                break;
+            case "string":
+                res = this.eoObject(type, codec);
+                break;
+            default:
+                res = this.jeoObject(type, codec);
+                break;
         }
         return res.iterator();
     }
 
     /**
      * Value of the data.
+     * @param codec Codec
      * @return Value
      */
-    String hex() {
-        return DirectivesValue.bytesToHex(this.value.bytes());
+    String hex(final Codec codec) {
+        return DirectivesValue.bytesToHex(this.value.encode(codec));
     }
 
     /**
@@ -121,12 +149,66 @@ public final class DirectivesValue implements Iterable<Directive> {
     }
 
     /**
+     * Check if the value fits into the double.
+     * @return True if fits.
+     */
+    private boolean fits() {
+        final long val = ((Number) this.value.value()).longValue();
+        return val >= DirectivesValue.MIN_LONG_DOUBLE && val <= DirectivesValue.MAX_LONG_DOUBLE;
+    }
+
+    /**
+     * EO object.
+     * @param base Base.
+     * @param codec Codec to use for bytes encoding.
+     * @return EO object directives.
+     */
+    private DirectivesEoObject eoObject(final String base, final Codec codec) {
+        return new DirectivesEoObject(
+            base,
+            this.name,
+            new DirectivesComment(this.comment()),
+            new DirectivesBytes(this.hex(codec))
+        );
+    }
+
+    /**
+     * JEO object.
+     * @param base Base.
+     * @param codec Codec to use for bytes encoding.
+     * @return JEO object directives.
+     */
+    private DirectivesJeoObject jeoObject(final String base, final Codec codec) {
+        return new DirectivesJeoObject(
+            base,
+            this.name,
+            new DirectivesComment(this.comment()),
+            new DirectivesBytes(this.hex(codec))
+        );
+    }
+
+    /**
+     * JEO number.
+     * @param base Object base.
+     * @param codec Codec to use for bytes encoding.
+     * @return JEO number directives.
+     */
+    private DirectivesJeoObject jeoNumber(final String base, final Codec codec) {
+        return new DirectivesJeoObject(
+            base,
+            this.name,
+            new DirectivesComment(this.comment()),
+            new DirectivesNumber(this.hex(codec))
+        );
+    }
+
+    /**
      * Bytes of the representative comment.
      * @return Sting comment.
      */
     private String comment() {
         final String result;
-        final Object object = this.value.object();
+        final Object object = this.value.value();
         if (object instanceof String) {
             result = String.format("\"%s\"", object);
         } else {

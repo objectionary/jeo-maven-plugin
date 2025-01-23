@@ -21,34 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
-
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+package org.eolang.jeo.representation.bytecode;
 
 /**
- * XML representation of bytecode label.
- * @since 0.1
+ * Classes that can transform objects to byte arrays and vice versa.
+ * @since 0.8
  */
-public final class XmlLabel implements XmlBytecodeEntry {
+public interface Codec {
 
     /**
-     * Label node.
+     * Encodes an object to a byte array.
+     * @param object Object.
+     * @param type Data type.
+     * @return Byte array.
      */
-    private final XmlNode node;
+    byte[] encode(Object object, DataType type);
 
     /**
-     * Constructor.
-     * @param node Label node.
+     * Decodes a byte array to an object.
+     * @param bytes Byte array.
+     * @param type Data type.
+     * @return Object.
      */
-    XmlLabel(final XmlNode node) {
-        this.node = node;
-    }
-
-    /**
-     * Converts label to bytecode.
-     * @return Bytecode label.
-     */
-    public BytecodeLabel bytecode() {
-        return (BytecodeLabel) new XmlValue(this.node).object();
-    }
+    Object decode(byte[] bytes, DataType type);
 }

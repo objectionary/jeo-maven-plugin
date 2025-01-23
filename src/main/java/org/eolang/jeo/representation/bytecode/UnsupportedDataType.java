@@ -21,34 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
-
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+package org.eolang.jeo.representation.bytecode;
 
 /**
- * XML representation of bytecode label.
- * @since 0.1
+ * Unsupported data type.
+ * @since 0.8
  */
-public final class XmlLabel implements XmlBytecodeEntry {
+final class UnsupportedDataType extends IllegalArgumentException {
 
     /**
-     * Label node.
+     * Serial version UID.
      */
-    private final XmlNode node;
+    private static final long serialVersionUID = 1_586L;
 
     /**
      * Constructor.
-     * @param node Label node.
+     * @param type Data type.
      */
-    XmlLabel(final XmlNode node) {
-        this.node = node;
-    }
-
-    /**
-     * Converts label to bytecode.
-     * @return Bytecode label.
-     */
-    public BytecodeLabel bytecode() {
-        return (BytecodeLabel) new XmlValue(this.node).object();
+    UnsupportedDataType(final DataType type) {
+        super(String.format("Unsupported data type: %s", type));
     }
 }

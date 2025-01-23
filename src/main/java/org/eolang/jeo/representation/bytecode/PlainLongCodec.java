@@ -21,34 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.bytecode;
 
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import java.nio.ByteBuffer;
 
 /**
- * XML representation of bytecode label.
- * @since 0.1
+ * Codec that saves long as a plain byte array.
+ * The delegate codec encodes all the rest data types.
+ * @since 0.8
  */
-public final class XmlLabel implements XmlBytecodeEntry {
+public final class PlainLongCodec implements Codec {
 
     /**
-     * Label node.
+     * Delegate codec.
      */
-    private final XmlNode node;
+    private final Codec origin;
 
     /**
      * Constructor.
-     * @param node Label node.
+     * @param delegate Origin codec.
      */
-    XmlLabel(final XmlNode node) {
-        this.node = node;
+    public PlainLongCodec(final Codec delegate) {
+        this.origin = delegate;
     }
 
-    /**
-     * Converts label to bytecode.
-     * @return Bytecode label.
-     */
-    public BytecodeLabel bytecode() {
-        return (BytecodeLabel) new XmlValue(this.node).object();
+    @Override
+    public byte[] encode(final Object object, final DataType type) {
+        final byte[] result;
+        if (type == DataType.LONG) {
+            result = ByteBuffer.allocate(Long.BYTES).putLong((long) object).array();
+        } else {
+            result = this.origin.encode(object, type);
+        }
+        return result;
+    }
+
+    @Override
+    public Object decode(final byte[] bytes, final DataType type) {
+        final Object result;
+        if (type == DataType.LONG) {
+            result = ByteBuffer.wrap(bytes).getLong();
+        } else {
+            result = this.origin.decode(bytes, type);
+        }
+        return result;
     }
 }

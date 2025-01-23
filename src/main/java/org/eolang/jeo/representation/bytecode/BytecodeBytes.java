@@ -27,11 +27,10 @@ import java.util.Locale;
 import java.util.Optional;
 
 /**
- * Bytecode value.
- * Represents a typed value in bytecode format.
- * @since 0.6
+ * Bytecode byte array.
+ * @since 0.8
  */
-public final class BytecodeValue {
+public final class BytecodeBytes {
 
     /**
      * Data type.
@@ -45,46 +44,30 @@ public final class BytecodeValue {
 
     /**
      * Constructor.
-     * @param value Value.
-     */
-    public BytecodeValue(final Object value) {
-        this(DataType.findByData(value), value);
-    }
-
-    /**
-     * Constructor.
      * @param type Value type.
      * @param bytes Value bytes.
      */
-    public BytecodeValue(final String type, final byte[] bytes) {
+    public BytecodeBytes(final String type, final byte[] bytes) {
         this(DataType.findByBase(type), bytes);
     }
 
     /**
      * Constructor.
      * @param type Value type.
-     * @param value Value.
-     */
-    private BytecodeValue(final DataType type, final Object value) {
-        this(type, type.encode(value));
-    }
-
-    /**
-     * Constructor.
-     * @param type Value type.
      * @param bytes Value bytes.
      */
-    private BytecodeValue(final DataType type, final byte[] bytes) {
+    private BytecodeBytes(final DataType type, final byte[] bytes) {
         this.vtype = type;
         this.vbytes = Optional.ofNullable(bytes).map(byte[]::clone).orElse(null);
     }
 
     /**
      * Represent the value as an object.
+     * @param codec Codec.
      * @return Object.
      */
-    public Object object() {
-        return this.vtype.decode(this.vbytes);
+    public Object object(final Codec codec) {
+        return codec.decode(this.vbytes, this.vtype);
     }
 
     /**
@@ -95,17 +78,4 @@ public final class BytecodeValue {
         return this.vtype.caption().toLowerCase(Locale.ROOT);
     }
 
-    /**
-     * Retrieve the bytes of the value.
-     * @return Bytes.
-     */
-    public byte[] bytes() {
-        final byte[] result;
-        if (this.vbytes == null) {
-            result = null;
-        } else {
-            result = this.vbytes.clone();
-        }
-        return result;
-    }
 }

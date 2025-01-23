@@ -21,34 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.directives;
 
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import java.util.Iterator;
+import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
- * XML representation of bytecode label.
- * @since 0.1
+ * Directives for an EO number.
+ * @since 0.8
  */
-public final class XmlLabel implements XmlBytecodeEntry {
+final class DirectivesNumber implements Iterable<Directive> {
 
     /**
-     * Label node.
+     * Hex value.
      */
-    private final XmlNode node;
+    private final String hex;
 
     /**
      * Constructor.
-     * @param node Label node.
+     * @param hex Hex number.
      */
-    XmlLabel(final XmlNode node) {
-        this.node = node;
+    DirectivesNumber(final String hex) {
+        this.hex = hex;
     }
 
-    /**
-     * Converts label to bytecode.
-     * @return Bytecode label.
-     */
-    public BytecodeLabel bytecode() {
-        return (BytecodeLabel) new XmlValue(this.node).object();
+    @Override
+    public Iterator<Directive> iterator() {
+        return new Directives()
+            .add("o")
+            .attr("base", "org.eolang.number")
+            .append(new DirectivesBytes(this.hex))
+            .up()
+            .iterator();
     }
 }

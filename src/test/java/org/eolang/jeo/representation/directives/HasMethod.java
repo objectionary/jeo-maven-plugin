@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.bytecode.JavaCodec;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -303,9 +304,9 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 Stream.of(
                     instruction.concat("/@base"),
                     String.format(
-                        "%s/o[contains(@base,'int')]/o[@base='org.eolang.bytes' and text()='%s']/@base",
+                        "%s/o[contains(@base,'int')]/o[contains(@base,'number')]/o[contains(@base,'bytes') and text()='%s']/@base",
                         instruction,
-                        new DirectivesValue(this.opcode).hex()
+                        new DirectivesValue((double) this.opcode).hex(new JavaCodec())
                     )
                 ),
                 this.arguments(instruction)
@@ -322,19 +323,33 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 .map(
                     arg -> {
                         final String result;
-                        final DirectivesValue hex = new DirectivesValue(arg);
-                        if (arg instanceof BytecodeLabel) {
+                        if (arg instanceof Number) {
+                            final DirectivesValue simple = new DirectivesValue(
+                                arg
+                            );
+                            final DirectivesValue hex = new DirectivesValue(
+                                ((Number) arg).doubleValue()
+                            );
                             result = String.format(
-                                "%s/o[contains(@base,'%s')]/o[@base='org.eolang.bytes']/@base",
+                                "%s/o[contains(@base,'%s')]/o[contains(@base,'number')]/o[contains(@base,'bytes') and text()='%s']/@base",
+                                instruction,
+                                simple.type(),
+                                hex.hex(new JavaCodec())
+                            );
+                        } else if (arg instanceof BytecodeLabel) {
+                            final DirectivesValue hex = new DirectivesValue(arg);
+                            result = String.format(
+                                "%s/o[contains(@base,'%s')]/o[contains(@base,'bytes')]/@base",
                                 instruction,
                                 hex.type()
                             );
                         } else {
+                            final DirectivesValue hex = new DirectivesValue(arg);
                             result = String.format(
-                                "%s/o[contains(@base,'%s')]/o[@base='org.eolang.bytes' and text()='%s']/@base",
+                                "%s/o[contains(@base,'%s')]/o[contains(@base,'bytes') and text()='%s']/@base",
                                 instruction,
                                 hex.type(),
-                                hex.hex()
+                                hex.hex(new JavaCodec())
                             );
                         }
                         return result;
@@ -385,7 +400,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 String.format(
                     "%s/o[4][contains(@base,'string')]/o[text()='%s']/@base",
                     HasTryCatch.path(root),
-                    new DirectivesValue(this.type).hex()
+                    new DirectivesValue(this.type).hex(new JavaCodec())
                 )
             );
         }

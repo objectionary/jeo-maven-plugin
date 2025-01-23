@@ -21,34 +21,67 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.jeo.representation.xmir;
+package org.eolang.jeo.representation.bytecode;
 
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import java.util.Locale;
 
 /**
- * XML representation of bytecode label.
- * @since 0.1
+ * Bytecode value.
+ * Represents a typed value in bytecode format.
+ * @since 0.6
  */
-public final class XmlLabel implements XmlBytecodeEntry {
+public final class BytecodeObject {
 
     /**
-     * Label node.
+     * Data type.
      */
-    private final XmlNode node;
+    private final DataType vtype;
+
+    /**
+     * Bytes.
+     */
+    private final Object object;
 
     /**
      * Constructor.
-     * @param node Label node.
+     * @param value Value.
      */
-    XmlLabel(final XmlNode node) {
-        this.node = node;
+    public BytecodeObject(final Object value) {
+        this(DataType.findByData(value), value);
     }
 
     /**
-     * Converts label to bytecode.
-     * @return Bytecode label.
+     * Constructor.
+     * @param type Value type.
+     * @param bytes Value bytes.
      */
-    public BytecodeLabel bytecode() {
-        return (BytecodeLabel) new XmlValue(this.node).object();
+    private BytecodeObject(final DataType type, final Object bytes) {
+        this.vtype = type;
+        this.object = bytes;
+    }
+
+    /**
+     * Retrieve the type of the value.
+     * @return Type.
+     */
+    public String type() {
+        return this.vtype.caption().toLowerCase(Locale.ROOT);
+    }
+
+    /**
+     * Retrieve the value.
+     * @return Value.
+     */
+    public Object value() {
+        return this.object;
+    }
+
+    /**
+     * Retrieve the bytes of the value.
+     * @param codec Codec.
+     * @return Bytes.
+     */
+    public byte[] encode(final Codec codec) {
+        return codec.encode(this.object, this.vtype);
     }
 }

@@ -72,7 +72,7 @@ public final class XmlClassProperties {
      * @return Access modifiers.
      */
     private int access() {
-        return new XmlValue(this.clazz.child("as", "access")).integer();
+        return (int) new XmlValue(this.clazz.child("as", "access")).object();
     }
 
     /**
@@ -120,7 +120,8 @@ public final class XmlClassProperties {
     private int version() {
         return this.child("version")
             .map(XmlValue::new)
-            .map(XmlValue::integer)
+            .map(XmlValue::object)
+            .map(Integer.class::cast)
             .orElse(new DefaultVersion().bytecode());
     }
 
