@@ -84,7 +84,7 @@ public class XmlAnnotation {
      * @return True if visible at runtime, false otherwise.
      */
     private boolean visible() {
-        return new XmlValue(this.child(1)).bool();
+        return (boolean) new XmlValue(this.child(1)).object();
     }
 
     /**
