@@ -25,7 +25,7 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import org.eolang.jeo.representation.bytecode.Codec;
-import org.eolang.jeo.representation.bytecode.PlainCodec;
+import org.eolang.jeo.representation.bytecode.JavaCodec;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
@@ -51,7 +51,7 @@ final class DirectivesAnnotationsTest {
     @Test
     void returnsSingleAnnotation() throws ImpossibleModificationException {
         final String annotation = "Ljava/lang/Override;";
-        Codec codec = new PlainCodec();
+        Codec codec = new JavaCodec();
         MatcherAssert.assertThat(
             "Must return single annotation with correct descriptor and visibility",
             new Xembler(

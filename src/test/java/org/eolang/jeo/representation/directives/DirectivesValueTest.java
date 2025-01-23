@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.Codec;
-import org.eolang.jeo.representation.bytecode.PlainCodec;
+import org.eolang.jeo.representation.bytecode.JavaCodec;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -125,14 +125,14 @@ final class DirectivesValueTest {
                     hex
                 )
             ),
-            new DirectivesValue(data).hex(new PlainCodec()),
+            new DirectivesValue(data).hex(new JavaCodec()),
             Matchers.equalTo(hex)
         );
     }
 
     @Test
     void convertsRawPrimitiveDataToHexString() {
-        final Codec codec = new PlainCodec();
+        final Codec codec = new JavaCodec();
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '10' should be '00 00 00 00 00 00 00 0A'",
             new DirectivesValue(10).hex(codec),
@@ -167,7 +167,7 @@ final class DirectivesValueTest {
 
     @Test
     void encodesType() {
-        final String value = new DirectivesValue(Type.INT_TYPE).hex(new PlainCodec());
+        final String value = new DirectivesValue(Type.INT_TYPE).hex(new JavaCodec());
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'Type.INT_TYPE' should be '69 6E 74'",
             value,

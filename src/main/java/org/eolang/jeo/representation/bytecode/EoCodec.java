@@ -25,19 +25,13 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.nio.ByteBuffer;
 
+/**
+ * EO codec.
+ * Converts primitive types to byte arrays and vice versa.
+ *
+ * @since 0.8
+ */
 public final class EoCodec implements Codec {
-
-    /**
-     * Maximum long value that can be represented as double.
-     * Any value greater than this will be represented incorrectly.
-     */
-    private static final long MAX_LONG_DOUBLE = 9_007_199_254_740_992L;
-
-    /**
-     * Minimum long value that can be represented as double.
-     * Any value less than this will be represented incorrectly.
-     */
-    private static final long MIN_LONG_DOUBLE = -9_007_199_254_740_992L;
 
     /**
      * Origin codec.
@@ -45,7 +39,7 @@ public final class EoCodec implements Codec {
     private final Codec origin;
 
     public EoCodec() {
-        this(new PlainCodec());
+        this(new JavaCodec());
     }
 
     private EoCodec(final Codec origin) {
@@ -70,20 +64,11 @@ public final class EoCodec implements Codec {
             case LONG:
             case FLOAT:
             case DOUBLE:
-                return ByteBuffer.allocate(Double.BYTES).putDouble(((Number) object).doubleValue())
+                return ByteBuffer.allocate(Double.BYTES)
+                    .putDouble(((Number) object).doubleValue())
                     .array();
-//            case LONG:
-//                if (EoCodec.MIN_LONG_DOUBLE <= (long) object && (long) object <= EoCodec.MAX_LONG_DOUBLE) {
-//                    return ByteBuffer.allocate(Long.BYTES)
-//                        .putDouble(((Number) object).doubleValue())
-//                        .array();
-//                } else {
-//                    return this.origin.encode(object, type);
-//                }
             default:
-                throw new IllegalArgumentException(
-                    String.format("Unsupported data type: %s", type)
-                );
+                throw new UnsupportedDataType(type);
         }
     }
 
@@ -112,9 +97,7 @@ public final class EoCodec implements Codec {
             case DOUBLE:
                 return ByteBuffer.wrap(bytes).getDouble();
             default:
-                throw new IllegalArgumentException(
-                    String.format("Unsupported data type: %s", type)
-                );
+                throw new UnsupportedDataType(type);
         }
     }
 }

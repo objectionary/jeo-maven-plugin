@@ -28,59 +28,69 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import org.objectweb.asm.Type;
 
-public final class PlainCodec implements Codec {
+/**
+ * Plain codec.
+ * Converts objects to bytes and vice versa using Java type sizes.
+ * @since 0.8
+ */
+public final class JavaCodec implements Codec {
+    /**
+     * Empty bytes.
+     */
     private static final byte[] EMPTY = new byte[0];
 
     @Override
     public byte[] encode(final Object value, final DataType type) {
+        final byte[] result;
         switch (type) {
             case BOOL:
-                final byte[] result;
-                if (value instanceof Integer) {
-                    result = PlainCodec.hexBoolean((int) value != 0);
-                } else {
-                    result = PlainCodec.hexBoolean(Boolean.class.cast(value));
-                }
-                return result;
+                result = JavaCodec.booleanBytes(value);
+                break;
             case CHAR:
-                final char val;
-                if (value instanceof Integer) {
-                    val = (char) (int) value;
-                } else {
-                    val = (char) value;
-                }
-                return ByteBuffer.allocate(Character.BYTES).putChar(val).array();
+                result = JavaCodec.charBytes(value);
+                break;
             case BYTE:
-                return ByteBuffer.allocate(Byte.BYTES).put((byte) value).array();
+                result = ByteBuffer.allocate(Byte.BYTES).put((byte) value).array();
+                break;
             case SHORT:
-                return ByteBuffer.allocate(Short.BYTES).putShort((short) value).array();
+                result = ByteBuffer.allocate(Short.BYTES).putShort((short) value).array();
+                break;
             case INT:
-                return ByteBuffer.allocate(Long.BYTES).putLong((int) value).array();
+                result = ByteBuffer.allocate(Long.BYTES).putLong((int) value).array();
+                break;
             case LONG:
-                return ByteBuffer.allocate(Long.BYTES).putLong((long) value).array();
+                result = ByteBuffer.allocate(Long.BYTES).putLong((long) value).array();
+                break;
             case FLOAT:
-                return ByteBuffer.allocate(Float.BYTES).putFloat((float) value).array();
+                result = ByteBuffer.allocate(Float.BYTES).putFloat((float) value).array();
+                break;
             case DOUBLE:
-                return ByteBuffer.allocate(Double.BYTES).putDouble((double) value).array();
+                result = ByteBuffer.allocate(Double.BYTES).putDouble((double) value).array();
+                break;
             case STRING:
-                return Optional.ofNullable(value).map(String::valueOf)
+                result = Optional.ofNullable(value).map(String::valueOf)
                     .map(unicode -> unicode.getBytes(StandardCharsets.UTF_8))
                     .orElse(null);
+                break;
             case BYTES:
-                return byte[].class.cast(value);
+                result = byte[].class.cast(value);
+                break;
             case LABEL:
-                return BytecodeLabel.class.cast(value).uid().getBytes(StandardCharsets.UTF_8);
+                result = BytecodeLabel.class.cast(value).uid().getBytes(StandardCharsets.UTF_8);
+                break;
             case TYPE_REFERENCE:
-                return PlainCodec.typeBytes(value);
+                result = JavaCodec.typeBytes(value);
+                break;
             case CLASS_REFERENCE:
-                return PlainCodec.hexClass(Class.class.cast(value).getName());
+                result = JavaCodec.hexClass(Class.class.cast(value).getName());
+                break;
             case NULL:
-                return PlainCodec.EMPTY;
+                result = JavaCodec.EMPTY;
+                break;
             default:
-                throw new IllegalArgumentException(
-                    String.format("Unsupported data type: %s", type)
-                );
+                throw new UnsupportedDataType(type);
         }
+        return result;
     }
 
     @Override
@@ -117,10 +127,38 @@ public final class PlainCodec implements Codec {
             case NULL:
                 return null;
             default:
-                throw new IllegalArgumentException(
-                    String.format("Unsupported data type: %s", type)
-                );
+                throw new UnsupportedDataType(type);
         }
+    }
+
+    /**
+     * Convert boolean to bytes.
+     * @param value Boolean.
+     * @return Bytes.
+     */
+    private static byte[] booleanBytes(final Object value) {
+        final byte[] result;
+        if (value instanceof Integer) {
+            result = JavaCodec.hexBoolean((int) value != 0);
+        } else {
+            result = JavaCodec.hexBoolean(Boolean.class.cast(value));
+        }
+        return result;
+    }
+
+    /**
+     * Convert char to bytes.
+     * @param value Char.
+     * @return Bytes.
+     */
+    private static byte[] charBytes(final Object value) {
+        final char val;
+        if (value instanceof Integer) {
+            val = (char) (int) value;
+        } else {
+            val = (char) value;
+        }
+        return ByteBuffer.allocate(Character.BYTES).putChar(val).array();
     }
 
     /**
@@ -139,13 +177,13 @@ public final class PlainCodec implements Codec {
     }
 
     /**
-     * Convert type to bytes.
+     * Convert a type to bytes.
      * @param value Type.
      * @return Bytes.
      */
     private static byte[] typeBytes(final Object value) {
         try {
-            return PlainCodec.hexClass(((Type) value).getDescriptor());
+            return JavaCodec.hexClass(((Type) value).getDescriptor());
         } catch (final AssertionError exception) {
             throw new IllegalStateException(
                 String.format("Failed to get class name for %s", value), exception
