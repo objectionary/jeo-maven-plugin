@@ -34,6 +34,7 @@ import org.objectweb.asm.Type;
  * @since 0.8
  */
 public final class JavaCodec implements Codec {
+
     /**
      * Empty bytes.
      */

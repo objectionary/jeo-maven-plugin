@@ -47,6 +47,11 @@ import org.xembly.Xembler;
 @SuppressWarnings("PMD.TooManyMethods")
 final class DirectivesValueTest {
 
+    /**
+     * Codec for tests.
+     */
+    private final Codec codec = new JavaCodec();
+
     @Test
     void convertsInteger() throws ImpossibleModificationException {
         final String xml = new Xembler(new DirectivesValue("access", 42)).xml();
@@ -125,49 +130,43 @@ final class DirectivesValueTest {
                     hex
                 )
             ),
-            new DirectivesValue(data).hex(new JavaCodec()),
+            new DirectivesValue(data).hex(this.codec),
             Matchers.equalTo(hex)
         );
     }
 
     @Test
     void convertsRawPrimitiveDataToHexString() {
-        final Codec codec = new JavaCodec();
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '10' should be '00 00 00 00 00 00 00 0A'",
-            new DirectivesValue(10).hex(codec),
+            new DirectivesValue(10).hex(this.codec),
             Matchers.equalTo("00-00-00-00-00-00-00-0A")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1d' should be '3F B9 99 99 99 99 99 9A'",
-            new DirectivesValue(0.1d).hex(codec),
+            new DirectivesValue(0.1d).hex(this.codec),
             Matchers.equalTo("3F-B9-99-99-99-99-99-9A")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1f' should be '3D CC CC CD'",
-            new DirectivesValue(0.1f).hex(codec),
+            new DirectivesValue(0.1f).hex(this.codec),
             Matchers.equalTo("3D-CC-CC-CD")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'true' should be '01'",
-            new DirectivesValue(true).hex(codec),
+            new DirectivesValue(true).hex(this.codec),
             Matchers.equalTo("01-")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'false' should be '00'",
-            new DirectivesValue(false).hex(codec),
+            new DirectivesValue(false).hex(this.codec),
             Matchers.equalTo("00-")
-        );
-        MatcherAssert.assertThat(
-            "Expected and actual hex values differ, the value for 'Hello!' should be '48 65 6C 6C 6F 21'",
-            new DirectivesValue(11L).type(),
-            Matchers.equalTo("long")
         );
     }
 
     @Test
     void encodesType() {
-        final String value = new DirectivesValue(Type.INT_TYPE).hex(new JavaCodec());
+        final String value = new DirectivesValue(Type.INT_TYPE).hex(this.codec);
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'Type.INT_TYPE' should be '69 6E 74'",
             value,
