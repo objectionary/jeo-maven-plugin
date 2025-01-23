@@ -24,7 +24,6 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.Locale;
-import java.util.Optional;
 
 /**
  * Bytecode value.
@@ -69,28 +68,21 @@ public final class BytecodeObject {
         return this.vtype.caption().toLowerCase(Locale.ROOT);
     }
 
-    public Object object() {
+    /**
+     * Retrieve the value.
+     * @return Value.
+     */
+    public Object value() {
         return this.object;
-    }
-
-    public byte[] encode(final Codec codec) {
-        return codec.encode(this.object, this.vtype);
     }
 
     /**
      * Retrieve the bytes of the value.
      * @return Bytes.
      */
-//    public byte[] bytes() {
-//        return this.codec.encode(this.vbytes, this.vtype);
-//    }
+    public byte[] encode(final Codec codec) {
+        return codec.encode(this.object, this.vtype);
+    }
 
-//    public boolean large() {
-//        if (this.vtype == DataType.LONG) {
-//            final long l = ((Number) vbytes).longValue();
-//            return   l >= DirectivesNumberBytes.MIN_LONG_DOUBLE
-//                && this.value.longValue() <= DirectivesNumberBytes.MAX_LONG_DOUBLE)
-//        }
-//        return false;
-//    }
+
 }

@@ -59,6 +59,12 @@ public final class DirectivesValue implements Iterable<Directive> {
     private static final long MIN_LONG_DOUBLE = -9_007_199_254_740_992L;
 
     /**
+     * Default codec.
+     */
+    private static final Codec CODEC = new EoCodec();
+
+
+    /**
      * Name.
      */
     private final String name;
@@ -101,53 +107,28 @@ public final class DirectivesValue implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final String type = this.type();
         final Iterable<Directive> res;
-        Codec codec = new EoCodec();
+        Codec codec = DirectivesValue.CODEC;
         switch (type) {
             case "byte":
             case "short":
             case "int":
             case "float":
             case "double":
-                res = new DirectivesJeoObject(
-                    type,
-                    this.name,
-                    new DirectivesComment(this.comment()),
-                    new DirectivesNumber(this.hex(codec))
-                );
-                break;
-            case "string":
-                res = new DirectivesEoObject(
-                    type,
-                    this.name,
-                    new DirectivesComment(this.comment()),
-                    new DirectivesBytes(this.hex(codec))
-                );
+                res = this.jeoNumber(type, codec);
                 break;
             case "long":
-                final long val = ((Number) value.object()).longValue();
+                final long val = ((Number) this.value.value()).longValue();
                 if (val >= DirectivesValue.MIN_LONG_DOUBLE && val <= DirectivesValue.MAX_LONG_DOUBLE) {
-                    res = new DirectivesJeoObject(
-                        type,
-                        this.name,
-                        new DirectivesComment(this.comment()),
-                        new DirectivesNumber(this.hex(codec))
-                    );
+                    res = this.jeoNumber(type, codec);
                 } else {
-                    res = new DirectivesJeoObject(
-                        type,
-                        this.name,
-                        new DirectivesComment(this.comment()),
-                        new DirectivesBytes(this.hex(new PlainLongCodec(codec)))
-                    );
+                    res = this.jeoObject(type, new PlainLongCodec(codec));
                 }
                 break;
+            case "string":
+                res = this.eoObject(type, codec);
+                break;
             default:
-                res = new DirectivesJeoObject(
-                    type,
-                    this.name,
-                    new DirectivesComment(this.comment()),
-                    new DirectivesBytes(this.hex(codec))
-                );
+                res = this.jeoObject(type, codec);
                 break;
         }
         return res.iterator();
@@ -170,12 +151,57 @@ public final class DirectivesValue implements Iterable<Directive> {
     }
 
     /**
+     * EO object.
+     * @param base Base.
+     * @param codec Codec to use for bytes encoding.
+     * @return EO object directives.
+     */
+    private DirectivesEoObject eoObject(final String base, final Codec codec) {
+        return new DirectivesEoObject(
+            base,
+            this.name,
+            new DirectivesComment(this.comment()),
+            new DirectivesBytes(this.hex(codec))
+        );
+    }
+
+    /**
+     * JEO object.
+     * @param base Base.
+     * @param codec Codec to use for bytes encoding.
+     * @return JEO object directives.
+     */
+    private DirectivesJeoObject jeoObject(final String base, final Codec codec) {
+        return new DirectivesJeoObject(
+            base,
+            this.name,
+            new DirectivesComment(this.comment()),
+            new DirectivesBytes(this.hex(codec))
+        );
+    }
+
+    /**
+     * JEO number.
+     * @param base Object base.
+     * @param codec Codec to use for bytes encoding.
+     * @return JEO number directives.
+     */
+    private DirectivesJeoObject jeoNumber(final String base, final Codec codec) {
+        return new DirectivesJeoObject(
+            base,
+            this.name,
+            new DirectivesComment(this.comment()),
+            new DirectivesNumber(this.hex(codec))
+        );
+    }
+
+    /**
      * Bytes of the representative comment.
      * @return Sting comment.
      */
     private String comment() {
         final String result;
-        final Object object = this.value.object();
+        final Object object = this.value.value();
         if (object instanceof String) {
             result = String.format("\"%s\"", object);
         } else {

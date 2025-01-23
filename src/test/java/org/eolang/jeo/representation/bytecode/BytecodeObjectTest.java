@@ -79,7 +79,7 @@ final class BytecodeObjectTest {
     ) {
         MatcherAssert.assertThat(
             "We expect that object will be retrieved from the value",
-            value.object(),
+            value.value(),
             Matchers.equalTo(object)
         );
     }
