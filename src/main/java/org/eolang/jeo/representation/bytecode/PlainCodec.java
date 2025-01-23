@@ -76,9 +76,11 @@ public final class PlainCodec implements Codec {
                 return PlainCodec.hexClass(Class.class.cast(value).getName());
             case NULL:
                 return PlainCodec.EMPTY;
+            default:
+                throw new IllegalArgumentException(
+                    String.format("Unsupported data type: %s", type)
+                );
         }
-
-        return type.encode(value);
     }
 
     @Override

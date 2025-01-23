@@ -23,11 +23,8 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.Function;
 import org.objectweb.asm.Type;
 
 /**
@@ -39,136 +36,72 @@ enum DataType {
     /**
      * Boolean.
      */
-    BOOL("bool", Boolean.class,
-        value -> {
-            final byte[] result;
-            if (value instanceof Integer) {
-                result = DataType.hexBoolean((int) value != 0);
-            } else {
-                result = DataType.hexBoolean(Boolean.class.cast(value));
-            }
-            return result;
-        },
-        bytes -> {
-            return Boolean.valueOf(bytes[0] != 0);
-        }
-    ),
+    BOOL("bool", Boolean.class),
 
     /**
      * Character.
      */
-    CHAR("char", Character.class,
-        value -> {
-            final char val;
-            if (value instanceof Integer) {
-                val = (char) (int) value;
-            } else {
-                val = (char) value;
-            }
-            return ByteBuffer.allocate(Character.BYTES).putChar(val).array();
-        },
-        bytes -> ByteBuffer.wrap(bytes).getChar()
-    ),
+    CHAR("char", Character.class),
 
     /**
      * Byte.
      */
-    BYTE("byte", Byte.class,
-        value -> ByteBuffer.allocate(Byte.BYTES).put((byte) value).array(),
-        bytes -> ByteBuffer.wrap(bytes).get()
-//        bytes -> (byte) ByteBuffer.wrap(bytes).getDouble()
-    ),
+    BYTE("byte", Byte.class),
 
     /**
      * Short.
      */
-    SHORT("short", Short.class,
-        value -> ByteBuffer.allocate(Short.BYTES).putShort((short) value).array(),
-        bytes -> ByteBuffer.wrap(bytes).getShort()
-//        bytes -> (short) ByteBuffer.wrap(bytes).getDouble()
-    ),
+    SHORT("short", Short.class),
 
     /**
      * Integer.
      */
-    INT("int", Integer.class,
-        value -> ByteBuffer.allocate(Long.BYTES).putLong((int) value).array(),
-        bytes -> (int) ByteBuffer.wrap(bytes).getLong()
-//        bytes -> (int) ByteBuffer.wrap(bytes).getDouble()
+    INT("int", Integer.class),
 
-    ),
     /**
      * Long.
      */
-    LONG("long", Long.class,
-        value -> ByteBuffer.allocate(Long.BYTES).putLong((long) value).array(),
-        bytes -> ByteBuffer.wrap(bytes).getLong()
-//        bytes -> (long) ByteBuffer.wrap(bytes).getDouble()
-    ),
+    LONG("long", Long.class),
 
     /**
      * Float.
      */
-    FLOAT("float", Float.class,
-        value -> ByteBuffer.allocate(Float.BYTES).putFloat((float) value).array(),
-        bytes -> ByteBuffer.wrap(bytes).getFloat()
-//        bytes -> (float) ByteBuffer.wrap(bytes).getDouble()
-    ),
+    FLOAT("float", Float.class),
 
     /**
      * Double.
      */
-    DOUBLE("double", Double.class,
-        value -> ByteBuffer.allocate(Double.BYTES).putDouble((double) value).array(),
-        bytes -> ByteBuffer.wrap(bytes).getDouble()
-    ),
+    DOUBLE("double", Double.class),
 
     /**
      * String.
      */
-    STRING("string", String.class,
-        value -> Optional.ofNullable(value).map(String::valueOf)
-            .map(unicode -> unicode.getBytes(StandardCharsets.UTF_8))
-            .orElse(null),
-        bytes -> new String(bytes, StandardCharsets.UTF_8)
-    ),
+    STRING("string", String.class),
 
     /**
      * Bytes.
      */
-    BYTES("bytes", byte[].class,
-        value -> byte[].class.cast(value),
-        bytes -> bytes
-    ),
+    BYTES("bytes", byte[].class),
 
     /**
      * Label.
      */
-    LABEL("label", BytecodeLabel.class,
-        value -> BytecodeLabel.class.cast(value).uid().getBytes(StandardCharsets.UTF_8),
-        bytes -> new BytecodeLabel(new String(bytes, StandardCharsets.UTF_8))
-    ),
+    LABEL("label", BytecodeLabel.class),
 
     /**
      * Type reference.
      */
-    TYPE_REFERENCE(
-        "type", Type.class, DataType::typeBytes, bytes ->
-        Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)))
-    ),
+    TYPE_REFERENCE("type", Type.class),
 
     /**
      * Class reference.
      */
-    CLASS_REFERENCE("class", Class.class,
-        value -> DataType.hexClass(Class.class.cast(value).getName()),
-        bytes -> new String(bytes, StandardCharsets.UTF_8)
-    ),
+    CLASS_REFERENCE("class", Class.class),
 
     /**
      * Null.
      */
-    NULL("nullable", Void.class, value -> new byte[0], bytes -> null);
+    NULL("nullable", Void.class);
 
     /**
      * Base type.
@@ -181,33 +114,14 @@ enum DataType {
     private final Class<?> clazz;
 
     /**
-     * Converter to hex.
-     */
-    private final Function<Object, byte[]> encoder;
-
-    /**
-     * Converter from hex.
-     */
-    private final Function<byte[], Object> decoder;
-
-    /**
      * Constructor.
      * @param base Base type.
      * @param clazz Class.
-     * @param encoder Converter to hex.
-     * @param decoder Converter from hex.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    DataType(
-        final String base,
-        final Class<?> clazz,
-        final Function<Object, byte[]> encoder,
-        final Function<byte[], Object> decoder
-    ) {
+    DataType(final String base, final Class<?> clazz) {
         this.base = base;
         this.clazz = clazz;
-        this.encoder = encoder;
-        this.decoder = decoder;
     }
 
     /**
@@ -262,60 +176,4 @@ enum DataType {
         return this.base;
     }
 
-    /**
-     * Encode data.
-     * @param data Data.
-     * @return Encoded data.
-     */
-    byte[] encode(final Object data) {
-        return Optional.ofNullable(data).map(this.encoder).orElse(null);
-    }
-
-    /**
-     * Decode data.
-     * @param data Data.
-     * @return Decoded data.
-     */
-    Object decode(final byte[] data) {
-        return Optional.ofNullable(data).map(this.decoder).orElse(null);
-    }
-
-    /**
-     * Convert class name to bytes.
-     * @param name Class name.
-     * @return Bytes.
-     */
-    private static byte[] hexClass(final String name) {
-        return name.replace('.', '/').getBytes(StandardCharsets.UTF_8);
-    }
-
-    /**
-     * Convert boolean to bytes.
-     * @param data Boolean.
-     * @return Bytes.
-     */
-    private static byte[] hexBoolean(final boolean data) {
-        final byte[] result;
-        if (data) {
-            result = new byte[]{0x01};
-        } else {
-            result = new byte[]{0x00};
-        }
-        return result;
-    }
-
-    /**
-     * Convert type to bytes.
-     * @param value Type.
-     * @return Bytes.
-     */
-    private static byte[] typeBytes(final Object value) {
-        try {
-            return DataType.hexClass(((Type) value).getDescriptor());
-        } catch (final AssertionError exception) {
-            throw new IllegalStateException(
-                String.format("Failed to get class name for %s", value), exception
-            );
-        }
-    }
 }
