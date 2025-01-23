@@ -78,12 +78,12 @@ final class JavaCodecTest {
                 Type.getType(Object.class),
                 DataType.TYPE_REFERENCE,
                 "Ljava/lang/Object;".getBytes(StandardCharsets.UTF_8)}
-//            ,
-//            {
-//                Object.class,
-//                DataType.CLASS_REFERENCE,
-//                "java/lang/Object".getBytes(StandardCharsets.UTF_8)
-//            }
+            ,
+            {
+                Object.class,
+                DataType.CLASS_REFERENCE,
+                "java/lang/Object".getBytes(StandardCharsets.UTF_8)
+            }
         };
     }
 }

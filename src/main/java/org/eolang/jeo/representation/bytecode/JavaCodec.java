@@ -137,7 +137,7 @@ public final class JavaCodec implements Codec {
                 result = Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)));
                 break;
             case CLASS_REFERENCE:
-                result = new String(bytes, StandardCharsets.UTF_8);
+                result = JavaCodec.classReference(bytes);
                 break;
             case NULL:
                 result = null;
@@ -146,6 +146,23 @@ public final class JavaCodec implements Codec {
                 throw new UnsupportedDataType(type);
         }
         return result;
+    }
+
+    /**
+     * Get class reference by bytes.
+     * @param bytes Bytes.
+     * @return Class.
+     */
+    private static Class<?> classReference(final byte[] bytes) {
+        final String name = new String(bytes, StandardCharsets.UTF_8);
+        try {
+            return Class.forName(name.replace('/', '.'));
+        } catch (final ClassNotFoundException exception) {
+            throw new IllegalStateException(
+                String.format("Class with name '%s' isn't found", name),
+                exception
+            );
+        }
     }
 
     /**

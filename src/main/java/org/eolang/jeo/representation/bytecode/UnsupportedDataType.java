@@ -27,13 +27,18 @@ package org.eolang.jeo.representation.bytecode;
  * Unsupported data type.
  * @since 0.8
  */
-public final class UnsupportedDataType extends IllegalArgumentException {
+final class UnsupportedDataType extends IllegalArgumentException {
+
+    /**
+     * Serial version UID.
+     */
+    private static final long serialVersionUID = 1_586L;
 
     /**
      * Constructor.
      * @param type Data type.
      */
-    public UnsupportedDataType(final DataType type) {
+    UnsupportedDataType(final DataType type) {
         super(String.format("Unsupported data type: %s", type));
     }
 }
