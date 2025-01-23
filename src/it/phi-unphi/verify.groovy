@@ -42,29 +42,29 @@ private void generateGitHubIssue() {
     copyAll('org/eolang/hone/param/Parameter')
     def issue = new File(basedir, "issue.md")
     issue.text = '''I run the following [integration test](https://github.com/objectionary/jeo-maven-plugin/tree/master/src/it/phi-unphi):
- 
+
  bytecode -> (disassemble) `xmir`  -> `phi` -> `unphi` -> `xmir` (assemble) -> bytecode.
- 
+
  And this test fails because `phi/unphi` alter the original `xmir` file.
- 
+
  **Steps to reproduce:**
- 
+
  1) I generate `App.xmir` from `App.class` file (`jeo:disassemble`):
  [App.xmir.disassemble.txt](todo)
  2) Then I use `eo:0.39.0:xmir-to-phi` to generate `App.phi`:
  [App.phi.txt](todo)
  3) Then I run `eo:0.39.0:phi-to-xmir` to generate `App.xmir` (and it is generated):
  [App.xmir.unphi.txt](todo)
- 
+
  **Expected behaviour:**
- 
+
  `App.xmir.disassemble.txt` and `App.xmir.unphi.txt` files should be the same. In other words, `phi/unphi` does not
  have to change the original `xmir` file.
- 
- **Actual behaviour:** 
- 
+
+ **Actual behaviour:**
+
  `App.xmir.disassemble.txt` and `App.xmir.unphi.txt` files are different. `phi/unphi` significantly changes the original `xmir`.
- 
+
  **Details:**
     '''
 

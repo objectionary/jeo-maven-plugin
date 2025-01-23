@@ -227,4 +227,3 @@ public final class BytecodeMethodProperties {
         return visitor;
     }
 }
-

@@ -112,4 +112,3 @@ public final class ClassName {
         return result;
     }
 }
-

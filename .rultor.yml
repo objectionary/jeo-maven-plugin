@@ -17,7 +17,7 @@ release:
     export MAVEN_OPTS="--add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED --add-opens=java.desktop/java.awt.font=ALL-UNNAMED"
     echo "MAVEN_OPTS: $MAVEN_OPTS"
     [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
-    mvn versions:set "-DnewVersion=${tag}" 
+    mvn versions:set "-DnewVersion=${tag}"
     git commit -am "${tag}"
     mvn clean install -Pqulice --errors --batch-mode -Dinvoker.skip -DskipITs
     mvn clean deploy -Pobjectionary -Psonatype --errors --settings ../settings.xml -Dstyle.color=never
