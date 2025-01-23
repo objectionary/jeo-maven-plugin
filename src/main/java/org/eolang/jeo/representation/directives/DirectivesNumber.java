@@ -27,12 +27,12 @@ import java.util.Iterator;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
-public final class DirectivesNumberBytes implements Iterable<Directive> {
+public final class DirectivesNumber implements Iterable<Directive> {
 
 
     private final String value;
 
-    public DirectivesNumberBytes(final String hex) {
+    public DirectivesNumber(final String hex) {
         this.value = hex;
     }
 

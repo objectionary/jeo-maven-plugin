@@ -40,10 +40,10 @@ public final class EoLargeCodec implements Codec {
     @Override
     public byte[] encode(final Object object, final DataType type) {
         if (type == DataType.LONG) {
+            return ByteBuffer.allocate(Long.BYTES).putLong((long) object).array();
+        } else {
             return this.origin.encode(object, type);
         }
-        //todo
-        return this.origin.encode(object, type);
     }
 
     @Override

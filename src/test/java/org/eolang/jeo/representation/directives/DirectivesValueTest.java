@@ -27,6 +27,8 @@ import com.jcabi.matchers.XhtmlMatchers;
 import java.util.stream.Stream;
 import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.bytecode.Codec;
+import org.eolang.jeo.representation.bytecode.PlainCodec;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -123,36 +125,37 @@ final class DirectivesValueTest {
                     hex
                 )
             ),
-            new DirectivesValue(data).hex(),
+            new DirectivesValue(data).hex(new PlainCodec()),
             Matchers.equalTo(hex)
         );
     }
 
     @Test
     void convertsRawPrimitiveDataToHexString() {
+        final Codec codec = new PlainCodec();
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '10' should be '00 00 00 00 00 00 00 0A'",
-            new DirectivesValue(10).hex(),
+            new DirectivesValue(10).hex(codec),
             Matchers.equalTo("00-00-00-00-00-00-00-0A")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1d' should be '3F B9 99 99 99 99 99 9A'",
-            new DirectivesValue(0.1d).hex(),
+            new DirectivesValue(0.1d).hex(codec),
             Matchers.equalTo("3F-B9-99-99-99-99-99-9A")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1f' should be '3D CC CC CD'",
-            new DirectivesValue(0.1f).hex(),
+            new DirectivesValue(0.1f).hex(codec),
             Matchers.equalTo("3D-CC-CC-CD")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'true' should be '01'",
-            new DirectivesValue(true).hex(),
+            new DirectivesValue(true).hex(codec),
             Matchers.equalTo("01-")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'false' should be '00'",
-            new DirectivesValue(false).hex(),
+            new DirectivesValue(false).hex(codec),
             Matchers.equalTo("00-")
         );
         MatcherAssert.assertThat(
@@ -164,7 +167,7 @@ final class DirectivesValueTest {
 
     @Test
     void encodesType() {
-        final String value = new DirectivesValue(Type.INT_TYPE).hex();
+        final String value = new DirectivesValue(Type.INT_TYPE).hex(new PlainCodec());
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'Type.INT_TYPE' should be '69 6E 74'",
             value,

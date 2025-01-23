@@ -24,6 +24,8 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import org.eolang.jeo.representation.bytecode.Codec;
+import org.eolang.jeo.representation.bytecode.PlainCodec;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
@@ -49,6 +51,7 @@ final class DirectivesAnnotationsTest {
     @Test
     void returnsSingleAnnotation() throws ImpossibleModificationException {
         final String annotation = "Ljava/lang/Override;";
+        Codec codec = new PlainCodec();
         MatcherAssert.assertThat(
             "Must return single annotation with correct descriptor and visibility",
             new Xembler(
@@ -58,11 +61,11 @@ final class DirectivesAnnotationsTest {
                 "/o[contains(@base,'seq.of1') and contains(@as,'annotations')]/o",
                 String.format(
                     "/o[contains(@base,'seq.of1') and contains(@as,'annotations')]/o/o[1][contains(@base,'string')]/o[text()='%s']",
-                    new DirectivesValue(annotation).hex()
+                    new DirectivesValue(annotation).hex(codec)
                 ),
                 String.format(
                     "/o[contains(@base,'seq.of1') and contains(@as,'annotations')]/o/o[2][contains(@base,'bool')]/o[text()='%s']",
-                    new DirectivesValue(true).hex()
+                    new DirectivesValue(true).hex(codec)
                 )
             )
         );

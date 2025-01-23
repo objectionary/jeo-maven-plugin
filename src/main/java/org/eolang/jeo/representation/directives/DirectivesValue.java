@@ -101,6 +101,7 @@ public final class DirectivesValue implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final String type = this.type();
         final Iterable<Directive> res;
+        Codec codec = new EoCodec();
         switch (type) {
             case "byte":
             case "short":
@@ -111,7 +112,7 @@ public final class DirectivesValue implements Iterable<Directive> {
                     type,
                     this.name,
                     new DirectivesComment(this.comment()),
-                    new DirectivesNumberBytes(this.hex())
+                    new DirectivesNumber(this.hex(codec))
                 );
                 break;
             case "string":
@@ -119,7 +120,7 @@ public final class DirectivesValue implements Iterable<Directive> {
                     type,
                     this.name,
                     new DirectivesComment(this.comment()),
-                    new DirectivesBytes(this.hex())
+                    new DirectivesBytes(this.hex(codec))
                 );
                 break;
             case "long":
@@ -129,14 +130,14 @@ public final class DirectivesValue implements Iterable<Directive> {
                         type,
                         this.name,
                         new DirectivesComment(this.comment()),
-                        new DirectivesNumberBytes(this.hex())
+                        new DirectivesNumber(this.hex(codec))
                     );
                 } else {
                     res = new DirectivesJeoObject(
                         type,
                         this.name,
                         new DirectivesComment(this.comment()),
-                        new DirectivesBytes(this.hex(new EoLargeCodec()))
+                        new DirectivesBytes(this.hex(new EoLargeCodec(codec)))
                     );
                 }
                 break;
@@ -145,7 +146,7 @@ public final class DirectivesValue implements Iterable<Directive> {
                     type,
                     this.name,
                     new DirectivesComment(this.comment()),
-                    new DirectivesBytes(this.hex())
+                    new DirectivesBytes(this.hex(codec))
                 );
                 break;
         }
@@ -156,9 +157,9 @@ public final class DirectivesValue implements Iterable<Directive> {
      * Value of the data.
      * @return Value
      */
-    String hex() {
-        return this.hex(new EoCodec());
-    }
+//    String hex() {
+//        return this.hex(new EoCodec());
+//    }
 
     String hex(Codec codec) {
         return DirectivesValue.bytesToHex(this.value.encode(codec));

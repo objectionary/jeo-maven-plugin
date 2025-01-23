@@ -67,18 +67,19 @@ public final class EoCodec implements Codec {
             case BYTE:
             case SHORT:
             case INT:
+            case LONG:
             case FLOAT:
             case DOUBLE:
                 return ByteBuffer.allocate(Double.BYTES).putDouble(((Number) object).doubleValue())
                     .array();
-            case LONG:
-                if (EoCodec.MIN_LONG_DOUBLE <= (long) object && (long) object <= EoCodec.MAX_LONG_DOUBLE) {
-                    return ByteBuffer.allocate(Long.BYTES)
-                        .putDouble(((Number) object).doubleValue())
-                        .array();
-                } else {
-                    return this.origin.encode(object, type);
-                }
+//            case LONG:
+//                if (EoCodec.MIN_LONG_DOUBLE <= (long) object && (long) object <= EoCodec.MAX_LONG_DOUBLE) {
+//                    return ByteBuffer.allocate(Long.BYTES)
+//                        .putDouble(((Number) object).doubleValue())
+//                        .array();
+//                } else {
+//                    return this.origin.encode(object, type);
+//                }
             default:
                 throw new IllegalArgumentException(
                     String.format("Unsupported data type: %s", type)

@@ -23,20 +23,14 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import com.jcabi.matchers.XhtmlMatchers;
 import java.util.stream.Stream;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.xembly.ImpossibleModificationException;
-import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesNumberBytes}.
+ * Test case for {@link DirectivesNumber}.
  * @since 0.8
  */
-final class DirectivesNumberBytesTest {
+final class DirectivesNumberTest {
 
 //    @ParameterizedTest
 //    @MethodSource("numbers")

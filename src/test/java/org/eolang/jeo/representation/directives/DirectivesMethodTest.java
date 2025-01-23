@@ -49,18 +49,16 @@ final class DirectivesMethodTest {
         final int access = 100;
         final String descriptor = "()I";
         final String signature = "";
-        final String xml = new Xembler(
-            new DirectivesMethod(
-                name,
-                new DirectivesMethodProperties(access, descriptor, signature)
-            )
-        ).xml();
-        System.out.println(xml);
         MatcherAssert.assertThat(
             "We expect that directives will generate correct method",
             new XmlMethod(
                 new NativeXmlNode(
-                    xml
+                    new Xembler(
+                        new DirectivesMethod(
+                            name,
+                            new DirectivesMethodProperties(access, descriptor, signature)
+                        )
+                    ).xml()
                 )
             ).bytecode(),
             Matchers.equalTo(

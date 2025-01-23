@@ -151,7 +151,7 @@ final class BytecodeObjectTest {
                 "org/eolang/jeo/representation/bytecode/BytecodeObject".getBytes(
                     StandardCharsets.UTF_8
                 ),
-                "org/eolang/jeo/representation/bytecode/BytecodeObject"
+                BytecodeObject.class
             ),
             Arguments.of(
                 new BytecodeObject(Type.INT_TYPE),
