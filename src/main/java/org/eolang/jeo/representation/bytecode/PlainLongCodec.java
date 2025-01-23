@@ -25,29 +25,45 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.nio.ByteBuffer;
 
-public final class EoLargeCodec implements Codec {
+/**
+ * Codec that saves long as a plain byte array.
+ * The delegate codec encodes all the rest data types.
+ * @since 0.8
+ */
+public final class PlainLongCodec implements Codec {
 
+    /**
+     * Delegate codec.
+     */
     private final Codec origin;
 
-    public EoLargeCodec(final Codec origin) {
-        this.origin = origin;
+    /**
+     * Constructor.
+     * @param delegate Origin codec.
+     */
+    public PlainLongCodec(final Codec delegate) {
+        this.origin = delegate;
     }
 
     @Override
     public byte[] encode(final Object object, final DataType type) {
+        final byte[] result;
         if (type == DataType.LONG) {
-            return ByteBuffer.allocate(Long.BYTES).putLong((long) object).array();
+            result = ByteBuffer.allocate(Long.BYTES).putLong((long) object).array();
         } else {
-            return this.origin.encode(object, type);
+            result = this.origin.encode(object, type);
         }
+        return result;
     }
 
     @Override
     public Object decode(final byte[] bytes, final DataType type) {
+        final Object result;
         if (type == DataType.LONG) {
-            return ByteBuffer.wrap(bytes).getLong();
+            result = ByteBuffer.wrap(bytes).getLong();
         } else {
-            return this.origin.decode(bytes, type);
+            result = this.origin.decode(bytes, type);
         }
+        return result;
     }
 }

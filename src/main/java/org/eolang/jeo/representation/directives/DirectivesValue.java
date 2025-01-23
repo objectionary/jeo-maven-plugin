@@ -28,7 +28,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.eolang.jeo.representation.bytecode.Codec;
 import org.eolang.jeo.representation.bytecode.EoCodec;
-import org.eolang.jeo.representation.bytecode.EoLargeCodec;
+import org.eolang.jeo.representation.bytecode.PlainLongCodec;
 import org.xembly.Directive;
 
 /**
@@ -137,7 +137,7 @@ public final class DirectivesValue implements Iterable<Directive> {
                         type,
                         this.name,
                         new DirectivesComment(this.comment()),
-                        new DirectivesBytes(this.hex(new EoLargeCodec(codec)))
+                        new DirectivesBytes(this.hex(new PlainLongCodec(codec)))
                     );
                 }
                 break;

@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 import org.eolang.jeo.representation.bytecode.BytecodeBytes;
 import org.eolang.jeo.representation.bytecode.Codec;
 import org.eolang.jeo.representation.bytecode.EoCodec;
-import org.eolang.jeo.representation.bytecode.EoLargeCodec;
+import org.eolang.jeo.representation.bytecode.PlainLongCodec;
 
 /**
  * XML value.
@@ -77,7 +77,7 @@ public final class XmlValue {
     public Object object() {
         Codec codec = new EoCodec();
         if (!this.node.child("o").hasAttribute("base", "org.eolang.number")) {
-            codec = new EoLargeCodec(codec);
+            codec = new PlainLongCodec(codec);
         }
         return new BytecodeBytes(this.base(), this.bytes()).object(codec);
     }
