@@ -29,10 +29,6 @@ public final class EoLargeCodec implements Codec {
 
     private final Codec origin;
 
-    public EoLargeCodec() {
-        this(new EoCodec());
-    }
-
     public EoLargeCodec(final Codec origin) {
         this.origin = origin;
     }
