@@ -28,7 +28,6 @@ import java.nio.ByteBuffer;
 /**
  * EO codec.
  * Converts primitive types to byte arrays and vice versa.
- *
  * @since 0.8
  */
 public final class EoCodec implements Codec {
@@ -38,16 +37,24 @@ public final class EoCodec implements Codec {
      */
     private final Codec origin;
 
+    /**
+     * Constructor.
+     */
     public EoCodec() {
         this(new JavaCodec());
     }
 
-    private EoCodec(final Codec origin) {
-        this.origin = origin;
+    /**
+     * Constructor.
+     * @param delegate Origin codec.
+     */
+    private EoCodec(final Codec delegate) {
+        this.origin = delegate;
     }
 
     @Override
     public byte[] encode(final Object object, final DataType type) {
+        final byte[] result;
         switch (type) {
             case BOOL:
             case CHAR:
@@ -57,23 +64,27 @@ public final class EoCodec implements Codec {
             case TYPE_REFERENCE:
             case CLASS_REFERENCE:
             case NULL:
-                return this.origin.encode(object, type);
+                result = this.origin.encode(object, type);
+                break;
             case BYTE:
             case SHORT:
             case INT:
             case LONG:
             case FLOAT:
             case DOUBLE:
-                return ByteBuffer.allocate(Double.BYTES)
+                result = ByteBuffer.allocate(Double.BYTES)
                     .putDouble(((Number) object).doubleValue())
                     .array();
+                break;
             default:
                 throw new UnsupportedDataType(type);
         }
+        return result;
     }
 
     @Override
     public Object decode(final byte[] bytes, final DataType type) {
+        final Object result;
         switch (type) {
             case BOOL:
             case CHAR:
@@ -83,21 +94,29 @@ public final class EoCodec implements Codec {
             case TYPE_REFERENCE:
             case CLASS_REFERENCE:
             case NULL:
-                return this.origin.decode(bytes, type);
+                result = this.origin.decode(bytes, type);
+                break;
             case BYTE:
-                return (byte) ByteBuffer.wrap(bytes).getDouble();
+                result = (byte) ByteBuffer.wrap(bytes).getDouble();
+                break;
             case SHORT:
-                return (short) ByteBuffer.wrap(bytes).getDouble();
+                result = (short) ByteBuffer.wrap(bytes).getDouble();
+                break;
             case INT:
-                return (int) ByteBuffer.wrap(bytes).getDouble();
+                result = (int) ByteBuffer.wrap(bytes).getDouble();
+                break;
             case LONG:
-                return (long) ByteBuffer.wrap(bytes).getDouble();
+                result = (long) ByteBuffer.wrap(bytes).getDouble();
+                break;
             case FLOAT:
-                return (float) ByteBuffer.wrap(bytes).getDouble();
+                result = (float) ByteBuffer.wrap(bytes).getDouble();
+                break;
             case DOUBLE:
-                return ByteBuffer.wrap(bytes).getDouble();
+                result = ByteBuffer.wrap(bytes).getDouble();
+                break;
             default:
                 throw new UnsupportedDataType(type);
         }
+        return result;
     }
 }

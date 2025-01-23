@@ -23,9 +23,25 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+/**
+ * Classes that can transform objects to byte arrays and vice versa.
+ * @since 0.8
+ */
 public interface Codec {
 
+    /**
+     * Encodes an object to a byte array.
+     * @param object Object.
+     * @param type Data type.
+     * @return Byte array.
+     */
     byte[] encode(final Object object, final DataType type);
 
+    /**
+     * Decodes a byte array to an object.
+     * @param bytes Byte array.
+     * @param type Data type.
+     * @return Object.
+     */
     Object decode(final byte[] bytes, final DataType type);
 }
