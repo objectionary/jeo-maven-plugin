@@ -63,6 +63,7 @@ public final class BytecodeBytes {
 
     /**
      * Represent the value as an object.
+     * @param codec Codec.
      * @return Object.
      */
     public Object object(final Codec codec) {

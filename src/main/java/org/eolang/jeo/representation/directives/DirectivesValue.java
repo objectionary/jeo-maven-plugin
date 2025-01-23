@@ -33,7 +33,6 @@ import org.xembly.Directive;
 
 /**
  * Data Object Directive in EO language.
- *
  * @since 0.1.0
  */
 @ToString
@@ -62,7 +61,6 @@ public final class DirectivesValue implements Iterable<Directive> {
      * Default codec.
      */
     private static final Codec CODEC = new EoCodec();
-
 
     /**
      * Name.
@@ -117,8 +115,7 @@ public final class DirectivesValue implements Iterable<Directive> {
                 res = this.jeoNumber(type, codec);
                 break;
             case "long":
-                final long val = ((Number) this.value.value()).longValue();
-                if (val >= DirectivesValue.MIN_LONG_DOUBLE && val <= DirectivesValue.MAX_LONG_DOUBLE) {
+                if (this.fits()) {
                     res = this.jeoNumber(type, codec);
                 } else {
                     res = this.jeoObject(type, new PlainLongCodec(codec));
@@ -136,6 +133,7 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Value of the data.
+     * @param codec Codec
      * @return Value
      */
     String hex(final Codec codec) {
@@ -148,6 +146,15 @@ public final class DirectivesValue implements Iterable<Directive> {
      */
     String type() {
         return this.value.type();
+    }
+
+    /**
+     * Check if the value fits into the double.
+     * @return True if fits.
+     */
+    private boolean fits() {
+        final long val = ((Number) this.value.value()).longValue();
+        return val >= DirectivesValue.MIN_LONG_DOUBLE && val <= DirectivesValue.MAX_LONG_DOUBLE;
     }
 
     /**
