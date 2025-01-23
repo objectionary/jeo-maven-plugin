@@ -101,7 +101,9 @@ public final class PlainCodec implements Codec {
             case DOUBLE:
                 return ByteBuffer.wrap(bytes).getDouble();
             case STRING:
-                return new String(bytes, StandardCharsets.UTF_8);
+                return Optional.ofNullable(bytes)
+                    .map(all -> new String(all, StandardCharsets.UTF_8))
+                    .orElse("");
             case BYTES:
                 return bytes;
             case LABEL:
