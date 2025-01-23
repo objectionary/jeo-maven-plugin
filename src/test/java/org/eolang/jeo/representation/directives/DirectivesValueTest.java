@@ -69,10 +69,8 @@ final class DirectivesValueTest {
 
     @ParameterizedTest
     @MethodSource("numbers")
-    void convertsNumbers(
-        Number number, final String base, final String bytes
-    ) throws ImpossibleModificationException {
-        final String xml = new Xembler(new DirectivesValue("access", number)).xml();
+    void convertsNumbers(final Number number, final String base, final String bytes) {
+        final String xml = new Xembler(new DirectivesValue("access", number)).xmlQuietly();
         MatcherAssert.assertThat(
             String.format(
                 "We expect that number value is converted to the correct XMIR, but got the incorrect one: %n%s%n",

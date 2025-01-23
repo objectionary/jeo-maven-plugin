@@ -78,11 +78,10 @@ public final class BytecodeObject {
 
     /**
      * Retrieve the bytes of the value.
+     * @param codec Codec.
      * @return Bytes.
      */
     public byte[] encode(final Codec codec) {
         return codec.encode(this.object, this.vtype);
     }
-
-
 }

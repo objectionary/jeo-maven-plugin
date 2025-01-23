@@ -138,7 +138,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * Value of the data.
      * @return Value
      */
-    String hex(Codec codec) {
+    String hex(final Codec codec) {
         return DirectivesValue.bytesToHex(this.value.encode(codec));
     }
 
