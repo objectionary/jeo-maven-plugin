@@ -38,16 +38,6 @@ public final class BytecodeBytes {
      */
     private final byte[] vbytes;
 
-    private final Codec codec;
-
-    /**
-     * Constructor.
-     * @param value Value.
-     */
-    public BytecodeBytes(final Object value) {
-        this(DataType.findByData(value), value);
-    }
-
     /**
      * Constructor.
      * @param type Value type.
@@ -60,37 +50,19 @@ public final class BytecodeBytes {
     /**
      * Constructor.
      * @param type Value type.
-     * @param value Value.
-     */
-    private BytecodeBytes(final DataType type, final Object value) {
-        this(type, value, new EoLargeCodec());
-    }
-
-    private BytecodeBytes(final DataType type, final Object value, final Codec codec) {
-        this(type, codec.encode(value, type), codec);
-    }
-
-    /**
-     * Constructor.
-     * @param type Value type.
      * @param bytes Value bytes.
      */
     private BytecodeBytes(final DataType type, final byte[] bytes) {
-        this(type, bytes, new EoCodec());
-    }
-
-    private BytecodeBytes(final DataType vtype, final byte[] vbytes, final Codec codec) {
-        this.vtype = vtype;
-        this.vbytes = Optional.ofNullable(vbytes).map(byte[]::clone).orElse(null);
-        this.codec = codec;
+        this.vtype = type;
+        this.vbytes = Optional.ofNullable(bytes).map(byte[]::clone).orElse(null);
     }
 
     /**
      * Represent the value as an object.
      * @return Object.
      */
-    public Object object() {
-        return this.codec.decode(this.vbytes, this.vtype);
+    public Object object(final Codec codec) {
+        return codec.decode(this.vbytes, this.vtype);
     }
 
     /**

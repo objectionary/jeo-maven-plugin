@@ -26,7 +26,12 @@ package org.eolang.jeo.representation.xmir;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
+import org.eolang.jeo.representation.bytecode.BytecodeBytes;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
+import org.eolang.jeo.representation.bytecode.Codec;
+import org.eolang.jeo.representation.bytecode.EoCodec;
+import org.eolang.jeo.representation.bytecode.EoLargeCodec;
+import org.eolang.jeo.representation.bytecode.PlainCodec;
 
 /**
  * XML value.
@@ -121,37 +126,43 @@ public final class XmlValue {
     public Object object() {
         final String base = this.base();
         final Object result;
-        switch (base) {
-            case "byte":
-                result = (byte) ByteBuffer.wrap(this.bytes()).getDouble();
-                break;
-            case "short":
-                result = (short) ByteBuffer.wrap(this.bytes()).getDouble();
-                break;
-            case "int":
-                result = (int) ByteBuffer.wrap(this.bytes()).getDouble();
-                break;
-            case "long":
-                if (this.node.child("o").hasAttribute("base", "org.eolang.number")) {
-                    result = (long) ByteBuffer.wrap(this.bytes()).getDouble();
-                } else {
-                    result = ByteBuffer.wrap(this.bytes()).getLong();
-                }
-                break;
-            case "float":
-                result = (float) ByteBuffer.wrap(this.bytes()).getDouble();
-                break;
-            case "double":
-                result = ByteBuffer.wrap(this.bytes()).getDouble();
-                break;
-            case "string":
-                result = this.string();
-                break;
-            default:
-                result = new BytecodeObject(base, this.bytes()).object();
-                break;
+
+//        switch (base) {
+//            case "byte":
+//                result = (byte) ByteBuffer.wrap(this.bytes()).getDouble();
+//                break;
+//            case "short":
+//                result = (short) ByteBuffer.wrap(this.bytes()).getDouble();
+//                break;
+//            case "int":
+//                result = (int) ByteBuffer.wrap(this.bytes()).getDouble();
+//                break;
+//            case "long":
+//                if (this.node.child("o").hasAttribute("base", "org.eolang.number")) {
+//                    result = (long) ByteBuffer.wrap(this.bytes()).getDouble();
+//                } else {
+//                    result = ByteBuffer.wrap(this.bytes()).getLong();
+//                }
+//                break;
+//            case "float":
+//                result = (float) ByteBuffer.wrap(this.bytes()).getDouble();
+//                break;
+//            case "double":
+//                result = ByteBuffer.wrap(this.bytes()).getDouble();
+//                break;
+//            case "string":
+//                result = this.string();
+//                break;
+//            default:
+//                result = new BytecodeBytes(base, this.bytes()).object();
+//                break;
+//        }
+//        return result;
+        Codec codec = new EoCodec();
+        if (!this.node.child("o").hasAttribute("base", "org.eolang.number")) {
+            codec = new EoLargeCodec(codec);
         }
-        return result;
+        return new BytecodeBytes(base, this.bytes()).object(codec);
     }
 
     /**

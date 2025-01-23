@@ -56,35 +56,9 @@ public final class BytecodeObject {
      * @param type Value type.
      * @param bytes Value bytes.
      */
-    public BytecodeObject(final String type, final byte[] bytes) {
-        this(DataType.findByBase(type), bytes);
-    }
-
-    /**
-     * Constructor.
-     * @param type Value type.
-     * @param value Value.
-     */
-    private BytecodeObject(final DataType type, final Object value) {
-        this(type, value, new EoLargeCodec());
-    }
-
-    private BytecodeObject(final DataType type, final Object value, final Codec codec) {
-        this(type, codec.encode(value, type), codec);
-    }
-
-    /**
-     * Constructor.
-     * @param type Value type.
-     * @param bytes Value bytes.
-     */
-    private BytecodeObject(final DataType type, final byte[] bytes) {
-        this(type, bytes, new EoCodec());
-    }
-
-    private BytecodeObject(final DataType vtype, final byte[] vbytes, final Codec codec) {
-        this.vtype = vtype;
-        this.object = Optional.ofNullable(vbytes).map(byte[]::clone).orElse(null);
+    private BytecodeObject(final DataType type, final Object bytes) {
+        this.vtype = type;
+        this.object = bytes;
     }
 
     /**

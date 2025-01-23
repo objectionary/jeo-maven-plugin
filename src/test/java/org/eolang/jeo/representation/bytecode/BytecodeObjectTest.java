@@ -37,7 +37,7 @@ import org.objectweb.asm.Type;
  * @since 0.6
  * @checkstyle ParameterNumberCheck (500 lines)
  */
-final class BytecodeValueTest {
+final class BytecodeObjectTest {
 
 //    @ParameterizedTest
 //    @MethodSource("arguments")
@@ -148,10 +148,10 @@ final class BytecodeValueTest {
             Arguments.of(
                 new BytecodeObject(BytecodeObject.class),
                 "class",
-                "org/eolang/jeo/representation/bytecode/BytecodeValue".getBytes(
+                "org/eolang/jeo/representation/bytecode/BytecodeObject".getBytes(
                     StandardCharsets.UTF_8
                 ),
-                "org/eolang/jeo/representation/bytecode/BytecodeValue"
+                "org/eolang/jeo/representation/bytecode/BytecodeObject"
             ),
             Arguments.of(
                 new BytecodeObject(Type.INT_TYPE),

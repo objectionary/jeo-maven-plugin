@@ -27,13 +27,13 @@ import java.nio.ByteBuffer;
 
 public final class EoLargeCodec implements Codec {
 
-    private final EoCodec origin;
+    private final Codec origin;
 
     public EoLargeCodec() {
         this(new EoCodec());
     }
 
-    public EoLargeCodec(final EoCodec origin) {
+    public EoLargeCodec(final Codec origin) {
         this.origin = origin;
     }
 
