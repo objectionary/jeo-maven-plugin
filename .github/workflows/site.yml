@@ -1,6 +1,6 @@
 ---
 name: site
-on:
+'on':
   push:
     tags:
       - '*'
