@@ -23,8 +23,10 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.util.stream.Stream;
-import org.junit.jupiter.params.provider.Arguments;
+import com.jcabi.matchers.XhtmlMatchers;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Test;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link DirectivesNumber}.
@@ -32,44 +34,15 @@ import org.junit.jupiter.params.provider.Arguments;
  */
 final class DirectivesNumberTest {
 
-//    @ParameterizedTest
-//    @MethodSource("numbers")
-//    void convertsDifferentNumbersToBytes(
-//        final Number value, final String bytes
-//    ) throws ImpossibleModificationException {
-//        final String xml = new Xembler(new DirectivesNumberBytes(value)).xml();
-//        MatcherAssert.assertThat(
-//            String.format(
-//                "We expect that number will be converted to the correct XMIR, but got: %n%s%n",
-//                xml
-//            ),
-//            xml,
-//            XhtmlMatchers.hasXPaths(
-//                "/o[@base='org.eolang.number']",
-//                String.format(
-//                    "/o[@base='org.eolang.number']/o[@base='org.eolang.bytes' and text()='%s']",
-//                    bytes
-//                )
-//            )
-//        );
-//    }
-
-    /**
-     * Provide numbers.
-     * @return Numbers.
-     */
-    static Stream<Arguments> numbers() {
-        final String same = "3F-F0-00-00-00-00-00-00";
-        return Stream.of(
-            Arguments.of(1, same),
-            Arguments.of(1L, same),
-            Arguments.of(1.0, same),
-            Arguments.of(1.0f, same),
-            Arguments.of(1.0d, same),
-            Arguments.of((byte) 1, same),
-            Arguments.of((short) 1, same)
+    @Test
+    void convertsToXml() {
+        MatcherAssert.assertThat(
+            "We can't convert number to XML",
+            new Xembler(new DirectivesNumber("42")).xmlQuietly(),
+            XhtmlMatchers.hasXPaths(
+                "/o[@base='org.eolang.number']",
+                "/o[@base='org.eolang.number']/o[@base='org.eolang.bytes' and text()='42']"
+            )
         );
     }
-
-
 }

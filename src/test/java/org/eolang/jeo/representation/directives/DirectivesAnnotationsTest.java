@@ -51,7 +51,7 @@ final class DirectivesAnnotationsTest {
     @Test
     void returnsSingleAnnotation() throws ImpossibleModificationException {
         final String annotation = "Ljava/lang/Override;";
-        Codec codec = new JavaCodec();
+        final Codec codec = new JavaCodec();
         MatcherAssert.assertThat(
             "Must return single annotation with correct descriptor and visibility",
             new Xembler(

@@ -107,7 +107,7 @@ public final class DirectivesValue implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final String type = this.type();
         final Iterable<Directive> res;
-        Codec codec = DirectivesValue.CODEC;
+        final Codec codec = DirectivesValue.CODEC;
         switch (type) {
             case "byte":
             case "short":

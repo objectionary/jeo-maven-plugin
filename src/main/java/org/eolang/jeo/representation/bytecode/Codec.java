@@ -35,7 +35,7 @@ public interface Codec {
      * @param type Data type.
      * @return Byte array.
      */
-    byte[] encode(final Object object, final DataType type);
+    byte[] encode(Object object, DataType type);
 
     /**
      * Decodes a byte array to an object.
@@ -43,5 +43,5 @@ public interface Codec {
      * @param type Data type.
      * @return Object.
      */
-    Object decode(final byte[] bytes, final DataType type);
+    Object decode(byte[] bytes, DataType type);
 }

@@ -68,7 +68,7 @@ final class JavaCodecTest {
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Object[][] mapping() {
         return new Object[][]{
-            {null, DataType.NULL, EMPTY},
+            {null, DataType.NULL, JavaCodecTest.EMPTY},
             {true, DataType.BOOL, new byte[]{1}},
             {'a', DataType.CHAR, new byte[]{0, 97}},
             {new byte[]{0, 1, 2, 3}, DataType.BYTES, new byte[]{0, 1, 2, 3}},

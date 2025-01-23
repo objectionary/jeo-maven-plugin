@@ -62,12 +62,10 @@ final class XmlValueTest {
     @ParameterizedTest
     @MethodSource("values")
     void decodesEncodesCorrectly(final Object origin) {
-        final String xml = new Xembler(new DirectivesValue(origin)).xmlQuietly();
-        System.out.println(xml);
         MatcherAssert.assertThat(
             "Decoding and encoding are not consistent",
             new XmlValue(
-                new NativeXmlNode(xml)
+                new NativeXmlNode(new Xembler(new DirectivesValue(origin)).xmlQuietly())
             ).object(),
             Matchers.equalTo(origin)
         );
