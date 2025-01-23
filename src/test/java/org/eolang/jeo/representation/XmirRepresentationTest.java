@@ -27,7 +27,6 @@ import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -211,39 +210,6 @@ final class XmirRepresentationTest {
             attempts,
             end - start
         );
-    }
-
-    @Test
-    void strangeTest2() {
-//        long min = Long.MIN_VALUE;
-//        long max = Long.MAX_VALUE;
-//        for (long curr = Long.MIN_VALUE; curr < Long.MAX_VALUE; ++curr) {
-//            final byte[] bytes = ByteBuffer.allocate(Double.BYTES).putDouble(curr).array();
-//            long res = (long) ByteBuffer.wrap(bytes).getDouble();
-//            if (res == curr) {
-//                min = curr;
-//            }
-//        }
-//        System.out.println("Current min: " + min);
-//        for (long curr = Long.MAX_VALUE; curr > Long.MIN_VALUE; --curr) {
-//            final byte[] bytes = ByteBuffer.allocate(Double.BYTES).putDouble(curr).array();
-//            long res = (long) ByteBuffer.wrap(bytes).getDouble();
-//            if (res == curr) {
-//                max = curr;
-//            }
-//        }
-//        System.out.println(min);
-//        System.out.println(max);
-
-        final long max = 9007199254740992L;
-        final byte[] bytes = ByteBuffer.allocate(Double.BYTES).putDouble(max).array();
-        long res = (long) ByteBuffer.wrap(bytes).getDouble();
-        System.out.println(res == max);
-
-        final long min = -9007199254740992L;
-        final byte[] bytes2 = ByteBuffer.allocate(Double.BYTES).putDouble(min).array();
-        long res2 = (long) ByteBuffer.wrap(bytes2).getDouble();
-        System.out.println(res2 == min);
     }
 
     @Test

@@ -96,40 +96,56 @@ public final class JavaCodec implements Codec {
 
     @Override
     public Object decode(final byte[] bytes, final DataType type) {
+        final Object result;
         switch (type) {
             case BOOL:
-                return Boolean.valueOf(bytes[0] != 0);
+                result = Boolean.valueOf(bytes[0] != 0);
+                break;
             case CHAR:
-                return ByteBuffer.wrap(bytes).getChar();
+                result = ByteBuffer.wrap(bytes).getChar();
+                break;
             case BYTE:
-                return ByteBuffer.wrap(bytes).get();
+                result = ByteBuffer.wrap(bytes).get();
+                break;
             case SHORT:
-                return ByteBuffer.wrap(bytes).getShort();
+                result = ByteBuffer.wrap(bytes).getShort();
+                break;
             case INT:
-                return (int) ByteBuffer.wrap(bytes).getLong();
+                result = (int) ByteBuffer.wrap(bytes).getLong();
+                break;
             case LONG:
-                return ByteBuffer.wrap(bytes).getLong();
+                result = ByteBuffer.wrap(bytes).getLong();
+                break;
             case FLOAT:
-                return ByteBuffer.wrap(bytes).getFloat();
+                result = ByteBuffer.wrap(bytes).getFloat();
+                break;
             case DOUBLE:
-                return ByteBuffer.wrap(bytes).getDouble();
+                result = ByteBuffer.wrap(bytes).getDouble();
+                break;
             case STRING:
-                return Optional.ofNullable(bytes)
+                result = Optional.ofNullable(bytes)
                     .map(all -> new String(all, StandardCharsets.UTF_8))
                     .orElse("");
+                break;
             case BYTES:
-                return bytes;
+                result = bytes;
+                break;
             case LABEL:
-                return new BytecodeLabel(new String(bytes, StandardCharsets.UTF_8));
+                result = new BytecodeLabel(new String(bytes, StandardCharsets.UTF_8));
+                break;
             case TYPE_REFERENCE:
-                return Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)));
+                result = Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)));
+                break;
             case CLASS_REFERENCE:
-                return new String(bytes, StandardCharsets.UTF_8);
+                result = new String(bytes, StandardCharsets.UTF_8);
+                break;
             case NULL:
-                return null;
+                result = null;
+                break;
             default:
                 throw new UnsupportedDataType(type);
         }
+        return result;
     }
 
     /**
