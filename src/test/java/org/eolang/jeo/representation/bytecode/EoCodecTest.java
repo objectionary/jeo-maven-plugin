@@ -23,30 +23,23 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.nio.charset.StandardCharsets;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.objectweb.asm.Type;
 
 /**
- * Test case for {@link JavaCodec}.
+ * Test case for {@link EoCodec}.
  * @since 0.8
  */
-final class JavaCodecTest {
-
-    /**
-     * Empty byte array.
-     */
-    private static final byte[] EMPTY = new byte[0];
+final class EoCodecTest {
 
     @ParameterizedTest
     @MethodSource("mapping")
     void encodesSuccessfully(final Object value, final DataType type, final byte[] bytes) {
         MatcherAssert.assertThat(
-            "Can't encode value to the correct byte array",
-            new JavaCodec().encode(value, type),
+            "Can't encode value to the correct double byte array (according with IEEE 754)",
+            new EoCodec().encode(value, type),
             Matchers.equalTo(bytes)
         );
     }
@@ -55,8 +48,8 @@ final class JavaCodecTest {
     @MethodSource("mapping")
     void decodesSuccessfully(final Object value, final DataType type, final byte[] bytes) {
         MatcherAssert.assertThat(
-            "Can't decode byte array to the correct value",
-            new JavaCodec().decode(bytes, type),
+            "Can't decode double byte array to the correct value (according with IEEE 754)",
+            new EoCodec().decode(bytes, type),
             Matchers.equalTo(value)
         );
     }
@@ -68,22 +61,16 @@ final class JavaCodecTest {
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Object[][] mapping() {
         return new Object[][]{
-            {null, DataType.NULL, EMPTY},
             {true, DataType.BOOL, new byte[]{1}},
+            {false, DataType.BOOL, new byte[]{0}},
             {'a', DataType.CHAR, new byte[]{0, 97}},
-            {new byte[]{0, 1, 2, 3}, DataType.BYTES, new byte[]{0, 1, 2, 3}},
-            {"hello, world!", DataType.STRING, "hello, world!".getBytes(StandardCharsets.UTF_8)},
-            {new BytecodeLabel("label"), DataType.LABEL, "label".getBytes(StandardCharsets.UTF_8)},
-            {
-                Type.getType(Object.class),
-                DataType.TYPE_REFERENCE,
-                "Ljava/lang/Object;".getBytes(StandardCharsets.UTF_8)}
-//            ,
-//            {
-//                Object.class,
-//                DataType.CLASS_REFERENCE,
-//                "java/lang/Object".getBytes(StandardCharsets.UTF_8)
-//            }
+            {(byte) 42, DataType.BYTE, new byte[]{64, 69, 0, 0, 0, 0, 0, 0}},
+            {(short) 42, DataType.SHORT, new byte[]{64, 69, 0, 0, 0, 0, 0, 0}},
+            {42, DataType.INT, new byte[]{64, 69, 0, 0, 0, 0, 0, 0}},
+            {42L, DataType.LONG, new byte[]{64, 69, 0, 0, 0, 0, 0, 0}},
+            {42.0f, DataType.FLOAT, new byte[]{64, 69, 0, 0, 0, 0, 0, 0}},
+            {42.0, DataType.DOUBLE, new byte[]{64, 69, 0, 0, 0, 0, 0, 0}},
+            {"Hello, world!", DataType.STRING, "Hello, world!".getBytes()}
         };
     }
 }
