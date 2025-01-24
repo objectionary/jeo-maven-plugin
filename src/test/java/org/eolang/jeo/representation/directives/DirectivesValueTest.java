@@ -103,6 +103,15 @@ final class DirectivesValueTest {
         );
     }
 
+    @Test
+    void convertsBoolean() {
+        MatcherAssert.assertThat(
+            "Converts boolean to XML",
+            new Xembler(new DirectivesValue(true)).xmlQuietly(),
+            new SameXml("<o base='jeo.bool'><o base='QQ.true'></o></o>")
+        );
+    }
+
     @MethodSource("types")
     @ParameterizedTest
     void determinesTypeCorrectly(final Object data, final String type) {

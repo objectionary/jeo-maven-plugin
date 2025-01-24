@@ -75,11 +75,26 @@ public final class XmlValue {
      * @return Object.
      */
     public Object object() {
-        Codec codec = new EoCodec();
-        if (!this.node.child("o").hasAttribute("base", "org.eolang.number")) {
-            codec = new PlainLongCodec(codec);
+        final String base = this.base();
+        final Object res;
+        if (base.equals("bool")) {
+            res = this.parseBoolean();
+        } else {
+            Codec codec = new EoCodec();
+            if (!this.node.child("o").hasAttribute("base", "org.eolang.number")) {
+                codec = new PlainLongCodec(codec);
+            }
+            res = new BytecodeBytes(base, this.bytes()).object(codec);
         }
-        return new BytecodeBytes(this.base(), this.bytes()).object(codec);
+        return res;
+    }
+
+    /**
+     * Parse boolean value.
+     * @return Boolean.
+     */
+    private Object parseBoolean() {
+        return this.node.child("o").hasAttribute("base", "QQ.true");
     }
 
     /**
