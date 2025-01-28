@@ -108,7 +108,7 @@ final class DirectivesValueTest {
         MatcherAssert.assertThat(
             "Converts boolean to XML",
             new Xembler(new DirectivesValue(true)).xmlQuietly(),
-            new SameXml("<o base='jeo.bool'><o base='QQ.true'></o></o>")
+            new SameXml("<o base='jeo.bool'><o base='org.eolang.true'></o></o>")
         );
     }
 

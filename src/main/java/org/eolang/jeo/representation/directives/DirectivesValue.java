@@ -34,6 +34,7 @@ import org.xembly.Directives;
 
 /**
  * Data Object Directive in EO language.
+ *
  * @since 0.1.0
  */
 @ToString
@@ -75,6 +76,7 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param data Data.
      * @param <T> Data type.
      */
@@ -84,6 +86,7 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param name Name.
      * @param data Data.
      * @param <T> Data type.
@@ -94,6 +97,7 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param name Name.
      * @param value Value.
      */
@@ -137,6 +141,7 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Value of the data.
+     *
      * @param codec Codec
      * @return Value
      */
@@ -146,6 +151,7 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Type of the data.
+     *
      * @return Type
      */
     String type() {
@@ -154,6 +160,7 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Check if the value fits into the double.
+     *
      * @return True if fits.
      */
     private boolean fits() {
@@ -163,6 +170,7 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * EO object.
+     *
      * @param base Base.
      * @param codec Codec to use for bytes encoding.
      * @return EO object directives.
@@ -178,6 +186,7 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * JEO object.
+     *
      * @param base Base.
      * @param codec Codec to use for bytes encoding.
      * @return JEO object directives.
@@ -193,6 +202,7 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * JEO number.
+     *
      * @param base Object base.
      * @param codec Codec to use for bytes encoding.
      * @return JEO number directives.
@@ -208,15 +218,16 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Boolean object.
+     *
      * @param type Type of the object, usually "bool".
      * @return Boolean object directives.
      */
     private Iterable<Directive> booleanObject(final String type) {
         final String base;
         if ((boolean) this.value.value()) {
-            base = "QQ.true";
+            base = "org.eolang.true";
         } else {
-            base = "QQ.false";
+            base = "org.eolang.false";
         }
         return new DirectivesJeoObject(
             type,
@@ -227,6 +238,7 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Bytes of the representative comment.
+     *
      * @return Sting comment.
      */
     private String comment() {

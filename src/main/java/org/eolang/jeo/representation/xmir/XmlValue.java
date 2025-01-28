@@ -94,7 +94,7 @@ public final class XmlValue {
      * @return Boolean.
      */
     private Object parseBoolean() {
-        return this.node.child("o").hasAttribute("base", "QQ.true");
+        return this.node.child("o").hasAttribute("base", "org.eolang.true");
     }
 
     /**
