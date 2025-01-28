@@ -77,7 +77,7 @@ public final class XmlValue {
     public Object object() {
         final String base = this.base();
         final Object res;
-        if (base.equals("bool")) {
+        if ("bool".equals(base)) {
             res = this.parseBoolean();
         } else {
             Codec codec = new EoCodec();
