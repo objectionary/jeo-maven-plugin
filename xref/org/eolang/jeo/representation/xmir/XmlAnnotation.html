@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * The MIT License (MIT)</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2024 Objectionary.com</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2025 Objectionary.com</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * Permission is hereby granted, free of charge, to any person obtaining a copy</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * of this software and associated documentation files (the "Software"), to deal</em>
@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">     * @return True if visible at runtime, false otherwise.</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> visible() {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlValue" href="../../../../../org/eolang/jeo/representation/xmir/XmlValue.html#XmlValue">XmlValue</a>(<strong class="jxr_keyword">this</strong>.child(1)).bool();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">boolean</strong>) <strong class="jxr_keyword">new</strong> <a name="XmlValue" href="../../../../../org/eolang/jeo/representation/xmir/XmlValue.html#XmlValue">XmlValue</a>(<strong class="jxr_keyword">this</strong>.child(1)).object();
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>      }
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>      <em class="jxr_javadoccomment">/**</em>

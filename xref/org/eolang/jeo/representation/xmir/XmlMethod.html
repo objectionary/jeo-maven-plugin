@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * The MIT License (MIT)</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2024 Objectionary.com</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2025 Objectionary.com</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * Permission is hereby granted, free of charge, to any person obtaining a copy</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * of this software and associated documentation files (the "Software"), to deal</em>
@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a>     <strong class="jxr_keyword">private</strong> <a name="BytecodeAttributes" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeAttributes.html#BytecodeAttributes">BytecodeAttributes</a> attrs() {
 <a class="jxr_linenumber" name="L160" href="#L160">160</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>             .filter(element -&gt; element.hasAttribute(<span class="jxr_string">"name"</span>, <span class="jxr_string">"local-variable-table"</span>))
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>             .filter(element -&gt; element.hasAttribute(<span class="jxr_string">"as"</span>, <span class="jxr_string">"local-variable-table"</span>))
 <a class="jxr_linenumber" name="L162" href="#L162">162</a>             .findFirst()
 <a class="jxr_linenumber" name="L163" href="#L163">163</a>             .map(XmlAttributes::<strong class="jxr_keyword">new</strong>)
 <a class="jxr_linenumber" name="L164" href="#L164">164</a>             .map(XmlAttributes::attributes)
@@ -181,7 +181,7 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="MethodName" href="../../../../../org/eolang/jeo/representation/MethodName.html#MethodName">MethodName</a>(
 <a class="jxr_linenumber" name="L174" href="#L174">174</a>             <strong class="jxr_keyword">new</strong> <a name="PrefixedName" href="../../../../../org/eolang/jeo/representation/PrefixedName.html#PrefixedName">PrefixedName</a>(
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>                 <strong class="jxr_keyword">new</strong> <a name="Signature" href="../../../../../org/eolang/jeo/representation/Signature.html#Signature">Signature</a>(
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>                     <strong class="jxr_keyword">this</strong>.node.attribute(<span class="jxr_string">"name"</span>)
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>                     <strong class="jxr_keyword">this</strong>.node.attribute(<span class="jxr_string">"as"</span>)
 <a class="jxr_linenumber" name="L177" href="#L177">177</a>                         .orElseThrow(
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>                             () -&gt; <strong class="jxr_keyword">new</strong> IllegalStateException(
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>                                 <span class="jxr_string">"Method 'name' attribute is not present"</span>
@@ -197,7 +197,7 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">     * @return Instructions.</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">private</strong> List&lt;XmlBytecodeEntry&gt; instructions() {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.child(<span class="jxr_string">"name"</span>, <span class="jxr_string">"body"</span>)
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.child(<span class="jxr_string">"as"</span>, <span class="jxr_string">"body"</span>)
 <a class="jxr_linenumber" name="L193" href="#L193">193</a>             .children()
 <a class="jxr_linenumber" name="L194" href="#L194">194</a>             .filter(element -&gt; element.attribute(<span class="jxr_string">"base"</span>).isPresent())
 <a class="jxr_linenumber" name="L195" href="#L195">195</a>             .map(XmlMethod::toEntry)
@@ -263,7 +263,7 @@
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">     * @return Access modifiers.</em>
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L257" href="#L257">257</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> access() {
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlValue" href="../../../../../org/eolang/jeo/representation/xmir/XmlValue.html#XmlValue">XmlValue</a>(<strong class="jxr_keyword">this</strong>.child(0)).integer();
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>         <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">int</strong>) <strong class="jxr_keyword">new</strong> <a name="XmlValue" href="../../../../../org/eolang/jeo/representation/xmir/XmlValue.html#XmlValue">XmlValue</a>(<strong class="jxr_keyword">this</strong>.child(0)).object();
 <a class="jxr_linenumber" name="L259" href="#L259">259</a>     }
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 
 <a class="jxr_linenumber" name="L261" href="#L261">261</a>     <em class="jxr_javadoccomment">/**</em>
@@ -301,7 +301,7 @@
 <a class="jxr_linenumber" name="L293" href="#L293">293</a>     <strong class="jxr_keyword">private</strong> List&lt;XmlTryCatchEntry&gt; trycatchEntries() {
 <a class="jxr_linenumber" name="L294" href="#L294">294</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
 <a class="jxr_linenumber" name="L295" href="#L295">295</a>             .filter(
-<a class="jxr_linenumber" name="L296" href="#L296">296</a>                 element -&gt; element.attribute(<span class="jxr_string">"name"</span>)
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>                 element -&gt; element.attribute(<span class="jxr_string">"as"</span>)
 <a class="jxr_linenumber" name="L297" href="#L297">297</a>                     .map(s -&gt; s.contains(<span class="jxr_string">"trycatchblocks"</span>))
 <a class="jxr_linenumber" name="L298" href="#L298">298</a>                     .orElse(false))
 <a class="jxr_linenumber" name="L299" href="#L299">299</a>             .flatMap(XmlNode::children)
@@ -316,7 +316,7 @@
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L309" href="#L309">309</a>     <strong class="jxr_keyword">private</strong> <a name="BytecodeAnnotations" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeAnnotations.html#BytecodeAnnotations">BytecodeAnnotations</a> annotations() {
 <a class="jxr_linenumber" name="L310" href="#L310">310</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>             .filter(element -&gt; element.hasAttribute(<span class="jxr_string">"name"</span>, <span class="jxr_string">"annotations"</span>))
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>             .filter(element -&gt; element.hasAttribute(<span class="jxr_string">"as"</span>, <span class="jxr_string">"annotations"</span>))
 <a class="jxr_linenumber" name="L312" href="#L312">312</a>             .findFirst()
 <a class="jxr_linenumber" name="L313" href="#L313">313</a>             .map(XmlAnnotations::<strong class="jxr_keyword">new</strong>)
 <a class="jxr_linenumber" name="L314" href="#L314">314</a>             .map(XmlAnnotations::bytecode)

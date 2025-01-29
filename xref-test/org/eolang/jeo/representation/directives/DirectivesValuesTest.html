@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * The MIT License (MIT)</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2024 Objectionary.com</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2025 Objectionary.com</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * Permission is hereby granted, free of charge, to any person obtaining a copy</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * of this software and associated documentation files (the "Software"), to deal</em>
@@ -52,8 +52,8 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>              <span class="jxr_string">"We expect that array of values will be converted to correct Xembly directives"</span>,
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>              <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesValues(<span class="jxr_string">"name"</span>, <span class="jxr_string">"value"</span>)).xml(),
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>              XhtmlMatchers.hasXPaths(
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>                  <span class="jxr_string">"./o[contains(@base,'seq.of1') and contains(@name,'name')]"</span>,
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>                  <span class="jxr_string">"./o[contains(@base,'seq.of1') and contains(@name,'name')]/o/o[@base='org.eolang.bytes' and text()='76-61-6C-75-65']"</span>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>                  <span class="jxr_string">"./o[contains(@base,'seq.of1') and contains(@as,'name')]"</span>,
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>                  <span class="jxr_string">"./o[contains(@base,'seq.of1') and contains(@as,'name')]/o/o[@base='org.eolang.bytes' and text()='76-61-6C-75-65']"</span>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>              )
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>          );
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      }
@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>                  <strong class="jxr_keyword">new</strong> Xembler(
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>                      <strong class="jxr_keyword">new</strong> DirectivesValues(<span class="jxr_string">""</span>, <span class="jxr_string">"some-value"</span>)
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>                  ).xmlQuietly()
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>              ).attribute(<span class="jxr_string">"name"</span>).orElseThrow(
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>              ).attribute(<span class="jxr_string">"as"</span>).orElseThrow(
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>                  () -&gt; <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Name attribute is absent"</span>)
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>              ),
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>              Matchers.matchesRegex(<span class="jxr_string">"^[^0-9].*"</span>)

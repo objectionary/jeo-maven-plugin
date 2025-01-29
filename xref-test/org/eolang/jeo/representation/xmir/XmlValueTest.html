@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * The MIT License (MIT)</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2024 Objectionary.com</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2025 Objectionary.com</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * Permission is hereby granted, free of charge, to any person obtaining a copy</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * of this software and associated documentation files (the "Software"), to deal</em>
@@ -53,9 +53,9 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>      @Test
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">void</strong> parsesHexStringAsInteger() {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> expected = 1057;
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> actual = <strong class="jxr_keyword">new</strong> XmlValue(
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>              <strong class="jxr_keyword">new</strong> NativeXmlNode(<span class="jxr_string">"&lt;o&gt;&lt;o&gt;00-00-00-00-00-00-04-21&lt;/o&gt;&lt;/o&gt;"</span>)
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>          ).integer();
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> actual = (<strong class="jxr_keyword">int</strong>) <strong class="jxr_keyword">new</strong> XmlValue(
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>              <strong class="jxr_keyword">new</strong> NativeXmlNode(<span class="jxr_string">"&lt;o base='jeo.int'&gt;&lt;o&gt;40-90-84-00-00-00-00-00&lt;/o&gt;&lt;/o&gt;"</span>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          ).object();
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>              String.format(
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>                  <span class="jxr_string">"Can't parse hex string as integer, or the result is wrong; expected %d, got %d"</span>,
@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>      }
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     * Arguments for {@link XmlValue#decodesEncodesCorrectly(Object, String)}.</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     * Arguments for {@link XmlValueTest#decodesEncodesCorrectly(Object)}.</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">     * @return Stream of arguments.</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>      <strong class="jxr_keyword">static</strong> Stream&lt;Arguments&gt; values() {

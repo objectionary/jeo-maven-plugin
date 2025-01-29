@@ -9,7 +9,7 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * The MIT License (MIT)</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2024 Objectionary.com</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Copyright (c) 2016-2025 Objectionary.com</em>
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> *</em>
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * Permission is hereby granted, free of charge, to any person obtaining a copy</em>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * of this software and associated documentation files (the "Software"), to deal</em>
@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>     <strong class="jxr_keyword">private</strong> Optional&lt;XmlAnnotations&gt; annotations() {
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>             .filter(o -&gt; o.hasAttribute(<span class="jxr_string">"name"</span>, <span class="jxr_string">"annotations"</span>))
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>             .filter(o -&gt; o.hasAttribute(<span class="jxr_string">"as"</span>, <span class="jxr_string">"annotations"</span>))
 <a class="jxr_linenumber" name="L137" href="#L137">137</a>             .findFirst()
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>             .map(XmlAnnotations::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>     }
@@ -183,7 +183,7 @@
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a>     <strong class="jxr_keyword">private</strong> Optional&lt;XmlAttributes&gt; attributes() {
 <a class="jxr_linenumber" name="L177" href="#L177">177</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
-<a class="jxr_linenumber" name="L178" href="#L178">178</a>             .filter(o -&gt; o.hasAttribute(<span class="jxr_string">"name"</span>, <span class="jxr_string">"attributes"</span>))
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>             .filter(o -&gt; o.hasAttribute(<span class="jxr_string">"as"</span>, <span class="jxr_string">"attributes"</span>))
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>             .findFirst()
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>             .map(XmlAttributes::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a>     }
