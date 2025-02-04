@@ -24,7 +24,8 @@
 
 def integrationTestCommand = "mvn invoker:run -Dinvoker.test=phi-unphi -DskipTests"
 profilerCommandBase = "/Users/lombrozo/Workspace/Tools/async-profiler-2.9-macos/profiler.sh"
-profilingDuration = 180
+profilingDuration = 1_000_000
+//profilingDuration = 180
 
 def executeCommand(String command, boolean wait = true) {
     def process = command.execute()
@@ -61,6 +62,7 @@ def getIntegrationTestPid() {
 def profileIntegrationTest(String pid) {
     def outputFilename = "flamegraph-phi-unphi-${pid}.html"
     def profilerCommand = "${profilerCommandBase} -d ${profilingDuration} -f ${outputFilename} ${pid}"
+//    def profilerCommand = "${profilerCommandBase} -f ${outputFilename} ${pid}"
     executeCommand(profilerCommand)
     println "Profiling completed. Output saved to ${outputFilename}"
 }
