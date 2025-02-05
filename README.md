@@ -366,12 +366,21 @@ To build the plugin from the source code, you need to clone the repository and
 run the following command:
 
 ```bash
-$ mvn clean install -Pqulice,long
+mvn clean install -Pqulice,long
 ```
 
 Pay attention to the `qulice` profile, which activates the static analysis
 tools. The `long` profile is optional and runs the full test suite, including
 long-running integration tests.
+
+
+## How to Run Benchmarks
+
+To run the benchmarks, you need to execute the following command:
+
+```bash
+mvn clean verify -Pbenchmark
+```
 
 ## How to Contribute
 
