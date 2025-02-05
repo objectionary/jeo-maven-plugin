@@ -1,4 +1,5 @@
 .DS_Store
+.env
 .idea
 target
 !src/it/eo-to-bytecode/target
