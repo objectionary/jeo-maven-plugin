@@ -382,6 +382,14 @@ To run the benchmarks, you need to execute the following command:
 mvn clean verify -Pbenchmark
 ```
 
+Before running the benchmarks, make sure you have the `.env` file in the root
+directory of the project. The file should contain the following environment
+variables:
+
+```bash
+PROFILER=/path/to/async-profiler/profiler.sh
+```
+
 ## How to Contribute
 
 Fork repository, make changes, then send us
