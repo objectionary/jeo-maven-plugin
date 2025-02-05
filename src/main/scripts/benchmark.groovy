@@ -27,9 +27,8 @@ profilerCommandBase = project.properties.getProperty("PROFILER") ?: System.getPr
 if (!profilerCommandBase) {
     throw new RuntimeException("Error: PROFILER is not set. Ensure it is defined in your .env file or provided as a system property (-Dprofiler.command).")
 }
-
-profilingDuration = 1_000_000
-//profilingDuration = 180
+durationProperty = project.properties.getProperty("DURATION")
+profilingDuration = durationProperty ? Integer.parseInt(durationProperty) : 1_000_000
 
 def executeCommand(String command, boolean wait = true) {
     def process = command.execute()
