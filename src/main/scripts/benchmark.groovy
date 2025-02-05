@@ -23,7 +23,11 @@
  */ // in seconds
 
 def integrationTestCommand = "mvn invoker:run -Dinvoker.test=phi-unphi -DskipTests"
-profilerCommandBase = "/Users/lombrozo/Workspace/Tools/async-profiler-2.9-macos/profiler.sh"
+profilerCommandBase = project.properties.getProperty("PROFILER") ?: System.getProperty("profiler.command")
+if (!profilerCommandBase) {
+    throw new RuntimeException("Error: PROFILER is not set. Ensure it is defined in your .env file or provided as a system property (-Dprofiler.command).")
+}
+
 profilingDuration = 1_000_000
 //profilingDuration = 180
 
