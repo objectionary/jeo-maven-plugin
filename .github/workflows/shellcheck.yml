@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-name: xcop
+name: shellcheck
 'on':
   push:
     branches:
@@ -29,8 +29,9 @@ name: xcop
     branches:
       - master
 jobs:
-  xcop:
+  shellcheck:
+    timeout-minutes: 15
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: g4s8/xcop-action@v1.3
+      - uses: ludeeus/action-shellcheck@master

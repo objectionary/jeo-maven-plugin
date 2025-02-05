@@ -20,30 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-name: up
+name: xcop
 'on':
   push:
     branches:
       - master
-    tags:
-      - '*'
-concurrency:
-  group: up-${{ github.ref }}
-  cancel-in-progress: true
+  pull_request:
+    branches:
+      - master
 jobs:
-  up:
+  xcop:
+    timeout-minutes: 15
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - run: |-
-          git fetch --tags --force && \
-          latest=$(git tag --sort=creatordate | tail -1) && \
-          sed -E -i "s/<version>[^<]+/<version>${latest}/g" README.md
-      - uses: peter-evans/create-pull-request@v7
-        with:
-          branch: version-up
-          commit-message: 'chore: new version in README'
-          delete-branch: true
-          title: 'chore: New version in README'
-          assignees: volodya-lombrozo
-          base: master
+      - uses: g4s8/xcop-action@v1.3
