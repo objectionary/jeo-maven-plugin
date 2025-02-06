@@ -257,7 +257,7 @@ public final class XmlMethod {
      * @return Access modifiers.
      */
     private int access() {
-        return (int) new XmlValue(this.child(0)).object();
+        return (int) new XmlValue(this.child("access")).object();
     }
 
     /**
@@ -266,7 +266,7 @@ public final class XmlMethod {
      * @return Descriptor.
      */
     private String descriptor() {
-        return new XmlValue(this.child(1)).string();
+        return new XmlValue(this.child("descriptor")).string();
     }
 
     /**
@@ -275,16 +275,26 @@ public final class XmlMethod {
      * @return Signature.
      */
     private String signature() {
-        return new XmlValue(this.child(2)).string();
+        return new XmlValue(this.child("signature")).string();
     }
 
     /**
-     * Get child by index.
-     * @param index Index.
+     * Get child by name.
+     * @param name Name.
      * @return Child.
      */
-    private XmlNode child(final int index) {
-        return this.node.children().collect(Collectors.toList()).get(index);
+    private XmlNode child(final String name) {
+        return this.node.children()
+            .filter(Filter.attrContains("as", name))
+            .findFirst().orElseThrow(
+                () -> new IllegalStateException(
+                    String.format(
+                        "Method '%s' doesn't have '%s' child",
+                        this.name(),
+                        name
+                    )
+                )
+            );
     }
 
     /**
@@ -343,7 +353,7 @@ public final class XmlMethod {
      * @return Exceptions.
      */
     private String[] exceptions() {
-        return this.child(3)
+        return this.child("exceptions")
             .children()
             .map(XmlValue::new)
             .map(XmlValue::string)
