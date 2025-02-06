@@ -284,17 +284,21 @@ public final class XmlMethod {
      * @return Child.
      */
     private XmlNode child(final String name) {
+        return this.ochild(name).orElseThrow(
+            () -> new IllegalStateException(
+                String.format(
+                    "Method '%s' doesn't have '%s' child",
+                    this.name(),
+                    name
+                )
+            )
+        );
+    }
+
+    private Optional<XmlNode> ochild(final String name) {
         return this.node.children()
             .filter(Filter.attrContains("as", name))
-            .findFirst().orElseThrow(
-                () -> new IllegalStateException(
-                    String.format(
-                        "Method '%s' doesn't have '%s' child",
-                        this.name(),
-                        name
-                    )
-                )
-            );
+            .findFirst();
     }
 
     /**
@@ -353,8 +357,9 @@ public final class XmlMethod {
      * @return Exceptions.
      */
     private String[] exceptions() {
-        return this.child("exceptions")
-            .children()
+        return this.ochild("exceptions")
+            .map(XmlNode::children)
+            .orElse(Stream.empty())
             .map(XmlValue::new)
             .map(XmlValue::string)
             .toArray(String[]::new);
