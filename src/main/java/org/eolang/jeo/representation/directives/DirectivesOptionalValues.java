@@ -52,6 +52,7 @@ final class DirectivesOptionalValues implements Iterable<Directive> {
      * @param name Name of the tuple.
      * @param values Values.
      */
+    @SafeVarargs
     @SuppressWarnings("PMD.ArrayIsStoredDirectly")
     DirectivesOptionalValues(final String name, final Object... values) {
         this.name = name;
