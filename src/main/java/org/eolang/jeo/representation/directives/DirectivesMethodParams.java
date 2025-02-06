@@ -58,7 +58,8 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesJeoObject(
+        return new DirectivesOptionalJeoObject(
+            "params",
             "params",
             this.params.stream().map(Directives::new).collect(Collectors.toList())
         ).iterator();
