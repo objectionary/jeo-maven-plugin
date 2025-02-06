@@ -28,8 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.cactoos.scalar.LengthOf;
-import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.Signature;
@@ -182,26 +180,4 @@ public final class DirectivesMethod implements Iterable<Directive> {
         ).iterator();
     }
 
-    private static class DirectivesOptionalSeq implements Iterable<Directive> {
-
-        private final String name;
-        private final List<? extends Iterable<Directive>> original;
-
-        private DirectivesOptionalSeq(
-            final String name,
-            final List<? extends Iterable<Directive>> elements
-        ) {
-            this.name = name;
-            this.original = elements;
-        }
-
-        @Override
-        public Iterator<Directive> iterator() {
-            if (this.original.isEmpty()) {
-                return new Directives().iterator();
-            } else {
-                return new DirectivesSeq(this.name, this.original).iterator();
-            }
-        }
-    }
 }

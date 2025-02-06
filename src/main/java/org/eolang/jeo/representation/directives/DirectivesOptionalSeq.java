@@ -23,58 +23,30 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
-/**
- * Directives for attributes.
- * @since 0.4
- */
-public final class DirectivesAttributes implements Iterable<Directive> {
+class DirectivesOptionalSeq implements Iterable<Directive> {
 
-    /**
-     * Name.
-     */
     private final String name;
+    private final List<? extends Iterable<Directive>> original;
 
-    /**
-     * Attributes.
-     */
-    private final List<DirectivesAttribute> attributes;
-
-    /**
-     * Constructor.
-     * @param attributes Separate attributes.
-     */
-    public DirectivesAttributes(final List<DirectivesAttribute> attributes) {
-        this("attributes", attributes);
-    }
-
-    public DirectivesAttributes(final String name, final List<DirectivesAttribute> attributes) {
+    DirectivesOptionalSeq(
+        final String name,
+        final List<? extends Iterable<Directive>> elements
+    ) {
         this.name = name;
-        this.attributes = attributes;
-    }
-
-    /**
-     * Constructor.
-     */
-    DirectivesAttributes() {
-        this(new ArrayList<>(0));
-    }
-
-    /**
-     * Constructor.
-     * @param attributes Attributes.
-     */
-    DirectivesAttributes(final DirectivesAttribute... attributes) {
-        this(Arrays.asList(attributes));
+        this.original = elements;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesOptionalSeq(this.name, this.attributes).iterator();
+        if (this.original.isEmpty()) {
+            return new Directives().iterator();
+        } else {
+            return new DirectivesSeq(this.name, this.original).iterator();
+        }
     }
 }

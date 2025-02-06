@@ -25,9 +25,11 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
+import java.util.Collections;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
+import org.eolang.jeo.representation.bytecode.InnerClass;
 import org.eolang.jeo.representation.xmir.NativeXmlNode;
 import org.eolang.jeo.representation.xmir.XmlClass;
 import org.hamcrest.MatcherAssert;
@@ -48,7 +50,16 @@ final class DirectivesClassTest {
         MatcherAssert.assertThat(
             "Can't create class with simple constructor",
             new Xembler(
-                new DirectivesClass(new ClassName("Neo"), new DirectivesClassProperties()),
+                new DirectivesClass(
+                    new ClassName("Neo"),
+                    new DirectivesClassProperties(),
+                    Collections.emptyList(),
+                    Collections.emptyList(),
+                    new DirectivesAnnotations(),
+                    new DirectivesAttributes(
+                        new InnerClass("Inner", "Outer", "Inner", 0).directives()
+                    )
+                ),
                 new Transformers.Node()
             ).xml(),
             XhtmlMatchers.hasXPaths(

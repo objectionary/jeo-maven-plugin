@@ -194,9 +194,6 @@ public final class XmlMethod {
             .findFirst()
             .map(XmlNode::children)
             .orElse(Stream.empty())
-//            .child("as", "body")
-//            .children()
-//            .filter(element -> element.attribute("base").isPresent())
             .map(XmlMethod::toEntry)
             .collect(Collectors.toList());
     }
