@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.MethodName;
@@ -189,9 +190,13 @@ public final class XmlMethod {
      * @return Instructions.
      */
     private List<XmlBytecodeEntry> instructions() {
-        return this.node.child("as", "body")
-            .children()
-            .filter(element -> element.attribute("base").isPresent())
+        return this.node.children().filter(Filter.attrContains("as", "body"))
+            .findFirst()
+            .map(XmlNode::children)
+            .orElse(Stream.empty())
+//            .child("as", "body")
+//            .children()
+//            .filter(element -> element.attribute("base").isPresent())
             .map(XmlMethod::toEntry)
             .collect(Collectors.toList());
     }

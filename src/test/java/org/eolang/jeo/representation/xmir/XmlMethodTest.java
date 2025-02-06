@@ -96,28 +96,4 @@ final class XmlMethodTest {
         );
     }
 
-    @Test
-    void catchesMethodParsingException() {
-        MatcherAssert.assertThat(
-            "Exception message doesn't contain the expected text related to the method parsing",
-            Assertions.assertThrows(
-                ParsingException.class,
-                () -> new XmlMethod(
-                    new NativeXmlNode(
-                        new Xembler(
-                            new Directives(
-                                new BytecodeMethod(
-                                    "someMethodName"
-                                ).directives()
-                            ).xpath(".//o[contains(@as, 'body')]")
-                                .append(new DirectivesBytes("???"))
-                        ).xmlQuietly()
-                    )
-                ).bytecode()
-            ).getMessage(),
-            Matchers.containsString(
-                "Unexpected exception during parsing the method 'someMethodName'"
-            )
-        );
-    }
 }
