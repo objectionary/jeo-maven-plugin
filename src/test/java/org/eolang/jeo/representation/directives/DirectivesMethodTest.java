@@ -108,7 +108,6 @@ final class DirectivesMethodTest {
     @Test
     void createsEmptyXmirIfMethodIsEmpty() {
         final String xml = new Xembler(new DirectivesMethod("foo")).xmlQuietly();
-        System.out.println(xml);
         MatcherAssert.assertThat(
             String.format(
                 "We expect that empty method won't contain any redundant directives, generated: %n%s%n",
@@ -118,7 +117,9 @@ final class DirectivesMethodTest {
             Matchers.not(
                 Matchers.anyOf(
                     XhtmlMatchers.hasXPath("./o[contains(@base,'method')]/o[contains(@as,'body')]"),
-                    XhtmlMatchers.hasXPath("./o[contains(@base,'method')]/o[contains(@as,'exceptions')]"),
+                    XhtmlMatchers.hasXPath(
+                        "./o[contains(@base,'method')]/o[contains(@as,'exceptions')]"
+                    ),
                     XhtmlMatchers.hasXPath(
                         "./o[contains(@base,'method')]/o[contains(@as,'params')]"
                     ),
@@ -131,10 +132,8 @@ final class DirectivesMethodTest {
                     XhtmlMatchers.hasXPath(
                         "./o[contains(@base,'method')]/o[contains(@as,'attributes')]"
                     )
-
                 )
             )
-
         );
     }
 }

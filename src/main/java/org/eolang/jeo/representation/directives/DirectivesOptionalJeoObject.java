@@ -23,14 +23,19 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
-public final class DirectivesOptionalJeoObject implements Iterable<Directive> {
+/**
+ * Optional directives sequence.
+ * If the original sequence is empty, it returns nothing.
+ * In opposite, {@link DirectivesSeq}, in this case, returns an empty sequence.
+ *
+ * @since 0.8
+ */
+final class DirectivesOptionalJeoObject implements Iterable<Directive> {
 
     /**
      * The base of the object.
@@ -50,57 +55,10 @@ public final class DirectivesOptionalJeoObject implements Iterable<Directive> {
     /**
      * Constructor.
      * @param base The base of the object.
-     * @param inner Inner components.
-     */
-    @SafeVarargs
-    public DirectivesOptionalJeoObject(final String base, final Iterable<Directive>... inner) {
-        this(base, Arrays.stream(inner).map(Directives::new).collect(Collectors.toList()));
-    }
-
-    /**
-     * Constructor.
-     * @param base The base of the object.
-     * @param inner Inner components.
-     */
-    public DirectivesOptionalJeoObject(final String base, final Directives... inner) {
-        this(base, Arrays.asList(inner));
-    }
-
-    /**
-     * Constructor.
-     * @param base The base of the object.
-     * @param inner Inner components.
-     */
-    public DirectivesOptionalJeoObject(final String base, final List<Directives> inner) {
-        this(base, "", inner);
-    }
-
-    /**
-     * Constructor.
-     * @param base The base of the object.
      * @param name The name of the object.
      * @param inner Inner components.
      */
-    @SafeVarargs
-    public DirectivesOptionalJeoObject(
-        final String base, final String name, final Iterable<Directive>... inner
-    ) {
-        this(base, name, Arrays.stream(inner).map(Directives::new).collect(Collectors.toList()));
-    }
-
-    /**
-     * Constructor.
-     * @param base The base of the object.
-     * @param name The name of the object.
-     * @param inner Inner components.
-     */
-    public DirectivesOptionalJeoObject(
-        final String base, final String name, final Directives... inner
-    ) {
-        this(base, name, Arrays.asList(inner));
-    }
-
-    public DirectivesOptionalJeoObject(
+    DirectivesOptionalJeoObject(
         final String base, final String name, final List<Directives> inner
     ) {
         this.base = base;
@@ -110,9 +68,12 @@ public final class DirectivesOptionalJeoObject implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
+        final Iterator<Directive> result;
         if (this.inner.isEmpty()) {
-            return new Directives().iterator();
+            result = new Directives().iterator();
+        } else {
+            result = new DirectivesJeoObject(this.base, this.name, this.inner).iterator();
         }
-        return new DirectivesJeoObject(this.base, this.name, this.inner).iterator();
+        return result;
     }
 }

@@ -26,6 +26,7 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
@@ -190,7 +191,7 @@ public final class XmlMethod {
      * @return Instructions.
      */
     private List<XmlBytecodeEntry> instructions() {
-        return this.node.children().filter(Filter.attrContains("as", "body"))
+        return this.node.children().filter(XmlMethod.attrContains("as", "body"))
             .findFirst()
             .map(XmlNode::children)
             .orElse(Stream.empty())
@@ -295,9 +296,14 @@ public final class XmlMethod {
         );
     }
 
+    /**
+     * Get optional child by name.
+     * @param name Name.
+     * @return Optional child.
+     */
     private Optional<XmlNode> ochild(final String name) {
         return this.node.children()
-            .filter(Filter.attrContains("as", name))
+            .filter(XmlMethod.attrContains("as", name))
             .findFirst();
     }
 
@@ -401,5 +407,15 @@ public final class XmlMethod {
                 new Transformers.Node()
             ).xmlQuietly()
         );
+    }
+
+    /**
+     * Predicate that checks if the attribute contains the value.
+     * @param name Attribute name.
+     * @param value Value to check.
+     * @return Predicate.
+     */
+    private static Predicate<XmlNode> attrContains(final String name, final String value) {
+        return node -> node.attribute(name).map(v -> v.contains(value)).orElse(false);
     }
 }

@@ -26,14 +26,10 @@ package org.eolang.jeo.representation.xmir;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
-import org.eolang.jeo.representation.directives.DirectivesBytes;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
-import org.xembly.Directives;
-import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlMethod}.
