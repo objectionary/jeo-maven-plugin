@@ -108,7 +108,7 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesSeq(this.name, this.annotations).iterator();
+        return new DirectivesOptionalSeq(this.name, this.annotations).iterator();
     }
 
     /**

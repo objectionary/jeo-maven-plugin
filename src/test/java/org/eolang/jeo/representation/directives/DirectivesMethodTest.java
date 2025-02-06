@@ -119,6 +119,9 @@ final class DirectivesMethodTest {
                 Matchers.anyOf(
                     XhtmlMatchers.hasXPath("./o[contains(@base,'method')]/o[contains(@as,'body')]"),
                     XhtmlMatchers.hasXPath(
+                        "./o[contains(@base,'method')]/o[contains(@as,'annotations')]"
+                    ),
+                    XhtmlMatchers.hasXPath(
                         "./o[contains(@base,'method')]/o[contains(@as,'trycatchblocks')]"
                     ),
                     XhtmlMatchers.hasXPath(

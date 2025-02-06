@@ -55,7 +55,9 @@ final class DirectivesClassTest {
                     new DirectivesClassProperties(),
                     Collections.emptyList(),
                     Collections.emptyList(),
-                    new DirectivesAnnotations(),
+                    new DirectivesAnnotations(
+                        "annotations", new DirectivesAnnotation("Override", true)
+                    ),
                     new DirectivesAttributes(
                         new InnerClass("Inner", "Outer", "Inner", 0).directives()
                     )
