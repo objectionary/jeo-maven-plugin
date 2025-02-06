@@ -64,6 +64,7 @@ public final class DirectivesMaxs implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "maxs",
+            "maxs",
             new DirectivesValue(this.stack),
             new DirectivesValue(this.locals)
         ).iterator();

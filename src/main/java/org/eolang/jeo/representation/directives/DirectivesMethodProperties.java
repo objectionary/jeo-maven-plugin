@@ -126,10 +126,10 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         return new Directives()
-            .append(new DirectivesValue(this.access))
-            .append(new DirectivesValue(this.descriptor))
-            .append(new DirectivesValue(this.signature))
-            .append(new DirectivesValues(this.exceptions))
+            .append(new DirectivesValue("access", this.access))
+            .append(new DirectivesValue("descriptor", this.descriptor))
+            .append(new DirectivesValue("signature", this.signature))
+            .append(new DirectivesValues("exceptions", this.exceptions))
             .append(this.max.get())
             .append(this.params)
             .iterator();
