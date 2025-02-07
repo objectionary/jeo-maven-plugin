@@ -435,7 +435,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         static Stream<String> checks(final String root) {
             return Stream.of(
                 String.format(
-                    "%s/o[contains(@base,'seq') and contains(@as,'body')]/o[contains(@base,'label')]/o[@base='org.eolang.bytes']/@base",
+                    "%s/o[contains(@base,'seq') and contains(@as,'body')]/o[contains(@base,'label')]/o[contains(@base, 'org.eolang.bytes')]/@base",
                     root
                 )
             );

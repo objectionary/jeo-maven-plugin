@@ -41,7 +41,7 @@ final class DirectivesNumberTest {
             new Xembler(new DirectivesNumber("42")).xmlQuietly(),
             XhtmlMatchers.hasXPaths(
                 "/o[@base='org.eolang.number']",
-                "/o[@base='org.eolang.number']/o[@base='org.eolang.bytes' and text()='42']"
+                "/o[@base='org.eolang.number']/o[contains(@base, 'org.eolang.bytes') and text()='42']"
             )
         );
     }
