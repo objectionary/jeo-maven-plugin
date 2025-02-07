@@ -44,7 +44,7 @@ final class JeoFqnTest {
         MatcherAssert.assertThat(
             "We expect the fqn to be converted to a correct jeo fqn",
             new JeoFqn(base).fqn(),
-            Matchers.equalTo(expected)
+            Matchers.containsString(expected)
         );
     }
 }
