@@ -168,11 +168,7 @@ public final class CanonicalXmir {
                             )
                         )
                     ),
-                    new TrClasspath<Shift>(
-                        "/org/eolang/parser/remove-cuts.xsl",
-                        "/org/eolang/parser/shake/add-default-package.xsl",
-                        "/org/eolang/parser/shake/explicit-data.xsl"
-                    ).back()
+                    new TrClasspath<Shift>("/org/eolang/parser/remove-cuts.xsl").back()
                 ),
                 CanonicalXmir.class,
                 5

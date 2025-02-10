@@ -50,7 +50,7 @@ final class DirectivesNumber implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new Directives()
             .add("o")
-            .attr("base", "org.eolang.number")
+            .attr("base", new EoFqn("number").fqn())
             .append(new DirectivesBytes(this.hex))
             .up()
             .iterator();

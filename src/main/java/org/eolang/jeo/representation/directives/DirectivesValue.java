@@ -225,9 +225,9 @@ public final class DirectivesValue implements Iterable<Directive> {
     private Iterable<Directive> booleanObject(final String type) {
         final String base;
         if ((boolean) this.value.value()) {
-            base = "org.eolang.true";
+            base = new EoFqn("true").fqn();
         } else {
-            base = "org.eolang.false";
+            base = new EoFqn("false").fqn();
         }
         return new DirectivesJeoObject(
             type,

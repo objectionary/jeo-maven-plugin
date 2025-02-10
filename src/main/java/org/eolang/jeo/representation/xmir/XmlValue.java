@@ -28,6 +28,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeBytes;
 import org.eolang.jeo.representation.bytecode.Codec;
 import org.eolang.jeo.representation.bytecode.EoCodec;
 import org.eolang.jeo.representation.bytecode.PlainLongCodec;
+import org.eolang.jeo.representation.directives.EoFqn;
 
 /**
  * XML value.
@@ -81,7 +82,7 @@ public final class XmlValue {
             res = this.parseBoolean();
         } else {
             Codec codec = new EoCodec();
-            if (!this.node.child("o").hasAttribute("base", "org.eolang.number")) {
+            if (!this.node.child("o").hasAttribute("base", new EoFqn("number").fqn())) {
                 codec = new PlainLongCodec(codec);
             }
             res = new BytecodeBytes(base, this.bytes()).object(codec);
@@ -94,7 +95,7 @@ public final class XmlValue {
      * @return Boolean.
      */
     private Object parseBoolean() {
-        return this.node.child("o").hasAttribute("base", "org.eolang.true");
+        return this.node.child("o").hasAttribute("base", new EoFqn("true").fqn());
     }
 
     /**
