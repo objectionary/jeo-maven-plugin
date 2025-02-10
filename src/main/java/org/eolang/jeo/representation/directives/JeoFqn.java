@@ -58,7 +58,7 @@ public final class JeoFqn {
      * @return Fully qualified name.
      */
     public String fqn() {
-        return String.format(".jeo.%s", this.base);
+        return String.format("Q.jeo.%s", this.base);
     }
 
     @Override
