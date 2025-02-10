@@ -61,7 +61,7 @@ final class DirectivesValueTest {
             ),
             xml,
             XhtmlMatchers.hasXPath(
-                "./o[contains(@base,'jeo.int') and @as='access']/o[@base='org.eolang.number']/o[contains(@base, 'org.eolang.bytes')]/text()"
+                "./o[contains(@base,'jeo.int') and @as='access']/o[contains(@base,'number')]/o[contains(@base, 'bytes')]/text()"
             )
         );
     }
@@ -78,7 +78,7 @@ final class DirectivesValueTest {
             xml,
             XhtmlMatchers.hasXPath(
                 String.format(
-                    "./o[contains(@base,'%s') and @as='access']/o[@base='org.eolang.number']/o[contains(@base,'org.eolang.bytes') and text()='%s']",
+                    "./o[contains(@base,'%s') and @as='access']/o[contains(@base,'number')]/o[contains(@base,'bytes') and text()='%s']",
                     base,
                     bytes
                 )
