@@ -92,11 +92,20 @@ public final class DirectivesFrame implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "frame",
-            new DirectivesValue(this.type),
-            new DirectivesValue(this.nlocal),
-            new DirectivesValues(this.locals),
-            new DirectivesValue(this.nstack),
-            new DirectivesValues(this.stack)
+            new DirectivesValue(this.name("type"), this.type),
+            new DirectivesValue(this.name("nlocal"), this.nlocal),
+            new DirectivesValues(this.name("locals"), this.locals),
+            new DirectivesValue(this.name("nstack"), this.nstack),
+            new DirectivesValues(this.name("stack"), this.stack)
         ).iterator();
+    }
+
+    /**
+     * Attribute name.
+     * @param attribute Attribute name.
+     * @return Attribute name.
+     */
+    private String name(final String attribute) {
+        return String.format("%s-%d", attribute, this.hashCode());
     }
 }

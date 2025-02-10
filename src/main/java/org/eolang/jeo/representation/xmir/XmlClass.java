@@ -152,7 +152,7 @@ public final class XmlClass {
      */
     private List<XmlMethod> methods() {
         return this.node.children()
-            .filter(o -> o.attribute("base").map("jeo.method"::equals).orElse(false))
+            .filter(o -> o.attribute("base").map(s -> s.contains("method")).orElse(false))
             .map(XmlMethod::new)
             .collect(Collectors.toList());
     }

@@ -25,7 +25,6 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.stream.Stream;
-import org.eolang.jeo.matchers.SameXml;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.Codec;
 import org.eolang.jeo.representation.bytecode.JavaCodec;
@@ -62,7 +61,7 @@ final class DirectivesValueTest {
             ),
             xml,
             XhtmlMatchers.hasXPath(
-                "./o[@base='jeo.int' and @as='access']/o[@base='org.eolang.number']/o[@base='org.eolang.bytes']/text()"
+                "./o[contains(@base,'jeo.int') and @as='access']/o[contains(@base,'number')]/o[contains(@base, 'bytes')]/text()"
             )
         );
     }
@@ -79,7 +78,7 @@ final class DirectivesValueTest {
             xml,
             XhtmlMatchers.hasXPath(
                 String.format(
-                    "./o[@base='%s' and @as='access']/o[@base='org.eolang.number']/o[@base='org.eolang.bytes' and text()='%s']",
+                    "./o[contains(@base,'%s') and @as='access']/o[contains(@base,'number')]/o[contains(@base,'bytes') and text()='%s']",
                     base,
                     bytes
                 )
@@ -97,8 +96,8 @@ final class DirectivesValueTest {
                 ),
                 new Transformers.Node()
             ).xml(),
-            new SameXml(
-                "<o base='jeo.label'><o base='org.eolang.bytes'>73-6F-6D-65-2D-72-61-6E-64-6F-6D</o></o>"
+            XhtmlMatchers.hasXPath(
+                "./o[contains(@base,'jeo.label')]/o[contains(@base,'org.eolang.bytes') and text()='73-6F-6D-65-2D-72-61-6E-64-6F-6D']"
             )
         );
     }
@@ -108,7 +107,9 @@ final class DirectivesValueTest {
         MatcherAssert.assertThat(
             "Converts boolean to XML",
             new Xembler(new DirectivesValue(true)).xmlQuietly(),
-            new SameXml("<o base='jeo.bool'><o base='org.eolang.true'></o></o>")
+            XhtmlMatchers.hasXPath(
+                "./o[contains(@base,'jeo.bool')]/o[contains(@base,'org.eolang.true')]"
+            )
         );
     }
 

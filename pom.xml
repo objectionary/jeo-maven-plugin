@@ -123,7 +123,7 @@ SOFTWARE.
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>lints</artifactId>
-      <version>0.0.33</version>
+      <version>0.0.38</version>
     </dependency>
     <dependency>
       <groupId>org.cactoos</groupId>
@@ -195,7 +195,7 @@ SOFTWARE.
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.50.2</version>
+      <version>0.51.2</version>
     </dependency>
     <dependency>
       <groupId>com.github.volodya-lombrozo</groupId>

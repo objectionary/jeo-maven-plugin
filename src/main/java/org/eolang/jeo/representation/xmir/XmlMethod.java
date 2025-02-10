@@ -223,7 +223,11 @@ public final class XmlMethod {
      * @return Maxs.
      */
     private Optional<XmlMaxs> maxs() {
-        return this.node.optchild("base", "jeo.maxs").map(XmlMaxs::new);
+        return this.node
+            .children().filter(
+                element -> element.attribute("as").map(s -> s.contains("maxs")).orElse(false)
+            ).findFirst()
+            .map(XmlMaxs::new);
     }
 
     /**
