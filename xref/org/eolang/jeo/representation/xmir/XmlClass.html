@@ -160,7 +160,7 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L153" href="#L153">153</a>     <strong class="jxr_keyword">private</strong> List&lt;XmlMethod&gt; methods() {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>             .filter(o -&gt; o.attribute(<span class="jxr_string">"base"</span>).map(<span class="jxr_string">"jeo.method"</span>::equals).orElse(false))
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>             .filter(o -&gt; o.attribute(<span class="jxr_string">"base"</span>).map(s -&gt; s.contains(<span class="jxr_string">"method"</span>)).orElse(false))
 <a class="jxr_linenumber" name="L156" href="#L156">156</a>             .map(XmlMethod::<strong class="jxr_keyword">new</strong>)
 <a class="jxr_linenumber" name="L157" href="#L157">157</a>             .collect(Collectors.toList());
 <a class="jxr_linenumber" name="L158" href="#L158">158</a>     }

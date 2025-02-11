@@ -100,14 +100,23 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a>(
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>              <span class="jxr_string">"frame"</span>,
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>              <strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.type),
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>              <strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.nlocal),
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>              <strong class="jxr_keyword">new</strong> <a name="DirectivesValues" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValues.html#DirectivesValues">DirectivesValues</a>(<strong class="jxr_keyword">this</strong>.locals),
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>              <strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.nstack),
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>              <strong class="jxr_keyword">new</strong> <a name="DirectivesValues" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValues.html#DirectivesValues">DirectivesValues</a>(<strong class="jxr_keyword">this</strong>.stack)
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>              <strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.name(<span class="jxr_string">"type"</span>), <strong class="jxr_keyword">this</strong>.type),
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>              <strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.name(<span class="jxr_string">"nlocal"</span>), <strong class="jxr_keyword">this</strong>.nlocal),
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>              <strong class="jxr_keyword">new</strong> <a name="DirectivesValues" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValues.html#DirectivesValues">DirectivesValues</a>(<strong class="jxr_keyword">this</strong>.name(<span class="jxr_string">"locals"</span>), <strong class="jxr_keyword">this</strong>.locals),
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>              <strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.name(<span class="jxr_string">"nstack"</span>), <strong class="jxr_keyword">this</strong>.nstack),
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>              <strong class="jxr_keyword">new</strong> <a name="DirectivesValues" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValues.html#DirectivesValues">DirectivesValues</a>(<strong class="jxr_keyword">this</strong>.name(<span class="jxr_string">"stack"</span>), <strong class="jxr_keyword">this</strong>.stack)
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>         ).iterator();
 <a class="jxr_linenumber" name="L101" href="#L101">101</a>     }
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> }
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">     * Attribute name.</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">     * @param attribute Attribute name.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">     * @return Attribute name.</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>     <strong class="jxr_keyword">private</strong> String name(<strong class="jxr_keyword">final</strong> String attribute) {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>         <strong class="jxr_keyword">return</strong> String.format(<span class="jxr_string">"%s-%d"</span>, attribute, <strong class="jxr_keyword">this</strong>.hashCode());
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>     }
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2023&#x2013;2025 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
