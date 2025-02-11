@@ -20,40 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-name: mvn
-'on':
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-jobs:
-  test:
-    strategy:
-      matrix:
-        os: [ ubuntu-24.04, macos-15, windows-2022 ]
-        java: [ 11, 21 ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: ${{ matrix.java }}
-      - uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}
-            -jdk-${{ matrix.java }}
-            -maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
-      - run: mvn clean install -P"qulice,long" --errors --batch-mode
-      - name: Archive failure logs
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: build-log-files
-          path: |
-            target/
+
+extends: default
+
+rules:
+  line-length: disable
+  brackets:
+    min-spaces-inside: 1
+    max-spaces-inside: 2
+  truthy:
+    level: warning
+    allowed-values: [ 'on', 'true', 'false', 'yes', 'no' ]
