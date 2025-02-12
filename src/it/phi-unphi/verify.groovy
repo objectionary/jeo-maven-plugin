@@ -94,7 +94,6 @@ private void copyAll(final String subpath) {
     copy('target/generated-sources/jeo-disassemble/' + subpath + ".xmir", name + '.xmir.disassemble.txt')
     copy('target/generated-sources/eo-phi/' + subpath + ".phi", name + '.phi.txt')
     copy('target/generated-sources/eo-unphi/' + subpath + '.xmir', name + '.xmir.unphi.txt')
-    copy('target/generated-sources/jeo-unroll/' + subpath + '.xmir', name + '.xmir.unroll.txt')
 }
 
 private void copy(final String source, final String destination) {
