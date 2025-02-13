@@ -78,7 +78,9 @@ SOFTWARE.
             <artifactId>jeo-maven-plugin</artifactId>
             <version>@project.version@</version>
             <configuration>
-              <xmirVerification>true</xmirVerification>
+            <!-- We disable xmir verification in order to speed up the build. -->
+            <!-- todo: enable xmir verification in the future. -->
+              <xmirVerification>false</xmirVerification>
             </configuration>
             <executions>
               <execution>

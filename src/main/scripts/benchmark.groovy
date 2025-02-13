@@ -22,7 +22,8 @@
  * SOFTWARE.
  */ // in seconds
 
-def integrationTestCommand = "mvn invoker:run -Dinvoker.test=phi-unphi -DskipTests"
+test = "jna"
+def integrationTestCommand = "mvn invoker:run -Dinvoker.test=${test} -DskipTests"
 profilerCommandBase = project.properties.getProperty("PROFILER") ?: System.getProperty("profiler.command")
 if (!profilerCommandBase) {
     throw new RuntimeException("Error: PROFILER is not set. Ensure it is defined in your .env file or provided as a system property (-Dprofiler.command).")
@@ -54,7 +55,7 @@ def waitForLogMessage(def process, String message) {
 def getIntegrationTestPid() {
     def processListCommand = "jps -lv"
     def processOutput = processListCommand.execute().text
-    def matchingLine = processOutput.split("\n").find { it.contains("phi-unphi") }
+    def matchingLine = processOutput.split("\n").find { it.contains("target/it/${test}") }
     if (matchingLine) {
         return matchingLine.split(" ")[0].trim()
     } else {
@@ -63,7 +64,7 @@ def getIntegrationTestPid() {
 }
 
 def profileIntegrationTest(String pid) {
-    def outputFilename = "flamegraph-phi-unphi-${pid}.html"
+    def outputFilename = "flamegraph-${test}-${pid}.html"
     def profilerCommand = "${profilerCommandBase} -d ${profilingDuration} -f ${outputFilename} ${pid}"
 //    def profilerCommand = "${profilerCommandBase} -f ${outputFilename} ${pid}"
     executeCommand(profilerCommand)
@@ -74,7 +75,7 @@ println "Starting integration test in the background..."
 def integrationTestProcess = executeCommand(integrationTestCommand, false)
 
 println "Waiting for specific log message to start profiling..."
-waitForLogMessage(integrationTestProcess, "Building: phi-unphi/pom.xml")
+waitForLogMessage(integrationTestProcess, "Building: ${test}/pom.xml")
 
 println "Fetching PID of the integration test process..."
 def pid = getIntegrationTestPid()
