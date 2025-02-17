@@ -84,6 +84,9 @@ SOFTWARE.
                  because the following issue:
                  https://github.com/objectionary/lints/issues/338
                  When this issue is resolved, we should enable XMIR verification back.
+                 Pay attention that we disable XMIR verification in two places:
+                 1. In the configuration of the jeo-maven-plugin for disassembling.
+                 2. In the configuration of the jeo-maven-plugin for assembling.
                -->
               <xmirVerification>false</xmirVerification>
             </configuration>
@@ -191,7 +194,7 @@ SOFTWARE.
             <artifactId>jeo-maven-plugin</artifactId>
             <version>@project.version@</version>
             <configuration>
-              <xmirVerification>true</xmirVerification>
+              <xmirVerification>false</xmirVerification>
             </configuration>
             <executions>
               <execution>
