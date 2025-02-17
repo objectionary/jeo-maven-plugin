@@ -78,7 +78,14 @@ SOFTWARE.
             <artifactId>jeo-maven-plugin</artifactId>
             <version>@project.version@</version>
             <configuration>
-              <xmirVerification>true</xmirVerification>
+              <!--
+                @todo #999:30min Enable XMIR Verification For JNA Integration Test.
+                 Currently, we disable XMIR verification for JNA integration test
+                 because the following issue:
+                 https://github.com/objectionary/lints/issues/338
+                 When this issue is resolved, we should enable XMIR verification back.
+               -->
+              <xmirVerification>false</xmirVerification>
             </configuration>
             <executions>
               <execution>
