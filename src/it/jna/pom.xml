@@ -85,7 +85,7 @@ SOFTWARE.
                  https://github.com/objectionary/lints/issues/338
                  When this issue is resolved, we should enable XMIR verification back.
                -->
-              <xmirVerification>false</xmirVerification>
+              <xmirVerification>true</xmirVerification>
             </configuration>
             <executions>
               <execution>
@@ -220,7 +220,7 @@ SOFTWARE.
           <plugin>
             <groupId>org.eolang</groupId>
             <artifactId>eo-maven-plugin</artifactId>
-            <version>0.51.4</version>
+            <version>0.51.6</version>
             <executions>
               <execution>
                 <id>xmir-to-phi</id>

@@ -115,7 +115,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
             .attr("revision", Manifests.read("JEO-Revision"))
             .attr("dob", Manifests.read("JEO-Dob"))
             .attr("time", now)
-            .attr("xsi:noNamespaceSchemaLocation", "https://www.eolang.org/xsd/XMIR-0.51.4.xsd")
+            .attr("xsi:noNamespaceSchemaLocation", "https://www.eolang.org/xsd/XMIR-0.51.6.xsd")
             .add("listing")
             .set(this.listing)
             .up()
