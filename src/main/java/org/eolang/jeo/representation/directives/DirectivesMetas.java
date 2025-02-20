@@ -52,10 +52,10 @@ public final class DirectivesMetas implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives result = new Directives().add("metas");
+        result.append(DirectivesMetas.home());
         if (!this.name.pckg().isEmpty()) {
             result.append(this.pckg());
         }
-        result.append(DirectivesMetas.unlint());
         result.append(DirectivesMetas.version());
         return result.up().iterator();
     }
@@ -66,6 +66,18 @@ public final class DirectivesMetas implements Iterable<Directive> {
      */
     ClassName className() {
         return this.name;
+    }
+
+    /**
+     * Home directives.
+     * @return Directives for home.
+     */
+    private static Iterable<Directive> home() {
+        return new Directives().add("meta")
+            .add("head").set("home").up()
+            .add("tail").set("https://github.com/objectionary/jeo-maven-plugin").up()
+            .add("part").set("https://github.com/objectionary/jeo-maven-plugin").up()
+            .up();
     }
 
     /**
@@ -93,18 +105,6 @@ public final class DirectivesMetas implements Iterable<Directive> {
             .add("meta")
             .add("head").set("version").up()
             .add("tail").set(Manifests.read("JEO-Version")).up()
-            .up();
-    }
-
-    /**
-     * Ignored XMIR checks.
-     * @return Directives for ignored checks.
-     */
-    private static Directives unlint() {
-        return new Directives()
-            .add("meta")
-            .add("head").set("unlint").up()
-            .add("tail").set("mandatory-package").up()
             .up();
     }
 }
