@@ -163,7 +163,6 @@ public final class JcabiXmlNode implements XmlNode {
         //  We should remove the ignore list and fix the defects that are being ignored.
         final Collection<String> ignore = new HashSet<>(
             Arrays.asList(
-                "empty-object",
                 "incorrect-package",
                 "object-does-not-match-filename"
             )
