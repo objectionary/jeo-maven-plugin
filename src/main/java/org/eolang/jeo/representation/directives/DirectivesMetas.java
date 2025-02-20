@@ -52,6 +52,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives result = new Directives().add("metas");
+        result.append(DirectivesMetas.home());
         if (!this.name.pckg().isEmpty()) {
             result.append(this.pckg());
         }
@@ -66,6 +67,18 @@ public final class DirectivesMetas implements Iterable<Directive> {
      */
     ClassName className() {
         return this.name;
+    }
+
+    /**
+     * Home directives.
+     * @return Directives for home.
+     */
+    private static Iterable<Directive> home() {
+        return new Directives().add("meta")
+            .add("head").set("home").up()
+            .add("tail").set("https://github.com/objectionary/jeo-maven-plugin").up()
+            .add("part").set("https://github.com/objectionary/jeo-maven-plugin").up()
+            .up();
     }
 
     /**
