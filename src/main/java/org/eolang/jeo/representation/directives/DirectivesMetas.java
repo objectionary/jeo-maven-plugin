@@ -56,7 +56,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
         if (!this.name.pckg().isEmpty()) {
             result.append(this.pckg());
         }
-        result.append(DirectivesMetas.unlint());
+//        result.append(DirectivesMetas.unlint());
         result.append(DirectivesMetas.version());
         return result.up().iterator();
     }
