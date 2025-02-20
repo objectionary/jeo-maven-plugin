@@ -56,7 +56,6 @@ public final class DirectivesMetas implements Iterable<Directive> {
         if (!this.name.pckg().isEmpty()) {
             result.append(this.pckg());
         }
-//        result.append(DirectivesMetas.unlint());
         result.append(DirectivesMetas.version());
         return result.up().iterator();
     }
@@ -106,18 +105,6 @@ public final class DirectivesMetas implements Iterable<Directive> {
             .add("meta")
             .add("head").set("version").up()
             .add("tail").set(Manifests.read("JEO-Version")).up()
-            .up();
-    }
-
-    /**
-     * Ignored XMIR checks.
-     * @return Directives for ignored checks.
-     */
-    private static Directives unlint() {
-        return new Directives()
-            .add("meta")
-            .add("head").set("unlint").up()
-            .add("tail").set("mandatory-package").up()
             .up();
     }
 }
