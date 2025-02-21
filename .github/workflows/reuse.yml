@@ -21,36 +21,18 @@
 # SOFTWARE.
 ---
 # yamllint disable rule:line-length
-name: site
+name: reuse
 'on':
   push:
-    tags:
-      - '*'
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 jobs:
-  site:
+  reuse:
     timeout-minutes: 15
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 11
-      - uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }} -site-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-jdk-site-maven-
-      - run: mvn clean site -Psite
-      - uses: JamesIves/github-pages-deploy-action@v4.7.3
-        with:
-          branch: gh-pages
-          folder: target/site
-          target-folder: ${{ github.ref_name }}
-          clean: false
-      - uses: JamesIves/github-pages-deploy-action@v4.7.2
-        with:
-          branch: gh-pages
-          folder: target/site
-          clean: false
+      - uses: fsfe/reuse-action@v5
