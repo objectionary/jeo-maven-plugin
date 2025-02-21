@@ -158,14 +158,14 @@ public final class JcabiXmlNode implements XmlNode {
     @Override
     public void validate() {
         //@checkstyle MethodBodyCommentsCheck (10 lines)
-        // @todo #946:30min Remove the ignore list from the 'validate' method.
-        //  The ignore list is used to ignore some defects that we haven't implemented yet.
-        //  We should remove the ignore list and fix the defects that are being ignored.
+        // @todo #965:30min Remove 'object-does-not-match-filename' from the ignore list.
+        //  This is a temporary solution to ignore the 'object-does-not-match-filename' defect.
+        //  Most probably, this check will be removed at all:
+        //  https://github.com/objectionary/lints/issues/352
+        //  If so, we should remove the ignore list after the issue is resolved.
+        //  Otherwise we need to fix filenames.
         final Collection<String> ignore = new HashSet<>(
             Arrays.asList(
-                "mandatory-home",
-                "empty-object",
-                "incorrect-package",
                 "object-does-not-match-filename"
             )
         );
