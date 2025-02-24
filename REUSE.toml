@@ -5,7 +5,13 @@ version = 1
 [[annotations]]
 path = [
     "**/*.jpg",
+    "**/*.vm",
+    "src/main/resources/META-INF/services/javax.xml.transform.TransformerFactory",
+    "src/it/spring-fat/src/main/resources/META-INF/spring.factories",
     "**/*.json",
+    "**/*.class",
+    "**/MANIFEST.MF",
+    "**/MethodByte.eo",
     "**/*.md",
     "**/*.pdf",
     "**/*.png",
