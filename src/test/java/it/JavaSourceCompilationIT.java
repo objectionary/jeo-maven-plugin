@@ -82,7 +82,7 @@ final class JavaSourceCompilationIT {
             src.toString()
         );
         return new Bytecode(
-            Files.readAllBytes(where.resolve(String.format("%s.class", clazz.name())))
+            Files.readAllBytes(where.resolve(String.format("%s.class", "HelloWorld")))
         );
     }
 
