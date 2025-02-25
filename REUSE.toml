@@ -4,19 +4,20 @@
 version = 1
 [[annotations]]
 path = [
-    "**/*.jpg",
-    "**/*.vm",
-    "src/main/resources/META-INF/services/javax.xml.transform.TransformerFactory",
-    "src/it/spring-fat/src/main/resources/META-INF/spring.factories",
-    "**/*.json",
     "**/*.class",
-    "**/MANIFEST.MF",
-    "**/MethodByte.eo",
+    "**/*.csv",
+    "**/*.jpg",
+    "**/*.json",
     "**/*.md",
     "**/*.pdf",
     "**/*.png",
     "**/*.svg",
+    "**/*.txt",
+    "**/*.vm",
     "**/.gitignore",
+    "**/CNAME",
+    "**/MANIFEST.MF",
+    "**/MethodByte.eo",
     ".gitattributes",
     ".gitignore",
     ".gitleaksignore",
@@ -25,6 +26,8 @@ path = [
     "Gemfile.lock",
     "README.md",
     "renovate.json",
+    "src/it/spring-fat/src/main/resources/META-INF/spring.factories",
+    "src/main/resources/META-INF/services/javax.xml.transform.TransformerFactory",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "Copyright (c) 2025 Yegor Bugayenko"
