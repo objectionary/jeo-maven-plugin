@@ -299,8 +299,13 @@ public final class BytecodeMethod {
                 mvisitor.visitCode();
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor, all));
                 this.instructions.forEach(instruction -> instruction.writeTo(mvisitor, all));
-                final BytecodeMaxs computed = this.computeMaxs();
-                mvisitor.visitMaxs(computed.stack(), computed.locals());
+                final BytecodeMaxs max;
+                if (this.maxs.compute()) {
+                    max = this.computeMaxs();
+                } else {
+                    max = this.maxs;
+                }
+                mvisitor.visitMaxs(max.stack(), max.locals());
             }
             this.attributes.write(mvisitor, all);
             mvisitor.visitEnd();

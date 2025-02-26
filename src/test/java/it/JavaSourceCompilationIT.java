@@ -58,7 +58,6 @@ final class JavaSourceCompilationIT {
         final Path java = where.resolve("HelloWorld.java");
         final RandomJavaClass rand = new RandomJavaClass();
         final String src = rand.src();
-        System.out.println(src);
         Files.write(
             java,
             src.getBytes(StandardCharsets.UTF_8)
