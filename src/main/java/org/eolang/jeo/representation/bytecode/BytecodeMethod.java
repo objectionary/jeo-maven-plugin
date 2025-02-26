@@ -88,7 +88,7 @@ public final class BytecodeMethod {
             new BytecodeAnnotations(),
             new BytecodeMethodProperties("foo", "()V", "", Opcodes.ACC_PUBLIC),
             new ArrayList<>(0),
-            new BytecodeMaxs(0, 0),
+            new BytecodeMaxs(),
             new BytecodeAttributes()
         );
     }
@@ -105,7 +105,7 @@ public final class BytecodeMethod {
             annotations,
             new BytecodeMethodProperties(name, "()V", "", Opcodes.ACC_PUBLIC),
             new ArrayList<>(0),
-            new BytecodeMaxs(0, 0),
+            new BytecodeMaxs(),
             new BytecodeAttributes()
         );
     }
@@ -135,7 +135,7 @@ public final class BytecodeMethod {
      * @param properties Method properties.
      */
     BytecodeMethod(final BytecodeMethodProperties properties) {
-        this(properties, new BytecodeMaxs(0, 0));
+        this(properties, new BytecodeMaxs());
     }
 
     /**

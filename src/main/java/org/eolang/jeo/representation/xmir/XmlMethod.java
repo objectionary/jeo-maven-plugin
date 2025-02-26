@@ -105,7 +105,7 @@ public final class XmlMethod {
                     .map(Collections::singletonList)
                     .orElse(Collections.emptyList()),
                 this.maxs().map(XmlMaxs::bytecode)
-                    .orElse(new BytecodeMaxs(0, 0)),
+                    .orElse(new BytecodeMaxs()),
                 this.attrs()
             );
         } catch (final IllegalStateException exception) {

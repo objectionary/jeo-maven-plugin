@@ -168,7 +168,7 @@ public final class BytecodeClass {
      * @return This object.
      */
     public BytecodeMethodBuilder withMethod(final BytecodeMethodProperties properties) {
-        return this.withMethod(properties, new BytecodeMaxs(0, 0));
+        return this.withMethod(properties, new BytecodeMaxs());
     }
 
     /**
