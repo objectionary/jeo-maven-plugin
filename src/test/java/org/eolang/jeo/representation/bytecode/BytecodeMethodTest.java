@@ -448,7 +448,6 @@ final class BytecodeMethodTest {
         final String name,
         final BytecodeMaxs expected
     ) {
-        method.intructions().forEach(instruction -> System.out.println(instruction.view()));
         MatcherAssert.assertThat(
             String.format(
                 "Maxs weren't computed correctly for method %s",
