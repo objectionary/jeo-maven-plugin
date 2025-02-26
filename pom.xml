@@ -482,7 +482,7 @@
         <jdk>[11,)</jdk>
       </activation>
       <properties>
-        <qulice.version>0.23.0</qulice.version>
+        <qulice.version>0.24.0</qulice.version>
       </properties>
     </profile>
     <profile>
