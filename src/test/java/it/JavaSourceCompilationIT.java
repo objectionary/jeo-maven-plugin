@@ -62,15 +62,7 @@ final class JavaSourceCompilationIT {
         final Path src = where.resolve("HelloWorld.java");
         Files.write(
             src,
-            String.join(
-                "\n",
-                "package org.eolang.jeo.representation.bytecode;",
-                "public class HelloWorld {",
-                "    public static void main(String[] args) {",
-                "        System.out.println(\"Hello, World!\");",
-                "    }",
-                "}"
-            ).getBytes(StandardCharsets.UTF_8)
+            clazz.src().getBytes(StandardCharsets.UTF_8)
         );
         ToolProvider.getSystemJavaCompiler().run(
             System.in,
@@ -82,7 +74,11 @@ final class JavaSourceCompilationIT {
             src.toString()
         );
         return new Bytecode(
-            Files.readAllBytes(where.resolve(String.format("%s.class", "HelloWorld")))
+            Files.readAllBytes(
+                Files.find(where, 1, (path, attr) -> path.toString().endsWith(".class"))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("No class file found"))
+            )
         );
     }
 
