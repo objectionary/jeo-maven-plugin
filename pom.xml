@@ -181,7 +181,7 @@
     <dependency>
       <groupId>com.github.volodya-lombrozo</groupId>
       <artifactId>jsmith</artifactId>
-      <version>0.0.3</version>
+      <version>0.1.3</version>
     </dependency>
     <dependency>
       <groupId>com.yegor256</groupId>
@@ -242,6 +242,26 @@
       </testResource>
     </testResources>
     <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>jcabi-xcop</id>
+            <!--
+               @todo #30:30min Enable jcabi-xcop check.
+                Due recent changes in LICENSE generation, jcabi-xcop check
+                doesn't work. It happens because the LICENSE file is generated
+                later then the jcabi-xcop check. We need to fix this issue.
+                Most probably, the issue is related to SPDX license generation.
+            -->
+            <phase>none</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <executions>
@@ -482,7 +502,7 @@
         <jdk>[11,)</jdk>
       </activation>
       <properties>
-        <qulice.version>0.23.0</qulice.version>
+        <qulice.version>0.24.0</qulice.version>
       </properties>
     </profile>
     <profile>
