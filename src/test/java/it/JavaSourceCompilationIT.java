@@ -39,7 +39,7 @@ final class JavaSourceCompilationIT {
     @Test
     @EnabledIf(value = "hasJavaCompiler", disabledReason = "Java compiler is not available")
     void transformsRandomJavaSourceCodeIntoEoAndBack(@TempDir final Path temp) throws IOException {
-        final Bytecode expected = JavaSourceCompilationIT.compile(temp, new RandomJavaClass());
+        final Bytecode expected = JavaSourceCompilationIT.compile(temp);
         MatcherAssert.assertThat(
             "Bytecode is not equal to the original one, check that transformation is correct and does not change the bytecode",
             new XmirRepresentation(
@@ -52,17 +52,16 @@ final class JavaSourceCompilationIT {
     /**
      * Compile random java class into bytecode.
      * @param where Where to compile.
-     * @param clazz Random java class.
      * @return Bytecode.
      */
-    private static Bytecode compile(
-        final Path where,
-        final RandomJavaClass clazz
-    ) throws IOException {
-        final Path src = where.resolve("HelloWorld.java");
+    private static Bytecode compile(final Path where) throws IOException {
+        final Path java = where.resolve("HelloWorld.java");
+        final RandomJavaClass rand = new RandomJavaClass();
+        final String src = rand.src();
+        System.out.println(src);
         Files.write(
-            src,
-            clazz.src().getBytes(StandardCharsets.UTF_8)
+            java,
+            src.getBytes(StandardCharsets.UTF_8)
         );
         ToolProvider.getSystemJavaCompiler().run(
             System.in,
@@ -71,7 +70,7 @@ final class JavaSourceCompilationIT {
             "-g:vars",
             "-source", "11",
             "-parameters",
-            src.toString()
+            java.toString()
         );
         return new Bytecode(
             Files.readAllBytes(
