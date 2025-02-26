@@ -14,6 +14,12 @@ import org.xembly.Directive;
 public final class DirectivesMaxs implements Iterable<Directive> {
 
     /**
+     * Undefined value.
+     * Need to be recomputed.
+     */
+    private static final int UNDEFINED = -1;
+
+    /**
      * Max stack size.
      */
     private final int stack;
@@ -27,7 +33,7 @@ public final class DirectivesMaxs implements Iterable<Directive> {
      * Constructor.
      */
     public DirectivesMaxs() {
-        this(0, 0);
+        this(DirectivesMaxs.UNDEFINED, DirectivesMaxs.UNDEFINED);
     }
 
     /**

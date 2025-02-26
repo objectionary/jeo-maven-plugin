@@ -41,6 +41,12 @@ import org.xembly.Xembler;
 public final class XmlMethod {
 
     /**
+     * Undefined value.
+     * Max stack and locals need to be recomputed.
+     */
+    private static final int UNDEFINED = -1;
+
+    /**
      * Method node.
      */
     private final XmlNode node;
@@ -68,7 +74,16 @@ public final class XmlMethod {
         final String descriptor,
         final String... exceptions
     ) {
-        this(XmlMethod.prestructor(name, access, descriptor, 0, 0, exceptions));
+        this(
+            XmlMethod.prestructor(
+                name,
+                access,
+                descriptor,
+                XmlMethod.UNDEFINED,
+                XmlMethod.UNDEFINED,
+                exceptions
+            )
+        );
     }
 
     /**
