@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  * This class is used to assemble the project's EO source files to bytecode.
  * @since 0.2
  */
-final class Assembler {
+public final class Assembler {
 
     /**
      * Input folder with "xmir" files.
@@ -32,7 +32,7 @@ final class Assembler {
      * @param input Input folder with "xmir" files.
      * @param output Output folder for the assembled classes.
      */
-    Assembler(final Path input, final Path output) {
+    public Assembler(final Path input, final Path output) {
         this.input = input;
         this.output = output;
     }
@@ -41,7 +41,7 @@ final class Assembler {
      * Assemble all "xmir" files.
      * @since 0.2
      */
-    void assemble() {
+    public void assemble() {
         final String assembling = "Assembling";
         final String assembled = "assembled";
         final Stream<Path> all = new Summary(
