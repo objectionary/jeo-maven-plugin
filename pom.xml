@@ -243,6 +243,11 @@
     </testResources>
     <plugins>
       <plugin>
+        <groupId>pw.krejci</groupId>
+        <artifactId>jmh-maven-plugin</artifactId>
+        <version>0.2.2</version>
+      </plugin>
+      <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <executions>
           <execution>
