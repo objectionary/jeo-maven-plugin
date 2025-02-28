@@ -7,12 +7,9 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -138,23 +135,9 @@ public final class JcabiXmlNode implements XmlNode {
 
     @Override
     public void validate() {
-        //@checkstyle MethodBodyCommentsCheck (10 lines)
-        // @todo #965:30min Remove 'object-does-not-match-filename' from the ignore list.
-        //  This is a temporary solution to ignore the 'object-does-not-match-filename' defect.
-        //  Most probably, this check will be removed at all:
-        //  https://github.com/objectionary/lints/issues/352
-        //  If so, we should remove the ignore list after the issue is resolved.
-        //  Otherwise we need to fix filenames.
-        final Collection<String> ignore = new HashSet<>(
-            Arrays.asList(
-                "object-does-not-match-filename"
-            )
+        final Collection<Defect> defects = new ArrayList<>(
+            new Program(new StrictXmir(this.doc)).defects()
         );
-        final Collection<Defect> defects = new Program(new StrictXmir(this.doc))
-            .defects()
-            .stream()
-            .filter(defect -> !ignore.contains(defect.rule()))
-            .collect(Collectors.toList());
         if (!defects.isEmpty()) {
             throw new IllegalStateException(
                 String.format(
