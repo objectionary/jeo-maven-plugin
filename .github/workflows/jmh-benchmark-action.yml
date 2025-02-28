@@ -18,6 +18,5 @@ jobs:
           java-version: "11"
           base-ref: "master"
           benchmark-command: |
-            mvn jmh:benchmark -pl eo-parser -Djmh.rf=json -Djmh.rff=benchmark.json
-            cp eo-parser/benchmark.json .
+            mvn jmh:benchmark -Djmh.rf=json -Djmh.rff=benchmark.json
           benchmark-file: "benchmark.json"
