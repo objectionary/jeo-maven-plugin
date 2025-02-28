@@ -55,21 +55,26 @@ final class Representation {
      * @return Bytes.
      */
     byte[] bytecode() {
-        final InputStream stream = Thread.currentThread()
-            .getContextClassLoader()
-            .getResourceAsStream(
-                String.format(
-                    "%s.class",
-                    Integer.class.getName().replace('.', '/')
+        try (
+            InputStream stream = Thread.currentThread()
+                .getContextClassLoader()
+                .getResourceAsStream(
+                    String.format(
+                        "%s.class",
+                        Integer.class.getName().replace('.', '/')
+                    )
+                )
+        ) {
+            return Representation.bytes(
+                Optional.ofNullable(stream).orElseThrow(
+                    () -> new IllegalStateException(
+                        String.format("Failed to load '%s' class", this.clazz)
+                    )
                 )
             );
-        return this.bytes(
-            Optional.ofNullable(stream).orElseThrow(
-                () -> new IllegalStateException(
-                    String.format("Failed to load '%s' class", this.clazz)
-                )
-            )
-        );
+        } catch (final IOException exception) {
+            throw new IllegalStateException("Failed to load bytecode", exception);
+        }
     }
 
     /**
@@ -77,17 +82,18 @@ final class Representation {
      * @param stream Input stream.
      * @return Bytes.
      */
-    private byte[] bytes(final InputStream stream) {
+    private static byte[] bytes(final InputStream stream) {
         try {
             final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            int nread;
-            byte[] data = new byte[stream.available()];
-            while ((nread = stream.read(data, 0, data.length)) != -1) {
+            final byte[] data = new byte[stream.available()];
+            int nread = stream.read(data, 0, data.length);
+            while (nread != -1) {
                 buffer.write(data, 0, nread);
+                nread = stream.read(data, 0, data.length);
             }
             return buffer.toByteArray();
-        } catch (IOException ex) {
-            throw new IllegalStateException("Failed to read all bytes from input stream", ex);
+        } catch (final IOException ioex) {
+            throw new IllegalStateException("Failed to read all bytes from input stream", ioex);
         }
     }
 }

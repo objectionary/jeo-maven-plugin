@@ -24,10 +24,16 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+/**
+ * Assemble benchmark.
+ * @since 0.8
+ * @checkstyle DesignForExtensionCheck (500 lines)
+ */
 @Fork(1)
 @Warmup(iterations = 1, time = 2)
 @Measurement(iterations = 1, time = 3)
 @State(Scope.Benchmark)
+@SuppressWarnings("PMD.JUnit4TestShouldUseAfterAnnotation")
 public class AssembleBenchmark {
 
     /**
@@ -46,7 +52,8 @@ public class AssembleBenchmark {
      * @param args Arguments.
      * @throws RunnerException If something goes wrong.
      */
-    public static void main(String[] args) throws RunnerException {
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
+    public static void main(final String[] args) throws RunnerException {
         new Runner(
             new OptionsBuilder()
                 .include(AssembleBenchmark.class.getSimpleName())
@@ -73,8 +80,8 @@ public class AssembleBenchmark {
     public void tearDown() {
         try (Stream<Path> files = Files.walk(this.dir).sorted(Comparator.reverseOrder())) {
             files.map(Path::toFile).forEach(File::delete);
-        } catch (IOException ex) {
-            throw new IllegalStateException("Failed to delete assemble temporary directory", ex);
+        } catch (final IOException ioex) {
+            throw new IllegalStateException("Failed to delete assemble temporary directory", ioex);
         }
     }
 }
