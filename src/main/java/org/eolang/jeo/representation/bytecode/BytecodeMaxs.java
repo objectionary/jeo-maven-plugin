@@ -18,6 +18,12 @@ import org.eolang.jeo.representation.directives.DirectivesMaxs;
 public final class BytecodeMaxs {
 
     /**
+     * Undefined value.
+     * Need to be recomputed.
+     */
+    private static final int UNDEFINED = -1;
+
+    /**
      * Stack max size.
      */
     private final int stack;
@@ -31,7 +37,7 @@ public final class BytecodeMaxs {
      * Constructor.
      */
     public BytecodeMaxs() {
-        this(0, 0);
+        this(BytecodeMaxs.UNDEFINED, BytecodeMaxs.UNDEFINED);
     }
 
     /**
@@ -73,6 +79,6 @@ public final class BytecodeMaxs {
      * @return True if both are zero.
      */
     boolean compute() {
-        return this.stack == 0 && this.locals == 0;
+        return this.stack == BytecodeMaxs.UNDEFINED && this.locals == BytecodeMaxs.UNDEFINED;
     }
 }

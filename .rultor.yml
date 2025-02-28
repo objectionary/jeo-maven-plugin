@@ -7,7 +7,7 @@ architect:
 ec2:
   type: t2.2xlarge
 docker:
-  image: lombrozo/rultor-image-java:pr-4
+  image: lombrozo/rultor-image-java:master
 assets:
   settings.xml: yegor256/objectionary-secrets#settings.xml
   pubring.gpg: yegor256/objectionary-secrets#pubring.gpg

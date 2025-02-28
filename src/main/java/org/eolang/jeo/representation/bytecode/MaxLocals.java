@@ -19,6 +19,17 @@ import org.objectweb.asm.Type;
  * Bytecode method max locals.
  * This class knows hot to compute the maximum number of local variables
  * that can be used by a method.
+ * The computation of max locals might give different results if computed only
+ * by looking at bytecode instructions, because some of the variables we can see only
+ * in the source code are not visible in the bytecode:
+ * {@code
+ *   public void ia(){
+ *     long h$m$$;
+ *     boolean U$qa=true,A=U$qa==false,$z;
+ *   }
+ * }
+ * Here, the variable {@code $z} is not visible in the bytecode, because it is not used and it's
+ * last variable in the method.
  * @since 0.6
  */
 final class MaxLocals {
