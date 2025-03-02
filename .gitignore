@@ -1,6 +1,9 @@
+!src/it/eo-to-bytecode/target
+!src/it/fails-if-bytecode-broken/target
 .DS_Store
 .env
 .idea
+.idea/
+node_modules/
 target
-!src/it/eo-to-bytecode/target
-!src/it/fails-if-bytecode-broken/target
+target/
