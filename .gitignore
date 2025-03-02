@@ -5,5 +5,7 @@
 .idea
 .idea/
 node_modules/
-target
 target/
+!src/it/eo-to-bytecode/target
+!src/it/fails-if-bytecode-broken/target
+.aider*
