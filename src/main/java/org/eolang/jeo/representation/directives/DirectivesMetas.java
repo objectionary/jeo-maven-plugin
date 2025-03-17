@@ -103,7 +103,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
                 '-',
                 'L', 'i', 'c', 'e', 'n', 's', 'e',
                 '-', 'I', 'd', 'e', 'n', 't', 'i', 'f', 'i', 'e', 'r',
-                ':'
+                ':',
             }
         );
         return new Directives()
