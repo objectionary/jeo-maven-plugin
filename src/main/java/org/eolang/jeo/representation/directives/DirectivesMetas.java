@@ -94,7 +94,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * SPDX directives.
      * @return SPDX directives.
      */
-    private static Directives spdx(){
+    private static Directives spdx() {
         return new Directives()
             .add("meta")
             .add("head").set("spdx").up()
