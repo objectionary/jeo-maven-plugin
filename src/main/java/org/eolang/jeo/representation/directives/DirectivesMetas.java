@@ -37,6 +37,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
         if (!this.name.pckg().isEmpty()) {
             result.append(this.pckg());
         }
+        result.append(DirectivesMetas.spdx());
         result.append(DirectivesMetas.version());
         return result.up().iterator();
     }
@@ -86,6 +87,20 @@ public final class DirectivesMetas implements Iterable<Directive> {
             .add("meta")
             .add("head").set("version").up()
             .add("tail").set(Manifests.read("JEO-Version")).up()
+            .up();
+    }
+
+    /**
+     * SPDX directives.
+     * @return SPDX directives.
+     */
+    private static Directives spdx(){
+        return new Directives()
+            .add("meta")
+            .add("head").set("spdx").up()
+            .add("tail").set("SPDX-License-Identifier: MIT").up()
+            .add("part").set("SPDX-License-Identifier:").up()
+            .add("part").set("MIT").up()
             .up();
     }
 }
