@@ -97,7 +97,7 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * @return SPDX directives.
      */
     private static Directives spdx() {
-        final String spdx = Arrays.toString(
+        final String spdx = new String(
             new char[]{
                 'S', 'P', 'D', 'X',
                 '-',
