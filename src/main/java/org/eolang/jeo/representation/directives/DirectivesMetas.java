@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.manifests.Manifests;
-import java.util.Arrays;
 import java.util.Iterator;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
