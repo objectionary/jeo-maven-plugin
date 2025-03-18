@@ -75,11 +75,10 @@
         <configuration>
           <disabled>false</disabled>
           <!--
-            @todo #488:90min Enable Bytecode Verification For Spring Fat Integration Test.
+             Impossible to Make Bytecode Verification For Spring Fat Integration Test.
              We skip verification because the Spring Framework uses many classes that
              are not in the classpath and the plugin cannot verify the correctness of
-             the transformation. For not it's not so crucial, but in the future, we
-             should enable it.
+             the transformation.
           -->
           <skipVerification>true</skipVerification>
         </configuration>
