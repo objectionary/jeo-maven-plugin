@@ -81,7 +81,7 @@
              the transformation. For not it's not so crucial, but in the future, we
              should enable it.
           -->
-          <skipVerification>true</skipVerification>
+          <skipVerification>false</skipVerification>
         </configuration>
         <executions>
           <execution>
