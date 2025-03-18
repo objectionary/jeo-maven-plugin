@@ -58,19 +58,6 @@
             <groupId>org.eolang</groupId>
             <artifactId>jeo-maven-plugin</artifactId>
             <version>@project.version@</version>
-            <configuration>
-              <!--
-                @todo #999:30min Enable XMIR Verification For JNA Integration Test.
-                 Currently, we disable XMIR verification for JNA integration test
-                 because the following issue:
-                 https://github.com/objectionary/lints/issues/338
-                 When this issue is resolved, we should enable XMIR verification back.
-                 Pay attention that we disable XMIR verification in two places:
-                 1. In the configuration of the jeo-maven-plugin for disassembling.
-                 2. In the configuration of the jeo-maven-plugin for assembling.
-               -->
-              <xmirVerification>false</xmirVerification>
-            </configuration>
             <executions>
               <execution>
                 <id>bytecode-to-xmir</id>
@@ -174,9 +161,6 @@
             <groupId>org.eolang</groupId>
             <artifactId>jeo-maven-plugin</artifactId>
             <version>@project.version@</version>
-            <configuration>
-              <xmirVerification>false</xmirVerification>
-            </configuration>
             <executions>
               <execution>
                 <id>bytecode-to-xmir</id>
