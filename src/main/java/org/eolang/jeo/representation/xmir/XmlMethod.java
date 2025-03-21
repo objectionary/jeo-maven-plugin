@@ -1,32 +1,15 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2024 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
  */
 package org.eolang.jeo.representation.xmir;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.MethodName;
@@ -58,6 +41,12 @@ import org.xembly.Xembler;
 public final class XmlMethod {
 
     /**
+     * Undefined value.
+     * Max stack and locals need to be recomputed.
+     */
+    private static final int UNDEFINED = -1;
+
+    /**
      * Method node.
      */
     private final XmlNode node;
@@ -85,7 +74,16 @@ public final class XmlMethod {
         final String descriptor,
         final String... exceptions
     ) {
-        this(XmlMethod.prestructor(name, access, descriptor, 0, 0, exceptions));
+        this(
+            XmlMethod.prestructor(
+                name,
+                access,
+                descriptor,
+                XmlMethod.UNDEFINED,
+                XmlMethod.UNDEFINED,
+                exceptions
+            )
+        );
     }
 
     /**
@@ -122,7 +120,7 @@ public final class XmlMethod {
                     .map(Collections::singletonList)
                     .orElse(Collections.emptyList()),
                 this.maxs().map(XmlMaxs::bytecode)
-                    .orElse(new BytecodeMaxs(0, 0)),
+                    .orElse(new BytecodeMaxs()),
                 this.attrs()
             );
         } catch (final IllegalStateException exception) {
@@ -158,7 +156,7 @@ public final class XmlMethod {
      */
     private BytecodeAttributes attrs() {
         return this.node.children()
-            .filter(element -> element.hasAttribute("name", "local-variable-table"))
+            .filter(element -> element.hasAttribute("as", "local-variable-table"))
             .findFirst()
             .map(XmlAttributes::new)
             .map(XmlAttributes::attributes)
@@ -173,7 +171,7 @@ public final class XmlMethod {
         return new MethodName(
             new PrefixedName(
                 new Signature(
-                    this.node.attribute("name")
+                    this.node.attribute("as")
                         .orElseThrow(
                             () -> new IllegalStateException(
                                 "Method 'name' attribute is not present"
@@ -189,11 +187,30 @@ public final class XmlMethod {
      * @return Instructions.
      */
     private List<XmlBytecodeEntry> instructions() {
-        return this.node.child("name", "@")
-            .children()
-            .filter(element -> element.attribute("base").isPresent())
-            .map(XmlNode::toEntry)
+        return this.node.children().filter(XmlMethod.attrContains("as", "body"))
+            .findFirst()
+            .map(XmlNode::children)
+            .orElse(Stream.empty())
+            .map(XmlMethod::toEntry)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Convert to an entry.
+     * @param node Node.
+     * @return Bytecode entry.
+     */
+    private static XmlBytecodeEntry toEntry(final XmlNode node) {
+        final XmlBytecodeEntry result;
+        final Optional<String> base = node.attribute("base");
+        if (base.isPresent() && new JeoFqn("label").fqn().equals(base.get())) {
+            result = new XmlLabel(node);
+        } else if (base.isPresent() && new JeoFqn("frame").fqn().equals(base.get())) {
+            result = new XmlFrame(node);
+        } else {
+            result = new XmlInstruction(node);
+        }
+        return result;
     }
 
     /**
@@ -202,7 +219,11 @@ public final class XmlMethod {
      * @return Maxs.
      */
     private Optional<XmlMaxs> maxs() {
-        return this.node.optchild("name", "maxs").map(XmlMaxs::new);
+        return this.node
+            .children().filter(
+                element -> element.attribute("as").map(s -> s.contains("maxs")).orElse(false)
+            ).findFirst()
+            .map(XmlMaxs::new);
     }
 
     /**
@@ -237,7 +258,7 @@ public final class XmlMethod {
      * @return Access modifiers.
      */
     private int access() {
-        return new XmlValue(this.child(0)).integer();
+        return (int) new XmlValue(this.child("access")).object();
     }
 
     /**
@@ -246,7 +267,7 @@ public final class XmlMethod {
      * @return Descriptor.
      */
     private String descriptor() {
-        return new XmlValue(this.child(1)).string();
+        return new XmlValue(this.child("descriptor")).string();
     }
 
     /**
@@ -255,16 +276,35 @@ public final class XmlMethod {
      * @return Signature.
      */
     private String signature() {
-        return new XmlValue(this.child(2)).string();
+        return new XmlValue(this.child("signature")).string();
     }
 
     /**
-     * Get child by index.
-     * @param index Index.
+     * Get child by name.
+     * @param name Name.
      * @return Child.
      */
-    private XmlNode child(final int index) {
-        return this.node.children().collect(Collectors.toList()).get(index);
+    private XmlNode child(final String name) {
+        return this.ochild(name).orElseThrow(
+            () -> new IllegalStateException(
+                String.format(
+                    "Method '%s' doesn't have '%s' child",
+                    this.name(),
+                    name
+                )
+            )
+        );
+    }
+
+    /**
+     * Get optional child by name.
+     * @param name Name.
+     * @return Optional child.
+     */
+    private Optional<XmlNode> ochild(final String name) {
+        return this.node.children()
+            .filter(XmlMethod.attrContains("as", name))
+            .findFirst();
     }
 
     /**
@@ -275,11 +315,11 @@ public final class XmlMethod {
     private List<XmlTryCatchEntry> trycatchEntries() {
         return this.node.children()
             .filter(
-                element -> element.attribute("name")
+                element -> element.attribute("as")
                     .map(s -> s.contains("trycatchblocks"))
                     .orElse(false))
             .flatMap(XmlNode::children)
-            .map(entry -> new XmlTryCatchEntry(entry))
+            .map(XmlTryCatchEntry::new)
             .collect(Collectors.toList());
     }
 
@@ -290,7 +330,7 @@ public final class XmlMethod {
      */
     private BytecodeAnnotations annotations() {
         return this.node.children()
-            .filter(element -> element.hasAttribute("name", "annotations"))
+            .filter(element -> element.hasAttribute("as", "annotations"))
             .findFirst()
             .map(XmlAnnotations::new)
             .map(XmlAnnotations::bytecode)
@@ -323,15 +363,16 @@ public final class XmlMethod {
      * @return Exceptions.
      */
     private String[] exceptions() {
-        return this.child(3)
-            .children()
+        return this.ochild("exceptions")
+            .map(XmlNode::children)
+            .orElse(Stream.empty())
             .map(XmlValue::new)
             .map(XmlValue::string)
             .toArray(String[]::new);
     }
 
     /**
-     * Create Method XmlNode by directives.
+     * Create Method MyXmlNode by directives.
      *
      * @param name Method name.
      * @param access Method access modifiers.
@@ -339,7 +380,7 @@ public final class XmlMethod {
      * @param stack Max stack.
      * @param locals Max locals.
      * @param exceptions Method exceptions.
-     * @return Method XmlNode.
+     * @return Method MyXmlNode.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     private static XmlNode prestructor(
@@ -350,7 +391,7 @@ public final class XmlMethod {
         final int locals,
         final String... exceptions
     ) {
-        return new XmlNode(
+        return new NativeXmlNode(
             new Xembler(
                 new DirectivesMethod(
                     name,
@@ -366,5 +407,15 @@ public final class XmlMethod {
                 new Transformers.Node()
             ).xmlQuietly()
         );
+    }
+
+    /**
+     * Predicate that checks if the attribute contains the value.
+     * @param name Attribute name.
+     * @param value Value to check.
+     * @return Predicate.
+     */
+    private static Predicate<XmlNode> attrContains(final String name, final String value) {
+        return node -> node.attribute(name).map(v -> v.contains(value)).orElse(false);
     }
 }

@@ -1,31 +1,15 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2024 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
-import org.eolang.jeo.representation.bytecode.BytecodeValue;
+import org.eolang.jeo.representation.bytecode.BytecodeBytes;
+import org.eolang.jeo.representation.bytecode.Codec;
+import org.eolang.jeo.representation.bytecode.EoCodec;
+import org.eolang.jeo.representation.bytecode.PlainLongCodec;
+import org.eolang.jeo.representation.directives.EoFqn;
 
 /**
  * XML value.
@@ -59,63 +43,47 @@ public final class XmlValue {
     /**
      * Convert hex string to human-readable string.
      * Example:
+     * {@code
      *  "48 65 6C 6C 6F 20 57 6F 72 6C 64 21" -> "Hello World!"
+     *  }
      * @return Human-readable string.
      */
     public String string() {
-        final String hex = this.hex();
-        try {
-            final String result;
-            if (hex.isEmpty()) {
-                result = "";
-            } else {
-                final String[] chars = hex.split("(?<=\\G.{2})");
-                final int length = chars.length;
-                final byte[] bytes = new byte[length];
-                for (int index = 0; index < length; ++index) {
-                    bytes[index] = (byte) Integer.parseInt(chars[index], XmlValue.RADIX);
-                }
-                result = new String(bytes, StandardCharsets.UTF_8);
-            }
-            return result;
-        } catch (final NumberFormatException exception) {
-            throw new IllegalArgumentException(
-                String.format("Invalid hex string: %s", hex),
-                exception
-            );
-        }
+        return (String) this.object();
     }
 
     /**
-     * Convert hex string to boolean.
+     * Convert hex string to an object.
+     * @return Object.
+     */
+    public Object object() {
+        final String base = this.base();
+        final Object res;
+        if ("bool".equals(base)) {
+            res = this.parseBoolean();
+        } else {
+            Codec codec = new EoCodec();
+            if (!this.node.child("o").hasAttribute("base", new EoFqn("number").fqn())) {
+                codec = new PlainLongCodec(codec);
+            }
+            res = new BytecodeBytes(base, this.bytes()).object(codec);
+        }
+        return res;
+    }
+
+    /**
+     * Parse boolean value.
      * @return Boolean.
      */
-    public boolean bool() {
-        final String value = this.hex();
-        if (value.length() != 2) {
-            throw new IllegalArgumentException(
-                String.format(
-                    "Invalid hex boolean string: %s, the expected size is 2: 01 or 00",
-                    value
-                )
-            );
-        }
-        return "01".equals(value);
-    }
-
-    /**
-     * Convert hex string to integer.
-     * @return Integer.
-     */
-    public int integer() {
-        return Integer.parseInt(this.hex(), XmlValue.RADIX);
+    private Object parseBoolean() {
+        return this.node.child("o").hasAttribute("base", new EoFqn("true").fqn());
     }
 
     /**
      * Convert hex string to a byte array.
      * @return Byte array.
      */
-    public byte[] bytes() {
+    private byte[] bytes() {
         final String hex = this.hex();
         final byte[] res;
         if (hex.isEmpty()) {
@@ -131,21 +99,6 @@ public final class XmlValue {
             }
         }
         return res;
-    }
-
-    /**
-     * Convert hex string to an object.
-     * @return Object.
-     */
-    public Object object() {
-        final String base = this.base();
-        final Object result;
-        if ("string".equals(base)) {
-            result = this.string();
-        } else {
-            result = new BytecodeValue(base, this.bytes()).object();
-        }
-        return result;
     }
 
     /**

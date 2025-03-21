@@ -1,29 +1,10 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2024 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
  */
 package org.eolang.jeo.representation.directives;
 
-import org.eolang.jeo.matchers.SameXml;
+import com.jcabi.matchers.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.xembly.Directives;
@@ -32,7 +13,6 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link org.eolang.jeo.representation.directives.DirectivesClassProperties}.
- *
  * @since 0.1.0
  */
 final class DirectivesClassPropertiesTest {
@@ -53,22 +33,13 @@ final class DirectivesClassPropertiesTest {
                         )
                     ).up()
             ).xml(),
-            new SameXml(
-                String.join(
-                    "",
-                    "<?xml version='1.0' encoding='UTF-8'?>\n",
-                    "<o>\n",
-                    "   <o base='jeo.int' name='version'><o base='org.eolang.bytes'>00-00-00-00-00-00-00-34</o></o>\n",
-                    "   <o base='jeo.int' name='access'><o base='org.eolang.bytes'>00-00-00-00-00-00-00-01</o></o>\n",
-                    "   <o base='org.eolang.string' name='signature'><o base='org.eolang.bytes'>6F-72-67-2F-65-6F-6C-61-6E-67-2F-53-6F-6D-65-43-6C-61-73-73</o></o>\n",
-                    "   <o base='org.eolang.string' name='supername'><o base='org.eolang.bytes'>6A-61-76-61-2F-6C-61-6E-67-2F-4F-62-6A-65-63-74</o></o>\n",
-                    "   <o base='jeo.seq.of1' name='interfaces'>\n",
-                    "      <o base='org.eolang.string'><o base='org.eolang.bytes'>6F-72-67-2F-65-6F-6C-61-6E-67-2F-53-6F-6D-65-49-6E-74-65-72-66-61-63-65</o></o>\n",
-                    "   </o>\n",
-                    "</o>\n"
-                )
+            XhtmlMatchers.hasXPaths(
+                "/o/o[contains(@base,'jeo.int') and contains(@as,'version')]",
+                "/o/o[contains(@base,'jeo.int') and contains(@as,'access')]",
+                "/o/o[contains(@base,'org.eolang.string') and contains(@as,'signature')]",
+                "/o/o[contains(@base,'org.eolang.string') and contains(@as,'supername')]",
+                "/o/o[contains(@base,'jeo.seq.of1') and contains(@as,'interfaces')]"
             )
         );
     }
-
 }

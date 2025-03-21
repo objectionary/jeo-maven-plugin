@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+
+version = 1
+[[annotations]]
+path = [
+    "**.json",
+    "**.md",
+    "**.txt",
+    "**.vm",
+    "**/*.class",
+    "**/*.csv",
+    "**/*.jpg",
+    "**/*.json",
+    "**/*.md",
+    "**/*.pdf",
+    "**/*.png",
+    "**/*.svg",
+    "**/*.txt",
+    "**/*.vm",
+    "**/.DS_Store",
+    "**/.gitignore",
+    "**/CNAME",
+    "**/MANIFEST.MF",
+    "**/MethodByte.eo",
+    ".DS_Store",
+    ".gitattributes",
+    ".gitignore",
+    "README.md",
+    "renovate.json",
+    "src/it/spring-fat/src/main/resources/META-INF/spring.factories",
+    "src/main/resources/META-INF/services/javax.xml.transform.TransformerFactory",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "Copyright (c) 2016-2025 Objectionary.com"
+SPDX-License-Identifier = "MIT"

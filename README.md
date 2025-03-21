@@ -7,30 +7,32 @@
 ![Lines of code](https://sloc.xyz/github/objectionary/jeo-maven-plugin)
 [![codecov](https://codecov.io/gh/objectionary/jeo-maven-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/objectionary/jeo-maven-plugin)
 
-**jeo** stands for "Java EOlang Optimizations". **jeo-maven-plugin** is a Maven
-plugin dedicated to optimizing Java bytecode. The process involves translating
-the Java bytecode into the [EOlang](https://github.com/objectionary/eo)
-programming language. Utilizing the optimization steps provided by EOlang, the
-original code undergoes an enhancement process. Upon completion, the optimized
-EOlang program is translated back to Java bytecode, achieving efficient and
-optimized performance.
+**jeo-maven-plugin** is a Maven plugin dedicated to disassembling Java bytecode.
+The process involves translating the Java bytecode into
+the [EO](https://github.com/objectionary/eo)
+programming language.
+The plugin also provides the ability to assemble EO back into Java bytecode.
 
 # How to use
 
-The plugin can be run using several approaches but for all of them you need
-at least Maven 3.1.+ and Java 8+.
-The plugin can convert compiled classes into EOlang by using
-the `disassemble` goal. The `assemble` goal can convert EOlang back
-into bytecode. The default phase for the plugin
-is [process-classes](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#default-lifecycle).
-If you are a developer of optimizations in EOlang you probably need to
-use the both goals in the following order:
+You need at least **Maven 3.1+** and **Java 11+** to run the plugin.
+(Actually, the plugin requires **Java 8+**, but since the main
+dependency [eo](https://github.com/objectionary/eo) requires **Java 11**,
+we are obligated to use it as well.)
 
-* `disassemble` create EOlang files in the `target/generated-sources`
+The plugin can convert compiled `.class` files into EO by using
+the `disassemble` goal.
+The `assemble` goal can convert EO back into bytecode.
+The default phase for the plugin
+is [process-classes](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#default-lifecycle).
+
+To optimize java bytecode you need to use both goals in the following order:
+
+* `disassemble` create EO files in the `target/generated-sources`
   directory.
-* Provide your optimizations are applied to the EOlang files
+* Provide your optimizations are applied to the EO files
   in the `target/generated-sources` directory.
-* `assemble` scans the `target/generated-sources` directory for EOlang
+* `assemble` scans the `target/generated-sources` directory for EO
   files and converts them back to Java bytecode.
 
 More details about plugin usage you can find in our
@@ -63,7 +65,7 @@ configuration to your `pom.xml` file:
     <plugin>
       <groupId>org.eolang</groupId>
       <artifactId>jeo-maven-plugin</artifactId>
-      <version>0.6.26</version>
+      <version>0.8.1</version>
       <executions>
         <execution>
           <id>bytecode-to-eo</id>
@@ -91,12 +93,13 @@ In order to include debug information in the generated EO files, you can set
 `debug` option.
 
 ```xml
+
 <configuration>
   <mode>debug</mode>
 </configuration>
 ```
 
-This option will add line numbers and local variable names to the EO files 
+This option will add line numbers and local variable names to the EO files
 together with their corresponding labels.
 
 ### Disable bytecode verification
@@ -114,251 +117,248 @@ setting the `skipVerification` parameter to `true`:
 
 At times, it might be beneficial to generate intentionally flawed bytecode.
 
-## Transformation method
+### Enable XMIR Verification
 
-The plugin can transform Java bytecode into EO and back. Usually, the plugin
-transforms each bytecode class file into a separate EO file, maintaining a
-one-to-one relationship. If the Java class has name `Foo.class`, the EO file
-will have `Foo.eo` (and Foo.xmir for the XMIR representation of the EO file).
-
-### Classes
-
-The first high-level transformation is the conversion of the bytecode class
-into `<program>` and `<objects><o name='Classname'/></objects>` XMIR elements.
-For example, consider the following Java class:
-
-```java
-public class Foo {
-}
-```
-
-It will be transformed into the following EO:
-
-```eo
-[] > j$Foo
-  33 > access
-  "java/lang/Object" > supername
-  * > interfaces
-```
-
-`access`(class access modifiers like `public`, `static`, `final` and others),
-`supername` (parent class), and `interfaces` (tuple of implemented interfaces)
-are attributes of the class element that retain the information necessary for
-the reverse transformation.
-
-The `j$*` prefix is employed to prevent name conflicts with EO keywords.
-This same prefix is utilized for all EO elements generated from Java bytecode.
-
-By the way, the `XMIR` representation of that EO file will be:
+After generation XMIR or before `assemble` goal,
+you might need to check its correctness.
+We do it by using [objectionary/lints](https://github.com/objectionary/lints)
+repository.
+By default, the plugin does not run lints.
+To enable them, you need to set `xmirVerification` to `true`:
 
 ```xml
 
-<program>
-  <objects>
-    <o name="j$Foo">
-      <attribute name="access" value="33"/>
-      <attribute name="supername" value="java/lang/Object"/>
-      <attribute name="interfaces" value="*"/>
-    </o>
-  </objects>
-</program>
+<configuration>
+  <xmirVerification>true</xmirVerification>
+</configuration>
 ```
 
-### Methods
+## Disassembling Example
 
-The second high-level transformation involves converting the bytecode method
-into EO. For example, consider the following Java method:
+The plugin can transform Java bytecode into EO and back. Usually, the plugin
+transforms each bytecode class file into a separate EO file, maintaining a
+one-to-one relationship. If the Java class has name `Application.class`, the EO
+file will have `Application.xmir` file.
+
+For example, consider the following Java class:
 
 ```java
-public class Bar {
-    public void foo() {
-        return;
+package org.eolang.jeo;
+
+public class Application {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
     }
 }
 ```
 
-It will be transformed into the following EO:
+with the following bytecode representation:
+
+```bytecode
+{
+  public org.eolang.jeo.Application();
+    descriptor: ()V
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 3: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lorg/eolang/jeo/Application;
+
+  public static void main(java.lang.String[]);
+    descriptor: ([Ljava/lang/String;)V
+    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=2, locals=1, args_size=1
+         0: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+         3: ldc           #13                 // String Hello, World!
+         5: invokevirtual #15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+         8: return
+      LineNumberTable:
+        line 5: 0
+        line 6: 8
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       9     0  args   [Ljava/lang/String;
+}
+```
+
+After running the `jeo:disassemble` goal, the plugin will generate the
+following EO:
 
 ```eo
-[] > j$Bar
-  33 > access
++package j$org.j$eolang.j$jeo
+
+jeo.class > j$Application
+  jeo.int > version
+    00-00-00-00-00-00-00-34
+  jeo.int > access
+    00-00-00-00-00-00-00-21
   "java/lang/Object" > supername
-  * > interfaces
-  [] > j$foo
-    1 > access
-    "()V" > descriptor
-    * > exceptions
-    seq > @
-      tuple
-        opcode > RETURN-1
-          177
+  jeo.seq.of0 > interfaces-696199744
+  jeo.method > j$object@init@-%28%29V
+    jeo.int
+      00-00-00-00-00-00-00-01
+    "()V"
+    ""
+    jeo.seq.of0 > aca3ae21-f727-41cc-b8df-791e7031904e-1635871459
+    jeo.maxs
+      jeo.int
+        00-00-00-00-00-00-00-01
+      jeo.int
+        00-00-00-00-00-00-00-01
+    jeo.params
+    jeo.seq.of0 > annotations-1586121642
+    jeo.seq.of3 > body-1998918745
+      jeo.opcode.aload
+        jeo.int
+          00-00-00-00-00-00-00-19
+        jeo.int
+          00-00-00-00-00-00-00-00
+      jeo.opcode.invokespecial
+        jeo.int
+          00-00-00-00-00-00-00-B7
+        "java/lang/Object"
+        "<init>"
+        "()V"
+        jeo.bool
+          00-
+      jeo.opcode.return
+        jeo.int
+          00-00-00-00-00-00-00-B1
+    jeo.seq.of0 > trycatchblocks-object@init@-1849817803
+    jeo.seq.of0 > local-variable-table-1794934203
+  jeo.method > j$main-%28%5BLjava%2Flang%2FString%3B%29V
+    jeo.int
+      00-00-00-00-00-00-00-09
+    "([Ljava/lang/String;)V"
+    ""
+    jeo.seq.of0 > f6c6c536-0b96-4357-bbba-d2966968b266-658978372
+    jeo.maxs
+      jeo.int
+        00-00-00-00-00-00-00-02
+      jeo.int
+        00-00-00-00-00-00-00-01
+    jeo.params
+      jeo.param > param-%5BLjava%2Flang%2FString%3B-arg0-0-0-1064778491
+        jeo.seq.of0 > param-annotations-0-666850426
+    jeo.seq.of0 > annotations-639467587
+    jeo.seq.of4 > body-1023152593
+      jeo.opcode.getstatic
+        jeo.int
+          00-00-00-00-00-00-00-B2
+        "java/lang/System"
+        "out"
+        "Ljava/io/PrintStream;"
+      jeo.opcode.ldc
+        jeo.int
+          00-00-00-00-00-00-00-12
+        "Hello, World!"
+      jeo.opcode.invokevirtual
+        jeo.int
+          00-00-00-00-00-00-00-B6
+        "java/io/PrintStream"
+        "println"
+        "(Ljava/lang/String;)V"
+        jeo.bool
+          00-
+      jeo.opcode.return
+        jeo.int
+          00-00-00-00-00-00-00-B1
+    jeo.seq.of0 > trycatchblocks-main-727934521
+    jeo.seq.of0 > local-variable-table-2134319645
+  jeo.seq.of0 > annotations-785801830
+  jeo.seq.of0 > attributes-744976367
 ```
 
-Each method is a child of the [class](#classes) element and contains bytecode
-attributes such as `access` (access
-modifiers), `descriptor` ([method descriptor](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html)),
-and `exceptions` (a tuple of declared exceptions). Additionally, it includes the
-`seq` element containing the sequence of bytecode instructions.
+As you can see, there are many EO objects that represent the Java bytecode
+primitives, like `jeo.opcode`, `jeo.int`, `jeo.method`, etc.
 
-It's worth mentioning that Java constructors are also treated as methods with
-the name `new`. For instance, consider the following Java constructor:
+## Full List of Jeo Objects
 
-```java
-public class Bar {
-    public Bar() {
-    }
-}
-```
+During decompilation, the `jeo-maven-plugin` creates a set of objects
+representing bytecode primitives.
+These objects provide a way to handle various aspects of Java bytecode.
+Below is the full list of these objects, grouped by category:
 
-It will be transformed into the following EO:
+---
 
-```eo
-[] > j$Bar
-  33 > access
-  "java/lang/Object" > supername
-  * > interfaces
-  [] > new
-    1 > access
-    "()V" > descriptor
-    * > exceptions
-    seq > @
-      tuple
-        // list of instructions
-```
+### Bytecode Instructions
 
-### Instructions
+- **`jeo.opcode.*`**
+  Represents a single bytecode instruction like `aload_0`, `iconst_0`, etc.
 
-Each method and constructor contains a sequence of instructions, with each
-instruction represented by either a `opcode` or a `label`. For example, consider
-the following Java method:
+### Classes, Methods, and Fields
 
-```java
-public class Bar {
-    public int foo(int x) {
-        if (x < 0) {
-            return 1;
-        }
-        return 2;
-    }
-}
-```
+- **`jeo.class`**
+  Represents a Java class.
+- **`jeo.method`**
+  Represents a Java method.
+- **`jeo.field`**
+  Represents a Java field.
+- **`jeo.params`**
+  Represents method parameters.
+- **`jeo.param`**
+  Represents a single method parameter.
+- **`jeo.maxs`**
+  Represents the maximum stack and local variable sizes.
 
-It will have the following set of instructions after compilation (as shown
-by `javap -v Bar` output):
+### Primitive Values
 
-```
-0: iload_1
-1: ifle          6
-4: iconst_1
-5: ireturn
-6: iconst_2
-7: ireturn
-```
+- **`jeo.int`** - Represents an integer value.
+- **`jeo.bool`** - Represents a boolean value.
+- **`jeo.string`** - Represents a string value.
+- **`jeo.float`** - Represents a float value.
+- **`jeo.double`** - Represents a double value.
+- **`jeo.long`** - Represents a long value.
+- **`jeo.char`** - Represents a char value.
+- **`jeo.short`** - Represents a short value.
+- **`jeo.byte`** - Represents a byte value.
+- **`jeo.bytes`** - Represents a byte array.
 
-After the transformation provided by `jeo`, the content of the `foo` method in
-EO will look like:
+### Collections and Complex Types
 
-```eo
-seq > @
-  tuple
-    label
-      "67b715c8-7d74-413a-9bba-f6920c8ba68b"
-    opcode > ILOAD-E
-       21
-       1
-    opcode > IFLE-F
-      158
-      label
-        "c361c429-6c81-4b11-9b97-0cbb6e96a2f9"
-    opcode > ICONST_1-10
-      4
-    opcode > IRETURN-11
-      172
-    label
-      "c361c429-6c81-4b11-9b97-0cbb6e96a2f9"
-    opcode > ICONST_2-12
-      5
-    opcode > IRETURN-13
-      172
-    label
-      "8f341f7f-e357-4a78-b604-bcaae28e3c1f"
-```
+- **`jeo.nullable`**
+  Represents an object that can be `null`.
+- **`jeo.array`**
+  Represents an array of objects.
+- **`jeo.type`**
+  Represents a Java type.
+- **`jeo.seq.*`**
+  Represents a sequence of objects with a specific size,
+  like `jeo.seq.of0`, `jeo.seq.of1`, etc.
 
-#### Opcode
+### Annotations and Metadata
 
-From the example above (refer to the [Methods](#methods) section), you can
-observe that each opcode is represented by the `opcode` object. Each opcode
-object includes a name, a numerical argument, and optional operand arguments.
-For instance, the `iload` opcode has the following EO representation
+- **`jeo.annotation`**
+  Represents a Java annotation.
+- **`jeo.annotation-property`**
+  Represents a single annotation element.
+- **`jeo.annotation-default-value`**
+  Represents a default value of a Java interface method or annotation property.
+- **`jeo.inner-class`**
+  Represents a Java inner class annotation property.
 
-```eo
-opcode > ILOAD-E
-  21
-  1
-```
+### Local Variables and Control Flow
 
-Here, `ILOAD-E` is the opcode's name, `21` is its number according to the [Java
-specification](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html),
-and `1` represents the opcode argument, indicating the 'local
-variable with index 1' in this context.
+- **`jeo.local-variable`**
+  Represents a local variable entry.
+- **`jeo.try-catch`**
+  Represents a try-catch block.
 
-`ILOAD-E` is simply a name assigned to an opcode object. Since it serves a
-descriptive purpose and isn't relied upon during transformations, you have
-flexibility to modify these names as needed when making changes to the original
-`jeo` output (as `jeo` doesn't utilize them during parsing.)
+### Labels, Handles, Frames
 
-Also, it's worth mentioning that an `opcode` might not have operand arguments,
-as is the case with the `IRETURN` opcode:
-
-```eo
-opcode > IRETURN-11
-  172
-```
-
-Alternatively, the opcode argument might be a `label` object, as seen in the
-`IFLE` instruction:
-
-```eo
-opcode > IFLE-F
-  158
-  label
-    "c361c429-6c81-4b11-9b97-0cbb6e96a2f9"
-```
-
-In this instance, the `IFLE` opcode has precisely one operand, which is
-a `label`.
-
-#### Labels
-
-Labels serve as markers or references indicating specific points in the code:
-
-1. They might mark the entry- and exit-points of a method for debugging
-   purposes.
-2. They provide jump points in the code, such as for `if` and `for` statements.
-   The example of using labels is in conjunction with the `goto` instruction:
-
-```
-opcode > GOTO-1
-  167
-  label "dbe5a680-4814-4b19-a8e6-15c3c2db3a83"
-opcode > ALOAD-2 // skiped by goto
-  25             // skiped by goto
-  1              // skiped by goto
-label "dbe5a680-4814-4b19-a8e6-15c3c2db3a83"
-opcode > RETURN-3
-  177
-```
-
-3. Labels can also be used for exception handling.
-
-Of course, this isn't an exhaustive list of `label` usages.
-
-What is more important, many labels are as crucial as opcodes themselves, and if
-subsequent transformations lose these labels, the logic of the program might be
-compromised. Therefore, it is extremely important to preserve most of the
-labels. However, it's worth noting that you can omit certain labels used solely
-for debugging purposes when generating your own classes. For instance, you can
-omit labels at the start and end of a method.
+- **`jeo.label`**
+  Represents a Java label.
+- **`jeo.handle`**
+  Represents a Java method handle.
+- **`jeo.frame`**
+  Represents a stack frame.
 
 ## How to Build the Plugin
 
@@ -366,12 +366,29 @@ To build the plugin from the source code, you need to clone the repository and
 run the following command:
 
 ```bash
-$ mvn clean install -Pqulice,long
+mvn clean install -Pqulice,long
 ```
 
 Pay attention to the `qulice` profile, which activates the static analysis
 tools. The `long` profile is optional and runs the full test suite, including
 long-running integration tests.
+
+
+## How to Run Benchmarks
+
+To run the benchmarks, you need to execute the following command:
+
+```bash
+mvn clean verify -Pbenchmark
+```
+
+Before running the benchmarks, make sure you have the `.env` file in the root
+directory of the project. The file should contain the following environment
+variables:
+
+```bash
+PROFILER=/path/to/async-profiler/profiler.sh
+```
 
 ## How to Contribute
 
@@ -385,5 +402,4 @@ before sending us your pull request please run full Maven build:
 $ mvn clean install -Pqulice
 ```
 
-You will need [Maven 3.3+](https://maven.apache.org) and Java 8+ installed.
-
+You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.

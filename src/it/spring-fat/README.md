@@ -65,5 +65,3 @@ result, we skip bytecode verification for this test.
 
 You can read more about this problem in [pom.xml](pom.xml) in
 the `jeo-maven-plugin` configuration.
-
-

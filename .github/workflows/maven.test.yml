@@ -1,6 +1,9 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
 ---
+# yamllint disable rule:line-length
 name: mvn
-on:
+'on':
   push:
     branches:
       - master
@@ -9,15 +12,9 @@ on:
       - master
 jobs:
   test:
-    name: Tests
     strategy:
       matrix:
-        os: [ ubuntu-20.04, macos-14, windows-2022 ]
-#       @todo #909:60min Add 8 version of Java to matrix.
-#        For now we're getting an infinite qulice check on
-#        Java 8. To fix this you need to set Java 8 version
-#        in your Maven configuration, after that you need to
-#        run `mvn clean install -Pqulice`.
+        os: [ ubuntu-24.04, macos-15, windows-2022 ]
         java: [ 11, 21 ]
     runs-on: ${{ matrix.os }}
     steps:
@@ -29,7 +26,9 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-jdk-${{ matrix.java }}-maven-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}
+            -jdk-${{ matrix.java }}
+            -maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
       - run: mvn clean install -P"qulice,long" --errors --batch-mode

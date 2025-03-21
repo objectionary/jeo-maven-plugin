@@ -1,37 +1,15 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2024 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
  */
 package org.eolang.jeo.representation.directives;
 
-import com.jcabi.xml.XMLDocument;
-import java.util.HashSet;
+import com.jcabi.manifests.Manifests;
 import java.util.Iterator;
-import java.util.Set;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.xembly.Directive;
 import org.xembly.Directives;
-import org.xembly.Xembler;
 
 /**
  * Directives for meta-information of a class.
@@ -45,40 +23,23 @@ public final class DirectivesMetas implements Iterable<Directive> {
     private final ClassName name;
 
     /**
-     * Class directives.
-     */
-    private final DirectivesClass clazz;
-
-    /**
      * Constructor.
      * @param classname Class name.
      */
     public DirectivesMetas(final ClassName classname) {
-        this(classname, new DirectivesClass(new ClassName("org.jeo", "SomeClass")));
-    }
-
-    /**
-     * Constructor.
-     * @param classname Class name.
-     * @param clazz Class directives.
-     */
-    public DirectivesMetas(
-        final ClassName classname,
-        final DirectivesClass clazz
-    ) {
         this.name = classname;
-        this.clazz = clazz;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives metas = new Directives().add("metas").append(this.pckg());
-        this.jeo()
-            .stream()
-            .filter(object -> !object.isEmpty())
-            .map(DirectivesMetas::alias)
-            .forEach(metas::append);
-        return metas.up().iterator();
+        final Directives result = new Directives().add("metas");
+        result.append(DirectivesMetas.home());
+        if (!this.name.pckg().isEmpty()) {
+            result.append(this.pckg());
+        }
+        result.append(DirectivesMetas.spdx());
+        result.append(DirectivesMetas.version());
+        return result.up().iterator();
     }
 
     /**
@@ -90,57 +51,66 @@ public final class DirectivesMetas implements Iterable<Directive> {
     }
 
     /**
+     * Home directives.
+     * @return Directives for home.
+     */
+    private static Iterable<Directive> home() {
+        return new Directives().add("meta")
+            .add("head").set("home").up()
+            .add("tail").set("https://github.com/objectionary/jeo-maven-plugin").up()
+            .add("part").set("https://github.com/objectionary/jeo-maven-plugin").up()
+            .up();
+    }
+
+    /**
      * Prefixed package.
      * We intentionally add prefix to the packages, because sometimes they can be really
      * strange, <a href="https://github.com/objectionary/jeo-maven-plugin/issues/779">see</a>
      * @return Prefixed package name.
      */
     private Directives pckg() {
-        final Directives result;
-        final String original = this.name.pckg();
-        if (original.isEmpty()) {
-            result = new Directives();
-        } else {
-            final String prefixed = new PrefixedName(original).encode();
-            result = new Directives()
-                .add("meta")
-                .add("head").set("package").up()
-                .add("tail").set(prefixed).up()
-                .add("part").set(prefixed).up()
-                .up();
-        }
-        return result;
-    }
-
-    /**
-     * Find all jeo objects.
-     * @return Set of jeo objects.
-     * @todo #883:90min Optimize jeo.* Objects Collection for Metas.
-     *  Currently, we are required to pre-build a part of XML, find all the jeo objects
-     *  by using Xpath and then build the XML. This is not efficient.
-     *  We should find a way to collect all the jeo objects on the way.
-     */
-    private Set<String> jeo() {
-        return new HashSet<>(
-            new XMLDocument(
-                new Xembler(
-                    new Directives(this.clazz)
-                ).xmlQuietly()
-            ).xpath(".//o[starts-with(@base, 'jeo.')]/@base")
-        );
-    }
-
-    /**
-     * Alias directive for an object.
-     * @param object Some object name.
-     * @return Alias directive.
-     */
-    private static Directives alias(final String object) {
+        final String prefixed = new PrefixedName(this.name.pckg()).encode();
         return new Directives()
             .add("meta")
-            .add("head").set("alias").up()
-            .add("tail").set(object).up()
-            .add("part").set(object).up()
+            .add("head").set("package").up()
+            .add("tail").set(prefixed).up()
+            .add("part").set(prefixed).up()
+            .up();
+    }
+
+    /**
+     * The version directives of jeo-maven-plugin.
+     * @return Version directives.
+     */
+    private static Directives version() {
+        return new Directives()
+            .add("meta")
+            .add("head").set("version").up()
+            .add("tail").set(Manifests.read("JEO-Version")).up()
+            .up();
+    }
+
+    /**
+     * SPDX directives.
+     * Here I intentionally use the array of characters to avoid the 'reuse' check warning.
+     * @return SPDX directives.
+     */
+    private static Directives spdx() {
+        final String spdx = new String(
+            new char[]{
+                'S', 'P', 'D', 'X',
+                '-',
+                'L', 'i', 'c', 'e', 'n', 's', 'e',
+                '-', 'I', 'd', 'e', 'n', 't', 'i', 'f', 'i', 'e', 'r',
+                ':',
+            }
+        );
+        return new Directives()
+            .add("meta")
+            .add("head").set("spdx").up()
+            .add("tail").set(String.format("%s MIT", spdx)).up()
+            .add("part").set(spdx).up()
+            .add("part").set("MIT").up()
             .up();
     }
 }

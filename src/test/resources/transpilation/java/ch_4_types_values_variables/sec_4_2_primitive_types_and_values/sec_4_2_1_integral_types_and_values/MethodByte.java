@@ -1,3 +1,7 @@
+/*
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
+ */
 public class MethodByte {
     public static void main(String[] args) {
         System.out.println(method());

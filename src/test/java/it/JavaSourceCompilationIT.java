@@ -1,25 +1,6 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2024 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
  */
 package it;
 
@@ -58,7 +39,7 @@ final class JavaSourceCompilationIT {
     @Test
     @EnabledIf(value = "hasJavaCompiler", disabledReason = "Java compiler is not available")
     void transformsRandomJavaSourceCodeIntoEoAndBack(@TempDir final Path temp) throws IOException {
-        final Bytecode expected = JavaSourceCompilationIT.compile(temp, new RandomJavaClass());
+        final Bytecode expected = JavaSourceCompilationIT.compile(temp);
         MatcherAssert.assertThat(
             "Bytecode is not equal to the original one, check that transformation is correct and does not change the bytecode",
             new XmirRepresentation(
@@ -71,25 +52,15 @@ final class JavaSourceCompilationIT {
     /**
      * Compile random java class into bytecode.
      * @param where Where to compile.
-     * @param clazz Random java class.
      * @return Bytecode.
      */
-    private static Bytecode compile(
-        final Path where,
-        final RandomJavaClass clazz
-    ) throws IOException {
-        final Path src = where.resolve("HelloWorld.java");
+    private static Bytecode compile(final Path where) throws IOException {
+        final Path java = where.resolve("HelloWorld.java");
+        final RandomJavaClass rand = new RandomJavaClass();
+        final String src = rand.src();
         Files.write(
-            src,
-            String.join(
-                "\n",
-                "package org.eolang.jeo.representation.bytecode;",
-                "public class HelloWorld {",
-                "    public static void main(String[] args) {",
-                "        System.out.println(\"Hello, World!\");",
-                "    }",
-                "}"
-            ).getBytes(StandardCharsets.UTF_8)
+            java,
+            src.getBytes(StandardCharsets.UTF_8)
         );
         ToolProvider.getSystemJavaCompiler().run(
             System.in,
@@ -98,10 +69,14 @@ final class JavaSourceCompilationIT {
             "-g:vars",
             "-source", "11",
             "-parameters",
-            src.toString()
+            java.toString()
         );
         return new Bytecode(
-            Files.readAllBytes(where.resolve(String.format("%s.class", clazz.name())))
+            Files.readAllBytes(
+                Files.find(where, 1, (path, attr) -> path.toString().endsWith(".class"))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("No class file found"))
+            )
         );
     }
 

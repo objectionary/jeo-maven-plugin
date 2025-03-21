@@ -1,25 +1,6 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2024 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
  */
 package org.eolang.jeo.representation.directives;
 
@@ -31,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.bytecode.JavaCodec;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -190,7 +172,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
     private Stream<String> definition() {
         final String root = this.root();
         return Stream.of(
-            root.concat("/@name"),
+            root.concat("/@as"),
             root.concat("/o[contains(@base,'seq')]/@base")
         );
     }
@@ -204,7 +186,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         return this.params.stream()
             .map(
                 param -> String.format(
-                    "%s/o[contains(@base,'params')]/o[@name='%s' and contains(@base,'param')]/@name",
+                    "%s/o[contains(@base,'params')]/o[contains(@as,'%s') and contains(@base,'param')]/@as",
                     root,
                     param
                 )
@@ -247,7 +229,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      */
     private String root() {
         return String.format(
-            "/program/objects/o[@name='%s']/o[contains(@name,'%s')]",
+            "/program/objects/o[contains(@name,'%s')]/o[contains(@as,'%s')]",
             this.clazz,
             this.name
         );
@@ -296,16 +278,16 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          */
         Stream<String> checks(final String root) {
             final String instruction = String.format(
-                "%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'opcode')]",
+                "%s/o[contains(@base,'seq') and contains(@as,'body')]/o[contains(@base,'opcode')]",
                 root
             );
             return Stream.concat(
                 Stream.of(
                     instruction.concat("/@base"),
                     String.format(
-                        "%s/o[contains(@base,'int')]/o[@base='org.eolang.bytes' and text()='%s']/@base",
+                        "%s/o[contains(@base,'int')]/o[contains(@base,'number')]/o[contains(@base,'bytes') and text()='%s']/@base",
                         instruction,
-                        new DirectivesValue(this.opcode).hex()
+                        new DirectivesValue((double) this.opcode).hex(new JavaCodec())
                     )
                 ),
                 this.arguments(instruction)
@@ -322,19 +304,33 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 .map(
                     arg -> {
                         final String result;
-                        final DirectivesValue hex = new DirectivesValue(arg);
-                        if (arg instanceof BytecodeLabel) {
+                        if (arg instanceof Number) {
+                            final DirectivesValue simple = new DirectivesValue(
+                                arg
+                            );
+                            final DirectivesValue hex = new DirectivesValue(
+                                ((Number) arg).doubleValue()
+                            );
                             result = String.format(
-                                "%s/o[contains(@base,'%s')]/o[@base='org.eolang.bytes']/@base",
+                                "%s/o[contains(@base,'%s')]/o[contains(@base,'number')]/o[contains(@base,'bytes') and text()='%s']/@base",
+                                instruction,
+                                simple.type(),
+                                hex.hex(new JavaCodec())
+                            );
+                        } else if (arg instanceof BytecodeLabel) {
+                            final DirectivesValue hex = new DirectivesValue(arg);
+                            result = String.format(
+                                "%s/o[contains(@base,'%s')]/o[contains(@base,'bytes')]/@base",
                                 instruction,
                                 hex.type()
                             );
                         } else {
+                            final DirectivesValue hex = new DirectivesValue(arg);
                             result = String.format(
-                                "%s/o[contains(@base,'%s')]/o[@base='org.eolang.bytes' and text()='%s']/@base",
+                                "%s/o[contains(@base,'%s')]/o[contains(@base,'bytes') and text()='%s']/@base",
                                 instruction,
                                 hex.type(),
-                                hex.hex()
+                                hex.hex(new JavaCodec())
                             );
                         }
                         return result;
@@ -385,7 +381,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 String.format(
                     "%s/o[4][contains(@base,'string')]/o[text()='%s']/@base",
                     HasTryCatch.path(root),
-                    new DirectivesValue(this.type).hex()
+                    new DirectivesValue(this.type).hex(new JavaCodec())
                 )
             );
         }
@@ -397,7 +393,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
          */
         private static String path(final String root) {
             return String.format(
-                "%s/o[contains(@base,'seq') and contains(@name, 'trycatchblocks')]/o[contains(@base,'trycatch')]",
+                "%s/o[contains(@base,'seq') and contains(@as, 'trycatchblocks')]/o[contains(@base,'trycatch')]",
                 root
             );
         }
@@ -420,7 +416,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
         static Stream<String> checks(final String root) {
             return Stream.of(
                 String.format(
-                    "%s/o[contains(@base,'seq') and @name='@']/o[contains(@base,'label')]/o[@base='org.eolang.bytes']/@base",
+                    "%s/o[contains(@base,'seq') and contains(@as,'body')]/o[contains(@base,'label')]/o[contains(@base, 'org.eolang.bytes')]/@base",
                     root
                 )
             );

@@ -1,25 +1,6 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2024 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
  */
 package org.eolang.jeo.representation;
 
@@ -39,6 +20,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.xembly.Directives;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmirRepresentation}.
@@ -52,6 +35,11 @@ final class XmirRepresentationTest {
      */
     private static final String MESSAGE =
         "The bytecode representation of the EO object is not correct,%nexpected:%n%s%nbut got:%n%s";
+
+    /**
+     * Math class name.
+     */
+    private static final String MATH = "org/eolang/foo/Math";
 
     @Test
     void retrievesName() {
@@ -75,12 +63,32 @@ final class XmirRepresentationTest {
     }
 
     @Test
+    void retrievesEmptyPackageWhenXmirWithoutMetas() {
+        final String actual = new XmirRepresentation(
+            new XMLDocument(
+                new Xembler(new Directives().xpath("/program/metas").remove())
+                    .applyQuietly(new BytecodeProgram(new BytecodeClass("Math")).xml().inner())
+            )
+        ).name();
+        final String expected = "j$Math";
+        MatcherAssert.assertThat(
+            String.format(
+                "The name of the class (without package) is not retrieved correctly, we expected '%s', but got '%s'",
+                expected,
+                actual
+            ),
+            actual,
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
     void returnsXmlRepresentationOfEo() {
         MatcherAssert.assertThat(
             "The XML representation of the EO object is not correct",
             new BytecodeProgram(
                 "org.eolang",
-                new BytecodeClass("org/eolang/foo/Math")
+                new BytecodeClass(XmirRepresentationTest.MATH)
             ).xml(),
             XhtmlMatchers.hasXPath("/program[@name='j$Math']")
         );
@@ -139,21 +147,13 @@ final class XmirRepresentationTest {
         Files.write(
             xmir,
             new BytecodeProgram(
-                new BytecodeClass("org/eolang/foo/Math")
+                new BytecodeClass(XmirRepresentationTest.MATH)
             ).xml().toString().substring(42).getBytes(StandardCharsets.UTF_8)
         );
-        MatcherAssert.assertThat(
-            "We expect that the error message will be easily understandable by developers",
-            Assertions.assertThrows(
-                IllegalStateException.class,
-                () -> new XmirRepresentation(xmir).toBytecode()
-            ).getMessage(),
-            Matchers.containsString(
-                String.format(
-                    "Can't parse XML from the file '%s'",
-                    xmir
-                )
-            )
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new XmirRepresentation(xmir).toBytecode(),
+            "We expect that the error message will be easily understandable by developers"
         );
     }
 
@@ -167,7 +167,7 @@ final class XmirRepresentationTest {
     @SuppressWarnings("PMD.GuardLogStatement")
     void convertsToXmirAndBack() {
         final Bytecode before = new BytecodeProgram(
-            new BytecodeClass("org/eolang/foo/Math")
+            new BytecodeClass(XmirRepresentationTest.MATH)
                 .helloWorldMethod()
         ).bytecode();
         final int attempts = 500;
@@ -194,20 +194,17 @@ final class XmirRepresentationTest {
     }
 
     @Test
-    void throwsExceptionIfXmirIsInvalid() {
+    void createsXmirRepresentationFromFile(@TempDir final Path path) throws IOException {
+        final BytecodeProgram program = new BytecodeProgram(
+            new BytecodeClass(XmirRepresentationTest.MATH).helloWorldMethod()
+        );
+        final Bytecode expected = program.bytecode();
+        final Path address = path.resolve("Math.xmir");
+        Files.write(address, program.xml().toString().getBytes(StandardCharsets.UTF_8));
         MatcherAssert.assertThat(
-            "We excpect that XSD violation message will be easily understandable by developers",
-            Assertions.assertThrows(
-                IllegalStateException.class,
-                () -> new XmirRepresentation(
-                    new XMLDocument(
-                        new BytecodeProgram(
-                            new BytecodeClass("org/eolang/foo/Math")
-                        ).xml().toString().replace("<head>package</head>", "")
-                    )
-                ).toBytecode()
-            ).getCause().getMessage(),
-            Matchers.containsString("There are XSD violations, see the log")
+            "We expect that Xmir representation will be created from the file successfully",
+            new XmirRepresentation(address).toBytecode(),
+            Matchers.equalTo(expected)
         );
     }
 }

@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-The MIT License (MIT)
-
-Copyright (c) 2016-2024 Objectionary.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included
-in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -40,7 +21,6 @@ SOFTWARE.
     <jeo.disassemble>${project.build.directory}/generated-sources/jeo-disassemble</jeo.disassemble>
     <eo.phi>${project.build.directory}/generated-sources/eo-phi</eo.phi>
     <eo.unphi>${project.build.directory}/generated-sources/eo-unphi</eo.unphi>
-    <jeo.unroll>${project.build.directory}/generated-sources/jeo-unroll</jeo.unroll>
     <jeo.assemble>target/classes</jeo.assemble>
   </properties>
   <profiles>
@@ -65,7 +45,7 @@ SOFTWARE.
                     <artifactItem>
                       <groupId>net.java.dev.jna</groupId>
                       <artifactId>jna</artifactId>
-                      <version>5.15.0</version>
+                      <version>5.17.0</version>
                       <type>jar</type>
                     </artifactItem>
                   </artifactItems>
@@ -125,7 +105,7 @@ SOFTWARE.
             -->
           <plugin>
             <artifactId>maven-clean-plugin</artifactId>
-            <version>3.4.0</version>
+            <version>3.4.1</version>
             <executions>
               <execution>
                 <id>clean-target-classes</id>
@@ -168,7 +148,7 @@ SOFTWARE.
                     <artifactItem>
                       <groupId>net.java.dev.jna</groupId>
                       <artifactId>jna</artifactId>
-                      <version>5.15.0</version>
+                      <version>5.17.0</version>
                       <type>jar</type>
                     </artifactItem>
                   </artifactItems>
@@ -193,21 +173,10 @@ SOFTWARE.
                 </goals>
               </execution>
               <execution>
-                <id>unroll-phi</id>
-                <phase>prepare-package</phase>
-                <configuration>
-                  <sourcesDir>${eo.unphi}</sourcesDir>
-                  <outputDir>${jeo.unroll}</outputDir>
-                </configuration>
-                <goals>
-                  <goal>unroll-phi</goal>
-                </goals>
-              </execution>
-              <execution>
                 <id>xmir-to-bytecode</id>
                 <phase>package</phase>
                 <configuration>
-                  <sourcesDir>${jeo.unroll}</sourcesDir>
+                  <sourcesDir>${eo.unphi}</sourcesDir>
                   <outputDir>${jeo.assemble}</outputDir>
                 </configuration>
                 <goals>
@@ -219,7 +188,7 @@ SOFTWARE.
           <plugin>
             <groupId>org.eolang</groupId>
             <artifactId>eo-maven-plugin</artifactId>
-            <version>0.44.0</version>
+            <version>0.54.1</version>
             <executions>
               <execution>
                 <id>xmir-to-phi</id>
@@ -268,7 +237,7 @@ SOFTWARE.
         -->
           <plugin>
             <artifactId>maven-clean-plugin</artifactId>
-            <version>3.4.0</version>
+            <version>3.4.1</version>
             <executions>
               <execution>
                 <id>clean-target-classes</id>

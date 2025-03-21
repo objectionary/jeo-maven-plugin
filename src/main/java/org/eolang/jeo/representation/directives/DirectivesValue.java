@@ -1,32 +1,17 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2024 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
  */
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import lombok.ToString;
-import org.eolang.jeo.representation.bytecode.BytecodeValue;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
+import org.eolang.jeo.representation.bytecode.Codec;
+import org.eolang.jeo.representation.bytecode.EoCodec;
+import org.eolang.jeo.representation.bytecode.PlainLongCodec;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
  * Data Object Directive in EO language.
@@ -44,6 +29,23 @@ public final class DirectivesValue implements Iterable<Directive> {
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
     /**
+     * Maximum long value that can be represented as double.
+     * Any value greater than this will be represented incorrectly.
+     */
+    private static final long MAX_LONG_DOUBLE = 9_007_199_254_740_992L;
+
+    /**
+     * Minimum long value that can be represented as double.
+     * Any value less than this will be represented incorrectly.
+     */
+    private static final long MIN_LONG_DOUBLE = -9_007_199_254_740_992L;
+
+    /**
+     * Default codec.
+     */
+    private static final Codec CODEC = new EoCodec();
+
+    /**
      * Name.
      */
     private final String name;
@@ -51,10 +53,11 @@ public final class DirectivesValue implements Iterable<Directive> {
     /**
      * Value.
      */
-    private final BytecodeValue value;
+    private final BytecodeObject value;
 
     /**
      * Constructor.
+     *
      * @param data Data.
      * @param <T> Data type.
      */
@@ -64,20 +67,22 @@ public final class DirectivesValue implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param name Name.
      * @param data Data.
      * @param <T> Data type.
      */
     public <T> DirectivesValue(final String name, final T data) {
-        this(name, new BytecodeValue(data));
+        this(name, new BytecodeObject(data));
     }
 
     /**
      * Constructor.
+     *
      * @param name Name.
      * @param value Value.
      */
-    public DirectivesValue(final String name, final BytecodeValue value) {
+    public DirectivesValue(final String name, final BytecodeObject value) {
         this.name = name;
         this.value = value;
     }
@@ -86,34 +91,48 @@ public final class DirectivesValue implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final String type = this.type();
         final Iterable<Directive> res;
-        if ("string".equals(type)) {
-            res = new DirectivesEoObject(
-                type,
-                this.name,
-                new DirectivesComment(this.comment()),
-                new DirectivesBytes(this.hex())
-            );
-        } else {
-            res = new DirectivesJeoObject(
-                type,
-                this.name,
-                new DirectivesComment(this.comment()),
-                new DirectivesBytes(this.hex())
-            );
+        final Codec codec = DirectivesValue.CODEC;
+        switch (type) {
+            case "byte":
+            case "short":
+            case "int":
+            case "float":
+            case "double":
+                res = this.jeoNumber(type, codec);
+                break;
+            case "long":
+                if (this.fits()) {
+                    res = this.jeoNumber(type, codec);
+                } else {
+                    res = this.jeoObject(type, new PlainLongCodec(codec));
+                }
+                break;
+            case "string":
+                res = this.eoObject(type, codec);
+                break;
+            case "bool":
+                res = this.booleanObject(type);
+                break;
+            default:
+                res = this.jeoObject(type, codec);
+                break;
         }
         return res.iterator();
     }
 
     /**
      * Value of the data.
+     *
+     * @param codec Codec
      * @return Value
      */
-    String hex() {
-        return DirectivesValue.bytesToHex(this.value.bytes());
+    String hex(final Codec codec) {
+        return DirectivesValue.bytesToHex(this.value.encode(codec));
     }
 
     /**
      * Type of the data.
+     *
      * @return Type
      */
     String type() {
@@ -121,12 +140,91 @@ public final class DirectivesValue implements Iterable<Directive> {
     }
 
     /**
+     * Check if the value fits into the double.
+     *
+     * @return True if fits.
+     */
+    private boolean fits() {
+        final long val = ((Number) this.value.value()).longValue();
+        return val >= DirectivesValue.MIN_LONG_DOUBLE && val <= DirectivesValue.MAX_LONG_DOUBLE;
+    }
+
+    /**
+     * EO object.
+     *
+     * @param base Base.
+     * @param codec Codec to use for bytes encoding.
+     * @return EO object directives.
+     */
+    private DirectivesEoObject eoObject(final String base, final Codec codec) {
+        return new DirectivesEoObject(
+            base,
+            this.name,
+            new DirectivesComment(this.comment()),
+            new DirectivesBytes(this.hex(codec))
+        );
+    }
+
+    /**
+     * JEO object.
+     *
+     * @param base Base.
+     * @param codec Codec to use for bytes encoding.
+     * @return JEO object directives.
+     */
+    private DirectivesJeoObject jeoObject(final String base, final Codec codec) {
+        return new DirectivesJeoObject(
+            base,
+            this.name,
+            new DirectivesComment(this.comment()),
+            new DirectivesBytes(this.hex(codec))
+        );
+    }
+
+    /**
+     * JEO number.
+     *
+     * @param base Object base.
+     * @param codec Codec to use for bytes encoding.
+     * @return JEO number directives.
+     */
+    private DirectivesJeoObject jeoNumber(final String base, final Codec codec) {
+        return new DirectivesJeoObject(
+            base,
+            this.name,
+            new DirectivesComment(this.comment()),
+            new DirectivesNumber(this.hex(codec))
+        );
+    }
+
+    /**
+     * Boolean object.
+     *
+     * @param type Type of the object, usually "bool".
+     * @return Boolean object directives.
+     */
+    private Iterable<Directive> booleanObject(final String type) {
+        final String base;
+        if ((boolean) this.value.value()) {
+            base = new EoFqn("true").fqn();
+        } else {
+            base = new EoFqn("false").fqn();
+        }
+        return new DirectivesJeoObject(
+            type,
+            this.name,
+            new Directives().add("o").attr("base", base).up()
+        );
+    }
+
+    /**
      * Bytes of the representative comment.
+     *
      * @return Sting comment.
      */
     private String comment() {
         final String result;
-        final Object object = this.value.object();
+        final Object object = this.value.value();
         if (object instanceof String) {
             result = String.format("\"%s\"", object);
         } else {

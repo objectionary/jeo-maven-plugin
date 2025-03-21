@@ -1,6 +1,9 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
 ---
+# yamllint disable rule:line-length
 name: up
-on:
+'on':
   push:
     branches:
       - master
@@ -11,9 +14,10 @@ concurrency:
   cancel-in-progress: true
 jobs:
   up:
+    timeout-minutes: 15
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@v4
       - run: |-
           git fetch --tags --force && \
           latest=$(git tag --sort=creatordate | tail -1) && \
