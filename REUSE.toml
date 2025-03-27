@@ -26,6 +26,7 @@ path = [
     ".DS_Store",
     ".gitattributes",
     ".gitignore",
+    "MANIFEST.MF",
     "README.md",
     "renovate.json",
     "src/it/spring-fat/src/main/resources/META-INF/spring.factories",
