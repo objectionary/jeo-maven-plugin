@@ -4,9 +4,12 @@
  */
 package org.eolang.jeo.representation;
 
+import com.yegor256.Together;
+import org.cactoos.list.ListOf;
 import org.cactoos.text.FormattedText;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -20,12 +23,20 @@ final class LicenseTest {
     void readsLicenseFileCorrectly() throws Exception {
         final String name = "LICENSE.txt";
         MatcherAssert.assertThat(
-            new FormattedText(
-                "Unexpected file:'%s' content",
-                name
-            ).asString(),
+            new FormattedText("Unexpected file:'%s' content", name).asString(),
             new License(name).value(),
             Matchers.containsString("MIT")
+        );
+    }
+
+    @RepeatedTest(10)
+    void readsLicenseConcurrently() {
+        final License license = new License();
+        final int total = 10;
+        MatcherAssert.assertThat(
+            "Unexpected license content",
+            new ListOf<>(new Together<>(total, i -> license.value())),
+            Matchers.everyItem(Matchers.containsString("MIT"))
         );
     }
 }

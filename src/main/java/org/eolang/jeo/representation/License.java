@@ -8,6 +8,7 @@ import org.cactoos.Scalar;
 import org.cactoos.Text;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.Sticky;
+import org.cactoos.text.Synced;
 import org.cactoos.text.TextOf;
 
 /**
@@ -35,7 +36,7 @@ public final class License implements Scalar<String> {
      * @param content The name of file with license.
      */
     public License(final String content) {
-        this.content = new Sticky(new TextOf(new ResourceOf(content)));
+        this.content = new Synced(new Sticky(new TextOf(new ResourceOf(content))));
     }
 
     @Override
