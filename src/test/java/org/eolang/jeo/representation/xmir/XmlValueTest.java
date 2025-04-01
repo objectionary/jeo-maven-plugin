@@ -27,7 +27,9 @@ final class XmlValueTest {
     void parsesHexStringAsInteger() {
         final int expected = 1057;
         final int actual = (int) new XmlValue(
-            new NativeXmlNode("<o base='jeo.int'><o>40-90-84-00-00-00-00-00</o></o>")
+            new NativeXmlNode(
+                "<o base='jeo.int'><o base='Q.org.eolang.bytes'><o>40-90-84-00-00-00-00-00</o></o></o>"
+            )
         ).object();
         MatcherAssert.assertThat(
             String.format(
@@ -83,9 +85,7 @@ final class XmlValueTest {
             Arguments.of(true),
             Arguments.of(false),
             Arguments.of(0.1d),
-            Arguments.of(
-                "org/eolang/jeo/representation/HexDataTest"
-            ),
+            Arguments.of("org/eolang/jeo/representation/HexDataTest"),
             Arguments.of(new BytecodeLabel("some"))
         );
     }

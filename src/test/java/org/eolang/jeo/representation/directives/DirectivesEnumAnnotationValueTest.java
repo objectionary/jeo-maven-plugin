@@ -33,7 +33,7 @@ final class DirectivesEnumAnnotationValueTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[contains(@base,'annotation-property') and count(o) = 4]",
-                "./o[contains(@base,'annotation-property')]/o[1]/o[text()='45-4E-55-4D']"
+                "./o[contains(@base,'annotation-property')]/o[1]/o[1]/o[text()='45-4E-55-4D']"
             )
         );
     }

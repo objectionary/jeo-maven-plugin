@@ -22,7 +22,7 @@ final class DirectivesNumberTest {
             new Xembler(new DirectivesNumber("42")).xmlQuietly(),
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@base,'number')]",
-                "/o[contains(@base,'number')]/o[contains(@base, 'bytes') and text()='42']"
+                "/o[contains(@base,'number')]/o[contains(@base, 'bytes')]/o[text()='42']"
             )
         );
     }

@@ -59,7 +59,7 @@ final class DirectivesValueTest {
             xml,
             XhtmlMatchers.hasXPath(
                 String.format(
-                    "./o[contains(@base,'%s') and @as='access']/o[contains(@base,'number')]/o[contains(@base,'bytes') and text()='%s']",
+                    "./o[contains(@base,'%s') and @as='access']/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']",
                     base,
                     bytes
                 )
@@ -78,7 +78,7 @@ final class DirectivesValueTest {
                 new Transformers.Node()
             ).xml(),
             XhtmlMatchers.hasXPath(
-                "./o[contains(@base,'jeo.label')]/o[contains(@base,'org.eolang.bytes') and text()='73-6F-6D-65-2D-72-61-6E-64-6F-6D']"
+                "./o[contains(@base,'jeo.label')]/o[contains(@base,'org.eolang.bytes')]/o[text()='73-6F-6D-65-2D-72-61-6E-64-6F-6D']"
             )
         );
     }

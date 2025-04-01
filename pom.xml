@@ -104,7 +104,7 @@
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>lints</artifactId>
-      <version>0.0.42</version>
+      <version>0.0.43</version>
     </dependency>
     <dependency>
       <groupId>org.cactoos</groupId>
@@ -176,7 +176,7 @@
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.54.1</version>
+      <version>0.55.1</version>
     </dependency>
     <dependency>
       <groupId>com.github.volodya-lombrozo</groupId>

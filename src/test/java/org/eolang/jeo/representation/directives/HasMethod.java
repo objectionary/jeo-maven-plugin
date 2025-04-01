@@ -285,7 +285,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 Stream.of(
                     instruction.concat("/@base"),
                     String.format(
-                        "%s/o[contains(@base,'int')]/o[contains(@base,'number')]/o[contains(@base,'bytes') and text()='%s']/@base",
+                        "%s/o[contains(@base,'int')]/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']/text()",
                         instruction,
                         new DirectivesValue((double) this.opcode).hex(new JavaCodec())
                     )
@@ -312,7 +312,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                                 ((Number) arg).doubleValue()
                             );
                             result = String.format(
-                                "%s/o[contains(@base,'%s')]/o[contains(@base,'number')]/o[contains(@base,'bytes') and text()='%s']/@base",
+                                "%s/o[contains(@base,'%s')]/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']/text()",
                                 instruction,
                                 simple.type(),
                                 hex.hex(new JavaCodec())
@@ -327,7 +327,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                         } else {
                             final DirectivesValue hex = new DirectivesValue(arg);
                             result = String.format(
-                                "%s/o[contains(@base,'%s')]/o[contains(@base,'bytes') and text()='%s']/@base",
+                                "%s/o[contains(@base,'%s')]/o[contains(@base,'bytes')]/o[text()='%s']/text()",
                                 instruction,
                                 hex.type(),
                                 hex.hex(new JavaCodec())
@@ -379,7 +379,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                     "%s/o[4][contains(@base,'string')]/@base", HasTryCatch.path(root)
                 ),
                 String.format(
-                    "%s/o[4][contains(@base,'string')]/o[text()='%s']/@base",
+                    "%s/o[4][contains(@base,'string')]/o[1]/o[text()='%s']/text()",
                     HasTryCatch.path(root),
                     new DirectivesValue(this.type).hex(new JavaCodec())
                 )

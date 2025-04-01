@@ -26,7 +26,7 @@ final class DirectivesValuesTest {
             new Xembler(new DirectivesValues("name", "value")).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[contains(@base,'seq.of1') and contains(@as,'name')]",
-                "./o[contains(@base,'seq.of1') and contains(@as,'name')]/o/o[contains(@base, 'org.eolang.bytes') and text()='76-61-6C-75-65']"
+                "./o[contains(@base,'seq.of1') and contains(@as,'name')]/o/o[contains(@base, 'org.eolang.bytes')]/o[text()='76-61-6C-75-65']"
             )
         );
     }

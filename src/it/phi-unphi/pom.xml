@@ -19,6 +19,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <eo.version>0.55.2</eo.version>
     <stack-size>256M</stack-size>
     <jeo.disassemble>${project.build.directory}/generated-sources/jeo-disassemble</jeo.disassemble>
     <eo.phi>${project.build.directory}/generated-sources/eo-phi</eo.phi>
@@ -69,7 +70,7 @@
       <plugin>
         <groupId>org.eolang</groupId>
         <artifactId>eo-maven-plugin</artifactId>
-        <version>0.54.1</version>
+        <version>${eo.version}</version>
         <executions>
           <execution>
             <id>xmir-to-phi</id>

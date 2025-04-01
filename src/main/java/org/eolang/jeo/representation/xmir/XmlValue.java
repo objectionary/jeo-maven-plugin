@@ -108,7 +108,9 @@ public final class XmlValue {
      * @return Hex string.
      */
     private String hex() {
-        return XmlValue.DELIMITER.matcher(this.node.firstChild().text().trim()).replaceAll("");
+        return XmlValue.DELIMITER.matcher(
+            this.node.firstChild().text().trim()
+        ).replaceAll("");
     }
 
     /**

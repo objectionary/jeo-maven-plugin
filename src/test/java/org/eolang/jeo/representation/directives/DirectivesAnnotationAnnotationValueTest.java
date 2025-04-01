@@ -36,7 +36,7 @@ final class DirectivesAnnotationAnnotationValueTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "./o[contains(@base,'annotation-property')]",
-                "./o[contains(@base,'annotation-property')]/o[1]/o[text()='41-4E-4E-4F-54-41-54-49-4F-4E']"
+                "./o[contains(@base,'annotation-property')]/o[1]/o[1]/o[text()='41-4E-4E-4F-54-41-54-49-4F-4E']"
             )
         );
     }
