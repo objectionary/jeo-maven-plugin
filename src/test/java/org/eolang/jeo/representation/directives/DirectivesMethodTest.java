@@ -5,6 +5,8 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import java.util.Collections;
+import org.eolang.jeo.representation.Signature;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
@@ -15,6 +17,7 @@ import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -114,6 +117,33 @@ final class DirectivesMethodTest {
                         "./o[contains(@base,'method')]/o[contains(@as,'attributes')]"
                     )
                 )
+            )
+        );
+    }
+
+    /**
+     * This test was added to check if the #1063 issue is fixed.
+     * You can read more about it
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1063">here</a>
+     */
+    @Test
+    void generatesMethodWithSimpleBodyName() throws ImpossibleModificationException {
+        final String descriptor = "()I";
+        MatcherAssert.assertThat(
+            "We expect that the method body name will be generated correctly without any suffixes and prefixes",
+            new Xembler(
+                new DirectivesMethod(
+                    new Signature("checks1063", descriptor),
+                    new DirectivesMethodProperties(1, descriptor, ""),
+                    Collections.singletonList(new DirectivesInstruction(Opcodes.RETURN)),
+                    Collections.emptyList(),
+                    new DirectivesAnnotations(),
+                    Collections.emptyList(),
+                    new DirectivesAttributes()
+                )
+            ).xml(),
+            XhtmlMatchers.hasXPath(
+                "./o[contains(@base,'method') and contains(@as,'checks1063')]/o[@as='body']"
             )
         );
     }
