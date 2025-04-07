@@ -89,7 +89,7 @@ final class DirectivesValueTest {
             "Converts boolean to XML",
             new Xembler(new DirectivesValue(true)).xmlQuietly(),
             XhtmlMatchers.hasXPath(
-                "./o[contains(@base,'jeo.bool')]/o[contains(@base,'org.eolang.true')]"
+                "./o[contains(@base,'org.eolang.true')]"
             )
         );
     }
