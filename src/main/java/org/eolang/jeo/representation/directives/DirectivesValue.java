@@ -11,7 +11,6 @@ import org.eolang.jeo.representation.bytecode.Codec;
 import org.eolang.jeo.representation.bytecode.EoCodec;
 import org.eolang.jeo.representation.bytecode.PlainLongCodec;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Data Object Directive in EO language.
@@ -111,7 +110,7 @@ public final class DirectivesValue implements Iterable<Directive> {
                 res = this.eoObject(type, codec);
                 break;
             case "bool":
-                res = this.booleanObject(type);
+                res = this.booleanObject();
                 break;
             default:
                 res = this.jeoObject(type, codec);
@@ -200,21 +199,16 @@ public final class DirectivesValue implements Iterable<Directive> {
     /**
      * Boolean object.
      *
-     * @param type Type of the object, usually "bool".
      * @return Boolean object directives.
      */
-    private Iterable<Directive> booleanObject(final String type) {
+    private Iterable<Directive> booleanObject() {
         final String base;
         if ((boolean) this.value.value()) {
-            base = new EoFqn("true").fqn();
+            base = "true";
         } else {
-            base = new EoFqn("false").fqn();
+            base = "false";
         }
-        return new DirectivesJeoObject(
-            type,
-            this.name,
-            new Directives().add("o").attr("base", base).up()
-        );
+        return new DirectivesEoObject(base, this.name);
     }
 
     /**
