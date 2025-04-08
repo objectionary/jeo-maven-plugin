@@ -42,7 +42,7 @@ final class DirectivesValueTest {
             ),
             xml,
             XhtmlMatchers.hasXPath(
-                "./o[contains(@base,'jeo.int') and @as='access']/o[contains(@base,'number')]/o[contains(@base, 'bytes')]/text()"
+                "./o[contains(@base,'number') and @as='access']/o[contains(@base, 'bytes')]/text()"
             )
         );
     }
@@ -61,6 +61,25 @@ final class DirectivesValueTest {
                 String.format(
                     "./o[contains(@base,'%s') and @as='access']/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']",
                     base,
+                    bytes
+                )
+            )
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("integers")
+    void convertsIntegers(final Number number, final String bytes) {
+        final String xml = new Xembler(new DirectivesValue("access", number)).xmlQuietly();
+        MatcherAssert.assertThat(
+            String.format(
+                "We expect that integer value is converted to the correct XMIR, but got the incorrect one: %n%s%n",
+                xml
+            ),
+            xml,
+            XhtmlMatchers.hasXPath(
+                String.format(
+                    "./o[contains(@base,'number') and @as='access']/o[contains(@base,'bytes')]/o[text()='%s']",
                     bytes
                 )
             )
@@ -178,7 +197,7 @@ final class DirectivesValueTest {
      */
     static Stream<Arguments> types() {
         return Stream.of(
-            Arguments.of(1, "int"),
+            Arguments.of(1, "number"),
             Arguments.of("Hello!", "string"),
             Arguments.of(new byte[]{1, 2, 3}, "bytes"),
             Arguments.of(new byte[0], "bytes"),
@@ -218,14 +237,24 @@ final class DirectivesValueTest {
     static Stream<Arguments> numbers() {
         final String same = "3F-F0-00-00-00-00-00-00";
         return Stream.of(
-            Arguments.of(1, "jeo.int", same),
             Arguments.of(1L, "jeo.long", same),
             Arguments.of(1.0f, "jeo.float", same),
             Arguments.of(1.0d, "jeo.double", same),
             Arguments.of((short) 1, "jeo.short", same),
-            Arguments.of((byte) 1, "jeo.byte", same),
-            Arguments.of(100, "jeo.int", "40-59-00-00-00-00-00-00"),
-            Arguments.of(1057, "jeo.int", "40-90-84-00-00-00-00-00")
+            Arguments.of((byte) 1, "jeo.byte", same)
+        );
+    }
+
+    /**
+     * Arguments for {@link DirectivesValueTest#convertsIntegers(Number, String)} (Number, String)}.
+     * @return Stream of arguments.
+     */
+    static Stream<Arguments> integers() {
+        final String same = "3F-F0-00-00-00-00-00-00";
+        return Stream.of(
+            Arguments.of(1, same),
+            Arguments.of(100, "40-59-00-00-00-00-00-00"),
+            Arguments.of(1057, "40-90-84-00-00-00-00-00")
         );
     }
 }

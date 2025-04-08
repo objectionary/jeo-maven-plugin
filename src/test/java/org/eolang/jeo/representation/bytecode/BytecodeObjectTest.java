@@ -59,7 +59,7 @@ final class BytecodeObjectTest {
         return Stream.of(
             Arguments.of(
                 new BytecodeObject(42),
-                "int",
+                "number",
                 new byte[]{0, 0, 0, 0, 0, 0, 0, 42},
                 42
             ),

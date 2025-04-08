@@ -37,7 +37,7 @@ enum DataType {
     /**
      * Integer.
      */
-    INT("int", Integer.class),
+    INT("number", Integer.class),
 
     /**
      * Long.

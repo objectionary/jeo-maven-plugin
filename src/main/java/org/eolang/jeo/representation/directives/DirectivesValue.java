@@ -18,6 +18,7 @@ import org.xembly.Directive;
  * @since 0.1.0
  */
 @ToString
+@SuppressWarnings("PMD.TooManyMethods")
 public final class DirectivesValue implements Iterable<Directive> {
 
     /**
@@ -92,9 +93,11 @@ public final class DirectivesValue implements Iterable<Directive> {
         final Iterable<Directive> res;
         final Codec codec = DirectivesValue.CODEC;
         switch (type) {
+            case "number":
+                res = this.integerNumber(codec);
+                break;
             case "byte":
             case "short":
-            case "int":
             case "float":
             case "double":
                 res = this.jeoNumber(type, codec);
@@ -178,6 +181,19 @@ public final class DirectivesValue implements Iterable<Directive> {
             new DirectivesComment(this.comment()),
             new DirectivesBytes(this.hex(codec))
         );
+    }
+
+    /**
+     * Integer number object.
+     * We decided to use simplified representation of integer numbers.
+     * Previously, we used {@link #jeoNumber(String, Codec)} wrapper.
+     * You can read about it here:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1061">#1061</a>
+     * @param codec Codec to use for bytes encoding.
+     * @return JEO number directives.
+     */
+    private Iterable<Directive> integerNumber(final Codec codec) {
+        return new DirectivesNumber(this.name, this.hex(codec));
     }
 
     /**

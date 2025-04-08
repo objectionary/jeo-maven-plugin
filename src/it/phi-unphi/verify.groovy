@@ -7,7 +7,8 @@ import java.nio.file.Files
 String log = new File(basedir, 'build.log').text;
 assert log.contains("BUILD SUCCESS"): assertionMessage("BUILD FAILED")
 assert log.contains("sin(42.000000) = -0.916522"): assertionMessage("sin(42.000000) = -0.916522 not found")
-assert log.contains("We have the field with the unicode character 'Φ'"): assertionMessage("We can't find the field with the unicode character 'Φ'")
+assert new File(basedir, "target/generated-sources/eo-phi/org/eolang/hone/App.phi").text
+  .contains("Φ.jeo.opcode.dup(89)"): assertionMessage("We can't find the correct PHI integer representation")
 
 private String assertionMessage(String message) {
     generateGitHubIssue()

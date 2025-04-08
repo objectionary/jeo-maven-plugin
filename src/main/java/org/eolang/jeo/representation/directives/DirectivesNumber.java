@@ -20,17 +20,36 @@ final class DirectivesNumber implements Iterable<Directive> {
     private final String hex;
 
     /**
+     * Name of the number.
+     */
+    private final String name;
+
+    /**
      * Constructor.
      * @param hex Hex number.
      */
     DirectivesNumber(final String hex) {
+        this("", hex);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name Name of the number.
+     * @param hex Hex number.
+     */
+    DirectivesNumber(final String name, final String hex) {
         this.hex = hex;
+        this.name = name;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o")
+        final Directives number = new Directives().add("o");
+        if (!this.name.isEmpty()) {
+            number.attr("as", this.name);
+        }
+        return number
             .attr("base", new EoFqn("number").fqn())
             .append(new DirectivesBytes(this.hex))
             .up()

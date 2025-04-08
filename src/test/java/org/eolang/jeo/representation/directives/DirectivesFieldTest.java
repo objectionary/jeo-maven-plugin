@@ -34,7 +34,7 @@ final class DirectivesFieldTest {
                 "/o/o[@as='access-unknown']",
                 "/o/o[@as='descriptor-unknown']",
                 "/o/o[@as='signature-unknown']",
-                "/o/o[contains(@base,'int') and @as='value-unknown']"
+                "/o/o[contains(@base,'number') and @as='value-unknown']"
             )
         );
     }

@@ -28,7 +28,7 @@ final class XmlValueTest {
         final int expected = 1057;
         final int actual = (int) new XmlValue(
             new NativeXmlNode(
-                "<o base='jeo.int'><o base='Q.org.eolang.bytes'><o>40-90-84-00-00-00-00-00</o></o></o>"
+                "<o base='Q.org.eolang.number'><o base='Q.org.eolang.bytes'><o>40-90-84-00-00-00-00-00</o></o></o>"
             )
         ).object();
         MatcherAssert.assertThat(

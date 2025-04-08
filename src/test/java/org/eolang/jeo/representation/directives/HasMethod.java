@@ -285,7 +285,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                 Stream.of(
                     instruction.concat("/@base"),
                     String.format(
-                        "%s/o[contains(@base,'int')]/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']/text()",
+                        "%s/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']/text()",
                         instruction,
                         new DirectivesValue((double) this.opcode).hex(new JavaCodec())
                     )
@@ -312,7 +312,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
                                 ((Number) arg).doubleValue()
                             );
                             result = String.format(
-                                "%s/o[contains(@base,'%s')]/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']/text()",
+                                "%s/o[contains(@base,'%s')]/o[contains(@base,'bytes')]/o[text()='%s']/text()",
                                 instruction,
                                 simple.type(),
                                 hex.hex(new JavaCodec())

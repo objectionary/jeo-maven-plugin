@@ -31,7 +31,7 @@ final class DirectivesHandleTest {
             xml,
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@base,'handle')]",
-                "/o[contains(@base,'handle')]/o[contains(@base,'int')]",
+                "/o[contains(@base,'handle')]/o[contains(@base,'number')]",
                 "/o[contains(@base,'handle')]/o[contains(@base,'string')]"
             )
         );
