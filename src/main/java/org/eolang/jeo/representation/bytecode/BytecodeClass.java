@@ -284,7 +284,8 @@ public final class BytecodeClass {
             new ClassName(new PrefixedName(this.name).encode()),
             this.props.directives(),
             this.fields.stream().map(BytecodeField::directives).collect(Collectors.toList()),
-            this.cmethods.stream().map(BytecodeMethod::directives)
+            this.cmethods.stream()
+                .map(method -> method.directives(this.mnumber(method)))
                 .collect(Collectors.toList()),
             this.annotations.directives(),
             this.attributes.directives("attributes")
@@ -325,6 +326,18 @@ public final class BytecodeClass {
                 exception
             );
         }
+    }
+
+    /**
+     * Method number.
+     * @param method Method.
+     * @return Method number.
+     */
+    private int mnumber(final BytecodeMethod method) {
+        return this.methods().stream()
+            .filter(m -> m.name().equals(method.name()))
+            .collect(Collectors.toList())
+            .indexOf(method) + 1;
     }
 
     /**

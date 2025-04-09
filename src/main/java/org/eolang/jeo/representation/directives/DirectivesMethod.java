@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.MethodName;
+import org.eolang.jeo.representation.NumberedName;
 import org.eolang.jeo.representation.PrefixedName;
-import org.eolang.jeo.representation.Signature;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -28,7 +28,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
     /**
      * Method name.
      */
-    private final Signature name;
+    private final NumberedName name;
 
     /**
      * Method properties.
@@ -78,7 +78,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final DirectivesMethodProperties properties
     ) {
         this(
-            new Signature(new MethodName(name).xmir(), properties.descr()),
+            new NumberedName(1, new MethodName(name).xmir()),
             properties,
             new ArrayList<>(0),
             new ArrayList<>(0),
@@ -100,7 +100,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @checkstyle ParameterNumberCheck (10 lines)
      */
     public DirectivesMethod(
-        final Signature name,
+        final NumberedName name,
         final DirectivesMethodProperties properties,
         final List<Iterable<Directive>> instructions,
         final List<Iterable<Directive>> exceptions,
@@ -142,14 +142,14 @@ public final class DirectivesMethod implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "method",
-            new PrefixedName(this.name.encoded()).encode(),
+            new PrefixedName(this.name.toString()).encode(),
             Stream.concat(
                 Stream.of(
                     this.properties,
                     this.annotations,
                     new DirectivesOptionalSeq("body", this.instructions),
                     new DirectivesOptionalSeq(
-                        String.format("trycatchblocks-%s", this.name.name()),
+                        String.format("trycatchblocks-%s", this.name.plain()),
                         this.exceptions
                     )
                 ),

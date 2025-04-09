@@ -6,7 +6,7 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Collections;
-import org.eolang.jeo.representation.Signature;
+import org.eolang.jeo.representation.NumberedName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
@@ -84,7 +84,7 @@ final class DirectivesMethodTest {
     void addsPrefixToTheMethodName() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that 'j$' prefix will be added to the method name",
-            new Xembler(new BytecodeMethod("φTerm").directives()).xml(),
+            new Xembler(new BytecodeMethod("φTerm").directives(1)).xml(),
             XhtmlMatchers.hasXPaths("./o[contains(@as, 'j$φTerm')]")
         );
     }
@@ -133,7 +133,7 @@ final class DirectivesMethodTest {
             "We expect that the method body name will be generated correctly without any suffixes and prefixes",
             new Xembler(
                 new DirectivesMethod(
-                    new Signature("checks1063", descriptor),
+                    new NumberedName(1, "checks1063"),
                     new DirectivesMethodProperties(1, descriptor, ""),
                     Collections.singletonList(new DirectivesInstruction(Opcodes.RETURN)),
                     Collections.emptyList(),

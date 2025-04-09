@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.MethodName;
-import org.eolang.jeo.representation.Signature;
+import org.eolang.jeo.representation.NumberedName;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.objectweb.asm.MethodVisitor;
@@ -252,13 +252,29 @@ public final class BytecodeMethod {
     }
 
     /**
+     * Method instructions.
+     * @return Instructions.
+     */
+    public List<BytecodeEntry> intructions() {
+        return Collections.unmodifiableList(this.instructions);
+    }
+
+    /**
      * Generate directives.
+     * Since EO can't have overloaded methods, we need to add suffix to their names.
+     * This suffix is a number of the method.
+     * For example, if we have two methods with the same name, say 'foo',
+     * then we add suffixes to their names:
+     * foo and foo-2.
+     * That is why we need to pass method number to this method.
+     * @param number Method number.
      * @return Directives.
      */
-    public DirectivesMethod directives() {
+    public DirectivesMethod directives(final int number) {
         return new DirectivesMethod(
-            new Signature(
-                new MethodName(this.properties.name()).xmir(), this.properties.descriptor()
+            new NumberedName(
+                number,
+                new MethodName(this.properties.name()).xmir()
             ),
             this.properties.directives(this.maxs),
             this.instructions.stream().map(BytecodeEntry::directives)
@@ -274,11 +290,11 @@ public final class BytecodeMethod {
     }
 
     /**
-     * Method instructions.
-     * @return Instructions.
+     * Generate directives.
+     * @return Directives.
      */
-    public List<BytecodeEntry> intructions() {
-        return Collections.unmodifiableList(this.instructions);
+    DirectivesMethod directives() {
+        return this.directives(1);
     }
 
     /**

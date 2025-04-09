@@ -13,8 +13,8 @@ import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.MethodName;
+import org.eolang.jeo.representation.NumberedName;
 import org.eolang.jeo.representation.PrefixedName;
-import org.eolang.jeo.representation.Signature;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
@@ -170,14 +170,14 @@ public final class XmlMethod {
     private String name() {
         return new MethodName(
             new PrefixedName(
-                new Signature(
+                new NumberedName(
                     this.node.attribute("as")
                         .orElseThrow(
                             () -> new IllegalStateException(
                                 "Method 'name' attribute is not present"
                             )
                         )
-                ).name()
+                ).plain()
             ).decode()
         ).bytecode();
     }

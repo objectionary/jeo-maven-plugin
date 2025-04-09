@@ -9,6 +9,8 @@ assert log.contains("BUILD SUCCESS"): assertionMessage("BUILD FAILED")
 assert log.contains("sin(42.000000) = -0.916522"): assertionMessage("sin(42.000000) = -0.916522 not found")
 assert new File(basedir, "target/generated-sources/eo-phi/org/eolang/hone/App.phi").text
   .contains("Φ.jeo.opcode.dup(89)"): assertionMessage("We can't find the correct PHI integer representation")
+assert new File(basedir, "target/generated-sources/eo-phi/org/eolang/hone/mess/A.phi").text
+  .contains("j\$print-3"): assertionMessage("We can't find overloaded method in PHI (with an additional number that is allow us to distinguish between overloaded methods)")
 
 private String assertionMessage(String message) {
     generateGitHubIssue()
