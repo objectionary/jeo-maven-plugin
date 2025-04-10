@@ -293,7 +293,7 @@
 <a class="jxr_linenumber" name="L285" href="#L285">285</a>                 Stream.of(
 <a class="jxr_linenumber" name="L286" href="#L286">286</a>                     instruction.concat(<span class="jxr_string">"/@base"</span>),
 <a class="jxr_linenumber" name="L287" href="#L287">287</a>                     String.format(
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>                         <span class="jxr_string">"%s/o[contains(@base,'int')]/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']/text()"</span>,
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>                         <span class="jxr_string">"%s/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']/text()"</span>,
 <a class="jxr_linenumber" name="L289" href="#L289">289</a>                         instruction,
 <a class="jxr_linenumber" name="L290" href="#L290">290</a>                         <strong class="jxr_keyword">new</strong> DirectivesValue((<strong class="jxr_keyword">double</strong>) <strong class="jxr_keyword">this</strong>.opcode).hex(<strong class="jxr_keyword">new</strong> JavaCodec())
 <a class="jxr_linenumber" name="L291" href="#L291">291</a>                     )
@@ -320,7 +320,7 @@
 <a class="jxr_linenumber" name="L312" href="#L312">312</a>                                 ((Number) arg).doubleValue()
 <a class="jxr_linenumber" name="L313" href="#L313">313</a>                             );
 <a class="jxr_linenumber" name="L314" href="#L314">314</a>                             result = String.format(
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>                                 <span class="jxr_string">"%s/o[contains(@base,'%s')]/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']/text()"</span>,
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>                                 <span class="jxr_string">"%s/o[contains(@base,'%s')]/o[contains(@base,'bytes')]/o[text()='%s']/text()"</span>,
 <a class="jxr_linenumber" name="L316" href="#L316">316</a>                                 instruction,
 <a class="jxr_linenumber" name="L317" href="#L317">317</a>                                 simple.type(),
 <a class="jxr_linenumber" name="L318" href="#L318">318</a>                                 hex.hex(<strong class="jxr_keyword">new</strong> JavaCodec())
