@@ -44,17 +44,17 @@ final class BytecodeMethodParameterTest {
             Arguments.of(
                 0,
                 Type.INT_TYPE,
-                "/o[contains(@base,'param') and contains(@as,'param-I-arg0-0-0')]"
+                "/o[contains(@base,'param') and contains(@as,'arg0')]"
             ),
             Arguments.of(
                 1,
                 Type.INT_TYPE,
-                "/o[contains(@base,'param') and contains(@as,'param-I-arg1-0-1')]"
+                "/o[contains(@base,'param') and contains(@as,'arg1')]"
             ),
             Arguments.of(
                 2,
                 Type.DOUBLE_TYPE,
-                "/o[contains(@base,'param') and contains(@as,'param-D-arg2-0-2')]"
+                "/o[contains(@base,'param') and contains(@as,'arg2')]"
             )
         );
     }

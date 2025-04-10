@@ -50,7 +50,7 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
     /**
      * Constructor.
      */
-    DirectivesAnnotations() {
+    public DirectivesAnnotations() {
         this(new ArrayList<>(0));
     }
 

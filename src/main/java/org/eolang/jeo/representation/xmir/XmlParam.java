@@ -47,7 +47,7 @@ public final class XmlParam {
      * @return Type.
      */
     private Type type() {
-        return Type.getType(new EncodedString(this.suffix(1)).decode());
+        return Type.getType(new EncodedString(this.child("type").string()).decode());
     }
 
     /**
@@ -55,7 +55,7 @@ public final class XmlParam {
      * @return Name.
      */
     private String pure() {
-        return this.suffix(2);
+        return this.name();
     }
 
     /**
@@ -63,7 +63,7 @@ public final class XmlParam {
      * @return Access.
      */
     private int access() {
-        return Integer.parseInt(this.suffix(3));
+        return (int) this.child("access").object();
     }
 
     /**
@@ -71,7 +71,7 @@ public final class XmlParam {
      * @return Index.
      */
     private int index() {
-        return Integer.parseInt(this.suffix(4));
+        return (int) this.child("index").object();
     }
 
     /**
@@ -92,14 +92,21 @@ public final class XmlParam {
     }
 
     /**
-     * Get the suffix of the name attribute.
-     * position[0]-position[1]-position[2].
-     * param      -type       -index
-     * @param position Position of the suffix.
-     * @return Suffix.
+     * Child node with the given name.
+     * @param name Name of the child node.
+     * @return Child node.
      */
-    private String suffix(final int position) {
-        return this.name().split("-")[position];
+    private XmlValue child(final String name) {
+        return new XmlValue(
+            this.root.children()
+                .filter(node -> node.attribute("as").map(name::equals).orElse(false))
+                .findFirst()
+                .orElseThrow(
+                    () -> new IllegalStateException(
+                        String.format("Child with attribute 'as'='%s' not found", name)
+                    )
+                )
+        );
     }
 
     /**

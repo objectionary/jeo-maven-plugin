@@ -4,10 +4,13 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -20,7 +23,13 @@ final class XmlParamTest {
 
     @Test
     void convertsToBytecode() throws ImpossibleModificationException {
-        final BytecodeMethodParameter expected = new BytecodeMethodParameter(0, Type.INT_TYPE);
+        final BytecodeMethodParameter expected = new BytecodeMethodParameter(
+            1,
+            "foo",
+            Opcodes.ACC_STATIC,
+            Type.INT_TYPE,
+            new BytecodeAnnotations(new BytecodeAnnotation("Ljava/lang/Deprecated;", true))
+        );
         MatcherAssert.assertThat(
             "Can't convert XML param to bytecode",
             new XmlParam(
