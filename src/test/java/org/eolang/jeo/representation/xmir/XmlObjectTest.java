@@ -12,7 +12,7 @@ import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
-import org.eolang.jeo.representation.directives.DirectivesProgram;
+import org.eolang.jeo.representation.directives.DirectivesObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -22,10 +22,10 @@ import org.xembly.Directives;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link XmlProgram}.
+ * Test case for {@link XmlObject}.
  * @since 0.1
  */
-final class XmlProgramTest {
+final class XmlObjectTest {
 
     @Test
     void convertsToBytecode() {
@@ -33,10 +33,10 @@ final class XmlProgramTest {
         final String name = "FooBar";
         MatcherAssert.assertThat(
             "Can't convert program to bytecode.",
-            new XmlProgram(
+            new XmlObject(
                 new XMLDocument(
                     new Xembler(
-                        new DirectivesProgram(
+                        new DirectivesObject(
                             new DirectivesClass(new ClassName(pckg, name)),
                             new DirectivesMetas(
                                 new ClassName(pckg, name)
@@ -58,7 +58,7 @@ final class XmlProgramTest {
     void convertsGenericsMethodIntoBytecode() {
         MatcherAssert.assertThat(
             "Can't convert generics method into bytecode",
-            new XmlProgram(XmlProgramTest.classWithGenericMethod()).bytecode().bytecode(),
+            new XmlObject(XmlObjectTest.classWithGenericMethod()).bytecode().bytecode(),
             Matchers.notNullValue()
         );
     }
@@ -67,7 +67,7 @@ final class XmlProgramTest {
     void convertsMethodWithExceptionIntoBytecode() {
         MatcherAssert.assertThat(
             "Can't convert method with exception into bytecode",
-            new XmlProgram(XmlProgramTest.classWithException()).bytecode().bytecode(),
+            new XmlObject(XmlObjectTest.classWithException()).bytecode().bytecode(),
             Matchers.notNullValue()
         );
     }
@@ -78,13 +78,13 @@ final class XmlProgramTest {
             "Exception message doesn't contain the expected text",
             Assertions.assertThrows(
                 ParsingException.class,
-                () -> new XmlProgram(
+                () -> new XmlObject(
                     new Xembler(
                         new Directives(
                             new BytecodeProgram(
                                 "com.example", new BytecodeClass("Foo", 0)
                             ).directives("")
-                        ).xpath(".//objects").remove()
+                        ).xpath(".//o").remove()
                     ).xmlQuietly()
                 ).bytecode()
             ).getMessage(),
@@ -110,7 +110,7 @@ final class XmlProgramTest {
     private static String classWithGenericMethod() {
         final ClassName name = new ClassName("jeo.takes", "StrangeClass");
         return new Xembler(
-            new DirectivesProgram(
+            new DirectivesObject(
                 new DirectivesClass(
                     name,
                     new DirectivesMethod(
@@ -157,7 +157,7 @@ final class XmlProgramTest {
     private static String classWithException() {
         final ClassName name = new ClassName("Foo");
         return new Xembler(
-            new DirectivesProgram(
+            new DirectivesObject(
                 new DirectivesClass(
                     name,
                     new DirectivesMethod(

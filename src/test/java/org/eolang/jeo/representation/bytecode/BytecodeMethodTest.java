@@ -14,7 +14,7 @@ import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.directives.HasMethod;
-import org.eolang.jeo.representation.xmir.XmlProgram;
+import org.eolang.jeo.representation.xmir.XmlObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -537,7 +537,7 @@ final class BytecodeMethodTest {
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     static Stream<Arguments> disassembleAssemble(final String compiled) {
         try {
-            return new XmlProgram(
+            return new XmlObject(
                 new BytecodeRepresentation(
                     new Bytecode(new BytesOf(new ResourceOf(compiled)).asBytes())
                 ).toEO()

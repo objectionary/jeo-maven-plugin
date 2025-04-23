@@ -21,7 +21,7 @@ final class JcabiXmlDocTest {
     /**
      * Example XML.
      */
-    private static final String XML = "<program><o>1</o></program>";
+    private static final String XML = "<object><o>1</o></object>";
 
     @Test
     void createsFromFile(@TempDir final Path dir) throws IOException {
@@ -29,7 +29,7 @@ final class JcabiXmlDocTest {
         Files.write(path, JcabiXmlDocTest.XML.getBytes(StandardCharsets.UTF_8));
         MatcherAssert.assertThat(
             "Can't read XML from file",
-            new JcabiXmlDoc(path).root().xpath("/program/o/text()").get(0),
+            new JcabiXmlDoc(path).root().xpath("/object/o/text()").get(0),
             org.hamcrest.Matchers.equalTo("1")
         );
     }

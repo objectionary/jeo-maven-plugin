@@ -46,34 +46,21 @@ public final class HasClass extends TypeSafeMatcher<String> {
 
     /**
      * Add additional check for package.
-     * Package example:
-     * <p>
-     * {@code
-     * &lt;program&gt;
-     *   &lt;metas&gt;
-     *     &lt;meta line="1"&gt;
-     *        &lt;head&gt;package&lt;/head&gt;
-     *        &lt;tail&gt;a.b.c&lt;/tail&gt;
-     *        &lt;part&gt;a.b.c&lt;/part&gt;
-     *     &lt;/meta&gt;
-     *   &lt;/metas&gt;
-     * &lt;/program&gt;
-     * }
-     * </p>
+     *
      * @param pckg Package name.
      * @return This matcher.
      */
     public HasClass inside(final String pckg) {
-        this.additional.add("/program/metas/meta/head[text()='package']/text()");
+        this.additional.add("/object/metas/meta/head[text()='package']/text()");
         this.additional.add(
             String.format(
-                "/program/metas/meta/tail[text()='%s']/text()",
+                "/object/metas/meta/tail[text()='%s']/text()",
                 new PrefixedName(pckg).encode()
             )
         );
         this.additional.add(
             String.format(
-                "/program/metas/meta/part[text()='%s']/text()",
+                "/object/metas/meta/part[text()='%s']/text()",
                 new PrefixedName(pckg).encode()
             )
         );
@@ -98,7 +85,7 @@ public final class HasClass extends TypeSafeMatcher<String> {
      */
     private List<String> checks() {
         return Stream.concat(
-            Stream.of(String.format("/program/objects/o[@name='%s']/text()", this.name)),
+            Stream.of(String.format("/object/o[@name='%s']/text()", this.name)),
             this.additional.stream()
         ).collect(Collectors.toList());
     }

@@ -9,8 +9,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
-import org.cactoos.Scalar;
-import org.eolang.jeo.representation.License;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -18,12 +16,7 @@ import org.xembly.Directives;
  * Program representation as Xembly directives.
  * @since 0.1
  */
-public final class DirectivesProgram implements Iterable<Directive> {
-
-    /**
-     * The license of project.
-     */
-    private static final Scalar<String> LICENSE = new License();
+public final class DirectivesObject implements Iterable<Directive> {
 
     /**
      * Program listing.
@@ -53,7 +46,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
      * @param klass Top-level class.
      * @param metas Metas.
      */
-    public DirectivesProgram(final DirectivesClass klass, final DirectivesMetas metas) {
+    public DirectivesObject(final DirectivesClass klass, final DirectivesMetas metas) {
         this("", klass, metas);
     }
 
@@ -63,7 +56,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
      * @param clazz Class.
      * @param name Metas.
      */
-    public DirectivesProgram(
+    public DirectivesObject(
         final String code,
         final DirectivesClass clazz,
         final DirectivesMetas name
@@ -79,7 +72,7 @@ public final class DirectivesProgram implements Iterable<Directive> {
      * @param metas Metas.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
-    public DirectivesProgram(
+    public DirectivesObject(
         final String listing,
         final long milliseconds,
         final DirectivesClass klass,
@@ -96,21 +89,18 @@ public final class DirectivesProgram implements Iterable<Directive> {
         final String now = ZonedDateTime.now(ZoneOffset.UTC)
             .format(DateTimeFormatter.ISO_INSTANT);
         final Directives directives = new Directives();
-        directives.add("program")
+        directives.add("object")
             .attr("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
-            .attr("name", this.metas.className().name())
             .attr("version", Manifests.read("JEO-Version"))
             .attr("revision", Manifests.read("JEO-Revision"))
             .attr("dob", Manifests.read("JEO-Dob"))
             .attr("time", now)
-            .attr("xsi:noNamespaceSchemaLocation", "https://www.eolang.org/xsd/XMIR-0.51.6.xsd")
+            .attr("xsi:noNamespaceSchemaLocation", "https://www.eolang.org/xsd/XMIR-0.56.0.xsd")
             .add("listing")
             .set(this.listing)
             .up()
-            .add("license").set(DirectivesProgram.LICENSE).up()
             .append(this.metas)
-            .attr("ms", this.milliseconds)
-            .add("objects");
+            .attr("ms", this.milliseconds);
         directives.append(this.klass);
         directives.up();
         return directives.iterator();

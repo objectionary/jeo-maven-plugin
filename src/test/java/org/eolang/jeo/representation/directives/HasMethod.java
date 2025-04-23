@@ -229,7 +229,7 @@ public final class HasMethod extends TypeSafeMatcher<String> {
      */
     private String root() {
         return String.format(
-            "/program/objects/o[contains(@name,'%s')]/o[contains(@as,'%s')]",
+            "/object/o[contains(@name,'%s')]/o[contains(@as,'%s')]",
             this.clazz,
             this.name
         );

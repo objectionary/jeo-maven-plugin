@@ -10,7 +10,7 @@ import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.JcabiXmlDoc;
 import org.eolang.jeo.representation.xmir.XmlDoc;
 import org.eolang.jeo.representation.xmir.XmlNode;
-import org.eolang.jeo.representation.xmir.XmlProgram;
+import org.eolang.jeo.representation.xmir.XmlObject;
 
 /**
  * Intermediate representation of a class files from XMIR.
@@ -64,11 +64,11 @@ public final class XmirRepresentation {
     public String name() {
         final XmlNode root = this.xml.root();
         return new ClassName(
-            root.xpath("/program/metas/meta[head[text()]='package']/tail/text()")
+            root.xpath("/object/metas/meta[head[text()]='package']/tail/text()")
                 .stream()
                 .findFirst()
                 .orElse(""),
-            root.xpath("/program/@name").get(0)
+            root.xpath("/object/o/@name").get(0)
         ).full();
     }
 
@@ -78,7 +78,7 @@ public final class XmirRepresentation {
      */
     public Bytecode toBytecode() {
         try {
-            return new XmlProgram(this.xml.root()).bytecode().bytecode();
+            return new XmlObject(this.xml.root()).bytecode().bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
                 String.format("Can't transform '%s' to bytecode", this.xml),

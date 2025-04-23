@@ -5,7 +5,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.xml.XMLDocument;
-import org.eolang.jeo.representation.directives.DirectivesProgram;
+import org.eolang.jeo.representation.directives.DirectivesObject;
 import org.eolang.jeo.representation.directives.HasClass;
 import org.eolang.jeo.representation.directives.HasMethod;
 import org.hamcrest.MatcherAssert;
@@ -50,7 +50,7 @@ final class BytecodeProgramTest {
     @Test
     void convertsClassWithPackageToXmir() throws ImpossibleModificationException {
         final String name = "ClassInPackage";
-        final DirectivesProgram directives = new BytecodeProgram(
+        final DirectivesObject directives = new BytecodeProgram(
             "some/package",
             new BytecodeClass(name).helloWorldMethod()
         ).directives("");

@@ -12,7 +12,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeProgram;
  * XMIR Program.
  * @since 0.1
  */
-public final class XmlProgram {
+public final class XmlObject {
 
     /**
      * Root node.
@@ -23,7 +23,7 @@ public final class XmlProgram {
      * Constructor.
      * @param lines Xmir lines.
      */
-    public XmlProgram(final String... lines) {
+    public XmlObject(final String... lines) {
         this(new JcabiXmlNode(lines));
     }
 
@@ -31,7 +31,7 @@ public final class XmlProgram {
      * Constructor.
      * @param xml Raw XMIR.
      */
-    public XmlProgram(final XML xml) {
+    public XmlObject(final XML xml) {
         this(new JcabiXmlDoc(xml).root());
     }
 
@@ -39,7 +39,7 @@ public final class XmlProgram {
      * Constructor.
      * @param root Root node.
      */
-    public XmlProgram(final XmlNode root) {
+    public XmlObject(final XmlNode root) {
         this.root = root;
     }
 
@@ -72,7 +72,7 @@ public final class XmlProgram {
      * @return Class.
      */
     private XmlClass top() {
-        return new XmlClass(this.root.child("objects").child("o"));
+        return new XmlClass(this.root.child("o"));
     }
 
     /**
@@ -84,7 +84,7 @@ public final class XmlProgram {
      */
     private String pckg() {
         return this.root
-            .xpath("/program/metas/meta[head='package']/tail/text()")
+            .xpath("/object/metas/meta[head='package']/tail/text()")
             .stream()
             .findFirst()
             .map(PrefixedName::new)

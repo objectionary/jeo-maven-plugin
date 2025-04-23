@@ -16,7 +16,7 @@ import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
-import org.eolang.jeo.representation.directives.DirectivesProgram;
+import org.eolang.jeo.representation.directives.DirectivesObject;
 
 /**
  * Bytecode program.
@@ -128,11 +128,11 @@ public final class BytecodeProgram {
      * @param listing Program listing.
      * @return Directives program.
      */
-    public DirectivesProgram directives(final String listing) {
+    public DirectivesObject directives(final String listing) {
         final BytecodeClass top = this.top();
         final ClassName classname = new ClassName(this.pckg, new PrefixedName(top.name()).encode());
         final DirectivesClass clazz = top.directives();
-        return new DirectivesProgram(
+        return new DirectivesObject(
             listing,
             clazz,
             new DirectivesMetas(classname)

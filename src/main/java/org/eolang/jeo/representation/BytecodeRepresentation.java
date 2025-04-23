@@ -17,7 +17,7 @@ import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.bytecode.Bytecode;
-import org.eolang.jeo.representation.directives.DirectivesProgram;
+import org.eolang.jeo.representation.directives.DirectivesObject;
 import org.objectweb.asm.ClassReader;
 import org.xembly.ImpossibleModificationException;
 
@@ -91,7 +91,7 @@ public final class BytecodeRepresentation {
      * @return XML representation of bytecode.
      */
     public XML toEO(final DisassembleMode mode) {
-        final DirectivesProgram directives = new AsmProgram(this.input.value())
+        final DirectivesObject directives = new AsmProgram(this.input.value())
             .bytecode(mode.asmOptions())
             .directives(new BytecodeListing(this.input.value()).toString());
         try {

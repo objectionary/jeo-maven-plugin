@@ -16,25 +16,25 @@ import org.xembly.Transformers;
 import org.xembly.Xembler;
 
 /**
- * Test cases for {@link DirectivesProgram}.
+ * Test cases for {@link DirectivesObject}.
  * @since 0.1
  */
-final class DirectivesProgramTest {
+final class DirectivesObjectTest {
 
     @Test
     void createsCorrectDirectives() {
         final ClassName name = new ClassName("Foo");
         final String actual = new Xembler(
-            new DirectivesProgram(new DirectivesClass(name), new DirectivesMetas(name)),
+            new DirectivesObject(new DirectivesClass(name), new DirectivesMetas(name)),
             new Transformers.Node()
         ).xmlQuietly();
         MatcherAssert.assertThat(
             String.format(
-                "Can't correctly and without errors create program directives, received XML: %n%s",
+                "Can't correctly and without errors create object directives, received XML: %n%s",
                 new XMLDocument(actual)
             ),
             actual,
-            XhtmlMatchers.hasXPath("/program/objects/o[@name='Foo']")
+            XhtmlMatchers.hasXPath("/object/o[@name='Foo']")
         );
     }
 
@@ -48,9 +48,9 @@ final class DirectivesProgramTest {
                 ).directives("")
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/program[@version='1.2.3']",
-                "/program[@revision='1234567']",
-                "/program[@dob='2023-03-19T00:00:00']"
+                "/object[@version='1.2.3']",
+                "/object[@revision='1234567']",
+                "/object[@dob='2023-03-19T00:00:00']"
             )
         );
     }
@@ -58,7 +58,7 @@ final class DirectivesProgramTest {
     @Test
     void setsMilliseconds() throws ImpossibleModificationException {
         final ClassName clazz = new ClassName("Some");
-        final DirectivesProgram program = new DirectivesProgram(
+        final DirectivesObject object = new DirectivesObject(
             "some code",
             10,
             new DirectivesClass(clazz),
@@ -66,8 +66,8 @@ final class DirectivesProgramTest {
         );
         MatcherAssert.assertThat(
             "We expect that milliseconds will be set",
-            new Xembler(program).xml(),
-            XhtmlMatchers.hasXPath("/program[@ms='10']")
+            new Xembler(object).xml(),
+            XhtmlMatchers.hasXPath("/object[@ms='10']")
         );
     }
 }

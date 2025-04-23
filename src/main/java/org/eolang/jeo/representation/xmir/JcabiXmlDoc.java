@@ -46,7 +46,7 @@ public final class JcabiXmlDoc implements XmlDoc {
 
     @Override
     public XmlNode root() {
-        return this.doc.child("program");
+        return this.doc.child("object");
     }
 
     @Override

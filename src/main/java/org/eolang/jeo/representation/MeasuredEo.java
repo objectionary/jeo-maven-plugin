@@ -6,7 +6,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import org.eolang.jeo.representation.directives.DirectivesProgram;
+import org.eolang.jeo.representation.directives.DirectivesObject;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -26,7 +26,7 @@ final class MeasuredEo {
      * Ctor.
      * @param directives Directives to build the EO from.
      */
-    MeasuredEo(final DirectivesProgram directives) {
+    MeasuredEo(final DirectivesObject directives) {
         this(new XMLDocument(new Xembler(directives).xmlQuietly()));
     }
 

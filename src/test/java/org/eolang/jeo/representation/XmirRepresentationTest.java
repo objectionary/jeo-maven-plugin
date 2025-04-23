@@ -66,7 +66,7 @@ final class XmirRepresentationTest {
     void retrievesEmptyPackageWhenXmirWithoutMetas() {
         final String actual = new XmirRepresentation(
             new XMLDocument(
-                new Xembler(new Directives().xpath("/program/metas").remove())
+                new Xembler(new Directives().xpath("/object/metas").remove())
                     .applyQuietly(new BytecodeProgram(new BytecodeClass("Math")).xml().inner())
             )
         ).name();
@@ -90,7 +90,7 @@ final class XmirRepresentationTest {
                 "org.eolang",
                 new BytecodeClass(XmirRepresentationTest.MATH)
             ).xml(),
-            XhtmlMatchers.hasXPath("/program[@name='j$Math']")
+            XhtmlMatchers.hasXPath("/object/o[@name='j$Math']")
         );
     }
 

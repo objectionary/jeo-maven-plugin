@@ -52,16 +52,6 @@ public final class DirectivesGlobalObject implements Iterable<Directive> {
      * @param name The name of the object.
      * @param inner Inner components.
      */
-    public DirectivesGlobalObject(final String base, final String name, final Directives... inner) {
-        this(base, name, Arrays.asList(inner));
-    }
-
-    /**
-     * Constructor.
-     * @param base The base of the object.
-     * @param name The name of the object.
-     * @param inner Inner components.
-     */
     public DirectivesGlobalObject(
         final String base, final String name, final List<Directives> inner
     ) {
