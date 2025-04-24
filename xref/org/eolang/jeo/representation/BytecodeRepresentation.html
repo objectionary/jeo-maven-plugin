@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.asm.AsmProgram;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.asm.DisassembleMode;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.bytecode.Bytecode;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.DirectivesProgram;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.DirectivesObject;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.objectweb.asm.ClassReader;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.xembly.ImpossibleModificationException;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
@@ -99,7 +99,7 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     * @return XML representation of bytecode.</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">public</strong> XML toEO(<strong class="jxr_keyword">final</strong> <a name="DisassembleMode" href="../../../../org/eolang/jeo/representation/asm/DisassembleMode.html#DisassembleMode">DisassembleMode</a> mode) {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          <strong class="jxr_keyword">final</strong> <a name="DirectivesProgram" href="../../../../org/eolang/jeo/representation/directives/DirectivesProgram.html#DirectivesProgram">DirectivesProgram</a> directives = <strong class="jxr_keyword">new</strong> <a name="AsmProgram" href="../../../../org/eolang/jeo/representation/asm/AsmProgram.html#AsmProgram">AsmProgram</a>(<strong class="jxr_keyword">this</strong>.input.value())
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          <strong class="jxr_keyword">final</strong> <a name="DirectivesObject" href="../../../../org/eolang/jeo/representation/directives/DirectivesObject.html#DirectivesObject">DirectivesObject</a> directives = <strong class="jxr_keyword">new</strong> <a name="AsmProgram" href="../../../../org/eolang/jeo/representation/asm/AsmProgram.html#AsmProgram">AsmProgram</a>(<strong class="jxr_keyword">this</strong>.input.value())
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>              .bytecode(mode.asmOptions())
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>              .directives(<strong class="jxr_keyword">new</strong> <a name="BytecodeListing" href="../../../../org/eolang/jeo/representation/BytecodeListing.html#BytecodeListing">BytecodeListing</a>(<strong class="jxr_keyword">this</strong>.input.value()).toString());
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>          <strong class="jxr_keyword">try</strong> {

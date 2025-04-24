@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">void</strong> retrievesEmptyPackageWhenXmirWithoutMetas() {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          <strong class="jxr_keyword">final</strong> String actual = <strong class="jxr_keyword">new</strong> XmirRepresentation(
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>              <strong class="jxr_keyword">new</strong> XMLDocument(
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>                  <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> Directives().xpath(<span class="jxr_string">"/program/metas"</span>).remove())
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>                  <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> Directives().xpath(<span class="jxr_string">"/object/metas"</span>).remove())
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>                      .applyQuietly(<strong class="jxr_keyword">new</strong> BytecodeProgram(<strong class="jxr_keyword">new</strong> BytecodeClass(<span class="jxr_string">"Math"</span>)).xml().<strong class="jxr_keyword">inner</strong>())
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>              )
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          ).name();
@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>                  <span class="jxr_string">"org.eolang"</span>,
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>                  <strong class="jxr_keyword">new</strong> BytecodeClass(XmirRepresentationTest.MATH)
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>              ).xml(),
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>              XhtmlMatchers.hasXPath(<span class="jxr_string">"/program[@name='j$Math']"</span>)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>              XhtmlMatchers.hasXPath(<span class="jxr_string">"/object/o[@name='j$Math']"</span>)
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>          );
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>      }
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  

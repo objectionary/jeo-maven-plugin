@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>              <span class="jxr_string">"The simplest class should contain the object with MethodByte name"</span>,
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>              <strong class="jxr_keyword">new</strong> BytecodeRepresentation(<strong class="jxr_keyword">new</strong> ResourceOf(BytecodeRepresentationTest.METHOD_BYTE))
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>                  .toEO().xpath(<span class="jxr_string">"/program/@name"</span>).get(0),
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>                  .toEO().xpath(<span class="jxr_string">"/object/o/@name"</span>).get(0),
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>              Matchers.equalTo(<strong class="jxr_keyword">new</strong> PrefixedName(<span class="jxr_string">"MethodByte"</span>).encode())
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>          );
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>      }

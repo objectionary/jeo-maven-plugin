@@ -14,7 +14,7 @@
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> com.jcabi.xml.XML;
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> com.jcabi.xml.XMLDocument;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.DirectivesProgram;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.DirectivesObject;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.xembly.Directives;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.xembly.ImpossibleModificationException;
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.xembly.Xembler;
@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">     * Ctor.</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">     * @param directives Directives to build the EO from.</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <a name="MeasuredEo" href="../../../../org/eolang/jeo/representation/MeasuredEo.html#MeasuredEo">MeasuredEo</a>(<strong class="jxr_keyword">final</strong> <a name="DirectivesProgram" href="../../../../org/eolang/jeo/representation/directives/DirectivesProgram.html#DirectivesProgram">DirectivesProgram</a> directives) {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>      <a name="MeasuredEo" href="../../../../org/eolang/jeo/representation/MeasuredEo.html#MeasuredEo">MeasuredEo</a>(<strong class="jxr_keyword">final</strong> <a name="DirectivesObject" href="../../../../org/eolang/jeo/representation/directives/DirectivesObject.html#DirectivesObject">DirectivesObject</a> directives) {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>          <strong class="jxr_keyword">this</strong>(<strong class="jxr_keyword">new</strong> XMLDocument(<strong class="jxr_keyword">new</strong> Xembler(directives).xmlQuietly()));
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>      }
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  

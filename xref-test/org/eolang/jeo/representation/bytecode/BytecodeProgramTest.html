@@ -13,7 +13,7 @@
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">package</strong> org.eolang.jeo.representation.bytecode;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> com.jcabi.xml.XMLDocument;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.DirectivesProgram;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.DirectivesObject;
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.HasClass;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.HasMethod;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.hamcrest.MatcherAssert;
@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      @Test
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">void</strong> convertsClassWithPackageToXmir() <strong class="jxr_keyword">throws</strong> ImpossibleModificationException {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">final</strong> String name = <span class="jxr_string">"ClassInPackage"</span>;
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>          <strong class="jxr_keyword">final</strong> DirectivesProgram directives = <strong class="jxr_keyword">new</strong> BytecodeProgram(
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>          <strong class="jxr_keyword">final</strong> DirectivesObject directives = <strong class="jxr_keyword">new</strong> BytecodeProgram(
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>              <span class="jxr_string">"some/package"</span>,
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>              <strong class="jxr_keyword">new</strong> BytecodeClass(name).helloWorldMethod()
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>          ).directives(<span class="jxr_string">""</span>);
