@@ -1,10 +1,10 @@
 !src/it/eo-to-bytecode/target
 !src/it/fails-if-bytecode-broken/target
-.DS_Store
 .aider*
+.aidy
+.DS_Store
 .env
 .idea
 .idea/
 node_modules/
 target/
-.aidy
