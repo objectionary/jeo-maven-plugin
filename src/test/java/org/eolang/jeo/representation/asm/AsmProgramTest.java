@@ -46,7 +46,7 @@ final class AsmProgramTest {
                 .top()
                 .methods()
                 .get(1)
-                .intructions()
+                .instructions()
                 .stream()
                 .anyMatch(entry -> entry instanceof BytecodeLabel || entry instanceof BytecodeLine),
             Matchers.is(false)

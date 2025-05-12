@@ -35,7 +35,7 @@ public final class BytecodeMethod {
     /**
      * Method Instructions.
      */
-    private final List<BytecodeEntry> instructions;
+    private final List<BytecodeEntry> entries;
 
     /**
      * Method annotations.
@@ -180,7 +180,7 @@ public final class BytecodeMethod {
         final BytecodeAttributes attributes
     ) {
         this.tryblocks = tryblocks;
-        this.instructions = instructions;
+        this.entries = instructions;
         this.annotations = annotations;
         this.properties = properties;
         this.defvalues = defvalues;
@@ -195,7 +195,7 @@ public final class BytecodeMethod {
     public BytecodeMethod withoutMaxs() {
         return new BytecodeMethod(
             this.tryblocks,
-            this.instructions,
+            this.entries,
             this.annotations,
             this.properties,
             this.defvalues,
@@ -229,7 +229,7 @@ public final class BytecodeMethod {
      * @return This object.
      */
     public BytecodeMethod entry(final BytecodeEntry entry) {
-        this.instructions.add(entry);
+        this.entries.add(entry);
         return this;
     }
 
@@ -255,8 +255,8 @@ public final class BytecodeMethod {
      * Method instructions.
      * @return Instructions.
      */
-    public List<BytecodeEntry> intructions() {
-        return Collections.unmodifiableList(this.instructions);
+    public List<BytecodeEntry> instructions() {
+        return Collections.unmodifiableList(this.entries);
     }
 
     /**
@@ -277,7 +277,7 @@ public final class BytecodeMethod {
                 new MethodName(this.properties.name()).xmir()
             ),
             this.properties.directives(this.maxs),
-            this.instructions.stream().map(BytecodeEntry::directives)
+            this.entries.stream().map(BytecodeEntry::directives)
                 .collect(Collectors.toList()),
             this.tryblocks.stream().map(BytecodeEntry::directives)
                 .collect(Collectors.toList()),
@@ -314,7 +314,7 @@ public final class BytecodeMethod {
             if (!this.properties.isAbstract()) {
                 mvisitor.visitCode();
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor, all));
-                this.instructions.forEach(instruction -> instruction.writeTo(mvisitor, all));
+                this.entries.forEach(instruction -> instruction.writeTo(mvisitor, all));
                 final BytecodeMaxs max;
                 if (this.maxs.compute()) {
                     max = this.computeMaxs();
@@ -393,7 +393,7 @@ public final class BytecodeMethod {
      * @return Instructions view in human-readable format.
      */
     String instructionsView() {
-        return this.instructions.stream()
+        return this.entries.stream()
             .map(BytecodeEntry::view)
             .collect(Collectors.joining("\n"));
     }
@@ -404,7 +404,7 @@ public final class BytecodeMethod {
      */
     private int computeStack() {
         return new MaxStack(
-            this.instructions,
+            this.entries,
             this.tryblocks.stream()
                 .filter(BytecodeTryCatchBlock.class::isInstance)
                 .map(BytecodeTryCatchBlock.class::cast)
@@ -419,7 +419,7 @@ public final class BytecodeMethod {
     private int computeLocals() {
         return new MaxLocals(
             this.properties,
-            this.instructions,
+            this.entries,
             this.tryblocks.stream()
                 .filter(BytecodeTryCatchBlock.class::isInstance)
                 .map(BytecodeTryCatchBlock.class::cast)

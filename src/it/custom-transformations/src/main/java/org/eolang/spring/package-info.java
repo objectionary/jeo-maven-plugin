@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 /**
- * This package contains all the cases that accidentaly broke `spring-fat` integration test.
+ * This package contains all the cases that accidentally broke `spring-fat` integration test.
  * So, all the identified cases are placed here.
  * @since 0.3
  */
