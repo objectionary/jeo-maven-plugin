@@ -1,3 +1,5 @@
+# jeo-maven-plugin
+
 <img alt="logo" src="https://www.objectionary.com/cactus.svg" height="100px" />
 
 [![Maven Central](https://img.shields.io/maven-central/v/org.eolang/jeo-maven-plugin.svg)](https://maven-badges.herokuapp.com/maven-central/org.eolang/jeo-maven-plugin)
@@ -13,7 +15,7 @@ the [EO](https://github.com/objectionary/eo)
 programming language.
 The plugin also provides the ability to assemble EO back into Java bytecode.
 
-# How to use
+## How to use
 
 You need at least **Maven 3.1+** and **Java 11+** to run the plugin.
 (Actually, the plugin requires **Java 8+**, but since the main
