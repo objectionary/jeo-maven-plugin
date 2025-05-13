@@ -1,6 +1,6 @@
 # jeo-maven-plugin
 
-<img alt="logo" src="https://www.objectionary.com/cactus.svg" height="100px" />
+[![logo](https://www.objectionary.com/cactus-100.svg)](https://www.objectionary.com)
 
 [![Maven Central](https://img.shields.io/maven-central/v/org.eolang/jeo-maven-plugin.svg)](https://maven-badges.herokuapp.com/maven-central/org.eolang/jeo-maven-plugin)
 [![Javadoc](https://www.javadoc.io/badge/org.eolang/jeo-maven-plugin.svg)](https://www.javadoc.io/doc/org.eolang/jeo-maven-plugin)
