@@ -4,7 +4,7 @@
  */
 /**
  * Contains classes for generating bytecode in the form of Java classes.
- * Some sort of API for generating Java classes. Usefull for generating
+ * Some sort of API for generating Java classes. Useful for generating
  * inputs for tests. The classes also used in {@link org.eolang.jeo.representation.xmir} package
  * to generate bytecode from XMIR files.
  *

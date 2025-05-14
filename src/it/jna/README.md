@@ -1,7 +1,7 @@
 # JNA Usage Test
 
 This integration test was added in order to mitigate the problem
-with JNA usage: https://github.com/objectionary/hone-maven-plugin/issues/58
+with [JNA usage](https://github.com/objectionary/hone-maven-plugin/issues/58)
 
 To run this test exclusively, execute the command below:
 

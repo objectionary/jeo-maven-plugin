@@ -13,7 +13,7 @@ The process is as follows:
 
 1. **Download all dependencies**
 2. **Unpack them**
-3. **Disassemble**: Apply transformation via the `jeo-maven-plugin:dissassemble`
+3. **Disassemble**: Apply transformation via the `jeo-maven-plugin:disassemble`
    goal for all the
    unpacked dependencies
 4. **Assemble**: Apply back transformation via the `jeo-maven-plugin:assemble`

@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 /**
  * This class contains many different methods with different number of local
  * variables and stack elements.
- * Primarly this class is used in {@link BytecodeMethodTest} to test how the
+ * Primarily this class is used in {@link BytecodeMethodTest} to test how the
  * {@link BytecodeMethod} class counts the maxs.
  * @since 0.6
  */
