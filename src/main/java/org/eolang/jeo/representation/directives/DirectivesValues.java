@@ -39,12 +39,12 @@ public final class DirectivesValues implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param vaues Values themselves.
+     * @param values Values themselves.
      * @param <T> Values type.
      */
     @SafeVarargs
-    <T> DirectivesValues(final T... vaues) {
-        this("", vaues);
+    <T> DirectivesValues(final T... values) {
+        this("", values);
     }
 
     /**

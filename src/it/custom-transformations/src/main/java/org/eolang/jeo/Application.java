@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class Application {
     public static void main(String[] args) {
         dynamicDispatch();
-        funcionalInterfaces();
+        functionalInterfaces();
         streams();
     }
 
@@ -40,7 +40,7 @@ public class Application {
         return 8;
     }
 
-    private static void funcionalInterfaces() {
+    private static void functionalInterfaces() {
         Runnable r = () -> System.out.println("Runnable test passed successfully!");
         r.run();
         Predicate<String> p = s -> s.length() > 10;
