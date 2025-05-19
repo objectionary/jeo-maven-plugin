@@ -1,4 +1,6 @@
-<img alt="logo" src="https://www.objectionary.com/cactus.svg" height="100px" />
+# jeo-maven-plugin
+
+[![logo](https://www.objectionary.com/cactus-100.svg)](https://www.objectionary.com)
 
 [![Maven Central](https://img.shields.io/maven-central/v/org.eolang/jeo-maven-plugin.svg)](https://maven-badges.herokuapp.com/maven-central/org.eolang/jeo-maven-plugin)
 [![Javadoc](https://www.javadoc.io/badge/org.eolang/jeo-maven-plugin.svg)](https://www.javadoc.io/doc/org.eolang/jeo-maven-plugin)
@@ -13,7 +15,7 @@ the [EO](https://github.com/objectionary/eo)
 programming language.
 The plugin also provides the ability to assemble EO back into Java bytecode.
 
-# How to use
+## How to use
 
 You need at least **Maven 3.1+** and **Java 11+** to run the plugin.
 (Actually, the plugin requires **Java 8+**, but since the main
@@ -290,74 +292,74 @@ Below is the full list of these objects, grouped by category:
 
 ### Bytecode Instructions
 
-- **`jeo.opcode.*`**
+* **`jeo.opcode.*`**
   Represents a single bytecode instruction like `aload_0`, `iconst_0`, etc.
 
 ### Classes, Methods, and Fields
 
-- **`jeo.class`**
+* **`jeo.class`**
   Represents a Java class.
-- **`jeo.method`**
+* **`jeo.method`**
   Represents a Java method.
-- **`jeo.field`**
+* **`jeo.field`**
   Represents a Java field.
-- **`jeo.params`**
+* **`jeo.params`**
   Represents method parameters.
-- **`jeo.param`**
+* **`jeo.param`**
   Represents a single method parameter.
-- **`jeo.maxs`**
+* **`jeo.maxs`**
   Represents the maximum stack and local variable sizes.
 
 ### Primitive Values
 
-- **`jeo.int`** - Represents an integer value.
-- **`jeo.bool`** - Represents a boolean value.
-- **`jeo.string`** - Represents a string value.
-- **`jeo.float`** - Represents a float value.
-- **`jeo.double`** - Represents a double value.
-- **`jeo.long`** - Represents a long value.
-- **`jeo.char`** - Represents a char value.
-- **`jeo.short`** - Represents a short value.
-- **`jeo.byte`** - Represents a byte value.
-- **`jeo.bytes`** - Represents a byte array.
+* **`jeo.int`** - Represents an integer value.
+* **`jeo.bool`** - Represents a boolean value.
+* **`jeo.string`** - Represents a string value.
+* **`jeo.float`** - Represents a float value.
+* **`jeo.double`** - Represents a double value.
+* **`jeo.long`** - Represents a long value.
+* **`jeo.char`** - Represents a char value.
+* **`jeo.short`** - Represents a short value.
+* **`jeo.byte`** - Represents a byte value.
+* **`jeo.bytes`** - Represents a byte array.
 
 ### Collections and Complex Types
 
-- **`jeo.nullable`**
+* **`jeo.nullable`**
   Represents an object that can be `null`.
-- **`jeo.array`**
+* **`jeo.array`**
   Represents an array of objects.
-- **`jeo.type`**
+* **`jeo.type`**
   Represents a Java type.
-- **`jeo.seq.*`**
+* **`jeo.seq.*`**
   Represents a sequence of objects with a specific size,
   like `jeo.seq.of0`, `jeo.seq.of1`, etc.
 
 ### Annotations and Metadata
 
-- **`jeo.annotation`**
+* **`jeo.annotation`**
   Represents a Java annotation.
-- **`jeo.annotation-property`**
+* **`jeo.annotation-property`**
   Represents a single annotation element.
-- **`jeo.annotation-default-value`**
+* **`jeo.annotation-default-value`**
   Represents a default value of a Java interface method or annotation property.
-- **`jeo.inner-class`**
+* **`jeo.inner-class`**
   Represents a Java inner class annotation property.
 
 ### Local Variables and Control Flow
 
-- **`jeo.local-variable`**
+* **`jeo.local-variable`**
   Represents a local variable entry.
-- **`jeo.try-catch`**
+* **`jeo.try-catch`**
   Represents a try-catch block.
 
 ### Labels, Handles, Frames
 
-- **`jeo.label`**
+* **`jeo.label`**
   Represents a Java label.
-- **`jeo.handle`**
+* **`jeo.handle`**
   Represents a Java method handle.
-- **`jeo.frame`**
+* **`jeo.frame`**
   Represents a stack frame.
 
 ## How to Build the Plugin
@@ -372,7 +374,6 @@ mvn clean install -Pqulice,long
 Pay attention to the `qulice` profile, which activates the static analysis
 tools. The `long` profile is optional and runs the full test suite, including
 long-running integration tests.
-
 
 ## How to Run Benchmarks
 
@@ -399,7 +400,7 @@ provided they don't violate our quality standards. To avoid frustration,
 before sending us your pull request please run full Maven build:
 
 ```bash
-$ mvn clean install -Pqulice
+mvn clean install -Pqulice
 ```
 
 You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
