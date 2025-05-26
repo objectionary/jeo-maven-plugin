@@ -8,3 +8,8 @@
 .idea/
 node_modules/
 target/
+.settings/
+.project
+.classpath
+.factorypath
+

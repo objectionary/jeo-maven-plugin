@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.lints.Defect;
-import org.eolang.lints.Program;
+import org.eolang.lints.Source;
 import org.eolang.parser.StrictXmir;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -136,7 +136,7 @@ public final class JcabiXmlNode implements XmlNode {
     @Override
     public void validate() {
         final Collection<Defect> defects = new ArrayList<>(
-            new Program(new StrictXmir(this.doc)).defects()
+            new Source(new StrictXmir(this.doc)).defects()
         );
         if (!defects.isEmpty()) {
             throw new IllegalStateException(
