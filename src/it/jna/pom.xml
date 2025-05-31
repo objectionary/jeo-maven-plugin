@@ -105,7 +105,7 @@
             -->
           <plugin>
             <artifactId>maven-clean-plugin</artifactId>
-            <version>3.4.1</version>
+            <version>3.5.0</version>
             <executions>
               <execution>
                 <id>clean-target-classes</id>
@@ -237,7 +237,7 @@
         -->
           <plugin>
             <artifactId>maven-clean-plugin</artifactId>
-            <version>3.4.1</version>
+            <version>3.5.0</version>
             <executions>
               <execution>
                 <id>clean-target-classes</id>
