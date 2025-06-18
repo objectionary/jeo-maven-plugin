@@ -121,7 +121,7 @@ public final class BytecodeRepresentation {
     }
 
     /**
-     * Factory method that converts a file to a byte source.
+     * Prestructor that converts a file to a byte source.
      * @param path The path to the file containing bytecode
      * @return The unchecked byte array supplier
      */
@@ -130,7 +130,7 @@ public final class BytecodeRepresentation {
     }
 
     /**
-     * Factory method that converts input to a byte source.
+     * Prestructor that converts input to a byte source.
      * @param input The input source to read from
      * @return The unchecked byte array supplier
      */
@@ -139,7 +139,7 @@ public final class BytecodeRepresentation {
     }
 
     /**
-     * Factory method that converts bytes to a byte source.
+     * Prestructor that converts bytes to a byte source.
      * @param bytes The raw byte array
      * @return The unchecked byte array supplier
      */

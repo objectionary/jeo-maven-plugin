@@ -20,7 +20,6 @@ assert log.contains("Request time: ")
  *  assertions to this file. For example, we need to check that we have
  *  generated EO object files (see commented checks above).
  *
- *
  * <p>{@code
  * <plugin>
  *   <groupId>org.eolang</groupId>
