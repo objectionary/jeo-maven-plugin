@@ -187,7 +187,7 @@ final class XmirRepresentationTest {
         final long end = System.currentTimeMillis();
         Logger.info(
             this,
-            "We made %d attempts to convert bytecode to xmir and back in %[ms]s",
+            "We made %d attempts to convert bytecode to XMIR and back in %[ms]s",
             attempts,
             end - start
         );
@@ -202,7 +202,7 @@ final class XmirRepresentationTest {
         final Path address = path.resolve("Math.xmir");
         Files.write(address, program.xml().toString().getBytes(StandardCharsets.UTF_8));
         MatcherAssert.assertThat(
-            "We expect that Xmir representation will be created from the file successfully",
+            "We expect that XMIR representation will be created from the file successfully",
             new XmirRepresentation(address).toBytecode(),
             Matchers.equalTo(expected)
         );

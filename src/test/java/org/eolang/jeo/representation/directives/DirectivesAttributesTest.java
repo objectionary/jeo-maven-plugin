@@ -19,7 +19,7 @@ final class DirectivesAttributesTest {
     @Test
     void convertsToXmir() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
-            "We expect that attributes will be converted to Xmir as a sequence of two objects with the name 'attributes'",
+            "We expect that attributes will be converted to XMIR as a sequence of two objects with the name 'attributes'",
             new Xembler(
                 new DirectivesAttributes(
                     new DirectivesAttribute("first"),

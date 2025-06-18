@@ -103,14 +103,14 @@ public class Disassembler {
         try {
             Logger.debug(
                 this,
-                "Dissembling of '%s' (%[size]s) finished successfully.",
+                "Dissembling of %[file]s (%[size]s) finished successfully",
                 disassembled,
                 Files.size(disassembled)
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format(
-                    "Filed to get size of '%s'",
+                    "Failed to get size of '%s'",
                     disassembled
                 ),
                 exception

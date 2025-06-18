@@ -69,7 +69,7 @@ public final class Summary implements Translator {
     public Stream<Path> apply(final Stream<Path> representations) {
         Logger.info(
             this,
-            "%s files from '%[file]s' to '%[file]s'",
+            "%s files from %[file]s to %[file]s",
             this.process,
             this.input,
             this.output

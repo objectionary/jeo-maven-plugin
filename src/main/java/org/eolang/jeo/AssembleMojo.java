@@ -72,8 +72,8 @@ public final class AssembleMojo extends AbstractMojo {
     private boolean skipVerification;
 
     /**
-     * Xmir verification before assembling.
-     * Before assembling, we verify all the xmir files.
+     * XMIR verification before assembling.
+     * Before assembling, we verify all the XMIR files.
      * If any of them are invalid or corrupted, we stop the process.
      * If you want to run this verification, set this parameter to true.
      *
@@ -103,22 +103,22 @@ public final class AssembleMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         try {
             if (this.disabled) {
-                Logger.info(this, "Assemble mojo is disabled. Skipping.");
+                Logger.info(this, "Assemble mojo is disabled, skipping");
             } else {
                 if (this.xmirVerification) {
-                    Logger.info(this, "Verifying all the xmir files before assembling.");
+                    Logger.info(this, "Verifying all the XMIR files before assembling...");
                     new XmirFiles(this.sourcesDir.toPath()).verify();
                 } else {
-                    Logger.info(this, "Xmir verification before assembling is disabled. Skipping.");
+                    Logger.info(this, "XMIR verification before assembling is disabled, skipping");
                 }
                 new Assembler(
                     this.sourcesDir.toPath(),
                     this.outputDir.toPath()
                 ).assemble();
                 if (this.skipVerification) {
-                    Logger.info(this, "Bytecode verification is disabled. Skipping.");
+                    Logger.info(this, "Bytecode verification is disabled, skipping");
                 } else {
-                    Logger.info(this, "Bytecode verification of all the generated classes.");
+                    Logger.info(this, "Verifying bytecode of all the generated classes...");
                     new PluginStartup(this.project, this.outputDir.toPath()).init();
                     new BytecodeClasses(this.outputDir.toPath()).verify();
                 }

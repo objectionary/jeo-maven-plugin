@@ -72,9 +72,9 @@ public final class Logging implements Transformation {
      * @param source Initial path.
      */
     private void logStartWithSize(final Path source) {
-        Logger.info(
+        Logger.debug(
             this,
-            "%s '%[file]s' (%[size]s)",
+            "%s of %[file]s (%[size]s) started",
             this.process,
             source,
             Logging.size(source)
@@ -90,7 +90,7 @@ public final class Logging implements Transformation {
     private void logEndWithSize(final Path source, final Path after, final long time) {
         Logger.info(
             this,
-            "'%[file]s' %s to '%[file]s' (%[size]s) in %[ms]s",
+            "%[file]s %s to %[file]s (%[size]s) in %[ms]s",
             source,
             this.participle,
             after,
@@ -115,7 +115,7 @@ public final class Logging implements Transformation {
             return result;
         } catch (final IOException exception) {
             throw new IllegalStateException(
-                String.format("Can't determine size of '%s'", path),
+                String.format("Can't determine the size of '%s'", path),
                 exception
             );
         }

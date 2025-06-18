@@ -78,7 +78,7 @@ public final class Assembler {
         try {
             Logger.debug(
                 this,
-                "Assembling of '%s' (%[size]s) finished successfully.",
+                "Assembling of %[file]s (%[size]s) finished successfully",
                 disassembled,
                 Files.size(disassembled)
             );

@@ -110,7 +110,7 @@ public final class DisassembleMojo extends AbstractMojo {
         try {
             new PluginStartup(this.project, this.sourcesDir.toPath()).init();
             if (this.disabled) {
-                Logger.info(this, "Disassemble mojo is disabled. Skipping.");
+                Logger.info(this, "Disassemble mojo is disabled, skipping");
             } else {
                 Logger.info(this, "Disassembling is started with mode '%s'", this.mode);
                 new Disassembler(
@@ -119,18 +119,18 @@ public final class DisassembleMojo extends AbstractMojo {
                     DisassembleMode.fromString(this.mode)
                 ).disassemble();
                 if (this.xmirVerification) {
-                    Logger.info(this, "Verifying all the xmir files after disassembling.");
+                    Logger.info(this, "Verifying all the XMIR files after disassembling");
                     new XmirFiles(this.outputDir.toPath()).verify();
                 } else {
                     Logger.info(
-                        this, "Xmir verification after disassembling is disabled. Skipping."
+                        this, "XMIR verification after disassembling is disabled, skipping"
                     );
                 }
             }
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(
                 String.format(
-                    "Can't transpile bytecode from '%s' to EO. Output directory: '%s'.",
+                    "Failed to transpile bytecode to EO, from '%s' to '%s'",
                     this.sourcesDir.toPath(),
                     this.outputDir.toPath()
                 ),
