@@ -103,7 +103,7 @@ public class Disassembler {
         try {
             Logger.debug(
                 this,
-                "Dissembling of %[file]s (%[size]s) finished successfully",
+                "Disassembling of %[file]s (%[size]s) finished successfully",
                 disassembled,
                 Files.size(disassembled)
             );
