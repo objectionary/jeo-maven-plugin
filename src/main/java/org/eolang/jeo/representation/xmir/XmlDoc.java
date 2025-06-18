@@ -5,7 +5,8 @@
 package org.eolang.jeo.representation.xmir;
 
 /**
- * <p>XML document abstraction interface.</p>
+ * XML document abstraction interface.
+ *
  * <p>This interface provides an abstraction layer for XML documents, allowing
  * the use of different XML implementations:</p>
  * <ul>

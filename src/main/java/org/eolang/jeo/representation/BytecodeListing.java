@@ -10,7 +10,8 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.util.TraceClassVisitor;
 
 /**
- * <p>Pretty-printing utility for Java bytecode.</p>
+ * Pretty-printing utility for Java bytecode.
+ *
  * <p>This class provides human-readable representation of Java bytecode using ASM's
  * TraceClassVisitor. It converts raw bytecode into a textual format that shows
  * the structure and instructions of a class file.</p>

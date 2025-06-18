@@ -7,7 +7,8 @@ package org.eolang.jeo.representation.asm;
 import org.objectweb.asm.ClassReader;
 
 /**
- * <p>Enumeration of bytecode disassembly modes.</p>
+ * Enumeration of bytecode disassembly modes.
+ *
  * <p>This enumeration defines different modes for disassembling Java bytecode,
  * controlling the level of detail and information included in the disassembly process.</p>
  * @since 0.6.0

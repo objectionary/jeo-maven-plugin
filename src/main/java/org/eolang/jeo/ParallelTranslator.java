@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 /**
  * Translator that applies a translation to a batch of representations in parallel.
+ *
  * <p>This class implements parallel processing of transformations to improve performance.
  * It ensures that each parallel thread has the correct class loader context to avoid
  * class loading issues during concurrent execution.</p>

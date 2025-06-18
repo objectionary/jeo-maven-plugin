@@ -13,7 +13,8 @@ import org.eolang.jeo.representation.xmir.XmlNode;
 import org.eolang.jeo.representation.xmir.XmlObject;
 
 /**
- * <p>Intermediate representation of class files from XMIR format.</p>
+ * Intermediate representation of class files from XMIR format.
+ *
  * <p>This class provides a unified interface for working with XMIR (EO XML representation)
  * files. It can read XMIR from files or XML objects and convert them to Java bytecode.</p>
  * @since 0.1.0

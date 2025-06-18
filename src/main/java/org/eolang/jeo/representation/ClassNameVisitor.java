@@ -9,7 +9,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.objectweb.asm.ClassVisitor;
 
 /**
- * <p>ASM class visitor for extracting class names from bytecode.</p>
+ * ASM class visitor for extracting class names from bytecode.
+ *
  * <p>This visitor extracts the class name from bytecode using ASM's visitor pattern.
  * It captures the class name when the {@link #visit} method is called during
  * bytecode traversal.</p>

@@ -17,15 +17,13 @@ import org.eolang.jeo.representation.asm.DisassembleMode;
 
 /**
  * Disassembles Java bytecode into XMIR representation.
- * <p>
- * This Maven plugin converts compiled Java class files into low-level EO representation
+ *
+ * <p>This Maven plugin converts compiled Java class files into low-level EO representation
  * (in XMIR format) that contains JVM opcodes and their operands. The resulting XMIR files
- * preserve all bytecode instructions and can be assembled back into executable class files.
- * </p>
- * <p>
- * The plugin supports different disassembly modes to control the level of detail in the
- * output, including debug information such as line numbers and variable names.
- * </p>
+ * preserve all bytecode instructions and can be assembled back into executable class files.</p>
+ *
+ * <p>The plugin supports different disassembly modes to control the level of detail in the
+ * output, including debug information such as line numbers and variable names.</p>
  *
  * @since 0.1.0
  */

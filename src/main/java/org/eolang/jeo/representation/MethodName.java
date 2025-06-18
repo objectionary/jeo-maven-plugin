@@ -5,7 +5,8 @@
 package org.eolang.jeo.representation;
 
 /**
- * <p>Method name converter between Java bytecode and EO representations.</p>
+ * Method name converter between Java bytecode and EO representations.
+ *
  * <p>This class handles the conversion of Java method names, particularly
  * special cases like constructors and static initializers. Constructor names
  * are represented as '&lt;init&gt;' in bytecode which isn't allowed in EO,

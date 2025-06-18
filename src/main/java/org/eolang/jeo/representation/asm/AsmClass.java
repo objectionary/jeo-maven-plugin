@@ -16,7 +16,8 @@ import org.eolang.jeo.representation.bytecode.InnerClass;
 import org.objectweb.asm.tree.ClassNode;
 
 /**
- * <p>ASM-based bytecode parser for Java classes.</p>
+ * ASM-based bytecode parser for Java classes.
+ *
  * <p>This class provides functionality to parse ASM ClassNode objects and convert
  * them into domain-specific bytecode representations. It handles extraction of
  * class properties, methods, fields, and annotations from ASM's internal structure.</p>

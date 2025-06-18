@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: MIT
  */
 /**
- * <p>XMIR generation through Xembly directives.</p>
+ * XMIR generation through Xembly directives.
+ *
  * <p>This package contains classes that generate XMIR by using the ASM library
  * to scan bytecode and the Xembly library to build XML directives.
  * All classes in this package work together to:</p>

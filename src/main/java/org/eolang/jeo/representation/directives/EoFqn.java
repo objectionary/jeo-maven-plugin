@@ -6,12 +6,11 @@ package org.eolang.jeo.representation.directives;
 
 /**
  * EO fully qualified name generator.
- * <p>
- * This class generates fully qualified names for EO objects by adding
- * the standard EO namespace prefix to base names.
- * </p>
- * <p>
- * Examples:
+ *
+ * <p>This class generates fully qualified names for EO objects by adding
+ * the standard EO namespace prefix to base names.</p>
+ *
+ * <p>Examples:
  * </p>
  * <ul>
  * <li>{@code seq} -> {@code Q.org.eolang.seq}</li>

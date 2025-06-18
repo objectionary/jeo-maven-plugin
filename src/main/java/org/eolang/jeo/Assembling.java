@@ -11,6 +11,8 @@ import org.eolang.jeo.representation.XmirRepresentation;
 
 /**
  * Assembling transformation.
+ *
+ *
  * <p>This class implements the transformation process that converts XMIR
  * representations into Java bytecode. It reads XMIR files and produces
  * corresponding .class files in the specified target directory.</p>

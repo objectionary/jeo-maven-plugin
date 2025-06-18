@@ -22,7 +22,8 @@ import org.xembly.Transformers;
 import org.xembly.Xembler;
 
 /**
- * <p>XML representation of a Java class from XMIR.</p>
+ * XML representation of a Java class from XMIR.
+ *
  * <p>This class provides functionality to parse and convert XMIR (EO XML representation)
  * class nodes into bytecode classes. It handles extraction of class properties,
  * methods, fields, annotations, and attributes from the XML structure.</p>

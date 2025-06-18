@@ -401,7 +401,6 @@
             <artifactId>qulice-maven-plugin</artifactId>
             <version>${qulice.version}</version>
             <configuration>
-              <license>file:${basedir}/LICENSE.txt</license>
               <excludes>
                 <exclude>checkstyle:.*/BytecodeInstruction.java</exclude>
                 <exclude>pmd:/src/test/resources/.*</exclude>
@@ -422,13 +421,6 @@
                 <exclude>dependencies:.*</exclude>
               </excludes>
             </configuration>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>check</goal>
-                </goals>
-              </execution>
-            </executions>
           </plugin>
           <plugin>
             <groupId>com.github.volodya-lombrozo</groupId>

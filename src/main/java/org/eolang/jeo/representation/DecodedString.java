@@ -9,7 +9,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * <p>A utility class for encoding strings using URL encoding.</p>
+ * A utility class for encoding strings using URL encoding.
+ *
  * <p>This class wraps a decoded string and provides functionality to encode it
  * using UTF-8 URL encoding. It handles encoding exceptions internally and
  * throws IllegalStateException if encoding fails.</p>

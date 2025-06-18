@@ -23,6 +23,7 @@ import org.xembly.ImpossibleModificationException;
 
 /**
  * Intermediate representation of class files from bytecode.
+ *
  * <p>This class provides a unified interface for working with Java bytecode.
  * It can read bytecode from various sources (files, byte arrays, input streams)
  * and convert it to XMIR (EO XML representation) format with configurable detail levels.</p>

@@ -13,6 +13,7 @@ import org.eolang.jeo.representation.asm.DisassembleMode;
 
 /**
  * Disassembler for bytecode classes.
+ *
  * <p>This class disassembles the project's compiled Java bytecode classes into
  * XMIR (EO XML representation). It processes all .class files from a specified
  * directory and converts them into corresponding XMIR files, supporting different

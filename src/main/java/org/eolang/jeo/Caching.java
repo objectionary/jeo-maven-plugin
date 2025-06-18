@@ -11,6 +11,7 @@ import java.nio.file.Path;
 
 /**
  * Cached transformation.
+ *
  * <p>This class implements a caching mechanism for transformations. It checks
  * if a transformation has already been performed by comparing file modification
  * times, and skips redundant transformations to improve performance.</p>

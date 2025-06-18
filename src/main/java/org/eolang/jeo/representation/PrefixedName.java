@@ -9,10 +9,12 @@ import java.util.regex.Pattern;
 import lombok.ToString;
 
 /**
- * <p>Java name handler for avoiding naming conflicts with EO-reserved words.</p>
+ * Java name handler for avoiding naming conflicts with EO-reserved words.
+ *
  * <p>This class is used to represent any Java class or method name and provides
  * encoding/decoding functionality to avoid naming conflicts with EO-reserved words.
  * Names are prefixed with "j$" to distinguish them from EO keywords.</p>
+ *
  * <p>You can read more about the problem
  * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/276">here</a></p>
  * @since 0.1.0

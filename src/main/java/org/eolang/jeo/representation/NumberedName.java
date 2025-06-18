@@ -5,7 +5,8 @@
 package org.eolang.jeo.representation;
 
 /**
- * <p>Name representation with optional numeric suffix.</p>
+ * Name representation with optional numeric suffix.
+ *
  * <p>This class handles names that may have numeric suffixes for disambiguation.
  * For example: `foo`, `foo-2`, `foo-3`. Names without suffixes are treated
  * as having number 1.</p>

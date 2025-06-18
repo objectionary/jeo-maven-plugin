@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: MIT
  */
 /**
- * <p>ASM library integration for bytecode manipulation.</p>
+ * ASM library integration for bytecode manipulation.
+ *
  * <p>This package contains classes that provide integration with the ASM library
  * for parsing, analyzing, and manipulating Java bytecode. These classes serve
  * as adapters between ASM's internal representation and JEO's domain models.</p>

@@ -11,6 +11,7 @@ import java.nio.file.Path;
 
 /**
  * Logging transformation decorator.
+ *
  * <p>This class wraps a transformation and adds logging functionality. It logs
  * messages before and after applying the original transformation, including file
  * sizes and processing time for performance monitoring.</p>

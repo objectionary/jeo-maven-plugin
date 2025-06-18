@@ -13,7 +13,8 @@ import org.xembly.Directive;
 import org.xembly.Directives;
 
 /**
- * <p>Directives for generating EO class objects.</p>
+ * Directives for generating EO class objects.
+ *
  * <p>This class generates Xembly directives to create EO object representations
  * of Java classes, including their properties, fields, methods, annotations,
  * and attributes.</p>

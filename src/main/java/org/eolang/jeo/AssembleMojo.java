@@ -16,15 +16,13 @@ import org.apache.maven.project.MavenProject;
 
 /**
  * Assembles XMIR representation of Java bytecode into executable class files.
- * <p>
- * This Maven plugin converts low-level EO representation (in XMIR format) into Java bytecode
+ *
+ * <p>This Maven plugin converts low-level EO representation (in XMIR format) into Java bytecode
  * that can be executed by the Java Virtual Machine. The plugin performs pure assembly without
- * applying any optimizations or improvements to the bytecode.
- * </p>
- * <p>
- * The plugin supports optional bytecode verification to ensure generated classes are valid
- * and can be loaded by the JVM.
- * </p>
+ * applying any optimizations or improvements to the bytecode.</p>
+ *
+ * <p>The plugin supports optional bytecode verification to ensure generated classes are valid
+ * and can be loaded by the JVM.</p>
  *
  * @since 0.1.0
  */

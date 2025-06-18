@@ -5,7 +5,8 @@
 package org.eolang.jeo.representation;
 
 /**
- * <p>Method signature representation combining name and descriptor.</p>
+ * Method signature representation combining name and descriptor.
+ *
  * <p>Represents Java method name and descriptor as a unified signature.
  * Since methods in Java are allowed to be overloaded, we need to handle this
  * ambiguity by combining the method name with its descriptor to create a

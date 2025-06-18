@@ -9,8 +9,8 @@ import org.xembly.Directive;
 
 /**
  * This class represents a default annotation value.
- * <p>
- *     {@code
+ *
+ * <p>    {@code
  *        public @interface NestedAnnotation {
  *          String name() default "nested-default";
  *        }

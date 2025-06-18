@@ -20,13 +20,16 @@ import org.cactoos.map.MapEntry;
 
 /**
  * JEO class loader.
+ *
  * <p>This classloader reads classes from specified directories, loads them into memory,
  * and makes them available for class loading operations. This happens before any
  * transformations are applied.</p>
+ *
  * <p>Preloading allows safe class validation. The validator loads "old" classes and
  * uses them for the validation of the "newly" generated classes. Moreover, by using
  * {@link JeoClassLoader}, we can guarantee that the classes loaded before any
  * transformations are correct.</p>
+ *
  * <p>If we use any other {@link ClassLoader} implementation it leads to flaky tests as
  * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/672">issue 672</a> shows.</p>
  * @since 0.6.0

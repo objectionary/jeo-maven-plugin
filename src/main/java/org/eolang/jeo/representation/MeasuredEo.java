@@ -12,7 +12,8 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * <p>A utility class that measures the time taken to convert bytecode to XMIR.</p>
+ * A utility class that measures the time taken to convert bytecode to XMIR.
+ *
  * <p>This class wraps the transformation process and adds timing metadata to the
  * resulting XMIR program. The timing information is embedded in the program's
  * ms attribute.</p>

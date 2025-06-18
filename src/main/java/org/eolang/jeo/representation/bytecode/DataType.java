@@ -9,7 +9,8 @@ import java.util.Optional;
 import org.objectweb.asm.Type;
 
 /**
- * <p>Enumeration of all supported data types in bytecode representation.</p>
+ * Enumeration of all supported data types in bytecode representation.
+ *
  * <p>This enumeration defines the mapping between Java data types and their
  * corresponding EO base types used in XMIR representation.</p>
  * @since 0.3.0

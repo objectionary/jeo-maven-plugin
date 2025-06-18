@@ -16,7 +16,8 @@ import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.objectweb.asm.Opcodes;
 
 /**
- * <p>Bytecode representation of a Java class.</p>
+ * Bytecode representation of a Java class.
+ *
  * <p>This class represents a Java class in bytecode form, containing methods, fields,
  * annotations, attributes, and class properties. It provides functionality for
  * building bytecode classes programmatically and converting them to various formats.</p>

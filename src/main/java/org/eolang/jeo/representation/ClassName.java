@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 /**
  * Class name parser and builder.
+ *
  * <p>This class understands Java class names and packages. It can extract package
  * and class name components from a fully qualified class name, and construct
  * full names from separate package and class name parts.</p>
