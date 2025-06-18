@@ -28,16 +28,16 @@ The `assemble` goal can convert EO back into bytecode.
 The default phase for the plugin
 is [process-classes](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#default-lifecycle).
 
-To optimize java bytecode you need to use both goals in the following order:
+To optimize Java bytecode, you need to use both goals in the following order:
 
-* `disassemble` create EO files in the `target/generated-sources`
+* `disassemble` creates EO files in the `target/generated-sources`
   directory.
-* Provide your optimizations are applied to the EO files
+* Apply your optimizations to the EO files
   in the `target/generated-sources` directory.
 * `assemble` scans the `target/generated-sources` directory for EO
   files and converts them back to Java bytecode.
 
-More details about plugin usage you can find in our
+More details about plugin usage can be found in our
 [Maven site](https://objectionary.github.io/jeo-maven-plugin).
 
 ## Invoke the plugin from the command line
@@ -92,7 +92,7 @@ configuration to your `pom.xml` file:
 ### Include debug information
 
 In order to include debug information in the generated EO files, you can set
-`debug` option.
+the `debug` option.
 
 ```xml
 
@@ -101,7 +101,7 @@ In order to include debug information in the generated EO files, you can set
 </configuration>
 ```
 
-This option will add line numbers and local variable names to the EO files
+This option will add line numbers and local variable names to the EO files,
 together with their corresponding labels.
 
 ### Disable bytecode verification
@@ -121,7 +121,7 @@ At times, it might be beneficial to generate intentionally flawed bytecode.
 
 ### Enable XMIR Verification
 
-After generation XMIR or before `assemble` goal,
+After generating XMIR or before the `assemble` goal,
 you might need to check its correctness.
 We do it by using [objectionary/lints](https://github.com/objectionary/lints)
 repository.
@@ -139,8 +139,8 @@ To enable them, you need to set `xmirVerification` to `true`:
 
 The plugin can transform Java bytecode into EO and back. Usually, the plugin
 transforms each bytecode class file into a separate EO file, maintaining a
-one-to-one relationship. If the Java class has name `Application.class`, the EO
-file will have `Application.xmir` file.
+one-to-one relationship. If the Java class has the name `Application.class`, the EO
+file will have the name `Application.xmir`.
 
 For example, consider the following Java class:
 
@@ -283,7 +283,7 @@ primitives, like `jeo.opcode`, `jeo.int`, `jeo.method`, etc.
 
 ## Full List of Jeo Objects
 
-During decompilation, the `jeo-maven-plugin` creates a set of objects
+During disassembly, the `jeo-maven-plugin` creates a set of objects
 representing bytecode primitives.
 These objects provide a way to handle various aspects of Java bytecode.
 Below is the full list of these objects, grouped by category:
@@ -393,11 +393,11 @@ PROFILER=/path/to/async-profiler/profiler.sh
 
 ## How to Contribute
 
-Fork repository, make changes, then send us
+Fork the repository, make changes, then send us
 a [pull request](https://www.yegor256.com/2014/04/15/github-guidelines.html).
 We will review your changes and apply them to the `master` branch shortly,
 provided they don't violate our quality standards. To avoid frustration,
-before sending us your pull request please run full Maven build:
+before sending us your pull request, please run the full Maven build:
 
 ```bash
 mvn clean install -Pqulice
