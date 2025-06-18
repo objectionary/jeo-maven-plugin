@@ -5,15 +5,20 @@
 package org.eolang.jeo.representation.directives;
 
 /**
- * <p>EO fully qualified name generator.</p>
- * <p>This class generates fully qualified names for EO objects by adding
- * the standard EO namespace prefix to base names.</p>
- * <p>Examples:</p>
+ * EO fully qualified name generator.
+ * <p>
+ * This class generates fully qualified names for EO objects by adding
+ * the standard EO namespace prefix to base names.
+ * </p>
+ * <p>
+ * Examples:
+ * </p>
  * <ul>
- * <li>`seq` -> `org.eolang.seq`</li>
- * <li>`bytes` -> `org.eolang.bytes`</li>
- * <li>`math` -> `org.eolang.math`</li>
+ * <li>{@code seq} -> {@code Q.org.eolang.seq}</li>
+ * <li>{@code bytes} -> {@code Q.org.eolang.bytes}</li>
+ * <li>{@code math} -> {@code Q.org.eolang.math}</li>
  * </ul>
+ *
  * @since 0.6.0
  */
 public final class EoFqn {

@@ -5,15 +5,20 @@
 package org.eolang.jeo.representation.directives;
 
 /**
- * <p>JEO fully qualified name generator.</p>
- * <p>This class generates fully qualified names for JEO-specific objects by adding
- * the JEO namespace prefix to base names.</p>
- * <p>Examples:</p>
+ * JEO fully qualified name generator.
+ * <p>
+ * This class generates fully qualified names for JEO-specific objects by adding
+ * the JEO namespace prefix to base names.
+ * </p>
+ * <p>
+ * Examples:
+ * </p>
  * <ul>
- * <li>`opcode` -> `org.eolang.jeo.opcode`</li>
- * <li>`representation` -> `org.eolang.jeo.representation`</li>
- * <li>`int` -> `org.eolang.jeo.int`</li>
+ * <li>{@code opcode} -> {@code Q.jeo.opcode}</li>
+ * <li>{@code representation} -> {@code Q.jeo.representation}</li>
+ * <li>{@code int} -> {@code Q.jeo.int}</li>
  * </ul>
+ *
  * @since 0.6.0
  * @todo #710:90min Refactor the usage of {@link JeoFqn} in the project.
  *  The solution with FQN transformation is not the best one.

@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: MIT
  */
 /**
- * Tests for classes in {@link org.eolang.jeo.representation.bytecode} package.
+ * Test cases for classes in the {@link org.eolang.jeo.representation.bytecode} package.
+ * This package contains comprehensive test coverage for bytecode representation classes,
+ * including bytecode parsing, object creation, method handling, and codec operations.
+ *
+ * @since 0.1.0
  */
 package org.eolang.jeo.representation.bytecode;

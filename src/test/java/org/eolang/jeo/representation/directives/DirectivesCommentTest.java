@@ -12,8 +12,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesComment}.
- * @since 0.6
+ * Test cases for {@link DirectivesComment}.
+ * This class verifies the generation of comment directives
+ * and their proper XML formatting.
+ *
+ * @since 0.6.0
  */
 final class DirectivesCommentTest {
 

@@ -17,7 +17,10 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 /**
- * Matcher to check if the received XMIR document has a method inside a class with a given name.
+ * Hamcrest matcher to verify that an XMIR document contains a method with a specific name.
+ * This matcher supports complex method validation including parameters, return types,
+ * and method body verification for comprehensive testing.
+ *
  * @since 0.1.0
  */
 @SuppressWarnings({

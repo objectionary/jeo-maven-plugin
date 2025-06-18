@@ -10,9 +10,11 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link XmlClass}.
+ * Test cases for {@link XmlClass}.
+ * This class verifies the functionality of XML class representation,
+ * ensuring proper creation and manipulation of class objects from XML.
  *
- * @since 0.1
+ * @since 0.1.0
  */
 final class XmlClassTest {
 

@@ -14,8 +14,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesValues}.
- * @since 0.6
+ * Test cases for {@link DirectivesValues}.
+ * This class verifies the conversion of value arrays to XMIR directives,
+ * ensuring proper handling of multiple values and their serialization.
+ *
+ * @since 0.6.0
  */
 final class DirectivesValuesTest {
 

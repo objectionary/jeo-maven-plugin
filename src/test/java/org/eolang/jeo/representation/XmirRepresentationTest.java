@@ -24,7 +24,9 @@ import org.xembly.Directives;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link XmirRepresentation}.
+ * Test cases for {@link XmirRepresentation}.
+ * This class verifies the functionality of XMIR representation,
+ * including conversion between XMIR and bytecode formats.
  *
  * @since 0.1.0
  */

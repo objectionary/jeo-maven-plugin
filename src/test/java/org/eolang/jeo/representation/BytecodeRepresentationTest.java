@@ -10,9 +10,11 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link BytecodeRepresentation}.
+ * Test cases for {@link BytecodeRepresentation}.
+ * This class verifies the parsing and conversion of Java bytecode
+ * to EO representation, including name extraction and XML generation.
  *
- * @since 0.1
+ * @since 0.1.0
  */
 final class BytecodeRepresentationTest {
 

@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: MIT
  */
 /**
- * Tests for classes in {@link org.eolang.jeo.matchers} packages.
- * @since 0.6
+ * Test cases for classes in the {@link org.eolang.jeo.matchers} package.
+ * This package contains custom Hamcrest matchers for testing XML documents,
+ * providing specialized assertions for XMIR validation and comparison.
+ *
+ * @since 0.6.0
  */
 package org.eolang.jeo.matchers;

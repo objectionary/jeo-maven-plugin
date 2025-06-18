@@ -15,8 +15,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.objectweb.asm.Opcodes;
 
 /**
- * Test case for {@link OpcodeName}.
- * @since 0.1
+ * Test cases for {@link OpcodeName}.
+ * This class verifies the correct mapping of JVM opcodes to their string representations,
+ * ensuring accurate bytecode instruction naming.
+ *
+ * @since 0.1.0
  */
 final class OpcodeNameTest {
 

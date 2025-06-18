@@ -16,9 +16,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Cached transformation test.
  * Test cases for {@link Caching}.
- * @since 0.6
+ * This class verifies the caching functionality for transformations,
+ * ensuring proper cache behavior and file modification tracking.
+ *
+ * @since 0.6.0
  */
 final class CachingTest {
 

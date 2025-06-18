@@ -12,8 +12,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 /**
- * Test case for {@link PrefixedName}.
- * @since 0.1
+ * Test cases for {@link PrefixedName}.
+ * This class verifies the functionality of prefixed name handling,
+ * ensuring proper encoding and decoding of names with prefix conventions.
+ *
+ * @since 0.1.0
  */
 final class PrefixedNameTest {
 

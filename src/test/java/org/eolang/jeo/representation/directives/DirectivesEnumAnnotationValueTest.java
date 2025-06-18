@@ -17,8 +17,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test for {@link DirectivesEnumAnnotationValue}.
- * @since 0.6
+ * Test cases for {@link DirectivesEnumAnnotationValue}.
+ * This class verifies the generation of enum annotation value directives,
+ * ensuring proper handling of enum types in annotations.
+ *
+ * @since 0.6.0
  */
 final class DirectivesEnumAnnotationValueTest {
 

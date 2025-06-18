@@ -17,7 +17,10 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link DirectivesObject}.
- * @since 0.1
+ * This class verifies the correct generation of object directives
+ * and their properties including version, revision, and timestamps.
+ *
+ * @since 0.1.0
  */
 final class DirectivesObjectTest {
 

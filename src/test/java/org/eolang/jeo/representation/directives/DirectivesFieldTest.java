@@ -15,8 +15,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesField}.
- * @since 0.3
+ * Test cases for {@link DirectivesField}.
+ * This class verifies the generation of field directives for Java class fields,
+ * including various field properties and access modifiers.
+ *
+ * @since 0.3.0
  */
 final class DirectivesFieldTest {
 
