@@ -10,22 +10,25 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Translation that leaves a log message before and after applying the original translation.
- * @since 0.6
+ * Logging transformation decorator.
+ * <p>This class wraps a transformation and adds logging functionality. It logs
+ * messages before and after applying the original transformation, including file
+ * sizes and processing time for performance monitoring.</p>
+ * @since 0.6.0
  */
 public final class Logging implements Transformation {
 
     /**
      * Process name.
-     * Usually it is a noun, like:
-     * "Disassembling", "Assembling", etc.
+     * <p>Usually it is a gerund form, like:
+     * "Disassembling", "Assembling", etc.</p>
      */
     private final String process;
 
     /**
      * Participle of the process.
-     * Something like:
-     * "disassembled", "assembled", etc.
+     * <p>Past participle form, like:
+     * "disassembled", "assembled", etc.</p>
      */
     private final String participle;
 
@@ -36,9 +39,9 @@ public final class Logging implements Transformation {
 
     /**
      * Constructor.
-     * @param process Process name.
-     * @param participle Participle of the process.
-     * @param origin Original transformation.
+     * @param process Process name (gerund form)
+     * @param participle Past participle of the process
+     * @param origin Original transformation to wrap with logging
      */
     public Logging(final String process, final String participle, final Transformation origin) {
         this.process = process;
@@ -69,7 +72,7 @@ public final class Logging implements Transformation {
 
     /**
      * Log the start of the process.
-     * @param source Initial path.
+     * @param source Initial path of the file being processed
      */
     private void logStartWithSize(final Path source) {
         Logger.debug(
@@ -83,9 +86,9 @@ public final class Logging implements Transformation {
 
     /**
      * Log the end of the process.
-     * @param source Initial path
-     * @param after Path after the process
-     * @param time Time spent
+     * @param source Initial path of the source file
+     * @param after Path to the resulting file after processing
+     * @param time Time spent in milliseconds
      */
     private void logEndWithSize(final Path source, final Path after, final long time) {
         Logger.info(
@@ -102,7 +105,7 @@ public final class Logging implements Transformation {
     /**
      * Size of the file.
      * @param path Path to the file
-     * @return Size of the file
+     * @return Size of the file in bytes, or 0 if file doesn't exist
      */
     private static long size(final Path path) {
         try {

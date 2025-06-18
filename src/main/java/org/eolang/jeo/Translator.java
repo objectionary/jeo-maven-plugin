@@ -9,14 +9,16 @@ import java.util.stream.Stream;
 
 /**
  * Translator that applies a translation to a batch of representations.
- * @since 0.1
+ * <p>This interface defines the contract for batch processing of file transformations.
+ * Implementations can process files sequentially or in parallel to improve performance.</p>
+ * @since 0.1.0
  */
 public interface Translator {
 
     /**
      * Apply the translation for all representations.
-     * @param representations IRs to translate.
-     * @return Translated IRs.
+     * @param representations Stream of intermediate representations to translate
+     * @return Stream of translated intermediate representations
      */
     Stream<Path> apply(Stream<Path> representations);
 }

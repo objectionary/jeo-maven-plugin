@@ -13,8 +13,9 @@ import org.eolang.jeo.representation.xmir.XmlNode;
 import org.eolang.jeo.representation.xmir.XmlObject;
 
 /**
- * Intermediate representation of a class files from XMIR.
- *
+ * Intermediate representation of class files from XMIR.
+ * <p>This class provides a unified interface for working with XMIR (EO XML representation)
+ * files. It can read XMIR from files or XML objects and convert them to Java bytecode.</p>
  * @since 0.1.0
  */
 public final class XmirRepresentation {
@@ -31,7 +32,7 @@ public final class XmirRepresentation {
 
     /**
      * Constructor.
-     * @param path Path to XML file.
+     * @param path Path to XMIR file to read
      */
     public XmirRepresentation(final Path path) {
         this(new JcabiXmlDoc(path), path.toAbsolutePath().toString());
@@ -39,7 +40,7 @@ public final class XmirRepresentation {
 
     /**
      * Constructor.
-     * @param xml XML.
+     * @param xml XML object containing XMIR representation
      */
     public XmirRepresentation(final XML xml) {
         this(new JcabiXmlDoc(xml), "Unknown");
@@ -47,8 +48,8 @@ public final class XmirRepresentation {
 
     /**
      * Constructor.
-     * @param xml XML.
-     * @param source Source of the XML.
+     * @param xml XML document wrapper
+     * @param source Source description for error reporting
      */
     private XmirRepresentation(final XmlDoc xml, final String source) {
         this.xml = xml;
@@ -57,9 +58,9 @@ public final class XmirRepresentation {
 
     /**
      * Retrieves class name from XMIR.
-     * This method intentionally uses classes from `org.w3c.dom` instead of `com.jcabi.xml`
-     * by performance reasons.
-     * @return Class name.
+     * <p>This method intentionally uses classes from {@code org.w3c.dom} instead of
+     * {@code com.jcabi.xml} for performance reasons.</p>
+     * @return Fully qualified class name
      */
     public String name() {
         final XmlNode root = this.xml.root();
@@ -74,7 +75,7 @@ public final class XmirRepresentation {
 
     /**
      * Convert to bytecode.
-     * @return Array of bytes.
+     * @return Bytecode object containing the compiled class
      */
     public Bytecode toBytecode() {
         try {

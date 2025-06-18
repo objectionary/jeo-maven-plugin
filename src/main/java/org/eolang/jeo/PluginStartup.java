@@ -14,10 +14,11 @@ import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 
 /**
- * All mojo's initialization step.
- * This class is responsible for initializing classloader.
- *
- * @since 0.1
+ * Plugin initialization and setup.
+ * <p>This class is responsible for initializing the classloader for all Maven mojos.
+ * It ensures that all necessary classes from the project's runtime, compile, and test
+ * classpaths are available during plugin execution.</p>
+ * @since 0.1.0
  */
 public final class PluginStartup {
 
@@ -28,9 +29,9 @@ public final class PluginStartup {
 
     /**
      * Constructor.
-     * @param project Maven project.
-     * @param additional Additional folders with classes.
-     * @throws DependencyResolutionRequiredException If a problem happened during loading classes.
+     * @param project Maven project containing classpath information
+     * @param additional Additional folders with classes to include
+     * @throws DependencyResolutionRequiredException If a problem happened during loading classes
      */
     PluginStartup(
         final MavenProject project, final Path... additional
@@ -51,7 +52,7 @@ public final class PluginStartup {
 
     /**
      * Constructor.
-     * @param folders Folders with classes.
+     * @param folders Array of folder paths containing classes
      */
     PluginStartup(final String... folders) {
         this(Arrays.asList(folders));
@@ -59,7 +60,7 @@ public final class PluginStartup {
 
     /**
      * Constructor.
-     * @param folders Folders with classes.
+     * @param folders Collection of folder paths containing classes
      */
     private PluginStartup(final Collection<String> folders) {
         this.folders = folders;
@@ -67,14 +68,16 @@ public final class PluginStartup {
 
     /**
      * Initialize classloader.
-     * This method is important to load classes that were compiled on the previous maven
+     * <p>This method is important to load classes that were compiled on the previous Maven
      * phases. Since the jeo plugin works on the 'process-classes' phase, it might
-     * see classes that were compiled on the 'compile' phase.
-     * We need to have all these classes in the classpath to be able to load them during
-     * the transformation phase.
-     * We need this to solve the problem with computing maxs in ASM library:
-     * - https://gitlab.ow2.org/asm/asm/-/issues/317918
-     * - https://stackoverflow.com/questions/11292701/error-while-instrumenting-class-files-asm-classwriter-getcommonsuperclass
+     * see classes that were compiled on the 'compile' phase.</p>
+     * <p>We need to have all these classes in the classpath to be able to load them during
+     * the transformation phase. This is necessary to solve the problem with computing maxs
+     * in ASM library:</p>
+     * <ul>
+     * <li><a href="https://gitlab.ow2.org/asm/asm/-/issues/317918">ASM Issue 317918</a></li>
+     * <li><a href="https://stackoverflow.com/questions/11292701/error-while-instrumenting-class-files-asm-classwriter-getcommonsuperclass">StackOverflow: ASM ClassWriter getCommonSuperClass</a></li>
+     * </ul>
      */
     void init() {
         Logger.info(

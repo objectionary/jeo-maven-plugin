@@ -11,7 +11,10 @@ import java.util.stream.Stream;
 
 /**
  * Translation summary log.
- * @since 0.2
+ * <p>This class wraps a translator and provides summary logging functionality.
+ * It logs the start and end of the translation process, including the number of
+ * files processed and the total time taken.</p>
+ * @since 0.2.0
  */
 public final class Summary implements Translator {
 
@@ -22,8 +25,8 @@ public final class Summary implements Translator {
 
     /**
      * Past participle of the process.
-     * Usually it is something like:
-     * "disassembled", "assembled", etc.
+     * <p>Usually it is something like:
+     * "disassembled", "assembled", etc.</p>
      */
     private final String participle;
 
@@ -44,11 +47,11 @@ public final class Summary implements Translator {
 
     /**
      * Constructor.
-     * @param process Process name.
-     * @param participle Past participle of the process.
-     * @param input From where.
-     * @param output To where.
-     * @param original Original translator.
+     * @param process Process name (gerund form)
+     * @param participle Past participle of the process
+     * @param input Source directory path
+     * @param output Target directory path
+     * @param original Original translator to wrap with summary logging
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     Summary(

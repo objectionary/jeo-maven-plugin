@@ -11,7 +11,10 @@ import java.nio.file.Path;
 
 /**
  * Cached transformation.
- * @since 0.6
+ * <p>This class implements a caching mechanism for transformations. It checks
+ * if a transformation has already been performed by comparing file modification
+ * times, and skips redundant transformations to improve performance.</p>
+ * @since 0.6.0
  */
 public final class Caching implements Transformation {
 
@@ -22,7 +25,7 @@ public final class Caching implements Transformation {
 
     /**
      * Constructor.
-     * @param origin Original transformation.
+     * @param origin Original transformation to cache
      */
     Caching(final Transformation origin) {
         this.origin = origin;
@@ -56,8 +59,8 @@ public final class Caching implements Transformation {
 
     /**
      * Try to transform the file.
-     * @return The transformed file content.
-     * @throws IOException If something goes wrong.
+     * @return The transformed file content as byte array
+     * @throws IOException If something goes wrong during transformation
      */
     private byte[] tryTransform() throws IOException {
         final byte[] result;
@@ -81,8 +84,8 @@ public final class Caching implements Transformation {
 
     /**
      * Check if the file has already been transformed.
-     * @return True if the file has already been transformed.
-     * @throws IOException If something goes wrong.
+     * @return True if the file has already been transformed, false otherwise
+     * @throws IOException If something goes wrong while checking file status
      */
     private boolean alreadyTransformed() throws IOException {
         final Path source = this.source();

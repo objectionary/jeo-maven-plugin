@@ -22,8 +22,11 @@ import org.objectweb.asm.ClassReader;
 import org.xembly.ImpossibleModificationException;
 
 /**
- * Intermediate representation of a class files which can be optimized from bytecode.
- * @since 0.1
+ * Intermediate representation of class files from bytecode.
+ * <p>This class provides a unified interface for working with Java bytecode.
+ * It can read bytecode from various sources (files, byte arrays, input streams)
+ * and convert it to XMIR (EO XML representation) format with configurable detail levels.</p>
+ * @since 0.1.0
  */
 @ToString
 @SuppressWarnings("PMD.UseObjectForClearerAPI")
@@ -36,7 +39,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
-     * @param clazz Path to the class file
+     * @param clazz Path to the class file to read
      */
     public BytecodeRepresentation(final Path clazz) {
         this(BytecodeRepresentation.fromFile(clazz));
@@ -44,7 +47,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
-     * @param bytecode Bytecode
+     * @param bytecode Bytecode object containing raw bytes
      */
     public BytecodeRepresentation(final Bytecode bytecode) {
         this(BytecodeRepresentation.fromBytes(bytecode.bytes()));
@@ -52,7 +55,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
-     * @param input Input source
+     * @param input Input source containing bytecode
      */
     public BytecodeRepresentation(final Input input) {
         this(BytecodeRepresentation.fromInput(input));
@@ -60,7 +63,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
-     * @param input Input.
+     * @param input Unchecked byte array supplier
      */
     private BytecodeRepresentation(final Unchecked<byte[]> input) {
         this.input = input;
@@ -68,8 +71,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Read class name from bytecode.
-     *
-     * @return Class name.
+     * @return Fully qualified class name
      */
     public String name() {
         final ClassNameVisitor name = new ClassNameVisitor();
@@ -79,7 +81,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Convert to EOlang XML representation (XMIR).
-     * @return XML.
+     * @return XML representation of the bytecode
      */
     public XML toEO() {
         return this.toEO(DisassembleMode.SHORT);
@@ -87,8 +89,8 @@ public final class BytecodeRepresentation {
 
     /**
      * Converts bytecode into XML.
-     * @param mode Disassemble mode.
-     * @return XML representation of bytecode.
+     * @param mode Disassemble mode controlling the level of detail
+     * @return XML representation of bytecode
      */
     public XML toEO(final DisassembleMode mode) {
         final DirectivesObject directives = new AsmProgram(this.input.value())
@@ -119,8 +121,8 @@ public final class BytecodeRepresentation {
 
     /**
      * Prestructor that converts a file to a byte source.
-     * @param path Path to the file.
-     * @return Byte source.
+     * @param path Path to the file containing bytecode
+     * @return Unchecked byte array supplier
      */
     private static Unchecked<byte[]> fromFile(final Path path) {
         return BytecodeRepresentation.fromInput(new InputOf(path));
@@ -128,8 +130,8 @@ public final class BytecodeRepresentation {
 
     /**
      * Prestructor that converts input to a byte source.
-     * @param input Input.
-     * @return Byte source.
+     * @param input Input source to read from
+     * @return Unchecked byte array supplier
      */
     private static Unchecked<byte[]> fromInput(final Input input) {
         return new Unchecked<>(new Synced<>(new Sticky<>(() -> new BytesOf(input).asBytes())));
@@ -137,8 +139,8 @@ public final class BytecodeRepresentation {
 
     /**
      * Prestructor that converts bytes to a byte source.
-     * @param bytes Bytes.
-     * @return Byte source.
+     * @param bytes Raw byte array
+     * @return Unchecked byte array supplier
      */
     private static Unchecked<byte[]> fromBytes(final byte[] bytes) {
         return new Unchecked<>(new Synced<>(new Sticky<>(() -> bytes)));

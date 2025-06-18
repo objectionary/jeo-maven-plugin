@@ -10,8 +10,11 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.util.TraceClassVisitor;
 
 /**
- * This is pretty-printing of bytecode.
- * @since 0.6
+ * Pretty-printing of bytecode.
+ * <p>This class provides human-readable representation of Java bytecode using ASM's
+ * TraceClassVisitor. It converts raw bytecode into a textual format that shows
+ * the structure and instructions of a class file.</p>
+ * @since 0.6.0
  * @todo #845:90min Decompile Bytecode Listing.
  *  Currently we print bytecode listing to XMIR without decompiling it.
  *  It's just raw, but human-readable bytecode.
@@ -27,7 +30,7 @@ public final class BytecodeListing {
 
     /**
      * Constructor.
-     * @param bytecode Bytecode.
+     * @param bytecode Raw bytecode array to format
      */
     BytecodeListing(final byte... bytecode) {
         this.bytecode = bytecode.clone();

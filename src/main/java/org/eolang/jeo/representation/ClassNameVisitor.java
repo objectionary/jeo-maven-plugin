@@ -9,7 +9,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.objectweb.asm.ClassVisitor;
 
 /**
- * Class name.
+ * Class name visitor.
+ * <p>This visitor extracts the class name from bytecode using ASM's visitor pattern.
+ * It captures the class name when the {@link #visit} method is called during
+ * bytecode traversal.</p>
  * @since 0.1.0
  */
 @SuppressWarnings("PMD.UseObjectForClearerAPI")
@@ -29,7 +32,7 @@ public final class ClassNameVisitor extends ClassVisitor {
 
     /**
      * Constructor.
-     * @param bag Atomic reference to store class name.
+     * @param bag Atomic reference to store class name
      */
     private ClassNameVisitor(final AtomicReference<String> bag) {
         this(new DefaultVersion().api(), bag);
@@ -37,8 +40,8 @@ public final class ClassNameVisitor extends ClassVisitor {
 
     /**
      * Constructor.
-     * @param api ASM API version.
-     * @param bag Atomic reference to store class name.
+     * @param api ASM API version to use
+     * @param bag Atomic reference to store class name
      */
     private ClassNameVisitor(final int api, final AtomicReference<String> bag) {
         super(api);
@@ -60,13 +63,13 @@ public final class ClassNameVisitor extends ClassVisitor {
 
     /**
      * Get class name.
-     * @return Class name.
+     * @return The extracted class name
      */
     public String asString() {
         final String last = this.bag.get();
         if (Objects.isNull(last)) {
             throw new IllegalStateException(
-                "Class name is not set, bug is empty. Use #visit() method to set it."
+                "Class name is not set, bag is empty. Use #visit() method to set it."
             );
         }
         return last;

@@ -8,23 +8,25 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Class name.
- * Understands class name and package. Could extract them from full class name.
- * @since 0.1
+ * Class name parser and builder.
+ * <p>This class understands Java class names and packages. It can extract package
+ * and class name components from a fully qualified class name, and construct
+ * full names from separate package and class name parts.</p>
+ * @since 0.1.0
  */
 public final class ClassName {
 
     /**
      * Internal delimiter.
-     * This delimiter is used to split full class name to package and class name.
-     * The field {@code #name} uses this delimiter internally.
+     * <p>This delimiter is used to split full class name to package and class name.
+     * The field {@link #fqn} uses this delimiter internally.</p>
      */
     private static final String DELIMITER = "/";
 
     /**
      * Full class name.
-     * This field contains full class name including package.
-     * Example: {@code org/eolang/jeo/representation/directives/ClassName}.
+     * <p>This field contains full class name including package.
+     * Example: {@code org/eolang/jeo/representation/directives/ClassName}.</p>
      */
     private final String fqn;
 
@@ -37,8 +39,8 @@ public final class ClassName {
 
     /**
      * Constructor.
-     * @param pckg Package
-     * @param name Class name
+     * @param pckg Package name (can be empty)
+     * @param name Simple class name
      */
     public ClassName(final String pckg, final String name) {
         this(Stream.of(pckg, name)
@@ -49,7 +51,7 @@ public final class ClassName {
 
     /**
      * Constructor.
-     * @param name Full class name.
+     * @param name Full class name with slash delimiters
      */
     public ClassName(final String name) {
         this.fqn = name;
@@ -57,7 +59,7 @@ public final class ClassName {
 
     /**
      * Full class name.
-     * @return Full class name as is.
+     * @return Full class name with slash delimiters
      */
     public String full() {
         return this.fqn;
@@ -65,7 +67,7 @@ public final class ClassName {
 
     /**
      * Package.
-     * @return Package name in the following format: "jeo.representation.directives".
+     * @return Package name in dot notation (e.g., "jeo.representation.directives")
      */
     public String pckg() {
         final String result;
@@ -80,7 +82,7 @@ public final class ClassName {
 
     /**
      * Class name.
-     * @return Class name in the following format: {@code ClassName}.
+     * @return Simple class name without package (e.g., "ClassName")
      */
     public String name() {
         final String result;

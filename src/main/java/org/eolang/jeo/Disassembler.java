@@ -12,9 +12,12 @@ import java.util.stream.Stream;
 import org.eolang.jeo.representation.asm.DisassembleMode;
 
 /**
- * This class disassembles the project's compiled classes.
- * It is used to transpile the project's compiled bytecode classes into EO.
- * @since 0.1
+ * Disassembler for bytecode classes.
+ * <p>This class disassembles the project's compiled Java bytecode classes into
+ * XMIR (EO XML representation). It processes all .class files from a specified
+ * directory and converts them into corresponding XMIR files, supporting different
+ * disassembly modes for various levels of detail.</p>
+ * @since 0.1.0
  */
 public class Disassembler {
 
@@ -35,8 +38,8 @@ public class Disassembler {
 
     /**
      * Constructor.
-     * @param classes Project compiled classes.
-     * @param target Project default target directory.
+     * @param classes Directory containing compiled class files
+     * @param target Target directory where XMIR files will be saved
      */
     public Disassembler(
         final Path classes,
@@ -47,9 +50,9 @@ public class Disassembler {
 
     /**
      * Constructor.
-     * @param classes Project compiled classes.
-     * @param target Project default target directory.
-     * @param mode Disassemble mode.
+     * @param classes Directory containing compiled class files
+     * @param target Target directory where XMIR files will be saved
+     * @param mode Disassemble mode controlling the level of detail
      */
     public Disassembler(
         final Path classes,
@@ -80,8 +83,8 @@ public class Disassembler {
 
     /**
      * Disassemble a single bytecode file.
-     * @param path Path to the bytecode file.
-     * @return Path to the decompiled file.
+     * @param path Path to the bytecode file to disassemble
+     * @return Path to the disassembled XMIR file
      */
     private Path disassemble(final Path path) {
         final Transformation trans = new Logging(
@@ -97,7 +100,7 @@ public class Disassembler {
 
     /**
      * Log the disassembling process.
-     * @param disassembled The disassembled file path.
+     * @param disassembled Path to the disassembled XMIR file
      */
     private void log(final Path disassembled) {
         try {

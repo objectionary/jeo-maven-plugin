@@ -20,16 +20,16 @@ import org.cactoos.map.MapEntry;
 
 /**
  * JEO class loader.
- * This classloader reads classes folder, uploads these classes into a memory
- * and then loads them.
- * This happens before any transformations are applied.
- * Preloading allows safe classes validation.
- * Validator loads "old" classes and uses them for the validation of the "newly" generated classes.
- * Moreover, by using {@link JeoClassLoader}, we can guarantee that the classes loaded
- * before any transformations are correct.
- * If we use any other {@link ClassLoader} implementation it leads to flaky tests as
- * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/672">issue 672</a> shows.
- * @since 0.6
+ * <p>This classloader reads classes from specified directories, loads them into memory,
+ * and makes them available for class loading operations. This happens before any
+ * transformations are applied.</p>
+ * <p>Preloading allows safe class validation. The validator loads "old" classes and
+ * uses them for the validation of the "newly" generated classes. Moreover, by using
+ * {@link JeoClassLoader}, we can guarantee that the classes loaded before any
+ * transformations are correct.</p>
+ * <p>If we use any other {@link ClassLoader} implementation it leads to flaky tests as
+ * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/672">issue 672</a> shows.</p>
+ * @since 0.6.0
  */
 public final class JeoClassLoader extends ClassLoader {
 
@@ -50,8 +50,8 @@ public final class JeoClassLoader extends ClassLoader {
 
     /**
      * Constructor.
-     * @param parent Parent class loader.
-     * @param classes Classes as file paths.
+     * @param parent Parent class loader to delegate to
+     * @param classes Collection of file paths containing classes to load
      */
     JeoClassLoader(final ClassLoader parent, final Collection<String> classes) {
         this(parent, JeoClassLoader.prestructor(classes));
@@ -59,8 +59,8 @@ public final class JeoClassLoader extends ClassLoader {
 
     /**
      * Constructor.
-     * @param parent Parent class loader.
-     * @param classes Classes as byte arrays.
+     * @param parent Parent class loader to delegate to
+     * @param classes Map of class names to their byte arrays
      */
     private JeoClassLoader(final ClassLoader parent, final Map<String, byte[]> classes) {
         super(parent);
@@ -97,8 +97,8 @@ public final class JeoClassLoader extends ClassLoader {
 
     /**
      * Construct a map of classes.
-     * @param classes File paths.
-     * @return Map of classes.
+     * @param classes Collection of file paths containing classes
+     * @return Map of class names to their byte arrays
      */
     private static Map<String, byte[]> prestructor(final Collection<String> classes) {
         return classes.stream()
@@ -113,8 +113,8 @@ public final class JeoClassLoader extends ClassLoader {
 
     /**
      * Check if the path is a class.
-     * @param path Path to check.
-     * @return True if the path is a class.
+     * @param path Path to check
+     * @return True if the path is a class file, false otherwise
      */
     private static boolean isClass(final Path path) {
         return Files.isRegularFile(path)
@@ -123,8 +123,8 @@ public final class JeoClassLoader extends ClassLoader {
 
     /**
      * Find classes in the root folder.
-     * @param root Root folder.
-     * @return Stream of classes with their names.
+     * @param root Root folder to search for classes
+     * @return Stream of map entries containing class names and their byte arrays
      */
     private static Stream<MapEntry<String, byte[]>> clazzes(final Path root) {
         try {
@@ -141,9 +141,9 @@ public final class JeoClassLoader extends ClassLoader {
 
     /**
      * Create a class entry.
-     * @param root Root folder.
-     * @param file File of the class.
-     * @return Class entry.
+     * @param root Root folder for calculating relative paths
+     * @param file File containing the class bytecode
+     * @return Map entry with class name and its byte array
      */
     private static MapEntry<String, byte[]> entry(final Path root, final Path file) {
         return new MapEntry<>(

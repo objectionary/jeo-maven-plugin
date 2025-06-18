@@ -12,8 +12,10 @@ import java.util.stream.Stream;
 
 /**
  * Assembler.
- * This class is used to assemble the project's EO source files to bytecode.
- * @since 0.2
+ * <p>This class is responsible for assembling the project's XMIR (EO XML representation)
+ * source files into Java bytecode (.class files). It processes all XMIR files from an
+ * input directory and generates corresponding bytecode files in an output directory.</p>
+ * @since 0.2.0
  */
 public final class Assembler {
 
@@ -38,8 +40,8 @@ public final class Assembler {
     }
 
     /**
-     * Assemble all "xmir" files.
-     * @since 0.2
+     * Assemble all XMIR files.
+     * @since 0.2.0
      */
     public void assemble() {
         final String assembling = "Assembling";
@@ -56,9 +58,9 @@ public final class Assembler {
     }
 
     /**
-     * Assemble a single "xmir" file.
-     * @param path Path to the "xmir" file.
-     * @return Path to the assembled class.
+     * Assemble a single XMIR file.
+     * @param path Path to the XMIR file to assemble
+     * @return Path to the assembled class file
      */
     private Path assemble(final Path path) {
         final Transformation trans = new Logging(
@@ -72,7 +74,7 @@ public final class Assembler {
 
     /**
      * Log the result.
-     * @param disassembled Disassembled file.
+     * @param disassembled Path to the assembled file
      */
     private void log(final Path disassembled) {
         try {
