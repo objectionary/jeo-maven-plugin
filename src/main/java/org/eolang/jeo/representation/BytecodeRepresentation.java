@@ -39,7 +39,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
-     * @param clazz Path to the class file to read
+     * @param clazz The path to the class file to read
      */
     public BytecodeRepresentation(final Path clazz) {
         this(BytecodeRepresentation.fromFile(clazz));
@@ -47,7 +47,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
-     * @param bytecode Bytecode object containing raw bytes
+     * @param bytecode The bytecode object containing raw bytes
      */
     public BytecodeRepresentation(final Bytecode bytecode) {
         this(BytecodeRepresentation.fromBytes(bytecode.bytes()));
@@ -55,7 +55,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
-     * @param input Input source containing bytecode
+     * @param input The input source containing bytecode
      */
     public BytecodeRepresentation(final Input input) {
         this(BytecodeRepresentation.fromInput(input));
@@ -63,7 +63,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
-     * @param input Unchecked byte array supplier
+     * @param input The unchecked byte array supplier
      */
     private BytecodeRepresentation(final Unchecked<byte[]> input) {
         this.input = input;
@@ -88,9 +88,9 @@ public final class BytecodeRepresentation {
     }
 
     /**
-     * Converts bytecode into XML.
-     * @param mode Disassemble mode controlling the level of detail
-     * @return XML representation of bytecode
+     * Convert bytecode into XMIR format.
+     * @param mode The disassemble mode controlling the level of detail
+     * @return XMIR representation of the bytecode
      */
     public XML toEO(final DisassembleMode mode) {
         final DirectivesObject directives = new AsmProgram(this.input.value())
@@ -120,27 +120,27 @@ public final class BytecodeRepresentation {
     }
 
     /**
-     * Prestructor that converts a file to a byte source.
-     * @param path Path to the file containing bytecode
-     * @return Unchecked byte array supplier
+     * Factory method that converts a file to a byte source.
+     * @param path The path to the file containing bytecode
+     * @return The unchecked byte array supplier
      */
     private static Unchecked<byte[]> fromFile(final Path path) {
         return BytecodeRepresentation.fromInput(new InputOf(path));
     }
 
     /**
-     * Prestructor that converts input to a byte source.
-     * @param input Input source to read from
-     * @return Unchecked byte array supplier
+     * Factory method that converts input to a byte source.
+     * @param input The input source to read from
+     * @return The unchecked byte array supplier
      */
     private static Unchecked<byte[]> fromInput(final Input input) {
         return new Unchecked<>(new Synced<>(new Sticky<>(() -> new BytesOf(input).asBytes())));
     }
 
     /**
-     * Prestructor that converts bytes to a byte source.
-     * @param bytes Raw byte array
-     * @return Unchecked byte array supplier
+     * Factory method that converts bytes to a byte source.
+     * @param bytes The raw byte array
+     * @return The unchecked byte array supplier
      */
     private static Unchecked<byte[]> fromBytes(final byte[] bytes) {
         return new Unchecked<>(new Synced<>(new Sticky<>(() -> bytes)));

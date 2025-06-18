@@ -9,8 +9,10 @@ import java.util.Optional;
 import org.objectweb.asm.Type;
 
 /**
- * All supported data types.
- * @since 0.3
+ * <p>Enumeration of all supported data types in bytecode representation.</p>
+ * <p>This enumeration defines the mapping between Java data types and their
+ * corresponding EO base types used in XMIR representation.</p>
+ * @since 0.3.0
  */
 enum DataType {
 
@@ -96,8 +98,8 @@ enum DataType {
 
     /**
      * Constructor.
-     * @param base Base type.
-     * @param clazz Class.
+     * @param base The EO base type name
+     * @param clazz The corresponding Java class
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     DataType(final String base, final Class<?> clazz) {
@@ -106,9 +108,9 @@ enum DataType {
     }
 
     /**
-     * Find a type by base.
-     * @param base Base type.
-     * @return Type.
+     * Find a data type by its EO base type name.
+     * @param base The EO base type name
+     * @return The corresponding DataType
      */
     static DataType findByBase(final String base) {
         return Arrays.stream(DataType.values())
@@ -122,9 +124,9 @@ enum DataType {
     }
 
     /**
-     * Find a type by data.
-     * @param data Data.
-     * @return Data type.
+     * Find a data type by examining a data object.
+     * @param data The data object to analyze
+     * @return The corresponding DataType
      */
     static DataType findByData(final Object data) {
         final DataType result;
@@ -150,8 +152,8 @@ enum DataType {
     }
 
     /**
-     * Type name.
-     * @return Type name.
+     * Get the EO base type name.
+     * @return The EO base type name
      */
     String caption() {
         return this.base;

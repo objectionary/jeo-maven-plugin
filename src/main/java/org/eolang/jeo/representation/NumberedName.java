@@ -5,9 +5,11 @@
 package org.eolang.jeo.representation;
 
 /**
- * Name with the number at the end.
- * For example, `foo`, `foo-2`, `foo-3`.
- * @since 0.9
+ * <p>Name representation with optional numeric suffix.</p>
+ * <p>This class handles names that may have numeric suffixes for disambiguation.
+ * For example: `foo`, `foo-2`, `foo-3`. Names without suffixes are treated
+ * as having number 1.</p>
+ * @since 0.9.0
  */
 public final class NumberedName {
 
@@ -21,14 +23,18 @@ public final class NumberedName {
      */
     private final String name;
 
+    /**
+     * Constructor from encoded name.
+     * @param encoded The encoded name (e.g., "foo-2")
+     */
     public NumberedName(final String encoded) {
         this(NumberedName.suffix(encoded), NumberedName.prefix(encoded));
     }
 
     /**
      * Constructor.
-     * @param number Number of the name starting from 1.
-     * @param name Name of an object.
+     * @param number The number of the name starting from 1
+     * @param name The base name of the object
      */
     public NumberedName(final int number, final String name) {
         this.number = number;
@@ -58,9 +64,9 @@ public final class NumberedName {
     }
 
     /**
-     * Returns the number of the name.
-     * @param encoded Encoded name, like `foo-2`.
-     * @return Number of the name, like `2`.
+     * Extract the number suffix from an encoded name.
+     * @param encoded The encoded name (e.g., "foo-2")
+     * @return The numeric suffix (e.g., 2)
      */
     private static int suffix(final String encoded) {
         final int result;
@@ -82,9 +88,9 @@ public final class NumberedName {
     }
 
     /**
-     * Gets the name without the number.
-     * @param encoded Encoded name, like `foo-2`.
-     * @return Name without the number, like `foo`.
+     * Extract the base name without the number suffix.
+     * @param encoded The encoded name (e.g., "foo-2")
+     * @return The base name without number (e.g., "foo")
      */
     private static String prefix(final String encoded) {
         final String result;

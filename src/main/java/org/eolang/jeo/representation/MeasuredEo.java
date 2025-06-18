@@ -12,8 +12,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * This class tracks the time it takes to convert a bytecode to a XMIR program.
- * @since 0.6
+ * <p>A utility class that measures the time taken to convert bytecode to XMIR.</p>
+ * <p>This class wraps the transformation process and adds timing metadata to the
+ * resulting XMIR program. The timing information is embedded in the program's
+ * ms attribute.</p>
+ * @since 0.6.0
  */
 final class MeasuredEo {
 
@@ -23,25 +26,25 @@ final class MeasuredEo {
     private final XML xmir;
 
     /**
-     * Ctor.
-     * @param directives Directives to build the EO from.
+     * Constructor.
+     * @param directives Directives to build the EO program from
      */
     MeasuredEo(final DirectivesObject directives) {
         this(new XMLDocument(new Xembler(directives).xmlQuietly()));
     }
 
     /**
-     * Ctor.
-     * @param xmir Original xmir representation.
+     * Constructor.
+     * @param xmir Original XMIR representation
      */
     private MeasuredEo(final XML xmir) {
         this.xmir = xmir;
     }
 
     /**
-     * XML representation of the EO.
-     * @return XML representation
-     * @throws ImpossibleModificationException If something goes wrong
+     * Get XML representation of the EO with timing information.
+     * @return XML representation with embedded timing metadata
+     * @throws ImpossibleModificationException If XMIR modification fails
      */
     XML asXml() throws ImpossibleModificationException {
         final long start = System.currentTimeMillis();

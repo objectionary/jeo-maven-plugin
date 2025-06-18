@@ -39,8 +39,8 @@ public final class ClassName {
 
     /**
      * Constructor.
-     * @param pckg Package name (can be empty)
-     * @param name Simple class name
+     * @param pckg The package name (can be empty)
+     * @param name The simple class name
      */
     public ClassName(final String pckg, final String name) {
         this(Stream.of(pckg, name)
@@ -51,7 +51,7 @@ public final class ClassName {
 
     /**
      * Constructor.
-     * @param name Full class name with slash delimiters
+     * @param name The full class name with slash delimiters
      */
     public ClassName(final String name) {
         this.fqn = name;

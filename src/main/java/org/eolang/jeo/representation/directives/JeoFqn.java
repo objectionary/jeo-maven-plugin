@@ -5,13 +5,16 @@
 package org.eolang.jeo.representation.directives;
 
 /**
- * Jeo fully qualified name.
- * Adds a jeo-maven-plugin package name to an object base.
- * For example,
- * - `opcode` -> `org.eolang.jeo.opcode`
- * - `representation` -> `org.eolang.jeo.representation`
- * - `int` -> `org.eolang.jeo.int`
- * @since 0.6
+ * <p>JEO fully qualified name generator.</p>
+ * <p>This class generates fully qualified names for JEO-specific objects by adding
+ * the JEO namespace prefix to base names.</p>
+ * <p>Examples:</p>
+ * <ul>
+ * <li>`opcode` -> `org.eolang.jeo.opcode`</li>
+ * <li>`representation` -> `org.eolang.jeo.representation`</li>
+ * <li>`int` -> `org.eolang.jeo.int`</li>
+ * </ul>
+ * @since 0.6.0
  * @todo #710:90min Refactor the usage of {@link JeoFqn} in the project.
  *  The solution with FQN transformation is not the best one.
  *  We create this object many times and use it in many places.
@@ -28,7 +31,7 @@ public final class JeoFqn {
 
     /**
      * Constructor.
-     * @param base Base name.
+     * @param base The base name to qualify
      */
     public JeoFqn(final String base) {
         this.base = base;

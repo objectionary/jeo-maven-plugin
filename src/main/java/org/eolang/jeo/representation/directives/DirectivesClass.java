@@ -13,8 +13,11 @@ import org.xembly.Directive;
 import org.xembly.Directives;
 
 /**
- * Directives Class.
- * @since 0.1
+ * <p>Directives for generating EO class objects.</p>
+ * <p>This class generates Xembly directives to create EO object representations
+ * of Java classes, including their properties, fields, methods, annotations,
+ * and attributes.</p>
+ * @since 0.1.0
  */
 public final class DirectivesClass implements Iterable<Directive> {
 
@@ -50,7 +53,7 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Class name
+     * @param name The class name
      */
     public DirectivesClass(final ClassName name) {
         this(name, new DirectivesClassProperties());
@@ -58,8 +61,8 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param classname Class name.
-     * @param properties Class properties.
+     * @param classname The class name
+     * @param properties The class properties
      */
     public DirectivesClass(final String classname, final DirectivesClassProperties properties) {
         this(new ClassName(classname), properties);
@@ -67,8 +70,8 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Class name
-     * @param method Method
+     * @param name The class name
+     * @param method The method to include
      */
     public DirectivesClass(final ClassName name, final DirectivesMethod method) {
         this(
@@ -81,12 +84,12 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Class name
-     * @param properties Class properties
-     * @param fields Class fields
-     * @param methods Class methods
-     * @param annotations Annotations
-     * @param attributes Attributes
+     * @param name The class name
+     * @param properties The class properties
+     * @param fields The class fields
+     * @param methods The class methods
+     * @param annotations The annotations
+     * @param attributes The attributes
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesClass(
@@ -107,8 +110,8 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Class name
-     * @param field Field
+     * @param name The class name
+     * @param field The field to include
      */
     DirectivesClass(final ClassName name, final DirectivesField field) {
         this(
@@ -121,8 +124,8 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Class name
-     * @param properties Class properties
+     * @param name The class name
+     * @param properties The class properties
      */
     DirectivesClass(final ClassName name, final DirectivesClassProperties properties) {
         this(name, properties, new ArrayList<>(0), new ArrayList<>(0));
@@ -130,10 +133,10 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Class name
-     * @param properties Class properties
-     * @param fields Class fields
-     * @param methods Class methods
+     * @param name The class name
+     * @param properties The class properties
+     * @param fields The class fields
+     * @param methods The class methods
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     private DirectivesClass(

@@ -13,7 +13,7 @@ import org.eolang.jeo.representation.xmir.XmlNode;
 import org.eolang.jeo.representation.xmir.XmlObject;
 
 /**
- * Intermediate representation of class files from XMIR.
+ * <p>Intermediate representation of class files from XMIR format.</p>
  * <p>This class provides a unified interface for working with XMIR (EO XML representation)
  * files. It can read XMIR from files or XML objects and convert them to Java bytecode.</p>
  * @since 0.1.0
@@ -32,7 +32,7 @@ public final class XmirRepresentation {
 
     /**
      * Constructor.
-     * @param path Path to XMIR file to read
+     * @param path The path to XMIR file to read
      */
     public XmirRepresentation(final Path path) {
         this(new JcabiXmlDoc(path), path.toAbsolutePath().toString());
@@ -40,7 +40,7 @@ public final class XmirRepresentation {
 
     /**
      * Constructor.
-     * @param xml XML object containing XMIR representation
+     * @param xml The XML object containing XMIR representation
      */
     public XmirRepresentation(final XML xml) {
         this(new JcabiXmlDoc(xml), "Unknown");
@@ -48,8 +48,8 @@ public final class XmirRepresentation {
 
     /**
      * Constructor.
-     * @param xml XML document wrapper
-     * @param source Source description for error reporting
+     * @param xml The XML document wrapper
+     * @param source The source description for error reporting
      */
     private XmirRepresentation(final XmlDoc xml, final String source) {
         this.xml = xml;

@@ -16,8 +16,11 @@ import org.eolang.jeo.representation.bytecode.InnerClass;
 import org.objectweb.asm.tree.ClassNode;
 
 /**
- * ASM bytecode parser for a class.
- * @since 0.6
+ * <p>ASM-based bytecode parser for Java classes.</p>
+ * <p>This class provides functionality to parse ASM ClassNode objects and convert
+ * them into domain-specific bytecode representations. It handles extraction of
+ * class properties, methods, fields, and annotations from ASM's internal structure.</p>
+ * @since 0.6.0
  */
 public final class AsmClass {
 
@@ -28,15 +31,15 @@ public final class AsmClass {
 
     /**
      * Constructor.
-     * @param node Class node.
+     * @param node The ASM class node to parse
      */
     AsmClass(final ClassNode node) {
         this.node = node;
     }
 
     /**
-     * Convert asm class to domain class.
-     * @return Domain class.
+     * Convert ASM class to domain bytecode class.
+     * @return The domain bytecode class representation
      */
     public BytecodeClass bytecode() {
         final ClassName full = new ClassName(this.node.name);
@@ -57,8 +60,8 @@ public final class AsmClass {
     }
 
     /**
-     * Convert asm field to domain field.
-     * @return Domain field.
+     * Convert ASM fields to domain fields.
+     * @return The list of domain field representations
      */
     private List<BytecodeField> fields() {
         return this.node.fields.stream()
@@ -68,8 +71,8 @@ public final class AsmClass {
     }
 
     /**
-     * Convert asm methods to domain methods.
-     * @return Domain methods.
+     * Convert ASM methods to domain methods.
+     * @return The list of domain method representations
      */
     private List<BytecodeMethod> methods() {
         return this.node.methods.stream()
@@ -79,8 +82,8 @@ public final class AsmClass {
     }
 
     /**
-     * Retrieve domain attributes from asm class.
-     * @return Domain attributes.
+     * Retrieve domain attributes from ASM class.
+     * @return The domain attributes representation
      */
     private BytecodeAttributes attributes() {
         return new BytecodeAttributes(

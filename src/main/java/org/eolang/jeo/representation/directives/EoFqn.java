@@ -5,13 +5,16 @@
 package org.eolang.jeo.representation.directives;
 
 /**
- * Eolang fully qualified name.
- * Adds a fully qualified name to an object base.
- * For example,
- * - `seq` -> `org.eolang.seq`
- * - `bytes` -> `org.eolang.bytes`
- * - `math` -> `org.eolang.math`
- * @since 0.6
+ * <p>EO fully qualified name generator.</p>
+ * <p>This class generates fully qualified names for EO objects by adding
+ * the standard EO namespace prefix to base names.</p>
+ * <p>Examples:</p>
+ * <ul>
+ * <li>`seq` -> `org.eolang.seq`</li>
+ * <li>`bytes` -> `org.eolang.bytes`</li>
+ * <li>`math` -> `org.eolang.math`</li>
+ * </ul>
+ * @since 0.6.0
  */
 public final class EoFqn {
 
@@ -22,7 +25,7 @@ public final class EoFqn {
 
     /**
      * Constructor.
-     * @param base Base name.
+     * @param base The base name to qualify
      */
     public EoFqn(final String base) {
         this.base = base;

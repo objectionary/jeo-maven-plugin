@@ -10,7 +10,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.util.TraceClassVisitor;
 
 /**
- * Pretty-printing of bytecode.
+ * <p>Pretty-printing utility for Java bytecode.</p>
  * <p>This class provides human-readable representation of Java bytecode using ASM's
  * TraceClassVisitor. It converts raw bytecode into a textual format that shows
  * the structure and instructions of a class file.</p>
@@ -30,7 +30,7 @@ public final class BytecodeListing {
 
     /**
      * Constructor.
-     * @param bytecode Raw bytecode array to format
+     * @param bytecode The raw bytecode array to format
      */
     BytecodeListing(final byte... bytecode) {
         this.bytecode = bytecode.clone();

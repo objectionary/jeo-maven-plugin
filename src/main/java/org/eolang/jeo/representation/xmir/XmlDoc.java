@@ -5,19 +5,25 @@
 package org.eolang.jeo.representation.xmir;
 
 /**
- * XML document abstraction.
- * We added it to be able to use two different implementations of XML documents:
- * - one from the jcabi library
- * - another native implementation
- * @since 0.7
+ * <p>XML document abstraction interface.</p>
+ * <p>This interface provides an abstraction layer for XML documents, allowing
+ * the use of different XML implementations:</p>
+ * <ul>
+ * <li>JCabi XML library implementation</li>
+ * <li>Native Java XML implementation</li>
+ * </ul>
+ * @since 0.7.0
  */
 public interface XmlDoc {
 
     /**
-     * Root node.
-     * @return Root node.
+     * Get the root node of the XML document.
+     * @return The root XML node
      */
     XmlNode root();
 
+    /**
+     * Validate the XML document.
+     */
     void validate();
 }

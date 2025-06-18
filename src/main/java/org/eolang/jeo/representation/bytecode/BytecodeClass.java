@@ -16,7 +16,10 @@ import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.objectweb.asm.Opcodes;
 
 /**
- * Class useful for generating bytecode for testing purposes.
+ * <p>Bytecode representation of a Java class.</p>
+ * <p>This class represents a Java class in bytecode form, containing methods, fields,
+ * annotations, attributes, and class properties. It provides functionality for
+ * building bytecode classes programmatically and converting them to various formats.</p>
  * @since 0.1.0
  */
 @SuppressWarnings("PMD.TooManyMethods")
@@ -56,8 +59,8 @@ public final class BytecodeClass {
     private final BytecodeClassProperties props;
 
     /**
-     * Constructor.
-     * Used in tests only.
+     * Default constructor.
+     * Creates a simple class with default settings.
      */
     public BytecodeClass() {
         this("Simple");
@@ -65,8 +68,7 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
-     * Used in tests only.
-     * @param name Class name.
+     * @param name The class name
      */
     public BytecodeClass(final String name) {
         this(name, Opcodes.ACC_PUBLIC);
@@ -74,9 +76,8 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
-     * Used in tests only.
-     * @param name Class name.
-     * @param access Access modifiers.
+     * @param name The class name
+     * @param access The access modifiers
      */
     public BytecodeClass(final String name, final int access) {
         this(name, new BytecodeClassProperties(access));
@@ -84,9 +85,8 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
-     * Has real usages.
-     * @param name Class name.
-     * @param properties Class properties.
+     * @param name The class name
+     * @param properties The class properties
      */
     public BytecodeClass(
         final String name,
@@ -97,10 +97,9 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
-     *
-     * @param name Class name.
-     * @param methods Methods.
-     * @param properties Class properties.
+     * @param name The class name
+     * @param methods The class methods
+     * @param properties The class properties
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeClass(
@@ -120,12 +119,12 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
-     * @param name Class name.
-     * @param methods Methods.
-     * @param fields Fields.
-     * @param annotations Annotations.
-     * @param attributes Attributes.
-     * @param props Class properties.
+     * @param name The class name
+     * @param methods The class methods
+     * @param fields The class fields
+     * @param annotations The class annotations
+     * @param attributes The class attributes
+     * @param props The class properties
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeClass(
@@ -154,28 +153,28 @@ public final class BytecodeClass {
     }
 
     /**
-     * Add constructor.
-     * @param modifiers Constructor modifiers.
-     * @return This object.
+     * Add constructor to the class.
+     * @param modifiers The constructor access modifiers
+     * @return The method builder for chaining
      */
     public BytecodeMethodBuilder withConstructor(final int... modifiers) {
         return this.withConstructor("()V", modifiers);
     }
 
     /**
-     * Add method.
-     * @param properties Method properties.
-     * @return This object.
+     * Add method to the class.
+     * @param properties The method properties
+     * @return The method builder for chaining
      */
     public BytecodeMethodBuilder withMethod(final BytecodeMethodProperties properties) {
         return this.withMethod(properties, new BytecodeMaxs());
     }
 
     /**
-     * Add method.
-     * @param properties Method properties.
-     * @param maxs Method maxs.
-     * @return This object.
+     * Add method to the class.
+     * @param properties The method properties
+     * @param maxs The method stack/locals maxs
+     * @return The method builder for chaining
      */
     public BytecodeMethodBuilder withMethod(
         final BytecodeMethodProperties properties, final BytecodeMaxs maxs
