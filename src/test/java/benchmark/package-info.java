@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: MIT
  */
 /**
- * Contains the benchmark classes.
- * @since 0.8
+ * Performance benchmark classes for the JEO Maven plugin.
+ * This package contains JMH benchmarks for measuring performance
+ * of key operations like disassembly and assembly processes.
+ *
+ * @since 0.8.0
  */
 package benchmark;

@@ -3,8 +3,11 @@
  * SPDX-License-Identifier: MIT
  */
 /**
- * Package for the representations.
+ * Core representation classes for Java bytecode and XMIR conversion.
  *
+ * <p>This package contains the fundamental classes for representing and converting
+ * between different formats: Java bytecode, XMIR (EO XML representation), and
+ * various intermediate representations used by the JEO Maven plugin.</p>
  * @since 0.1.0
  */
 package org.eolang.jeo.representation;

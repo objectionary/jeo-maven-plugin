@@ -7,17 +7,19 @@ package org.eolang.jeo.representation.asm;
 import org.objectweb.asm.ClassReader;
 
 /**
- * Disassemble mode.
- * @since 0.6
+ * Enumeration of bytecode disassembly modes.
+ *
+ * <p>This enumeration defines different modes for disassembling Java bytecode,
+ * controlling the level of detail and information included in the disassembly process.</p>
+ * @since 0.6.0
  */
 public enum DisassembleMode {
     /**
-     * Short mode.
-     * This mode will disassemble the bytecode without any additional information.
+     * Short mode - disassemble bytecode without debug information.
      */
     SHORT,
     /**
-     * Assemble mode.
+     * Debug mode - disassemble bytecode with full debug information.
      */
     DEBUG;
 
@@ -27,9 +29,9 @@ public enum DisassembleMode {
     private static final String UNKNOWN = "Unknown disassemble mode: %s";
 
     /**
-     * Convert from string.
-     * @param mode Mode.
-     * @return Disassemble mode.
+     * Convert string representation to DisassembleMode.
+     * @param mode The string representation of the mode
+     * @return The corresponding DisassembleMode
      */
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DisassembleMode fromString(final String mode) {
@@ -48,8 +50,8 @@ public enum DisassembleMode {
     }
 
     /**
-     * Convert to ASM options.
-     * @return ASM options.
+     * Convert to corresponding ASM ClassReader options.
+     * @return The ASM ClassReader options for this mode
      */
     public int asmOptions() {
         final int result;

@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: MIT
  */
 /**
- * Contains tests for {@link org.eolang.jeo.representation} classes.
+ * Test cases for classes in the {@link org.eolang.jeo.representation} package.
+ * This package contains comprehensive test coverage for representation classes,
+ * including bytecode representation, XMIR representation, and various utility classes.
+ *
+ * @since 0.1.0
  */
 package org.eolang.jeo.representation;

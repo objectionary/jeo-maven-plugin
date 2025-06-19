@@ -10,8 +10,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 /**
- * Test case for {@link EoFqn}.
- * @since 0.6
+ * Test cases for {@link EoFqn}.
+ * This class verifies the conversion of base names to fully qualified EO domain names,
+ * ensuring proper naming conventions for EO objects.
+ *
+ * @since 0.6.0
  */
 final class EoFqnTest {
 

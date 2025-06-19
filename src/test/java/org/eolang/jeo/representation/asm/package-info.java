@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: MIT
  */
 /**
- * Contains test classes for working with the ASM representation of a program.
- * Test cases for {@link org.eolang.jeo.representation.asm}.
- * @since 0.6
+ * Test cases for classes in the {@link org.eolang.jeo.representation.asm} package.
+ * This package contains test coverage for ASM representation classes,
+ * providing functionality for working with ASM-based program representations and label handling.
+ *
+ * @since 0.6.0
  */
 package org.eolang.jeo.representation.asm;

@@ -14,7 +14,10 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link DirectivesMethodParam}.
- * @since 0.9
+ * This class verifies the generation of method parameter directives,
+ * including parameter names, indices, access modifiers, and type information.
+ *
+ * @since 0.9.0
  */
 final class DirectivesMethodParamTest {
 

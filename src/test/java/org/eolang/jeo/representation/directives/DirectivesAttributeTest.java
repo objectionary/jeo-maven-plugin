@@ -11,8 +11,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesAttribute}.
- * @since 0.6
+ * Test cases for {@link DirectivesAttribute}.
+ * This class verifies the conversion of attributes to XMIR format,
+ * ensuring proper handling of attribute objects and their properties.
+ *
+ * @since 0.6.0
  */
 final class DirectivesAttributeTest {
 

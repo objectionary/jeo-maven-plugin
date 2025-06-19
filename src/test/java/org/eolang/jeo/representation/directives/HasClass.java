@@ -14,7 +14,10 @@ import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
 /**
- * Matcher to check if the received XMIR document has a class with a given name.
+ * Hamcrest matcher to verify that an XMIR document contains a class with a specific name.
+ * This matcher supports additional checks for package verification and provides
+ * detailed error descriptions when matches fail.
+ *
  * @since 0.1.0
  */
 @SuppressWarnings({
@@ -37,7 +40,8 @@ public final class HasClass extends TypeSafeMatcher<String> {
 
     /**
      * Constructor.
-     * @param name Class name.
+     *
+     * @param name Class name to match in the XMIR document
      */
     public HasClass(final String name) {
         this.name = new PrefixedName(name).encode();
@@ -47,8 +51,8 @@ public final class HasClass extends TypeSafeMatcher<String> {
     /**
      * Add additional check for package.
      *
-     * @param pckg Package name.
-     * @return This matcher.
+     * @param pckg Package name to verify
+     * @return This matcher for method chaining
      */
     public HasClass inside(final String pckg) {
         this.additional.add("/object/metas/meta/head[text()='package']/text()");
@@ -80,8 +84,9 @@ public final class HasClass extends TypeSafeMatcher<String> {
     }
 
     /**
-     * All checks.
-     * @return List of XPath expressions.
+     * Get all XPath expressions for validation.
+     *
+     * @return List of XPath expressions to check
      */
     private List<String> checks() {
         return Stream.concat(

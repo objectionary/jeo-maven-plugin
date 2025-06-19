@@ -22,14 +22,14 @@ import org.xembly.Directive;
  * </p>
  * The name of the "field" object is a name of the field in Java class.
  * For example, the following Java field
- * <p>
- *     {@code
+ *
+ * <p>    {@code
  *        private final int bar = 1;
  *     }
  * </p>
  * will be transformed into the following EO object:
- * <p>
- *     {@code
+ *
+ * <p>    {@code
  *       field 18 "I" "" "01" > bar
  *     }
  * </p>

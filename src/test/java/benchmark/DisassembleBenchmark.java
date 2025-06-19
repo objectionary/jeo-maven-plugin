@@ -25,8 +25,11 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
- * Assemble benchmark.
- * @since 0.8
+ * JMH benchmark for disassembly operations.
+ * This class measures the performance of converting Java bytecode
+ * to XMIR format using the JEO disassembler.
+ *
+ * @since 0.8.0
  * @checkstyle DesignForExtensionCheck (500 lines)
  */
 @Fork(1)

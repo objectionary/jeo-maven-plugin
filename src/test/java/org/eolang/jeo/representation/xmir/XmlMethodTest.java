@@ -13,9 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 
 /**
- * Test case for {@link XmlMethod}.
+ * Test cases for {@link XmlMethod}.
+ * This class verifies the functionality of XML method representation,
+ * ensuring proper creation and handling of method objects from XML format.
  *
- * @since 0.1
+ * @since 0.1.0
  */
 final class XmlMethodTest {
 

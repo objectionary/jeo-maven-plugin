@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: MIT
  */
 /**
- * Package for testing classes from {@link org.eolang.jeo.representation.directives} package.
+ * Test cases for classes in the {@link org.eolang.jeo.representation.directives} package.
+ * This package contains comprehensive test coverage for directive generation classes,
+ * including object directives, method directives, field directives, and annotation handling.
+ *
+ * @since 0.1.0
  */
 package org.eolang.jeo.representation.directives;

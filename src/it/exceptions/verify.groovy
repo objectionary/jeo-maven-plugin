@@ -25,8 +25,7 @@ assert log.contains("Exception during closing resource")
  *  generated EO object files (see commented checks above).
  *  Right now this test just compiles java as is without any transformations.
  *
- * <p>
- * {@code
+ * <p>{@code
  * <plugin>
  *   <groupId>org.eolang</groupId>
  *   <artifactId>jeo-maven-plugin</artifactId>

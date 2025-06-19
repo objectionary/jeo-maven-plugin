@@ -13,8 +13,11 @@ import org.xembly.Transformers;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesMetas}.
- * @since 0.1
+ * Test cases for {@link DirectivesMetas}.
+ * This class verifies the generation of meta directives for classes,
+ * including package information and class metadata.
+ *
+ * @since 0.1.0
  */
 final class DirectivesMetasTest {
 

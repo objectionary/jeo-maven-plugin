@@ -18,8 +18,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesAnnotationAnnotationValue}.
- * @since 0.6
+ * Test cases for {@link DirectivesAnnotationAnnotationValue}.
+ * This class verifies the generation of annotation annotation value directives,
+ * ensuring proper handling of nested annotations within annotations.
+ *
+ * @since 0.6.0
  */
 final class DirectivesAnnotationAnnotationValueTest {
 

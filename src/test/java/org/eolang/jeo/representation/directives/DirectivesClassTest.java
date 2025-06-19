@@ -21,8 +21,11 @@ import org.xembly.Transformers;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesClass}.
- * @since 0.1
+ * Test cases for {@link DirectivesClass}.
+ * This class verifies the generation of class directives,
+ * including class properties, inner classes, and bytecode conversion.
+ *
+ * @since 0.1.0
  */
 final class DirectivesClassTest {
 

@@ -11,9 +11,11 @@ import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test case for {@link SameXml}.
+ * Test cases for {@link SameXml}.
+ * This class verifies the XML comparison functionality,
+ * ensuring that XML documents can be properly matched regardless of formatting differences.
  *
- * @since 0.6
+ * @since 0.6.0
  */
 final class SameXmlTest {
 

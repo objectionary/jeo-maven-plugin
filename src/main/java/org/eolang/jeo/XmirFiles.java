@@ -12,6 +12,7 @@ import org.eolang.jeo.representation.xmir.JcabiXmlDoc;
 
 /**
  * XMIR files reader.
+ *
  * <p>This class reads all XMIR (EO XML representation) files from a specified folder.
  * It provides functionality to discover and validate XMIR files for processing.</p>
  * @since 0.1.0

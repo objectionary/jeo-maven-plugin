@@ -21,8 +21,11 @@ import org.xembly.Transformers;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesValue}.
- * @since 0.3
+ * Test cases for {@link DirectivesValue}.
+ * This class verifies the generation of value directives for various data types,
+ * including primitives, strings, and complex objects.
+ *
+ * @since 0.3.0
  */
 @SuppressWarnings("PMD.TooManyMethods")
 final class DirectivesValueTest {

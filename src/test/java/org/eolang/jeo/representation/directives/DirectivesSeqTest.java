@@ -16,9 +16,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Directives sequence test cases.
  * Test cases for {@link DirectivesSeq}.
- * @since 0.6
+ * This class verifies the generation of sequence directives,
+ * ensuring proper handling of sequential elements in bytecode representation.
+ *
+ * @since 0.6.0
  */
 final class DirectivesSeqTest {
 

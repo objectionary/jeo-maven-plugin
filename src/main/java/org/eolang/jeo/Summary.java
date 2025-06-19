@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 /**
  * Translation summary log.
+ *
  * <p>This class wraps a translator and provides summary logging functionality.
  * It logs the start and end of the translation process, including the number of
  * files processed and the total time taken.</p>

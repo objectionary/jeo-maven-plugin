@@ -9,13 +9,15 @@ import java.util.regex.Pattern;
 import lombok.ToString;
 
 /**
- * Java name.
- * This class is used to represent any java class or method name and to avoid
- * naming conflicts with EO-reserved words.
- * You can read more about the problem
- * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/276">here</a>
+ * Java name handler for avoiding naming conflicts with EO-reserved words.
  *
- * @since 0.1
+ * <p>This class is used to represent any Java class or method name and provides
+ * encoding/decoding functionality to avoid naming conflicts with EO-reserved words.
+ * Names are prefixed with "j$" to distinguish them from EO keywords.</p>
+ *
+ * <p>You can read more about the problem
+ * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/276">here</a></p>
+ * @since 0.1.0
  */
 @ToString
 public final class PrefixedName {
@@ -55,7 +57,7 @@ public final class PrefixedName {
 
     /**
      * Constructor.
-     * @param origin Original name.
+     * @param origin The original name (may or may not be prefixed)
      */
     public PrefixedName(final String origin) {
         this.origin = origin;

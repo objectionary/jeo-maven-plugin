@@ -9,8 +9,12 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Simple string that might be encoded.
- * @since 0.6
+ * A utility class for encoding strings using URL encoding.
+ *
+ * <p>This class wraps a decoded string and provides functionality to encode it
+ * using UTF-8 URL encoding. It handles encoding exceptions internally and
+ * throws IllegalStateException if encoding fails.</p>
+ * @since 0.6.0
  */
 public final class DecodedString {
 
@@ -21,7 +25,7 @@ public final class DecodedString {
 
     /**
      * Constructor.
-     * @param decoded Decoded string.
+     * @param decoded The original decoded string to be encoded
      */
     public DecodedString(final String decoded) {
         this.original = decoded;

@@ -8,6 +8,7 @@ import java.nio.file.Path;
 
 /**
  * Transformation interface.
+ *
  * <p>This interface defines the contract for transformations that convert
  * files from one format to another. Implementations handle specific transformation
  * types like assembling XMIR to bytecode or disassembling bytecode to XMIR.</p>

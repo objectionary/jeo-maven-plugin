@@ -15,6 +15,7 @@ import org.apache.maven.project.MavenProject;
 
 /**
  * Plugin initialization and setup.
+ *
  * <p>This class is responsible for initializing the classloader for all Maven mojos.
  * It ensures that all necessary classes from the project's runtime, compile, and test
  * classpaths are available during plugin execution.</p>

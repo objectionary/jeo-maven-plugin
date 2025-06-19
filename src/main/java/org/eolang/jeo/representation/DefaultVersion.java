@@ -7,7 +7,10 @@ package org.eolang.jeo.representation;
 import org.objectweb.asm.Opcodes;
 
 /**
- * Version of ASM and Java bytecode.
+ * Default version configuration for ASM API and Java bytecode.
+ *
+ * <p>This class encapsulates the default versions used for ASM API and Java bytecode
+ * generation, providing consistent version management across the representation layer.</p>
  * @since 0.1.0
  */
 public final class DefaultVersion {

@@ -22,7 +22,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link XmirFiles}.
+ * Test cases for {@link XmirFiles}.
+ * This class verifies the functionality of XMIR file operations,
+ * including retrieval, validation, and error handling.
  *
  * @since 0.1.0
  */

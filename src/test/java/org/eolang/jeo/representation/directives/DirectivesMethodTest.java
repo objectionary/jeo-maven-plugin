@@ -22,8 +22,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesMethod}.
- * @since 0.5
+ * Test cases for {@link DirectivesMethod}.
+ * This class verifies the generation of method directives for Java methods,
+ * including method properties, annotations, and bytecode instructions.
+ *
+ * @since 0.5.0
  */
 final class DirectivesMethodTest {
 

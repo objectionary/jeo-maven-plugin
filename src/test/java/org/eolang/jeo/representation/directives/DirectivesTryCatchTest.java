@@ -19,8 +19,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesTryCatch}.
- * @since 0.5
+ * Test cases for {@link DirectivesTryCatch}.
+ * This class verifies the generation of try-catch block directives,
+ * ensuring proper handling of exception handling constructs in bytecode.
+ *
+ * @since 0.5.0
  */
 final class DirectivesTryCatchTest {
 

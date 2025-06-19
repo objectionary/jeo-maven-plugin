@@ -5,11 +5,13 @@
 package org.eolang.jeo.representation;
 
 /**
- * Method name.
- * Represents java method name.
- * Since methods in java are allowed to be overloaded, we should handle this ambiguity.
- * This class is used to represent method name and its descriptor.
- * @since 0.5
+ * Method signature representation combining name and descriptor.
+ *
+ * <p>Represents Java method name and descriptor as a unified signature.
+ * Since methods in Java are allowed to be overloaded, we need to handle this
+ * ambiguity by combining the method name with its descriptor to create a
+ * unique identifier.</p>
+ * @since 0.5.0
  */
 public final class Signature {
 
@@ -25,7 +27,7 @@ public final class Signature {
 
     /**
      * Constructor.
-     * @param encoded Method name and descriptor encoded.
+     * @param encoded The encoded method name and descriptor
      */
     public Signature(final String encoded) {
         this(Signature.prefix(encoded), Signature.suffix(encoded));
@@ -33,8 +35,8 @@ public final class Signature {
 
     /**
      * Constructor.
-     * @param name Method name.
-     * @param descriptor Method descriptor.
+     * @param name The method name
+     * @param descriptor The method descriptor
      */
     public Signature(final String name, final String descriptor) {
         this.original = name;
@@ -70,9 +72,9 @@ public final class Signature {
     }
 
     /**
-     * Decode method name.
-     * @param encoded Encoded method name and descriptor.
-     * @return Method name.
+     * Decode method name from encoded signature.
+     * @param encoded The encoded method name and descriptor
+     * @return The decoded method name
      */
     private static String prefix(final String encoded) {
         try {
@@ -86,9 +88,9 @@ public final class Signature {
     }
 
     /**
-     * Decode method descriptor.
-     * @param encoded Encoded method name and descriptor.
-     * @return Method descriptor.
+     * Decode method descriptor from encoded signature.
+     * @param encoded The encoded method name and descriptor
+     * @return The decoded method descriptor
      */
     private static String suffix(final String encoded) {
         return new EncodedString(encoded.substring(encoded.indexOf('-') + 1)).decode();

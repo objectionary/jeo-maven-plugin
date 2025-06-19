@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 /**
  * Translator that applies a translation to a batch of representations.
+ *
  * <p>This interface defines the contract for batch processing of file transformations.
  * Implementations can process files sequentially or in parallel to improve performance.</p>
  * @since 0.1.0

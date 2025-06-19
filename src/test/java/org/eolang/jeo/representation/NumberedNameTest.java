@@ -12,8 +12,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 /**
- * Test case for {@link NumberedName}.
- * @since 0.9
+ * Test cases for {@link NumberedName}.
+ * This class verifies the functionality of numbered name generation,
+ * ensuring proper handling of name uniqueness and numbering schemes.
+ *
+ * @since 0.9.0
  */
 final class NumberedNameTest {
 

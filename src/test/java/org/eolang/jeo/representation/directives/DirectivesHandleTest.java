@@ -13,9 +13,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesHandle}.
+ * Test cases for {@link DirectivesHandle}.
+ * This class verifies the conversion of method handles to directive format,
+ * ensuring proper representation of bytecode handles and their properties.
  *
- * @since 0.3
+ * @since 0.3.0
  */
 final class DirectivesHandleTest {
 

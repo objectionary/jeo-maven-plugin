@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 /**
  * Assembler.
+ *
  * <p>This class is responsible for assembling the project's XMIR (EO XML representation)
  * source files into Java bytecode (.class files). It processes all XMIR files from an
  * input directory and generates corresponding bytecode files in an output directory.</p>

@@ -9,7 +9,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.objectweb.asm.ClassVisitor;
 
 /**
- * Class name visitor.
+ * ASM class visitor for extracting class names from bytecode.
+ *
  * <p>This visitor extracts the class name from bytecode using ASM's visitor pattern.
  * It captures the class name when the {@link #visit} method is called during
  * bytecode traversal.</p>
@@ -32,7 +33,7 @@ public final class ClassNameVisitor extends ClassVisitor {
 
     /**
      * Constructor.
-     * @param bag Atomic reference to store class name
+     * @param bag The atomic reference to store class name
      */
     private ClassNameVisitor(final AtomicReference<String> bag) {
         this(new DefaultVersion().api(), bag);
@@ -40,8 +41,8 @@ public final class ClassNameVisitor extends ClassVisitor {
 
     /**
      * Constructor.
-     * @param api ASM API version to use
-     * @param bag Atomic reference to store class name
+     * @param api The ASM API version to use
+     * @param bag The atomic reference to store class name
      */
     private ClassNameVisitor(final int api, final AtomicReference<String> bag) {
         super(api);

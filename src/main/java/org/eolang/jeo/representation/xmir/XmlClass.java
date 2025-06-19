@@ -22,9 +22,12 @@ import org.xembly.Transformers;
 import org.xembly.Xembler;
 
 /**
- * XML class.
+ * XML representation of a Java class from XMIR.
  *
- * @since 0.1
+ * <p>This class provides functionality to parse and convert XMIR (EO XML representation)
+ * class nodes into bytecode classes. It handles extraction of class properties,
+ * methods, fields, annotations, and attributes from the XML structure.</p>
+ * @since 0.1.0
  */
 @ToString
 @EqualsAndHashCode
@@ -38,7 +41,7 @@ public final class XmlClass {
 
     /**
      * Constructor.
-     * @param node Class node.
+     * @param node The XML node representing the class
      */
     public XmlClass(final XmlNode node) {
         this.node = node;
@@ -46,7 +49,7 @@ public final class XmlClass {
 
     /**
      * Constructor.
-     * @param classname Class name.
+     * @param classname The class name
      */
     XmlClass(final String classname) {
         this(XmlClass.empty(classname));
@@ -54,8 +57,8 @@ public final class XmlClass {
 
     /**
      * Constructor.
-     * @param classname Class name.
-     * @param properties Class properties.
+     * @param classname The class name
+     * @param properties The class properties
      */
     XmlClass(final String classname, final DirectivesClassProperties properties) {
         this(XmlClass.withProps(classname, properties));

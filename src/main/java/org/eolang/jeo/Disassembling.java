@@ -13,6 +13,7 @@ import org.eolang.jeo.representation.asm.DisassembleMode;
 
 /**
  * Disassembling transformation.
+ *
  * <p>This class implements the transformation process that converts Java bytecode
  * into XMIR representation. It reads .class files and produces corresponding
  * XMIR files in the specified target directory with configurable detail levels.</p>

@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: MIT
  */
 /**
- * Tests for {@link org.eolang.jeo.representation.xmir} classes.
+ * Test cases for classes in the {@link org.eolang.jeo.representation.xmir} package.
+ * This package contains comprehensive test coverage for XMIR representation classes,
+ * including XML document handling, node manipulation, and bytecode-to-XML conversion.
+ *
+ * @since 0.1.0
  */
 package org.eolang.jeo.representation.xmir;

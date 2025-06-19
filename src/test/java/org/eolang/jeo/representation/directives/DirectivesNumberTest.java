@@ -10,8 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesNumber}.
- * @since 0.8
+ * Test cases for {@link DirectivesNumber}.
+ * This class verifies the conversion of numeric values to XML format,
+ * ensuring proper representation of numbers in the directive system.
+ *
+ * @since 0.8.0
  */
 final class DirectivesNumberTest {
 

@@ -15,9 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Test case for {@link PluginStartup}.
+ * Test cases for {@link PluginStartup}.
+ * This class verifies the plugin startup functionality,
+ * including dynamic class loading and project initialization.
  *
- * @since 0.6
+ * @since 0.6.0
  */
 final class PluginStartupTest {
 

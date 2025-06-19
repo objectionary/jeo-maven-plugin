@@ -17,8 +17,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesArrayAnnotationValue}.
- * @since 0.6
+ * Test cases for {@link DirectivesArrayAnnotationValue}.
+ * This class verifies the generation of array annotation value directives,
+ * ensuring proper handling of array properties and conversions.
+ *
+ * @since 0.6.0
  */
 final class DirectivesArrayAnnotationValueTest {
 
