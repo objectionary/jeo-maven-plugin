@@ -48,7 +48,7 @@
       <plugin>
         <groupId>org.eolang</groupId>
         <artifactId>eo-maven-plugin</artifactId>
-        <version>0.56.5</version>
+        <version>0.56.7</version>
         <executions>
           <execution>
             <id>convert-xmir-to-eo</id>
