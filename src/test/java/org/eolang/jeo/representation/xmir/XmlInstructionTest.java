@@ -5,10 +5,13 @@
 package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
+import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlInstruction}.
@@ -56,6 +59,27 @@ final class XmlInstructionTest {
             "Xml Instruction with different content should not be equal, but it was",
             new XmlInstruction(Opcodes.DUP),
             Matchers.not(Matchers.equalTo(XmlInstructionTest.EXPECTED))
+        );
+    }
+
+    @Test
+    void throwsExceptionForInvalidOpcode() {
+        MatcherAssert.assertThat(
+            "Error message should contain invalid opcode number",
+            Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new XmlInstruction(
+                    new JcabiXmlNode(
+                        new Xembler(new DirectivesInstruction(Opcodes.DUP))
+                            .xml()
+                            .replace(".number", ".string")
+                    )
+                ).bytecode(),
+                "Should throw IllegalArgumentException for invalid opcode"
+            ).getMessage(),
+            Matchers.containsString(
+                "opcode value is '@V@\u0000\u0000\u0000\u0000\u0000', but the opcode number should be an integer"
+            )
         );
     }
 }

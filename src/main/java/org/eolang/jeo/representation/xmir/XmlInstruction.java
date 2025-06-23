@@ -68,7 +68,17 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      */
     @EqualsAndHashCode.Include
     private int opcode() {
-        return (int) new XmlValue(this.node.firstChild()).object();
+        final Object value = new XmlValue(this.node.firstChild()).object();
+        if (!(value instanceof Integer)) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Can't parse opcode number from the node '%s', opcode value is '%s', but the opcode number should be an integer",
+                    this.node,
+                    value
+                )
+            );
+        }
+        return (int) value;
     }
 
     /**
