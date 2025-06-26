@@ -31,7 +31,7 @@ final class MeasuredEo {
      * @param directives Directives to build the EO program from
      */
     MeasuredEo(final DirectivesObject directives) {
-        this(new XMLDocument(new Xembler(directives).xmlQuietly()));
+        this(new TwoSpaceXml(new XMLDocument(new Xembler(directives).xmlQuietly())));
     }
 
     /**
@@ -44,18 +44,20 @@ final class MeasuredEo {
 
     /**
      * Get XML representation of the EO with timing information.
-     * @return XML representation with embedded timing metadata
+     * @return XML representation with embedded timing metadata and two-space indentation
      * @throws ImpossibleModificationException If XMIR modification fails
      */
     XML asXml() throws ImpossibleModificationException {
         final long start = System.currentTimeMillis();
         final long end = System.currentTimeMillis();
-        return new XMLDocument(
-            new Xembler(
-                new Directives()
-                    .xpath("/program[@ms]/@ms")
-                    .set(String.format("%d", end - start))
-            ).apply(this.xmir.deepCopy())
+        return new TwoSpaceXml(
+            new XMLDocument(
+                new Xembler(
+                    new Directives()
+                        .xpath("/program[@ms]/@ms")
+                        .set(String.format("%d", end - start))
+                ).apply(this.xmir.deepCopy())
+            )
         );
     }
 }
