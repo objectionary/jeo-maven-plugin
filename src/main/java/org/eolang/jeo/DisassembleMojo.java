@@ -141,7 +141,7 @@ public final class DisassembleMojo extends AbstractMojo {
      */
     @Parameter(
         property = "jeo.disassemble.omitComments",
-        defaultValue = "true"
+        defaultValue = "false"
     )
     private boolean omitComments;
 
