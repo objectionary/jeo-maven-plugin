@@ -128,6 +128,25 @@ public final class DisassembleMojo extends AbstractMojo {
     )
     private boolean xmirVerification;
 
+    /**
+     * Flag to omit detailed bytecode listings in generated XMIR.
+     * <p>
+     * When enabled, the {@code <listing>} element in XMIR files will contain a summary 
+     * like "N lines of Bytecode" instead of the full bytecode listing. This reduces 
+     * file size and improves readability in production environments where detailed 
+     * bytecode output is not needed. When disabled, full bytecode listings are included 
+     * for debugging purposes.
+     * </p>
+     *
+     * @since 0.9.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(
+        property = "jeo.disassemble.omitListings",
+        defaultValue = "true"
+    )
+    private boolean omitListings;
+
     @Override
     public void execute() throws MojoExecutionException {
         try {
@@ -139,7 +158,8 @@ public final class DisassembleMojo extends AbstractMojo {
                 new Disassembler(
                     this.sourcesDir.toPath(),
                     this.outputDir.toPath(),
-                    DisassembleMode.fromString(this.mode)
+                    DisassembleMode.fromString(this.mode),
+                    this.omitListings
                 ).disassemble();
                 if (this.xmirVerification) {
                     Logger.info(this, "Verifying all the XMIR files after disassembling");

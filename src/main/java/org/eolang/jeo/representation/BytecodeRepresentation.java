@@ -85,7 +85,7 @@ public final class BytecodeRepresentation {
      * @return XML representation of the bytecode
      */
     public XML toEO() {
-        return this.toEO(DisassembleMode.SHORT);
+        return this.toEO(DisassembleMode.SHORT, true);
     }
 
     /**
@@ -94,9 +94,27 @@ public final class BytecodeRepresentation {
      * @return XMIR representation of the bytecode
      */
     public XML toEO(final DisassembleMode mode) {
+        return this.toEO(mode, true);
+    }
+
+    /**
+     * Convert bytecode into XMIR format.
+     * @param mode The disassemble mode controlling the level of detail
+     * @param omitListings Whether to omit detailed listings in XMIR output
+     * @return XMIR representation of the bytecode
+     */
+    public XML toEO(final DisassembleMode mode, final boolean omitListings) {
+        final String listing;
+        if (omitListings) {
+            final String fullListing = new BytecodeListing(this.input.value()).toString();
+            final long lines = fullListing.lines().count();
+            listing = String.format("%d lines of Bytecode", lines);
+        } else {
+            listing = new BytecodeListing(this.input.value()).toString();
+        }
         final DirectivesObject directives = new AsmProgram(this.input.value())
             .bytecode(mode.asmOptions())
-            .directives(new BytecodeListing(this.input.value()).toString());
+            .directives(listing);
         try {
             return new MeasuredEo(directives).asXml();
         } catch (final IllegalStateException exception) {

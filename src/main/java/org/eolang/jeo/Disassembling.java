@@ -37,15 +37,32 @@ public final class Disassembling implements Transformation {
     private final DisassembleMode mode;
 
     /**
+     * Whether to omit detailed listings in XMIR output.
+     */
+    private final boolean omitListings;
+
+    /**
      * Constructor.
      * @param target Target folder where the disassembled XMIR will be saved
      * @param representation Path to the bytecode representation to disassemble
      * @param mode Disassemble mode controlling the level of detail
      */
     Disassembling(final Path target, final Path representation, final DisassembleMode mode) {
+        this(target, representation, mode, true);
+    }
+
+    /**
+     * Constructor.
+     * @param target Target folder where the disassembled XMIR will be saved
+     * @param representation Path to the bytecode representation to disassemble
+     * @param mode Disassemble mode controlling the level of detail
+     * @param omitListings Whether to omit detailed listings in XMIR output
+     */
+    Disassembling(final Path target, final Path representation, final DisassembleMode mode, final boolean omitListings) {
         this.folder = target;
         this.from = representation;
         this.mode = mode;
+        this.omitListings = omitListings;
     }
 
     @Override
@@ -68,7 +85,7 @@ public final class Disassembling implements Transformation {
     @Override
     public byte[] transform() {
         return new BytecodeRepresentation(this.from)
-            .toEO(this.mode)
+            .toEO(this.mode, this.omitListings)
             .toString()
             .getBytes(StandardCharsets.UTF_8);
     }

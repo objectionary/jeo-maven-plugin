@@ -38,6 +38,11 @@ public class Disassembler {
     private final DisassembleMode mode;
 
     /**
+     * Whether to omit detailed listings in XMIR output.
+     */
+    private final boolean omitListings;
+
+    /**
      * Constructor.
      * @param classes Directory containing compiled class files
      * @param target Target directory where XMIR files will be saved
@@ -46,7 +51,7 @@ public class Disassembler {
         final Path classes,
         final Path target
     ) {
-        this(classes, target, DisassembleMode.SHORT);
+        this(classes, target, DisassembleMode.SHORT, true);
     }
 
     /**
@@ -60,9 +65,26 @@ public class Disassembler {
         final Path target,
         final DisassembleMode mode
     ) {
+        this(classes, target, mode, true);
+    }
+
+    /**
+     * Constructor.
+     * @param classes Directory containing compiled class files
+     * @param target Target directory where XMIR files will be saved
+     * @param mode Disassemble mode controlling the level of detail
+     * @param omitListings Whether to omit detailed listings in XMIR output
+     */
+    public Disassembler(
+        final Path classes,
+        final Path target,
+        final DisassembleMode mode,
+        final boolean omitListings
+    ) {
         this.classes = classes;
         this.target = target;
         this.mode = mode;
+        this.omitListings = omitListings;
     }
 
     /**
@@ -92,7 +114,7 @@ public class Disassembler {
             "Disassembling",
             "disassembled",
             new Caching(
-                new Disassembling(this.target, path, this.mode)
+                new Disassembling(this.target, path, this.mode, this.omitListings)
             )
         );
         trans.transform();
