@@ -128,6 +128,63 @@ public final class DisassembleMojo extends AbstractMojo {
     )
     private boolean xmirVerification;
 
+    /**
+     * Flag to omit XML comments from generated XMIR files.
+     * <p>
+     * When enabled, no XML comments will be generated in the XMIR output, which can be
+     * useful for production builds where comments are not needed and may reduce file size.
+     * When disabled, XML comments will be included to provide debugging information.
+     * </p>
+     *
+     * @since 0.9.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(
+        property = "jeo.disassemble.omitComments",
+        defaultValue = "true"
+    )
+    private boolean omitComments;
+
+    /**
+     * Set sources directory for testing.
+     * @param dir Sources directory
+     */
+    public void setSourcesDir(final File dir) {
+        this.sourcesDir = dir;
+    }
+
+    /**
+     * Set output directory for testing.
+     * @param dir Output directory
+     */
+    public void setOutputDir(final File dir) {
+        this.outputDir = dir;
+    }
+
+    /**
+     * Set omit comments flag for testing.
+     * @param omit Whether to omit comments
+     */
+    public void setOmitComments(final boolean omit) {
+        this.omitComments = omit;
+    }
+
+    /**
+     * Set Maven project for testing.
+     * @param proj Maven project
+     */
+    public void setProject(final MavenProject proj) {
+        this.project = proj;
+    }
+
+    /**
+     * Set mode for testing.
+     * @param mode Disassemble mode
+     */
+    public void setMode(final String mode) {
+        this.mode = mode;
+    }
+
     @Override
     public void execute() throws MojoExecutionException {
         try {
@@ -139,7 +196,8 @@ public final class DisassembleMojo extends AbstractMojo {
                 new Disassembler(
                     this.sourcesDir.toPath(),
                     this.outputDir.toPath(),
-                    DisassembleMode.fromString(this.mode)
+                    DisassembleMode.fromString(this.mode),
+                    this.omitComments
                 ).disassemble();
                 if (this.xmirVerification) {
                     Logger.info(this, "Verifying all the XMIR files after disassembling");

@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import java.nio.file.Path;
 import java.util.Arrays;
 import lombok.ToString;
@@ -19,7 +20,9 @@ import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.directives.DirectivesObject;
 import org.objectweb.asm.ClassReader;
+import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Intermediate representation of class files from bytecode.
@@ -94,11 +97,25 @@ public final class BytecodeRepresentation {
      * @return XMIR representation of the bytecode
      */
     public XML toEO(final DisassembleMode mode) {
+        return this.toEO(mode, false);
+    }
+
+    /**
+     * Convert bytecode into XMIR format.
+     * @param mode The disassemble mode controlling the level of detail
+     * @param omitComments Whether to omit comments in the generated XMIR
+     * @return XMIR representation of the bytecode
+     */
+    public XML toEO(final DisassembleMode mode, final boolean omitComments) {
         final DirectivesObject directives = new AsmProgram(this.input.value())
             .bytecode(mode.asmOptions())
             .directives(new BytecodeListing(this.input.value()).toString());
         try {
-            return new MeasuredEo(directives).asXml();
+            final XML xml = new MeasuredEo(directives).asXml();
+            if (omitComments) {
+                return this.removeComments(xml);
+            }
+            return xml;
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(
                 String.format(
@@ -116,6 +133,26 @@ public final class BytecodeRepresentation {
                     directives
                 ),
                 exception
+            );
+        }
+    }
+
+    /**
+     * Remove comments from XML.
+     * @param xml The XML to process
+     * @return XML without comments
+     */
+    private XML removeComments(final XML xml) {
+        try {
+            return new XMLDocument(
+                new Xembler(
+                    new Directives()
+                        .xpath("//comment()").remove()
+                ).apply(xml.inner())
+            );
+        } catch (final ImpossibleModificationException exception) {
+            throw new IllegalStateException(
+                "Failed to remove comments from XML", exception
             );
         }
     }
