@@ -14,4 +14,10 @@ assert new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/annot
 File app = new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/annotations/AnnotationsApplication.xmir')
 assert app.exists()
 assert !app.text.contains("<listing>") : "Listings are disabled by default (see the omitListings option), but it is still present"
+app.eachLine { line ->
+  if(line.contains("meta")) {
+    def spaces = line.takeWhile { it == ' ' }.size()
+    assert spaces % 2 == 0 : "Line has incorrect indentation (${spaces} spaces): $line"
+  }
+}
 true

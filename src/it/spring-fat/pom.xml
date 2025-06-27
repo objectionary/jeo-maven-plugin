@@ -81,6 +81,7 @@
              the transformation.
           -->
           <skipVerification>true</skipVerification>
+          <prettyXmir>false</prettyXmir>
         </configuration>
         <executions>
           <execution>

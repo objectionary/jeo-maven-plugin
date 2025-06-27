@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import javax.tools.ToolProvider;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.XmirRepresentation;
-import org.eolang.jeo.representation.asm.DisassembleParams;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -42,9 +41,9 @@ final class JavaSourceCompilationIT {
         final Bytecode expected = JavaSourceCompilationIT.compile(temp);
         MatcherAssert.assertThat(
             "Bytecode is not equal to the original one, check that transformation is correct and does not change the bytecode",
-            new XmirRepresentation(
-                new BytecodeRepresentation(expected).toEO(new DisassembleParams())
-            ).toBytecode().toString(),
+            new XmirRepresentation(new BytecodeRepresentation(expected).toXmir())
+                .toBytecode()
+                .toString(),
             Matchers.equalTo(expected.toString())
         );
     }

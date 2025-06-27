@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import java.nio.file.Path;
 import java.util.Arrays;
 import lombok.ToString;
@@ -84,8 +85,8 @@ public final class BytecodeRepresentation {
      * Convert to EOlang XML representation (XMIR).
      * @return XML representation of the bytecode
      */
-    public XML toEO() {
-        return this.toEO(new DisassembleParams());
+    public XML toXmir() {
+        return new XMLDocument(this.toEO(new DisassembleParams()));
     }
 
     /**
@@ -93,7 +94,7 @@ public final class BytecodeRepresentation {
      * @param params The disassemble params controlling the level of detail
      * @return XMIR representation of the bytecode
      */
-    public XML toEO(final DisassembleParams params) {
+    public String toEO(final DisassembleParams params) {
         final String listing;
         if (params.includeListings()) {
             listing = new BytecodeListing(this.input.value()).toString();
@@ -104,7 +105,14 @@ public final class BytecodeRepresentation {
             .bytecode(params.asmMode())
             .directives(listing);
         try {
-            return new MeasuredEo(directives).asXml();
+            final XML measured = new MeasuredEo(directives).asXml();
+            final String res;
+            if (params.prettyPrint()) {
+                res = new PrettyXml(measured).toString();
+            } else {
+                res = measured.toString();
+            }
+            return res;
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(
                 String.format(

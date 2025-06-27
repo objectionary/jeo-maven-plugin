@@ -45,7 +45,7 @@ final class Representation {
      */
     byte[] disassemble() {
         return new BytecodeRepresentation(new Bytecode(this.bytecode()))
-            .toEO()
+            .toXmir()
             .toString()
             .getBytes(StandardCharsets.UTF_8);
     }

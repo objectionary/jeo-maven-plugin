@@ -76,7 +76,7 @@ public final class BytecodeProgram {
      * @return XML representation of bytecode.
      */
     public XML xml() {
-        return new BytecodeRepresentation(this.bytecode()).toEO();
+        return new BytecodeRepresentation(this.bytecode()).toXmir();
     }
 
     /**

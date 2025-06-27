@@ -131,6 +131,24 @@ public final class DisassembleMojo extends AbstractMojo {
     private boolean omitListings;
 
     /**
+     * Flag to enable pretty-printing of XMIR files.
+     * <p>
+     *     When enabled, the generated XMIR files will be formatted with indentation (2 spaces) and
+     *     line breaks for better readability.
+     *     This is useful for development and debugging purposes.
+     *     By default, pretty-printing is enabled, but it's best to disable it for large
+     *     projects or production builds to reduce file size and improve performance.
+     * </p>
+     * @since 0.11.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(
+        property = "jeo.disassemble.prettyXmir",
+        defaultValue = "true"
+    )
+    private boolean prettyXmir;
+
+    /**
      * Flag to enable XMIR verification after disassembling.
      * <p>
      * When enabled, verifies all generated XMIR files for structural integrity and correctness
@@ -165,7 +183,8 @@ public final class DisassembleMojo extends AbstractMojo {
                     this.outputDir.toPath(),
                     new DisassembleParams(
                         DisassembleMode.fromString(this.mode),
-                        listings
+                        listings,
+                        this.prettyXmir
                     )
                 ).disassemble();
                 if (this.xmirVerification) {

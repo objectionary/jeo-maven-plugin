@@ -14,4 +14,10 @@ assert new File(basedir, 'target/generated-sources/jeo-phi/org/eolang/jeo/Applic
 File app = new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/Application.xmir')
 assert app.exists()
 assert app.text.contains("<listing>") : "We enabled listings (see the omitListings=false option) in the XMIR file, but it is absent"
+app.eachLine { line ->
+  if(line.contains("meta")) {
+    def spaces = line.takeWhile { it == ' ' }.size()
+    assert spaces % 3 == 0 : "Line has incorrect indentation (${spaces} spaces): $line"
+  }
+}
 true

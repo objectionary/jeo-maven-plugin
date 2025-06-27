@@ -540,7 +540,7 @@ final class BytecodeMethodTest {
             return new XmlObject(
                 new BytecodeRepresentation(
                     new Bytecode(new BytesOf(new ResourceOf(compiled)).asBytes())
-                ).toEO()
+                ).toXmir()
             ).bytecode()
                 .top()
                 .methods().stream()

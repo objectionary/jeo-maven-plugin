@@ -119,7 +119,7 @@ final class XmirRepresentationTest {
             new BytecodeClass("Fields").withField("foo")
         ).bytecode();
         final Bytecode actual = new XmirRepresentation(
-            new BytecodeRepresentation(expected).toEO()
+            new BytecodeRepresentation(expected).toXmir()
         ).toBytecode();
         MatcherAssert.assertThat(
             String.format(XmirRepresentationTest.MESSAGE, expected, actual),
@@ -134,7 +134,7 @@ final class XmirRepresentationTest {
             new BytecodeClass("Application").helloWorldMethod()
         ).bytecode();
         final Bytecode actual = new XmirRepresentation(
-            new BytecodeRepresentation(expected).toEO()
+            new BytecodeRepresentation(expected).toXmir()
         ).toBytecode();
         MatcherAssert.assertThat(
             String.format(XmirRepresentationTest.MESSAGE, expected, actual),
@@ -178,7 +178,7 @@ final class XmirRepresentationTest {
             final Bytecode actual = new XmirRepresentation(
                 new BytecodeRepresentation(
                     before
-                ).toEO()
+                ).toXmir()
             ).toBytecode();
             MatcherAssert.assertThat(
                 String.format(XmirRepresentationTest.MESSAGE, before, actual),

@@ -97,7 +97,7 @@ final class XmirFilesTest {
         Files.write(
             temp.resolve("MethodByte.xmir"),
             new BytecodeRepresentation(new ResourceOf("MethodByte.class"))
-                .toEO()
+                .toXmir()
                 .toString()
                 .getBytes(StandardCharsets.UTF_8)
         );

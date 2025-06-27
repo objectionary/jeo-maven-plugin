@@ -111,7 +111,7 @@ final class BytecodeClassTest {
             new BytecodeProgram(
                 new BytecodeClass("Hello").helloWorldMethod()
             ).bytecode()
-        ).toEO();
+        ).toXmir();
         MatcherAssert.assertThat(
             String.format(
                 "We expect to get the EO representation of the bytecode where each instruction has a simple name without sequence number, please check the final XML:%n%s%n",

@@ -69,7 +69,6 @@ public final class Disassembling implements Transformation {
     public byte[] transform() {
         return new BytecodeRepresentation(this.from)
             .toEO(this.params)
-            .toString()
             .getBytes(StandardCharsets.UTF_8);
     }
 }

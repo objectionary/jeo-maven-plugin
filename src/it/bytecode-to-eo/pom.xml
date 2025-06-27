@@ -28,6 +28,7 @@
         <configuration>
           <xmirVerification>true</xmirVerification>
           <omitListings>false</omitListings>
+          <prettyXmir>false</prettyXmir>
         </configuration>
         <executions>
           <execution>
