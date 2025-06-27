@@ -112,18 +112,6 @@ public final class BytecodeProgram {
     }
 
     /**
-     * Copy program without top class.
-     *
-     * @return Program without top class.
-     */
-    public BytecodeProgram withoutTopClass() {
-        return new BytecodeProgram(
-            this.pckg,
-            new ArrayList<>(Collections.emptyList())
-        );
-    }
-
-    /**
      * Convert to directives.
      * @param listing Program listing.
      * @return Directives program.

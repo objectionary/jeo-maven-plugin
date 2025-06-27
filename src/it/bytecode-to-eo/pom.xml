@@ -27,6 +27,7 @@
         <version>@project.version@</version>
         <configuration>
           <xmirVerification>true</xmirVerification>
+          <omitListings>false</omitListings>
         </configuration>
         <executions>
           <execution>

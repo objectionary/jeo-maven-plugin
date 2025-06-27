@@ -10,6 +10,7 @@ import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeProgram;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Transformers;
@@ -23,6 +24,50 @@ import org.xembly.Xembler;
  * @since 0.1.0
  */
 final class DirectivesObjectTest {
+
+    @Test
+    void generatesDirectivesWithListing() {
+        final ClassName name = new ClassName("Foo");
+        final String actual = new Xembler(
+            new DirectivesObject(
+                "some code",
+                0,
+                new DirectivesClass(name),
+                new DirectivesMetas(name)
+            ),
+            new Transformers.Node()
+        ).xmlQuietly();
+        MatcherAssert.assertThat(
+            String.format(
+                "Can't correctly and without errors create object directives with listing, received XML: %n%s",
+                new XMLDocument(actual)
+            ),
+            actual,
+            XhtmlMatchers.hasXPath("/object/listing[.='some code']")
+        );
+    }
+
+    @Test
+    void generatesDirectivesWithoutListing() {
+        final ClassName name = new ClassName("Foo");
+        final String actual = new Xembler(
+            new DirectivesObject(
+                "",
+                0,
+                new DirectivesClass(name),
+                new DirectivesMetas(name)
+            ),
+            new Transformers.Node()
+        ).xmlQuietly();
+        MatcherAssert.assertThat(
+            String.format(
+                "Can't correctly and without errors create object directives without listing, received XML: %n%s",
+                new XMLDocument(actual)
+            ),
+            actual,
+            Matchers.not(XhtmlMatchers.hasXPath("/object/listing"))
+        );
+    }
 
     @Test
     void createsCorrectDirectives() {

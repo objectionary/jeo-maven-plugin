@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.PrefixedName;
-import org.eolang.jeo.representation.asm.DisassembleMode;
+import org.eolang.jeo.representation.asm.DisassembleParams;
 
 /**
  * Disassembling transformation.
@@ -32,20 +32,20 @@ public final class Disassembling implements Transformation {
     private final Path from;
 
     /**
-     * Disassemble mode.
+     * Disassemble params.
      */
-    private final DisassembleMode mode;
+    private final DisassembleParams params;
 
     /**
      * Constructor.
      * @param target Target folder where the disassembled XMIR will be saved
      * @param representation Path to the bytecode representation to disassemble
-     * @param mode Disassemble mode controlling the level of detail
+     * @param params Disassemble parameters including mode and listings options
      */
-    Disassembling(final Path target, final Path representation, final DisassembleMode mode) {
+    Disassembling(final Path target, final Path representation, final DisassembleParams params) {
         this.folder = target;
         this.from = representation;
-        this.mode = mode;
+        this.params = params;
     }
 
     @Override
@@ -68,7 +68,7 @@ public final class Disassembling implements Transformation {
     @Override
     public byte[] transform() {
         return new BytecodeRepresentation(this.from)
-            .toEO(this.mode)
+            .toEO(this.params)
             .toString()
             .getBytes(StandardCharsets.UTF_8);
     }

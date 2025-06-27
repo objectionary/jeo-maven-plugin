@@ -88,19 +88,18 @@ public final class DirectivesObject implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final String now = ZonedDateTime.now(ZoneOffset.UTC)
             .format(DateTimeFormatter.ISO_INSTANT);
-        final Directives directives = new Directives();
-        directives.add("object")
+        final Directives directives = new Directives()
+            .add("object")
             .attr("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
             .attr("version", Manifests.read("JEO-Version"))
             .attr("revision", Manifests.read("JEO-Revision"))
             .attr("dob", Manifests.read("JEO-Dob"))
             .attr("time", now)
-            .attr("xsi:noNamespaceSchemaLocation", "https://www.eolang.org/xsd/XMIR-0.56.2.xsd")
-            .add("listing")
-            .set(this.listing)
-            .up()
-            .append(this.metas)
-            .attr("ms", this.milliseconds);
+            .attr("xsi:noNamespaceSchemaLocation", "https://www.eolang.org/xsd/XMIR-0.56.2.xsd");
+        if (!this.listing.isEmpty()) {
+            directives.add("listing").set(this.listing).up();
+        }
+        directives.append(this.metas).attr("ms", this.milliseconds);
         directives.append(this.klass);
         directives.up();
         return directives.iterator();

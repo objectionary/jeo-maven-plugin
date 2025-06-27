@@ -14,6 +14,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.eolang.jeo.representation.asm.DisassembleMode;
+import org.eolang.jeo.representation.asm.DisassembleParams;
 
 /**
  * Disassembles Java bytecode into XMIR representation.
@@ -112,6 +113,24 @@ public final class DisassembleMojo extends AbstractMojo {
     private String mode;
 
     /**
+     * Flag to omit detailed bytecode listings in generated XMIR.
+     * <p>
+     * When enabled, the {@code <listing>} element in XMIR files will not contain bytecode listing.
+     * This reduces file size and improves readability in production environments where detailed
+     * bytecode output is not needed. When disabled, full bytecode listings are included
+     * for debugging purposes.
+     * </p>
+     *
+     * @since 0.11.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(
+        property = "jeo.disassemble.omitListings",
+        defaultValue = "true"
+    )
+    private boolean omitListings;
+
+    /**
      * Flag to enable XMIR verification after disassembling.
      * <p>
      * When enabled, verifies all generated XMIR files for structural integrity and correctness
@@ -135,11 +154,19 @@ public final class DisassembleMojo extends AbstractMojo {
             if (this.disabled) {
                 Logger.info(this, "Disassemble mojo is disabled, skipping");
             } else {
-                Logger.info(this, "Disassembling is started with mode '%s'", this.mode);
+                final boolean listings = !this.omitListings;
+                Logger.info(
+                    this, "Disassembling is started with mode '%s' (with listings = '%b')",
+                    this.mode,
+                    listings
+                );
                 new Disassembler(
                     this.sourcesDir.toPath(),
                     this.outputDir.toPath(),
-                    DisassembleMode.fromString(this.mode)
+                    new DisassembleParams(
+                        DisassembleMode.fromString(this.mode),
+                        listings
+                    )
                 ).disassemble();
                 if (this.xmirVerification) {
                     Logger.info(this, "Verifying all the XMIR files after disassembling");

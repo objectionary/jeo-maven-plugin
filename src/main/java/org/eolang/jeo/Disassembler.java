@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.asm.DisassembleMode;
+import org.eolang.jeo.representation.asm.DisassembleParams;
 
 /**
  * Disassembler for bytecode classes.
@@ -33,9 +33,9 @@ public class Disassembler {
     private final Path target;
 
     /**
-     * Disassemble mode.
+     * Disassemble params.
      */
-    private final DisassembleMode mode;
+    private final DisassembleParams params;
 
     /**
      * Constructor.
@@ -46,23 +46,23 @@ public class Disassembler {
         final Path classes,
         final Path target
     ) {
-        this(classes, target, DisassembleMode.SHORT);
+        this(classes, target, new DisassembleParams());
     }
 
     /**
      * Constructor.
      * @param classes Directory containing compiled class files
      * @param target Target directory where XMIR files will be saved
-     * @param mode Disassemble mode controlling the level of detail
+     * @param params Disassembling params.
      */
     public Disassembler(
         final Path classes,
         final Path target,
-        final DisassembleMode mode
+        final DisassembleParams params
     ) {
         this.classes = classes;
         this.target = target;
-        this.mode = mode;
+        this.params = params;
     }
 
     /**
@@ -92,7 +92,7 @@ public class Disassembler {
             "Disassembling",
             "disassembled",
             new Caching(
-                new Disassembling(this.target, path, this.mode)
+                new Disassembling(this.target, path, this.params)
             )
         );
         trans.transform();

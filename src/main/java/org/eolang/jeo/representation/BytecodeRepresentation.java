@@ -15,7 +15,7 @@ import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.asm.AsmProgram;
-import org.eolang.jeo.representation.asm.DisassembleMode;
+import org.eolang.jeo.representation.asm.DisassembleParams;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.directives.DirectivesObject;
 import org.objectweb.asm.ClassReader;
@@ -85,18 +85,24 @@ public final class BytecodeRepresentation {
      * @return XML representation of the bytecode
      */
     public XML toEO() {
-        return this.toEO(DisassembleMode.SHORT);
+        return this.toEO(new DisassembleParams());
     }
 
     /**
      * Convert bytecode into XMIR format.
-     * @param mode The disassemble mode controlling the level of detail
+     * @param params The disassemble params controlling the level of detail
      * @return XMIR representation of the bytecode
      */
-    public XML toEO(final DisassembleMode mode) {
+    public XML toEO(final DisassembleParams params) {
+        final String listing;
+        if (params.includeListings()) {
+            listing = new BytecodeListing(this.input.value()).toString();
+        } else {
+            listing = "";
+        }
         final DirectivesObject directives = new AsmProgram(this.input.value())
-            .bytecode(mode.asmOptions())
-            .directives(new BytecodeListing(this.input.value()).toString());
+            .bytecode(params.asmMode())
+            .directives(listing);
         try {
             return new MeasuredEo(directives).asXml();
         } catch (final IllegalStateException exception) {
