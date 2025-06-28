@@ -18,8 +18,9 @@ import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.asm.DisassembleParams;
 import org.eolang.jeo.representation.bytecode.Bytecode;
-import org.eolang.jeo.representation.directives.DirectivesObject;
+import org.eolang.jeo.representation.directives.DirectivesWithoutComments;
 import org.objectweb.asm.ClassReader;
+import org.xembly.Directive;
 import org.xembly.ImpossibleModificationException;
 
 /**
@@ -101,9 +102,12 @@ public final class BytecodeRepresentation {
         } else {
             listing = "";
         }
-        final DirectivesObject directives = new AsmProgram(this.input.value())
+        Iterable<Directive> directives = new AsmProgram(this.input.value())
             .bytecode(params.asmMode())
             .directives(listing);
+        if (!params.includeComments()) {
+            directives = new DirectivesWithoutComments(directives);
+        }
         try {
             final XML measured = new MeasuredEo(directives).asXml();
             final String res;

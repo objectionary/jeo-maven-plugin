@@ -20,4 +20,5 @@ app.eachLine { line ->
     assert spaces % 3 == 0 : "Line has incorrect indentation (${spaces} spaces): $line"
   }
 }
+assert app.text.contains("<!--") : "We enabled comments in the XMIR file using 'omitComments=false' option, but they are absent"
 true

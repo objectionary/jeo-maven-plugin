@@ -6,7 +6,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import org.eolang.jeo.representation.directives.DirectivesObject;
+import org.xembly.Directive;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -24,22 +24,14 @@ final class MeasuredEo {
     /**
      * Original transformation.
      */
-    private final XML xmir;
+    private final Iterable<Directive> directives;
 
     /**
      * Constructor.
      * @param directives Directives to build the EO program from
      */
-    MeasuredEo(final DirectivesObject directives) {
-        this(new XMLDocument(new Xembler(directives).xmlQuietly()));
-    }
-
-    /**
-     * Constructor.
-     * @param xmir Original XMIR representation
-     */
-    private MeasuredEo(final XML xmir) {
-        this.xmir = xmir;
+    MeasuredEo(final Iterable<Directive> directives) {
+        this.directives = directives;
     }
 
     /**
@@ -49,13 +41,14 @@ final class MeasuredEo {
      */
     XML asXml() throws ImpossibleModificationException {
         final long start = System.currentTimeMillis();
+        final XML doc = new XMLDocument(new Xembler(this.directives).xmlQuietly());
         final long end = System.currentTimeMillis();
         return new XMLDocument(
             new Xembler(
                 new Directives()
                     .xpath("/program[@ms]/@ms")
                     .set(String.format("%d", end - start))
-            ).apply(this.xmir.deepCopy())
+            ).apply(doc.inner())
         );
     }
 }

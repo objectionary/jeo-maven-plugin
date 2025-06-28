@@ -27,11 +27,17 @@ public final class DisassembleParams {
     private final boolean pretty;
 
     /**
+     * Whether to omit comments in the output.
+     * <p>When true, comments will not be included in the disassembled output.</p>
+     */
+    private final boolean comments;
+
+    /**
      * Constructor with default parameters.
      * <p>Uses DEBUG mode, listings disabled, and pretty-printing enabled.</p>
      */
     public DisassembleParams() {
-        this(DisassembleMode.SHORT, false, true);
+        this(DisassembleMode.SHORT, false, true, false);
     }
 
     /**
@@ -40,15 +46,19 @@ public final class DisassembleParams {
      * @param mode Disassemble mode
      * @param listings Whether to include listings in the output
      * @param pretty Whether to pretty-print the output
+     * @param comments Whether to include comments in the output
+     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public DisassembleParams(
         final DisassembleMode mode,
         final boolean listings,
-        final boolean pretty
+        final boolean pretty,
+        final boolean comments
     ) {
         this.mode = mode;
         this.listings = listings;
         this.pretty = pretty;
+        this.comments = comments;
     }
 
     /**
@@ -73,5 +83,13 @@ public final class DisassembleParams {
      */
     public boolean prettyPrint() {
         return this.pretty;
+    }
+
+    /**
+     * Whether to include comments in the output.
+     * @return True if comments should be included, false otherwise
+     */
+    public boolean includeComments() {
+        return this.comments;
     }
 }

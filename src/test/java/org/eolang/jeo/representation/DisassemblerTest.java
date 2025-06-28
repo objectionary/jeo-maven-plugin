@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
@@ -28,14 +27,14 @@ import org.junit.jupiter.api.io.TempDir;
 final class DisassemblerTest {
 
     @Test
-    void transpilesSuccessfully(@TempDir final Path temp) throws IOException {
+    void transpilesSuccessfullyWithoutComments(@TempDir final Path temp) throws IOException {
         final String name = "MethodByte.class";
         Files.write(
             temp.resolve(name),
             new UncheckedBytes(new BytesOf(new ResourceOf(name))).asBytes()
         );
         new Disassembler(
-            temp, temp, new DisassembleParams(DisassembleMode.SHORT, false, true)
+            temp, temp, new DisassembleParams(DisassembleMode.SHORT, false, true, false)
         ).disassemble();
         final Path disassembled = temp.resolve("org")
             .resolve("eolang")
@@ -46,15 +45,43 @@ final class DisassemblerTest {
             Files.exists(disassembled),
             Matchers.is(true)
         );
-        final List<String> metas = Files.readAllLines(disassembled).stream()
-            .filter(line -> line.contains("<meta>"))
-            .collect(Collectors.toList());
+        final List<String> lines = Files.readAllLines(disassembled);
         MatcherAssert.assertThat(
             String.format(
                 "The XMIR file is not indented correctly, expected 4 spaces  indentation for each 'meta' element, but was '%s'",
-                metas
+                lines
             ),
-            metas.stream().allMatch(line -> line.startsWith("    ")),
+            lines.stream()
+                .filter(line -> line.contains("<meta>"))
+                .allMatch(line -> line.startsWith("    ")),
+            Matchers.is(true)
+        );
+        MatcherAssert.assertThat(
+            "The XMIR file should not contain comments",
+            lines.stream().noneMatch(line -> line.contains("<!--")),
+            Matchers.is(true)
+        );
+    }
+
+    @Test
+    void transpilesWithComments(@TempDir final Path temp) throws IOException {
+        final String name = "MethodByte.class";
+        Files.write(
+            temp.resolve(name),
+            new UncheckedBytes(new BytesOf(new ResourceOf(name))).asBytes()
+        );
+        new Disassembler(
+            temp, temp, new DisassembleParams(DisassembleMode.SHORT, true, true, true)
+        ).disassemble();
+        final List<String> lines = Files.readAllLines(
+            temp.resolve("org")
+                .resolve("eolang")
+                .resolve("jeo")
+                .resolve("MethodByte.xmir")
+        );
+        MatcherAssert.assertThat(
+            "The XMIR file should contain comments",
+            lines.stream().anyMatch(line -> line.contains("<!--")),
             Matchers.is(true)
         );
     }

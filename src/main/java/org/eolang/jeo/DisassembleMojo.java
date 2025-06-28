@@ -131,6 +131,23 @@ public final class DisassembleMojo extends AbstractMojo {
     private boolean omitListings;
 
     /**
+     * Flag to omit XML comments in generated XMIR files.
+     * <p>
+     * When enabled, no comments will be generated in the XMIR output, which can be
+     * useful for production builds where comments are not needed and may reduce file size.
+     * When disabled, XML comments will be included to provide debugging information.
+     * </p>
+     *
+     * @since 0.11.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(
+        property = "jeo.disassemble.omitComments",
+        defaultValue = "true"
+    )
+    private boolean omitComments;
+
+    /**
      * Flag to enable pretty-printing of XMIR files.
      * <p>
      *     When enabled, the generated XMIR files will be formatted with indentation (2 spaces) and
@@ -173,10 +190,13 @@ public final class DisassembleMojo extends AbstractMojo {
                 Logger.info(this, "Disassemble mojo is disabled, skipping");
             } else {
                 final boolean listings = !this.omitListings;
+                final boolean comments = !this.omitComments;
                 Logger.info(
-                    this, "Disassembling is started with mode '%s' (with listings = '%b')",
+                    this,
+                    "Disassembling is started with mode '%s' (with listings = '%b', comments = '%b')",
                     this.mode,
-                    listings
+                    listings,
+                    comments
                 );
                 new Disassembler(
                     this.sourcesDir.toPath(),
@@ -184,7 +204,8 @@ public final class DisassembleMojo extends AbstractMojo {
                     new DisassembleParams(
                         DisassembleMode.fromString(this.mode),
                         listings,
-                        this.prettyXmir
+                        this.prettyXmir,
+                        comments
                     )
                 ).disassemble();
                 if (this.xmirVerification) {

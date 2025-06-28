@@ -31,7 +31,7 @@ public final class PrettyXml {
      * Constructor.
      * @param xml XML content as an XML object
      */
-    public PrettyXml(final XML xml) {
+    PrettyXml(final XML xml) {
         this(xml.toString());
     }
 
