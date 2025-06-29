@@ -48,6 +48,8 @@ public final class XmlOperand {
         final Object result;
         if (new JeoFqn("handle").fqn().equals(base)) {
             result = new XmlHandler(this.raw).bytecode().asHandle();
+        } else if (new JeoFqn("type").fqn().equals(base)) {
+            result = new XmlType(this.raw).type();
         } else if (new JeoFqn("annotation").fqn().equals(base)) {
             result = new XmlAnnotation(this.raw).bytecode();
         } else if (new JeoFqn("annotation-property").fqn().equals(base)) {

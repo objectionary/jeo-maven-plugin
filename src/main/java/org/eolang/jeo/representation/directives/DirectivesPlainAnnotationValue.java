@@ -85,7 +85,7 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
                 res = new DirectivesValues("", (Object[]) this.value);
             }
         } else {
-            res = new DirectivesValue(this.value);
+            res = new DirectivesOperand(this.value);
         }
         return new DirectivesJeoObject(
             "annotation-property",
