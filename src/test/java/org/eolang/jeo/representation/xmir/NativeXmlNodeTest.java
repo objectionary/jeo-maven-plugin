@@ -23,7 +23,10 @@ final class NativeXmlNodeTest {
     void retrievesTheFirstChild() {
         MatcherAssert.assertThat(
             "Can't retrieve the first child, or the first child is not the expected one",
-            new NativeXmlNode("<o><o name='inner'/></o>").firstChild(),
+            new NativeXmlNode("<o><o name='inner'/></o>")
+                .children()
+                .findFirst()
+                .orElseThrow(AssertionError::new),
             Matchers.equalTo(new NativeXmlNode("<o name='inner'/>"))
         );
     }

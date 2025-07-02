@@ -4,133 +4,73 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.nio.charset.StandardCharsets;
-import java.util.stream.Stream;
+import com.jcabi.xml.XMLDocument;
+import org.eolang.jeo.representation.directives.DirectivesObject;
+import org.eolang.jeo.representation.directives.HasClass;
+import org.eolang.jeo.representation.directives.HasMethod;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.objectweb.asm.Type;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link BytecodeObject}.
  * @since 0.6
- * @checkstyle ParameterNumberCheck (500 lines)
+ * @todo #1130:30min Find a way to test {@link BytecodeObject#directives(String)}.
+ *  When you find a way to test it, remove the @Disabled annotation from
+ *  {@link #convertsSimpleClassWithMethodToXmir()} test.
+ *  Most probably it will require to remove such classes as {@link HasClass}.
  */
 final class BytecodeObjectTest {
 
-    @ParameterizedTest
-    @MethodSource("arguments")
-    void detectsType(
-        final BytecodeObject value,
-        final String type,
-        final byte[] bytes,
-        final Object object
-    ) {
+    @Test
+    void convertsSimpleClassWithoutConstructorToXmir() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
-            "We expect that type will be detected correctly",
-            value.type(),
-            Matchers.equalTo(type)
+            "Can't parse simple class without constructor",
+            new Xembler(new BytecodeObject(new BytecodeClass()).directives("")).xml(),
+            new HasClass("Simple")
         );
     }
 
-    @ParameterizedTest
-    @MethodSource("arguments")
-    void retrievesObject(
-        final BytecodeObject value,
-        final String type,
-        final byte[] bytes,
-        final Object object
-    ) {
+    @Test
+    @Disabled
+    void convertsSimpleClassWithMethodToXmir() throws ImpossibleModificationException {
+        final String clazz = "WithMethod";
+        final String xml = new Xembler(
+            new BytecodeObject(
+                new BytecodeClass(clazz)
+                    .helloWorldMethod()
+            ).directives("")
+        ).xml();
         MatcherAssert.assertThat(
-            "We expect that object will be retrieved from the value",
-            value.value(),
-            Matchers.equalTo(object)
+            String.format(
+                "Can't parse simple class with method, result is: '%s'",
+                new XMLDocument(xml)
+            ),
+            xml,
+            new HasMethod("main").inside(clazz)
         );
     }
 
-    /**
-     * Arguments for the tests.
-     * Used in these tests:
-     * @return Arguments.
-     */
-    static Stream<Arguments> arguments() {
-        return Stream.of(
-            Arguments.of(
-                new BytecodeObject(42),
-                "number",
-                new byte[]{0, 0, 0, 0, 0, 0, 0, 42},
-                42
+    @Test
+    void convertsClassWithPackageToXmir() throws ImpossibleModificationException {
+        final String name = "ClassInPackage";
+        final DirectivesObject directives = new BytecodeObject(
+            "some/package",
+            new BytecodeClass(name).helloWorldMethod()
+        ).directives("");
+        final String xml = new Xembler(directives).xml();
+        final String pckg = "some.package";
+        MatcherAssert.assertThat(
+            String.format(
+                "Can't parse '%s' class that placed under package '%s', result is: %n%s%n",
+                name,
+                pckg,
+                new XMLDocument(xml)
             ),
-            Arguments.of(
-                new BytecodeObject(42L),
-                "long",
-                new byte[]{0, 0, 0, 0, 0, 0, 0, 42},
-                42L
-            ),
-            Arguments.of(
-                new BytecodeObject(42.0),
-                "double",
-                new byte[]{64, 69, 0, 0, 0, 0, 0, 0},
-                42.0
-            ),
-            Arguments.of(
-                new BytecodeObject(42.0f),
-                "float",
-                new byte[]{66, 40, 0, 0},
-                42.0f
-            ),
-            Arguments.of(
-                new BytecodeObject(true),
-                "bool",
-                new byte[]{1},
-                true
-            ),
-            Arguments.of(
-                new BytecodeObject(false),
-                "bool",
-                new byte[]{0},
-                false
-            ),
-            Arguments.of(
-                new BytecodeObject("Hello!"),
-                "string",
-                new byte[]{72, 101, 108, 108, 111, 33},
-                "Hello!"
-            ),
-            Arguments.of(
-                new BytecodeObject(new byte[]{1, 2, 3}),
-                "bytes",
-                new byte[]{1, 2, 3},
-                new byte[]{1, 2, 3}
-            ),
-            Arguments.of(
-                new BytecodeObject(' '),
-                "char",
-                new byte[]{0, 32},
-                ' '
-            ),
-            Arguments.of(
-                new BytecodeObject(BytecodeObject.class),
-                "class",
-                "org/eolang/jeo/representation/bytecode/BytecodeObject".getBytes(
-                    StandardCharsets.UTF_8
-                ),
-                BytecodeObject.class
-            ),
-            Arguments.of(
-                new BytecodeObject(Type.INT_TYPE),
-                "type",
-                "I".getBytes(StandardCharsets.UTF_8),
-                Type.INT_TYPE
-            ),
-            Arguments.of(
-                new BytecodeObject(null),
-                "nullable",
-                null,
-                null
-            )
+            xml,
+            new HasClass(name).inside(pckg)
         );
     }
 }

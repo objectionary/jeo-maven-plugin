@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.nio.charset.StandardCharsets;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 
 /**
@@ -15,14 +16,14 @@ public final class XmlLabel implements XmlBytecodeEntry {
     /**
      * Label node.
      */
-    private final XmlNode node;
+    private final XmlJeoObject node;
 
     /**
      * Constructor.
      * @param node Label node.
      */
     XmlLabel(final XmlNode node) {
-        this.node = node;
+        this.node = new XmlJeoObject(node);
     }
 
     /**
@@ -30,6 +31,19 @@ public final class XmlLabel implements XmlBytecodeEntry {
      * @return Bytecode label.
      */
     public BytecodeLabel bytecode() {
-        return (BytecodeLabel) new XmlValue(this.node).object();
+        return new BytecodeLabel(
+            new String(
+                (byte[]) new XmlValue(
+                    this.node.children()
+                        .findFirst()
+                        .orElseThrow(
+                            () -> new IllegalStateException(
+                                "Label node must have at least one child"
+                            )
+                        )
+                ).object(),
+                StandardCharsets.UTF_8
+            )
+        );
     }
 }

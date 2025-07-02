@@ -16,14 +16,22 @@ public final class XmlAttributes {
     /**
      * XML node of attributes.
      */
-    private final XmlNode node;
+    private final XmlSeq node;
 
     /**
      * Constructor.
      * @param xmlnode XML node.
      */
     XmlAttributes(final XmlNode xmlnode) {
-        this.node = xmlnode;
+        this(new XmlSeq(xmlnode));
+    }
+
+    /**
+     * Constructor.
+     * @param node XML sequence node containing attributes.
+     */
+    private XmlAttributes(final XmlSeq node) {
+        this.node = node;
     }
 
     /**

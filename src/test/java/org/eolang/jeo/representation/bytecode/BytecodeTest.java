@@ -29,7 +29,7 @@ final class BytecodeTest {
     void printsHumanReadableBytecodeDescription() {
         MatcherAssert.assertThat(
             "We expect correct and human-readable class description",
-            new BytecodeProgram(new BytecodeClass("Classname")).bytecode().toString(),
+            new BytecodeObject(new BytecodeClass("Classname")).bytecode().toString(),
             Matchers.allOf(
                 Matchers.containsString("class version"),
                 Matchers.containsString("public class Classname")

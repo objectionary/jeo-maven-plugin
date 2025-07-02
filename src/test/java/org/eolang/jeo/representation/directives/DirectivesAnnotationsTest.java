@@ -38,12 +38,13 @@ final class DirectivesAnnotationsTest {
                 new DirectivesAnnotations().add(new DirectivesAnnotation(annotation, true))
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o[contains(@base,'seq.of1') and contains(@as,'annotations')]/o",
+                new JeoBaseXpath("./o", "seq.of1").toXpath(),
+                "/o[contains(@as,'annotations')]/o",
                 String.format(
-                    "/o[contains(@base,'seq.of1') and contains(@as,'annotations')]/o/o[1][contains(@base,'string')]/o[1]/o[text()='%s']",
+                    "/o[contains(@as,'annotations')]/o/o[2][contains(@base,'string')]/o[1]/o[text()='%s']",
                     new DirectivesValue(annotation).hex(codec)
                 ),
-                "/o[contains(@base,'seq.of1') and contains(@as,'annotations')]/o/o[2][contains(@base,'true')]"
+                "/o[contains(@as,'annotations')]/o/o[3][contains(@base,'true')]"
             )
         );
     }
@@ -60,10 +61,11 @@ final class DirectivesAnnotationsTest {
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o[contains(@base,'annotation') and count(o) = 3]",
-                "/o[contains(@base,'annotation')]/o[1]/o[1]/o[text()='4C-6A-61-76-61-2F-6C-61-6E-67-2F-4F-76-65-72-72-69-64-65-3B']",
-                "/o[contains(@base,'annotation')]/o[2][contains(@base,'true')]",
-                "/o[contains(@base,'annotation')]/o[contains(@base,'annotation-property')]"
+                new JeoBaseXpath("./o", "annotation").toXpath(),
+                "/o[count(o) = 4]",
+                "/o/o[2]/o[1]/o[text()='4C-6A-61-76-61-2F-6C-61-6E-67-2F-4F-76-65-72-72-69-64-65-3B']",
+                "/o/o[3][contains(@base,'true')]",
+                new JeoBaseXpath("/o/o", "annotation-property").toXpath()
             )
         );
     }

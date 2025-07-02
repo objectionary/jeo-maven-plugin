@@ -22,7 +22,7 @@ public final class XmlMaxs {
      * XML node.
      */
     @EqualsAndHashCode.Exclude
-    private final XmlNode node;
+    private final XmlJeoObject node;
 
     /**
      * Constructor.
@@ -30,6 +30,14 @@ public final class XmlMaxs {
      * @param node XML node.
      */
     XmlMaxs(final XmlNode node) {
+        this(new XmlJeoObject(node));
+    }
+
+    /**
+     * Constructor.
+     * @param node XML Jeo object node representing the maxs.
+     */
+    private XmlMaxs(final XmlJeoObject node) {
         this.node = node;
     }
 

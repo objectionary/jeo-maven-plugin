@@ -12,29 +12,51 @@ import org.eolang.jeo.representation.directives.JeoFqn;
  * XML method params.
  * @since 0.6
  */
-public final class XmlParams {
+final class XmlParams {
+
+    /**
+     * Params fully qualified name.
+     */
+    private static final String PARAMS_BASE = new JeoFqn("params").fqn();
 
     /**
      * Xml representation of a method params.
      */
-    private final XmlNode node;
+    private final XmlJeoObject node;
 
     /**
      * Constructor.
      * @param node Xml representation of a method params.
      */
-    public XmlParams(final XmlNode node) {
+    XmlParams(final XmlNode node) {
+        this(new XmlJeoObject(node));
+    }
+
+    /**
+     * Constructor.
+     * @param node XML Jeo object node representing the method params.
+     */
+    private XmlParams(final XmlJeoObject node) {
         this.node = node;
+    }
+
+    /**
+     * Is this node a method params?
+     * @return True if this node is a method params.
+     */
+    boolean isParams() {
+        return this.node.base()
+            .map(XmlParams.PARAMS_BASE::equals)
+            .orElse(false);
     }
 
     /**
      * Get method params.
      * @return Method params.
      */
-    public BytecodeMethodParameters params() {
+    BytecodeMethodParameters params() {
         return new BytecodeMethodParameters(
             this.node.children()
-                .filter(element -> element.hasAttribute("base", new JeoFqn("param").fqn()))
                 .map(XmlParam::new)
                 .map(XmlParam::bytecode)
                 .collect(Collectors.toList())

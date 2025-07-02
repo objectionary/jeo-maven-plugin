@@ -67,13 +67,10 @@ public final class DirectivesEoObject implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives().add("o")
-            .attr("base", new EoFqn(this.base).fqn());
-        if (!this.name.isEmpty()) {
-            directives.attr("as", this.name);
-        }
-        return directives
-            .append(this.inner.stream().reduce(new Directives(), Directives::append))
-            .up().iterator();
+        return new DirectivesClosedObject(
+            new EoFqn(this.base).fqn(),
+            this.name,
+            this.inner.stream().reduce(new Directives(), Directives::append)
+        ).iterator();
     }
 }

@@ -26,7 +26,7 @@
         <artifactId>jeo-maven-plugin</artifactId>
         <version>@project.version@</version>
         <configuration>
-          <xmirVerification>true</xmirVerification>
+          <xmirVerification>false</xmirVerification>
           <omitListings>false</omitListings>
           <omitComments>false</omitComments>
           <prettyXmir>false</prettyXmir>

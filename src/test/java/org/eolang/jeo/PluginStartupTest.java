@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.apache.maven.project.MavenProject;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ final class PluginStartupTest {
         final String name = "SomeClassCompiledDynamically";
         Files.write(
             dir.resolve("SomeClassCompiledDynamically.class"),
-            new BytecodeProgram(new BytecodeClass(name)).bytecode().bytes()
+            new BytecodeObject(new BytecodeClass(name)).bytecode().bytes()
         );
         new PluginStartup(new MavenProject(), dir).init();
         MatcherAssert.assertThat(

@@ -41,6 +41,11 @@ import org.xembly.Xembler;
 public final class XmlMethod {
 
     /**
+     * Field base full qualified name.
+     */
+    private static final String METHOD = new JeoFqn("method").fqn();
+
+    /**
      * Undefined value.
      * Max stack and locals need to be recomputed.
      */
@@ -49,14 +54,22 @@ public final class XmlMethod {
     /**
      * Method node.
      */
-    private final XmlNode node;
+    private final XmlJeoObject node;
 
     /**
      * Constructor.
      * @param xmlnode Method node.
      */
     public XmlMethod(final XmlNode xmlnode) {
-        this.node = xmlnode;
+        this(new XmlJeoObject(xmlnode));
+    }
+
+    /**
+     * Constructor.
+     * @param node Method node.
+     */
+    private XmlMethod(final XmlJeoObject node) {
+        this.node = node;
     }
 
     /**
@@ -151,12 +164,22 @@ public final class XmlMethod {
     }
 
     /**
+     * Whether the node is a method.
+     * @return True if the node is a method.
+     */
+    boolean isMethod() {
+        return this.node.base().map(XmlMethod.METHOD::equals).orElse(false);
+    }
+
+    /**
      * Method attributes.
      * @return Attributes.
      */
     private BytecodeAttributes attrs() {
         return this.node.children()
-            .filter(element -> element.hasAttribute("as", "local-variable-table"))
+            .filter(
+                element -> element.attribute("as").map("local-variable-table"::equals)
+                    .orElse(false))
             .findFirst()
             .map(XmlAttributes::new)
             .map(XmlAttributes::attributes)
@@ -189,7 +212,8 @@ public final class XmlMethod {
     private List<XmlBytecodeEntry> instructions() {
         return this.node.children().filter(XmlMethod.attrContains("as", "body"))
             .findFirst()
-            .map(XmlNode::children)
+            .map(XmlSeq::new)
+            .map(XmlSeq::children)
             .orElse(Stream.empty())
             .map(XmlMethod::toEntry)
             .collect(Collectors.toList());
@@ -202,7 +226,7 @@ public final class XmlMethod {
      */
     private static XmlBytecodeEntry toEntry(final XmlNode node) {
         final XmlBytecodeEntry result;
-        final Optional<String> base = node.attribute("base");
+        final Optional<String> base = new XmlJeoObject(node).base();
         if (base.isPresent() && new JeoFqn("label").fqn().equals(base.get())) {
             result = new XmlLabel(node);
         } else if (base.isPresent() && new JeoFqn("frame").fqn().equals(base.get())) {
@@ -318,7 +342,8 @@ public final class XmlMethod {
                 element -> element.attribute("as")
                     .map(s -> s.contains("trycatchblocks"))
                     .orElse(false))
-            .flatMap(XmlNode::children)
+            .map(XmlSeq::new)
+            .flatMap(XmlSeq::children)
             .map(XmlTryCatchEntry::new)
             .collect(Collectors.toList());
     }
@@ -330,7 +355,10 @@ public final class XmlMethod {
      */
     private BytecodeAnnotations annotations() {
         return this.node.children()
-            .filter(element -> element.hasAttribute("as", "annotations"))
+            .filter(
+                element -> element.attribute("as")
+                    .map(s -> s.contains("annotations"))
+                    .orElse(false))
             .findFirst()
             .map(XmlAnnotations::new)
             .map(XmlAnnotations::bytecode)
@@ -343,8 +371,10 @@ public final class XmlMethod {
      * @return Optional XMIR of the default value.
      */
     private Optional<XmlDefaultValue> defvalue() {
-        return this.node.optchild("base", new JeoFqn("annotation-default-value").fqn())
-            .map(XmlDefaultValue::new);
+        return this.node.children()
+            .map(XmlDefaultValue::new)
+            .filter(XmlDefaultValue::isDefaultValue)
+            .findFirst();
     }
 
     /**
@@ -352,8 +382,11 @@ public final class XmlMethod {
      * @return Parameters.
      */
     private BytecodeMethodParameters params() {
-        return this.node.optchild("base", new JeoFqn("params").fqn())
-            .map(XmlParams::new).map(XmlParams::params)
+        return this.node.children()
+            .map(XmlParams::new)
+            .filter(XmlParams::isParams)
+            .findFirst()
+            .map(XmlParams::params)
             .orElse(new BytecodeMethodParameters());
     }
 
@@ -364,7 +397,8 @@ public final class XmlMethod {
      */
     private String[] exceptions() {
         return this.ochild("exceptions")
-            .map(XmlNode::children)
+            .map(XmlSeq::new)
+            .map(XmlSeq::children)
             .orElse(Stream.empty())
             .map(XmlValue::new)
             .map(XmlValue::string)

@@ -11,6 +11,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeArrayAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeEnumAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodePlainAnnotationValue;
+import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * Xmir annotation property.
@@ -19,15 +20,28 @@ import org.eolang.jeo.representation.bytecode.BytecodePlainAnnotationValue;
 public final class XmlAnnotationValue {
 
     /**
+     * Annotation property base FQN.
+     */
+    private static final String APROPERTY_BASE = new JeoFqn("annotation-property").fqn();
+
+    /**
      * Annotation property XML node.
      */
-    private final XmlNode node;
+    private final XmlJeoObject node;
+
+    /**
+     * Constructor.
+     * @param node XML node representing an annotation property.
+     */
+    public XmlAnnotationValue(final XmlNode node) {
+        this(new XmlJeoObject(node));
+    }
 
     /**
      * Constructor.
      * @param xmlnode XML node.
      */
-    public XmlAnnotationValue(final XmlNode xmlnode) {
+    private XmlAnnotationValue(final XmlJeoObject xmlnode) {
         this.node = xmlnode;
     }
 
@@ -80,12 +94,29 @@ public final class XmlAnnotationValue {
     }
 
     /**
+     * Is this a valid annotation value?
+     * @return True if this is a valid annotation value, false otherwise.
+     */
+    boolean isValue() {
+        return this.node.base().map(XmlAnnotationValue.APROPERTY_BASE::equals).orElse(false);
+    }
+
+    /**
      * Type of the property.
      * @return Type.
      */
     private String type() {
+        final List<XmlNode> collect = this.node.children().collect(Collectors.toList());
+        if (collect.isEmpty()) {
+            throw new IllegalStateException(
+                String.format(
+                    "The '%s' node doesn't have any children, but it should have at least one",
+                    this.node
+                )
+            );
+        }
         return (String) new XmlOperand(
-            this.node.children().collect(Collectors.toList()).get(0)
+            collect.get(0)
         ).asObject();
     }
 

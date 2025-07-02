@@ -13,11 +13,11 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link XmlHandler}.
+ * Test case for {@link XmlHandle}.
  *
  * @since 0.3
  */
-final class XmlHandlerTest {
+final class XmlHandleTest {
 
     @Test
     void convertsToHandleObject() throws ImpossibleModificationException {
@@ -26,7 +26,7 @@ final class XmlHandlerTest {
         );
         MatcherAssert.assertThat(
             "Can't convert XML handler to the correct handle object",
-            new XmlHandler(new NativeXmlNode(new Xembler(new DirectivesHandle(handle)).xml()))
+            new XmlHandle(new NativeXmlNode(new Xembler(new DirectivesHandle(handle)).xml()))
                 .bytecode().asHandle(),
             Matchers.equalTo(handle)
         );

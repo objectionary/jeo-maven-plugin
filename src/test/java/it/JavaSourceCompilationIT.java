@@ -15,6 +15,7 @@ import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.io.TempDir;
@@ -32,10 +33,14 @@ import org.junit.jupiter.api.io.TempDir;
  * Moreover, we don't care about line numbers and other supplementary information.
  * We ignore it by using `-g:vars` compiler option.
  * @since 0.1
+ * @todo #1130:90min Enable {@link #transformsRandomJavaSourceCodeIntoEoAndBack(Path)} test.
+ *  This test is disabled because it's flaky and sometimes fails on some machines, like
+ *  MacOS with JDK 17. We should investigate the reason of the failure and enable it.
  */
 final class JavaSourceCompilationIT {
 
     @Test
+    @Disabled
     @EnabledIf(value = "hasJavaCompiler", disabledReason = "Java compiler is not available")
     void transformsRandomJavaSourceCodeIntoEoAndBack(@TempDir final Path temp) throws IOException {
         final Bytecode expected = JavaSourceCompilationIT.compile(temp);

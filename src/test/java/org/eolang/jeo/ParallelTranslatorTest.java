@@ -13,7 +13,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.io.FileMatchers;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ final class ParallelTranslatorTest {
         final Path clazz = temp.resolve("Application.class");
         Files.write(
             clazz,
-            new BytecodeProgram(
+            new BytecodeObject(
                 "org/eolang/jeo",
                 new BytecodeClass("Application")
             ).bytecode().bytes()
@@ -57,7 +57,7 @@ final class ParallelTranslatorTest {
         Files.createDirectories(path.getParent());
         Files.write(
             path,
-            new BytecodeProgram(
+            new BytecodeObject(
                 "org/eolang/jeo",
                 new BytecodeClass("Application")
             ).bytecode().bytes()
@@ -81,7 +81,7 @@ final class ParallelTranslatorTest {
         Files.createDirectories(path.getParent());
         Files.write(
             path,
-            new BytecodeProgram(
+            new BytecodeObject(
                 "jeo/xmir",
                 new BytecodeClass(fake)
             ).xml().toString().getBytes(StandardCharsets.UTF_8)

@@ -10,6 +10,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
+import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * XML field.
@@ -19,16 +20,29 @@ import org.eolang.jeo.representation.bytecode.BytecodeField;
 public class XmlField {
 
     /**
+     * Field base full qualified name.
+     */
+    private static final String FIELD = new JeoFqn("field").fqn();
+
+    /**
      * Field node.
      */
-    private final XmlNode node;
+    private final XmlJeoObject node;
 
     /**
      * Constructor.
      * @param xmlnode Field node.
      */
     XmlField(final XmlNode xmlnode) {
-        this.node = xmlnode;
+        this(new XmlJeoObject(xmlnode));
+    }
+
+    /**
+     * Constructor.
+     * @param node XML Jeo object node.
+     */
+    private XmlField(final XmlJeoObject node) {
+        this.node = node;
     }
 
     /**
@@ -44,6 +58,14 @@ public class XmlField {
             this.access(),
             this.annotations().map(XmlAnnotations::bytecode).orElse(new BytecodeAnnotations())
         );
+    }
+
+    /**
+     * Whether this node is a field.
+     * @return True if this node is a field, false otherwise.
+     */
+    boolean isField() {
+        return this.node.base().map(XmlField.FIELD::equals).orElse(false);
     }
 
     /**
@@ -105,7 +127,12 @@ public class XmlField {
      * @return Annotations.
      */
     private Optional<XmlAnnotations> annotations() {
-        return this.node.optchild("as", String.format("annotations-%s", this.name()))
+        final String name = String.format("annotations-%s", this.name());
+        return this.node.children()
+            .filter(
+                child -> child.attribute("as").map(name::equals).orElse(false)
+            )
+            .findFirst()
             .map(XmlAnnotations::new);
     }
 

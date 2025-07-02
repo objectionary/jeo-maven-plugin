@@ -16,7 +16,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
-import org.eolang.jeo.representation.directives.JeoFqn;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
@@ -33,18 +32,19 @@ import org.xembly.Xembler;
 @EqualsAndHashCode
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class XmlClass {
+
     /**
      * Class node from entire XML.
      */
     @ToString.Include
-    private final XmlNode node;
+    private final XmlGlobalObject node;
 
     /**
      * Constructor.
      * @param node The XML node representing the class
      */
     public XmlClass(final XmlNode node) {
-        this.node = node;
+        this.node = new XmlGlobalObject(node);
     }
 
     /**
@@ -117,7 +117,7 @@ public final class XmlClass {
      */
     private Optional<XmlAnnotations> annotations() {
         return this.node.children()
-            .filter(o -> o.hasAttribute("as", "annotations"))
+            .filter(o -> o.attribute("as").map("annotations"::equals).orElse(false))
             .findFirst()
             .map(XmlAnnotations::new);
     }
@@ -136,8 +136,8 @@ public final class XmlClass {
      */
     private List<XmlMethod> methods() {
         return this.node.children()
-            .filter(o -> o.attribute("base").map(s -> s.contains("method")).orElse(false))
             .map(XmlMethod::new)
+            .filter(XmlMethod::isMethod)
             .collect(Collectors.toList());
     }
 
@@ -147,9 +147,8 @@ public final class XmlClass {
      */
     private List<XmlField> fields() {
         return this.node.children()
-            .filter(o -> o.attribute("base").isPresent())
-            .filter(o -> new JeoFqn("field").fqn().equals(o.attribute("base").get()))
             .map(XmlField::new)
+            .filter(XmlField::isField)
             .collect(Collectors.toList());
     }
 
@@ -159,7 +158,7 @@ public final class XmlClass {
      */
     private Optional<XmlAttributes> attributes() {
         return this.node.children()
-            .filter(o -> o.hasAttribute("as", "attributes"))
+            .filter(o -> o.attribute("as").map("attributes"::equals).orElse(false))
             .findFirst()
             .map(XmlAttributes::new);
     }

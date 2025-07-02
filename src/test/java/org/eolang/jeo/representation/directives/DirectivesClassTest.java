@@ -62,18 +62,18 @@ final class DirectivesClassTest {
     }
 
     @Test
-    void appendsField() {
+    void appendsField() throws ImpossibleModificationException {
+        final DirectivesField field = new DirectivesField();
         final String xml = new Xembler(
-            new DirectivesClass(new ClassName("Neo"), new DirectivesField()),
+            new DirectivesClass(new ClassName("Neo"), field),
             new Transformers.Node()
-        ).xmlQuietly();
+        ).xml();
         MatcherAssert.assertThat(
-            String.format(
-                "Can't append field to the class; result is: '%s'",
-                new XMLDocument(xml)
-            ),
+            "Can't append field to the class",
             xml,
-            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[contains(@base,'field')]")
+            Matchers.containsString(
+                new Xembler(field, new Transformers.Node()).xml()
+            )
         );
     }
 

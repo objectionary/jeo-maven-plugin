@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
@@ -17,16 +18,30 @@ import org.eolang.jeo.representation.directives.EoFqn;
 public final class XmlTryCatchEntry implements XmlBytecodeEntry {
 
     /**
+     * NOP base FQN.
+     * NOP is used to represent an empty label in try-catch blocks.
+     */
+    private static final String NOP = new EoFqn("nop").fqn();
+
+    /**
      * XML node.
      */
-    private final XmlNode xmlnode;
+    private final XmlJeoObject node;
 
     /**
      * Constructor.
      * @param node XML node
      */
     public XmlTryCatchEntry(final XmlNode node) {
-        this.xmlnode = node;
+        this(new XmlJeoObject(node));
+    }
+
+    /**
+     * Constructor.
+     * @param node XML Jeo object node
+     */
+    private XmlTryCatchEntry(final XmlJeoObject node) {
+        this.node = node;
     }
 
     /**
@@ -66,8 +81,8 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      * @return Exception type.
      */
     private String type() {
-        return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(3))
-            .filter(node -> !node.hasAttribute("base", new EoFqn("nop").fqn()))
+        return Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(3))
+            .filter(n -> !XmlTryCatchEntry.NOP.equals(new XmlClosedObject(n).base()))
             .map(XmlValue::new)
             .map(XmlValue::string)
             .filter(s -> !s.isEmpty())
@@ -80,8 +95,24 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      * @return Label.
      */
     private Optional<BytecodeLabel> label(final int id) {
-        return Optional.ofNullable(this.xmlnode.children().collect(Collectors.toList()).get(id))
-            .filter(node -> !node.hasAttribute("base", new EoFqn("nop").fqn()))
+        final List<XmlNode> all = this.node.children().collect(Collectors.toList());
+        if (all.size() <= id) {
+            throw new IllegalStateException(
+                String.format(
+                    "Expected at least %d element, but found %d in %s",
+                    id + 1,
+                    all.size(),
+                    this.node
+                )
+            );
+        }
+        return Optional.ofNullable(all.get(id))
+            .filter(n -> new XmlJeoObject(n).base().isPresent())
+            .filter(
+                based -> !new XmlJeoObject(based).base()
+                    .map(XmlTryCatchEntry.NOP::equals)
+                    .orElse(false)
+            )
             .map(XmlValue::new)
             .map(XmlValue::object)
             .map(BytecodeLabel.class::cast);

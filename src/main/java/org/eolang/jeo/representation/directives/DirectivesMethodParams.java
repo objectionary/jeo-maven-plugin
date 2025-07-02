@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +28,15 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
      */
     public DirectivesMethodParams() {
         this(new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param params Parameters.
+     */
+    @SafeVarargs
+    public DirectivesMethodParams(final Iterable<Directive>... params) {
+        this(Arrays.asList(params));
     }
 
     /**

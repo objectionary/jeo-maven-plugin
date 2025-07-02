@@ -10,7 +10,7 @@ import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeLine;
-import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.eolang.jeo.representation.xmir.XmlObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -27,7 +27,7 @@ final class AsmProgramTest {
 
     @Test
     void convertsToBytecode() {
-        final Bytecode same = new BytecodeProgram()
+        final Bytecode same = new BytecodeObject()
             .replaceTopClass(new BytecodeClass().helloWorldMethod())
             .bytecode();
         MatcherAssert.assertThat(
@@ -68,7 +68,7 @@ final class AsmProgramTest {
     @ParameterizedTest
     @ValueSource(strings = {"FixedWidth.class", "DeprecatedMethod.class", "ParamAnnotation.class"})
     void convertsToBytecodeThenToXmirAndThenBackToBytecode(final String resource) throws Exception {
-        final BytecodeProgram bytecode = new AsmProgram(
+        final BytecodeObject bytecode = new AsmProgram(
             new BytesOf(new ResourceOf(resource)).asBytes()
         ).bytecode();
         MatcherAssert.assertThat(

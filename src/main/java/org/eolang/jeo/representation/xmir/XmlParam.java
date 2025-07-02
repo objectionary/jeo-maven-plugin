@@ -18,13 +18,21 @@ public final class XmlParam {
     /**
      * Root node from which we will get all required data.
      */
-    private final XmlNode root;
+    private final XmlJeoObject root;
 
     /**
      * Constructor.
      * @param root Parameter xml node.
      */
-    public XmlParam(final XmlNode root) {
+    XmlParam(final XmlNode root) {
+        this(new XmlJeoObject(root));
+    }
+
+    /**
+     * Constructor.
+     * @param root Parameter xml node.
+     */
+    private XmlParam(final XmlJeoObject root) {
         this.root = root;
     }
 
@@ -103,7 +111,10 @@ public final class XmlParam {
                 .findFirst()
                 .orElseThrow(
                     () -> new IllegalStateException(
-                        String.format("Child with attribute 'as'='%s' not found", name)
+                        String.format(
+                            "Child with attribute 'as'='%s' not found in node '%s'", name,
+                            this.root
+                        )
                     )
                 )
         );

@@ -145,8 +145,9 @@ final class DirectivesMethodTest {
                     new DirectivesAttributes()
                 )
             ).xml(),
-            XhtmlMatchers.hasXPath(
-                "./o[contains(@base,'method') and contains(@as,'checks1063')]/o[@as='body']"
+            XhtmlMatchers.hasXPaths(
+                new JeoBaseXpath("/o", "method").toXpath(),
+                "./o[contains(@as,'checks1063')]/o[@as='body']"
             )
         );
     }

@@ -85,6 +85,18 @@ final class XmlValueTest {
             Arguments.of(true),
             Arguments.of(false),
             Arguments.of(0.1d),
+            Arguments.of(Double.MAX_VALUE),
+            Arguments.of(Double.MIN_VALUE),
+            Arguments.of(Float.MAX_VALUE),
+            Arguments.of(Float.MIN_VALUE),
+            Arguments.of(Long.MAX_VALUE),
+            Arguments.of(Long.MIN_VALUE),
+            Arguments.of(Integer.MAX_VALUE),
+            Arguments.of(Integer.MIN_VALUE),
+            Arguments.of(Short.MAX_VALUE),
+            Arguments.of(Short.MIN_VALUE),
+            Arguments.of(Byte.MAX_VALUE),
+            Arguments.of(Byte.MIN_VALUE),
             Arguments.of("org/eolang/jeo/representation/HexDataTest"),
             Arguments.of(new BytecodeLabel("some"))
         );

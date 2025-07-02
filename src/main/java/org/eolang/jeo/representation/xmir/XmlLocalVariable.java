@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.LocalVariable;
@@ -20,13 +19,13 @@ public final class XmlLocalVariable {
     /**
      * XML node of local variable.
      */
-    private final XmlNode node;
+    private final XmlJeoObject node;
 
     /**
      * Constructor.
      * @param node XML node.
      */
-    XmlLocalVariable(final XmlNode node) {
+    XmlLocalVariable(final XmlJeoObject node) {
         this.node = node;
     }
 
@@ -126,8 +125,6 @@ public final class XmlLocalVariable {
      * @return Optional operand.
      */
     private Optional<Object> operand(final int index) {
-        return Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(index))
-            .map(XmlOperand::new)
-            .map(XmlOperand::asObject);
+        return this.node.child(index).map(XmlOperand::new).map(XmlOperand::asObject);
     }
 }

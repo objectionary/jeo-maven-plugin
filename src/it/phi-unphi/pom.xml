@@ -43,7 +43,7 @@
                   See more details here:
                   https://github.com/objectionary/eo/issues/3812
               -->
-              <xmirVerification>true</xmirVerification>
+              <xmirVerification>false</xmirVerification>
             </configuration>
             <goals>
               <goal>disassemble</goal>

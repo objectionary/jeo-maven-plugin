@@ -22,6 +22,10 @@ import org.hamcrest.TypeSafeMatcher;
  * and method body verification for comprehensive testing.
  *
  * @since 0.1.0
+ * @todo #1130:90min Don't use {@link HasMethod} class in 'Bytecode' tests.
+ *  We should compare generated XMIR with expected XMIR using 'Directives' classes instead.
+ *  Otherwise, we have to invent such overly complicated classes as {@link HasMethod}.
+ *  When we will have proper XMIR comparison, we can remove this class.
  */
 @SuppressWarnings({
     "PMD.TooManyMethods",

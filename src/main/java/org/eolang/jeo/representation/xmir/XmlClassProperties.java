@@ -12,18 +12,18 @@ import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
  * XML representation of a class.
  * @since 0.1.0
  */
-public final class XmlClassProperties {
+final class XmlClassProperties {
 
     /**
      * XML representation of a class.
      */
-    private final XmlNode clazz;
+    private final XmlGlobalObject clazz;
 
     /**
      * Constructor.
      * @param xmlclass XMl representation of a class.
      */
-    XmlClassProperties(final XmlNode xmlclass) {
+    XmlClassProperties(final XmlGlobalObject xmlclass) {
         this.clazz = xmlclass;
     }
 
@@ -53,7 +53,18 @@ public final class XmlClassProperties {
      * @return Access modifiers.
      */
     private int access() {
-        return (int) new XmlValue(this.clazz.child("as", "access")).object();
+        final XmlNode value = this.clazz.children()
+            .filter(node -> node.attribute("as").map("access"::equals).orElse(false))
+            .findFirst()
+            .orElseThrow(
+                () -> new IllegalStateException(
+                    String.format(
+                        "The '%s' node doesn't have 'access' attribute, but it should have one",
+                        this.clazz
+                    )
+                )
+            );
+        return (int) new XmlValue(value).object();
     }
 
     /**
@@ -87,7 +98,8 @@ public final class XmlClassProperties {
     private String[] interfaces() {
         return this.child("interfaces")
             .map(
-                node -> node.children()
+                node -> new XmlSeq(node)
+                    .children()
                     .map(XmlValue::new)
                     .map(XmlValue::string)
                     .toArray(String[]::new)
@@ -112,7 +124,8 @@ public final class XmlClassProperties {
      * @return Child node.
      */
     private Optional<XmlNode> child(final String name) {
-        return this.clazz.optchild("as", name);
+        return this.clazz.children().filter(
+            child -> child.attribute("as").map(name::equals).orElse(false)
+        ).findFirst();
     }
-
 }

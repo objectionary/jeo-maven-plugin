@@ -4,65 +4,126 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.util.Locale;
+import com.jcabi.xml.XML;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.eolang.jeo.representation.BytecodeRepresentation;
+import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.PrefixedName;
+import org.eolang.jeo.representation.directives.DirectivesClass;
+import org.eolang.jeo.representation.directives.DirectivesMetas;
+import org.eolang.jeo.representation.directives.DirectivesObject;
 
 /**
- * Bytecode value.
- * Represents a typed value in bytecode format.
+ * Bytecode program.
  * @since 0.6
  */
+@ToString
+@EqualsAndHashCode
 public final class BytecodeObject {
+    /**
+     * Package.
+     */
+    private final String pckg;
 
     /**
-     * Data type.
+     * Class.
      */
-    private final DataType vtype;
-
-    /**
-     * Bytes.
-     */
-    private final Object object;
-
-    /**
-     * Constructor.
-     * @param value Value.
-     */
-    public BytecodeObject(final Object value) {
-        this(DataType.findByData(value), value);
-    }
+    private final List<BytecodeClass> classes;
 
     /**
      * Constructor.
-     * @param type Value type.
-     * @param bytes Value bytes.
+     * @param pckg Package.
      */
-    private BytecodeObject(final DataType type, final Object bytes) {
-        this.vtype = type;
-        this.object = bytes;
+    public BytecodeObject(final String pckg) {
+        this(pckg, new ArrayList<>(0));
     }
 
     /**
-     * Retrieve the type of the value.
-     * @return Type.
+     * Constructor.
+     * @param classes Classes.
      */
-    public String type() {
-        return this.vtype.caption().toLowerCase(Locale.ROOT);
+    public BytecodeObject(final BytecodeClass... classes) {
+        this("", Arrays.asList(classes));
     }
 
     /**
-     * Retrieve the value.
-     * @return Value.
+     * Constructor.
+     * @param pckg Package.
+     * @param classes Classes.
      */
-    public Object value() {
-        return this.object;
+    public BytecodeObject(final String pckg, final BytecodeClass... classes) {
+        this(pckg, Arrays.asList(classes));
     }
 
     /**
-     * Retrieve the bytes of the value.
-     * @param codec Codec.
-     * @return Bytes.
+     * Constructor.
+     * @param pckg Package.
+     * @param classes Classes.
      */
-    public byte[] encode(final Codec codec) {
-        return codec.encode(this.object, this.vtype);
+    public BytecodeObject(final String pckg, final List<BytecodeClass> classes) {
+        this.pckg = pckg;
+        this.classes = classes;
+    }
+
+    /**
+     * Converts bytecode into XML.
+     *
+     * @return XML representation of bytecode.
+     */
+    public XML xml() {
+        return new BytecodeRepresentation(this.bytecode()).toXmir();
+    }
+
+    /**
+     * Generate bytecode.
+     * Traverse XML and build bytecode class.
+     * @return Bytecode.
+     */
+    public Bytecode bytecode() {
+        final CustomClassWriter writer = new CustomClassWriter();
+        this.top().writeTo(writer, this.pckg);
+        return writer.bytecode();
+    }
+
+    /**
+     * Get top class.
+     * @return Top class.
+     */
+    public BytecodeClass top() {
+        return this.classes.get(0);
+    }
+
+    /**
+     * Copy program with replaced top class.
+     *
+     * @param clazz Class to replace.
+     * @return Program with replaced top class.
+     */
+    public BytecodeObject replaceTopClass(final BytecodeClass clazz) {
+        return new BytecodeObject(
+            this.pckg,
+            new ArrayList<>(Collections.singletonList(clazz))
+        );
+    }
+
+    /**
+     * Convert to directives.
+     * @param listing Program listing.
+     * @return Directives program.
+     */
+    public DirectivesObject directives(final String listing) {
+        final BytecodeClass top = this.top();
+        final ClassName classname = new ClassName(this.pckg, new PrefixedName(top.name()).encode());
+        final DirectivesClass clazz = top.directives();
+        return new DirectivesObject(
+            listing,
+            clazz,
+            new DirectivesMetas(classname)
+        );
     }
 }

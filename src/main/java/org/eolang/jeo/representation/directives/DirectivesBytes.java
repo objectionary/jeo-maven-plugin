@@ -31,13 +31,9 @@ public final class DirectivesBytes implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives()
-            .add("o")
-            .attr("base", "Q.org.eolang.bytes")
-            .add("o")
-            .set(this.hex)
-            .up()
-            .up()
-            .iterator();
+        return new DirectivesClosedObject(
+            "Q.org.eolang.bytes",
+            new Directives().add("o").set(this.hex).up()
+        ).iterator();
     }
 }

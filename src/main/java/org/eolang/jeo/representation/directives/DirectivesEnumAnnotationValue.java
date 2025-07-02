@@ -36,7 +36,9 @@ public final class DirectivesEnumAnnotationValue implements Iterable<Directive> 
      * @param value The actual enumeration value.
      */
     public DirectivesEnumAnnotationValue(
-        final String name, final String descriptor, final String value
+        final String name,
+        final String descriptor,
+        final String value
     ) {
         this.name = name;
         this.descriptor = descriptor;

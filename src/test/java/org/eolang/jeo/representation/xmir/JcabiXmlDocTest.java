@@ -44,7 +44,7 @@ final class JcabiXmlDocTest {
         );
         MatcherAssert.assertThat(
             "Can't read XML from file",
-            new JcabiXmlDoc(path).root().firstChild(),
+            new JcabiXmlDoc(path).root().children().findFirst().orElseThrow(AssertionError::new),
             org.hamcrest.Matchers.equalTo(new JcabiXmlNode("<o>1</o>"))
         );
     }

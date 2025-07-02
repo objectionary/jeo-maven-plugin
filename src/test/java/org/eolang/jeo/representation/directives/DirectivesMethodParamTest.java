@@ -98,8 +98,9 @@ final class DirectivesMethodParamTest {
                     )
                 )
             ).xml(),
-            XhtmlMatchers.hasXPath(
-                "./o[contains(@base, param)]/o[contains(@base, 'seq.of') and contains(@as, 'annotations')]"
+            XhtmlMatchers.hasXPaths(
+                new JeoBaseXpath("./o", "param").toXpath(),
+                "./o/o[contains(@as, 'annotations')]"
             )
         );
     }

@@ -60,10 +60,10 @@ final class DirectivesValueTest {
                 xml
             ),
             xml,
-            XhtmlMatchers.hasXPath(
+            XhtmlMatchers.hasXPaths(
+                new JeoBaseXpath("./o", base).toXpath(),
                 String.format(
-                    "./o[contains(@base,'%s') and @as='access']/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']",
-                    base,
+                    "./o[@as='access']/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']",
                     bytes
                 )
             )
@@ -80,7 +80,7 @@ final class DirectivesValueTest {
                 xml
             ),
             xml,
-            XhtmlMatchers.hasXPath(
+            XhtmlMatchers.hasXPaths(
                 String.format(
                     "./o[contains(@base,'number') and @as='access']/o[contains(@base,'bytes')]/o[text()='%s']",
                     bytes
@@ -99,8 +99,9 @@ final class DirectivesValueTest {
                 ),
                 new Transformers.Node()
             ).xml(),
-            XhtmlMatchers.hasXPath(
-                "./o[contains(@base,'jeo.label')]/o[contains(@base,'org.eolang.bytes')]/o[text()='73-6F-6D-65-2D-72-61-6E-64-6F-6D']"
+            XhtmlMatchers.hasXPaths(
+                new JeoBaseXpath("./o", "label").toXpath(),
+                "./o/o[contains(@base,'org.eolang.bytes')]/o[text()='73-6F-6D-65-2D-72-61-6E-64-6F-6D']"
             )
         );
     }

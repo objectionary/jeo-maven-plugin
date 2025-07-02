@@ -6,7 +6,6 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Directives for an EO number.
@@ -45,14 +44,10 @@ final class DirectivesNumber implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives number = new Directives().add("o");
-        if (!this.name.isEmpty()) {
-            number.attr("as", this.name);
-        }
-        return number
-            .attr("base", new EoFqn("number").fqn())
-            .append(new DirectivesBytes(this.hex))
-            .up()
-            .iterator();
+        return new DirectivesClosedObject(
+            new EoFqn("number").fqn(),
+            this.name,
+            new DirectivesBytes(this.hex)
+        ).iterator();
     }
 }
