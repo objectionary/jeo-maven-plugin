@@ -6,7 +6,7 @@ package org.eolang.jeo.representation.xmir;
 
 import com.jcabi.xml.XML;
 import org.eolang.jeo.representation.PrefixedName;
-import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 
 /**
  * XMIR Program.
@@ -52,9 +52,9 @@ public final class XmlObject {
      * Convert to bytecode.
      * @return Bytecode program.
      */
-    public BytecodeProgram bytecode() {
+    public BytecodeObject bytecode() {
         try {
-            return new BytecodeProgram(this.pckg(), this.top().bytecode());
+            return new BytecodeObject(this.pckg(), this.top().bytecode());
         } catch (final IllegalStateException exception) {
             throw new ParsingException(
                 String.format(

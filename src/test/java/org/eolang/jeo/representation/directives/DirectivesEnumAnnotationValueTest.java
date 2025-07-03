@@ -35,8 +35,9 @@ final class DirectivesEnumAnnotationValueTest {
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "./o[contains(@base,'annotation-property') and count(o) = 4]",
-                "./o[contains(@base,'annotation-property')]/o[1]/o[1]/o[text()='45-4E-55-4D']"
+                new JeoBaseXpath("./o", "annotation-property").toXpath(),
+                "./o[count(o) = 5]",
+                "./o/o[2]/o[1]/o[text()='45-4E-55-4D']"
             )
         );
     }

@@ -32,9 +32,9 @@ final class DirectivesHandleTest {
             String.format("Can't convert Handle to DirectivesHandle. Expected XML:%n%s%n", xml),
             xml,
             XhtmlMatchers.hasXPaths(
-                "/o[contains(@base,'handle')]",
-                "/o[contains(@base,'handle')]/o[contains(@base,'number')]",
-                "/o[contains(@base,'handle')]/o[contains(@base,'string')]"
+                new JeoBaseXpath("./o", "handle").toXpath(),
+                "/o/o[contains(@base,'number')]",
+                "/o/o[contains(@base,'string')]"
             )
         );
     }

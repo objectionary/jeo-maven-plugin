@@ -25,7 +25,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * Instruction node.
      */
     @EqualsAndHashCode.Exclude
-    private final XmlNode node;
+    private final XmlJeoObject node;
 
     /**
      * Constructor.
@@ -48,7 +48,15 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      * @param xmlnode Instruction node.
      */
     XmlInstruction(final XmlNode xmlnode) {
-        this.node = xmlnode;
+        this(new XmlJeoObject(xmlnode));
+    }
+
+    /**
+     * Constructor.
+     * @param node XML Jeo object node representing the instruction.
+     */
+    private XmlInstruction(final XmlJeoObject node) {
+        this.node = node;
     }
 
     /**
@@ -68,7 +76,14 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      */
     @EqualsAndHashCode.Include
     private int opcode() {
-        final Object value = new XmlValue(this.node.firstChild()).object();
+        final Object value = new XmlValue(
+            this.node.children().findFirst()
+                .orElseThrow(
+                    () -> new IllegalStateException(
+                        String.format("fist child isn't found in node %s", this.node)
+                    )
+                )
+        ).object();
         if (!(value instanceof Integer)) {
             throw new IllegalArgumentException(
                 String.format(

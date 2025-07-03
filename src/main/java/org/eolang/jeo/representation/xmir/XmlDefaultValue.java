@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeDefaultValue;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * XMIR of annotation default value.
@@ -15,15 +16,28 @@ import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 public final class XmlDefaultValue {
 
     /**
+     * Annotation default value fully qualified name.
+     */
+    private static final String ADEFVALUE = new JeoFqn("annotation-default-value").fqn();
+
+    /**
      * Default value XMIR node.
      */
-    private final XmlNode node;
+    private final XmlJeoObject node;
 
     /**
      * Constructor.
      * @param node Default value XMIR node.
      */
     XmlDefaultValue(final XmlNode node) {
+        this(new XmlJeoObject(node));
+    }
+
+    /**
+     * Constructor.
+     * @param node XML Jeo object node.
+     */
+    private XmlDefaultValue(final XmlJeoObject node) {
         this.node = node;
     }
 
@@ -45,5 +59,13 @@ public final class XmlDefaultValue {
      */
     public void writeTo(final BytecodeMethod method) {
         this.bytecode().ifPresent(method::defvalue);
+    }
+
+    /**
+     * Is default value?
+     * @return True this node is default value.
+     */
+    boolean isDefaultValue() {
+        return this.node.base().map(XmlDefaultValue.ADEFVALUE::equals).orElse(false);
     }
 }

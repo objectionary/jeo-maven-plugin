@@ -40,7 +40,7 @@ public final class DirectivesGlobalObject implements Iterable<Directive> {
      * @param inner Inner components.
      */
     @SafeVarargs
-    public DirectivesGlobalObject(
+    DirectivesGlobalObject(
         final String base, final String name, final Iterable<Directive>... inner
     ) {
         this(base, name, Arrays.stream(inner).map(Directives::new).collect(Collectors.toList()));
@@ -52,7 +52,7 @@ public final class DirectivesGlobalObject implements Iterable<Directive> {
      * @param name The name of the object.
      * @param inner Inner components.
      */
-    public DirectivesGlobalObject(
+    private DirectivesGlobalObject(
         final String base, final String name, final List<Directives> inner
     ) {
         this.base = base;
@@ -62,14 +62,11 @@ public final class DirectivesGlobalObject implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives().add("o")
-            .attr("base", new JeoFqn(this.base).fqn());
-        if (!this.name.isEmpty()) {
-            directives.attr("name", this.name);
-        }
-        return directives
-            .append(this.inner.stream().reduce(new Directives(), Directives::append))
-            .up()
-            .iterator();
+        return new DirectivesAbsractObject(
+            new JeoFqn(this.base).fqn(),
+            "",
+            this.name,
+            this.inner.stream().reduce(new Directives(), Directives::append)
+        ).iterator();
     }
 }

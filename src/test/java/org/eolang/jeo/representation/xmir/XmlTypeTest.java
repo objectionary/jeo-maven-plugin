@@ -4,10 +4,12 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import org.eolang.jeo.representation.directives.DirectivesType;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Type;
+import org.xembly.Xembler;
 
 /**
  * Test for {@link XmlType}.
@@ -21,7 +23,9 @@ final class XmlTypeTest {
             "We expect the type to be parsed correctly",
             new XmlType(
                 new JcabiXmlNode(
-                    "<o base='Q.jeo.type'><o base='Q.org.eolang.string'><o base='Q.org.eolang.bytes'>5A-</o></o></o>"
+                    new Xembler(
+                        new DirectivesType(Type.BOOLEAN_TYPE)
+                    ).xmlQuietly()
                 )
             ).type(),
             Matchers.equalTo(Type.BOOLEAN_TYPE)

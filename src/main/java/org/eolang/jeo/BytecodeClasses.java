@@ -70,7 +70,7 @@ final class BytecodeClasses {
      * Verify bytecode in the folder.
      */
     void verify() {
-        this.all().map(BytecodeClasses::read).forEach(BytecodeClasses::verify);
+        this.all().forEach(BytecodeClasses::verify);
     }
 
     /**
@@ -112,6 +112,21 @@ final class BytecodeClasses {
             throw new IllegalStateException(
                 String.format("Can't read bytecode from the file '%s'", clazz),
                 exception
+            );
+        }
+    }
+
+    /**
+     * Verify the bytecode of the class file.
+     * @param clazz Path to the class file to verify
+     */
+    private static void verify(final Path clazz) {
+        final byte[] bytes = BytecodeClasses.read(clazz);
+        try {
+            BytecodeClasses.verify(bytes);
+        } catch (final IllegalArgumentException exception) {
+            throw new IllegalArgumentException(
+                String.format("Invalid bytecode of class '%s'", clazz), exception
             );
         }
     }

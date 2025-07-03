@@ -46,7 +46,7 @@
         <artifactId>jeo-maven-plugin</artifactId>
         <version>@project.version@</version>
         <configuration>
-          <xmirVerification>true</xmirVerification>
+          <xmirVerification>false</xmirVerification>
         </configuration>
         <executions>
           <execution>

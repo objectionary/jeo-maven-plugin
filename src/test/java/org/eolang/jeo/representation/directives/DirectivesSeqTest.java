@@ -34,9 +34,10 @@ final class DirectivesSeqTest {
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o[contains(@base,'seq.of2') and contains(@as,'seq')]",
-                "/o[contains(@base,'seq.of2') and contains(@as,'seq')]/o[contains(@base,'string')]/o[contains(@base, 'org.eolang.bytes')]/o[text()='31-']",
-                "/o[contains(@base,'seq.of2') and contains(@as,'seq')]/o[contains(@base,'string')]/o[contains(@base, 'org.eolang.bytes')]/o[text()='32-']"
+                new JeoBaseXpath("./o", "seq.of2").toXpath(),
+                "/o[contains(@as,'seq')]",
+                "/o[contains(@as,'seq')]/o[contains(@base,'string')]/o[contains(@base, 'bytes')]/o[text()='31-']",
+                "/o[contains(@as,'seq')]/o[contains(@base,'string')]/o[contains(@base, 'bytes')]/o[text()='32-']"
             )
         );
     }
@@ -49,11 +50,9 @@ final class DirectivesSeqTest {
         MatcherAssert.assertThat(
             "The size of the sequence is not as expected",
             new Xembler(actual).xml(),
-            XhtmlMatchers.hasXPath(
-                String.format(
-                    "/o[contains(@base,'seq.of%d') and contains(@as,'seq')]",
-                    expected
-                )
+            XhtmlMatchers.hasXPaths(
+                new JeoBaseXpath("./o", String.format("seq.of%d", expected)).toXpath(),
+                "/o[contains(@as,'seq')]"
             )
         );
     }

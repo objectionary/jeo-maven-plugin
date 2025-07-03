@@ -13,19 +13,27 @@ import org.eolang.jeo.representation.bytecode.BytecodeHandler;
  * XML representation of handler.
  * @since 0.3
  */
-final class XmlHandler {
+final class XmlHandle {
 
     /**
      * XML node.
      */
-    private final XmlNode node;
+    private final XmlJeoObject node;
 
     /**
      * Constructor.
      * @param xmlnode Node.
      */
-    XmlHandler(final XmlNode xmlnode) {
-        this.node = xmlnode;
+    XmlHandle(final XmlNode xmlnode) {
+        this(new XmlJeoObject(xmlnode));
+    }
+
+    /**
+     * Constructor.
+     * @param node XML Jeo object node.
+     */
+    private XmlHandle(final XmlJeoObject node) {
+        this.node = node;
     }
 
     /**

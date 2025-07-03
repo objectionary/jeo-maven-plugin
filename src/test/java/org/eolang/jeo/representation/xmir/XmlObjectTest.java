@@ -7,7 +7,7 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
@@ -46,7 +46,7 @@ final class XmlObjectTest {
                 )
             ).bytecode(),
             Matchers.equalTo(
-                new BytecodeProgram(
+                new BytecodeObject(
                     pckg,
                     new BytecodeClass(name, 0)
                 )
@@ -81,7 +81,7 @@ final class XmlObjectTest {
                 () -> new XmlObject(
                     new Xembler(
                         new Directives(
-                            new BytecodeProgram(
+                            new BytecodeObject(
                                 "com.example", new BytecodeClass("Foo", 0)
                             ).directives("")
                         ).xpath(".//o").remove()

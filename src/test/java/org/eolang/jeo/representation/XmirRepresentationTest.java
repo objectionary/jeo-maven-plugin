@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -48,7 +48,7 @@ final class XmirRepresentationTest {
         final String name = "Math";
         final String expected = "j$org/j$eolang/j$foo/j$Math";
         final String actual = new XmirRepresentation(
-            new BytecodeProgram(
+            new BytecodeObject(
                 "org/eolang/foo",
                 new BytecodeClass(name)
             ).xml()
@@ -69,7 +69,7 @@ final class XmirRepresentationTest {
         final String actual = new XmirRepresentation(
             new XMLDocument(
                 new Xembler(new Directives().xpath("/object/metas").remove())
-                    .applyQuietly(new BytecodeProgram(new BytecodeClass("Math")).xml().inner())
+                    .applyQuietly(new BytecodeObject(new BytecodeClass("Math")).xml().inner())
             )
         ).name();
         final String expected = "j$Math";
@@ -88,7 +88,7 @@ final class XmirRepresentationTest {
     void returnsXmlRepresentationOfEo() {
         MatcherAssert.assertThat(
             "The XML representation of the EO object is not correct",
-            new BytecodeProgram(
+            new BytecodeObject(
                 "org.eolang",
                 new BytecodeClass(XmirRepresentationTest.MATH)
             ).xml(),
@@ -100,11 +100,11 @@ final class XmirRepresentationTest {
     void returnsBytecodeRepresentationOfEo() {
         final String name = "Bar";
         final BytecodeClass clazz = new BytecodeClass(name);
-        final Bytecode expected = new BytecodeProgram(
+        final Bytecode expected = new BytecodeObject(
             new BytecodeClass(name)
         ).bytecode();
         final Bytecode actual = new XmirRepresentation(
-            new BytecodeProgram(clazz).xml()
+            new BytecodeObject(clazz).xml()
         ).toBytecode();
         MatcherAssert.assertThat(
             String.format(XmirRepresentationTest.MESSAGE, expected, actual),
@@ -115,7 +115,7 @@ final class XmirRepresentationTest {
 
     @Test
     void returnsBytecodeRepresentationOfEoObjectWithFields() {
-        final Bytecode expected = new BytecodeProgram(
+        final Bytecode expected = new BytecodeObject(
             new BytecodeClass("Fields").withField("foo")
         ).bytecode();
         final Bytecode actual = new XmirRepresentation(
@@ -130,7 +130,7 @@ final class XmirRepresentationTest {
 
     @Test
     void convertsHelloWordEoRepresentationIntoBytecode() {
-        final Bytecode expected = new BytecodeProgram(
+        final Bytecode expected = new BytecodeObject(
             new BytecodeClass("Application").helloWorldMethod()
         ).bytecode();
         final Bytecode actual = new XmirRepresentation(
@@ -148,7 +148,7 @@ final class XmirRepresentationTest {
         final Path xmir = dir.resolve("Math.xmir");
         Files.write(
             xmir,
-            new BytecodeProgram(
+            new BytecodeObject(
                 new BytecodeClass(XmirRepresentationTest.MATH)
             ).xml().toString().substring(42).getBytes(StandardCharsets.UTF_8)
         );
@@ -168,7 +168,7 @@ final class XmirRepresentationTest {
     @Disabled
     @SuppressWarnings("PMD.GuardLogStatement")
     void convertsToXmirAndBack() {
-        final Bytecode before = new BytecodeProgram(
+        final Bytecode before = new BytecodeObject(
             new BytecodeClass(XmirRepresentationTest.MATH)
                 .helloWorldMethod()
         ).bytecode();
@@ -197,7 +197,7 @@ final class XmirRepresentationTest {
 
     @Test
     void createsXmirRepresentationFromFile(@TempDir final Path path) throws IOException {
-        final BytecodeProgram program = new BytecodeProgram(
+        final BytecodeObject program = new BytecodeObject(
             new BytecodeClass(XmirRepresentationTest.MATH).helloWorldMethod()
         );
         final Bytecode expected = program.bytecode();

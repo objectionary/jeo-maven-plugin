@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.InnerClass;
+import org.eolang.jeo.representation.directives.DirectivesAttribute;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -35,10 +36,12 @@ final class XmlAttributeTest {
             "We expect an exception message be understandable and clear",
             Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> new XmlAttribute("<o base='unknown'/>").attribute(),
+                () -> new XmlAttribute(
+                    new Xembler(new DirectivesAttribute("unknown")).xmlQuietly()
+                ).attribute(),
                 "We expect an exception to be thrown if the attribute cannot be identified"
             ).getMessage(),
-            Matchers.equalTo("Unknown attribute base 'unknown'")
+            Matchers.equalTo("Unknown attribute base 'Q.jeo.unknown'")
         );
     }
 }

@@ -12,7 +12,7 @@ import org.xembly.Directive;
  * Directives for Type object.
  * @since 0.11.0
  */
-final class DirectivesType implements Iterable<Directive> {
+public final class DirectivesType implements Iterable<Directive> {
 
     /**
      * ASM Type object.
@@ -23,7 +23,7 @@ final class DirectivesType implements Iterable<Directive> {
      * Constructor.
      * @param type ASM Type object
      */
-    DirectivesType(final Type type) {
+    public DirectivesType(final Type type) {
         this.type = type;
     }
 

@@ -52,36 +52,6 @@ public interface XmlNode {
     List<String> xpath(String xpath);
 
     /**
-     * Get child node by attribute.
-     * @param attribute Attribute name.
-     * @param value Attribute value.
-     * @return Child node.
-     */
-    XmlNode child(String attribute, String value);
-
-    /**
-     * Get optional child node by attribute.
-     * @param attribute Attribute name.
-     * @param value Attribute value.
-     * @return Child node.
-     */
-    Optional<XmlNode> optchild(String attribute, String value);
-
-    /**
-     * Get first child.
-     * @return First child node.
-     */
-    XmlNode firstChild();
-
-    /**
-     * Check if an attribute exists.
-     * @param name Attribute name.
-     * @param value Attribute value.
-     * @return True if an attribute with specified value exists.
-     */
-    boolean hasAttribute(String name, String value);
-
-    /**
      * Validate the node.
      */
     void validate();

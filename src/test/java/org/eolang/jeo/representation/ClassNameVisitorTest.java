@@ -5,7 +5,7 @@
 package org.eolang.jeo.representation;
 
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ final class ClassNameVisitorTest {
     void retrievesClassName() {
         final ClassNameVisitor name = new ClassNameVisitor();
         final String expected = "representation/asm/ClassNameTest";
-        new ClassReader(new BytecodeProgram(new BytecodeClass(expected)).bytecode().bytes())
+        new ClassReader(new BytecodeObject(new BytecodeClass(expected)).bytecode().bytes())
             .accept(name, 0);
         MatcherAssert.assertThat(
             "Can't retrieve class name, or it's incorrect",

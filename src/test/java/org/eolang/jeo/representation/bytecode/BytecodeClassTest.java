@@ -4,9 +4,6 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import com.jcabi.matchers.XhtmlMatchers;
-import com.jcabi.xml.XML;
-import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -44,7 +41,7 @@ final class BytecodeClassTest {
                 "Can't parse abstract class with access modifier %s",
                 access
             ),
-            new BytecodeProgram(new BytecodeClass("AbstractClass", access)).bytecode(),
+            new BytecodeObject(new BytecodeClass("AbstractClass", access)).bytecode(),
             Matchers.notNullValue()
         );
     }
@@ -52,7 +49,7 @@ final class BytecodeClassTest {
     @Test
     void createsConstructorWithStoreInstructions() {
         Assertions.assertDoesNotThrow(
-            () -> new BytecodeProgram(
+            () -> new BytecodeObject(
                 new BytecodeClass("Store")
                     .withConstructor()
                     .opcode(Opcodes.ICONST_0)
@@ -76,7 +73,7 @@ final class BytecodeClassTest {
     void createsBytecodeWithDefaultConstructor() {
         MatcherAssert.assertThat(
             "Can't create bytecode with default public constructor",
-            new BytecodeProgram(
+            new BytecodeObject(
                 new BytecodeClass("DefaultConstructor")
                     .withConstructor(Opcodes.ACC_PUBLIC)
                     .opcode(Opcodes.RETURN)
@@ -92,7 +89,7 @@ final class BytecodeClassTest {
             "Exception message is not equal to expected",
             Assertions.assertThrows(
                 IllegalStateException.class,
-                () -> new BytecodeProgram(new BytecodeClass("UnknownInstruction")
+                () -> new BytecodeObject(new BytecodeClass("UnknownInstruction")
                     .withConstructor()
                     .opcode(305)
                     .up()
@@ -101,28 +98,6 @@ final class BytecodeClassTest {
             ).getMessage(),
             Matchers.containsString(
                 "Bytecode creation for the 'UnknownInstruction' class is not possible due to unmet preconditions."
-            )
-        );
-    }
-
-    @Test
-    void transformsBytecodeIntoEoWithoutCountingOpcodes() {
-        final XML xmir = new BytecodeRepresentation(
-            new BytecodeProgram(
-                new BytecodeClass("Hello").helloWorldMethod()
-            ).bytecode()
-        ).toXmir();
-        MatcherAssert.assertThat(
-            String.format(
-                "We expect to get the EO representation of the bytecode where each instruction has a simple name without sequence number, please check the final XML:%n%s%n",
-                xmir
-            ),
-            xmir.toString(),
-            XhtmlMatchers.hasXPaths(
-                "//o[contains(@base,'jeo.opcode.getstatic')]",
-                "//o[contains(@base,'jeo.opcode.ldc')]",
-                "//o[contains(@base,'jeo.opcode.invokevirtual')]",
-                "//o[contains(@base,'jeo.opcode.return')]"
             )
         );
     }
@@ -166,7 +141,7 @@ final class BytecodeClassTest {
     @Test
     void generatesCodeForInterface() {
         Assertions.assertDoesNotThrow(
-            () -> new BytecodeProgram(new BytecodeClass("org/eolang/benchmark/F")
+            () -> new BytecodeObject(new BytecodeClass("org/eolang/benchmark/F")
                 .withMethod("j$foo", "()I", 1025)
                 .up()
             ).bytecode(),
@@ -178,7 +153,7 @@ final class BytecodeClassTest {
     void failsBecauseBytecodeIsBroken() {
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> new BytecodeProgram(new BytecodeClass("Broken")
+            () -> new BytecodeObject(new BytecodeClass("Broken")
                 .withMethod("j$bar", "()I", Opcodes.ACC_PUBLIC)
                 .label()
                 .opcode(Opcodes.ALOAD, 0)
@@ -196,7 +171,7 @@ final class BytecodeClassTest {
     @Test
     void returnsShortValue() {
         Assertions.assertDoesNotThrow(
-            () -> new BytecodeProgram(
+            () -> new BytecodeObject(
                 new BytecodeClass("ShortValue")
                     .withMethod("j$foo", "()S", Opcodes.ACC_PUBLIC)
                     .opcode(Opcodes.SIPUSH, 256)

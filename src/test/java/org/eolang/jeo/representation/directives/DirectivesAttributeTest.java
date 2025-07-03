@@ -24,7 +24,9 @@ final class DirectivesAttributeTest {
         MatcherAssert.assertThat(
             "We expect that the attribute will be converted to Xmir as a simple object without children",
             new Xembler(new DirectivesAttribute("some")).xml(),
-            XhtmlMatchers.hasXPaths("./o[contains(@base, 'some')]")
+            XhtmlMatchers.hasXPaths(
+                new JeoBaseXpath("./o", "some").toXpath()
+            )
         );
     }
 
@@ -39,8 +41,8 @@ final class DirectivesAttributeTest {
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "./o[contains(@base, 'children')]",
-                "./o[contains(@base, 'children')]/o[contains(@base, 'string')]"
+                new JeoBaseXpath("./o", "children").toXpath(),
+                "./o/o[contains(@base, 'string')]"
             )
         );
     }

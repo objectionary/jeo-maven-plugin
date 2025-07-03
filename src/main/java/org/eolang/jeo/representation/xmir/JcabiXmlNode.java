@@ -94,46 +94,6 @@ public final class JcabiXmlNode implements XmlNode {
     }
 
     @Override
-    public XmlNode child(final String attribute, final String value) {
-        return this.children()
-            .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
-            .findFirst()
-            .orElseThrow(
-                () -> this.notFound(
-                    String.format("object with attribute %s='%s'", attribute, value)
-                )
-            );
-    }
-
-    @Override
-    public Optional<XmlNode> optchild(final String attribute, final String value) {
-        return this.children()
-            .filter(xmlnode -> xmlnode.hasAttribute(attribute, value))
-            .findFirst();
-    }
-
-    @Override
-    public XmlNode firstChild() {
-        return this.children().findFirst()
-            .orElseThrow(
-                () -> new IllegalStateException(
-                    String.format(
-                        "Can't find any child nodes in '%s'",
-                        this.doc
-                    )
-                )
-            );
-    }
-
-    @Override
-    public boolean hasAttribute(final String name, final String value) {
-        return this.attribute(name)
-            .map(String::valueOf)
-            .map(val -> val.startsWith(value))
-            .orElse(false);
-    }
-
-    @Override
     public void validate() {
         final Collection<Defect> defects = new ArrayList<>(
             new Source(new StrictXmir(this.doc)).defects()

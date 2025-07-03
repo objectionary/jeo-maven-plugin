@@ -27,9 +27,10 @@ final class DirectivesAttributesTest {
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "./o[contains(@as, 'attributes') and contains(@base, 'seq.of2')]",
-                "./o[contains(@base, 'seq.of2')]/o[contains(@base, 'first')]",
-                "./o[contains(@base, 'seq.of2')]/o[contains(@base, 'second')]"
+                "./o[contains(@as, 'attributes')]",
+                new JeoBaseXpath("./o", "seq.of2").toXpath(),
+                new JeoBaseXpath("./o/o", "first").toXpath(),
+                new JeoBaseXpath("./o/o", "second").toXpath()
             )
         );
     }

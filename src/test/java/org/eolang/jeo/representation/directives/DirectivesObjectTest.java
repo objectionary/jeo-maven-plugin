@@ -8,7 +8,7 @@ import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -91,7 +91,7 @@ final class DirectivesObjectTest {
         MatcherAssert.assertThat(
             "We expect that version and revision number will be set from MANIFEST.MF file",
             new Xembler(
-                new BytecodeProgram(
+                new BytecodeObject(
                     new BytecodeClass("Some")
                 ).directives("")
             ).xml(),

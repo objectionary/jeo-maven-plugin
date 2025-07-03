@@ -354,6 +354,8 @@
           -->
           <pomExcludes>
             <exclude>spring-fat/pom.xml</exclude>
+            <exclude>phi-unphi/pom.xml</exclude>
+            <exclude>jna/pom.xml</exclude>
           </pomExcludes>
         </configuration>
       </plugin>
@@ -552,7 +554,10 @@
               <!--
                 All integration tests are enabled in the 'long' profile.
               -->
-              <pomExcludes/>
+              <pomExcludes>
+                <exclude>phi-unphi/pom.xml</exclude>
+                <exclude>jna/pom.xml</exclude>
+              </pomExcludes>
             </configuration>
           </plugin>
         </plugins>

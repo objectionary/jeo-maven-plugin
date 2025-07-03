@@ -21,8 +21,9 @@ final class DirectivesTypeTest {
         MatcherAssert.assertThat(
             "We expect the type to be converted to a string internally",
             new Xembler(new DirectivesType(Type.BOOLEAN_TYPE)).xmlQuietly(),
-            XhtmlMatchers.hasXPath(
-                "/o[@base='Q.jeo.type']/o[@base='Q.org.eolang.string']/o[@base='Q.org.eolang.bytes']/o[text()]"
+            XhtmlMatchers.hasXPaths(
+                new JeoBaseXpath("./o", "type").toXpath(),
+                "/o/o[@base='Q.org.eolang.string']/o[@base='Q.org.eolang.bytes']/o[text()]"
             )
         );
     }

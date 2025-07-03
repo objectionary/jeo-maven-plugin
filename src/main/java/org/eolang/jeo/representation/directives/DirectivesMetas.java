@@ -43,14 +43,6 @@ public final class DirectivesMetas implements Iterable<Directive> {
     }
 
     /**
-     * Class name.
-     * @return The class name.
-     */
-    ClassName className() {
-        return this.name;
-    }
-
-    /**
      * Home directives.
      * @return Directives for home.
      */

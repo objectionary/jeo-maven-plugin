@@ -26,14 +26,6 @@ public final class DirectivesAttributes implements Iterable<Directive> {
      */
     private final List<DirectivesAttribute> attributes;
 
-    /**
-     * Constructor.
-     * @param attributes Separate attributes.
-     */
-    public DirectivesAttributes(final List<DirectivesAttribute> attributes) {
-        this("attributes", attributes);
-    }
-
     public DirectivesAttributes(final String name, final List<DirectivesAttribute> attributes) {
         this.name = name;
         this.attributes = attributes;
@@ -50,8 +42,17 @@ public final class DirectivesAttributes implements Iterable<Directive> {
      * Constructor.
      * @param attributes Attributes.
      */
+    @SafeVarargs
     DirectivesAttributes(final DirectivesAttribute... attributes) {
         this(Arrays.asList(attributes));
+    }
+
+    /**
+     * Constructor.
+     * @param attributes Separate attributes.
+     */
+    private DirectivesAttributes(final List<DirectivesAttribute> attributes) {
+        this("attributes", attributes);
     }
 
     @Override

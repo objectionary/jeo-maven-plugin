@@ -23,7 +23,10 @@ final class JcabiXmlNodeTest {
     void retrievesTheFirstChild() {
         MatcherAssert.assertThat(
             "Can't retrieve the first child, or the first child is not the expected one",
-            new JcabiXmlNode("<o><o name='inner'/></o>").firstChild(),
+            new JcabiXmlNode("<o><o name='inner'/></o>")
+                .children()
+                .findFirst()
+                .orElseThrow(AssertionError::new),
             Matchers.equalTo(new JcabiXmlNode("<o name='inner'/>"))
         );
     }

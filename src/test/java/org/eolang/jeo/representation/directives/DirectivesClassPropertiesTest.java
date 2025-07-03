@@ -36,9 +36,10 @@ final class DirectivesClassPropertiesTest {
             XhtmlMatchers.hasXPaths(
                 "/o/o[contains(@base,'number') and contains(@as,'version')]",
                 "/o/o[contains(@base,'number') and contains(@as,'access')]",
-                "/o/o[contains(@base,'org.eolang.string') and contains(@as,'signature')]",
-                "/o/o[contains(@base,'org.eolang.string') and contains(@as,'supername')]",
-                "/o/o[contains(@base,'jeo.seq.of1') and contains(@as,'interfaces')]"
+                "/o/o[contains(@base,'string') and contains(@as,'signature')]",
+                "/o/o[contains(@base,'string') and contains(@as,'supername')]",
+                new JeoBaseXpath("./o/o", "seq.of1").toXpath(),
+                "/o/o[contains(@as,'interfaces')]"
             )
         );
     }

@@ -5,7 +5,7 @@
 package org.eolang.jeo.representation.asm;
 
 import org.eolang.jeo.representation.ClassName;
-import org.eolang.jeo.representation.bytecode.BytecodeProgram;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -38,7 +38,7 @@ public final class AsmProgram {
      * Convert to bytecode.
      * @return Bytecode.
      */
-    public BytecodeProgram bytecode() {
+    public BytecodeObject bytecode() {
         return this.bytecode(ClassReader.SKIP_DEBUG);
     }
 
@@ -47,10 +47,10 @@ public final class AsmProgram {
      * @param flags Flags.
      * @return Bytecode.
      */
-    public BytecodeProgram bytecode(final int flags) {
+    public BytecodeObject bytecode(final int flags) {
         final ClassNode node = new ClassNode();
         new ClassReader(this.bytes).accept(node, flags);
-        return new BytecodeProgram(
+        return new BytecodeObject(
             new ClassName(node.name).pckg(),
             new AsmClass(node).bytecode()
         );

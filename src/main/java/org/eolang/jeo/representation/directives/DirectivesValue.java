@@ -6,7 +6,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import lombok.ToString;
-import org.eolang.jeo.representation.bytecode.BytecodeObject;
+import org.eolang.jeo.representation.bytecode.BytecodeValue;
 import org.eolang.jeo.representation.bytecode.Codec;
 import org.eolang.jeo.representation.bytecode.EoCodec;
 import org.eolang.jeo.representation.bytecode.PlainLongCodec;
@@ -53,7 +53,7 @@ public final class DirectivesValue implements Iterable<Directive> {
     /**
      * Value.
      */
-    private final BytecodeObject value;
+    private final BytecodeValue value;
 
     /**
      * Constructor.
@@ -73,7 +73,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param <T> Data type.
      */
     public <T> DirectivesValue(final String name, final T data) {
-        this(name, new BytecodeObject(data));
+        this(name, new BytecodeValue(data));
     }
 
     /**
@@ -82,7 +82,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param name Name.
      * @param value Value.
      */
-    public DirectivesValue(final String name, final BytecodeObject value) {
+    public DirectivesValue(final String name, final BytecodeValue value) {
         this.name = name;
         this.value = value;
     }

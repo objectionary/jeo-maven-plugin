@@ -18,14 +18,22 @@ public final class XmlFrame implements XmlBytecodeEntry {
     /**
      * Xmir node.
      */
-    private final XmlNode node;
+    private final XmlJeoObject node;
 
     /**
      * Constructor.
      * @param xmlnode Xmir node
      */
     public XmlFrame(final XmlNode xmlnode) {
-        this.node = xmlnode;
+        this(new XmlJeoObject(xmlnode));
+    }
+
+    /**
+     * Constructor.
+     * @param node XML Jeo object node
+     */
+    private XmlFrame(final XmlJeoObject node) {
+        this.node = node;
     }
 
     /**
@@ -79,7 +87,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * @return Local variables.
      */
     private Object[] locals() {
-        return this.node.children().collect(Collectors.toList()).get(2)
+        return new XmlSeq(this.node.children().collect(Collectors.toList()).get(2))
             .children()
             .map(XmlOperand::new)
             .map(XmlOperand::asObject)
@@ -113,7 +121,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * @return Stack elements.
      */
     private Object[] stack() {
-        return this.node.children().collect(Collectors.toList()).get(4)
+        return new XmlSeq(this.node.children().collect(Collectors.toList()).get(4))
             .children()
             .map(XmlOperand::new)
             .map(XmlOperand::asObject)

@@ -4,8 +4,11 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import com.jcabi.matchers.XhtmlMatchers;
+import org.eolang.jeo.representation.directives.DirectivesAnnotations;
+import org.eolang.jeo.representation.directives.DirectivesMethodParam;
+import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Type;
 import org.xembly.ImpossibleModificationException;
@@ -27,10 +30,17 @@ final class BytecodeMethodParametersTest {
                     new BytecodeMethodParameter(1, Type.INT_TYPE)
                 ).directives()
             ).xml(),
-            XhtmlMatchers.hasXPaths(
-                "/o[contains(@base,'params')]",
-                "/o[contains(@base,'params')]/o[contains(@base,'param') and contains(@as,'arg0')]",
-                "/o[contains(@base,'params')]/o[contains(@base,'param') and contains(@as,'arg1')]"
+            Matchers.equalTo(
+                new Xembler(
+                    new DirectivesMethodParams(
+                        new DirectivesMethodParam(
+                            0, "arg0", 0, Type.INT_TYPE, new DirectivesAnnotations()
+                        ),
+                        new DirectivesMethodParam(
+                            1, "arg1", 0, Type.INT_TYPE, new DirectivesAnnotations()
+                        )
+                    )
+                ).xml()
             )
         );
     }
