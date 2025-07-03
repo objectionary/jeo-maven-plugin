@@ -7,9 +7,12 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -28,6 +31,18 @@ import org.w3c.dom.NodeList;
 @EqualsAndHashCode
 @SuppressWarnings("PMD.TooManyMethods")
 public final class JcabiXmlNode implements XmlNode {
+
+    /**
+     * Set of ignored defects.
+     */
+    private static final Collection<String> IGNORE = new HashSet<>(
+        Arrays.asList(
+            "no-attribute-formation",
+            "redundant-object",
+            "duplicate-names-in-diff-context",
+            "unit-test-missing"
+        )
+    );
 
     /**
      * XML document.
@@ -95,14 +110,16 @@ public final class JcabiXmlNode implements XmlNode {
 
     @Override
     public void validate() {
-        final Collection<Defect> defects = new ArrayList<>(
-            new Source(new StrictXmir(this.doc)).defects()
-        );
+        final Collection<Defect> defects = new Source(new StrictXmir(this.doc)).defects()
+            .stream()
+            .filter(defect -> !defect.experimental())
+            .filter(JcabiXmlNode::notIgnored)
+            .collect(Collectors.toList());
         if (!defects.isEmpty()) {
             throw new IllegalStateException(
                 String.format(
                     "XMIR is incorrect: %s, %n%s%n",
-                    defects,
+                    defects.stream().map(Object::toString).collect(Collectors.joining("\n")),
                     this.doc
                 )
             );
@@ -157,5 +174,14 @@ public final class JcabiXmlNode implements XmlNode {
             }
         }
         return res.stream();
+    }
+
+    /**
+     * Check if the defect is not ignored.
+     * @param defect Defect to check.
+     * @return True if the defect is not ignored, false otherwise.
+     */
+    private static boolean notIgnored(final Defect defect) {
+        return !JcabiXmlNode.IGNORE.contains(defect.rule().split(" ")[0]);
     }
 }

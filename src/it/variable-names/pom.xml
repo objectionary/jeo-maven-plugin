@@ -37,7 +37,7 @@
         <version>@project.version@</version>
         <configuration>
           <mode>debug</mode>
-          <xmirVerification>false</xmirVerification>
+          <xmirVerification>true</xmirVerification>
         </configuration>
         <executions>
           <execution>
