@@ -41,7 +41,7 @@ final class JeoBaseXpath {
      */
     String toXpath() {
         return String.format(
-            "%s/o[@as='base' and contains(@base,'string')]/o[contains(@base, 'bytes')]/o[contains(text(),'%s')]",
+            "%s/o[@name='base' and contains(@base,'string')]/o[contains(@base, 'bytes')]/o[contains(text(),'%s')]",
             this.element,
             new DirectivesValue(this.base).hex(new JavaCodec())
         );

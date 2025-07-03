@@ -50,13 +50,13 @@ final class DirectivesClassTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[@name='Neo']",
-                "/o[@name='Neo']/o[contains(@as,'version')]",
-                "/o[@name='Neo']/o[contains(@as,'access')]",
-                "/o[@name='Neo']/o[contains(@as,'signature')]",
-                "/o[@name='Neo']/o[contains(@as,'supername')]",
-                "/o[@name='Neo']/o[contains(@as,'interfaces')]",
-                "/o[@name='Neo']/o[contains(@as,'annotations')]",
-                "/o[@name='Neo']/o[contains(@as,'attributes')]"
+                "/o[@name='Neo']/o[contains(@name,'version')]",
+                "/o[@name='Neo']/o[contains(@name,'access')]",
+                "/o[@name='Neo']/o[contains(@name,'signature')]",
+                "/o[@name='Neo']/o[contains(@name,'supername')]",
+                "/o[@name='Neo']/o[contains(@name,'interfaces')]",
+                "/o[@name='Neo']/o[contains(@name,'annotations')]",
+                "/o[@name='Neo']/o[contains(@name,'attributes')]"
             )
         );
     }
@@ -89,7 +89,7 @@ final class DirectivesClassTest {
                 new XMLDocument(xml)
             ),
             xml,
-            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[contains(@as,'method')]")
+            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[contains(@name,'method')]")
         );
     }
 

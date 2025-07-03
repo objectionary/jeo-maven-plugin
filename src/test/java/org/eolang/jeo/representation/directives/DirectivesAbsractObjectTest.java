@@ -32,7 +32,7 @@ final class DirectivesAbsractObjectTest {
                     DirectivesAbsractObjectTest.BASE, Collections.emptyList()
                 )
             ).xmlQuietly(),
-            XhtmlMatchers.hasXPath("/o[not(@base)]/o[@as='base']")
+            XhtmlMatchers.hasXPath("/o[not(@base)]/o[@name='base']")
         );
     }
 
@@ -45,7 +45,7 @@ final class DirectivesAbsractObjectTest {
                     DirectivesAbsractObjectTest.BASE, "asValue", Collections.emptyList()
                 )
             ).xmlQuietly(),
-            XhtmlMatchers.hasXPath("/o[@as='asValue' and not(@base)]/o[@as='base']")
+            XhtmlMatchers.hasXPath("/o[@as='asValue' and not(@base)]/o[@name='base']")
         );
     }
 
@@ -62,7 +62,7 @@ final class DirectivesAbsractObjectTest {
                 )
             ).xmlQuietly(),
             Matchers.allOf(
-                XhtmlMatchers.hasXPath("/o[@as='asValue' and @name='nameValue']/o[@as='base']"),
+                XhtmlMatchers.hasXPath("/o[@as='asValue' and @name='nameValue']/o[@name='base']"),
                 XhtmlMatchers.hasXPath("/o[@as='asValue' and @name='nameValue']/inner")
             )
         );
@@ -78,7 +78,7 @@ final class DirectivesAbsractObjectTest {
                 )
             ).xmlQuietly(),
             Matchers.allOf(
-                XhtmlMatchers.hasXPath("/o/o[@as='base']"),
+                XhtmlMatchers.hasXPath("/o/o[@name='base']"),
                 XhtmlMatchers.hasXPath("/o/inner")
             )
         );
@@ -93,7 +93,7 @@ final class DirectivesAbsractObjectTest {
                     DirectivesAbsractObjectTest.BASE, "", "", Collections.emptyList()
                 )
             ).xmlQuietly(),
-            XhtmlMatchers.hasXPath("/o[not(@as) and not(@name)]/o[@as='base']")
+            XhtmlMatchers.hasXPath("/o[not(@as) and not(@name)]/o[@name='base']")
         );
     }
 }

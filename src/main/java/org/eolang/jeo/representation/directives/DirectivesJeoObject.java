@@ -108,6 +108,7 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesAbsractObject(
             new JeoFqn(this.base).fqn(),
+            "",
             this.name,
             this.inner.stream().reduce(new Directives(), Directives::append)
         ).iterator();

@@ -35,9 +35,9 @@ final class DirectivesSeqTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("./o", "seq.of2").toXpath(),
-                "/o[contains(@as,'seq')]",
-                "/o[contains(@as,'seq')]/o[contains(@base,'string')]/o[contains(@base, 'bytes')]/o[text()='31-']",
-                "/o[contains(@as,'seq')]/o[contains(@base,'string')]/o[contains(@base, 'bytes')]/o[text()='32-']"
+                "/o[contains(@name,'seq')]",
+                "/o[contains(@name,'seq')]/o[contains(@base,'string')]/o[contains(@base, 'bytes')]/o[text()='31-']",
+                "/o[contains(@name,'seq')]/o[contains(@base,'string')]/o[contains(@base, 'bytes')]/o[text()='32-']"
             )
         );
     }
@@ -52,7 +52,7 @@ final class DirectivesSeqTest {
             new Xembler(actual).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("./o", String.format("seq.of%d", expected)).toXpath(),
-                "/o[contains(@as,'seq')]"
+                "/o[contains(@name,'seq')]"
             )
         );
     }

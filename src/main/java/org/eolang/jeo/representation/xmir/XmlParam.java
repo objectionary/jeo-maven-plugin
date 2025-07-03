@@ -43,7 +43,7 @@ public final class XmlParam {
     public BytecodeMethodParameter bytecode() {
         return new BytecodeMethodParameter(
             this.index(),
-            this.pure(),
+            this.name(),
             this.access(),
             this.type(),
             this.annotations()
@@ -62,8 +62,8 @@ public final class XmlParam {
      * Pure name of the parameter.
      * @return Name.
      */
-    private String pure() {
-        return this.name();
+    private String name() {
+        return this.root.name();
     }
 
     /**
@@ -88,11 +88,9 @@ public final class XmlParam {
      */
     private BytecodeAnnotations annotations() {
         return this.root.children()
-            .filter(
-                node -> node.attribute("as")
-                    .map(name -> name.startsWith("param-annotations-"))
-                    .orElse(false)
-            )
+            .map(XmlJeoObject::new)
+            .filter(XmlJeoObject::named)
+            .filter(node -> node.name().startsWith("param-annotations-"))
             .findFirst()
             .map(XmlAnnotations::new)
             .map(XmlAnnotations::bytecode)
@@ -107,7 +105,7 @@ public final class XmlParam {
     private XmlValue child(final String name) {
         return new XmlValue(
             this.root.children()
-                .filter(node -> node.attribute("as").map(name::equals).orElse(false))
+                .filter(node -> XmlParam.hasName(node, name))
                 .findFirst()
                 .orElseThrow(
                     () -> new IllegalStateException(
@@ -121,14 +119,12 @@ public final class XmlParam {
     }
 
     /**
-     * Name attribute of the parameter.
-     * @return Name attribute.
+     * Check if the node has the specified name.
+     * @param node XML node to check.
+     * @param name Name to check against the node's attributes.
+     * @return True if the node has the specified name, false otherwise.
      */
-    private String name() {
-        return this.root.attribute("as").orElseThrow(
-            () -> new IllegalStateException(
-                String.format("'name' attribute is not present in xml param %n%s%n", this.root)
-            )
-        );
+    private static boolean hasName(final XmlNode node, final String name) {
+        return node.attribute("name").map(name::equals).orElse(false);
     }
 }

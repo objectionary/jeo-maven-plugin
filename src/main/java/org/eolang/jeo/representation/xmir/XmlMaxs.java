@@ -26,18 +26,9 @@ public final class XmlMaxs {
 
     /**
      * Constructor.
-     *
-     * @param node XML node.
-     */
-    XmlMaxs(final XmlNode node) {
-        this(new XmlJeoObject(node));
-    }
-
-    /**
-     * Constructor.
      * @param node XML Jeo object node representing the maxs.
      */
-    private XmlMaxs(final XmlJeoObject node) {
+    XmlMaxs(final XmlJeoObject node) {
         this.node = node;
     }
 

@@ -34,11 +34,11 @@ final class DirectivesFieldTest {
             xml,
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "field").toXpath(),
-                "/o[contains(@as,'unknown')]",
-                "/o/o[@as='access-unknown']",
-                "/o/o[@as='descriptor-unknown']",
-                "/o/o[@as='signature-unknown']",
-                "/o/o[contains(@base,'number') and @as='value-unknown']"
+                "/o[contains(@name,'unknown')]",
+                "/o/o[@name='access-unknown']",
+                "/o/o[@name='descriptor-unknown']",
+                "/o/o[@name='signature-unknown']",
+                "/o/o[contains(@base,'number') and @name='value-unknown']"
             )
         );
     }
@@ -62,11 +62,11 @@ final class DirectivesFieldTest {
             xml,
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "field").toXpath(),
-                "/o[contains(@as,'serialVersionUID')]",
-                "/o/o[@as='access-serialVersionUID']",
-                "/o/o[@as='descriptor-serialVersionUID']",
-                "/o/o[@as='signature-serialVersionUID']",
-                "/o/o[@as='value-serialVersionUID']"
+                "/o[contains(@name,'serialVersionUID')]",
+                "/o/o[@name='access-serialVersionUID']",
+                "/o/o[@name='descriptor-serialVersionUID']",
+                "/o/o[@name='signature-serialVersionUID']",
+                "/o/o[@name='value-serialVersionUID']"
             )
         );
     }
@@ -91,7 +91,7 @@ final class DirectivesFieldTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "field").toXpath(),
-                String.format("/o[contains(@as,'%s')]", original)
+                String.format("/o[contains(@name,'%s')]", original)
             )
         );
     }

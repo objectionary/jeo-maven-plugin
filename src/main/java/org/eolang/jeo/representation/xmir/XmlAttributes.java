@@ -30,7 +30,7 @@ public final class XmlAttributes {
      * Constructor.
      * @param node XML sequence node containing attributes.
      */
-    private XmlAttributes(final XmlSeq node) {
+    XmlAttributes(final XmlSeq node) {
         this.node = node;
     }
 

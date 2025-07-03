@@ -30,7 +30,7 @@ final class DirectivesMethodParamTest {
                     1, "foo", Opcodes.ACC_PUBLIC, Type.INT_TYPE, new DirectivesAnnotations()
                 )
             ).xml(),
-            XhtmlMatchers.hasXPath("./o[contains(@base, param) and contains(@as, 'foo')]")
+            XhtmlMatchers.hasXPath("./o[contains(@base, param) and contains(@name, 'foo')]")
         );
     }
 
@@ -44,7 +44,7 @@ final class DirectivesMethodParamTest {
                 )
             ).xml(),
             XhtmlMatchers.hasXPath(
-                "./o[contains(@base, param)]/o[contains(@base, 'number') and contains(@as, 'index')]"
+                "./o[contains(@base, param)]/o[contains(@base, 'number') and contains(@name, 'index')]"
             )
         );
     }
@@ -59,7 +59,7 @@ final class DirectivesMethodParamTest {
                 )
             ).xml(),
             XhtmlMatchers.hasXPath(
-                "./o[contains(@base, param)]/o[contains(@base, 'number') and contains(@as, 'access')]"
+                "./o[contains(@base, param)]/o[contains(@base, 'number') and contains(@name, 'access')]"
             )
         );
     }
@@ -78,7 +78,7 @@ final class DirectivesMethodParamTest {
                 )
             ).xml(),
             XhtmlMatchers.hasXPath(
-                "./o[contains(@base, param)]/o[contains(@base, 'string') and contains(@as, 'type')]"
+                "./o[contains(@base, param)]/o[contains(@base, 'string') and contains(@name, 'type')]"
             )
         );
     }
@@ -100,7 +100,7 @@ final class DirectivesMethodParamTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("./o", "param").toXpath(),
-                "./o/o[contains(@as, 'annotations')]"
+                "./o/o[contains(@name, 'annotations')]"
             )
         );
     }

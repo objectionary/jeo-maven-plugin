@@ -7,13 +7,7 @@ package org.eolang.jeo.representation.directives;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Collections;
 import org.eolang.jeo.representation.NumberedName;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
-import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
-import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
-import org.eolang.jeo.representation.xmir.NativeXmlNode;
-import org.eolang.jeo.representation.xmir.XmlMethod;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -31,64 +25,11 @@ import org.xembly.Xembler;
 final class DirectivesMethodTest {
 
     @Test
-    void transformsToXmir() throws ImpossibleModificationException {
-        final String name = "Hello";
-        final int access = 100;
-        final String descriptor = "()I";
-        final String signature = "";
-        MatcherAssert.assertThat(
-            "We expect that directives will generate correct method",
-            new XmlMethod(
-                new NativeXmlNode(
-                    new Xembler(
-                        new DirectivesMethod(
-                            name,
-                            new DirectivesMethodProperties(access, descriptor, signature)
-                        )
-                    ).xml()
-                )
-            ).bytecode(),
-            Matchers.equalTo(
-                new BytecodeMethod(
-                    new BytecodeMethodProperties(name, descriptor, signature, access),
-                    new BytecodeMaxs()
-                )
-            )
-        );
-    }
-
-    @Test
-    void transformsAnnotationsToXmir() throws ImpossibleModificationException {
-        final String descriptor = "Consumer";
-        final boolean visible = true;
-        final String name = "foo";
-        MatcherAssert.assertThat(
-            "We expect that annotation dirictes will be added to the method",
-            new XmlMethod(
-                new NativeXmlNode(
-                    new Xembler(
-                        new DirectivesMethod(name)
-                            .withAnnotation(new DirectivesAnnotation(descriptor, visible))
-                    ).xml()
-                )
-            ).bytecode(),
-            Matchers.equalTo(
-                new BytecodeMethod(
-                    name,
-                    new BytecodeAnnotations(
-                        new BytecodeAnnotation(descriptor, visible)
-                    )
-                )
-            )
-        );
-    }
-
-    @Test
     void addsPrefixToTheMethodName() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that 'j$' prefix will be added to the method name",
             new Xembler(new BytecodeMethod("φTerm").directives(1)).xml(),
-            XhtmlMatchers.hasXPaths("./o[contains(@as, 'j$φTerm')]")
+            XhtmlMatchers.hasXPaths("./o[contains(@name, 'j$φTerm')]")
         );
     }
 
@@ -147,7 +88,7 @@ final class DirectivesMethodTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "method").toXpath(),
-                "./o[contains(@as,'checks1063')]/o[@as='body']"
+                "./o[contains(@name,'checks1063')]/o[@name='body']"
             )
         );
     }

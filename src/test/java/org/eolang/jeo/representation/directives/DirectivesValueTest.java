@@ -45,7 +45,7 @@ final class DirectivesValueTest {
             ),
             xml,
             XhtmlMatchers.hasXPath(
-                "./o[contains(@base,'number') and @as='access']/o[contains(@base, 'bytes')]/text()"
+                "./o[contains(@base,'number') and @name='access']/o[contains(@base, 'bytes')]/text()"
             )
         );
     }
@@ -63,7 +63,7 @@ final class DirectivesValueTest {
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("./o", base).toXpath(),
                 String.format(
-                    "./o[@as='access']/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']",
+                    "./o[@name='access']/o[contains(@base,'number')]/o[contains(@base,'bytes')]/o[text()='%s']",
                     bytes
                 )
             )
@@ -82,7 +82,7 @@ final class DirectivesValueTest {
             xml,
             XhtmlMatchers.hasXPaths(
                 String.format(
-                    "./o[contains(@base,'number') and @as='access']/o[contains(@base,'bytes')]/o[text()='%s']",
+                    "./o[contains(@base,'number') and @name='access']/o[contains(@base,'bytes')]/o[text()='%s']",
                     bytes
                 )
             )
@@ -101,7 +101,7 @@ final class DirectivesValueTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("./o", "label").toXpath(),
-                "./o/o[contains(@base,'org.eolang.bytes')]/o[text()='73-6F-6D-65-2D-72-61-6E-64-6F-6D']"
+                "./o/o[contains(@base,'bytes')]/o[text()='73-6F-6D-65-2D-72-61-6E-64-6F-6D']"
             )
         );
     }
@@ -112,7 +112,7 @@ final class DirectivesValueTest {
             "Converts boolean to XML",
             new Xembler(new DirectivesValue(true)).xmlQuietly(),
             XhtmlMatchers.hasXPath(
-                "./o[contains(@base,'org.eolang.true')]"
+                "./o[contains(@base,'true')]"
             )
         );
     }

@@ -4,9 +4,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Closed object in XMIR format.
@@ -41,22 +39,6 @@ final class XmlClosedObject {
      */
     Optional<String> optbase() {
         return this.node.attribute("base");
-    }
-
-    /**
-     * Get the child node by index.
-     * @param index Index of the child node.
-     * @return Optional child node.
-     */
-    Optional<XmlNode> child(final int index) {
-        final Optional<XmlNode> result;
-        final List<XmlNode> children = this.node.children().collect(Collectors.toList());
-        if (index < 0 || index >= children.size()) {
-            result = Optional.empty();
-        } else {
-            result = Optional.ofNullable(children.get(index));
-        }
-        return result;
     }
 
     /**

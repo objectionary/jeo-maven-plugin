@@ -7,7 +7,6 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
@@ -60,7 +59,7 @@ public final class XmlMethod {
      * Constructor.
      * @param xmlnode Method node.
      */
-    public XmlMethod(final XmlNode xmlnode) {
+    XmlMethod(final XmlNode xmlnode) {
         this(new XmlJeoObject(xmlnode));
     }
 
@@ -177,9 +176,9 @@ public final class XmlMethod {
      */
     private BytecodeAttributes attrs() {
         return this.node.children()
-            .filter(
-                element -> element.attribute("as").map("local-variable-table"::equals)
-                    .orElse(false))
+            .map(XmlSeq::new)
+            .filter(XmlSeq::named)
+            .filter(seq -> seq.name().contains("local-variable-table"))
             .findFirst()
             .map(XmlAttributes::new)
             .map(XmlAttributes::attributes)
@@ -194,12 +193,7 @@ public final class XmlMethod {
         return new MethodName(
             new PrefixedName(
                 new NumberedName(
-                    this.node.attribute("as")
-                        .orElseThrow(
-                            () -> new IllegalStateException(
-                                "Method 'name' attribute is not present"
-                            )
-                        )
+                    this.node.name()
                 ).plain()
             ).decode()
         ).bytecode();
@@ -210,9 +204,11 @@ public final class XmlMethod {
      * @return Instructions.
      */
     private List<XmlBytecodeEntry> instructions() {
-        return this.node.children().filter(XmlMethod.attrContains("as", "body"))
-            .findFirst()
+        return this.node.children()
             .map(XmlSeq::new)
+            .filter(XmlSeq::named)
+            .filter(seq -> seq.name().contains("body"))
+            .findFirst()
             .map(XmlSeq::children)
             .orElse(Stream.empty())
             .map(XmlMethod::toEntry)
@@ -243,10 +239,11 @@ public final class XmlMethod {
      * @return Maxs.
      */
     private Optional<XmlMaxs> maxs() {
-        return this.node
-            .children().filter(
-                element -> element.attribute("as").map(s -> s.contains("maxs")).orElse(false)
-            ).findFirst()
+        return this.node.children()
+            .map(XmlJeoObject::new)
+            .filter(XmlJeoObject::named)
+            .filter(object -> object.name().contains("maxs"))
+            .findFirst()
             .map(XmlMaxs::new);
     }
 
@@ -308,27 +305,21 @@ public final class XmlMethod {
      * @param name Name.
      * @return Child.
      */
-    private XmlNode child(final String name) {
-        return this.ochild(name).orElseThrow(
-            () -> new IllegalStateException(
-                String.format(
-                    "Method '%s' doesn't have '%s' child",
-                    this.name(),
-                    name
-                )
-            )
-        );
-    }
-
-    /**
-     * Get optional child by name.
-     * @param name Name.
-     * @return Optional child.
-     */
-    private Optional<XmlNode> ochild(final String name) {
+    private XmlEoObject child(final String name) {
         return this.node.children()
-            .filter(XmlMethod.attrContains("as", name))
-            .findFirst();
+            .map(XmlEoObject::new)
+            .filter(XmlEoObject::named)
+            .filter(object -> object.name().contains(name))
+            .findFirst()
+            .orElseThrow(
+                () -> new IllegalStateException(
+                    String.format(
+                        "Method '%s' doesn't have '%s' child",
+                        this.name(),
+                        name
+                    )
+                )
+            );
     }
 
     /**
@@ -338,11 +329,9 @@ public final class XmlMethod {
      */
     private List<XmlTryCatchEntry> trycatchEntries() {
         return this.node.children()
-            .filter(
-                element -> element.attribute("as")
-                    .map(s -> s.contains("trycatchblocks"))
-                    .orElse(false))
             .map(XmlSeq::new)
+            .filter(XmlSeq::named)
+            .filter(seq -> seq.name().contains("trycatchblocks"))
             .flatMap(XmlSeq::children)
             .map(XmlTryCatchEntry::new)
             .collect(Collectors.toList());
@@ -355,10 +344,9 @@ public final class XmlMethod {
      */
     private BytecodeAnnotations annotations() {
         return this.node.children()
-            .filter(
-                element -> element.attribute("as")
-                    .map(s -> s.contains("annotations"))
-                    .orElse(false))
+            .map(XmlJeoObject::new)
+            .filter(XmlJeoObject::named)
+            .filter(object -> object.name().contains("annotations"))
             .findFirst()
             .map(XmlAnnotations::new)
             .map(XmlAnnotations::bytecode)
@@ -396,8 +384,11 @@ public final class XmlMethod {
      * @return Exceptions.
      */
     private String[] exceptions() {
-        return this.ochild("exceptions")
+        return this.node.children()
             .map(XmlSeq::new)
+            .filter(XmlSeq::named)
+            .filter(seq -> seq.name().contains("exceptions"))
+            .findFirst()
             .map(XmlSeq::children)
             .orElse(Stream.empty())
             .map(XmlValue::new)
@@ -441,15 +432,5 @@ public final class XmlMethod {
                 new Transformers.Node()
             ).xmlQuietly()
         );
-    }
-
-    /**
-     * Predicate that checks if the attribute contains the value.
-     * @param name Attribute name.
-     * @param value Value to check.
-     * @return Predicate.
-     */
-    private static Predicate<XmlNode> attrContains(final String name, final String value) {
-        return node -> node.attribute(name).map(v -> v.contains(value)).orElse(false);
     }
 }
