@@ -69,6 +69,7 @@ public final class DirectivesEoObject implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesClosedObject(
             new EoFqn(this.base).fqn(),
+            "",
             this.name,
             this.inner.stream().reduce(new Directives(), Directives::append)
         ).iterator();

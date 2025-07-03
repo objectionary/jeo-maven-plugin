@@ -35,6 +35,23 @@ final class XmlJeoObject {
         this.origin = origin;
     }
 
+    @Override
+    public String toString() {
+        return this.origin.toString();
+    }
+
+    /**
+     * Retrieve the name of the Jeo object.
+     * @return Name of the Jeo object.
+     */
+    public String name() {
+        return this.origin.attribute("name").orElseThrow(
+            () -> new IllegalStateException(
+                String.format("Attribute 'name' not found in %s", this.origin)
+            )
+        );
+    }
+
     /**
      * Base of the Jeo object.
      * @return Optional containing the base of the Jeo object if present, otherwise empty.
@@ -61,12 +78,11 @@ final class XmlJeoObject {
     }
 
     /**
-     * Retrieve an attribute by name.
-     * @param name Name of the attribute to retrieve.
-     * @return Optional containing the attribute value if present, otherwise empty.
+     * Whether this XML Jeo object has a name attribute.
+     * @return True if the object has a name attribute, false otherwise.
      */
-    public Optional<String> attribute(final String name) {
-        return this.origin.attribute(name);
+    boolean named() {
+        return this.origin.attribute("name").isPresent();
     }
 
     /**

@@ -73,13 +73,7 @@ public class XmlField {
      * @return Name.
      */
     private String name() {
-        return new PrefixedName(
-            this.node.attribute("as").orElseThrow(
-                () -> new IllegalStateException(
-                    String.format("Can't find field name in '%s'", this.node)
-                )
-            )
-        ).decode();
+        return new PrefixedName(this.node.name()).decode();
     }
 
     /**
@@ -129,9 +123,9 @@ public class XmlField {
     private Optional<XmlAnnotations> annotations() {
         final String name = String.format("annotations-%s", this.name());
         return this.node.children()
-            .filter(
-                child -> child.attribute("as").map(name::equals).orElse(false)
-            )
+            .map(XmlJeoObject::new)
+            .filter(XmlJeoObject::named)
+            .filter(object -> name.equals(object.name()))
             .findFirst()
             .map(XmlAnnotations::new);
     }

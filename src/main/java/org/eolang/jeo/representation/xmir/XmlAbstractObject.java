@@ -46,12 +46,8 @@ final class XmlAbstractObject {
      */
     Optional<String> base() {
         return this.node.children().findFirst()
-            .filter(child -> child.attribute("as").map("base"::equals).orElse(false))
-            .map(
-                child -> {
-                    return new XmlValue(child).string();
-                }
-            );
+            .filter(child -> child.attribute("name").map("base"::equals).orElse(false))
+            .map(child -> new XmlValue(child).string());
     }
 
     /**

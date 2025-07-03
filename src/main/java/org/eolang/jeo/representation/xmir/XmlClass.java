@@ -117,7 +117,9 @@ public final class XmlClass {
      */
     private Optional<XmlAnnotations> annotations() {
         return this.node.children()
-            .filter(o -> o.attribute("as").map("annotations"::equals).orElse(false))
+            .map(XmlJeoObject::new)
+            .filter(XmlJeoObject::named)
+            .filter(object -> "annotations".equals(object.name()))
             .findFirst()
             .map(XmlAnnotations::new);
     }
@@ -158,7 +160,9 @@ public final class XmlClass {
      */
     private Optional<XmlAttributes> attributes() {
         return this.node.children()
-            .filter(o -> o.attribute("as").map("attributes"::equals).orElse(false))
+            .map(XmlSeq::new)
+            .filter(XmlSeq::named)
+            .filter(seq -> "attributes".equals(seq.name()))
             .findFirst()
             .map(XmlAttributes::new);
     }

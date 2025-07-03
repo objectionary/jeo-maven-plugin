@@ -29,8 +29,8 @@ final class DirectivesValuesTest {
             new Xembler(new DirectivesValues("name", "value")).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("./o", "seq.of1").toXpath(),
-                "./o[contains(@as,'name')]",
-                "./o[contains(@as,'name')]/o/o/o[text()='76-61-6C-75-65']"
+                "./o[contains(@name,'name')]",
+                "./o[contains(@name,'name')]/o/o/o[text()='76-61-6C-75-65']"
             )
         );
     }
@@ -43,7 +43,7 @@ final class DirectivesValuesTest {
                 new Xembler(
                     new DirectivesValues("", "some-value")
                 ).xmlQuietly()
-            ).attribute("as").orElseThrow(
+            ).attribute("name").orElseThrow(
                 () -> new IllegalStateException("Name attribute is absent")
             ),
             Matchers.matchesRegex("^[^0-9].*")

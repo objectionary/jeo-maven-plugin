@@ -24,7 +24,15 @@ public class XmlAnnotations {
      * @param xmlnode XML node.
      */
     XmlAnnotations(final XmlNode xmlnode) {
-        this.node = new XmlJeoObject(xmlnode);
+        this(new XmlJeoObject(xmlnode));
+    }
+
+    /**
+     * Constructor.
+     * @param node XML Jeo object node.
+     */
+    XmlAnnotations(final XmlJeoObject node) {
+        this.node = node;
     }
 
     /**

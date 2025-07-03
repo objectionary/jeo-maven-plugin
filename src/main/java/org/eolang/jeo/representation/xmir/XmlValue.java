@@ -52,6 +52,14 @@ public final class XmlValue {
      * Constructor.
      * @param node XML node.
      */
+    public XmlValue(final XmlEoObject node) {
+        this(node.node());
+    }
+
+    /**
+     * Constructor.
+     * @param node XML node.
+     */
     public XmlValue(final XmlNode node) {
         this.node = node;
     }

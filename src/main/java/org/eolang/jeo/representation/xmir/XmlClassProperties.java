@@ -53,18 +53,21 @@ final class XmlClassProperties {
      * @return Access modifiers.
      */
     private int access() {
-        final XmlNode value = this.clazz.children()
-            .filter(node -> node.attribute("as").map("access"::equals).orElse(false))
-            .findFirst()
-            .orElseThrow(
-                () -> new IllegalStateException(
-                    String.format(
-                        "The '%s' node doesn't have 'access' attribute, but it should have one",
-                        this.clazz
+        return (int) new XmlValue(
+            this.clazz.children()
+                .map(XmlEoObject::new)
+                .filter(XmlEoObject::named)
+                .filter(node -> node.name().contains("access"))
+                .findFirst()
+                .orElseThrow(
+                    () -> new IllegalStateException(
+                        String.format(
+                            "The '%s' node doesn't have 'access' attribute, but it should have one",
+                            this.clazz
+                        )
                     )
                 )
-            );
-        return (int) new XmlValue(value).object();
+        ).object();
     }
 
     /**
@@ -72,7 +75,7 @@ final class XmlClassProperties {
      * @return Signature.
      */
     private String signature() {
-        return this.child("signature")
+        return this.eoChild("signature")
             .map(XmlValue::new)
             .map(XmlValue::string)
             .filter(s -> !s.isEmpty())
@@ -84,7 +87,7 @@ final class XmlClassProperties {
      * @return Supername.
      */
     private String supername() {
-        return this.child("supername")
+        return this.eoChild("supername")
             .map(XmlValue::new)
             .map(XmlValue::string)
             .filter(s -> !s.isEmpty())
@@ -96,7 +99,7 @@ final class XmlClassProperties {
      * @return Interfaces.
      */
     private String[] interfaces() {
-        return this.child("interfaces")
+        return this.jeoChild("interfaces")
             .map(
                 node -> new XmlSeq(node)
                     .children()
@@ -111,7 +114,7 @@ final class XmlClassProperties {
      * @return Bytecode version.
      */
     private int version() {
-        return this.child("version")
+        return this.eoChild("version")
             .map(XmlValue::new)
             .map(XmlValue::object)
             .map(Integer.class::cast)
@@ -123,9 +126,24 @@ final class XmlClassProperties {
      * @param name Name of the child node.
      * @return Child node.
      */
-    private Optional<XmlNode> child(final String name) {
-        return this.clazz.children().filter(
-            child -> child.attribute("as").map(name::equals).orElse(false)
-        ).findFirst();
+    private Optional<XmlEoObject> eoChild(final String name) {
+        return this.clazz.children()
+            .map(XmlEoObject::new)
+            .filter(XmlEoObject::named)
+            .filter(node -> node.name().equals(name))
+            .findFirst();
+    }
+
+    /**
+     * Retrieve jeo object child by name.
+     * @param name Name of the child node.
+     * @return Optional child node.
+     */
+    private Optional<XmlJeoObject> jeoChild(final String name) {
+        return this.clazz.children()
+            .map(XmlJeoObject::new)
+            .filter(XmlJeoObject::named)
+            .filter(node -> name.equals(node.name()))
+            .findFirst();
     }
 }

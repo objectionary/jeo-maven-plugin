@@ -32,8 +32,16 @@ final class XmlSeq {
      * Constructor.
      * @param origin XML Jeo object representing the sequence.
      */
-    private XmlSeq(final XmlJeoObject origin) {
+    XmlSeq(final XmlJeoObject origin) {
         this.origin = origin;
+    }
+
+    /**
+     * Name of the sequence.
+     * @return Name of the sequence.
+     */
+    public String name() {
+        return this.origin.name();
     }
 
     /**
@@ -42,5 +50,13 @@ final class XmlSeq {
      */
     public Stream<XmlNode> children() {
         return this.origin.children();
+    }
+
+    /**
+     * Whether the sequence is named.
+     * @return True if the sequence has a name attribute, false otherwise.
+     */
+    boolean named() {
+        return this.origin.named();
     }
 }

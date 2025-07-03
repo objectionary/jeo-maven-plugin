@@ -34,12 +34,12 @@ final class DirectivesClassPropertiesTest {
                     ).up()
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o/o[contains(@base,'number') and contains(@as,'version')]",
-                "/o/o[contains(@base,'number') and contains(@as,'access')]",
-                "/o/o[contains(@base,'string') and contains(@as,'signature')]",
-                "/o/o[contains(@base,'string') and contains(@as,'supername')]",
+                "/o/o[contains(@base,'number') and contains(@name,'version')]",
+                "/o/o[contains(@base,'number') and contains(@name,'access')]",
+                "/o/o[contains(@base,'string') and contains(@name,'signature')]",
+                "/o/o[contains(@base,'string') and contains(@name,'supername')]",
                 new JeoBaseXpath("./o/o", "seq.of1").toXpath(),
-                "/o/o[contains(@as,'interfaces')]"
+                "/o/o[contains(@name,'interfaces')]"
             )
         );
     }
