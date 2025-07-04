@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>jeo-maven-plugin &#x2013; JEO Maven Plugin</title>
+        <title>JEO Maven Plugin – jeo-maven-plugin</title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
                     <meta name="author" content="Yegor Bugayenko" />
                                                     <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
@@ -84,23 +84,21 @@
                             <div class="logo">
                                 <a href="index.html"
                                     title=" logo ">
-                                    <img src="https://www.objectionary.com/cactus.svg"
+                                    <img src="${decoration.bannerLeft.src}"
                                         alt="jeo-maven-plugin"
-                                                                                    width="92"
-                                                                                                                            height="92"
-                                                                                itemprop="image"
+                                                                                                                        itemprop="image"
                                     />
                                 </a>
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">0.10.0</strong>
+                                    <strong itemprop="version">0.11.0</strong>
                                 </li>
                                 <li>
-                                    
-                                    <time itemprop="datePublished" datetime="2025-04-24T11:22:26Z">
-                                        
-                                        24-Apr-2025
+                                    $dateFormat.applyPattern("yyyy-MM-dd'T'hh:mm:ss'Z'")
+                                    <time itemprop="datePublished" datetime="${dateFormat.format($currentDate)}">
+                                        $dateFormat.applyPattern('dd-MMM-yyyy')
+                                        ${dateFormat.format($currentDate)}
                                     </time>
                                 </li>
                                 <li class="menu-button">menu</li>
@@ -111,12 +109,11 @@
                                 <img src="https://www.jcabi.com/fork-me.svg" class="fork-me"/>
                             </a>
                                                 <article itemprop="articleBody">
-                            <section>
-<h2><a name="JEO_Maven_Plugin"></a>JEO Maven Plugin</h2>
+                            <section><a id="JEO_Maven_Plugin"></a>
+<h1>JEO Maven Plugin</h1>
 <p>This <a class="externalLink" href="http://github.com/objectionary/jeo-maven-plugin">README</a> documentation explains it in details.</p>
 <p>Use it like this:</p>
-<div class="source">
-<pre>&lt;build&gt;
+<pre><code>&lt;build&gt;
   &lt;plugins&gt;
     &lt;plugin&gt;
       &lt;groupId&gt;org.eolang&lt;/groupId&gt;
@@ -140,7 +137,7 @@
       &lt;/executions&gt;
     &lt;/plugin&gt;
   &lt;/plugins&gt;
-&lt;/build&gt;</pre></div>
+&lt;/build&gt;</code></pre>
 <p>If any questions, submit a <a class="externalLink" href="http://github.com/objectionary/jeo-maven-plugin/issues">GitHub issue</a>.</p></section>
                         </article>
                     </div>
@@ -148,7 +145,7 @@
                 <footer class="legal-notes">
                     <div>
                         Copyright &#169;
-                                                                            2023-2025
+                                                                            2023-${currentYear}
                                             </div>
                     <div>EO, All Rights Reserved.</div>
                     <div><a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.</div>

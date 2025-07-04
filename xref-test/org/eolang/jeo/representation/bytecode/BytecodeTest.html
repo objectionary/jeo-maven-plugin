@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>BytecodeTest xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">void</strong> printsHumanReadableBytecodeDescription() {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>              <span class="jxr_string">"We expect correct and human-readable class description"</span>,
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>              <strong class="jxr_keyword">new</strong> BytecodeProgram(<strong class="jxr_keyword">new</strong> BytecodeClass(<span class="jxr_string">"Classname"</span>)).bytecode().toString(),
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>              <strong class="jxr_keyword">new</strong> BytecodeObject(<strong class="jxr_keyword">new</strong> BytecodeClass(<span class="jxr_string">"Classname"</span>)).bytecode().toString(),
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>              Matchers.allOf(
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>                  Matchers.containsString(<span class="jxr_string">"class version"</span>),
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>                  Matchers.containsString(<span class="jxr_string">"public class Classname"</span>)
@@ -47,6 +47,6 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2023&#x2013;2025 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
+<div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>
 </body>
 </html>

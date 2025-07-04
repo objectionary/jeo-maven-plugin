@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>DirectivesEoObject xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -75,18 +75,16 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      @Override
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">final</strong> Directives directives = <strong class="jxr_keyword">new</strong> Directives().add(<span class="jxr_string">"o"</span>)
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>              .attr(<span class="jxr_string">"base"</span>, <strong class="jxr_keyword">new</strong> <a name="EoFqn" href="../../../../../org/eolang/jeo/representation/directives/EoFqn.html#EoFqn">EoFqn</a>(<strong class="jxr_keyword">this</strong>.base).fqn());
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">if</strong> (!<strong class="jxr_keyword">this</strong>.name.isEmpty()) {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>              directives.attr(<span class="jxr_string">"as"</span>, <strong class="jxr_keyword">this</strong>.name);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          }
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">return</strong> directives
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>              .append(<strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong>.stream().reduce(<strong class="jxr_keyword">new</strong> Directives(), Directives::append))
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>              .up().iterator();
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      }
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  }
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesClosedObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesClosedObject.html#DirectivesClosedObject">DirectivesClosedObject</a>(
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>              <strong class="jxr_keyword">new</strong> <a name="EoFqn" href="../../../../../org/eolang/jeo/representation/directives/EoFqn.html#EoFqn">EoFqn</a>(<strong class="jxr_keyword">this</strong>.base).fqn(),
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>              <span class="jxr_string">""</span>,
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>              <strong class="jxr_keyword">this</strong>.name,
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>              <strong class="jxr_keyword">this</strong>.<strong class="jxr_keyword">inner</strong>.stream().reduce(<strong class="jxr_keyword">new</strong> Directives(), Directives::append)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          ).iterator();
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      }
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2023&#x2013;2025 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
+<div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>XmlObjectTest xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -15,7 +15,7 @@
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> com.jcabi.xml.XMLDocument;
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.ClassName;
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.bytecode.BytecodeClass;
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.bytecode.BytecodeProgram;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.bytecode.BytecodeObject;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.DirectivesClass;
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.DirectivesMetas;
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.DirectivesMethod;
@@ -54,9 +54,9 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>                  )
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>              ).bytecode(),
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>              Matchers.equalTo(
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  <strong class="jxr_keyword">new</strong> BytecodeProgram(
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  <strong class="jxr_keyword">new</strong> BytecodeObject(
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>                      pckg,
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                      <strong class="jxr_keyword">new</strong> BytecodeClass(name, 0)
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                      <strong class="jxr_keyword">new</strong> BytecodeClass(String.format(<span class="jxr_string">"%s.%s"</span>, pckg, name), 0)
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>                  )
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>              )
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>          );
@@ -89,8 +89,8 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>                  () -&gt; <strong class="jxr_keyword">new</strong> XmlObject(
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>                      <strong class="jxr_keyword">new</strong> Xembler(
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>                          <strong class="jxr_keyword">new</strong> Directives(
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>                              <strong class="jxr_keyword">new</strong> BytecodeProgram(
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>                                  <span class="jxr_string">"com.example"</span>, <strong class="jxr_keyword">new</strong> BytecodeClass(<span class="jxr_string">"Foo"</span>, 0)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>                              <strong class="jxr_keyword">new</strong> BytecodeObject(
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>                                  <span class="jxr_string">"com.example"</span>, <strong class="jxr_keyword">new</strong> BytecodeClass(<span class="jxr_string">"com.example.Foo"</span>, 0)
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>                              ).directives(<span class="jxr_string">""</span>)
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>                          ).xpath(<span class="jxr_string">".//o"</span>).remove()
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>                      ).xmlQuietly()
@@ -197,6 +197,6 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2023&#x2013;2025 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
+<div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>
 </body>
 </html>

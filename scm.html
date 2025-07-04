@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>jeo-maven-plugin &#x2013; Source Code Management</title>
+        <title>Source Code Management – jeo-maven-plugin</title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
                                                     <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
         <script src="./js/jcabi.js"></script>
@@ -83,23 +83,21 @@
                             <div class="logo">
                                 <a href="index.html"
                                     title=" logo ">
-                                    <img src="https://www.objectionary.com/cactus.svg"
+                                    <img src="${decoration.bannerLeft.src}"
                                         alt="jeo-maven-plugin"
-                                                                                    width="92"
-                                                                                                                            height="92"
-                                                                                itemprop="image"
+                                                                                                                        itemprop="image"
                                     />
                                 </a>
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">0.10.0</strong>
+                                    <strong itemprop="version">0.11.0</strong>
                                 </li>
                                 <li>
-                                    
-                                    <time itemprop="datePublished" datetime="2025-04-24T11:22:39Z">
-                                        
-                                        24-Apr-2025
+                                    $dateFormat.applyPattern("yyyy-MM-dd'T'hh:mm:ss'Z'")
+                                    <time itemprop="datePublished" datetime="${dateFormat.format($currentDate)}">
+                                        $dateFormat.applyPattern('dd-MMM-yyyy')
+                                        ${dateFormat.format($currentDate)}
                                     </time>
                                 </li>
                                 <li class="menu-button">menu</li>
@@ -110,22 +108,19 @@
                                 <img src="https://www.jcabi.com/fork-me.svg" class="fork-me"/>
                             </a>
                                                 <article itemprop="articleBody">
-                            <section>
-<h2><a name="Overview"></a>Overview</h2><a name="Overview"></a>
-<p>This project uses <a class="externalLink" href="https://git-scm.com/">Git</a> to manage its source code. Instructions on Git use can be found at <a class="externalLink" href="https://git-scm.com/documentation">https://git-scm.com/documentation</a>.</p></section><section>
-<h2><a name="Web_Browser_Access"></a>Web Browser Access</h2><a name="Web_Browser_Access"></a>
+                            <section><a id="Overview"></a>
+<h1>Overview</h1>
+<p>This project uses <a class="externalLink" href="https://git-scm.com/">Git</a> to manage its source code. Instructions on Git use can be found at <a class="externalLink" href="https://git-scm.com/doc">https://git-scm.com/doc</a>.</p></section><section><a id="Web_Browser_Access"></a>
+<h1>Web Browser Access</h1>
 <p>The following is a link to a browsable version of the source repository:</p>
-<div>
-<pre><a class="externalLink" href="https://github.com/objectionary/jeo-maven-plugin">https://github.com/objectionary/jeo-maven-plugin</a></pre></div></section><section>
-<h2><a name="Anonymous_Access"></a>Anonymous Access</h2><a name="Anonymous_Access"></a>
+<pre><a class="externalLink" href="https://github.com/objectionary/jeo-maven-plugin">https://github.com/objectionary/jeo-maven-plugin</a></pre></section><section><a id="Anonymous_Access"></a>
+<h1>Anonymous Access</h1>
 <p>The source can be checked out anonymously from Git with this command (See <a class="externalLink" href="https://git-scm.com/docs/git-clone">https://git-scm.com/docs/git-clone</a>):</p>
-<div>
-<pre>$ git clone git@github.com:objectionary/jeo-maven-plugin.git</pre></div></section><section>
-<h2><a name="Developer_Access"></a>Developer Access</h2><a name="Developer_Access"></a>
+<pre>$ git clone git@github.com:objectionary/jeo-maven-plugin.git</pre></section><section><a id="Developer_Access"></a>
+<h1>Developer Access</h1>
 <p>Only project developers can access the Git tree via this method (See <a class="externalLink" href="https://git-scm.com/docs/git-clone">https://git-scm.com/docs/git-clone</a>).</p>
-<div>
-<pre>$ git clone git@github.com:objectionary/jeo-maven-plugin.git</pre></div></section><section>
-<h2><a name="Access_from_Behind_a_Firewall"></a>Access from Behind a Firewall</h2><a name="Access_from_Behind_a_Firewall"></a>
+<pre>$ git clone git@github.com:objectionary/jeo-maven-plugin.git</pre></section><section><a id="Access_from_Behind_a_Firewall"></a>
+<h1>Access from Behind a Firewall</h1>
 <p>Refer to the documentation of the SCM used for more information about access behind a firewall.</p></section>
                         </article>
                     </div>
@@ -133,7 +128,7 @@
                 <footer class="legal-notes">
                     <div>
                         Copyright &#169;
-                                                                            2023-2025
+                                                                            2023-${currentYear}
                                             </div>
                     <div>EO, All Rights Reserved.</div>
                     <div><a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.</div>

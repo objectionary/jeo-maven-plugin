@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>AsmProgramTest xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -18,7 +18,7 @@
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.bytecode.BytecodeClass;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.bytecode.BytecodeLabel;
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.bytecode.BytecodeLine;
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.bytecode.BytecodeProgram;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.bytecode.BytecodeObject;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.xmir.XmlObject;
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.hamcrest.MatcherAssert;
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> org.hamcrest.Matchers;
@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>      @Test
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>      <strong class="jxr_keyword">void</strong> convertsToBytecode() {
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>          <strong class="jxr_keyword">final</strong> Bytecode same = <strong class="jxr_keyword">new</strong> BytecodeProgram()
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>          <strong class="jxr_keyword">final</strong> Bytecode same = <strong class="jxr_keyword">new</strong> BytecodeObject()
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>              .replaceTopClass(<strong class="jxr_keyword">new</strong> BytecodeClass().helloWorldMethod())
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>              .bytecode();
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>          MatcherAssert.assertThat(
@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>                  .top()
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>                  .methods()
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>                  .get(1)
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  .intructions()
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                  .instructions()
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>                  .stream()
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>                  .anyMatch(entry -&gt; entry instanceof BytecodeLabel || entry instanceof BytecodeLine),
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>              Matchers.is(false)
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      @ParameterizedTest
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      @ValueSource(strings = {<span class="jxr_string">"FixedWidth.class"</span>, <span class="jxr_string">"DeprecatedMethod.class"</span>, <span class="jxr_string">"ParamAnnotation.class"</span>})
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">void</strong> convertsToBytecodeThenToXmirAndThenBackToBytecode(<strong class="jxr_keyword">final</strong> String resource) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">final</strong> BytecodeProgram bytecode = <strong class="jxr_keyword">new</strong> AsmProgram(
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">final</strong> BytecodeObject bytecode = <strong class="jxr_keyword">new</strong> AsmProgram(
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>              <strong class="jxr_keyword">new</strong> BytesOf(<strong class="jxr_keyword">new</strong> ResourceOf(resource)).asBytes()
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          ).bytecode();
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          MatcherAssert.assertThat(
@@ -90,6 +90,6 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2023&#x2013;2025 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
+<div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>
 </body>
 </html>

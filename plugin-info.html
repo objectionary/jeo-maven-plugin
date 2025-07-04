@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>jeo-maven-plugin &#x2013; Plugin Documentation</title>
+        <title>Plugin Documentation – jeo-maven-plugin</title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
                                                     <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
         <script src="./js/jcabi.js"></script>
@@ -53,7 +53,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li >
-                            <span>                        <a href="surefire-report.html" title="Surefire">Surefire</a>
+                            <span>                        <a href="surefire.html" title="Surefire">Surefire</a>
         </span>
                                                                                                                                                                 <ul>
                                                                     </ul>
@@ -71,7 +71,7 @@
                                                                     </ul>
                                                     </li>
                                                                                                                         <li >
-                            <span>                        <a href="apidocs-0.10.0/index.html" title="Javadoc">Javadoc</a>
+                            <span>                        <a href="apidocs/index.html" title="Javadoc">Javadoc</a>
         </span>
                                                                                                                                                                 <ul>
                                                                     </ul>
@@ -101,23 +101,21 @@
                             <div class="logo">
                                 <a href="index.html"
                                     title=" logo ">
-                                    <img src="https://www.objectionary.com/cactus.svg"
+                                    <img src="${decoration.bannerLeft.src}"
                                         alt="jeo-maven-plugin"
-                                                                                    width="92"
-                                                                                                                            height="92"
-                                                                                itemprop="image"
+                                                                                                                        itemprop="image"
                                     />
                                 </a>
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">0.10.0</strong>
+                                    <strong itemprop="version">0.11.0</strong>
                                 </li>
                                 <li>
-                                    
-                                    <time itemprop="datePublished" datetime="2025-04-24T11:22:48Z">
-                                        
-                                        24-Apr-2025
+                                    $dateFormat.applyPattern("yyyy-MM-dd'T'hh:mm:ss'Z'")
+                                    <time itemprop="datePublished" datetime="${dateFormat.format($currentDate)}">
+                                        $dateFormat.applyPattern('dd-MMM-yyyy')
+                                        ${dateFormat.format($currentDate)}
                                     </time>
                                 </li>
                                 <li class="menu-button">menu</li>
@@ -128,58 +126,61 @@
                                 <img src="https://www.jcabi.com/fork-me.svg" class="fork-me"/>
                             </a>
                                                 <article itemprop="articleBody">
-                            <section>
-<h2><a name="Plugin_Documentation"></a>Plugin Documentation</h2><a name="Plugin_Documentation"></a>
-<p>This report describes goals, parameters details, requirements and sample usage of this plugin.</p><section>
-<h3><a name="Goals"></a>Goals</h3><a name="Goals"></a>
+                            <section><a id="Plugin_Documentation"></a>
+<h1>Plugin Documentation</h1>
+<p>This report describes goals, parameters details, requirements and sample usage of this plugin.</p><section><a id="Goals"></a>
+<h2>Goals</h2>
 <p>Goals available for this plugin:</p>
-<table border="0" class="bodyTable">
+<table class="bodyTable">
 <tr class="a">
 <th>Goal</th>
 <th>Description</th></tr>
 <tr class="b">
-<td align="left"><a href="./assemble-mojo.html">jeo:assemble</a></td>
-<td>Converts EO to bytecode. In other words, it assembles low-lever representation EO to bytecode that JVM can execute. The mojo that converts EO to bytecode only. It does not apply any improvements.</td></tr>
+<td><a href="./assemble-mojo.html">jeo:assemble</a></td>
+<td>Assembles XMIR representation of Java bytecode into executable class files. 
+<p>This Maven plugin converts low-level EO representation (in XMIR format) into Java bytecode that can be executed by the Java Virtual Machine. The plugin performs pure assembly without applying any optimizations or improvements to the bytecode.</p>
+<p>The plugin supports optional bytecode verification to ensure generated classes are valid and can be loaded by the JVM.</p></td></tr>
 <tr class="a">
-<td align="left"><a href="./disassemble-mojo.html">jeo:disassemble</a></td>
-<td>Converts bytecode to EO. In other words, it disassembles bytecode to low-level EO representation that contains opcodes and their values. The mojo that converts bytecode to EO only. It does not apply any improvements. It does not convert EO to bytecode back.</td></tr>
+<td><a href="./disassemble-mojo.html">jeo:disassemble</a></td>
+<td>Disassembles Java bytecode into XMIR representation. 
+<p>This Maven plugin converts compiled Java class files into low-level EO representation (in XMIR format) that contains JVM opcodes and their operands. The resulting XMIR files preserve all bytecode instructions and can be assembled back into executable class files.</p>
+<p>The plugin supports different disassembly modes to control the level of detail in the output, including debug information such as line numbers and variable names.</p></td></tr>
 <tr class="b">
-<td align="left"><a href="./help-mojo.html">jeo:help</a></td>
+<td><a href="./help-mojo.html">jeo:help</a></td>
 <td>Display help information on jeo-maven-plugin.
 <br />
- Call <code>mvn jeo:help -Ddetail=true -Dgoal=&lt;goal-name&gt;</code> to display parameter details.</td></tr></table></section><section>
-<h3><a name="System_Requirements"></a>System Requirements</h3><a name="System_Requirements"></a>
+ Call <code>mvn jeo:help -Ddetail=true -Dgoal=&lt;goal-name&gt;</code> to display parameter details.</td></tr></table></section><section><a id="System_Requirements"></a>
+<h2>System Requirements</h2>
 <p>The following specifies the minimum requirements to run this Maven plugin:</p>
-<table border="0" class="bodyTable">
+<table class="bodyTable">
 <tr class="a">
-<td align="left">Maven</td>
+<td>Maven</td>
 <td>4.0.0-alpha-7</td></tr>
 <tr class="b">
-<td align="left">JDK</td>
-<td>11</td></tr></table></section><section>
-<h3><a name="System_Requirements_History"></a>System Requirements History</h3><a name="System_Requirements_History"></a>
+<td>JDK</td>
+<td>11</td></tr></table></section><section><a id="System_Requirements_History"></a>
+<h2>System Requirements History</h2>
 <p>The following specifies the minimum requirements to run this Maven plugin for historical versions:</p>
-<table border="0" class="bodyTable">
+<table class="bodyTable">
 <tr class="a">
 <th>Plugin Version</th>
 <th>Maven</th>
 <th>JDK</th></tr>
 <tr class="b">
-<td align="left">from 0.4.6 to 0.9.0</td>
+<td>from 0.4.6 to 0.10.0</td>
 <td>-</td>
 <td>8</td></tr>
 <tr class="a">
-<td align="left">from 0.1.0 to 0.4.5</td>
+<td>from 0.1.0 to 0.4.5</td>
 <td>-</td>
 <td>11</td></tr>
 <tr class="b">
-<td align="left">0.0.1</td>
+<td>0.0.1</td>
 <td>-</td>
-<td>8</td></tr></table></section><section>
-<h3><a name="Usage"></a>Usage</h3><a name="Usage"></a>
+<td>8</td></tr></table></section><section><a id="Usage"></a>
+<h2>Usage</h2>
 <p>You should specify the version in your project's plugin configuration:</p>
-<div class="source">
-<pre>&lt;project&gt;
+<pre><code>&lt;project&gt;
   ...
   &lt;build&gt;
     &lt;!-- To define the plugin version in your parent POM --&gt;
@@ -188,7 +189,7 @@
         &lt;plugin&gt;
           &lt;groupId&gt;org.eolang&lt;/groupId&gt;
           &lt;artifactId&gt;jeo-maven-plugin&lt;/artifactId&gt;
-          &lt;version&gt;0.10.0&lt;/version&gt;
+          &lt;version&gt;0.11.0&lt;/version&gt;
         &lt;/plugin&gt;
         ...
       &lt;/plugins&gt;
@@ -203,7 +204,7 @@
     &lt;/plugins&gt;
   &lt;/build&gt;
   ...
-&lt;/project&gt;</pre></div>
+&lt;/project&gt;</code></pre>
 <p>For more information, see <a class="externalLink" href="https://maven.apache.org/guides/mini/guide-configuring-plugins.html">&quot;Guide to Configuring Plug-ins&quot;</a></p></section></section>
                         </article>
                     </div>
@@ -211,7 +212,7 @@
                 <footer class="legal-notes">
                     <div>
                         Copyright &#169;
-                                                                            2023-2025
+                                                                            2023-${currentYear}
                                             </div>
                     <div>EO, All Rights Reserved.</div>
                     <div><a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.</div>

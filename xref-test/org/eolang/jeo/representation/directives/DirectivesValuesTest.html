@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>DirectivesValuesTest xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -22,40 +22,44 @@
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.xembly.Xembler;
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment"> * Test case for {@link DirectivesValues}.</em>
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * @since 0.6</em>
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="DirectivesValuesTest" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValuesTest.html#DirectivesValuesTest">DirectivesValuesTest</a> {
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>      @Test
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>      <strong class="jxr_keyword">void</strong> convertsToXmir() <strong class="jxr_keyword">throws</strong> ImpossibleModificationException {
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>          MatcherAssert.assertThat(
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>              <span class="jxr_string">"We expect that array of values will be converted to correct Xembly directives"</span>,
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>              <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesValues(<span class="jxr_string">"name"</span>, <span class="jxr_string">"value"</span>)).xml(),
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>              XhtmlMatchers.hasXPaths(
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>                  <span class="jxr_string">"./o[contains(@base,'seq.of1') and contains(@as,'name')]"</span>,
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>                  <span class="jxr_string">"./o[contains(@base,'seq.of1') and contains(@as,'name')]/o/o[contains(@base, 'org.eolang.bytes')]/o[text()='76-61-6C-75-65']"</span>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>              )
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>          );
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>      }
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>      @RepeatedTest(100)
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">void</strong> generatesRandomNameWithoutFirstDigit() {
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>          MatcherAssert.assertThat(
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>              <span class="jxr_string">"We expect that the name of the sequence will be generated randomly and will not start with a digit"</span>,
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>              <strong class="jxr_keyword">new</strong> NativeXmlNode(
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>                  <strong class="jxr_keyword">new</strong> Xembler(
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>                      <strong class="jxr_keyword">new</strong> DirectivesValues(<span class="jxr_string">""</span>, <span class="jxr_string">"some-value"</span>)
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>                  ).xmlQuietly()
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>              ).attribute(<span class="jxr_string">"as"</span>).orElseThrow(
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>                  () -&gt; <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Name attribute is absent"</span>)
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>              ),
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>              Matchers.matchesRegex(<span class="jxr_string">"^[^0-9].*"</span>)
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>          );
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>      }
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  }
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment"> * Test cases for {@link DirectivesValues}.</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * This class verifies the conversion of value arrays to XMIR directives,</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * ensuring proper handling of multiple values and their serialization.</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> * @since 0.6.0</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="DirectivesValuesTest" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValuesTest.html#DirectivesValuesTest">DirectivesValuesTest</a> {
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>      @Test
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      <strong class="jxr_keyword">void</strong> convertsToXmir() <strong class="jxr_keyword">throws</strong> ImpossibleModificationException {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>          MatcherAssert.assertThat(
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>              <span class="jxr_string">"We expect that array of values will be converted to correct Xembly directives"</span>,
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>              <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesValues(<span class="jxr_string">"name"</span>, <span class="jxr_string">"value"</span>)).xml(),
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>              XhtmlMatchers.hasXPaths(
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>                  <strong class="jxr_keyword">new</strong> <a name="JeoBaseXpath" href="../../../../../org/eolang/jeo/representation/directives/JeoBaseXpath.html#JeoBaseXpath">JeoBaseXpath</a>(<span class="jxr_string">"./o"</span>, <span class="jxr_string">"seq.of1"</span>).toXpath(),
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>                  <span class="jxr_string">"./o[contains(@name,'name')]"</span>,
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>                  <span class="jxr_string">"./o[contains(@name,'name')]/o/o/o[text()='76-61-6C-75-65']"</span>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>              )
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>          );
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>      }
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      @RepeatedTest(100)
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>      <strong class="jxr_keyword">void</strong> generatesRandomNameWithoutFirstDigit() {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>          MatcherAssert.assertThat(
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>              <span class="jxr_string">"We expect that the name of the sequence will be generated randomly and will not start with a digit"</span>,
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>              <strong class="jxr_keyword">new</strong> NativeXmlNode(
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>                  <strong class="jxr_keyword">new</strong> Xembler(
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>                      <strong class="jxr_keyword">new</strong> DirectivesValues(<span class="jxr_string">""</span>, <span class="jxr_string">"some-value"</span>)
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>                  ).xmlQuietly()
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>              ).attribute(<span class="jxr_string">"name"</span>).orElseThrow(
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>                  () -&gt; <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Name attribute is absent"</span>)
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>              ),
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>              Matchers.matchesRegex(<span class="jxr_string">"^[^0-9].*"</span>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          );
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>      }
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2023&#x2013;2025 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
+<div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>
 </body>
 </html>

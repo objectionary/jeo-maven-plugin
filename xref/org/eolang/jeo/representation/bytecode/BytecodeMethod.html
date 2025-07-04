@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>BytecodeMethod xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">     * Method Instructions.</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;BytecodeEntry&gt; instructions;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;BytecodeEntry&gt; entries;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     * Method annotations.</em>
@@ -188,7 +188,7 @@
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>         <strong class="jxr_keyword">final</strong> <a name="BytecodeAttributes" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeAttributes.html#BytecodeAttributes">BytecodeAttributes</a> attributes
 <a class="jxr_linenumber" name="L181" href="#L181">181</a>     ) {
 <a class="jxr_linenumber" name="L182" href="#L182">182</a>         <strong class="jxr_keyword">this</strong>.tryblocks = tryblocks;
-<a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">this</strong>.instructions = instructions;
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>         <strong class="jxr_keyword">this</strong>.entries = instructions;
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>         <strong class="jxr_keyword">this</strong>.annotations = annotations;
 <a class="jxr_linenumber" name="L185" href="#L185">185</a>         <strong class="jxr_keyword">this</strong>.properties = properties;
 <a class="jxr_linenumber" name="L186" href="#L186">186</a>         <strong class="jxr_keyword">this</strong>.defvalues = defvalues;
@@ -203,7 +203,7 @@
 <a class="jxr_linenumber" name="L195" href="#L195">195</a>     <strong class="jxr_keyword">public</strong> <a name="BytecodeMethod" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeMethod.html#BytecodeMethod">BytecodeMethod</a> withoutMaxs() {
 <a class="jxr_linenumber" name="L196" href="#L196">196</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BytecodeMethod" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeMethod.html#BytecodeMethod">BytecodeMethod</a>(
 <a class="jxr_linenumber" name="L197" href="#L197">197</a>             <strong class="jxr_keyword">this</strong>.tryblocks,
-<a class="jxr_linenumber" name="L198" href="#L198">198</a>             <strong class="jxr_keyword">this</strong>.instructions,
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>             <strong class="jxr_keyword">this</strong>.entries,
 <a class="jxr_linenumber" name="L199" href="#L199">199</a>             <strong class="jxr_keyword">this</strong>.annotations,
 <a class="jxr_linenumber" name="L200" href="#L200">200</a>             <strong class="jxr_keyword">this</strong>.properties,
 <a class="jxr_linenumber" name="L201" href="#L201">201</a>             <strong class="jxr_keyword">this</strong>.defvalues,
@@ -237,7 +237,7 @@
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">     * @return This object.</em>
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L231" href="#L231">231</a>     <strong class="jxr_keyword">public</strong> <a name="BytecodeMethod" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeMethod.html#BytecodeMethod">BytecodeMethod</a> entry(<strong class="jxr_keyword">final</strong> <a name="BytecodeEntry" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeEntry.html#BytecodeEntry">BytecodeEntry</a> entry) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>         <strong class="jxr_keyword">this</strong>.instructions.add(entry);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a>         <strong class="jxr_keyword">this</strong>.entries.add(entry);
 <a class="jxr_linenumber" name="L233" href="#L233">233</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L234" href="#L234">234</a>     }
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 
@@ -263,8 +263,8 @@
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">     * Method instructions.</em>
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">     * @return Instructions.</em>
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">public</strong> List&lt;BytecodeEntry&gt; intructions() {
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>         <strong class="jxr_keyword">return</strong> Collections.unmodifiableList(<strong class="jxr_keyword">this</strong>.instructions);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>     <strong class="jxr_keyword">public</strong> List&lt;BytecodeEntry&gt; instructions() {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>         <strong class="jxr_keyword">return</strong> Collections.unmodifiableList(<strong class="jxr_keyword">this</strong>.entries);
 <a class="jxr_linenumber" name="L260" href="#L260">260</a>     }
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 
 <a class="jxr_linenumber" name="L262" href="#L262">262</a>     <em class="jxr_javadoccomment">/**</em>
@@ -285,7 +285,7 @@
 <a class="jxr_linenumber" name="L277" href="#L277">277</a>                 <strong class="jxr_keyword">new</strong> <a name="MethodName" href="../../../../../org/eolang/jeo/representation/MethodName.html#MethodName">MethodName</a>(<strong class="jxr_keyword">this</strong>.properties.name()).xmir()
 <a class="jxr_linenumber" name="L278" href="#L278">278</a>             ),
 <a class="jxr_linenumber" name="L279" href="#L279">279</a>             <strong class="jxr_keyword">this</strong>.properties.directives(<strong class="jxr_keyword">this</strong>.maxs),
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>             <strong class="jxr_keyword">this</strong>.instructions.stream().map(BytecodeEntry::directives)
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>             <strong class="jxr_keyword">this</strong>.entries.stream().map(BytecodeEntry::directives)
 <a class="jxr_linenumber" name="L281" href="#L281">281</a>                 .collect(Collectors.toList()),
 <a class="jxr_linenumber" name="L282" href="#L282">282</a>             <strong class="jxr_keyword">this</strong>.tryblocks.stream().map(BytecodeEntry::directives)
 <a class="jxr_linenumber" name="L283" href="#L283">283</a>                 .collect(Collectors.toList()),
@@ -322,7 +322,7 @@
 <a class="jxr_linenumber" name="L314" href="#L314">314</a>             <strong class="jxr_keyword">if</strong> (!<strong class="jxr_keyword">this</strong>.properties.isAbstract()) {
 <a class="jxr_linenumber" name="L315" href="#L315">315</a>                 mvisitor.visitCode();
 <a class="jxr_linenumber" name="L316" href="#L316">316</a>                 <strong class="jxr_keyword">this</strong>.tryblocks.forEach(block -&gt; block.writeTo(mvisitor, all));
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>                 <strong class="jxr_keyword">this</strong>.instructions.forEach(instruction -&gt; instruction.writeTo(mvisitor, all));
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>                 <strong class="jxr_keyword">this</strong>.entries.forEach(instruction -&gt; instruction.writeTo(mvisitor, all));
 <a class="jxr_linenumber" name="L318" href="#L318">318</a>                 <strong class="jxr_keyword">final</strong> <a name="BytecodeMaxs" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeMaxs.html#BytecodeMaxs">BytecodeMaxs</a> max;
 <a class="jxr_linenumber" name="L319" href="#L319">319</a>                 <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.maxs.compute()) {
 <a class="jxr_linenumber" name="L320" href="#L320">320</a>                     max = <strong class="jxr_keyword">this</strong>.computeMaxs();
@@ -401,7 +401,7 @@
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">     * @return Instructions view in human-readable format.</em>
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L395" href="#L395">395</a>     String instructionsView() {
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.instructions.stream()
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.entries.stream()
 <a class="jxr_linenumber" name="L397" href="#L397">397</a>             .map(BytecodeEntry::view)
 <a class="jxr_linenumber" name="L398" href="#L398">398</a>             .collect(Collectors.joining(<span class="jxr_string">"\n"</span>));
 <a class="jxr_linenumber" name="L399" href="#L399">399</a>     }
@@ -412,7 +412,7 @@
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L405" href="#L405">405</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> computeStack() {
 <a class="jxr_linenumber" name="L406" href="#L406">406</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="MaxStack" href="../../../../../org/eolang/jeo/representation/bytecode/MaxStack.html#MaxStack">MaxStack</a>(
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>             <strong class="jxr_keyword">this</strong>.instructions,
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>             <strong class="jxr_keyword">this</strong>.entries,
 <a class="jxr_linenumber" name="L408" href="#L408">408</a>             <strong class="jxr_keyword">this</strong>.tryblocks.stream()
 <a class="jxr_linenumber" name="L409" href="#L409">409</a>                 .filter(BytecodeTryCatchBlock.<strong class="jxr_keyword">class</strong>::isInstance)
 <a class="jxr_linenumber" name="L410" href="#L410">410</a>                 .map(BytecodeTryCatchBlock.<strong class="jxr_keyword">class</strong>::<strong class="jxr_keyword">cast</strong>)
@@ -427,7 +427,7 @@
 <a class="jxr_linenumber" name="L419" href="#L419">419</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> computeLocals() {
 <a class="jxr_linenumber" name="L420" href="#L420">420</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="MaxLocals" href="../../../../../org/eolang/jeo/representation/bytecode/MaxLocals.html#MaxLocals">MaxLocals</a>(
 <a class="jxr_linenumber" name="L421" href="#L421">421</a>             <strong class="jxr_keyword">this</strong>.properties,
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>             <strong class="jxr_keyword">this</strong>.instructions,
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>             <strong class="jxr_keyword">this</strong>.entries,
 <a class="jxr_linenumber" name="L423" href="#L423">423</a>             <strong class="jxr_keyword">this</strong>.tryblocks.stream()
 <a class="jxr_linenumber" name="L424" href="#L424">424</a>                 .filter(BytecodeTryCatchBlock.<strong class="jxr_keyword">class</strong>::isInstance)
 <a class="jxr_linenumber" name="L425" href="#L425">425</a>                 .map(BytecodeTryCatchBlock.<strong class="jxr_keyword">class</strong>::<strong class="jxr_keyword">cast</strong>)
@@ -437,6 +437,6 @@
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2023&#x2013;2025 <a href="https://github.com/objectionary/eo">EO</a>. All rights reserved.</div>
+<div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>
 </body>
 </html>

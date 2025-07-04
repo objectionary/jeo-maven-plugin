@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>jeo-maven-plugin &#x2013; Project Summary</title>
+        <title>Project Summary – jeo-maven-plugin</title>
         <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
                                                     <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
         <script src="./js/jcabi.js"></script>
@@ -83,23 +83,21 @@
                             <div class="logo">
                                 <a href="index.html"
                                     title=" logo ">
-                                    <img src="https://www.objectionary.com/cactus.svg"
+                                    <img src="${decoration.bannerLeft.src}"
                                         alt="jeo-maven-plugin"
-                                                                                    width="92"
-                                                                                                                            height="92"
-                                                                                itemprop="image"
+                                                                                                                        itemprop="image"
                                     />
                                 </a>
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">0.10.0</strong>
+                                    <strong itemprop="version">0.11.0</strong>
                                 </li>
                                 <li>
-                                    
-                                    <time itemprop="datePublished" datetime="2025-04-24T11:22:39Z">
-                                        
-                                        24-Apr-2025
+                                    $dateFormat.applyPattern("yyyy-MM-dd'T'hh:mm:ss'Z'")
+                                    <time itemprop="datePublished" datetime="${dateFormat.format($currentDate)}">
+                                        $dateFormat.applyPattern('dd-MMM-yyyy')
+                                        ${dateFormat.format($currentDate)}
                                     </time>
                                 </li>
                                 <li class="menu-button">menu</li>
@@ -110,61 +108,61 @@
                                 <img src="https://www.jcabi.com/fork-me.svg" class="fork-me"/>
                             </a>
                                                 <article itemprop="articleBody">
-                            <section>
-<h2><a name="Project_Summary"></a>Project Summary</h2><a name="Project_Summary"></a><section>
-<h3><a name="Project_Information"></a>Project Information</h3><a name="Project_Information"></a>
-<table border="0" class="bodyTable">
+                            <section><a id="Project_Summary"></a>
+<h1>Project Summary</h1><section><a id="Project_Information"></a>
+<h2>Project Information</h2>
+<table class="bodyTable">
 <tr class="a">
 <th>Field</th>
 <th>Value</th></tr>
 <tr class="b">
-<td align="left">Name</td>
+<td>Name</td>
 <td>jeo</td></tr>
 <tr class="a">
-<td align="left">Description</td>
+<td>Description</td>
 <td>Optimisation of Java Bytecode via EOLANG</td></tr>
 <tr class="b">
-<td align="left">Homepage</td>
-<td><a class="externalLink" href="https://objectionary.github.io/jeo-maven-plugin">https://objectionary.github.io/jeo-maven-plugin</a></td></tr></table></section><section>
-<h3><a name="Project_Organization"></a>Project Organization</h3><a name="Project_Organization"></a>
-<table border="0" class="bodyTable">
+<td>Homepage</td>
+<td><a class="externalLink" href="https://objectionary.github.io/jeo-maven-plugin">https://objectionary.github.io/jeo-maven-plugin</a></td></tr></table></section><section><a id="Project_Organization"></a>
+<h2>Project Organization</h2>
+<table class="bodyTable">
 <tr class="a">
 <th>Field</th>
 <th>Value</th></tr>
 <tr class="b">
-<td align="left">Name</td>
+<td>Name</td>
 <td>EO</td></tr>
 <tr class="a">
-<td align="left">URL</td>
-<td><a class="externalLink" href="https://github.com/objectionary/eo">https://github.com/objectionary/eo</a></td></tr></table></section><section>
-<h3><a name="Build_Information"></a>Build Information</h3><a name="Build_Information"></a>
-<table border="0" class="bodyTable">
+<td>URL</td>
+<td><a class="externalLink" href="https://github.com/objectionary/eo">https://github.com/objectionary/eo</a></td></tr></table></section><section><a id="Build_Information"></a>
+<h2>Build Information</h2>
+<table class="bodyTable">
 <tr class="a">
 <th>Field</th>
 <th>Value</th></tr>
 <tr class="b">
-<td align="left">GroupId</td>
+<td>GroupId</td>
 <td>org.eolang</td></tr>
 <tr class="a">
-<td align="left">ArtifactId</td>
+<td>ArtifactId</td>
 <td>jeo-maven-plugin</td></tr>
 <tr class="b">
-<td align="left">Version</td>
-<td>0.10.0</td></tr>
+<td>Version</td>
+<td>0.11.0</td></tr>
 <tr class="a">
-<td align="left">Type</td>
+<td>Type</td>
 <td>maven-plugin</td></tr>
 <tr class="b">
-<td align="left">Java Version</td>
-<td>8</td></tr></table></section><section>
-<h3><a name="Download"></a>Download</h3><a name="Download"></a><a class="externalLink" href="https://oss.sonatype.org/content/groups/public">https://oss.sonatype.org/content/groups/public</a></section></section>
+<td>Java Version</td>
+<td>8</td></tr></table></section><section><a id="Download"></a>
+<h2>Download</h2><a class="externalLink" href="https://oss.sonatype.org/content/groups/public">https://oss.sonatype.org/content/groups/public</a></section></section>
                         </article>
                     </div>
                 </main>
                 <footer class="legal-notes">
                     <div>
                         Copyright &#169;
-                                                                            2023-2025
+                                                                            2023-${currentYear}
                                             </div>
                     <div>EO, All Rights Reserved.</div>
                     <div><a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.</div>
