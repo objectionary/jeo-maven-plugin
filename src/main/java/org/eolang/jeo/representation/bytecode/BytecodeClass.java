@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.ClassName;
-import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.objectweb.asm.Opcodes;
 
@@ -32,7 +31,7 @@ public final class BytecodeClass {
      * Class name.
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    private final String name;
+    private final ClassName name;
 
     /**
      * Methods.
@@ -109,7 +108,7 @@ public final class BytecodeClass {
         final BytecodeClassProperties properties
     ) {
         this(
-            name,
+            new ClassName(name),
             methods,
             new ArrayList<>(0),
             new BytecodeAnnotations(),
@@ -129,7 +128,7 @@ public final class BytecodeClass {
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeClass(
-        final String name,
+        final ClassName name,
         final List<BytecodeMethod> methods,
         final List<BytecodeField> fields,
         final BytecodeAnnotations annotations,
@@ -149,7 +148,7 @@ public final class BytecodeClass {
      * @return Name.
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-    public String name() {
+    public ClassName name() {
         return this.name;
     }
 
@@ -281,7 +280,7 @@ public final class BytecodeClass {
      */
     public DirectivesClass directives() {
         return new DirectivesClass(
-            new ClassName(new PrefixedName(this.name).encode()),
+            this.name,
             this.props.directives(),
             this.fields.stream().map(BytecodeField::directives).collect(Collectors.toList()),
             this.cmethods.stream()
@@ -302,7 +301,7 @@ public final class BytecodeClass {
             visitor.visit(
                 this.props.version(),
                 this.props.access(),
-                new ClassName(pckg, this.name).full(),
+                this.name.full(),
                 this.props.signature(),
                 this.props.supername(),
                 this.props.interfaces()
@@ -321,7 +320,7 @@ public final class BytecodeClass {
             throw new IllegalStateException(
                 String.format(
                     "Bytecode creation for the '%s' class is not possible due to unmet preconditions.",
-                    this.name
+                    this.name.full()
                 ),
                 exception
             );

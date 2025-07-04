@@ -45,7 +45,7 @@ public final class AsmClass {
     public BytecodeClass bytecode() {
         final ClassName full = new ClassName(this.node.name);
         return new BytecodeClass(
-            full.name(),
+            full,
             this.methods(),
             this.fields(),
             new AsmAnnotations(this.node).bytecode(),

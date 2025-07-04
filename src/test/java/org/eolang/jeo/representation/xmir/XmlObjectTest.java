@@ -48,7 +48,7 @@ final class XmlObjectTest {
             Matchers.equalTo(
                 new BytecodeObject(
                     pckg,
-                    new BytecodeClass(name, 0)
+                    new BytecodeClass(String.format("%s.%s", pckg, name), 0)
                 )
             )
         );
@@ -82,7 +82,7 @@ final class XmlObjectTest {
                     new Xembler(
                         new Directives(
                             new BytecodeObject(
-                                "com.example", new BytecodeClass("Foo", 0)
+                                "com.example", new BytecodeClass("com.example.Foo", 0)
                             ).directives("")
                         ).xpath(".//o").remove()
                     ).xmlQuietly()

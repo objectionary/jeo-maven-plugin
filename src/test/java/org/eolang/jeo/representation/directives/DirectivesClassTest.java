@@ -8,11 +8,8 @@ import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import java.util.Collections;
 import org.eolang.jeo.representation.ClassName;
-import org.eolang.jeo.representation.bytecode.BytecodeClass;
-import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.bytecode.InnerClass;
-import org.eolang.jeo.representation.xmir.NativeXmlNode;
-import org.eolang.jeo.representation.xmir.XmlClass;
+import org.eolang.jeo.representation.bytecode.JavaCodec;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -49,14 +46,14 @@ final class DirectivesClassTest {
                 new Transformers.Node()
             ).xml(),
             XhtmlMatchers.hasXPaths(
-                "/o[@name='Neo']",
-                "/o[@name='Neo']/o[contains(@name,'version')]",
-                "/o[@name='Neo']/o[contains(@name,'access')]",
-                "/o[@name='Neo']/o[contains(@name,'signature')]",
-                "/o[@name='Neo']/o[contains(@name,'supername')]",
-                "/o[@name='Neo']/o[contains(@name,'interfaces')]",
-                "/o[@name='Neo']/o[contains(@name,'annotations')]",
-                "/o[@name='Neo']/o[contains(@name,'attributes')]"
+                "/o[contains(@name,'Neo')]",
+                "/o[contains(@name,'Neo')]/o[contains(@name,'version')]",
+                "/o[contains(@name,'Neo')]/o[contains(@name,'access')]",
+                "/o[contains(@name,'Neo')]/o[contains(@name,'signature')]",
+                "/o[contains(@name,'Neo')]/o[contains(@name,'supername')]",
+                "/o[contains(@name,'Neo')]/o[contains(@name,'interfaces')]",
+                "/o[contains(@name,'Neo')]/o[contains(@name,'annotations')]",
+                "/o[contains(@name,'Neo')]/o[contains(@name,'attributes')]"
             )
         );
     }
@@ -89,41 +86,26 @@ final class DirectivesClassTest {
                 new XMLDocument(xml)
             ),
             xml,
-            XhtmlMatchers.hasXPath("/o[@name='Neo']/o[contains(@name,'method')]")
+            XhtmlMatchers.hasXPath("/o[@name='j$Neo']/o[contains(@name,'method')]")
         );
     }
 
     @Test
-    void convertsToDirectives() throws ImpossibleModificationException {
-        final String name = "Foo";
-        final int access = 100;
-        final String signature = "java/lang/Object";
-        final String supername = "java/lang/Runnable";
-        final String interfce = "java/lang/Cloneable";
+    void appendsFullyQualifiedName() throws ImpossibleModificationException {
+        final String name = "org.eolang.jeo.representation.directives.DirectivesClassTest";
         MatcherAssert.assertThat(
-            "We expect that class created from directives is equal to expected",
-            new XmlClass(
-                new NativeXmlNode(
-                    new Xembler(
-                        new DirectivesClass(
-                            name,
-                            new DirectivesClassProperties(
-                                access,
-                                signature,
-                                supername,
-                                interfce
-                            )
-                        )
-                    ).xml()
+            "Can't append fully qualified class name",
+            new Xembler(
+                new DirectivesClass(
+                    new ClassName(name)
                 )
-            ).bytecode(),
-            Matchers.equalTo(
-                new BytecodeClass(
-                    name,
-                    new BytecodeClassProperties(access, signature, supername, interfce)
+            ).xml(),
+            XhtmlMatchers.hasXPath(
+                String.format(
+                    "./o[contains(@name,DirectivesClassTest)]/o[contains(@name, 'name')]/o/o[text()='%s']",
+                    new DirectivesValue(name.replace('.', '/')).hex(new JavaCodec())
                 )
             )
         );
     }
-
 }

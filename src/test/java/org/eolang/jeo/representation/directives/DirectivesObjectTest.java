@@ -82,7 +82,7 @@ final class DirectivesObjectTest {
                 new XMLDocument(actual)
             ),
             actual,
-            XhtmlMatchers.hasXPath("/object/o[@name='Foo']")
+            XhtmlMatchers.hasXPath("/object/o[contains(@name,'Foo')]")
         );
     }
 

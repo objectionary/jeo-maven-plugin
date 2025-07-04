@@ -58,7 +58,7 @@ final class BytecodeObjectTest {
         final String name = "ClassInPackage";
         final DirectivesObject directives = new BytecodeObject(
             "some/package",
-            new BytecodeClass(name).helloWorldMethod()
+            new BytecodeClass(String.format("some/package/%s", name)).helloWorldMethod()
         ).directives("");
         final String xml = new Xembler(directives).xml();
         final String pckg = "some.package";

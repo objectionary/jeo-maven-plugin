@@ -13,7 +13,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.ClassName;
-import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesObject;
@@ -118,7 +117,7 @@ public final class BytecodeObject {
      */
     public DirectivesObject directives(final String listing) {
         final BytecodeClass top = this.top();
-        final ClassName classname = new ClassName(this.pckg, new PrefixedName(top.name()).encode());
+        final ClassName classname = top.name();
         final DirectivesClass clazz = top.directives();
         return new DirectivesObject(
             listing,

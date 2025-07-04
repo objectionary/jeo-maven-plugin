@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
@@ -40,10 +41,17 @@ public final class XmlClass {
     private final XmlGlobalObject node;
 
     /**
+     * Package name.
+     */
+    private final String pckg;
+
+    /**
      * Constructor.
+     * @param pckg Package name
      * @param node The XML node representing the class
      */
-    public XmlClass(final XmlNode node) {
+    XmlClass(final String pckg, final XmlNode node) {
+        this.pckg = pckg;
         this.node = new XmlGlobalObject(node);
     }
 
@@ -52,7 +60,7 @@ public final class XmlClass {
      * @param classname The class name
      */
     XmlClass(final String classname) {
-        this(XmlClass.empty(classname));
+        this("", XmlClass.empty(classname));
     }
 
     /**
@@ -61,7 +69,7 @@ public final class XmlClass {
      * @param properties The class properties
      */
     XmlClass(final String classname, final DirectivesClassProperties properties) {
-        this(XmlClass.withProps(classname, properties));
+        this("", XmlClass.withProps(classname, properties));
     }
 
     /**
@@ -71,7 +79,9 @@ public final class XmlClass {
     public BytecodeClass bytecode() {
         try {
             return new BytecodeClass(
-                new PrefixedName(this.name()).decode(),
+                new ClassName(
+                    new PrefixedName(new ClassName(this.pckg, this.name()).full()).decode()
+                ),
                 this.methods().stream().map(XmlMethod::bytecode)
                     .collect(Collectors.toList()),
                 this.fields().stream()

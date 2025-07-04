@@ -72,7 +72,7 @@ public final class XmlObject {
      * @return Class.
      */
     private XmlClass top() {
-        return new XmlClass(this.root.child("o"));
+        return new XmlClass(this.pckg(), this.root.child("o"));
     }
 
     /**

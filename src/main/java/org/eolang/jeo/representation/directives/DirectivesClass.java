@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.PrefixedName;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -160,8 +161,9 @@ public final class DirectivesClass implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesGlobalObject(
             "class",
-            this.name.name(),
+            new PrefixedName(this.name.name()).encode(),
             this.properties,
+            new DirectivesValue("name", this.name.full().replace('.', '/')),
             this.fields.stream().map(Directives::new).reduce(new Directives(), Directives::append),
             this.methods.stream().map(Directives::new).reduce(new Directives(), Directives::append),
             this.annotations,
