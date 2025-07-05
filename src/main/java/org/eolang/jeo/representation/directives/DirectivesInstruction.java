@@ -46,6 +46,7 @@ public final class DirectivesInstruction implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             this.base(),
+            new RandName("instruction").toString(),
             Stream.concat(
                 Stream.of(
                     new DirectivesComment(this.comment()),
