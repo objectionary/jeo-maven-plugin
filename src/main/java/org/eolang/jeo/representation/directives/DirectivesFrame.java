@@ -73,6 +73,7 @@ public final class DirectivesFrame implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "frame",
+            new RandName("frame").toString(),
             new DirectivesValue(this.name("type"), this.type),
             new DirectivesValue(this.name("nlocal"), this.nlocal),
             new DirectivesValues(this.name("locals"), this.locals),

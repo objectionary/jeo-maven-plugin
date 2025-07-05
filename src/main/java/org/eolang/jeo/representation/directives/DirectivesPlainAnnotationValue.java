@@ -89,6 +89,7 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
         }
         return new DirectivesJeoObject(
             "annotation-property",
+            new RandName("plain").toString(),
             new DirectivesValue("PLAIN"),
             new DirectivesValue(Optional.ofNullable(this.name).orElse("")),
             res

@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import org.cactoos.io.ResourceOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -30,6 +31,21 @@ final class BytecodeRepresentationTest {
             new BytecodeRepresentation(new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE))
                 .toXmir().xpath("/object/o/@name").get(0),
             Matchers.equalTo(new PrefixedName("MethodByte").encode())
+        );
+    }
+
+    @Test
+    void generatesXmlWithCorrectObjectAttributes() {
+        MatcherAssert.assertThat(
+            "XMIR objects should have either 'name' or 'base' attribute, or both",
+            new BytecodeRepresentation(
+                new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE)
+            ).toXmir().toString(),
+            Matchers.not(
+                XhtmlMatchers.hasXPath(
+                    "//o[not(@base) and not(@name) and not(parent::*[@base='Q.org.eolang.bytes'])]"
+                )
+            )
         );
     }
 

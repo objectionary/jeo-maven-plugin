@@ -65,6 +65,7 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "trycatch",
+            new RandName("trycatch").toString(),
             Stream.of(
                 this.start.directives(),
                 this.end.directives(),

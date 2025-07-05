@@ -43,6 +43,7 @@ public final class DirectivesArrayAnnotationValue implements Iterable<Directive>
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "annotation-property",
+            new RandName("array").toString(),
             Stream.concat(
                 Stream.of(
                     new DirectivesValue("ARRAY"),
