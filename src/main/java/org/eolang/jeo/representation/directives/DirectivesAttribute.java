@@ -22,6 +22,11 @@ public final class DirectivesAttribute implements Iterable<Directive> {
     private final String base;
 
     /**
+     * Name of the attribute.
+     */
+    private final String name;
+
+    /**
      * Data to store.
      */
     private final List<Iterable<Directive>> data;
@@ -42,7 +47,19 @@ public final class DirectivesAttribute implements Iterable<Directive> {
      * @param data Properties of an attribute.
      */
     private DirectivesAttribute(final String base, final List<Iterable<Directive>> data) {
+        this(base, new RandName("attr").toString(), data);
+    }
+
+    /**
+     * Constructor.
+     * @param base The base of the attribute.
+     * @param name The name of the attribute.
+     * @param data Properties of an attribute.
+     */
+    public DirectivesAttribute(
+        final String base, final String name, final List<Iterable<Directive>> data) {
         this.base = base;
+        this.name = name;
         this.data = data;
     }
 
@@ -50,6 +67,7 @@ public final class DirectivesAttribute implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             this.base,
+            this.name,
             this.data.stream().map(Directives::new).toArray(Directives[]::new)
         ).iterator();
     }

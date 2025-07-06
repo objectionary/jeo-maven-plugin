@@ -44,34 +44,6 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
     /**
      * Constructor.
      * @param base The base of the object.
-     * @param inner Inner components.
-     */
-    @SafeVarargs
-    public DirectivesJeoObject(final String base, final Iterable<Directive>... inner) {
-        this(base, Arrays.stream(inner).map(Directives::new).collect(Collectors.toList()));
-    }
-
-    /**
-     * Constructor.
-     * @param base The base of the object.
-     * @param inner Inner components.
-     */
-    public DirectivesJeoObject(final String base, final Directives... inner) {
-        this(base, Arrays.asList(inner));
-    }
-
-    /**
-     * Constructor.
-     * @param base The base of the object.
-     * @param inner Inner components.
-     */
-    public DirectivesJeoObject(final String base, final List<Directives> inner) {
-        this(base, "", inner);
-    }
-
-    /**
-     * Constructor.
-     * @param base The base of the object.
      * @param name The name of the object.
      * @param inner Inner components.
      */
