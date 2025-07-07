@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a>                         String.format(
 <a class="jxr_linenumber" name="L142" href="#L142">142</a>                             <span class="jxr_string">"Unknown data type of %s, class is %s"</span>,
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>                             data,
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>                             Optional.ofNullable(data)
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>                             Optional.of(data)
 <a class="jxr_linenumber" name="L145" href="#L145">145</a>                                 .map(Object::getClass)
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>                                 .map(Class::getName)
 <a class="jxr_linenumber" name="L147" href="#L147">147</a>                                 .orElse(<span class="jxr_string">"Nullable"</span>)
