@@ -62,7 +62,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param <T> Data type.
      */
     public <T> DirectivesValue(final T data) {
-        this("", data);
+        this(new RandName("val").toString(), data);
     }
 
     /**
@@ -87,6 +87,12 @@ public final class DirectivesValue implements Iterable<Directive> {
         this.value = value;
     }
 
+    /**
+     * Iterator of directives.
+     * @return Iterator of directives.
+     * @checkstyle CyclomaticComplexityCheck (50 lines)
+     * @checkstyle NoJavadocForOverriddenMethodsCheck (50 lines)
+     */
     @Override
     public Iterator<Directive> iterator() {
         final String type = this.type();
@@ -108,6 +114,9 @@ public final class DirectivesValue implements Iterable<Directive> {
                 } else {
                     res = this.jeoObject(type, new PlainLongCodec(codec));
                 }
+                break;
+            case "nullable":
+                res = this.nullable(type, codec);
                 break;
             case "string":
                 res = this.eoObject(type, codec);
@@ -164,6 +173,21 @@ public final class DirectivesValue implements Iterable<Directive> {
             this.name,
             new DirectivesComment(this.comment()),
             new DirectivesBytes(this.hex(codec))
+        );
+    }
+
+    /**
+     * Nullable object.
+     * @param base Base of the object, usually "nullable".
+     * @param codec Codec to use for bytes encoding.
+     * @return JEO object directives for nullable type.
+     */
+    private DirectivesJeoObject nullable(final String base, final Codec codec) {
+        return new DirectivesJeoObject(
+            base,
+            this.name,
+            new DirectivesComment(this.comment()),
+            new DirectivesBytes(this.hex(codec), new RandName("null").toString())
         );
     }
 

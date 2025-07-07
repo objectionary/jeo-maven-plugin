@@ -80,10 +80,10 @@ public final class InnerClass implements BytecodeAttribute {
     public DirectivesAttribute directives() {
         return new DirectivesAttribute(
             "inner-class",
-            new DirectivesValue("", this.name),
-            new DirectivesValue("", this.outer),
-            new DirectivesValue("", this.inner),
-            new DirectivesValue("", this.access)
+            new DirectivesValue("name", this.name),
+            new DirectivesValue("outer", this.outer),
+            new DirectivesValue("inner", this.inner),
+            new DirectivesValue("access", this.access)
         );
     }
 }

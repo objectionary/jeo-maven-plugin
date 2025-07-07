@@ -141,7 +141,7 @@ enum DataType {
                         String.format(
                             "Unknown data type of %s, class is %s",
                             data,
-                            Optional.ofNullable(data)
+                            Optional.of(data)
                                 .map(Object::getClass)
                                 .map(Class::getName)
                                 .orElse("Nullable")

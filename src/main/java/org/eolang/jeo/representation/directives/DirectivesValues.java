@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.xembly.Directive;
@@ -39,16 +40,6 @@ public final class DirectivesValues implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param values Values themselves.
-     * @param <T> Values type.
-     */
-    @SafeVarargs
-    <T> DirectivesValues(final T... values) {
-        this("", values);
-    }
-
-    /**
-     * Constructor.
      * @param name Group of values name.
      * @param vals Values themselves.
      * @param <T> Values type.
@@ -61,11 +52,17 @@ public final class DirectivesValues implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
+        final AtomicInteger index = new AtomicInteger(0);
         return new DirectivesSeq(
             this.nonEmptyName(),
             Arrays.stream(this.values)
                 .filter(Objects::nonNull)
-                .map(DirectivesValue::new)
+                .map(
+                    value -> new DirectivesValue(
+                        String.format("x%d", index.getAndIncrement()),
+                        value
+                    )
+                )
                 .collect(Collectors.toList())
         ).iterator();
     }

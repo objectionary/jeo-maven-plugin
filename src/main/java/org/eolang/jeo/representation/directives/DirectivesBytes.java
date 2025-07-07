@@ -22,18 +22,44 @@ public final class DirectivesBytes implements Iterable<Directive> {
     private final String hex;
 
     /**
+     * Name of the object.
+     */
+    private final String name;
+
+    /**
      * Constructor.
      * @param hex Hex representation of bytes.
      */
     public DirectivesBytes(final String hex) {
+        this(hex, "");
+    }
+
+    /**
+     * Constructor.
+     * @param hex Hex representation of bytes.
+     * @param name Name of the object.
+     */
+    public DirectivesBytes(final String hex, final String name) {
         this.hex = hex;
+        this.name = name;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesClosedObject(
-            "Q.org.eolang.bytes",
-            new Directives().add("o").set(this.hex).up()
-        ).iterator();
+        final DirectivesClosedObject directives;
+        if (this.name.isEmpty()) {
+            directives = new DirectivesClosedObject(
+                "Q.org.eolang.bytes",
+                new Directives().add("o").set(this.hex).up()
+            );
+        } else {
+            directives = new DirectivesClosedObject(
+                "Q.org.eolang.bytes",
+                "",
+                this.name,
+                new Directives().add("o").set(this.hex).up()
+            );
+        }
+        return directives.iterator();
     }
 }

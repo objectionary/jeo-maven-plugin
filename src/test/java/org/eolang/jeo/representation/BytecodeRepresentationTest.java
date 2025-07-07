@@ -49,6 +49,21 @@ final class BytecodeRepresentationTest {
         );
     }
 
+    /**
+     * This test was added to mitigate the issue:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1160">Issue #1160</a>.
+     */
+    @Test
+    void generatesXmlWithFormationsThatCIncludeObjectsWithNames() {
+        MatcherAssert.assertThat(
+            "A formation must only include objects with names.",
+            new BytecodeRepresentation(
+                new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE)
+            ).toXmir().toString(),
+            Matchers.not(XhtmlMatchers.hasXPath("//o[not(@base)]/o[not(@name)]"))
+        );
+    }
+
     @Test
     void retrievesName() {
         final ResourceOf input = new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE);
