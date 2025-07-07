@@ -14,6 +14,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesEoObject;
 import org.eolang.jeo.representation.directives.DirectivesValue;
+import org.eolang.jeo.representation.directives.RandName;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
@@ -64,7 +65,7 @@ public final class BytecodeLabel implements BytecodeEntry {
     public Iterable<Directive> directives() {
         final Iterable<Directive> result;
         if (Objects.isNull(this.identifier)) {
-            result = new DirectivesEoObject("nop");
+            result = new DirectivesEoObject("nop", new RandName("nop").toString());
         } else {
             result = new DirectivesValue(this);
         }

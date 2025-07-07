@@ -85,7 +85,7 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
         if (Objects.nonNull(value)) {
             result = new DirectivesValue(value);
         } else {
-            result = new DirectivesEoObject("nop");
+            result = new DirectivesEoObject("nop", new RandName("nop").toString());
         }
         return result;
     }

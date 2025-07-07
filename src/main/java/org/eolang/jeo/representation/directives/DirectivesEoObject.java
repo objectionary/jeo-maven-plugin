@@ -4,7 +4,6 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -37,19 +36,13 @@ public final class DirectivesEoObject implements Iterable<Directive> {
     /**
      * Constructor.
      * @param base The base of the object.
-     */
-    public DirectivesEoObject(final String base) {
-        this(base, "", new ArrayList<>(0));
-    }
-
-    /**
-     * Constructor.
-     * @param base The base of the object.
      * @param name The name of the object.
      * @param inner Inner components.
      */
     @SafeVarargs
-    DirectivesEoObject(final String base, final String name, final Iterable<Directive>... inner) {
+    public DirectivesEoObject(
+        final String base, final String name, final Iterable<Directive>... inner
+    ) {
         this(base, name, Arrays.stream(inner).map(Directives::new).collect(Collectors.toList()));
     }
 
