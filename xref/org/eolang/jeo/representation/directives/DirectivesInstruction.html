@@ -54,41 +54,42 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a>(
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>              <strong class="jxr_keyword">this</strong>.base(),
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>              Stream.concat(
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>                  Stream.of(
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                      <strong class="jxr_keyword">new</strong> <a name="DirectivesComment" href="../../../../../org/eolang/jeo/representation/directives/DirectivesComment.html#DirectivesComment">DirectivesComment</a>(<strong class="jxr_keyword">this</strong>.comment()),
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>                      <strong class="jxr_keyword">new</strong> <a name="DirectivesOperand" href="../../../../../org/eolang/jeo/representation/directives/DirectivesOperand.html#DirectivesOperand">DirectivesOperand</a>(<strong class="jxr_keyword">this</strong>.opcode)
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>                  ),
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>                  Arrays.stream(<strong class="jxr_keyword">this</strong>.arguments).map(DirectivesOperand::<strong class="jxr_keyword">new</strong>)
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>              ).map(Directives::<strong class="jxr_keyword">new</strong>).collect(Collectors.toList())
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>          ).iterator();
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>      }
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     * Base of the instruction.</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     * @return String base.</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">private</strong> String base() {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">return</strong> String.format(<span class="jxr_string">"%s.%s"</span>, <span class="jxr_string">"opcode"</span>, <strong class="jxr_keyword">new</strong> <a name="OpcodeName" href="../../../../../org/eolang/jeo/representation/directives/OpcodeName.html#OpcodeName">OpcodeName</a>(<strong class="jxr_keyword">this</strong>.opcode).simplified());
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      }
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">     * Instruction comment.</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     * Later this message will be converted to the XML comment, like:</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     * &lt;!-- INVOKESPECIAL 183, "java/lang/Object", "&lt;init&gt;", "()V" --&gt;</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     * @return String comment.</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">private</strong> String comment() {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">return</strong> String.format(
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>              <span class="jxr_string">"#%d:%s(%s)"</span>,
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>              <strong class="jxr_keyword">this</strong>.opcode,
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>              <strong class="jxr_keyword">new</strong> <a name="OpcodeName" href="../../../../../org/eolang/jeo/representation/directives/OpcodeName.html#OpcodeName">OpcodeName</a>(<strong class="jxr_keyword">this</strong>.opcode).simplified(),
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>              Arrays.stream(<strong class="jxr_keyword">this</strong>.arguments)
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>                  .map(Object::toString)
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  .collect(Collectors.joining(<span class="jxr_string">", "</span>))
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>          );
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      }
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  }
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>              <strong class="jxr_keyword">new</strong> <a name="RandName" href="../../../../../org/eolang/jeo/representation/directives/RandName.html#RandName">RandName</a>(<span class="jxr_string">"instruction"</span>).toString(),
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>              Stream.concat(
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  Stream.of(
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>                      <strong class="jxr_keyword">new</strong> <a name="DirectivesComment" href="../../../../../org/eolang/jeo/representation/directives/DirectivesComment.html#DirectivesComment">DirectivesComment</a>(<strong class="jxr_keyword">this</strong>.comment()),
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>                      <strong class="jxr_keyword">new</strong> <a name="DirectivesOperand" href="../../../../../org/eolang/jeo/representation/directives/DirectivesOperand.html#DirectivesOperand">DirectivesOperand</a>(<strong class="jxr_keyword">this</strong>.opcode)
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>                  ),
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>                  Arrays.stream(<strong class="jxr_keyword">this</strong>.arguments).map(DirectivesOperand::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>              ).map(Directives::<strong class="jxr_keyword">new</strong>).collect(Collectors.toList())
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>          ).iterator();
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     * Base of the instruction.</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">     * @return String base.</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      <strong class="jxr_keyword">private</strong> String base() {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">return</strong> String.format(<span class="jxr_string">"%s.%s"</span>, <span class="jxr_string">"opcode"</span>, <strong class="jxr_keyword">new</strong> <a name="OpcodeName" href="../../../../../org/eolang/jeo/representation/directives/OpcodeName.html#OpcodeName">OpcodeName</a>(<strong class="jxr_keyword">this</strong>.opcode).simplified());
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     * Instruction comment.</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">     * Later this message will be converted to the XML comment, like:</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">     * &lt;!-- INVOKESPECIAL 183, "java/lang/Object", "&lt;init&gt;", "()V" --&gt;</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     * @return String comment.</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">private</strong> String comment() {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">return</strong> String.format(
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>              <span class="jxr_string">"#%d:%s(%s)"</span>,
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>              <strong class="jxr_keyword">this</strong>.opcode,
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>              <strong class="jxr_keyword">new</strong> <a name="OpcodeName" href="../../../../../org/eolang/jeo/representation/directives/OpcodeName.html#OpcodeName">OpcodeName</a>(<strong class="jxr_keyword">this</strong>.opcode).simplified(),
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>              Arrays.stream(<strong class="jxr_keyword">this</strong>.arguments)
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  .map(Object::toString)
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                  .collect(Collectors.joining(<span class="jxr_string">", "</span>))
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>          );
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      }
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>

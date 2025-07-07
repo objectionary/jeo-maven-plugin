@@ -51,16 +51,17 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a>(
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>              <span class="jxr_string">"annotation-property"</span>,
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>              Stream.concat(
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>                  Stream.of(
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>                      <strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<span class="jxr_string">"ARRAY"</span>),
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>                      <strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.name)
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>                  ),
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  <strong class="jxr_keyword">this</strong>.values.stream()
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>              ).map(Directives::<strong class="jxr_keyword">new</strong>).collect(Collectors.toList())
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>          ).iterator();
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      }
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  }
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>              <strong class="jxr_keyword">new</strong> <a name="RandName" href="../../../../../org/eolang/jeo/representation/directives/RandName.html#RandName">RandName</a>(<span class="jxr_string">"array"</span>).toString(),
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>              Stream.concat(
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>                  Stream.of(
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>                      <strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<span class="jxr_string">"ARRAY"</span>),
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>                      <strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(<strong class="jxr_keyword">this</strong>.name)
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  ),
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>                  <strong class="jxr_keyword">this</strong>.values.stream()
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>              ).map(Directives::<strong class="jxr_keyword">new</strong>).collect(Collectors.toList())
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>          ).iterator();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>

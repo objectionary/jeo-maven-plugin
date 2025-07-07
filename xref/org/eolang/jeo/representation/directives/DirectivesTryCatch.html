@@ -73,30 +73,31 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a>(
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>              <span class="jxr_string">"trycatch"</span>,
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>              Stream.of(
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>                  <strong class="jxr_keyword">this</strong>.start.directives(),
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>                  <strong class="jxr_keyword">this</strong>.end.directives(),
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>                  <strong class="jxr_keyword">this</strong>.handler.directives(),
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>                  DirectivesTryCatch.nullable(<strong class="jxr_keyword">this</strong>.type)
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>              ).map(Directives::<strong class="jxr_keyword">new</strong>).collect(Collectors.toList())
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>          ).iterator();
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      }
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">     * Wpraps a nullable string into a directive.</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">     * @param value The value that may be null.</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">     * @return The directives.</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Iterable&lt;Directive&gt; nullable(<strong class="jxr_keyword">final</strong> String value) {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>          <strong class="jxr_keyword">final</strong> Iterable&lt;Directive&gt; result;
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">if</strong> (Objects.nonNull(value)) {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>              result = <strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(value);
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>          } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>              result = <strong class="jxr_keyword">new</strong> <a name="DirectivesEoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesEoObject.html#DirectivesEoObject">DirectivesEoObject</a>(<span class="jxr_string">"nop"</span>);
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>          }
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      }
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  }
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>              <strong class="jxr_keyword">new</strong> <a name="RandName" href="../../../../../org/eolang/jeo/representation/directives/RandName.html#RandName">RandName</a>(<span class="jxr_string">"trycatch"</span>).toString(),
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>              Stream.of(
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>                  <strong class="jxr_keyword">this</strong>.start.directives(),
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>                  <strong class="jxr_keyword">this</strong>.end.directives(),
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>                  <strong class="jxr_keyword">this</strong>.handler.directives(),
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>                  DirectivesTryCatch.nullable(<strong class="jxr_keyword">this</strong>.type)
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>              ).map(Directives::<strong class="jxr_keyword">new</strong>).collect(Collectors.toList())
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          ).iterator();
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      }
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">     * Wpraps a nullable string into a directive.</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">     * @param value The value that may be null.</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">     * @return The directives.</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Iterable&lt;Directive&gt; nullable(<strong class="jxr_keyword">final</strong> String value) {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          <strong class="jxr_keyword">final</strong> Iterable&lt;Directive&gt; result;
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">if</strong> (Objects.nonNull(value)) {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>              result = <strong class="jxr_keyword">new</strong> <a name="DirectivesValue" href="../../../../../org/eolang/jeo/representation/directives/DirectivesValue.html#DirectivesValue">DirectivesValue</a>(value);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>              result = <strong class="jxr_keyword">new</strong> <a name="DirectivesEoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesEoObject.html#DirectivesEoObject">DirectivesEoObject</a>(<span class="jxr_string">"nop"</span>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          }
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>          <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>      }
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>
