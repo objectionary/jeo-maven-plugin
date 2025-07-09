@@ -9,13 +9,15 @@
     <artifactId>jcabi-maven-skin</artifactId>
     <version>1.7.1</version>
   </skin>
-  <bannerLeft>
-    <name>jeo-maven-plugin</name>
-    <src>https://www.objectionary.com/cactus.svg</src>
-    <href>https://objectionary.github.io/jeo-maven-plugin/index.html</href>
-    <width>92</width>
-    <height>92</height>
-  </bannerLeft>
+  <decoration>
+    <bannerLeft>
+      <name>jeo-maven-plugin</name>
+      <src>https://www.objectionary.com/cactus.svg</src>
+      <href>https://objectionary.github.io/jeo-maven-plugin/index.html</href>
+      <width>92</width>
+      <height>92</height>
+    </bannerLeft>
+  </decoration>
   <body>
     <head>
       &lt;link href="https://www.objectionary.com/cactus.svg" rel="shortcut icon"/&gt;
