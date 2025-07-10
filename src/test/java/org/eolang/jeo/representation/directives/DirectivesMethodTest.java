@@ -8,6 +8,7 @@ import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Collections;
 import org.eolang.jeo.representation.NumberedName;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
+import org.eolang.jeo.representation.bytecode.JavaCodec;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,22 @@ final class DirectivesMethodTest {
             "We expect that 'j$' prefix will be added to the method name",
             new Xembler(new BytecodeMethod("φTerm").directives(1)).xml(),
             XhtmlMatchers.hasXPaths("./o[contains(@name, 'j$φTerm')]")
+        );
+    }
+
+    @Test
+    void savesMethodNameAsAttributeValue() {
+        final String foo = "foo";
+        MatcherAssert.assertThat(
+            "We expect that the method name will be saved as an attribute value",
+            new Xembler(new DirectivesMethod(foo)).xmlQuietly(),
+            XhtmlMatchers.hasXPath(
+                String.format(
+                    "./o[contains(@name,'%s')]/o[@name='name']/o/o[text()='%s']",
+                    foo,
+                    new DirectivesValue(foo).hex(new JavaCodec())
+                )
+            )
         );
     }
 

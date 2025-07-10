@@ -140,9 +140,10 @@ public final class DirectivesMethod implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
+        final String mname = this.name.toString();
         return new DirectivesJeoObject(
             "method",
-            new PrefixedName(this.name.toString()).encode(),
+            new PrefixedName(mname).encode(),
             Stream.concat(
                 Stream.of(
                     this.properties,
@@ -155,7 +156,10 @@ public final class DirectivesMethod implements Iterable<Directive> {
                 ),
                 Stream.concat(
                     this.dvalue.stream(),
-                    Stream.of(this.attributes)
+                    Stream.of(
+                        this.attributes,
+                        new DirectivesValue("name", mname)
+                    )
                 )
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
