@@ -13,7 +13,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.NumberedName;
-import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
@@ -190,13 +189,22 @@ public final class XmlMethod {
      * @return Name.
      */
     private String name() {
-        return new MethodName(
-            new PrefixedName(
-                new NumberedName(
-                    this.node.name()
-                ).plain()
-            ).decode()
-        ).bytecode();
+        return this.node.children()
+            .map(XmlEoObject::new)
+            .filter(XmlEoObject::named)
+            .filter(xml -> "name".equals(xml.name()))
+            .map(XmlValue::new)
+            .map(XmlValue::string)
+            .map(NumberedName::new)
+            .map(NumberedName::plain)
+            .map(MethodName::new)
+            .map(MethodName::bytecode)
+            .findFirst()
+            .orElseThrow(
+                () -> new IllegalStateException(
+                    String.format("Method '%s' doesn't have a name", this.node.name())
+                )
+            );
     }
 
     /**
