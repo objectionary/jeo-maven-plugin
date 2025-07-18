@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -34,22 +33,6 @@ final class OpcodeNameTest {
         MatcherAssert.assertThat(
             "Opcode name is not as expected",
             new OpcodeName(actual, OpcodeNameTest.COUNTER).asString(),
-            Matchers.equalTo(expected)
-        );
-    }
-
-    @Test
-    void returnsOpcode() {
-        final int expected = 0;
-        final int code = new OpcodeName(expected, OpcodeNameTest.COUNTER)
-            .code();
-        MatcherAssert.assertThat(
-            String.format(
-                "Opcode code: %d does not matches with expected: %d",
-                code,
-                expected
-            ),
-            code,
             Matchers.equalTo(expected)
         );
     }

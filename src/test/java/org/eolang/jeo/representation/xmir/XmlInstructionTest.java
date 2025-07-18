@@ -67,18 +67,18 @@ final class XmlInstructionTest {
         MatcherAssert.assertThat(
             "Error message should contain invalid opcode number",
             Assertions.assertThrows(
-                IllegalArgumentException.class,
+                IllegalStateException.class,
                 () -> new XmlInstruction(
                     new JcabiXmlNode(
                         new Xembler(new DirectivesInstruction(Opcodes.DUP))
                             .xml()
-                            .replace(".number", ".string")
+                            .replace("64-75-70", "31-31-31")
                     )
                 ).bytecode(),
-                "Should throw IllegalArgumentException for invalid opcode"
+                "Should throw an exception for invalid opcode"
             ).getMessage(),
             Matchers.containsString(
-                "opcode value is '@V@\u0000\u0000\u0000\u0000\u0000', but the opcode number should be an integer"
+                "Unknown opcode name: 111"
             )
         );
     }

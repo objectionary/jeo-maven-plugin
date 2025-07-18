@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.OpcodeDictionary;
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.xembly.Transformers;
@@ -20,6 +21,11 @@ import org.xembly.Xembler;
 @ToString
 @EqualsAndHashCode
 public final class XmlInstruction implements XmlBytecodeEntry {
+
+    /**
+     * Opcode dictionary.
+     */
+    private static final OpcodeDictionary DICTIONARY = new OpcodeDictionary();
 
     /**
      * Instruction node.
@@ -76,24 +82,14 @@ public final class XmlInstruction implements XmlBytecodeEntry {
      */
     @EqualsAndHashCode.Include
     private int opcode() {
-        final Object value = new XmlValue(
-            this.node.children().findFirst()
-                .orElseThrow(
-                    () -> new IllegalStateException(
-                        String.format("fist child isn't found in node %s", this.node)
-                    )
-                )
-        ).object();
-        if (!(value instanceof Integer)) {
-            throw new IllegalArgumentException(
-                String.format(
-                    "Can't parse opcode number from the node '%s', opcode value is '%s', but the opcode number should be an integer",
-                    this.node,
-                    value
+        return this.node.base()
+            .map(s -> s.substring(s.lastIndexOf('.') + 1))
+            .map(XmlInstruction.DICTIONARY::code)
+            .orElseThrow(
+                () -> new IllegalStateException(
+                    String.format("base is not found in node %s", this.node)
                 )
             );
-        }
-        return (int) value;
     }
 
     /**
@@ -104,7 +100,6 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     private List<XmlOperand> operands() {
         return this.node
             .children()
-            .skip(1)
             .map(XmlOperand::new)
             .collect(Collectors.toList());
     }

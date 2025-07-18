@@ -48,10 +48,7 @@ public final class DirectivesInstruction implements Iterable<Directive> {
             this.base(),
             new RandName("instruction").toString(),
             Stream.concat(
-                Stream.of(
-                    new DirectivesComment(this.comment()),
-                    new DirectivesOperand(this.opcode)
-                ),
+                Stream.of(new DirectivesComment(this.comment())),
                 Arrays.stream(this.arguments).map(DirectivesOperand::new)
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();

@@ -4,12 +4,8 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.objectweb.asm.Opcodes;
+import org.eolang.jeo.representation.OpcodeDictionary;
 
 /**
  * Opcode name.
@@ -22,17 +18,12 @@ public final class OpcodeName {
     /**
      * Opcode names.
      */
-    private static final Map<Integer, String> NAMES = OpcodeName.init();
+    private static final OpcodeDictionary NAMES = new OpcodeDictionary();
 
     /**
      * Default counter.
      */
     private static final AtomicInteger DEFAULT = new AtomicInteger(0);
-
-    /**
-     * Unknown opcode name.
-     */
-    private static final String UNKNOWN = "unknown";
 
     /**
      * Bytecode operation code.
@@ -67,49 +58,16 @@ public final class OpcodeName {
      * @return Simplified opcode name.
      */
     public String simplified() {
-        return OpcodeName.NAMES.getOrDefault(this.opcode, OpcodeName.UNKNOWN);
-    }
-
-    /**
-     * Opcode.
-     * @return Opcode
-     * @todo #770:35min Get rid of code() method.
-     *  This method looks like a getter. For now this method should be used by
-     *  <a href="https://github.com/objectionary/opeo-maven-plugin">opeo</a>
-     *  in it/AgentsIT.java. Let's remove code() method, so this class will be
-     *  getter-free.
-     */
-    public int code() {
-        return this.opcode;
+        return OpcodeName.NAMES.name(this.opcode);
     }
 
     /**
      * Get string representation of a bytecode.
      * @return String representation of a bytecode.
      */
-    public String asString() {
-        final String opc = OpcodeName.NAMES.getOrDefault(this.opcode, OpcodeName.UNKNOWN);
-        return String.format("%s-%X", opc, this.counter.incrementAndGet());
-    }
-
-    /**
-     * Initialize opcode names.
-     * @return Opcode names.
-     */
-    private static Map<Integer, String> init() {
-        try {
-            final Map<Integer, String> res = new HashMap<>();
-            for (final Field field : Opcodes.class.getFields()) {
-                if (field.getType() == int.class) {
-                    res.put(field.getInt(Opcodes.class), field.getName().toLowerCase(Locale.ROOT));
-                }
-            }
-            return res;
-        } catch (final IllegalAccessException exception) {
-            throw new IllegalStateException(
-                String.format("Can't retrieve opcode names from '%s'", Opcodes.class),
-                exception
-            );
-        }
+    String asString() {
+        return String.format(
+            "%s-%X", OpcodeName.NAMES.name(this.opcode), this.counter.incrementAndGet()
+        );
     }
 }
