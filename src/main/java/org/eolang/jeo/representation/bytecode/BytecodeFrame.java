@@ -9,11 +9,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesFrame;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.LabelNode;
 import org.xembly.Directive;
 
@@ -158,12 +160,124 @@ public final class BytecodeFrame implements BytecodeEntry {
 
     @Override
     public String view() {
+        final String name;
+        switch (this.type) {
+            case Opcodes.F_NEW:
+                name = "NEW";
+                break;
+            case Opcodes.F_FULL:
+                name = "FULL";
+                break;
+            case Opcodes.F_APPEND:
+                name = "APPEND";
+                break;
+            case Opcodes.F_CHOP:
+                name = "CHOP";
+                break;
+            case Opcodes.F_SAME:
+                name = "SAME";
+                break;
+            case Opcodes.F_SAME1:
+                name = "SAME1";
+                break;
+            default:
+                name = "UNKNOWN";
+        }
         return String.format(
-            "Frame %d locals %d stack %d",
-            this.type,
+            "Frame %s locals %d stack %d",
+            name,
             this.nlocal,
             this.nstack
         );
+    }
+
+    public int stackDiff(final BytecodeFrame other) {
+        return this.nstack - other.nstack;
+    }
+
+
+    public boolean stackOneElement() {
+        return this.nstack == 1;
+    }
+
+    public boolean stackEmpty() {
+        return this.nstack == 0;
+    }
+
+    public BytecodeFrame withType(final int type) {
+        return new BytecodeFrame(
+            type,
+            this.nlocal,
+            this.locals,
+            this.nstack,
+            this.stack
+        );
+    }
+
+    public BytecodeFrame substract(final BytecodeFrame other) {
+        List<Object> result = new ArrayList<>(0);
+        final Object[] tlocals = this.locals;
+        final Object[] olocals = other.locals;
+        int size = Math.max(tlocals.length, olocals.length);
+        for (int i = 0; i < size; ++i) {
+            final Object tlocal;
+            if (tlocals.length <= i) {
+                tlocal = Opcodes.TOP;
+            } else {
+                tlocal = tlocals[i];
+            }
+            final Object olocal;
+            if (olocals.length <= i) {
+                olocal = Opcodes.TOP;
+            } else {
+                olocal = olocals[i];
+            }
+            if (!tlocal.equals(olocal)) {
+                result.add(tlocal);
+            }
+        }
+        Object[] res = result.stream().filter(arg -> !arg.equals(Opcodes.TOP))
+            .toArray();
+        return new BytecodeFrame(
+            this.type,
+            res.length,
+            res,
+            this.nstack,
+            this.stack
+        );
+    }
+
+    public int localsDiff(final BytecodeFrame previous) {
+        return this.nlocal - previous.nlocal;
+    }
+
+    /**
+     * Check if the frame has the same locals.
+     * @param frame Frame to compare.
+     * @return True if the frame has the same locals.
+     */
+    public boolean sameLocals(final BytecodeFrame frame) {
+        final int size = Math.max(this.nlocal, frame.nlocal);
+        final Object[] current = this.locals;
+        final Object[] other = frame.locals;
+        for (int index = 0; index < size; ++index) {
+            final Object curr;
+            if (current.length <= index) {
+                curr = Opcodes.TOP;
+            } else {
+                curr = current[index];
+            }
+            final Object oth;
+            if (other.length <= index) {
+                oth = Opcodes.TOP;
+            } else {
+                oth = other[index];
+            }
+            if (!curr.equals(oth)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

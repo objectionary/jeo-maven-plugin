@@ -99,6 +99,57 @@ public final class BytecodeInstruction implements BytecodeEntry {
         return true;
     }
 
+
+    public int localIndex() {
+        return this.varIndex();
+    }
+
+    /**
+     *   // Standard stack map frame element types.
+     *
+     *   Integer TOP = Frame.ITEM_TOP;
+     *   Integer INTEGER = Frame.ITEM_INTEGER;
+     *   Integer FLOAT = Frame.ITEM_FLOAT;
+     *   Integer DOUBLE = Frame.ITEM_DOUBLE;
+     *   Integer LONG = Frame.ITEM_LONG;
+     *   Integer NULL = Frame.ITEM_NULL;
+     *   Integer UNINITIALIZED_THIS = Frame.ITEM_UNINITIALIZED_THIS;
+     * @return
+     */
+    public Object elementType() {
+        final Object result;
+        switch (this.opcode) {
+            case Opcodes.ILOAD:
+            case Opcodes.ISTORE:
+                result = Opcodes.INTEGER;
+                break;
+            case Opcodes.LLOAD:
+            case Opcodes.LSTORE:
+                result = Opcodes.LONG;
+                break;
+            case Opcodes.FLOAD:
+            case Opcodes.FSTORE:
+                result = Opcodes.FLOAT;
+                break;
+            case Opcodes.DLOAD:
+            case Opcodes.DSTORE:
+                result = Opcodes.DOUBLE;
+                break;
+            case Opcodes.ALOAD:
+            case Opcodes.ASTORE:
+                result = Opcodes.TOP;
+                break;
+            default:
+                throw new IllegalStateException(
+                    String.format(
+                        "Unexpected opcode for local variable instruction: %s",
+                        new OpcodeName(this.opcode).simplified()
+                    )
+                );
+        }
+        return result;
+    }
+
     /**
      * Impact of each instruction on the stack.
      * @return Stack impact.

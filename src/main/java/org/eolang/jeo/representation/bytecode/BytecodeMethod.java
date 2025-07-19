@@ -379,6 +379,32 @@ public final class BytecodeMethod {
     }
 
     /**
+     * Compute frames.
+     * @return Frames.
+     */
+    List<BytecodeFrame> computeFrames() {
+        return new StackMapFrames(
+            this.properties,
+            this.instructions,
+            this.tryblocks.stream()
+                .filter(BytecodeTryCatchBlock.class::isInstance)
+                .map(BytecodeTryCatchBlock.class::cast)
+                .collect(Collectors.toList())
+        ).frames();
+    }
+
+    /**
+     * Current frames.
+     * @return Frames.
+     */
+    List<BytecodeFrame> currentFrames() {
+        return this.instructions.stream()
+            .filter(BytecodeFrame.class::isInstance)
+            .map(BytecodeFrame.class::cast)
+            .collect(Collectors.toList());
+    }
+
+    /**
      * Add instruction.
      * @param opcode Opcode.
      * @param args Arguments.
