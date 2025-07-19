@@ -32,6 +32,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
       - run: mvn clean install -P"qulice,long" --errors --batch-mode
+      - run: mvn clean site -Psite --errors --batch-mode
       - name: Archive failure logs
         uses: actions/upload-artifact@v4
         if: failure()
