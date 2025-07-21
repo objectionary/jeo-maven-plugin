@@ -63,8 +63,8 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> access() {
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>          <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">int</strong>) <strong class="jxr_keyword">new</strong> <a name="XmlValue" href="../../../../../org/eolang/jeo/representation/xmir/XmlValue.html#XmlValue">XmlValue</a>(
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>              <strong class="jxr_keyword">this</strong>.clazz.children()
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>                  .map(XmlEoObject::<strong class="jxr_keyword">new</strong>)
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>                  .filter(XmlEoObject::named)
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>                  .map(XmlNamedObject::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>                  .filter(XmlNamedObject::named)
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>                  .filter(node -&gt; node.name().contains(<span class="jxr_string">"access"</span>))
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>                  .findFirst()
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>                  .orElseThrow(
@@ -134,10 +134,10 @@
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">     * @param name Name of the child node.</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">     * @return Child node.</em>
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>     <strong class="jxr_keyword">private</strong> Optional&lt;XmlEoObject&gt; eoChild(<strong class="jxr_keyword">final</strong> String name) {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>     <strong class="jxr_keyword">private</strong> Optional&lt;XmlNamedObject&gt; eoChild(<strong class="jxr_keyword">final</strong> String name) {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.clazz.children()
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>             .map(XmlEoObject::<strong class="jxr_keyword">new</strong>)
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>             .filter(XmlEoObject::named)
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>             .map(XmlNamedObject::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>             .filter(XmlNamedObject::named)
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>             .filter(node -&gt; node.name().equals(name))
 <a class="jxr_linenumber" name="L134" href="#L134">134</a>             .findFirst();
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>     }

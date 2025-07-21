@@ -121,11 +121,10 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>                     .map(XmlTryCatchEntry.NOP::equals)
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>                     .orElse(false)
 <a class="jxr_linenumber" name="L115" href="#L115">115</a>             )
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>             .map(XmlValue::<strong class="jxr_keyword">new</strong>)
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>             .map(XmlValue::object)
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>             .map(BytecodeLabel.<strong class="jxr_keyword">class</strong>::<strong class="jxr_keyword">cast</strong>);
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>     }
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> }
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>             .map(XmlLabel::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>             .map(XmlLabel::bytecode);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>     }
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> }
 </pre>
 <hr/>
 <div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>

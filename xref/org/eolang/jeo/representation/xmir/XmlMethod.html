@@ -198,8 +198,8 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a>     <strong class="jxr_keyword">private</strong> String name() {
 <a class="jxr_linenumber" name="L192" href="#L192">192</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
-<a class="jxr_linenumber" name="L193" href="#L193">193</a>             .map(XmlEoObject::<strong class="jxr_keyword">new</strong>)
-<a class="jxr_linenumber" name="L194" href="#L194">194</a>             .filter(XmlEoObject::named)
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>             .map(XmlNamedObject::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>             .filter(XmlNamedObject::named)
 <a class="jxr_linenumber" name="L195" href="#L195">195</a>             .filter(xml -&gt; <span class="jxr_string">"name"</span>.equals(xml.name()))
 <a class="jxr_linenumber" name="L196" href="#L196">196</a>             .map(XmlValue::<strong class="jxr_keyword">new</strong>)
 <a class="jxr_linenumber" name="L197" href="#L197">197</a>             .map(XmlValue::string)
@@ -321,10 +321,10 @@
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">     * @param name Name.</em>
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">     * @return Child.</em>
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>     <strong class="jxr_keyword">private</strong> <a name="XmlEoObject" href="../../../../../org/eolang/jeo/representation/xmir/XmlEoObject.html#XmlEoObject">XmlEoObject</a> child(<strong class="jxr_keyword">final</strong> String name) {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>     <strong class="jxr_keyword">private</strong> <a name="XmlNamedObject" href="../../../../../org/eolang/jeo/representation/xmir/XmlNamedObject.html#XmlNamedObject">XmlNamedObject</a> child(<strong class="jxr_keyword">final</strong> String name) {
 <a class="jxr_linenumber" name="L317" href="#L317">317</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>             .map(XmlEoObject::<strong class="jxr_keyword">new</strong>)
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>             .filter(XmlEoObject::named)
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>             .map(XmlNamedObject::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>             .filter(XmlNamedObject::named)
 <a class="jxr_linenumber" name="L320" href="#L320">320</a>             .filter(object -&gt; object.name().contains(name))
 <a class="jxr_linenumber" name="L321" href="#L321">321</a>             .findFirst()
 <a class="jxr_linenumber" name="L322" href="#L322">322</a>             .orElseThrow(
