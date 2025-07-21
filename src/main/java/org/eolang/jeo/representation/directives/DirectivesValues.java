@@ -12,6 +12,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.BytecodeEntry;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.xembly.Directive;
 
 /**
@@ -58,10 +60,18 @@ public final class DirectivesValues implements Iterable<Directive> {
             Arrays.stream(this.values)
                 .filter(Objects::nonNull)
                 .map(
-                    value -> new DirectivesValue(
-                        String.format("x%d", index.getAndIncrement()),
-                        value
-                    )
+                    value -> {
+                        final Iterable<Directive> result;
+                        if (value instanceof BytecodeLabel) {
+                            result = ((BytecodeEntry) value).directives();
+                        } else {
+                            result = new DirectivesValue(
+                                String.format("x%d", index.getAndIncrement()),
+                                value
+                            );
+                        }
+                        return result;
+                    }
                 )
                 .collect(Collectors.toList())
         ).iterator();

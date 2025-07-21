@@ -54,7 +54,6 @@ final class JavaCodecTest {
             {'a', DataType.CHAR, new byte[]{0, 97}},
             {new byte[]{0, 1, 2, 3}, DataType.BYTES, new byte[]{0, 1, 2, 3}},
             {"hello, world!", DataType.STRING, "hello, world!".getBytes(StandardCharsets.UTF_8)},
-            {new BytecodeLabel("label"), DataType.LABEL, "label".getBytes(StandardCharsets.UTF_8)},
             {
                 Type.getType(Object.class),
                 DataType.TYPE_REFERENCE,

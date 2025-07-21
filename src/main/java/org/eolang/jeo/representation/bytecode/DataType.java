@@ -68,11 +68,6 @@ enum DataType {
     BYTES("bytes", byte[].class),
 
     /**
-     * Label.
-     */
-    LABEL("label", BytecodeLabel.class),
-
-    /**
      * Type reference.
      */
     TYPE_REFERENCE("type", Type.class),

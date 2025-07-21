@@ -6,7 +6,6 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.Codec;
 import org.eolang.jeo.representation.bytecode.JavaCodec;
 import org.hamcrest.MatcherAssert;
@@ -17,7 +16,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.objectweb.asm.Type;
 import org.xembly.ImpossibleModificationException;
-import org.xembly.Transformers;
 import org.xembly.Xembler;
 
 /**
@@ -85,23 +83,6 @@ final class DirectivesValueTest {
                     "./o[contains(@base,'number') and @name='access']/o[contains(@base,'bytes')]/o[text()='%s']",
                     bytes
                 )
-            )
-        );
-    }
-
-    @Test
-    void convertsLabel() throws ImpossibleModificationException {
-        MatcherAssert.assertThat(
-            "Converts label to XML",
-            new Xembler(
-                new DirectivesValue(
-                    new BytecodeLabel("some-random")
-                ),
-                new Transformers.Node()
-            ).xml(),
-            XhtmlMatchers.hasXPaths(
-                new JeoBaseXpath("./o", "label").toXpath(),
-                "./o/o[contains(@base,'bytes')]/o[text()='73-6F-6D-65-2D-72-61-6E-64-6F-6D']"
             )
         );
     }

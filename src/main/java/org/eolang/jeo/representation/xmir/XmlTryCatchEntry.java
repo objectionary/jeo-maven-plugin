@@ -113,8 +113,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
                     .map(XmlTryCatchEntry.NOP::equals)
                     .orElse(false)
             )
-            .map(XmlValue::new)
-            .map(XmlValue::object)
-            .map(BytecodeLabel.class::cast);
+            .map(XmlLabel::new)
+            .map(XmlLabel::bytecode);
     }
 }

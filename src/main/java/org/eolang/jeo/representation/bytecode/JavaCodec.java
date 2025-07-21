@@ -58,9 +58,6 @@ public final class JavaCodec implements Codec {
             case BYTES:
                 result = byte[].class.cast(value);
                 break;
-            case LABEL:
-                result = BytecodeLabel.class.cast(value).uid().getBytes(StandardCharsets.UTF_8);
-                break;
             case TYPE_REFERENCE:
                 result = JavaCodec.typeBytes(value);
                 break;
@@ -111,9 +108,6 @@ public final class JavaCodec implements Codec {
                 break;
             case BYTES:
                 result = bytes;
-                break;
-            case LABEL:
-                result = new BytecodeLabel(new String(bytes, StandardCharsets.UTF_8));
                 break;
             case TYPE_REFERENCE:
                 result = Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)));

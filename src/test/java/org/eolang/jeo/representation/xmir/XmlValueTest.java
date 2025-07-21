@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -97,8 +96,7 @@ final class XmlValueTest {
             Arguments.of(Short.MIN_VALUE),
             Arguments.of(Byte.MAX_VALUE),
             Arguments.of(Byte.MIN_VALUE),
-            Arguments.of("org/eolang/jeo/representation/HexDataTest"),
-            Arguments.of(new BytecodeLabel("some"))
+            Arguments.of("org/eolang/jeo/representation/HexDataTest")
         );
     }
 }

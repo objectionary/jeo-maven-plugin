@@ -42,7 +42,6 @@ public final class EoCodec implements Codec {
             case CHAR:
             case STRING:
             case BYTES:
-            case LABEL:
             case TYPE_REFERENCE:
             case CLASS_REFERENCE:
             case NULL:
@@ -72,7 +71,6 @@ public final class EoCodec implements Codec {
             case CHAR:
             case STRING:
             case BYTES:
-            case LABEL:
             case TYPE_REFERENCE:
             case CLASS_REFERENCE:
             case NULL:
