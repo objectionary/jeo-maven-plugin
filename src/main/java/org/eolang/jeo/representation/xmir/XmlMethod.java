@@ -190,8 +190,8 @@ public final class XmlMethod {
      */
     private String name() {
         return this.node.children()
-            .map(XmlEoObject::new)
-            .filter(XmlEoObject::named)
+            .map(XmlNamedObject::new)
+            .filter(XmlNamedObject::named)
             .filter(xml -> "name".equals(xml.name()))
             .map(XmlValue::new)
             .map(XmlValue::string)
@@ -313,10 +313,10 @@ public final class XmlMethod {
      * @param name Name.
      * @return Child.
      */
-    private XmlEoObject child(final String name) {
+    private XmlNamedObject child(final String name) {
         return this.node.children()
-            .map(XmlEoObject::new)
-            .filter(XmlEoObject::named)
+            .map(XmlNamedObject::new)
+            .filter(XmlNamedObject::named)
             .filter(object -> object.name().contains(name))
             .findFirst()
             .orElseThrow(

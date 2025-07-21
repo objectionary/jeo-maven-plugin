@@ -72,13 +72,13 @@ final class XmlInstructionTest {
                     new JcabiXmlNode(
                         new Xembler(new DirectivesInstruction(Opcodes.DUP))
                             .xml()
-                            .replace("64-75-70", "31-31-31")
+                            .replace("dup", "unknown")
                     )
                 ).bytecode(),
                 "Should throw an exception for invalid opcode"
             ).getMessage(),
             Matchers.containsString(
-                "Unknown opcode name: 111"
+                "Unknown opcode name: unknown"
             )
         );
     }

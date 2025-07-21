@@ -4,8 +4,6 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import org.eolang.jeo.representation.bytecode.JavaCodec;
-
 /**
  * XPath for the base of an object.
  * This class is the response to the frequent changes in a way we represent 'base' attribute in
@@ -40,10 +38,6 @@ final class JeoBaseXpath {
      * @return String base.
      */
     String toXpath() {
-        return String.format(
-            "%s/o[@name='base' and contains(@base,'string')]/o[contains(@base, 'bytes')]/o[contains(text(),'%s')]",
-            this.element,
-            new DirectivesValue(this.base).hex(new JavaCodec())
-        );
+        return String.format("%s/o[@name='@' and contains(@base,'%s')]", this.element, this.base);
     }
 }

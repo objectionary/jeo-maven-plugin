@@ -52,7 +52,7 @@ public final class XmlValue {
      * Constructor.
      * @param node XML node.
      */
-    public XmlValue(final XmlEoObject node) {
+    public XmlValue(final XmlNamedObject node) {
         this(node.node());
     }
 

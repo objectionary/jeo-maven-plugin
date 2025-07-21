@@ -40,7 +40,8 @@ public final class JcabiXmlNode implements XmlNode {
             "no-attribute-formation",
             "redundant-object",
             "duplicate-names-in-diff-context",
-            "unit-test-missing"
+            "unit-test-missing",
+            "sparse-decoration"
         )
     );
 

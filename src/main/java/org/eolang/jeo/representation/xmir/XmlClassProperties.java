@@ -55,8 +55,8 @@ final class XmlClassProperties {
     private int access() {
         return (int) new XmlValue(
             this.clazz.children()
-                .map(XmlEoObject::new)
-                .filter(XmlEoObject::named)
+                .map(XmlNamedObject::new)
+                .filter(XmlNamedObject::named)
                 .filter(node -> node.name().contains("access"))
                 .findFirst()
                 .orElseThrow(
@@ -126,10 +126,10 @@ final class XmlClassProperties {
      * @param name Name of the child node.
      * @return Child node.
      */
-    private Optional<XmlEoObject> eoChild(final String name) {
+    private Optional<XmlNamedObject> eoChild(final String name) {
         return this.clazz.children()
-            .map(XmlEoObject::new)
-            .filter(XmlEoObject::named)
+            .map(XmlNamedObject::new)
+            .filter(XmlNamedObject::named)
             .filter(node -> node.name().equals(name))
             .findFirst();
     }

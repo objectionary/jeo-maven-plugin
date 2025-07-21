@@ -78,7 +78,7 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesAbsractObject(
+        return new DirectivesDelegateObject(
             new JeoFqn(this.base).fqn(),
             "",
             this.name,

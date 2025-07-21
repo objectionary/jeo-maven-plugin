@@ -19,21 +19,21 @@ final class XmlGlobalObject {
     /**
      * Abstract XML object representation.
      */
-    private final XmlAbstractObject origin;
+    private final XmlEoObject origin;
 
     /**
      * Constructor.
      * @param node XML node representing the global object.
      */
     XmlGlobalObject(final XmlNode node) {
-        this(new XmlAbstractObject(node));
+        this(new XmlDelegateObject(node));
     }
 
     /**
      * Constructor.
      * @param origin XML abstract object representing the global object.
      */
-    private XmlGlobalObject(final XmlAbstractObject origin) {
+    private XmlGlobalObject(final XmlEoObject origin) {
         this.origin = origin;
     }
 

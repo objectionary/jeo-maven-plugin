@@ -10,53 +10,55 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Abstract XML object representation.
+ * Xml representation of an EO delegate object.
  * <p>
- * This class keeps the base attribute as a separate object (argument) instead of XML attribute.
- * This class is similar to {@link XmlClosedObject}.
+ *     Alternative representations of the same idea:
+ *     - {@link XmlClosedObject} - a closed object with a base attribute,
+ *     - {@link XmlAbstractObject} - an abstract object with a base attribute,
  * </p>
  * <p>
- *     Mirrors from {@link org.eolang.jeo.representation.directives.DirectivesAbsractObject}
+ *     Mirrors:
+ *     - {@link org.eolang.jeo.representation.directives.DirectivesDelegateObject}.
  * </p>
- * @since 0.11.0
+ * @since 0.12.0
  */
-final class XmlAbstractObject implements XmlEoObject {
+public final class XmlDelegateObject implements XmlEoObject {
 
     /**
-     * XML node of the closed object.
+     * Inner XML node representing the delegate object.
      */
-    private final XmlNode node;
+    private final XmlNode inner;
 
     /**
      * Constructor.
-     * @param node XML node of the closed object.
+     * @param inner XML node representing the delegate object
      */
-    XmlAbstractObject(final XmlNode node) {
-        this.node = node;
+    XmlDelegateObject(final XmlNode inner) {
+        this.inner = inner;
     }
 
     @Override
     public String toString() {
-        return this.node.toString();
+        return this.inner.toString();
     }
 
     @Override
     public Optional<String> base() {
-        return this.node.children().findFirst()
-            .filter(child -> child.attribute("name").map("base"::equals).orElse(false))
-            .map(child -> new XmlValue(child).string());
+        return this.inner.children().findFirst()
+            .filter(child -> child.attribute("name").map("@"::equals).orElse(false))
+            .map(child -> new XmlSimpleDelegate(child).base());
     }
 
     @Override
     public Optional<String> attribute(final String name) {
-        return this.node.attribute(name);
+        return this.inner.attribute(name);
     }
 
     @Override
     public Optional<XmlNode> child(final int index) {
         final int indx = index + 1;
         final Optional<XmlNode> result;
-        final List<XmlNode> children = this.node.children().collect(Collectors.toList());
+        final List<XmlNode> children = this.inner.children().collect(Collectors.toList());
         if (indx < 0 || indx >= children.size()) {
             result = Optional.empty();
         } else {
@@ -67,12 +69,12 @@ final class XmlAbstractObject implements XmlEoObject {
 
     @Override
     public Stream<XmlNode> children() {
-        final List<XmlNode> collect = this.node.children().collect(Collectors.toList());
+        final List<XmlNode> collect = this.inner.children().collect(Collectors.toList());
         if (collect.isEmpty()) {
             throw new IllegalStateException(
                 String.format(
                     "The '%s' node doesn't have any children, but it should have at least one",
-                    this.node
+                    this.inner
                 )
             );
         }

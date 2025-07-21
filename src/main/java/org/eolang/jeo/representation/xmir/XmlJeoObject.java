@@ -17,21 +17,21 @@ final class XmlJeoObject {
     /**
      * Origin XML node.
      */
-    private final XmlAbstractObject origin;
+    private final XmlEoObject origin;
 
     /**
      * Constructor.
      * @param node XML node.
      */
     XmlJeoObject(final XmlNode node) {
-        this(new XmlAbstractObject(node));
+        this(new XmlDelegateObject(node));
     }
 
     /**
      * Constructor.
      * @param origin XML abstract object.
      */
-    private XmlJeoObject(final XmlAbstractObject origin) {
+    private XmlJeoObject(final XmlEoObject origin) {
         this.origin = origin;
     }
 

@@ -4,54 +4,38 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 /**
- * This is EO object in XML representation.
- * <p>
- *     Mirrors {@link org.eolang.jeo.representation.directives.DirectivesEoObject}
- * </p>
- * @since 0.11.0
+ * XML EO object representation.
+ * @since 0.12.0
  */
-public final class XmlEoObject {
+interface XmlEoObject {
 
     /**
-     * Inner XML node representing the EO object.
+     * Get the option type of the object.
+     * @return Optional type.
      */
-    private final XmlNode inner;
+    Optional<String> base();
 
     /**
-     * Constructor.
-     * @param inner XML node representing the EO object.
+     * Get the attribute by name.
+     * @param name Name of the attribute.
+     * @return Optional attribute value.
      */
-    XmlEoObject(final XmlNode inner) {
-        this.inner = inner;
-    }
+    Optional<String> attribute(String name);
 
     /**
-     * Retrieve the name of the EO object.
-     * @return Name of the EO object.
+     * Get the child node by index.
+     * @param index Index of the child node.
+     * @return Optional child node.
      */
-    public String name() {
-        return this.inner.attribute("name")
-            .orElseThrow(
-                () -> new IllegalStateException(
-                    String.format("Attribute 'name' not found in %s", this.inner)
-                )
-            );
-    }
+    Optional<XmlNode> child(int index);
 
     /**
-     * Retrieve the inner XML node representing the EO object.
-     * @return XML node of the EO object.
+     * Retrieve the children of the XML node.
+     * @return Stream of child nodes.
      */
-    public XmlNode node() {
-        return this.inner;
-    }
-
-    /**
-     * Whether the EO object has a name attribute.
-     * @return True if the EO object has a name attribute, false otherwise.
-     */
-    boolean named() {
-        return this.inner.attribute("name").isPresent();
-    }
+    Stream<XmlNode> children();
 }
