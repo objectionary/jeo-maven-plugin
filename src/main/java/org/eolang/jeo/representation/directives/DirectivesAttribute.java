@@ -47,7 +47,7 @@ public final class DirectivesAttribute implements Iterable<Directive> {
      * @param data Properties of an attribute.
      */
     private DirectivesAttribute(final String base, final List<Iterable<Directive>> data) {
-        this(base, new RandName("attr").toString(), data);
+        this(base, new RandName("a").toString(), data);
     }
 
     /**

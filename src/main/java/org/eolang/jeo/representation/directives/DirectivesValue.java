@@ -62,7 +62,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param <T> Data type.
      */
     public <T> DirectivesValue(final T data) {
-        this(new RandName("val").toString(), data);
+        this(new RandName("v").toString(), data);
     }
 
     /**
@@ -187,7 +187,7 @@ public final class DirectivesValue implements Iterable<Directive> {
             base,
             this.name,
             new DirectivesComment(this.comment()),
-            new DirectivesBytes(this.hex(codec), new RandName("null").toString())
+            new DirectivesBytes(this.hex(codec), new RandName("n").toString())
         );
     }
 
@@ -203,7 +203,7 @@ public final class DirectivesValue implements Iterable<Directive> {
             base,
             this.name,
             new DirectivesComment(this.comment()),
-            new DirectivesBytes(this.hex(codec), new RandName(base).toString())
+            new DirectivesBytes(this.hex(codec), new RandName("j").toString())
         );
     }
 
@@ -232,7 +232,7 @@ public final class DirectivesValue implements Iterable<Directive> {
             base,
             this.name,
             new DirectivesComment(this.comment()),
-            new DirectivesNumber(new RandName("number").toString(), this.hex(codec))
+            new DirectivesNumber(new RandName("n").toString(), this.hex(codec))
         );
     }
 

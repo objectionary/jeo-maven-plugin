@@ -65,7 +65,7 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "trycatch",
-            new RandName("trycatch").toString(),
+            new RandName("t").toString(),
             Stream.of(
                 this.start.directives(),
                 this.end.directives(),
@@ -85,7 +85,7 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
         if (Objects.nonNull(value)) {
             result = new DirectivesValue(value);
         } else {
-            result = new DirectivesEoObject("nop", new RandName("nop").toString());
+            result = new DirectivesEoObject("nop", new RandName("n").toString());
         }
         return result;
     }

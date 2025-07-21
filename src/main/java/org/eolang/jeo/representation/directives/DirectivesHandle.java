@@ -32,7 +32,7 @@ public final class DirectivesHandle implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "handle",
-            new RandName("handle").toString(),
+            new RandName("h").toString(),
             new DirectivesValue(this.handle.getTag()),
             new DirectivesValue(this.handle.getOwner()),
             new DirectivesValue(this.handle.getName()),

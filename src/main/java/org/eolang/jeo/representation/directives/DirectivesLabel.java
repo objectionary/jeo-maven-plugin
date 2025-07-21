@@ -31,7 +31,7 @@ public final class DirectivesLabel implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final Iterable<Directive> result;
         if (Objects.isNull(this.identifier)) {
-            result = new DirectivesEoObject("nop", new RandName("nop").toString());
+            result = new DirectivesEoObject("nop", new RandName("n").toString());
         } else {
             result = new DirectivesJeoObject(
                 "label",

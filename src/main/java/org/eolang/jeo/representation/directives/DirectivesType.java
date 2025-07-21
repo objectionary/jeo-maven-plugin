@@ -31,7 +31,7 @@ public final class DirectivesType implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "type",
-            new RandName("type").toString(),
+            new RandName("t").toString(),
             new DirectivesValue(this.type.getDescriptor())
         ).iterator();
     }

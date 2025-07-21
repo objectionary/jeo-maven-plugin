@@ -49,7 +49,7 @@ public final class DirectivesEnumAnnotationValue implements Iterable<Directive> 
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "annotation-property",
-            new RandName("enum").toString(),
+            new RandName("e").toString(),
             new DirectivesValue("ENUM"),
             new DirectivesValue(Optional.ofNullable(this.name).orElse("")),
             new DirectivesValue(this.descriptor),

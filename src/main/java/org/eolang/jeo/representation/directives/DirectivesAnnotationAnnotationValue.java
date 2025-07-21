@@ -50,7 +50,7 @@ public final class DirectivesAnnotationAnnotationValue implements Iterable<Direc
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "annotation-property",
-            new RandName("annotation").toString(),
+            new RandName("a").toString(),
             Stream.concat(
                 Stream.of(
                     new DirectivesValue("ANNOTATION"),
