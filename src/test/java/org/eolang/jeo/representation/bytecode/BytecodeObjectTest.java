@@ -5,12 +5,14 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.xml.XMLDocument;
+import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesObject;
 import org.eolang.jeo.representation.directives.HasClass;
-import org.eolang.jeo.representation.directives.HasMethod;
 import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Disabled;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -34,22 +36,27 @@ final class BytecodeObjectTest {
     }
 
     @Test
-    @Disabled
-    void convertsSimpleClassWithMethodToXmir() throws ImpossibleModificationException {
+    void convertsSimpleClassWithMethodToXmir() {
         final String clazz = "WithMethod";
-        final String xml = new Xembler(
-            new BytecodeObject(
-                new BytecodeClass(clazz)
-                    .helloWorldMethod()
-            ).directives("")
-        ).xml();
+        final BytecodeClass bclass = new BytecodeClass(clazz).helloWorldMethod();
+        final String opath = "//object";
         MatcherAssert.assertThat(
-            String.format(
-                "Can't parse simple class with method, result is: '%s'",
-                new XMLDocument(xml)
+            "Can't parse simple class with method",
+            new Nameless(
+                new Directives(new BytecodeObject(bclass).directives(""))
+                    .xpath(opath).attr("time", "0")
             ),
-            xml,
-            new HasMethod("main").inside(clazz)
+            Matchers.equalTo(
+                new Nameless(
+                    new Directives(
+                        new DirectivesObject(
+                            "",
+                            bclass.directives(),
+                            new DirectivesMetas(new ClassName(clazz))
+                        )
+                    ).xpath(opath).attr("time", "0")
+                )
+            )
         );
     }
 

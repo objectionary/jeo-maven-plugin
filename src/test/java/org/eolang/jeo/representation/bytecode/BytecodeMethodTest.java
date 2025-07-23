@@ -5,19 +5,23 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import com.jcabi.xml.XMLDocument;
 import it.JavaSourceClass;
-import java.util.UUID;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.Stream;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.BytecodeRepresentation;
+import org.eolang.jeo.representation.NumberedName;
 import org.eolang.jeo.representation.asm.AsmProgram;
-import org.eolang.jeo.representation.directives.HasMethod;
+import org.eolang.jeo.representation.directives.DirectivesAnnotations;
+import org.eolang.jeo.representation.directives.DirectivesAttributes;
+import org.eolang.jeo.representation.directives.DirectivesInstruction;
+import org.eolang.jeo.representation.directives.DirectivesMethod;
+import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.eolang.jeo.representation.xmir.XmlObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -30,16 +34,6 @@ import org.xembly.Xembler;
 /**
  * Test case for {@link BytecodeMethod}.
  * @since 0.6
- * @todo #1130 Remove {@link HasMethod} class and enable tests in {@link BytecodeMethodTest} class.
- *  We should find a way to test {@link BytecodeMethod#directives()} method without using
- *  {@link HasMethod} class. Once we find a way to do it, we should enable the following tests:
- *  - {@link #parsesMethodParameters}
- *  - {@link #parsesConstructor}
- *  - {@link #parsesConstructorWithParameters}
- *  - {@link #parsesIfStatementCorrectly}
- *  - {@link #parsesTryCatchInstructions}
- *  - {@link #doesNotContainTryCatchBlock}
- *  - {@link #generatesDirectivesForMethodWithInstructions()}
  */
 @SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods"})
 final class BytecodeMethodTest {
@@ -54,27 +48,31 @@ final class BytecodeMethodTest {
     }
 
     @Test
-    @Disabled
-    void generatesDirectivesForMethodWithInstructions() throws ImpossibleModificationException {
-        final String xml = new Xembler(
-            new BytecodeObject(
-                new BytecodeClass()
-                    .withMethod(new BytecodeMethodProperties("main", "()I"))
+    void generatesDirectivesForMethodWithInstructions() {
+        MatcherAssert.assertThat(
+            "We expect that method with instructions will generate correct directives",
+            new Nameless(
+                new BytecodeMethod("main")
                     .opcode(Opcodes.BIPUSH, 28)
                     .opcode(Opcodes.IRETURN)
-                    .up()
-            ).directives("")
-        ).xml();
-        MatcherAssert.assertThat(
-            String.format(
-                "Can't find a method in the final XML by using XPath. Please, check the resulting XMIR: \n%s\n",
-                xml
+                    .directives()
             ),
-            xml,
-            new HasMethod("main")
-                .inside("Simple")
-                .withInstruction(Opcodes.BIPUSH, 28)
-                .withInstruction(Opcodes.IRETURN)
+            Matchers.equalTo(
+                new Nameless(
+                    new DirectivesMethod(
+                        new NumberedName(1, "main"),
+                        new DirectivesMethodProperties(),
+                        Arrays.asList(
+                            new DirectivesInstruction(Opcodes.BIPUSH, 28),
+                            new DirectivesInstruction(Opcodes.IRETURN)
+                        ),
+                        Collections.emptyList(),
+                        new DirectivesAnnotations(),
+                        Collections.emptyList(),
+                        new DirectivesAttributes()
+                    )
+                )
+            )
         );
     }
 
@@ -83,10 +81,6 @@ final class BytecodeMethodTest {
      * <p>
      *     {@code
      *     public class ParamsExample {
-     *       public static void main(String[] args) {
-     *         ParamsExample pe = new ParamsExample();
-     *         pe.printSum(10, 20);
-     *       }
      *       public void printSum(int a, int b) {
      *         int sum = a + b;
      *         System.out.println(sum);
@@ -96,274 +90,66 @@ final class BytecodeMethodTest {
      * </p>
      */
     @Test
-    @Disabled
     void parsesMethodParameters() {
-        final String clazz = "ParametersExample";
-        final String method = "printSum";
-        final String xml = new BytecodeObject(
-            new BytecodeClass(clazz)
-                .withMethod(
+        MatcherAssert.assertThat(
+            "We expect that the method with parameters generates correct directives",
+            new Nameless(
+                new BytecodeMethod(
                     new BytecodeMethodProperties(
-                        "main",
-                        "([Ljava/lang/String;)V",
-                        Opcodes.ACC_PUBLIC,
-                        Opcodes.ACC_STATIC
+                        Opcodes.ACC_PUBLIC, "printSum", "(II)V", "", new BytecodeMethodParameters()
+                    )
+                ).opcode(Opcodes.NEW, "ParametersExample")
+                    .opcode(Opcodes.DUP)
+                    .opcode(Opcodes.INVOKESPECIAL, "ParametersExample", "<init>", "()V", false)
+                    .opcode(Opcodes.ASTORE, 1)
+                    .opcode(Opcodes.ALOAD, 1)
+                    .opcode(Opcodes.BIPUSH, 10)
+                    .opcode(Opcodes.BIPUSH, 20)
+                    .opcode(Opcodes.INVOKEVIRTUAL, "ParametersExample", "printSum", "(II)V", false)
+                    .opcode(Opcodes.RETURN)
+                    .directives()
+            ),
+            Matchers.equalTo(
+                new Nameless(
+                    new DirectivesMethod(
+                        new NumberedName(1, "printSum"),
+                        new DirectivesMethodProperties(
+                            Opcodes.ACC_PUBLIC, "(II)V", ""
+                        ),
+                        Arrays.asList(
+                            new DirectivesInstruction(Opcodes.NEW, "ParametersExample"),
+                            new DirectivesInstruction(Opcodes.DUP),
+                            new DirectivesInstruction(
+                                Opcodes.INVOKESPECIAL,
+                                "ParametersExample",
+                                "<init>",
+                                "()V",
+                                false
+                            ),
+                            new DirectivesInstruction(Opcodes.ASTORE, 1),
+                            new DirectivesInstruction(Opcodes.ALOAD, 1),
+                            new DirectivesInstruction(Opcodes.BIPUSH, 10),
+                            new DirectivesInstruction(Opcodes.BIPUSH, 20),
+                            new DirectivesInstruction(
+                                Opcodes.INVOKEVIRTUAL,
+                                "ParametersExample",
+                                "printSum",
+                                "(II)V",
+                                false
+                            ),
+                            new DirectivesInstruction(Opcodes.RETURN)
+                        ),
+                        Collections.emptyList(),
+                        new DirectivesAnnotations(),
+                        Collections.emptyList(),
+                        new DirectivesAttributes()
                     )
                 )
-                .opcode(Opcodes.NEW, clazz)
-                .opcode(Opcodes.DUP)
-                .opcode(Opcodes.INVOKESPECIAL, clazz, "<init>", "()V", false)
-                .opcode(Opcodes.ASTORE, 1)
-                .opcode(Opcodes.ALOAD, 1)
-                .opcode(Opcodes.BIPUSH, 10)
-                .opcode(Opcodes.BIPUSH, 20)
-                .opcode(Opcodes.INVOKEVIRTUAL, clazz, method, "(II)V", false)
-                .opcode(Opcodes.RETURN)
-                .up()
-                .withMethod(new BytecodeMethodProperties(method, "(II)V", Opcodes.ACC_PUBLIC))
-                .opcode(Opcodes.ILOAD, 1)
-                .opcode(Opcodes.ILOAD, 2)
-                .opcode(Opcodes.IADD)
-                .opcode(Opcodes.ISTORE, 3)
-                .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-                .opcode(Opcodes.ILOAD, 3)
-                .opcode(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V", false)
-                .opcode(Opcodes.RETURN)
-                .up()
-        ).xml().toString();
-        MatcherAssert.assertThat(
-            String.format(
-                "DirectivesMethod doesn't parse method parameters correctly. Please, check the resulting XMIR: \n%s\n",
-                xml
-            ),
-            xml,
-            new HasMethod(method)
-                .inside(clazz)
-                .withParameter("arg0")
-                .withParameter("arg1")
-        );
-    }
-
-    /**
-     * In this test case, we parse the following java code.
-     * <p>
-     *     {@code
-     *     public class ConstructorExample {
-     *       public ConstructorExample() {
-     *           System.out.println("Hello, constructor!");
-     *       }
-     *       public static void main(String[] args) {
-     *         new ConstructorExample();
-     *       }
-     *     }
-     *     }
-     * </p>
-     */
-    @Test
-    @Disabled
-    void parsesConstructor() {
-        final String xml = new BytecodeObject(
-            new BytecodeClass("ConstructorExample")
-                .withConstructor(Opcodes.ACC_PUBLIC)
-                .opcode(Opcodes.ALOAD, 0)
-                .opcode(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false)
-                .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-                .opcode(Opcodes.LDC, "Hello, constructor!")
-                .opcode(
-                    Opcodes.INVOKEVIRTUAL,
-                    "java/io/PrintStream",
-                    "println",
-                    "(Ljava/lang/String;)V",
-                    false
-                )
-                .opcode(Opcodes.RETURN)
-                .up()
-                .withMethod(
-                    new BytecodeMethodProperties(
-                        "main",
-                        "([Ljava/lang/String;)V",
-                        Opcodes.ACC_PUBLIC,
-                        Opcodes.ACC_STATIC
-                    )
-                )
-                .opcode(Opcodes.NEW, "ConstructorExample")
-                .opcode(Opcodes.DUP)
-                .opcode(Opcodes.INVOKESPECIAL, "ConstructorExample", "<init>", "()V", false)
-                .opcode(Opcodes.POP)
-                .opcode(Opcodes.RETURN)
-                .up()
-        ).xml().toString();
-        MatcherAssert.assertThat(
-            String.format(
-                "Constructor wasn't parsed correctly, please, check the resulting XMIR: \n%s\n",
-                new XMLDocument(xml)
-            ),
-            xml,
-            new HasMethod("@init@")
-                .inside("ConstructorExample")
-                .withInstruction(Opcodes.LDC, "Hello, constructor!")
-        );
-    }
-
-    /**
-     * In this test case, we parse the following java code.
-     * <p>
-     *     {@code
-     *     public class ConstructorParams {
-     *       public ConstructorParams(int a, int b)
-     *           System.out.println(a + b);
-     *       }
-     *       public static void main(String[] args) {
-     *         new ConstructorExample(11, 22);
-     *       }
-     *     }
-     *     }
-     * </p>
-     */
-    @Test
-    @Disabled
-    void parsesConstructorWithParameters() {
-        final String clazz = "ConstructorParams";
-        final String xml = new BytecodeObject(
-            new BytecodeClass(clazz)
-                .withConstructor("(II)V", Opcodes.ACC_PUBLIC)
-                .opcode(Opcodes.ALOAD, 0)
-                .opcode(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false)
-                .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-                .opcode(Opcodes.ILOAD, 1)
-                .opcode(Opcodes.ILOAD, 2)
-                .opcode(Opcodes.IADD)
-                .opcode(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V", false)
-                .opcode(Opcodes.RETURN)
-                .up()
-                .withMethod(
-                    new BytecodeMethodProperties(
-                        "main",
-                        "([Ljava/lang/String;)V",
-                        Opcodes.ACC_PUBLIC,
-                        Opcodes.ACC_STATIC
-                    )
-                )
-                .opcode(Opcodes.NEW, clazz)
-                .opcode(Opcodes.DUP)
-                .opcode(Opcodes.BIPUSH, 11)
-                .opcode(Opcodes.BIPUSH, 22)
-                .opcode(Opcodes.INVOKESPECIAL, clazz, "<init>", "(II)V", false)
-                .opcode(Opcodes.POP)
-                .opcode(Opcodes.RETURN)
-                .up()
-        ).xml().toString();
-        MatcherAssert.assertThat(
-            String.format(
-                "Constructor wasn't parsed correctly, please, check the resulting XMIR: \n%s\n",
-                new XMLDocument(xml)
-            ),
-            xml,
-            new HasMethod("@init@")
-                .inside(clazz)
-                .withInstruction(Opcodes.ILOAD, 1)
-                .withInstruction(Opcodes.ILOAD, 2)
-                .withInstruction(Opcodes.IADD)
-        );
-    }
-
-    /**
-     * In this class we parse the next java code.
-     * <p>
-     * {@code
-     *     class Foo {
-     *       int bar(double x) {
-     *         if (x > 0.0d) {
-     *           return 5;
-     *         }
-     *         return 8;
-     *       }
-     *     }
-     * }
-     * </p>
-     * Pay Attention! That we just can't verify exact id's of labels since ASM library doesn't
-     * allow it. Hence, we can just check the presence of a label.
-     */
-    @Test
-    @Disabled
-    void parsesIfStatementCorrectly() {
-        final String label = UUID.randomUUID().toString();
-        final String xml = new BytecodeObject(
-            new BytecodeClass("Foo")
-                .withMethod("bar", "(D)I", 0)
-                .opcode(Opcodes.DLOAD, 1)
-                .opcode(Opcodes.DCONST_0)
-                .opcode(Opcodes.DCMPL)
-                .opcode(Opcodes.IFLE, new BytecodeLabel(label))
-                .opcode(Opcodes.ICONST_5)
-                .opcode(Opcodes.IRETURN)
-                .label(label)
-                .opcode(Opcodes.BIPUSH, 8)
-                .opcode(Opcodes.IRETURN)
-                .up()
-        ).xml().toString();
-        MatcherAssert.assertThat(
-            String.format(
-                "If statement wasn't parsed correctly, please, check the resulting XMIR: \n%s\n",
-                xml
-            ),
-            xml,
-            new HasMethod("bar")
-                .inside("Foo")
-                .withInstruction(Opcodes.IFLE, new BytecodeLabel(label))
-                .withLabel()
-        );
-    }
-
-    /**
-     * In this test case, we parse the following java code.
-     * <p>
-     * {@code
-     *   public class Foo {
-     *     public void bar(){
-     *         try {
-     *           throw new Exception();
-     *         } catch (Exception e) {
-     *         }
-     *     }
-     *   }
-     * }
-     */
-    @Test
-    @Disabled
-    void parsesTryCatchInstructions() {
-        final String start = UUID.randomUUID().toString();
-        final String end = UUID.randomUUID().toString();
-        final String handler = UUID.randomUUID().toString();
-        final String xml = new BytecodeObject(
-            new BytecodeClass("Foo")
-                .withMethod("bar", "()V", Opcodes.ACC_PUBLIC)
-                .label(start)
-                .opcode(Opcodes.NEW, "java/lang/Exception")
-                .opcode(Opcodes.DUP)
-                .opcode(Opcodes.INVOKESPECIAL, "java/lang/Exception", "<init>", "()V", false)
-                .opcode(Opcodes.ATHROW)
-                .opcode(Opcodes.ASTORE, 1)
-                .label(end)
-                .label(handler)
-                .opcode(Opcodes.RETURN)
-                .trycatch(new BytecodeTryCatchBlock(start, end, handler, "java/lang/Exception"))
-                .up()
-        ).xml().toString();
-        MatcherAssert.assertThat(
-            String.format(
-                "Exception table wasn't parsed correctly, please, check the resulting XMIR: \n%s\n",
-                xml
-            ),
-            xml,
-            new HasMethod("bar")
-                .inside("Foo")
-                .withTryCatch("java/lang/Exception")
+            )
         );
     }
 
     @Test
-    @Disabled
     void doesNotContainTryCatchBlock() {
         MatcherAssert.assertThat(
             "We expect that method without try-catch block doesn't contain try-catch directives.",

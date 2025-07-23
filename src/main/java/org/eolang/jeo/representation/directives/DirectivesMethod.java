@@ -164,5 +164,4 @@ public final class DirectivesMethod implements Iterable<Directive> {
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
     }
-
 }

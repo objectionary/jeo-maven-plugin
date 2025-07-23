@@ -34,7 +34,7 @@ public final class DirectivesAttributes implements Iterable<Directive> {
     /**
      * Constructor.
      */
-    DirectivesAttributes() {
+    public DirectivesAttributes() {
         this(new ArrayList<>(0));
     }
 
