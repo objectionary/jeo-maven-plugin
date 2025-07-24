@@ -41,7 +41,9 @@ final class Nameless {
         return new Xembler(
             new Directives(this.directives)
                 .xpath("//o[not(starts-with(@name,'j')) and not(starts-with(@name,'@'))]")
-                .attr("name", ""),
+                .attr("name", "")
+                .xpath("//object")
+                .attr("time", "0"),
             new Transformers.Node()
         ).xmlQuietly();
     }
