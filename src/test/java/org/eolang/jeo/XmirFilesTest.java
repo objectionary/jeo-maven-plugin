@@ -53,6 +53,26 @@ final class XmirFilesTest {
     }
 
     @Test
+    void ignoresNonXmlFiles(@TempDir final Path temp) throws IOException {
+        final Path directory = temp.resolve(Paths.get("xmirs"));
+        Files.createDirectories(directory);
+        Files.write(
+            directory.resolve("first.xmir"),
+            new BytecodeObject(new BytecodeClass("org.jeo.First")).xml().toString()
+                .getBytes(StandardCharsets.UTF_8)
+        );
+        Files.write(
+            directory.resolve("second.txt"),
+            "rendom text".getBytes(StandardCharsets.UTF_8)
+        );
+        MatcherAssert.assertThat(
+            "We expect that all files except XMIR files are ignored",
+            new XmirFiles(temp).all().collect(Collectors.toList()),
+            Matchers.hasSize(1)
+        );
+    }
+
+    @Test
     void retrievesEmptyObjectsIfFolderIsEmpty(@TempDir final Path temp) throws IOException {
         Files.createDirectories(temp.resolve("some-path"));
         MatcherAssert.assertThat(

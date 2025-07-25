@@ -40,14 +40,18 @@ final class XmirFiles {
      */
     public Stream<Path> all() {
         final Path path = this.root;
-        try {
-            return Files.walk(path).filter(Files::isRegularFile);
+        final Stream.Builder<Path> builder = Stream.builder();
+        try (Stream<Path> all = Files.walk(path)) {
+            all.filter(Files::isRegularFile)
+                .filter(f -> f.getFileName().toString().endsWith(".xmir"))
+                .forEach(builder::add);
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Can't read folder '%s'", path),
                 exception
             );
         }
+        return builder.build();
     }
 
     /**
