@@ -8,6 +8,7 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.asm.DisassembleParams;
 
@@ -20,7 +21,7 @@ import org.eolang.jeo.representation.asm.DisassembleParams;
  * disassembly modes for various levels of detail.</p>
  * @since 0.1.0
  */
-public class Disassembler {
+public final class Disassembler {
 
     /**
      * Project compiled classes.
@@ -67,8 +68,10 @@ public class Disassembler {
 
     /**
      * Disassemble all bytecode files.
+     * @param filters Optional filters to apply on class files
      */
-    public void disassemble() {
+    @SafeVarargs
+    public final void disassemble(final Predicate<Path>... filters) {
         final String process = "Disassembling";
         final String disassembled = "disassembled";
         final Stream<Path> stream = new Summary(
@@ -77,7 +80,7 @@ public class Disassembler {
             this.classes,
             this.target,
             new ParallelTranslator(this::disassemble)
-        ).apply(new BytecodeClasses(this.classes).all());
+        ).apply(new BytecodeClasses(this.classes, filters).all());
         stream.forEach(this::log);
         stream.close();
     }

@@ -6,6 +6,7 @@ package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
 import java.io.File;
+import java.util.Set;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -13,6 +14,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.cactoos.set.SetOf;
 import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.asm.DisassembleParams;
 
@@ -182,6 +184,28 @@ public final class DisassembleMojo extends AbstractMojo {
     )
     private boolean xmirVerification;
 
+    /**
+     * Set of inclusion GLOB filters for finding .class files
+     * in the {@link #sourcesDir} directory.
+     *
+     * @since 0.13.0
+     * @checkstyle MemberNameCheck (15 lines)
+     */
+    @Parameter(property = "jeo.disassemble.includes")
+    @SuppressWarnings("PMD.ImmutableField")
+    private Set<String> includes = new SetOf<>("**/*.class");
+
+    /**
+     * Set of exclusion GLOB filters for finding .class files
+     * in the {@link #sourcesDir} directory.
+     *
+     * @since 0.13.0
+     * @checkstyle MemberNameCheck (7 lines)
+     */
+    @Parameter(property = "jeo.disassemble.excludes")
+    @SuppressWarnings("PMD.ImmutableField")
+    private Set<String> excludes = new SetOf<>();
+
     @Override
     public void execute() throws MojoExecutionException {
         try {
@@ -207,7 +231,7 @@ public final class DisassembleMojo extends AbstractMojo {
                         this.prettyXmir,
                         comments
                     )
-                ).disassemble();
+                ).disassemble(new GlobFilter(this.includes, this.excludes));
                 if (this.xmirVerification) {
                     Logger.info(this, "Verifying all the XMIR files after disassembling");
                     new XmirFiles(this.outputDir.toPath()).verify();

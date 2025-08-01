@@ -83,11 +83,11 @@ final class XmirFilesTest {
     }
 
     @Test
-    void throwsExceptionIfFolderDoesNotExist(@TempDir final Path temp) {
-        Assertions.assertThrows(
-            IllegalStateException.class,
-            () -> new XmirFiles(temp.resolve("missing")).all(),
-            "Exception was not thrown when folder does not exist"
+    void returnsNothingIfFolderDoesNotExist(@TempDir final Path temp) {
+        MatcherAssert.assertThat(
+            "Objects were not retrieved, we expected empty list",
+            new XmirFiles(temp.resolve("missing")).all().collect(Collectors.toList()),
+            Matchers.empty()
         );
     }
 
