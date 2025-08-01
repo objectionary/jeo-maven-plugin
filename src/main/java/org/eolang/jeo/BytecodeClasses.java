@@ -8,10 +8,12 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.objectweb.asm.ClassReader;
@@ -41,11 +43,28 @@ final class BytecodeClasses {
     private final Path input;
 
     /**
+     * Several filters to apply on class files.
+     */
+    private final List<? extends Predicate<Path>> filters;
+
+    /**
      * Constructor.
      * @param input Input directory where all the generated class files are placed.
+     * @param filters List of filters to apply on class files
      */
-    BytecodeClasses(final Path input) {
+    @SafeVarargs
+    BytecodeClasses(final Path input, final Predicate<Path>... filters) {
+        this(input, Arrays.asList(filters));
+    }
+
+    /**
+     * Constructor with filters.
+     * @param input Input directory where all the generated class files are placed.
+     * @param filters List of filters to apply on class files
+     */
+    private BytecodeClasses(final Path input, final List<Predicate<Path>> filters) {
         this.input = input;
+        this.filters = filters;
     }
 
     /**
@@ -96,6 +115,7 @@ final class BytecodeClasses {
             return walk
                 .filter(Files::isRegularFile)
                 .filter(path -> path.toString().endsWith(".class"))
+                .filter(path -> this.filters.stream().allMatch(filter -> filter.test(path)))
                 .collect(Collectors.toList());
         }
     }
