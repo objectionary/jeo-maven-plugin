@@ -59,7 +59,7 @@
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">0.12.0</strong>
+                                    <strong itemprop="version">0.13.0</strong>
                                 </li>
                                 <li>
                                     $dateFormat.applyPattern("yyyy-MM-dd'T'hh:mm:ss'Z'")
@@ -79,7 +79,7 @@
                             <section><a id="jeo.3Adisassemble"></a>
 <h1>jeo:disassemble</h1>
 <p><strong>Full name</strong>:</p>
-<p>org.eolang:jeo-maven-plugin:0.12.0:disassemble</p>
+<p>org.eolang:jeo-maven-plugin:0.13.0:disassemble</p>
 <p><strong>Description</strong>:</p>
 <p>Disassembles Java bytecode into XMIR representation. 
 <p>This Maven plugin converts compiled Java class files into low-level EO representation (in XMIR format) that contains JVM opcodes and their operands. The resulting XMIR files preserve all bytecode instructions and can be assembled back into executable class files.</p>
@@ -103,6 +103,16 @@
 <td><code>0.2.0</code></td>
 <td>Flag to disable the plugin execution. 
 <p>When set to <code>true</code>, the plugin will skip all processing and exit immediately. This can be useful for conditional builds or troubleshooting.</p><br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>jeo.disassemble.disabled</code></td></tr>
+<tr class="a">
+<td><a href="#excludes"><code>&lt;excludes&gt;</code></a></td>
+<td><code>Set&lt;String&gt;</code></td>
+<td><code>0.13.0</code></td>
+<td>Set of exclusion GLOB filters for finding .class files in the <code>sourcesDir</code><!-- no javadoc sites associated --> directory.<br /><strong>User Property</strong>: <code>jeo.disassemble.excludes</code></td></tr>
+<tr class="b">
+<td><a href="#includes"><code>&lt;includes&gt;</code></a></td>
+<td><code>Set&lt;String&gt;</code></td>
+<td><code>0.13.0</code></td>
+<td>Set of inclusion GLOB filters for finding .class files in the <code>sourcesDir</code><!-- no javadoc sites associated --> directory.<br /><strong>User Property</strong>: <code>jeo.disassemble.includes</code></td></tr>
 <tr class="a">
 <td><a href="#mode"><code>&lt;mode&gt;</code></a></td>
 <td><code>String</code></td>
@@ -159,7 +169,21 @@
 <li><strong>Since</strong>: <code>0.2.0</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
 <li><strong>User Property</strong>: <code>jeo.disassemble.disabled</code></li>
-<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a id="mode"></a><section><a id="a.3Cmode.3E"></a>
+<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a id="excludes"></a><section><a id="a.3Cexcludes.3E"></a>
+<h3>&lt;excludes&gt;</h3>
+<div>Set of exclusion GLOB filters for finding .class files in the <code>sourcesDir</code><!-- no javadoc sites associated --> directory.</div>
+<ul>
+<li><strong>Type</strong>: <code>java.util.Set&lt;java.lang.String&gt;</code></li>
+<li><strong>Since</strong>: <code>0.13.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.excludes</code></li></ul><hr /></section><a id="includes"></a><section><a id="a.3Cincludes.3E"></a>
+<h3>&lt;includes&gt;</h3>
+<div>Set of inclusion GLOB filters for finding .class files in the <code>sourcesDir</code><!-- no javadoc sites associated --> directory.</div>
+<ul>
+<li><strong>Type</strong>: <code>java.util.Set&lt;java.lang.String&gt;</code></li>
+<li><strong>Since</strong>: <code>0.13.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.includes</code></li></ul><hr /></section><a id="mode"></a><section><a id="a.3Cmode.3E"></a>
 <h3>&lt;mode&gt;</h3>
 <div>Disassembly mode controlling the level of detail in output. 
 <p>Supported modes:</p>
