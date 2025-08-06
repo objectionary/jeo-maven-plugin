@@ -6,6 +6,8 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import org.cactoos.io.ResourceOf;
+import org.eolang.jeo.representation.bytecode.EoCodec;
+import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,11 @@ import org.junit.jupiter.api.Test;
  * @since 0.1.0
  */
 final class BytecodeRepresentationTest {
+
+    /**
+     * Bytecode example that contains a double value in the stack.
+     */
+    private static final String EXAMPLE_BYTECODE = "Example.class";
 
     /**
      * The name of the resource with the simplest class.
@@ -76,6 +83,27 @@ final class BytecodeRepresentationTest {
             ),
             actual,
             Matchers.equalTo(expected)
+        );
+    }
+
+    /**
+     * This test checks that the bytecode representation have a stack with a double value.
+     * The test was added to mitigate the issue:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1211:">Issue #1211</a>.
+     */
+    @Test
+    void parsesBytecodeWithDoubleStack() {
+        MatcherAssert.assertThat(
+            "we expect to find a frame with a double stack",
+            new BytecodeRepresentation(
+                new ResourceOf(BytecodeRepresentationTest.EXAMPLE_BYTECODE)
+            ).toXmir(),
+            XhtmlMatchers.hasXPath(
+                String.format(
+                    "//o[contains(@name, 'stack')]/o[@name='x0']/o/o[text()='%s']",
+                    new DirectivesValue("double").hex(new EoCodec())
+                )
+            )
         );
     }
 }

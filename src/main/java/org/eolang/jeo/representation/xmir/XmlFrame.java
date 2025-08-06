@@ -87,11 +87,8 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * @return Local variables.
      */
     private Object[] locals() {
-        return new XmlSeq(this.node.children().collect(Collectors.toList()).get(2))
-            .children()
-            .map(XmlOperand::new)
-            .map(XmlOperand::asObject)
-            .toArray(Object[]::new);
+        return new XmlFrameValues(this.node.children().collect(Collectors.toList()).get(2))
+            .values();
     }
 
     /**
@@ -121,10 +118,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * @return Stack elements.
      */
     private Object[] stack() {
-        return new XmlSeq(this.node.children().collect(Collectors.toList()).get(4))
-            .children()
-            .map(XmlOperand::new)
-            .map(XmlOperand::asObject)
-            .toArray(Object[]::new);
+        return new XmlFrameValues(this.node.children().collect(Collectors.toList()).get(4))
+            .values();
     }
 }

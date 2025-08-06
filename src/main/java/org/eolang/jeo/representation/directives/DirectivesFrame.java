@@ -76,9 +76,9 @@ public final class DirectivesFrame implements Iterable<Directive> {
             new RandName("f").toString(),
             new DirectivesValue(this.name("type"), this.type),
             new DirectivesValue(this.name("nlocal"), this.nlocal),
-            new DirectivesValues(this.name("locals"), this.locals),
+            new DirectivesFrameValues(this.name("locals"), this.locals),
             new DirectivesValue(this.name("nstack"), this.nstack),
-            new DirectivesValues(this.name("stack"), this.stack)
+            new DirectivesFrameValues(this.name("stack"), this.stack)
         ).iterator();
     }
 
