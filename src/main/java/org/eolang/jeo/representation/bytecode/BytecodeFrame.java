@@ -14,6 +14,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesFrame;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.xembly.Directive;
 
@@ -91,22 +92,20 @@ public final class BytecodeFrame implements BytecodeEntry {
 
     @Override
     public void writeTo(final MethodVisitor visitor, final AsmLabels labels) {
-        visitor.visitFrame(
+        new FrameNode(
             this.type,
             this.nlocal,
             this.asmLocals(labels),
             this.nstack,
             this.asmStack(labels)
-        );
+        ).accept(visitor);
     }
 
     @Override
     public Iterable<Directive> directives() {
         return new DirectivesFrame(
             this.type,
-            this.nlocal,
             this.locals,
-            this.nstack,
             this.stack
         );
     }

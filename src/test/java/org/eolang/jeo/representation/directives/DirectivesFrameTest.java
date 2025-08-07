@@ -26,10 +26,10 @@ final class DirectivesFrameTest {
         final int type = Opcodes.F_NEW;
         final int nlocal = 2;
         final Object[] locals = {"java/lang/Object", Opcodes.LONG};
-        final int nstack = 3;
+        final int nstack = 2;
         final Object[] stack = {"java/lang/String", Opcodes.DOUBLE};
         final String xml = new Xembler(
-            new DirectivesFrame(type, nlocal, locals, nstack, stack)
+            new DirectivesFrame(type, locals, stack)
         ).xml();
         MatcherAssert.assertThat(
             "We failed to create correct directives for bytecode frame.",

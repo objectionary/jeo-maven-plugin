@@ -7,7 +7,6 @@ package org.eolang.jeo.representation.directives;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
@@ -58,7 +57,6 @@ public final class DirectivesValues implements Iterable<Directive> {
         return new DirectivesSeq(
             this.nonEmptyName(),
             Arrays.stream(this.values)
-                .filter(Objects::nonNull)
                 .map(
                     value -> {
                         final Iterable<Directive> result;

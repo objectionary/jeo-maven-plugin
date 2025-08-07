@@ -5,7 +5,9 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
+import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.EoCodec;
 import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.hamcrest.MatcherAssert;
@@ -104,6 +106,26 @@ final class BytecodeRepresentationTest {
                     new DirectivesValue("double").hex(new EoCodec())
                 )
             )
+        );
+    }
+
+    /**
+     * This test was added to mitigate the issue with stack map frames mapping.
+     * You can read more about it here:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1215">Issue</a>
+     * @throws Exception if something goes wrong
+     */
+    @Test
+    void parsesBytecodeLoggerStackFrames() throws Exception {
+        final ResourceOf input = new ResourceOf("LoggerFactory$DelegatingLogger.class");
+        MatcherAssert.assertThat(
+            "The disassembled/assembled bytecode representation should match the original bytecode",
+            new Bytecode(
+                new XmirRepresentation(
+                    new BytecodeRepresentation(input).toXmir()
+                ).toBytecode().bytes()
+            ).toString(),
+            Matchers.equalTo(new Bytecode(new BytesOf(input).asBytes()).toString())
         );
     }
 }

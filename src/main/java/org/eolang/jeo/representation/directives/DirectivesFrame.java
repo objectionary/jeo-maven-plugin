@@ -20,12 +20,6 @@ public final class DirectivesFrame implements Iterable<Directive> {
     private final int type;
 
     /**
-     * The number of local variables in the visited frame.
-     * Long and double values count for one variable.
-     */
-    private final int nlocal;
-
-    /**
      * The local variable types in this frame.
      * Primitive types are represented by:
      * Opcodes.TOP, Opcodes.INTEGER, Opcodes.FLOAT, Opcodes.LONG, Opcodes.DOUBLE, Opcodes.NULL
@@ -37,11 +31,6 @@ public final class DirectivesFrame implements Iterable<Directive> {
     private final Object[] locals;
 
     /**
-     * The number of operand stack elements in the visited frame.
-     */
-    private final int nstack;
-
-    /**
      * The operand stack types in this frame.
      */
     private final Object[] stack;
@@ -49,23 +38,17 @@ public final class DirectivesFrame implements Iterable<Directive> {
     /**
      * Constructor.
      * @param type The type of stack map frame.
-     * @param nlocal The number of local variables in the visited frame.
      * @param locals The local variable types in this frame.
-     * @param nstack The number of operand stack elements in the visited frame.
      * @param stack The operand stack types in this frame.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesFrame(
         final int type,
-        final int nlocal,
         final Object[] locals,
-        final int nstack,
         final Object... stack
     ) {
         this.type = type;
-        this.nlocal = nlocal;
         this.locals = locals.clone();
-        this.nstack = nstack;
         this.stack = stack.clone();
     }
 
@@ -75,9 +58,7 @@ public final class DirectivesFrame implements Iterable<Directive> {
             "frame",
             new RandName("f").toString(),
             new DirectivesValue(this.name("type"), this.type),
-            new DirectivesValue(this.name("nlocal"), this.nlocal),
             new DirectivesFrameValues(this.name("locals"), this.locals),
-            new DirectivesValue(this.name("nstack"), this.nstack),
             new DirectivesFrameValues(this.name("stack"), this.stack)
         ).iterator();
     }
