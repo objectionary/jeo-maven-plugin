@@ -34,10 +34,10 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> type = Opcodes.F_NEW;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> nlocal = 2;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>          <strong class="jxr_keyword">final</strong> Object[] locals = {<span class="jxr_string">"java/lang/Object"</span>, Opcodes.LONG};
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> nstack = 3;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> nstack = 2;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>          <strong class="jxr_keyword">final</strong> Object[] stack = {<span class="jxr_string">"java/lang/String"</span>, Opcodes.DOUBLE};
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>          <strong class="jxr_keyword">final</strong> String xml = <strong class="jxr_keyword">new</strong> Xembler(
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>              <strong class="jxr_keyword">new</strong> DirectivesFrame(type, nlocal, locals, nstack, stack)
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>              <strong class="jxr_keyword">new</strong> DirectivesFrame(type, locals, stack)
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>          ).xml();
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>              <span class="jxr_string">"We failed to create correct directives for bytecode frame."</span>,
