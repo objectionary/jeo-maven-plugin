@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>jeo:disassemble – jeo-maven-plugin</title>
+        <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
+                                                    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+        <script src="./js/jcabi.js"></script>
+    </head>
+    <body>
+                <div class="page" itemscope="" itemtype="http://schema.org/BlogPosting">
+            <nav class="menu-section">
+                <ul class="menu" id="menu">
+                                                                                    <li>
+                            <span>Overview</span>
+                                                            <ul>
+                                                                                                    <li >
+                            <span>                        <a href="index.html" title="Introduction">Introduction</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="plugin-info.html" title="Goals">Goals</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                            <li>
+                            <span>Project Documentation</span>
+                                                            <ul>
+                                                                                                    <li >
+                            <span>                        <a href="project-info.html" title="Project Information">Project Information</a>
+        </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="project-reports.html" title="Project Reports">Project Reports</a>
+        </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </li>
+                                                                                        </ul>
+                                                    </li>
+                                    </ul>
+            </nav>
+            <div class="right-side">
+                <main>
+                    <div class="content">
+                        <header>
+                            <div class="logo">
+                                <a href="index.html"
+                                    title=" logo ">
+                                    <img src="${decoration.bannerLeft.src}"
+                                        alt="jeo-maven-plugin"
+                                                                                                                        itemprop="image"
+                                    />
+                                </a>
+                            </div>
+                            <ul class="badges">
+                                <li>
+                                    <strong itemprop="version">0.13.2</strong>
+                                </li>
+                                <li>
+                                    $dateFormat.applyPattern("yyyy-MM-dd'T'hh:mm:ss'Z'")
+                                    <time itemprop="datePublished" datetime="${dateFormat.format($currentDate)}">
+                                        $dateFormat.applyPattern('dd-MMM-yyyy')
+                                        ${dateFormat.format($currentDate)}
+                                    </time>
+                                </li>
+                                <li class="menu-button">menu</li>
+                            </ul>
+                        </header>
+                        <div id="here-goes-menu" class="menu-off"></div>
+                                                                            <a href="https://github.com/objectionary/jeo-maven-plugin">
+                                <img src="https://www.jcabi.com/fork-me.svg" class="fork-me"/>
+                            </a>
+                                                <article itemprop="articleBody">
+                            <section><a id="jeo.3Adisassemble"></a>
+<h1>jeo:disassemble</h1>
+<p><strong>Full name</strong>:</p>
+<p>org.eolang:jeo-maven-plugin:0.13.2:disassemble</p>
+<p><strong>Description</strong>:</p>
+<p>Disassembles Java bytecode into XMIR representation. 
+<p>This Maven plugin converts compiled Java class files into low-level EO representation (in XMIR format) that contains JVM opcodes and their operands. The resulting XMIR files preserve all bytecode instructions and can be assembled back into executable class files.</p>
+<p>The plugin supports different disassembly modes to control the level of detail in the output, including debug information such as line numbers and variable names.</p></p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li>Requires a Maven project to be executed.</li>
+<li>The goal is not marked as thread-safe and thus does not support parallel builds.</li>
+<li>Since version: <code>0.1.0</code>.</li>
+<li>Binds by default to the <a class="externalLink" href="https://maven.apache.org/ref/current/maven-core/lifecycles.html">lifecycle phase</a>: <code>process-classes</code>.</li></ul><section><a id="Optional_Parameters"></a>
+<h2>Optional Parameters</h2>
+<table class="bodyTable">
+<tr class="a">
+<th>Name</th>
+<th>Type</th>
+<th>Since</th>
+<th>Description</th></tr>
+<tr class="b">
+<td><a href="#disabled"><code>&lt;disabled&gt;</code></a></td>
+<td><code>boolean</code></td>
+<td><code>0.2.0</code></td>
+<td>Flag to disable the plugin execution. 
+<p>When set to <code>true</code>, the plugin will skip all processing and exit immediately. This can be useful for conditional builds or troubleshooting.</p><br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>jeo.disassemble.disabled</code></td></tr>
+<tr class="a">
+<td><a href="#excludes"><code>&lt;excludes&gt;</code></a></td>
+<td><code>Set&lt;String&gt;</code></td>
+<td><code>0.13.0</code></td>
+<td>Set of exclusion GLOB filters for finding .class files in the <code>sourcesDir</code><!-- no javadoc sites associated --> directory.<br /><strong>User Property</strong>: <code>jeo.disassemble.excludes</code></td></tr>
+<tr class="b">
+<td><a href="#includes"><code>&lt;includes&gt;</code></a></td>
+<td><code>Set&lt;String&gt;</code></td>
+<td><code>0.13.0</code></td>
+<td>Set of inclusion GLOB filters for finding .class files in the <code>sourcesDir</code><!-- no javadoc sites associated --> directory.<br /><strong>User Property</strong>: <code>jeo.disassemble.includes</code></td></tr>
+<tr class="a">
+<td><a href="#mode"><code>&lt;mode&gt;</code></a></td>
+<td><code>String</code></td>
+<td><code>0.6.0</code></td>
+<td>Disassembly mode controlling the level of detail in output. 
+<p>Supported modes:</p>
+<ul>
+ <li><code>short</code> - Minimal output with bytecode instructions only (default)</li>
+ <li><code>debug</code> - Include debug information such as line numbers, local variables, and source file references</li>
+</ul>
+<p></p><br /><strong>Default</strong>: <code>short</code><br /><strong>User Property</strong>: <code>jeo.disassemble.mode</code></td></tr>
+<tr class="b">
+<td><a href="#omitComments"><code>&lt;omitComments&gt;</code></a></td>
+<td><code>boolean</code></td>
+<td><code>0.11.0</code></td>
+<td>Flag to omit XML comments in generated XMIR files. 
+<p>When enabled, no comments will be generated in the XMIR output, which can be useful for production builds where comments are not needed and may reduce file size. When disabled, XML comments will be included to provide debugging information.</p><br /><strong>Default</strong>: <code>true</code><br /><strong>User Property</strong>: <code>jeo.disassemble.omitComments</code></td></tr>
+<tr class="a">
+<td><a href="#omitListings"><code>&lt;omitListings&gt;</code></a></td>
+<td><code>boolean</code></td>
+<td><code>0.11.0</code></td>
+<td>Flag to omit detailed bytecode listings in generated XMIR. 
+<p>When enabled, the <code>&lt;listing&gt;</code> element in XMIR files will not contain bytecode listing. This reduces file size and improves readability in production environments where detailed bytecode output is not needed. When disabled, full bytecode listings are included for debugging purposes.</p><br /><strong>Default</strong>: <code>true</code><br /><strong>User Property</strong>: <code>jeo.disassemble.omitListings</code></td></tr>
+<tr class="b">
+<td><a href="#outputDir"><code>&lt;outputDir&gt;</code></a></td>
+<td><code>File</code></td>
+<td><code>0.2.0</code></td>
+<td>Target directory for generated XMIR files. 
+<p>All disassembled XMIR files will be written to this directory, preserving the package structure of the original class files. Each class file will be converted to a corresponding XMIR file with <code>.xmir</code> extension.</p><br /><strong>Default</strong>: <code>${project.build.directory}/generated-sources/jeo-xmir</code><br /><strong>User Property</strong>: <code>jeo.disassemble.outputDir</code></td></tr>
+<tr class="a">
+<td><a href="#prettyXmir"><code>&lt;prettyXmir&gt;</code></a></td>
+<td><code>boolean</code></td>
+<td><code>0.11.0</code></td>
+<td>Flag to enable pretty-printing of XMIR files. 
+<p>When enabled, the generated XMIR files will be formatted with indentation (2 spaces) and line breaks for better readability. This is useful for development and debugging purposes. By default, pretty-printing is enabled, but it's best to disable it for large projects or production builds to reduce file size and improve performance.</p><br /><strong>Default</strong>: <code>true</code><br /><strong>User Property</strong>: <code>jeo.disassemble.prettyXmir</code></td></tr>
+<tr class="b">
+<td><a href="#sourcesDir"><code>&lt;sourcesDir&gt;</code></a></td>
+<td><code>File</code></td>
+<td><code>0.2.0</code></td>
+<td>Source directory containing compiled Java class files. 
+<p>This directory should contain <code>.class</code> files that will be disassembled into XMIR format. Typically points to the project's build output directory.</p><br /><strong>Default</strong>: <code>${project.build.outputDirectory}</code><br /><strong>User Property</strong>: <code>jeo.disassemble.sourcesDir</code></td></tr>
+<tr class="a">
+<td><a href="#xmirVerification"><code>&lt;xmirVerification&gt;</code></a></td>
+<td><code>boolean</code></td>
+<td><code>0.8.0</code></td>
+<td>Flag to enable XMIR verification after disassembling. 
+<p>When enabled, verifies all generated XMIR files for structural integrity and correctness after disassembly. If any XMIR file is invalid or corrupted, the build process will fail. This verification is disabled by default for performance.</p><br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>jeo.disassemble.xmir.verification</code></td></tr></table></section><section><a id="Parameter_Details"></a>
+<h2>Parameter Details</h2><a id="disabled"></a><section><a id="a.3Cdisabled.3E"></a>
+<h3>&lt;disabled&gt;</h3>
+<div>Flag to disable the plugin execution. 
+<p>When set to <code>true</code>, the plugin will skip all processing and exit immediately. This can be useful for conditional builds or troubleshooting.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>boolean</code></li>
+<li><strong>Since</strong>: <code>0.2.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.disabled</code></li>
+<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a id="excludes"></a><section><a id="a.3Cexcludes.3E"></a>
+<h3>&lt;excludes&gt;</h3>
+<div>Set of exclusion GLOB filters for finding .class files in the <code>sourcesDir</code><!-- no javadoc sites associated --> directory.</div>
+<ul>
+<li><strong>Type</strong>: <code>java.util.Set&lt;java.lang.String&gt;</code></li>
+<li><strong>Since</strong>: <code>0.13.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.excludes</code></li></ul><hr /></section><a id="includes"></a><section><a id="a.3Cincludes.3E"></a>
+<h3>&lt;includes&gt;</h3>
+<div>Set of inclusion GLOB filters for finding .class files in the <code>sourcesDir</code><!-- no javadoc sites associated --> directory.</div>
+<ul>
+<li><strong>Type</strong>: <code>java.util.Set&lt;java.lang.String&gt;</code></li>
+<li><strong>Since</strong>: <code>0.13.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.includes</code></li></ul><hr /></section><a id="mode"></a><section><a id="a.3Cmode.3E"></a>
+<h3>&lt;mode&gt;</h3>
+<div>Disassembly mode controlling the level of detail in output. 
+<p>Supported modes:</p>
+<ul>
+ <li><code>short</code> - Minimal output with bytecode instructions only (default)</li>
+ <li><code>debug</code> - Include debug information such as line numbers, local variables, and source file references</li>
+</ul>
+<p></p></div>
+<ul>
+<li><strong>Type</strong>: <code>java.lang.String</code></li>
+<li><strong>Since</strong>: <code>0.6.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.mode</code></li>
+<li><strong>Default</strong>: <code>short</code></li></ul><hr /></section><a id="omitComments"></a><section><a id="a.3ComitComments.3E"></a>
+<h3>&lt;omitComments&gt;</h3>
+<div>Flag to omit XML comments in generated XMIR files. 
+<p>When enabled, no comments will be generated in the XMIR output, which can be useful for production builds where comments are not needed and may reduce file size. When disabled, XML comments will be included to provide debugging information.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>boolean</code></li>
+<li><strong>Since</strong>: <code>0.11.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.omitComments</code></li>
+<li><strong>Default</strong>: <code>true</code></li></ul><hr /></section><a id="omitListings"></a><section><a id="a.3ComitListings.3E"></a>
+<h3>&lt;omitListings&gt;</h3>
+<div>Flag to omit detailed bytecode listings in generated XMIR. 
+<p>When enabled, the <code>&lt;listing&gt;</code> element in XMIR files will not contain bytecode listing. This reduces file size and improves readability in production environments where detailed bytecode output is not needed. When disabled, full bytecode listings are included for debugging purposes.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>boolean</code></li>
+<li><strong>Since</strong>: <code>0.11.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.omitListings</code></li>
+<li><strong>Default</strong>: <code>true</code></li></ul><hr /></section><a id="outputDir"></a><section><a id="a.3CoutputDir.3E"></a>
+<h3>&lt;outputDir&gt;</h3>
+<div>Target directory for generated XMIR files. 
+<p>All disassembled XMIR files will be written to this directory, preserving the package structure of the original class files. Each class file will be converted to a corresponding XMIR file with <code>.xmir</code> extension.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>java.io.File</code></li>
+<li><strong>Since</strong>: <code>0.2.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.outputDir</code></li>
+<li><strong>Default</strong>: <code>${project.build.directory}/generated-sources/jeo-xmir</code></li></ul><hr /></section><a id="prettyXmir"></a><section><a id="a.3CprettyXmir.3E"></a>
+<h3>&lt;prettyXmir&gt;</h3>
+<div>Flag to enable pretty-printing of XMIR files. 
+<p>When enabled, the generated XMIR files will be formatted with indentation (2 spaces) and line breaks for better readability. This is useful for development and debugging purposes. By default, pretty-printing is enabled, but it's best to disable it for large projects or production builds to reduce file size and improve performance.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>boolean</code></li>
+<li><strong>Since</strong>: <code>0.11.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.prettyXmir</code></li>
+<li><strong>Default</strong>: <code>true</code></li></ul><hr /></section><a id="sourcesDir"></a><section><a id="a.3CsourcesDir.3E"></a>
+<h3>&lt;sourcesDir&gt;</h3>
+<div>Source directory containing compiled Java class files. 
+<p>This directory should contain <code>.class</code> files that will be disassembled into XMIR format. Typically points to the project's build output directory.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>java.io.File</code></li>
+<li><strong>Since</strong>: <code>0.2.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.sourcesDir</code></li>
+<li><strong>Default</strong>: <code>${project.build.outputDirectory}</code></li></ul><hr /></section><a id="xmirVerification"></a><section><a id="a.3CxmirVerification.3E"></a>
+<h3>&lt;xmirVerification&gt;</h3>
+<div>Flag to enable XMIR verification after disassembling. 
+<p>When enabled, verifies all generated XMIR files for structural integrity and correctness after disassembly. If any XMIR file is invalid or corrupted, the build process will fail. This verification is disabled by default for performance.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>boolean</code></li>
+<li><strong>Since</strong>: <code>0.8.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.xmir.verification</code></li>
+<li><strong>Default</strong>: <code>false</code></li></ul></section></section></section>
+                        </article>
+                    </div>
+                </main>
+                <footer class="legal-notes">
+                    <div>
+                        Copyright &#169;
+                                                                            2023-${currentYear}
+                                            </div>
+                    <div>EO, All Rights Reserved.</div>
+                    <div><a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.</div>
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>
