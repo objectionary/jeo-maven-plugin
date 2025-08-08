@@ -11,6 +11,7 @@ import org.eolang.jeo.representation.bytecode.Codec;
 import org.eolang.jeo.representation.bytecode.EoCodec;
 import org.eolang.jeo.representation.bytecode.PlainLongCodec;
 import org.eolang.jeo.representation.directives.EoFqn;
+import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * XML value.
@@ -37,6 +38,11 @@ public final class XmlValue {
      * Number full qualified name.
      */
     private static final String NUMBER = new EoFqn("number").fqn();
+
+    /**
+     * Long full qualified name.
+     */
+    private static final String LONG = new JeoFqn("long").fqn();
 
     /**
      * Space pattern.
@@ -79,55 +85,54 @@ public final class XmlValue {
     /**
      * Convert hex string to an object.
      * @return Object.
-     * @todo #1130:90min Cover {@link XmlValue#object()} with tests.
-     *  Currently, this method is overly complex and not covered by tests.
-     *  Actually, this code caused several issues in integration tests which
-     *  were not caught by unit tests.
      */
     public Object object() {
         final String base = XmlValue.base(this.node);
         final Object res;
-        if (XmlValue.isBoolean(base)) {
-            res = new XmlClosedObject(this.node).optbase()
+        if (XmlValue.TRUE.equals(base) || XmlValue.FALSE.equals(base)) {
+            res = new XmlClosedObject(this.node)
+                .optbase()
                 .map(XmlValue.TRUE::equals)
                 .orElse(false);
-        } else {
+        } else if (XmlValue.NUMBER.equals(base)) {
+            res = new BytecodeBytes(XmlValue.withoutPackage(base), this.bytes())
+                .object(new EoCodec());
+        } else if (XmlValue.LONG.equals(base)) {
+            final XmlNode child = new XmlJeoObject(this.node)
+                .children()
+                .findFirst()
+                .orElseThrow(
+                    () -> new IllegalStateException(
+                        String.format("Can't find a child in '%s' to convert to long", this.node)
+                    )
+                );
+            final boolean nonumber = !(XmlValue.NUMBER.equals(XmlValue.base(child)));
             Codec codec = new EoCodec();
-            final XmlNode child;
-            final boolean based;
-            if (new XmlJeoObject(this.node).isJeoObject()) {
-                based = true;
-                child = new XmlJeoObject(this.node)
-                    .children()
-                    .findFirst()
-                    .orElseThrow(IllegalStateException::new);
-            } else {
-                child = this.node.child("o");
-                based = child.attribute("base").isPresent();
-            }
-            final boolean nonumber = !(based && XmlValue.NUMBER.equals(XmlValue.base(child)));
             if (nonumber) {
                 codec = new PlainLongCodec(codec);
             }
-            final String result;
-            final int last = base.lastIndexOf('.');
-            if (last == -1) {
-                result = base;
-            } else {
-                result = base.substring(last + 1);
-            }
-            res = new BytecodeBytes(result, this.bytes()).object(codec);
+            res = new BytecodeBytes(XmlValue.withoutPackage(base), this.bytes()).object(codec);
+        } else {
+            res = new BytecodeBytes(XmlValue.withoutPackage(base), this.bytes())
+                .object(new EoCodec());
         }
         return res;
     }
 
     /**
-     * Object base.
-     * @param base Object 'base' attribute value.
-     * @return True if it's boolean, false otherwise.
+     * Get the last part of the base without the package.
+     * @param base Base of the object, e.g. "org.eolang.jeo.String".
+     * @return Last part of the base, e.g. "String".
      */
-    private static boolean isBoolean(final String base) {
-        return XmlValue.TRUE.equals(base) || XmlValue.FALSE.equals(base);
+    private static String withoutPackage(final String base) {
+        final String result;
+        final int last = base.lastIndexOf('.');
+        if (last == -1) {
+            result = base;
+        } else {
+            result = base.substring(last + 1);
+        }
+        return result;
     }
 
     /**
@@ -187,7 +192,7 @@ public final class XmlValue {
      * @return Type without package.
      */
     private static String base(final XmlNode node) {
-        return new XmlJeoObject(node)
+        return new XmlDelegateObject(node)
             .base()
             .orElseGet(() -> new XmlClosedObject(node).base());
     }

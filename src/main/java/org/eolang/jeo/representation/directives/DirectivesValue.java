@@ -208,19 +208,6 @@ public final class DirectivesValue implements Iterable<Directive> {
     }
 
     /**
-     * Integer number object.
-     * We decided to use simplified representation of integer numbers.
-     * Previously, we used {@link #jeoNumber(String, Codec)} wrapper.
-     * You can read about it here:
-     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1061">#1061</a>
-     * @param codec Codec to use for bytes encoding.
-     * @return JEO number directives.
-     */
-    private Iterable<Directive> integerNumber(final Codec codec) {
-        return new DirectivesNumber(this.name, this.hex(codec));
-    }
-
-    /**
      * JEO number.
      *
      * @param base Object base.
@@ -234,6 +221,19 @@ public final class DirectivesValue implements Iterable<Directive> {
             new DirectivesComment(this.comment()),
             new DirectivesNumber(new RandName("n").toString(), this.hex(codec))
         );
+    }
+
+    /**
+     * Integer number object.
+     * We decided to use simplified representation of integer numbers.
+     * Previously, we used {@link #jeoNumber(String, Codec)} wrapper.
+     * You can read about it here:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1061">#1061</a>
+     * @param codec Codec to use for bytes encoding.
+     * @return JEO number directives.
+     */
+    private Iterable<Directive> integerNumber(final Codec codec) {
+        return new DirectivesNumber(this.name, this.hex(codec));
     }
 
     /**
