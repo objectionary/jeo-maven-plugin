@@ -216,32 +216,32 @@
 <a class="jxr_linenumber" name="L208" href="#L208">208</a>     }
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 
 <a class="jxr_linenumber" name="L210" href="#L210">210</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">     * Integer number object.</em>
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">     * We decided to use simplified representation of integer numbers.</em>
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">     * Previously, we used {@link #jeoNumber(String, Codec)} wrapper.</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">     * You can read about it here:</em>
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">     * &lt;a href="<a href="https://github.com/objectionary/jeo-maven-plugin/issues/1061" target="alexandria_uri">https://github.com/objectionary/jeo-maven-plugin/issues/1061</a>"&gt;#1061&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">     * @param codec Codec to use for bytes encoding.</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">     * @return JEO number directives.</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a>     <strong class="jxr_keyword">private</strong> Iterable&lt;Directive&gt; integerNumber(<strong class="jxr_keyword">final</strong> <a name="Codec" href="../../../../../org/eolang/jeo/representation/bytecode/Codec.html#Codec">Codec</a> codec) {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesNumber" href="../../../../../org/eolang/jeo/representation/directives/DirectivesNumber.html#DirectivesNumber">DirectivesNumber</a>(<strong class="jxr_keyword">this</strong>.name, <strong class="jxr_keyword">this</strong>.hex(codec));
-<a class="jxr_linenumber" name="L221" href="#L221">221</a>     }
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
-<a class="jxr_linenumber" name="L223" href="#L223">223</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">     * JEO number.</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">     * @param base Object base.</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">     * @param codec Codec to use for bytes encoding.</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">     * @return JEO number directives.</em>
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L230" href="#L230">230</a>     <strong class="jxr_keyword">private</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a> jeoNumber(<strong class="jxr_keyword">final</strong> String base, <strong class="jxr_keyword">final</strong> <a name="Codec" href="../../../../../org/eolang/jeo/representation/bytecode/Codec.html#Codec">Codec</a> codec) {
-<a class="jxr_linenumber" name="L231" href="#L231">231</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a>(
-<a class="jxr_linenumber" name="L232" href="#L232">232</a>             base,
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>             <strong class="jxr_keyword">this</strong>.name,
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>             <strong class="jxr_keyword">new</strong> <a name="DirectivesComment" href="../../../../../org/eolang/jeo/representation/directives/DirectivesComment.html#DirectivesComment">DirectivesComment</a>(<strong class="jxr_keyword">this</strong>.comment()),
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>             <strong class="jxr_keyword">new</strong> <a name="DirectivesNumber" href="../../../../../org/eolang/jeo/representation/directives/DirectivesNumber.html#DirectivesNumber">DirectivesNumber</a>(<strong class="jxr_keyword">new</strong> <a name="RandName" href="../../../../../org/eolang/jeo/representation/directives/RandName.html#RandName">RandName</a>(<span class="jxr_string">"n"</span>).toString(), <strong class="jxr_keyword">this</strong>.hex(codec))
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>         );
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">     * JEO number.</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">     * @param base Object base.</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">     * @param codec Codec to use for bytes encoding.</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">     * @return JEO number directives.</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>     <strong class="jxr_keyword">private</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a> jeoNumber(<strong class="jxr_keyword">final</strong> String base, <strong class="jxr_keyword">final</strong> <a name="Codec" href="../../../../../org/eolang/jeo/representation/bytecode/Codec.html#Codec">Codec</a> codec) {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a>(
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>             base,
+<a class="jxr_linenumber" name="L220" href="#L220">220</a>             <strong class="jxr_keyword">this</strong>.name,
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>             <strong class="jxr_keyword">new</strong> <a name="DirectivesComment" href="../../../../../org/eolang/jeo/representation/directives/DirectivesComment.html#DirectivesComment">DirectivesComment</a>(<strong class="jxr_keyword">this</strong>.comment()),
+<a class="jxr_linenumber" name="L222" href="#L222">222</a>             <strong class="jxr_keyword">new</strong> <a name="DirectivesNumber" href="../../../../../org/eolang/jeo/representation/directives/DirectivesNumber.html#DirectivesNumber">DirectivesNumber</a>(<strong class="jxr_keyword">new</strong> <a name="RandName" href="../../../../../org/eolang/jeo/representation/directives/RandName.html#RandName">RandName</a>(<span class="jxr_string">"n"</span>).toString(), <strong class="jxr_keyword">this</strong>.hex(codec))
+<a class="jxr_linenumber" name="L223" href="#L223">223</a>         );
+<a class="jxr_linenumber" name="L224" href="#L224">224</a>     }
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
+<a class="jxr_linenumber" name="L226" href="#L226">226</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">     * Integer number object.</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">     * We decided to use simplified representation of integer numbers.</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">     * Previously, we used {@link #jeoNumber(String, Codec)} wrapper.</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">     * You can read about it here:</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">     * &lt;a href="<a href="https://github.com/objectionary/jeo-maven-plugin/issues/1061" target="alexandria_uri">https://github.com/objectionary/jeo-maven-plugin/issues/1061</a>"&gt;#1061&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">     * @param codec Codec to use for bytes encoding.</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">     * @return JEO number directives.</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a>     <strong class="jxr_keyword">private</strong> Iterable&lt;Directive&gt; integerNumber(<strong class="jxr_keyword">final</strong> <a name="Codec" href="../../../../../org/eolang/jeo/representation/bytecode/Codec.html#Codec">Codec</a> codec) {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesNumber" href="../../../../../org/eolang/jeo/representation/directives/DirectivesNumber.html#DirectivesNumber">DirectivesNumber</a>(<strong class="jxr_keyword">this</strong>.name, <strong class="jxr_keyword">this</strong>.hex(codec));
 <a class="jxr_linenumber" name="L237" href="#L237">237</a>     }
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 
 <a class="jxr_linenumber" name="L239" href="#L239">239</a>     <em class="jxr_javadoccomment">/**</em>
