@@ -44,6 +44,17 @@ public final class GlobFilter implements Predicate<Path> {
     }
 
     @Override
+    public String toString() {
+        return String.format(
+            "%d inclusions (%s) and %d exclusions (%s)",
+            this.includes.size(),
+            String.join(", ", this.includes),
+            this.excludes.size(),
+            String.join(", ", this.excludes)
+        );
+    }
+
+    @Override
     public boolean test(final Path path) {
         final Set<PathMatcher> whitelist = this.includes.stream()
             .map(GlobFilter::matcher)

@@ -15,4 +15,6 @@ assert log.contains("included class successfully invoked!")
 assert log.contains("not included class successfully invoked!")
 assert log.contains("ignored class successfully invoked!")
 assert log.contains("deeply ignored class successfully invoked!")
+
+assert log.contains("using 1 inclusions (**/Included.class) and 1 exclusions (ignored/**/*.class)")
 true

@@ -8,12 +8,10 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.objectweb.asm.ClassReader;
@@ -35,7 +33,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
  * for details on how all generated classes are loaded.</p>
  * @since 0.6.0
  */
-final class BytecodeClasses {
+final class BytecodeClasses implements Classes {
 
     /**
      * Input directory where all the generated class files are placed.
@@ -43,35 +41,20 @@ final class BytecodeClasses {
     private final Path input;
 
     /**
-     * Several filters to apply on class files.
-     */
-    private final List<? extends Predicate<Path>> filters;
-
-    /**
-     * Constructor.
-     * @param input Input directory where all the generated class files are placed.
-     * @param filters List of filters to apply on class files
-     */
-    @SafeVarargs
-    BytecodeClasses(final Path input, final Predicate<Path>... filters) {
-        this(input, Arrays.asList(filters));
-    }
-
-    /**
      * Constructor with filters.
      * @param input Input directory where all the generated class files are placed.
-     * @param filters List of filters to apply on class files
      */
-    private BytecodeClasses(final Path input, final List<Predicate<Path>> filters) {
+    BytecodeClasses(final Path input) {
         this.input = input;
-        this.filters = filters;
     }
 
-    /**
-     * All the class files.
-     * @return Stream of paths to class files
-     */
-    Stream<Path> all() {
+    @Override
+    public String toString() {
+        return this.input.toString();
+    }
+
+    @Override
+    public Stream<Path> all() {
         try {
             return this.classes().stream();
         } catch (final IOException exception) {
@@ -115,7 +98,6 @@ final class BytecodeClasses {
             return walk
                 .filter(Files::isRegularFile)
                 .filter(path -> path.toString().endsWith(".class"))
-                .filter(path -> this.filters.stream().allMatch(filter -> filter.test(path)))
                 .collect(Collectors.toList());
         }
     }

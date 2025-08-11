@@ -8,7 +8,6 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.asm.DisassembleParams;
 
@@ -26,7 +25,7 @@ public final class Disassembler {
     /**
      * Project compiled classes.
      */
-    private final Path classes;
+    private final Classes classes;
 
     /**
      * Where to save decompiled classes.
@@ -61,6 +60,14 @@ public final class Disassembler {
         final Path target,
         final DisassembleParams params
     ) {
+        this(new BytecodeClasses(classes), target, params);
+    }
+
+    public Disassembler(
+        final Classes classes,
+        final Path target,
+        final DisassembleParams params
+    ) {
         this.classes = classes;
         this.target = target;
         this.params = params;
@@ -68,19 +75,17 @@ public final class Disassembler {
 
     /**
      * Disassemble all bytecode files.
-     * @param filters Optional filters to apply on class files
      */
-    @SafeVarargs
-    public final void disassemble(final Predicate<Path>... filters) {
+    public void disassemble() {
         final String process = "Disassembling";
         final String disassembled = "disassembled";
         final Stream<Path> stream = new Summary(
             process,
             disassembled,
-            this.classes,
+            this.classes.toString(),
             this.target,
             new ParallelTranslator(this::disassemble)
-        ).apply(new BytecodeClasses(this.classes, filters).all());
+        ).apply(this.classes.all());
         stream.forEach(this::log);
         stream.close();
     }

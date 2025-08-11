@@ -223,7 +223,10 @@ public final class DisassembleMojo extends AbstractMojo {
                     comments
                 );
                 new Disassembler(
-                    this.sourcesDir.toPath(),
+                    new FilteredClasses(
+                        new BytecodeClasses(this.sourcesDir.toPath()),
+                        new GlobFilter(this.includes, this.excludes)
+                    ),
                     this.outputDir.toPath(),
                     new DisassembleParams(
                         DisassembleMode.fromString(this.mode),
@@ -231,7 +234,7 @@ public final class DisassembleMojo extends AbstractMojo {
                         this.prettyXmir,
                         comments
                     )
-                ).disassemble(new GlobFilter(this.includes, this.excludes));
+                ).disassemble();
                 if (this.xmirVerification) {
                     Logger.info(this, "Verifying all the XMIR files after disassembling");
                     new XmirFiles(this.outputDir.toPath()).verify();
