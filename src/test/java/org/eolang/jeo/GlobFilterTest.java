@@ -48,6 +48,27 @@ final class GlobFilterTest {
     }
 
     /**
+     * Tests the string representation of the GlobFilter.
+     * @param description Description of the test case
+     * @param filter The GlobFilter to test
+     * @param expected Expected string representation of the filter
+     */
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("stringCases")
+    @DisplayName("Test GlobFilter string representation")
+    void convertsGlobFilterToString(
+        final String description,
+        final GlobFilter filter,
+        final String expected
+    ) {
+        MatcherAssert.assertThat(
+            "We expect the filter's string representation to match",
+            filter.toString(),
+            Matchers.is(expected)
+        );
+    }
+
+    /**
      * Test cases for GlobFilter.
      * @return Stream of test cases
      */
@@ -108,6 +129,38 @@ final class GlobFilterTest {
                 GlobFilterTest.setOf(),
                 Paths.get("any/path/file.txt"),
                 true
+            )
+        );
+    }
+
+    /**
+     * Test cases for {@link GlobFilter#toString()}.
+     * @return Stream of test cases
+     */
+    static Stream<Arguments> stringCases() {
+        return Stream.of(
+            Arguments.of(
+                "No inclusions and no exclusions",
+                new GlobFilter(GlobFilterTest.setOf(), GlobFilterTest.setOf()),
+                "no inclusions and no exclusions"
+            ),
+            Arguments.of(
+                "With inclusions only",
+                new GlobFilter(GlobFilterTest.setOf("**/*.java"), GlobFilterTest.setOf()),
+                "1 inclusions (**/*.java) and no exclusions"
+            ),
+            Arguments.of(
+                "With exclusions only",
+                new GlobFilter(GlobFilterTest.setOf(), GlobFilterTest.setOf("**/*.tmp")),
+                "no inclusions and 1 exclusions (**/*.tmp)"
+            ),
+            Arguments.of(
+                "With both inclusions and exclusions",
+                new GlobFilter(
+                    GlobFilterTest.setOf("src/**/*.java"),
+                    GlobFilterTest.setOf("**/test/**")
+                ),
+                "1 inclusions (src/**/*.java) and 1 exclusions (**/test/**)"
             )
         );
     }

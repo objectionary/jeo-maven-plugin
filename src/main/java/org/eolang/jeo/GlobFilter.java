@@ -45,13 +45,31 @@ public final class GlobFilter implements Predicate<Path> {
 
     @Override
     public String toString() {
-        return String.format(
-            "%d inclusions (%s) and %d exclusions (%s)",
-            this.includes.size(),
-            String.join(", ", this.includes),
-            this.excludes.size(),
-            String.join(", ", this.excludes)
-        );
+        final String inclusions;
+        if (this.includes.isEmpty()) {
+            inclusions = "no inclusions";
+        } else {
+            inclusions = this.includes.stream().collect(
+                Collectors.joining(
+                    ", ",
+                    String.format("%d inclusions (", this.includes.size()),
+                    ")"
+                )
+            );
+        }
+        final String exclusions;
+        if (this.excludes.isEmpty()) {
+            exclusions = "no exclusions";
+        } else {
+            exclusions = this.excludes.stream().collect(
+                Collectors.joining(
+                    ", ",
+                    String.format("%d exclusions (", this.excludes.size()),
+                    ")"
+                )
+            );
+        }
+        return String.format("%s and %s", inclusions, exclusions);
     }
 
     @Override

@@ -77,7 +77,7 @@ final class FilteredClassesTest {
                 Matchers.hasItem(
                     Matchers.containsString(
                         String.format(
-                            "Found 2 files in %s using 0 inclusions () and 1 exclusions (*.txt)",
+                            "Found 2 files in %s using no inclusions and 1 exclusions (*.txt)",
                             root
                         )
                     )
