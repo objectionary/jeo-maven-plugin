@@ -21,6 +21,7 @@ import org.objectweb.asm.tree.InvokeDynamicInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MultiANewArrayInsnNode;
@@ -52,6 +53,7 @@ final class AsmInstruction {
      * @return Domain instruction.
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      * @checkstyle JavaNCSSCheck (100 lines)
+     * @checkstyle MethodLengthCheck (200 lines)
      */
     @SuppressWarnings({"PMD.NcssCount", "PMD.ExcessiveMethodLength"})
     BytecodeEntry bytecode() {
@@ -192,7 +194,11 @@ final class AsmInstruction {
                 );
                 break;
             case AbstractInsnNode.LINE:
-                result = new BytecodeLine();
+                final LineNumberNode line = LineNumberNode.class.cast(this.node);
+                result = new BytecodeLine(
+                    line.line,
+                    new BytecodeLabel(LabelNode.class.cast(line.start).getLabel().toString())
+                );
                 break;
             default:
                 throw new IllegalStateException(

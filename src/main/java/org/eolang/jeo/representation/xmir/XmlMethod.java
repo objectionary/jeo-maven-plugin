@@ -235,6 +235,8 @@ public final class XmlMethod {
             result = new XmlLabel(node);
         } else if (base.isPresent() && new JeoFqn("frame").fqn().equals(base.get())) {
             result = new XmlFrame(node);
+        } else if (base.isPresent() && new JeoFqn("line-number").fqn().equals(base.get())) {
+            result = new XmlLine(node);
         } else {
             result = new XmlInstruction(node);
         }
