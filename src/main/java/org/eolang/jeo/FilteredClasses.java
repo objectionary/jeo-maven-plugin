@@ -66,4 +66,9 @@ final class FilteredClasses implements Classes {
         );
         return res.stream();
     }
+
+    @Override
+    public String toString() {
+        return this.original.toString();
+    }
 }
