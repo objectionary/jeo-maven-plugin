@@ -43,4 +43,26 @@ final class DirectivesClassPropertiesTest {
             )
         );
     }
+
+    @Test
+    void createsDirectivesWithMandatorySignature() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Can't create proper xml with mandatory signature",
+            new Xembler(
+                new Directives()
+                    .add("o")
+                    .append(
+                        new DirectivesClassProperties(
+                            1,
+                            null,
+                            "java/lang/Object",
+                            "org/eolang/SomeInterface"
+                        )
+                    ).up()
+            ).xml(),
+            XhtmlMatchers.hasXPaths(
+                "//o[contains(@name,'signature')]"
+            )
+        );
+    }
 }

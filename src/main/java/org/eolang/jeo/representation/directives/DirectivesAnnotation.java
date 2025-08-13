@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.eolang.jeo.representation.Signature;
+import org.eolang.jeo.representation.NamedDescriptor;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -87,7 +87,7 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "annotation",
-            new Signature(
+            new NamedDescriptor(
                 String.format("annotation-%d", new Random().nextInt(Integer.MAX_VALUE)),
                 this.descriptor
             ).encoded(),

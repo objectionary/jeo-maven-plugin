@@ -12,17 +12,17 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 /**
- * Test for {@link Signature}.
+ * Test for {@link NamedDescriptor}.
  * @since 0.5
  */
-final class SignatureTest {
+final class NamedDescriptorTest {
 
     @ParameterizedTest(name = "Encodes \"{0}\" name with \"{1}\" descriptor, should be \"{2}\"")
     @MethodSource("namesDescriptorsAndEncoded")
     void encodesNamesWithDescriptors(final String name, final String descr, final String encoded) {
         MatcherAssert.assertThat(
             "Encoded method name and descriptor should be correct",
-            new Signature(name, descr).encoded(),
+            new NamedDescriptor(name, descr).encoded(),
             Matchers.equalTo(encoded)
         );
     }
@@ -32,7 +32,7 @@ final class SignatureTest {
     void decodesNames(final String name, final String descr, final String encoded) {
         MatcherAssert.assertThat(
             "Decoded method name should be correct",
-            new Signature(encoded).name(),
+            new NamedDescriptor(encoded).name(),
             Matchers.equalTo(name)
         );
     }
@@ -42,7 +42,7 @@ final class SignatureTest {
     void decodesDescriptors(final String name, final String descr, final String encoded) {
         MatcherAssert.assertThat(
             "Decoded method descriptor should be correct",
-            new Signature(encoded).descriptor(),
+            new NamedDescriptor(encoded).descriptor(),
             Matchers.equalTo(descr)
         );
     }

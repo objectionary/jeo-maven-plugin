@@ -13,7 +13,7 @@ package org.eolang.jeo.representation;
  * unique identifier.</p>
  * @since 0.5.0
  */
-public final class Signature {
+public final class NamedDescriptor {
 
     /**
      * Human-readable method name in source code.
@@ -29,8 +29,8 @@ public final class Signature {
      * Constructor.
      * @param encoded The encoded method name and descriptor
      */
-    public Signature(final String encoded) {
-        this(Signature.prefix(encoded), Signature.suffix(encoded));
+    public NamedDescriptor(final String encoded) {
+        this(NamedDescriptor.prefix(encoded), NamedDescriptor.suffix(encoded));
     }
 
     /**
@@ -38,7 +38,7 @@ public final class Signature {
      * @param name The method name
      * @param descriptor The method descriptor
      */
-    public Signature(final String name, final String descriptor) {
+    public NamedDescriptor(final String name, final String descriptor) {
         this.original = name;
         this.descr = descriptor;
     }
