@@ -21,7 +21,7 @@
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Stream;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> lombok.EqualsAndHashCode;
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> lombok.ToString;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.Signature;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.NamedDescriptor;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> org.xembly.Directive;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.xembly.Directives;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
@@ -95,7 +95,7 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">public</strong> Iterator&lt;Directive&gt; iterator() {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DirectivesJeoObject" href="../../../../../org/eolang/jeo/representation/directives/DirectivesJeoObject.html#DirectivesJeoObject">DirectivesJeoObject</a>(
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>              <span class="jxr_string">"annotation"</span>,
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">new</strong> <a name="Signature" href="../../../../../org/eolang/jeo/representation/Signature.html#Signature">Signature</a>(
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">new</strong> <a name="NamedDescriptor" href="../../../../../org/eolang/jeo/representation/NamedDescriptor.html#NamedDescriptor">NamedDescriptor</a>(
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>                  String.format(<span class="jxr_string">"annotation-%d"</span>, <strong class="jxr_keyword">new</strong> Random().nextInt(Integer.MAX_VALUE)),
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>                  <strong class="jxr_keyword">this</strong>.descriptor
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>              ).encoded(),
