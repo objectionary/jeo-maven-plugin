@@ -40,4 +40,22 @@ final class BytecodeTryCatchBlockTest {
             )
         );
     }
+
+    @Test
+    void comparesEquality() {
+        final String start = UUID.randomUUID().toString();
+        final String end = UUID.randomUUID().toString();
+        final String handler = UUID.randomUUID().toString();
+        MatcherAssert.assertThat(
+            "We expected two try-catch blocks with the same parameters to be equal.",
+            new BytecodeTryCatchBlock(
+                start, end, handler, "java/lang/Exception"
+            ),
+            Matchers.equalTo(
+                new BytecodeTryCatchBlock(
+                    start, end, handler, "java/lang/Exception"
+                )
+            )
+        );
+    }
 }
