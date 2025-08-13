@@ -67,7 +67,7 @@ configuration to your `pom.xml` file:
     <plugin>
       <groupId>org.eolang</groupId>
       <artifactId>jeo-maven-plugin</artifactId>
-      <version>0.13.5</version>
+      <version>0.13.6</version>
       <executions>
         <execution>
           <id>bytecode-to-eo</id>
