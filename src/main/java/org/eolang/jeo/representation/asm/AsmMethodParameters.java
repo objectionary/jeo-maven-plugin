@@ -12,6 +12,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.ParameterNode;
 
 /**
  * Asm method parameters.
@@ -101,11 +102,12 @@ final class AsmMethodParameters {
      * @return Parameter name.
      */
     private static String name(final MethodNode node, final int index) {
-        final String result;
+        String result = String.format("arg%d", index);
         if (node.parameters != null && node.parameters.size() > index) {
-            result = node.parameters.get(index).name;
-        } else {
-            result = String.format("arg%d", index);
+            final ParameterNode pnode = node.parameters.get(index);
+            if (pnode.name != null) {
+                result = pnode.name;
+            }
         }
         return result;
     }

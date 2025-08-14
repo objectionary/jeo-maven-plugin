@@ -12,6 +12,7 @@ import org.eolang.jeo.representation.bytecode.EoCodec;
 import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -32,6 +33,13 @@ final class BytecodeRepresentationTest {
      * The name of the resource with the simplest class.
      */
     private static final String METHOD_BYTE = "MethodByte.class";
+
+    /**
+     * The example of bytecode with a nullable param name.
+     * You can read more about it here:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1233">#1233</a>
+     */
+    private static final String NULL_NAME = "LtIncorrectUnlint.class";
 
     @Test
     void parsesBytecode() {
@@ -126,6 +134,16 @@ final class BytecodeRepresentationTest {
                 ).toBytecode().bytes()
             ).toString(),
             Matchers.equalTo(new Bytecode(new BytesOf(input).asBytes()).toString())
+        );
+    }
+
+    @Test
+    void parsesBytecodeWithNullParameterName() {
+        Assertions.assertDoesNotThrow(
+            () -> new BytecodeRepresentation(
+                new ResourceOf(BytecodeRepresentationTest.NULL_NAME)
+            ).toXmir(),
+            "We expect to parse a bytecode with a null name without exceptions"
         );
     }
 }
