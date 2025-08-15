@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Optional;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -110,7 +111,9 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         final Directives directives = new Directives()
             .append(new DirectivesValue("version", this.version))
             .append(new DirectivesValue("access", this.access))
-            .append(new DirectivesValue("signature", this.signature));
+            .append(
+                new DirectivesValue("signature", Optional.ofNullable(this.signature).orElse(""))
+            );
         if (this.supername != null) {
             directives.append(new DirectivesValue("supername", this.supername));
         }

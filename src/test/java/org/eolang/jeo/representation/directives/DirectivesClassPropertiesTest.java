@@ -65,4 +65,31 @@ final class DirectivesClassPropertiesTest {
             )
         );
     }
+
+    /**
+     * This test was added to ensure that when a null signature is passed,
+     * it is converted to an empty string in the XML output.
+     * See more details in
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1246">#1246</a>
+     * @throws ImpossibleModificationException in case of XML modification failure.
+     */
+    @Test
+    void convertsNullSignatureToEmptyString() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Signature should be empty string when null is passed",
+            new Xembler(
+                new Directives().add("o").append(
+                    new DirectivesClassProperties(
+                        1,
+                        null,
+                        "java/lang/Object",
+                        "org/eolang/SomeInterface"
+                    )
+                ).up()
+            ).xml(),
+            XhtmlMatchers.hasXPath(
+                "//o[@name='signature']/o[contains(@base,'bytes')]/o[text()='--']"
+            )
+        );
+    }
 }
