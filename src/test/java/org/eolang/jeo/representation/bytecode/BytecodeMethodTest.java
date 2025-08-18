@@ -245,6 +245,27 @@ final class BytecodeMethodTest {
         );
     }
 
+    /**
+     * This test was added to mitigate the following issue:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1251">issue #1251</a>.
+     * @throws ImpossibleModificationException if modification is impossible, programmer mistake.
+     */
+    @Test
+    void addsLocalVariableTableEvenIfItIsEmpty() throws ImpossibleModificationException {
+        final String name = "emptyLocalVariableTable";
+        final DirectivesMethod directives = new BytecodeMethod(name).directives();
+        MatcherAssert.assertThat(
+            "We expect that the local variable table will be added even if it is empty",
+            new Xembler(directives).xml(),
+            XhtmlMatchers.hasXPaths(
+                String.format(
+                    "./o[contains(@name,'%s')]/o[@name='local-variable-table']",
+                    name
+                )
+            )
+        );
+    }
+
     @ParameterizedTest(name = "Computing maxs for method {1}, expected  {2}")
     @MethodSource("implementedMethods")
     void computesMaxsCorrectlyForImplementedMethods(

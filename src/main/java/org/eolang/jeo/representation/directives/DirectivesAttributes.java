@@ -57,6 +57,6 @@ public final class DirectivesAttributes implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesOptionalSeq(this.name, this.attributes).iterator();
+        return new DirectivesSeq(this.name, this.attributes).iterator();
     }
 }
