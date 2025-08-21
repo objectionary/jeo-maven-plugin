@@ -13,9 +13,9 @@
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">package</strong> org.eolang.jeo.representation.bytecode;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.asm.AsmLabels;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.DirectivesAttribute;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.objectweb.asm.ClassVisitor;
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.objectweb.asm.MethodVisitor;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.objectweb.asm.ClassVisitor;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.objectweb.asm.MethodVisitor;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.xembly.Directive;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_javadoccomment"> * Bytecode attribute.</em>
@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">     * Converts to directives.</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">     * @return Directives.</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <a name="DirectivesAttribute" href="../../../../../org/eolang/jeo/representation/directives/DirectivesAttribute.html#DirectivesAttribute">DirectivesAttribute</a> directives();
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      Iterable&lt;Directive&gt; directives();
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  }
 </pre>
