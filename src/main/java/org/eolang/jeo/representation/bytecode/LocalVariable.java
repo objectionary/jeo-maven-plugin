@@ -7,11 +7,11 @@ package org.eolang.jeo.representation.bytecode;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
-import org.eolang.jeo.representation.directives.DirectivesAttribute;
-import org.eolang.jeo.representation.directives.DirectivesValue;
+import org.eolang.jeo.representation.directives.DirectivesLocalVariables;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.LocalVariableNode;
+import org.xembly.Directive;
 
 /**
  * Local variable attribute.
@@ -116,13 +116,12 @@ public final class LocalVariable implements BytecodeAttribute {
     }
 
     @Override
-    public DirectivesAttribute directives() {
-        return new DirectivesAttribute(
-            "local-variable",
-            new DirectivesValue("index", this.index),
-            new DirectivesValue("name", this.name),
-            new DirectivesValue("descr", this.descriptor),
-            new DirectivesValue("signature", this.signature),
+    public Iterable<Directive> directives() {
+        return new DirectivesLocalVariables(
+            this.index,
+            this.name,
+            this.descriptor,
+            this.signature,
             this.start.directives(),
             this.end.directives()
         );
