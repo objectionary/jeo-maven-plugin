@@ -19,7 +19,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <eo.version>0.58.1</eo.version>
+    <eo.version>0.58.2</eo.version>
     <stack-size>256M</stack-size>
     <jeo.disassemble>${project.build.directory}/generated-sources/jeo-disassemble</jeo.disassemble>
     <eo.phi>${project.build.directory}/generated-sources/eo-phi</eo.phi>
