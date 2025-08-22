@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.directives.DirectivesClass;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.Opcodes;
 
 /**
@@ -279,12 +280,21 @@ public final class BytecodeClass {
      * @return Directives.
      */
     public DirectivesClass directives() {
+        return this.directives(new Format());
+    }
+
+    /**
+     * Convert to directives.
+     * @param format Format of the directives.
+     * @return Directives.
+     */
+    public DirectivesClass directives(final Format format) {
         return new DirectivesClass(
             this.name,
             this.props.directives(),
             this.fields.stream().map(BytecodeField::directives).collect(Collectors.toList()),
             this.cmethods.stream()
-                .map(method -> method.directives(this.mnumber(method)))
+                .map(method -> method.directives(this.mnumber(method), format))
                 .collect(Collectors.toList()),
             this.annotations.directives(),
             this.attributes.directives("attributes")
@@ -294,9 +304,8 @@ public final class BytecodeClass {
     /**
      * Constructor.
      * @param visitor Writer.
-     * @param pckg Package.
      */
-    void writeTo(final CustomClassWriter visitor, final String pckg) {
+    void writeTo(final CustomClassWriter visitor) {
         try {
             visitor.visit(
                 this.props.version(),

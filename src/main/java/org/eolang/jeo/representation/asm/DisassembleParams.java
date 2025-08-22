@@ -4,6 +4,8 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import org.eolang.jeo.representation.directives.Format;
+
 /**
  * Parameters for disassembling bytecode.
  * @since 0.11.0
@@ -33,11 +35,16 @@ public final class DisassembleParams {
     private final boolean comments;
 
     /**
+     * Format for disassembling.
+     */
+    private final Format fmt;
+
+    /**
      * Constructor with default parameters.
      * <p>Uses DEBUG mode, listings disabled, and pretty-printing enabled.</p>
      */
     public DisassembleParams() {
-        this(DisassembleMode.SHORT, false, true, false);
+        this(DisassembleMode.SHORT, false, true, false, new Format());
     }
 
     /**
@@ -47,18 +54,21 @@ public final class DisassembleParams {
      * @param listings Whether to include listings in the output
      * @param pretty Whether to pretty-print the output
      * @param comments Whether to include comments in the output
+     * @param format Format for disassembling
      * @checkstyle ParameterNumberCheck (10 lines)
      */
     public DisassembleParams(
         final DisassembleMode mode,
         final boolean listings,
         final boolean pretty,
-        final boolean comments
+        final boolean comments,
+        final Format format
     ) {
         this.mode = mode;
         this.listings = listings;
         this.pretty = pretty;
         this.comments = comments;
+        this.fmt = format;
     }
 
     /**
@@ -91,5 +101,13 @@ public final class DisassembleParams {
      */
     public boolean includeComments() {
         return this.comments;
+    }
+
+    /**
+     * Returns the format for disassembling.
+     * @return Format object with the properties set for disassembly.
+     */
+    public Format format() {
+        return this.fmt;
     }
 }

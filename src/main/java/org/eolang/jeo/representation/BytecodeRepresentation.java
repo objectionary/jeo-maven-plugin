@@ -104,7 +104,7 @@ public final class BytecodeRepresentation {
         }
         Iterable<Directive> directives = new AsmProgram(this.input.value())
             .bytecode(params.asmMode())
-            .directives(listing);
+            .directives(listing, params.format());
         if (!params.includeComments()) {
             directives = new DirectivesWithoutComments(directives);
         }

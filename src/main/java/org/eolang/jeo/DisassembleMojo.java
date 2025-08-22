@@ -17,6 +17,7 @@ import org.apache.maven.project.MavenProject;
 import org.cactoos.set.SetOf;
 import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.asm.DisassembleParams;
+import org.eolang.jeo.representation.directives.Format;
 
 /**
  * Disassembles Java bytecode into XMIR representation.
@@ -185,6 +186,22 @@ public final class DisassembleMojo extends AbstractMojo {
     private boolean xmirVerification;
 
     /**
+     * Should method modifiers be included in the output.
+     * <p>
+     * When true, method modifiers (e.g., public, private, static) will be
+     * included in the disassembled output.
+     * </p>
+     *
+     * @since 0.14.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(
+        property = "jeo.disassemble.xmir.modifiers",
+        defaultValue = "false"
+    )
+    private boolean modifiers;
+
+    /**
      * Set of inclusion GLOB filters for finding .class files
      * in the {@link #sourcesDir} directory.
      *
@@ -217,10 +234,12 @@ public final class DisassembleMojo extends AbstractMojo {
                 final boolean comments = !this.omitComments;
                 Logger.info(
                     this,
-                    "Disassembling is started with mode '%s' (with listings = '%b', comments = '%b')",
+                    "Disassembling is started with mode '%s' (with listings = '%b', comments = '%b', modifiers = '%b', pretty = '%b')",
                     this.mode,
                     listings,
-                    comments
+                    comments,
+                    this.modifiers,
+                    this.prettyXmir
                 );
                 new Disassembler(
                     new FilteredClasses(
@@ -232,7 +251,8 @@ public final class DisassembleMojo extends AbstractMojo {
                         DisassembleMode.fromString(this.mode),
                         listings,
                         this.prettyXmir,
-                        comments
+                        comments,
+                        new Format(Format.MODIFIERS, this.modifiers)
                     )
                 ).disassemble();
                 if (this.xmirVerification) {

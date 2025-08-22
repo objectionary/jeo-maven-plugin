@@ -16,6 +16,7 @@ import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesObject;
+import org.eolang.jeo.representation.directives.Format;
 
 /**
  * Bytecode program.
@@ -85,7 +86,7 @@ public final class BytecodeObject {
      */
     public Bytecode bytecode() {
         final CustomClassWriter writer = new CustomClassWriter();
-        this.top().writeTo(writer, this.pckg);
+        this.top().writeTo(writer);
         return writer.bytecode();
     }
 
@@ -116,9 +117,19 @@ public final class BytecodeObject {
      * @return Directives program.
      */
     public DirectivesObject directives(final String listing) {
+        return this.directives(listing, new Format());
+    }
+
+    /**
+     * Convert to directives.
+     * @param listing Program listing.
+     * @param format Format of the directives.
+     * @return Directives program.
+     */
+    public DirectivesObject directives(final String listing, final Format format) {
         final BytecodeClass top = this.top();
         final ClassName classname = top.name();
-        final DirectivesClass clazz = top.directives();
+        final DirectivesClass clazz = top.directives(format);
         return new DirectivesObject(
             listing,
             clazz,

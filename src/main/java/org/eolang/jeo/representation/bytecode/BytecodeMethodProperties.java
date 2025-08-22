@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -172,16 +173,18 @@ public final class BytecodeMethodProperties {
     /**
      * Convert to directives.
      * @param maxs Maxs.
+     * @param format Format of the directives.
      * @return Directives.
      */
-    public DirectivesMethodProperties directives(final BytecodeMaxs maxs) {
+    public DirectivesMethodProperties directives(final BytecodeMaxs maxs, final Format format) {
         return new DirectivesMethodProperties(
             this.access,
             this.descr,
             this.signature,
             this.exceptions,
             maxs.directives(),
-            this.parameters.directives()
+            this.parameters.directives(),
+            format
         );
     }
 

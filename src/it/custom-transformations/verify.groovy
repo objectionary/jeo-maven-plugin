@@ -17,4 +17,6 @@ assert new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/Appli
 //Check that class file was changed
 assert log.contains("Application.class disassembled to")
 assert log.contains("Application.xmir assembled to")
+//Check that the output contains method modifiers: https://github.com/objectionary/jeo-maven-plugin/issues/1263
+assert new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/Application.xmir').text.contains("modifiers")
 true
