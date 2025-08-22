@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Plugin Documentation – jeo-maven-plugin</title>
+        <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
+                                                    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+        <script src="./js/jcabi.js"></script>
+    </head>
+    <body>
+                <div class="page" itemscope="" itemtype="http://schema.org/BlogPosting">
+            <nav class="menu-section">
+                <ul class="menu" id="menu">
+                                                                                    <li>
+                            <span>Overview</span>
+                                                            <ul>
+                                                                                                    <li >
+                            <span>                        <a href="index.html" title="Introduction">Introduction</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li  class='active' >
+                            <span>                        <a href="plugin-info.html" title="Goals">Goals</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                            <li>
+                            <span>Project Documentation</span>
+                                                            <ul>
+                                                                                                    <li >
+                            <span>                        <a href="project-info.html" title="Project Information">Project Information</a>
+        </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="project-reports.html" title="Project Reports">Project Reports</a>
+        </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <ul>
+                                                                                                    <li >
+                            <span>                        <a href="xref/index.html" title="Source Xref">Source Xref</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="xref-test/index.html" title="Test Source Xref">Test Source Xref</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="surefire.html" title="Surefire">Surefire</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="dependency-updates-report.html" title="Dependency Updates Report">Dependency Updates Report</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="plugin-updates-report.html" title="Plugin Updates Report">Plugin Updates Report</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="apidocs/index.html" title="Javadoc">Javadoc</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="jacoco-aggregate/index.html" title="JaCoCo Aggregate">JaCoCo Aggregate</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li  class='active' >
+                            <span>                        <a href="plugin-info.html" title="Plugin Documentation">Plugin Documentation</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                    </ul>
+            </nav>
+            <div class="right-side">
+                <main>
+                    <div class="content">
+                        <header>
+                            <div class="logo">
+                                <a href="index.html"
+                                    title=" logo ">
+                                    <img src="${decoration.bannerLeft.src}"
+                                        alt="jeo-maven-plugin"
+                                                                                                                        itemprop="image"
+                                    />
+                                </a>
+                            </div>
+                            <ul class="badges">
+                                <li>
+                                    <strong itemprop="version">0.13.11</strong>
+                                </li>
+                                <li>
+                                    $dateFormat.applyPattern("yyyy-MM-dd'T'hh:mm:ss'Z'")
+                                    <time itemprop="datePublished" datetime="${dateFormat.format($currentDate)}">
+                                        $dateFormat.applyPattern('dd-MMM-yyyy')
+                                        ${dateFormat.format($currentDate)}
+                                    </time>
+                                </li>
+                                <li class="menu-button">menu</li>
+                            </ul>
+                        </header>
+                        <div id="here-goes-menu" class="menu-off"></div>
+                                                                            <a href="https://github.com/objectionary/jeo-maven-plugin">
+                                <img src="https://www.jcabi.com/fork-me.svg" class="fork-me"/>
+                            </a>
+                                                <article itemprop="articleBody">
+                            <section><a id="Plugin_Documentation"></a>
+<h1>Plugin Documentation</h1>
+<p>This report describes goals, parameters details, requirements and sample usage of this plugin.</p><section><a id="Goals"></a>
+<h2>Goals</h2>
+<p>Goals available for this plugin:</p>
+<table class="bodyTable">
+<tr class="a">
+<th>Goal</th>
+<th>Description</th></tr>
+<tr class="b">
+<td><a href="./assemble-mojo.html">jeo:assemble</a></td>
+<td>Assembles XMIR representation of Java bytecode into executable class files. 
+<p>This Maven plugin converts low-level EO representation (in XMIR format) into Java bytecode that can be executed by the Java Virtual Machine. The plugin performs pure assembly without applying any optimizations or improvements to the bytecode.</p>
+<p>The plugin supports optional bytecode verification to ensure generated classes are valid and can be loaded by the JVM.</p></td></tr>
+<tr class="a">
+<td><a href="./disassemble-mojo.html">jeo:disassemble</a></td>
+<td>Disassembles Java bytecode into XMIR representation. 
+<p>This Maven plugin converts compiled Java class files into low-level EO representation (in XMIR format) that contains JVM opcodes and their operands. The resulting XMIR files preserve all bytecode instructions and can be assembled back into executable class files.</p>
+<p>The plugin supports different disassembly modes to control the level of detail in the output, including debug information such as line numbers and variable names.</p></td></tr>
+<tr class="b">
+<td><a href="./help-mojo.html">jeo:help</a></td>
+<td>Display help information on jeo-maven-plugin.
+<br />
+ Call <code>mvn jeo:help -Ddetail=true -Dgoal=&lt;goal-name&gt;</code> to display parameter details.</td></tr></table></section><section><a id="System_Requirements"></a>
+<h2>System Requirements</h2>
+<p>The following specifies the minimum requirements to run this Maven plugin:</p>
+<table class="bodyTable">
+<tr class="a">
+<td>Maven</td>
+<td>4.0.0-alpha-7</td></tr>
+<tr class="b">
+<td>JDK</td>
+<td>11</td></tr></table></section><section><a id="System_Requirements_History"></a>
+<h2>System Requirements History</h2>
+<p>The following specifies the minimum requirements to run this Maven plugin for historical versions:</p>
+<table class="bodyTable">
+<tr class="a">
+<th>Plugin Version</th>
+<th>Maven</th>
+<th>JDK</th></tr>
+<tr class="b">
+<td>from 0.4.6 to 0.13.10</td>
+<td>-</td>
+<td>8</td></tr>
+<tr class="a">
+<td>from 0.1.0 to 0.4.5</td>
+<td>-</td>
+<td>11</td></tr>
+<tr class="b">
+<td>0.0.1</td>
+<td>-</td>
+<td>8</td></tr></table></section><section><a id="Usage"></a>
+<h2>Usage</h2>
+<p>You should specify the version in your project's plugin configuration:</p>
+<pre><code>&lt;project&gt;
+  ...
+  &lt;build&gt;
+    &lt;!-- To define the plugin version in your parent POM --&gt;
+    &lt;pluginManagement&gt;
+      &lt;plugins&gt;
+        &lt;plugin&gt;
+          &lt;groupId&gt;org.eolang&lt;/groupId&gt;
+          &lt;artifactId&gt;jeo-maven-plugin&lt;/artifactId&gt;
+          &lt;version&gt;0.13.11&lt;/version&gt;
+        &lt;/plugin&gt;
+        ...
+      &lt;/plugins&gt;
+    &lt;/pluginManagement&gt;
+    &lt;!-- To use the plugin goals in your POM or parent POM --&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.eolang&lt;/groupId&gt;
+        &lt;artifactId&gt;jeo-maven-plugin&lt;/artifactId&gt;
+      &lt;/plugin&gt;
+      ...
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+  ...
+&lt;/project&gt;</code></pre>
+<p>For more information, see <a class="externalLink" href="https://maven.apache.org/guides/mini/guide-configuring-plugins.html">&quot;Guide to Configuring Plug-ins&quot;</a></p></section></section>
+                        </article>
+                    </div>
+                </main>
+                <footer class="legal-notes">
+                    <div>
+                        Copyright &#169;
+                                                                            2023-${currentYear}
+                                            </div>
+                    <div>EO, All Rights Reserved.</div>
+                    <div><a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.</div>
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>
