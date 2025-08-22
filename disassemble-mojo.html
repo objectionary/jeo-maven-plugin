@@ -59,7 +59,7 @@
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">0.13.10</strong>
+                                    <strong itemprop="version">0.13.11</strong>
                                 </li>
                                 <li>
                                     $dateFormat.applyPattern("yyyy-MM-dd'T'hh:mm:ss'Z'")
@@ -79,7 +79,7 @@
                             <section><a id="jeo.3Adisassemble"></a>
 <h1>jeo:disassemble</h1>
 <p><strong>Full name</strong>:</p>
-<p>org.eolang:jeo-maven-plugin:0.13.10:disassemble</p>
+<p>org.eolang:jeo-maven-plugin:0.13.11:disassemble</p>
 <p><strong>Description</strong>:</p>
 <p>Disassembles Java bytecode into XMIR representation. 
 <p>This Maven plugin converts compiled Java class files into low-level EO representation (in XMIR format) that contains JVM opcodes and their operands. The resulting XMIR files preserve all bytecode instructions and can be assembled back into executable class files.</p>
@@ -125,36 +125,42 @@
 </ul>
 <p></p><br /><strong>Default</strong>: <code>short</code><br /><strong>User Property</strong>: <code>jeo.disassemble.mode</code></td></tr>
 <tr class="b">
+<td><a href="#modifiers"><code>&lt;modifiers&gt;</code></a></td>
+<td><code>boolean</code></td>
+<td><code>0.14.0</code></td>
+<td>Should method modifiers be included in the output. 
+<p>When true, method modifiers (e.g., public, private, static) will be included in the disassembled output.</p><br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>jeo.disassemble.xmir.modifiers</code></td></tr>
+<tr class="a">
 <td><a href="#omitComments"><code>&lt;omitComments&gt;</code></a></td>
 <td><code>boolean</code></td>
 <td><code>0.11.0</code></td>
 <td>Flag to omit XML comments in generated XMIR files. 
 <p>When enabled, no comments will be generated in the XMIR output, which can be useful for production builds where comments are not needed and may reduce file size. When disabled, XML comments will be included to provide debugging information.</p><br /><strong>Default</strong>: <code>true</code><br /><strong>User Property</strong>: <code>jeo.disassemble.omitComments</code></td></tr>
-<tr class="a">
+<tr class="b">
 <td><a href="#omitListings"><code>&lt;omitListings&gt;</code></a></td>
 <td><code>boolean</code></td>
 <td><code>0.11.0</code></td>
 <td>Flag to omit detailed bytecode listings in generated XMIR. 
 <p>When enabled, the <code>&lt;listing&gt;</code> element in XMIR files will not contain bytecode listing. This reduces file size and improves readability in production environments where detailed bytecode output is not needed. When disabled, full bytecode listings are included for debugging purposes.</p><br /><strong>Default</strong>: <code>true</code><br /><strong>User Property</strong>: <code>jeo.disassemble.omitListings</code></td></tr>
-<tr class="b">
+<tr class="a">
 <td><a href="#outputDir"><code>&lt;outputDir&gt;</code></a></td>
 <td><code>File</code></td>
 <td><code>0.2.0</code></td>
 <td>Target directory for generated XMIR files. 
 <p>All disassembled XMIR files will be written to this directory, preserving the package structure of the original class files. Each class file will be converted to a corresponding XMIR file with <code>.xmir</code> extension.</p><br /><strong>Default</strong>: <code>${project.build.directory}/generated-sources/jeo-xmir</code><br /><strong>User Property</strong>: <code>jeo.disassemble.outputDir</code></td></tr>
-<tr class="a">
+<tr class="b">
 <td><a href="#prettyXmir"><code>&lt;prettyXmir&gt;</code></a></td>
 <td><code>boolean</code></td>
 <td><code>0.11.0</code></td>
 <td>Flag to enable pretty-printing of XMIR files. 
 <p>When enabled, the generated XMIR files will be formatted with indentation (2 spaces) and line breaks for better readability. This is useful for development and debugging purposes. By default, pretty-printing is enabled, but it's best to disable it for large projects or production builds to reduce file size and improve performance.</p><br /><strong>Default</strong>: <code>true</code><br /><strong>User Property</strong>: <code>jeo.disassemble.prettyXmir</code></td></tr>
-<tr class="b">
+<tr class="a">
 <td><a href="#sourcesDir"><code>&lt;sourcesDir&gt;</code></a></td>
 <td><code>File</code></td>
 <td><code>0.2.0</code></td>
 <td>Source directory containing compiled Java class files. 
 <p>This directory should contain <code>.class</code> files that will be disassembled into XMIR format. Typically points to the project's build output directory.</p><br /><strong>Default</strong>: <code>${project.build.outputDirectory}</code><br /><strong>User Property</strong>: <code>jeo.disassemble.sourcesDir</code></td></tr>
-<tr class="a">
+<tr class="b">
 <td><a href="#xmirVerification"><code>&lt;xmirVerification&gt;</code></a></td>
 <td><code>boolean</code></td>
 <td><code>0.8.0</code></td>
@@ -197,7 +203,16 @@
 <li><strong>Since</strong>: <code>0.6.0</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
 <li><strong>User Property</strong>: <code>jeo.disassemble.mode</code></li>
-<li><strong>Default</strong>: <code>short</code></li></ul><hr /></section><a id="omitComments"></a><section><a id="a.3ComitComments.3E"></a>
+<li><strong>Default</strong>: <code>short</code></li></ul><hr /></section><a id="modifiers"></a><section><a id="a.3Cmodifiers.3E"></a>
+<h3>&lt;modifiers&gt;</h3>
+<div>Should method modifiers be included in the output. 
+<p>When true, method modifiers (e.g., public, private, static) will be included in the disassembled output.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>boolean</code></li>
+<li><strong>Since</strong>: <code>0.14.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.disassemble.xmir.modifiers</code></li>
+<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a id="omitComments"></a><section><a id="a.3ComitComments.3E"></a>
 <h3>&lt;omitComments&gt;</h3>
 <div>Flag to omit XML comments in generated XMIR files. 
 <p>When enabled, no comments will be generated in the XMIR output, which can be useful for production builds where comments are not needed and may reduce file size. When disabled, XML comments will be included to provide debugging information.</p></div>
