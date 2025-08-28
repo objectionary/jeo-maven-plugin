@@ -19,9 +19,9 @@ import org.xembly.Directives;
 public final class DirectivesObject implements Iterable<Directive> {
 
     /**
-     * Program listing.
+     * Format of the directives.
      */
-    private final String listing;
+    private final Format format;
 
     /**
      * How much time it took to transform bytecode to directives.
@@ -47,38 +47,38 @@ public final class DirectivesObject implements Iterable<Directive> {
      * @param metas Metas.
      */
     public DirectivesObject(final DirectivesClass klass, final DirectivesMetas metas) {
-        this("", klass, metas);
+        this(new Format(), klass, metas);
     }
 
     /**
      * Constructor.
-     * @param code Program listing.
+     * @param format Format.
      * @param clazz Class.
      * @param name Metas.
      */
     public DirectivesObject(
-        final String code,
+        final Format format,
         final DirectivesClass clazz,
         final DirectivesMetas name
     ) {
-        this(code, 0L, clazz, name);
+        this(format, 0L, clazz, name);
     }
 
     /**
      * Constructor.
-     * @param listing Listing.
+     * @param format Format.
      * @param milliseconds Milliseconds.
      * @param klass Class.
      * @param metas Metas.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesObject(
-        final String listing,
+        final Format format,
         final long milliseconds,
         final DirectivesClass klass,
         final DirectivesMetas metas
     ) {
-        this.listing = listing;
+        this.format = format;
         this.milliseconds = milliseconds;
         this.klass = klass;
         this.metas = metas;
@@ -96,8 +96,9 @@ public final class DirectivesObject implements Iterable<Directive> {
             .attr("dob", Manifests.read("JEO-Dob"))
             .attr("time", now)
             .attr("xsi:noNamespaceSchemaLocation", "https://www.eolang.org/xsd/XMIR-0.57.0.xsd");
-        if (!this.listing.isEmpty()) {
-            directives.add("listing").set(this.listing).up();
+        final String listing = this.format.listing();
+        if (!listing.isEmpty()) {
+            directives.add("listing").set(listing).up();
         }
         directives.append(this.metas).attr("ms", this.milliseconds);
         directives.append(this.klass);

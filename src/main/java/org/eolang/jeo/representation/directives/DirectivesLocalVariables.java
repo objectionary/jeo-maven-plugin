@@ -15,6 +15,11 @@ import org.xembly.Directive;
 public final class DirectivesLocalVariables implements Iterable<Directive> {
 
     /**
+     * Directives format.
+     */
+    private final Format format;
+
+    /**
      * Index of the local variable in the local variable array.
      */
     private final int index;
@@ -46,6 +51,7 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param format Directives format.
      * @param index Index of the local variable in the local variable array.
      * @param name Name of the local variable.
      * @param descriptor Descriptor of the local variable.
@@ -55,6 +61,7 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesLocalVariables(
+        final Format format,
         final int index,
         final String name,
         final String descriptor,
@@ -62,6 +69,7 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
         final Iterable<Directive> start,
         final Iterable<Directive> end
     ) {
+        this.format = format;
         this.index = index;
         this.name = name;
         this.descriptor = descriptor;
@@ -74,10 +82,12 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesAttribute(
             "local-variable",
-            new DirectivesValue("index", this.index),
-            new DirectivesValue("name", this.name),
-            new DirectivesValue("descr", this.descriptor),
-            new DirectivesValue("signature",  Optional.ofNullable(this.signature).orElse("")),
+            new DirectivesValue(this.format, "index", this.index),
+            new DirectivesValue(this.format, "name", this.name),
+            new DirectivesValue(this.format, "descr", this.descriptor),
+            new DirectivesValue(
+                this.format, "signature", Optional.ofNullable(this.signature).orElse("")
+            ),
             this.start,
             this.end
         ).iterator();

@@ -15,15 +15,22 @@ import org.xembly.Directive;
 public final class DirectivesModifiers implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Access modifiers.
      */
     private final int modifiers;
 
     /**
      * Constructor.
+     * @param format Format of the directives.
      * @param modifiers Access modifiers.
      */
-    DirectivesModifiers(final int modifiers) {
+    DirectivesModifiers(final Format format, final int modifiers) {
+        this.format = format;
         this.modifiers = modifiers;
     }
 
@@ -32,19 +39,19 @@ public final class DirectivesModifiers implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "modifiers",
             "modifiers",
-            new DirectivesValue("public", this.is(Opcodes.ACC_PUBLIC)),
-            new DirectivesValue("private", this.is(Opcodes.ACC_PRIVATE)),
-            new DirectivesValue("protected", this.is(Opcodes.ACC_PROTECTED)),
-            new DirectivesValue("static", this.is(Opcodes.ACC_STATIC)),
-            new DirectivesValue("final", this.is(Opcodes.ACC_FINAL)),
-            new DirectivesValue("synchronized", this.is(Opcodes.ACC_SYNCHRONIZED)),
-            new DirectivesValue("bridge", this.is(Opcodes.ACC_BRIDGE)),
-            new DirectivesValue("varargs", this.is(Opcodes.ACC_VARARGS)),
-            new DirectivesValue("native", this.is(Opcodes.ACC_NATIVE)),
-            new DirectivesValue("abstract", this.is(Opcodes.ACC_ABSTRACT)),
-            new DirectivesValue("strict", this.is(Opcodes.ACC_STRICT)),
-            new DirectivesValue("synthetic", this.is(Opcodes.ACC_SYNTHETIC)),
-            new DirectivesValue("mandated", this.is(Opcodes.ACC_MANDATED))
+            new DirectivesValue(this.format, "public", this.is(Opcodes.ACC_PUBLIC)),
+            new DirectivesValue(this.format, "private", this.is(Opcodes.ACC_PRIVATE)),
+            new DirectivesValue(this.format, "protected", this.is(Opcodes.ACC_PROTECTED)),
+            new DirectivesValue(this.format, "static", this.is(Opcodes.ACC_STATIC)),
+            new DirectivesValue(this.format, "final", this.is(Opcodes.ACC_FINAL)),
+            new DirectivesValue(this.format, "synchronized", this.is(Opcodes.ACC_SYNCHRONIZED)),
+            new DirectivesValue(this.format, "bridge", this.is(Opcodes.ACC_BRIDGE)),
+            new DirectivesValue(this.format, "varargs", this.is(Opcodes.ACC_VARARGS)),
+            new DirectivesValue(this.format, "native", this.is(Opcodes.ACC_NATIVE)),
+            new DirectivesValue(this.format, "abstract", this.is(Opcodes.ACC_ABSTRACT)),
+            new DirectivesValue(this.format, "strict", this.is(Opcodes.ACC_STRICT)),
+            new DirectivesValue(this.format, "synthetic", this.is(Opcodes.ACC_SYNTHETIC)),
+            new DirectivesValue(this.format, "mandated", this.is(Opcodes.ACC_MANDATED))
         ).iterator();
     }
 

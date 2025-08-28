@@ -15,6 +15,11 @@ import org.xembly.Directive;
 public final class DirectivesEnumAnnotationValue implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * The name of the annotation property.
      */
     private final String name;
@@ -31,15 +36,19 @@ public final class DirectivesEnumAnnotationValue implements Iterable<Directive> 
 
     /**
      * Constructor.
+     * @param format Format of the directives.
      * @param name The name of the annotation property.
      * @param descriptor The descriptor of the enumeration.
      * @param value The actual enumeration value.
+     * @checkstyle ParameterNumber (5 lines)
      */
     public DirectivesEnumAnnotationValue(
+        final Format format,
         final String name,
         final String descriptor,
         final String value
     ) {
+        this.format = format;
         this.name = name;
         this.descriptor = descriptor;
         this.value = value;
@@ -50,10 +59,10 @@ public final class DirectivesEnumAnnotationValue implements Iterable<Directive> 
         return new DirectivesJeoObject(
             "annotation-property",
             new RandName("e").toString(),
-            new DirectivesValue("ENUM"),
-            new DirectivesValue(Optional.ofNullable(this.name).orElse("")),
-            new DirectivesValue(this.descriptor),
-            new DirectivesValue(this.value)
+            new DirectivesValue(this.format, "ENUM"),
+            new DirectivesValue(this.format, Optional.ofNullable(this.name).orElse("")),
+            new DirectivesValue(this.format, this.descriptor),
+            new DirectivesValue(this.format, this.value)
         ).iterator();
     }
 }

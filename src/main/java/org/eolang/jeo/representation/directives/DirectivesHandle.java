@@ -16,15 +16,22 @@ import org.xembly.Directive;
 public final class DirectivesHandle implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * ASM Handle object.
      */
     private final Handle handle;
 
     /**
      * Constructor.
+     * @param format Format of the directives.
      * @param handle ASM Handle object.
      */
-    public DirectivesHandle(final Handle handle) {
+    public DirectivesHandle(final Format format, final Handle handle) {
+        this.format = format;
         this.handle = handle;
     }
 
@@ -33,11 +40,11 @@ public final class DirectivesHandle implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "handle",
             new RandName("h").toString(),
-            new DirectivesValue(this.handle.getTag()),
-            new DirectivesValue(this.handle.getOwner()),
-            new DirectivesValue(this.handle.getName()),
-            new DirectivesValue(this.handle.getDesc()),
-            new DirectivesValue(this.handle.isInterface())
+            new DirectivesValue(this.format, this.handle.getTag()),
+            new DirectivesValue(this.format, this.handle.getOwner()),
+            new DirectivesValue(this.format, this.handle.getName()),
+            new DirectivesValue(this.format, this.handle.getDesc()),
+            new DirectivesValue(this.format, this.handle.isInterface())
         ).iterator();
     }
 }

@@ -32,6 +32,7 @@ final class DirectivesAnnotationAnnotationValueTest {
             "Can't create an annotation property with a name and a descriptor",
             new Xembler(
                 new DirectivesAnnotationAnnotationValue(
+                    new Format(),
                     "name",
                     Type.getDescriptor(String.class),
                     Collections.singletonList(new DirectivesPlainAnnotationValue())
@@ -55,6 +56,7 @@ final class DirectivesAnnotationAnnotationValueTest {
                 new NativeXmlNode(
                     new Xembler(
                         new DirectivesAnnotationAnnotationValue(
+                            new Format(),
                             name,
                             descriptor,
                             Collections.singletonList(new DirectivesAnnotation(descriptor, visible))

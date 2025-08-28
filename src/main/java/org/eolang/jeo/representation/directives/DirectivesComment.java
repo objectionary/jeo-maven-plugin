@@ -55,22 +55,29 @@ public final class DirectivesComment implements Iterable<Directive> {
     );
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Comment.
      */
     private final String comment;
 
     /**
      * Constructor.
+     * @param format Format of the directives.
      * @param comment Comment.
      */
-    DirectivesComment(final String comment) {
+    DirectivesComment(final Format format, final String comment) {
+        this.format = format;
         this.comment = comment;
     }
 
     @Override
     public Iterator<Directive> iterator() {
         final Iterator<Directive> result;
-        if (this.comment.isEmpty()) {
+        if (this.comment.isEmpty() || !this.format.comments()) {
             result = new Directives().iterator();
         } else {
             result = new Directives().comment(

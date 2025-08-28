@@ -23,6 +23,7 @@ import org.eolang.jeo.representation.directives.DirectivesMaxs;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
+import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.directives.JeoFqn;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Transformers;
@@ -435,7 +436,7 @@ public final class XmlMethod {
                         descriptor,
                         "",
                         exceptions,
-                        new DirectivesMaxs(stack, locals),
+                        new DirectivesMaxs(new Format(), stack, locals),
                         new DirectivesMethodParams()
                     )
                 ),

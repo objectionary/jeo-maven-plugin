@@ -18,6 +18,11 @@ import org.xembly.Directives;
 public final class DirectivesMethodProperties implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Method access modifiers.
      */
     private final int access;
@@ -46,11 +51,6 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      * Method parameters.
      */
     private final DirectivesMethodParams params;
-
-    /**
-     * Format of the directives.
-     */
-    private final Format format;
 
     /**
      * Constructor.
@@ -136,14 +136,16 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives dirs = new Directives()
-            .append(new DirectivesValue("access", this.access))
-            .append(new DirectivesValue("descriptor", this.descriptor))
-            .append(new DirectivesValue("signature", this.signature))
-            .append(new DirectivesOptionalValues("exceptions", (Object[]) this.exceptions))
+            .append(new DirectivesValue(this.format, "access", this.access))
+            .append(new DirectivesValue(this.format, "descriptor", this.descriptor))
+            .append(new DirectivesValue(this.format, "signature", this.signature))
+            .append(
+                new DirectivesOptionalValues(this.format, "exceptions", (Object[]) this.exceptions)
+            )
             .append(this.max.get())
             .append(this.params);
         if (this.format.modifiers()) {
-            dirs.append(new DirectivesModifiers(this.access));
+            dirs.append(new DirectivesModifiers(this.format, this.access));
         }
         return dirs.iterator();
     }

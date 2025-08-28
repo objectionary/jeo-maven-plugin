@@ -23,6 +23,7 @@ final class DirectivesFrameValuesTest {
             "We expect the integers to be mapped to their aliases",
             new Xembler(
                 new DirectivesFrameValues(
+                    new Format(),
                     name,
                     new Object[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
                 )
@@ -30,6 +31,7 @@ final class DirectivesFrameValuesTest {
             Matchers.equalTo(
                 new Xembler(
                     new DirectivesValues(
+                        new Format(),
                         name,
                         "top",
                         "integer",

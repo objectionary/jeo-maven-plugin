@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAnnotations;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
 
 /**
@@ -60,13 +61,14 @@ public final class BytecodeAnnotations {
 
     /**
      * Directives with the given name.
+     * @param format Format of the directives.
      * @param name Name of the directives.
      * @return Directives.
      */
-    public DirectivesAnnotations directives(final String name) {
+    public DirectivesAnnotations directives(final Format format, final String name) {
         return new DirectivesAnnotations(
             this.all.stream()
-                .map(BytecodeAnnotation::directives)
+                .map(a -> a.directives(format))
                 .collect(Collectors.toList()),
             name
         );
@@ -74,10 +76,11 @@ public final class BytecodeAnnotations {
 
     /**
      * Directives with the name "annotations".
+     * @param format Format of the directives.
      * @return Directives.
      */
-    public DirectivesAnnotations directives() {
-        return this.directives("annotations");
+    public DirectivesAnnotations directives(final Format format) {
+        return this.directives(format, "annotations");
     }
 
     /**

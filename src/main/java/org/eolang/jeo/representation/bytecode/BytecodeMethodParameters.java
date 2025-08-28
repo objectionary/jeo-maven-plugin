@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
@@ -68,12 +69,13 @@ public final class BytecodeMethodParameters {
 
     /**
      * Convert to directives.
+     * @param format Format of the directives.
      * @return Directives.
      */
-    public DirectivesMethodParams directives() {
+    public DirectivesMethodParams directives(final Format format) {
         return new DirectivesMethodParams(
             this.params.stream()
-                .map(BytecodeMethodParameter::directives)
+                .map(p -> p.directives(format))
                 .collect(Collectors.toList())
         );
     }

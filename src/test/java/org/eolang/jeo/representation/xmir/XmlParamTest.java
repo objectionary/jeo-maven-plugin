@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.xmir;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ final class XmlParamTest {
         MatcherAssert.assertThat(
             "Can't convert XML param to bytecode",
             new XmlParam(
-                new NativeXmlNode(new Xembler(expected.directives()).xml())
+                new NativeXmlNode(new Xembler(expected.directives(new Format())).xml())
             ).bytecode(),
             Matchers.equalTo(expected)
         );

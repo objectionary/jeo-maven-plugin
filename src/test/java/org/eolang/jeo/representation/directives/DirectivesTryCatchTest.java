@@ -38,7 +38,7 @@ final class DirectivesTryCatchTest {
             new XmlTryCatchEntry(
                 new NativeXmlNode(
                     new Xembler(
-                        new DirectivesTryCatch(start, end, handler, type)
+                        new DirectivesTryCatch(new Format(), start, end, handler, type)
                     ).xml()
                 )
             ).bytecode(),
@@ -68,7 +68,7 @@ final class DirectivesTryCatchTest {
             new XmlTryCatchEntry(
                 new NativeXmlNode(
                     new Xembler(
-                        new DirectivesTryCatch(start, end, handler, type)
+                        new DirectivesTryCatch(new Format(), start, end, handler, type)
                     ).xml()
                 )
             ).bytecode(),

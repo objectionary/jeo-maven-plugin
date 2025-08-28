@@ -19,6 +19,11 @@ import org.xembly.Directives;
 final class DirectivesOptionalValues implements Iterable<Directive> {
 
     /**
+     * The format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Tuple name.
      */
     private final String name;
@@ -30,12 +35,14 @@ final class DirectivesOptionalValues implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param format The format of the directives.
      * @param name Name of the tuple.
      * @param values Values.
      */
     @SafeVarargs
     @SuppressWarnings("PMD.ArrayIsStoredDirectly")
-    DirectivesOptionalValues(final String name, final Object... values) {
+    DirectivesOptionalValues(final Format format, final String name, final Object... values) {
+        this.format = format;
         this.name = name;
         this.values = values;
     }
@@ -46,7 +53,7 @@ final class DirectivesOptionalValues implements Iterable<Directive> {
         if (Objects.isNull(this.values) || this.values.length == 0) {
             result = new Directives().iterator();
         } else {
-            result = new DirectivesValues(this.name, this.values).iterator();
+            result = new DirectivesValues(this.format, this.name, this.values).iterator();
         }
         return result;
     }

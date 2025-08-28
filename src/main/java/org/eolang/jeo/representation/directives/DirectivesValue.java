@@ -46,6 +46,11 @@ public final class DirectivesValue implements Iterable<Directive> {
     private static final Codec CODEC = new EoCodec();
 
     /**
+     * Directives format.
+     */
+    private final Format format;
+
+    /**
      * Name.
      */
     private final String name;
@@ -62,27 +67,41 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param <T> Data type.
      */
     public <T> DirectivesValue(final T data) {
-        this(new RandName("v").toString(), data);
+        this(new Format(), new RandName("v").toString(), data);
     }
 
     /**
      * Constructor.
      *
+     * @param format Directives format.
+     * @param data Data.
+     * @param <T> Data type.
+     */
+    public <T> DirectivesValue(final Format format, final T data) {
+        this(format, new RandName("v").toString(), data);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param format Directives format.
      * @param name Name.
      * @param data Data.
      * @param <T> Data type.
      */
-    public <T> DirectivesValue(final String name, final T data) {
-        this(name, new BytecodeValue(data));
+    public <T> DirectivesValue(final Format format, final String name, final T data) {
+        this(format, name, new BytecodeValue(data));
     }
 
     /**
      * Constructor.
      *
+     * @param format Format.
      * @param name Name.
      * @param value Value.
      */
-    public DirectivesValue(final String name, final BytecodeValue value) {
+    public DirectivesValue(final Format format, final String name, final BytecodeValue value) {
+        this.format = format;
         this.name = name;
         this.value = value;
     }
@@ -171,7 +190,7 @@ public final class DirectivesValue implements Iterable<Directive> {
         return new DirectivesEoObject(
             base,
             this.name,
-            new DirectivesComment(this.comment()),
+            new DirectivesComment(this.format, this.comment()),
             new DirectivesBytes(this.hex(codec))
         );
     }
@@ -186,7 +205,7 @@ public final class DirectivesValue implements Iterable<Directive> {
         return new DirectivesJeoObject(
             base,
             this.name,
-            new DirectivesComment(this.comment()),
+            new DirectivesComment(this.format, this.comment()),
             new DirectivesBytes(this.hex(codec), new RandName("n").toString())
         );
     }
@@ -202,7 +221,7 @@ public final class DirectivesValue implements Iterable<Directive> {
         return new DirectivesJeoObject(
             base,
             this.name,
-            new DirectivesComment(this.comment()),
+            new DirectivesComment(this.format, this.comment()),
             new DirectivesBytes(this.hex(codec), new RandName("j").toString())
         );
     }
@@ -218,7 +237,7 @@ public final class DirectivesValue implements Iterable<Directive> {
         return new DirectivesJeoObject(
             base,
             this.name,
-            new DirectivesComment(this.comment()),
+            new DirectivesComment(this.format, this.comment()),
             new DirectivesNumber(new RandName("n").toString(), this.hex(codec))
         );
     }

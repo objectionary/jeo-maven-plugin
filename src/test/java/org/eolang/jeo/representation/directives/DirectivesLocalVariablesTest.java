@@ -23,6 +23,7 @@ final class DirectivesLocalVariablesTest {
             "We should convert null signature to empty string",
             new Xembler(
                 new DirectivesLocalVariables(
+                    new Format(),
                     0,
                     "name",
                     "descriptor",

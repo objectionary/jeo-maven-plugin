@@ -11,6 +11,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.OpcodeDictionary;
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
+import org.eolang.jeo.representation.directives.Format;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
 
@@ -42,7 +43,7 @@ public final class XmlInstruction implements XmlBytecodeEntry {
         this(
             new NativeXmlNode(
                 new Xembler(
-                    new DirectivesInstruction(opcode, args),
+                    new DirectivesInstruction(new Format(), opcode, args),
                     new Transformers.Node()
                 ).xmlQuietly()
             )

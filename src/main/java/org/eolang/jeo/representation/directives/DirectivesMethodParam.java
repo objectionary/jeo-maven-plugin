@@ -15,6 +15,11 @@ import org.xembly.Directive;
 public final class DirectivesMethodParam implements Iterable<Directive> {
 
     /**
+     * Directives format.
+     */
+    private final Format format;
+
+    /**
      * Index of the parameter.
      */
     private final int index;
@@ -41,6 +46,7 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param format Directives format.
      * @param index Index of the parameter.
      * @param name Name of the parameter.
      * @param access Access modifier of the parameter.
@@ -49,12 +55,14 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesMethodParam(
+        final Format format,
         final int index,
         final String name,
         final int access,
         final Type type,
         final DirectivesAnnotations annotations
     ) {
+        this.format = format;
         this.index = index;
         this.name = name;
         this.access = access;
@@ -67,9 +75,9 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "param",
             this.name,
-            new DirectivesValue("index", this.index),
-            new DirectivesValue("access", this.access),
-            new DirectivesValue("type", this.type.toString()),
+            new DirectivesValue(this.format, "index", this.index),
+            new DirectivesValue(this.format, "access", this.access),
+            new DirectivesValue(this.format, "type", this.type.toString()),
             this.annotations
         ).iterator();
     }

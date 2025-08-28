@@ -29,7 +29,7 @@ final class DirectivesFrameTest {
         final int nstack = 2;
         final Object[] stack = {"java/lang/String", Opcodes.DOUBLE};
         final String xml = new Xembler(
-            new DirectivesFrame(type, locals, stack)
+            new DirectivesFrame(new Format(), type, locals, stack)
         ).xml();
         MatcherAssert.assertThat(
             "We failed to create correct directives for bytecode frame.",

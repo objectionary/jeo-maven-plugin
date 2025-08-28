@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.Collections;
 import org.eolang.jeo.representation.directives.DirectivesAbsractObject;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ final class XmlAbstractObjectTest {
                 new JcabiXmlNode(
                     new Xembler(
                         new DirectivesAbsractObject(
+                            new Format(),
                             base,
                             "object-as",
                             "object-name",

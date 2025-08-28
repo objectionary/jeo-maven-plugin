@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesLine;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
@@ -48,8 +49,8 @@ public final class BytecodeLine implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives() {
-        return new DirectivesLine(this.number, this.label.uid());
+    public Iterable<Directive> directives(final Format format) {
+        return new DirectivesLine(format, this.number, this.label.uid());
     }
 
     @Override

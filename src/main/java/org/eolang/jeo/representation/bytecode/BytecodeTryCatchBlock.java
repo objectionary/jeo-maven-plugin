@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesTryCatch;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
@@ -100,8 +101,8 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives() {
-        return new DirectivesTryCatch(this.start, this.end, this.handler, this.type);
+    public Iterable<Directive> directives(final Format format) {
+        return new DirectivesTryCatch(format, this.start, this.end, this.handler, this.type);
     }
 
     @Override

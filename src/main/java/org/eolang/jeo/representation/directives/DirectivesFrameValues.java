@@ -15,6 +15,11 @@ import org.xembly.Directive;
 public final class DirectivesFrameValues implements Iterable<Directive> {
 
     /**
+     * The format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Name of the values array.
      */
     private final String name;
@@ -26,10 +31,12 @@ public final class DirectivesFrameValues implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param format The format of the directives.
      * @param name Name of the values array
      * @param values Frame values
      */
-    public DirectivesFrameValues(final String name, final Object... values) {
+    public DirectivesFrameValues(final Format format, final String name, final Object... values) {
+        this.format = format;
         this.name = name;
         this.values = values.clone();
     }
@@ -37,6 +44,7 @@ public final class DirectivesFrameValues implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         return new DirectivesValues(
+            this.format,
             this.name,
             Arrays.stream(this.values).map(DirectivesFrameValues::alias).toArray(Object[]::new)
         ).iterator();

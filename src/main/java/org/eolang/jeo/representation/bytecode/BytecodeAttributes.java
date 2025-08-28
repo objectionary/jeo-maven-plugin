@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesAttributes;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 
@@ -45,13 +46,14 @@ public final class BytecodeAttributes {
 
     /**
      * Convert to directives.
+     * @param format Format of directives.
      * @param name Name of the attributes in EO representation.
      * @return Directives.
      */
-    public DirectivesAttributes directives(final String name) {
+    public DirectivesAttributes directives(final Format format, final String name) {
         return new DirectivesAttributes(
             name,
-            this.all.stream().map(BytecodeAttribute::directives).collect(Collectors.toList())
+            this.all.stream().map(a -> a.directives(format)).collect(Collectors.toList())
         );
     }
 

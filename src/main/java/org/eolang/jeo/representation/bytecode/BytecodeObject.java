@@ -113,25 +113,15 @@ public final class BytecodeObject {
 
     /**
      * Convert to directives.
-     * @param listing Program listing.
-     * @return Directives program.
-     */
-    public DirectivesObject directives(final String listing) {
-        return this.directives(listing, new Format());
-    }
-
-    /**
-     * Convert to directives.
-     * @param listing Program listing.
      * @param format Format of the directives.
      * @return Directives program.
      */
-    public DirectivesObject directives(final String listing, final Format format) {
+    public DirectivesObject directives(final Format format) {
         final BytecodeClass top = this.top();
         final ClassName classname = top.name();
         final DirectivesClass clazz = top.directives(format);
         return new DirectivesObject(
-            listing,
+            format,
             clazz,
             new DirectivesMetas(classname)
         );

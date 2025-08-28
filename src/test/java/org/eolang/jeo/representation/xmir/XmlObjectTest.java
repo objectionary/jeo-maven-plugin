@@ -13,6 +13,7 @@ import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
 import org.eolang.jeo.representation.directives.DirectivesObject;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -83,7 +84,7 @@ final class XmlObjectTest {
                         new Directives(
                             new BytecodeObject(
                                 "com.example", new BytecodeClass("com.example.Foo", 0)
-                            ).directives("")
+                            ).directives(new Format())
                         ).xpath(".//o").remove()
                     ).xmlQuietly()
                 ).bytecode()

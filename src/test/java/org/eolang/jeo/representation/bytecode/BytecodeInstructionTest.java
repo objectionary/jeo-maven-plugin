@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -30,13 +31,14 @@ final class BytecodeInstructionTest {
                     new BytecodeInstruction(
                         Opcodes.LDC,
                         Type.getType(Integer.class)
-                    ).directives()
+                    ).directives(new Format())
                 )
             ).xml(),
             Matchers.equalTo(
                 new Xembler(
                     BytecodeInstructionTest.withoutNames(
                         new DirectivesInstruction(
+                            new Format(),
                             Opcodes.LDC,
                             Type.getType(Integer.class)
                         )

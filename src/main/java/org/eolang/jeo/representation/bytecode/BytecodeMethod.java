@@ -289,20 +289,21 @@ public final class BytecodeMethod {
      */
     public DirectivesMethod directives(final int number, final Format format) {
         return new DirectivesMethod(
+            format,
             new NumberedName(
                 number,
                 new MethodName(this.properties.name()).xmir()
             ),
             this.properties.directives(this.maxs, format),
-            this.entries.stream().map(BytecodeEntry::directives)
+            this.entries.stream().map(e -> e.directives(format))
                 .collect(Collectors.toList()),
-            this.tryblocks.stream().map(BytecodeEntry::directives)
+            this.tryblocks.stream().map(e -> e.directives(format))
                 .collect(Collectors.toList()),
-            this.annotations.directives(),
+            this.annotations.directives(format),
             this.defvalues.stream()
-                .map(BytecodeDefaultValue::directives)
+                .map(v -> v.directives(format))
                 .collect(Collectors.toList()),
-            this.attributes.directives("local-variable-table")
+            this.attributes.directives(format, "local-variable-table")
         );
     }
 

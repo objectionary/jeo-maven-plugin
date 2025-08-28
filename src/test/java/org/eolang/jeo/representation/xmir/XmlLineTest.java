@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeLine;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ final class XmlLineTest {
             new XmlLine(
                 new XmlJeoObject(
                     new JcabiXmlNode(
-                        new Xembler(expected.directives()).xml()
+                        new Xembler(expected.directives(new Format())).xml()
                     )
                 )
             ).bytecode(),

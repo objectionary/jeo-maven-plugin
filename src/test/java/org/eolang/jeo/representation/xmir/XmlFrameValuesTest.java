@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.directives.DirectivesFrameValues;
 import org.eolang.jeo.representation.directives.DirectivesValues;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,7 @@ final class XmlFrameValuesTest {
                 new NativeXmlNode(
                     new Xembler(
                         new DirectivesFrameValues(
+                            new Format(),
                             "values",
                             expected
                         )
@@ -67,6 +69,7 @@ final class XmlFrameValuesTest {
                 new NativeXmlNode(
                     new Xembler(
                         new DirectivesValues(
+                            new Format(),
                             "values",
                             expected
                         )
@@ -85,6 +88,7 @@ final class XmlFrameValuesTest {
                 new NativeXmlNode(
                     new Xembler(
                         new DirectivesValues(
+                            new Format(),
                             "name",
                             "byte",
                             "short",

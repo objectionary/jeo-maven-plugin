@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.bytecode;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesMethodParam;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
@@ -118,15 +119,17 @@ public final class BytecodeMethodParameter {
 
     /**
      * Convert to directives.
+     * @param format Directives format.
      * @return Directives.
      */
-    public Iterable<Directive> directives() {
+    public Iterable<Directive> directives(final Format format) {
         return new DirectivesMethodParam(
+            format,
             this.index,
             this.name,
             this.access,
             this.type,
-            this.annotations.directives(String.format("param-annotations-%d", this.index))
+            this.annotations.directives(format, String.format("param-annotations-%d", this.index))
         );
     }
 }

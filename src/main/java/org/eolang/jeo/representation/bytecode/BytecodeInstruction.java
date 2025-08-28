@@ -14,6 +14,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
+import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.directives.OpcodeName;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
@@ -85,8 +86,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives() {
-        return new DirectivesInstruction(this.opcode, this.args.toArray());
+    public Iterable<Directive> directives(final Format format) {
+        return new DirectivesInstruction(format, this.opcode, this.args.toArray());
     }
 
     @Override

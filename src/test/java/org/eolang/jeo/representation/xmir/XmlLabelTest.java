@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ final class XmlLabelTest {
             "Can't retrieve correct label identifier",
             new XmlLabel(
                 new NativeXmlNode(
-                    new Xembler(expected.directives()).xml()
+                    new Xembler(expected.directives(new Format())).xml()
                 )
             ).bytecode(),
             Matchers.equalTo(expected)

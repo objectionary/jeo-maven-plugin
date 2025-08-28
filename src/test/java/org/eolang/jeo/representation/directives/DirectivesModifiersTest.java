@@ -22,7 +22,7 @@ final class DirectivesModifiersTest {
         MatcherAssert.assertThat(
             "We expect access modifiers in the directives with correct values",
             new Xembler(
-                new DirectivesModifiers(Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC)
+                new DirectivesModifiers(new Format(), Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC)
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@name, 'modifiers')]/o[contains(@name, 'public') and contains(@base, 'true')]",

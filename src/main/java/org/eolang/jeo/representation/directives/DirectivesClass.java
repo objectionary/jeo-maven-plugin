@@ -24,6 +24,11 @@ import org.xembly.Directives;
 public final class DirectivesClass implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Class name.
      */
     private final ClassName name;
@@ -86,6 +91,7 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param format The format of the directives
      * @param name The class name
      * @param properties The class properties
      * @param fields The class fields
@@ -95,6 +101,7 @@ public final class DirectivesClass implements Iterable<Directive> {
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesClass(
+        final Format format,
         final ClassName name,
         final DirectivesClassProperties properties,
         final List<DirectivesField> fields,
@@ -102,6 +109,7 @@ public final class DirectivesClass implements Iterable<Directive> {
         final DirectivesAnnotations annotations,
         final DirectivesAttributes attributes
     ) {
+        this.format = format;
         this.name = name;
         this.properties = properties;
         this.fields = fields;
@@ -148,6 +156,7 @@ public final class DirectivesClass implements Iterable<Directive> {
         final List<DirectivesMethod> methods
     ) {
         this(
+            new Format(),
             name,
             properties,
             fields,
@@ -163,7 +172,7 @@ public final class DirectivesClass implements Iterable<Directive> {
             "class",
             new PrefixedName(this.name.name()).encode(),
             this.properties,
-            new DirectivesValue("name", this.name.full().replace('.', '/')),
+            new DirectivesValue(this.format, "name", this.name.full().replace('.', '/')),
             this.fields.stream().map(Directives::new).reduce(new Directives(), Directives::append),
             this.methods.stream().map(Directives::new).reduce(new Directives(), Directives::append),
             this.annotations,

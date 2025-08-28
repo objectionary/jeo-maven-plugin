@@ -15,8 +15,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.cactoos.set.SetOf;
-import org.eolang.jeo.representation.asm.DisassembleMode;
-import org.eolang.jeo.representation.asm.DisassembleParams;
 import org.eolang.jeo.representation.directives.Format;
 
 /**
@@ -247,12 +245,12 @@ public final class DisassembleMojo extends AbstractMojo {
                         new GlobFilter(this.includes, this.excludes)
                     ),
                     this.outputDir.toPath(),
-                    new DisassembleParams(
-                        DisassembleMode.fromString(this.mode),
-                        listings,
-                        this.prettyXmir,
-                        comments,
-                        new Format(Format.MODIFIERS, this.modifiers)
+                    new Format(
+                        Format.MODIFIERS, this.modifiers,
+                        Format.COMMENTS, comments,
+                        Format.WITH_LISTING, listings,
+                        Format.PRETTY, this.prettyXmir,
+                        Format.MODE, this.mode
                     )
                 ).disassemble();
                 if (this.xmirVerification) {

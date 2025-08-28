@@ -18,6 +18,11 @@ import org.xembly.Directives;
 public final class DirectivesClassProperties implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Class bytecode version.
      */
     private final int version;
@@ -80,11 +85,15 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         final String supername,
         final String... interfaces
     ) {
-        this(new DefaultVersion().bytecode(), access, signature, supername, interfaces.clone());
+        this(
+            new Format(), new DefaultVersion().bytecode(), access, signature, supername,
+            interfaces.clone()
+        );
     }
 
     /**
      * Constructor.
+     * @param format Format of the directives.
      * @param version Bytecode version.
      * @param access Access modifiers.
      * @param signature Class Signature.
@@ -93,12 +102,14 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
      * @checkstyle ParameterNumberCheck (6 lines)
      */
     public DirectivesClassProperties(
+        final Format format,
         final int version,
         final int access,
         final String signature,
         final String supername,
         final String... interfaces
     ) {
+        this.format = format;
         this.version = version;
         this.access = access;
         this.signature = signature;
@@ -109,16 +120,18 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives()
-            .append(new DirectivesValue("version", this.version))
-            .append(new DirectivesValue("access", this.access))
+            .append(new DirectivesValue(this.format, "version", this.version))
+            .append(new DirectivesValue(this.format, "access", this.access))
             .append(
-                new DirectivesValue("signature", Optional.ofNullable(this.signature).orElse(""))
+                new DirectivesValue(
+                    this.format, "signature", Optional.ofNullable(this.signature).orElse("")
+                )
             );
         if (this.supername != null) {
-            directives.append(new DirectivesValue("supername", this.supername));
+            directives.append(new DirectivesValue(this.format, "supername", this.supername));
         }
         if (this.interfaces != null) {
-            directives.append(new DirectivesValues("interfaces", this.interfaces));
+            directives.append(new DirectivesValues(this.format, "interfaces", this.interfaces));
         }
         return directives.iterator();
     }

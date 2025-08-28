@@ -182,8 +182,8 @@ public final class BytecodeMethodProperties {
             this.descr,
             this.signature,
             this.exceptions,
-            maxs.directives(),
-            this.parameters.directives(),
+            maxs.directives(format),
+            this.parameters.directives(format),
             format
         );
     }

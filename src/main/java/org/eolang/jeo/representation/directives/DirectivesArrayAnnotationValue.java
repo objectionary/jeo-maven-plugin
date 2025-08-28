@@ -18,6 +18,11 @@ import org.xembly.Directives;
 public final class DirectivesArrayAnnotationValue implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * The name of the annotation property.
      */
     private final String name;
@@ -29,12 +34,14 @@ public final class DirectivesArrayAnnotationValue implements Iterable<Directive>
 
     /**
      * Constructor.
+     * @param format Format of the directives.
      * @param name The name of the annotation property.
      * @param children The actual values.
      */
     public DirectivesArrayAnnotationValue(
-        final String name, final List<Iterable<Directive>> children
+        final Format format, final String name, final List<Iterable<Directive>> children
     ) {
+        this.format = format;
         this.name = name;
         this.values = children;
     }
@@ -46,8 +53,8 @@ public final class DirectivesArrayAnnotationValue implements Iterable<Directive>
             new RandName("a").toString(),
             Stream.concat(
                 Stream.of(
-                    new DirectivesValue("ARRAY"),
-                    new DirectivesValue(this.name)
+                    new DirectivesValue(this.format, "ARRAY"),
+                    new DirectivesValue(this.format, this.name)
                 ),
                 this.values.stream()
             ).map(Directives::new).collect(Collectors.toList())

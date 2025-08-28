@@ -20,6 +20,11 @@ import org.xembly.Directives;
 public final class DirectivesTryCatch implements Iterable<Directive> {
 
     /**
+     * The format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Start label.
      */
     private final BytecodeLabel start;
@@ -41,6 +46,7 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param format The format of the directives.
      * @param start Start label
      * @param end End label
      * @param handler Handler label
@@ -49,11 +55,12 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
      */
     @SuppressWarnings("PMD.ConstructorOnlyInitializesOrCallOtherConstructors")
     public DirectivesTryCatch(
-        final BytecodeLabel start,
+        final Format format, final BytecodeLabel start,
         final BytecodeLabel end,
         final BytecodeLabel handler,
         final String type
     ) {
+        this.format = format;
         final BytecodeLabel empty = new BytecodeLabel((String) null);
         this.start = Optional.ofNullable(start).orElse(empty);
         this.end = Optional.ofNullable(end).orElse(empty);
@@ -67,10 +74,10 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
             "trycatch",
             new RandName("t").toString(),
             Stream.of(
-                this.start.directives(),
-                this.end.directives(),
-                this.handler.directives(),
-                DirectivesTryCatch.nullable(this.type)
+                this.start.directives(this.format),
+                this.end.directives(this.format),
+                this.handler.directives(this.format),
+                this.nullable(this.type)
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
     }
@@ -80,10 +87,10 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
      * @param value The value that may be null.
      * @return The directives.
      */
-    private static Iterable<Directive> nullable(final String value) {
+    private Iterable<Directive> nullable(final String value) {
         final Iterable<Directive> result;
         if (Objects.nonNull(value)) {
-            result = new DirectivesValue(value);
+            result = new DirectivesValue(this.format, value);
         } else {
             result = new DirectivesEoObject("nop", new RandName("n").toString());
         }

@@ -41,6 +41,11 @@ import org.xembly.Directive;
 public final class DirectivesField implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Access.
      */
     private final int access;
@@ -83,6 +88,7 @@ public final class DirectivesField implements Iterable<Directive> {
      */
     public DirectivesField(final DirectivesAnnotation... annotations) {
         this(
+            new Format(),
             Opcodes.ACC_PUBLIC,
             "unknown",
             "I",
@@ -109,6 +115,7 @@ public final class DirectivesField implements Iterable<Directive> {
         final Object value
     ) {
         this(
+            new Format(),
             access,
             name,
             descriptor,
@@ -120,6 +127,7 @@ public final class DirectivesField implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param format Format
      * @param access Access modifiers
      * @param name Name
      * @param descriptor Descriptor
@@ -129,6 +137,7 @@ public final class DirectivesField implements Iterable<Directive> {
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesField(
+        final Format format,
         final int access,
         final String name,
         final String descriptor,
@@ -136,6 +145,7 @@ public final class DirectivesField implements Iterable<Directive> {
         final Object value,
         final DirectivesAnnotations annotations
     ) {
+        this.format = format;
         this.access = access;
         this.name = name;
         this.descriptor = Optional.ofNullable(descriptor).orElse("");
@@ -149,10 +159,10 @@ public final class DirectivesField implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "field",
             new PrefixedName(this.name).encode(),
-            new DirectivesValue(this.title("access"), this.access),
-            new DirectivesValue(this.title("descriptor"), this.descriptor),
-            new DirectivesValue(this.title("signature"), this.signature),
-            new DirectivesValue(this.title("value"), this.value),
+            new DirectivesValue(this.format, this.title("access"), this.access),
+            new DirectivesValue(this.format, this.title("descriptor"), this.descriptor),
+            new DirectivesValue(this.format, this.title("signature"), this.signature),
+            new DirectivesValue(this.format, this.title("value"), this.value),
             this.annotations
         ).iterator();
     }

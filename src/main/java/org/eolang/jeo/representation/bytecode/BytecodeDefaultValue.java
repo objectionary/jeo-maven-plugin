@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.bytecode;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesDefaultValue;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
@@ -43,7 +44,7 @@ public final class BytecodeDefaultValue {
         visitor.visitEnd();
     }
 
-    public Iterable<Directive> directives() {
-        return new DirectivesDefaultValue(this.property.directives());
+    public Iterable<Directive> directives(final Format format) {
+        return new DirectivesDefaultValue(this.property.directives(format));
     }
 }

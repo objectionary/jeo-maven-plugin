@@ -20,6 +20,11 @@ import org.xembly.Directives;
 public final class DirectivesInstruction implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Opcode.
      */
     private final int opcode;
@@ -31,13 +36,16 @@ public final class DirectivesInstruction implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param format Format of the directives
      * @param opcode Opcode
      * @param arguments Instruction arguments
      */
     public DirectivesInstruction(
+        final Format format,
         final int opcode,
         final Object... arguments
     ) {
+        this.format = format;
         this.opcode = opcode;
         this.arguments = arguments.clone();
     }
@@ -48,8 +56,8 @@ public final class DirectivesInstruction implements Iterable<Directive> {
             this.base(),
             new RandName("i").toString(),
             Stream.concat(
-                Stream.of(new DirectivesComment(this.comment())),
-                Arrays.stream(this.arguments).map(DirectivesOperand::new)
+                Stream.of(new DirectivesComment(this.format, this.comment())),
+                Arrays.stream(this.arguments).map(a -> new DirectivesOperand(this.format, a))
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
     }

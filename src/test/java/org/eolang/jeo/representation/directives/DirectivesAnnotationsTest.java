@@ -40,7 +40,7 @@ final class DirectivesAnnotationsTest {
                 "/o[contains(@name,'annotations')]/o",
                 String.format(
                     "/o[contains(@name,'annotations')]/o/o[2][contains(@base,'string')]/o[1]/o[text()='%s']",
-                    new DirectivesValue(annotation).hex(new JavaCodec())
+                    new DirectivesValue(new Format(), annotation).hex(new JavaCodec())
                 ),
                 "/o[contains(@name,'annotations')]/o/o[3][contains(@base,'true')]"
             )
@@ -49,13 +49,15 @@ final class DirectivesAnnotationsTest {
 
     @Test
     void createsAnnotationWithProperty() throws ImpossibleModificationException {
+        final Format format = new Format();
         MatcherAssert.assertThat(
             "Can't create an annotation with a property",
             new Xembler(
                 new DirectivesAnnotation(
+                    format,
                     "Ljava/lang/Override;",
                     true,
-                    new DirectivesPlainAnnotationValue("name", "something")
+                    new DirectivesPlainAnnotationValue(format, "name", "something")
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(

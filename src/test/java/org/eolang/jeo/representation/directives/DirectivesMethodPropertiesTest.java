@@ -30,7 +30,7 @@ final class DirectivesMethodPropertiesTest {
                         "()V",
                         "",
                         new String[]{},
-                        new DirectivesMaxs(1, 1),
+                        new DirectivesMaxs(new Format(), 1, 1),
                         new DirectivesMethodParams(),
                         new Format(Format.MODIFIERS, false)
                     )
@@ -55,7 +55,7 @@ final class DirectivesMethodPropertiesTest {
                         "()V",
                         "",
                         new String[]{},
-                        new DirectivesMaxs(1, 1),
+                        new DirectivesMaxs(new Format(), 1, 1),
                         new DirectivesMethodParams(),
                         new Format(Format.MODIFIERS, true)
                     )

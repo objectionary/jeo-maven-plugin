@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.InnerClass;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,9 @@ final class XmlAttributesTest {
         MatcherAssert.assertThat(
             "We expect the attributes to be converted to a correct bytecode domain class",
             new XmlAttributes(
-                new NativeXmlNode(new Xembler(expected.directives("attributes")).xml())
+                new NativeXmlNode(
+                    new Xembler(expected.directives(new Format(), "attributes")).xml()
+                )
             ).attributes(),
             Matchers.equalTo(expected)
         );

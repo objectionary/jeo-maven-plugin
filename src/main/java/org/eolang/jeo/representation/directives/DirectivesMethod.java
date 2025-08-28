@@ -26,6 +26,11 @@ import org.xembly.Directives;
 public final class DirectivesMethod implements Iterable<Directive> {
 
     /**
+     * Directives format.
+     */
+    private final Format format;
+
+    /**
      * Method name.
      */
     private final NumberedName name;
@@ -78,6 +83,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final DirectivesMethodProperties properties
     ) {
         this(
+            new Format(),
             new NumberedName(1, new MethodName(name).xmir()),
             properties,
             new ArrayList<>(0),
@@ -90,6 +96,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param format Directives format
      * @param name Method name
      * @param properties Method properties
      * @param instructions Method instructions
@@ -100,6 +107,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @checkstyle ParameterNumberCheck (10 lines)
      */
     public DirectivesMethod(
+        final Format format,
         final NumberedName name,
         final DirectivesMethodProperties properties,
         final List<Iterable<Directive>> instructions,
@@ -108,6 +116,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final List<Iterable<Directive>> dvalue,
         final DirectivesAttributes attributes
     ) {
+        this.format = format;
         this.name = name;
         this.properties = properties;
         this.instructions = instructions;
@@ -124,7 +133,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @return This object
      */
     public DirectivesMethod withOpcode(final int opcode, final Object... operands) {
-        this.instructions.add(new DirectivesInstruction(opcode, operands));
+        this.instructions.add(new DirectivesInstruction(this.format, opcode, operands));
         return this;
     }
 
@@ -158,7 +167,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
                     this.dvalue.stream(),
                     Stream.of(
                         this.attributes,
-                        new DirectivesValue("name", mname)
+                        new DirectivesValue(this.format, "name", mname)
                     )
                 )
             ).map(Directives::new).collect(Collectors.toList())

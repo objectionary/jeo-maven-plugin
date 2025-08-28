@@ -19,6 +19,7 @@ import org.eolang.jeo.representation.directives.DirectivesAttributes;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
+import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.xmir.XmlObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -60,11 +61,12 @@ final class BytecodeMethodTest {
             Matchers.equalTo(
                 new Nameless(
                     new DirectivesMethod(
+                        new Format(),
                         new NumberedName(1, "main"),
                         new DirectivesMethodProperties(),
                         Arrays.asList(
-                            new DirectivesInstruction(Opcodes.BIPUSH, 28),
-                            new DirectivesInstruction(Opcodes.IRETURN)
+                            new DirectivesInstruction(new Format(), Opcodes.BIPUSH, 28),
+                            new DirectivesInstruction(new Format(), Opcodes.IRETURN)
                         ),
                         Collections.emptyList(),
                         new DirectivesAnnotations(),
@@ -91,6 +93,7 @@ final class BytecodeMethodTest {
      */
     @Test
     void parsesMethodParameters() {
+        final Format format = new Format();
         MatcherAssert.assertThat(
             "We expect that the method with parameters generates correct directives",
             new Nameless(
@@ -112,32 +115,35 @@ final class BytecodeMethodTest {
             Matchers.equalTo(
                 new Nameless(
                     new DirectivesMethod(
+                        new Format(),
                         new NumberedName(1, "printSum"),
                         new DirectivesMethodProperties(
                             Opcodes.ACC_PUBLIC, "(II)V", ""
                         ),
                         Arrays.asList(
-                            new DirectivesInstruction(Opcodes.NEW, "ParametersExample"),
-                            new DirectivesInstruction(Opcodes.DUP),
+                            new DirectivesInstruction(format, Opcodes.NEW, "ParametersExample"),
+                            new DirectivesInstruction(format, Opcodes.DUP),
                             new DirectivesInstruction(
+                                format,
                                 Opcodes.INVOKESPECIAL,
                                 "ParametersExample",
                                 "<init>",
                                 "()V",
                                 false
                             ),
-                            new DirectivesInstruction(Opcodes.ASTORE, 1),
-                            new DirectivesInstruction(Opcodes.ALOAD, 1),
-                            new DirectivesInstruction(Opcodes.BIPUSH, 10),
-                            new DirectivesInstruction(Opcodes.BIPUSH, 20),
+                            new DirectivesInstruction(format, Opcodes.ASTORE, 1),
+                            new DirectivesInstruction(format, Opcodes.ALOAD, 1),
+                            new DirectivesInstruction(format, Opcodes.BIPUSH, 10),
+                            new DirectivesInstruction(format, Opcodes.BIPUSH, 20),
                             new DirectivesInstruction(
+                                format,
                                 Opcodes.INVOKEVIRTUAL,
                                 "ParametersExample",
                                 "printSum",
                                 "(II)V",
                                 false
                             ),
-                            new DirectivesInstruction(Opcodes.RETURN)
+                            new DirectivesInstruction(format, Opcodes.RETURN)
                         ),
                         Collections.emptyList(),
                         new DirectivesAnnotations(),

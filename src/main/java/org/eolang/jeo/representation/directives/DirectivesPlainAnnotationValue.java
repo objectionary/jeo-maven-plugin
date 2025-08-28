@@ -16,6 +16,11 @@ import org.xembly.Directive;
 public final class DirectivesPlainAnnotationValue implements Iterable<Directive> {
 
     /**
+     * The format of the directives.
+     */
+    private final Format format;
+
+    /**
      * The name of the annotation property.
      */
     private final String name;
@@ -27,10 +32,14 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
 
     /**
      * Constructor.
+     * @param format The format of the directives.
      * @param name The name of the annotation property.
      * @param value The actual value.
      */
-    public DirectivesPlainAnnotationValue(final String name, final Object value) {
+    public DirectivesPlainAnnotationValue(
+        final Format format, final String name, final Object value
+    ) {
+        this.format = format;
         this.name = name;
         this.value = value;
     }
@@ -39,7 +48,7 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
      * Constructor.
      */
     DirectivesPlainAnnotationValue() {
-        this("", "");
+        this(new Format(), "", "");
     }
 
     @Override
@@ -66,32 +75,32 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
         };
         if (Arrays.stream(iterable).anyMatch(iter -> iter.equals(this.value.getClass()))) {
             if (this.value.getClass().equals(int[].class)) {
-                res = new DirectivesValues("", (int[]) this.value);
+                res = new DirectivesValues(this.format, "", (int[]) this.value);
             } else if (this.value.getClass().equals(long[].class)) {
-                res = new DirectivesValues("", (long[]) this.value);
+                res = new DirectivesValues(this.format, "", (long[]) this.value);
             } else if (this.value.getClass().equals(float[].class)) {
-                res = new DirectivesValues("", (float[]) this.value);
+                res = new DirectivesValues(this.format, "", (float[]) this.value);
             } else if (this.value.getClass().equals(double[].class)) {
-                res = new DirectivesValues("", (double[]) this.value);
+                res = new DirectivesValues(this.format, "", (double[]) this.value);
             } else if (this.value.getClass().equals(boolean[].class)) {
-                res = new DirectivesValues("", (boolean[]) this.value);
+                res = new DirectivesValues(this.format, "", (boolean[]) this.value);
             } else if (this.value.getClass().equals(char[].class)) {
-                res = new DirectivesValues("", (char[]) this.value);
+                res = new DirectivesValues(this.format, "", (char[]) this.value);
             } else if (this.value.getClass().equals(byte[].class)) {
-                res = new DirectivesValues("", (byte[]) this.value);
+                res = new DirectivesValues(this.format, "", (byte[]) this.value);
             } else if (this.value.getClass().equals(short[].class)) {
-                res = new DirectivesValues("", (short[]) this.value);
+                res = new DirectivesValues(this.format, "", (short[]) this.value);
             } else {
-                res = new DirectivesValues("", (Object[]) this.value);
+                res = new DirectivesValues(this.format, "", (Object[]) this.value);
             }
         } else {
-            res = new DirectivesOperand(this.value);
+            res = new DirectivesOperand(this.format, this.value);
         }
         return new DirectivesJeoObject(
             "annotation-property",
             new RandName("p").toString(),
-            new DirectivesValue("PLAIN"),
-            new DirectivesValue(Optional.ofNullable(this.name).orElse("")),
+            new DirectivesValue(this.format, "PLAIN"),
+            new DirectivesValue(this.format, Optional.ofNullable(this.name).orElse("")),
             res
         ).iterator();
     }

@@ -27,7 +27,12 @@ final class DirectivesMethodParamTest {
             "We expect that the parameter directives will be generated with a simple name that includes the name",
             new Xembler(
                 new DirectivesMethodParam(
-                    1, "foo", Opcodes.ACC_PUBLIC, Type.INT_TYPE, new DirectivesAnnotations()
+                    new Format(),
+                    1,
+                    "foo",
+                    Opcodes.ACC_PUBLIC,
+                    Type.INT_TYPE,
+                    new DirectivesAnnotations()
                 )
             ).xml(),
             XhtmlMatchers.hasXPath("./o[contains(@base, param) and contains(@name, 'foo')]")
@@ -40,7 +45,12 @@ final class DirectivesMethodParamTest {
             "We expect that the parameter directives will be generated with an index",
             new Xembler(
                 new DirectivesMethodParam(
-                    2, "bar", Opcodes.ACC_PRIVATE, Type.DOUBLE_TYPE, new DirectivesAnnotations()
+                    new Format(),
+                    2,
+                    "bar",
+                    Opcodes.ACC_PRIVATE,
+                    Type.DOUBLE_TYPE,
+                    new DirectivesAnnotations()
                 )
             ).xml(),
             XhtmlMatchers.hasXPath(
@@ -55,7 +65,12 @@ final class DirectivesMethodParamTest {
             "We expect that the parameter directives will be generated with an access modifier",
             new Xembler(
                 new DirectivesMethodParam(
-                    3, "baz", Opcodes.ACC_PROTECTED, Type.LONG_TYPE, new DirectivesAnnotations()
+                    new Format(),
+                    3,
+                    "baz",
+                    Opcodes.ACC_PROTECTED,
+                    Type.LONG_TYPE,
+                    new DirectivesAnnotations()
                 )
             ).xml(),
             XhtmlMatchers.hasXPath(
@@ -70,6 +85,7 @@ final class DirectivesMethodParamTest {
             "We expect that the parameter directives will be generated with a type",
             new Xembler(
                 new DirectivesMethodParam(
+                    new Format(),
                     4,
                     "qux",
                     Opcodes.ACC_STATIC,
@@ -89,6 +105,7 @@ final class DirectivesMethodParamTest {
             "We expect that the parameter directives will be generated with annotations",
             new Xembler(
                 new DirectivesMethodParam(
+                    new Format(),
                     5,
                     "quux",
                     Opcodes.ACC_ABSTRACT,

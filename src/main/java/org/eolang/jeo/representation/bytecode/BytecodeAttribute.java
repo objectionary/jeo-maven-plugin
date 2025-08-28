@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import org.eolang.jeo.representation.asm.AsmLabels;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
@@ -30,8 +31,9 @@ public interface BytecodeAttribute {
 
     /**
      * Converts to directives.
+     * @param format Format of the directives.
      * @return Directives.
      */
-    Iterable<Directive> directives();
+    Iterable<Directive> directives(Format format);
 
 }

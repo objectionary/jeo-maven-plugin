@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAnnotationAnnotationValue;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
@@ -59,12 +60,13 @@ public final class BytecodeAnnotationAnnotationValue implements BytecodeAnnotati
     }
 
     @Override
-    public Iterable<Directive> directives() {
+    public Iterable<Directive> directives(final Format format) {
         return new DirectivesAnnotationAnnotationValue(
+            format,
             this.name,
             this.descriptor,
             this.values.stream()
-                .map(BytecodeAnnotationValue::directives)
+                .map(v -> v.directives(format))
                 .collect(Collectors.toList())
         );
     }

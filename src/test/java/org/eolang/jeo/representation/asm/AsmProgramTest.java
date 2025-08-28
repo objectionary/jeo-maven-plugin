@@ -11,6 +11,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeLine;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
+import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.xmir.XmlObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -74,7 +75,7 @@ final class AsmProgramTest {
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode",
             new XmlObject(
-                new Xembler(bytecode.directives("")).xml()
+                new Xembler(bytecode.directives(new Format())).xml()
             ).bytecode().bytecode(),
             Matchers.equalTo(bytecode.bytecode())
         );

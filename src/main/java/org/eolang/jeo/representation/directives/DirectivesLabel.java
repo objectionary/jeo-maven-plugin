@@ -15,15 +15,22 @@ import org.xembly.Directive;
 public final class DirectivesLabel implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Simple string identifier.
      */
     private final String identifier;
 
     /**
      * Default constructor.
+     * @param format Format of the directives.
      * @param identifier Identifier for the label.
      */
-    public DirectivesLabel(final String identifier) {
+    public DirectivesLabel(final Format format, final String identifier) {
+        this.format = format;
         this.identifier = identifier;
     }
 
@@ -36,7 +43,7 @@ public final class DirectivesLabel implements Iterable<Directive> {
             result = new DirectivesJeoObject(
                 "label",
                 new RandName("l").toString(),
-                new DirectivesValue(this.identifier)
+                new DirectivesValue(this.format, this.identifier)
             );
         }
         return result.iterator();

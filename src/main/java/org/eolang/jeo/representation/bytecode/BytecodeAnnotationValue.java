@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
@@ -23,5 +24,5 @@ public interface BytecodeAnnotationValue {
      */
     void writeTo(AnnotationVisitor visitor);
 
-    Iterable<Directive> directives();
+    Iterable<Directive> directives(Format format);
 }

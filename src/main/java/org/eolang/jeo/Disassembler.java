@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.asm.DisassembleParams;
+import org.eolang.jeo.representation.directives.Format;
 
 /**
  * Disassembler for bytecode classes.
@@ -35,7 +35,7 @@ public final class Disassembler {
     /**
      * Disassemble params.
      */
-    private final DisassembleParams params;
+    private final Format params;
 
     /**
      * Constructor.
@@ -46,7 +46,7 @@ public final class Disassembler {
         final Path classes,
         final Path target
     ) {
-        this(classes, target, new DisassembleParams());
+        this(classes, target, new Format());
     }
 
     /**
@@ -58,7 +58,7 @@ public final class Disassembler {
     public Disassembler(
         final Path classes,
         final Path target,
-        final DisassembleParams params
+        final Format params
     ) {
         this(new BytecodeClasses(classes), target, params);
     }
@@ -66,7 +66,7 @@ public final class Disassembler {
     public Disassembler(
         final Classes classes,
         final Path target,
-        final DisassembleParams params
+        final Format params
     ) {
         this.classes = classes;
         this.target = target;

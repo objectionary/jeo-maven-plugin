@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -70,7 +71,7 @@ final class XmlInstructionTest {
                 IllegalStateException.class,
                 () -> new XmlInstruction(
                     new JcabiXmlNode(
-                        new Xembler(new DirectivesInstruction(Opcodes.DUP))
+                        new Xembler(new DirectivesInstruction(new Format(), Opcodes.DUP))
                             .xml()
                             .replace("dup", "unknown")
                     )

@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
+import org.eolang.jeo.representation.directives.Format;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xembly.Directives;
@@ -27,7 +28,7 @@ final class XmlAnnotationTest {
                             new BytecodeAnnotation(
                                 "Lorg/eolang/jeo/representation/xmir/XmlAnnotation;",
                                 true
-                            ).directives()
+                            ).directives(new Format())
                         ).xpath("./o/o").remove()
                     ).xml()
                 )

@@ -26,6 +26,11 @@ import org.xembly.Directives;
 public final class DirectivesAnnotation implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Annotation descriptor.
      */
     private final String descriptor;
@@ -49,35 +54,42 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
         final String descriptor,
         final boolean visible
     ) {
-        this(descriptor, visible, new ArrayList<>(0));
+        this(new Format(), descriptor, visible, new ArrayList<>(0));
     }
 
     /**
      * Constructor.
+     * @param format Format.
      * @param descriptor Descriptor.
      * @param visible Visible.
      * @param props Properties.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     @SafeVarargs
     public DirectivesAnnotation(
+        final Format format,
         final String descriptor,
         final boolean visible,
         final Iterable<Directive>... props
     ) {
-        this(descriptor, visible, Arrays.asList(props));
+        this(format, descriptor, visible, Arrays.asList(props));
     }
 
     /**
      * Constructor.
+     * @param format Format.
      * @param descriptor Descriptor.
      * @param visible Visible.
      * @param properties Properties.
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesAnnotation(
+        final Format format,
         final String descriptor,
         final boolean visible,
         final List<Iterable<Directive>> properties
     ) {
+        this.format = format;
         this.descriptor = descriptor;
         this.visible = visible;
         this.properties = properties;
@@ -93,8 +105,8 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
             ).encoded(),
             Stream.concat(
                 Stream.of(
-                    new DirectivesValue(this.descriptor),
-                    new DirectivesValue(this.visible)
+                    new DirectivesValue(this.format, this.descriptor),
+                    new DirectivesValue(this.format, this.visible)
                 ),
                 this.properties.stream()
             ).map(Directives::new).collect(Collectors.toList())

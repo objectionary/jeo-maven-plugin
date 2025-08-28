@@ -15,15 +15,22 @@ import org.xembly.Directive;
 public final class DirectivesType implements Iterable<Directive> {
 
     /**
+     * The format of the directives.
+     */
+    private final Format format;
+
+    /**
      * ASM Type object.
      */
     private final Type type;
 
     /**
      * Constructor.
+     * @param format The format of the directives.
      * @param type ASM Type object
      */
-    public DirectivesType(final Type type) {
+    public DirectivesType(final Format format, final Type type) {
+        this.format = format;
         this.type = type;
     }
 
@@ -32,7 +39,7 @@ public final class DirectivesType implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "type",
             new RandName("t").toString(),
-            new DirectivesValue(this.type.getDescriptor())
+            new DirectivesValue(this.format, this.type.getDescriptor())
         ).iterator();
     }
 }

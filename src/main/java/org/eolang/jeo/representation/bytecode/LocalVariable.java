@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesLocalVariables;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.LocalVariableNode;
@@ -116,14 +117,15 @@ public final class LocalVariable implements BytecodeAttribute {
     }
 
     @Override
-    public Iterable<Directive> directives() {
+    public Iterable<Directive> directives(final Format format) {
         return new DirectivesLocalVariables(
+            format,
             this.index,
             this.name,
             this.descriptor,
             this.signature,
-            this.start.directives(),
-            this.end.directives()
+            this.start.directives(format),
+            this.end.directives(format)
         );
     }
 }

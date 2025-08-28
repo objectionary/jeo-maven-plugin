@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.bytecode;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesPlainAnnotationValue;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
@@ -44,7 +45,7 @@ public final class BytecodePlainAnnotationValue implements BytecodeAnnotationVal
     }
 
     @Override
-    public Iterable<Directive> directives() {
-        return new DirectivesPlainAnnotationValue(this.name, this.value);
+    public Iterable<Directive> directives(final Format format) {
+        return new DirectivesPlainAnnotationValue(format, this.name, this.value);
     }
 }

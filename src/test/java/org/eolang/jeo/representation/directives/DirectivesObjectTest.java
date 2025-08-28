@@ -30,7 +30,7 @@ final class DirectivesObjectTest {
         final ClassName name = new ClassName("Foo");
         final String actual = new Xembler(
             new DirectivesObject(
-                "some code",
+                new Format(Format.LISTING, "some code"),
                 0,
                 new DirectivesClass(name),
                 new DirectivesMetas(name)
@@ -52,7 +52,7 @@ final class DirectivesObjectTest {
         final ClassName name = new ClassName("Foo");
         final String actual = new Xembler(
             new DirectivesObject(
-                "",
+                new Format(Format.LISTING, ""),
                 0,
                 new DirectivesClass(name),
                 new DirectivesMetas(name)
@@ -93,7 +93,7 @@ final class DirectivesObjectTest {
             new Xembler(
                 new BytecodeObject(
                     new BytecodeClass("Some")
-                ).directives("")
+                ).directives(new Format())
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/object[@version='1.2.3']",
@@ -107,7 +107,7 @@ final class DirectivesObjectTest {
     void setsMilliseconds() throws ImpossibleModificationException {
         final ClassName clazz = new ClassName("Some");
         final DirectivesObject object = new DirectivesObject(
-            "some code",
+            new Format(Format.LISTING, "some code"),
             10,
             new DirectivesClass(clazz),
             new DirectivesMetas(clazz)

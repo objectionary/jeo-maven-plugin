@@ -25,7 +25,7 @@ final class DirectivesCommentTest {
         MatcherAssert.assertThat(
             "Can't create proper xml a comment",
             new Xembler(
-                new Directives().append(new DirectivesComment("Hello, world!"))
+                new Directives().append(new DirectivesComment(new Format(), "Hello, world!"))
             ).xml(),
             Matchers.containsString("<!-- Hello, world! -->")
         );
@@ -36,7 +36,9 @@ final class DirectivesCommentTest {
         MatcherAssert.assertThat(
             "Can't escape unsafe characters",
             new Xembler(
-                new Directives().append(new DirectivesComment("Hello -- <world> ---!"))
+                new Directives().append(
+                    new DirectivesComment(new Format(), "Hello -- <world> ---!")
+                )
             ).xml(),
             Matchers.containsString("<!-- Hello &#45;&#45; &lt;world&gt; &#45;&#45;&#45;! -->")
         );

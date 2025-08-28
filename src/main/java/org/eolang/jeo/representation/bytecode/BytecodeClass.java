@@ -290,14 +290,15 @@ public final class BytecodeClass {
      */
     public DirectivesClass directives(final Format format) {
         return new DirectivesClass(
+            format,
             this.name,
-            this.props.directives(),
-            this.fields.stream().map(BytecodeField::directives).collect(Collectors.toList()),
+            this.props.directives(format),
+            this.fields.stream().map(f -> f.directives(format)).collect(Collectors.toList()),
             this.cmethods.stream()
                 .map(method -> method.directives(this.mnumber(method), format))
                 .collect(Collectors.toList()),
-            this.annotations.directives(),
-            this.attributes.directives("attributes")
+            this.annotations.directives(format),
+            this.attributes.directives(format, "attributes")
         );
     }
 

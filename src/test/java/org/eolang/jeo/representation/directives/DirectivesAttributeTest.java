@@ -37,7 +37,7 @@ final class DirectivesAttributeTest {
             new Xembler(
                 new DirectivesAttribute(
                     "children",
-                    new DirectivesValue("data")
+                    new DirectivesValue(new Format(), "data")
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(

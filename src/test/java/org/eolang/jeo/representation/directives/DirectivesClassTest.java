@@ -28,10 +28,12 @@ final class DirectivesClassTest {
 
     @Test
     void createsWithSimpleConstructor() throws ImpossibleModificationException {
+        final Format format = new Format();
         MatcherAssert.assertThat(
             "Can't create class with simple constructor",
             new Xembler(
                 new DirectivesClass(
+                    format,
                     new ClassName("Neo"),
                     new DirectivesClassProperties(),
                     Collections.emptyList(),
@@ -40,7 +42,7 @@ final class DirectivesClassTest {
                         "annotations", new DirectivesAnnotation("Override", true)
                     ),
                     new DirectivesAttributes(
-                        new InnerClass("Inner", "Outer", "Inner", 0).directives()
+                        new InnerClass("Inner", "Outer", "Inner", 0).directives(format)
                     )
                 ),
                 new Transformers.Node()
@@ -103,7 +105,7 @@ final class DirectivesClassTest {
             XhtmlMatchers.hasXPath(
                 String.format(
                     "./o[contains(@name,DirectivesClassTest)]/o[contains(@name, 'name')]/o/o[text()='%s']",
-                    new DirectivesValue(name.replace('.', '/')).hex(new JavaCodec())
+                    new DirectivesValue(new Format(), name.replace('.', '/')).hex(new JavaCodec())
                 )
             )
         );

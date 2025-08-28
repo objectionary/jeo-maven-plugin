@@ -8,6 +8,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeFrame;
 import org.eolang.jeo.representation.directives.DirectivesFrameValues;
 import org.eolang.jeo.representation.directives.DirectivesJeoObject;
 import org.eolang.jeo.representation.directives.DirectivesValue;
+import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.directives.RandName;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -34,7 +35,7 @@ final class XmlFrameTest {
         );
         MatcherAssert.assertThat(
             "Parsed frame type is not correct.",
-            new XmlFrame(new Xembler(expected.directives()).xml()).bytecode(),
+            new XmlFrame(new Xembler(expected.directives(new Format())).xml()).bytecode(),
             Matchers.equalTo(expected)
         );
     }
@@ -47,6 +48,7 @@ final class XmlFrameTest {
      */
     @Test
     void parsesFullFrameNode() throws ImpossibleModificationException {
+        final Format format = new Format();
         MatcherAssert.assertThat(
             "We expect XmlFrame to parse old-style frame representation for backward compatibility",
             new XmlFrame(
@@ -54,11 +56,11 @@ final class XmlFrameTest {
                     new DirectivesJeoObject(
                         "frame",
                         new RandName("f").toString(),
-                        new DirectivesValue("type", Opcodes.F_CHOP),
-                        new DirectivesValue("nlocal", 0),
-                        new DirectivesFrameValues("locals"),
-                        new DirectivesValue("nstack", 3),
-                        new DirectivesFrameValues("stack", null, null, null)
+                        new DirectivesValue(format, "type", Opcodes.F_CHOP),
+                        new DirectivesValue(format, "nlocal", 0),
+                        new DirectivesFrameValues(format, "locals"),
+                        new DirectivesValue(format, "nstack", 3),
+                        new DirectivesFrameValues(format, "stack", null, null, null)
                     )
                 ).xml()
             ).bytecode(),

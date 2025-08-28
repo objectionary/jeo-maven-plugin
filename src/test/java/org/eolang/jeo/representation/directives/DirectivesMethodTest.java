@@ -44,7 +44,7 @@ final class DirectivesMethodTest {
                 String.format(
                     "./o[contains(@name,'%s')]/o[@name='name']/o/o[text()='%s']",
                     foo,
-                    new DirectivesValue(foo).hex(new JavaCodec())
+                    new DirectivesValue(new Format(), foo).hex(new JavaCodec())
                 )
             )
         );
@@ -90,13 +90,15 @@ final class DirectivesMethodTest {
     @Test
     void generatesMethodWithSimpleBodyName() throws ImpossibleModificationException {
         final String descriptor = "()I";
+        final Format format = new Format();
         MatcherAssert.assertThat(
             "We expect that the method body name will be generated correctly without any suffixes and prefixes",
             new Xembler(
                 new DirectivesMethod(
+                    format,
                     new NumberedName(1, "checks1063"),
                     new DirectivesMethodProperties(1, descriptor, ""),
-                    Collections.singletonList(new DirectivesInstruction(Opcodes.RETURN)),
+                    Collections.singletonList(new DirectivesInstruction(format, Opcodes.RETURN)),
                     Collections.emptyList(),
                     new DirectivesAnnotations(),
                     Collections.emptyList(),

@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ final class XmlAnnotationsTest {
             "We expect that XMIR annotations are parsed correctly",
             new XmlAnnotations(
                 new NativeXmlNode(
-                    new Xembler(expected.directives("")).xml()
+                    new Xembler(expected.directives(new Format(), "")).xml()
                 )
             ).bytecode(),
             Matchers.equalTo(expected)

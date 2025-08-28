@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.bytecode;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesObject;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ final class BytecodeObjectTest {
         final BytecodeClass clazz = new BytecodeClass();
         MatcherAssert.assertThat(
             "Can't covert simple global object with a class without constructor",
-            new Nameless(new BytecodeObject(clazz).directives("")),
+            new Nameless(new BytecodeObject(clazz).directives(new Format())),
             Matchers.equalTo(
                 new Nameless(
                     new DirectivesObject(
@@ -40,12 +41,11 @@ final class BytecodeObjectTest {
         MatcherAssert.assertThat(
             "Can't parse simple class with method",
             new Nameless(
-                new BytecodeObject(bclass).directives("")
+                new BytecodeObject(bclass).directives(new Format())
             ),
             Matchers.equalTo(
                 new Nameless(
                     new DirectivesObject(
-                        "",
                         bclass.directives(),
                         new DirectivesMetas(new ClassName(clazz))
                     )
@@ -66,7 +66,7 @@ final class BytecodeObjectTest {
                 new BytecodeObject(
                     "some/package",
                     clazz
-                ).directives("")
+                ).directives(new Format())
             ),
             Matchers.equalTo(
                 new Nameless(
