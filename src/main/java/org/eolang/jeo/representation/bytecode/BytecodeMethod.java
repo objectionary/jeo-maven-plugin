@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -288,6 +289,8 @@ public final class BytecodeMethod {
      * @return Directives.
      */
     public DirectivesMethod directives(final int number, final Format format) {
+        final AtomicInteger ecounter = new AtomicInteger(0);
+        final AtomicInteger tcounter = new AtomicInteger(0);
         return new DirectivesMethod(
             format,
             new NumberedName(
@@ -295,9 +298,9 @@ public final class BytecodeMethod {
                 new MethodName(this.properties.name()).xmir()
             ),
             this.properties.directives(this.maxs, format),
-            this.entries.stream().map(e -> e.directives(format))
+            this.entries.stream().map(e -> e.directives(ecounter.getAndIncrement(), format))
                 .collect(Collectors.toList()),
-            this.tryblocks.stream().map(e -> e.directives(format))
+            this.tryblocks.stream().map(e -> e.directives(tcounter.getAndIncrement(), format))
                 .collect(Collectors.toList()),
             this.annotations.directives(format),
             this.defvalues.stream()

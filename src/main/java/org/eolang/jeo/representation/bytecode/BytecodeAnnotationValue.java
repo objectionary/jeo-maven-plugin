@@ -24,5 +24,5 @@ public interface BytecodeAnnotationValue {
      */
     void writeTo(AnnotationVisitor visitor);
 
-    Iterable<Directive> directives(Format format);
+    Iterable<Directive> directives(int index, Format format);
 }

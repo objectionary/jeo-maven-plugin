@@ -123,21 +123,23 @@ final class XmlObjectTest {
                         )
                     )
                         .withOpcode(
+                            0,
                             Opcodes.GETSTATIC,
                             "java/lang/System",
                             "out",
                             "Ljava/io/PrintStream;",
                             false
                         )
-                        .withOpcode(Opcodes.ALOAD, 0)
+                        .withOpcode(1, Opcodes.ALOAD, 0)
                         .withOpcode(
+                            2,
                             Opcodes.INVOKEVIRTUAL,
                             "java/io/PrintStream",
                             "println",
                             "(Ljava/lang/Object;)V",
                             false
                         )
-                        .withOpcode(Opcodes.RETURN)
+                        .withOpcode(3, Opcodes.RETURN)
                 ), new DirectivesMetas(name)
             )
         ).xmlQuietly();
@@ -171,18 +173,20 @@ final class XmlObjectTest {
                         )
                     )
                         .withOpcode(
+                            0,
                             Opcodes.NEW,
                             "java/lang/Exception"
                         )
-                        .withOpcode(Opcodes.DUP)
+                        .withOpcode(1, Opcodes.DUP)
                         .withOpcode(
+                            2,
                             Opcodes.INVOKESPECIAL,
                             "java/lang/Exception",
                             "<init>",
                             "()V",
                             false
                         )
-                        .withOpcode(Opcodes.ATHROW)
+                        .withOpcode(3, Opcodes.ATHROW)
                 ), new DirectivesMetas(name)
             )
         ).xmlQuietly();

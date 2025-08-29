@@ -9,7 +9,7 @@ import org.eolang.jeo.representation.directives.DirectivesFrameValues;
 import org.eolang.jeo.representation.directives.DirectivesJeoObject;
 import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.eolang.jeo.representation.directives.Format;
-import org.eolang.jeo.representation.directives.RandName;
+import org.eolang.jeo.representation.directives.NumName;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ final class XmlFrameTest {
         );
         MatcherAssert.assertThat(
             "Parsed frame type is not correct.",
-            new XmlFrame(new Xembler(expected.directives(new Format())).xml()).bytecode(),
+            new XmlFrame(new Xembler(expected.directives(0, new Format())).xml()).bytecode(),
             Matchers.equalTo(expected)
         );
     }
@@ -55,7 +55,7 @@ final class XmlFrameTest {
                 new Xembler(
                     new DirectivesJeoObject(
                         "frame",
-                        new RandName("f").toString(),
+                        new NumName("f", 0).toString(),
                         new DirectivesValue(format, "type", Opcodes.F_CHOP),
                         new DirectivesValue(format, "nlocal", 0),
                         new DirectivesFrameValues(format, "locals"),

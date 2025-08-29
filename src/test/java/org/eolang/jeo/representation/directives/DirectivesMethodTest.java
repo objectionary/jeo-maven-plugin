@@ -44,7 +44,7 @@ final class DirectivesMethodTest {
                 String.format(
                     "./o[contains(@name,'%s')]/o[@name='name']/o/o[text()='%s']",
                     foo,
-                    new DirectivesValue(new Format(), foo).hex(new JavaCodec())
+                    new DirectivesValue(0, new Format(), foo).hex(new JavaCodec())
                 )
             )
         );
@@ -98,7 +98,7 @@ final class DirectivesMethodTest {
                     format,
                     new NumberedName(1, "checks1063"),
                     new DirectivesMethodProperties(1, descriptor, ""),
-                    Collections.singletonList(new DirectivesInstruction(format, Opcodes.RETURN)),
+                    Collections.singletonList(new DirectivesInstruction(0, format, Opcodes.RETURN)),
                     Collections.emptyList(),
                     new DirectivesAnnotations(),
                     Collections.emptyList(),

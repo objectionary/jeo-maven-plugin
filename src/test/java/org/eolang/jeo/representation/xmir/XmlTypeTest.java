@@ -25,7 +25,7 @@ final class XmlTypeTest {
             new XmlType(
                 new JcabiXmlNode(
                     new Xembler(
-                        new DirectivesType(new Format(), Type.BOOLEAN_TYPE)
+                        new DirectivesType(0, new Format(), Type.BOOLEAN_TYPE)
                     ).xmlQuietly()
                 )
             ).type(),

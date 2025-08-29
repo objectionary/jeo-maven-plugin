@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.xembly.Directive;
@@ -18,6 +19,11 @@ import org.xembly.Directives;
  * @since 0.1
  */
 public final class DirectivesInstruction implements Iterable<Directive> {
+
+    /**
+     * Instruction index.
+     */
+    private final int index;
 
     /**
      * Format of the directives.
@@ -36,15 +42,19 @@ public final class DirectivesInstruction implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param index Instruction index
      * @param format Format of the directives
      * @param opcode Opcode
      * @param arguments Instruction arguments
+     * @checkstyle ParameterNumber (5 lines)
      */
     public DirectivesInstruction(
+        final int index,
         final Format format,
         final int opcode,
         final Object... arguments
     ) {
+        this.index = index;
         this.format = format;
         this.opcode = opcode;
         this.arguments = arguments.clone();
@@ -52,12 +62,14 @@ public final class DirectivesInstruction implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
+        final AtomicInteger counter = new AtomicInteger(0);
         return new DirectivesJeoObject(
             this.base(),
-            new RandName("i").toString(),
+            new NumName("i", this.index).toString(),
             Stream.concat(
                 Stream.of(new DirectivesComment(this.format, this.comment())),
-                Arrays.stream(this.arguments).map(a -> new DirectivesOperand(this.format, a))
+                Arrays.stream(this.arguments)
+                    .map(a -> new DirectivesOperand(counter.getAndIncrement(), this.format, a))
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
     }

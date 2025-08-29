@@ -26,6 +26,7 @@ final class DirectivesArrayAnnotationValueTest {
             "Can't create an array property with a name",
             new Xembler(
                 new DirectivesArrayAnnotationValue(
+                    0,
                     new Format(),
                     "name",
                     Collections.singletonList(new DirectivesPlainAnnotationValue())

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
@@ -24,6 +23,11 @@ import org.xembly.Directives;
 @ToString
 @EqualsAndHashCode
 public final class DirectivesAnnotation implements Iterable<Directive> {
+
+    /**
+     * Index of the annotation among other annotations.
+     */
+    private final int index;
 
     /**
      * Format of the directives.
@@ -54,11 +58,12 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
         final String descriptor,
         final boolean visible
     ) {
-        this(new Format(), descriptor, visible, new ArrayList<>(0));
+        this(0, new Format(), descriptor, visible, new ArrayList<>(0));
     }
 
     /**
      * Constructor.
+     * @param index Index.
      * @param format Format.
      * @param descriptor Descriptor.
      * @param visible Visible.
@@ -67,16 +72,18 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
      */
     @SafeVarargs
     public DirectivesAnnotation(
+        final int index,
         final Format format,
         final String descriptor,
         final boolean visible,
         final Iterable<Directive>... props
     ) {
-        this(format, descriptor, visible, Arrays.asList(props));
+        this(index, format, descriptor, visible, Arrays.asList(props));
     }
 
     /**
      * Constructor.
+     * @param index Index.
      * @param format Format.
      * @param descriptor Descriptor.
      * @param visible Visible.
@@ -84,11 +91,13 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesAnnotation(
+        final int index,
         final Format format,
         final String descriptor,
         final boolean visible,
         final List<Iterable<Directive>> properties
     ) {
+        this.index = index;
         this.format = format;
         this.descriptor = descriptor;
         this.visible = visible;
@@ -100,13 +109,13 @@ public final class DirectivesAnnotation implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "annotation",
             new NamedDescriptor(
-                String.format("annotation-%d", new Random().nextInt(Integer.MAX_VALUE)),
+                String.format("annotation-%d", this.index),
                 this.descriptor
             ).encoded(),
             Stream.concat(
                 Stream.of(
-                    new DirectivesValue(this.format, this.descriptor),
-                    new DirectivesValue(this.format, this.visible)
+                    new DirectivesValue(0, this.format, this.descriptor),
+                    new DirectivesValue(1, this.format, this.visible)
                 ),
                 this.properties.stream()
             ).map(Directives::new).collect(Collectors.toList())

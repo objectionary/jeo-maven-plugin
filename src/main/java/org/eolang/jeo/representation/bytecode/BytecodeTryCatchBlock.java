@@ -101,8 +101,8 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives(final Format format) {
-        return new DirectivesTryCatch(format, this.start, this.end, this.handler, this.type);
+    public Iterable<Directive> directives(final int index, final Format format) {
+        return new DirectivesTryCatch(index, format, this.start, this.end, this.handler, this.type);
     }
 
     @Override

@@ -33,6 +33,7 @@ final class XmlAnnotationValueTest {
                 new NativeXmlNode(
                     new Xembler(
                         new DirectivesArrayAnnotationValue(
+                            0,
                             new Format(),
                             name,
                             Collections.singletonList(new DirectivesAnnotation(descriptor, visible))

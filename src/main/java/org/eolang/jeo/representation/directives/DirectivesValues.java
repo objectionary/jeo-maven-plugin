@@ -68,7 +68,10 @@ public final class DirectivesValues implements Iterable<Directive> {
                     value -> {
                         final Iterable<Directive> result;
                         if (value instanceof BytecodeLabel) {
-                            result = ((BytecodeEntry) value).directives(this.format);
+                            result = ((BytecodeEntry) value).directives(
+                                index.getAndIncrement(),
+                                this.format
+                            );
                         } else {
                             result = new DirectivesValue(
                                 this.format,

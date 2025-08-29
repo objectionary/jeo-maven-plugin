@@ -29,7 +29,7 @@ final class XmlTryCatchEntryTest {
         MatcherAssert.assertThat(
             "Can't convert XML try-catch entry to the correct bytecode",
             new XmlTryCatchEntry(
-                new NativeXmlNode(new Xembler(block.directives(new Format())).xml())
+                new NativeXmlNode(new Xembler(block.directives(0, new Format())).xml())
             ).bytecode(),
             Matchers.equalTo(block)
         );

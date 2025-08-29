@@ -45,7 +45,7 @@ public final class BytecodePlainAnnotationValue implements BytecodeAnnotationVal
     }
 
     @Override
-    public Iterable<Directive> directives(final Format format) {
-        return new DirectivesPlainAnnotationValue(format, this.name, this.value);
+    public Iterable<Directive> directives(final int index, final Format format) {
+        return new DirectivesPlainAnnotationValue(index, format, this.name, this.value);
     }
 }

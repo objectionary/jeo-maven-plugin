@@ -117,15 +117,16 @@ public final class LocalVariable implements BytecodeAttribute {
     }
 
     @Override
-    public Iterable<Directive> directives(final Format format) {
+    public Iterable<Directive> directives(final int oindex, final Format format) {
         return new DirectivesLocalVariables(
+            oindex,
             format,
             this.index,
             this.name,
             this.descriptor,
             this.signature,
-            this.start.directives(format),
-            this.end.directives(format)
+            this.start.directives(0, format),
+            this.end.directives(1, format)
         );
     }
 }

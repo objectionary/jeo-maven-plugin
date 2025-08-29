@@ -20,7 +20,7 @@ final class DirectivesLabelTest {
     void createsCorrectXmlLabel() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Expected XML to contain a label directive with the identifier 'test-label'",
-            new Xembler(new DirectivesLabel(new Format(), "test-label")).xml(),
+            new Xembler(new DirectivesLabel(0, new Format(), "test-label")).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "label").toXpath()
             )

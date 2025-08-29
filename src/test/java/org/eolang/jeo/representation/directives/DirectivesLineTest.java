@@ -18,7 +18,7 @@ final class DirectivesLineTest {
 
     @Test
     void generatesValidXmirForLineNumber() throws ImpossibleModificationException {
-        final DirectivesLine directives = new DirectivesLine(new Format(), 42, "test");
+        final DirectivesLine directives = new DirectivesLine(0, new Format(), 42, "test");
         final String root = "./o[contains(@name,'ln')]";
         MatcherAssert.assertThat(
             "We expect to generate a valid XMIR for the line number directive",

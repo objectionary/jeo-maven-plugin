@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -51,12 +52,14 @@ public final class BytecodeArrayAnnotationValue implements BytecodeAnnotationVal
     }
 
     @Override
-    public Iterable<Directive> directives(final Format format) {
+    public Iterable<Directive> directives(final int index, final Format format) {
+        final AtomicInteger counter = new AtomicInteger(0);
         return new DirectivesArrayAnnotationValue(
+            index,
             format,
             this.name,
             this.values.stream()
-                .map(v -> v.directives(format))
+                .map(v -> v.directives(counter.getAndIncrement(), format))
                 .collect(Collectors.toList())
         );
     }

@@ -31,9 +31,10 @@ public interface BytecodeAttribute {
 
     /**
      * Converts to directives.
+     * @param index Index of the attribute.
      * @param format Format of the directives.
      * @return Directives.
      */
-    Iterable<Directive> directives(Format format);
+    Iterable<Directive> directives(int index, Format format);
 
 }

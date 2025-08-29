@@ -28,7 +28,7 @@ final class XmlHandleTest {
         MatcherAssert.assertThat(
             "Can't convert XML handler to the correct handle object",
             new XmlHandle(
-                new NativeXmlNode(new Xembler(new DirectivesHandle(new Format(), handle)).xml())
+                new NativeXmlNode(new Xembler(new DirectivesHandle(0, new Format(), handle)).xml())
             ).bytecode().asHandle(),
             Matchers.equalTo(handle)
         );

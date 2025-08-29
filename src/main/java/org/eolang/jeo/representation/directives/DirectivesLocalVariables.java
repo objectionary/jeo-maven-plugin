@@ -15,6 +15,14 @@ import org.xembly.Directive;
 public final class DirectivesLocalVariables implements Iterable<Directive> {
 
     /**
+     * Ordered index.
+     * This is used to generate unique names for the directives.
+     * Nothing more, nothing less.
+     * We cannot use index of the local variable, because in some cases it's not unique.
+     */
+    private final int oindex;
+
+    /**
      * Directives format.
      */
     private final Format format;
@@ -51,6 +59,7 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param oindex Ordered index of the local variable.
      * @param format Directives format.
      * @param index Index of the local variable in the local variable array.
      * @param name Name of the local variable.
@@ -61,6 +70,7 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesLocalVariables(
+        final int oindex,
         final Format format,
         final int index,
         final String name,
@@ -69,6 +79,7 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
         final Iterable<Directive> start,
         final Iterable<Directive> end
     ) {
+        this.oindex = oindex;
         this.format = format;
         this.index = index;
         this.name = name;
@@ -82,6 +93,7 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesAttribute(
             "local-variable",
+            new NumName("a", this.oindex).toString(),
             new DirectivesValue(this.format, "index", this.index),
             new DirectivesValue(this.format, "name", this.name),
             new DirectivesValue(this.format, "descr", this.descriptor),

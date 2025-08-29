@@ -95,7 +95,7 @@ final class DirectivesValueTest {
     void convertsBoolean() {
         MatcherAssert.assertThat(
             "Converts boolean to XML",
-            new Xembler(new DirectivesValue(new Format(), true)).xmlQuietly(),
+            new Xembler(new DirectivesValue(0, new Format(), true)).xmlQuietly(),
             XhtmlMatchers.hasXPath(
                 "./o[contains(@base,'true')]"
             )
@@ -111,7 +111,7 @@ final class DirectivesValueTest {
                 data,
                 type
             ),
-            new DirectivesValue(new Format(), data).type(),
+            new DirectivesValue(0, new Format(), data).type(),
             Matchers.equalTo(type)
         );
     }
@@ -127,7 +127,7 @@ final class DirectivesValueTest {
                     hex
                 )
             ),
-            new DirectivesValue(new Format(), data).hex(this.codec),
+            new DirectivesValue(0, new Format(), data).hex(this.codec),
             Matchers.equalTo(hex)
         );
     }
@@ -136,34 +136,34 @@ final class DirectivesValueTest {
     void convertsRawPrimitiveDataToHexString() {
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '10' should be '00 00 00 00 00 00 00 0A'",
-            new DirectivesValue(new Format(), 10).hex(this.codec),
+            new DirectivesValue(0, new Format(), 10).hex(this.codec),
             Matchers.equalTo("00-00-00-00-00-00-00-0A")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1d' should be '3F B9 99 99 99 99 99 9A'",
-            new DirectivesValue(new Format(), 0.1d).hex(this.codec),
+            new DirectivesValue(0, new Format(), 0.1d).hex(this.codec),
             Matchers.equalTo("3F-B9-99-99-99-99-99-9A")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1f' should be '3D CC CC CD'",
-            new DirectivesValue(new Format(), 0.1f).hex(this.codec),
+            new DirectivesValue(0, new Format(), 0.1f).hex(this.codec),
             Matchers.equalTo("3D-CC-CC-CD")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'true' should be '01'",
-            new DirectivesValue(new Format(), true).hex(this.codec),
+            new DirectivesValue(0, new Format(), true).hex(this.codec),
             Matchers.equalTo("01-")
         );
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'false' should be '00'",
-            new DirectivesValue(new Format(), false).hex(this.codec),
+            new DirectivesValue(0, new Format(), false).hex(this.codec),
             Matchers.equalTo("00-")
         );
     }
 
     @Test
     void encodesType() {
-        final String value = new DirectivesValue(new Format(), Type.INT_TYPE).hex(this.codec);
+        final String value = new DirectivesValue(0, new Format(), Type.INT_TYPE).hex(this.codec);
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'Type.INT_TYPE' should be '69 6E 74'",
             value,
@@ -175,7 +175,7 @@ final class DirectivesValueTest {
     void createsStringWithQuotedComment() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that string value will be quoted in the comment",
-            new Xembler(new DirectivesValue(new Format(), "java/lang/Object")).xml(),
+            new Xembler(new DirectivesValue(0, new Format(), "java/lang/Object")).xml(),
             Matchers.containsString("<!-- \"java/lang/Object\" -->")
         );
     }

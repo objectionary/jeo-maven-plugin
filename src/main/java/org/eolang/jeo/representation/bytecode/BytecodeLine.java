@@ -49,8 +49,8 @@ public final class BytecodeLine implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives(final Format format) {
-        return new DirectivesLine(format, this.number, this.label.uid());
+    public Iterable<Directive> directives(final int index, final Format format) {
+        return new DirectivesLine(index, format, this.number, this.label.uid());
     }
 
     @Override

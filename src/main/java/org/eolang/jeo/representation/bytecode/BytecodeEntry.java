@@ -25,10 +25,11 @@ public interface BytecodeEntry {
 
     /**
      * Convert entry to directives.
+     * @param index Index of the entry in the method.
      * @param format Format of the directives.
      * @return Directives.
      */
-    Iterable<Directive> directives(Format format);
+    Iterable<Directive> directives(int index, Format format);
 
     /**
      * Is this instruction a label?

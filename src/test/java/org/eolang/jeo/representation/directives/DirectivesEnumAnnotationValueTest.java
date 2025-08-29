@@ -31,6 +31,7 @@ final class DirectivesEnumAnnotationValueTest {
             "Can't create an enum property with a name and a value",
             new Xembler(
                 new DirectivesEnumAnnotationValue(
+                    0,
                     new Format(),
                     "name",
                     Type.getDescriptor(DayOfWeek.class),
@@ -56,6 +57,7 @@ final class DirectivesEnumAnnotationValueTest {
                 new NativeXmlNode(
                     new Xembler(
                         new DirectivesEnumAnnotationValue(
+                            0,
                             new Format(),
                             name,
                             descriptor,

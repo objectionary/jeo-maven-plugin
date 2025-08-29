@@ -16,6 +16,11 @@ import org.xembly.Directive;
 public final class DirectivesPlainAnnotationValue implements Iterable<Directive> {
 
     /**
+     * Index of the annotation value among other annotation values.
+     */
+    private final int index;
+
+    /**
      * The format of the directives.
      */
     private final Format format;
@@ -32,13 +37,19 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
 
     /**
      * Constructor.
+     * @param index Index of the annotation value among other annotation values.
      * @param format The format of the directives.
      * @param name The name of the annotation property.
      * @param value The actual value.
+     * @checkstyle ParameterNumber (5 lines)
      */
     public DirectivesPlainAnnotationValue(
-        final Format format, final String name, final Object value
+        final int index,
+        final Format format,
+        final String name,
+        final Object value
     ) {
+        this.index = index;
         this.format = format;
         this.name = name;
         this.value = value;
@@ -48,7 +59,7 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
      * Constructor.
      */
     DirectivesPlainAnnotationValue() {
-        this(new Format(), "", "");
+        this(0, new Format(), "", "");
     }
 
     @Override
@@ -94,13 +105,13 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
                 res = new DirectivesValues(this.format, "", (Object[]) this.value);
             }
         } else {
-            res = new DirectivesOperand(this.format, this.value);
+            res = new DirectivesOperand(2, this.format, this.value);
         }
         return new DirectivesJeoObject(
             "annotation-property",
-            new RandName("p").toString(),
-            new DirectivesValue(this.format, "PLAIN"),
-            new DirectivesValue(this.format, Optional.ofNullable(this.name).orElse("")),
+            new NumName("p", this.index).toString(),
+            new DirectivesValue(0, this.format, "PLAIN"),
+            new DirectivesValue(1, this.format, Optional.ofNullable(this.name).orElse("")),
             res
         ).iterator();
     }

@@ -14,6 +14,11 @@ import org.xembly.Directive;
 public final class DirectivesLine implements Iterable<Directive> {
 
     /**
+     * Line index.
+     */
+    private final int index;
+
+    /**
      * Format of the directives.
      */
     private final Format format;
@@ -30,11 +35,19 @@ public final class DirectivesLine implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param index Line index
      * @param format Format of the directives
      * @param number Line number in the source code
      * @param identifier Identifier for the line
+     * @checkstyle ParameterNumber (5 lines)
      */
-    public DirectivesLine(final Format format, final int number, final String identifier) {
+    public DirectivesLine(
+        final int index,
+        final Format format,
+        final int number,
+        final String identifier
+    ) {
+        this.index = index;
         this.format = format;
         this.number = number;
         this.identifier = identifier;
@@ -44,9 +57,9 @@ public final class DirectivesLine implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "line-number",
-            new RandName("ln").toString(),
+            new NumName("ln", this.index).toString(),
             new DirectivesValue(this.format, "number", this.number),
-            new DirectivesLabel(this.format, this.identifier)
+            new DirectivesLabel(0, this.format, this.identifier)
         ).iterator();
     }
 }

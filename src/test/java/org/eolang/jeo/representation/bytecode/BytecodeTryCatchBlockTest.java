@@ -10,6 +10,7 @@ import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.xembly.Xembler;
 
 /**
  * Test cases for {@link BytecodeTryCatchBlock}.
@@ -25,21 +26,22 @@ final class BytecodeTryCatchBlockTest {
         final Format format = new Format();
         MatcherAssert.assertThat(
             "We expected to convert try-catch block to correct directives.",
-            new Nameless(
+            new Xembler(
                 new BytecodeTryCatchBlock(
                     start, end, handler, "java/lang/Exception"
-                ).directives(format)
-            ),
+                ).directives(0, format)
+            ).xmlQuietly(),
             Matchers.equalTo(
-                new Nameless(
+                new Xembler(
                     new DirectivesTryCatch(
+                        0,
                         format,
                         new BytecodeLabel(start),
                         new BytecodeLabel(end),
                         new BytecodeLabel(handler),
                         "java/lang/Exception"
                     )
-                )
+                ).xmlQuietly()
             )
         );
     }

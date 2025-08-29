@@ -15,6 +15,11 @@ import org.xembly.Directive;
 public final class DirectivesEnumAnnotationValue implements Iterable<Directive> {
 
     /**
+     * Index of the annotation value among other annotation values.
+     */
+    private final int index;
+
+    /**
      * Format of the directives.
      */
     private final Format format;
@@ -36,6 +41,7 @@ public final class DirectivesEnumAnnotationValue implements Iterable<Directive> 
 
     /**
      * Constructor.
+     * @param index Index of the annotation value among other annotation values.
      * @param format Format of the directives.
      * @param name The name of the annotation property.
      * @param descriptor The descriptor of the enumeration.
@@ -43,11 +49,13 @@ public final class DirectivesEnumAnnotationValue implements Iterable<Directive> 
      * @checkstyle ParameterNumber (5 lines)
      */
     public DirectivesEnumAnnotationValue(
+        final int index,
         final Format format,
         final String name,
         final String descriptor,
         final String value
     ) {
+        this.index = index;
         this.format = format;
         this.name = name;
         this.descriptor = descriptor;
@@ -58,11 +66,11 @@ public final class DirectivesEnumAnnotationValue implements Iterable<Directive> 
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "annotation-property",
-            new RandName("e").toString(),
-            new DirectivesValue(this.format, "ENUM"),
-            new DirectivesValue(this.format, Optional.ofNullable(this.name).orElse("")),
-            new DirectivesValue(this.format, this.descriptor),
-            new DirectivesValue(this.format, this.value)
+            new NumName("e", this.index).toString(),
+            new DirectivesValue(0, this.format, "ENUM"),
+            new DirectivesValue(1, this.format, Optional.ofNullable(this.name).orElse("")),
+            new DirectivesValue(2, this.format, this.descriptor),
+            new DirectivesValue(3, this.format, this.value)
         ).iterator();
     }
 }

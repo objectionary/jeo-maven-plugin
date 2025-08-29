@@ -103,8 +103,9 @@ public final class BytecodeFrame implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives(final Format format) {
+    public Iterable<Directive> directives(final int index, final Format format) {
         return new DirectivesFrame(
+            index,
             format,
             this.type,
             this.locals,

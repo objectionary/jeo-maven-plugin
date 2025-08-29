@@ -42,7 +42,7 @@ final class DirectivesClassTest {
                         "annotations", new DirectivesAnnotation("Override", true)
                     ),
                     new DirectivesAttributes(
-                        new InnerClass("Inner", "Outer", "Inner", 0).directives(format)
+                        new InnerClass("Inner", "Outer", "Inner", 0).directives(0, format)
                     )
                 ),
                 new Transformers.Node()
@@ -105,7 +105,8 @@ final class DirectivesClassTest {
             XhtmlMatchers.hasXPath(
                 String.format(
                     "./o[contains(@name,DirectivesClassTest)]/o[contains(@name, 'name')]/o/o[text()='%s']",
-                    new DirectivesValue(new Format(), name.replace('.', '/')).hex(new JavaCodec())
+                    new DirectivesValue(0, new Format(), name.replace('.', '/'))
+                        .hex(new JavaCodec())
                 )
             )
         );

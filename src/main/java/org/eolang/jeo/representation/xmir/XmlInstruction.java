@@ -36,14 +36,15 @@ public final class XmlInstruction implements XmlBytecodeEntry {
 
     /**
      * Constructor.
+     * @param index Index of the instruction among other instructions.
      * @param opcode Opcode.
      * @param args Arguments.
      */
-    XmlInstruction(final int opcode, final Object... args) {
+    XmlInstruction(final int index, final int opcode, final Object... args) {
         this(
             new NativeXmlNode(
                 new Xembler(
-                    new DirectivesInstruction(new Format(), opcode, args),
+                    new DirectivesInstruction(index, new Format(), opcode, args),
                     new Transformers.Node()
                 ).xmlQuietly()
             )

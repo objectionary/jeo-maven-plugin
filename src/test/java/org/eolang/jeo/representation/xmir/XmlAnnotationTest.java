@@ -28,7 +28,7 @@ final class XmlAnnotationTest {
                             new BytecodeAnnotation(
                                 "Lorg/eolang/jeo/representation/xmir/XmlAnnotation;",
                                 true
-                            ).directives(new Format())
+                            ).directives(0, new Format())
                         ).xpath("./o/o").remove()
                     ).xml()
                 )

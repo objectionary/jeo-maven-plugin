@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.EqualsAndHashCode;
@@ -60,27 +61,28 @@ public final class BytecodeAnnotations {
     }
 
     /**
-     * Directives with the given name.
-     * @param format Format of the directives.
-     * @param name Name of the directives.
-     * @return Directives.
-     */
-    public DirectivesAnnotations directives(final Format format, final String name) {
-        return new DirectivesAnnotations(
-            this.all.stream()
-                .map(a -> a.directives(format))
-                .collect(Collectors.toList()),
-            name
-        );
-    }
-
-    /**
      * Directives with the name "annotations".
      * @param format Format of the directives.
      * @return Directives.
      */
     public DirectivesAnnotations directives(final Format format) {
         return this.directives(format, "annotations");
+    }
+
+    /**
+     * Directives with the given name.
+     * @param format Format of the directives.
+     * @param name Name of the directives.
+     * @return Directives.
+     */
+    public DirectivesAnnotations directives(final Format format, final String name) {
+        final AtomicInteger counter = new AtomicInteger(0);
+        return new DirectivesAnnotations(
+            this.all.stream()
+                .map(a -> a.directives(counter.getAndIncrement(), format))
+                .collect(Collectors.toList()),
+            name
+        );
     }
 
     /**

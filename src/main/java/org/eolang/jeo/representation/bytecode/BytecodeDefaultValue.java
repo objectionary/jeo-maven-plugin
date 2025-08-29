@@ -45,6 +45,6 @@ public final class BytecodeDefaultValue {
     }
 
     public Iterable<Directive> directives(final Format format) {
-        return new DirectivesDefaultValue(this.property.directives(format));
+        return new DirectivesDefaultValue(this.property.directives(0, format));
     }
 }

@@ -10,6 +10,7 @@ import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesAttribute;
 import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.eolang.jeo.representation.directives.Format;
+import org.eolang.jeo.representation.directives.NumName;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 
@@ -78,9 +79,10 @@ public final class InnerClass implements BytecodeAttribute {
     }
 
     @Override
-    public DirectivesAttribute directives(final Format format) {
+    public DirectivesAttribute directives(final int index, final Format format) {
         return new DirectivesAttribute(
             "inner-class",
+            new NumName("a", index).toString(),
             new DirectivesValue(format, "name", this.name),
             new DirectivesValue(format, "outer", this.outer),
             new DirectivesValue(format, "inner", this.inner),

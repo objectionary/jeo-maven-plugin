@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -51,9 +52,12 @@ public final class BytecodeAttributes {
      * @return Directives.
      */
     public DirectivesAttributes directives(final Format format, final String name) {
+        final AtomicInteger counter = new AtomicInteger(0);
         return new DirectivesAttributes(
             name,
-            this.all.stream().map(a -> a.directives(format)).collect(Collectors.toList())
+            this.all.stream()
+                .map(a -> a.directives(counter.getAndIncrement(), format))
+                .collect(Collectors.toList())
         );
     }
 

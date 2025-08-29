@@ -34,20 +34,16 @@ public final class DirectivesAttribute implements Iterable<Directive> {
     /**
      * Constructor.
      * @param base The name of the attribute.
+     * @param name The name of the attribute.
      * @param data Properties of an attribute.
      */
     @SafeVarargs
-    public DirectivesAttribute(final String base, final Iterable<Directive>... data) {
-        this(base, Arrays.asList(data));
-    }
-
-    /**
-     * Constructor.
-     * @param base The base of the attribute.
-     * @param data Properties of an attribute.
-     */
-    private DirectivesAttribute(final String base, final List<Iterable<Directive>> data) {
-        this(base, new RandName("a").toString(), data);
+    public DirectivesAttribute(
+        final String base,
+        final String name,
+        final Iterable<Directive>... data
+    ) {
+        this(base, name, Arrays.asList(data));
     }
 
     /**
@@ -57,7 +53,10 @@ public final class DirectivesAttribute implements Iterable<Directive> {
      * @param data Properties of an attribute.
      */
     public DirectivesAttribute(
-        final String base, final String name, final List<Iterable<Directive>> data) {
+        final String base,
+        final String name,
+        final List<Iterable<Directive>> data
+    ) {
         this.base = base;
         this.name = name;
         this.data = data;

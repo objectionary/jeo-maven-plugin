@@ -86,8 +86,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives(final Format format) {
-        return new DirectivesInstruction(format, this.opcode, this.args.toArray());
+    public Iterable<Directive> directives(final int index, final Format format) {
+        return new DirectivesInstruction(index, format, this.opcode, this.args.toArray());
     }
 
     @Override

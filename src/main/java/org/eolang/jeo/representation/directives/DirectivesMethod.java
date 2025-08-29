@@ -128,12 +128,15 @@ public final class DirectivesMethod implements Iterable<Directive> {
 
     /**
      * Add opcode to the directives.
+     * @param index Instruction index
      * @param opcode Opcode
      * @param operands Operands
      * @return This object
      */
-    public DirectivesMethod withOpcode(final int opcode, final Object... operands) {
-        this.instructions.add(new DirectivesInstruction(this.format, opcode, operands));
+    public DirectivesMethod withOpcode(
+        final int index, final int opcode, final Object... operands
+    ) {
+        this.instructions.add(new DirectivesInstruction(index, this.format, opcode, operands));
         return this;
     }
 

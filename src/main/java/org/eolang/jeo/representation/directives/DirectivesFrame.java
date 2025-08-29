@@ -15,6 +15,11 @@ import org.xembly.Directive;
 public final class DirectivesFrame implements Iterable<Directive> {
 
     /**
+     * Index of the bytecode instruction among other instructions.
+     */
+    private final int index;
+
+    /**
      * Format of the directives.
      */
     private final Format format;
@@ -42,6 +47,7 @@ public final class DirectivesFrame implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param index Index of the bytecode instruction among other instructions.
      * @param format Format of the directives.
      * @param type The type of stack map frame.
      * @param locals The local variable types in this frame.
@@ -49,11 +55,13 @@ public final class DirectivesFrame implements Iterable<Directive> {
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesFrame(
+        final int index,
         final Format format,
         final int type,
         final Object[] locals,
         final Object... stack
     ) {
+        this.index = index;
         this.format = format;
         this.type = type;
         this.locals = locals.clone();
@@ -64,7 +72,7 @@ public final class DirectivesFrame implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "frame",
-            new RandName("f").toString(),
+            new NumName("f", this.index).toString(),
             new DirectivesValue(this.format, this.name("type"), this.type),
             new DirectivesFrameValues(this.format, this.name("locals"), this.locals),
             new DirectivesFrameValues(this.format, this.name("stack"), this.stack)

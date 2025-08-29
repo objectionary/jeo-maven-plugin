@@ -61,8 +61,8 @@ public final class BytecodeLabel implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives(final Format format) {
-        return new DirectivesLabel(format, this.identifier);
+    public Iterable<Directive> directives(final int index, final Format format) {
+        return new DirectivesLabel(index, format, this.identifier);
     }
 
     @Override

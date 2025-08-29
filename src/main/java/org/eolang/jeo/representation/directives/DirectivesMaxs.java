@@ -59,8 +59,8 @@ public final class DirectivesMaxs implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "maxs",
             "maxs",
-            new DirectivesValue(this.format, this.stack),
-            new DirectivesValue(this.format, this.locals)
+            new DirectivesValue(this.format, new NumName("m", 1), this.stack),
+            new DirectivesValue(this.format, new NumName("m", 2), this.locals)
         ).iterator();
     }
 }

@@ -27,7 +27,7 @@ final class XmlLineTest {
             new XmlLine(
                 new XmlJeoObject(
                     new JcabiXmlNode(
-                        new Xembler(expected.directives(new Format())).xml()
+                        new Xembler(expected.directives(0, new Format())).xml()
                     )
                 )
             ).bytecode(),

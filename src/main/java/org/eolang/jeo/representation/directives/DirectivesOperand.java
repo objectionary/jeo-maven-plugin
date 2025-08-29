@@ -19,6 +19,11 @@ import org.xembly.Directive;
 public final class DirectivesOperand implements Iterable<Directive> {
 
     /**
+     * Operand index.
+     */
+    private final int index;
+
+    /**
      * Format of the directives.
      */
     private final Format format;
@@ -30,10 +35,12 @@ public final class DirectivesOperand implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param index Operand index.
      * @param format Format of the directives.
      * @param operand Raw operand.
      */
-    DirectivesOperand(final Format format, final Object operand) {
+    DirectivesOperand(final int index, final Format format, final Object operand) {
+        this.index = index;
         this.format = format;
         this.raw = operand;
     }
@@ -42,15 +49,15 @@ public final class DirectivesOperand implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final Iterator<Directive> result;
         if (this.raw instanceof Label) {
-            result = new DirectivesLabel(this.format, this.raw.toString()).iterator();
+            result = new DirectivesLabel(this.index, this.format, this.raw.toString()).iterator();
         } else if (this.raw instanceof BytecodeLabel) {
-            result = ((BytecodeEntry) this.raw).directives(this.format).iterator();
+            result = ((BytecodeEntry) this.raw).directives(this.index, this.format).iterator();
         } else if (this.raw instanceof Handle) {
-            result = new DirectivesHandle(this.format, (Handle) this.raw).iterator();
+            result = new DirectivesHandle(this.index, this.format, (Handle) this.raw).iterator();
         } else if (this.raw instanceof Type) {
-            result = new DirectivesType(this.format, (Type) this.raw).iterator();
+            result = new DirectivesType(this.index, this.format, (Type) this.raw).iterator();
         } else {
-            result = new DirectivesValue(this.format, this.raw).iterator();
+            result = new DirectivesValue(this.index, this.format, this.raw).iterator();
         }
         return result;
     }
