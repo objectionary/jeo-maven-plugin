@@ -26,7 +26,7 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>      @Test
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>      <strong class="jxr_keyword">void</strong> generatesValidXmirForLineNumber() <strong class="jxr_keyword">throws</strong> ImpossibleModificationException {
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>          <strong class="jxr_keyword">final</strong> DirectivesLine directives = <strong class="jxr_keyword">new</strong> DirectivesLine(42, <span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>          <strong class="jxr_keyword">final</strong> DirectivesLine directives = <strong class="jxr_keyword">new</strong> DirectivesLine(0, <strong class="jxr_keyword">new</strong> Format(), 42, <span class="jxr_string">"test"</span>);
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>          <strong class="jxr_keyword">final</strong> String root = <span class="jxr_string">"./o[contains(@name,'ln')]"</span>;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>              <span class="jxr_string">"We expect to generate a valid XMIR for the line number directive"</span>,

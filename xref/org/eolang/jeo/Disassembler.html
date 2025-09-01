@@ -17,7 +17,7 @@
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> java.nio.file.Files;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> java.nio.file.Path;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> java.util.stream.Stream;
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.asm.DisassembleParams;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.eolang.jeo.representation.directives.Format;
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_javadoccomment"> * Disassembler for bytecode classes.</em>
@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">     * Disassemble params.</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="DisassembleParams" href="../../../org/eolang/jeo/representation/asm/DisassembleParams.html#DisassembleParams">DisassembleParams</a> params;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="Format" href="../../../org/eolang/jeo/representation/directives/Format.html#Format">Format</a> params;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     * Constructor.</em>
@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>          <strong class="jxr_keyword">final</strong> Path classes,
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>          <strong class="jxr_keyword">final</strong> Path target
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>      ) {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>          <strong class="jxr_keyword">this</strong>(classes, target, <strong class="jxr_keyword">new</strong> <a name="DisassembleParams" href="../../../org/eolang/jeo/representation/asm/DisassembleParams.html#DisassembleParams">DisassembleParams</a>());
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          <strong class="jxr_keyword">this</strong>(classes, target, <strong class="jxr_keyword">new</strong> <a name="Format" href="../../../org/eolang/jeo/representation/directives/Format.html#Format">Format</a>());
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      }
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      <em class="jxr_javadoccomment">/**</em>
@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">public</strong> <a name="Disassembler" href="../../../org/eolang/jeo/Disassembler.html#Disassembler">Disassembler</a>(
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>          <strong class="jxr_keyword">final</strong> Path classes,
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>          <strong class="jxr_keyword">final</strong> Path target,
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          <strong class="jxr_keyword">final</strong> <a name="DisassembleParams" href="../../../org/eolang/jeo/representation/asm/DisassembleParams.html#DisassembleParams">DisassembleParams</a> params
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          <strong class="jxr_keyword">final</strong> <a name="Format" href="../../../org/eolang/jeo/representation/directives/Format.html#Format">Format</a> params
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      ) {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>          <strong class="jxr_keyword">this</strong>(<strong class="jxr_keyword">new</strong> <a name="BytecodeClasses" href="../../../org/eolang/jeo/BytecodeClasses.html#BytecodeClasses">BytecodeClasses</a>(classes), target, params);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      }
@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      <strong class="jxr_keyword">public</strong> <a name="Disassembler" href="../../../org/eolang/jeo/Disassembler.html#Disassembler">Disassembler</a>(
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          <strong class="jxr_keyword">final</strong> <a name="Classes" href="../../../org/eolang/jeo/Classes.html#Classes">Classes</a> classes,
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">final</strong> Path target,
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <strong class="jxr_keyword">final</strong> <a name="DisassembleParams" href="../../../org/eolang/jeo/representation/asm/DisassembleParams.html#DisassembleParams">DisassembleParams</a> params
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <strong class="jxr_keyword">final</strong> <a name="Format" href="../../../org/eolang/jeo/representation/directives/Format.html#Format">Format</a> params
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>      ) {
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">this</strong>.classes = classes;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">this</strong>.target = target;

@@ -31,30 +31,32 @@
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>              <span class="jxr_string">"We expect the integers to be mapped to their aliases"</span>,
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>              <strong class="jxr_keyword">new</strong> Xembler(
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>                  <strong class="jxr_keyword">new</strong> DirectivesFrameValues(
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>                      name,
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>                      <strong class="jxr_keyword">new</strong> Object[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>                  )
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>              ).xml(),
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>              Matchers.equalTo(
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>                  <strong class="jxr_keyword">new</strong> Xembler(
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>                      <strong class="jxr_keyword">new</strong> DirectivesValues(
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>                          name,
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>                          <span class="jxr_string">"top"</span>,
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>                          <span class="jxr_string">"integer"</span>,
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>                          <span class="jxr_string">"float"</span>,
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>                          <span class="jxr_string">"double"</span>,
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>                          <span class="jxr_string">"long"</span>,
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>                          <span class="jxr_string">"null"</span>,
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>                          <span class="jxr_string">"uninit_this"</span>,
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>                          <span class="jxr_string">"object"</span>,
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>                          <span class="jxr_string">"uninit"</span>,
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>                          9
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>                      )
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>                  ).xml()
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>              )
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>          );
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>      }
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  }
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>                      <strong class="jxr_keyword">new</strong> Format(),
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>                      name,
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>                      <strong class="jxr_keyword">new</strong> Object[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>                  )
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>              ).xml(),
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>              Matchers.equalTo(
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>                  <strong class="jxr_keyword">new</strong> Xembler(
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>                      <strong class="jxr_keyword">new</strong> DirectivesValues(
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>                          <strong class="jxr_keyword">new</strong> Format(),
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>                          name,
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>                          <span class="jxr_string">"top"</span>,
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>                          <span class="jxr_string">"integer"</span>,
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>                          <span class="jxr_string">"float"</span>,
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>                          <span class="jxr_string">"double"</span>,
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>                          <span class="jxr_string">"long"</span>,
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>                          <span class="jxr_string">"null"</span>,
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>                          <span class="jxr_string">"uninit_this"</span>,
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>                          <span class="jxr_string">"object"</span>,
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>                          <span class="jxr_string">"uninit"</span>,
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>                          9
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>                      )
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>                  ).xml()
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>              )
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          );
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      }
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>

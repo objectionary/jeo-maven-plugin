@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>      <strong class="jxr_keyword">void</strong> convertsToXmir() <strong class="jxr_keyword">throws</strong> ImpossibleModificationException {
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>              <span class="jxr_string">"We expect that array of values will be converted to correct Xembly directives"</span>,
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>              <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesValues(<span class="jxr_string">"name"</span>, <span class="jxr_string">"value"</span>)).xml(),
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>              <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesValues(<strong class="jxr_keyword">new</strong> Format(), <span class="jxr_string">"name"</span>, <span class="jxr_string">"value"</span>)).xml(),
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>              XhtmlMatchers.hasXPaths(
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>                  <strong class="jxr_keyword">new</strong> <a name="JeoBaseXpath" href="../../../../../org/eolang/jeo/representation/directives/JeoBaseXpath.html#JeoBaseXpath">JeoBaseXpath</a>(<span class="jxr_string">"./o"</span>, <span class="jxr_string">"seq.of1"</span>).toXpath(),
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>                  <span class="jxr_string">"./o[contains(@name,'name')]"</span>,
@@ -49,7 +49,7 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>              <span class="jxr_string">"We expect that the name of the sequence will be generated randomly and will not start with a digit"</span>,
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>              <strong class="jxr_keyword">new</strong> NativeXmlNode(
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>                  <strong class="jxr_keyword">new</strong> Xembler(
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>                      <strong class="jxr_keyword">new</strong> DirectivesValues(<span class="jxr_string">""</span>, <span class="jxr_string">"some-value"</span>)
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>                      <strong class="jxr_keyword">new</strong> DirectivesValues(<strong class="jxr_keyword">new</strong> Format(), <span class="jxr_string">""</span>, <span class="jxr_string">"some-value"</span>)
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>                  ).xmlQuietly()
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>              ).attribute(<span class="jxr_string">"name"</span>).orElseThrow(
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>                  () -&gt; <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Name attribute is absent"</span>)

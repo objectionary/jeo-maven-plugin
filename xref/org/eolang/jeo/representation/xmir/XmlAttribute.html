@@ -86,14 +86,24 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>              );
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">new</strong> <a name="JeoFqn" href="../../../../../org/eolang/jeo/representation/directives/JeoFqn.html#JeoFqn">JeoFqn</a>(<span class="jxr_string">"local-variable"</span>).fqn().equals(base)) {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>              result = <strong class="jxr_keyword">new</strong> <a name="XmlLocalVariable" href="../../../../../org/eolang/jeo/representation/xmir/XmlLocalVariable.html#XmlLocalVariable">XmlLocalVariable</a>(<strong class="jxr_keyword">this</strong>.node).attribute();
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>          } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>                  String.format(<span class="jxr_string">"Unknown attribute base '%s'"</span>, base)
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>              );
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          }
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>          <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>      }
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">new</strong> <a name="JeoFqn" href="../../../../../org/eolang/jeo/representation/directives/JeoFqn.html#JeoFqn">JeoFqn</a>(<span class="jxr_string">"source-file"</span>).fqn().equals(base)) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>              result = <strong class="jxr_keyword">new</strong> <a name="XmlSourceFile" href="../../../../../org/eolang/jeo/representation/xmir/XmlSourceFile.html#XmlSourceFile">XmlSourceFile</a>(<strong class="jxr_keyword">this</strong>.node).attribute();
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">new</strong> <a name="JeoFqn" href="../../../../../org/eolang/jeo/representation/directives/JeoFqn.html#JeoFqn">JeoFqn</a>(<span class="jxr_string">"enclosing-method"</span>).fqn().equals(base)) {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>              result = <strong class="jxr_keyword">new</strong> <a name="XmlEnclosingMethod" href="../../../../../org/eolang/jeo/representation/xmir/XmlEnclosingMethod.html#XmlEnclosingMethod">XmlEnclosingMethod</a>(<strong class="jxr_keyword">this</strong>.node).attribute();
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">new</strong> <a name="JeoFqn" href="../../../../../org/eolang/jeo/representation/directives/JeoFqn.html#JeoFqn">JeoFqn</a>(<span class="jxr_string">"nest-host"</span>).fqn().equals(base)) {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>              result = <strong class="jxr_keyword">new</strong> <a name="XmlNestHost" href="../../../../../org/eolang/jeo/representation/xmir/XmlNestHost.html#XmlNestHost">XmlNestHost</a>(<strong class="jxr_keyword">this</strong>.node).attribute();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">new</strong> <a name="JeoFqn" href="../../../../../org/eolang/jeo/representation/directives/JeoFqn.html#JeoFqn">JeoFqn</a>(<span class="jxr_string">"nest-members"</span>).fqn().equals(base)) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>              result = <strong class="jxr_keyword">new</strong> <a name="XmlNestMembers" href="../../../../../org/eolang/jeo/representation/xmir/XmlNestMembers.html#XmlNestMembers">XmlNestMembers</a>(<strong class="jxr_keyword">this</strong>.node).attribute();
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">new</strong> <a name="JeoFqn" href="../../../../../org/eolang/jeo/representation/directives/JeoFqn.html#JeoFqn">JeoFqn</a>(<span class="jxr_string">"permitted-subclasses"</span>).fqn().equals(base)) {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>              result = <strong class="jxr_keyword">new</strong> <a name="XmlPermittedSubclasses" href="../../../../../org/eolang/jeo/representation/xmir/XmlPermittedSubclasses.html#XmlPermittedSubclasses">XmlPermittedSubclasses</a>(<strong class="jxr_keyword">this</strong>.node).attribute();
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>                  String.format(<span class="jxr_string">"Unknown attribute base '%s'"</span>, base)
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>              );
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>          }
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>      }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>
