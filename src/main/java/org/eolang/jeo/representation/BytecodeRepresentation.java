@@ -87,7 +87,16 @@ public final class BytecodeRepresentation {
      * @return XML representation of the bytecode
      */
     public XML toXmir() {
-        return new XMLDocument(this.toEO(new Format()));
+        return this.toXmir(new Format());
+    }
+
+    /**
+     * Convert bytecode into XMIR format.
+     * @param format Disassemble output format
+     * @return XML representation of the bytecode
+     */
+    public XML toXmir(final Format format) {
+        return new XMLDocument(this.toEO(format));
     }
 
     /**

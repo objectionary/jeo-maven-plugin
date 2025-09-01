@@ -45,4 +45,76 @@ final class XmlAttributeTest {
             Matchers.equalTo("Unknown attribute base 'Q.jeo.unknown'")
         );
     }
+
+    @Test
+    void parsesSourceFile() {
+        final String source = "source";
+        final String debug = "debug";
+        final BytecodeAttribute.SourceFile attr = new BytecodeAttribute.SourceFile(source, debug);
+        MatcherAssert.assertThat(
+            "We expect to parse SourceFile attribute",
+            new XmlAttribute(
+                new Xembler(attr.directives(0, new Format())).xmlQuietly()
+            ).attribute(),
+            Matchers.equalTo(attr)
+        );
+    }
+
+    @Test
+    void parsesEnclosingMethod() {
+        final String owner = "owner";
+        final String method = "method";
+        final String descriptor = "descriptor";
+        final BytecodeAttribute attr = new BytecodeAttribute.EnclosingMethod(
+            owner, method, descriptor
+        );
+        MatcherAssert.assertThat(
+            "We expect to parse EnclosingMethod attribute",
+            new XmlAttribute(
+                new Xembler(attr.directives(0, new Format())).xmlQuietly()
+            ).attribute(),
+            Matchers.equalTo(attr)
+        );
+    }
+
+    @Test
+    void parsesNestHost() {
+        final BytecodeAttribute attr = new BytecodeAttribute.NestHost("host");
+        MatcherAssert.assertThat(
+            "We expect to parse NestHost attribute",
+            new XmlAttribute(
+                new Xembler(attr.directives(0, new Format())).xmlQuietly()
+            ).attribute(),
+            Matchers.equalTo(attr)
+        );
+    }
+
+    @Test
+    void parsesNestMembers() {
+        final BytecodeAttribute attr = new BytecodeAttribute.NestMembers(
+            "member1",
+            "member2"
+        );
+        MatcherAssert.assertThat(
+            "We expect to parse NestMembers attribute",
+            new XmlAttribute(
+                new Xembler(attr.directives(0, new Format())).xmlQuietly()
+            ).attribute(),
+            Matchers.equalTo(attr)
+        );
+    }
+
+    @Test
+    void parsesPermittedSubclasses() {
+        final BytecodeAttribute attr = new BytecodeAttribute.PermittedSubclasses(
+            "subclass1", "subclass2"
+        );
+        MatcherAssert.assertThat(
+            "We expect to parse PermittedSubclasses attribute",
+            new XmlAttribute(
+                new Xembler(attr.directives(0, new Format())).xmlQuietly()
+            ).attribute(),
+            Matchers.equalTo(attr)
+        );
+    }
 }
