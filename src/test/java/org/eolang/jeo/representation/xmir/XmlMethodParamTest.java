@@ -4,8 +4,6 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
@@ -17,10 +15,10 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test cases for {@link XmlParam}.
+ * Test cases for {@link XmlMethodParam}.
  * @since 0.6
  */
-final class XmlParamTest {
+final class XmlMethodParamTest {
 
     @Test
     void convertsToBytecode() throws ImpossibleModificationException {
@@ -28,12 +26,11 @@ final class XmlParamTest {
             1,
             "foo",
             Opcodes.ACC_STATIC,
-            Type.INT_TYPE,
-            new BytecodeAnnotations(new BytecodeAnnotation("Ljava/lang/Deprecated;", true))
+            Type.INT_TYPE
         );
         MatcherAssert.assertThat(
             "Can't convert XML param to bytecode",
-            new XmlParam(
+            new XmlMethodParam(
                 new NativeXmlNode(new Xembler(expected.directives(new Format())).xml())
             ).bytecode(),
             Matchers.equalTo(expected)

@@ -4,15 +4,18 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.List;
 import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
+import org.eolang.jeo.representation.bytecode.BytecodeParamAnnotations;
 import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * XML method params.
  * @since 0.6
  */
-final class XmlParams {
+final class XmlMethodParams {
 
     /**
      * Params fully qualified name.
@@ -28,7 +31,7 @@ final class XmlParams {
      * Constructor.
      * @param node Xml representation of a method params.
      */
-    XmlParams(final XmlNode node) {
+    XmlMethodParams(final XmlNode node) {
         this(new XmlJeoObject(node));
     }
 
@@ -36,7 +39,7 @@ final class XmlParams {
      * Constructor.
      * @param node XML Jeo object node representing the method params.
      */
-    private XmlParams(final XmlJeoObject node) {
+    private XmlMethodParams(final XmlJeoObject node) {
         this.node = node;
     }
 
@@ -46,7 +49,7 @@ final class XmlParams {
      */
     boolean isParams() {
         return this.node.base()
-            .map(XmlParams.PARAMS_BASE::equals)
+            .map(XmlMethodParams.PARAMS_BASE::equals)
             .orElse(false);
     }
 
@@ -56,10 +59,33 @@ final class XmlParams {
      */
     BytecodeMethodParameters params() {
         return new BytecodeMethodParameters(
-            this.node.children()
-                .map(XmlParam::new)
-                .map(XmlParam::bytecode)
-                .collect(Collectors.toList())
+            this.parameters(),
+            this.annotations()
         );
+    }
+
+    /**
+     * Method parameters.
+     * @return List of bytecode method parameters.
+     */
+    private List<BytecodeMethodParameter> parameters() {
+        return this.node.children()
+            .map(XmlMethodParam::new)
+            .filter(XmlMethodParam::isParam)
+            .map(XmlMethodParam::bytecode)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Annotations of the parameter.
+     * @return Annotations.
+     */
+    private List<BytecodeParamAnnotations> annotations() {
+        return this.node.children()
+            .map(XmlJeoObject::new)
+            .map(XmlParamAnnotations::new)
+            .filter(XmlParamAnnotations::isParamAnnotations)
+            .map(XmlParamAnnotations::bytecode)
+            .collect(Collectors.toList());
     }
 }

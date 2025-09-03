@@ -98,9 +98,9 @@ public final class DisassembleMojo extends AbstractMojo {
      * <p>
      * Supported modes:
      * <ul>
-     *   <li>{@code short} - Minimal output with bytecode instructions only (default)</li>
+     *   <li>{@code short} - Minimal output with bytecode instructions only</li>
      *   <li>{@code debug} - Include debug information such as line numbers, local variables,
-     *       and source file references</li>
+     *       and source file references (default)</li>
      * </ul>
      * </p>
      *
@@ -109,7 +109,7 @@ public final class DisassembleMojo extends AbstractMojo {
      */
     @Parameter(
         property = "jeo.disassemble.mode",
-        defaultValue = "short"
+        defaultValue = "debug"
     )
     private String mode;
 

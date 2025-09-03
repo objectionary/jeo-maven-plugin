@@ -41,31 +41,15 @@ public final class BytecodeMethodParameter {
     private final Type type;
 
     /**
-     * Annotations of the parameter.
-     */
-    private final BytecodeAnnotations annotations;
-
-    /**
      * Constructor.
      * @param index Index of the parameter.
      * @param type Type of the parameter.
-     */
-    public BytecodeMethodParameter(final int index, final Type type) {
-        this(index, type, new BytecodeAnnotations());
-    }
-
-    /**
-     * Constructor.
-     * @param index Index of the parameter.
-     * @param type Type of the parameter.
-     * @param annotations Annotations of the parameter.
      */
     public BytecodeMethodParameter(
         final int index,
-        final Type type,
-        final BytecodeAnnotations annotations
+        final Type type
     ) {
-        this(index, String.format("arg%d", index), type, annotations);
+        this(index, null, type);
     }
 
     /**
@@ -73,16 +57,14 @@ public final class BytecodeMethodParameter {
      * @param index Index of the parameter.
      * @param name Name of the parameter.
      * @param type Type of the parameter.
-     * @param annotations Annotations of the parameter.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeMethodParameter(
         final int index,
         final String name,
-        final Type type,
-        final BytecodeAnnotations annotations
+        final Type type
     ) {
-        this(index, name, 0, type, annotations);
+        this(index, name, 0, type);
     }
 
     /**
@@ -91,21 +73,18 @@ public final class BytecodeMethodParameter {
      * @param name Name of the parameter.
      * @param access Method parameter access.
      * @param type Type of the parameter.
-     * @param annotations Annotations of the parameter.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeMethodParameter(
         final int index,
         final String name,
         final int access,
-        final Type type,
-        final BytecodeAnnotations annotations
+        final Type type
     ) {
         this.index = index;
         this.name = name;
         this.access = access;
         this.type = type;
-        this.annotations = annotations;
     }
 
     /**
@@ -114,7 +93,6 @@ public final class BytecodeMethodParameter {
      */
     public void write(final MethodVisitor visitor) {
         visitor.visitParameter(this.name, this.access);
-        this.annotations.write(this.index, visitor);
     }
 
     /**
@@ -128,8 +106,7 @@ public final class BytecodeMethodParameter {
             this.index,
             this.name,
             this.access,
-            this.type,
-            this.annotations.directives(format, String.format("param-annotations-%d", this.index))
+            this.type
         );
     }
 }

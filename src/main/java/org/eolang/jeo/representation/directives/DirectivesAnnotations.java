@@ -56,6 +56,22 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param annotations Annotations.
+     */
+    public DirectivesAnnotations(final List<Iterable<Directive>> annotations) {
+        this(
+            annotations,
+            String.format(
+                String.format(
+                    "annotations-%d",
+                    Math.abs(DirectivesAnnotations.RANDOM.nextInt())
+                )
+            )
+        );
+    }
+
+    /**
+     * Constructor.
      * @param name Name.
      */
     DirectivesAnnotations(final String name) {
@@ -69,22 +85,6 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
      */
     DirectivesAnnotations(final String name, final DirectivesAnnotation... annotations) {
         this(Arrays.asList(annotations), name);
-    }
-
-    /**
-     * Constructor.
-     * @param annotations Annotations.
-     */
-    private DirectivesAnnotations(final List<Iterable<Directive>> annotations) {
-        this(
-            annotations,
-            String.format(
-                String.format(
-                    "annotations-%d",
-                    Math.abs(DirectivesAnnotations.RANDOM.nextInt())
-                )
-            )
-        );
     }
 
     @Override

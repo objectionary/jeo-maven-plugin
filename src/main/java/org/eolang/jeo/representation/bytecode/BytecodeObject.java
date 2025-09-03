@@ -76,7 +76,7 @@ public final class BytecodeObject {
      * @return XML representation of bytecode.
      */
     public XML xml() {
-        return new BytecodeRepresentation(this.bytecode()).toXmir();
+        return new BytecodeRepresentation(this.bytecode()).toXmir(new Format(Format.MODE, "debug"));
     }
 
     /**

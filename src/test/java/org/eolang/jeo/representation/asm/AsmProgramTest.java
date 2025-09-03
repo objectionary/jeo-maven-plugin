@@ -33,8 +33,8 @@ final class AsmProgramTest {
             .bytecode();
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode",
-            new AsmProgram(same.bytes()).bytecode().bytecode(),
-            Matchers.equalTo(same)
+            new AsmProgram(same.bytes()).bytecode(0).bytecode().toString(),
+            Matchers.equalTo(same.toString())
         );
     }
 
@@ -73,7 +73,7 @@ final class AsmProgramTest {
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode with the 'NestMembers' attribute",
             actual.toString(),
-            Matchers.containsString("NESTMEMBER")
+            Matchers.equalTo(new Bytecode(original).toString())
         );
     }
 
@@ -82,20 +82,14 @@ final class AsmProgramTest {
      * Comes from the issue:
      * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1274">#1274</a>
      * @throws Exception In case of error
-     * @todo #1274:30min Compare the bytecode before and after the conversion.
-     *  Instead of just checking for the presence of the 'NestHost' attribute, we should
-     *  compare the entire bytecode before and after the conversion to ensure that no other
-     *  attributes or instructions are lost or altered during the process.
-     *  We can't do it right now, because we have some strange 'arg0' attribute after
-     *  the conversion, which is not present in the original bytecode.
      */
     @Test
-    void persesNestHostBytecodeAttribute() throws Exception {
+    void parsesNestHostBytecodeAttribute() throws Exception {
         final byte[] original = new BytesOf(new ResourceOf("Check$1Local.class")).asBytes();
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode with the 'NestHost' attribute",
             new AsmProgram(original).bytecode(0).bytecode().toString(),
-            Matchers.containsString("NESTHOST")
+            Matchers.equalTo(new Bytecode(original).toString())
         );
     }
 

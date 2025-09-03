@@ -72,6 +72,15 @@ public final class AsmAnnotations {
     }
 
     /**
+     * Check if there are no annotations.
+     * @return True if there are no annotations, false otherwise
+     */
+    public boolean isEmpty() {
+        return Optional.ofNullable(this.invisible).map(List::isEmpty).orElse(true)
+            && Optional.ofNullable(this.visible).map(List::isEmpty).orElse(true);
+    }
+
+    /**
      * Convert asm annotations to domain annotations.
      * @return Domain annotations.
      */

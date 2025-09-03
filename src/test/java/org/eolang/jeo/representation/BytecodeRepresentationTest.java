@@ -10,6 +10,7 @@ import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.EoCodec;
 import org.eolang.jeo.representation.directives.DirectivesValue;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -126,14 +127,16 @@ final class BytecodeRepresentationTest {
     @Test
     void parsesBytecodeLoggerStackFrames() throws Exception {
         final ResourceOf input = new ResourceOf("LoggerFactory$DelegatingLogger.class");
+        final String actual = new Bytecode(
+            new XmirRepresentation(
+                new BytecodeRepresentation(input).toXmir(new Format(Format.MODE, "debug"))
+            ).toBytecode().bytes()
+        ).toString();
+        final String expected = new Bytecode(new BytesOf(input).asBytes()).toString();
         MatcherAssert.assertThat(
             "The disassembled/assembled bytecode representation should match the original bytecode",
-            new Bytecode(
-                new XmirRepresentation(
-                    new BytecodeRepresentation(input).toXmir()
-                ).toBytecode().bytes()
-            ).toString(),
-            Matchers.equalTo(new Bytecode(new BytesOf(input).asBytes()).toString())
+            actual,
+            Matchers.equalTo(expected)
         );
     }
 

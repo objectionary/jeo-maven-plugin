@@ -382,10 +382,10 @@ public final class XmlMethod {
      */
     private BytecodeMethodParameters params() {
         return this.node.children()
-            .map(XmlParams::new)
-            .filter(XmlParams::isParams)
+            .map(XmlMethodParams::new)
+            .filter(XmlMethodParams::isParams)
             .findFirst()
-            .map(XmlParams::params)
+            .map(XmlMethodParams::params)
             .orElse(new BytecodeMethodParameters());
     }
 

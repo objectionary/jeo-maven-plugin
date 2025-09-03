@@ -24,9 +24,14 @@ import org.objectweb.asm.Type;
 public final class BytecodeMethodParameters {
 
     /**
-     * Annotations with a parameter position (as a key).
+     * Method parameter names.
      */
     private final List<BytecodeMethodParameter> params;
+
+    /**
+     * Method parameter annotations.
+     */
+    private final List<BytecodeParamAnnotations> annotations;
 
     /**
      * Default constructor.
@@ -56,7 +61,20 @@ public final class BytecodeMethodParameters {
      * @param params Parameters.
      */
     public BytecodeMethodParameters(final List<BytecodeMethodParameter> params) {
+        this(params, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param params Parameters.
+     * @param annotations Parameter annotations.
+     */
+    public BytecodeMethodParameters(
+        final List<BytecodeMethodParameter> params,
+        final List<BytecodeParamAnnotations> annotations
+    ) {
         this.params = params;
+        this.annotations = annotations;
     }
 
     /**
@@ -65,6 +83,7 @@ public final class BytecodeMethodParameters {
      */
     public void write(final MethodVisitor visitor) {
         this.params.forEach(param -> param.write(visitor));
+        this.annotations.forEach(ann -> ann.write(visitor));
     }
 
     /**
@@ -76,7 +95,10 @@ public final class BytecodeMethodParameters {
         return new DirectivesMethodParams(
             this.params.stream()
                 .map(p -> p.directives(format))
-                .collect(Collectors.toList())
+                .collect(Collectors.toList()),
+            this.annotations.stream().map(
+                a -> a.directives(format)
+            ).collect(Collectors.toList())
         );
     }
 

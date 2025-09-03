@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -22,6 +23,11 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
      * Parameters.
      */
     private final List<Iterable<Directive>> params;
+
+    /**
+     * Parameter annotations.
+     */
+    private final List<Iterable<Directive>> annotations;
 
     /**
      * Constructor.
@@ -44,7 +50,20 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
      * @param params Parameters.
      */
     public DirectivesMethodParams(final List<Iterable<Directive>> params) {
+        this(params, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param params Parameters.
+     * @param annotations Parameter annotations.
+     */
+    public DirectivesMethodParams(
+        final List<Iterable<Directive>> params,
+        final List<Iterable<Directive>> annotations
+    ) {
         this.params = params;
+        this.annotations = annotations;
     }
 
     @Override
@@ -52,7 +71,10 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "params",
             "params",
-            this.params.stream().map(Directives::new).collect(Collectors.toList())
+            Stream.concat(
+                this.params.stream().map(Directives::new),
+                this.annotations.stream().map(Directives::new)
+            ).collect(Collectors.toList())
         ).iterator();
     }
 }

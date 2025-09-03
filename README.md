@@ -89,20 +89,20 @@ configuration to your `pom.xml` file:
 </build>
 ```
 
-### Include debug information
+### Exclude debug information
 
-In order to include debug information in the generated EO files, you can set
-the `debug` option.
+In order to exclude debug information in the generated EO files, you can set
+the `short` option.
 
 ```xml
 
 <configuration>
-  <mode>debug</mode>
+  <mode>short</mode>
 </configuration>
 ```
 
-This option will add line numbers and local variable names to the EO files,
-together with their corresponding labels.
+This option will exclude line numbers and local variable names,
+together with their corresponding labels. The default mode is `debug`.
 
 ### Disable bytecode verification
 

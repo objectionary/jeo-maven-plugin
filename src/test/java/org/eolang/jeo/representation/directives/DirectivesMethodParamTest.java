@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import java.util.Collections;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
@@ -31,8 +32,7 @@ final class DirectivesMethodParamTest {
                     1,
                     "foo",
                     Opcodes.ACC_PUBLIC,
-                    Type.INT_TYPE,
-                    new DirectivesAnnotations()
+                    Type.INT_TYPE
                 )
             ).xml(),
             XhtmlMatchers.hasXPath("./o[contains(@base, param) and contains(@name, 'foo')]")
@@ -49,8 +49,7 @@ final class DirectivesMethodParamTest {
                     2,
                     "bar",
                     Opcodes.ACC_PRIVATE,
-                    Type.DOUBLE_TYPE,
-                    new DirectivesAnnotations()
+                    Type.DOUBLE_TYPE
                 )
             ).xml(),
             XhtmlMatchers.hasXPath(
@@ -69,8 +68,7 @@ final class DirectivesMethodParamTest {
                     3,
                     "baz",
                     Opcodes.ACC_PROTECTED,
-                    Type.LONG_TYPE,
-                    new DirectivesAnnotations()
+                    Type.LONG_TYPE
                 )
             ).xml(),
             XhtmlMatchers.hasXPath(
@@ -89,8 +87,7 @@ final class DirectivesMethodParamTest {
                     4,
                     "qux",
                     Opcodes.ACC_STATIC,
-                    Type.getType("Lorg/eolang/jeo/representation/directives;"),
-                    new DirectivesAnnotations()
+                    Type.getType("Lorg/eolang/jeo/representation/directives;")
                 )
             ).xml(),
             XhtmlMatchers.hasXPath(
@@ -104,14 +101,20 @@ final class DirectivesMethodParamTest {
         MatcherAssert.assertThat(
             "We expect that the parameter directives will be generated with annotations",
             new Xembler(
-                new DirectivesMethodParam(
-                    new Format(),
-                    5,
-                    "quux",
-                    Opcodes.ACC_ABSTRACT,
-                    Type.FLOAT_TYPE,
-                    new DirectivesAnnotations(
-                        "annotations", new DirectivesAnnotation("Ljava/lang/Override;", true)
+                new DirectivesMethodParams(
+                    Collections.singletonList(
+                        new DirectivesMethodParam(
+                            new Format(),
+                            5,
+                            "quux",
+                            Opcodes.ACC_ABSTRACT,
+                            Type.FLOAT_TYPE
+                        )
+                    ),
+                    Collections.singletonList(
+                        new DirectivesAnnotations(
+                            "annotations", new DirectivesAnnotation("Ljava/lang/Override;", true)
+                        )
                     )
                 )
             ).xml(),

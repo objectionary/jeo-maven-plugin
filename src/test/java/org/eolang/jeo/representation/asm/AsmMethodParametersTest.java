@@ -5,14 +5,19 @@
 package org.eolang.jeo.representation.asm;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
+import org.eolang.jeo.representation.bytecode.BytecodeParamAnnotations;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.ParameterNode;
 
@@ -36,10 +41,42 @@ final class AsmMethodParametersTest {
                 new BytecodeMethodParameters(
                     new BytecodeMethodParameter(
                         0,
-                        "arg0",
+                        null,
                         access,
-                        Type.INT_TYPE,
-                        new BytecodeAnnotations()
+                        Type.INT_TYPE
+                    )
+                )
+            )
+        );
+    }
+
+    @Test
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    void convertsMethodParamAnnotations() {
+        final MethodNode node = new MethodNode();
+        final String descriptor = "Ljava/lang/Deprecated()";
+        node.visibleParameterAnnotations = new List[1];
+        node.visibleParameterAnnotations[0] = Collections.singletonList(
+            new AnnotationNode(descriptor)
+        );
+        node.invisibleParameterAnnotations = new List[1];
+        node.invisibleParameterAnnotations[0] = Collections.singletonList(
+            new AnnotationNode(descriptor)
+        );
+        MatcherAssert.assertThat(
+            "We expect parameter annotations to be successfully parsed from bytecode",
+            new AsmMethodParameters(node).bytecode(),
+            Matchers.equalTo(
+                new BytecodeMethodParameters(
+                    new ArrayList<>(0),
+                    Collections.singletonList(
+                        new BytecodeParamAnnotations(
+                            0,
+                            new BytecodeAnnotations(
+                                new BytecodeAnnotation(descriptor, true),
+                                new BytecodeAnnotation(descriptor, false)
+                            )
+                        )
                     )
                 )
             )
