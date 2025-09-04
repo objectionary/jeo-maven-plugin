@@ -6,6 +6,8 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
@@ -13,12 +15,12 @@ import org.eolang.jeo.representation.directives.DirectivesEnclosingMethod;
 import org.eolang.jeo.representation.directives.DirectivesNestHost;
 import org.eolang.jeo.representation.directives.DirectivesNestMembers;
 import org.eolang.jeo.representation.directives.DirectivesPermittedSubclasses;
+import org.eolang.jeo.representation.directives.DirectivesRecordComponents;
 import org.eolang.jeo.representation.directives.DirectivesSourceFile;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Bytecode attribute.
@@ -293,6 +295,14 @@ public interface BytecodeAttribute {
          * Constructor.
          * @param components Components.
          */
+        public RecordComponents(final BytecodeRecordComponent... components) {
+            this(Arrays.asList(components));
+        }
+
+        /**
+         * Constructor.
+         * @param components Components.
+         */
         public RecordComponents(final List<BytecodeRecordComponent> components) {
             this.components = components;
         }
@@ -311,7 +321,13 @@ public interface BytecodeAttribute {
 
         @Override
         public Iterable<Directive> directives(final int index, final Format format) {
-            return new Directives();
+            final AtomicInteger counter = new AtomicInteger(0);
+            return new DirectivesRecordComponents(
+                index,
+                this.components.stream()
+                    .map(component -> component.directives(counter.getAndIncrement(), format))
+                    .collect(Collectors.toList())
+            );
         }
     }
 }

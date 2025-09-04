@@ -10,12 +10,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
-import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.RecordComponentNode;
 
 /**
  * Asm annotations.
@@ -55,6 +55,14 @@ public final class AsmAnnotations {
      * @param node Field node.
      */
     AsmAnnotations(final FieldNode node) {
+        this(node.visibleAnnotations, node.invisibleAnnotations);
+    }
+
+    /**
+     * Constructor.
+     * @param node Record node.
+     */
+    AsmAnnotations(final RecordComponentNode node) {
         this(node.visibleAnnotations, node.invisibleAnnotations);
     }
 
@@ -115,16 +123,8 @@ public final class AsmAnnotations {
      * @return Domain annotation.
      */
     private static BytecodeAnnotation annotation(final AnnotationNode node, final boolean visible) {
-        final List<BytecodeAnnotationValue> properties = new ArrayList<>(0);
-        final List<Object> values = Optional.ofNullable(node.values).orElse(new ArrayList<>(0));
-        for (int index = 0; index < values.size(); index += 2) {
-            properties.add(
-                new AsmAnnotationProperty(
-                    (String) values.get(index),
-                    values.get(index + 1)
-                ).bytecode()
-            );
-        }
-        return new BytecodeAnnotation(node.desc, visible, properties);
+        return new BytecodeAnnotation(
+            node.desc, visible, new AsmAnnotationValues(node.values).bytecode()
+        );
     }
 }

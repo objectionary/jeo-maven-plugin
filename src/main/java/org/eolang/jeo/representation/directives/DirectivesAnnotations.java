@@ -62,10 +62,8 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
         this(
             annotations,
             String.format(
-                String.format(
-                    "annotations-%d",
-                    Math.abs(DirectivesAnnotations.RANDOM.nextInt())
-                )
+                "annotations-%d",
+                Math.abs(DirectivesAnnotations.RANDOM.nextInt())
             )
         );
     }

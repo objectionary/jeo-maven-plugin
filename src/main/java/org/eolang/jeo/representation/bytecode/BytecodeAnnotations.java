@@ -15,6 +15,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAnnotations;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.RecordComponentVisitor;
 
 /**
  * Bytecode annotations.
@@ -108,5 +109,13 @@ public final class BytecodeAnnotations {
      */
     void write(final int index, final MethodVisitor writer) {
         this.all.forEach(annotation -> annotation.write(index, writer));
+    }
+
+    /**
+     * Write the record component.
+     * @param writer Record component visitor.
+     */
+    void write(final RecordComponentVisitor writer) {
+        this.all.forEach(annotation -> annotation.write(writer));
     }
 }

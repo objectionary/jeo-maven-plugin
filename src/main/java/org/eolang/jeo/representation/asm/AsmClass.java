@@ -16,7 +16,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeModule;
-import org.eolang.jeo.representation.bytecode.BytecodeRecordComponent;
 import org.eolang.jeo.representation.bytecode.InnerClass;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -224,13 +223,7 @@ public final class AsmClass {
         } else {
             result = Optional.of(
                 new BytecodeAttribute.RecordComponents(
-                    this.node.recordComponents.stream().map(
-                        rc -> new BytecodeRecordComponent(
-                            rc.name,
-                            rc.descriptor,
-                            rc.signature
-                        )
-                    ).collect(Collectors.toList())
+                    new AsmRecordComponents(this.node.recordComponents).bytecode()
                 )
             );
         }

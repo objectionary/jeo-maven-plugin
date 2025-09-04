@@ -34,6 +34,10 @@ public final class JcabiXmlNode implements XmlNode {
 
     /**
      * Set of ignored defects.
+     * @todo #1278:30min Remove 'duplicate-names' check suppression.
+     *  We are ignoring 'duplicate-names' check because of records that usually have
+     *  the field names same as the method names which leads to false positives.
+     *  We should find a way to distinguish between fields and methods in XMIR.
      */
     private static final Collection<String> IGNORE = new HashSet<>(
         Arrays.asList(
@@ -41,7 +45,8 @@ public final class JcabiXmlNode implements XmlNode {
             "redundant-object",
             "duplicate-names-in-diff-context",
             "unit-test-missing",
-            "sparse-decoration"
+            "sparse-decoration",
+            "duplicate-names"
         )
     );
 

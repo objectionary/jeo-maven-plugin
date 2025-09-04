@@ -5,12 +5,17 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import org.eolang.jeo.representation.directives.DirectivesAnnotations;
 import org.eolang.jeo.representation.directives.DirectivesEnclosingMethod;
 import org.eolang.jeo.representation.directives.DirectivesNestHost;
 import org.eolang.jeo.representation.directives.DirectivesNestMembers;
 import org.eolang.jeo.representation.directives.DirectivesPermittedSubclasses;
+import org.eolang.jeo.representation.directives.DirectivesRecordComponent;
+import org.eolang.jeo.representation.directives.DirectivesRecordComponents;
 import org.eolang.jeo.representation.directives.DirectivesSourceFile;
+import org.eolang.jeo.representation.directives.DirectivesTypeAnnotations;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -119,4 +124,37 @@ final class BytecodeAttributeTest {
             )
         );
     }
+
+    @Test
+    void covertsRecordComponentsToDirectives() throws ImpossibleModificationException {
+        final Format format = new Format();
+        final int index = 0;
+        MatcherAssert.assertThat(
+            "We expect to have proper XML representation for RecordComponents",
+            new Xembler(
+                new BytecodeAttribute.RecordComponents(
+                    new BytecodeRecordComponent("n", "d", "s")
+                ).directives(index, format)
+            ).xml(),
+            Matchers.equalTo(
+                new Xembler(
+                    new DirectivesRecordComponents(
+                        index,
+                        Collections.singletonList(
+                            new DirectivesRecordComponent(
+                                format,
+                                0,
+                                "n",
+                                "d",
+                                "s",
+                                new DirectivesAnnotations(),
+                                new DirectivesTypeAnnotations()
+                            )
+                        )
+                    )
+                ).xml()
+            )
+        );
+    }
+
 }

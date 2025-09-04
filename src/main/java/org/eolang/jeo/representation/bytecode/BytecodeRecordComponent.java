@@ -4,15 +4,20 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesRecordComponent;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.RecordComponentVisitor;
+import org.xembly.Directive;
 
 /**
  * The record component of a record class.
  * @since 0.14.0
- * @todo #1274:30min Implement annotations for record components.
- *  Currently, the BytecodeRecordComponent class does not handle annotations.
- *  This needs to be implemented to fully support record components in Java bytecode.
  */
+@ToString
+@EqualsAndHashCode
 public final class BytecodeRecordComponent {
 
     /**
@@ -31,6 +36,16 @@ public final class BytecodeRecordComponent {
     private final String signature;
 
     /**
+     * Bytecode annotations.
+     */
+    private final BytecodeAnnotations annotations;
+
+    /**
+     * Type annotations.
+     */
+    private final BytecodeTypeAnnotations types;
+
+    /**
      * Constructor.
      * @param name Name
      * @param descriptor Descriptor
@@ -41,9 +56,30 @@ public final class BytecodeRecordComponent {
         final String descriptor,
         final String signature
     ) {
+        this(name, descriptor, signature, new BytecodeAnnotations(), new BytecodeTypeAnnotations());
+    }
+
+    /**
+     * Constructor.
+     * @param name Name
+     * @param descriptor Descriptor
+     * @param signature Signature
+     * @param annotations Annotations
+     * @param types Type annotations
+     * @checkstyle ParameterNumber (10 lines)
+     */
+    public BytecodeRecordComponent(
+        final String name,
+        final String descriptor,
+        final String signature,
+        final BytecodeAnnotations annotations,
+        final BytecodeTypeAnnotations types
+    ) {
         this.name = name;
         this.descriptor = descriptor;
         this.signature = signature;
+        this.annotations = annotations;
+        this.types = types;
     }
 
     /**
@@ -51,6 +87,28 @@ public final class BytecodeRecordComponent {
      * @param clazz Class visitor
      */
     public void write(final ClassVisitor clazz) {
-        clazz.visitRecordComponent(this.name, this.descriptor, this.signature);
+        final RecordComponentVisitor visitor = clazz.visitRecordComponent(
+            this.name, this.descriptor, this.signature
+        );
+        this.annotations.write(visitor);
+        this.types.write(visitor);
+    }
+
+    /**
+     * Convert to directives.
+     * @param index Index of the record component
+     * @param format Format of the directives
+     * @return Directives
+     */
+    public Iterable<Directive> directives(final int index, final Format format) {
+        return new DirectivesRecordComponent(
+            format,
+            index,
+            this.name,
+            this.descriptor,
+            this.signature,
+            this.annotations.directives(format),
+            this.types.directives(format)
+        );
     }
 }

@@ -16,6 +16,7 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.RecordComponentVisitor;
 import org.xembly.Directive;
 
 /**
@@ -108,6 +109,17 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      * @return This.
      */
     public BytecodeAnnotation write(final FieldVisitor visitor) {
+        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
+        this.values.forEach(property -> property.writeTo(avisitor));
+        return this;
+    }
+
+    /**
+     * Write record component annotation.
+     * @param visitor Visitor.
+     * @return This.
+     */
+    public BytecodeAnnotation write(final RecordComponentVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
         this.values.forEach(property -> property.writeTo(avisitor));
         return this;
