@@ -284,6 +284,8 @@ public interface BytecodeAttribute {
      * Record components attribute.
      * @since 0.14.0
      */
+    @ToString
+    @EqualsAndHashCode
     final class RecordComponents implements BytecodeAttribute {
 
         /**

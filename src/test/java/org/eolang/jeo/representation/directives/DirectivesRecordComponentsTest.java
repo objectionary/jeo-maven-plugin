@@ -7,7 +7,6 @@ package org.eolang.jeo.representation.directives;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Collections;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Transformers;
@@ -43,9 +42,9 @@ final class DirectivesRecordComponentsTest {
                 "./o[@name='record-components-9']",
                 new JeoBaseXpath(
                     "./o[@name='record-components-9']",
-                    "seq.of1"
+                    "record-components"
                 ).toXpath(),
-                "./o/o[@name='rc0']"
+                "./o/o[@name='all']/o[@name='rc0']"
             )
         );
     }
@@ -60,7 +59,13 @@ final class DirectivesRecordComponentsTest {
                     Collections.emptyList()
                 ), new Transformers.Node()
             ).xml(),
-            Matchers.is(Matchers.emptyString())
+            XhtmlMatchers.hasXPaths(
+                "./o[@name='record-components-0']",
+                new JeoBaseXpath(
+                    "./o[@name='record-components-0']",
+                    "record-components"
+                ).toXpath()
+            )
         );
     }
 }

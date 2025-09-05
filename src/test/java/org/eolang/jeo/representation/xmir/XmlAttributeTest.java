@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
+import org.eolang.jeo.representation.bytecode.BytecodeRecordComponent;
 import org.eolang.jeo.representation.bytecode.InnerClass;
 import org.eolang.jeo.representation.directives.DirectivesAttribute;
 import org.eolang.jeo.representation.directives.Format;
@@ -111,6 +112,20 @@ final class XmlAttributeTest {
         );
         MatcherAssert.assertThat(
             "We expect to parse PermittedSubclasses attribute",
+            new XmlAttribute(
+                new Xembler(attr.directives(0, new Format())).xmlQuietly()
+            ).attribute(),
+            Matchers.equalTo(attr)
+        );
+    }
+
+    @Test
+    void parsesRecordComponents() {
+        final BytecodeAttribute attr = new BytecodeAttribute.RecordComponents(
+            new BytecodeRecordComponent("name", "descr", null)
+        );
+        MatcherAssert.assertThat(
+            "We expect to parse RecordComponents attribute",
             new XmlAttribute(
                 new Xembler(attr.directives(0, new Format())).xmlQuietly()
             ).attribute(),

@@ -39,9 +39,12 @@ public final class DirectivesRecordComponents implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesOptionalSeq(
+        return new DirectivesJeoObject(
+            "record-components",
             String.format("record-components-%d", this.index),
-            this.components
+            new DirectivesOptionalSeq(
+                "all", this.components
+            )
         ).iterator();
     }
 }
