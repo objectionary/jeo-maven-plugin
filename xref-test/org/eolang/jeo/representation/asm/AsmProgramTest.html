@@ -41,8 +41,8 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>              .bytecode();
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>              <span class="jxr_string">"We expect to receive the same bytecode"</span>,
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>              <strong class="jxr_keyword">new</strong> AsmProgram(same.bytes()).bytecode().bytecode(),
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>              Matchers.equalTo(same)
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>              <strong class="jxr_keyword">new</strong> AsmProgram(same.bytes()).bytecode(0).bytecode().toString(),
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>              Matchers.equalTo(same.toString())
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>          );
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>      }
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  
@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>              <span class="jxr_string">"We expect to receive the same bytecode with the 'NestMembers' attribute"</span>,
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>              actual.toString(),
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>              Matchers.containsString(<span class="jxr_string">"NESTMEMBER"</span>)
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>              Matchers.equalTo(<strong class="jxr_keyword">new</strong> Bytecode(original).toString())
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          );
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      }
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
@@ -90,38 +90,32 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">     * Comes from the issue:</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">     * &lt;a href="<a href="https://github.com/objectionary/jeo-maven-plugin/issues/1274" target="alexandria_uri">https://github.com/objectionary/jeo-maven-plugin/issues/1274</a>"&gt;#1274&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">     * @throws Exception In case of error</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">     * @todo #1274:30min Compare the bytecode before and after the conversion.</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">     *  Instead of just checking for the presence of the 'NestHost' attribute, we should</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">     *  compare the entire bytecode before and after the conversion to ensure that no other</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">     *  attributes or instructions are lost or altered during the process.</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">     *  We can't do it right now, because we have some strange 'arg0' attribute after</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">     *  the conversion, which is not present in the original bytecode.</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>      @Test
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      <strong class="jxr_keyword">void</strong> persesNestHostBytecodeAttribute() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          <strong class="jxr_keyword">final</strong> byte[] original = <strong class="jxr_keyword">new</strong> BytesOf(<strong class="jxr_keyword">new</strong> ResourceOf(<span class="jxr_string">"Check$1Local.class"</span>)).asBytes();
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>          MatcherAssert.assertThat(
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>              <span class="jxr_string">"We expect to receive the same bytecode with the 'NestHost' attribute"</span>,
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>              <strong class="jxr_keyword">new</strong> AsmProgram(original).bytecode(0).bytecode().toString(),
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>              Matchers.containsString(<span class="jxr_string">"NESTHOST"</span>)
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>          );
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>     }
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>     @ParameterizedTest
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>     @ValueSource(strings = {<span class="jxr_string">"FixedWidth.class"</span>, <span class="jxr_string">"DeprecatedMethod.class"</span>, <span class="jxr_string">"ParamAnnotation.class"</span>})
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>     <strong class="jxr_keyword">void</strong> convertsToBytecodeThenToXmirAndThenBackToBytecode(<strong class="jxr_keyword">final</strong> String resource) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>         <strong class="jxr_keyword">final</strong> BytecodeObject bytecode = <strong class="jxr_keyword">new</strong> AsmProgram(
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>             <strong class="jxr_keyword">new</strong> BytesOf(<strong class="jxr_keyword">new</strong> ResourceOf(resource)).asBytes()
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>         ).bytecode();
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>         MatcherAssert.assertThat(
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>             <span class="jxr_string">"We expect to receive the same bytecode"</span>,
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>             <strong class="jxr_keyword">new</strong> XmlObject(
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>                 <strong class="jxr_keyword">new</strong> Xembler(bytecode.directives(<strong class="jxr_keyword">new</strong> Format())).xml()
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>             ).bytecode().bytecode(),
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>             Matchers.equalTo(bytecode.bytecode())
-<a class="jxr_linenumber" name="L114" href="#L114">114</a>         );
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>     }
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>      @Test
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">void</strong> parsesNestHostBytecodeAttribute() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          <strong class="jxr_keyword">final</strong> byte[] original = <strong class="jxr_keyword">new</strong> BytesOf(<strong class="jxr_keyword">new</strong> ResourceOf(<span class="jxr_string">"Check$1Local.class"</span>)).asBytes();
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          MatcherAssert.assertThat(
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <span class="jxr_string">"We expect to receive the same bytecode with the 'NestHost' attribute"</span>,
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>              <strong class="jxr_keyword">new</strong> AsmProgram(original).bytecode(0).bytecode().toString(),
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>              Matchers.equalTo(<strong class="jxr_keyword">new</strong> Bytecode(original).toString())
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          );
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>      }
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>      @ParameterizedTest
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>      @ValueSource(strings = {<span class="jxr_string">"FixedWidth.class"</span>, <span class="jxr_string">"DeprecatedMethod.class"</span>, <span class="jxr_string">"ParamAnnotation.class"</span>})
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>      <strong class="jxr_keyword">void</strong> convertsToBytecodeThenToXmirAndThenBackToBytecode(<strong class="jxr_keyword">final</strong> String resource) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          <strong class="jxr_keyword">final</strong> BytecodeObject bytecode = <strong class="jxr_keyword">new</strong> AsmProgram(
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>             <strong class="jxr_keyword">new</strong> BytesOf(<strong class="jxr_keyword">new</strong> ResourceOf(resource)).asBytes()
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>         ).bytecode();
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>         MatcherAssert.assertThat(
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>             <span class="jxr_string">"We expect to receive the same bytecode"</span>,
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>             <strong class="jxr_keyword">new</strong> XmlObject(
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>                 <strong class="jxr_keyword">new</strong> Xembler(bytecode.directives(<strong class="jxr_keyword">new</strong> Format())).xml()
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>             ).bytecode().bytecode(),
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>             Matchers.equalTo(bytecode.bytecode())
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>         );
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>     }
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> }
 </pre>
 <hr/>
 <div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>

@@ -390,10 +390,10 @@
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L383" href="#L383">383</a>     <strong class="jxr_keyword">private</strong> <a name="BytecodeMethodParameters" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeMethodParameters.html#BytecodeMethodParameters">BytecodeMethodParameters</a> params() {
 <a class="jxr_linenumber" name="L384" href="#L384">384</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>             .map(XmlParams::<strong class="jxr_keyword">new</strong>)
-<a class="jxr_linenumber" name="L386" href="#L386">386</a>             .filter(XmlParams::isParams)
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>             .map(XmlMethodParams::<strong class="jxr_keyword">new</strong>)
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>             .filter(XmlMethodParams::isParams)
 <a class="jxr_linenumber" name="L387" href="#L387">387</a>             .findFirst()
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>             .map(XmlParams::params)
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>             .map(XmlMethodParams::params)
 <a class="jxr_linenumber" name="L389" href="#L389">389</a>             .orElse(<strong class="jxr_keyword">new</strong> <a name="BytecodeMethodParameters" href="../../../../../org/eolang/jeo/representation/bytecode/BytecodeMethodParameters.html#BytecodeMethodParameters">BytecodeMethodParameters</a>());
 <a class="jxr_linenumber" name="L390" href="#L390">390</a>     }
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 

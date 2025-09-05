@@ -59,7 +59,7 @@
                             </div>
                             <ul class="badges">
                                 <li>
-                                    <strong itemprop="version">0.14.0</strong>
+                                    <strong itemprop="version">0.14.1</strong>
                                 </li>
                                 <li>
                                     $dateFormat.applyPattern("yyyy-MM-dd'T'hh:mm:ss'Z'")
@@ -79,7 +79,7 @@
                             <section><a id="jeo.3Adisassemble"></a>
 <h1>jeo:disassemble</h1>
 <p><strong>Full name</strong>:</p>
-<p>org.eolang:jeo-maven-plugin:0.14.0:disassemble</p>
+<p>org.eolang:jeo-maven-plugin:0.14.1:disassemble</p>
 <p><strong>Description</strong>:</p>
 <p>Disassembles Java bytecode into XMIR representation. 
 <p>This Maven plugin converts compiled Java class files into low-level EO representation (in XMIR format) that contains JVM opcodes and their operands. The resulting XMIR files preserve all bytecode instructions and can be assembled back into executable class files.</p>
@@ -120,10 +120,10 @@
 <td>Disassembly mode controlling the level of detail in output. 
 <p>Supported modes:</p>
 <ul>
- <li><code>short</code> - Minimal output with bytecode instructions only (default)</li>
- <li><code>debug</code> - Include debug information such as line numbers, local variables, and source file references</li>
+ <li><code>short</code> - Minimal output with bytecode instructions only</li>
+ <li><code>debug</code> - Include debug information such as line numbers, local variables, and source file references (default)</li>
 </ul>
-<p></p><br /><strong>Default</strong>: <code>short</code><br /><strong>User Property</strong>: <code>jeo.disassemble.mode</code></td></tr>
+<p></p><br /><strong>Default</strong>: <code>debug</code><br /><strong>User Property</strong>: <code>jeo.disassemble.mode</code></td></tr>
 <tr class="b">
 <td><a href="#modifiers"><code>&lt;modifiers&gt;</code></a></td>
 <td><code>boolean</code></td>
@@ -194,8 +194,8 @@
 <div>Disassembly mode controlling the level of detail in output. 
 <p>Supported modes:</p>
 <ul>
- <li><code>short</code> - Minimal output with bytecode instructions only (default)</li>
- <li><code>debug</code> - Include debug information such as line numbers, local variables, and source file references</li>
+ <li><code>short</code> - Minimal output with bytecode instructions only</li>
+ <li><code>debug</code> - Include debug information such as line numbers, local variables, and source file references (default)</li>
 </ul>
 <p></p></div>
 <ul>
@@ -203,7 +203,7 @@
 <li><strong>Since</strong>: <code>0.6.0</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
 <li><strong>User Property</strong>: <code>jeo.disassemble.mode</code></li>
-<li><strong>Default</strong>: <code>short</code></li></ul><hr /></section><a id="modifiers"></a><section><a id="a.3Cmodifiers.3E"></a>
+<li><strong>Default</strong>: <code>debug</code></li></ul><hr /></section><a id="modifiers"></a><section><a id="a.3Cmodifiers.3E"></a>
 <h3>&lt;modifiers&gt;</h3>
 <div>Should method modifiers be included in the output. 
 <p>When true, method modifiers (e.g., public, private, static) will be included in the disassembled output.</p></div>
