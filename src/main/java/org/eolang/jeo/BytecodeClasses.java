@@ -33,7 +33,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
  * for details on how all generated classes are loaded.</p>
  * @since 0.6.0
  */
-final class BytecodeClasses {
+final class BytecodeClasses implements Classes {
 
     /**
      * Input directory where all the generated class files are placed.
@@ -41,18 +41,20 @@ final class BytecodeClasses {
     private final Path input;
 
     /**
-     * Constructor.
+     * Constructor with filters.
      * @param input Input directory where all the generated class files are placed.
      */
     BytecodeClasses(final Path input) {
         this.input = input;
     }
 
-    /**
-     * All the class files.
-     * @return Stream of paths to class files
-     */
-    Stream<Path> all() {
+    @Override
+    public String toString() {
+        return this.input.toString();
+    }
+
+    @Override
+    public Stream<Path> all() {
         try {
             return this.classes().stream();
         } catch (final IOException exception) {

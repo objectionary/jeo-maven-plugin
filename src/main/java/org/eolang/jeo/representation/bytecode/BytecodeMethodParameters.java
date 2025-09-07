@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
@@ -23,9 +24,14 @@ import org.objectweb.asm.Type;
 public final class BytecodeMethodParameters {
 
     /**
-     * Annotations with a parameter position (as a key).
+     * Method parameter names.
      */
     private final List<BytecodeMethodParameter> params;
+
+    /**
+     * Method parameter annotations.
+     */
+    private final List<BytecodeParamAnnotations> annotations;
 
     /**
      * Default constructor.
@@ -55,7 +61,20 @@ public final class BytecodeMethodParameters {
      * @param params Parameters.
      */
     public BytecodeMethodParameters(final List<BytecodeMethodParameter> params) {
+        this(params, new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     * @param params Parameters.
+     * @param annotations Parameter annotations.
+     */
+    public BytecodeMethodParameters(
+        final List<BytecodeMethodParameter> params,
+        final List<BytecodeParamAnnotations> annotations
+    ) {
         this.params = params;
+        this.annotations = annotations;
     }
 
     /**
@@ -64,17 +83,22 @@ public final class BytecodeMethodParameters {
      */
     public void write(final MethodVisitor visitor) {
         this.params.forEach(param -> param.write(visitor));
+        this.annotations.forEach(ann -> ann.write(visitor));
     }
 
     /**
      * Convert to directives.
+     * @param format Format of the directives.
      * @return Directives.
      */
-    public DirectivesMethodParams directives() {
+    public DirectivesMethodParams directives(final Format format) {
         return new DirectivesMethodParams(
             this.params.stream()
-                .map(BytecodeMethodParameter::directives)
-                .collect(Collectors.toList())
+                .map(p -> p.directives(format))
+                .collect(Collectors.toList()),
+            this.annotations.stream().map(
+                a -> a.directives(format)
+            ).collect(Collectors.toList())
         );
     }
 

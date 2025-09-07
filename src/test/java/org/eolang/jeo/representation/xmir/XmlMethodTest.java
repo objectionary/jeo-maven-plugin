@@ -6,6 +6,8 @@ package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.bytecode.BytecodeLine;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
@@ -131,6 +133,23 @@ final class XmlMethodTest {
                         new BytecodeAnnotation(descriptor, visible)
                     )
                 )
+            )
+        );
+    }
+
+    @Test
+    void parsesLineNumbers() throws ImpossibleModificationException {
+        final BytecodeLine expected = new BytecodeLine(42, new BytecodeLabel("label"));
+        MatcherAssert.assertThat(
+            "We expect that line numbers will be parsed correctly",
+            new XmlMethod(
+                new NativeXmlNode(
+                    new Xembler(new BytecodeMethod().entry(expected).directives(1)).xml()
+                )
+            ).bytecode().instructions(),
+            Matchers.allOf(
+                Matchers.iterableWithSize(1),
+                Matchers.hasItem(expected)
             )
         );
     }

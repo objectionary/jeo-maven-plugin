@@ -18,6 +18,11 @@ import org.xembly.Directives;
 public final class DirectivesMethodProperties implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Method access modifiers.
      */
     private final int access;
@@ -96,31 +101,52 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         final DirectivesMaxs max,
         final DirectivesMethodParams params
     ) {
+        this(access, descriptor, signature, exceptions, max, params, new Format());
+    }
+
+    /**
+     * Constructor.
+     * @param access Access modifiers.
+     * @param descriptor Method descriptor.
+     * @param signature Method signature.
+     * @param exceptions Method exceptions.
+     * @param max Max stack and locals.
+     * @param params Method parameters.
+     * @param format Format of the directives.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    public DirectivesMethodProperties(
+        final int access,
+        final String descriptor,
+        final String signature,
+        final String[] exceptions,
+        final DirectivesMaxs max,
+        final DirectivesMethodParams params,
+        final Format format
+    ) {
         this.access = access;
         this.descriptor = Optional.ofNullable(descriptor).orElse("");
         this.signature = Optional.ofNullable(signature).orElse("");
         this.exceptions = Optional.ofNullable(exceptions).orElse(new String[0]).clone();
         this.max = new AtomicReference<>(max);
         this.params = params;
+        this.format = format;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return new Directives()
-            .append(new DirectivesValue("access", this.access))
-            .append(new DirectivesValue("descriptor", this.descriptor))
-            .append(new DirectivesValue("signature", this.signature))
-            .append(new DirectivesOptionalValues("exceptions", (Object[]) this.exceptions))
+        final Directives dirs = new Directives()
+            .append(new DirectivesValue(this.format, "access", this.access))
+            .append(new DirectivesValue(this.format, "descriptor", this.descriptor))
+            .append(new DirectivesValue(this.format, "signature", this.signature))
+            .append(
+                new DirectivesOptionalValues(this.format, "exceptions", (Object[]) this.exceptions)
+            )
             .append(this.max.get())
-            .append(this.params)
-            .iterator();
-    }
-
-    /**
-     * Method descriptor.
-     * @return Descriptor.
-     */
-    String descr() {
-        return this.descriptor;
+            .append(this.params);
+        if (this.format.modifiers()) {
+            dirs.append(new DirectivesModifiers(this.format, this.access));
+        }
+        return dirs.iterator();
     }
 }

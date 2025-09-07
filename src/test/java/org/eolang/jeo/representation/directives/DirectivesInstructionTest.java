@@ -30,6 +30,8 @@ final class DirectivesInstructionTest {
             "We expect that the bytecode instruction argument with type 'Type' will be wrapped in sting, see https://github.com/objectionary/jeo-maven-plugin/issues/1125",
             new Xembler(
                 new DirectivesInstruction(
+                    0,
+                    new Format(),
                     Opcodes.LDC,
                     Type.getType(Integer.class)
                 )
@@ -48,7 +50,7 @@ final class DirectivesInstructionTest {
     void transformsIntoEoWithoutCountingOpcodes(
         final int opcode, final String base
     ) throws ImpossibleModificationException {
-        final String xml = new Xembler(new DirectivesInstruction(opcode)).xml();
+        final String xml = new Xembler(new DirectivesInstruction(0, new Format(), opcode)).xml();
         MatcherAssert.assertThat(
             String.format(
                 "We expect to get the EO representation of the bytecode where each instruction has a simple name without sequence number, please check the final XML:%n%s%n",
@@ -64,7 +66,7 @@ final class DirectivesInstructionTest {
     void addsBeautifulComment(final BytecodeInstruction instr, final String comment) {
         MatcherAssert.assertThat(
             "We expect, that during transformation to XML, we will get a beautiful comment for bytecode instruction",
-            new Xembler(instr.directives()).xmlQuietly(),
+            new Xembler(instr.directives(0, new Format())).xmlQuietly(),
             Matchers.containsString(comment)
         );
     }

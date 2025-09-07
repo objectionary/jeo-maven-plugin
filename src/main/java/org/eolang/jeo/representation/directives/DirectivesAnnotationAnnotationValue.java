@@ -18,6 +18,16 @@ import org.xembly.Directives;
 public final class DirectivesAnnotationAnnotationValue implements Iterable<Directive> {
 
     /**
+     * Index of the annotation value among other annotations.
+     */
+    private final int index;
+
+    /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * The name of the annotation property.
      */
     private final String name;
@@ -34,13 +44,22 @@ public final class DirectivesAnnotationAnnotationValue implements Iterable<Direc
 
     /**
      * Constructor.
+     * @param index Index of the annotation value among other annotations.
+     * @param format Format of the directives.
      * @param name The name of the annotation property.
      * @param descriptor The descriptor of the annotation.
      * @param values The inner annotation values.
+     * @checkstyle ParameterNumber (5 lines)
      */
     public DirectivesAnnotationAnnotationValue(
-        final String name, final String descriptor, final List<Iterable<Directive>> values
+        final int index,
+        final Format format,
+        final String name,
+        final String descriptor,
+        final List<Iterable<Directive>> values
     ) {
+        this.index = index;
+        this.format = format;
         this.name = name;
         this.descriptor = descriptor;
         this.values = values;
@@ -50,12 +69,12 @@ public final class DirectivesAnnotationAnnotationValue implements Iterable<Direc
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "annotation-property",
-            new RandName("a").toString(),
+            new NumName("a", this.index).toString(),
             Stream.concat(
                 Stream.of(
-                    new DirectivesValue("ANNOTATION"),
-                    new DirectivesValue(this.name),
-                    new DirectivesValue(this.descriptor)
+                    new DirectivesValue(0, this.format, "ANNOTATION"),
+                    new DirectivesValue(1, this.format, this.name),
+                    new DirectivesValue(2, this.format, this.descriptor)
                 ),
                 this.values.stream()
             ).map(Directives::new).collect(Collectors.toList())

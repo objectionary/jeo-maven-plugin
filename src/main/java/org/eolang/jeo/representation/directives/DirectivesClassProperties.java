@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Optional;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -15,6 +16,11 @@ import org.xembly.Directives;
  * @since 0.1.0
  */
 public final class DirectivesClassProperties implements Iterable<Directive> {
+
+    /**
+     * Format of the directives.
+     */
+    private final Format format;
 
     /**
      * Class bytecode version.
@@ -79,11 +85,15 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         final String supername,
         final String... interfaces
     ) {
-        this(new DefaultVersion().bytecode(), access, signature, supername, interfaces.clone());
+        this(
+            new Format(), new DefaultVersion().bytecode(), access, signature, supername,
+            interfaces.clone()
+        );
     }
 
     /**
      * Constructor.
+     * @param format Format of the directives.
      * @param version Bytecode version.
      * @param access Access modifiers.
      * @param signature Class Signature.
@@ -92,12 +102,14 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
      * @checkstyle ParameterNumberCheck (6 lines)
      */
     public DirectivesClassProperties(
+        final Format format,
         final int version,
         final int access,
         final String signature,
         final String supername,
         final String... interfaces
     ) {
+        this.format = format;
         this.version = version;
         this.access = access;
         this.signature = signature;
@@ -108,16 +120,18 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives()
-            .append(new DirectivesValue("version", this.version))
-            .append(new DirectivesValue("access", this.access));
-        if (this.signature != null) {
-            directives.append(new DirectivesValue("signature", this.signature));
-        }
+            .append(new DirectivesValue(this.format, "version", this.version))
+            .append(new DirectivesValue(this.format, "access", this.access))
+            .append(
+                new DirectivesValue(
+                    this.format, "signature", Optional.ofNullable(this.signature).orElse("")
+                )
+            );
         if (this.supername != null) {
-            directives.append(new DirectivesValue("supername", this.supername));
+            directives.append(new DirectivesValue(this.format, "supername", this.supername));
         }
         if (this.interfaces != null) {
-            directives.append(new DirectivesValues("interfaces", this.interfaces));
+            directives.append(new DirectivesValues(this.format, "interfaces", this.interfaces));
         }
         return directives.iterator();
     }

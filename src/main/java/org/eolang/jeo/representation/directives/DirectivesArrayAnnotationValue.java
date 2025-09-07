@@ -18,6 +18,16 @@ import org.xembly.Directives;
 public final class DirectivesArrayAnnotationValue implements Iterable<Directive> {
 
     /**
+     * Index of the annotation among other annotations.
+     */
+    private final int index;
+
+    /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * The name of the annotation property.
      */
     private final String name;
@@ -29,12 +39,20 @@ public final class DirectivesArrayAnnotationValue implements Iterable<Directive>
 
     /**
      * Constructor.
+     * @param index Index of the annotation value among other annotation values.
+     * @param format Format of the directives.
      * @param name The name of the annotation property.
      * @param children The actual values.
+     * @checkstyle ParameterNumber (5 lines)
      */
     public DirectivesArrayAnnotationValue(
-        final String name, final List<Iterable<Directive>> children
+        final int index,
+        final Format format,
+        final String name,
+        final List<Iterable<Directive>> children
     ) {
+        this.index = index;
+        this.format = format;
         this.name = name;
         this.values = children;
     }
@@ -43,11 +61,11 @@ public final class DirectivesArrayAnnotationValue implements Iterable<Directive>
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "annotation-property",
-            new RandName("a").toString(),
+            new NumName("a", this.index).toString(),
             Stream.concat(
                 Stream.of(
-                    new DirectivesValue("ARRAY"),
-                    new DirectivesValue(this.name)
+                    new DirectivesValue(0, this.format, "ARRAY"),
+                    new DirectivesValue(1, this.format, this.name)
                 ),
                 this.values.stream()
             ).map(Directives::new).collect(Collectors.toList())

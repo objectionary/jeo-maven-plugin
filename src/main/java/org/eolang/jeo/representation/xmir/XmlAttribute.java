@@ -78,6 +78,18 @@ public final class XmlAttribute {
             );
         } else if (new JeoFqn("local-variable").fqn().equals(base)) {
             result = new XmlLocalVariable(this.node).attribute();
+        } else if (new JeoFqn("source-file").fqn().equals(base)) {
+            result = new XmlSourceFile(this.node).attribute();
+        } else if (new JeoFqn("enclosing-method").fqn().equals(base)) {
+            result = new XmlEnclosingMethod(this.node).attribute();
+        } else if (new JeoFqn("nest-host").fqn().equals(base)) {
+            result = new XmlNestHost(this.node).attribute();
+        } else if (new JeoFqn("nest-members").fqn().equals(base)) {
+            result = new XmlNestMembers(this.node).attribute();
+        } else if (new JeoFqn("permitted-subclasses").fqn().equals(base)) {
+            result = new XmlPermittedSubclasses(this.node).attribute();
+        } else if (new JeoFqn("record-components").fqn().equals(base)) {
+            result = new XmlRecordComponents(this.node).bytecode();
         } else {
             throw new IllegalArgumentException(
                 String.format("Unknown attribute base '%s'", base)

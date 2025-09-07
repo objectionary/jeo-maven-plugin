@@ -25,6 +25,8 @@ final class DirectivesHandleTest {
     void convertsHandleToDirectives() throws ImpossibleModificationException {
         final String xml = new Xembler(
             new DirectivesHandle(
+                0,
+                new Format(),
                 new Handle(Opcodes.H_INVOKESTATIC, "java/lang/Math", "max", "(II)I", false)
             )
         ).xml();

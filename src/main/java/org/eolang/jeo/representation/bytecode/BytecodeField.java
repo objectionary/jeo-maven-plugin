@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.bytecode;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesField;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 
@@ -109,14 +110,15 @@ public final class BytecodeField {
             .forEach(annotation -> annotation.write(fvisitor));
     }
 
-    public DirectivesField directives() {
+    public DirectivesField directives(final Format format) {
         return new DirectivesField(
+            format,
             this.access,
             this.name,
             this.descriptor,
             this.signature,
             this.value,
-            this.annotations.directives(String.format("annotations-%s", this.name))
+            this.annotations.directives(format, String.format("annotations-%s", this.name))
         );
     }
 }

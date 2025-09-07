@@ -23,7 +23,7 @@ final class DirectivesAttributeTest {
     void convertsToXmirWithoutChildren() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that the attribute will be converted to Xmir as a simple object without children",
-            new Xembler(new DirectivesAttribute("some")).xml(),
+            new Xembler(new DirectivesAttribute("some", "a0")).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("./o", "some").toXpath()
             )
@@ -37,7 +37,8 @@ final class DirectivesAttributeTest {
             new Xembler(
                 new DirectivesAttribute(
                     "children",
-                    new DirectivesValue("data")
+                    "a0",
+                    new DirectivesValue(0, new Format(), "data")
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(

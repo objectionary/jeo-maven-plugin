@@ -25,7 +25,7 @@ final class DirectivesPlainAnnotationValueTest {
         MatcherAssert.assertThat(
             "Can't create a plain property with a name and a value",
             new Xembler(
-                new DirectivesPlainAnnotationValue("name", "particular name")
+                new DirectivesPlainAnnotationValue(0, new Format(), "name", "particular name")
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("./o", "annotation-property").toXpath(),
@@ -43,7 +43,9 @@ final class DirectivesPlainAnnotationValueTest {
             "Incorrect annotation property for plain property",
             new XmlAnnotationValue(
                 new NativeXmlNode(
-                    new Xembler(new DirectivesPlainAnnotationValue(name, value)).xml()
+                    new Xembler(
+                        new DirectivesPlainAnnotationValue(0, new Format(), name, value)
+                    ).xml()
                 )
             ).bytecode(),
             Matchers.equalTo(new BytecodePlainAnnotationValue(name, value))

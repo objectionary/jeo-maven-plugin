@@ -46,6 +46,11 @@ public final class DirectivesValue implements Iterable<Directive> {
     private static final Codec CODEC = new EoCodec();
 
     /**
+     * Directives format.
+     */
+    private final Format format;
+
+    /**
      * Name.
      */
     private final String name;
@@ -62,27 +67,58 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param <T> Data type.
      */
     public <T> DirectivesValue(final T data) {
-        this(new RandName("v").toString(), data);
+        this(0, new Format(), data);
     }
 
     /**
      * Constructor.
      *
+     * @param index Ordered index.
+     * @param format Directives format.
+     * @param data Data.
+     * @param <T> Data type.
+     */
+    public <T> DirectivesValue(final int index, final Format format, final T data) {
+        this(format, new NumName("v", index), data);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param format Directives format.
      * @param name Name.
      * @param data Data.
      * @param <T> Data type.
      */
-    public <T> DirectivesValue(final String name, final T data) {
-        this(name, new BytecodeValue(data));
+    public <T> DirectivesValue(final Format format, final NumName name, final T data) {
+        this(format, name.toString(), new BytecodeValue(data));
     }
 
     /**
      * Constructor.
      *
+     * @param format Directives format.
+     * @param name Name.
+     * @param data Data.
+     * @param <T> Data type.
+     */
+    public <T> DirectivesValue(final Format format, final String name, final T data) {
+        this(format, name, new BytecodeValue(data));
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param format Format.
      * @param name Name.
      * @param value Value.
      */
-    public DirectivesValue(final String name, final BytecodeValue value) {
+    public DirectivesValue(
+        final Format format,
+        final String name,
+        final BytecodeValue value
+    ) {
+        this.format = format;
         this.name = name;
         this.value = value;
     }
@@ -137,7 +173,7 @@ public final class DirectivesValue implements Iterable<Directive> {
      * @param codec Codec
      * @return Value
      */
-    String hex(final Codec codec) {
+    public String hex(final Codec codec) {
         return DirectivesValue.bytesToHex(this.value.encode(codec));
     }
 
@@ -171,7 +207,7 @@ public final class DirectivesValue implements Iterable<Directive> {
         return new DirectivesEoObject(
             base,
             this.name,
-            new DirectivesComment(this.comment()),
+            new DirectivesComment(this.format, this.comment()),
             new DirectivesBytes(this.hex(codec))
         );
     }
@@ -186,8 +222,8 @@ public final class DirectivesValue implements Iterable<Directive> {
         return new DirectivesJeoObject(
             base,
             this.name,
-            new DirectivesComment(this.comment()),
-            new DirectivesBytes(this.hex(codec), new RandName("n").toString())
+            new DirectivesComment(this.format, this.comment()),
+            new DirectivesBytes(this.hex(codec), new NumName("n", 0).toString())
         );
     }
 
@@ -202,8 +238,24 @@ public final class DirectivesValue implements Iterable<Directive> {
         return new DirectivesJeoObject(
             base,
             this.name,
-            new DirectivesComment(this.comment()),
-            new DirectivesBytes(this.hex(codec), new RandName("j").toString())
+            new DirectivesComment(this.format, this.comment()),
+            new DirectivesBytes(this.hex(codec), new NumName("j", 0).toString())
+        );
+    }
+
+    /**
+     * JEO number.
+     *
+     * @param base Object base.
+     * @param codec Codec to use for bytes encoding.
+     * @return JEO number directives.
+     */
+    private DirectivesJeoObject jeoNumber(final String base, final Codec codec) {
+        return new DirectivesJeoObject(
+            base,
+            this.name,
+            new DirectivesComment(this.format, this.comment()),
+            new DirectivesNumber(new NumName("n", 0).toString(), this.hex(codec))
         );
     }
 
@@ -218,22 +270,6 @@ public final class DirectivesValue implements Iterable<Directive> {
      */
     private Iterable<Directive> integerNumber(final Codec codec) {
         return new DirectivesNumber(this.name, this.hex(codec));
-    }
-
-    /**
-     * JEO number.
-     *
-     * @param base Object base.
-     * @param codec Codec to use for bytes encoding.
-     * @return JEO number directives.
-     */
-    private DirectivesJeoObject jeoNumber(final String base, final Codec codec) {
-        return new DirectivesJeoObject(
-            base,
-            this.name,
-            new DirectivesComment(this.comment()),
-            new DirectivesNumber(new RandName("n").toString(), this.hex(codec))
-        );
     }
 
     /**

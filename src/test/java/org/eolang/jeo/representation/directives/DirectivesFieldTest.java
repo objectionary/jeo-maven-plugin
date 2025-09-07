@@ -87,7 +87,7 @@ final class DirectivesFieldTest {
                     "",
                     0,
                     Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL
-                ).directives()
+                ).directives(new Format())
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "field").toXpath(),

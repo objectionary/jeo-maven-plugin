@@ -13,6 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesLabel;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
@@ -60,8 +61,8 @@ public final class BytecodeLabel implements BytecodeEntry {
     }
 
     @Override
-    public Iterable<Directive> directives() {
-        return new DirectivesLabel(this.identifier);
+    public Iterable<Directive> directives(final int index, final Format format) {
+        return new DirectivesLabel(index, format, this.identifier);
     }
 
     @Override

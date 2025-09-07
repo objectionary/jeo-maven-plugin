@@ -4,8 +4,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeFrame;
 
 /**
@@ -57,12 +56,14 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * @return Bytecode frame.
      */
     public BytecodeFrame bytecode() {
+        final Object[] locals = this.locals();
+        final Object[] stack = this.stack();
         return new BytecodeFrame(
             this.type(),
-            this.nlocal(),
-            this.locals(),
-            this.nstack(),
-            this.stack()
+            this.nlocals().orElse(locals.length),
+            locals,
+            this.nstack().orElse(stack.length),
+            stack
         );
     }
 
@@ -71,15 +72,13 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * @return Type.
      */
     private int type() {
-        return this.ichild(0);
-    }
-
-    /**
-     * Number of local variables.
-     * @return Number of local variables.
-     */
-    private int nlocal() {
-        return this.ichild(1);
+        return (int) new XmlOperand(
+            this.byName("type").orElseThrow(
+                () -> new IllegalStateException(
+                    String.format("Can't find 'type' child in '%s'", this.node)
+                )
+            )
+        ).asObject();
     }
 
     /**
@@ -87,33 +86,13 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * @return Local variables.
      */
     private Object[] locals() {
-        return new XmlSeq(this.node.children().collect(Collectors.toList()).get(2))
-            .children()
-            .map(XmlOperand::new)
-            .map(XmlOperand::asObject)
-            .toArray(Object[]::new);
-    }
-
-    /**
-     * Number of stack elements.
-     * @return Number of stack elements.
-     */
-    private int nstack() {
-        return this.ichild(3);
-    }
-
-    /**
-     * Retrieve integer child.
-     * @param position Position.
-     * @return Integer value.
-     */
-    private int ichild(final int position) {
-        return (int) Objects.requireNonNull(
-            new XmlOperand(
-                this.node.children().collect(Collectors.toList()).get(position)
-            ).asObject(),
-            String.format("Can't find integer child at position %d in '%s'", position, this.node)
-        );
+        return new XmlFrameValues(
+            this.byName("locals").orElseThrow(
+                () -> new IllegalStateException(
+                    String.format("Can't find 'locals' child in '%s'", this.node)
+                )
+            )
+        ).values();
     }
 
     /**
@@ -121,10 +100,35 @@ public final class XmlFrame implements XmlBytecodeEntry {
      * @return Stack elements.
      */
     private Object[] stack() {
-        return new XmlSeq(this.node.children().collect(Collectors.toList()).get(4))
-            .children()
+        return new XmlFrameValues(
+            this.byName("stack").orElseThrow(
+                () -> new IllegalStateException(
+                    String.format("Can't find 'stack' child in '%s'", this.node)
+                )
+            )
+        ).values();
+    }
+
+    private Optional<Integer> nlocals() {
+        return this.byName("nlocals")
             .map(XmlOperand::new)
             .map(XmlOperand::asObject)
-            .toArray(Object[]::new);
+            .map(Integer.class::cast);
+    }
+
+    private Optional<Integer> nstack() {
+        return this.byName("nstack")
+            .map(XmlOperand::new)
+            .map(XmlOperand::asObject)
+            .map(Integer.class::cast);
+    }
+
+    private Optional<XmlNode> byName(final String name) {
+        return this.node.children()
+            .filter(
+                child -> child.attribute("name")
+                    .map(s -> s.startsWith(name))
+                    .orElse(false))
+            .findFirst();
     }
 }

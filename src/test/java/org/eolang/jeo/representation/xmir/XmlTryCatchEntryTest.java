@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ final class XmlTryCatchEntryTest {
         MatcherAssert.assertThat(
             "Can't convert XML try-catch entry to the correct bytecode",
             new XmlTryCatchEntry(
-                new NativeXmlNode(new Xembler(block.directives()).xml())
+                new NativeXmlNode(new Xembler(block.directives(0, new Format())).xml())
             ).bytecode(),
             Matchers.equalTo(block)
         );

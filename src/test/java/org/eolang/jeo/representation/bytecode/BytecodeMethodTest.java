@@ -19,6 +19,7 @@ import org.eolang.jeo.representation.directives.DirectivesAttributes;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
+import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.xmir.XmlObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -51,27 +52,28 @@ final class BytecodeMethodTest {
     void generatesDirectivesForMethodWithInstructions() {
         MatcherAssert.assertThat(
             "We expect that method with instructions will generate correct directives",
-            new Nameless(
+            new Xembler(
                 new BytecodeMethod("main")
                     .opcode(Opcodes.BIPUSH, 28)
                     .opcode(Opcodes.IRETURN)
                     .directives()
-            ),
+            ).xmlQuietly(),
             Matchers.equalTo(
-                new Nameless(
+                new Xembler(
                     new DirectivesMethod(
+                        new Format(),
                         new NumberedName(1, "main"),
                         new DirectivesMethodProperties(),
                         Arrays.asList(
-                            new DirectivesInstruction(Opcodes.BIPUSH, 28),
-                            new DirectivesInstruction(Opcodes.IRETURN)
+                            new DirectivesInstruction(0, new Format(), Opcodes.BIPUSH, 28),
+                            new DirectivesInstruction(1, new Format(), Opcodes.IRETURN)
                         ),
                         Collections.emptyList(),
                         new DirectivesAnnotations(),
                         Collections.emptyList(),
-                        new DirectivesAttributes()
+                        new DirectivesAttributes("local-variable-table", Collections.emptyList())
                     )
-                )
+                ).xmlQuietly()
             )
         );
     }
@@ -91,9 +93,10 @@ final class BytecodeMethodTest {
      */
     @Test
     void parsesMethodParameters() {
+        final Format format = new Format();
         MatcherAssert.assertThat(
             "We expect that the method with parameters generates correct directives",
-            new Nameless(
+            new Xembler(
                 new BytecodeMethod(
                     new BytecodeMethodProperties(
                         Opcodes.ACC_PUBLIC, "printSum", "(II)V", "", new BytecodeMethodParameters()
@@ -108,43 +111,48 @@ final class BytecodeMethodTest {
                     .opcode(Opcodes.INVOKEVIRTUAL, "ParametersExample", "printSum", "(II)V", false)
                     .opcode(Opcodes.RETURN)
                     .directives()
-            ),
+            ).xmlQuietly(),
             Matchers.equalTo(
-                new Nameless(
+                new Xembler(
                     new DirectivesMethod(
+                        new Format(),
                         new NumberedName(1, "printSum"),
                         new DirectivesMethodProperties(
                             Opcodes.ACC_PUBLIC, "(II)V", ""
                         ),
                         Arrays.asList(
-                            new DirectivesInstruction(Opcodes.NEW, "ParametersExample"),
-                            new DirectivesInstruction(Opcodes.DUP),
+                            new DirectivesInstruction(0, format, Opcodes.NEW, "ParametersExample"),
+                            new DirectivesInstruction(1, format, Opcodes.DUP),
                             new DirectivesInstruction(
+                                2,
+                                format,
                                 Opcodes.INVOKESPECIAL,
                                 "ParametersExample",
                                 "<init>",
                                 "()V",
                                 false
                             ),
-                            new DirectivesInstruction(Opcodes.ASTORE, 1),
-                            new DirectivesInstruction(Opcodes.ALOAD, 1),
-                            new DirectivesInstruction(Opcodes.BIPUSH, 10),
-                            new DirectivesInstruction(Opcodes.BIPUSH, 20),
+                            new DirectivesInstruction(3, format, Opcodes.ASTORE, 1),
+                            new DirectivesInstruction(4, format, Opcodes.ALOAD, 1),
+                            new DirectivesInstruction(5, format, Opcodes.BIPUSH, 10),
+                            new DirectivesInstruction(6, format, Opcodes.BIPUSH, 20),
                             new DirectivesInstruction(
+                                7,
+                                format,
                                 Opcodes.INVOKEVIRTUAL,
                                 "ParametersExample",
                                 "printSum",
                                 "(II)V",
                                 false
                             ),
-                            new DirectivesInstruction(Opcodes.RETURN)
+                            new DirectivesInstruction(8, format, Opcodes.RETURN)
                         ),
                         Collections.emptyList(),
                         new DirectivesAnnotations(),
                         Collections.emptyList(),
-                        new DirectivesAttributes()
+                        new DirectivesAttributes("local-variable-table", Collections.emptyList())
                     )
-                )
+                ).xmlQuietly()
             )
         );
     }
@@ -241,6 +249,27 @@ final class BytecodeMethodTest {
                 Matchers.containsString("1"),
                 Matchers.containsString("3"),
                 Matchers.containsString("label")
+            )
+        );
+    }
+
+    /**
+     * This test was added to mitigate the following issue:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1251">issue #1251</a>.
+     * @throws ImpossibleModificationException if modification is impossible, programmer mistake.
+     */
+    @Test
+    void addsLocalVariableTableEvenIfItIsEmpty() throws ImpossibleModificationException {
+        final String name = "emptyLocalVariableTable";
+        final DirectivesMethod directives = new BytecodeMethod(name).directives();
+        MatcherAssert.assertThat(
+            "We expect that the local variable table will be added even if it is empty",
+            new Xembler(directives).xml(),
+            XhtmlMatchers.hasXPaths(
+                String.format(
+                    "./o[contains(@name,'%s')]/o[@name='local-variable-table']",
+                    name
+                )
             )
         );
     }

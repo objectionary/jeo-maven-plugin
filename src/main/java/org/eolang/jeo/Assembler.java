@@ -50,7 +50,7 @@ public final class Assembler {
         final Stream<Path> all = new Summary(
             assembling,
             assembled,
-            this.input,
+            this.input.toString(),
             this.output,
             new ParallelTranslator(this::assemble)
         ).apply(new XmirFiles(this.input).all());
@@ -67,7 +67,7 @@ public final class Assembler {
         final Transformation trans = new Logging(
             "Assembling",
             "assembled",
-            new Caching(new Assembling(this.output, path))
+            new Caching(new Informative(new Assembling(this.output, path)))
         );
         trans.transform();
         return trans.target();

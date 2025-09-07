@@ -9,27 +9,48 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
+import org.eolang.jeo.representation.directives.DirectivesLine;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
 /**
  * Bytecode line.
  * This class represents the reference to a source line from a bytecode instruction.
- * Since the purpose of this class is rather informative, we just ignore it.
  * @since 0.6
  */
 @EqualsAndHashCode
 @ToString
 public final class BytecodeLine implements BytecodeEntry {
 
-    @Override
-    public void writeTo(final MethodVisitor visitor, final AsmLabels labels) {
-        // nothing to write
+    /**
+     * Line number in the source code.
+     */
+    private final int number;
+
+    /**
+     * Bytecode label that this line refers to.
+     */
+    private final BytecodeLabel label;
+
+    /**
+     * Constructor.
+     * @param number Line number in the source code
+     * @param label Bytecode label that this line refers to
+     */
+    public BytecodeLine(final int number, final BytecodeLabel label) {
+        this.number = number;
+        this.label = label;
     }
 
     @Override
-    public Iterable<Directive> directives() {
-        return Collections.emptyList();
+    public void writeTo(final MethodVisitor visitor, final AsmLabels labels) {
+        visitor.visitLineNumber(this.number, labels.label(this.label));
+    }
+
+    @Override
+    public Iterable<Directive> directives(final int index, final Format format) {
+        return new DirectivesLine(index, format, this.number, this.label.uid());
     }
 
     @Override

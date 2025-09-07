@@ -31,7 +31,11 @@ final class DirectivesEnumAnnotationValueTest {
             "Can't create an enum property with a name and a value",
             new Xembler(
                 new DirectivesEnumAnnotationValue(
-                    "name", Type.getDescriptor(DayOfWeek.class), "MONDAY"
+                    0,
+                    new Format(),
+                    "name",
+                    Type.getDescriptor(DayOfWeek.class),
+                    "MONDAY"
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(
@@ -51,7 +55,15 @@ final class DirectivesEnumAnnotationValueTest {
             "Incorrect annotation property for enum property",
             new XmlAnnotationValue(
                 new NativeXmlNode(
-                    new Xembler(new DirectivesEnumAnnotationValue(name, descriptor, value)).xml()
+                    new Xembler(
+                        new DirectivesEnumAnnotationValue(
+                            0,
+                            new Format(),
+                            name,
+                            descriptor,
+                            value
+                        )
+                    ).xml()
                 )
             ).bytecode(),
             Matchers.equalTo(new BytecodeEnumAnnotationValue(name, descriptor, value))

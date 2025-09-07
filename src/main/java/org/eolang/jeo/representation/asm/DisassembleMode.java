@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import java.util.Locale;
 import org.objectweb.asm.ClassReader;
 
 /**
@@ -36,7 +37,7 @@ public enum DisassembleMode {
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static DisassembleMode fromString(final String mode) {
         final DisassembleMode result;
-        switch (mode) {
+        switch (mode.toLowerCase(Locale.ROOT)) {
             case "short":
                 result = DisassembleMode.SHORT;
                 break;

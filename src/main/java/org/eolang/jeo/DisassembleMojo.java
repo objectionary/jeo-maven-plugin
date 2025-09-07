@@ -6,6 +6,7 @@ package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
 import java.io.File;
+import java.util.Set;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -13,8 +14,8 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.eolang.jeo.representation.asm.DisassembleMode;
-import org.eolang.jeo.representation.asm.DisassembleParams;
+import org.cactoos.set.SetOf;
+import org.eolang.jeo.representation.directives.Format;
 
 /**
  * Disassembles Java bytecode into XMIR representation.
@@ -97,9 +98,9 @@ public final class DisassembleMojo extends AbstractMojo {
      * <p>
      * Supported modes:
      * <ul>
-     *   <li>{@code short} - Minimal output with bytecode instructions only (default)</li>
+     *   <li>{@code short} - Minimal output with bytecode instructions only</li>
      *   <li>{@code debug} - Include debug information such as line numbers, local variables,
-     *       and source file references</li>
+     *       and source file references (default)</li>
      * </ul>
      * </p>
      *
@@ -108,7 +109,7 @@ public final class DisassembleMojo extends AbstractMojo {
      */
     @Parameter(
         property = "jeo.disassemble.mode",
-        defaultValue = "short"
+        defaultValue = "debug"
     )
     private String mode;
 
@@ -182,6 +183,44 @@ public final class DisassembleMojo extends AbstractMojo {
     )
     private boolean xmirVerification;
 
+    /**
+     * Should method modifiers be included in the output.
+     * <p>
+     * When true, method modifiers (e.g., public, private, static) will be
+     * included in the disassembled output.
+     * </p>
+     *
+     * @since 0.14.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(
+        property = "jeo.disassemble.xmir.modifiers",
+        defaultValue = "false"
+    )
+    private boolean modifiers;
+
+    /**
+     * Set of inclusion GLOB filters for finding .class files
+     * in the {@link #sourcesDir} directory.
+     *
+     * @since 0.13.0
+     * @checkstyle MemberNameCheck (15 lines)
+     */
+    @Parameter(property = "jeo.disassemble.includes")
+    @SuppressWarnings("PMD.ImmutableField")
+    private Set<String> includes = new SetOf<>("**/*.class");
+
+    /**
+     * Set of exclusion GLOB filters for finding .class files
+     * in the {@link #sourcesDir} directory.
+     *
+     * @since 0.13.0
+     * @checkstyle MemberNameCheck (7 lines)
+     */
+    @Parameter(property = "jeo.disassemble.excludes")
+    @SuppressWarnings("PMD.ImmutableField")
+    private Set<String> excludes = new SetOf<>();
+
     @Override
     public void execute() throws MojoExecutionException {
         try {
@@ -193,19 +232,25 @@ public final class DisassembleMojo extends AbstractMojo {
                 final boolean comments = !this.omitComments;
                 Logger.info(
                     this,
-                    "Disassembling is started with mode '%s' (with listings = '%b', comments = '%b')",
+                    "Disassembling is started with mode '%s' (with listings = '%b', comments = '%b', modifiers = '%b', pretty = '%b')",
                     this.mode,
                     listings,
-                    comments
+                    comments,
+                    this.modifiers,
+                    this.prettyXmir
                 );
                 new Disassembler(
-                    this.sourcesDir.toPath(),
+                    new FilteredClasses(
+                        new BytecodeClasses(this.sourcesDir.toPath()),
+                        new GlobFilter(this.includes, this.excludes)
+                    ),
                     this.outputDir.toPath(),
-                    new DisassembleParams(
-                        DisassembleMode.fromString(this.mode),
-                        listings,
-                        this.prettyXmir,
-                        comments
+                    new Format(
+                        Format.MODIFIERS, this.modifiers,
+                        Format.COMMENTS, comments,
+                        Format.WITH_LISTING, listings,
+                        Format.PRETTY, this.prettyXmir,
+                        Format.MODE, this.mode
                     )
                 ).disassemble();
                 if (this.xmirVerification) {

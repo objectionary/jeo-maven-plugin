@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -15,6 +16,7 @@ import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.NumberedName;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -271,21 +273,40 @@ public final class BytecodeMethod {
      * @return Directives.
      */
     public DirectivesMethod directives(final int number) {
+        return this.directives(number, new Format());
+    }
+
+    /**
+     * Generate directives.
+     * Since EO can't have overloaded methods, we need to add suffix to their names.
+     * This suffix is a number of the method.
+     * For example, if we have two methods with the same name, say 'foo',
+     * then we add suffixes to their names:
+     * foo and foo-2.
+     * That is why we need to pass method number to this method.
+     * @param number Method number.
+     * @param format Format of directives.
+     * @return Directives.
+     */
+    public DirectivesMethod directives(final int number, final Format format) {
+        final AtomicInteger ecounter = new AtomicInteger(0);
+        final AtomicInteger tcounter = new AtomicInteger(0);
         return new DirectivesMethod(
+            format,
             new NumberedName(
                 number,
                 new MethodName(this.properties.name()).xmir()
             ),
-            this.properties.directives(this.maxs),
-            this.entries.stream().map(BytecodeEntry::directives)
+            this.properties.directives(this.maxs, format),
+            this.entries.stream().map(e -> e.directives(ecounter.getAndIncrement(), format))
                 .collect(Collectors.toList()),
-            this.tryblocks.stream().map(BytecodeEntry::directives)
+            this.tryblocks.stream().map(e -> e.directives(tcounter.getAndIncrement(), format))
                 .collect(Collectors.toList()),
-            this.annotations.directives(),
+            this.annotations.directives(format),
             this.defvalues.stream()
-                .map(BytecodeDefaultValue::directives)
+                .map(v -> v.directives(format))
                 .collect(Collectors.toList()),
-            this.attributes.directives("local-variable-table")
+            this.attributes.directives(format, "local-variable-table")
         );
     }
 

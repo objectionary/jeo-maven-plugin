@@ -20,6 +20,11 @@ import org.xembly.Directives;
 public final class DirectivesAbsractObject implements Iterable<Directive> {
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * The name of the abstract object.
      */
     private final String base;
@@ -61,24 +66,27 @@ public final class DirectivesAbsractObject implements Iterable<Directive> {
         final String as,
         final Iterable<Directive> directives
     ) {
-        this(base, as, "", directives);
+        this(new Format(), base, as, "", directives);
     }
 
     /**
      * Constructor.
+     * @param format Format of the directives.
      * @param base The 'base' attribute of the abstract object.
      * @param as The 'as' attribute of the abstract object.
      * @param name The 'name' attribute of the abstract object.
      * @param internal Inner components of the abstract object.
-     * @checkstyle ParameterNameCheck (5 lines)
-     * @checkstyle ParameterNumberCheck (5 lines)
+     * @checkstyle ParameterNameCheck (10 lines)
+     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public DirectivesAbsractObject(
+        final Format format,
         final String base,
         final String as,
         final String name,
         final Iterable<Directive> internal
     ) {
+        this.format = format;
         this.base = base;
         this.as = as;
         this.name = name;
@@ -94,7 +102,7 @@ public final class DirectivesAbsractObject implements Iterable<Directive> {
         if (!this.name.isEmpty()) {
             directives.attr("name", this.name);
         }
-        directives.append(new DirectivesValue("base", this.base));
+        directives.append(new DirectivesValue(this.format, "base", this.base));
         if (this.internal.iterator().hasNext()) {
             directives.append(this.internal);
         }

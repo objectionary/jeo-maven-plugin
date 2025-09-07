@@ -26,7 +26,7 @@ final class DirectivesValuesTest {
     void convertsToXmir() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that array of values will be converted to correct Xembly directives",
-            new Xembler(new DirectivesValues("name", "value")).xml(),
+            new Xembler(new DirectivesValues(new Format(), "name", "value")).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("./o", "seq.of1").toXpath(),
                 "./o[contains(@name,'name')]",
@@ -41,7 +41,7 @@ final class DirectivesValuesTest {
             "We expect that the name of the sequence will be generated randomly and will not start with a digit",
             new NativeXmlNode(
                 new Xembler(
-                    new DirectivesValues("", "some-value")
+                    new DirectivesValues(new Format(), "", "some-value")
                 ).xmlQuietly()
             ).attribute("name").orElseThrow(
                 () -> new IllegalStateException("Name attribute is absent")

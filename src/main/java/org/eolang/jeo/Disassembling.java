@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.PrefixedName;
-import org.eolang.jeo.representation.asm.DisassembleParams;
+import org.eolang.jeo.representation.directives.Format;
 
 /**
  * Disassembling transformation.
@@ -34,7 +34,7 @@ public final class Disassembling implements Transformation {
     /**
      * Disassemble params.
      */
-    private final DisassembleParams params;
+    private final Format params;
 
     /**
      * Constructor.
@@ -42,7 +42,7 @@ public final class Disassembling implements Transformation {
      * @param representation Path to the bytecode representation to disassemble
      * @param params Disassemble parameters including mode and listings options
      */
-    Disassembling(final Path target, final Path representation, final DisassembleParams params) {
+    Disassembling(final Path target, final Path representation, final Format params) {
         this.folder = target;
         this.from = representation;
         this.params = params;

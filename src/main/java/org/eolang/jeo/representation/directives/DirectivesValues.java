@@ -7,7 +7,6 @@ package org.eolang.jeo.representation.directives;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
@@ -31,6 +30,11 @@ public final class DirectivesValues implements Iterable<Directive> {
     private static final Pattern DIGITS = Pattern.compile("^[0-9]");
 
     /**
+     * The format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Tuple name.
      */
     private final String name;
@@ -42,12 +46,14 @@ public final class DirectivesValues implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param format The format of the directives.
      * @param name Group of values name.
      * @param vals Values themselves.
      * @param <T> Values type.
      */
     @SafeVarargs
-    <T> DirectivesValues(final String name, final T... vals) {
+    public <T> DirectivesValues(final Format format, final String name, final T... vals) {
+        this.format = format;
         this.name = name;
         this.values = vals.clone();
     }
@@ -58,14 +64,17 @@ public final class DirectivesValues implements Iterable<Directive> {
         return new DirectivesSeq(
             this.nonEmptyName(),
             Arrays.stream(this.values)
-                .filter(Objects::nonNull)
                 .map(
                     value -> {
                         final Iterable<Directive> result;
                         if (value instanceof BytecodeLabel) {
-                            result = ((BytecodeEntry) value).directives();
+                            result = ((BytecodeEntry) value).directives(
+                                index.getAndIncrement(),
+                                this.format
+                            );
                         } else {
                             result = new DirectivesValue(
+                                this.format,
                                 String.format("x%d", index.getAndIncrement()),
                                 value
                             );

@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
+import org.eolang.jeo.representation.directives.Format;
 
 /**
  * Class properties.
@@ -132,8 +133,9 @@ public final class BytecodeClassProperties {
         return this.interfaces.clone();
     }
 
-    public DirectivesClassProperties directives() {
+    public DirectivesClassProperties directives(final Format format) {
         return new DirectivesClassProperties(
+            format,
             this.version,
             this.access,
             this.signature,

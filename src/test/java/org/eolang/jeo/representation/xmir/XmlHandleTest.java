@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.directives.DirectivesHandle;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -26,8 +27,9 @@ final class XmlHandleTest {
         );
         MatcherAssert.assertThat(
             "Can't convert XML handler to the correct handle object",
-            new XmlHandle(new NativeXmlNode(new Xembler(new DirectivesHandle(handle)).xml()))
-                .bytecode().asHandle(),
+            new XmlHandle(
+                new NativeXmlNode(new Xembler(new DirectivesHandle(0, new Format(), handle)).xml())
+            ).bytecode().asHandle(),
             Matchers.equalTo(handle)
         );
     }

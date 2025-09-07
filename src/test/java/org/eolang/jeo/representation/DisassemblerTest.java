@@ -16,8 +16,7 @@ import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.Disassembler;
-import org.eolang.jeo.representation.asm.DisassembleMode;
-import org.eolang.jeo.representation.asm.DisassembleParams;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -45,8 +44,11 @@ final class DisassemblerTest {
     @Test
     void transpilesSuccessfullyWithoutComments(@TempDir final Path temp) throws IOException {
         Files.write(temp.resolve(DisassemblerTest.CLASS_NAME), DisassemblerTest.BYTECODE);
+        final Format format = new Format(Format.COMMENTS, false);
         new Disassembler(
-            temp, temp, new DisassembleParams(DisassembleMode.SHORT, false, true, false)
+            temp,
+            temp,
+            format
         ).disassemble();
         final Path disassembled = temp.resolve("org")
             .resolve("eolang")
@@ -82,7 +84,9 @@ final class DisassemblerTest {
     void transpilesWithComments(@TempDir final Path temp) throws IOException {
         Files.write(temp.resolve(DisassemblerTest.CLASS_NAME), DisassemblerTest.BYTECODE);
         new Disassembler(
-            temp, temp, new DisassembleParams(DisassembleMode.SHORT, true, true, true)
+            temp,
+            temp,
+            new Format(Format.WITH_LISTING, true, Format.COMMENTS, true)
         ).disassemble();
         final List<String> lines = Files.readAllLines(
             temp.resolve("org")

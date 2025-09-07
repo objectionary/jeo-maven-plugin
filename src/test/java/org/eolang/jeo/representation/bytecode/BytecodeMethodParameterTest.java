@@ -5,8 +5,8 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.directives.DirectivesAnnotations;
 import org.eolang.jeo.representation.directives.DirectivesMethodParam;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,13 +27,25 @@ final class BytecodeMethodParameterTest {
     void convertsToDirectives(
         final int index, final Type type
     ) throws ImpossibleModificationException {
+        final Format format = new Format();
+        final String name = String.format("arg%d", index);
         MatcherAssert.assertThat(
             "We can't convert bytecode method parameter to correct XML directives",
-            new Xembler(new BytecodeMethodParameter(index, type).directives()).xml(),
+            new Xembler(
+                new BytecodeMethodParameter(
+                    index,
+                    name,
+                    type
+                ).directives(format)
+            ).xml(),
             Matchers.equalTo(
                 new Xembler(
                     new DirectivesMethodParam(
-                        index, String.format("arg%d", index), 0, type, new DirectivesAnnotations()
+                        format,
+                        index,
+                        name,
+                        0,
+                        type
                     )
                 ).xml()
             )

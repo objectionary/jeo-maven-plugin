@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Optional;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
 
@@ -13,6 +14,11 @@ import org.xembly.Directive;
  * @since 0.6
  */
 public final class DirectivesMethodParam implements Iterable<Directive> {
+
+    /**
+     * Directives format.
+     */
+    private final Format format;
 
     /**
      * Index of the parameter.
@@ -35,42 +41,37 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
     private final Type type;
 
     /**
-     * Annotations of the parameter.
-     */
-    private final DirectivesAnnotations annotations;
-
-    /**
      * Constructor.
+     * @param format Directives format.
      * @param index Index of the parameter.
      * @param name Name of the parameter.
      * @param access Access modifier of the parameter.
      * @param type Type of the parameter.
-     * @param annotations Annotations of the parameter.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesMethodParam(
+        final Format format,
         final int index,
         final String name,
         final int access,
-        final Type type,
-        final DirectivesAnnotations annotations
+        final Type type
     ) {
+        this.format = format;
         this.index = index;
         this.name = name;
         this.access = access;
         this.type = type;
-        this.annotations = annotations;
     }
 
     @Override
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "param",
-            this.name,
-            new DirectivesValue("index", this.index),
-            new DirectivesValue("access", this.access),
-            new DirectivesValue("type", this.type.toString()),
-            this.annotations
+            Optional.ofNullable(this.name).orElse(String.format("arg%d", this.index)),
+            new DirectivesValue(this.format, "name", this.name),
+            new DirectivesValue(this.format, "index", this.index),
+            new DirectivesValue(this.format, "access", this.access),
+            new DirectivesValue(this.format, "type", this.type.toString())
         ).iterator();
     }
 }

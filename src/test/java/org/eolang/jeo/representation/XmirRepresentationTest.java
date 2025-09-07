@@ -12,9 +12,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.cactoos.bytes.BytesOf;
+import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -137,7 +140,7 @@ final class XmirRepresentationTest {
             new BytecodeClass("Application").helloWorldMethod()
         ).bytecode();
         final Bytecode actual = new XmirRepresentation(
-            new BytecodeRepresentation(expected).toXmir()
+            new BytecodeRepresentation(expected).toXmir(new Format(Format.MODE, "debug"))
         ).toBytecode();
         MatcherAssert.assertThat(
             String.format(XmirRepresentationTest.MESSAGE, expected, actual),
@@ -159,6 +162,20 @@ final class XmirRepresentationTest {
             IllegalStateException.class,
             () -> new XmirRepresentation(xmir).toBytecode(),
             "We expect that the error message will be easily understandable by developers"
+        );
+    }
+
+    @Test
+    void generatesValidBytecodeWithNestMembersAttributeFromXmir() throws Exception {
+        final Bytecode original = new Bytecode(
+            new BytesOf(new ResourceOf("Check.class")).asBytes()
+        );
+        MatcherAssert.assertThat(
+            "We expect to parse the same bytecode with the 'NestMembers' attribute",
+            new XmirRepresentation(
+                new BytecodeRepresentation(original).toXmir()
+            ).toBytecode().toString(),
+            Matchers.containsString("NESTMEMBER")
         );
     }
 

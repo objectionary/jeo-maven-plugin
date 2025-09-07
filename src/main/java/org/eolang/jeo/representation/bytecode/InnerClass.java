@@ -9,6 +9,8 @@ import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesAttribute;
 import org.eolang.jeo.representation.directives.DirectivesValue;
+import org.eolang.jeo.representation.directives.Format;
+import org.eolang.jeo.representation.directives.NumName;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 
@@ -77,13 +79,14 @@ public final class InnerClass implements BytecodeAttribute {
     }
 
     @Override
-    public DirectivesAttribute directives() {
+    public DirectivesAttribute directives(final int index, final Format format) {
         return new DirectivesAttribute(
             "inner-class",
-            new DirectivesValue("name", this.name),
-            new DirectivesValue("outer", this.outer),
-            new DirectivesValue("inner", this.inner),
-            new DirectivesValue("access", this.access)
+            new NumName("a", index).toString(),
+            new DirectivesValue(format, "name", this.name),
+            new DirectivesValue(format, "outer", this.outer),
+            new DirectivesValue(format, "inner", this.inner),
+            new DirectivesValue(format, "access", this.access)
         );
     }
 }

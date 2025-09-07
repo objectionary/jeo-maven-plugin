@@ -20,6 +20,11 @@ public final class DirectivesMaxs implements Iterable<Directive> {
     private static final int UNDEFINED = -1;
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * Max stack size.
      */
     private final int stack;
@@ -33,16 +38,18 @@ public final class DirectivesMaxs implements Iterable<Directive> {
      * Constructor.
      */
     public DirectivesMaxs() {
-        this(DirectivesMaxs.UNDEFINED, DirectivesMaxs.UNDEFINED);
+        this(new Format(), DirectivesMaxs.UNDEFINED, DirectivesMaxs.UNDEFINED);
     }
 
     /**
      * Constructor.
      *
+     * @param format Format of the directives.
      * @param stack Max stack size.
      * @param locals Max locals size.
      */
-    public DirectivesMaxs(final int stack, final int locals) {
+    public DirectivesMaxs(final Format format, final int stack, final int locals) {
+        this.format = format;
         this.stack = stack;
         this.locals = locals;
     }
@@ -52,8 +59,8 @@ public final class DirectivesMaxs implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "maxs",
             "maxs",
-            new DirectivesValue(this.stack),
-            new DirectivesValue(this.locals)
+            new DirectivesValue(this.format, new NumName("m", 1), this.stack),
+            new DirectivesValue(this.format, new NumName("m", 2), this.locals)
         ).iterator();
     }
 }

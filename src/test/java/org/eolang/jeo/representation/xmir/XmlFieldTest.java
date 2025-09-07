@@ -10,6 +10,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
 import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.DirectivesField;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -131,7 +132,9 @@ final class XmlFieldTest {
         );
         MatcherAssert.assertThat(
             "We expect the field name with unicode characters to be successfully parsed from directives",
-            new XmlField(new NativeXmlNode(new Xembler(expected.directives()).xml())).bytecode(),
+            new XmlField(
+                new NativeXmlNode(new Xembler(expected.directives(new Format())).xml())
+            ).bytecode(),
             Matchers.equalTo(expected)
         );
     }

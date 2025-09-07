@@ -16,9 +16,9 @@ import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.asm.AsmProgram;
-import org.eolang.jeo.representation.asm.DisassembleParams;
+import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.bytecode.Bytecode;
-import org.eolang.jeo.representation.directives.DirectivesWithoutComments;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassReader;
 import org.xembly.Directive;
 import org.xembly.ImpossibleModificationException;
@@ -87,31 +87,40 @@ public final class BytecodeRepresentation {
      * @return XML representation of the bytecode
      */
     public XML toXmir() {
-        return new XMLDocument(this.toEO(new DisassembleParams()));
+        return this.toXmir(new Format());
     }
 
     /**
      * Convert bytecode into XMIR format.
-     * @param params The disassemble params controlling the level of detail
+     * @param format Disassemble output format
+     * @return XML representation of the bytecode
+     */
+    public XML toXmir(final Format format) {
+        return new XMLDocument(this.toEO(format));
+    }
+
+    /**
+     * Convert bytecode into XMIR format.
+     * @param format The disassemble params controlling the level of detail
      * @return XMIR representation of the bytecode
      */
-    public String toEO(final DisassembleParams params) {
-        final String listing;
-        if (params.includeListings()) {
-            listing = new BytecodeListing(this.input.value()).toString();
+    public String toEO(final Format format) {
+        final Format fmt;
+        if (format.withListing()) {
+            fmt = new Format(
+                format,
+                Format.LISTING, new BytecodeListing(this.input.value()).toString()
+            );
         } else {
-            listing = "";
+            fmt = format;
         }
-        Iterable<Directive> directives = new AsmProgram(this.input.value())
-            .bytecode(params.asmMode())
-            .directives(listing);
-        if (!params.includeComments()) {
-            directives = new DirectivesWithoutComments(directives);
-        }
+        final Iterable<Directive> directives = new AsmProgram(this.input.value())
+            .bytecode(DisassembleMode.fromString(fmt.mode()).asmOptions())
+            .directives(fmt);
         try {
             final XML measured = new MeasuredEo(directives).asXml();
             final String res;
-            if (params.prettyPrint()) {
+            if (fmt.pretty()) {
                 res = new PrettyXml(measured).toString();
             } else {
                 res = measured.toString();

@@ -22,8 +22,8 @@ final class DirectivesAttributesTest {
             "We expect that attributes will be converted to XMIR as a sequence of two objects with the name 'attributes'",
             new Xembler(
                 new DirectivesAttributes(
-                    new DirectivesAttribute("first"),
-                    new DirectivesAttribute("second")
+                    new DirectivesAttribute("first", "a0"),
+                    new DirectivesAttribute("second", "a1")
                 )
             ).xml(),
             XhtmlMatchers.hasXPaths(

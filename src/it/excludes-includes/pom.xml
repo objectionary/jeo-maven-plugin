@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.eolang</groupId>
+  <artifactId>jeo-excludes-includes-it</artifactId>
+  <version>@project.version@</version>
+  <packaging>jar</packaging>
+  <description>
+    This integration test verifies the functionality of the 'excludes' and
+    'includes' options in the `jeo-maven-plugin`. It ensures that the plugin
+    correctly chooses Java class files ('.class') based on the specified patterns.
+    If you need to run only this test, use the following command:
+    "mvn clean integration-test -Dinvoker.test=excludes-includes -DskipTests"
+  </description>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <stack-size>256M</stack-size>
+  </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.5.1</version>
+        <executions>
+          <execution>
+            <phase>
+              process-classes
+            </phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>org.eolang.jeo.ei.Application</mainClass>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.eolang</groupId>
+        <artifactId>jeo-maven-plugin</artifactId>
+        <version>@project.version@</version>
+        <configuration>
+          <xmirVerification>true</xmirVerification>
+          <omitComments>false</omitComments>
+          <excludes>
+            <exclude>ignored/**/*.class</exclude>
+          </excludes>
+          <includes>
+            <include>**/Included.class</include>
+          </includes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>bytecode-to-eo</id>
+            <goals>
+              <goal>disassemble</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>eo-to-bytecode</id>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.eolang</groupId>
+        <artifactId>eo-maven-plugin</artifactId>
+        <version>0.57.2</version>
+        <executions>
+          <execution>
+            <id>convert-xmir-to-eo</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>xmir-to-phi</goal>
+            </goals>
+            <configuration>
+              <phiInputDir>${project.build.directory}/generated-sources/jeo-xmir</phiInputDir>
+              <phiOutputDir>${project.build.directory}/generated-sources/jeo-eo</phiOutputDir>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -41,6 +41,21 @@ final class XmlValueTest {
         );
     }
 
+    @Test
+    void initializesFromNamedObject() {
+        MatcherAssert.assertThat(
+            "XmlValue should be initialized from XmlNamedObject",
+            new XmlValue(
+                new XmlNamedObject(
+                    new JcabiXmlNode(
+                        "<o base='Q.org.eolang.string'><o base='Q.org.eolang.bytes'><o>--</o></o></o>"
+                    )
+                )
+            ).string(),
+            Matchers.emptyString()
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("values")
     void decodesEncodesCorrectly(final Object origin) {
@@ -85,18 +100,26 @@ final class XmlValueTest {
             Arguments.of(false),
             Arguments.of(0.1d),
             Arguments.of(Double.MAX_VALUE),
+            Arguments.of(0.0d),
             Arguments.of(Double.MIN_VALUE),
             Arguments.of(Float.MAX_VALUE),
+            Arguments.of(0.0f),
             Arguments.of(Float.MIN_VALUE),
             Arguments.of(Long.MAX_VALUE),
+            Arguments.of(0L),
+            Arguments.of(10L),
             Arguments.of(Long.MIN_VALUE),
             Arguments.of(Integer.MAX_VALUE),
+            Arguments.of(0),
             Arguments.of(Integer.MIN_VALUE),
             Arguments.of(Short.MAX_VALUE),
+            Arguments.of((short) 0),
             Arguments.of(Short.MIN_VALUE),
             Arguments.of(Byte.MAX_VALUE),
+            Arguments.of((byte) 0),
             Arguments.of(Byte.MIN_VALUE),
-            Arguments.of("org/eolang/jeo/representation/HexDataTest")
+            Arguments.of("org/eolang/jeo/representation/HexDataTest"),
+            null
         );
     }
 }

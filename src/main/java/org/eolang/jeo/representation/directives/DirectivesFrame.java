@@ -15,15 +15,19 @@ import org.xembly.Directive;
 public final class DirectivesFrame implements Iterable<Directive> {
 
     /**
+     * Index of the bytecode instruction among other instructions.
+     */
+    private final int index;
+
+    /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
      * The type of stack map frame.
      */
     private final int type;
-
-    /**
-     * The number of local variables in the visited frame.
-     * Long and double values count for one variable.
-     */
-    private final int nlocal;
 
     /**
      * The local variable types in this frame.
@@ -37,35 +41,30 @@ public final class DirectivesFrame implements Iterable<Directive> {
     private final Object[] locals;
 
     /**
-     * The number of operand stack elements in the visited frame.
-     */
-    private final int nstack;
-
-    /**
      * The operand stack types in this frame.
      */
     private final Object[] stack;
 
     /**
      * Constructor.
+     * @param index Index of the bytecode instruction among other instructions.
+     * @param format Format of the directives.
      * @param type The type of stack map frame.
-     * @param nlocal The number of local variables in the visited frame.
      * @param locals The local variable types in this frame.
-     * @param nstack The number of operand stack elements in the visited frame.
      * @param stack The operand stack types in this frame.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesFrame(
+        final int index,
+        final Format format,
         final int type,
-        final int nlocal,
         final Object[] locals,
-        final int nstack,
         final Object... stack
     ) {
+        this.index = index;
+        this.format = format;
         this.type = type;
-        this.nlocal = nlocal;
         this.locals = locals.clone();
-        this.nstack = nstack;
         this.stack = stack.clone();
     }
 
@@ -73,12 +72,10 @@ public final class DirectivesFrame implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "frame",
-            new RandName("f").toString(),
-            new DirectivesValue(this.name("type"), this.type),
-            new DirectivesValue(this.name("nlocal"), this.nlocal),
-            new DirectivesValues(this.name("locals"), this.locals),
-            new DirectivesValue(this.name("nstack"), this.nstack),
-            new DirectivesValues(this.name("stack"), this.stack)
+            new NumName("f", this.index).toString(),
+            new DirectivesValue(this.format, this.name("type"), this.type),
+            new DirectivesFrameValues(this.format, this.name("locals"), this.locals),
+            new DirectivesFrameValues(this.format, this.name("stack"), this.stack)
         ).iterator();
     }
 

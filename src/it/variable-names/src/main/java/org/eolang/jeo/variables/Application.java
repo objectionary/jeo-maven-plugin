@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Set;
 import java.util.HashSet;
+import org.eolang.jeo.lines.Lines;
 
 /**
  *  Application Entry Point.
@@ -36,6 +37,7 @@ public class Application {
                 "Expected parameter 'secondParam' not found. All found methods: " + names);
         }
         someMethod("firstParam", "secondParam");
+        Lines.checkTransformationPreserveLines();
     }
 
     public static void someMethod(final String firstParam, final String secondParam) {

@@ -34,7 +34,7 @@ public final class Summary implements Translator {
     /**
      * From where.
      */
-    private final Path input;
+    private final String input;
 
     /**
      * To where.
@@ -58,7 +58,7 @@ public final class Summary implements Translator {
     Summary(
         final String process,
         final String participle,
-        final Path input,
+        final String input,
         final Path output,
         final Translator original
     ) {

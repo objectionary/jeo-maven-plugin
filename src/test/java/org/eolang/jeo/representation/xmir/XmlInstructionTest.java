@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +31,7 @@ final class XmlInstructionTest {
     void comparesSuccessfullyWithSpaces() {
         MatcherAssert.assertThat(
             "Xml Instruction nodes with different empty spaces, but with the same content should be the same, but it wasn't",
-            new XmlInstruction(Opcodes.INVOKESPECIAL, 1, 2, 3).bytecode(),
+            new XmlInstruction(0, Opcodes.INVOKESPECIAL, 1, 2, 3).bytecode(),
             Matchers.equalTo(XmlInstructionTest.EXPECTED)
         );
     }
@@ -39,7 +40,7 @@ final class XmlInstructionTest {
     void comparesSuccessfullyWithDifferentTextNodes() {
         MatcherAssert.assertThat(
             "Xml Instruction with different arguments should not be equal, but it was",
-            new XmlInstruction(Opcodes.INVOKESPECIAL, 32, 23, 14),
+            new XmlInstruction(0, Opcodes.INVOKESPECIAL, 32, 23, 14),
             Matchers.not(Matchers.equalTo(XmlInstructionTest.EXPECTED))
         );
     }
@@ -48,7 +49,7 @@ final class XmlInstructionTest {
     void comparesDeeply() {
         MatcherAssert.assertThat(
             "Xml Instruction with different child content should not be equal, but it was",
-            new XmlInstruction(Opcodes.INVOKESPECIAL),
+            new XmlInstruction(0, Opcodes.INVOKESPECIAL),
             Matchers.not(Matchers.equalTo(XmlInstructionTest.EXPECTED))
         );
     }
@@ -57,7 +58,7 @@ final class XmlInstructionTest {
     void comparesDifferentInstructions() {
         MatcherAssert.assertThat(
             "Xml Instruction with different content should not be equal, but it was",
-            new XmlInstruction(Opcodes.DUP),
+            new XmlInstruction(0, Opcodes.DUP),
             Matchers.not(Matchers.equalTo(XmlInstructionTest.EXPECTED))
         );
     }
@@ -70,7 +71,7 @@ final class XmlInstructionTest {
                 IllegalStateException.class,
                 () -> new XmlInstruction(
                     new JcabiXmlNode(
-                        new Xembler(new DirectivesInstruction(Opcodes.DUP))
+                        new Xembler(new DirectivesInstruction(0, new Format(), Opcodes.DUP))
                             .xml()
                             .replace("dup", "unknown")
                     )

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.asm.DisassembleParams;
+import org.eolang.jeo.representation.directives.Format;
 
 /**
  * Disassembler for bytecode classes.
@@ -20,12 +20,12 @@ import org.eolang.jeo.representation.asm.DisassembleParams;
  * disassembly modes for various levels of detail.</p>
  * @since 0.1.0
  */
-public class Disassembler {
+public final class Disassembler {
 
     /**
      * Project compiled classes.
      */
-    private final Path classes;
+    private final Classes classes;
 
     /**
      * Where to save decompiled classes.
@@ -35,7 +35,7 @@ public class Disassembler {
     /**
      * Disassemble params.
      */
-    private final DisassembleParams params;
+    private final Format params;
 
     /**
      * Constructor.
@@ -46,7 +46,7 @@ public class Disassembler {
         final Path classes,
         final Path target
     ) {
-        this(classes, target, new DisassembleParams());
+        this(classes, target, new Format());
     }
 
     /**
@@ -58,7 +58,15 @@ public class Disassembler {
     public Disassembler(
         final Path classes,
         final Path target,
-        final DisassembleParams params
+        final Format params
+    ) {
+        this(new BytecodeClasses(classes), target, params);
+    }
+
+    public Disassembler(
+        final Classes classes,
+        final Path target,
+        final Format params
     ) {
         this.classes = classes;
         this.target = target;
@@ -74,10 +82,10 @@ public class Disassembler {
         final Stream<Path> stream = new Summary(
             process,
             disassembled,
-            this.classes,
+            this.classes.toString(),
             this.target,
             new ParallelTranslator(this::disassemble)
-        ).apply(new BytecodeClasses(this.classes).all());
+        ).apply(this.classes.all());
         stream.forEach(this::log);
         stream.close();
     }
@@ -91,9 +99,7 @@ public class Disassembler {
         final Transformation trans = new Logging(
             "Disassembling",
             "disassembled",
-            new Caching(
-                new Disassembling(this.target, path, this.params)
-            )
+            new Caching(new Informative(new Disassembling(this.target, path, this.params)))
         );
         trans.transform();
         return trans.target();

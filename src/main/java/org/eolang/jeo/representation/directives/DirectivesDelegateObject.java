@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Objects;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -88,10 +89,10 @@ public final class DirectivesDelegateObject implements Iterable<Directive> {
     @Override
     public Iterator<Directive> iterator() {
         final Directives directives = new Directives().add("o");
-        if (!this.as.isEmpty()) {
+        if (Objects.nonNull(this.as) && !this.as.isEmpty()) {
             directives.attr("as", this.as);
         }
-        if (!this.name.isEmpty()) {
+        if (Objects.nonNull(this.name) && !this.name.isEmpty()) {
             directives.attr("name", this.name);
         }
         directives.append(new DirectivesSimpleDelegate(this.base));

@@ -5,10 +5,12 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesArrayAnnotationValue;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.AnnotationVisitor;
 import org.xembly.Directive;
 
@@ -50,11 +52,14 @@ public final class BytecodeArrayAnnotationValue implements BytecodeAnnotationVal
     }
 
     @Override
-    public Iterable<Directive> directives() {
+    public Iterable<Directive> directives(final int index, final Format format) {
+        final AtomicInteger counter = new AtomicInteger(0);
         return new DirectivesArrayAnnotationValue(
+            index,
+            format,
             this.name,
             this.values.stream()
-                .map(BytecodeAnnotationValue::directives)
+                .map(v -> v.directives(counter.getAndIncrement(), format))
                 .collect(Collectors.toList())
         );
     }

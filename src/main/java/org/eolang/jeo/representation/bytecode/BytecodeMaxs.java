@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.bytecode;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesMaxs;
+import org.eolang.jeo.representation.directives.Format;
 
 /**
  * Bytecode maxs.
@@ -68,10 +69,11 @@ public final class BytecodeMaxs {
 
     /**
      * Convert to directives.
+     * @param format Format of the directives.
      * @return Directives.
      */
-    public DirectivesMaxs directives() {
-        return new DirectivesMaxs(this.stack, this.locals);
+    public DirectivesMaxs directives(final Format format) {
+        return new DirectivesMaxs(format, this.stack, this.locals);
     }
 
     /**

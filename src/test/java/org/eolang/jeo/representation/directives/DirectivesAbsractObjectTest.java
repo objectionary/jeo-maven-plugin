@@ -55,6 +55,7 @@ final class DirectivesAbsractObjectTest {
             "We expect the abstract object to have base EO attribute, as and name XML attributes",
             new Xembler(
                 new DirectivesAbsractObject(
+                    new Format(),
                     DirectivesAbsractObjectTest.BASE,
                     "asValue",
                     "nameValue",
@@ -90,6 +91,7 @@ final class DirectivesAbsractObjectTest {
             "We expect the abstract object to not have as or name XML attributes when they are empty",
             new Xembler(
                 new DirectivesAbsractObject(
+                    new Format(),
                     DirectivesAbsractObjectTest.BASE, "", "", Collections.emptyList()
                 )
             ).xmlQuietly(),

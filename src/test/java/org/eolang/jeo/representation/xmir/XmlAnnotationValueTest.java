@@ -9,6 +9,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeArrayAnnotationValue;
 import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.DirectivesArrayAnnotationValue;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,8 @@ final class XmlAnnotationValueTest {
                 new NativeXmlNode(
                     new Xembler(
                         new DirectivesArrayAnnotationValue(
+                            0,
+                            new Format(),
                             name,
                             Collections.singletonList(new DirectivesAnnotation(descriptor, visible))
                         )

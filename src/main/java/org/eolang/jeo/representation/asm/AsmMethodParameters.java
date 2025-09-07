@@ -5,13 +5,17 @@
 package org.eolang.jeo.representation.asm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
+import org.eolang.jeo.representation.bytecode.BytecodeParamAnnotations;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.ParameterNode;
 
 /**
  * Asm method parameters.
@@ -37,27 +41,64 @@ final class AsmMethodParameters {
      * @return Domain method parameters.
      */
     BytecodeMethodParameters bytecode() {
-        final Type[] types = Type.getArgumentTypes(this.node.desc);
-        final List<BytecodeMethodParameter> params = new ArrayList<>(types.length);
-        for (int index = 0; index < types.length; ++index) {
-            params.add(
+        final List<ParameterNode> params = Optional.ofNullable(this.node.parameters)
+            .orElse(Collections.emptyList());
+        final Type[] types = this.types();
+        final List<BytecodeMethodParameter> res = new ArrayList<>(types.length);
+        for (int index = 0; index < params.size(); ++index) {
+            res.add(
                 new BytecodeMethodParameter(
                     index,
                     AsmMethodParameters.name(this.node, index),
                     AsmMethodParameters.access(this.node, index),
-                    types[index],
-                    new AsmAnnotations(
-                        AsmMethodParameters.annotations(
-                            this.node.visibleParameterAnnotations, index
-                        ),
-                        AsmMethodParameters.annotations(
-                            this.node.invisibleParameterAnnotations, index
-                        )
-                    ).bytecode()
+                    types[index]
                 )
             );
         }
-        return new BytecodeMethodParameters(params);
+        return new BytecodeMethodParameters(res, this.paramAnnotations());
+    }
+
+    /**
+     * Method parameter types.
+     * @return Method parameter types.
+     */
+    private Type[] types() {
+        final Type[] result;
+        if (this.node.desc != null) {
+            result = Type.getArgumentTypes(this.node.desc);
+        } else {
+            result = new Type[0];
+        }
+        return result;
+    }
+
+    /**
+     * Parameter annotations.
+     * @return Parameter annotations.
+     */
+    private List<BytecodeParamAnnotations> paramAnnotations() {
+        final List<AnnotationNode>[] visible = this.node.visibleParameterAnnotations;
+        final List<AnnotationNode>[] invisible = this.node.invisibleParameterAnnotations;
+        final int max = Math.max(
+            Optional.ofNullable(visible).map(a -> a.length).orElse(0),
+            Optional.ofNullable(invisible).map(a -> a.length).orElse(0)
+        );
+        final List<BytecodeParamAnnotations> annotations = new ArrayList<>(0);
+        for (int index = 0; index < max; ++index) {
+            final AsmAnnotations all = new AsmAnnotations(
+                AsmMethodParameters.annotations(visible, index),
+                AsmMethodParameters.annotations(invisible, index)
+            );
+            if (!all.isEmpty()) {
+                annotations.add(
+                    new BytecodeParamAnnotations(
+                        index,
+                        all.bytecode()
+                    )
+                );
+            }
+        }
+        return annotations;
     }
 
     /**
@@ -101,11 +142,12 @@ final class AsmMethodParameters {
      * @return Parameter name.
      */
     private static String name(final MethodNode node, final int index) {
-        final String result;
+        String result = null;
         if (node.parameters != null && node.parameters.size() > index) {
-            result = node.parameters.get(index).name;
-        } else {
-            result = String.format("arg%d", index);
+            final ParameterNode pnode = node.parameters.get(index);
+            if (pnode.name != null) {
+                result = pnode.name;
+            }
         }
         return result;
     }
