@@ -54,7 +54,7 @@ private void generateGitHubIssue() {
     '''
 
     // Generate the Bash script
-    def bashScript = """#!/bin/bash
+    def bashScript = """#!/usr/bin/env bash
 
 # Attachments
 file1="App.xmir.disassemble.txt"
