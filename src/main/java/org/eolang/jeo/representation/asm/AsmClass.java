@@ -15,9 +15,9 @@ import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
-import org.eolang.jeo.representation.bytecode.BytecodeModule;
 import org.eolang.jeo.representation.bytecode.InnerClass;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.ModuleNode;
 
 /**
  * ASM-based bytecode parser for Java classes.
@@ -133,10 +133,11 @@ public final class AsmClass {
      */
     private Optional<BytecodeAttribute> module() {
         final Optional<BytecodeAttribute> result;
-        if (this.node.module == null) {
+        final ModuleNode module = this.node.module;
+        if (module == null) {
             result = Optional.empty();
         } else {
-            result = Optional.of(new BytecodeModule());
+            result = Optional.of(new AsmModule(module).bytecode());
         }
         return result;
     }

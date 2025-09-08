@@ -4,5 +4,5 @@
  */
 String log = new File(basedir, 'build.log').text;
 assert log.contains("BUILD SUCCESS")
-assert log.contains("All checks passed.")
+assert log.contains("Everything looks fine!")
 true

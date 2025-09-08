@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.eolang</groupId>
+  <artifactId>jeo-it</artifactId>
+  <version>@project.version@</version>
+  <packaging>jar</packaging>
+  <description>
+    Integration test that attempts to transform a simple Java program with modules usage.
+    The integration test verifies that the program can run successfully, and the jeo-maven-plugin doesn't break anything.
+    If you only need to run this test, use the following command:
+    "mvn clean integration-test invoker:run -Dinvoker.test=modules -DskipTests"
+  </description>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>9</maven.compiler.release>
+    <stack-size>256M</stack-size>
+    <exec.mainClass>org.eolang.jeo.modules/org.eolang.jeo.modules.App</exec.mainClass>
+  </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eolang</groupId>
+        <artifactId>jeo-maven-plugin</artifactId>
+        <version>@project.version@</version>
+        <configuration>
+          <xmirVerification>true</xmirVerification>
+        </configuration>
+        <executions>
+          <execution>
+            <id>bytecode-to-eo</id>
+            <goals>
+              <goal>disassemble</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>eo-to-bytecode</id>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.5.1</version>
+        <executions>
+          <execution>
+            <id>run-module</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>process-classes</phase>
+            <configuration>
+              <executable>java</executable>
+              <arguments>
+                <argument>--module-path</argument>
+                <modulepath/>
+                <argument>--module</argument>
+                <argument>org.eolang.jeo.modules/org.eolang.jeo.modules.App</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
