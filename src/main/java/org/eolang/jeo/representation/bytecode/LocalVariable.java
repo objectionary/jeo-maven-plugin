@@ -106,10 +106,16 @@ public final class LocalVariable implements BytecodeAttribute {
 
     @Override
     public void write(final MethodVisitor method, final AsmLabels labels) {
+        final String sig;
+        if (this.signature == null || this.signature.isEmpty()) {
+            sig = null;
+        } else {
+            sig = this.signature;
+        }
         method.visitLocalVariable(
             this.name,
             this.descriptor,
-            this.signature,
+            sig,
             labels.label(this.start),
             labels.label(this.end),
             this.index

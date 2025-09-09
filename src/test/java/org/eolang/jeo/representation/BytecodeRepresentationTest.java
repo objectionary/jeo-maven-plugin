@@ -7,6 +7,7 @@ package org.eolang.jeo.representation;
 import com.jcabi.matchers.XhtmlMatchers;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
+import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.EoCodec;
 import org.eolang.jeo.representation.directives.DirectivesValue;
@@ -15,6 +16,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.MethodVisitor;
 
 /**
  * Test cases for {@link BytecodeRepresentation}.
@@ -149,4 +151,32 @@ final class BytecodeRepresentationTest {
             "We expect to parse a bytecode with a null name without exceptions"
         );
     }
+
+    /**
+     * This bug was found in the issue:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1282">#1282</a>
+     * The problem lies in the 'signature' field of the LocalVariableNode,
+     * if it is null, we save an empty string in XMIR and then try to decode it back into bytecode,
+     * which leads to saving an empty signature in the variable table of the method,
+     * instead of null.
+     * You can find the fix here:
+     * {@link  org.eolang.jeo.representation.bytecode.LocalVariable#write(MethodVisitor, AsmLabels)}
+     * @throws Exception In case of error.
+     */
+    @Test
+    void doesNotAddEmptySignaturesToVariableTable() throws Exception {
+        final ResourceOf input = new ResourceOf("Check.class");
+        final String actual = new Bytecode(
+            new XmirRepresentation(
+                new BytecodeRepresentation(input).toXmir(new Format(Format.MODE, "debug"))
+            ).toBytecode().bytes()
+        ).toString();
+        final String expected = new Bytecode(new BytesOf(input).asBytes()).toString();
+        MatcherAssert.assertThat(
+            "The disassembled/assembled bytecode representation should match the original bytecode",
+            actual,
+            Matchers.equalTo(expected)
+        );
+    }
+
 }
