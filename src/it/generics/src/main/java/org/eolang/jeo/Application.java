@@ -4,6 +4,8 @@
  */
 package org.eolang.jeo;
 
+import java.util.List;
+
 public class Application {
     public static void main(String[] args) {
         new Developer<>(
@@ -41,5 +43,7 @@ public class Application {
                 }
             }
         ).writeCode();
+        GenericSelfCheck<Integer, List<Number>> self = new GenericSelfCheck<>();
+        self.check();
     }
 }

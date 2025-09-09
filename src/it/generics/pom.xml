@@ -28,7 +28,14 @@
         <artifactId>jeo-maven-plugin</artifactId>
         <version>@project.version@</version>
         <configuration>
-          <xmirVerification>true</xmirVerification>
+          <!--
+          @todo #1282:30min Enable xmir verification when objectionary/lints will speed up the checks.
+           Currently, the verification is disabled because it takes too long to check all the generated XMIR files.
+           You can track the progress of speeding up the lints here:
+           https://github.com/objectionary/lints/issues/743
+           https://github.com/objectionary/lints/issues/744
+          -->
+          <xmirVerification>false</xmirVerification>
         </configuration>
         <executions>
           <execution>
