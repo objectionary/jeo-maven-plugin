@@ -93,8 +93,26 @@ final class AsmProgramTest {
         );
     }
 
+    @Test
+    void convertsToBytecodeThenToXmirAndThenBackToBytecodeScalaBytecode() throws Exception {
+        final BytecodeObject original = new AsmProgram(
+            new BytesOf(new ResourceOf("LogManager.class")).asBytes()
+        ).bytecode();
+        MatcherAssert.assertThat(
+            "We expect to receive the same scala bytecode",
+            new XmlObject(
+                new Xembler(original.directives(new Format())).xml()
+            ).bytecode().bytecode(),
+            Matchers.equalTo(original.bytecode())
+        );
+    }
+
     @ParameterizedTest
-    @ValueSource(strings = {"FixedWidth.class", "DeprecatedMethod.class", "ParamAnnotation.class"})
+    @ValueSource(strings = {
+        "FixedWidth.class",
+        "DeprecatedMethod.class",
+        "ParamAnnotation.class"
+    })
     void convertsToBytecodeThenToXmirAndThenBackToBytecode(final String resource) throws Exception {
         final BytecodeObject bytecode = new AsmProgram(
             new BytesOf(new ResourceOf(resource)).asBytes()
