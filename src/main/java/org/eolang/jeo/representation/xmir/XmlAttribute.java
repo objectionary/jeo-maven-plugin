@@ -90,6 +90,8 @@ public final class XmlAttribute {
             result = new XmlPermittedSubclasses(this.node).attribute();
         } else if (new JeoFqn("record-components").fqn().equals(base)) {
             result = new XmlRecordComponents(this.node).bytecode();
+        } else if (new JeoFqn("unknown-attribute").fqn().equals(base)) {
+            result = new XmlUnknownAttribute(this.node).bytecode();
         } else {
             throw new IllegalArgumentException(
                 String.format("Unknown attribute base '%s'", base)
