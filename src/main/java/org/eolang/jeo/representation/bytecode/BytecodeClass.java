@@ -313,7 +313,7 @@ public final class BytecodeClass {
                 this.props.access(),
                 this.name.full(),
                 this.props.signature(),
-                this.props.supername(),
+                this.supername(),
                 this.props.interfaces()
             );
             this.annotations.write(visitor);
@@ -335,6 +335,23 @@ public final class BytecodeClass {
                 exception
             );
         }
+    }
+
+    /**
+     * Supername.
+     * <p>
+     *     For module-info class, there is no supername.
+     * </p>
+     * @return Supername.
+     */
+    private String supername() {
+        final String result;
+        if ("module-info".equals(this.name.full())) {
+            result = null;
+        } else {
+            result = this.props.supername();
+        }
+        return result;
     }
 
     /**

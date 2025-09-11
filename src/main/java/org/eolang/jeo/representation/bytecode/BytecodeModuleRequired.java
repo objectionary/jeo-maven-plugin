@@ -6,6 +6,8 @@ package org.eolang.jeo.representation.bytecode;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesModuleRequired;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ModuleVisitor;
 
 /**
@@ -51,5 +53,14 @@ public final class BytecodeModuleRequired {
      */
     public void write(final ModuleVisitor visitor) {
         visitor.visitRequire(this.module, this.access, this.version);
+    }
+
+    /**
+     * Converts this required module to directives.
+     * @param format Directive format
+     * @return Directives representation of this required module
+     */
+    public DirectivesModuleRequired directives(final Format format) {
+        return new DirectivesModuleRequired(format, this.module, this.access, this.version);
     }
 }

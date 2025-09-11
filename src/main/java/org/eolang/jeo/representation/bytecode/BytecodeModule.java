@@ -7,15 +7,16 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
+import org.eolang.jeo.representation.directives.DirectivesModule;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.ModuleVisitor;
 import org.xembly.Directive;
-import org.xembly.Directives;
 
 /**
  * Bytecode module.
@@ -138,6 +139,26 @@ public final class BytecodeModule implements BytecodeAttribute {
 
     @Override
     public Iterable<Directive> directives(final int index, final Format format) {
-        return new Directives();
+        return new DirectivesModule(
+            format,
+            this.name,
+            this.access,
+            this.version,
+            this.main,
+            this.packages,
+            this.requires.stream()
+                .map(req -> req.directives(format))
+                .collect(Collectors.toList()),
+            this.exports.stream()
+                .map(exp -> exp.directives(format))
+                .collect(Collectors.toList()),
+            this.opens.stream()
+                .map(opn -> opn.directives(format))
+                .collect(Collectors.toList()),
+            this.provides.stream()
+                .map(prov -> prov.directives(format))
+                .collect(Collectors.toList()),
+            this.uses
+        );
     }
 }

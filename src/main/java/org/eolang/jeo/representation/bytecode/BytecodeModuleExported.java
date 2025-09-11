@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.directives.DirectivesModuleExported;
+import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ModuleVisitor;
 
 /**
@@ -54,5 +56,14 @@ public final class BytecodeModuleExported {
      */
     public void write(final ModuleVisitor module) {
         module.visitExport(this.pckg, this.access, this.modules.toArray(new String[0]));
+    }
+
+    /**
+     * Converts this exported package to directives.
+     * @param format Directive format
+     * @return Directives
+     */
+    public DirectivesModuleExported directives(final Format format) {
+        return new DirectivesModuleExported(format, this.pckg, this.access, this.modules);
     }
 }

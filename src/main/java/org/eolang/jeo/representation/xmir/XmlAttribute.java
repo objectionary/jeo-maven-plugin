@@ -42,6 +42,7 @@ public final class XmlAttribute {
     /**
      * Get attribute.
      * @return Attribute.
+     * @checkstyle CyclomaticComplexityCheck (50 lines)
      */
     public BytecodeAttribute attribute() {
         final String base = this.node.base().orElseThrow(
@@ -90,6 +91,8 @@ public final class XmlAttribute {
             result = new XmlPermittedSubclasses(this.node).attribute();
         } else if (new JeoFqn("record-components").fqn().equals(base)) {
             result = new XmlRecordComponents(this.node).bytecode();
+        } else if (new JeoFqn("module").fqn().equals(base)) {
+            result = new XmlModule(this.node).bytecode();
         } else if (new JeoFqn("unknown-attribute").fqn().equals(base)) {
             result = new XmlUnknownAttribute(this.node).bytecode();
         } else {
