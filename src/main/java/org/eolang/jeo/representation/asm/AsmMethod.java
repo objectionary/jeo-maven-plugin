@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -68,18 +69,17 @@ final class AsmMethod {
      * @return Domain method attributes.
      */
     private BytecodeAttributes attributes() {
+        final List<BytecodeAttribute> all = new ArrayList<>(0);
+        all.addAll(new AsmUnknownAttributes(this.node).bytecode());
         final List<LocalVariableNode> variables = this.node.localVariables;
-        final BytecodeAttributes result;
-        if (variables == null) {
-            result = new BytecodeAttributes();
-        } else {
-            result = new BytecodeAttributes(
+        if (variables != null) {
+            all.addAll(
                 variables.stream()
                     .map(LocalVariable::new)
-                    .toArray(BytecodeAttribute[]::new)
+                    .collect(Collectors.toList())
             );
         }
-        return result;
+        return new BytecodeAttributes(all);
     }
 
     /**

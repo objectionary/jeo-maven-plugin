@@ -103,7 +103,10 @@ public final class AsmClass {
                     this.permitted(),
                     this.records()
                 ).filter(Optional::isPresent).map(Optional::get),
-                this.inners()
+                Stream.concat(
+                    this.inners(),
+                    new AsmUnknownAttributes(this.node).bytecode().stream()
+                )
             ).collect(Collectors.toList())
         );
     }

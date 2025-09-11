@@ -97,13 +97,15 @@ final class AsmProgramTest {
     void convertsToBytecodeThenToXmirAndThenBackToBytecodeScalaBytecode() throws Exception {
         final BytecodeObject original = new AsmProgram(
             new BytesOf(new ResourceOf("LogManager.class")).asBytes()
-        ).bytecode();
+        ).bytecode(0);
+        final Bytecode actual = new XmlObject(
+            new Xembler(original.directives(new Format())).xml()
+        ).bytecode().bytecode();
+        final Bytecode expected = original.bytecode();
         MatcherAssert.assertThat(
             "We expect to receive the same scala bytecode",
-            new XmlObject(
-                new Xembler(original.directives(new Format())).xml()
-            ).bytecode().bytecode(),
-            Matchers.equalTo(original.bytecode())
+            actual,
+            Matchers.equalTo(expected)
         );
     }
 
