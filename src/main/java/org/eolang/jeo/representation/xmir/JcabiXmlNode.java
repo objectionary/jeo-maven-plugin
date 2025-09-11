@@ -38,6 +38,10 @@ public final class JcabiXmlNode implements XmlNode {
      *  We are ignoring 'duplicate-names' check because of records that usually have
      *  the field names same as the method names which leads to false positives.
      *  We should find a way to distinguish between fields and methods in XMIR.
+     * @todo #1297:60min Remove 'mandatory-package' check suppression.
+     *  We are ignoring 'mandatory-package' check because 'module-info' files don't
+     *  have package declaration. We should find a way to identify 'module-info'
+     *  for XMIR.
      */
     private static final Collection<String> IGNORE = new HashSet<>(
         Arrays.asList(
@@ -46,7 +50,8 @@ public final class JcabiXmlNode implements XmlNode {
             "duplicate-names-in-diff-context",
             "unit-test-missing",
             "sparse-decoration",
-            "duplicate-names"
+            "duplicate-names",
+            "mandatory-package"
         )
     );
 

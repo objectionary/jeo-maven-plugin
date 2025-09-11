@@ -7,6 +7,7 @@ package org.eolang.jeo.representation;
 import com.jcabi.matchers.XhtmlMatchers;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
+import org.eolang.jeo.VerifiedBytecode;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.EoCodec;
@@ -179,4 +180,29 @@ final class BytecodeRepresentationTest {
         );
     }
 
+    @Test
+    void parsesModuleInfo() throws Exception {
+        final ResourceOf resource = new ResourceOf("test-module-info.class");
+        final Bytecode expected = new Bytecode(new BytesOf(resource).asBytes());
+        MatcherAssert.assertThat(
+            "The module-info class should be parsed correctly",
+            new XmirRepresentation(
+                new BytecodeRepresentation(resource).toXmir(new Format(Format.MODE, "debug"))
+            ).toBytecode().toString(),
+            Matchers.equalTo(expected.toString())
+        );
+    }
+
+    @Test
+    void parsesModuleInfoAndCorvertsItBackToValidBytecode() {
+        final Bytecode debug = new XmirRepresentation(
+            new BytecodeRepresentation(
+                new ResourceOf("test-module-info.class")
+            ).toXmir(new Format(Format.MODE, "debug"))
+        ).toBytecode();
+        Assertions.assertDoesNotThrow(
+            () -> new VerifiedBytecode(debug.bytes()).verify(),
+            "We expect to convert the module-info class back to valid bytecode"
+        );
+    }
 }

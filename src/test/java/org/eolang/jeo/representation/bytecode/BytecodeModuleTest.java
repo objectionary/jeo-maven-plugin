@@ -6,10 +6,18 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.Collections;
 import org.eolang.jeo.representation.asm.AsmModule;
+import org.eolang.jeo.representation.directives.DirectivesModule;
+import org.eolang.jeo.representation.directives.DirectivesModuleExported;
+import org.eolang.jeo.representation.directives.DirectivesModuleOpened;
+import org.eolang.jeo.representation.directives.DirectivesModuleProvided;
+import org.eolang.jeo.representation.directives.DirectivesModuleRequired;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.tree.ClassNode;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link BytecodeModule}.
@@ -19,13 +27,14 @@ final class BytecodeModuleTest {
 
     @Test
     void writesModuleToAsmClass() {
+        final String version = "0.1.1";
         final BytecodeModule original = new BytecodeModule(
             "name",
             0,
-            "0.1.0",
+            version,
             "main",
             Collections.singletonList("org.eolang.jeo"),
-            Collections.singletonList(new BytecodeModuleRequired("required", 0, "0.1.0")),
+            Collections.singletonList(new BytecodeModuleRequired("required", 0, version)),
             Collections.singletonList(
                 new BytecodeModuleExported("exported", 1, Collections.singletonList("m1"))
             ),
@@ -43,6 +52,63 @@ final class BytecodeModuleTest {
             "We expect the module to be written to ASM class and read back correctly",
             new AsmModule(node.module).bytecode(),
             Matchers.equalTo(original)
+        );
+    }
+
+    @Test
+    void convertsToDirectives() throws ImpossibleModificationException {
+        final Format format = new Format();
+        final String version = "1.1.1";
+        final String actual = new Xembler(
+            new DirectivesModule(
+                format,
+                "name",
+                0,
+                version,
+                "main",
+                Collections.singletonList("org.eolang.jeo"),
+                Collections.singletonList(
+                    new DirectivesModuleRequired(format, "required", 0, version)
+                ),
+                Collections.singletonList(
+                    new DirectivesModuleExported(
+                        format, "exported", 1, Collections.singletonList("m1")
+                    )
+                ),
+                Collections.singletonList(
+                    new DirectivesModuleOpened(format, "opened", 2, Collections.singletonList("m2"))
+                ),
+                Collections.singletonList(
+                    new DirectivesModuleProvided(
+                        format, "provided", Collections.singletonList("impl")
+                    )
+                ),
+                Collections.singletonList("used")
+            )
+        ).xml();
+        MatcherAssert.assertThat(
+            "We expect to receive the same XML representation",
+            new Xembler(
+                new BytecodeModule(
+                    "name",
+                    0,
+                    version,
+                    "main",
+                    Collections.singletonList("org.eolang.jeo"),
+                    Collections.singletonList(new BytecodeModuleRequired("required", 0, version)),
+                    Collections.singletonList(
+                        new BytecodeModuleExported("exported", 1, Collections.singletonList("m1"))
+                    ),
+                    Collections.singletonList(
+                        new BytecodeModuleOpened("opened", 2, Collections.singletonList("m2"))
+                    ),
+                    Collections.singletonList(
+                        new BytecodeModuleProvided("provided", Collections.singletonList("impl"))
+                    ),
+                    Collections.singletonList("used")
+                ).directives(0, format)
+            ).xml(),
+            Matchers.equalTo(actual)
         );
     }
 }

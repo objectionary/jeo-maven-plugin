@@ -78,6 +78,7 @@ public final class AsmUnknownAttributes {
             new AsmUnknownAttribute("Scala"),
             new AsmUnknownAttribute("scala.reflect.ScalaSignature"),
             new AsmUnknownAttribute("TASTY"),
+            new AsmUnknownAttribute("ModuleTarget"),
         };
     }
 
