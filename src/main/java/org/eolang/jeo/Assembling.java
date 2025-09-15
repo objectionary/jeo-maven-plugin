@@ -6,7 +6,7 @@ package org.eolang.jeo;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.eolang.jeo.representation.PrefixedName;
+import java.util.regex.Pattern;
 import org.eolang.jeo.representation.XmirRepresentation;
 
 /**
@@ -20,46 +20,52 @@ import org.eolang.jeo.representation.XmirRepresentation;
 public final class Assembling implements Transformation {
 
     /**
-     * Target folder where to save the assembled class.
+     * XMIR file extension pattern.
      */
-    private final Path folder;
+    private static final Pattern XMIR = Pattern.compile(".xmir", Pattern.LITERAL);
 
     /**
-     * Representation to assemble.
+     * Source folder where all the XMIR representations are located.
      */
     private final Path from;
 
     /**
-     * XMIR representation.
+     * Target folder where to save the assembled class.
      */
-    private final XmirRepresentation repr;
+    private final Path tgt;
+
+    /**
+     * Representation to assemble.
+     */
+    private final Path xmir;
 
     /**
      * Constructor.
+     * @param source Source folder where all the XMIR representations are located
      * @param target Target folder where the assembled class will be saved
      * @param representation Path to the XMIR representation to assemble
      */
-    Assembling(final Path target, final Path representation) {
-        this.folder = target;
-        this.from = representation;
-        this.repr = new XmirRepresentation(this.from);
+    Assembling(final Path source, final Path target, final Path representation) {
+        this.from = source;
+        this.tgt = target;
+        this.xmir = representation;
     }
 
     @Override
     public Path source() {
-        return this.from;
+        return this.xmir;
     }
 
     @Override
     public Path target() {
-        final String name = new PrefixedName(this.repr.name()).decode();
-        final String[] subpath = name.split("\\.");
-        subpath[subpath.length - 1] = String.format("%s.class", subpath[subpath.length - 1]);
-        return Paths.get(this.folder.toString(), subpath);
+        return Paths.get(
+            this.tgt.toString(),
+            Assembling.XMIR.matcher(this.from.relativize(this.xmir).toString()).replaceAll(".class")
+        );
     }
 
     @Override
     public byte[] transform() {
-        return this.repr.toBytecode().bytes();
+        return new XmirRepresentation(this.xmir).toBytecode().bytes();
     }
 }

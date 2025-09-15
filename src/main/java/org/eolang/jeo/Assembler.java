@@ -67,7 +67,7 @@ public final class Assembler {
         final Transformation trans = new Logging(
             "Assembling",
             "assembled",
-            new Caching(new Informative(new Assembling(this.output, path)))
+            new Caching(new Informative(new Assembling(this.input, this.output, path)))
         );
         trans.transform();
         return trans.target();
