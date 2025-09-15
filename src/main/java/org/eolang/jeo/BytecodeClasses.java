@@ -42,6 +42,11 @@ final class BytecodeClasses implements Classes {
     }
 
     @Override
+    public Path root() {
+        return this.input;
+    }
+
+    @Override
     public Stream<Path> all() {
         try {
             return this.classes().stream();

@@ -99,7 +99,11 @@ public final class Disassembler {
         final Transformation trans = new Logging(
             "Disassembling",
             "disassembled",
-            new Caching(new Informative(new Disassembling(this.target, path, this.params)))
+            new Caching(
+                new Informative(
+                    new Disassembling(this.classes.root(), this.target, path, this.params)
+                )
+            )
         );
         trans.transform();
         return trans.target();

@@ -58,6 +58,11 @@ final class FilteredClasses implements Classes {
     }
 
     @Override
+    public Path root() {
+        return this.original.root();
+    }
+
+    @Override
     public Stream<Path> all() {
         final List<Path> res = this.original.all().filter(this.filter).collect(Collectors.toList());
         final int size = res.size();

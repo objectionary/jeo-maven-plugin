@@ -28,6 +28,7 @@
         <artifactId>jeo-maven-plugin</artifactId>
         <version>@project.version@</version>
         <configuration>
+          <omitComments>false</omitComments>
           <xmirVerification>true</xmirVerification>
         </configuration>
         <executions>

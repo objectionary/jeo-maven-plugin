@@ -182,7 +182,7 @@ final class BytecodeRepresentationTest {
 
     @Test
     void parsesModuleInfo() throws Exception {
-        final ResourceOf resource = new ResourceOf("test-module-info.class");
+        final ResourceOf resource = new ResourceOf("closed-module-info.class");
         final Bytecode expected = new Bytecode(new BytesOf(resource).asBytes());
         MatcherAssert.assertThat(
             "The module-info class should be parsed correctly",
@@ -194,10 +194,10 @@ final class BytecodeRepresentationTest {
     }
 
     @Test
-    void parsesModuleInfoAndCorvertsItBackToValidBytecode() {
+    void parsesModuleInfoAndConvertsItBackToValidBytecode() {
         final Bytecode debug = new XmirRepresentation(
             new BytecodeRepresentation(
-                new ResourceOf("test-module-info.class")
+                new ResourceOf("closed-module-info.class")
             ).toXmir(new Format(Format.MODE, "debug"))
         ).toBytecode();
         Assertions.assertDoesNotThrow(

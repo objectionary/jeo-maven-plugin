@@ -5,7 +5,10 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.Collections;
+import org.cactoos.bytes.BytesOf;
+import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.asm.AsmModule;
+import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.directives.DirectivesModule;
 import org.eolang.jeo.representation.directives.DirectivesModuleExported;
 import org.eolang.jeo.representation.directives.DirectivesModuleOpened;
@@ -52,6 +55,19 @@ final class BytecodeModuleTest {
             "We expect the module to be written to ASM class and read back correctly",
             new AsmModule(node.module).bytecode(),
             Matchers.equalTo(original)
+        );
+    }
+
+    @Test
+    void disassemblesOpenModuleAndAssemblesItBack() throws Exception {
+        final BytecodeObject domain = new AsmProgram(
+            new Bytecode(new BytesOf(new ResourceOf("open-module-info.class")).asBytes()).bytes()
+        ).bytecode();
+        final Bytecode second = domain.bytecode();
+        MatcherAssert.assertThat(
+            "We expect to read the same bytecode after writing it to ASM and reading it back",
+            new AsmProgram(second.bytes()).bytecode(),
+            Matchers.equalTo(domain)
         );
     }
 

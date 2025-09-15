@@ -50,10 +50,7 @@ final class DisassemblerTest {
             temp,
             format
         ).disassemble();
-        final Path disassembled = temp.resolve("org")
-            .resolve("eolang")
-            .resolve("jeo")
-            .resolve("MethodByte.xmir");
+        final Path disassembled = temp.resolve("MethodByte.xmir");
         MatcherAssert.assertThat(
             String.format(
                 "Can't find the transpiled file for the class '%s'.",
@@ -89,10 +86,7 @@ final class DisassemblerTest {
             new Format(Format.WITH_LISTING, true, Format.COMMENTS, true)
         ).disassemble();
         final List<String> lines = Files.readAllLines(
-            temp.resolve("org")
-                .resolve("eolang")
-                .resolve("jeo")
-                .resolve("MethodByte.xmir")
+            temp.resolve("MethodByte.xmir")
         );
         MatcherAssert.assertThat(
             "The XMIR file should contain comments",
@@ -119,10 +113,7 @@ final class DisassemblerTest {
     void overwritesExistingXmir(@TempDir final Path temp) throws IOException {
         Files.write(temp.resolve(DisassemblerTest.CLASS_NAME), DisassemblerTest.BYTECODE);
         new Disassembler(temp, temp).disassemble();
-        final Path disassembled = temp.resolve("org")
-            .resolve("eolang")
-            .resolve("jeo")
-            .resolve("MethodByte.xmir");
+        final Path disassembled = temp.resolve("MethodByte.xmir");
         final String appended = "<bottomline>I'm still here</bottomline>";
         Files.write(
             disassembled,

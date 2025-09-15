@@ -56,6 +56,26 @@ final class XmlValueTest {
         );
     }
 
+    @Test
+    void parsesNumber() {
+        MatcherAssert.assertThat(
+            "Xml value should parse number from hex string",
+            new XmlValue(
+                new XmlNamedObject(
+                    new JcabiXmlNode(
+                        new StringBuilder()
+                            .append("<o base=\"Q.org.eolang.number\" name=\"access\">\n")
+                            .append("  <o base=\"Q.org.eolang.bytes\">\n")
+                            .append("    <o>40-40-00-00-00-00-00-00</o>\n")
+                            .append("  </o>\n")
+                            .append("</o>").toString()
+                    )
+                )
+            ).object(),
+            Matchers.equalTo(0x20)
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("values")
     void decodesEncodesCorrectly(final Object origin) {

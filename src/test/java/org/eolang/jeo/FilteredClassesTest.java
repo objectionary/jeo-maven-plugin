@@ -25,7 +25,7 @@ final class FilteredClassesTest {
         final Path first = Paths.get("A.class");
         final Path second = Paths.get("B.class");
         final List<Path> result = new FilteredClasses(
-            () -> Stream.of(first, second, Paths.get("C.txt")),
+            new Project(Stream.of(first, second, Paths.get("C.txt"))),
             new GlobFilter(Collections.singleton("*.class"), Collections.emptySet())
         ).all().collect(java.util.stream.Collectors.toList());
         MatcherAssert.assertThat(
@@ -44,10 +44,7 @@ final class FilteredClassesTest {
         MatcherAssert.assertThat(
             "No paths should match the filter",
             new FilteredClasses(
-                () -> Stream.of(
-                    Paths.get("A.txt"),
-                    Paths.get("B.txt")
-                ),
+                new Project(Stream.of(Paths.get("A.txt"), Paths.get("B.txt"))),
                 new GlobFilter(Collections.singleton("*.class"), Collections.emptySet())
             ).all().collect(java.util.stream.Collectors.toList()),
             Matchers.empty()
@@ -98,7 +95,7 @@ final class FilteredClassesTest {
         /**
          * Project root path.
          */
-        private final Path root;
+        private final Path dir;
 
         /**
          * Stream of paths representing project files.
@@ -107,12 +104,25 @@ final class FilteredClassesTest {
 
         /**
          * Constructor.
+         * @param paths Stream of paths representing project files
+         */
+        private Project(final Stream<Path> paths) {
+            this(Paths.get("/dev/null"), paths);
+        }
+
+        /**
+         * Constructor.
          * @param root Project root path
          * @param paths Stream of paths representing project files
          */
         private Project(final Path root, final Stream<Path> paths) {
-            this.root = root;
+            this.dir = root;
             this.paths = paths;
+        }
+
+        @Override
+        public Path root() {
+            return this.dir;
         }
 
         @Override
@@ -122,7 +132,7 @@ final class FilteredClassesTest {
 
         @Override
         public String toString() {
-            return this.root.toString();
+            return this.dir.toString();
         }
     }
 }
