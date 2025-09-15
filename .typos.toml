@@ -2,5 +2,5 @@
 # SPDX-License-Identifier: MIT
 [default]
 extend-ignore-identifiers-re = [
-    "IFLE", "interfce", "ifle", "ecounter", "tcounter"
+    "IFLE", "interfce", "ifle", "ecounter", "tcounter", "outout"
 ]
