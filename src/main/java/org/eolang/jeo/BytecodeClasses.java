@@ -4,10 +4,12 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -79,20 +81,25 @@ final class BytecodeClasses implements Classes {
                 "The classes directory is not set, jeo-maven-plugin does not know where to look for classes."
             );
         }
-        if (!Files.exists(this.input)) {
-            throw new IllegalStateException(
+        final Collection<Path> result;
+        if (Files.exists(this.input)) {
+            try (Stream<Path> walk = Files.walk(this.input)) {
+                result = walk
+                    .filter(Files::isRegularFile)
+                    .filter(path -> path.toString().endsWith(".class"))
+                    .collect(Collectors.toList());
+            }
+        } else {
+            Logger.warn(
+                this,
                 String.format(
                     "The classes directory '%s' does not exist, jeo-maven-plugin does not know where to look for classes.",
                     this.input
                 )
             );
+            result = Collections.emptyList();
         }
-        try (Stream<Path> walk = Files.walk(this.input)) {
-            return walk
-                .filter(Files::isRegularFile)
-                .filter(path -> path.toString().endsWith(".class"))
-                .collect(Collectors.toList());
-        }
+        return result;
     }
 
     /**

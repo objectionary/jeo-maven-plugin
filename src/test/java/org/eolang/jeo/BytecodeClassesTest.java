@@ -25,4 +25,14 @@ final class BytecodeClassesTest {
             Matchers.equalTo(path.toString())
         );
     }
+
+    @Test
+    void doesNotThrowExceptionOnAbsentDirectory() {
+        final Path path = Paths.get("/dev/null/absent");
+        MatcherAssert.assertThat(
+            "BytecodeClasses should handle empty directories without throwing exceptions",
+            new BytecodeClasses(path).all().count(),
+            Matchers.equalTo(0L)
+        );
+    }
 }
