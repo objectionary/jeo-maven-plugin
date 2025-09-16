@@ -68,15 +68,18 @@ public final class AsmUnknownAttributes {
 
     /**
      * All prototypes of custom attributes.
+     * Pay Attention! We don't have `ScalaInlineInfo` here because
+     * this attribute requires special handling. Actually, we should
+     * rebuild `ScalaInlineInfo` after rebuilding the constant pool.
+     * Since we can't rebuild the `ScalaInlineInfo` attribute, we
+     * simply ignore it.
      * @return All prototypes of custom attributes.
      */
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static Attribute[] prototypes() {
         return new Attribute[]{
             new AsmUnknownAttribute("ScalaSig"),
-            new AsmUnknownAttribute("ScalaInlineInfo"),
             new AsmUnknownAttribute("Scala"),
-            new AsmUnknownAttribute("scala.reflect.ScalaSignature"),
             new AsmUnknownAttribute("TASTY"),
             new AsmUnknownAttribute("ModuleTarget"),
         };

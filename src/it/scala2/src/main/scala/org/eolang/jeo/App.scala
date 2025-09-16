@@ -5,7 +5,6 @@
 package org.eolang.jeo
 
 object App {
-  def main(args: Array[String]): Unit = {
-    println("Scala 3 works fine!")
-  }
+  @inline final def msg: String = "Scala 2 works fine!"
+  def main(args: Array[String]): Unit = println(msg)
 }

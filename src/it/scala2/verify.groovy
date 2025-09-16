@@ -4,5 +4,5 @@
  */
 String log = new File(basedir, 'build.log').text;
 assert log.contains("BUILD SUCCESS")
-assert log.contains("Scala 3 works fine!")
+assert log.contains("Scala 2 works fine!")
 true
