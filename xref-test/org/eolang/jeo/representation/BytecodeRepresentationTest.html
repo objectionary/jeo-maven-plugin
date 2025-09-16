@@ -190,7 +190,7 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 
 <a class="jxr_linenumber" name="L183" href="#L183">183</a>     @Test
 <a class="jxr_linenumber" name="L184" href="#L184">184</a>     <strong class="jxr_keyword">void</strong> parsesModuleInfo() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a>         <strong class="jxr_keyword">final</strong> ResourceOf resource = <strong class="jxr_keyword">new</strong> ResourceOf(<span class="jxr_string">"test-module-info.class"</span>);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>         <strong class="jxr_keyword">final</strong> ResourceOf resource = <strong class="jxr_keyword">new</strong> ResourceOf(<span class="jxr_string">"closed-module-info.class"</span>);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a>         <strong class="jxr_keyword">final</strong> Bytecode expected = <strong class="jxr_keyword">new</strong> Bytecode(<strong class="jxr_keyword">new</strong> BytesOf(resource).asBytes());
 <a class="jxr_linenumber" name="L187" href="#L187">187</a>         MatcherAssert.assertThat(
 <a class="jxr_linenumber" name="L188" href="#L188">188</a>             <span class="jxr_string">"The module-info class should be parsed correctly"</span>,
@@ -202,10 +202,10 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a>     }
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 
 <a class="jxr_linenumber" name="L196" href="#L196">196</a>     @Test
-<a class="jxr_linenumber" name="L197" href="#L197">197</a>     <strong class="jxr_keyword">void</strong> parsesModuleInfoAndCorvertsItBackToValidBytecode() {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>     <strong class="jxr_keyword">void</strong> parsesModuleInfoAndConvertsItBackToValidBytecode() {
 <a class="jxr_linenumber" name="L198" href="#L198">198</a>         <strong class="jxr_keyword">final</strong> Bytecode debug = <strong class="jxr_keyword">new</strong> XmirRepresentation(
 <a class="jxr_linenumber" name="L199" href="#L199">199</a>             <strong class="jxr_keyword">new</strong> BytecodeRepresentation(
-<a class="jxr_linenumber" name="L200" href="#L200">200</a>                 <strong class="jxr_keyword">new</strong> ResourceOf(<span class="jxr_string">"test-module-info.class"</span>)
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>                 <strong class="jxr_keyword">new</strong> ResourceOf(<span class="jxr_string">"closed-module-info.class"</span>)
 <a class="jxr_linenumber" name="L201" href="#L201">201</a>             ).toXmir(<strong class="jxr_keyword">new</strong> Format(Format.MODE, <span class="jxr_string">"debug"</span>))
 <a class="jxr_linenumber" name="L202" href="#L202">202</a>         ).toBytecode();
 <a class="jxr_linenumber" name="L203" href="#L203">203</a>         Assertions.assertDoesNotThrow(
