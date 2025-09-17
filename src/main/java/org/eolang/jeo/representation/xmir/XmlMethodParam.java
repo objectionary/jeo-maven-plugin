@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.Optional;
 import org.eolang.jeo.representation.EncodedString;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
 import org.eolang.jeo.representation.directives.JeoFqn;
@@ -70,7 +71,7 @@ public final class XmlMethodParam {
      * @return Name.
      */
     private String name() {
-        return this.child("name").string();
+        return this.ochild("name").map(XmlValue::string).orElse(null);
     }
 
     /**
@@ -95,19 +96,26 @@ public final class XmlMethodParam {
      * @return Child node.
      */
     private XmlValue child(final String name) {
-        return new XmlValue(
-            this.root.children()
-                .filter(node -> XmlMethodParam.hasName(node, name))
-                .findFirst()
-                .orElseThrow(
-                    () -> new IllegalStateException(
-                        String.format(
-                            "Child with attribute 'as'='%s' not found in node '%s'", name,
-                            this.root
-                        )
-                    )
+        return this.ochild(name).orElseThrow(
+            () -> new IllegalStateException(
+                String.format(
+                    "Child with attribute 'name'='%s' not found in node '%s'", name,
+                    this.root
                 )
+            )
         );
+    }
+
+    /**
+     * Child node with the given name.
+     * @param name Name of the child node.
+     * @return Child node.
+     */
+    private Optional<XmlValue> ochild(final String name) {
+        return this.root.children()
+            .filter(node -> XmlMethodParam.hasName(node, name))
+            .findFirst()
+            .map(XmlValue::new);
     }
 
     /**

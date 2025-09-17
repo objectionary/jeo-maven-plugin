@@ -11,6 +11,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -32,6 +33,29 @@ final class XmlMethodParamTest {
             "Can't convert XML param to bytecode",
             new XmlMethodParam(
                 new NativeXmlNode(new Xembler(expected.directives(new Format())).xml())
+            ).bytecode(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void parsesMethodParamWithoutName() throws ImpossibleModificationException {
+        final BytecodeMethodParameter expected = new BytecodeMethodParameter(
+            0,
+            null,
+            Opcodes.ACC_FINAL,
+            Type.getType("Ljava/lang/String;")
+        );
+        MatcherAssert.assertThat(
+            "Can't parse XML param without name",
+            new XmlMethodParam(
+                new JcabiXmlNode(
+                    new Xembler(
+                        new Directives(expected.directives(new Format()))
+                            .xpath(".//o[@name='name']")
+                            .remove()
+                    ).xml()
+                )
             ).bytecode(),
             Matchers.equalTo(expected)
         );
