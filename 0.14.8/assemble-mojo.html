@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>jeo:assemble – jeo-maven-plugin</title>
+        <link media="all" rel="stylesheet" type="text/css" href="./css/jcabi.css"/>
+                                                    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+        <script src="./js/jcabi.js"></script>
+    </head>
+    <body>
+                <div class="page" itemscope="" itemtype="http://schema.org/BlogPosting">
+            <nav class="menu-section">
+                <ul class="menu" id="menu">
+                                                                                    <li>
+                            <span>Overview</span>
+                                                            <ul>
+                                                                                                    <li >
+                            <span>                        <a href="index.html" title="Introduction">Introduction</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="plugin-info.html" title="Goals">Goals</a>
+        </span>
+                                                                                                                                                                <ul>
+                                                                    </ul>
+                                                    </li>
+                                                                                        </ul>
+                                                    </li>
+                                            <li>
+                            <span>Project Documentation</span>
+                                                            <ul>
+                                                                                                    <li >
+                            <span>                        <a href="project-info.html" title="Project Information">Project Information</a>
+        </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </li>
+                                                                                                                        <li >
+                            <span>                        <a href="project-reports.html" title="Project Reports">Project Reports</a>
+        </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </li>
+                                                                                        </ul>
+                                                    </li>
+                                    </ul>
+            </nav>
+            <div class="right-side">
+                <main>
+                    <div class="content">
+                        <header>
+                            <div class="logo">
+                                <a href="index.html"
+                                    title=" logo ">
+                                    <img src="${decoration.bannerLeft.src}"
+                                        alt="jeo-maven-plugin"
+                                                                                                                        itemprop="image"
+                                    />
+                                </a>
+                            </div>
+                            <ul class="badges">
+                                <li>
+                                    <strong itemprop="version">0.14.8</strong>
+                                </li>
+                                <li>
+                                    $dateFormat.applyPattern("yyyy-MM-dd'T'hh:mm:ss'Z'")
+                                    <time itemprop="datePublished" datetime="${dateFormat.format($currentDate)}">
+                                        $dateFormat.applyPattern('dd-MMM-yyyy')
+                                        ${dateFormat.format($currentDate)}
+                                    </time>
+                                </li>
+                                <li class="menu-button">menu</li>
+                            </ul>
+                        </header>
+                        <div id="here-goes-menu" class="menu-off"></div>
+                                                                            <a href="https://github.com/objectionary/jeo-maven-plugin">
+                                <img src="https://www.jcabi.com/fork-me.svg" class="fork-me"/>
+                            </a>
+                                                <article itemprop="articleBody">
+                            <section><a id="jeo.3Aassemble"></a>
+<h1>jeo:assemble</h1>
+<p><strong>Full name</strong>:</p>
+<p>org.eolang:jeo-maven-plugin:0.14.8:assemble</p>
+<p><strong>Description</strong>:</p>
+<p>Assembles XMIR representation of Java bytecode into executable class files. 
+<p>This Maven plugin converts low-level EO representation (in XMIR format) into Java bytecode that can be executed by the Java Virtual Machine. The plugin performs pure assembly without applying any optimizations or improvements to the bytecode.</p>
+<p>The plugin supports optional bytecode verification to ensure generated classes are valid and can be loaded by the JVM.</p></p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li>Requires a Maven project to be executed.</li>
+<li>The goal is not marked as thread-safe and thus does not support parallel builds.</li>
+<li>Since version: <code>0.1.0</code>.</li>
+<li>Binds by default to the <a class="externalLink" href="https://maven.apache.org/ref/current/maven-core/lifecycles.html">lifecycle phase</a>: <code>process-classes</code>.</li></ul><section><a id="Optional_Parameters"></a>
+<h2>Optional Parameters</h2>
+<table class="bodyTable">
+<tr class="a">
+<th>Name</th>
+<th>Type</th>
+<th>Since</th>
+<th>Description</th></tr>
+<tr class="b">
+<td><a href="#disabled"><code>&lt;disabled&gt;</code></a></td>
+<td><code>boolean</code></td>
+<td><code>0.2.0</code></td>
+<td>Flag to disable the plugin execution. 
+<p>When set to <code>true</code>, the plugin will skip all processing and exit immediately. This can be useful for conditional builds or troubleshooting.</p><br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>jeo.assemble.disabled</code></td></tr>
+<tr class="a">
+<td><a href="#outputDir"><code>&lt;outputDir&gt;</code></a></td>
+<td><code>File</code></td>
+<td><code>0.2.0</code></td>
+<td>Target directory for generated bytecode class files. 
+<p>All assembled class files will be written to this directory, preserving the package structure as defined in the source XMIR files.</p><br /><strong>Default</strong>: <code>${project.build.outputDirectory}</code><br /><strong>User Property</strong>: <code>jeo.assemble.outputDir</code></td></tr>
+<tr class="b">
+<td><a href="#skipVerification"><code>&lt;skipVerification&gt;</code></a></td>
+<td><code>boolean</code></td>
+<td><code>0.2.0</code></td>
+<td>Flag to skip bytecode verification after assembly. 
+<p>By default, all generated bytecode is verified to ensure it conforms to JVM specifications and can be loaded without errors. Set this parameter to <code>true</code> to skip verification, which may speed up the build but could result in invalid class files.</p><br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>jeo.assemble.skip.verification</code></td></tr>
+<tr class="a">
+<td><a href="#sourcesDir"><code>&lt;sourcesDir&gt;</code></a></td>
+<td><code>File</code></td>
+<td><code>0.2.0</code></td>
+<td>Source directory containing XMIR files to be assembled. 
+<p>This directory should contain EO files in XMIR format that represent Java bytecode instructions. These files are typically generated by the disassemble goal.</p><br /><strong>Default</strong>: <code>${project.build.directory}/generated-sources/jeo-xmir</code><br /><strong>User Property</strong>: <code>jeo.assemble.sourcesDir</code></td></tr>
+<tr class="b">
+<td><a href="#xmirVerification"><code>&lt;xmirVerification&gt;</code></a></td>
+<td><code>boolean</code></td>
+<td><code>0.8.0</code></td>
+<td>Flag to enable XMIR verification before assembling. 
+<p>When enabled, verifies all XMIR files for structural integrity and correctness before attempting to assemble them into bytecode. If any XMIR file is invalid or corrupted, the build process will fail. This verification is disabled by default for performance.</p><br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>jeo.assemble.xmir.verification</code></td></tr></table></section><section><a id="Parameter_Details"></a>
+<h2>Parameter Details</h2><a id="disabled"></a><section><a id="a.3Cdisabled.3E"></a>
+<h3>&lt;disabled&gt;</h3>
+<div>Flag to disable the plugin execution. 
+<p>When set to <code>true</code>, the plugin will skip all processing and exit immediately. This can be useful for conditional builds or troubleshooting.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>boolean</code></li>
+<li><strong>Since</strong>: <code>0.2.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.assemble.disabled</code></li>
+<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a id="outputDir"></a><section><a id="a.3CoutputDir.3E"></a>
+<h3>&lt;outputDir&gt;</h3>
+<div>Target directory for generated bytecode class files. 
+<p>All assembled class files will be written to this directory, preserving the package structure as defined in the source XMIR files.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>java.io.File</code></li>
+<li><strong>Since</strong>: <code>0.2.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.assemble.outputDir</code></li>
+<li><strong>Default</strong>: <code>${project.build.outputDirectory}</code></li></ul><hr /></section><a id="skipVerification"></a><section><a id="a.3CskipVerification.3E"></a>
+<h3>&lt;skipVerification&gt;</h3>
+<div>Flag to skip bytecode verification after assembly. 
+<p>By default, all generated bytecode is verified to ensure it conforms to JVM specifications and can be loaded without errors. Set this parameter to <code>true</code> to skip verification, which may speed up the build but could result in invalid class files.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>boolean</code></li>
+<li><strong>Since</strong>: <code>0.2.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.assemble.skip.verification</code></li>
+<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a id="sourcesDir"></a><section><a id="a.3CsourcesDir.3E"></a>
+<h3>&lt;sourcesDir&gt;</h3>
+<div>Source directory containing XMIR files to be assembled. 
+<p>This directory should contain EO files in XMIR format that represent Java bytecode instructions. These files are typically generated by the disassemble goal.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>java.io.File</code></li>
+<li><strong>Since</strong>: <code>0.2.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.assemble.sourcesDir</code></li>
+<li><strong>Default</strong>: <code>${project.build.directory}/generated-sources/jeo-xmir</code></li></ul><hr /></section><a id="xmirVerification"></a><section><a id="a.3CxmirVerification.3E"></a>
+<h3>&lt;xmirVerification&gt;</h3>
+<div>Flag to enable XMIR verification before assembling. 
+<p>When enabled, verifies all XMIR files for structural integrity and correctness before attempting to assemble them into bytecode. If any XMIR file is invalid or corrupted, the build process will fail. This verification is disabled by default for performance.</p></div>
+<ul>
+<li><strong>Type</strong>: <code>boolean</code></li>
+<li><strong>Since</strong>: <code>0.8.0</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>jeo.assemble.xmir.verification</code></li>
+<li><strong>Default</strong>: <code>false</code></li></ul></section></section></section>
+                        </article>
+                    </div>
+                </main>
+                <footer class="legal-notes">
+                    <div>
+                        Copyright &#169;
+                                                                            2023-${currentYear}
+                                            </div>
+                    <div>EO, All Rights Reserved.</div>
+                    <div><a href="http://maven.apache.org/privacy-policy.html">Privacy Policy</a>.</div>
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>
