@@ -145,7 +145,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
             .append(this.max.get())
             .append(this.params);
         if (this.format.modifiers()) {
-            dirs.append(new DirectivesModifiers(this.format, this.access));
+            dirs.append(new DirectivesMethodModifiers(this.format, this.access));
         }
         return dirs.iterator();
     }

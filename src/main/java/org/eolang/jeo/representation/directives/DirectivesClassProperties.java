@@ -18,6 +18,11 @@ import org.xembly.Directives;
 public final class DirectivesClassProperties implements Iterable<Directive> {
 
     /**
+     * Empty interfaces array.
+     */
+    private static final String[] EMPTY_INTERFACES = new String[0];
+
+    /**
      * Format of the directives.
      */
     private final Format format;
@@ -64,11 +69,27 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
 
     /**
      * Constructor.
+     * @param format Format of the directives.
+     * @param access Access modifiers.
+     */
+    public DirectivesClassProperties(final Format format, final int access) {
+        this(
+            format,
+            new DefaultVersion().bytecode(),
+            access,
+            "",
+            "",
+            DirectivesClassProperties.EMPTY_INTERFACES
+        );
+    }
+
+    /**
+     * Constructor.
      * @param access Access modifiers.
      * @param signature Class Signature.
      */
     public DirectivesClassProperties(final int access, final String signature) {
-        this(access, signature, "", new String[0]);
+        this(access, signature, "", DirectivesClassProperties.EMPTY_INTERFACES);
     }
 
     /**
@@ -86,7 +107,11 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         final String... interfaces
     ) {
         this(
-            new Format(), new DefaultVersion().bytecode(), access, signature, supername,
+            new Format(),
+            new DefaultVersion().bytecode(),
+            access,
+            signature,
+            supername,
             interfaces.clone()
         );
     }
@@ -132,6 +157,9 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         }
         if (this.interfaces != null) {
             directives.append(new DirectivesValues(this.format, "interfaces", this.interfaces));
+        }
+        if (this.format.modifiers()) {
+            directives.append(new DirectivesClassModifiers(this.format, this.access));
         }
         return directives.iterator();
     }

@@ -12,17 +12,17 @@ import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
 /**
- * Test case for {@link DirectivesModifiers}.
+ * Test case for {@link DirectivesMethodModifiers}.
  * @since 0.14.0
  */
-final class DirectivesModifiersTest {
+final class DirectivesMethodModifiersTest {
 
     @Test
     void convertsToXmir() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect access modifiers in the directives with correct values",
             new Xembler(
-                new DirectivesModifiers(new Format(), Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC)
+                new DirectivesMethodModifiers(new Format(), Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC)
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@name, 'modifiers')]/o[contains(@name, 'public') and contains(@base, 'true')]",

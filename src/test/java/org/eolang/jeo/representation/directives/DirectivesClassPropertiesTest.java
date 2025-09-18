@@ -6,7 +6,9 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Opcodes;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -89,6 +91,44 @@ final class DirectivesClassPropertiesTest {
             ).xml(),
             XhtmlMatchers.hasXPath(
                 "//o[@name='signature']/o[contains(@base,'bytes')]/o[text()='--']"
+            )
+        );
+    }
+
+    @Test
+    void addsClassModifiers() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect class access modifiers to be added to the directives",
+            new Xembler(
+                new Directives()
+                    .add("o")
+                    .append(
+                        new DirectivesClassProperties(
+                            new Format(Format.MODIFIERS, true),
+                            Opcodes.ACC_INTERFACE
+                        )
+                    ).up()
+            ).xml(),
+            XhtmlMatchers.hasXPath(
+                "//o[contains(@name, 'modifiers')]/o[contains(@name, 'interface') and contains(@base, 'true')]"
+            )
+        );
+    }
+
+    @Test
+    void ignoresClassModifiers() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect class access modifiers to be avoided by default",
+            new Xembler(
+                new Directives()
+                    .add("o")
+                    .append(new DirectivesClassProperties(Opcodes.ACC_INTERFACE))
+                    .up()
+            ).xml(),
+            Matchers.not(
+                XhtmlMatchers.hasXPath(
+                    "//o[contains(@name, 'modifiers')]/o[contains(@name, 'interface') and contains(@base, 'true')]"
+                )
             )
         );
     }
