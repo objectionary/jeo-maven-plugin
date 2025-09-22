@@ -45,7 +45,7 @@
                     <artifactItem>
                       <groupId>net.java.dev.jna</groupId>
                       <artifactId>jna</artifactId>
-                      <version>5.17.0</version>
+                      <version>5.18.0</version>
                       <type>jar</type>
                     </artifactItem>
                   </artifactItems>
@@ -148,7 +148,7 @@
                     <artifactItem>
                       <groupId>net.java.dev.jna</groupId>
                       <artifactId>jna</artifactId>
-                      <version>5.17.0</version>
+                      <version>5.18.0</version>
                       <type>jar</type>
                     </artifactItem>
                   </artifactItems>
