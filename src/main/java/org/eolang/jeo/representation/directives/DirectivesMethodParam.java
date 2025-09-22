@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import java.util.Optional;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
 
@@ -67,11 +66,26 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "param",
-            Optional.ofNullable(this.name).orElse(String.format("arg%d", this.index)),
+            this.paramName(),
             new DirectivesValue(this.format, "name", this.name),
             new DirectivesValue(this.format, "index", this.index),
             new DirectivesValue(this.format, "access", this.access),
             new DirectivesValue(this.format, "type", this.type.toString())
         ).iterator();
+    }
+
+    /**
+     * Get parameter name or a default one if it's null.
+     * @return Parameter name
+     */
+    private String paramName() {
+        final String prefix = "p";
+        final String result;
+        if (this.name == null) {
+            result = String.format("%s%d", prefix, this.index);
+        } else {
+            result = String.format("%s%s", prefix, this.name);
+        }
+        return result;
     }
 }

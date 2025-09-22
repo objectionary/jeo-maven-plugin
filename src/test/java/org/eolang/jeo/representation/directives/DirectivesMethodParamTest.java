@@ -22,6 +22,32 @@ import org.xembly.Xembler;
  */
 final class DirectivesMethodParamTest {
 
+    /**
+     * This issue was raised in #1341.
+     * In come cases, the parameter name might be $this.
+     * $this isn't allowed in EO as a name, so we need to append a prefix to it.
+     * You can find more details here:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1341">issue</a>
+     */
+    @Test
+    void appendsPrefixForName() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect that the parameter name will have a prefix",
+            new Xembler(
+                new DirectivesMethodParam(
+                    new Format(),
+                    0,
+                    "$this",
+                    Opcodes.ACC_PUBLIC,
+                    Type.VOID_TYPE
+                )
+            ).xml(),
+            XhtmlMatchers.hasXPath(
+                "./o[contains(@name, 'p$this')]"
+            )
+        );
+    }
+
     @Test
     void generatesParamDirectivesWithSimpleName() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
