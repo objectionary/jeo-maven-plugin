@@ -29,7 +29,7 @@ import org.eolang.jeo.representation.directives.Format;
  *
  * @since 0.1.0
  */
-@Mojo(name = "disassemble", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
+@Mojo(name = "disassemble", defaultPhase = LifecyclePhase.PROCESS_CLASSES, requiresProject = false)
 public final class DisassembleMojo extends AbstractMojo {
 
     /**
@@ -41,7 +41,7 @@ public final class DisassembleMojo extends AbstractMojo {
      *
      * @since 0.2.0
      */
-    @Parameter(defaultValue = "${project}", required = true, readonly = true)
+    @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
     /**

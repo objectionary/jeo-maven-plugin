@@ -26,7 +26,7 @@ import org.apache.maven.project.MavenProject;
  *
  * @since 0.1.0
  */
-@Mojo(name = "assemble", defaultPhase = LifecyclePhase.PROCESS_CLASSES)
+@Mojo(name = "assemble", defaultPhase = LifecyclePhase.PROCESS_CLASSES, requiresProject = false)
 public final class AssembleMojo extends AbstractMojo {
 
     /**
@@ -37,7 +37,7 @@ public final class AssembleMojo extends AbstractMojo {
      *
      * @since 0.2.0
      */
-    @Parameter(defaultValue = "${project}", required = true, readonly = true)
+    @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
     /**

@@ -135,11 +135,39 @@ To enable them, you need to set `xmirVerification` to `true`:
 </configuration>
 ```
 
+## Run Without a POM File
+
+You can run the plugin in a project that does not contain a `pom.xml` file.  
+For example, to disassemble compiled classes, use:
+
+```bash
+mvn org.eolang:jeo-maven-plugin:${project.version}:disassemble \
+  -Djeo.disassemble.sourcesDir=input \
+  -Djeo.disassemble.outputDir=xmir
+```
+
+The full list of available parameters is documented
+in [DisassembleMojo.java](src/main/java/org/eolang/jeo/DisassembleMojo.java).
+
+Similarly, you can run the `assemble` goal:
+
+```bash
+mvn org.eolang:jeo-maven-plugin:${project.version}:assemble \
+    -Djeo.assemble.sourcesDir=xmir \
+    -Djeo.assemble.outputDir=output
+```
+
+(Again, the full list of available parameters is documented
+in [AssembleMojo.java](src/main/java/org/eolang/jeo/AssembleMojo.java).)
+Note that the parameters for assembling use the `jeo.assemble` prefix,
+while the parameters for disassembling use the `jeo.disassemble` prefix.
+
 ## Disassembling Example
 
 The plugin can transform Java bytecode into EO and back. Usually, the plugin
 transforms each bytecode class file into a separate EO file, maintaining a
-one-to-one relationship. If the Java class has the name `Application.class`, the EO
+one-to-one relationship. If the Java class has the name `Application.class`, the
+EO
 file will have the name `Application.xmir`.
 
 For example, consider the following Java class:

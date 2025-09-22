@@ -8,6 +8,7 @@ import com.jcabi.log.Logger;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
@@ -37,26 +38,7 @@ public final class PluginStartup {
     PluginStartup(
         final MavenProject project, final Path... additional
     ) throws DependencyResolutionRequiredException {
-        this(
-            Stream.concat(
-                Stream.concat(
-                    project.getRuntimeClasspathElements().stream(),
-                    project.getCompileClasspathElements().stream()
-                ),
-                Stream.concat(
-                    project.getTestClasspathElements().stream(),
-                    Arrays.stream(additional).map(Path::toString)
-                )
-            ).collect(Collectors.toSet())
-        );
-    }
-
-    /**
-     * Constructor.
-     * @param folders Array of folder paths containing classes
-     */
-    PluginStartup(final String... folders) {
-        this(Arrays.asList(folders));
+        this(PluginStartup.all(project, additional));
     }
 
     /**
@@ -96,4 +78,34 @@ public final class PluginStartup {
         );
     }
 
+    /**
+     * All folders with classes.
+     * @param project Maven project
+     * @param additional Additional folders with classes
+     * @return Set of folder paths as strings
+     * @throws DependencyResolutionRequiredException If a problem happened during loading classes
+     */
+    private static Set<String> all(
+        final MavenProject project,
+        final Path... additional
+    ) throws DependencyResolutionRequiredException {
+        final Set<String> result;
+        if (project == null) {
+            result = Arrays.stream(additional)
+                .map(Path::toString)
+                .collect(Collectors.toSet());
+        } else {
+            result = Stream.concat(
+                Stream.concat(
+                    project.getRuntimeClasspathElements().stream(),
+                    project.getCompileClasspathElements().stream()
+                ),
+                Stream.concat(
+                    project.getTestClasspathElements().stream(),
+                    Arrays.stream(additional).map(Path::toString)
+                )
+            ).collect(Collectors.toSet());
+        }
+        return result;
+    }
 }
