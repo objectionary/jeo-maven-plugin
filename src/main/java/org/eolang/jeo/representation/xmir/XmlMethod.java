@@ -146,8 +146,9 @@ public final class XmlMethod {
         } catch (final IllegalArgumentException exception) {
             throw new ParsingException(
                 String.format(
-                    "Can't transform method '%s' to bytecode",
-                    this.name()
+                    "Can't transform method '%s' to bytecode, node: '%s",
+                    this.name(),
+                    this.node
                 ),
                 exception
             );
@@ -396,14 +397,11 @@ public final class XmlMethod {
      */
     private String[] exceptions() {
         return this.node.children()
-            .map(XmlSeq::new)
-            .filter(XmlSeq::named)
-            .filter(seq -> seq.name().contains("exceptions"))
+            .map(XmlExceptions::new)
+            .filter(XmlExceptions::isExceptions)
             .findFirst()
-            .map(XmlSeq::children)
+            .map(n -> n.bytecode().stream())
             .orElse(Stream.empty())
-            .map(XmlValue::new)
-            .map(XmlValue::string)
             .toArray(String[]::new);
     }
 

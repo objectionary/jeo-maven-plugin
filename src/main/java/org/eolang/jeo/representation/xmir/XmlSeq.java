@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.stream.Stream;
+import lombok.ToString;
 
 /**
  * Xml representation of a sequence of XML nodes.
@@ -13,6 +14,7 @@ import java.util.stream.Stream;
  * </p>
  * @since 0.11.0
  */
+@ToString
 final class XmlSeq {
 
     /**

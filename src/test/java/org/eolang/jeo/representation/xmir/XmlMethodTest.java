@@ -11,6 +11,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeLine;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
+import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodProperties;
@@ -154,4 +155,28 @@ final class XmlMethodTest {
         );
     }
 
+    /**
+     * Ensures that a method with try-catch blocks is correctly parsed from XML to bytecode.
+     * Pay attention that the name of the method contains 'exceptions' word.
+     * This name caused issues in parsing:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1348">#1348</a>
+     * @throws ImpossibleModificationException if something goes wrong
+     */
+    @Test
+    void parsesWithExceptions() throws ImpossibleModificationException {
+        final BytecodeMethod original = new BytecodeMethod("exceptionsAndFailedTasks")
+            .trycatch(
+                new BytecodeTryCatchBlock(
+                    "start",
+                    "end",
+                    "handler",
+                    "java/io/IOException"
+                )
+            );
+        MatcherAssert.assertThat(
+            "We expect that method with try-catch blocks will be correctly parsed",
+            new XmlMethod(new JcabiXmlNode(new Xembler(original.directives(1)).xml())).bytecode(),
+            Matchers.equalTo(original)
+        );
+    }
 }
