@@ -30,6 +30,11 @@ import java.util.Arrays;
     },
     nestedEmpty = @NestedAnnotation
 )
+@JeoSubTypes(value = {
+    @JeoSubTypes.Type(value = String.class, name = "string"),
+    @JeoSubTypes.Type(value = Integer.class, name = "integer"),
+    @JeoSubTypes.Type(value = Double.class, name = "double")
+})
 public class AnnotationsApplication {
 
     /**
@@ -118,6 +123,26 @@ public class AnnotationsApplication {
                 .value();
             if (!custom.equals("custom")) {
                 throw new IllegalStateException("Custom annotation param value is not correct");
+            }
+            final JeoSubTypes subs = clazz.getAnnotation(JeoSubTypes.class);
+            if (subs == null) {
+                throw new IllegalStateException("@JeoSubTypes not present");
+            }
+            final JeoSubTypes.Type[] types = subs.value();
+            if (types.length != 3) {
+                throw new IllegalStateException("Expected 3 subtypes, got " + types.length);
+            }
+            final String[] gotNames = Arrays.stream(types)
+                .map(JeoSubTypes.Type::name)
+                .toArray(String[]::new);
+            if (!Arrays.equals(gotNames, new String[] {"string", "integer", "double"})) {
+                throw new IllegalStateException("Subtype names are not [string, integer, double]");
+            }
+            final Class<?>[] gotValues = Arrays.stream(types)
+                .map(JeoSubTypes.Type::value)
+                .toArray(Class<?>[]::new);
+            if (!Arrays.equals(gotValues, new Class<?>[] {String.class, Integer.class, Double.class})) {
+                throw new IllegalStateException("Subtype classes are not [String, Integer, Double]");
             }
             System.out.println("Annotations test passed successfully!");
         } else {

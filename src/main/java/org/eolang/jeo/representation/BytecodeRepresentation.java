@@ -18,6 +18,7 @@ import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.bytecode.Bytecode;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassReader;
 import org.xembly.Directive;
@@ -114,8 +115,9 @@ public final class BytecodeRepresentation {
         } else {
             fmt = format;
         }
-        final Iterable<Directive> directives = new AsmProgram(this.input.value())
-            .bytecode(DisassembleMode.fromString(fmt.mode()).asmOptions())
+        final BytecodeObject bytecode = new AsmProgram(this.input.value())
+            .bytecode(DisassembleMode.fromString(fmt.mode()).asmOptions());
+        final Iterable<Directive> directives = bytecode
             .directives(fmt);
         try {
             final XML measured = new MeasuredEo(directives).asXml();

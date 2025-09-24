@@ -6,9 +6,7 @@ package org.eolang.jeo.representation.asm;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
 import org.eolang.jeo.representation.bytecode.BytecodeArrayAnnotationValue;
@@ -74,11 +72,7 @@ final class AsmAnnotationProperty {
             result = new BytecodeAnnotationAnnotationValue(
                 name,
                 cast.desc,
-                Optional.ofNullable(cast.values)
-                    .map(Collection::stream)
-                    .orElseGet(Stream::empty)
-                    .map(val -> AsmAnnotationProperty.property("", val))
-                    .collect(Collectors.toList())
+                new AsmAnnotationValues(cast.values).bytecode()
             );
         } else if (value instanceof List) {
             result = new BytecodeArrayAnnotationValue(

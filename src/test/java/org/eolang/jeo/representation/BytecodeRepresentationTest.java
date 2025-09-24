@@ -26,6 +26,7 @@ import org.objectweb.asm.MethodVisitor;
  *
  * @since 0.1.0
  */
+@SuppressWarnings("PMD.TooManyMethods")
 final class BytecodeRepresentationTest {
 
     /**
@@ -44,6 +45,11 @@ final class BytecodeRepresentationTest {
      * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1233">#1233</a>
      */
     private static final String NULL_NAME = "LtIncorrectUnlint.class";
+
+    /**
+     * Format for debug mode.
+     */
+    private static final Format DEBUG = new Format(Format.MODE, "debug");
 
     @Test
     void parsesBytecode() {
@@ -132,7 +138,7 @@ final class BytecodeRepresentationTest {
         final ResourceOf input = new ResourceOf("LoggerFactory$DelegatingLogger.class");
         final String actual = new Bytecode(
             new XmirRepresentation(
-                new BytecodeRepresentation(input).toXmir(new Format(Format.MODE, "debug"))
+                new BytecodeRepresentation(input).toXmir(BytecodeRepresentationTest.DEBUG)
             ).toBytecode().bytes()
         ).toString();
         final String expected = new Bytecode(new BytesOf(input).asBytes()).toString();
@@ -169,7 +175,7 @@ final class BytecodeRepresentationTest {
         final ResourceOf input = new ResourceOf("Check.class");
         final String actual = new Bytecode(
             new XmirRepresentation(
-                new BytecodeRepresentation(input).toXmir(new Format(Format.MODE, "debug"))
+                new BytecodeRepresentation(input).toXmir(BytecodeRepresentationTest.DEBUG)
             ).toBytecode().bytes()
         ).toString();
         final String expected = new Bytecode(new BytesOf(input).asBytes()).toString();
@@ -187,7 +193,7 @@ final class BytecodeRepresentationTest {
         MatcherAssert.assertThat(
             "The module-info class should be parsed correctly",
             new XmirRepresentation(
-                new BytecodeRepresentation(resource).toXmir(new Format(Format.MODE, "debug"))
+                new BytecodeRepresentation(resource).toXmir(BytecodeRepresentationTest.DEBUG)
             ).toBytecode().toString(),
             Matchers.equalTo(expected.toString())
         );
@@ -198,11 +204,27 @@ final class BytecodeRepresentationTest {
         final Bytecode debug = new XmirRepresentation(
             new BytecodeRepresentation(
                 new ResourceOf("closed-module-info.class")
-            ).toXmir(new Format(Format.MODE, "debug"))
+            ).toXmir(BytecodeRepresentationTest.DEBUG)
         ).toBytecode();
         Assertions.assertDoesNotThrow(
             () -> new VerifiedBytecode(debug.bytes()).verify(),
             "We expect to convert the module-info class back to valid bytecode"
+        );
+    }
+
+    @Test
+    void parsesAnnotationsAndConvertsThemBackToValidBytecode() throws Exception {
+        final Bytecode original = new Bytecode(
+            new BytesOf(new ResourceOf("AnnotationsApplication.class")).asBytes()
+        );
+        MatcherAssert.assertThat(
+            "The disassembled/assembled bytecode representation should match the original bytecode",
+            new XmirRepresentation(
+                new BytecodeRepresentation(
+                    original
+                ).toXmir(BytecodeRepresentationTest.DEBUG)
+            ).toBytecode().toString(),
+            Matchers.equalTo(original.toString())
         );
     }
 }
