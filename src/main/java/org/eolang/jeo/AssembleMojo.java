@@ -122,6 +122,14 @@ public final class AssembleMojo extends AbstractMojo {
     )
     private boolean disabled;
 
+    /**
+     * Enable debug logging for the assembling process.
+     * @since 0.15.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(property = "jeo.assemble.debug", defaultValue = "false")
+    private boolean debug;
+
     @Override
     public void execute() throws MojoExecutionException {
         try {
@@ -136,7 +144,8 @@ public final class AssembleMojo extends AbstractMojo {
                 }
                 new Assembler(
                     this.sourcesDir.toPath(),
-                    this.outputDir.toPath()
+                    this.outputDir.toPath(),
+                    this.debug
                 ).assemble();
                 if (this.skipVerification) {
                     Logger.info(this, "Bytecode verification is disabled, skipping");

@@ -121,6 +121,11 @@ final class FilteredClassesTest {
         }
 
         @Override
+        public long total() {
+            return this.all().count();
+        }
+
+        @Override
         public Path root() {
             return this.dir;
         }

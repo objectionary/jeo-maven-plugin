@@ -49,6 +49,7 @@
         <configuration>
           <xmirVerification>true</xmirVerification>
           <omitComments>false</omitComments>
+          <debug>true</debug>
           <excludes>
             <exclude>ignored/**/*.class</exclude>
           </excludes>

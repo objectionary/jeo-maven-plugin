@@ -58,6 +58,11 @@ final class FilteredClasses implements Classes {
     }
 
     @Override
+    public long total() {
+        return this.all().count();
+    }
+
+    @Override
     public Path root() {
         return this.original.root();
     }

@@ -8,6 +8,7 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.eolang.jeo.representation.Counter;
 
 /**
  * Logging transformation decorator.
@@ -39,15 +40,36 @@ public final class Logging implements Transformation {
     private final Transformation origin;
 
     /**
+     * Enables detailed debug logging.
+     */
+    private final boolean debug;
+
+    /**
+     * File size counter.
+     */
+    private final Counter counter;
+
+    /**
      * Constructor.
      * @param process Process name (gerund form)
      * @param participle Past participle of the process
      * @param origin Original transformation to wrap with logging
+     * @param debug Enables detailed debug logging
+     * @param counter File size counter
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
-    public Logging(final String process, final String participle, final Transformation origin) {
+    public Logging(
+        final String process,
+        final String participle,
+        final Transformation origin,
+        final boolean debug,
+        final Counter counter
+    ) {
         this.process = process;
         this.participle = participle;
         this.origin = origin;
+        this.debug = debug;
+        this.counter = counter;
     }
 
     @Override
@@ -92,15 +114,30 @@ public final class Logging implements Transformation {
      * @param time Time spent in milliseconds
      */
     private void logEndWithSize(final Path source, final Path after, final long time) {
-        Logger.info(
-            this,
-            "%[file]s %s to %[file]s (%[size]s) in %[ms]s",
-            source,
-            this.participle,
-            after,
-            Logging.size(after),
-            time
-        );
+        synchronized (this.counter) {
+            if (this.debug) {
+                Logger.info(
+                    this,
+                    "%s %[file]s %s to %[file]s (%[size]s) in %[ms]s",
+                    this.counter.next(),
+                    source,
+                    this.participle,
+                    after,
+                    Logging.size(after),
+                    time
+                );
+            } else {
+                Logger.info(
+                    this,
+                    "%s %[file]s (%[size]s) %s in %[ms]s",
+                    this.counter.next(),
+                    after.getFileName(),
+                    Logging.size(after),
+                    this.participle,
+                    time
+                );
+            }
+        }
     }
 
     /**

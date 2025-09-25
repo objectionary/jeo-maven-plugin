@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.Counter;
 
 /**
  * Assembler.
@@ -31,13 +32,20 @@ public final class Assembler {
     private final Path output;
 
     /**
+     * Enables detailed debug logging.
+     */
+    private final boolean debug;
+
+    /**
      * Constructor.
      * @param input Input folder with "xmir" files.
      * @param output Output folder for the assembled classes.
+     * @param debug Enables detailed debug logging.
      */
-    public Assembler(final Path input, final Path output) {
+    public Assembler(final Path input, final Path output, final boolean debug) {
         this.input = input;
         this.output = output;
+        this.debug = debug;
     }
 
     /**
@@ -47,13 +55,15 @@ public final class Assembler {
     public void assemble() {
         final String assembling = "Assembling";
         final String assembled = "assembled";
+        final XmirFiles files = new XmirFiles(this.input);
+        final Counter counter = new Counter(files.total());
         final Stream<Path> all = new Summary(
             assembling,
             assembled,
             this.input.toString(),
             this.output,
-            new ParallelTranslator(this::assemble)
-        ).apply(new XmirFiles(this.input).all());
+            new ParallelTranslator(path -> this.assemble(path, counter))
+        ).apply(files.all());
         all.forEach(this::log);
         all.close();
     }
@@ -61,13 +71,16 @@ public final class Assembler {
     /**
      * Assemble a single XMIR file.
      * @param path Path to the XMIR file to assemble
+     * @param counter File size counter
      * @return Path to the assembled class file
      */
-    private Path assemble(final Path path) {
+    private Path assemble(final Path path, final Counter counter) {
         final Transformation trans = new Logging(
             "Assembling",
             "assembled",
-            new Caching(new Informative(new Assembling(this.input, this.output, path)))
+            new Caching(new Informative(new Assembling(this.input, this.output, path))),
+            this.debug,
+            counter
         );
         trans.transform();
         return trans.target();

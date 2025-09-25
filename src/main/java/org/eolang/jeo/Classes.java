@@ -14,6 +14,12 @@ import java.util.stream.Stream;
 interface Classes {
 
     /**
+     * Total number of class files.
+     * @return Total count of class files
+     */
+    long total();
+
+    /**
      * Root directory containing the class files.
      * @return Path to the root directory
      */

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.Counter;
 import org.eolang.jeo.representation.directives.Format;
 
 /**
@@ -38,6 +39,11 @@ public final class Disassembler {
     private final Format params;
 
     /**
+     * Enables detailed debug logging.
+     */
+    private final boolean debug;
+
+    /**
      * Constructor.
      * @param classes Directory containing compiled class files
      * @param target Target directory where XMIR files will be saved
@@ -60,17 +66,27 @@ public final class Disassembler {
         final Path target,
         final Format params
     ) {
-        this(new BytecodeClasses(classes), target, params);
+        this(new BytecodeClasses(classes), target, params, false);
     }
 
+    /**
+     * Constructor.
+     * @param classes Project compiled classes
+     * @param target Where to save decompiled classes
+     * @param params Disassembling params.
+     * @param debug Enables detailed debug logging
+     * @checkstyle ParameterNumberCheck (10 lines)
+     */
     public Disassembler(
         final Classes classes,
         final Path target,
-        final Format params
+        final Format params,
+        final boolean debug
     ) {
         this.classes = classes;
         this.target = target;
         this.params = params;
+        this.debug = debug;
     }
 
     /**
@@ -79,12 +95,13 @@ public final class Disassembler {
     public void disassemble() {
         final String process = "Disassembling";
         final String disassembled = "disassembled";
+        final Counter counter = new Counter(this.classes.total());
         final Stream<Path> stream = new Summary(
             process,
             disassembled,
             this.classes.toString(),
             this.target,
-            new ParallelTranslator(this::disassemble)
+            new ParallelTranslator(path -> this.disassemble(path, counter))
         ).apply(this.classes.all());
         stream.forEach(this::log);
         stream.close();
@@ -93,9 +110,10 @@ public final class Disassembler {
     /**
      * Disassemble a single bytecode file.
      * @param path Path to the bytecode file to disassemble
+     * @param counter File size counter
      * @return Path to the disassembled XMIR file
      */
-    private Path disassemble(final Path path) {
+    private Path disassemble(final Path path, final Counter counter) {
         final Transformation trans = new Logging(
             "Disassembling",
             "disassembled",
@@ -103,7 +121,9 @@ public final class Disassembler {
                 new Informative(
                     new Disassembling(this.classes.root(), this.target, path, this.params)
                 )
-            )
+            ),
+            this.debug,
+            counter
         );
         trans.transform();
         return trans.target();

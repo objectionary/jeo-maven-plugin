@@ -221,6 +221,14 @@ public final class DisassembleMojo extends AbstractMojo {
     @SuppressWarnings("PMD.ImmutableField")
     private Set<String> excludes = new SetOf<>();
 
+    /**
+     * Enable debug logging for the disassembly process.
+     * @since 0.15.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(property = "jeo.disassemble.debug", defaultValue = "false")
+    private boolean debug;
+
     @Override
     public void execute() throws MojoExecutionException {
         try {
@@ -251,7 +259,8 @@ public final class DisassembleMojo extends AbstractMojo {
                         Format.WITH_LISTING, listings,
                         Format.PRETTY, this.prettyXmir,
                         Format.MODE, this.mode
-                    )
+                    ),
+                    this.debug
                 ).disassemble();
                 if (this.xmirVerification) {
                     Logger.info(this, "Verifying all the XMIR files after disassembling");

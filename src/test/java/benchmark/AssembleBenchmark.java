@@ -68,7 +68,7 @@ public class AssembleBenchmark {
         this.dir.toFile().deleteOnExit();
         Files.createDirectories(input);
         Files.write(input.resolve("test.xmir"), new Representation().disassemble());
-        this.assembler = new Assembler(input, this.dir);
+        this.assembler = new Assembler(input, this.dir, false);
     }
 
     @Benchmark

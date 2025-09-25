@@ -135,6 +135,32 @@ To enable them, you need to set `xmirVerification` to `true`:
 </configuration>
 ```
 
+### Extend Logging Output
+
+You can extend the logging output of the plugin by setting the `debug` parameter
+to `true`:
+
+```xml
+<configuration>
+  <debug>true</debug>
+</configuration>
+```
+
+This will enable more detailed logging output, which can be useful for debugging
+purposes.
+
+Without the `debug` parameter:
+
+```txt
+1/3 WithoutPackage.xmir (9Kb) disassembled in 1s
+```
+
+With the `debug` parameter:
+
+```txt
+1/3 .../WithoutPackage.class disassembled to .../WithoutPackage.xmir (9Kb) in 1s
+```
+
 ## Run Without a POM File
 
 You can run the plugin in a project that does not contain a `pom.xml` file.  

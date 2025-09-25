@@ -30,6 +30,7 @@
         <configuration>
           <modifiers>true</modifiers>
           <xmirVerification>true</xmirVerification>
+          <debug>true</debug>
         </configuration>
         <executions>
           <execution>

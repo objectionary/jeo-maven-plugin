@@ -35,6 +35,14 @@ final class XmirFiles {
     }
 
     /**
+     * Count of all representations.
+     * @return Count of all XMIR files in the directory tree
+     */
+    public long total() {
+        return this.all().count();
+    }
+
+    /**
      * All representations.
      * @return Stream of paths to all XMIR files in the directory tree
      */
