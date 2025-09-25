@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">this</strong>.dir.toFile().deleteOnExit();
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          Files.createDirectories(input);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          Files.write(input.resolve(<span class="jxr_string">"test.xmir"</span>), <strong class="jxr_keyword">new</strong> <a name="Representation" href="../benchmark/Representation.html#Representation">Representation</a>().disassemble());
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">this</strong>.assembler = <strong class="jxr_keyword">new</strong> Assembler(input, <strong class="jxr_keyword">this</strong>.dir);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          <strong class="jxr_keyword">this</strong>.assembler = <strong class="jxr_keyword">new</strong> Assembler(input, <strong class="jxr_keyword">this</strong>.dir, false);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>      }
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      @Benchmark
