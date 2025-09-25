@@ -21,7 +21,8 @@ jobs:
       - run: |-
           git fetch --tags --force && \
           latest=$(git tag --sort=creatordate | tail -1) && \
-          sed -E -i "s/<version>[^<]+/<version>${latest}/g" README.md
+          prev=$(grep -oE '<version>[^<]+' README.md | sed 's/<version>//' | head -1) && \
+          sed -i "s/${prev}/${latest}/g" README.md
       - uses: peter-evans/create-pull-request@v7
         with:
           sign-commits: true
