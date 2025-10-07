@@ -95,7 +95,8 @@ public final class DirectivesObject implements Iterable<Directive> {
             .attr("revision", Manifests.read("JEO-Revision"))
             .attr("dob", Manifests.read("JEO-Dob"))
             .attr("time", now)
-            .attr("xsi:noNamespaceSchemaLocation", "https://www.eolang.org/xsd/XMIR-0.57.0.xsd");
+            .attr("author", "jeo-maven-plugin")
+            .attr("xsi:noNamespaceSchemaLocation", "https://www.eolang.org/xsd/XMIR-0.58.6.xsd");
         final String listing = this.format.listing();
         if (!listing.isEmpty()) {
             directives.add("listing").set(listing).up();

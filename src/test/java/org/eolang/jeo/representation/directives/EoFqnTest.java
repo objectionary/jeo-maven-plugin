@@ -20,9 +20,9 @@ final class EoFqnTest {
 
     @ParameterizedTest
     @CsvSource({
-        "seq, Q.org.eolang.seq",
-        "bytes, Q.org.eolang.bytes",
-        "math, Q.org.eolang.math"
+        "seq, Φ.org.eolang.seq",
+        "bytes, Φ.org.eolang.bytes",
+        "math, Φ.org.eolang.math"
     })
     void convertsToDomainFqn(final String base, final String expected) {
         MatcherAssert.assertThat(

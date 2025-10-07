@@ -27,6 +27,12 @@ public final class DirectivesBytes implements Iterable<Directive> {
     private final String name;
 
     /**
+     * The 'as' attribute of the object.
+     * @checkstyle MemberNameCheck (2 lines)
+     */
+    private final String as;
+
+    /**
      * Constructor.
      * @param hex Hex representation of bytes.
      */
@@ -40,8 +46,20 @@ public final class DirectivesBytes implements Iterable<Directive> {
      * @param name Name of the object.
      */
     public DirectivesBytes(final String hex, final String name) {
+        this(hex, name, "");
+    }
+
+    /**
+     * Constructor.
+     * @param hex Hex representation of bytes.
+     * @param name Name of the object.
+     * @param as The 'as' attribute of the object.
+     * @checkstyle ParameterNameCheck (5 lines)
+     */
+    public DirectivesBytes(final String hex, final String name, final String as) {
         this.hex = hex;
         this.name = name;
+        this.as = as;
     }
 
     @Override
@@ -49,15 +67,16 @@ public final class DirectivesBytes implements Iterable<Directive> {
         final DirectivesClosedObject directives;
         if (this.name.isEmpty()) {
             directives = new DirectivesClosedObject(
-                "Q.org.eolang.bytes",
-                new Directives().add("o").set(this.hex).up()
+                "Φ.org.eolang.bytes",
+                this.as,
+                new Directives().add("o").attr("as", "v1").set(this.hex).up()
             );
         } else {
             directives = new DirectivesClosedObject(
-                "Q.org.eolang.bytes",
-                "",
+                "Φ.org.eolang.bytes",
+                this.as,
                 this.name,
-                new Directives().add("o").set(this.hex).up()
+                new Directives().add("o").attr("as", "v1").set(this.hex).up()
             );
         }
         return directives.iterator();

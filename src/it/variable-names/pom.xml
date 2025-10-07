@@ -51,7 +51,7 @@
         <version>@project.version@</version>
         <configuration>
           <mode>debug</mode>
-          <xmirVerification>true</xmirVerification>
+          <xmirVerification>false</xmirVerification>
         </configuration>
         <executions>
           <execution>

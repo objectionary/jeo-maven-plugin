@@ -30,14 +30,14 @@ final class DirectivesUnknownAttributeTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[@name='a0']",
-                "/o[@name='a0']/o[@base='Q.jeo.unknown-attribute' and @name='@']",
-                "/o[@name='a0']/o[@base='Q.org.eolang.string' and @name='type']",
-                "/o[@name='a0']/o[@base='Q.org.eolang.string' and @name='type']/o[@base='Q.org.eolang.bytes']",
-                "/o[@name='a0']/o[@base='Q.org.eolang.string' and @name='type']/o[@base='Q.org.eolang.bytes']/o[text()='53-6F-6D-65-2D-54-79-70-65']",
+                "/o[@name='a0']/o[@base='Φ.jeo.unknown-attribute' and @name='φ']",
+                "/o[@name='a0']/o[@base='Φ.org.eolang.string' and @name='type']",
+                "/o[@name='a0']/o[@base='Φ.org.eolang.string' and @name='type']/o[@base='Φ.org.eolang.bytes']",
+                "/o[@name='a0']/o[@base='Φ.org.eolang.string' and @name='type']/o[@base='Φ.org.eolang.bytes']/o[text()='53-6F-6D-65-2D-54-79-70-65']",
                 "/o[@name='a0']/o[@name='data']",
-                "/o[@name='a0']/o[@name='data']/o[@base='Q.jeo.bytes' and @name='@']",
-                "/o[@name='a0']/o[@name='data']/o[@base='Q.org.eolang.bytes' and @name='j0']",
-                "/o[@name='a0']/o[@name='data']/o[@base='Q.org.eolang.bytes' and @name='j0']/o[text()='00-01-02-03-04-05']"
+                "/o[@name='a0']/o[@name='data']/o[@base='Φ.jeo.bytes' and @name='φ']",
+                "/o[@name='a0']/o[@name='data']/o[@base='Φ.org.eolang.bytes' and @name='j0']",
+                "/o[@name='a0']/o[@name='data']/o[@base='Φ.org.eolang.bytes' and @name='j0']/o[text()='00-01-02-03-04-05']"
             )
         );
     }

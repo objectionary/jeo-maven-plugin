@@ -43,7 +43,7 @@ final class XmlAttributeTest {
                 ).attribute(),
                 "We expect an exception to be thrown if the attribute cannot be identified"
             ).getMessage(),
-            Matchers.equalTo("Unknown attribute base 'Q.jeo.unknown'")
+            Matchers.equalTo("Unknown attribute base 'Φ.jeo.unknown'")
         );
     }
 

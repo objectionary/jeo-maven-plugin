@@ -42,6 +42,15 @@ public final class JcabiXmlNode implements XmlNode {
      *  We are ignoring 'mandatory-package' check because 'module-info' files don't
      *  have package declaration. We should find a way to identify 'module-info'
      *  for XMIR.
+     * @todo #1366:60min Remove 'idempotent-attribute-is-not-first' check suppression.
+     *  This check has 'CRITITCAL' priority and it fails for XMIRs generated from EO sources.
+     *  This check later will be reduced from 'CRITICAL' to 'WARNING':
+     *  https://github.com/objectionary/jeo-maven-plugin/issues/1366#issuecomment-3376125719
+     *  When this is done, we should remove this suppression.
+     * @todo #1366:30min Remove 'compound-name' check suppression.
+     *  Currently, we have several objects with compound names which leads to
+     *  WARNING from 'compound-name' check. We should rename these objects to have
+     *  simple names only and then remove this suppression.
      */
     private static final Collection<String> IGNORE = new HashSet<>(
         Arrays.asList(
@@ -51,7 +60,9 @@ public final class JcabiXmlNode implements XmlNode {
             "unit-test-missing",
             "sparse-decoration",
             "duplicate-names",
-            "mandatory-package"
+            "mandatory-package",
+            "idempotent-attribute-is-not-first",
+            "compound-name"
         )
     );
 
@@ -129,7 +140,8 @@ public final class JcabiXmlNode implements XmlNode {
         if (!defects.isEmpty()) {
             throw new IllegalStateException(
                 String.format(
-                    "XMIR is incorrect: %s, %n%s%n",
+                    "XMIR is incorrect (%d errors): %s, %n%s%n",
+                    defects.size(),
                     defects.stream().map(Object::toString).collect(Collectors.joining("\n")),
                     this.doc
                 )

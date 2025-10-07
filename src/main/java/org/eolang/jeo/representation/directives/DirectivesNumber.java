@@ -24,6 +24,12 @@ final class DirectivesNumber implements Iterable<Directive> {
     private final String name;
 
     /**
+     * The 'as' attribute of the object.
+     * @checkstyle MemberNameCheck (2 lines)
+     */
+    private final String as;
+
+    /**
      * Constructor.
      * @param hex Hex number.
      */
@@ -38,6 +44,19 @@ final class DirectivesNumber implements Iterable<Directive> {
      * @param hex Hex number.
      */
     DirectivesNumber(final String name, final String hex) {
+        this(name, "", hex);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name Name of the number.
+     * @param as The 'as' attribute of the object.
+     * @param hex Hex number.
+     * @checkstyle ParameterNameCheck (5 lines)
+     */
+    private DirectivesNumber(final String name, final String as, final String hex) {
+        this.as = as;
         this.hex = hex;
         this.name = name;
     }
@@ -46,9 +65,9 @@ final class DirectivesNumber implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesClosedObject(
             new EoFqn("number").fqn(),
-            "",
+            this.as,
             this.name,
-            new DirectivesBytes(this.hex)
+            new DirectivesBytes(this.hex, "", "v1")
         ).iterator();
     }
 }

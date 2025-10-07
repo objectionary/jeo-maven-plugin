@@ -23,7 +23,7 @@ final class DirectivesSimpleDelegateTest {
         MatcherAssert.assertThat(
             "The generated XML should match the expected format",
             new Xembler(new DirectivesSimpleDelegate(base), new Transformers.Node()).xml(),
-            Matchers.is(Matchers.equalTo(String.format("<o base=\"%s\" name=\"@\"/>", base)))
+            Matchers.is(Matchers.equalTo(String.format("<o base=\"%s\" name=\"φ\"/>", base)))
         );
     }
 }

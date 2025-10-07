@@ -23,7 +23,7 @@ final class DirectivesTypeTest {
             new Xembler(new DirectivesType(0, new Format(), Type.BOOLEAN_TYPE)).xmlQuietly(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("./o", "type").toXpath(),
-                "/o/o[@base='Q.org.eolang.string']/o[@base='Q.org.eolang.bytes']/o[text()]"
+                "/o/o[@base='Φ.org.eolang.string']/o[@base='Φ.org.eolang.bytes']/o[text()]"
             )
         );
     }

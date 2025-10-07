@@ -40,7 +40,7 @@ public final class EoFqn {
      * @return Fully qualified name.
      */
     public String fqn() {
-        return String.format("Q.org.eolang.%s", this.base);
+        return String.format("Φ.org.eolang.%s", this.base);
     }
 
     @Override

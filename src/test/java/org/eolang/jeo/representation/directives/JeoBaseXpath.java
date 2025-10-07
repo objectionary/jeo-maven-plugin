@@ -38,6 +38,6 @@ final class JeoBaseXpath {
      * @return String base.
      */
     String toXpath() {
-        return String.format("%s/o[@name='@' and contains(@base,'%s')]", this.element, this.base);
+        return String.format("%s/o[@name='φ' and contains(@base,'%s')]", this.element, this.base);
     }
 }

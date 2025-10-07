@@ -11,6 +11,7 @@ import org.eolang.jeo.representation.bytecode.Codec;
 import org.eolang.jeo.representation.bytecode.EoCodec;
 import org.eolang.jeo.representation.bytecode.PlainLongCodec;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
  * Data Object Directive in EO language.
@@ -54,6 +55,12 @@ public final class DirectivesValue implements Iterable<Directive> {
      * Name.
      */
     private final String name;
+
+    /**
+     * The 'as' attribute of the object.
+     * @checkstyle MemberNameCheck (2 lines)
+     */
+    private final String as;
 
     /**
      * Value.
@@ -109,6 +116,26 @@ public final class DirectivesValue implements Iterable<Directive> {
     /**
      * Constructor.
      *
+     * @param format Directives format.
+     * @param name Name.
+     * @param as The 'as' attribute of the object.
+     * @param data Data.
+     * @param <T> Data type.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     * @checkstyle ParameterNameCheck (5 lines)
+     */
+    public <T> DirectivesValue(
+        final Format format,
+        final String name,
+        final String as,
+        final T data
+    ) {
+        this(format, name, as, new BytecodeValue(data));
+    }
+
+    /**
+     * Constructor.
+     *
      * @param format Format.
      * @param name Name.
      * @param value Value.
@@ -118,8 +145,27 @@ public final class DirectivesValue implements Iterable<Directive> {
         final String name,
         final BytecodeValue value
     ) {
+        this(format, name, "", value);
+    }
+
+    /**
+     * Constructor.
+     * @param format Format.
+     * @param name Name.
+     * @param as The 'as' attribute of the object.
+     * @param value Value.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     * @checkstyle ParameterNameCheck (5 lines)
+     */
+    public DirectivesValue(
+        final Format format,
+        final String name,
+        final String as,
+        final BytecodeValue value
+    ) {
         this.format = format;
         this.name = name;
+        this.as = as;
         this.value = value;
     }
 
@@ -207,8 +253,9 @@ public final class DirectivesValue implements Iterable<Directive> {
         return new DirectivesEoObject(
             base,
             this.name,
+            this.as,
             new DirectivesComment(this.format, this.comment()),
-            new DirectivesBytes(this.hex(codec))
+            new DirectivesBytes(this.hex(codec), "", "v1")
         );
     }
 
@@ -254,8 +301,9 @@ public final class DirectivesValue implements Iterable<Directive> {
         return new DirectivesJeoObject(
             base,
             this.name,
-            new DirectivesComment(this.format, this.comment()),
-            new DirectivesNumber(new NumName("n", 0).toString(), this.hex(codec))
+            this.as,
+            new Directives(new DirectivesComment(this.format, this.comment())),
+            new Directives(new DirectivesNumber(new NumName("n", 0).toString(), this.hex(codec)))
         );
     }
 

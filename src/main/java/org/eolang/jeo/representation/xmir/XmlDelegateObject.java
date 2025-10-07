@@ -45,7 +45,7 @@ public final class XmlDelegateObject implements XmlEoObject {
     @Override
     public Optional<String> base() {
         return this.inner.children().findFirst()
-            .filter(child -> child.attribute("name").map("@"::equals).orElse(false))
+            .filter(child -> child.attribute("name").map("φ"::equals).orElse(false))
             .map(child -> new XmlSimpleDelegate(child).base());
     }
 

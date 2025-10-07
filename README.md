@@ -188,6 +188,11 @@ in [AssembleMojo.java](src/main/java/org/eolang/jeo/AssembleMojo.java).)
 Note that the parameters for assembling use the `jeo.assemble` prefix,
 while the parameters for disassembling use the `jeo.disassemble` prefix.
 
+## Notation
+
+`jeo-maven-plugin` relies on the [notation](https://arxiv.org/abs/2111.13384)
+when producing XMIR files and parsing them back into bytecode.
+
 ## Disassembling Example
 
 The plugin can transform Java bytecode into EO and back. Usually, the plugin

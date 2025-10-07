@@ -70,7 +70,7 @@ final class BytecodeRepresentationTest {
             ).toXmir().toString(),
             Matchers.not(
                 XhtmlMatchers.hasXPath(
-                    "//o[not(@base) and not(@name) and not(parent::*[@base='Q.org.eolang.bytes'])]"
+                    "//o[not(@base) and not(@name) and not(parent::*[@base='Φ.org.eolang.bytes'])]"
                 )
             )
         );

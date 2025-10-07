@@ -34,6 +34,12 @@ public final class DirectivesEoObject implements Iterable<Directive> {
     private final List<Directives> inner;
 
     /**
+     * The 'as' attribute of the object.
+     * @checkstyle MemberNameCheck (2 lines)
+     */
+    private final String as;
+
+    /**
      * Constructor.
      * @param base The base of the object.
      * @param name The name of the object.
@@ -52,9 +58,52 @@ public final class DirectivesEoObject implements Iterable<Directive> {
      * @param name The name of the object.
      * @param inner Inner components.
      */
-    DirectivesEoObject(final String base, final String name, final List<Directives> inner) {
+    public DirectivesEoObject(final String base, final String name, final List<Directives> inner) {
+        this(base, name, "", inner);
+    }
+
+    /**
+     * Constructor.
+     * @param base The base of the object.
+     * @param name The name of the object.
+     * @param as The 'as' attribute of the object.
+     * @param inner Inner components.
+     * @checkstyle ParameterNumberCheck (10 lines)
+     * @checkstyle ParameterNameCheck (10 lines)
+     */
+    @SafeVarargs
+    public DirectivesEoObject(
+        final String base,
+        final String name,
+        final String as,
+        final Iterable<Directive>... inner
+    ) {
+        this(
+            base,
+            name,
+            as,
+            Arrays.stream(inner).map(Directives::new).collect(Collectors.toList())
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param base The base of the object.
+     * @param name The name of the object.
+     * @param as The 'as' attribute of the object.
+     * @param inner Inner components.
+     * @checkstyle ParameterNameCheck (10 lines)
+     * @checkstyle ParameterNumberCheck (10 lines)
+     */
+    public DirectivesEoObject(
+        final String base,
+        final String name,
+        final String as,
+        final List<Directives> inner
+    ) {
         this.base = base;
         this.name = name;
+        this.as = as;
         this.inner = inner;
     }
 
@@ -62,7 +111,7 @@ public final class DirectivesEoObject implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesClosedObject(
             new EoFqn(this.base).fqn(),
-            "",
+            this.as,
             this.name,
             this.inner.stream().reduce(new Directives(), Directives::append)
         ).iterator();

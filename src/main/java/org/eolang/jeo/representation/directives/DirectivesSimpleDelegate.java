@@ -35,7 +35,7 @@ public final class DirectivesSimpleDelegate implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new Directives().add("o")
             .attr("base", this.base)
-            .attr("name", "@")
+            .attr("name", "φ")
             .up()
             .iterator();
     }

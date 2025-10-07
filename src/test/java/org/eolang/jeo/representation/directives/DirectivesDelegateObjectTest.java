@@ -31,7 +31,7 @@ final class DirectivesDelegateObjectTest {
                 )
             ).xml(),
             XhtmlMatchers.hasXPath(
-                String.format("o/o[@base='%s' and @name='@']", DirectivesDelegateObjectTest.BASE)
+                String.format("o/o[@base='%s' and @name='φ']", DirectivesDelegateObjectTest.BASE)
             )
         );
     }
@@ -49,7 +49,7 @@ final class DirectivesDelegateObjectTest {
             ).xml(),
             XhtmlMatchers.hasXPath(
                 String.format(
-                    "o[@as='asValue']/o[@base='%s' and @name='@']",
+                    "o[@as='asValue']/o[@base='%s' and @name='φ']",
                     DirectivesDelegateObjectTest.BASE
                 )
             )
@@ -70,7 +70,7 @@ final class DirectivesDelegateObjectTest {
             ).xml(),
             XhtmlMatchers.hasXPath(
                 String.format(
-                    "o[@as='as' and @name='name']/o[@base='%s' and @name='@']",
+                    "o[@as='as' and @name='name']/o[@base='%s' and @name='φ']",
                     DirectivesDelegateObjectTest.BASE
                 )
             )

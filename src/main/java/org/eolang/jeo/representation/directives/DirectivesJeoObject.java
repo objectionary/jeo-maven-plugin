@@ -37,6 +37,12 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
     private final String name;
 
     /**
+     * The 'as' attribute of the object.
+     * @checkstyle MemberNameCheck (2 lines)
+     */
+    private final String as;
+
+    /**
      * Inner components.
      */
     private final List<Directives> inner;
@@ -71,8 +77,42 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
      * @param inner Inner components.
      */
     public DirectivesJeoObject(final String base, final String name, final List<Directives> inner) {
+        this(base, name, "", inner);
+    }
+
+    /**
+     * Constructor.
+     * @param base The base of the object.
+     * @param name The name of the object.
+     * @param as The 'as' attribute of the object.
+     * @param inner Inner components.
+     * @checkstyle ParameterNumberCheck (5 lines)
+     * @checkstyle ParameterNameCheck (5 lines)
+     */
+    public DirectivesJeoObject(
+        final String base,
+        final String name,
+        final String as,
+        final Directives... inner
+    ) {
+        this(base, name, as, Arrays.asList(inner));
+    }
+
+    /**
+     * Constructor.
+     * @param base The base of the object.
+     * @param name The name of the object.
+     * @param as The 'as' attribute of the object.
+     * @param inner Inner components.
+     * @checkstyle ParameterNameCheck (5 lines)
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    public DirectivesJeoObject(
+        final String base, final String name, final String as, final List<Directives> inner
+    ) {
         this.base = base;
         this.name = name;
+        this.as = as;
         this.inner = inner;
     }
 
@@ -80,7 +120,7 @@ public final class DirectivesJeoObject implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesDelegateObject(
             new JeoFqn(this.base).fqn(),
-            "",
+            this.as,
             this.name,
             this.inner.stream().reduce(new Directives(), Directives::append)
         ).iterator();
