@@ -6,6 +6,7 @@ package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Set;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
@@ -231,8 +232,10 @@ public final class DisassembleMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
+        final Path src = new MavenPath(this.sourcesDir).resolve();
+        final Path out = new MavenPath(this.outputDir).resolve();
         try {
-            new PluginStartup(this.project, this.sourcesDir.toPath()).init();
+            new PluginStartup(this.project, src).init();
             if (this.disabled) {
                 Logger.info(this, "Disassemble mojo is disabled, skipping");
             } else {
@@ -249,10 +252,10 @@ public final class DisassembleMojo extends AbstractMojo {
                 );
                 new Disassembler(
                     new FilteredClasses(
-                        new BytecodeClasses(this.sourcesDir.toPath()),
+                        new BytecodeClasses(src),
                         new GlobFilter(this.includes, this.excludes)
                     ),
-                    this.outputDir.toPath(),
+                    out,
                     new Format(
                         Format.MODIFIERS, this.modifiers,
                         Format.COMMENTS, comments,
@@ -264,7 +267,7 @@ public final class DisassembleMojo extends AbstractMojo {
                 ).disassemble();
                 if (this.xmirVerification) {
                     Logger.info(this, "Verifying all the XMIR files after disassembling");
-                    new XmirFiles(this.outputDir.toPath()).verify();
+                    new XmirFiles(out).verify();
                 } else {
                     Logger.info(
                         this, "XMIR verification after disassembling is disabled, skipping"
@@ -273,11 +276,7 @@ public final class DisassembleMojo extends AbstractMojo {
             }
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(
-                String.format(
-                    "Failed to transpile bytecode to EO, from '%s' to '%s'",
-                    this.sourcesDir.toPath(),
-                    this.outputDir.toPath()
-                ),
+                String.format("Failed to transpile bytecode to EO, from '%s' to '%s'", src, out),
                 exception
             );
         }

@@ -6,6 +6,7 @@ package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
 import java.io.File;
+import java.nio.file.Path;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -132,27 +133,29 @@ public final class AssembleMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
+        final Path src = new MavenPath(this.sourcesDir).resolve();
+        final Path out = new MavenPath(this.outputDir).resolve();
         try {
             if (this.disabled) {
                 Logger.info(this, "Assemble mojo is disabled, skipping");
             } else {
                 if (this.xmirVerification) {
                     Logger.info(this, "Verifying all the XMIR files before assembling...");
-                    new XmirFiles(this.sourcesDir.toPath()).verify();
+                    new XmirFiles(src).verify();
                 } else {
                     Logger.info(this, "XMIR verification before assembling is disabled, skipping");
                 }
                 new Assembler(
-                    this.sourcesDir.toPath(),
-                    this.outputDir.toPath(),
+                    src,
+                    out,
                     this.debug
                 ).assemble();
                 if (this.skipVerification) {
                     Logger.info(this, "Bytecode verification is disabled, skipping");
                 } else {
                     Logger.info(this, "Verifying bytecode of all the generated classes...");
-                    new PluginStartup(this.project, this.outputDir.toPath()).init();
-                    new BytecodeClasses(this.outputDir.toPath()).verify();
+                    new PluginStartup(this.project, out).init();
+                    new BytecodeClasses(out).verify();
                 }
             }
         } catch (final DependencyResolutionRequiredException exception) {
