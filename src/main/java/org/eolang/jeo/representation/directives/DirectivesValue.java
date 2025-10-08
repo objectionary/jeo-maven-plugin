@@ -255,7 +255,7 @@ public final class DirectivesValue implements Iterable<Directive> {
             this.name,
             this.as,
             new DirectivesComment(this.format, this.comment()),
-            new DirectivesBytes(this.hex(codec), "", "v1")
+            new DirectivesBytes(this.hex(codec), "", "α0")
         );
     }
 
