@@ -50,17 +50,66 @@ public final class PrefixedName {
     );
 
     /**
+     * Prefix to be used for encoding and decoding.
+     */
+    private final String prefix;
+
+    /**
      * Original name.
-     * Might be with 'j' prefix or without it, depending on the context.
+     * Might be with a prefix or without it, depending on the context.
      */
     private final String origin;
 
     /**
+     * Pattern to find positions for prefixing and existing prefixes for removal.
+     */
+    private final Pattern delimited;
+
+    /**
+     * Pattern to find existing prefixes for removal.
+     */
+    private final Pattern prefixed;
+
+    /**
      * Constructor.
-     * @param origin The original name (may or may not be prefixed)
+     * @param origin The original name.
      */
     public PrefixedName(final String origin) {
+        this(PrefixedName.PREFIX, origin, PrefixedName.DELIMITED, PrefixedName.PREFIXED);
+    }
+
+    /**
+     * Constructor.
+     * @param prefix Prefix to be used for encoding and decoding
+     * @param origin The original name.
+     */
+    public PrefixedName(final String prefix, final String origin) {
+        this(
+            prefix,
+            origin,
+            PrefixedName.DELIMITED,
+            Pattern.compile(String.format("(?<=^|[./])%s", Pattern.quote(prefix)))
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param prefix Prefix to be used for encoding and decoding
+     * @param origin The original name
+     * @param delimited Pattern to find positions for prefixing
+     * @param prefixed Pattern to find existing prefixes for removal
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    public PrefixedName(
+        final String prefix,
+        final String origin,
+        final Pattern delimited,
+        final Pattern prefixed
+    ) {
+        this.prefix = prefix;
         this.origin = origin;
+        this.delimited = delimited;
+        this.prefixed = prefixed;
     }
 
     /**
@@ -71,9 +120,9 @@ public final class PrefixedName {
         if (PrefixedName.BLANKED.matcher(this.origin).matches()) {
             throw new IllegalArgumentException(PrefixedName.BLANK);
         }
-        return PrefixedName.DELIMITED
+        return this.delimited
             .matcher(this.origin)
-            .replaceAll(Matcher.quoteReplacement(PrefixedName.PREFIX));
+            .replaceAll(Matcher.quoteReplacement(this.prefix));
     }
 
     /**
@@ -84,6 +133,6 @@ public final class PrefixedName {
         if (PrefixedName.BLANKED.matcher(this.origin).matches()) {
             throw new IllegalArgumentException(PrefixedName.BLANK);
         }
-        return PrefixedName.PREFIXED.matcher(this.origin).replaceAll("");
+        return this.prefixed.matcher(this.origin).replaceAll("");
     }
 }

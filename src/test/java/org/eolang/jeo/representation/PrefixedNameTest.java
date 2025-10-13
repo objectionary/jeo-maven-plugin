@@ -59,6 +59,45 @@ final class PrefixedNameTest {
         );
     }
 
+    @ParameterizedTest
+    @CsvSource({
+        "name, jm$name",
+        "ClassName, jm$ClassName",
+        "someLongName, jm$someLongName",
+        "jm$jm, jm$jm$jm",
+        "jeo/xmir/Fake, jm$jeo/jm$xmir/jm$Fake",
+        "EOorg.EOeolang, jm$EOorg.jm$EOeolang",
+        "org.eolang, jm$org.jm$eolang",
+        "org.eolang.Fake, jm$org.jm$eolang.jm$Fake"
+    })
+    void encodesNamesWithDifferentPrefix(final String origin, final String encoded) {
+        MatcherAssert.assertThat(
+            String.format("Can't encode '%s' to '%s' with prefix 'jm'", origin, encoded),
+            new PrefixedName("jm$", origin).encode(),
+            Matchers.equalTo(encoded)
+        );
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "jm$name, name",
+        "jm$ClassName, ClassName",
+        "jm$someLongName, someLongName",
+        "jm$jm$jm, jm$jm",
+        "someName, someName",
+        "jm$jeo/jm$xmir/jm$Fake, jeo/xmir/Fake",
+        "jm$EOorg.jm$EOeolang, EOorg.EOeolang",
+        "jm$org.jm$eolang, org.eolang",
+        "jm$org.jm$eolang.jm$Fake, org.eolang.Fake"
+    })
+    void decodesNamesWithDifferentPrefix(final String encoded, final String origin) {
+        MatcherAssert.assertThat(
+            String.format("Can't decode '%s' to '%s' with prefix 'jm'", encoded, origin),
+            new PrefixedName("jm$", encoded).decode(),
+            Matchers.equalTo(origin)
+        );
+    }
+
     @Test
     void throwsExceptionWhenEncodingInvalidName() {
         Assertions.assertThrows(

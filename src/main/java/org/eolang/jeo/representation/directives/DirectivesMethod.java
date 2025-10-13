@@ -155,7 +155,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final String mname = this.name.toString();
         return new DirectivesJeoObject(
             "method",
-            new PrefixedName(mname).encode(),
+            new PrefixedName("jm$", mname).encode(),
             Stream.concat(
                 Stream.of(
                     this.properties,

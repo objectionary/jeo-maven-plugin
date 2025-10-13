@@ -4,11 +4,15 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import com.jcabi.matchers.XhtmlMatchers;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Test case for {@link org.eolang.jeo.representation.bytecode.BytecodeClass}.
@@ -179,6 +183,54 @@ final class BytecodeClassTest {
                     .up()
             ).bytecode(),
             "We expect no exception here because all instructions are valid"
+        );
+    }
+
+    @Test
+    void convertsToDirectivesOverloadedMethods() throws ImpossibleModificationException {
+        final String duplicated = "duplicated";
+        MatcherAssert.assertThat(
+            "We expect to have two methods with the names containing numbers to distinguish them",
+            new Xembler(
+                new BytecodeClass("OverloadedMethods")
+                    .withMethod(duplicated, "(I)I", Opcodes.ACC_PUBLIC)
+                    .opcode(Opcodes.ILOAD, 1)
+                    .opcode(Opcodes.IRETURN)
+                    .up()
+                    .withMethod(duplicated, "(II)I", Opcodes.ACC_PUBLIC)
+                    .opcode(Opcodes.ILOAD, 1)
+                    .opcode(Opcodes.ILOAD, 2)
+                    .opcode(Opcodes.IADD)
+                    .opcode(Opcodes.IRETURN)
+                    .up()
+                    .directives(new Format())
+            ).xml(),
+            XhtmlMatchers.hasXPaths(
+                "//o[@name='jm$duplicated']",
+                "//o[@name='jm$duplicated-2']"
+            )
+        );
+    }
+
+    @Test
+    void convertsToDirectivesWithMethodAndFieldHavingTheSameName()
+        throws ImpossibleModificationException {
+        final String same = "same";
+        MatcherAssert.assertThat(
+            "We expect to have a method and a field with the same name",
+            new Xembler(
+                new BytecodeClass("MethodAndFieldWithSameName")
+                    .withField(same)
+                    .withMethod(same, "()I", Opcodes.ACC_PUBLIC)
+                    .opcode(Opcodes.ICONST_0)
+                    .opcode(Opcodes.IRETURN)
+                    .up()
+                    .directives(new Format())
+            ).xml(),
+            XhtmlMatchers.hasXPaths(
+                "//o[@name='j$same']",
+                "//o[@name='jm$same']"
+            )
         );
     }
 }
