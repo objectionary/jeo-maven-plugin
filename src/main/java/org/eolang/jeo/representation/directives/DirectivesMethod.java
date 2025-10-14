@@ -160,8 +160,8 @@ public final class DirectivesMethod implements Iterable<Directive> {
                 Stream.of(
                     this.properties,
                     this.annotations,
-                    new DirectivesOptionalSeq("body", this.instructions),
-                    new DirectivesOptionalSeq(
+                    new DirectivesSeq("body", this.instructions),
+                    new DirectivesSeq(
                         String.format("trycatchblocks-%s", this.name.plain()),
                         this.exceptions
                     )

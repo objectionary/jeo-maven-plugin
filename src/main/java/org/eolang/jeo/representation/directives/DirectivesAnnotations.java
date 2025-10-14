@@ -4,12 +4,10 @@
  */
 package org.eolang.jeo.representation.directives;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.xembly.Directive;
@@ -21,11 +19,6 @@ import org.xembly.Directive;
 @ToString
 @EqualsAndHashCode
 public final class DirectivesAnnotations implements Iterable<Directive> {
-
-    /**
-     * Random number generator.
-     */
-    private static final Random RANDOM = new SecureRandom();
 
     /**
      * All the annotations.
@@ -59,13 +52,7 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
      * @param annotations Annotations.
      */
     public DirectivesAnnotations(final List<Iterable<Directive>> annotations) {
-        this(
-            annotations,
-            String.format(
-                "annotations-%d",
-                Math.abs(DirectivesAnnotations.RANDOM.nextInt())
-            )
-        );
+        this(annotations, "annotations");
     }
 
     /**
@@ -87,7 +74,7 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesOptionalSeq(this.name, this.annotations).iterator();
+        return new DirectivesSeq(this.name, this.annotations).iterator();
     }
 
     /**

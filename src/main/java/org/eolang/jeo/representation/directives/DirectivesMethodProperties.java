@@ -140,7 +140,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
             .append(new DirectivesValue(this.format, "descriptor", this.descriptor))
             .append(new DirectivesValue(this.format, "signature", this.signature))
             .append(
-                new DirectivesOptionalValues(this.format, "exceptions", (Object[]) this.exceptions)
+                new DirectivesValues(this.format, "exceptions", (Object[]) this.exceptions)
             )
             .append(this.max.get())
             .append(this.params);

@@ -42,9 +42,7 @@ public final class DirectivesRecordComponents implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "record-components",
             String.format("record-components-%d", this.index),
-            new DirectivesOptionalSeq(
-                "all", this.components
-            )
+            new DirectivesSeq("all", this.components)
         ).iterator();
     }
 }

@@ -111,4 +111,15 @@ final class DirectivesMethodTest {
             )
         );
     }
+
+    @Test
+    void convertsToEmptyAnnotationsIfThereAreNoAnnotations() {
+        MatcherAssert.assertThat(
+            "We expect that empty annotations will be mentioned in the method directives",
+            new Xembler(new DirectivesMethod("foo")).xmlQuietly(),
+            XhtmlMatchers.hasXPath(
+                "./o[contains(@name,'foo')]/o[contains(@name,'annotations')]"
+            )
+        );
+    }
 }

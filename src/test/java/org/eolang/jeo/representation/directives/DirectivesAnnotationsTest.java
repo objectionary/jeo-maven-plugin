@@ -7,7 +7,6 @@ package org.eolang.jeo.representation.directives;
 import com.jcabi.matchers.XhtmlMatchers;
 import org.eolang.jeo.representation.bytecode.JavaCodec;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -19,11 +18,15 @@ import org.xembly.Xembler;
 final class DirectivesAnnotationsTest {
 
     @Test
-    void returnsEmptyDirectviesIfNoAnnotations() {
+    void returnsEmptyDirectviesIfNoAnnotations() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Must return empty directives if no annotations",
-            new DirectivesAnnotations(),
-            Matchers.emptyIterable()
+            new Xembler(new DirectivesAnnotations()).xml(),
+            XhtmlMatchers.hasXPaths(
+                "/o[contains(@name,'annotations')]",
+                "/o[count(o)=1]",
+                "/o/o[contains(@base,'seq.of0')]"
+            )
         );
     }
 

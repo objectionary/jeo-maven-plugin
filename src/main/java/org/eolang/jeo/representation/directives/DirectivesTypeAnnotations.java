@@ -55,7 +55,7 @@ public final class DirectivesTypeAnnotations implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesOptionalSeq(
+        return new DirectivesSeq(
             this.name,
             this.annotations
         ).iterator();
