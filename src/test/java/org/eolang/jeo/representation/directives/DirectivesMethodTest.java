@@ -122,4 +122,15 @@ final class DirectivesMethodTest {
             )
         );
     }
+
+    @Test
+    void containsTryCatchBlocksIfThereAreNoExceptions() {
+        MatcherAssert.assertThat(
+            "We expect that empty trycatchblocks will be mentioned in the method directives",
+            new Xembler(new DirectivesMethod("foo")).xmlQuietly(),
+            XhtmlMatchers.hasXPath(
+                "./o[contains(@name,'foo')]/o[@name='trycatchblocks']"
+            )
+        );
+    }
 }

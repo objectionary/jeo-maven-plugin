@@ -161,10 +161,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
                     this.properties,
                     this.annotations,
                     new DirectivesSeq("body", this.instructions),
-                    new DirectivesSeq(
-                        String.format("trycatchblocks-%s", this.name.plain()),
-                        this.exceptions
-                    )
+                    new DirectivesSeq("trycatchblocks", this.exceptions)
                 ),
                 Stream.concat(
                     this.dvalue.stream(),
