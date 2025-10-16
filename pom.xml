@@ -69,6 +69,7 @@
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
     <stack-size>256M</stack-size>
+    <verify.xmir.in.integration.tests>false</verify.xmir.in.integration.tests>
     <skipITs/>
   </properties>
   <dependencies>
@@ -572,6 +573,15 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>verify</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <verify.xmir.in.integration.tests>true</verify.xmir.in.integration.tests>
+      </properties>
     </profile>
     <profile>
       <id>benchmark</id>

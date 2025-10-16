@@ -462,4 +462,16 @@ before sending us your pull request, please run the full Maven build:
 mvn clean install -Pqulice
 ```
 
+Also, if you want to check the generated XMIR, you can run:
+
+```bash
+mvn clean install -Pverify
+```
+
+This command will check all generated XMIR using
+[objectionary/lints](https://github.com/objectionary/lints).
+It might take significantly more time to build,
+but it will ensure that all transformations are correct and aligned with
+the XMIR specification.
+
 You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.

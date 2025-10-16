@@ -29,7 +29,7 @@
         <version>@project.version@</version>
         <configuration>
           <modifiers>true</modifiers>
-          <xmirVerification>false</xmirVerification>
+          <xmirVerification>@verify.xmir.in.integration.tests@</xmirVerification>
           <debug>true</debug>
         </configuration>
         <executions>

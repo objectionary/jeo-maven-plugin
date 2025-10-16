@@ -63,6 +63,7 @@
                 <id>bytecode-to-xmir</id>
                 <phase>process-classes</phase>
                 <configuration>
+                  <xmirVerification>@verify.xmir.in.integration.tests@</xmirVerification>
                   <outputDir>${jeo.disassemble}</outputDir>
                 </configuration>
                 <goals>
@@ -73,6 +74,7 @@
                 <id>xmir-to-bytecode</id>
                 <phase>package</phase>
                 <configuration>
+                  <xmirVerification>@verify.xmir.in.integration.tests@</xmirVerification>
                   <sourcesDir>${jeo.disassemble}</sourcesDir>
                   <outputDir>${jeo.assemble}</outputDir>
                 </configuration>
@@ -166,6 +168,7 @@
                 <id>bytecode-to-xmir</id>
                 <phase>process-classes</phase>
                 <configuration>
+                  <xmirVerification>@verify.xmir.in.integration.tests@</xmirVerification>
                   <outputDir>${jeo.disassemble}</outputDir>
                 </configuration>
                 <goals>
@@ -176,6 +179,7 @@
                 <id>xmir-to-bytecode</id>
                 <phase>package</phase>
                 <configuration>
+                  <xmirVerification>@verify.xmir.in.integration.tests@</xmirVerification>
                   <sourcesDir>${eo.unphi}</sourcesDir>
                   <outputDir>${jeo.assemble}</outputDir>
                 </configuration>

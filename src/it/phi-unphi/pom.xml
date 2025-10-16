@@ -43,7 +43,7 @@
                   See more details here:
                   https://github.com/objectionary/eo/issues/3812
               -->
-              <xmirVerification>true</xmirVerification>
+              <xmirVerification>@verify.xmir.in.integration.tests@</xmirVerification>
             </configuration>
             <goals>
               <goal>disassemble</goal>
@@ -60,6 +60,7 @@
                 See more details here:
                 https://github.com/objectionary/eo/issues/3812
               -->
+              <xmirVerification>false</xmirVerification>
             </configuration>
             <goals>
               <goal>assemble</goal>
