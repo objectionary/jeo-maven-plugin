@@ -12,6 +12,12 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-jdk-${{ matrix.java }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
       - name: Run JMH Benchmark Action
         uses: volodya-lombrozo/jmh-benchmark-action@v1.0.3
         with:
