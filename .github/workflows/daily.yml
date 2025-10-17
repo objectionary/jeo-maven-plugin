@@ -24,9 +24,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}
-            -jdk-${{ matrix.java }}
-            -maven-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-jdk-${{ matrix.java }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
       - run: mvn clean install -D"skipTests" -P"verify" --errors --batch-mode
