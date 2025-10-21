@@ -47,10 +47,6 @@ public final class JcabiXmlNode implements XmlNode {
      *  This check later will be reduced from 'CRITICAL' to 'WARNING':
      *  https://github.com/objectionary/jeo-maven-plugin/issues/1366#issuecomment-3376125719
      *  When this is done, we should remove this suppression.
-     * @todo #1366:30min Remove 'compound-name' check suppression.
-     *  Currently, we have several objects with compound names which leads to
-     *  WARNING from 'compound-name' check. We should rename these objects to have
-     *  simple names only and then remove this suppression.
      */
     private static final Collection<String> IGNORE = new HashSet<>(
         Arrays.asList(
@@ -61,8 +57,7 @@ public final class JcabiXmlNode implements XmlNode {
             "sparse-decoration",
             "duplicate-names",
             "mandatory-package",
-            "idempotent-attribute-is-not-first",
-            "compound-name"
+            "idempotent-attribute-is-not-first"
         )
     );
 

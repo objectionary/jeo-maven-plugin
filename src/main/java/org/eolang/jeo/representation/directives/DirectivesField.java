@@ -121,7 +121,7 @@ public final class DirectivesField implements Iterable<Directive> {
             descriptor,
             signature,
             value,
-            new DirectivesAnnotations(String.format("annotations-%s", name))
+            new DirectivesAnnotations("annotations")
         );
     }
 
@@ -159,10 +159,10 @@ public final class DirectivesField implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "field",
             new PrefixedName(this.name).encode(),
-            new DirectivesValue(this.format, this.title("access"), this.access),
-            new DirectivesValue(this.format, this.title("descriptor"), this.descriptor),
-            new DirectivesValue(this.format, this.title("signature"), this.signature),
-            new DirectivesValue(this.format, this.title("value"), this.value),
+            new DirectivesValue(this.format, DirectivesField.title("access"), this.access),
+            new DirectivesValue(this.format, DirectivesField.title("descriptor"), this.descriptor),
+            new DirectivesValue(this.format, DirectivesField.title("signature"), this.signature),
+            new DirectivesValue(this.format, DirectivesField.title("value"), this.value),
             this.annotations
         ).iterator();
     }
@@ -173,8 +173,7 @@ public final class DirectivesField implements Iterable<Directive> {
      * @param prefix Prefix
      * @return Title
      */
-    private String title(final String prefix) {
-        final String template = "%s-%s";
-        return String.format(template, prefix, this.name);
+    private static String title(final String prefix) {
+        return prefix;
     }
 }
