@@ -35,10 +35,10 @@ final class DirectivesFieldTest {
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "field").toXpath(),
                 "/o[contains(@name,'unknown')]",
-                "/o/o[@name='access-unknown']",
-                "/o/o[@name='descriptor-unknown']",
-                "/o/o[@name='signature-unknown']",
-                "/o/o[contains(@base,'number') and @name='value-unknown']"
+                "/o/o[@name='access']",
+                "/o/o[@name='descriptor']",
+                "/o/o[@name='signature']",
+                "/o/o[contains(@base,'number') and @name='value']"
             )
         );
     }
@@ -63,10 +63,10 @@ final class DirectivesFieldTest {
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "field").toXpath(),
                 "/o[contains(@name,'serialVersionUID')]",
-                "/o/o[@name='access-serialVersionUID']",
-                "/o/o[@name='descriptor-serialVersionUID']",
-                "/o/o[@name='signature-serialVersionUID']",
-                "/o/o[@name='value-serialVersionUID']"
+                "/o/o[@name='access']",
+                "/o/o[@name='descriptor']",
+                "/o/o[@name='signature']",
+                "/o/o[@name='value']"
             )
         );
     }
