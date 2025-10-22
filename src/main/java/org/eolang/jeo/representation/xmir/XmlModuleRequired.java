@@ -79,13 +79,6 @@ public final class XmlModuleRequired {
      * @throws IllegalStateException When child node is missing.
      */
     private XmlNode byName(final String name) {
-        return this.node.children()
-            .filter(n -> n.attribute("name").map(name::equals).orElse(false))
-            .findFirst()
-            .orElseThrow(
-                () -> new IllegalStateException(
-                    String.format("'%s' is missing in `%s`", name, this.node)
-                )
-            );
+        return new XmlChildren(this.node).byName(name);
     }
 }

@@ -7,10 +7,6 @@ package org.eolang.jeo.representation.xmir;
 /**
  * Node with children.
  * @since 0.15.0
- * @todo #1297:30min Use {@link XmlModuleOpened} in other places.
- *  Currently, this class is used only in {@link XmlModule}.
- *  It should be used in other places where child nodes are accessed by name.
- *  This will help to reduce code duplication and improve the quality of the code.
  */
 final class XmlChildren {
 
