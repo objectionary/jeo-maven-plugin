@@ -9,7 +9,6 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.objectweb.asm.Type;
 
 /**
  * Test case for {@link JavaCodec}.
@@ -54,16 +53,6 @@ final class JavaCodecTest {
             {'a', DataType.CHAR, new byte[]{0, 97}},
             {new byte[]{0, 1, 2, 3}, DataType.BYTES, new byte[]{0, 1, 2, 3}},
             {"hello, world!", DataType.STRING, "hello, world!".getBytes(StandardCharsets.UTF_8)},
-            {
-                Type.getType(Object.class),
-                DataType.TYPE_REFERENCE,
-                "Ljava/lang/Object;".getBytes(StandardCharsets.UTF_8),
-            },
-            {
-                Object.class,
-                DataType.CLASS_REFERENCE,
-                "java/lang/Object".getBytes(StandardCharsets.UTF_8),
-            },
         };
     }
 }

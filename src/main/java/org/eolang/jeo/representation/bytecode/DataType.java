@@ -6,7 +6,6 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.Arrays;
 import java.util.Optional;
-import org.objectweb.asm.Type;
 
 /**
  * Enumeration of all supported data types in bytecode representation.
@@ -66,16 +65,6 @@ enum DataType {
      * Bytes.
      */
     BYTES("bytes", byte[].class),
-
-    /**
-     * Type reference.
-     */
-    TYPE_REFERENCE("type", Type.class),
-
-    /**
-     * Class reference.
-     */
-    CLASS_REFERENCE("class", Class.class),
 
     /**
      * Null.

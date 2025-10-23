@@ -7,7 +7,6 @@ package org.eolang.jeo.representation.bytecode;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
-import org.objectweb.asm.Type;
 
 /**
  * Plain codec.
@@ -58,12 +57,6 @@ public final class JavaCodec implements Codec {
             case BYTES:
                 result = byte[].class.cast(value);
                 break;
-            case TYPE_REFERENCE:
-                result = JavaCodec.typeBytes(value);
-                break;
-            case CLASS_REFERENCE:
-                result = JavaCodec.hexClass(Class.class.cast(value).getName());
-                break;
             case NULL:
                 result = JavaCodec.EMPTY;
                 break;
@@ -109,12 +102,6 @@ public final class JavaCodec implements Codec {
             case BYTES:
                 result = bytes;
                 break;
-            case TYPE_REFERENCE:
-                result = Type.getType(String.format(new String(bytes, StandardCharsets.UTF_8)));
-                break;
-            case CLASS_REFERENCE:
-                result = JavaCodec.classReference(bytes);
-                break;
             case NULL:
                 result = null;
                 break;
@@ -122,23 +109,6 @@ public final class JavaCodec implements Codec {
                 throw new UnsupportedDataType(type);
         }
         return result;
-    }
-
-    /**
-     * Get class reference by bytes.
-     * @param bytes Bytes.
-     * @return Class.
-     */
-    private static Class<?> classReference(final byte[] bytes) {
-        final String name = new String(bytes, StandardCharsets.UTF_8);
-        try {
-            return Class.forName(name.replace('/', '.'));
-        } catch (final ClassNotFoundException exception) {
-            throw new IllegalStateException(
-                String.format("Class with name '%s' isn't found", name),
-                exception
-            );
-        }
     }
 
     /**
@@ -184,29 +154,5 @@ public final class JavaCodec implements Codec {
             result = new byte[]{0x00};
         }
         return result;
-    }
-
-    /**
-     * Convert a type to bytes.
-     * @param value Type.
-     * @return Bytes.
-     */
-    private static byte[] typeBytes(final Object value) {
-        try {
-            return JavaCodec.hexClass(((Type) value).getDescriptor());
-        } catch (final AssertionError exception) {
-            throw new IllegalStateException(
-                String.format("Failed to get class name for %s", value), exception
-            );
-        }
-    }
-
-    /**
-     * Convert class name to bytes.
-     * @param name Class name.
-     * @return Bytes.
-     */
-    private static byte[] hexClass(final String name) {
-        return name.replace('.', '/').getBytes(StandardCharsets.UTF_8);
     }
 }

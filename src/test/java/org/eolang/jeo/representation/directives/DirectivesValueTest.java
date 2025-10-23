@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.objectweb.asm.Type;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -162,16 +161,6 @@ final class DirectivesValueTest {
     }
 
     @Test
-    void encodesType() {
-        final String value = new DirectivesValue(0, new Format(), Type.INT_TYPE).hex(this.codec);
-        MatcherAssert.assertThat(
-            "Expected and actual hex values differ, the value for 'Type.INT_TYPE' should be '69 6E 74'",
-            value,
-            Matchers.equalTo("49-")
-        );
-    }
-
-    @Test
     void createsStringWithQuotedComment() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that string value will be quoted in the comment",
@@ -193,7 +182,6 @@ final class DirectivesValueTest {
             Arguments.of(true, "bool"),
             Arguments.of(0.1f, "float"),
             Arguments.of(0.1d, "double"),
-            Arguments.of(DirectivesValue.class, "class"),
             Arguments.of(' ', "char")
         );
     }
@@ -211,11 +199,7 @@ final class DirectivesValueTest {
             Arguments.of(true, "01-"),
             Arguments.of(false, "00-"),
             Arguments.of('a', "00-61"),
-            Arguments.of(0.1d, "3F-B9-99-99-99-99-99-9A"),
-            Arguments.of(
-                DirectivesValueTest.class,
-                "6F-72-67-2F-65-6F-6C-61-6E-67-2F-6A-65-6F-2F-72-65-70-72-65-73-65-6E-74-61-74-69-6F-6E-2F-64-69-72-65-63-74-69-76-65-73-2F-44-69-72-65-63-74-69-76-65-73-56-61-6C-75-65-54-65-73-74"
-            )
+            Arguments.of(0.1d, "3F-B9-99-99-99-99-99-9A")
         );
     }
 

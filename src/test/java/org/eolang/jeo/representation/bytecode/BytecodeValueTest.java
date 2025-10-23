@@ -4,14 +4,12 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.objectweb.asm.Type;
 
 /**
  * Test case for {@link BytecodeValue}.
@@ -110,20 +108,6 @@ final class BytecodeValueTest {
                 "char",
                 new byte[]{0, 32},
                 ' '
-            ),
-            Arguments.of(
-                new BytecodeValue(BytecodeValue.class),
-                "class",
-                "org/eolang/jeo/representation/bytecode/BytecodeObject".getBytes(
-                    StandardCharsets.UTF_8
-                ),
-                BytecodeValue.class
-            ),
-            Arguments.of(
-                new BytecodeValue(Type.INT_TYPE),
-                "type",
-                "I".getBytes(StandardCharsets.UTF_8),
-                Type.INT_TYPE
             ),
             Arguments.of(
                 new BytecodeValue(null),

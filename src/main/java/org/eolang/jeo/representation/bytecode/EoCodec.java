@@ -42,8 +42,6 @@ public final class EoCodec implements Codec {
             case CHAR:
             case STRING:
             case BYTES:
-            case TYPE_REFERENCE:
-            case CLASS_REFERENCE:
             case NULL:
                 result = this.origin.encode(object, type);
                 break;
@@ -71,8 +69,6 @@ public final class EoCodec implements Codec {
             case CHAR:
             case STRING:
             case BYTES:
-            case TYPE_REFERENCE:
-            case CLASS_REFERENCE:
             case NULL:
                 result = this.origin.decode(bytes, type);
                 break;
