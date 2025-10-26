@@ -93,16 +93,9 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">     * @throws IllegalStateException When child node is missing.</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">private</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a> byName(<strong class="jxr_keyword">final</strong> String name) {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>              .filter(n -&gt; n.attribute(<span class="jxr_string">"name"</span>).map(name::equals).orElse(false))
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>              .findFirst()
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>              .orElseThrow(
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>                  () -&gt; <strong class="jxr_keyword">new</strong> IllegalStateException(
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>                      String.format(<span class="jxr_string">"'%s' is missing in `%s`"</span>, name, <strong class="jxr_keyword">this</strong>.node)
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>                  )
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>              );
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>      }
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  }
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlChildren" href="../../../../../org/eolang/jeo/representation/xmir/XmlChildren.html#XmlChildren">XmlChildren</a>(<strong class="jxr_keyword">this</strong>.node).byName(name);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>      }
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>

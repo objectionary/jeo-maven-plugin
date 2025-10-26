@@ -167,16 +167,9 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">     * @throws IllegalStateException When child node is missing.</em>
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L161" href="#L161">161</a>     <strong class="jxr_keyword">private</strong> <a name="XmlNode" href="../../../../../org/eolang/jeo/representation/xmir/XmlNode.html#XmlNode">XmlNode</a> byName(<strong class="jxr_keyword">final</strong> String name) {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.node.children()
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>             .filter(n -&gt; n.attribute(<span class="jxr_string">"name"</span>).map(name::equals).orElse(false))
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>             .findFirst()
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>             .orElseThrow(
-<a class="jxr_linenumber" name="L166" href="#L166">166</a>                 () -&gt; <strong class="jxr_keyword">new</strong> IllegalStateException(
-<a class="jxr_linenumber" name="L167" href="#L167">167</a>                     String.format(<span class="jxr_string">"Module '%s' is missing in `%s`"</span>, name, <strong class="jxr_keyword">this</strong>.node)
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>                 )
-<a class="jxr_linenumber" name="L169" href="#L169">169</a>             );
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>     }
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> }
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="XmlChildren" href="../../../../../org/eolang/jeo/representation/xmir/XmlChildren.html#XmlChildren">XmlChildren</a>(<strong class="jxr_keyword">this</strong>.node).byName(name);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>     }
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> }
 </pre>
 <hr/>
 <div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>
