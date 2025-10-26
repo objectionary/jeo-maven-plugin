@@ -7,7 +7,7 @@
   <skin>
     <groupId>com.jcabi</groupId>
     <artifactId>jcabi-maven-skin</artifactId>
-    <version>1.7.1</version>
+    <version>1.8.3</version>
   </skin>
   <bannerLeft>
     <name>jeo-maven-plugin</name>
