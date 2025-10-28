@@ -5,6 +5,7 @@
 package org.eolang.benchmark;
 
 class B {
+    private final int bar = 2;
     private final F f;
 
     B(F f) {
@@ -12,6 +13,6 @@ class B {
     }
 
     int bar() {
-        return f.foo() + 2;
+        return f.foo() + bar;
     }
 }
