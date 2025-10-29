@@ -18,6 +18,11 @@ import org.xembly.Directives;
 public final class DirectivesMetas implements Iterable<Directive> {
 
     /**
+     * Absent package name.
+     */
+    private static final String ABSENT_PACKAGE = new AbsentPackage().toString();
+
+    /**
      * Class name.
      */
     private final ClassName name;
@@ -34,8 +39,11 @@ public final class DirectivesMetas implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         final Directives result = new Directives().add("metas");
         result.append(DirectivesMetas.home());
-        if (!this.name.pckg().isEmpty()) {
-            result.append(this.pckg());
+        final String pckg = this.name.pckg();
+        if (pckg.isEmpty()) {
+            result.append(DirectivesMetas.pckgd(DirectivesMetas.ABSENT_PACKAGE));
+        } else {
+            result.append(DirectivesMetas.pckgd(new PrefixedName(pckg).encode()));
         }
         result.append(DirectivesMetas.spdx());
         result.append(DirectivesMetas.version());
@@ -58,15 +66,15 @@ public final class DirectivesMetas implements Iterable<Directive> {
      * Prefixed package.
      * We intentionally add prefix to the packages, because sometimes they can be really
      * strange, <a href="https://github.com/objectionary/jeo-maven-plugin/issues/779">see</a>
-     * @return Prefixed package name.
+     * @param pckg Package name.
+     * @return Package name directives.
      */
-    private Directives pckg() {
-        final String prefixed = new PrefixedName(this.name.pckg()).encode();
+    private static Directives pckgd(final String pckg) {
         return new Directives()
             .add("meta")
             .add("head").set("package").up()
-            .add("tail").set(prefixed).up()
-            .add("part").set(prefixed).up()
+            .add("tail").set(pckg).up()
+            .add("part").set(pckg).up()
             .up();
     }
 

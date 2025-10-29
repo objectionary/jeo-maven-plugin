@@ -61,10 +61,17 @@ final class DirectivesMetasTest {
 
     @Test
     void createsDirectivesWithEmptyPackage() {
+        final String pckg = new AbsentPackage().toString();
         MatcherAssert.assertThat(
             "We expect that <metas>/<package> won't be created if package is empty",
-            new Xembler(new DirectivesMetas(new ClassName("WithoutPackage"))).xmlQuietly(),
-            Matchers.not(XhtmlMatchers.hasXPath("/metas/meta[head[text()='package']]"))
+            new Xembler(
+                new DirectivesMetas(new ClassName("WithoutPackage"))
+            ).xmlQuietly(),
+            Matchers.allOf(
+                XhtmlMatchers.hasXPath("/metas/meta/head[text()='package']"),
+                XhtmlMatchers.hasXPath(String.format("/metas/meta/tail[text()='%s']", pckg)),
+                XhtmlMatchers.hasXPath(String.format("/metas/meta/part[text()='%s']", pckg))
+            )
         );
     }
 

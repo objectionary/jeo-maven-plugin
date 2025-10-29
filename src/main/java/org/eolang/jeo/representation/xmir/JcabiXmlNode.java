@@ -34,10 +34,6 @@ public final class JcabiXmlNode implements XmlNode {
 
     /**
      * Set of ignored defects.
-     * @todo #1297:60min Remove 'mandatory-package' check suppression.
-     *  We are ignoring 'mandatory-package' check because 'module-info' files don't
-     *  have package declaration. We should find a way to identify 'module-info'
-     *  for XMIR.
      * @todo #1366:60min Remove 'idempotent-attribute-is-not-first' check suppression.
      *  This check has 'CRITITCAL' priority and it fails for XMIRs generated from EO sources.
      *  This check later will be reduced from 'CRITICAL' to 'WARNING':
@@ -51,7 +47,6 @@ public final class JcabiXmlNode implements XmlNode {
             "duplicate-names-in-diff-context",
             "unit-test-missing",
             "sparse-decoration",
-            "mandatory-package",
             "idempotent-attribute-is-not-first"
         )
     );

@@ -7,12 +7,18 @@ package org.eolang.jeo.representation.xmir;
 import com.jcabi.xml.XML;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
+import org.eolang.jeo.representation.directives.AbsentPackage;
 
 /**
  * XMIR Program.
  * @since 0.1
  */
 public final class XmlObject {
+
+    /**
+     * Absent package name.
+     */
+    private static final String ABSENT_PACKAGE = new AbsentPackage().toString();
 
     /**
      * Root node.
@@ -89,6 +95,22 @@ public final class XmlObject {
             .findFirst()
             .map(PrefixedName::new)
             .map(PrefixedName::decode)
+            .map(XmlObject::realPackage)
             .orElse("");
+    }
+
+    /**
+     * Convert absent package to empty string.
+     * @param pckg Package name.
+     * @return Real package name.
+     */
+    private static String realPackage(final String pckg) {
+        final String result;
+        if (XmlObject.ABSENT_PACKAGE.equals(pckg)) {
+            result = "";
+        } else {
+            result = pckg;
+        }
+        return result;
     }
 }

@@ -128,6 +128,21 @@ final class XmirFilesTest {
     }
 
     @Test
+    void verifiesXmirFileGeneratedFromModuleInfo(@TempDir final Path temp) throws IOException {
+        Files.write(
+            temp.resolve("open-module-info.xmir"),
+            new BytecodeRepresentation(new ResourceOf("open-module-info.class"))
+                .toXmir()
+                .toString()
+                .getBytes(StandardCharsets.UTF_8)
+        );
+        Assertions.assertDoesNotThrow(
+            () -> new XmirFiles(temp).verify(),
+            "We expected no exceptions when verifying the xmir file generated from module-info.class"
+        );
+    }
+
+    @Test
     void failsOnInvalidXmirFile(@TempDir final Path temp) throws IOException {
         Files.write(
             temp.resolve("Invalid.xmir"),
