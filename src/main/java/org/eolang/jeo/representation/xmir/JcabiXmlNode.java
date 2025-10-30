@@ -34,11 +34,9 @@ public final class JcabiXmlNode implements XmlNode {
 
     /**
      * Set of ignored defects.
-     * @todo #1366:60min Remove 'idempotent-attribute-is-not-first' check suppression.
-     *  This check has 'CRITITCAL' priority and it fails for XMIRs generated from EO sources.
-     *  This check later will be reduced from 'CRITICAL' to 'WARNING':
-     *  https://github.com/objectionary/jeo-maven-plugin/issues/1366#issuecomment-3376125719
-     *  When this is done, we should remove this suppression.
+     * We left 'idempotent-attribute-is-not-first' because it's not critical for XMIR correctness.
+     * You can find more details here:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1369">1369</a>
      */
     private static final Collection<String> IGNORE = new HashSet<>(
         Arrays.asList(
