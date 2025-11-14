@@ -368,6 +368,17 @@
             <exclude>phi-unphi/pom.xml</exclude>
             <exclude>jna/pom.xml</exclude>
           </pomExcludes>
+          <!--
+            We intentionally include 'without-pom' and 'without-pom-same-dir'
+            because 'maven-invoker-plugin' can't recognise them without pom.xml files.
+            You can read more about it here:
+            https://github.com/objectionary/jeo-maven-plugin/issues/1364
+          -->
+          <pomIncludes>
+            <pomInclude>*/pom.xml</pomInclude>
+            <include>without-pom</include>
+            <include>without-pom-same-dir</include>
+          </pomIncludes>
         </configuration>
       </plugin>
       <plugin>
