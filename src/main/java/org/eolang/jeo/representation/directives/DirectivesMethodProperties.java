@@ -13,6 +13,15 @@ import org.xembly.Directives;
 
 /**
  * Method properties as Xembly directives.
+ * All the directives are sorted according to JVM method specification:
+ * {@code
+ * method_info {
+ *     u2             access_flags; {@link DirectivesMethodProperties}
+ *     u2             name_index; {@link DirectivesMethodProperties}
+ *     u2             descriptor_index; {@link DirectivesMethodProperties}
+ *     u2             attributes_count; {@link DirectivesMethod}
+ *     attribute_info attributes[attributes_count]; {@link DirectivesMethod}
+ * }}
  * @since 0.1
  */
 public final class DirectivesMethodProperties implements Iterable<Directive> {
@@ -34,21 +43,25 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
 
     /**
      * Method signature.
+     * Attribute "Signature_attribute".
      */
     private final String signature;
 
     /**
      * Method exceptions.
+     * Attribute "Exceptions_attribute".
      */
     private final String[] exceptions;
 
     /**
      * Method max stack and locals.
+     * Inside 'Code' attribute.
      */
     private final AtomicReference<DirectivesMaxs> max;
 
     /**
      * Method parameters.
+     * Attribute "MethodParameters" (since Java 1.8).
      */
     private final DirectivesMethodParams params;
 
@@ -135,18 +148,18 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives dirs = new Directives()
-            .append(new DirectivesValue(this.format, "access", this.access))
-            .append(new DirectivesValue(this.format, "descriptor", this.descriptor))
-            .append(new DirectivesValue(this.format, "signature", this.signature))
-            .append(
-                new DirectivesValues(this.format, "exceptions", (Object[]) this.exceptions)
-            )
-            .append(this.max.get())
-            .append(this.params);
+        final Directives dirs = new Directives();
+        dirs.append(new DirectivesValue(this.format, "access", this.access));
         if (this.format.modifiers()) {
             dirs.append(new DirectivesMethodModifiers(this.format, this.access));
         }
+        dirs.append(new DirectivesValue(this.format, "descriptor", this.descriptor));
+        dirs.append(new DirectivesValue(this.format, "signature", this.signature));
+        dirs.append(
+            new DirectivesValues(this.format, "exceptions", (Object[]) this.exceptions)
+        );
+        dirs.append(this.max.get());
+        dirs.append(this.params);
         return dirs.iterator();
     }
 }

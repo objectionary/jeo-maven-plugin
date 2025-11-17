@@ -17,11 +17,26 @@ import org.xembly.Directives;
 
 /**
  * Directives Method.
+ * All the directives are sorted according to JVM method specification:
+ * {@code
+ * method_info {
+ *     u2             access_flags; {@link DirectivesMethodProperties}
+ *     u2             name_index; {@link DirectivesMethodProperties}
+ *     u2             descriptor_index; {@link DirectivesMethodProperties}
+ *     u2             attributes_count; {@link DirectivesMethod}
+ *     attribute_info attributes[attributes_count]; {@link DirectivesMethod}
+ * }}
+ * Pay attention, that most of the information about methods are stored into attributes:
+ * - Body (Code)
+ * - Annotations
+ * - Try-catch blocks
+ * - Default value (for annotation methods)
+ * - And other attributes
  * @since 0.1
- * @todo #534:90min Refactor DirectivesMethod class to simplify the code.
- *  Currently, the class has a lot of methods and fields. It's kind of hard to understand
- *  what this class does. We need to refactor it to make it more readable and understandable.
- *  Moreover, in many places this class uses null checks, which is not good.
+ * @todo #1183:60min Method name should should be moved to DirectivesMethodProperties
+ *  Otherwise it breaks component ordering (see the JVM specification).
+ *  The method name should be between access flags and descriptor - the both of them
+ *  are defined the the {@link DirectivesMethodProperties}.
  */
 public final class DirectivesMethod implements Iterable<Directive> {
 
@@ -46,9 +61,9 @@ public final class DirectivesMethod implements Iterable<Directive> {
     private final List<Iterable<Directive>> instructions;
 
     /**
-     * Method exceptions.
+     * Method try-catch blocks.
      */
-    private final List<Iterable<Directive>> exceptions;
+    private final List<Iterable<Directive>> tryblocks;
 
     /**
      * Method annotations.
@@ -100,7 +115,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @param name Method name
      * @param properties Method properties
      * @param instructions Method instructions
-     * @param exceptions Method exceptions
+     * @param tryblocks Method try-catch blocks
      * @param annotations Method annotations
      * @param dvalue Annotation default value
      * @param attributes Method attributes
@@ -111,7 +126,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final NumberedName name,
         final DirectivesMethodProperties properties,
         final List<Iterable<Directive>> instructions,
-        final List<Iterable<Directive>> exceptions,
+        final List<Iterable<Directive>> tryblocks,
         final DirectivesAnnotations annotations,
         final List<Iterable<Directive>> dvalue,
         final DirectivesAttributes attributes
@@ -120,7 +135,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
         this.name = name;
         this.properties = properties;
         this.instructions = instructions;
-        this.exceptions = exceptions;
+        this.tryblocks = tryblocks;
         this.annotations = annotations;
         this.dvalue = dvalue;
         this.attributes = attributes;
@@ -161,7 +176,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
                     this.properties,
                     this.annotations,
                     new DirectivesSeq("body", this.instructions),
-                    new DirectivesSeq("trycatchblocks", this.exceptions)
+                    new DirectivesSeq("trycatchblocks", this.tryblocks)
                 ),
                 Stream.concat(
                     this.dvalue.stream(),

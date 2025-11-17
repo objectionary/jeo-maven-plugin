@@ -10,7 +10,24 @@ import org.xembly.Directive;
 
 /**
  * Directives for local variables in a method.
+ * All local variable directives are sorted according to the JVM specification:
+ * {@code
+ * LocalVariableTable_attribute {
+ *     u2 attribute_name_index;
+ *     u4 attribute_length;
+ *     u2 local_variable_table_length;
+ *     {   u2 start_pc;
+ *         u2 length;
+ *         u2 name_index;
+ *         u2 descriptor_index;
+ *         u2 index;
+ *     } local_variable_table[local_variable_table_length];
+ * }}
  * @since 0.14.0
+ * @todo #1183:60min Sort out local variable directives according to the JVM specification.
+ *  Currently, the DirectivesLocalVariables class generates directives for local variables,
+ *  but they are not fully aligned with the JVM specification. The directives should be sorted
+ *  to match the structure outlined in the specification.
  */
 public final class DirectivesLocalVariables implements Iterable<Directive> {
 

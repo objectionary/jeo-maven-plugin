@@ -33,6 +33,16 @@ import org.xembly.Directive;
  *       field 18 "I" "" "01" > bar
  *     }
  * </p>
+ * <p>All the directives inside this class are sorted according to the JVM specification:
+ * {@code
+ * field_info {
+ *     u2             access_flags;
+ *     u2             name_index;
+ *     u2             descriptor_index;
+ *     u2             attributes_count;
+ *     attribute_info attributes[attributes_count]; (signature, annotations, value)
+ * }}
+ * </p>
  *
  * @since 0.1
  */
@@ -160,6 +170,7 @@ public final class DirectivesField implements Iterable<Directive> {
             "field",
             new PrefixedName(this.name).encode(),
             new DirectivesValue(this.format, DirectivesField.title("access"), this.access),
+            new DirectivesValue(this.format, DirectivesField.title("name"), this.name),
             new DirectivesValue(this.format, DirectivesField.title("descriptor"), this.descriptor),
             new DirectivesValue(this.format, DirectivesField.title("signature"), this.signature),
             new DirectivesValue(this.format, DirectivesField.title("value"), this.value),

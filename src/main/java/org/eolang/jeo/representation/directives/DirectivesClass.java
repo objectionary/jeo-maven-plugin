@@ -19,7 +19,35 @@ import org.xembly.Directives;
  * <p>This class generates Xembly directives to create EO object representations
  * of Java classes, including their properties, fields, methods, annotations,
  * and attributes.</p>
+ * <p>All the class directives are sorted according to JVM specification
+ * {@code
+ * ClassFile {
+ *     u4             magic; (absent)
+ *     u2             minor_version; {@link DirectivesClassProperties}
+ *     u2             major_version; {@link DirectivesClassProperties}
+ *     u2             constant_pool_count; (incorporated to the directives)
+ *     cp_info        constant_pool[constant_pool_count-1]; (incorporated to the directives)
+ *     u2             access_flags; {@link DirectivesClassProperties}
+ *     u2             this_class; {@link DirectivesClass} (class name)
+ *     u2             super_class;  {@link DirectivesClassProperties}
+ *     u2             interfaces_count;  {@link DirectivesClassProperties}
+ *     u2             interfaces[interfaces_count];  {@link DirectivesClassProperties}
+ *     u2             fields_count; {@link DirectivesClass}
+ *     field_info     fields[fields_count]; {@link DirectivesClass}
+ *     u2             methods_count; {@link DirectivesClass}
+ *     method_info    methods[methods_count]; {@link DirectivesClass}
+ *     u2             attributes_count; {@link DirectivesClass}
+ *     attribute_info attributes[attributes_count]; {@link DirectivesClass}
+ * }}
+ * <a href="https://docs.oracle.com/javase/specs/jvms/se25/html/jvms-4.html#jvms-4.4.1">
+ *     You can read more in the official JVM specification.
+ * </a>
+ * </p>
  * @since 0.1.0
+ * @todo #1183:60min Class name should should be moved to DirectivesClassProperties
+ *  Otherwise it breaks component ordering (see the JVM specification).
+ *  The class name should be between access flags and superclasses - the both of them
+ *  are defined the the {@link DirectivesClassProperties}.
  */
 public final class DirectivesClass implements Iterable<Directive> {
 

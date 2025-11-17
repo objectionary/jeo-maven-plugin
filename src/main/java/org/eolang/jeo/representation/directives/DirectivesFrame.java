@@ -9,7 +9,17 @@ import org.xembly.Directive;
 
 /**
  * Frame directives.
- *
+ * <p>All the directives of the frame are sorted according to the JVM specification:
+ * {@code
+ * full_frame {
+ *     u1 frame_type = FULL_FRAME;
+ *     u2 offset_delta;
+ *     u2 number_of_locals;
+ *     verification_type_info locals[number_of_locals];
+ *     u2 number_of_stack_items;
+ *     verification_type_info stack[number_of_stack_items];
+ * }}
+ * </p>
  * @since 0.3
  */
 public final class DirectivesFrame implements Iterable<Directive> {
