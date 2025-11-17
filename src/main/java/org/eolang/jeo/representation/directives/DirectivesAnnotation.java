@@ -18,6 +18,15 @@ import org.xembly.Directives;
 
 /**
  * Directives Annotation.
+ * All the directives are sorted according to the JVM Spec:
+ * {@code
+ * annotation {
+ *     u2 type_index; {@link DirectivesAnnotation#descriptor}
+ *     u2 num_element_value_pairs; {@link DirectivesAnnotation#properties.size()}
+ *     {   u2            element_name_index;
+ *         element_value value;
+ *     } element_value_pairs[num_element_value_pairs]; {@link DirectivesAnnotation#properties}
+ * }}
  * @since 0.1
  */
 @ToString

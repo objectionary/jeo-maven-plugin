@@ -12,7 +12,21 @@ import org.xembly.Directives;
 
 /**
  * Class properties as Xembly directives.
- *
+ * <p>All the class directives are sorted according to JVM specification
+ * {@code
+ *     u2             minor_version; {@link DirectivesClassProperties}
+ *     u2             major_version; {@link DirectivesClassProperties}
+ *     u2             constant_pool_count; (incorporated to the directives)
+ *     cp_info        constant_pool[constant_pool_count-1]; (incorporated to the directives)
+ *     u2             access_flags; {@link DirectivesClassProperties}
+ *     u2             this_class; {@link DirectivesClassProperties} (class name)
+ *     u2             super_class;  {@link DirectivesClassProperties}
+ *     u2             interfaces_count;  {@link DirectivesClassProperties}
+ *     u2             interfaces[interfaces_count];  {@link DirectivesClassProperties}
+ * }
+ * <a href="https://docs.oracle.com/javase/specs/jvms/se25/html/jvms-4.html#jvms-4.4.1">
+ *     You can read more in the official JVM specification.
+ * </a>
  * @since 0.1.0
  */
 public final class DirectivesClassProperties implements Iterable<Directive> {
@@ -144,23 +158,35 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final Directives directives = new Directives()
-            .append(new DirectivesValue(this.format, "version", this.version))
-            .append(new DirectivesValue(this.format, "access", this.access))
-            .append(
-                new DirectivesValue(
-                    this.format, "signature", Optional.ofNullable(this.signature).orElse("")
-                )
-            );
+        final Directives directives = new Directives();
+        directives.append(new DirectivesValue(this.format, "version", this.version));
+        directives.append(new DirectivesValue(this.format, "access", this.access));
+        if (this.format.modifiers()) {
+            directives.append(new DirectivesClassModifiers(this.format, this.access));
+        }
         if (this.supername != null) {
             directives.append(new DirectivesValue(this.format, "supername", this.supername));
         }
         if (this.interfaces != null) {
             directives.append(new DirectivesValues(this.format, "interfaces", this.interfaces));
         }
-        if (this.format.modifiers()) {
-            directives.append(new DirectivesClassModifiers(this.format, this.access));
-        }
+        directives.append(new DirectivesValue(this.format, "signature", this.sign()));
         return directives.iterator();
+    }
+
+    /**
+     * The "signature" refers to generic type information in Java bytecode.
+     * Contains information about:
+     * Type parameters (generics) for classes and methods
+     * Type bounds for generic parameters
+     * Generic superclasses and interfaces
+     * Generic field and method types
+     * @return Signature of the class.
+     * @todo #1183:90min Signature is a class attribute, not a property.
+     *  Since 'signature' is a class attribute, but not a property, it makes sense to move
+     *  it to a {@link DirectivesClass}, to attributes section.
+     */
+    private String sign() {
+        return Optional.ofNullable(this.signature).orElse("");
     }
 }

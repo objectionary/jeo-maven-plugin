@@ -9,6 +9,15 @@ import org.xembly.Directive;
 
 /**
  * Directives for enclosing method attribute.
+ * <p>All the 'enclosing-method' attribute directives are sorted according to the JVM specification:
+ * {@code
+ * EnclosingMethod_attribute {
+ *     u2 attribute_name_index;
+ *     u4 attribute_length;
+ *     u2 class_index;
+ *     u2 method_index;
+ * }}
+ * </p>
  * @since 0.14.0
  */
 public final class DirectivesEnclosingMethod implements Iterable<Directive> {

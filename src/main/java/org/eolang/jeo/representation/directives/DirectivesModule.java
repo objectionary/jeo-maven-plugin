@@ -13,7 +13,51 @@ import org.xembly.Directive;
 /**
  * Module of directives.
  * Mirrors {@link org.eolang.jeo.representation.bytecode.BytecodeModule}
+ * <p>All the directives are sorted according to the JVM specification:
+ * {@code
+ * Module_attribute {
+ *     u2 attribute_name_index;
+ *     u4 attribute_length;
+ *
+ *     u2 module_name_index;
+ *     u2 module_flags;
+ *     u2 module_version_index;
+ *
+ *     u2 requires_count;
+ *     {   u2 requires_index;
+ *         u2 requires_flags;
+ *         u2 requires_version_index;
+ *     } requires[requires_count];
+ *
+ *     u2 exports_count;
+ *     {   u2 exports_index;
+ *         u2 exports_flags;
+ *         u2 exports_to_count;
+ *         u2 exports_to_index[exports_to_count];
+ *     } exports[exports_count];
+ *
+ *     u2 opens_count;
+ *     {   u2 opens_index;
+ *         u2 opens_flags;
+ *         u2 opens_to_count;
+ *         u2 opens_to_index[opens_to_count];
+ *     } opens[opens_count];
+ *
+ *     u2 uses_count;
+ *     u2 uses_index[uses_count];
+ *
+ *     u2 provides_count;
+ *     {   u2 provides_index;
+ *         u2 provides_with_count;
+ *         u2 provides_with_index[provides_with_count];
+ *     } provides[provides_count];
+ * }}
+ * </p>
  * @since 0.15.0
+ * @todo #1183:60min Sort out the ordering of the components in this class.
+ *  The components of the DirectivesModule class should be ordered to match the JVM specification.
+ *  This includes ensuring that the order of requires, exports, opens, uses, and provides
+ *  aligns with the structure outlined in the specification.
  */
 public final class DirectivesModule implements Iterable<Directive> {
 

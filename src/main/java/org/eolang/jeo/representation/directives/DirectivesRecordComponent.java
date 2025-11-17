@@ -9,6 +9,16 @@ import org.xembly.Directive;
 
 /**
  * Directives Record Component.
+ * <p>All the directives in {@link DirectivesRecordComponent} are sorted according to the JVM
+ * specification:
+ * {@code
+ * record_component_info {
+ *     u2             name_index;
+ *     u2             descriptor_index;
+ *     u2             attributes_count;
+ *     attribute_info attributes[attributes_count];
+ * }}
+ * </p>
  * @since 0.15.0
  */
 public final class DirectivesRecordComponent implements Iterable<Directive> {

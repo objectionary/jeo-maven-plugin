@@ -160,6 +160,11 @@ public class XmlField {
         ACCESS,
 
         /**
+         * Field name.
+         */
+        NAME,
+
+        /**
          * Field descriptor.
          * For example, for field of type int the descriptor will be "I".
          */

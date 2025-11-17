@@ -15,6 +15,15 @@ import org.xembly.Directives;
 
 /**
  * Try catch directives.
+ * <p>All the directives are sorted according to the JVM specification:
+ * {@code
+ *     {   u2 start_pc;
+ *         u2 end_pc;
+ *         u2 handler_pc;
+ *         u2 catch_type;
+ *     } exception_table[exception_table_length];
+ * }
+ * </p>
  * @since 0.1
  */
 public final class DirectivesTryCatch implements Iterable<Directive> {
