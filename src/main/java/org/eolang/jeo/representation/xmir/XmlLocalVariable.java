@@ -49,7 +49,7 @@ public final class XmlLocalVariable {
      * @return Local variable index.
      */
     private int index() {
-        return this.integer(0);
+        return this.integer("index");
     }
 
     /**
@@ -57,7 +57,7 @@ public final class XmlLocalVariable {
      * @return Name.
      */
     private String name() {
-        return this.string(1);
+        return this.string("name");
     }
 
     /**
@@ -65,7 +65,7 @@ public final class XmlLocalVariable {
      * @return Descriptor.
      */
     private String descriptor() {
-        return this.string(2);
+        return this.string("descr");
     }
 
     /**
@@ -73,7 +73,7 @@ public final class XmlLocalVariable {
      * @return Signature.
      */
     private String signature() {
-        return this.string(3);
+        return this.string("signature");
     }
 
     /**
@@ -81,7 +81,7 @@ public final class XmlLocalVariable {
      * @return Label.
      */
     private BytecodeLabel start() {
-        return this.label(4);
+        return this.label(0);
     }
 
     /**
@@ -89,25 +89,25 @@ public final class XmlLocalVariable {
      * @return Label.
      */
     private BytecodeLabel end() {
-        return this.label(5);
+        return this.label(1);
     }
 
     /**
-     * Get integer by index.
-     * @param index Index.
+     * Get integer by name.
+     * @param name Name.
      * @return Integer.
      */
-    private int integer(final int index) {
-        return this.operand(index).map(Integer.class::cast).orElse(0);
+    private int integer(final String name) {
+        return this.byName(name).map(Integer.class::cast).orElse(0);
     }
 
     /**
      * Get string by index.
-     * @param index Index.
+     * @param name String.
      * @return String.
      */
-    private String string(final int index) {
-        return this.operand(index).map(String.class::cast).orElse(null);
+    private String string(final String name) {
+        return this.byName(name).map(String.class::cast).orElse(null);
     }
 
     /**
@@ -126,5 +126,17 @@ public final class XmlLocalVariable {
      */
     private Optional<Object> operand(final int index) {
         return this.node.child(index).map(XmlOperand::new).map(XmlOperand::asObject);
+    }
+
+    /**
+     * Find child node by name.
+     * @param name Name of the child node.
+     * @return Child node.
+     * @throws IllegalStateException When child node is missing.
+     */
+    private Optional<Object> byName(final String name) {
+        return Optional.ofNullable(
+            new XmlOperand(new XmlChildren(this.node).byName(name)).asObject()
+        );
     }
 }
