@@ -54,10 +54,6 @@ import org.xembly.Directive;
  * }}
  * </p>
  * @since 0.15.0
- * @todo #1183:60min Sort out the ordering of the components in this class.
- *  The components of the DirectivesModule class should be ordered to match the JVM specification.
- *  This includes ensuring that the order of requires, exports, opens, uses, and provides
- *  aligns with the structure outlined in the specification.
  */
 public final class DirectivesModule implements Iterable<Directive> {
 
@@ -81,16 +77,6 @@ public final class DirectivesModule implements Iterable<Directive> {
     private final String version;
 
     /**
-     * The internal name of the main class of this module.
-     */
-    private final String main;
-
-    /**
-     * The internal name of the packages declared by this module.
-     */
-    private final List<String> pckgs;
-
-    /**
      * The dependencies of this module.
      */
     private final List<DirectivesModuleRequired> requires;
@@ -106,14 +92,39 @@ public final class DirectivesModule implements Iterable<Directive> {
     private final List<DirectivesModuleOpened> opens;
 
     /**
+     * The internal names of the services used by this module.
+     */
+    private final List<String> uses;
+
+    /**
      *  The services provided by this module.
      *  */
     private final List<DirectivesModuleProvided> provides;
 
     /**
-     * The internal names of the services used by this module.
+     * The internal name of the main class of this module.
+     * JVM specification:
+     * {@code
+     * ModuleMainClass_attribute {
+     *     u2 attribute_name_index;
+     *     u4 attribute_length;
+     *     u2 main_class_index;
+     * }}
      */
-    private final List<String> uses;
+    private final String main;
+
+    /**
+     * The internal name of the packages declared by this module.
+     * JVM specification:
+     * {@code
+     * ModulePackages_attribute {
+     *     u2 attribute_name_index;
+     *     u4 attribute_length;
+     *     u2 package_count;
+     *     u2 package_index[package_count];
+     * }}
+     */
+    private final List<String> pckgs;
 
     /**
      * Constructor.
@@ -165,13 +176,13 @@ public final class DirectivesModule implements Iterable<Directive> {
             new DirectivesValue(this.format, "name", this.name),
             new DirectivesValue(this.format, "access", this.access),
             new DirectivesValue(this.format, "version", this.version),
-            new DirectivesValue(this.format, "main", this.main),
-            new DirectivesSeq("packages", this.packages()),
             new DirectivesSeq("requires", this.requires),
             new DirectivesSeq("exports", this.exports),
             new DirectivesSeq("opens", this.opens),
+            new DirectivesSeq("uses", this.use()),
             new DirectivesSeq("provides", this.provides),
-            new DirectivesSeq("uses", this.use())
+            new DirectivesValue(this.format, "main", this.main),
+            new DirectivesSeq("packages", this.packages())
         ).iterator();
     }
 

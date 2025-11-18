@@ -12,6 +12,12 @@ import org.xembly.Directive;
 
 /**
  * Directives for module opened.
+ * JVM Specification:
+ * {@code
+ * {   u2 opens_index; {@link #pckg}
+ *     u2 opens_flags; {@link #access}
+ *     u2 opens_to_count; {@link #modules.size()}
+ *     u2 opens_to_index[opens_to_count]; }} {@link #modules}
  * @since 0.15.0
  */
 public final class DirectivesModuleOpened implements Iterable<Directive> {

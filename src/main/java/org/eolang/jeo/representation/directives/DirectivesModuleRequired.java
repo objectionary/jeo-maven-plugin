@@ -10,6 +10,12 @@ import org.xembly.Directive;
 /**
  * Directives for module required.
  * Mirrors {@link org.eolang.jeo.representation.bytecode.BytecodeModuleRequired}.
+ * JVM Specification:
+ * {@code
+ *     {   u2 requires_index;
+ *         u2 requires_flags; {@link #access}
+ *         u2 requires_version_index; {@link #version}
+ *     }}
  * @since 0.15.0
  */
 public final class DirectivesModuleRequired implements Iterable<Directive> {
@@ -18,11 +24,6 @@ public final class DirectivesModuleRequired implements Iterable<Directive> {
      * Directives format.
      */
     private final Format format;
-
-    /**
-     * The fully qualified name (using dots) of the dependence.
-     * */
-    private final String module;
 
     /**
      * The access flag of the dependence.
@@ -35,6 +36,11 @@ public final class DirectivesModuleRequired implements Iterable<Directive> {
      * The module version at compile time.
      */
     private final String version;
+
+    /**
+     * The fully qualified name (using dots) of the dependence.
+     * */
+    private final String module;
 
     /**
      * Constructor.
@@ -57,9 +63,9 @@ public final class DirectivesModuleRequired implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "required",
             "required",
-            new DirectivesValue(this.format, "module", this.module),
             new DirectivesValue(this.format, "access", this.access),
-            new DirectivesValue(this.format, "version", this.version)
+            new DirectivesValue(this.format, "version", this.version),
+            new DirectivesValue(this.format, "module", this.module)
         ).iterator();
     }
 }

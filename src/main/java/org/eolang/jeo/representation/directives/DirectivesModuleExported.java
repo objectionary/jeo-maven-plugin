@@ -12,6 +12,13 @@ import org.xembly.Directive;
 
 /**
  * Directives for module exported.
+ * JVM Specification:
+ * {@code
+ *     {   u2 exports_index; {@link #pckg}
+ *         u2 exports_flags; {@link #access}
+ *         u2 exports_to_count; {@link #modules.size()}
+ *         u2 exports_to_index[exports_to_count]; {@link #modules}
+ *     }}
  * @since 0.15.0
  */
 public final class DirectivesModuleExported implements Iterable<Directive> {

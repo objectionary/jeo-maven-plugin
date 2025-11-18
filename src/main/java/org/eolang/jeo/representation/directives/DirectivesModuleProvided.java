@@ -12,6 +12,12 @@ import org.xembly.Directive;
 
 /**
  * Directives for module provided.
+ * JVM Specification:
+ * {@code
+ * {   u2 provides_index; {@link #service}
+ *     u2 provides_with_count; {@link #providers.size()}
+ *     u2 provides_with_index[provides_with_count]; {@link #providers}
+ * }}
  * @since 0.15.0
  */
 public final class DirectivesModuleProvided implements Iterable<Directive> {
