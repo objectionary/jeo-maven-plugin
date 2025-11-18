@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import it.JavaSourceClass;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
