@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
  * SPDX-License-Identifier: MIT
  */
-package it;
+package org.eolang.jeo.representation.bytecode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -22,7 +22,6 @@ import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
-import org.eolang.jeo.representation.bytecode.Bytecode;
 
 /**
  * Java source class with ".java" extension.
