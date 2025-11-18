@@ -118,6 +118,7 @@ final class XmlObjectTest {
                         "printElement",
                         new DirectivesMethodProperties(
                             Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
+                            name.full(),
                             "(Ljava/lang/Object;)V",
                             "<T:Ljava/lang/Object;>(TT;)V"
                         )
@@ -159,14 +160,16 @@ final class XmlObjectTest {
      */
     private static String classWithException() {
         final ClassName name = new ClassName("Foo");
+        final String method = "bar";
         return new Xembler(
             new DirectivesObject(
                 new DirectivesClass(
                     name,
                     new DirectivesMethod(
-                        "bar",
+                        method,
                         new DirectivesMethodProperties(
                             Opcodes.ACC_PUBLIC,
+                            method,
                             "()V",
                             null,
                             "java/lang/Exception"

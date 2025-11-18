@@ -179,6 +179,7 @@ public final class BytecodeMethodProperties {
     public DirectivesMethodProperties directives(final BytecodeMaxs maxs, final Format format) {
         return new DirectivesMethodProperties(
             this.access,
+            this.name,
             this.descr,
             this.signature,
             this.exceptions,

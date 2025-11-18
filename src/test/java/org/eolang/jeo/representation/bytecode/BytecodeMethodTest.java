@@ -118,7 +118,7 @@ final class BytecodeMethodTest {
                         new Format(),
                         new NumberedName(1, "printSum"),
                         new DirectivesMethodProperties(
-                            Opcodes.ACC_PUBLIC, "(II)V", ""
+                            Opcodes.ACC_PUBLIC, "printSum", "(II)V", ""
                         ),
                         Arrays.asList(
                             new DirectivesInstruction(0, format, Opcodes.NEW, "ParametersExample"),

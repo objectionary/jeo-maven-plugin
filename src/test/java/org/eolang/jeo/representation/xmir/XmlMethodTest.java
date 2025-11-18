@@ -44,7 +44,7 @@ final class XmlMethodTest {
                     new Xembler(
                         new DirectivesMethod(
                             name,
-                            new DirectivesMethodProperties(access, descriptor, signature)
+                            new DirectivesMethodProperties(access, name, descriptor, signature)
                         )
                     ).xml()
                 )

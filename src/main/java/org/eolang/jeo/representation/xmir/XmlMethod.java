@@ -431,6 +431,7 @@ public final class XmlMethod {
                     name,
                     new DirectivesMethodProperties(
                         access,
+                        name,
                         descriptor,
                         "",
                         exceptions,
