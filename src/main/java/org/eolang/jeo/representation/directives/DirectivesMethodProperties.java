@@ -37,6 +37,11 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
     private final int access;
 
     /**
+     * Method name.
+     */
+    private final String name;
+
+    /**
      * Method descriptor.
      */
     private final String descriptor;
@@ -69,12 +74,21 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      * Constructor.
      */
     public DirectivesMethodProperties() {
-        this(Opcodes.ACC_PUBLIC, "()V", "");
+        this("main");
+    }
+
+    /**
+     * Constructor.
+     * @param name Method name.
+     */
+    public DirectivesMethodProperties(final String name) {
+        this(Opcodes.ACC_PUBLIC, name, "()V", "");
     }
 
     /**
      * Constructor.
      * @param access Access modifiers.
+     * @param name Method name.
      * @param descriptor Method descriptor.
      * @param signature Method signature.
      * @param exceptions Method exceptions.
@@ -82,12 +96,14 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      */
     public DirectivesMethodProperties(
         final int access,
+        final String name,
         final String descriptor,
         final String signature,
         final String... exceptions
     ) {
         this(
             access,
+            name,
             descriptor,
             signature,
             exceptions,
@@ -99,6 +115,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
     /**
      * Constructor.
      * @param access Access modifiers.
+     * @param name Method name.
      * @param descriptor Method descriptor.
      * @param signature Method signature.
      * @param exceptions Method exceptions.
@@ -108,18 +125,20 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      */
     public DirectivesMethodProperties(
         final int access,
+        final String name,
         final String descriptor,
         final String signature,
         final String[] exceptions,
         final DirectivesMaxs max,
         final DirectivesMethodParams params
     ) {
-        this(access, descriptor, signature, exceptions, max, params, new Format());
+        this(access, name, descriptor, signature, exceptions, max, params, new Format());
     }
 
     /**
      * Constructor.
      * @param access Access modifiers.
+     * @param name Method name.
      * @param descriptor Method descriptor.
      * @param signature Method signature.
      * @param exceptions Method exceptions.
@@ -130,6 +149,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      */
     public DirectivesMethodProperties(
         final int access,
+        final String name,
         final String descriptor,
         final String signature,
         final String[] exceptions,
@@ -138,6 +158,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         final Format format
     ) {
         this.access = access;
+        this.name = name;
         this.descriptor = Optional.ofNullable(descriptor).orElse("");
         this.signature = Optional.ofNullable(signature).orElse("");
         this.exceptions = Optional.ofNullable(exceptions).orElse(new String[0]).clone();
@@ -153,6 +174,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         if (this.format.modifiers()) {
             dirs.append(new DirectivesMethodModifiers(this.format, this.access));
         }
+        dirs.append(new DirectivesValue(this.format, "name", this.name));
         dirs.append(new DirectivesValue(this.format, "descriptor", this.descriptor));
         dirs.append(new DirectivesValue(this.format, "signature", this.signature));
         dirs.append(

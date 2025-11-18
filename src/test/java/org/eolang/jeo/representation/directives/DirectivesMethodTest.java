@@ -91,13 +91,14 @@ final class DirectivesMethodTest {
     void generatesMethodWithSimpleBodyName() throws ImpossibleModificationException {
         final String descriptor = "()I";
         final Format format = new Format();
+        final String name = "checks1063";
         MatcherAssert.assertThat(
             "We expect that the method body name will be generated correctly without any suffixes and prefixes",
             new Xembler(
                 new DirectivesMethod(
                     format,
-                    new NumberedName(1, "checks1063"),
-                    new DirectivesMethodProperties(1, descriptor, ""),
+                    new NumberedName(1, name),
+                    new DirectivesMethodProperties(1, name, descriptor, ""),
                     Collections.singletonList(new DirectivesInstruction(0, format, Opcodes.RETURN)),
                     Collections.emptyList(),
                     new DirectivesAnnotations(),

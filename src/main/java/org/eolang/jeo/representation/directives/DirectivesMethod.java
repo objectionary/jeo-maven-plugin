@@ -33,10 +33,6 @@ import org.xembly.Directives;
  * - Default value (for annotation methods)
  * - And other attributes
  * @since 0.1
- * @todo #1183:60min Method name should should be moved to DirectivesMethodProperties
- *  Otherwise it breaks component ordering (see the JVM specification).
- *  The method name should be between access flags and descriptor - the both of them
- *  are defined the the {@link DirectivesMethodProperties}.
  */
 public final class DirectivesMethod implements Iterable<Directive> {
 
@@ -85,7 +81,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @param name Method name
      */
     public DirectivesMethod(final String name) {
-        this(name, new DirectivesMethodProperties());
+        this(name, new DirectivesMethodProperties(name));
     }
 
     /**
@@ -167,10 +163,9 @@ public final class DirectivesMethod implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final String mname = this.name.toString();
         return new DirectivesJeoObject(
             "method",
-            new PrefixedName("jm$", mname).encode(),
+            new PrefixedName("jm$", this.name.toString()).encode(),
             Stream.concat(
                 Stream.of(
                     this.properties,
@@ -180,10 +175,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
                 ),
                 Stream.concat(
                     this.dvalue.stream(),
-                    Stream.of(
-                        this.attributes,
-                        new DirectivesValue(this.format, "name", mname)
-                    )
+                    Stream.of(this.attributes)
                 )
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();

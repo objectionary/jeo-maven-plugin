@@ -27,6 +27,7 @@ final class DirectivesMethodPropertiesTest {
                 new Directives().add("o").append(
                     new DirectivesMethodProperties(
                         Opcodes.ACC_PUBLIC,
+                        "main",
                         "()V",
                         "",
                         new String[]{},
@@ -52,6 +53,7 @@ final class DirectivesMethodPropertiesTest {
                 new Directives().add("o").append(
                     new DirectivesMethodProperties(
                         Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL,
+                        "main",
                         "()V",
                         "",
                         new String[]{},
