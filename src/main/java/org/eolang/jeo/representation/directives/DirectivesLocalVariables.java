@@ -16,18 +16,14 @@ import org.xembly.Directive;
  *     u2 attribute_name_index;
  *     u4 attribute_length;
  *     u2 local_variable_table_length;
- *     {   u2 start_pc;
- *         u2 length;
- *         u2 name_index;
- *         u2 descriptor_index;
- *         u2 index;
+ *     {   u2 start_pc; {@link #start}
+ *         u2 length; {@link #start} and {@link #end}
+ *         u2 name_index; {@link #name}
+ *         u2 descriptor_index; {@link #descriptor}
+ *         u2 index; {@link #index}
  *     } local_variable_table[local_variable_table_length];
  * }}
  * @since 0.14.0
- * @todo #1183:60min Sort out local variable directives according to the JVM specification.
- *  Currently, the DirectivesLocalVariables class generates directives for local variables,
- *  but they are not fully aligned with the JVM specification. The directives should be sorted
- *  to match the structure outlined in the specification.
  */
 public final class DirectivesLocalVariables implements Iterable<Directive> {
 
@@ -45,9 +41,14 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
     private final Format format;
 
     /**
-     * Index of the local variable in the local variable array.
+     * Start label.
      */
-    private final int index;
+    private final Iterable<Directive> start;
+
+    /**
+     * Start label.
+     */
+    private final Iterable<Directive> end;
 
     /**
      * Name of the local variable.
@@ -60,19 +61,14 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
     private final String descriptor;
 
     /**
+     * Index of the local variable in the local variable array.
+     */
+    private final int index;
+
+    /**
      * Signature of the local variable.
      */
     private final String signature;
-
-    /**
-     * Start label.
-     */
-    private final Iterable<Directive> start;
-
-    /**
-     * Start label.
-     */
-    private final Iterable<Directive> end;
 
     /**
      * Constructor.
@@ -111,14 +107,16 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
         return new DirectivesAttribute(
             "local-variable",
             new NumName("a", this.oindex).toString(),
-            new DirectivesValue(this.format, "index", this.index),
+            this.start,
+            this.end,
             new DirectivesValue(this.format, "name", this.name),
             new DirectivesValue(this.format, "descr", this.descriptor),
+            new DirectivesValue(this.format, "index", this.index),
             new DirectivesValue(
-                this.format, "signature", Optional.ofNullable(this.signature).orElse("")
-            ),
-            this.start,
-            this.end
+                this.format,
+                "signature",
+                Optional.ofNullable(this.signature).orElse("")
+            )
         ).iterator();
     }
 }
