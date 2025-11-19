@@ -13,6 +13,7 @@ import org.eolang.jeo.representation.bytecode.JavaCodec;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Transformers;
 import org.xembly.Xembler;
@@ -38,6 +39,7 @@ final class DirectivesClassTest {
                     new DirectivesClassProperties(),
                     Collections.emptyList(),
                     Collections.emptyList(),
+                    "",
                     new DirectivesAnnotations(
                         "annotations", new DirectivesAnnotation("Override", true)
                     ),
@@ -108,6 +110,53 @@ final class DirectivesClassTest {
                     new DirectivesValue(0, new Format(), name.replace('.', '/'))
                         .hex(new JavaCodec())
                 )
+            )
+        );
+    }
+
+    @Test
+    void createsDirectivesWithMandatorySignature() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Can't create proper xml with mandatory signature",
+            new Xembler(
+                new Directives()
+                    .add("o")
+                    .append(
+                        new DirectivesClass(
+                            "MyClass",
+                            "org/eolang/SomeClass",
+                            new DirectivesClassProperties()
+                        )
+                    ).up()
+            ).xml(),
+            XhtmlMatchers.hasXPaths(
+                "//o[contains(@name,'signature')]"
+            )
+        );
+    }
+
+    /**
+     * This test was added to ensure that when a null signature is passed,
+     * it is converted to an empty string in the XML output.
+     * See more details in
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1246">#1246</a>
+     * @throws ImpossibleModificationException in case of XML modification failure.
+     */
+    @Test
+    void convertsNullSignatureToEmptyString() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Signature should be empty string when null is passed",
+            new Xembler(
+                new Directives().add("o").append(
+                    new DirectivesClass(
+                        "MyClass",
+                        null,
+                        new DirectivesClassProperties()
+                    )
+                ).up()
+            ).xml(),
+            XhtmlMatchers.hasXPath(
+                "//o[@name='signature']/o[contains(@base,'bytes')]/o[text()='--']"
             )
         );
     }

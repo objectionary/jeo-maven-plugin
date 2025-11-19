@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import java.util.Optional;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -52,11 +51,6 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
     private final int access;
 
     /**
-     * Class Signature.
-     */
-    private final String signature;
-
-    /**
      * Class supername.
      */
     private final String supername;
@@ -75,14 +69,6 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param access Access modifiers.
-     */
-    public DirectivesClassProperties(final int access) {
-        this(access, "");
-    }
-
-    /**
-     * Constructor.
      * @param format Format of the directives.
      * @param access Access modifiers.
      */
@@ -92,7 +78,6 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
             new DefaultVersion().bytecode(),
             access,
             "",
-            "",
             DirectivesClassProperties.EMPTY_INTERFACES
         );
     }
@@ -100,23 +85,20 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
     /**
      * Constructor.
      * @param access Access modifiers.
-     * @param signature Class Signature.
      */
-    public DirectivesClassProperties(final int access, final String signature) {
-        this(access, signature, "", DirectivesClassProperties.EMPTY_INTERFACES);
+    public DirectivesClassProperties(final int access) {
+        this(access, "", DirectivesClassProperties.EMPTY_INTERFACES);
     }
 
     /**
      * Constructor.
      * @param access Access modifiers.
-     * @param signature Class Signature.
      * @param supername Class supername.
      * @param interfaces Class interfaces.
      * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesClassProperties(
         final int access,
-        final String signature,
         final String supername,
         final String... interfaces
     ) {
@@ -124,7 +106,6 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
             new Format(),
             new DefaultVersion().bytecode(),
             access,
-            signature,
             supername,
             interfaces.clone()
         );
@@ -135,7 +116,6 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
      * @param format Format of the directives.
      * @param version Bytecode version.
      * @param access Access modifiers.
-     * @param signature Class Signature.
      * @param supername Class supername.
      * @param interfaces Class interfaces.
      * @checkstyle ParameterNumberCheck (6 lines)
@@ -144,14 +124,12 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         final Format format,
         final int version,
         final int access,
-        final String signature,
         final String supername,
         final String... interfaces
     ) {
         this.format = format;
         this.version = version;
         this.access = access;
-        this.signature = signature;
         this.supername = supername;
         this.interfaces = interfaces.clone();
     }
@@ -170,23 +148,6 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         if (this.interfaces != null) {
             directives.append(new DirectivesValues(this.format, "interfaces", this.interfaces));
         }
-        directives.append(new DirectivesValue(this.format, "signature", this.sign()));
         return directives.iterator();
-    }
-
-    /**
-     * The "signature" refers to generic type information in Java bytecode.
-     * Contains information about:
-     * Type parameters (generics) for classes and methods
-     * Type bounds for generic parameters
-     * Generic superclasses and interfaces
-     * Generic field and method types
-     * @return Signature of the class.
-     * @todo #1183:90min Signature is a class attribute, not a property.
-     *  Since 'signature' is a class attribute, but not a property, it makes sense to move
-     *  it to a {@link DirectivesClass}, to attributes section.
-     */
-    private String sign() {
-        return Optional.ofNullable(this.signature).orElse("");
     }
 }
