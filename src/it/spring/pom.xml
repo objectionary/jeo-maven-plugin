@@ -65,24 +65,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.eolang</groupId>
-        <artifactId>eo-maven-plugin</artifactId>
-        <version>0.57.2</version>
-        <executions>
-          <execution>
-            <id>convert-xmir-to-phi</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>xmir-to-phi</goal>
-            </goals>
-            <configuration>
-              <phiInputDir>${project.build.directory}/generated-sources/jeo-xmir</phiInputDir>
-              <phiOutputDir>${project.build.directory}/generated-sources/phi-jeo</phiOutputDir>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <!--
         We clean target/classes directory to be sure
         that bytecode verification works without old
