@@ -297,6 +297,7 @@ public final class BytecodeClass {
             this.cmethods.stream()
                 .map(method -> method.directives(this.mnumber(method), format))
                 .collect(Collectors.toList()),
+            this.props.signature(),
             this.annotations.directives(format),
             this.attributes.directives(format, "attributes")
         );

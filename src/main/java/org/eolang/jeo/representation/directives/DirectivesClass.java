@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.xembly.Directive;
@@ -77,6 +78,11 @@ public final class DirectivesClass implements Iterable<Directive> {
     private final List<DirectivesMethod> methods;
 
     /**
+     * Class Signature.
+     */
+    private final String signature;
+
+    /**
      * Annotations.
      */
     private final DirectivesAnnotations annotations;
@@ -97,10 +103,24 @@ public final class DirectivesClass implements Iterable<Directive> {
     /**
      * Constructor.
      * @param classname The class name
+     * @param signature The class signature
      * @param properties The class properties
      */
-    public DirectivesClass(final String classname, final DirectivesClassProperties properties) {
-        this(new ClassName(classname), properties);
+    public DirectivesClass(
+        final String classname,
+        final String signature,
+        final DirectivesClassProperties properties
+    ) {
+        this(
+            new Format(),
+            new ClassName(classname),
+            properties,
+            new ArrayList<>(0),
+            new ArrayList<>(0),
+            signature,
+            new DirectivesAnnotations(),
+            new DirectivesAttributes()
+        );
     }
 
     /**
@@ -124,6 +144,7 @@ public final class DirectivesClass implements Iterable<Directive> {
      * @param properties The class properties
      * @param fields The class fields
      * @param methods The class methods
+     * @param signature The class signature
      * @param annotations The annotations
      * @param attributes The attributes
      * @checkstyle ParameterNumberCheck (5 lines)
@@ -134,6 +155,7 @@ public final class DirectivesClass implements Iterable<Directive> {
         final DirectivesClassProperties properties,
         final List<DirectivesField> fields,
         final List<DirectivesMethod> methods,
+        final String signature,
         final DirectivesAnnotations annotations,
         final DirectivesAttributes attributes
     ) {
@@ -142,6 +164,7 @@ public final class DirectivesClass implements Iterable<Directive> {
         this.properties = properties;
         this.fields = fields;
         this.methods = methods;
+        this.signature = signature;
         this.annotations = annotations;
         this.attributes = attributes;
     }
@@ -189,6 +212,7 @@ public final class DirectivesClass implements Iterable<Directive> {
             properties,
             fields,
             methods,
+            "",
             new DirectivesAnnotations(),
             new DirectivesAttributes()
         );
@@ -203,8 +227,22 @@ public final class DirectivesClass implements Iterable<Directive> {
             new DirectivesValue(this.format, "name", this.name.full().replace('.', '/')),
             this.fields.stream().map(Directives::new).reduce(new Directives(), Directives::append),
             this.methods.stream().map(Directives::new).reduce(new Directives(), Directives::append),
+            new DirectivesValue(this.format, "signature", this.sign()),
             this.annotations,
             this.attributes
         ).iterator();
+    }
+
+    /**
+     * The "signature" refers to generic type information in Java bytecode.
+     * Contains information about:
+     * Type parameters (generics) for classes and methods
+     * Type bounds for generic parameters
+     * Generic superclasses and interfaces
+     * Generic field and method types
+     * @return Signature of the class.
+     */
+    private String sign() {
+        return Optional.ofNullable(this.signature).orElse("");
     }
 }

@@ -27,9 +27,9 @@ final class XmlClassPropertiesTest {
             "We expect that the properties will be created correctly and contain the correct values",
             new XmlClass(
                 "Language",
+                signature,
                 new DirectivesClassProperties(
                     access,
-                    signature,
                     supername,
                     interfaces
                 )

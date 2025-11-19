@@ -138,7 +138,6 @@ public final class BytecodeClassProperties {
             format,
             this.version,
             this.access,
-            this.signature,
             this.supername,
             this.interfaces
         );

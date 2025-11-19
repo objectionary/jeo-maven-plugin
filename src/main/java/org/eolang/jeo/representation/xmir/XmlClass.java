@@ -66,10 +66,15 @@ public final class XmlClass {
     /**
      * Constructor.
      * @param classname The class name
+     * @param sign The class signature
      * @param properties The class properties
      */
-    XmlClass(final String classname, final DirectivesClassProperties properties) {
-        this("", XmlClass.withProps(classname, properties));
+    XmlClass(
+        final String classname,
+        final String sign,
+        final DirectivesClassProperties properties
+    ) {
+        this("", XmlClass.withProps(classname, sign, properties));
     }
 
     /**
@@ -183,22 +188,23 @@ public final class XmlClass {
      * @return Class node.
      */
     private static XmlNode empty(final String classname) {
-        return XmlClass.withProps(classname, new DirectivesClassProperties(Opcodes.ACC_PUBLIC));
+        return XmlClass.withProps(classname, "", new DirectivesClassProperties(Opcodes.ACC_PUBLIC));
     }
 
     /**
      * Generate class node with given name and access.
      * @param classname Class name.
+     * @param sign Class signature.
      * @param props Class properties.
      * @return Class node.
      */
     private static XmlNode withProps(
-        final String classname, final DirectivesClassProperties props
+        final String classname, final String sign, final DirectivesClassProperties props
     ) {
         return new NativeXmlNode(
             new XMLDocument(
                 new Xembler(
-                    new DirectivesClass(classname, props),
+                    new DirectivesClass(classname, sign, props),
                     new Transformers.Node()
                 ).xmlQuietly()
             ).deepCopy().getFirstChild()

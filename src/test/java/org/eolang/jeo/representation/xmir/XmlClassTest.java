@@ -60,9 +60,9 @@ final class XmlClassTest {
                     new Xembler(
                         new DirectivesClass(
                             name,
+                            signature,
                             new DirectivesClassProperties(
                                 access,
-                                signature,
                                 supername,
                                 interfce
                             )
