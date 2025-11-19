@@ -69,22 +69,29 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>      @Test
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">void</strong> createsDirectivesWithEmptyPackage() {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          MatcherAssert.assertThat(
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>              <span class="jxr_string">"We expect that &lt;metas&gt;/&lt;package&gt; won't be created if package is empty"</span>,
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>              <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesMetas(<strong class="jxr_keyword">new</strong> ClassName(<span class="jxr_string">"WithoutPackage"</span>))).xmlQuietly(),
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>              Matchers.not(XhtmlMatchers.hasXPath(<span class="jxr_string">"/metas/meta[head[text()='package']]"</span>))
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>          );
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      }
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      @Test
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">void</strong> createsDirectivesWithVersion() {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>          MatcherAssert.assertThat(
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>              <span class="jxr_string">"We expect that &lt;metas&gt;/&lt;version&gt; will be created"</span>,
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>              <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesMetas(<strong class="jxr_keyword">new</strong> ClassName(<span class="jxr_string">"WithVersion"</span>))).xmlQuietly(),
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>              XhtmlMatchers.hasXPath(<span class="jxr_string">"/metas/meta[head[text()='version']]"</span>)
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>          );
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>      }
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">final</strong> String pckg = <strong class="jxr_keyword">new</strong> AbsentPackage().toString();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          MatcherAssert.assertThat(
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>              <span class="jxr_string">"We expect that &lt;metas&gt;/&lt;package&gt; won't be created if package is empty"</span>,
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>              <strong class="jxr_keyword">new</strong> Xembler(
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>                  <strong class="jxr_keyword">new</strong> DirectivesMetas(<strong class="jxr_keyword">new</strong> ClassName(<span class="jxr_string">"WithoutPackage"</span>))
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>              ).xmlQuietly(),
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>              Matchers.allOf(
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>                  XhtmlMatchers.hasXPath(<span class="jxr_string">"/metas/meta/head[text()='package']"</span>),
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>                  XhtmlMatchers.hasXPath(String.format(<span class="jxr_string">"/metas/meta/tail[text()='%s']"</span>, pckg)),
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>                  XhtmlMatchers.hasXPath(String.format(<span class="jxr_string">"/metas/meta/part[text()='%s']"</span>, pckg))
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>              )
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          );
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>      }
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>      @Test
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      <strong class="jxr_keyword">void</strong> createsDirectivesWithVersion() {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>          MatcherAssert.assertThat(
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>              <span class="jxr_string">"We expect that &lt;metas&gt;/&lt;version&gt; will be created"</span>,
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>              <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesMetas(<strong class="jxr_keyword">new</strong> ClassName(<span class="jxr_string">"WithVersion"</span>))).xmlQuietly(),
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>              XhtmlMatchers.hasXPath(<span class="jxr_string">"/metas/meta[head[text()='version']]"</span>)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          );
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>      }
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>

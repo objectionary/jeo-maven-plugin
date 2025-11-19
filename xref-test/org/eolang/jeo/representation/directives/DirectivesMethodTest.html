@@ -99,49 +99,50 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>      <strong class="jxr_keyword">void</strong> generatesMethodWithSimpleBodyName() <strong class="jxr_keyword">throws</strong> ImpossibleModificationException {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>          <strong class="jxr_keyword">final</strong> String descriptor = <span class="jxr_string">"()I"</span>;
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>          <strong class="jxr_keyword">final</strong> Format format = <strong class="jxr_keyword">new</strong> Format();
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>          MatcherAssert.assertThat(
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>              <span class="jxr_string">"We expect that the method body name will be generated correctly without any suffixes and prefixes"</span>,
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>              <strong class="jxr_keyword">new</strong> Xembler(
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>                  <strong class="jxr_keyword">new</strong> DirectivesMethod(
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>                      format,
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>                      <strong class="jxr_keyword">new</strong> NumberedName(1, <span class="jxr_string">"checks1063"</span>),
-<a class="jxr_linenumber" name="L100" href="#L100">100</a>                     <strong class="jxr_keyword">new</strong> DirectivesMethodProperties(1, descriptor, <span class="jxr_string">""</span>),
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>                     Collections.singletonList(<strong class="jxr_keyword">new</strong> DirectivesInstruction(0, format, Opcodes.RETURN)),
-<a class="jxr_linenumber" name="L102" href="#L102">102</a>                     Collections.emptyList(),
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>                     <strong class="jxr_keyword">new</strong> DirectivesAnnotations(),
-<a class="jxr_linenumber" name="L104" href="#L104">104</a>                     Collections.emptyList(),
-<a class="jxr_linenumber" name="L105" href="#L105">105</a>                     <strong class="jxr_keyword">new</strong> DirectivesAttributes()
-<a class="jxr_linenumber" name="L106" href="#L106">106</a>                 )
-<a class="jxr_linenumber" name="L107" href="#L107">107</a>             ).xml(),
-<a class="jxr_linenumber" name="L108" href="#L108">108</a>             XhtmlMatchers.hasXPaths(
-<a class="jxr_linenumber" name="L109" href="#L109">109</a>                 <strong class="jxr_keyword">new</strong> <a name="JeoBaseXpath" href="../../../../../org/eolang/jeo/representation/directives/JeoBaseXpath.html#JeoBaseXpath">JeoBaseXpath</a>(<span class="jxr_string">"/o"</span>, <span class="jxr_string">"method"</span>).toXpath(),
-<a class="jxr_linenumber" name="L110" href="#L110">110</a>                 <span class="jxr_string">"./o[contains(@name,'checks1063')]/o[@name='body']"</span>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a>             )
-<a class="jxr_linenumber" name="L112" href="#L112">112</a>         );
-<a class="jxr_linenumber" name="L113" href="#L113">113</a>     }
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>     @Test
-<a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">void</strong> convertsToEmptyAnnotationsIfThereAreNoAnnotations() {
-<a class="jxr_linenumber" name="L117" href="#L117">117</a>         MatcherAssert.assertThat(
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>             <span class="jxr_string">"We expect that empty annotations will be mentioned in the method directives"</span>,
-<a class="jxr_linenumber" name="L119" href="#L119">119</a>             <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesMethod(<span class="jxr_string">"foo"</span>)).xmlQuietly(),
-<a class="jxr_linenumber" name="L120" href="#L120">120</a>             XhtmlMatchers.hasXPath(
-<a class="jxr_linenumber" name="L121" href="#L121">121</a>                 <span class="jxr_string">"./o[contains(@name,'foo')]/o[contains(@name,'annotations')]"</span>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>             )
-<a class="jxr_linenumber" name="L123" href="#L123">123</a>         );
-<a class="jxr_linenumber" name="L124" href="#L124">124</a>     }
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
-<a class="jxr_linenumber" name="L126" href="#L126">126</a>     @Test
-<a class="jxr_linenumber" name="L127" href="#L127">127</a>     <strong class="jxr_keyword">void</strong> containsTryCatchBlocksIfThereAreNoExceptions() {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a>         MatcherAssert.assertThat(
-<a class="jxr_linenumber" name="L129" href="#L129">129</a>             <span class="jxr_string">"We expect that empty trycatchblocks will be mentioned in the method directives"</span>,
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>             <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesMethod(<span class="jxr_string">"foo"</span>)).xmlQuietly(),
-<a class="jxr_linenumber" name="L131" href="#L131">131</a>             XhtmlMatchers.hasXPath(
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>                 <span class="jxr_string">"./o[contains(@name,'foo')]/o[@name='trycatchblocks']"</span>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a>             )
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>         );
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>     }
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> }
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          <strong class="jxr_keyword">final</strong> String name = <span class="jxr_string">"checks1063"</span>;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>          MatcherAssert.assertThat(
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>              <span class="jxr_string">"We expect that the method body name will be generated correctly without any suffixes and prefixes"</span>,
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>              <strong class="jxr_keyword">new</strong> Xembler(
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>                  <strong class="jxr_keyword">new</strong> DirectivesMethod(
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>                      format,
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>                     <strong class="jxr_keyword">new</strong> NumberedName(1, name),
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>                     <strong class="jxr_keyword">new</strong> DirectivesMethodProperties(1, name, descriptor, <span class="jxr_string">""</span>),
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>                     Collections.singletonList(<strong class="jxr_keyword">new</strong> DirectivesInstruction(0, format, Opcodes.RETURN)),
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>                     Collections.emptyList(),
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>                     <strong class="jxr_keyword">new</strong> DirectivesAnnotations(),
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>                     Collections.emptyList(),
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>                     <strong class="jxr_keyword">new</strong> DirectivesAttributes()
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>                 )
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>             ).xml(),
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>             XhtmlMatchers.hasXPaths(
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>                 <strong class="jxr_keyword">new</strong> <a name="JeoBaseXpath" href="../../../../../org/eolang/jeo/representation/directives/JeoBaseXpath.html#JeoBaseXpath">JeoBaseXpath</a>(<span class="jxr_string">"/o"</span>, <span class="jxr_string">"method"</span>).toXpath(),
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>                 <span class="jxr_string">"./o[contains(@name,'checks1063')]/o[@name='body']"</span>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>             )
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>         );
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>     }
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>     @Test
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>     <strong class="jxr_keyword">void</strong> convertsToEmptyAnnotationsIfThereAreNoAnnotations() {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>         MatcherAssert.assertThat(
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>             <span class="jxr_string">"We expect that empty annotations will be mentioned in the method directives"</span>,
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>             <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesMethod(<span class="jxr_string">"foo"</span>)).xmlQuietly(),
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>             XhtmlMatchers.hasXPath(
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>                 <span class="jxr_string">"./o[contains(@name,'foo')]/o[contains(@name,'annotations')]"</span>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>             )
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>         );
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>     }
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     @Test
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>     <strong class="jxr_keyword">void</strong> containsTryCatchBlocksIfThereAreNoExceptions() {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>         MatcherAssert.assertThat(
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>             <span class="jxr_string">"We expect that empty trycatchblocks will be mentioned in the method directives"</span>,
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>             <strong class="jxr_keyword">new</strong> Xembler(<strong class="jxr_keyword">new</strong> DirectivesMethod(<span class="jxr_string">"foo"</span>)).xmlQuietly(),
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>             XhtmlMatchers.hasXPath(
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>                 <span class="jxr_string">"./o[contains(@name,'foo')]/o[@name='trycatchblocks']"</span>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>             )
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>         );
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>     }
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> }
 </pre>
 <hr/>
 <div id="footer">© 2023–2025 <a href="https://github.com/objectionary/eo">EO</a></div>
