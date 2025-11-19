@@ -45,11 +45,7 @@ import org.xembly.Directives;
  * </a>
  * </p>
  * @since 0.1.0
- * @todo #1183:60min Class name should should be moved to DirectivesClassProperties
- *  Otherwise it breaks component ordering (see the JVM specification).
- *  The class name should be between access flags and superclasses - the both of them
- *  are defined the the {@link DirectivesClassProperties}.
- */
+*/
 public final class DirectivesClass implements Iterable<Directive> {
 
     /**
@@ -224,7 +220,6 @@ public final class DirectivesClass implements Iterable<Directive> {
             "class",
             new PrefixedName(this.name.name()).encode(),
             this.properties,
-            new DirectivesValue(this.format, "name", this.name.full().replace('.', '/')),
             this.fields.stream().map(Directives::new).reduce(new Directives(), Directives::append),
             this.methods.stream().map(Directives::new).reduce(new Directives(), Directives::append),
             new DirectivesValue(this.format, "signature", this.sign()),

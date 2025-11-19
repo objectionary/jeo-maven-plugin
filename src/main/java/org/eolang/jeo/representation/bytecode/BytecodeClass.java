@@ -291,8 +291,8 @@ public final class BytecodeClass {
     public DirectivesClass directives(final Format format) {
         return new DirectivesClass(
             format,
-            this.name,
-            this.props.directives(format),
+            this.name(),
+            this.props.directives(format, this.name()),
             this.fields.stream().map(f -> f.directives(format)).collect(Collectors.toList()),
             this.cmethods.stream()
                 .map(method -> method.directives(this.mnumber(method), format))
@@ -312,7 +312,7 @@ public final class BytecodeClass {
             visitor.visit(
                 this.props.version(),
                 this.props.access(),
-                this.name.full(),
+                this.name().full(),
                 this.props.signature(),
                 this.supername(),
                 this.props.interfaces()

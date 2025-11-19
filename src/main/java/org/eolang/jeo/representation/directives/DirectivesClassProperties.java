@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -51,6 +52,11 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
     private final int access;
 
     /**
+     * Class name.
+     */
+    private final ClassName name;
+
+    /**
      * Class supername.
      */
     private final String supername;
@@ -77,6 +83,22 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
             format,
             new DefaultVersion().bytecode(),
             access,
+            new ClassName("SomeClass"),
+            "",
+            DirectivesClassProperties.EMPTY_INTERFACES
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param name Name of the class.
+     */
+    public DirectivesClassProperties(final String name) {
+        this(
+            new Format(),
+            new DefaultVersion().bytecode(),
+            0,
+            new ClassName(name),
             "",
             DirectivesClassProperties.EMPTY_INTERFACES
         );
@@ -106,6 +128,7 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
             new Format(),
             new DefaultVersion().bytecode(),
             access,
+            new ClassName("SomeClass"),
             supername,
             interfaces.clone()
         );
@@ -116,6 +139,7 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
      * @param format Format of the directives.
      * @param version Bytecode version.
      * @param access Access modifiers.
+     * @param name Class name.
      * @param supername Class supername.
      * @param interfaces Class interfaces.
      * @checkstyle ParameterNumberCheck (6 lines)
@@ -124,12 +148,14 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         final Format format,
         final int version,
         final int access,
+        final ClassName name,
         final String supername,
         final String... interfaces
     ) {
         this.format = format;
         this.version = version;
         this.access = access;
+        this.name = name;
         this.supername = supername;
         this.interfaces = interfaces.clone();
     }
@@ -142,6 +168,9 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         if (this.format.modifiers()) {
             directives.append(new DirectivesClassModifiers(this.format, this.access));
         }
+        directives.append(
+            new DirectivesValue(this.format, "name", this.name.full().replace('.', '/'))
+        );
         if (this.supername != null) {
             directives.append(new DirectivesValue(this.format, "supername", this.supername));
         }

@@ -15,6 +15,7 @@ import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
 import org.objectweb.asm.Opcodes;
@@ -82,6 +83,7 @@ public final class XmlClass {
      * @return Bytecode class.
      */
     public BytecodeClass bytecode() {
+        final BytecodeClassProperties props = this.properties().bytecode();
         try {
             return new BytecodeClass(
                 new ClassName(
@@ -98,7 +100,7 @@ public final class XmlClass {
                 this.attributes()
                     .map(XmlAttributes::attributes)
                     .orElseGet(BytecodeAttributes::new),
-                this.properties().bytecode()
+                props
             );
         } catch (final IllegalStateException exception) {
             throw new ParsingException(
@@ -109,21 +111,6 @@ public final class XmlClass {
                 exception
             );
         }
-    }
-
-    /**
-     * Class name.
-     * @return Name.
-     */
-    private String name() {
-        return this.node.attribute("name").orElseThrow(
-            () -> new IllegalStateException(
-                String.format(
-                    "Class name is not defined, expected attribute 'name' in %s",
-                    this.node
-                )
-            )
-        );
     }
 
     /**
@@ -145,6 +132,21 @@ public final class XmlClass {
      */
     private XmlClassProperties properties() {
         return new XmlClassProperties(this.node);
+    }
+
+    /**
+     * Class name.
+     * @return Name.
+     */
+    private String name() {
+        return this.node.attribute("name").orElseThrow(
+            () -> new IllegalStateException(
+                String.format(
+                    "Class name is not defined, expected attribute 'name' in %s",
+                    this.node
+                )
+            )
+        );
     }
 
     /**

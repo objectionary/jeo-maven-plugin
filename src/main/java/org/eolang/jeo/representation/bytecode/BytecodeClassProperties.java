@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
 import org.eolang.jeo.representation.directives.Format;
@@ -31,11 +32,6 @@ public final class BytecodeClassProperties {
     private final int access;
 
     /**
-     * Signature.
-     */
-    private final String signature;
-
-    /**
      * Supername.
      */
     private final String supername;
@@ -44,6 +40,11 @@ public final class BytecodeClassProperties {
      * Interfaces.
      */
     private final String[] interfaces;
+
+    /**
+     * Signature.
+     */
+    private final String signature;
 
     /**
      * Constructor.
@@ -133,11 +134,12 @@ public final class BytecodeClassProperties {
         return this.interfaces.clone();
     }
 
-    public DirectivesClassProperties directives(final Format format) {
+    public DirectivesClassProperties directives(final Format format, final ClassName name) {
         return new DirectivesClassProperties(
             format,
             this.version,
             this.access,
+            name,
             this.supername,
             this.interfaces
         );

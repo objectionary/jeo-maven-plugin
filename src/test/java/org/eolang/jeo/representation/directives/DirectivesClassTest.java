@@ -101,7 +101,8 @@ final class DirectivesClassTest {
             "Can't append fully qualified class name",
             new Xembler(
                 new DirectivesClass(
-                    new ClassName(name)
+                    new ClassName(name),
+                    new DirectivesClassProperties(name)
                 )
             ).xml(),
             XhtmlMatchers.hasXPath(
