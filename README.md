@@ -67,7 +67,7 @@ configuration to your `pom.xml` file:
     <plugin>
       <groupId>org.eolang</groupId>
       <artifactId>jeo-maven-plugin</artifactId>
-      <version>0.14.17</version>
+      <version>0.15.0</version>
       <executions>
         <execution>
           <id>bytecode-to-eo</id>
@@ -167,7 +167,7 @@ You can run the plugin in a project that does not contain a `pom.xml` file.
 For example, to disassemble compiled classes, use:
 
 ```bash
-mvn org.eolang:jeo-maven-plugin:0.14.17:disassemble \
+mvn org.eolang:jeo-maven-plugin:0.15.0:disassemble \
   -Djeo.disassemble.sourcesDir=input \
   -Djeo.disassemble.outputDir=xmir
 ```
@@ -178,7 +178,7 @@ in [DisassembleMojo.java](src/main/java/org/eolang/jeo/DisassembleMojo.java).
 Similarly, you can run the `assemble` goal:
 
 ```bash
-mvn org.eolang:jeo-maven-plugin:0.14.17:assemble \
+mvn org.eolang:jeo-maven-plugin:0.15.0:assemble \
     -Djeo.assemble.sourcesDir=xmir \
     -Djeo.assemble.outputDir=output
 ```
