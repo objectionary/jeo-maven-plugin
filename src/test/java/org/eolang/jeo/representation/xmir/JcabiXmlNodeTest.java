@@ -114,17 +114,17 @@ final class JcabiXmlNodeTest {
 
     @Test
     void retrievesByXpath() {
-        final List<String> atual = new JcabiXmlNode(
+        final List<String> actual = new JcabiXmlNode(
             "<program><o>o1</o><o>o2</o></program>"
         ).xpath("//o/text()");
         final List<String> expected = new ListOf<>("o1", "o2");
         MatcherAssert.assertThat(
             String.format(
                 "Retrieved xpath: %s don't match with expected: %s",
-                atual,
+                actual,
                 expected
             ),
-            atual,
+            actual,
             Matchers.equalTo(expected)
         );
     }
