@@ -18,15 +18,10 @@ import org.junit.jupiter.api.io.TempDir;
  */
 final class JcabiXmlDocTest {
 
-    /**
-     * Example XML.
-     */
-    private static final String XML = "<object><o>1</o></object>";
-
     @Test
     void createsFromFile(@TempDir final Path dir) throws IOException {
         final Path path = dir.resolve("test.xml");
-        Files.write(path, JcabiXmlDocTest.XML.getBytes(StandardCharsets.UTF_8));
+        Files.write(path, "<object><o>1</o></object>".getBytes(StandardCharsets.UTF_8));
         MatcherAssert.assertThat(
             "Can't read XML from file",
             new JcabiXmlDoc(path).root().xpath("/object/o/text()").get(0),
@@ -39,13 +34,13 @@ final class JcabiXmlDocTest {
         final Path path = dir.resolve("test.xml");
         Files.write(
             path,
-            String.format("<!-- Some comment -->%s", JcabiXmlDocTest.XML)
+            String.format("<!-- Some comment -->%s", "<object><o>2</o></object>")
                 .getBytes(StandardCharsets.UTF_8)
         );
         MatcherAssert.assertThat(
             "Can't read XML from file",
             new JcabiXmlDoc(path).root().children().findFirst().orElseThrow(AssertionError::new),
-            org.hamcrest.Matchers.equalTo(new JcabiXmlNode("<o>1</o>"))
+            org.hamcrest.Matchers.equalTo(new JcabiXmlNode("<o>2</o>"))
         );
     }
 }

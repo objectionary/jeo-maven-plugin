@@ -30,13 +30,9 @@ import org.objectweb.asm.MethodVisitor;
 final class BytecodeRepresentationTest {
 
     /**
-     * Bytecode example that contains a double value in the stack.
-     */
-    private static final String EXAMPLE_BYTECODE = "Example.class";
-
-    /**
      * The name of the resource with the simplest class.
      */
+    @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
     private static final String METHOD_BYTE = "MethodByte.class";
 
     /**
@@ -44,11 +40,13 @@ final class BytecodeRepresentationTest {
      * You can read more about it here:
      * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1233">#1233</a>
      */
+    @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
     private static final String NULL_NAME = "LtIncorrectUnlint.class";
 
     /**
      * Format for debug mode.
      */
+    @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
     private static final Format DEBUG = new Format(Format.MODE, "debug");
 
     @Test
@@ -116,7 +114,7 @@ final class BytecodeRepresentationTest {
         MatcherAssert.assertThat(
             "we expect to find a frame with a double stack",
             new BytecodeRepresentation(
-                new ResourceOf(BytecodeRepresentationTest.EXAMPLE_BYTECODE)
+                new ResourceOf("Example.class")
             ).toXmir(),
             XhtmlMatchers.hasXPath(
                 String.format(

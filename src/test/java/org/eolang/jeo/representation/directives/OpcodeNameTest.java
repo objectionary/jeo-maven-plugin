@@ -22,17 +22,12 @@ import org.objectweb.asm.Opcodes;
  */
 final class OpcodeNameTest {
 
-    /**
-     * Opcode counter.
-     */
-    private static final AtomicInteger COUNTER = new AtomicInteger(0);
-
     @ParameterizedTest(name = "{0} -> {1}")
     @MethodSource("opcodes")
-    void checksOpcodeNames(final int actual, final String expected) {
+    void checksOpcodeNames(final AtomicInteger counter, final int actual, final String expected) {
         MatcherAssert.assertThat(
             "Opcode name is not as expected",
-            new OpcodeName(actual, OpcodeNameTest.COUNTER).asString(),
+            new OpcodeName(actual, counter).asString(),
             Matchers.equalTo(expected)
         );
     }
@@ -45,18 +40,19 @@ final class OpcodeNameTest {
      */
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> opcodes() {
+        final AtomicInteger counter = new AtomicInteger(0);
         return Stream.of(
-            Arguments.of(Opcodes.INVOKESPECIAL, "invokespecial-1"),
-            Arguments.of(Opcodes.INVOKEVIRTUAL, "invokevirtual-2"),
-            Arguments.of(Opcodes.INVOKESTATIC, "invokestatic-3"),
-            Arguments.of(Opcodes.INVOKEINTERFACE, "invokeinterface-4"),
-            Arguments.of(Opcodes.INVOKEDYNAMIC, "invokedynamic-5"),
-            Arguments.of(Opcodes.DUP, "dup-6"),
-            Arguments.of(Opcodes.LDC, "ldc-7"),
-            Arguments.of(Opcodes.ALOAD, "aload-8"),
-            Arguments.of(Opcodes.ASTORE, "astore-9"),
-            Arguments.of(Opcodes.ILOAD, "iload-A"),
-            Arguments.of(Opcodes.ISTORE, "istore-B")
+            Arguments.of(counter, Opcodes.INVOKESPECIAL, "invokespecial-1"),
+            Arguments.of(counter, Opcodes.INVOKEVIRTUAL, "invokevirtual-2"),
+            Arguments.of(counter, Opcodes.INVOKESTATIC, "invokestatic-3"),
+            Arguments.of(counter, Opcodes.INVOKEINTERFACE, "invokeinterface-4"),
+            Arguments.of(counter, Opcodes.INVOKEDYNAMIC, "invokedynamic-5"),
+            Arguments.of(counter, Opcodes.DUP, "dup-6"),
+            Arguments.of(counter, Opcodes.LDC, "ldc-7"),
+            Arguments.of(counter, Opcodes.ALOAD, "aload-8"),
+            Arguments.of(counter, Opcodes.ASTORE, "astore-9"),
+            Arguments.of(counter, Opcodes.ILOAD, "iload-A"),
+            Arguments.of(counter, Opcodes.ISTORE, "istore-B")
         );
     }
 }

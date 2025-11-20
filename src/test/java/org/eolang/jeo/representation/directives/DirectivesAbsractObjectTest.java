@@ -18,19 +18,12 @@ import org.xembly.Xembler;
  */
 final class DirectivesAbsractObjectTest {
 
-    /**
-     * Base name for the abstract object.
-     */
-    private static final String BASE = "base";
-
     @Test
     void createsAbstractObjectWithBaseOnly() {
         MatcherAssert.assertThat(
             "We expect the abstract object to have only the base EO attribute",
             new Xembler(
-                new DirectivesAbsractObject(
-                    DirectivesAbsractObjectTest.BASE, Collections.emptyList()
-                )
+                new DirectivesAbsractObject("base-only", Collections.emptyList())
             ).xmlQuietly(),
             XhtmlMatchers.hasXPath("/o[not(@base)]/o[@name='base']")
         );
@@ -41,9 +34,7 @@ final class DirectivesAbsractObjectTest {
         MatcherAssert.assertThat(
             "We expect the abstract object to have base EO attribute and as XML attribute",
             new Xembler(
-                new DirectivesAbsractObject(
-                    DirectivesAbsractObjectTest.BASE, "asValue", Collections.emptyList()
-                )
+                new DirectivesAbsractObject("with-as", "asValue", Collections.emptyList())
             ).xmlQuietly(),
             XhtmlMatchers.hasXPath("/o[@as='asValue' and not(@base)]/o[@name='base']")
         );
@@ -56,7 +47,7 @@ final class DirectivesAbsractObjectTest {
             new Xembler(
                 new DirectivesAbsractObject(
                     new Format(),
-                    DirectivesAbsractObjectTest.BASE,
+                    "with-as-and-name",
                     "asValue",
                     "nameValue",
                     new Directives().add("inner").up()
@@ -74,9 +65,7 @@ final class DirectivesAbsractObjectTest {
         MatcherAssert.assertThat(
             "We expect the abstract object to contain internal directives",
             new Xembler(
-                new DirectivesAbsractObject(
-                    DirectivesAbsractObjectTest.BASE, new Directives().add("inner")
-                )
+                new DirectivesAbsractObject("with-internal", new Directives().add("inner"))
             ).xmlQuietly(),
             Matchers.allOf(
                 XhtmlMatchers.hasXPath("/o/o[@name='base']"),
@@ -92,7 +81,7 @@ final class DirectivesAbsractObjectTest {
             new Xembler(
                 new DirectivesAbsractObject(
                     new Format(),
-                    DirectivesAbsractObjectTest.BASE, "", "", Collections.emptyList()
+                    "with-empty", "", "", Collections.emptyList()
                 )
             ).xmlQuietly(),
             XhtmlMatchers.hasXPath("/o[not(@as) and not(@name)]/o[@name='base']")

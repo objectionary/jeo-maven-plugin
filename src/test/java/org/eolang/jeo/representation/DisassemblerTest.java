@@ -19,6 +19,7 @@ import org.eolang.jeo.Disassembler;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -32,25 +33,34 @@ final class DisassemblerTest {
     /**
      * Bytecode class name.
      */
+    @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
     private static final String CLASS_NAME = "MethodByte.class";
 
     /**
-     * Bytecode of a java class.
+     * Temporary folder for each test.
      */
-    private static final byte[] BYTECODE = new UncheckedBytes(
-        new BytesOf(new ResourceOf(DisassemblerTest.CLASS_NAME))
-    ).asBytes();
+    @TempDir
+    private Path temp;
+
+    @BeforeEach
+    void setUp() throws IOException {
+        Files.write(
+            this.temp.resolve(DisassemblerTest.CLASS_NAME),
+            new UncheckedBytes(
+                new BytesOf(new ResourceOf(DisassemblerTest.CLASS_NAME))
+            ).asBytes()
+        );
+    }
 
     @Test
-    void transpilesSuccessfullyWithoutComments(@TempDir final Path temp) throws IOException {
-        Files.write(temp.resolve(DisassemblerTest.CLASS_NAME), DisassemblerTest.BYTECODE);
+    void transpilesSuccessfullyWithoutComments() throws IOException {
         final Format format = new Format(Format.COMMENTS, false);
         new Disassembler(
-            temp,
-            temp,
+            this.temp,
+            this.temp,
             format
         ).disassemble();
-        final Path disassembled = temp.resolve("MethodByte.xmir");
+        final Path disassembled = this.temp.resolve("MethodByte.xmir");
         MatcherAssert.assertThat(
             String.format(
                 "Can't find the transpiled file for the class '%s'.",
@@ -78,15 +88,14 @@ final class DisassemblerTest {
     }
 
     @Test
-    void transpilesWithComments(@TempDir final Path temp) throws IOException {
-        Files.write(temp.resolve(DisassemblerTest.CLASS_NAME), DisassemblerTest.BYTECODE);
+    void transpilesWithComments() throws IOException {
         new Disassembler(
-            temp,
-            temp,
+            this.temp,
+            this.temp,
             new Format(Format.WITH_LISTING, true, Format.COMMENTS, true)
         ).disassemble();
         final List<String> lines = Files.readAllLines(
-            temp.resolve("MethodByte.xmir")
+            this.temp.resolve("MethodByte.xmir")
         );
         MatcherAssert.assertThat(
             "The XMIR file should contain comments",
@@ -106,14 +115,12 @@ final class DisassemblerTest {
      * {@link Files#setLastModifiedTime(Path, FileTime)} is used here in order to avoid
      * retrieving disassemble results from the cache.
      * </p>
-     * @param temp Temp directory where we make disassembling.
      * @throws IOException In case of any writing or reading error.
      */
     @Test
-    void overwritesExistingXmir(@TempDir final Path temp) throws IOException {
-        Files.write(temp.resolve(DisassemblerTest.CLASS_NAME), DisassemblerTest.BYTECODE);
-        new Disassembler(temp, temp).disassemble();
-        final Path disassembled = temp.resolve("MethodByte.xmir");
+    void overwritesExistingXmir() throws IOException {
+        new Disassembler(this.temp, this.temp).disassemble();
+        final Path disassembled = this.temp.resolve("MethodByte.xmir");
         final String appended = "<bottomline>I'm still here</bottomline>";
         Files.write(
             disassembled,
@@ -126,7 +133,7 @@ final class DisassemblerTest {
             Matchers.containsString(appended)
         );
         Files.setLastModifiedTime(disassembled, FileTime.from(Instant.EPOCH));
-        new Disassembler(temp, temp).disassemble();
+        new Disassembler(this.temp, this.temp).disassemble();
         MatcherAssert.assertThat(
             "We expect the appended text to be disappeared after the second disassembling",
             new String(Files.readAllBytes(disassembled), StandardCharsets.UTF_8),

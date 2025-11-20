@@ -20,19 +20,12 @@ import org.xembly.Xembler;
  */
 final class XmlInstructionTest {
 
-    /**
-     * Default instruction which we use for testing.
-     */
-    private static final BytecodeInstruction EXPECTED = new BytecodeInstruction(
-        Opcodes.INVOKESPECIAL, 1, 2, 3
-    );
-
     @Test
     void comparesSuccessfullyWithSpaces() {
         MatcherAssert.assertThat(
             "Xml Instruction nodes with different empty spaces, but with the same content should be the same, but it wasn't",
             new XmlInstruction(0, Opcodes.INVOKESPECIAL, 1, 2, 3).bytecode(),
-            Matchers.equalTo(XmlInstructionTest.EXPECTED)
+            Matchers.equalTo(new BytecodeInstruction(Opcodes.INVOKESPECIAL, 1, 2, 3))
         );
     }
 
@@ -40,8 +33,8 @@ final class XmlInstructionTest {
     void comparesSuccessfullyWithDifferentTextNodes() {
         MatcherAssert.assertThat(
             "Xml Instruction with different arguments should not be equal, but it was",
-            new XmlInstruction(0, Opcodes.INVOKESPECIAL, 32, 23, 14),
-            Matchers.not(Matchers.equalTo(XmlInstructionTest.EXPECTED))
+            new XmlInstruction(0, Opcodes.INVOKESPECIAL, 32, 23, 14).bytecode(),
+            Matchers.equalTo(new BytecodeInstruction(Opcodes.INVOKESPECIAL, 32, 23, 14))
         );
     }
 
@@ -49,8 +42,8 @@ final class XmlInstructionTest {
     void comparesDeeply() {
         MatcherAssert.assertThat(
             "Xml Instruction with different child content should not be equal, but it was",
-            new XmlInstruction(0, Opcodes.INVOKESPECIAL),
-            Matchers.not(Matchers.equalTo(XmlInstructionTest.EXPECTED))
+            new XmlInstruction(0, Opcodes.INVOKESPECIAL).bytecode(),
+            Matchers.equalTo(new BytecodeInstruction(Opcodes.INVOKESPECIAL))
         );
     }
 
@@ -58,8 +51,8 @@ final class XmlInstructionTest {
     void comparesDifferentInstructions() {
         MatcherAssert.assertThat(
             "Xml Instruction with different content should not be equal, but it was",
-            new XmlInstruction(0, Opcodes.DUP),
-            Matchers.not(Matchers.equalTo(XmlInstructionTest.EXPECTED))
+            new XmlInstruction(0, Opcodes.DUP).bytecode(),
+            Matchers.equalTo(new BytecodeInstruction(Opcodes.DUP))
         );
     }
 

@@ -16,11 +16,6 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 final class JavaCodecTest {
 
-    /**
-     * Empty byte array.
-     */
-    private static final byte[] EMPTY = new byte[0];
-
     @ParameterizedTest
     @MethodSource("mapping")
     void encodesSuccessfully(final Object value, final DataType type, final byte[] bytes) {
@@ -48,7 +43,7 @@ final class JavaCodecTest {
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Object[][] mapping() {
         return new Object[][]{
-            {null, DataType.NULL, JavaCodecTest.EMPTY},
+            {null, DataType.NULL, new byte[0]},
             {true, DataType.BOOL, new byte[]{1}},
             {'a', DataType.CHAR, new byte[]{0, 97}},
             {new byte[]{0, 1, 2, 3}, DataType.BYTES, new byte[]{0, 1, 2, 3}},

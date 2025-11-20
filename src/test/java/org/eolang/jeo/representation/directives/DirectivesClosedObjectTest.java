@@ -17,19 +17,14 @@ import org.xembly.Xembler;
  */
 final class DirectivesClosedObjectTest {
 
-    /**
-     * Base attribute.
-     */
-    private static final String BASE = "base";
-
     @Test
     void createsClosedObjectWithBaseOnly() {
         MatcherAssert.assertThat(
             "We expect the closed object to have only the base attribute",
             new Xembler(
-                new DirectivesClosedObject(DirectivesClosedObjectTest.BASE, Collections.emptyList())
+                new DirectivesClosedObject("closed", Collections.emptyList())
             ).xmlQuietly(),
-            XhtmlMatchers.hasXPath("/o[@base='base' and not(@as) and not(@name)]")
+            XhtmlMatchers.hasXPath("/o[@base='closed' and not(@as) and not(@name)]")
         );
     }
 
@@ -39,10 +34,10 @@ final class DirectivesClosedObjectTest {
             "We expect the closed object to have base and as attributes",
             new Xembler(
                 new DirectivesClosedObject(
-                    DirectivesClosedObjectTest.BASE, "asValue", Collections.emptyList()
+                    "with-base-and-as", "asValue", Collections.emptyList()
                 )
             ).xmlQuietly(),
-            XhtmlMatchers.hasXPath("/o[@base='base' and @as='asValue' and not(@name)]")
+            XhtmlMatchers.hasXPath("/o[@base='with-base-and-as' and @as='asValue' and not(@name)]")
         );
     }
 
@@ -52,13 +47,15 @@ final class DirectivesClosedObjectTest {
             "We expect the closed object to have base, as, and name attributes",
             new Xembler(
                 new DirectivesClosedObject(
-                    DirectivesClosedObjectTest.BASE,
+                    "with-base-as-and-name",
                     "asValue",
                     "nameValue",
                     Collections.emptyList()
                 )
             ).xmlQuietly(),
-            XhtmlMatchers.hasXPath("/o[@base='base' and @as='asValue' and @name='nameValue']")
+            XhtmlMatchers.hasXPath(
+                "/o[@base='with-base-as-and-name' and @as='asValue' and @name='nameValue']"
+            )
         );
     }
 
@@ -68,11 +65,11 @@ final class DirectivesClosedObjectTest {
             "We expect the closed object to contain internal directives",
             new Xembler(
                 new DirectivesClosedObject(
-                    DirectivesClosedObjectTest.BASE,
+                    "with-internal-directives",
                     new Directives().add("inner")
                 )
             ).xmlQuietly(),
-            XhtmlMatchers.hasXPath("/o[@base='base']/inner")
+            XhtmlMatchers.hasXPath("/o[@base='with-internal-directives']/inner")
         );
     }
 
@@ -82,13 +79,13 @@ final class DirectivesClosedObjectTest {
             "We expect the closed object to not have as or name attributes when they are empty",
             new Xembler(
                 new DirectivesClosedObject(
-                    DirectivesClosedObjectTest.BASE,
+                    "with-empty-as-and-name",
                     "",
                     "",
                     Collections.emptyList()
                 )
             ).xmlQuietly(),
-            XhtmlMatchers.hasXPath("/o[@base='base' and not(@as) and not(@name)]")
+            XhtmlMatchers.hasXPath("/o[@base='with-empty-as-and-name' and not(@as) and not(@name)]")
         );
     }
 }

@@ -18,15 +18,10 @@ import org.junit.jupiter.api.io.TempDir;
  */
 final class NativeXmlDocTest {
 
-    /**
-     * Example XML.
-     */
-    private static final String XML = "<root><a>1</a><b>2</b></root>";
-
     @Test
     void createsFromFile(@TempDir final Path dir) throws IOException {
         final Path path = dir.resolve("test.xml");
-        Files.write(path, NativeXmlDocTest.XML.getBytes(StandardCharsets.UTF_8));
+        Files.write(path, "<root><a>1</a><b>2</b></root>".getBytes(StandardCharsets.UTF_8));
         MatcherAssert.assertThat(
             "Can't read XML from file",
             new NativeXmlDoc(path).root().xpath("/root/a/text()").get(0),

@@ -39,12 +39,14 @@ final class XmirRepresentationTest {
     /**
      * Message for assertion.
      */
+    @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
     private static final String MESSAGE =
         "The bytecode representation of the EO object is not correct,%nexpected:%n%s%nbut got:%n%s";
 
     /**
      * Math class name.
      */
+    @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
     private static final String MATH = "org/eolang/foo/Math";
 
     @Test

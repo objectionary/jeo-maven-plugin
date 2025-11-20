@@ -20,19 +20,15 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 final class AssemblingTest {
 
-    /**
-     * Safe mock path.
-     */
-    private static final Path DEVNULL = Paths.get("/dev/null");
-
     @Test
     void bypassesRepresentationAsSource() {
         final Path expected = Paths.get("source");
+        final Path stub = Paths.get("/dev/null");
         MatcherAssert.assertThat(
             "Assembling must return the source path it was constructed with",
             new Assembling(
-                AssemblingTest.DEVNULL,
-                AssemblingTest.DEVNULL,
+                stub,
+                stub,
                 expected
             ).source(),
             Matchers.equalTo(expected)
