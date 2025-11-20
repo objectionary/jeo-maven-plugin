@@ -141,6 +141,7 @@ You can extend the logging output of the plugin by setting the `debug` parameter
 to `true`:
 
 ```xml
+
 <configuration>
   <debug>true</debug>
 </configuration>
@@ -190,8 +191,16 @@ while the parameters for disassembling use the `jeo.disassemble` prefix.
 
 ## Notation
 
-`jeo-maven-plugin` relies on the [notation](https://arxiv.org/abs/2111.13384)
+`jeo-maven-plugin` relies on
+the [formal notation](https://arxiv.org/abs/2111.13384)
 when producing XMIR files and parsing them back into bytecode.
+
+## Ordering
+
+All the components in the generated XMIR files are sorted according to the JVM
+[specification](https://docs.oracle.com/javase/specs/jvms/se25/html/index.html).
+It means that classes, fields, methods, and attributes have the same order in
+EO, PHI notation, and XMIR files as in the JVM specification.
 
 ## Disassembling Example
 
@@ -253,88 +262,204 @@ After running the `jeo:disassemble` goal, the plugin will generate the
 following EO:
 
 ```eo
++home https://github.com/objectionary/jeo-maven-plugin
 +package j$org.j$eolang.j$jeo
++spdx SPDX-License-Identifier: MIT
++version 1.0-SNAPSHOT
 
-jeo.class > j$Application
-  jeo.int > version
-    00-00-00-00-00-00-00-34
-  jeo.int > access
-    00-00-00-00-00-00-00-21
+# No comments.
+[] > j$Application
+  Φ.jeo.class > @
+  52 > version
+  33 > access
+  "org/eolang/jeo/Application" > name
   "java/lang/Object" > supername
-  jeo.seq.of0 > interfaces-696199744
-  jeo.method > j$object@init@-%28%29V
-    jeo.int
-      00-00-00-00-00-00-00-01
-    "()V"
-    ""
-    jeo.seq.of0 > aca3ae21-f727-41cc-b8df-791e7031904e-1635871459
-    jeo.maxs
-      jeo.int
-        00-00-00-00-00-00-00-01
-      jeo.int
-        00-00-00-00-00-00-00-01
-    jeo.params
-    jeo.seq.of0 > annotations-1586121642
-    jeo.seq.of3 > body-1998918745
-      jeo.opcode.aload
-        jeo.int
-          00-00-00-00-00-00-00-19
-        jeo.int
-          00-00-00-00-00-00-00-00
-      jeo.opcode.invokespecial
-        jeo.int
-          00-00-00-00-00-00-00-B7
-        "java/lang/Object"
-        "<init>"
-        "()V"
-        jeo.bool
-          00-
-      jeo.opcode.return
-        jeo.int
-          00-00-00-00-00-00-00-B1
-    jeo.seq.of0 > trycatchblocks-object@init@-1849817803
-    jeo.seq.of0 > local-variable-table-1794934203
-  jeo.method > j$main-%28%5BLjava%2Flang%2FString%3B%29V
-    jeo.int
-      00-00-00-00-00-00-00-09
-    "([Ljava/lang/String;)V"
-    ""
-    jeo.seq.of0 > f6c6c536-0b96-4357-bbba-d2966968b266-658978372
-    jeo.maxs
-      jeo.int
-        00-00-00-00-00-00-00-02
-      jeo.int
-        00-00-00-00-00-00-00-01
-    jeo.params
-      jeo.param > param-%5BLjava%2Flang%2FString%3B-arg0-0-0-1064778491
-        jeo.seq.of0 > param-annotations-0-666850426
-    jeo.seq.of0 > annotations-639467587
-    jeo.seq.of4 > body-1023152593
-      jeo.opcode.getstatic
-        jeo.int
-          00-00-00-00-00-00-00-B2
-        "java/lang/System"
-        "out"
-        "Ljava/io/PrintStream;"
-      jeo.opcode.ldc
-        jeo.int
-          00-00-00-00-00-00-00-12
-        "Hello, World!"
-      jeo.opcode.invokevirtual
-        jeo.int
-          00-00-00-00-00-00-00-B6
-        "java/io/PrintStream"
-        "println"
-        "(Ljava/lang/String;)V"
-        jeo.bool
-          00-
-      jeo.opcode.return
-        jeo.int
-          00-00-00-00-00-00-00-B1
-    jeo.seq.of0 > trycatchblocks-main-727934521
-    jeo.seq.of0 > local-variable-table-2134319645
-  jeo.seq.of0 > annotations-785801830
-  jeo.seq.of0 > attributes-744976367
+  # No comments.
+  [] > interfaces
+    Φ.jeo.seq.of0 > @
+  # No comments.
+  [] > jm$object@init@
+    Φ.jeo.method > @
+    1 > access
+    "<init>" > name
+    "()V" > descriptor
+    "" > signature
+    # No comments.
+    [] > exceptions
+      Φ.jeo.seq.of0 > @
+    # No comments.
+    [] > maxs
+      Φ.jeo.maxs > @
+      1 > m1
+      1 > m2
+    # No comments.
+    [] > params
+      Φ.jeo.params > @
+    # No comments.
+    [] > annotations
+      Φ.jeo.seq.of0 > @
+    # No comments.
+    [] > body
+      Φ.jeo.seq.of6 > @
+      # No comments.
+      [] > l0
+        Φ.jeo.label > @
+        "L629380274" > v0
+      # No comments.
+      [] > ln1
+        Φ.jeo.line-number > @
+        7 > number
+        # No comments.
+        [] > l0
+          Φ.jeo.label > @
+          "L629380274" > v0
+      # No comments.
+      [] > i2
+        Φ.jeo.opcode.aload > @
+        0 > v0
+      # No comments.
+      [] > i3
+        Φ.jeo.opcode.invokespecial > @
+        "java/lang/Object" > v0
+        "<init>" > v1
+        "()V" > v2
+        false > v3
+      # No comments.
+      [] > i4
+        Φ.jeo.opcode.return > @
+      # No comments.
+      [] > l5
+        Φ.jeo.label > @
+        "L2060339391" > v0
+    # No comments.
+    [] > trycatchblocks
+      Φ.jeo.seq.of0 > @
+    # No comments.
+    [] > local-variable-table
+      Φ.jeo.seq.of1 > @
+      # No comments.
+      [] > a0
+        Φ.jeo.local-variable > @
+        # No comments.
+        [] > l0
+          Φ.jeo.label > @
+          "L629380274" > v0
+        # No comments.
+        [] > l1
+          Φ.jeo.label > @
+          "L2060339391" > v0
+        "this" > name
+        "Lorg/eolang/jeo/Application;" > descr
+        0 > index
+        "" > signature
+  # No comments.
+  [] > jm$main
+    Φ.jeo.method > @
+    9 > access
+    "main" > name
+    "([Ljava/lang/String;)V" > descriptor
+    "" > signature
+    # No comments.
+    [] > exceptions
+      Φ.jeo.seq.of0 > @
+    # No comments.
+    [] > maxs
+      Φ.jeo.maxs > @
+      2 > m1
+      1 > m2
+    # No comments.
+    [] > params
+      Φ.jeo.params > @
+    # No comments.
+    [] > annotations
+      Φ.jeo.seq.of0 > @
+    # No comments.
+    [] > body
+      Φ.jeo.seq.of9 > @
+      # No comments.
+      [] > l0
+        Φ.jeo.label > @
+        "L1370568011" > v0
+      # No comments.
+      [] > ln1
+        Φ.jeo.line-number > @
+        9 > number
+        # No comments.
+        [] > l0
+          Φ.jeo.label > @
+          "L1370568011" > v0
+      # No comments.
+      [] > i2
+        Φ.jeo.opcode.getstatic > @
+        "java/lang/System" > v0
+        "out" > v1
+        "Ljava/io/PrintStream;" > v2
+      # No comments.
+      [] > i3
+        Φ.jeo.opcode.ldc > @
+        "Hello, World!" > v0
+      # No comments.
+      [] > i4
+        Φ.jeo.opcode.invokevirtual > @
+        "java/io/PrintStream" > v0
+        "println" > v1
+        "(Ljava/lang/String;)V" > v2
+        false > v3
+      # No comments.
+      [] > l5
+        Φ.jeo.label > @
+        "L1388035270" > v0
+      # No comments.
+      [] > ln6
+        Φ.jeo.line-number > @
+        10 > number
+        # No comments.
+        [] > l0
+          Φ.jeo.label > @
+          "L1388035270" > v0
+      # No comments.
+      [] > i7
+        Φ.jeo.opcode.return > @
+      # No comments.
+      [] > l8
+        Φ.jeo.label > @
+        "L1795299323" > v0
+    # No comments.
+    [] > trycatchblocks
+      Φ.jeo.seq.of0 > @
+    # No comments.
+    [] > local-variable-table
+      Φ.jeo.seq.of1 > @
+      # No comments.
+      [] > a0
+        Φ.jeo.local-variable > @
+        # No comments.
+        [] > l0
+          Φ.jeo.label > @
+          "L1370568011" > v0
+        # No comments.
+        [] > l1
+          Φ.jeo.label > @
+          "L1795299323" > v0
+        "args" > name
+        "[Ljava/lang/String;" > descr
+        0 > index
+        "" > signature
+  "" > signature
+  # No comments.
+  [] > annotations
+    Φ.jeo.seq.of0 > @
+  # No comments.
+  [] > attributes
+    Φ.jeo.seq.of1 > @
+    # No comments.
+    [] > source-file
+      Φ.jeo.source-file > @
+      "Application.java" > source
+      # No comments.
+      [] > debug
+        Φ.jeo.nullable > @
+        -- > n0
 ```
 
 As you can see, there are many EO objects that represent the Java bytecode
@@ -371,23 +496,21 @@ Below is the full list of these objects, grouped by category:
 
 ### Primitive Values
 
-* **`jeo.int`** - Represents an integer value.
 * **`jeo.bool`** - Represents a boolean value.
-* **`jeo.string`** - Represents a string value.
+* **`jeo.char`** - Represents a char value.
+* **`jeo.byte`** - Represents a byte value.
+* **`jeo.short`** - Represents a short value.
+* **`jeo.number`** - Represents an integer value.
+* **`jeo.long`** - Represents a long value.
 * **`jeo.float`** - Represents a float value.
 * **`jeo.double`** - Represents a double value.
-* **`jeo.long`** - Represents a long value.
-* **`jeo.char`** - Represents a char value.
-* **`jeo.short`** - Represents a short value.
-* **`jeo.byte`** - Represents a byte value.
+* **`jeo.string`** - Represents a string value.
 * **`jeo.bytes`** - Represents a byte array.
 
 ### Collections and Complex Types
 
 * **`jeo.nullable`**
   Represents an object that can be `null`.
-* **`jeo.array`**
-  Represents an array of objects.
 * **`jeo.type`**
   Represents a Java type.
 * **`jeo.seq.*`**
@@ -409,7 +532,7 @@ Below is the full list of these objects, grouped by category:
 
 * **`jeo.local-variable`**
   Represents a local variable entry.
-* **`jeo.try-catch`**
+* **`jeo.trycatch`**
   Represents a try-catch block.
 
 ### Labels, Handles, Frames
