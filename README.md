@@ -164,7 +164,7 @@ With the `debug` parameter:
 
 ## Run Without a POM File
 
-You can run the plugin in a project that does not contain a `pom.xml` file.  
+You can run the plugin in a project that does not contain a `pom.xml` file.
 For example, to disassemble compiled classes, use:
 
 ```bash
