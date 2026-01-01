@@ -1,7 +1,7 @@
 import java.nio.file.Files
 
 /*
- * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
  * SPDX-License-Identifier: MIT
  */
 String log = new File(basedir, 'build.log').text;
