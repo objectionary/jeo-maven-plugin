@@ -14,7 +14,7 @@
       here that requires java 11 since our plugin should be compatible with
       java 11.
     -->
-    <version>2.7.18</version>
+    <version>4.0.3</version>
     <relativePath/>
   </parent>
   <groupId>org.eolang</groupId>
