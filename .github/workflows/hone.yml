@@ -28,4 +28,3 @@ jobs:
             maven-
       - run: mvn install -PskipTests -Phone
       - run: mvn test -Phone
-
