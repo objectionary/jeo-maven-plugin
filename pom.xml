@@ -669,5 +669,26 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>hone</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eolang</groupId>
+            <artifactId>hone-maven-plugin</artifactId>
+            <version>0.23.0</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>pull</goal>
+                  <goal>optimize</goal>
+                  <goal>rmi</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 </project>
