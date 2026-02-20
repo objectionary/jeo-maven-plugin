@@ -677,6 +677,9 @@
             <groupId>org.eolang</groupId>
             <artifactId>hone-maven-plugin</artifactId>
             <version>0.23.0</version>
+            <configuration>
+              <alwaysWithDocker>true</alwaysWithDocker>
+            </configuration>
             <executions>
               <execution>
                 <goals>
