@@ -67,13 +67,13 @@ public final class DirectivesBytes implements Iterable<Directive> {
         final DirectivesClosedObject directives;
         if (this.name.isEmpty()) {
             directives = new DirectivesClosedObject(
-                "Φ.org.eolang.bytes",
+                new EoFqn("bytes").fqn(),
                 this.as,
                 new Directives().add("o").attr("as", "α0").set(this.hex).up()
             );
         } else {
             directives = new DirectivesClosedObject(
-                "Φ.org.eolang.bytes",
+                new EoFqn("bytes").fqn(),
                 this.as,
                 this.name,
                 new Directives().add("o").attr("as", "α0").set(this.hex).up()
