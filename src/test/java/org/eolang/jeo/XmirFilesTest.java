@@ -18,7 +18,6 @@ import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -28,11 +27,6 @@ import org.junit.jupiter.api.io.TempDir;
  * including retrieval, validation, and error handling.
  *
  * @since 0.1.0
- * @todo #1461:90min Update lints version.
- *  Recent changes caused some lints to fail, and we need to update the version to fix it.
- *  Don't forget to enable the disabled tests after updating the lints version:
- *  - {@link XmirFilesTest#verifiesXmirFilesGeneratedFromBytecode}
- *  - {@link XmirFilesTest#verifiesXmirFileGeneratedFromModuleInfo}
  */
 final class XmirFilesTest {
 
@@ -119,7 +113,6 @@ final class XmirFilesTest {
     }
 
     @Test
-    @Disabled
     void verifiesXmirFilesGeneratedFromBytecode(@TempDir final Path temp) throws IOException {
         Files.write(
             temp.resolve("MethodByte.xmir"),
@@ -135,7 +128,6 @@ final class XmirFilesTest {
     }
 
     @Test
-    @Disabled
     void verifiesXmirFileGeneratedFromModuleInfo(@TempDir final Path temp) throws IOException {
         Files.write(
             temp.resolve("open-module-info.xmir"),

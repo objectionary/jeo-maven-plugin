@@ -9,7 +9,6 @@ import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,20 +33,8 @@ public final class JcabiXmlNode implements XmlNode {
 
     /**
      * Set of ignored defects.
-     * We left 'idempotent-attribute-is-not-first' because it's not critical for XMIR correctness.
-     * You can find more details here:
-     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1369">1369</a>
      */
-    private static final Collection<String> IGNORE = new HashSet<>(
-        Arrays.asList(
-            "no-attribute-formation",
-            "redundant-object",
-            "duplicate-names-in-diff-context",
-            "unit-test-missing",
-            "sparse-decoration",
-            "idempotent-attribute-is-not-first"
-        )
-    );
+    private static final Collection<String> IGNORE = JcabiXmlNode.ignored();
 
     /**
      * XML document.
@@ -189,5 +176,30 @@ public final class JcabiXmlNode implements XmlNode {
      */
     private static boolean notIgnored(final Defect defect) {
         return !JcabiXmlNode.IGNORE.contains(defect.rule().split(" ")[0]);
+    }
+
+    /**
+     * Set of ignored defects.
+     * We left 'idempotent-attribute-is-not-first' because it's not critical for XMIR correctness.
+     * You can find more details here:
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1369">1369</a>
+     *
+     * @return Ignored rules.
+     */
+    private static Collection<String> ignored() {
+        final List<String> rules = Arrays.asList(
+            "no-attribute-formation",
+            "redundant-object",
+            "duplicate-names-in-diff-context",
+            "unit-test-missing",
+            "sparse-decoration",
+            "idempotent-attribute-is-not-first",
+            "empty-object",
+            "object-has-data"
+        );
+        return Stream.concat(
+            rules.stream(),
+            rules.stream().map(rule -> String.format("%s/S", rule))
+        ).collect(Collectors.toSet());
     }
 }
