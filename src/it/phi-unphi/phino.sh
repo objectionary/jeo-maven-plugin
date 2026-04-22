@@ -19,7 +19,7 @@ echo "phino xmir->xmir: input=$INPUT_DIR output=$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
 
 find "$INPUT_DIR" -name "*.xmir" | while IFS= read -r input_file; do
-    relative="${input_file#${INPUT_DIR}/}"
+    relative="${input_file#"${INPUT_DIR}/"}"
     output_file="${OUTPUT_DIR}/${relative}"
     mkdir -p "$(dirname "$output_file")"
     echo "Transforming: $input_file -> $output_file"

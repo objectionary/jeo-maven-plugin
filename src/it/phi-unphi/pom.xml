@@ -73,7 +73,7 @@
             <id>phino-transformations</id>
             <phase>process-classes</phase>
             <goals>
-               <goal>exec</goal>
+              <goal>exec</goal>
             </goals>
             <configuration>
               <executable>/bin/bash</executable>
