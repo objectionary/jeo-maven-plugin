@@ -33,6 +33,16 @@ public final class GlobFilter implements Predicate<Path> {
     private final Set<String> excludes;
 
     /**
+     * Compiled matchers for {@link #includes}.
+     */
+    private final Set<PathMatcher> whitelist;
+
+    /**
+     * Compiled matchers for {@link #excludes}.
+     */
+    private final Set<PathMatcher> blacklist;
+
+    /**
      * Ctor.
      *
      * @param includes Glob patterns to include
@@ -41,6 +51,12 @@ public final class GlobFilter implements Predicate<Path> {
     GlobFilter(final Set<String> includes, final Set<String> excludes) {
         this.includes = includes;
         this.excludes = excludes;
+        this.whitelist = includes.stream()
+            .map(GlobFilter::matcher)
+            .collect(Collectors.toSet());
+        this.blacklist = excludes.stream()
+            .map(GlobFilter::matcher)
+            .collect(Collectors.toSet());
     }
 
     @Override
@@ -74,17 +90,11 @@ public final class GlobFilter implements Predicate<Path> {
 
     @Override
     public boolean test(final Path path) {
-        final Set<PathMatcher> whitelist = this.includes.stream()
-            .map(GlobFilter::matcher)
-            .collect(Collectors.toSet());
-        final Set<PathMatcher> blacklist = this.excludes.stream()
-            .map(GlobFilter::matcher)
-            .collect(Collectors.toSet());
         final boolean included;
-        if (blacklist.stream().anyMatch(m -> m.matches(path))) {
+        if (this.blacklist.stream().anyMatch(m -> m.matches(path))) {
             included = false;
         } else {
-            included = whitelist.isEmpty() || whitelist.stream()
+            included = this.whitelist.isEmpty() || this.whitelist.stream()
                 .anyMatch(matcher -> matcher.matches(path));
         }
         return included;
