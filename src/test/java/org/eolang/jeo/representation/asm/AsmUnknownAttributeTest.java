@@ -15,6 +15,10 @@ import org.objectweb.asm.ByteVector;
  */
 final class AsmUnknownAttributeTest {
 
+    /**
+     * Verifies that {@link AsmUnknownAttribute#write} returns a non-null
+     * {@link ByteVector} when the attribute data is null.
+     */
     @Test
     void writesNullDataAsEmpty() {
         final ByteVector result = new AsmUnknownAttribute("Test", null)
@@ -26,6 +30,10 @@ final class AsmUnknownAttributeTest {
         );
     }
 
+    /**
+     * Verifies that {@link AsmUnknownAttribute#write} returns a non-null
+     * {@link ByteVector} when the attribute data is non-empty.
+     */
     @Test
     void writesNonEmptyData() {
         final byte[] data = {0x01, 0x02, 0x03};
