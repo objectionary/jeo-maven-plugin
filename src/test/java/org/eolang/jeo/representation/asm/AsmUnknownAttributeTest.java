@@ -7,7 +7,6 @@ package org.eolang.jeo.representation.asm;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.ByteVector;
 
 /**
  * Test case for {@link AsmUnknownAttribute}.
