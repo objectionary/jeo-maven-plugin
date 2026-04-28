@@ -79,11 +79,6 @@ public final class AsmUnknownAttribute extends Attribute {
         final int stack,
         final int locals
     ) {
-        if (this.data == null) {
-            throw new IllegalArgumentException(
-                String.format("Attribute data is null for type `%s`", this.type)
-            );
-        }
         return new ByteVector().putByteArray(this.data, 0, this.data.length);
     }
 }
