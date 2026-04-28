@@ -7,6 +7,7 @@ package org.eolang.jeo;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -35,12 +36,12 @@ public final class GlobFilter implements Predicate<Path> {
     /**
      * Compiled matchers for {@link #includes}.
      */
-    private final Set<PathMatcher> whitelist;
+    private final List<PathMatcher> whitelist;
 
     /**
      * Compiled matchers for {@link #excludes}.
      */
-    private final Set<PathMatcher> blacklist;
+    private final List<PathMatcher> blacklist;
 
     /**
      * Ctor.
@@ -53,10 +54,10 @@ public final class GlobFilter implements Predicate<Path> {
         this.excludes = excludes;
         this.whitelist = includes.stream()
             .map(GlobFilter::matcher)
-            .collect(Collectors.toSet());
+            .collect(Collectors.toUnmodifiableList());
         this.blacklist = excludes.stream()
             .map(GlobFilter::matcher)
-            .collect(Collectors.toSet());
+            .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
