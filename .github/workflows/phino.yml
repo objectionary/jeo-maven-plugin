@@ -34,4 +34,4 @@ jobs:
           sudo curl -L -o /usr/local/bin/phino http://phino.objectionary.com/releases/ubuntu-24.04/phino-0.0.0.67
           sudo chmod +x /usr/local/bin/phino
           phino --version
-      - run: mvn clean install -D"skipTests" -D"invoker.test=phi-unphi" --errors --batch-mode
+      - run: mvn clean install -ntp -D"skipTests" -D"invoker.test=phi-unphi" --errors --batch-mode
