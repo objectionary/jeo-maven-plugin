@@ -2,5 +2,17 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Track org.eolang:eo-maven-plugin version embedded in integration-test poms under src/it/",
+      "fileMatch": ["^src/it/.*/pom\\.xml$"],
+      "matchStrings": [
+        "<groupId>org\\.eolang</groupId>\\s*<artifactId>eo-maven-plugin</artifactId>\\s*<version>(?<currentValue>[^<]+)</version>"
+      ],
+      "depNameTemplate": "org.eolang:eo-maven-plugin",
+      "datasourceTemplate": "maven"
+    }
   ]
 }
