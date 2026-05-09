@@ -4,8 +4,8 @@
  */
 package org.eolang.jeo;
 
+import com.jcabi.log.Logger;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Function;
@@ -68,6 +68,8 @@ public final class ParallelTranslator implements Translator {
         } else {
             parallelism = this.threads;
         }
+        Logger.info(this, "Using %d thread(s) for parallel processing", parallelism);
+        @SuppressWarnings("PMD.CloseResource")
         final ForkJoinPool pool = new ForkJoinPool(parallelism);
         try {
             return pool.submit(
