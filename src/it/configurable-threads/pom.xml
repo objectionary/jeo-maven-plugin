@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+ * SPDX-License-Identifier: MIT
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.eolang</groupId>
+  <artifactId>jeo-configurable-threads-it</artifactId>
+  <version>@project.version@</version>
+  <packaging>jar</packaging>
+  <description>
+    This integration test verifies that the 'threads' parameter works correctly
+    for both 'disassemble' (with a single thread) and 'assemble' (with many threads).
+    If you need to run only this test, use the following command:
+    "mvn clean integration-test -Dinvoker.test=configurable-threads -DskipTests"
+  </description>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <stack-size>256M</stack-size>
+  </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eolang</groupId>
+        <artifactId>jeo-maven-plugin</artifactId>
+        <version>@project.version@</version>
+        <executions>
+          <execution>
+            <id>bytecode-to-xmir</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>disassemble</goal>
+            </goals>
+            <configuration>
+              <threads>1</threads>
+            </configuration>
+          </execution>
+          <execution>
+            <id>xmir-to-bytecode</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+            <configuration>
+              <threads>4</threads>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

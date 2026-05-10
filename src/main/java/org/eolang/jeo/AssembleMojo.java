@@ -131,6 +131,21 @@ public final class AssembleMojo extends AbstractMojo {
     @Parameter(property = "jeo.assemble.debug", defaultValue = "false")
     private boolean debug;
 
+    /**
+     * Number of threads for parallel assembling.
+     * <p>
+     * When set to {@code 0} (default), the plugin automatically selects the number of threads
+     * based on {@link Runtime#availableProcessors()}. When set to a positive value, the plugin
+     * uses exactly that many threads, scoped to a dedicated {@code ForkJoinPool} so that
+     * the setting does not affect the rest of the build.
+     * </p>
+     *
+     * @since 0.15.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(property = "jeo.assemble.threads", defaultValue = "0")
+    private int threads;
+
     @Override
     public void execute() throws MojoExecutionException {
         final Path src = new MavenPath(this.sourcesDir).resolve();
@@ -148,7 +163,8 @@ public final class AssembleMojo extends AbstractMojo {
                 new Assembler(
                     src,
                     out,
-                    this.debug
+                    this.debug,
+                    this.threads
                 ).assemble();
                 if (this.skipVerification) {
                     Logger.info(this, "Bytecode verification is disabled, skipping");

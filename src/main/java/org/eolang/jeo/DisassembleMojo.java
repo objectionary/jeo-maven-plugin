@@ -230,6 +230,21 @@ public final class DisassembleMojo extends AbstractMojo {
     @Parameter(property = "jeo.disassemble.debug", defaultValue = "false")
     private boolean debug;
 
+    /**
+     * Number of threads for parallel disassembly.
+     * <p>
+     * When set to {@code 0} (default), the plugin automatically selects the number of threads
+     * based on {@link Runtime#availableProcessors()}. When set to a positive value, the plugin
+     * uses exactly that many threads, scoped to a dedicated {@code ForkJoinPool} so that
+     * the setting does not affect the rest of the build.
+     * </p>
+     *
+     * @since 0.15.0
+     * @checkstyle MemberNameCheck (6 lines)
+     */
+    @Parameter(property = "jeo.disassemble.threads", defaultValue = "0")
+    private int threads;
+
     @Override
     public void execute() throws MojoExecutionException {
         final Path src = new MavenPath(this.sourcesDir).resolve();
@@ -263,7 +278,8 @@ public final class DisassembleMojo extends AbstractMojo {
                         Format.PRETTY, this.prettyXmir,
                         Format.MODE, this.mode
                     ),
-                    this.debug
+                    this.debug,
+                    this.threads
                 ).disassemble();
                 if (this.xmirVerification) {
                     Logger.info(this, "Verifying all the XMIR files after disassembling");
