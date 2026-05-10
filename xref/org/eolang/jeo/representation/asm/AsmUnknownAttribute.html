@@ -87,14 +87,9 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> stack,
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>          <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> locals
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>      ) {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.data == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>                  String.format(<span class="jxr_string">"Attribute data is null for type `%s`"</span>, <strong class="jxr_keyword">this</strong>.type)
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>              );
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>          }
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ByteVector().putByteArray(<strong class="jxr_keyword">this</strong>.data, 0, <strong class="jxr_keyword">this</strong>.data.length);
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      }
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ByteVector().putByteArray(<strong class="jxr_keyword">this</strong>.data, 0, <strong class="jxr_keyword">this</strong>.data.length);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>      }
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2023–2026 <a href="https://github.com/objectionary/eo">EO</a></div>

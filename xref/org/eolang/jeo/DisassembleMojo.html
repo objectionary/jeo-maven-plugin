@@ -238,58 +238,74 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a>     @Parameter(property = <span class="jxr_string">"jeo.disassemble.debug"</span>, defaultValue = <span class="jxr_string">"false"</span>)
 <a class="jxr_linenumber" name="L231" href="#L231">231</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> debug;
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a>     @Override
-<a class="jxr_linenumber" name="L234" href="#L234">234</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute() <strong class="jxr_keyword">throws</strong> MojoExecutionException {
-<a class="jxr_linenumber" name="L235" href="#L235">235</a>         <strong class="jxr_keyword">final</strong> Path src = <strong class="jxr_keyword">new</strong> <a name="MavenPath" href="../../../org/eolang/jeo/MavenPath.html#MavenPath">MavenPath</a>(<strong class="jxr_keyword">this</strong>.sourcesDir).resolve();
-<a class="jxr_linenumber" name="L236" href="#L236">236</a>         <strong class="jxr_keyword">final</strong> Path out = <strong class="jxr_keyword">new</strong> <a name="MavenPath" href="../../../org/eolang/jeo/MavenPath.html#MavenPath">MavenPath</a>(<strong class="jxr_keyword">this</strong>.outputDir).resolve();
-<a class="jxr_linenumber" name="L237" href="#L237">237</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L238" href="#L238">238</a>             <strong class="jxr_keyword">new</strong> <a name="PluginStartup" href="../../../org/eolang/jeo/PluginStartup.html#PluginStartup">PluginStartup</a>(<strong class="jxr_keyword">this</strong>.project, src).init();
-<a class="jxr_linenumber" name="L239" href="#L239">239</a>             <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.disabled) {
-<a class="jxr_linenumber" name="L240" href="#L240">240</a>                 Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Disassemble mojo is disabled, skipping"</span>);
-<a class="jxr_linenumber" name="L241" href="#L241">241</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a>                 <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> listings = !<strong class="jxr_keyword">this</strong>.omitListings;
-<a class="jxr_linenumber" name="L243" href="#L243">243</a>                 <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> comments = !<strong class="jxr_keyword">this</strong>.omitComments;
-<a class="jxr_linenumber" name="L244" href="#L244">244</a>                 Logger.info(
-<a class="jxr_linenumber" name="L245" href="#L245">245</a>                     <strong class="jxr_keyword">this</strong>,
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>                     <span class="jxr_string">"Disassembling is started with mode '%s' (with listings = '%b', comments = '%b', modifiers = '%b', pretty = '%b')"</span>,
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>                     <strong class="jxr_keyword">this</strong>.mode,
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>                     listings,
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>                     comments,
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>                     <strong class="jxr_keyword">this</strong>.modifiers,
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>                     <strong class="jxr_keyword">this</strong>.prettyXmir
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>                 );
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>                 <strong class="jxr_keyword">new</strong> <a name="Disassembler" href="../../../org/eolang/jeo/Disassembler.html#Disassembler">Disassembler</a>(
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>                     <strong class="jxr_keyword">new</strong> <a name="FilteredClasses" href="../../../org/eolang/jeo/FilteredClasses.html#FilteredClasses">FilteredClasses</a>(
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>                         <strong class="jxr_keyword">new</strong> <a name="BytecodeClasses" href="../../../org/eolang/jeo/BytecodeClasses.html#BytecodeClasses">BytecodeClasses</a>(src),
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>                         <strong class="jxr_keyword">new</strong> <a name="GlobFilter" href="../../../org/eolang/jeo/GlobFilter.html#GlobFilter">GlobFilter</a>(<strong class="jxr_keyword">this</strong>.includes, <strong class="jxr_keyword">this</strong>.excludes)
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>                     ),
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>                     out,
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>                     <strong class="jxr_keyword">new</strong> <a name="Format" href="../../../org/eolang/jeo/representation/directives/Format.html#Format">Format</a>(
-<a class="jxr_linenumber" name="L260" href="#L260">260</a>                         Format.MODIFIERS, <strong class="jxr_keyword">this</strong>.modifiers,
-<a class="jxr_linenumber" name="L261" href="#L261">261</a>                         Format.COMMENTS, comments,
-<a class="jxr_linenumber" name="L262" href="#L262">262</a>                         Format.WITH_LISTING, listings,
-<a class="jxr_linenumber" name="L263" href="#L263">263</a>                         Format.PRETTY, <strong class="jxr_keyword">this</strong>.prettyXmir,
-<a class="jxr_linenumber" name="L264" href="#L264">264</a>                         Format.MODE, <strong class="jxr_keyword">this</strong>.mode
-<a class="jxr_linenumber" name="L265" href="#L265">265</a>                     ),
-<a class="jxr_linenumber" name="L266" href="#L266">266</a>                     <strong class="jxr_keyword">this</strong>.debug
-<a class="jxr_linenumber" name="L267" href="#L267">267</a>                 ).disassemble();
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>                 <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.xmirVerification) {
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>                     Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Verifying all the XMIR files after disassembling"</span>);
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>                     <strong class="jxr_keyword">new</strong> <a name="XmirFiles" href="../../../org/eolang/jeo/XmirFiles.html#XmirFiles">XmirFiles</a>(out).verify();
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>                 } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>                     Logger.info(
-<a class="jxr_linenumber" name="L273" href="#L273">273</a>                         <strong class="jxr_keyword">this</strong>, <span class="jxr_string">"XMIR verification after disassembling is disabled, skipping"</span>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a>                     );
-<a class="jxr_linenumber" name="L275" href="#L275">275</a>                 }
-<a class="jxr_linenumber" name="L276" href="#L276">276</a>             }
-<a class="jxr_linenumber" name="L277" href="#L277">277</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> DependencyResolutionRequiredException exception) {
-<a class="jxr_linenumber" name="L278" href="#L278">278</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(
-<a class="jxr_linenumber" name="L279" href="#L279">279</a>                 String.format(<span class="jxr_string">"Failed to transpile bytecode to EO, from '%s' to '%s'"</span>, src, out),
-<a class="jxr_linenumber" name="L280" href="#L280">280</a>                 exception
-<a class="jxr_linenumber" name="L281" href="#L281">281</a>             );
-<a class="jxr_linenumber" name="L282" href="#L282">282</a>         }
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>     }
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> }
+<a class="jxr_linenumber" name="L233" href="#L233">233</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">     * Number of threads for parallel disassembly.</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">     * When set to {@code 0} (default), the plugin automatically selects the number of threads</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">     * based on {@link Runtime#availableProcessors()}. When set to a positive value, the plugin</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">     * uses exactly that many threads, scoped to a dedicated {@code ForkJoinPool} so that</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">     * the setting does not affect the rest of the build.</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">     * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">     * @since 0.15.0</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">     * @checkstyle MemberNameCheck (6 lines)</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a>     @Parameter(property = <span class="jxr_string">"jeo.disassemble.threads"</span>, defaultValue = <span class="jxr_string">"0"</span>)
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> threads;
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>     @Override
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute() <strong class="jxr_keyword">throws</strong> MojoExecutionException {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>         <strong class="jxr_keyword">final</strong> Path src = <strong class="jxr_keyword">new</strong> <a name="MavenPath" href="../../../org/eolang/jeo/MavenPath.html#MavenPath">MavenPath</a>(<strong class="jxr_keyword">this</strong>.sourcesDir).resolve();
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>         <strong class="jxr_keyword">final</strong> Path out = <strong class="jxr_keyword">new</strong> <a name="MavenPath" href="../../../org/eolang/jeo/MavenPath.html#MavenPath">MavenPath</a>(<strong class="jxr_keyword">this</strong>.outputDir).resolve();
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>             <strong class="jxr_keyword">new</strong> <a name="PluginStartup" href="../../../org/eolang/jeo/PluginStartup.html#PluginStartup">PluginStartup</a>(<strong class="jxr_keyword">this</strong>.project, src).init();
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>             <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.disabled) {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>                 Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Disassemble mojo is disabled, skipping"</span>);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>                 <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> listings = !<strong class="jxr_keyword">this</strong>.omitListings;
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>                 <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> comments = !<strong class="jxr_keyword">this</strong>.omitComments;
+<a class="jxr_linenumber" name="L259" href="#L259">259</a>                 Logger.info(
+<a class="jxr_linenumber" name="L260" href="#L260">260</a>                     <strong class="jxr_keyword">this</strong>,
+<a class="jxr_linenumber" name="L261" href="#L261">261</a>                     <span class="jxr_string">"Disassembling is started with mode '%s' (with listings = '%b', comments = '%b', modifiers = '%b', pretty = '%b')"</span>,
+<a class="jxr_linenumber" name="L262" href="#L262">262</a>                     <strong class="jxr_keyword">this</strong>.mode,
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>                     listings,
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>                     comments,
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>                     <strong class="jxr_keyword">this</strong>.modifiers,
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>                     <strong class="jxr_keyword">this</strong>.prettyXmir
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>                 );
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>                 <strong class="jxr_keyword">new</strong> <a name="Disassembler" href="../../../org/eolang/jeo/Disassembler.html#Disassembler">Disassembler</a>(
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>                     <strong class="jxr_keyword">new</strong> <a name="FilteredClasses" href="../../../org/eolang/jeo/FilteredClasses.html#FilteredClasses">FilteredClasses</a>(
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>                         <strong class="jxr_keyword">new</strong> <a name="BytecodeClasses" href="../../../org/eolang/jeo/BytecodeClasses.html#BytecodeClasses">BytecodeClasses</a>(src),
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>                         <strong class="jxr_keyword">new</strong> <a name="GlobFilter" href="../../../org/eolang/jeo/GlobFilter.html#GlobFilter">GlobFilter</a>(<strong class="jxr_keyword">this</strong>.includes, <strong class="jxr_keyword">this</strong>.excludes)
+<a class="jxr_linenumber" name="L272" href="#L272">272</a>                     ),
+<a class="jxr_linenumber" name="L273" href="#L273">273</a>                     out,
+<a class="jxr_linenumber" name="L274" href="#L274">274</a>                     <strong class="jxr_keyword">new</strong> <a name="Format" href="../../../org/eolang/jeo/representation/directives/Format.html#Format">Format</a>(
+<a class="jxr_linenumber" name="L275" href="#L275">275</a>                         Format.MODIFIERS, <strong class="jxr_keyword">this</strong>.modifiers,
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>                         Format.COMMENTS, comments,
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>                         Format.WITH_LISTING, listings,
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>                         Format.PRETTY, <strong class="jxr_keyword">this</strong>.prettyXmir,
+<a class="jxr_linenumber" name="L279" href="#L279">279</a>                         Format.MODE, <strong class="jxr_keyword">this</strong>.mode
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>                     ),
+<a class="jxr_linenumber" name="L281" href="#L281">281</a>                     <strong class="jxr_keyword">this</strong>.debug,
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>                     <strong class="jxr_keyword">this</strong>.threads
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>                 ).disassemble();
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>                 <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.xmirVerification) {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>                     Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Verifying all the XMIR files after disassembling"</span>);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>                     <strong class="jxr_keyword">new</strong> <a name="XmirFiles" href="../../../org/eolang/jeo/XmirFiles.html#XmirFiles">XmirFiles</a>(out).verify();
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>                 } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>                     Logger.info(
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>                         <strong class="jxr_keyword">this</strong>, <span class="jxr_string">"XMIR verification after disassembling is disabled, skipping"</span>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>                     );
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>                 }
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>             }
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> DependencyResolutionRequiredException exception) {
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>                 String.format(<span class="jxr_string">"Failed to transpile bytecode to EO, from '%s' to '%s'"</span>, src, out),
+<a class="jxr_linenumber" name="L296" href="#L296">296</a>                 exception
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>             );
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>         }
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>     }
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> }
 </pre>
 <hr/>
 <div id="footer">© 2023–2026 <a href="https://github.com/objectionary/eo">EO</a></div>

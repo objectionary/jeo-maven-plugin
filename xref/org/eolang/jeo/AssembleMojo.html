@@ -139,38 +139,54 @@
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>     @Parameter(property = <span class="jxr_string">"jeo.assemble.debug"</span>, defaultValue = <span class="jxr_string">"false"</span>)
 <a class="jxr_linenumber" name="L132" href="#L132">132</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> debug;
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>     @Override
-<a class="jxr_linenumber" name="L135" href="#L135">135</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute() <strong class="jxr_keyword">throws</strong> MojoExecutionException {
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>         <strong class="jxr_keyword">final</strong> Path src = <strong class="jxr_keyword">new</strong> <a name="MavenPath" href="../../../org/eolang/jeo/MavenPath.html#MavenPath">MavenPath</a>(<strong class="jxr_keyword">this</strong>.sourcesDir).resolve();
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>         <strong class="jxr_keyword">final</strong> Path out = <strong class="jxr_keyword">new</strong> <a name="MavenPath" href="../../../org/eolang/jeo/MavenPath.html#MavenPath">MavenPath</a>(<strong class="jxr_keyword">this</strong>.outputDir).resolve();
-<a class="jxr_linenumber" name="L138" href="#L138">138</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L139" href="#L139">139</a>             <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.disabled) {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a>                 Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Assemble mojo is disabled, skipping"</span>);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>             } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a>                 <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.xmirVerification) {
-<a class="jxr_linenumber" name="L143" href="#L143">143</a>                     Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Verifying all the XMIR files before assembling..."</span>);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>                     <strong class="jxr_keyword">new</strong> <a name="XmirFiles" href="../../../org/eolang/jeo/XmirFiles.html#XmirFiles">XmirFiles</a>(src).verify();
-<a class="jxr_linenumber" name="L145" href="#L145">145</a>                 } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L146" href="#L146">146</a>                     Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"XMIR verification before assembling is disabled, skipping"</span>);
-<a class="jxr_linenumber" name="L147" href="#L147">147</a>                 }
-<a class="jxr_linenumber" name="L148" href="#L148">148</a>                 <strong class="jxr_keyword">new</strong> <a name="Assembler" href="../../../org/eolang/jeo/Assembler.html#Assembler">Assembler</a>(
-<a class="jxr_linenumber" name="L149" href="#L149">149</a>                     src,
-<a class="jxr_linenumber" name="L150" href="#L150">150</a>                     out,
-<a class="jxr_linenumber" name="L151" href="#L151">151</a>                     <strong class="jxr_keyword">this</strong>.debug
-<a class="jxr_linenumber" name="L152" href="#L152">152</a>                 ).assemble();
-<a class="jxr_linenumber" name="L153" href="#L153">153</a>                 <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.skipVerification) {
-<a class="jxr_linenumber" name="L154" href="#L154">154</a>                     Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Bytecode verification is disabled, skipping"</span>);
-<a class="jxr_linenumber" name="L155" href="#L155">155</a>                 } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>                     Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Verifying bytecode of all the generated classes..."</span>);
-<a class="jxr_linenumber" name="L157" href="#L157">157</a>                     <strong class="jxr_keyword">new</strong> <a name="PluginStartup" href="../../../org/eolang/jeo/PluginStartup.html#PluginStartup">PluginStartup</a>(<strong class="jxr_keyword">this</strong>.project, out).init();
-<a class="jxr_linenumber" name="L158" href="#L158">158</a>                     <strong class="jxr_keyword">new</strong> <a name="BytecodeClasses" href="../../../org/eolang/jeo/BytecodeClasses.html#BytecodeClasses">BytecodeClasses</a>(out).verify();
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>                 }
-<a class="jxr_linenumber" name="L160" href="#L160">160</a>             }
-<a class="jxr_linenumber" name="L161" href="#L161">161</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> DependencyResolutionRequiredException exception) {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(exception);
-<a class="jxr_linenumber" name="L163" href="#L163">163</a>         }
-<a class="jxr_linenumber" name="L164" href="#L164">164</a>     }
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> }
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">     * Number of threads for parallel assembling.</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">     * When set to {@code 0} (default), the plugin automatically selects the number of threads</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">     * based on {@link Runtime#availableProcessors()}. When set to a positive value, the plugin</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">     * uses exactly that many threads, scoped to a dedicated {@code ForkJoinPool} so that</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">     * the setting does not affect the rest of the build.</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">     * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">     * @since 0.15.0</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">     * @checkstyle MemberNameCheck (6 lines)</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     @Parameter(property = <span class="jxr_string">"jeo.assemble.threads"</span>, defaultValue = <span class="jxr_string">"0"</span>)
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> threads;
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>     @Override
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute() <strong class="jxr_keyword">throws</strong> MojoExecutionException {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a>         <strong class="jxr_keyword">final</strong> Path src = <strong class="jxr_keyword">new</strong> <a name="MavenPath" href="../../../org/eolang/jeo/MavenPath.html#MavenPath">MavenPath</a>(<strong class="jxr_keyword">this</strong>.sourcesDir).resolve();
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>         <strong class="jxr_keyword">final</strong> Path out = <strong class="jxr_keyword">new</strong> <a name="MavenPath" href="../../../org/eolang/jeo/MavenPath.html#MavenPath">MavenPath</a>(<strong class="jxr_keyword">this</strong>.outputDir).resolve();
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>             <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.disabled) {
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>                 Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Assemble mojo is disabled, skipping"</span>);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>             } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>                 <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.xmirVerification) {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>                     Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Verifying all the XMIR files before assembling..."</span>);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>                     <strong class="jxr_keyword">new</strong> <a name="XmirFiles" href="../../../org/eolang/jeo/XmirFiles.html#XmirFiles">XmirFiles</a>(src).verify();
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>                 } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>                     Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"XMIR verification before assembling is disabled, skipping"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>                 }
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>                 <strong class="jxr_keyword">new</strong> <a name="Assembler" href="../../../org/eolang/jeo/Assembler.html#Assembler">Assembler</a>(
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>                     src,
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>                     out,
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>                     <strong class="jxr_keyword">this</strong>.debug,
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>                     <strong class="jxr_keyword">this</strong>.threads
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>                 ).assemble();
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>                 <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.skipVerification) {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>                     Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Bytecode verification is disabled, skipping"</span>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>                 } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>                     Logger.info(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Verifying bytecode of all the generated classes..."</span>);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>                     <strong class="jxr_keyword">new</strong> <a name="PluginStartup" href="../../../org/eolang/jeo/PluginStartup.html#PluginStartup">PluginStartup</a>(<strong class="jxr_keyword">this</strong>.project, out).init();
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>                     <strong class="jxr_keyword">new</strong> <a name="BytecodeClasses" href="../../../org/eolang/jeo/BytecodeClasses.html#BytecodeClasses">BytecodeClasses</a>(out).verify();
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>                 }
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>             }
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> DependencyResolutionRequiredException exception) {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(exception);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>         }
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>     }
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> }
 </pre>
 <hr/>
 <div id="footer">© 2023–2026 <a href="https://github.com/objectionary/eo">EO</a></div>
