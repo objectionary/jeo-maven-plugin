@@ -37,15 +37,36 @@ public final class Assembler {
     private final boolean debug;
 
     /**
+     * Number of threads for parallel processing.
+     * <p>When 0, the number of available processors is used automatically.</p>
+     */
+    private final int threads;
+
+    /**
      * Constructor.
      * @param input Input folder with "xmir" files.
      * @param output Output folder for the assembled classes.
      * @param debug Enables detailed debug logging.
      */
     public Assembler(final Path input, final Path output, final boolean debug) {
+        this(input, output, debug, 0);
+    }
+
+    /**
+     * Constructor.
+     * @param input Input folder with "xmir" files.
+     * @param output Output folder for the assembled classes.
+     * @param debug Enables detailed debug logging.
+     * @param threads Number of threads (0 = use available processors automatically).
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    public Assembler(
+        final Path input, final Path output, final boolean debug, final int threads
+    ) {
         this.input = input;
         this.output = output;
         this.debug = debug;
+        this.threads = threads;
     }
 
     /**
@@ -62,7 +83,7 @@ public final class Assembler {
             assembled,
             this.input.toString(),
             this.output,
-            new ParallelTranslator(path -> this.assemble(path, counter))
+            new ParallelTranslator(path -> this.assemble(path, counter), this.threads)
         ).apply(files.all());
         all.forEach(this::log);
         all.close();

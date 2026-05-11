@@ -44,6 +44,12 @@ public final class Disassembler {
     private final boolean debug;
 
     /**
+     * Number of threads for parallel processing.
+     * <p>When 0, the number of available processors is used automatically.</p>
+     */
+    private final int threads;
+
+    /**
      * Constructor.
      * @param classes Directory containing compiled class files
      * @param target Target directory where XMIR files will be saved
@@ -83,10 +89,30 @@ public final class Disassembler {
         final Format params,
         final boolean debug
     ) {
+        this(classes, target, params, debug, 0);
+    }
+
+    /**
+     * Constructor.
+     * @param classes Project compiled classes
+     * @param target Where to save decompiled classes
+     * @param params Disassembling params.
+     * @param debug Enables detailed debug logging
+     * @param threads Number of threads (0 = use available processors automatically)
+     * @checkstyle ParameterNumberCheck (10 lines)
+     */
+    public Disassembler(
+        final Classes classes,
+        final Path target,
+        final Format params,
+        final boolean debug,
+        final int threads
+    ) {
         this.classes = classes;
         this.target = target;
         this.params = params;
         this.debug = debug;
+        this.threads = threads;
     }
 
     /**
@@ -101,7 +127,7 @@ public final class Disassembler {
             disassembled,
             this.classes.toString(),
             this.target,
-            new ParallelTranslator(path -> this.disassemble(path, counter))
+            new ParallelTranslator(path -> this.disassemble(path, counter), this.threads)
         ).apply(this.classes.all());
         stream.forEach(this::log);
         stream.close();
