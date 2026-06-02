@@ -147,12 +147,12 @@ final class GlobFilterTest {
             Arguments.of(
                 "With inclusions only",
                 new GlobFilter(GlobFilterTest.setOf("**/*.java"), GlobFilterTest.setOf()),
-                "1 inclusions (**/*.java) and no exclusions"
+                "1 patterns (compiled) and no exclusions"
             ),
             Arguments.of(
                 "With exclusions only",
                 new GlobFilter(GlobFilterTest.setOf(), GlobFilterTest.setOf("**/*.tmp")),
-                "no inclusions and 1 exclusions (**/*.tmp)"
+                "no inclusions and 1 exclusions (compiled)"
             ),
             Arguments.of(
                 "With both inclusions and exclusions",
@@ -160,7 +160,7 @@ final class GlobFilterTest {
                     GlobFilterTest.setOf("src/**/*.java"),
                     GlobFilterTest.setOf("**/test/**")
                 ),
-                "1 inclusions (src/**/*.java) and 1 exclusions (**/test/**)"
+                "1 patterns (compiled) and 1 exclusions (compiled)"
             )
         );
     }
