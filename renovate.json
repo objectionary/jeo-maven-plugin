@@ -2,5 +2,15 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchPackagePrefixes": [
+        "org.eolang:"
+      ],
+      "groupName": "eo",
+      "groupSlug": "eo",
+      "commitMessageTopic": "eo {{depName}}"
+    }
   ]
 }
