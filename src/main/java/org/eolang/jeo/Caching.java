@@ -49,7 +49,7 @@ public final class Caching implements Transformation {
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format(
-                    "Failed to transform of '%s' to '%s'",
+                    "Failed to transform '%s' to '%s'",
                     this.source(),
                     this.target()
                 ),
