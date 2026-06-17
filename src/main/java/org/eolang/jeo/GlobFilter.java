@@ -24,24 +24,36 @@ import java.util.stream.Collectors;
 public final class GlobFilter implements Predicate<Path> {
 
     /**
-     * Includes glob patterns (compiled to PathMatchers).
+     * Includes glob patterns.
      */
-    private final Set<PathMatcher> includes;
+    private final Set<String> includes;
 
     /**
-     * Excludes glob patterns (compiled to PathMatchers).
+     * Excludes glob patterns.
      */
-    private final Set<PathMatcher> excludes;
+    private final Set<String> excludes;
+
+    /**
+     * Compiled include matchers.
+     */
+    private final Set<PathMatcher> compiled;
+
+    /**
+     * Compiled exclude matchers.
+     */
+    private final Set<PathMatcher> rejected;
 
     /**
      * Ctor.
      *
-     * @param patterns Glob patterns to include
-     * @param exclusions Glob patterns to exclude
+     * @param includes Glob patterns to include
+     * @param excludes Glob patterns to exclude
      */
-    GlobFilter(final Set<String> patterns, final Set<String> exclusions) {
-        this.includes = GlobFilter.compile(patterns);
-        this.excludes = GlobFilter.compile(exclusions);
+    GlobFilter(final Set<String> includes, final Set<String> excludes) {
+        this.includes = includes;
+        this.excludes = excludes;
+        this.compiled = GlobFilter.compile(includes);
+        this.rejected = GlobFilter.compile(excludes);
     }
 
     @Override
@@ -50,18 +62,24 @@ public final class GlobFilter implements Predicate<Path> {
         if (this.includes.isEmpty()) {
             inclusions = "no inclusions";
         } else {
-            inclusions = String.format(
-                "%d patterns (compiled)",
-                this.includes.size()
+            inclusions = this.includes.stream().collect(
+                Collectors.joining(
+                    ", ",
+                    String.format("%d inclusions (", this.includes.size()),
+                    ")"
+                )
             );
         }
         final String exclusions;
         if (this.excludes.isEmpty()) {
             exclusions = "no exclusions";
         } else {
-            exclusions = String.format(
-                "%d exclusions (compiled)",
-                this.excludes.size()
+            exclusions = this.excludes.stream().collect(
+                Collectors.joining(
+                    ", ",
+                    String.format("%d exclusions (", this.excludes.size()),
+                    ")"
+                )
             );
         }
         return String.format("%s and %s", inclusions, exclusions);
@@ -69,10 +87,10 @@ public final class GlobFilter implements Predicate<Path> {
 
     @Override
     public boolean test(final Path path) {
-        if (this.excludes.stream().anyMatch(m -> m.matches(path))) {
+        if (this.rejected.stream().anyMatch(m -> m.matches(path))) {
             return false;
         }
-        return this.includes.isEmpty() || this.includes.stream()
+        return this.compiled.isEmpty() || this.compiled.stream()
             .anyMatch(matcher -> matcher.matches(path));
     }
 
