@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.xembly.Xembler;
 
@@ -25,8 +26,17 @@ final class DirectivesNumberTest {
             new Xembler(new DirectivesNumber("42")).xmlQuietly(),
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@base,'number')]",
-                "/o[contains(@base,'number')]/o[contains(@base, 'bytes')]/o[text()='42']"
+                "/o[contains(@base,'number')]/o[@as='as-bytes' and contains(@base, 'bytes')]/o[@as='data' and text()='42']"
             )
+        );
+    }
+
+    @Test
+    void avoidsPositionalAttribute() {
+        MatcherAssert.assertThat(
+            "Number XMIR must not contain the positional attribute α0",
+            new Xembler(new DirectivesNumber("42")).xmlQuietly(),
+            Matchers.not(Matchers.containsString("α0"))
         );
     }
 }

@@ -69,14 +69,14 @@ public final class DirectivesBytes implements Iterable<Directive> {
             directives = new DirectivesClosedObject(
                 new EoFqn("bytes").fqn(),
                 this.as,
-                new Directives().add("o").attr("as", "α0").set(this.hex).up()
+                new Directives().add("o").attr("as", "data").set(this.hex).up()
             );
         } else {
             directives = new DirectivesClosedObject(
                 new EoFqn("bytes").fqn(),
                 this.as,
                 this.name,
-                new Directives().add("o").attr("as", "α0").set(this.hex).up()
+                new Directives().add("o").attr("as", "data").set(this.hex).up()
             );
         }
         return directives.iterator();
