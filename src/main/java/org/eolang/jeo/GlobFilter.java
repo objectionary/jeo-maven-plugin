@@ -7,6 +7,7 @@ package org.eolang.jeo;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
+import java.util.Collections;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -33,6 +34,16 @@ public final class GlobFilter implements Predicate<Path> {
     private final Set<String> excludes;
 
     /**
+     * Compiled include matchers.
+     */
+    private final Set<PathMatcher> compiled;
+
+    /**
+     * Compiled exclude matchers.
+     */
+    private final Set<PathMatcher> rejected;
+
+    /**
      * Ctor.
      *
      * @param includes Glob patterns to include
@@ -41,6 +52,8 @@ public final class GlobFilter implements Predicate<Path> {
     GlobFilter(final Set<String> includes, final Set<String> excludes) {
         this.includes = includes;
         this.excludes = excludes;
+        this.compiled = GlobFilter.compile(includes);
+        this.rejected = GlobFilter.compile(excludes);
     }
 
     @Override
@@ -74,20 +87,25 @@ public final class GlobFilter implements Predicate<Path> {
 
     @Override
     public boolean test(final Path path) {
-        final Set<PathMatcher> whitelist = this.includes.stream()
-            .map(GlobFilter::matcher)
-            .collect(Collectors.toSet());
-        final Set<PathMatcher> blacklist = this.excludes.stream()
-            .map(GlobFilter::matcher)
-            .collect(Collectors.toSet());
-        final boolean included;
-        if (blacklist.stream().anyMatch(m -> m.matches(path))) {
-            included = false;
-        } else {
-            included = whitelist.isEmpty() || whitelist.stream()
-                .anyMatch(matcher -> matcher.matches(path));
+        if (this.rejected.stream().anyMatch(m -> m.matches(path))) {
+            return false;
         }
-        return included;
+        return this.compiled.isEmpty() || this.compiled.stream()
+            .anyMatch(matcher -> matcher.matches(path));
+    }
+
+    /**
+     * Compile glob patterns to PathMatchers.
+     * @param patterns Glob patterns to compile
+     * @return Compiled PathMatchers
+     */
+    private static Set<PathMatcher> compile(final Set<String> patterns) {
+        if (patterns == null || patterns.isEmpty()) {
+            return Collections.emptySet();
+        }
+        return patterns.stream()
+            .map(GlobFilter::matcher)
+            .collect(Collectors.toSet());
     }
 
     /**
