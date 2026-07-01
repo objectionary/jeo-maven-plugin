@@ -67,7 +67,7 @@ final class DirectivesNumber implements Iterable<Directive> {
             new EoFqn("number").fqn(),
             this.as,
             this.name,
-            new DirectivesBytes(this.hex, "", "α0")
+            new DirectivesBytes(this.hex, "", "as-bytes")
         ).iterator();
     }
 }

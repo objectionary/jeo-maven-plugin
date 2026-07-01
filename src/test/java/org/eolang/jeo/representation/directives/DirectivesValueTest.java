@@ -161,6 +161,26 @@ final class DirectivesValueTest {
     }
 
     @Test
+    void bindsStringBytesWithNamedAttributes() {
+        MatcherAssert.assertThat(
+            "String must bind its bytes through 'as-bytes' and 'data', not the positional attribute",
+            new Xembler(new DirectivesValue(0, new Format(), "Hello!")).xmlQuietly(),
+            XhtmlMatchers.hasXPath(
+                "./o[contains(@base,'string')]/o[@as='as-bytes' and contains(@base,'bytes')]/o[@as='data' and text()='48-65-6C-6C-6F-21']"
+            )
+        );
+    }
+
+    @Test
+    void avoidsPositionalAttributeInString() {
+        MatcherAssert.assertThat(
+            "String XMIR must not contain the positional attribute α0",
+            new Xembler(new DirectivesValue(0, new Format(), "Hello!")).xmlQuietly(),
+            Matchers.not(Matchers.containsString("α0"))
+        );
+    }
+
+    @Test
     void createsStringWithQuotedComment() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that string value will be quoted in the comment",
