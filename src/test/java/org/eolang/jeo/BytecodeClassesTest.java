@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -23,6 +24,19 @@ final class BytecodeClassesTest {
             "BytecodeClasses toString() should return the correct path",
             new BytecodeClasses(path).toString(),
             Matchers.equalTo(path.toString())
+        );
+    }
+
+    @Test
+    void rejectsNullInputDirectory() {
+        MatcherAssert.assertThat(
+            "Constructor should reject a null input directory with a descriptive message",
+            Assertions.assertThrows(
+                NullPointerException.class,
+                () -> new BytecodeClasses(null),
+                "We expect an exception when the input directory is null"
+            ).getMessage(),
+            Matchers.containsString("The classes directory is not set")
         );
     }
 

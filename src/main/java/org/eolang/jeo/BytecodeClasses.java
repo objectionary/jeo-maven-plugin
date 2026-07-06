@@ -35,7 +35,10 @@ final class BytecodeClasses implements Classes {
      * @param input Input directory where all the generated class files are placed.
      */
     BytecodeClasses(final Path input) {
-        this.input = input;
+        this.input = Objects.requireNonNull(
+            input,
+            "The classes directory is not set, jeo-maven-plugin does not know where to look for classes."
+        );
     }
 
     @Override
@@ -81,11 +84,6 @@ final class BytecodeClasses implements Classes {
      * @throws IOException If some I/O problem arises
      */
     private Collection<Path> classes() throws IOException {
-        if (Objects.isNull(this.input)) {
-            throw new IllegalStateException(
-                "The classes directory is not set, jeo-maven-plugin does not know where to look for classes."
-            );
-        }
         final Collection<Path> result;
         if (Files.exists(this.input)) {
             try (Stream<Path> walk = Files.walk(this.input)) {
