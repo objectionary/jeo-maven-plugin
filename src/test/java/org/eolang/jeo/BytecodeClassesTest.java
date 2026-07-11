@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -23,6 +24,32 @@ final class BytecodeClassesTest {
             "BytecodeClasses toString() should return the correct path",
             new BytecodeClasses(path).toString(),
             Matchers.equalTo(path.toString())
+        );
+    }
+
+    @Test
+    void throwsDescriptiveExceptionWhenConvertingNullInputToString() {
+        final IllegalStateException exception = Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new BytecodeClasses(null).toString()
+        );
+        MatcherAssert.assertThat(
+            "BytecodeClasses toString() should describe the missing classes directory",
+            exception.getMessage(),
+            Matchers.containsString("The classes directory is not set")
+        );
+    }
+
+    @Test
+    void throwsDescriptiveExceptionWhenGettingRootFromNullInput() {
+        final IllegalStateException exception = Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new BytecodeClasses(null).root()
+        );
+        MatcherAssert.assertThat(
+            "BytecodeClasses root() should describe the missing classes directory",
+            exception.getMessage(),
+            Matchers.containsString("The classes directory is not set")
         );
     }
 
