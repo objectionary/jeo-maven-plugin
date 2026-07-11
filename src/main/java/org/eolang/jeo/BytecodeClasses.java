@@ -40,7 +40,7 @@ final class BytecodeClasses implements Classes {
 
     @Override
     public String toString() {
-        return this.input.toString();
+        return this.checked().toString();
     }
 
     @Override
@@ -50,7 +50,7 @@ final class BytecodeClasses implements Classes {
 
     @Override
     public Path root() {
-        return this.input;
+        return this.checked();
     }
 
     @Override
@@ -76,19 +76,28 @@ final class BytecodeClasses implements Classes {
     }
 
     /**
-     * Find all bytecode files.
-     * @return Collection of bytecode files
-     * @throws IOException If some I/O problem arises
+     * Check that the classes directory is set.
+     * @return Classes directory
      */
-    private Collection<Path> classes() throws IOException {
+    private Path checked() {
         if (Objects.isNull(this.input)) {
             throw new IllegalStateException(
                 "The classes directory is not set, jeo-maven-plugin does not know where to look for classes."
             );
         }
+        return this.input;
+    }
+
+    /**
+     * Find all bytecode files.
+     * @return Collection of bytecode files
+     * @throws IOException If some I/O problem arises
+     */
+    private Collection<Path> classes() throws IOException {
+        final Path directory = this.checked();
         final Collection<Path> result;
-        if (Files.exists(this.input)) {
-            try (Stream<Path> walk = Files.walk(this.input)) {
+        if (Files.exists(directory)) {
+            try (Stream<Path> walk = Files.walk(directory)) {
                 result = walk
                     .filter(Files::isRegularFile)
                     .filter(path -> path.toString().endsWith(".class"))
@@ -99,7 +108,7 @@ final class BytecodeClasses implements Classes {
                 this,
                 String.format(
                     "The classes directory '%s' does not exist, jeo-maven-plugin does not know where to look for classes.",
-                    this.input
+                    directory
                 )
             );
             result = Collections.emptyList();
