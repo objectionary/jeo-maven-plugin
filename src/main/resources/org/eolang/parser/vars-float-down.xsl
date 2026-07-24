@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
- * SPDX-License-Identifier: MIT
+* SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+* SPDX-License-Identifier: MIT
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="vars-float-down" version="2.0">
   <!--
@@ -10,17 +10,17 @@
   At the level of EO it looks like:
 
   [] > object             [] > object
-    opcode > somebody       seq > @
-      42               =>     opcode > somebody
-    seq > @                     42
-      somebody.             opcode > somebody
-                              42
+  opcode > somebody       seq > @
+  42               =>     opcode > somebody
+  seq > @                     42
+  somebody.             opcode > somebody
+  42
 
   In XMIR it works via "ref" and "line" attributes, it the transformation must
   be applied after "/org/eolang/parser/add-refs.xsl"
 
   <o>                                         <o>
-    <o ref="22" base="abc" line="3"/>           <o line="22" base="xyz" name="hello"/>
+  <o ref="22" base="abc" line="3"/>           <o line="22" base="xyz" name="hello"/>
   </o>                                   =>   </o>
   ...
   <o line="22" base="xyz" name="hello"/>

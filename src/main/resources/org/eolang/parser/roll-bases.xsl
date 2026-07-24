@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
- * SPDX-License-Identifier: MIT
+* SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+* SPDX-License-Identifier: MIT
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="roll-bases" version="2.0">
   <!--
@@ -10,17 +10,17 @@
   multiple times until it makes no effect.
 
   - <o base=".org">
-      <o base="Q"/>  => <o base="org"/>
-    </o>
+  <o base="Q"/>  => <o base="org"/>
+  </o>
   - <o base=".instructions">
-      <o base="$"/>  => <o base="instructions"/>
-    </o>
+  <o base="$"/>  => <o base="instructions"/>
+  </o>
   - <o base=".eolang">
-      <o base="org"/>  => <o base="org.eolang"/>
-    </o>
+  <o base="org"/>  => <o base="org.eolang"/>
+  </o>
   - <o base=".seq">
-      <o base="org.eolang"/>  => <o base="org.eolang.seq"/>
-    </o>
+  <o base="org.eolang"/>  => <o base="org.eolang.seq"/>
+  </o>
   -->
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="o[starts-with(@base, '.') and o[position()=1 and not(starts-with(@base, '.')) and count(o)=0]]">

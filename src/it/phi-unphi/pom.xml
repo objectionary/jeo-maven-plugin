@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
- * SPDX-License-Identifier: MIT
+* SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+* SPDX-License-Identifier: MIT
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -35,9 +35,9 @@
             <configuration>
               <outputDir>${jeo.disassemble}</outputDir>
               <!--
-                  We intentionally added the xmirVerification parameter only here.
-                  See more details here:
-                  https://github.com/objectionary/eo/issues/3812
+              We intentionally added the xmirVerification parameter only here.
+              See more details here:
+              https://github.com/objectionary/eo/issues/3812
               -->
               <xmirVerification>@verify.xmir.in.integration.tests@</xmirVerification>
             </configuration>
@@ -52,9 +52,9 @@
               <sourcesDir>${eo.unphi}</sourcesDir>
               <outputDir>${jeo.assemble}</outputDir>
               <!--
-                We intentionally don't add the xmirVerification parameter here.
-                See more details here:
-                https://github.com/objectionary/eo/issues/3812
+              We intentionally don't add the xmirVerification parameter here.
+              See more details here:
+              https://github.com/objectionary/eo/issues/3812
               -->
               <xmirVerification>false</xmirVerification>
             </configuration>
@@ -103,9 +103,9 @@
         </executions>
       </plugin>
       <!--
-        We clean target/classes directory to be sure
-        that bytecode verification works without old
-        class files.
+      We clean target/classes directory to be sure
+      that bytecode verification works without old
+      class files.
       -->
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>

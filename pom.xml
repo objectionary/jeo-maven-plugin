@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
- * SPDX-License-Identifier: MIT
+* SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+* SPDX-License-Identifier: MIT
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -124,10 +124,10 @@
       <scope>runtime</scope>
     </dependency>
     <!--
-      Warning!
-      We use the 4.0.0-alpha-7 version of maven-plugin-api intentionally.
-      Recent versions of the dependency are incompatible with Java 8.
-      So, don't change this version without a necessity.
+    Warning!
+    We use the 4.0.0-alpha-7 version of maven-plugin-api intentionally.
+    Recent versions of the dependency are incompatible with Java 8.
+    So, don't change this version without a necessity.
     -->
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -164,10 +164,10 @@
       <version>2.0.18</version>
     </dependency>
     <!--
-      Warning!
-      We use the 1.3.14 version of logback intentionally.
-      Recent versions of the dependency are incompatible with Java 8.
-      So, don't change this version without a necessity.
+    Warning!
+    We use the 1.3.14 version of logback intentionally.
+    Recent versions of the dependency are incompatible with Java 8.
+    So, don't change this version without a necessity.
     -->
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -357,11 +357,11 @@
         <artifactId>maven-invoker-plugin</artifactId>
         <configuration>
           <!--
-            The 'spring-fat' integration test is disabled in the default profile.
-            It's done intentionally to speed up the build process. However, this
-            test is still available in the 'long' profile. So if you want to run
-            it, you can use the following command:
-            mvn clean install -Plong
+          The 'spring-fat' integration test is disabled in the default profile.
+          It's done intentionally to speed up the build process. However, this
+          test is still available in the 'long' profile. So if you want to run
+          it, you can use the following command:
+          mvn clean install -Plong
           -->
           <pomExcludes>
             <exclude>spring-fat/pom.xml</exclude>
@@ -369,10 +369,10 @@
             <exclude>jna/pom.xml</exclude>
           </pomExcludes>
           <!--
-            We intentionally include 'without-pom' and 'without-pom-same-dir'
-            because 'maven-invoker-plugin' can't recognise them without pom.xml files.
-            You can read more about it here:
-            https://github.com/objectionary/jeo-maven-plugin/issues/1364
+          We intentionally include 'without-pom' and 'without-pom-same-dir'
+          because 'maven-invoker-plugin' can't recognise them without pom.xml files.
+          You can read more about it here:
+          https://github.com/objectionary/jeo-maven-plugin/issues/1364
           -->
           <pomIncludes>
             <pomInclude>*/pom.xml</pomInclude>
@@ -440,12 +440,12 @@
                 <exclude>checkstyle:/src/it/.*</exclude>
                 <exclude>duplicatefinder:.*</exclude>
                 <!--
-                  @todo #30:30min Enable dependency check.
-                    The qulice library has an issue related to dependency check.
-                    You can find more details here:
-                    - https://github.com/yegor256/qulice/issues/1145
-                    When this issue is fixed, we should enable dependency check.
-                    Don't forget to remove the exclude below and this puzzle.
+                @todo #30:30min Enable dependency check.
+                The qulice library has an issue related to dependency check.
+                You can find more details here:
+                - https://github.com/yegor256/qulice/issues/1145
+                When this issue is fixed, we should enable dependency check.
+                Don't forget to remove the exclude below and this puzzle.
                 -->
                 <exclude>dependencies:.*</exclude>
               </excludes>
@@ -564,9 +564,9 @@
     <profile>
       <id>long</id>
       <!--
-        This profile is used to run integration tests that take a long time.
-        For example, the 'spring-fat' integration test is disabled in the default
-        profile.
+      This profile is used to run integration tests that take a long time.
+      For example, the 'spring-fat' integration test is disabled in the default
+      profile.
       -->
       <build>
         <plugins>
@@ -574,7 +574,7 @@
             <artifactId>maven-invoker-plugin</artifactId>
             <configuration combine.self="override">
               <!--
-                All integration tests are enabled in the 'long' profile.
+              All integration tests are enabled in the 'long' profile.
               -->
               <pomExcludes>
                 <exclude>phi-unphi/pom.xml</exclude>

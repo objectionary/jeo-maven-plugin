@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
- * SPDX-License-Identifier: MIT
+* SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+* SPDX-License-Identifier: MIT
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -9,10 +9,10 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <!--
-      The version of 3.2.0 and similar requires rather high java
-      version: 17 or higher. So we intentionally use the version 2.7.18
-      here that requires java 11 since our plugin should be compatible with
-      java 11.
+    The version of 3.2.0 and similar requires rather high java
+    version: 17 or higher. So we intentionally use the version 2.7.18
+    here that requires java 11 since our plugin should be compatible with
+    java 11.
     -->
     <version>2.7.18</version>
     <relativePath/>
@@ -75,10 +75,10 @@
         <configuration>
           <disabled>false</disabled>
           <!--
-             Impossible to Make Bytecode Verification For Spring Fat Integration Test.
-             We skip verification because the Spring Framework uses many classes that
-             are not in the classpath and the plugin cannot verify the correctness of
-             the transformation.
+          Impossible to Make Bytecode Verification For Spring Fat Integration Test.
+          We skip verification because the Spring Framework uses many classes that
+          are not in the classpath and the plugin cannot verify the correctness of
+          the transformation.
           -->
           <skipVerification>true</skipVerification>
           <xmirVerification>false</xmirVerification>
