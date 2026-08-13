@@ -4,13 +4,18 @@
  */
 package org.eolang.jeo;
 
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -44,6 +49,42 @@ final class GlobFilterTest {
             "We expect the filter to match the path correctly",
             new GlobFilter(includes, excludes).test(path),
             Matchers.is(expected)
+        );
+    }
+
+    @Test
+    void compilesMatchersOnlyOnce() {
+        final AtomicInteger compiled = new AtomicInteger();
+        final GlobFilter filter = new GlobFilter(
+            GlobFilterTest.setOf("**/*.class"),
+            GlobFilterTest.setOf("target/**"),
+            pattern -> {
+                compiled.incrementAndGet();
+                return FileSystems.getDefault().getPathMatcher(
+                    String.format("glob:%s", pattern)
+                );
+            }
+        );
+        filter.test(Paths.get("src/main/Main.java"));
+        filter.test(Paths.get("src/main/Helper.java"));
+        filter.test(Paths.get("src/main/Util.java"));
+        MatcherAssert.assertThat(
+            "Each glob pattern must be compiled once, not on every test() call",
+            compiled.get(),
+            Matchers.equalTo(2)
+        );
+    }
+
+    @Test
+    void keepsGlobCompilationLazy() {
+        final GlobFilter filter = new GlobFilter(
+            GlobFilterTest.setOf("{unclosed"),
+            GlobFilterTest.setOf()
+        );
+        Assertions.assertThrows(
+            PatternSyntaxException.class,
+            () -> filter.test(Paths.get("any/file.java")),
+            "An invalid glob must fail on the first test() call, not at construction time"
         );
     }
 
