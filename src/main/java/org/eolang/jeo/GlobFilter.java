@@ -8,8 +8,13 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import org.cactoos.Scalar;
+import org.cactoos.scalar.Sticky;
+import org.cactoos.scalar.Synced;
+import org.cactoos.scalar.Unchecked;
 
 /**
  * Filter that matches paths against a set of glob patterns.
@@ -33,14 +38,53 @@ public final class GlobFilter implements Predicate<Path> {
     private final Set<String> excludes;
 
     /**
+     * Compiled include matchers, computed lazily and cached.
+     */
+    private final Scalar<Set<PathMatcher>> whitelist;
+
+    /**
+     * Compiled exclude matchers, computed lazily and cached.
+     */
+    private final Scalar<Set<PathMatcher>> blacklist;
+
+    /**
      * Ctor.
      *
      * @param includes Glob patterns to include
      * @param excludes Glob patterns to exclude
      */
     GlobFilter(final Set<String> includes, final Set<String> excludes) {
+        this(includes, excludes, GlobFilter::matcher);
+    }
+
+    /**
+     * Ctor.
+     *
+     * @param includes Glob patterns to include
+     * @param excludes Glob patterns to exclude
+     * @param compiler Factory that compiles a glob pattern into a matcher
+     */
+    GlobFilter(
+        final Set<String> includes,
+        final Set<String> excludes,
+        final Function<String, PathMatcher> compiler
+    ) {
         this.includes = includes;
         this.excludes = excludes;
+        this.whitelist = new Synced<>(
+            new Sticky<>(
+                () -> includes.stream()
+                    .map(compiler)
+                    .collect(Collectors.toSet())
+            )
+        );
+        this.blacklist = new Synced<>(
+            new Sticky<>(
+                () -> excludes.stream()
+                    .map(compiler)
+                    .collect(Collectors.toSet())
+            )
+        );
     }
 
     @Override
@@ -74,17 +118,13 @@ public final class GlobFilter implements Predicate<Path> {
 
     @Override
     public boolean test(final Path path) {
-        final Set<PathMatcher> whitelist = this.includes.stream()
-            .map(GlobFilter::matcher)
-            .collect(Collectors.toSet());
-        final Set<PathMatcher> blacklist = this.excludes.stream()
-            .map(GlobFilter::matcher)
-            .collect(Collectors.toSet());
+        final Set<PathMatcher> white = new Unchecked<>(this.whitelist).value();
+        final Set<PathMatcher> black = new Unchecked<>(this.blacklist).value();
         final boolean included;
-        if (blacklist.stream().anyMatch(m -> m.matches(path))) {
+        if (black.stream().anyMatch(matcher -> matcher.matches(path))) {
             included = false;
         } else {
-            included = whitelist.isEmpty() || whitelist.stream()
+            included = white.isEmpty() || white.stream()
                 .anyMatch(matcher -> matcher.matches(path));
         }
         return included;
