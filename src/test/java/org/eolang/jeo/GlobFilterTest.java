@@ -7,10 +7,13 @@ package org.eolang.jeo;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -44,6 +47,32 @@ final class GlobFilterTest {
             "We expect the filter to match the path correctly",
             new GlobFilter(includes, excludes).test(path),
             Matchers.is(expected)
+        );
+    }
+
+    @Test
+    @DisplayName("Compiles include patterns eagerly at construction time")
+    void compilesIncludePatternsAtConstruction() {
+        Assertions.assertThrows(
+            PatternSyntaxException.class,
+            () -> new GlobFilter(
+                GlobFilterTest.setOf("{unclosed"),
+                GlobFilterTest.setOf()
+            ),
+            "Invalid include glob must be rejected at construction, not lazily on test()"
+        );
+    }
+
+    @Test
+    @DisplayName("Compiles exclude patterns eagerly at construction time")
+    void compilesExcludePatternsAtConstruction() {
+        Assertions.assertThrows(
+            PatternSyntaxException.class,
+            () -> new GlobFilter(
+                GlobFilterTest.setOf(),
+                GlobFilterTest.setOf("[abc")
+            ),
+            "Invalid exclude glob must be rejected at construction, not lazily on test()"
         );
     }
 
