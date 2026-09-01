@@ -6,6 +6,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import java.nio.file.Path;
+import java.util.List;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.xmir.JcabiXmlDoc;
 import org.eolang.jeo.representation.xmir.XmlDoc;
@@ -65,12 +66,18 @@ public final class XmirRepresentation {
      */
     public String name() {
         final XmlNode root = this.xml.root();
+        final List<String> names = root.xpath("/object/o/@name");
+        if (names.isEmpty()) {
+            throw new IllegalStateException(
+                String.format("Can't find the object name in XMIR from '%s'", this.source)
+            );
+        }
         return new ClassName(
             root.xpath("/object/metas/meta[head[text()]='package']/tail/text()")
                 .stream()
                 .findFirst()
                 .orElse(""),
-            root.xpath("/object/o/@name").get(0)
+            names.get(0)
         ).full();
     }
 

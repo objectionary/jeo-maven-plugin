@@ -34,6 +34,7 @@ import org.xembly.Xembler;
  *
  * @since 0.1.0
  */
+@SuppressWarnings("PMD.TooManyMethods")
 final class XmirRepresentationTest {
 
     /**
@@ -69,6 +70,26 @@ final class XmirRepresentationTest {
             ),
             actual,
             Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void throwsDescriptiveExceptionWhenNameAttributeIsAbsent() {
+        final XML broken = new XMLDocument(
+            new Xembler(
+                new Directives().xpath("/object/o/@name").remove()
+            ).applyQuietly(
+                new BytecodeObject(new BytecodeClass("Math")).xml().inner()
+            )
+        );
+        final IllegalStateException exception = Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new XmirRepresentation(broken).name()
+        );
+        MatcherAssert.assertThat(
+            "XmirRepresentation#name should describe the missing object name",
+            exception.getMessage(),
+            Matchers.containsString("object name")
         );
     }
 
