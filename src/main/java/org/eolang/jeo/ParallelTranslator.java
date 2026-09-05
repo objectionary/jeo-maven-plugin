@@ -62,6 +62,14 @@ public final class ParallelTranslator implements Translator {
 
     @Override
     public Stream<Path> apply(final Stream<Path> representations) {
+        if (this.threads < 0) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "The number of threads must be 0 or positive, but got: %d",
+                    this.threads
+                )
+            );
+        }
         final int parallelism;
         if (this.threads == 0) {
             parallelism = Runtime.getRuntime().availableProcessors();

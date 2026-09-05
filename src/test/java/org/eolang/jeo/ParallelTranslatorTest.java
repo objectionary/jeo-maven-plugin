@@ -15,7 +15,9 @@ import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.hamcrest.io.FileMatchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -99,6 +101,21 @@ final class ParallelTranslatorTest {
                 .resolve("Fake.class")
                 .toFile(),
             FileMatchers.anExistingFile()
+        );
+    }
+
+    @Test
+    void rejectsNegativeThreads() {
+        final IllegalArgumentException exception = Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> new ParallelTranslator(ParallelTranslatorTest::transform, -1)
+                .apply(Stream.empty()),
+            "A negative thread count must be rejected with a descriptive error"
+        );
+        MatcherAssert.assertThat(
+            "The error must explain that only 0 or a positive number is allowed",
+            exception.getMessage(),
+            Matchers.containsString("0 or positive")
         );
     }
 
