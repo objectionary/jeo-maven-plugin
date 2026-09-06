@@ -148,6 +148,7 @@ public final class AssembleMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
+        this.checkedThreads();
         final Path src = new MavenPath(this.sourcesDir).resolve();
         final Path out = new MavenPath(this.outputDir).resolve();
         try {
@@ -176,6 +177,21 @@ public final class AssembleMojo extends AbstractMojo {
             }
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);
+        }
+    }
+
+    /**
+     * Check that the number of threads is valid.
+     * @throws MojoExecutionException If the number of threads is negative
+     */
+    private void checkedThreads() throws MojoExecutionException {
+        if (this.threads < 0) {
+            throw new MojoExecutionException(
+                String.format(
+                    "The number of threads must be 0 or positive, but got: %d",
+                    this.threads
+                )
+            );
         }
     }
 }

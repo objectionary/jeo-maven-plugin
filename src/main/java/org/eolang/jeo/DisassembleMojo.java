@@ -247,6 +247,7 @@ public final class DisassembleMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
+        this.checkedThreads();
         final Path src = new MavenPath(this.sourcesDir).resolve();
         final Path out = new MavenPath(this.outputDir).resolve();
         try {
@@ -294,6 +295,21 @@ public final class DisassembleMojo extends AbstractMojo {
             throw new MojoExecutionException(
                 String.format("Failed to transpile bytecode to EO, from '%s' to '%s'", src, out),
                 exception
+            );
+        }
+    }
+
+    /**
+     * Check that the number of threads is valid.
+     * @throws MojoExecutionException If the number of threads is negative
+     */
+    private void checkedThreads() throws MojoExecutionException {
+        if (this.threads < 0) {
+            throw new MojoExecutionException(
+                String.format(
+                    "The number of threads must be 0 or positive, but got: %d",
+                    this.threads
+                )
             );
         }
     }
