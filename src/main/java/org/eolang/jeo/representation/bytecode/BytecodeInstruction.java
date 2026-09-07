@@ -274,14 +274,13 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 result = 2;
                 break;
             case LDC: {
-                final Class<?> clazz = this.args.get(0).getClass();
-                if (clazz == Long.class || clazz == Double.class) {
+                final Object arg = this.args.get(0);
+                if (arg instanceof Long || arg instanceof Double) {
                     result = 2;
-                    break;
                 } else {
-                    result = BytecodeInstruction.size(Type.getType(clazz));
-                    break;
+                    result = 1;
                 }
+                break;
             }
             case GETSTATIC:
                 result = BytecodeInstruction.size(Type.getType(String.valueOf(this.args.get(2))));
