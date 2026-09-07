@@ -577,7 +577,8 @@
             <artifactId>maven-invoker-plugin</artifactId>
             <configuration combine.self="override">
               <!--
-              All integration tests are enabled in the 'long' profile.
+              All integration tests except 'phi-unphi' and 'jna' are enabled
+              in the 'long' profile.
               -->
               <pomExcludes>
                 <exclude>phi-unphi/pom.xml</exclude>
