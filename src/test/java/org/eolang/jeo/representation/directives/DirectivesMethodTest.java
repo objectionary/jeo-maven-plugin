@@ -10,7 +10,6 @@ import org.eolang.jeo.representation.NumberedName;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.JavaCodec;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
@@ -55,29 +54,15 @@ final class DirectivesMethodTest {
         final String xml = new Xembler(new DirectivesMethod("foo")).xmlQuietly();
         MatcherAssert.assertThat(
             String.format(
-                "We expect that empty method won't contain any redundant directives, generated: %n%s%n",
+                "We expect that an empty method contains all its containers, each with an empty sequence, generated: %n%s%n",
                 xml
             ),
             xml,
-            Matchers.not(
-                Matchers.anyOf(
-                    XhtmlMatchers.hasXPath("./o[contains(@base,'method')]/o[contains(@as,'body')]"),
-                    XhtmlMatchers.hasXPath(
-                        "./o[contains(@base,'method')]/o[contains(@as,'exceptions')]"
-                    ),
-                    XhtmlMatchers.hasXPath(
-                        "./o[contains(@base,'method')]/o[contains(@as,'params')]"
-                    ),
-                    XhtmlMatchers.hasXPath(
-                        "./o[contains(@base,'method')]/o[contains(@as,'annotations')]"
-                    ),
-                    XhtmlMatchers.hasXPath(
-                        "./o[contains(@base,'method')]/o[contains(@as,'trycatchblocks')]"
-                    ),
-                    XhtmlMatchers.hasXPath(
-                        "./o[contains(@base,'method')]/o[contains(@as,'attributes')]"
-                    )
-                )
+            XhtmlMatchers.hasXPaths(
+                "./o[contains(@name,'foo')]/o[@name='annotations']/o[contains(@base,'seq.of0')]",
+                "./o[contains(@name,'foo')]/o[@name='body']/o[contains(@base,'seq.of0')]",
+                "./o[contains(@name,'foo')]/o[@name='trycatchblocks']/o[contains(@base,'seq.of0')]",
+                "./o[contains(@name,'foo')]/o[@name='attributes']/o[contains(@base,'seq.of0')]"
             )
         );
     }
