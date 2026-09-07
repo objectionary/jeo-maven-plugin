@@ -81,7 +81,13 @@ public final class BytecodeMethodProperties {
         final String signature,
         final int... modifiers
     ) {
-        this(IntStream.of(modifiers).sum(), name, descriptor, signature, new String[0]);
+        this(
+            IntStream.of(modifiers).reduce(0, (a, b) -> a | b),
+            name,
+            descriptor,
+            signature,
+            new String[0]
+        );
     }
 
     /**
