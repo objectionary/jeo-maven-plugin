@@ -4,6 +4,7 @@
  */
 package org.eolang.hone;
 
+import java.util.Locale;
 import org.eolang.hone.param.Parameter;
 
 /**
@@ -18,7 +19,7 @@ public class App {
     public static void main(String[] args) {
         double angle = 42.0;
         double sin = Math.sin(angle);
-        System.out.printf("sin(%f) = %f\n", angle, sin);
+        System.out.printf(Locale.ROOT, "sin(%f) = %f\n", angle, sin);
         System.out.println(Φ);
     }
 }
