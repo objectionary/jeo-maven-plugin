@@ -33,14 +33,49 @@ public final class GlobFilter implements Predicate<Path> {
     private final Set<String> excludes;
 
     /**
+     * Compiled include patterns.
+     */
+    private final Set<PathMatcher> whitelist;
+
+    /**
+     * Compiled exclude patterns.
+     */
+    private final Set<PathMatcher> blacklist;
+
+    /**
      * Ctor.
      *
      * @param includes Glob patterns to include
      * @param excludes Glob patterns to exclude
      */
     GlobFilter(final Set<String> includes, final Set<String> excludes) {
+        this(
+            includes,
+            excludes,
+            includes.stream().map(GlobFilter::matcher).collect(Collectors.toSet()),
+            excludes.stream().map(GlobFilter::matcher).collect(Collectors.toSet())
+        );
+    }
+
+    /**
+     * Ctor.
+     *
+     * @param includes Glob patterns to include
+     * @param excludes Glob patterns to exclude
+     * @param whitelist The include patterns, compiled
+     * @param blacklist The exclude patterns, compiled
+     * @checkstyle ParameterNumberCheck (10 lines)
+     */
+    private GlobFilter(
+        final Set<String> includes,
+        final Set<String> excludes,
+        final Set<PathMatcher> whitelist,
+        final Set<PathMatcher> blacklist
+    ) {
         this.includes = includes;
         this.excludes = excludes;
+        this.whitelist = whitelist;
+        this.blacklist = blacklist;
     }
 
     @Override
@@ -74,17 +109,11 @@ public final class GlobFilter implements Predicate<Path> {
 
     @Override
     public boolean test(final Path path) {
-        final Set<PathMatcher> whitelist = this.includes.stream()
-            .map(GlobFilter::matcher)
-            .collect(Collectors.toSet());
-        final Set<PathMatcher> blacklist = this.excludes.stream()
-            .map(GlobFilter::matcher)
-            .collect(Collectors.toSet());
         final boolean included;
-        if (blacklist.stream().anyMatch(m -> m.matches(path))) {
+        if (this.blacklist.stream().anyMatch(m -> m.matches(path))) {
             included = false;
         } else {
-            included = whitelist.isEmpty() || whitelist.stream()
+            included = this.whitelist.isEmpty() || this.whitelist.stream()
                 .anyMatch(matcher -> matcher.matches(path));
         }
         return included;

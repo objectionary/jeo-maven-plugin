@@ -7,10 +7,13 @@ package org.eolang.jeo;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -20,6 +23,19 @@ import org.junit.jupiter.params.provider.MethodSource;
  * @since 0.13.0
  */
 final class GlobFilterTest {
+
+    @Test
+    @DisplayName("Refuses a broken glob pattern when the filter is built")
+    void refusesBrokenGlobPattern() {
+        MatcherAssert.assertThat(
+            "A broken glob must be refused when the filter is built, not when it is first applied",
+            Assertions.assertThrows(
+                PatternSyntaxException.class,
+                () -> new GlobFilter(Set.of("**/{"), Set.of())
+            ),
+            Matchers.notNullValue()
+        );
+    }
 
     /**
      * Applies the glob filter to a path and checks if it matches the expected result.
