@@ -24,4 +24,4 @@ release:
     mvn -ntp versions:set "-DnewVersion=${tag}"
     git commit -am "${tag}"
     mvn clean install -ntp -Pqulice --errors --batch-mode -Dinvoker.skip -DskipITs
-    mvn clean deploy -ntp -Pobjectionary -Psonatype --errors --settings ../settings.xml -Dstyle.color=never
+    mvn clean deploy -ntp -Psonatype --errors --settings ../settings.xml -Dstyle.color=never
