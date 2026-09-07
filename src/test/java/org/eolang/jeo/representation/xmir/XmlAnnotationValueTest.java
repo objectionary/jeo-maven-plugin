@@ -7,8 +7,10 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Collections;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeArrayAnnotationValue;
+import org.eolang.jeo.representation.bytecode.BytecodeEnumAnnotationValue;
 import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.DirectivesArrayAnnotationValue;
+import org.eolang.jeo.representation.directives.DirectivesEnumAnnotationValue;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -49,4 +51,31 @@ final class XmlAnnotationValueTest {
             )
         );
     }
+
+    @Test
+    void createsEnumAnnotationProperty() throws ImpossibleModificationException {
+        final String name = "color";
+        final String descriptor = "java/lang/Color";
+        final String value = "RED";
+        MatcherAssert.assertThat(
+            "Incorrect enum annotation property",
+            new XmlAnnotationValue(
+                new NativeXmlNode(
+                    new Xembler(
+                        new DirectivesEnumAnnotationValue(
+                            0,
+                            new Format(),
+                            name,
+                            descriptor,
+                            value
+                        )
+                    ).xml()
+                )
+            ).bytecode(),
+            Matchers.equalTo(
+                new BytecodeEnumAnnotationValue(name, descriptor, value)
+            )
+        );
+    }
 }
+

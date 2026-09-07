@@ -54,4 +54,17 @@ final class SameXmlTest {
             new IsEqual<>(true)
         );
     }
+
+    @Test
+    void doesNotMatchDistinctXmls() {
+        final XML first = new XMLDocument("<root><a/></root>");
+        final XML second = new XMLDocument("<root><b/></root>");
+        final boolean matches = new SameXml(first).matchesSafely(second.toString());
+        MatcherAssert.assertThat(
+            "Distinct XML documents must not match",
+            matches,
+            new IsEqual<>(false)
+        );
+    }
 }
+
