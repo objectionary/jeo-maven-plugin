@@ -108,7 +108,7 @@ final class DirectivesClassTest {
             xml,
             XhtmlMatchers.hasXPath(
                 String.format(
-                    "./o[contains(@name,DirectivesClassTest)]/o[contains(@name, 'name')]/o/o[text()='%s']",
+                    "./o[contains(@name,'DirectivesClassTest')]/o[contains(@name, 'name')]/o/o[text()='%s']",
                     new DirectivesValue(0, new Format(), name.replace('.', '/'))
                         .hex(new JavaCodec())
                 )
@@ -119,7 +119,7 @@ final class DirectivesClassTest {
             xml,
             Matchers.not(
                 XhtmlMatchers.hasXPath(
-                    "./o[contains(@name,WrongClass)]/o[contains(@name, 'name')]/o/o"
+                    "./o[contains(@name,'WrongClass')]/o[contains(@name, 'name')]/o/o"
                 )
             )
         );
