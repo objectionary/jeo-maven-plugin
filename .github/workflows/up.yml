@@ -21,11 +21,10 @@ jobs:
       - run: |-
           git fetch --tags --force && \
           latest=$(git tag --sort=creatordate | tail -1) && \
-          prev=$(grep -oE '<version>[^<]+' README.md | sed 's/<version>//' | head -1) && \
+          prev=$(awk '/<artifactId>jeo-maven-plugin<\/artifactId>/{getline; print}' README.md | grep -oE '<version>[^<]+' | sed 's/<version>//') && \
           sed -i "s/${prev}/${latest}/g" README.md
       - uses: peter-evans/create-pull-request@v8
         with:
-          sign-commits: true
           branch: version-up
           commit-message: 'chore: new version in README'
           delete-branch: true
