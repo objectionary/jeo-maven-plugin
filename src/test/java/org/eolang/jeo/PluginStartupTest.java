@@ -39,13 +39,17 @@ final class PluginStartupTest {
             ).bytecode().bytes()
         );
         final ClassLoader original = Thread.currentThread().getContextClassLoader();
-        new PluginStartup(new MavenProject(), dir).init();
-        MatcherAssert.assertThat(
-            "We expect the loaded class to be instantiable",
-            Thread.currentThread().getContextClassLoader().loadClass(name)
-                .getDeclaredConstructor().newInstance(),
-            Matchers.notNullValue()
-        );
+        try {
+            new PluginStartup(new MavenProject(), dir).init();
+            MatcherAssert.assertThat(
+                "We expect the loaded class to be instantiable",
+                Thread.currentThread().getContextClassLoader().loadClass(name)
+                    .getDeclaredConstructor().newInstance(),
+                Matchers.notNullValue()
+            );
+        } finally {
+            Thread.currentThread().setContextClassLoader(original);
+        }
         MatcherAssert.assertThat(
             "The original context classloader must not leak",
             Thread.currentThread().getContextClassLoader(),
