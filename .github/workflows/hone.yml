@@ -26,5 +26,5 @@ jobs:
           key: maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             maven-
-      - run: mvn install -PskipTests -Phone
+      - run: mvn install -DskipTests -Phone
       - run: mvn test -Phone
