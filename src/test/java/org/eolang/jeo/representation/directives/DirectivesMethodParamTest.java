@@ -85,7 +85,7 @@ final class DirectivesMethodParamTest {
     }
 
     @Test
-    void generatesPramDirectivesWithAccessModifier() throws ImpossibleModificationException {
+    void generatesParamDirectivesWithAccessModifier() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that the parameter directives will be generated with an access modifier",
             new Xembler(

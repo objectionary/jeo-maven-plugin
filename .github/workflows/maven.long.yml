@@ -10,6 +10,9 @@ name: mvn-long
   pull_request:
     branches:
       - master
+concurrency:
+  group: mvn-long-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   integration-test:
     strategy:

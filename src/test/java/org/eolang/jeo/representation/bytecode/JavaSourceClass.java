@@ -31,6 +31,13 @@ import org.cactoos.text.UncheckedText;
 public final class JavaSourceClass {
 
     /**
+     * System Java compiler.
+     * <p>The compiler is expensive to create, so it is reused across compilations.</p>
+     */
+    @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
+    private static final JavaCompiler COMPILER = ToolProvider.getSystemJavaCompiler();
+
+    /**
      * Name of Java class.
      */
     private final String name;
@@ -63,9 +70,8 @@ public final class JavaSourceClass {
      * @return Bytecode of compiled class.
      */
     public Bytecode compile() {
-        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        final BytecodeManager manager = new BytecodeManager(compiler);
-        final boolean successful = compiler.getTask(
+        final BytecodeManager manager = new BytecodeManager(JavaSourceClass.COMPILER);
+        final boolean successful = JavaSourceClass.COMPILER.getTask(
             null,
             manager,
             null,
