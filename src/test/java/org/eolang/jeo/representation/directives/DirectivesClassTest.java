@@ -97,19 +97,29 @@ final class DirectivesClassTest {
     @Test
     void appendsFullyQualifiedName() throws ImpossibleModificationException {
         final String name = "org.eolang.jeo.representation.directives.DirectivesClassTest";
+        final String xml = new Xembler(
+            new DirectivesClass(
+                new ClassName(name),
+                new DirectivesClassProperties(name)
+            )
+        ).xml();
         MatcherAssert.assertThat(
             "Can't append fully qualified class name",
-            new Xembler(
-                new DirectivesClass(
-                    new ClassName(name),
-                    new DirectivesClassProperties(name)
-                )
-            ).xml(),
+            xml,
             XhtmlMatchers.hasXPath(
                 String.format(
-                    "./o[contains(@name,DirectivesClassTest)]/o[contains(@name, 'name')]/o/o[text()='%s']",
+                    "./o[contains(@name,'DirectivesClassTest')]/o[contains(@name, 'name')]/o/o[text()='%s']",
                     new DirectivesValue(0, new Format(), name.replace('.', '/'))
                         .hex(new JavaCodec())
+                )
+            )
+        );
+        MatcherAssert.assertThat(
+            "Wrong class name must not match the class predicate",
+            xml,
+            Matchers.not(
+                XhtmlMatchers.hasXPath(
+                    "./o[contains(@name,'WrongClass')]/o[contains(@name, 'name')]/o/o"
                 )
             )
         );
