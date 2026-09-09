@@ -118,4 +118,40 @@ final class DirectivesObjectTest {
             XhtmlMatchers.hasXPath("/object[@ms='10']")
         );
     }
+
+    @Test
+    void usesConfiguredTime() throws ImpossibleModificationException {
+        final ClassName clazz = new ClassName("Some");
+        MatcherAssert.assertThat(
+            "We expect that the configured time is used as the 'time' attribute",
+            new Xembler(
+                new DirectivesObject(
+                    new Format(Format.TIME, "2024-01-01T00:00:00Z"),
+                    0,
+                    new DirectivesClass(clazz),
+                    new DirectivesMetas(clazz)
+                )
+            ).xml(),
+            XhtmlMatchers.hasXPath("/object[@time='2024-01-01T00:00:00Z']")
+        );
+    }
+
+    @Test
+    void usesSourceDateEpoch() {
+        MatcherAssert.assertThat(
+            "We expect that the SOURCE_DATE_EPOCH value is used when no time is configured",
+            DirectivesObject.time(new Format(), "1704067200"),
+            Matchers.equalTo("2024-01-01T00:00:00Z")
+        );
+    }
+
+    @Test
+    void usesCurrentTimeByDefault() {
+        final String actual = DirectivesObject.time(new Format(), null);
+        MatcherAssert.assertThat(
+            "We expect that the current time is used when nothing is configured",
+            actual,
+            Matchers.not(Matchers.emptyString())
+        );
+    }
 }
