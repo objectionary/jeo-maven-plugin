@@ -105,6 +105,54 @@ final class ParallelTranslatorTest {
     }
 
     @Test
+    void processesAllFilesWithAutoThreads(@TempDir final Path temp) throws IOException {
+        for (int index = 0; index < 3; ++index) {
+            final String name = String.format("Class%d", index);
+            Files.write(
+                temp.resolve(String.format("%s.class", name)),
+                new BytecodeObject(new BytecodeClass(name)).bytecode().bytes()
+            );
+        }
+        new ParallelTranslator(ParallelTranslatorTest::transform, 0)
+            .apply(
+                Stream.of(1, 2, 3)
+                    .map(index -> temp.resolve(String.format("Class%d.class", index - 1)))
+            )
+            .collect(Collectors.toList());
+        for (int index = 0; index < 3; ++index) {
+            MatcherAssert.assertThat(
+                String.format("Class%d must be transformed with the auto thread count", index),
+                temp.resolve(String.format("Class%d.xmir", index)).toFile(),
+                FileMatchers.anExistingFile()
+            );
+        }
+    }
+
+    @Test
+    void processesAllFilesWithPositiveThreads(@TempDir final Path temp) throws IOException {
+        for (int index = 0; index < 3; ++index) {
+            final String name = String.format("Class%d", index);
+            Files.write(
+                temp.resolve(String.format("%s.class", name)),
+                new BytecodeObject(new BytecodeClass(name)).bytecode().bytes()
+            );
+        }
+        new ParallelTranslator(ParallelTranslatorTest::transform, 2)
+            .apply(
+                Stream.of(1, 2, 3)
+                    .map(index -> temp.resolve(String.format("Class%d.class", index - 1)))
+            )
+            .collect(Collectors.toList());
+        for (int index = 0; index < 3; ++index) {
+            MatcherAssert.assertThat(
+                String.format("Class%d must be transformed with the given thread count", index),
+                temp.resolve(String.format("Class%d.xmir", index)).toFile(),
+                FileMatchers.anExistingFile()
+            );
+        }
+    }
+
+    @Test
     void rejectsNegativeThreads() {
         final IllegalArgumentException exception = Assertions.assertThrows(
             IllegalArgumentException.class,
@@ -148,3 +196,4 @@ final class ParallelTranslatorTest {
         return result;
     }
 }
+
