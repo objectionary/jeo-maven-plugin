@@ -51,7 +51,7 @@ public final class NamedDescriptor {
         return String.format(
             "%s-%s",
             this.original,
-            new DecodedString(this.descr).encode()
+            new UrlEncoder(this.descr).encode()
         );
     }
 
@@ -93,6 +93,6 @@ public final class NamedDescriptor {
      * @return The decoded method descriptor
      */
     private static String suffix(final String encoded) {
-        return new EncodedString(encoded.substring(encoded.indexOf('-') + 1)).decode();
+        return new UrlDecoder(encoded.substring(encoded.indexOf('-') + 1)).decode();
     }
 }

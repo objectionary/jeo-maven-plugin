@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
  * throws IllegalStateException if encoding fails.</p>
  * @since 0.6.0
  */
-public final class DecodedString {
+public final class UrlEncoder {
 
     /**
      * Original string to encode.
@@ -27,7 +27,7 @@ public final class DecodedString {
      * Constructor.
      * @param decoded The original decoded string to be encoded
      */
-    public DecodedString(final String decoded) {
+    public UrlEncoder(final String decoded) {
         this.original = decoded;
     }
 

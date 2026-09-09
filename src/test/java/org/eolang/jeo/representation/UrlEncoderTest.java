@@ -10,10 +10,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 /**
- * Test case for {@link DecodedString}.
+ * Test case for {@link UrlEncoder}.
  * @since 0.6
  */
-final class DecodedStringTest {
+final class UrlEncoderTest {
 
     @ParameterizedTest
     @CsvSource({
@@ -26,7 +26,7 @@ final class DecodedStringTest {
     void encodesString(final String original, final String expected) {
         MatcherAssert.assertThat(
             "Encoded string is not as expected",
-            new DecodedString(original).encode(),
+            new UrlEncoder(original).encode(),
             Matchers.equalTo(expected)
         );
     }
