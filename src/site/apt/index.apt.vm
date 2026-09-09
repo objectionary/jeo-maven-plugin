@@ -1,9 +1,9 @@
   ---
   JEO Maven Plugin
   ---
-  Yegor Bugayenko
+  Volodya Lombrozo
   ---
-  2023-12-21
+  2026-09-08
   ---
 
 JEO Maven Plugin
@@ -19,7 +19,7 @@ JEO Maven Plugin
     <plugin>
       <groupId>org.eolang</groupId>
       <artifactId>jeo-maven-plugin</artifactId>
-      <version>0.1.5</version>
+      <version>${project.version}</version>
       <executions>
         <execution>
           <id>bytecode-to-eo</id>
