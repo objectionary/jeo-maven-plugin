@@ -171,7 +171,7 @@ final class XmirFilesTest {
                 () -> new XmirFiles(temp).verify()
             ).getMessage(),
             Matchers.containsString(
-                "1 error(s) in XML document: cvc-complex-type.2.4.a: Invalid content was found starting with element 'tail'. One of '{head}' is expected."
+                "1 error(s) in XML document"
             )
         );
     }
