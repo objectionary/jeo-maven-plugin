@@ -79,7 +79,7 @@ final class BytecodeRepresentationTest {
      * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1160">Issue #1160</a>.
      */
     @Test
-    void generatesXmlWithFormationsThatCIncludeObjectsWithNames() {
+    void generatesXmlWithFormationsThatIncludeObjectsWithNames() {
         MatcherAssert.assertThat(
             "A formation must only include objects with names.",
             new BytecodeRepresentation(
@@ -107,7 +107,7 @@ final class BytecodeRepresentationTest {
     /**
      * This test checks that the bytecode representation have a stack with a double value.
      * The test was added to mitigate the issue:
-     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1211:">Issue #1211</a>.
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1211">Issue #1211</a>.
      */
     @Test
     void parsesBytecodeWithDoubleStack() {

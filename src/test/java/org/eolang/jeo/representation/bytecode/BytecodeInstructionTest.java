@@ -22,7 +22,7 @@ import org.xembly.Xembler;
 final class BytecodeInstructionTest {
 
     @Test
-    void covertsInstructionWithTypeToDirectives() throws ImpossibleModificationException {
+    void convertsInstructionWithTypeToDirectives() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that the bytecode instruction argument with type 'Type' will be wrapped in sting, see https://github.com/objectionary/jeo-maven-plugin/issues/1125",
             new Xembler(

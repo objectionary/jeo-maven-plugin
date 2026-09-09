@@ -18,7 +18,7 @@ import org.xembly.Xembler;
 final class DirectivesAnnotationsTest {
 
     @Test
-    void returnsEmptyDirectviesIfNoAnnotations() throws ImpossibleModificationException {
+    void returnsEmptyDirectivesIfNoAnnotations() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Must return empty directives if no annotations",
             new Xembler(new DirectivesAnnotations()).xml(),
