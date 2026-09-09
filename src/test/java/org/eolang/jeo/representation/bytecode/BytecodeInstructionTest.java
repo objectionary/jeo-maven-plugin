@@ -4,10 +4,13 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.Arrays;
+import java.util.Collections;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Opcodes;
@@ -19,6 +22,7 @@ import org.xembly.Xembler;
  * Test cases for {@link BytecodeInstruction}.
  * @since 0.11.0
  */
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
 final class BytecodeInstructionTest {
 
     @Test
@@ -116,6 +120,238 @@ final class BytecodeInstructionTest {
             "LDC with a null constant pushes one slot",
             new BytecodeInstruction(Opcodes.LDC, (Object) null).impact(),
             Matchers.equalTo(1)
+        );
+    }
+
+    @Test
+    void calculatesImpactForGetstatic() {
+        MatcherAssert.assertThat(
+            "GETSTATIC of an int field pushes one slot",
+            new BytecodeInstruction(
+                Opcodes.GETSTATIC,
+                "owner",
+                "name",
+                "I"
+            ).impact(),
+            Matchers.equalTo(1)
+        );
+    }
+
+    @Test
+    void calculatesImpactForPutstatic() {
+        MatcherAssert.assertThat(
+            "PUTSTATIC of an int field pops one slot",
+            new BytecodeInstruction(
+                Opcodes.PUTSTATIC,
+                "owner",
+                "name",
+                "I"
+            ).impact(),
+            Matchers.equalTo(-1)
+        );
+    }
+
+    @Test
+    void calculatesImpactForGetfield() {
+        MatcherAssert.assertThat(
+            "GETFIELD pops the reference and pushes an int field",
+            new BytecodeInstruction(
+                Opcodes.GETFIELD,
+                "owner",
+                "name",
+                "I"
+            ).impact(),
+            Matchers.equalTo(0)
+        );
+    }
+
+    @Test
+    void calculatesImpactForPutfield() {
+        MatcherAssert.assertThat(
+            "PUTFIELD pops the reference and the int field",
+            new BytecodeInstruction(
+                Opcodes.PUTFIELD,
+                "owner",
+                "name",
+                "I"
+            ).impact(),
+            Matchers.equalTo(-2)
+        );
+    }
+
+    @Test
+    void calculatesImpactForInvokestatic() {
+        MatcherAssert.assertThat(
+            "INVOKESTATIC with (I)I pops one argument and pushes one result",
+            new BytecodeInstruction(
+                Opcodes.INVOKESTATIC,
+                "owner",
+                "name",
+                "(I)I"
+            ).impact(),
+            Matchers.equalTo(0)
+        );
+    }
+
+    @Test
+    void calculatesImpactForInvokevirtual() {
+        MatcherAssert.assertThat(
+            "INVOKEVIRTUAL with (I)I additionally pops the receiver",
+            new BytecodeInstruction(
+                Opcodes.INVOKEVIRTUAL,
+                "owner",
+                "name",
+                "(I)I"
+            ).impact(),
+            Matchers.equalTo(-1)
+        );
+    }
+
+    @Test
+    void calculatesImpactForMultiAnNewArray() {
+        MatcherAssert.assertThat(
+            "MULTIANEWARRAY with two dimensions pops two ints and pushes a reference",
+            new BytecodeInstruction(Opcodes.MULTIANEWARRAY, "[[I", 2).impact(),
+            Matchers.equalTo(-1)
+        );
+    }
+
+    @Test
+    void returnsJumpsForGoto() {
+        final BytecodeLabel label = new BytecodeLabel("target");
+        MatcherAssert.assertThat(
+            "GOTO jumps to a single label",
+            new BytecodeInstruction(Opcodes.GOTO, label).jumps(),
+            Matchers.equalTo(Collections.singletonList(label))
+        );
+    }
+
+    @Test
+    void returnsJumpsForConditionalBranch() {
+        final BytecodeLabel label = new BytecodeLabel("branch");
+        MatcherAssert.assertThat(
+            "IFEQ jumps to a single label",
+            new BytecodeInstruction(Opcodes.IFEQ, label).jumps(),
+            Matchers.equalTo(Collections.singletonList(label))
+        );
+    }
+
+    @Test
+    void returnsJumpsForTableSwitch() {
+        final BytecodeLabel dflt = new BytecodeLabel("dflt");
+        final BytecodeLabel single = new BytecodeLabel("single");
+        MatcherAssert.assertThat(
+            "TABLESWITCH jumps to the default and every case label",
+            new BytecodeInstruction(Opcodes.TABLESWITCH, 0, 1, dflt, single).jumps(),
+            Matchers.equalTo(Arrays.asList(dflt, single))
+        );
+    }
+
+    @Test
+    void recognizesGotoAsJump() {
+        MatcherAssert.assertThat(
+            "GOTO is a jump instruction",
+            new BytecodeInstruction(Opcodes.GOTO, new BytecodeLabel("x")).isJump(),
+            Matchers.is(true)
+        );
+    }
+
+    @Test
+    void doesNotRecognizeNopAsJump() {
+        MatcherAssert.assertThat(
+            "NOP is not a jump instruction",
+            new BytecodeInstruction(Opcodes.NOP).isJump(),
+            Matchers.is(false)
+        );
+    }
+
+    @Test
+    void recognizesIfeqAsIf() {
+        MatcherAssert.assertThat(
+            "IFEQ is a conditional branch",
+            new BytecodeInstruction(Opcodes.IFEQ, new BytecodeLabel("x")).isIf(),
+            Matchers.is(true)
+        );
+    }
+
+    @Test
+    void doesNotRecognizeGotoAsIf() {
+        MatcherAssert.assertThat(
+            "GOTO is not a conditional branch",
+            new BytecodeInstruction(Opcodes.GOTO, new BytecodeLabel("x")).isIf(),
+            Matchers.is(false)
+        );
+    }
+
+    @Test
+    void recognizesTableSwitchAsSwitch() {
+        MatcherAssert.assertThat(
+            "TABLESWITCH is a switch instruction",
+            new BytecodeInstruction(Opcodes.TABLESWITCH).isSwitch(),
+            Matchers.is(true)
+        );
+    }
+
+    @Test
+    void recognizesIreturnAsReturn() {
+        MatcherAssert.assertThat(
+            "IRETURN is a return instruction",
+            new BytecodeInstruction(Opcodes.IRETURN).isReturn(),
+            Matchers.is(true)
+        );
+    }
+
+    @Test
+    void doesNotRecognizeNopAsReturn() {
+        MatcherAssert.assertThat(
+            "NOP is not a return instruction",
+            new BytecodeInstruction(Opcodes.NOP).isReturn(),
+            Matchers.is(false)
+        );
+    }
+
+    @Test
+    void recognizesLoadAsVarInstruction() {
+        MatcherAssert.assertThat(
+            "ILOAD is a variable instruction",
+            new BytecodeInstruction(Opcodes.ILOAD, 2).isVarInstruction(),
+            Matchers.is(true)
+        );
+    }
+
+    @Test
+    void retrievesVarIndex() {
+        MatcherAssert.assertThat(
+            "The variable index of ILOAD is its second argument",
+            new BytecodeInstruction(Opcodes.ILOAD, 2).varIndex(),
+            Matchers.equalTo(2)
+        );
+    }
+
+    @Test
+    void retrievesVarSizeForInt() {
+        MatcherAssert.assertThat(
+            "An int local variable occupies one slot",
+            new BytecodeInstruction(Opcodes.ILOAD, 2).varSize(),
+            Matchers.equalTo(1)
+        );
+    }
+
+    @Test
+    void retrievesVarSizeForLong() {
+        MatcherAssert.assertThat(
+            "A long local variable occupies two slots",
+            new BytecodeInstruction(Opcodes.LLOAD, 2).varSize(),
+            Matchers.equalTo(2)
+        );
+    }
+
+    @Test
+    void rejectsVarIndexForNonVarInstruction() {
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new BytecodeInstruction(Opcodes.NOP).varIndex(),
+            "Expected an exception for a non-variable instruction"
         );
     }
 }
