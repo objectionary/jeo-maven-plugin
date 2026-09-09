@@ -13,6 +13,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Test cases for {@link PluginStartup}.
@@ -28,13 +29,31 @@ final class PluginStartupTest {
         final String name = "SomeClassCompiledDynamically";
         Files.write(
             dir.resolve("SomeClassCompiledDynamically.class"),
-            new BytecodeObject(new BytecodeClass(name)).bytecode().bytes()
+            new BytecodeObject(
+                new BytecodeClass(name)
+                    .withConstructor(Opcodes.ACC_PUBLIC)
+                    .opcode(Opcodes.ALOAD, 0)
+                    .opcode(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false)
+                    .opcode(Opcodes.RETURN)
+                    .up()
+            ).bytecode().bytes()
         );
-        new PluginStartup(new MavenProject(), dir).init();
+        final ClassLoader original = Thread.currentThread().getContextClassLoader();
+        try {
+            new PluginStartup(new MavenProject(), dir).init();
+            MatcherAssert.assertThat(
+                "We expect the loaded class to be instantiable",
+                Thread.currentThread().getContextClassLoader().loadClass(name)
+                    .getDeclaredConstructor().newInstance(),
+                Matchers.notNullValue()
+            );
+        } finally {
+            Thread.currentThread().setContextClassLoader(original);
+        }
         MatcherAssert.assertThat(
-            "We expect the class to be loaded",
-            Thread.currentThread().getContextClassLoader().loadClass(name),
-            Matchers.notNullValue()
+            "The original context classloader must not leak",
+            Thread.currentThread().getContextClassLoader(),
+            Matchers.equalTo(original)
         );
     }
 }
