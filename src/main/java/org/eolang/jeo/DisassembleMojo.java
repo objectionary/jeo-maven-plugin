@@ -250,11 +250,11 @@ public final class DisassembleMojo extends AbstractMojo {
         this.checkedThreads();
         final Path src = new MavenPath(this.sourcesDir).resolve();
         final Path out = new MavenPath(this.outputDir).resolve();
-        try {
-            new PluginStartup(this.project, src).init();
-            if (this.disabled) {
-                Logger.info(this, "Disassemble mojo is disabled, skipping");
-            } else {
+        if (this.disabled) {
+            Logger.info(this, "Disassemble mojo is disabled, skipping");
+        } else {
+            try {
+                new PluginStartup(this.project, src).init();
                 final boolean listings = !this.omitListings;
                 final boolean comments = !this.omitComments;
                 Logger.info(
@@ -290,12 +290,14 @@ public final class DisassembleMojo extends AbstractMojo {
                         this, "XMIR verification after disassembling is disabled, skipping"
                     );
                 }
+            } catch (final DependencyResolutionRequiredException exception) {
+                throw new MojoExecutionException(
+                    String.format(
+                        "Failed to transpile bytecode to EO, from '%s' to '%s'", src, out
+                    ),
+                    exception
+                );
             }
-        } catch (final DependencyResolutionRequiredException exception) {
-            throw new MojoExecutionException(
-                String.format("Failed to transpile bytecode to EO, from '%s' to '%s'", src, out),
-                exception
-            );
         }
     }
 
