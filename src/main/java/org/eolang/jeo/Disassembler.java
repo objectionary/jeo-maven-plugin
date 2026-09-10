@@ -146,7 +146,8 @@ public final class Disassembler {
             new Caching(
                 new Informative(
                     new Disassembling(this.classes.root(), this.target, path, this.params)
-                )
+                ),
+                this.params.fingerprint()
             ),
             this.debug,
             counter

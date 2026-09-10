@@ -6,6 +6,7 @@ package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -25,11 +26,26 @@ public final class Caching implements Transformation {
     private final Transformation origin;
 
     /**
+     * Options the target was produced with, empty when they are unknown.
+     */
+    private final String print;
+
+    /**
      * Constructor.
      * @param origin Original transformation to cache
      */
     Caching(final Transformation origin) {
+        this(origin, "");
+    }
+
+    /**
+     * Constructor.
+     * @param origin Original transformation to cache
+     * @param fingerprint Options the target is produced with
+     */
+    Caching(final Transformation origin, final String fingerprint) {
         this.origin = origin;
+        this.print = fingerprint;
     }
 
     @Override
@@ -78,6 +94,9 @@ public final class Caching implements Transformation {
             final byte[] transform = this.origin.transform();
             Files.createDirectories(target.getParent());
             Files.write(target, transform);
+            if (!this.print.isEmpty()) {
+                Files.write(this.cache(), this.print.getBytes(StandardCharsets.UTF_8));
+            }
             result = transform;
         }
         return result;
@@ -93,6 +112,41 @@ public final class Caching implements Transformation {
         final Path target = this.target();
         return Files.exists(target)
             && Files.exists(source)
-            && Files.getLastModifiedTime(target).compareTo(Files.getLastModifiedTime(source)) >= 0;
+            && Files.getLastModifiedTime(target).compareTo(Files.getLastModifiedTime(source)) >= 0
+            && this.sameOptions();
+    }
+
+    /**
+     * Was the target produced with the options of this run?
+     *
+     * <p>The modification times say nothing about the options the file was
+     * made with, so changing the mode and running again without "clean" kept
+     * the old file. The options are written next to the target and compared
+     * before the skip.</p>
+     * @return True if the options are the same, or unknown
+     * @throws IOException If the options cannot be read
+     */
+    private boolean sameOptions() throws IOException {
+        final boolean same;
+        final Path cache = this.cache();
+        if (this.print.isEmpty()) {
+            same = true;
+        } else if (Files.exists(cache)) {
+            same = new String(
+                Files.readAllBytes(cache), StandardCharsets.UTF_8
+            ).equals(this.print);
+        } else {
+            same = false;
+        }
+        return same;
+    }
+
+    /**
+     * The file that keeps the options next to the target.
+     * @return Path to it
+     */
+    private Path cache() {
+        final Path target = this.target();
+        return target.resolveSibling(String.format("%s.jeo-cache", target.getFileName()));
     }
 }
