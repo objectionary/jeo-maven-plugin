@@ -64,7 +64,10 @@ final class NamedDescriptorTest {
                 "baz",
                 "(Ljava/lang/String;Ljava/lang/String;)V",
                 "baz-%28Ljava%2Flang%2FString%3BLjava%2Flang%2FString%3B%29V"
-            )
+            ),
+            Arguments.of("box-impl", "()V", "box-impl-%28%29V"),
+            Arguments.of("annotation-0", "()V", "annotation-0-%28%29V"),
+            Arguments.of("foo", "(LFoo-impl;)V", "foo-%28LFoo%2Dimpl%3B%29V")
         );
     }
 }
