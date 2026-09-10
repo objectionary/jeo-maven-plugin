@@ -195,7 +195,8 @@ public final class JcabiXmlNode implements XmlNode {
             "sparse-decoration",
             "idempotent-attribute-is-not-first",
             "empty-object",
-            "object-has-data"
+            "object-has-data",
+            "line-is-absent"
         );
         return Stream.concat(
             rules.stream(),
