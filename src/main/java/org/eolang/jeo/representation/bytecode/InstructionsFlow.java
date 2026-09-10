@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -33,6 +34,11 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
     private final List<BytecodeTryCatchBlock> blocks;
 
     /**
+     * Instruction indexes of labels.
+     */
+    private final Map<BytecodeLabel, Integer> labels;
+
+    /**
      * Constructor.
      * @param instr Instructions.
      * @param catches Try-catch blocks.
@@ -42,6 +48,13 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
     ) {
         this.instructions = instr;
         this.blocks = new ArrayList<>(catches);
+        this.labels = new HashMap<>(0);
+        for (int pos = 0; pos < instr.size(); ++pos) {
+            final BytecodeEntry entry = instr.get(pos);
+            if (entry.isLabel()) {
+                this.labels.putIfAbsent((BytecodeLabel) entry, pos);
+            }
+        }
     }
 
     /**
@@ -119,12 +132,11 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
      * @return Index.
      */
     private int index(final BytecodeLabel label) {
-        for (int index = 0; index < this.instructions.size(); ++index) {
-            if (this.instructions.get(index).equals(label)) {
-                return index;
-            }
+        final Integer index = this.labels.get(label);
+        if (index == null) {
+            throw new IllegalStateException(String.format("Label %s not found", label));
         }
-        throw new IllegalStateException(String.format("Label %s not found", label));
+        return index;
     }
 
     /**
