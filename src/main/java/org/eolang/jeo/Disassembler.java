@@ -122,15 +122,15 @@ public final class Disassembler {
         final String process = "Disassembling";
         final String disassembled = "disassembled";
         final Counter counter = new Counter(this.classes.total());
-        final Stream<Path> stream = new Summary(
+        try (Stream<Path> stream = new Summary(
             process,
             disassembled,
             this.classes.toString(),
             this.target,
             new ParallelTranslator(path -> this.disassemble(path, counter), this.threads)
-        ).apply(this.classes.all());
-        stream.forEach(this::log);
-        stream.close();
+        ).apply(this.classes.all())) {
+            stream.forEach(this::log);
+        }
     }
 
     /**
