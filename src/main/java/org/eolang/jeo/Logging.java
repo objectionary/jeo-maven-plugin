@@ -114,6 +114,7 @@ public final class Logging implements Transformation {
      * @param time Time spent in milliseconds
      */
     private void logEndWithSize(final Path source, final Path after, final long time) {
+        final long size = Logging.size(after);
         synchronized (this.counter) {
             if (this.debug) {
                 Logger.info(
@@ -123,7 +124,7 @@ public final class Logging implements Transformation {
                     source,
                     this.participle,
                     after,
-                    Logging.size(after),
+                    size,
                     time
                 );
             } else {
@@ -132,7 +133,7 @@ public final class Logging implements Transformation {
                     "%s %[file]s (%[size]s) %s in %[ms]s",
                     this.counter.next(),
                     after.getFileName(),
-                    Logging.size(after),
+                    size,
                     this.participle,
                     time
                 );
