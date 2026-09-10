@@ -16,6 +16,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.cactoos.set.SetOf;
+import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.directives.Format;
 
 /**
@@ -248,6 +249,7 @@ public final class DisassembleMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException {
         this.checkedThreads();
+        this.checkedMode();
         final Path src = new MavenPath(this.sourcesDir).resolve();
         final Path out = new MavenPath(this.outputDir).resolve();
         try {
@@ -296,6 +298,18 @@ public final class DisassembleMojo extends AbstractMojo {
                 String.format("Failed to transpile bytecode to EO, from '%s' to '%s'", src, out),
                 exception
             );
+        }
+    }
+
+    /**
+     * Check that the disassembly mode is valid.
+     * @throws MojoExecutionException If the mode is unknown
+     */
+    private void checkedMode() throws MojoExecutionException {
+        try {
+            DisassembleMode.fromString(this.mode);
+        } catch (final IllegalArgumentException exception) {
+            throw new MojoExecutionException(exception.getMessage(), exception);
         }
     }
 
