@@ -195,7 +195,9 @@ public final class JcabiXmlNode implements XmlNode {
             "sparse-decoration",
             "idempotent-attribute-is-not-first",
             "empty-object",
-            "object-has-data"
+            "object-has-data",
+            // Bytecode has no EO source-line contract (#1599).
+            "line-is-absent"
         );
         return Stream.concat(
             rules.stream(),

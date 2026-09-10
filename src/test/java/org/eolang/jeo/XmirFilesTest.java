@@ -15,6 +15,7 @@ import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
+import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -124,6 +125,21 @@ final class XmirFilesTest {
         Assertions.assertDoesNotThrow(
             () -> new XmirFiles(temp).verify(),
             "We expected no exceptions when verifying the correct xmir files"
+        );
+    }
+
+    @Test
+    void verifiesDebugXmirGeneratedFromBytecode(@TempDir final Path temp) throws IOException {
+        Files.write(
+            temp.resolve("MethodByte.xmir"),
+            new BytecodeRepresentation(new ResourceOf("MethodByte.class"))
+                .toXmir(new Format(Format.MODE, "debug"))
+                .toString()
+                .getBytes(StandardCharsets.UTF_8)
+        );
+        Assertions.assertDoesNotThrow(
+            () -> new XmirFiles(temp).verify(),
+            "Debug XMIR generated from bytecode must pass verification"
         );
     }
 
