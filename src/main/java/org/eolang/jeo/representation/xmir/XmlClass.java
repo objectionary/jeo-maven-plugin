@@ -134,10 +134,9 @@ public final class XmlClass {
      */
     private BytecodeTypeAnnotations typeAnnotations() {
         return this.node.children()
-            .filter(child -> {
-                final XmlJeoObject object = new XmlJeoObject(child);
-                return object.named() && "type-annotations".equals(object.name());
-            })
+            .map(XmlJeoObject::new)
+            .filter(XmlJeoObject::named)
+            .filter(object -> "type-annotations".equals(object.name()))
             .findFirst()
             .map(XmlTypeAnnotations::new)
             .map(XmlTypeAnnotations::bytecode)

@@ -54,6 +54,14 @@ public final class DirectivesTypeAnnotations implements Iterable<Directive> {
         this.annotations = annotations;
     }
 
+    @Override
+    public Iterator<Directive> iterator() {
+        return new DirectivesSeq(
+            this.name,
+            this.annotations
+        ).iterator();
+    }
+
     /**
      * Directives only when at least one type annotation exists.
      * @return This object or empty directives.
@@ -66,13 +74,5 @@ public final class DirectivesTypeAnnotations implements Iterable<Directive> {
             result = this;
         }
         return result;
-    }
-
-    @Override
-    public Iterator<Directive> iterator() {
-        return new DirectivesSeq(
-            this.name,
-            this.annotations
-        ).iterator();
     }
 }

@@ -125,14 +125,6 @@ public final class BytecodeTypeAnnotation {
     }
 
     /**
-     * Write type annotation values.
-     * @param visitor Annotation visitor.
-     */
-    private void write(final AnnotationVisitor visitor) {
-        this.values.forEach(value -> value.writeTo(visitor));
-    }
-
-    /**
      * Convert to directives.
      * @param index Index of the annotation.
      * @param format Directives format.
@@ -150,5 +142,13 @@ public final class BytecodeTypeAnnotation {
                 .map(v -> v.directives(counter.getAndIncrement(), format))
                 .collect(Collectors.toList())
         );
+    }
+
+    /**
+     * Write type annotation values.
+     * @param visitor Annotation visitor.
+     */
+    private void write(final AnnotationVisitor visitor) {
+        this.values.forEach(value -> value.writeTo(visitor));
     }
 }
