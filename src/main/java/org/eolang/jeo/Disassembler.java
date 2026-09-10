@@ -8,6 +8,8 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.Counter;
 import org.eolang.jeo.representation.directives.Format;
@@ -121,14 +123,15 @@ public final class Disassembler {
     public void disassemble() {
         final String process = "Disassembling";
         final String disassembled = "disassembled";
-        final Counter counter = new Counter(this.classes.total());
+        final List<Path> paths = this.classes.all().collect(Collectors.toList());
+        final Counter counter = new Counter(paths.size());
         final Stream<Path> stream = new Summary(
             process,
             disassembled,
             this.classes.toString(),
             this.target,
             new ParallelTranslator(path -> this.disassemble(path, counter), this.threads)
-        ).apply(this.classes.all());
+        ).apply(paths.stream());
         stream.forEach(this::log);
         stream.close();
     }
