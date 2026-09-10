@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -38,6 +39,40 @@ final class XmlValueTest {
             ),
             actual,
             Matchers.is(expected)
+        );
+    }
+
+    @Test
+    void refusesOddNumberOfHexDigits() {
+        MatcherAssert.assertThat(
+            "the failure must name the value and the node it came from",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new XmlValue(
+                    new NativeXmlNode(
+                        "<o base='Q.org.eolang.string'><o base='Q.org.eolang.bytes'><o>41-4</o></o></o>"
+                    )
+                ).object(),
+                "an odd number of hex digits was expected to be refused"
+            ).getMessage(),
+            Matchers.containsString("odd number of hex digits")
+        );
+    }
+
+    @Test
+    void refusesPairThatIsNotHex() {
+        MatcherAssert.assertThat(
+            "the failure must name the pair that is not hex",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new XmlValue(
+                    new NativeXmlNode(
+                        "<o base='Q.org.eolang.string'><o base='Q.org.eolang.bytes'><o>ZZ</o></o></o>"
+                    )
+                ).object(),
+                "a pair that is not hex was expected to be refused"
+            ).getMessage(),
+            Matchers.containsString("'ZZ'")
         );
     }
 
