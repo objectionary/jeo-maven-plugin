@@ -37,6 +37,31 @@ final class CachingTest {
     }
 
     @Test
+    void performsTransformationSinceOptionsChanged(@TempDir final Path temp) {
+        final MockTrans mock = new MockTrans(temp);
+        mock.createFrom(0);
+        new Caching(mock, "mode=short").transform();
+        MatcherAssert.assertThat(
+            "a target made with other options must be made again, but it was skipped",
+            new String(new Caching(mock, "mode=debug").transform(), StandardCharsets.UTF_8),
+            Matchers.equalTo(MockTrans.PERFORMED)
+        );
+    }
+
+    @Test
+    void skipsTransformationSinceOptionsAreTheSame(@TempDir final Path temp) {
+        final MockTrans mock = new MockTrans(temp);
+        mock.createFrom(0);
+        new Caching(mock, "mode=short").transform();
+        mock.createTo(1);
+        MatcherAssert.assertThat(
+            "a target made with the same options must be reused, but it was made again",
+            new String(new Caching(mock, "mode=short").transform(), StandardCharsets.UTF_8),
+            Matchers.equalTo(MockTrans.OLD_TO)
+        );
+    }
+
+    @Test
     void performsTransformationSinceModified(@TempDir final Path temp) {
         final MockTrans mock = new MockTrans(temp);
         mock.createTo(0);
