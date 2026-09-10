@@ -39,6 +39,15 @@ final class NumberedNameTest {
     }
 
     @Test
+    void readsBackAKotlinValueClassMethod() {
+        MatcherAssert.assertThat(
+            "a name the disassembler emits must be readable back, but it wasnt",
+            new NumberedName(new NumberedName(1, "box-impl").toString()).toString(),
+            Matchers.equalTo("box-impl")
+        );
+    }
+
+    @Test
     void throwsExceptionWhenNumberIsLessThanOne() {
         MatcherAssert.assertThat(
             "We expect that exception message will be human-readable",
@@ -56,7 +65,10 @@ final class NumberedNameTest {
         "foo, foo",
         "foo-2, foo",
         "bar-3, bar",
-        "foobar-4, foobar"
+        "foobar-4, foobar",
+        "box-impl, box-impl",
+        "constructor-impl, constructor-impl",
+        "get-x, get-x"
     })
     void decodesName(final String encoded, final String expected) {
         MatcherAssert.assertThat(
