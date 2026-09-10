@@ -147,11 +147,30 @@ public final class XmlValue {
         } else {
             final char[] chars = hex.toCharArray();
             final int length = chars.length;
+            if (length % 2 != 0) {
+                throw new IllegalStateException(
+                    String.format(
+                        "The value '%s' of '%s' has an odd number of hex digits",
+                        hex, this.node
+                    )
+                );
+            }
             res = new byte[length / 2];
             for (int index = 0; index < length; index += 2) {
-                res[index / 2] = (byte) Integer.parseInt(
-                    String.copyValueOf(new char[]{chars[index], chars[index + 1]}), XmlValue.RADIX
+                final String pair = String.copyValueOf(
+                    new char[]{chars[index], chars[index + 1]}
                 );
+                try {
+                    res[index / 2] = (byte) Integer.parseInt(pair, XmlValue.RADIX);
+                } catch (final NumberFormatException exception) {
+                    throw new IllegalStateException(
+                        String.format(
+                            "The pair '%s' in the value '%s' of '%s' is not hex",
+                            pair, hex, this.node
+                        ),
+                        exception
+                    );
+                }
             }
         }
         return res;
