@@ -247,49 +247,49 @@ public final class DisassembleMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
+        if (this.disabled) {
+            Logger.info(this, "Disassemble mojo is disabled, skipping");
+            return;
+        }
         this.checkedThreads();
         final Path src = new MavenPath(this.sourcesDir).resolve();
         final Path out = new MavenPath(this.outputDir).resolve();
         try {
             new PluginStartup(this.project, src).init();
-            if (this.disabled) {
-                Logger.info(this, "Disassemble mojo is disabled, skipping");
+            final boolean listings = !this.omitListings;
+            final boolean comments = !this.omitComments;
+            Logger.info(
+                this,
+                "Disassembling is started with mode '%s' (with listings = '%b', comments = '%b', modifiers = '%b', pretty = '%b')",
+                this.mode,
+                listings,
+                comments,
+                this.modifiers,
+                this.prettyXmir
+            );
+            new Disassembler(
+                new FilteredClasses(
+                    new BytecodeClasses(src),
+                    new GlobFilter(this.includes, this.excludes)
+                ),
+                out,
+                new Format(
+                    Format.MODIFIERS, this.modifiers,
+                    Format.COMMENTS, comments,
+                    Format.WITH_LISTING, listings,
+                    Format.PRETTY, this.prettyXmir,
+                    Format.MODE, this.mode
+                ),
+                this.debug,
+                this.threads
+            ).disassemble();
+            if (this.xmirVerification) {
+                Logger.info(this, "Verifying all the XMIR files after disassembling");
+                new XmirFiles(out).verify();
             } else {
-                final boolean listings = !this.omitListings;
-                final boolean comments = !this.omitComments;
                 Logger.info(
-                    this,
-                    "Disassembling is started with mode '%s' (with listings = '%b', comments = '%b', modifiers = '%b', pretty = '%b')",
-                    this.mode,
-                    listings,
-                    comments,
-                    this.modifiers,
-                    this.prettyXmir
+                    this, "XMIR verification after disassembling is disabled, skipping"
                 );
-                new Disassembler(
-                    new FilteredClasses(
-                        new BytecodeClasses(src),
-                        new GlobFilter(this.includes, this.excludes)
-                    ),
-                    out,
-                    new Format(
-                        Format.MODIFIERS, this.modifiers,
-                        Format.COMMENTS, comments,
-                        Format.WITH_LISTING, listings,
-                        Format.PRETTY, this.prettyXmir,
-                        Format.MODE, this.mode
-                    ),
-                    this.debug,
-                    this.threads
-                ).disassemble();
-                if (this.xmirVerification) {
-                    Logger.info(this, "Verifying all the XMIR files after disassembling");
-                    new XmirFiles(out).verify();
-                } else {
-                    Logger.info(
-                        this, "XMIR verification after disassembling is disabled, skipping"
-                    );
-                }
             }
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(
