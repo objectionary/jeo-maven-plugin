@@ -48,13 +48,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
     ) {
         this.instructions = instr;
         this.blocks = new ArrayList<>(catches);
-        this.labels = new HashMap<>(0);
-        for (int pos = 0; pos < instr.size(); ++pos) {
-            final BytecodeEntry entry = instr.get(pos);
-            if (entry.isLabel()) {
-                this.labels.putIfAbsent((BytecodeLabel) entry, pos);
-            }
-        }
+        this.labels = InstructionsFlow.indexes(instr);
     }
 
     /**
@@ -137,6 +131,24 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
             throw new IllegalStateException(String.format("Label %s not found", label));
         }
         return index;
+    }
+
+    /**
+     * Build instruction indexes of labels.
+     * @param instructions Method instructions.
+     * @return Label indexes.
+     */
+    private static Map<BytecodeLabel, Integer> indexes(
+        final List<? extends BytecodeEntry> instructions
+    ) {
+        final Map<BytecodeLabel, Integer> labels = new HashMap<>(0);
+        for (int pos = 0; pos < instructions.size(); ++pos) {
+            final BytecodeEntry entry = instructions.get(pos);
+            if (entry.isLabel()) {
+                labels.putIfAbsent((BytecodeLabel) entry, pos);
+            }
+        }
+        return labels;
     }
 
     /**
