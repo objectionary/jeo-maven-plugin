@@ -14,6 +14,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesTypeAnnotations;
 import org.eolang.jeo.representation.directives.Format;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.RecordComponentVisitor;
 
 /**
@@ -57,6 +60,30 @@ public final class BytecodeTypeAnnotations {
      * @param visitor Visitor to write to.
      */
     public void write(final RecordComponentVisitor visitor) {
+        this.annotations.forEach(annotation -> annotation.write(visitor));
+    }
+
+    /**
+     * Write to visitor.
+     * @param visitor Visitor to write to.
+     */
+    public void write(final ClassVisitor visitor) {
+        this.annotations.forEach(annotation -> annotation.write(visitor));
+    }
+
+    /**
+     * Write to visitor.
+     * @param visitor Visitor to write to.
+     */
+    public void write(final FieldVisitor visitor) {
+        this.annotations.forEach(annotation -> annotation.write(visitor));
+    }
+
+    /**
+     * Write to visitor.
+     * @param visitor Visitor to write to.
+     */
+    public void write(final MethodVisitor visitor) {
         this.annotations.forEach(annotation -> annotation.write(visitor));
     }
 

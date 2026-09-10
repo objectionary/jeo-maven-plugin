@@ -16,6 +16,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
+import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotations;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
 import org.objectweb.asm.Opcodes;
@@ -97,6 +98,7 @@ public final class XmlClass {
                 this.annotations()
                     .map(XmlAnnotations::bytecode)
                     .orElse(new BytecodeAnnotations()),
+                this.typeAnnotations(),
                 this.attributes()
                     .map(XmlAttributes::attributes)
                     .orElseGet(BytecodeAttributes::new),
@@ -124,6 +126,22 @@ public final class XmlClass {
             .filter(object -> "annotations".equals(object.name()))
             .findFirst()
             .map(XmlAnnotations::new);
+    }
+
+    /**
+     * Class type annotations.
+     * @return Type annotations.
+     */
+    private BytecodeTypeAnnotations typeAnnotations() {
+        return this.node.children()
+            .filter(child -> new XmlJeoObject(child).named())
+            .filter(
+                child -> "type-annotations".equals(new XmlJeoObject(child).name())
+            )
+            .findFirst()
+            .map(XmlTypeAnnotations::new)
+            .map(XmlTypeAnnotations::bytecode)
+            .orElseGet(BytecodeTypeAnnotations::new);
     }
 
     /**

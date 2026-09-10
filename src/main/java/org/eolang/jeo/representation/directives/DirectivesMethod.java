@@ -67,6 +67,11 @@ public final class DirectivesMethod implements Iterable<Directive> {
     private final DirectivesAnnotations annotations;
 
     /**
+     * Method type annotations.
+     */
+    private final DirectivesTypeAnnotations types;
+
+    /**
      * Default value.
      */
     private final List<Iterable<Directive>> dvalue;
@@ -127,12 +132,43 @@ public final class DirectivesMethod implements Iterable<Directive> {
         final List<Iterable<Directive>> dvalue,
         final DirectivesAttributes attributes
     ) {
+        this(
+            format, name, properties, instructions, tryblocks, annotations,
+            new DirectivesTypeAnnotations(), dvalue, attributes
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param format Directives format
+     * @param name Method name
+     * @param properties Method properties
+     * @param instructions Method instructions
+     * @param tryblocks Method try-catch blocks
+     * @param annotations Method annotations
+     * @param types Method type annotations
+     * @param dvalue Annotation default value
+     * @param attributes Method attributes
+     * @checkstyle ParameterNumberCheck (10 lines)
+     */
+    public DirectivesMethod(
+        final Format format,
+        final NumberedName name,
+        final DirectivesMethodProperties properties,
+        final List<Iterable<Directive>> instructions,
+        final List<Iterable<Directive>> tryblocks,
+        final DirectivesAnnotations annotations,
+        final DirectivesTypeAnnotations types,
+        final List<Iterable<Directive>> dvalue,
+        final DirectivesAttributes attributes
+    ) {
         this.format = format;
         this.name = name;
         this.properties = properties;
         this.instructions = instructions;
         this.tryblocks = tryblocks;
         this.annotations = annotations;
+        this.types = types;
         this.dvalue = dvalue;
         this.attributes = attributes;
     }
@@ -170,6 +206,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
                 Stream.of(
                     this.properties,
                     this.annotations,
+                    this.types.optional(),
                     new DirectivesSeq("body", this.instructions),
                     new DirectivesSeq("trycatchblocks", this.tryblocks)
                 ),

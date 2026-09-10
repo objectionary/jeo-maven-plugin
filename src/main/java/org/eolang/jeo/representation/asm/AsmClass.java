@@ -54,6 +54,7 @@ public final class AsmClass {
             this.methods(),
             this.fields(),
             new AsmAnnotations(this.node).bytecode(),
+            new AsmTypeAnnotations(this.node).bytecode(),
             this.attributes(),
             new BytecodeClassProperties(
                 this.node.version,

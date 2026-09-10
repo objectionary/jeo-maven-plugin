@@ -86,6 +86,11 @@ public final class DirectivesField implements Iterable<Directive> {
     private final DirectivesAnnotations annotations;
 
     /**
+     * Type annotations.
+     */
+    private final DirectivesTypeAnnotations types;
+
+    /**
      * Constructor.
      */
     public DirectivesField() {
@@ -155,6 +160,34 @@ public final class DirectivesField implements Iterable<Directive> {
         final Object value,
         final DirectivesAnnotations annotations
     ) {
+        this(
+            format, access, name, descriptor, signature, value, annotations,
+            new DirectivesTypeAnnotations()
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param format Format
+     * @param access Access modifiers
+     * @param name Name
+     * @param descriptor Descriptor
+     * @param signature Signature
+     * @param value Initial value
+     * @param annotations Annotations
+     * @param types Type annotations
+     * @checkstyle ParameterNumberCheck (10 lines)
+     */
+    public DirectivesField(
+        final Format format,
+        final int access,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final Object value,
+        final DirectivesAnnotations annotations,
+        final DirectivesTypeAnnotations types
+    ) {
         this.format = format;
         this.access = access;
         this.name = name;
@@ -162,6 +195,7 @@ public final class DirectivesField implements Iterable<Directive> {
         this.signature = Optional.ofNullable(signature).orElse("");
         this.value = value;
         this.annotations = annotations;
+        this.types = types;
     }
 
     @Override
@@ -174,7 +208,8 @@ public final class DirectivesField implements Iterable<Directive> {
             new DirectivesValue(this.format, DirectivesField.title("descriptor"), this.descriptor),
             new DirectivesValue(this.format, DirectivesField.title("signature"), this.signature),
             new DirectivesValue(this.format, DirectivesField.title("value"), this.value),
-            this.annotations
+            this.annotations,
+            this.types.optional()
         ).iterator();
     }
 

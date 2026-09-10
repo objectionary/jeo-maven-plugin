@@ -84,6 +84,11 @@ public final class DirectivesClass implements Iterable<Directive> {
     private final DirectivesAnnotations annotations;
 
     /**
+     * Type annotations.
+     */
+    private final DirectivesTypeAnnotations types;
+
+    /**
      * Attributes.
      */
     private final DirectivesAttributes attributes;
@@ -155,6 +160,36 @@ public final class DirectivesClass implements Iterable<Directive> {
         final DirectivesAnnotations annotations,
         final DirectivesAttributes attributes
     ) {
+        this(
+            format, name, properties, fields, methods, signature, annotations,
+            new DirectivesTypeAnnotations(), attributes
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param format The format of the directives
+     * @param name The class name
+     * @param properties The class properties
+     * @param fields The class fields
+     * @param methods The class methods
+     * @param signature The class signature
+     * @param annotations The annotations
+     * @param types The type annotations
+     * @param attributes The attributes
+     * @checkstyle ParameterNumberCheck (10 lines)
+     */
+    public DirectivesClass(
+        final Format format,
+        final ClassName name,
+        final DirectivesClassProperties properties,
+        final List<DirectivesField> fields,
+        final List<DirectivesMethod> methods,
+        final String signature,
+        final DirectivesAnnotations annotations,
+        final DirectivesTypeAnnotations types,
+        final DirectivesAttributes attributes
+    ) {
         this.format = format;
         this.name = name;
         this.properties = properties;
@@ -162,6 +197,7 @@ public final class DirectivesClass implements Iterable<Directive> {
         this.methods = methods;
         this.signature = signature;
         this.annotations = annotations;
+        this.types = types;
         this.attributes = attributes;
     }
 
@@ -224,6 +260,7 @@ public final class DirectivesClass implements Iterable<Directive> {
             this.methods.stream().map(Directives::new).reduce(new Directives(), Directives::append),
             new DirectivesValue(this.format, "signature", this.sign()),
             this.annotations,
+            this.types.optional(),
             this.attributes
         ).iterator();
     }

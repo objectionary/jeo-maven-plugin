@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import org.xembly.Directive;
@@ -59,5 +60,19 @@ public final class DirectivesTypeAnnotations implements Iterable<Directive> {
             this.name,
             this.annotations
         ).iterator();
+    }
+
+    /**
+     * Directives only when at least one type annotation exists.
+     * @return This object or empty directives.
+     */
+    Iterable<Directive> optional() {
+        final Iterable<Directive> result;
+        if (this.annotations.isEmpty()) {
+            result = Collections.emptyList();
+        } else {
+            result = this;
+        }
+        return result;
     }
 }
