@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * Output format of the XMIR representation.
@@ -133,6 +134,21 @@ public final class Format {
      */
     public String mode() {
         return this.string(Format.MODE);
+    }
+
+    /**
+     * The options of this format, as one line.
+     *
+     * <p>Two formats that differ in any property answer differently, so the
+     * line can be kept next to a file and compared with the options of a
+     * later run.</p>
+     * @return The line, such as "comments=true;mode=debug"
+     */
+    public String fingerprint() {
+        return this.properties.entrySet().stream()
+            .sorted(Map.Entry.comparingByKey())
+            .map(entry -> String.format("%s=%s", entry.getKey(), entry.getValue()))
+            .collect(Collectors.joining(";"));
     }
 
     /**
