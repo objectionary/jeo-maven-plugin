@@ -38,7 +38,8 @@ final class AsmField {
             this.node.signature,
             this.node.value,
             this.node.access,
-            new AsmAnnotations(this.node).bytecode()
+            new AsmAnnotations(this.node).bytecode(),
+            new AsmTypeAnnotations(this.node).bytecode()
         );
     }
 }

@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotations;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.RecordComponentNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
@@ -34,6 +37,30 @@ final class AsmTypeAnnotations {
      */
     AsmTypeAnnotations(final RecordComponentNode comp) {
         this(comp.visibleTypeAnnotations, comp.invisibleTypeAnnotations);
+    }
+
+    /**
+     * Constructor.
+     * @param clazz Class node.
+     */
+    AsmTypeAnnotations(final ClassNode clazz) {
+        this(clazz.visibleTypeAnnotations, clazz.invisibleTypeAnnotations);
+    }
+
+    /**
+     * Constructor.
+     * @param field Field node.
+     */
+    AsmTypeAnnotations(final FieldNode field) {
+        this(field.visibleTypeAnnotations, field.invisibleTypeAnnotations);
+    }
+
+    /**
+     * Constructor.
+     * @param method Method node.
+     */
+    AsmTypeAnnotations(final MethodNode method) {
+        this(method.visibleTypeAnnotations, method.invisibleTypeAnnotations);
     }
 
     /**

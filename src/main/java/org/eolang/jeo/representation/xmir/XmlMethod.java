@@ -19,6 +19,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
+import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotations;
 import org.eolang.jeo.representation.directives.DirectivesMaxs;
 import org.eolang.jeo.representation.directives.DirectivesMethod;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
@@ -124,6 +125,7 @@ public final class XmlMethod {
                     .map(XmlBytecodeEntry::bytecode)
                     .collect(Collectors.toList()),
                 this.annotations(),
+                this.typeAnnotations(),
                 this.properties(),
                 this.defvalue()
                     .map(XmlDefaultValue::bytecode)
@@ -363,6 +365,21 @@ public final class XmlMethod {
             .map(XmlAnnotations::new)
             .map(XmlAnnotations::bytecode)
             .orElse(new BytecodeAnnotations());
+    }
+
+    /**
+     * Method type annotations.
+     * @return Type annotations.
+     */
+    private BytecodeTypeAnnotations typeAnnotations() {
+        return this.node.children()
+            .map(XmlJeoObject::new)
+            .filter(XmlJeoObject::named)
+            .filter(object -> "type-annotations".equals(object.name()))
+            .findFirst()
+            .map(XmlTypeAnnotations::new)
+            .map(XmlTypeAnnotations::bytecode)
+            .orElseGet(BytecodeTypeAnnotations::new);
     }
 
     /**

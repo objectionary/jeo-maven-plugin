@@ -10,6 +10,7 @@ import lombok.ToString;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
+import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotations;
 import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
@@ -56,7 +57,8 @@ public class XmlField {
             this.signature(),
             this.value(),
             this.access(),
-            this.annotations().map(XmlAnnotations::bytecode).orElse(new BytecodeAnnotations())
+            this.annotations().map(XmlAnnotations::bytecode).orElse(new BytecodeAnnotations()),
+            this.typeAnnotations()
         );
     }
 
@@ -128,6 +130,21 @@ public class XmlField {
             .filter(object -> name.equals(object.name()))
             .findFirst()
             .map(XmlAnnotations::new);
+    }
+
+    /**
+     * Field type annotations.
+     * @return Type annotations.
+     */
+    private BytecodeTypeAnnotations typeAnnotations() {
+        return this.node.children()
+            .map(XmlJeoObject::new)
+            .filter(XmlJeoObject::named)
+            .filter(object -> "type-annotations".equals(object.name()))
+            .findFirst()
+            .map(XmlTypeAnnotations::new)
+            .map(XmlTypeAnnotations::bytecode)
+            .orElseGet(BytecodeTypeAnnotations::new);
     }
 
     /**
