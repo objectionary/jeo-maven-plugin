@@ -149,7 +149,8 @@ public final class Disassembler {
                 ),
                 this.debug,
                 counter
-            )
+            ),
+            this.params.fingerprint()
         );
         trans.transform();
         return trans.target();
