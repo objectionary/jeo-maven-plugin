@@ -148,32 +148,32 @@ public final class AssembleMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
+        if (this.disabled) {
+            Logger.info(this, "Assemble mojo is disabled, skipping");
+            return;
+        }
         this.checkedThreads();
         final Path src = new MavenPath(this.sourcesDir).resolve();
         final Path out = new MavenPath(this.outputDir).resolve();
         try {
-            if (this.disabled) {
-                Logger.info(this, "Assemble mojo is disabled, skipping");
+            if (this.xmirVerification) {
+                Logger.info(this, "Verifying all the XMIR files before assembling...");
+                new XmirFiles(src).verify();
             } else {
-                if (this.xmirVerification) {
-                    Logger.info(this, "Verifying all the XMIR files before assembling...");
-                    new XmirFiles(src).verify();
-                } else {
-                    Logger.info(this, "XMIR verification before assembling is disabled, skipping");
-                }
-                new Assembler(
-                    src,
-                    out,
-                    this.debug,
-                    this.threads
-                ).assemble();
-                if (this.skipVerification) {
-                    Logger.info(this, "Bytecode verification is disabled, skipping");
-                } else {
-                    Logger.info(this, "Verifying bytecode of all the generated classes...");
-                    new PluginStartup(this.project, out).init();
-                    new BytecodeClasses(out).verify();
-                }
+                Logger.info(this, "XMIR verification before assembling is disabled, skipping");
+            }
+            new Assembler(
+                src,
+                out,
+                this.debug,
+                this.threads
+            ).assemble();
+            if (this.skipVerification) {
+                Logger.info(this, "Bytecode verification is disabled, skipping");
+            } else {
+                Logger.info(this, "Verifying bytecode of all the generated classes...");
+                new PluginStartup(this.project, out).init();
+                new BytecodeClasses(out).verify();
             }
         } catch (final DependencyResolutionRequiredException exception) {
             throw new MojoExecutionException(exception);
