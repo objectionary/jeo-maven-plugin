@@ -5,6 +5,8 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.VerifiedBytecode;
@@ -17,7 +19,14 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.TypeReference;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.TypeAnnotationNode;
 
 /**
  * Test cases for {@link BytecodeRepresentation}.
@@ -48,6 +57,12 @@ final class BytecodeRepresentationTest {
      */
     @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
     private static final Format DEBUG = new Format(Format.MODE, "debug");
+
+    /**
+     * Descriptor of a synthetic TYPE_USE annotation.
+     */
+    @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
+    private static final String TYPE_USE = "Lorg/eolang/jeo/TypeUse;";
 
     @Test
     void parsesBytecode() {
@@ -211,6 +226,42 @@ final class BytecodeRepresentationTest {
     }
 
     @Test
+    void preservesClassFieldAndMethodTypeAnnotations() {
+        final Bytecode source = new Bytecode(BytecodeRepresentationTest.typeAnnotated());
+        final ClassNode restored = new ClassNode();
+        new ClassReader(
+            new XmirRepresentation(
+                new BytecodeRepresentation(source).toXmir(BytecodeRepresentationTest.DEBUG)
+            ).toBytecode().bytes()
+        ).accept(restored, 0);
+        MatcherAssert.assertThat(
+            "Class, field, and method type annotations must survive the XMIR round-trip",
+            Arrays.asList(
+                restored.visibleTypeAnnotations.get(0),
+                restored.fields.get(0).visibleTypeAnnotations.get(0),
+                restored.methods.get(0).visibleTypeAnnotations.get(0)
+            ).stream().map(BytecodeRepresentationTest::typeAnnotation).collect(Collectors.toList()),
+            Matchers.contains(
+                String.format(
+                    "%s:%d:null",
+                    BytecodeRepresentationTest.TYPE_USE,
+                    TypeReference.newSuperTypeReference(-1).getValue()
+                ),
+                String.format(
+                    "%s:%d:null",
+                    BytecodeRepresentationTest.TYPE_USE,
+                    TypeReference.newTypeReference(TypeReference.FIELD).getValue()
+                ),
+                String.format(
+                    "%s:%d:null",
+                    BytecodeRepresentationTest.TYPE_USE,
+                    TypeReference.newTypeReference(TypeReference.METHOD_RETURN).getValue()
+                )
+            )
+        );
+    }
+
+    @Test
     void parsesAnnotationsAndConvertsThemBackToValidBytecode() throws Exception {
         final Bytecode original = new Bytecode(
             new BytesOf(new ResourceOf("AnnotationsApplication.class")).asBytes()
@@ -225,4 +276,64 @@ final class BytecodeRepresentationTest {
             Matchers.equalTo(original.toString())
         );
     }
+
+    /**
+     * Synthetic class with type-use annotations on class, field and method.
+     * @return Class bytecode.
+     */
+    private static byte[] typeAnnotated() {
+        final ClassWriter writer = new ClassWriter(0);
+        writer.visit(
+            Opcodes.V11,
+            Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT,
+            "TypeAnnotated",
+            null,
+            "java/lang/Object",
+            null
+        );
+        writer.visitTypeAnnotation(
+            TypeReference.newSuperTypeReference(-1).getValue(),
+            null,
+            BytecodeRepresentationTest.TYPE_USE,
+            true
+        ).visitEnd();
+        final FieldVisitor field = writer.visitField(
+            Opcodes.ACC_PRIVATE, "value", "Ljava/lang/String;", null, null
+        );
+        field.visitTypeAnnotation(
+            TypeReference.newTypeReference(TypeReference.FIELD).getValue(),
+            null,
+            BytecodeRepresentationTest.TYPE_USE,
+            true
+        ).visitEnd();
+        field.visitEnd();
+        final MethodVisitor method = writer.visitMethod(
+            Opcodes.ACC_PUBLIC | Opcodes.ACC_ABSTRACT,
+            "value",
+            "()Ljava/lang/String;",
+            null,
+            null
+        );
+        method.visitTypeAnnotation(
+            TypeReference.newTypeReference(TypeReference.METHOD_RETURN).getValue(),
+            null,
+            BytecodeRepresentationTest.TYPE_USE,
+            true
+        ).visitEnd();
+        method.visitEnd();
+        writer.visitEnd();
+        return writer.toByteArray();
+    }
+
+    /**
+     * Compact identity of a type annotation used by the round-trip assertion.
+     * @param annotation Annotation.
+     * @return Descriptor, reference and path.
+     */
+    private static String typeAnnotation(final TypeAnnotationNode annotation) {
+        return String.format(
+            "%s:%d:%s", annotation.desc, annotation.typeRef, annotation.typePath
+        );
+    }
+
 }

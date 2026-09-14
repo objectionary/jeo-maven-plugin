@@ -50,6 +50,7 @@ final class AsmMethod {
             this.tryblocks(),
             this.instructions(),
             new AsmAnnotations(this.node).bytecode(),
+            new AsmTypeAnnotations(this.node).bytecode(),
             new BytecodeMethodProperties(
                 this.node.access,
                 this.node.name,

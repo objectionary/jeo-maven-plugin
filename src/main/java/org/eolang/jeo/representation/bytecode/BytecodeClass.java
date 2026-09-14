@@ -50,6 +50,11 @@ public final class BytecodeClass {
     private final BytecodeAnnotations annotations;
 
     /**
+     * Type annotations.
+     */
+    private final BytecodeTypeAnnotations types;
+
+    /**
      * Attributes.
      */
     private final BytecodeAttributes attributes;
@@ -136,10 +141,36 @@ public final class BytecodeClass {
         final BytecodeAttributes attributes,
         final BytecodeClassProperties props
     ) {
+        this(
+            name, methods, fields, annotations, new BytecodeTypeAnnotations(), attributes, props
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param name The class name
+     * @param methods The class methods
+     * @param fields The class fields
+     * @param annotations The class annotations
+     * @param types The class type annotations
+     * @param attributes The class attributes
+     * @param props The class properties
+     * @checkstyle ParameterNumberCheck (10 lines)
+     */
+    public BytecodeClass(
+        final ClassName name,
+        final List<BytecodeMethod> methods,
+        final List<BytecodeField> fields,
+        final BytecodeAnnotations annotations,
+        final BytecodeTypeAnnotations types,
+        final BytecodeAttributes attributes,
+        final BytecodeClassProperties props
+    ) {
         this.name = name;
         this.cmethods = methods;
         this.fields = fields;
         this.annotations = annotations;
+        this.types = types;
         this.attributes = attributes;
         this.props = props;
     }
@@ -299,6 +330,7 @@ public final class BytecodeClass {
                 .collect(Collectors.toList()),
             this.props.signature(),
             this.annotations.directives(format),
+            this.types.directives(format),
             this.attributes.directives(format, "attributes")
         );
     }
@@ -318,6 +350,7 @@ public final class BytecodeClass {
                 this.props.interfaces()
             );
             this.annotations.write(visitor);
+            this.types.write(visitor);
             this.fields.forEach(field -> field.write(visitor));
             this.cmethods.forEach(method -> method.write(visitor));
             this.attributes.write(visitor);

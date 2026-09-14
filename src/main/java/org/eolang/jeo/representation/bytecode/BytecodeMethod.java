@@ -45,6 +45,11 @@ public final class BytecodeMethod {
     private final BytecodeAnnotations annotations;
 
     /**
+     * Method type annotations.
+     */
+    private final BytecodeTypeAnnotations types;
+
+    /**
      * Method properties.
      */
     private final BytecodeMethodProperties properties;
@@ -181,9 +186,38 @@ public final class BytecodeMethod {
         final BytecodeMaxs maxs,
         final BytecodeAttributes attributes
     ) {
+        this(
+            tryblocks, instructions, annotations, new BytecodeTypeAnnotations(), properties,
+            defvalues, maxs, attributes
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param tryblocks Try-catch blocks.
+     * @param instructions Method instructions.
+     * @param annotations Method annotations.
+     * @param types Method type annotations.
+     * @param properties Method properties.
+     * @param defvalues Default values.
+     * @param maxs Max stack and locals.
+     * @param attributes Method attributes.
+     * @checkstyle ParameterNumberCheck (10 lines)
+     */
+    public BytecodeMethod(
+        final List<BytecodeEntry> tryblocks,
+        final List<BytecodeEntry> instructions,
+        final BytecodeAnnotations annotations,
+        final BytecodeTypeAnnotations types,
+        final BytecodeMethodProperties properties,
+        final List<BytecodeDefaultValue> defvalues,
+        final BytecodeMaxs maxs,
+        final BytecodeAttributes attributes
+    ) {
         this.tryblocks = tryblocks;
         this.entries = instructions;
         this.annotations = annotations;
+        this.types = types;
         this.properties = properties;
         this.defvalues = defvalues;
         this.maxs = maxs;
@@ -199,6 +233,7 @@ public final class BytecodeMethod {
             this.tryblocks,
             this.entries,
             this.annotations,
+            this.types,
             this.properties,
             this.defvalues,
             new BytecodeMaxs(),
@@ -303,6 +338,7 @@ public final class BytecodeMethod {
             this.tryblocks.stream().map(e -> e.directives(tcounter.getAndIncrement(), format))
                 .collect(Collectors.toList()),
             this.annotations.directives(format),
+            this.types.directives(format),
             this.defvalues.stream()
                 .map(v -> v.directives(format))
                 .collect(Collectors.toList()),
@@ -330,6 +366,7 @@ public final class BytecodeMethod {
                 this.maxs.compute()
             );
             this.annotations.write(mvisitor);
+            this.types.write(mvisitor);
             this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));
             final AsmLabels all = new AsmLabels();
             if (!this.properties.isAbstract()) {

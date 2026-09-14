@@ -50,6 +50,11 @@ public final class BytecodeField {
     private final BytecodeAnnotations annotations;
 
     /**
+     * Type annotations.
+     */
+    private final BytecodeTypeAnnotations types;
+
+    /**
      * Constructor.
      * @param name Name.
      * @param descr Descriptor.
@@ -86,12 +91,39 @@ public final class BytecodeField {
         final int access,
         final BytecodeAnnotations annotations
     ) {
+        this(
+            name, descriptor, signature, value, access, annotations,
+            new BytecodeTypeAnnotations()
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param name Name.
+     * @param descriptor Descriptor.
+     * @param signature Signature.
+     * @param value Value.
+     * @param access Access.
+     * @param annotations Annotations.
+     * @param types Type annotations.
+     * @checkstyle ParameterNumberCheck (10 lines)
+     */
+    public BytecodeField(
+        final String name,
+        final String descriptor,
+        final String signature,
+        final Object value,
+        final int access,
+        final BytecodeAnnotations annotations,
+        final BytecodeTypeAnnotations types
+    ) {
         this.name = name;
         this.descriptor = descriptor;
         this.signature = signature;
         this.value = value;
         this.access = access;
         this.annotations = annotations;
+        this.types = types;
     }
 
     /**
@@ -108,6 +140,7 @@ public final class BytecodeField {
         );
         this.annotations.annotations()
             .forEach(annotation -> annotation.write(fvisitor));
+        this.types.write(fvisitor);
     }
 
     public DirectivesField directives(final Format format) {
@@ -118,7 +151,8 @@ public final class BytecodeField {
             this.descriptor,
             this.signature,
             this.value,
-            this.annotations.directives(format, String.format("annotations-%s", this.name))
+            this.annotations.directives(format, String.format("annotations-%s", this.name)),
+            this.types.directives(format)
         );
     }
 }
