@@ -32,6 +32,9 @@ import org.xembly.Directives;
  * - Try-catch blocks
  * - Default value (for annotation methods)
  * - And other attributes
+ * <p>All method containers (annotations, body, trycatchblocks, attributes, exceptions, params,
+ * maxs) are always emitted, even when empty — an empty container is represented as an empty
+ * sequence (e.g. {@code seq.of0}). A consumer can rely on the presence of every container.</p>
  * @since 0.1
  */
 public final class DirectivesMethod implements Iterable<Directive> {
