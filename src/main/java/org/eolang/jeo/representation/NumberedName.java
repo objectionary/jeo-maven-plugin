@@ -4,6 +4,8 @@
  */
 package org.eolang.jeo.representation;
 
+import java.util.regex.Pattern;
+
 /**
  * Name representation with optional numeric suffix.
  *
@@ -13,6 +15,15 @@ package org.eolang.jeo.representation;
  * @since 0.9.0
  */
 public final class NumberedName {
+
+    /**
+     * A trailing group that is a number of a name.
+     *
+     * <p>A dash is legal in a JVM method name and Kotlin emits "box-impl" for
+     * a value class, so a trailing group that is not a number belongs to the
+     * name. The digits are bounded to keep the number inside an int.</p>
+     */
+    private static final Pattern NUMBER = Pattern.compile("[1-9][0-9]{0,8}");
 
     /**
      * Number of the name.
@@ -72,18 +83,10 @@ public final class NumberedName {
     private static int suffix(final String encoded) {
         final int result;
         final int index = encoded.lastIndexOf('-');
-        if (index == -1) {
+        if (index == -1 || !NumberedName.NUMBER.matcher(encoded.substring(index + 1)).matches()) {
             result = 1;
         } else {
-            final String number = encoded.substring(index + 1);
-            try {
-                result = Integer.parseInt(number);
-            } catch (final NumberFormatException ex) {
-                throw new IllegalArgumentException(
-                    String.format("Invalid number in name: %s", number),
-                    ex
-                );
-            }
+            result = Integer.parseInt(encoded.substring(index + 1));
         }
         return result;
     }
@@ -96,7 +99,7 @@ public final class NumberedName {
     private static String prefix(final String encoded) {
         final String result;
         final int index = encoded.lastIndexOf('-');
-        if (index == -1) {
+        if (index == -1 || !NumberedName.NUMBER.matcher(encoded.substring(index + 1)).matches()) {
             result = encoded;
         } else {
             result = encoded.substring(0, index);
