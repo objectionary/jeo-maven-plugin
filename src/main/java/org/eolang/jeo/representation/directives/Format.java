@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Output format of the XMIR representation.
  * @since 0.14.0
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class Format {
 
     /**
@@ -56,6 +57,15 @@ public final class Format {
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public static final String MODE = "mode";
+
+    /**
+     * Fixed timestamp of the generated XMIR.
+     * Expected to be a string value in the ISO-8601 format. When set, it is used as the
+     * 'time' attribute of the generated object; otherwise the current time (or the
+     * {@code SOURCE_DATE_EPOCH} environment variable) is used.
+     */
+    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+    public static final String TIME = "time";
 
     /**
      * All properties of the format.
@@ -133,6 +143,14 @@ public final class Format {
      */
     public String mode() {
         return this.string(Format.MODE);
+    }
+
+    /**
+     * Fixed timestamp of the generated XMIR.
+     * @return Timestamp value of the property, empty when not configured.
+     */
+    public String time() {
+        return this.string(Format.TIME);
     }
 
     /**

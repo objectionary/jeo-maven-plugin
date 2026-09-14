@@ -5,10 +5,12 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.manifests.Manifests;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
+import java.util.Optional;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -86,8 +88,9 @@ public final class DirectivesObject implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final String now = ZonedDateTime.now(ZoneOffset.UTC)
-            .format(DateTimeFormatter.ISO_INSTANT);
+        final String now = DirectivesObject.time(
+            this.format, System.getenv("SOURCE_DATE_EPOCH")
+        );
         final Directives directives = new Directives()
             .add("object")
             .attr("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
@@ -105,5 +108,37 @@ public final class DirectivesObject implements Iterable<Directive> {
         directives.append(this.klass);
         directives.up();
         return directives.iterator();
+    }
+
+    /**
+     * Timestamp of the generated XMIR.
+     * <p>The timestamp is reproducible: when the {@link Format#TIME} property is set it is used
+     * as is; otherwise the standard {@code SOURCE_DATE_EPOCH} environment variable (Unix epoch in
+     * seconds) is honored; only when neither is available the current wall-clock time is used.</p>
+     * @param format Format to read the configured timestamp from.
+     * @param epoch Value of the {@code SOURCE_DATE_EPOCH} environment variable, may be null.
+     * @return Timestamp in the ISO-8601 instant format.
+     */
+    static String time(final Format format, final String epoch) {
+        final String result;
+        final Optional<String> fromepoch = Optional.ofNullable(epoch)
+            .filter(value -> !value.isEmpty())
+            .map(Long::parseLong)
+            .map(Instant::ofEpochSecond)
+            .map(Instant::toString);
+        if (format.time().isEmpty()) {
+            result = fromepoch.orElseGet(DirectivesObject::current);
+        } else {
+            result = format.time();
+        }
+        return result;
+    }
+
+    /**
+     * Current wall-clock timestamp.
+     * @return Current timestamp in the ISO-8601 instant format.
+     */
+    private static String current() {
+        return ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
     }
 }
