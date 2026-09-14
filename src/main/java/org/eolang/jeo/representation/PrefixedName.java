@@ -120,9 +120,10 @@ public final class PrefixedName {
         if (PrefixedName.BLANKED.matcher(this.origin).matches()) {
             throw new IllegalArgumentException(PrefixedName.BLANK);
         }
-        return this.delimited
+        final String prefixed = this.delimited
             .matcher(this.origin)
             .replaceAll(Matcher.quoteReplacement(this.prefix));
+        return this.parts(prefixed, true);
     }
 
     /**
@@ -133,6 +134,39 @@ public final class PrefixedName {
         if (PrefixedName.BLANKED.matcher(this.origin).matches()) {
             throw new IllegalArgumentException(PrefixedName.BLANK);
         }
-        return this.prefixed.matcher(this.origin).replaceAll("");
+        return this.parts(this.prefixed.matcher(this.origin).replaceAll(""), false);
+    }
+
+    /**
+     * Encode or decode name parts while preserving the path delimiters.
+     * @param value Name to transform
+     * @param encode Whether to encode (or decode)
+     * @return Transformed name
+     */
+    private String parts(final String value, final boolean encode) {
+        final StringBuilder result = new StringBuilder();
+        for (final String part : value.split("(?<=[./])|(?=[./])", -1)) {
+            if (part.equals(".") || part.equals("/")) {
+                result.append(part);
+            } else if (encode && part.startsWith(this.prefix)) {
+                result.append(this.prefix).append(
+                    this.safe(part.substring(this.prefix.length()))
+                );
+            } else if (encode) {
+                result.append(this.safe(part));
+            } else {
+                result.append(new EncodedString(part).decode());
+            }
+        }
+        return result.toString();
+    }
+
+    /**
+     * Encode a name part without changing the prefix alphabet.
+     * @param part Name part
+     * @return Encoded part
+     */
+    private String safe(final String part) {
+        return new DecodedString(part).encode().replace("+", "%20").replace("%24", "$");
     }
 }
