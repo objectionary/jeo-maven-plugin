@@ -10,6 +10,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 
 /**
  * XML representation of a class.
+ *
  * @since 0.1.0
  */
 final class XmlClassProperties {
@@ -21,7 +22,8 @@ final class XmlClassProperties {
 
     /**
      * Constructor.
-     * @param xmlclass XMl representation of a class.
+     *
+     * @param xmlclass XMl representation of a class
      */
     XmlClassProperties(final XmlGlobalObject xmlclass) {
         this.clazz = xmlclass;
@@ -29,9 +31,10 @@ final class XmlClassProperties {
 
     /**
      * Convert to bytecode properties.
-     * @return Bytecode properties.
+     *
+     * @return Bytecode properties
      */
-    public BytecodeClassProperties bytecode() {
+    BytecodeClassProperties bytecode() {
         try {
             return new BytecodeClassProperties(
                 this.version(),
@@ -48,18 +51,13 @@ final class XmlClassProperties {
         }
     }
 
-    /**
-     * Retrieve 'access' modifiers of a class.
-     * @return Access modifiers.
-     */
     private int access() {
         return (int) new XmlValue(
             this.clazz.children()
                 .map(XmlNamedObject::new)
                 .filter(XmlNamedObject::named)
                 .filter(node -> node.name().contains("access"))
-                .findFirst()
-                .orElseThrow(
+                .findFirst().orElseThrow(
                     () -> new IllegalStateException(
                         String.format(
                             "The '%s' node doesn't have 'access' attribute, but it should have one",
@@ -70,10 +68,6 @@ final class XmlClassProperties {
         ).object();
     }
 
-    /**
-     * Retrieve 'signature' of a class.
-     * @return Signature.
-     */
     private String signature() {
         return this.eoChild("signature")
             .map(XmlValue::new)
@@ -82,10 +76,6 @@ final class XmlClassProperties {
             .orElse(null);
     }
 
-    /**
-     * Retrieve 'supername' of a class.
-     * @return Supername.
-     */
     private String supername() {
         return this.eoChild("supername")
             .map(XmlValue::new)
@@ -94,25 +84,16 @@ final class XmlClassProperties {
             .orElse("java/lang/Object");
     }
 
-    /**
-     * Retrieve 'interfaces' of a class.
-     * @return Interfaces.
-     */
     private String[] interfaces() {
-        return this.jeoChild("interfaces")
-            .map(
-                node -> new XmlSeq(node)
-                    .children()
-                    .map(XmlValue::new)
-                    .map(XmlValue::string)
-                    .toArray(String[]::new)
-            ).orElse(new String[0]);
+        return this.jeoChild("interfaces").map(
+            node -> new XmlSeq(node)
+                .children()
+                .map(XmlValue::new)
+                .map(XmlValue::string)
+                .toArray(String[]::new)
+        ).orElse(new String[0]);
     }
 
-    /**
-     * Retrieve bytecode 'version'.
-     * @return Bytecode version.
-     */
     private int version() {
         return this.eoChild("version")
             .map(XmlValue::new)
@@ -121,11 +102,6 @@ final class XmlClassProperties {
             .orElse(new DefaultVersion().bytecode());
     }
 
-    /**
-     * Retrieve child node by name.
-     * @param name Name of the child node.
-     * @return Child node.
-     */
     private Optional<XmlNamedObject> eoChild(final String name) {
         return this.clazz.children()
             .map(XmlNamedObject::new)
@@ -134,11 +110,6 @@ final class XmlClassProperties {
             .findFirst();
     }
 
-    /**
-     * Retrieve jeo object child by name.
-     * @param name Name of the child node.
-     * @return Optional child node.
-     */
     private Optional<XmlJeoObject> jeoChild(final String name) {
         return this.clazz.children()
             .map(XmlJeoObject::new)

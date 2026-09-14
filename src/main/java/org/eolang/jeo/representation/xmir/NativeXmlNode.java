@@ -23,9 +23,9 @@ import org.w3c.dom.NodeList;
 /**
  * XML smart element.
  * Utility class that simplifies work with XML.
+ *
  * @since 0.1
  */
-@SuppressWarnings("PMD.TooManyMethods")
 public final class NativeXmlNode implements XmlNode {
 
     /**
@@ -46,7 +46,8 @@ public final class NativeXmlNode implements XmlNode {
 
     /**
      * Constructor.
-     * @param xml XML string.
+     *
+     * @param xml XML string
      */
     public NativeXmlNode(final String xml) {
         this(new XMLDocument(xml).inner().getFirstChild());
@@ -54,7 +55,8 @@ public final class NativeXmlNode implements XmlNode {
 
     /**
      * Constructor.
-     * @param parent Xml node.
+     *
+     * @param parent Xml node
      */
     public NativeXmlNode(final Node parent) {
         this.node = parent;
@@ -111,11 +113,7 @@ public final class NativeXmlNode implements XmlNode {
         return this.optchild(name).orElseThrow(() -> this.notFound(name));
     }
 
-    /**
-     * Find elements by xpath.
-     * @param xpath XPath.
-     * @return List of elements.
-     */
+    @Override
     public List<String> xpath(final String xpath) {
         final XPath path = NativeXmlNode.XPATH_FACTORY.newXPath();
         try {
@@ -148,11 +146,6 @@ public final class NativeXmlNode implements XmlNode {
         new StrictXmir(new XMLDocument(new XMLDocument(this.node).toString())).inner();
     }
 
-    /**
-     * Get optional child node.
-     * @param name Child node name.
-     * @return Child node.
-     */
     private Optional<XmlNode> optchild(final String name) {
         Optional<XmlNode> result = Optional.empty();
         final NodeList children = this.node.getChildNodes();
@@ -167,11 +160,6 @@ public final class NativeXmlNode implements XmlNode {
         return result;
     }
 
-    /**
-     * Generate exception if element not found.
-     * @param name Element name.
-     * @return Exception.
-     */
     private IllegalStateException notFound(final String name) {
         return new IllegalStateException(
             String.format(
@@ -182,10 +170,6 @@ public final class NativeXmlNode implements XmlNode {
         );
     }
 
-    /**
-     * Objects.
-     * @return Stream of class objects.
-     */
     private Stream<Node> objects() {
         final NodeList children = this.node.getChildNodes();
         final List<Node> res = new ArrayList<>(children.getLength());

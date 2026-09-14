@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
@@ -28,11 +27,6 @@ import org.junit.jupiter.api.io.TempDir;
  */
 final class ParallelTranslatorTest {
 
-    /**
-     * Where the XML file is expected to be saved.
-     */
-    private final Path expected = Paths.get("Application.xmir");
-
     @Test
     void savesXml(@TempDir final Path temp) throws IOException {
         final Path clazz = temp.resolve("Application.class");
@@ -45,10 +39,10 @@ final class ParallelTranslatorTest {
         );
         new ParallelTranslator(ParallelTranslatorTest::transform)
             .apply(Stream.of(clazz))
-            .collect(Collectors.toList());
+            .forEach(ignored -> { });
         MatcherAssert.assertThat(
             "XML file was not saved",
-            temp.resolve(this.expected).toFile(),
+            temp.resolve("Application.xmir").toFile(),
             FileMatchers.anExistingFile()
         );
     }
@@ -65,11 +59,11 @@ final class ParallelTranslatorTest {
             ).bytecode().bytes()
         );
         final ParallelTranslator trans = new ParallelTranslator(ParallelTranslatorTest::transform);
-        trans.apply(Stream.of(path)).collect(Collectors.toList());
-        trans.apply(Stream.of(path)).collect(Collectors.toList());
+        trans.apply(Stream.of(path)).forEach(ignored -> { });
+        trans.apply(Stream.of(path)).forEach(ignored -> { });
         MatcherAssert.assertThat(
             "XML file was not successfully overwritten",
-            temp.resolve(this.expected).toFile(),
+            temp.resolve("Application.xmir").toFile(),
             FileMatchers.anExistingFile()
         );
     }
@@ -90,7 +84,7 @@ final class ParallelTranslatorTest {
         );
         new ParallelTranslator(ParallelTranslatorTest::transform)
             .apply(Stream.of(path))
-            .collect(Collectors.toList());
+            .forEach(ignored -> { });
         MatcherAssert.assertThat(
             String.format(
                 "Bytecode file was not saved for the representation with the name '%s'",
@@ -106,24 +100,18 @@ final class ParallelTranslatorTest {
 
     @Test
     void rejectsNegativeThreads() {
-        final IllegalArgumentException exception = Assertions.assertThrows(
-            IllegalArgumentException.class,
-            () -> new ParallelTranslator(ParallelTranslatorTest::transform, -1)
-                .apply(Stream.empty()),
-            "A negative thread count must be rejected with a descriptive error"
-        );
         MatcherAssert.assertThat(
             "The error must explain that only 0 or a positive number is allowed",
-            exception.getMessage(),
+            Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new ParallelTranslator(ParallelTranslatorTest::transform, -1)
+                    .apply(Stream.empty()),
+                "A negative thread count must be rejected with a descriptive error"
+            ).getMessage(),
             Matchers.containsString("0 or positive")
         );
     }
 
-    /**
-     * Transform the path.
-     * @param path Path to transform.
-     * @return Transformed path.
-     */
     private static Path transform(final Path path) {
         final Path result;
         try {

@@ -19,6 +19,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link BytecodeObject}.
+ *
  * @since 0.6
  */
 final class BytecodeObjectTest {
@@ -28,14 +29,15 @@ final class BytecodeObjectTest {
         final BytecodeClass clazz = new BytecodeClass();
         MatcherAssert.assertThat(
             "Can't covert simple global object with a class without constructor",
-            new Timeless(new BytecodeObject(clazz).directives(new Format())),
+            new BytecodeObjectTest.Timeless(new BytecodeObject(clazz).directives(new Format())),
             Matchers.equalTo(
-                new Timeless(
+                new BytecodeObjectTest.Timeless(
                     new DirectivesObject(
                         clazz.directives(),
                         new DirectivesMetas(new ClassName("Simple"))
                     )
-                ))
+                )
+            )
         );
     }
 
@@ -45,11 +47,11 @@ final class BytecodeObjectTest {
         final BytecodeClass bclass = new BytecodeClass(clazz).helloWorldMethod();
         MatcherAssert.assertThat(
             "Can't parse simple class with method",
-            new Timeless(
+            new BytecodeObjectTest.Timeless(
                 new BytecodeObject(bclass).directives(new Format())
             ),
             Matchers.equalTo(
-                new Timeless(
+                new BytecodeObjectTest.Timeless(
                     new DirectivesObject(
                         bclass.directives(),
                         new DirectivesMetas(new ClassName(clazz))
@@ -67,14 +69,14 @@ final class BytecodeObjectTest {
         ).helloWorldMethod();
         MatcherAssert.assertThat(
             "Can't convert global object to XMIR",
-            new Timeless(
+            new BytecodeObjectTest.Timeless(
                 new BytecodeObject(
                     "some/package",
                     clazz
                 ).directives(new Format())
             ),
             Matchers.equalTo(
-                new Timeless(
+                new BytecodeObjectTest.Timeless(
                     new DirectivesObject(
                         clazz.directives(),
                         new DirectivesMetas(new ClassName("some.package", name))
@@ -86,10 +88,11 @@ final class BytecodeObjectTest {
 
     /**
      * Directives without time attribute for comparison.
+     *
      * @since 0.14.0
      */
     @EqualsAndHashCode
-    private final class Timeless {
+    private static final class Timeless {
 
         /**
          * Directives to use for XMIR generation.
@@ -99,7 +102,8 @@ final class BytecodeObjectTest {
 
         /**
          * Constructor.
-         * @param directives Directives to use.
+         *
+         * @param directives Directives to use
          */
         Timeless(final Iterable<Directive> directives) {
             this.directives = directives;

@@ -14,6 +14,7 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
 
 /**
  * Asm type annotations.
+ *
  * @since 0.15.0
  */
 final class AsmTypeAnnotations {
@@ -30,7 +31,8 @@ final class AsmTypeAnnotations {
 
     /**
      * Constructor.
-     * @param comp Record component node.
+     *
+     * @param comp Record component node
      */
     AsmTypeAnnotations(final RecordComponentNode comp) {
         this(comp.visibleTypeAnnotations, comp.invisibleTypeAnnotations);
@@ -38,8 +40,9 @@ final class AsmTypeAnnotations {
 
     /**
      * Constructor.
-     * @param visible Visible type annotations.
-     * @param invisible Invisible type annotations.
+     *
+     * @param visible Visible type annotations
+     * @param invisible Invisible type annotations
      */
     private AsmTypeAnnotations(
         final List<TypeAnnotationNode> visible, final List<TypeAnnotationNode> invisible
@@ -50,9 +53,10 @@ final class AsmTypeAnnotations {
 
     /**
      * Convert to bytecode type annotations.
-     * @return Bytecode type annotations.
+     *
+     * @return Bytecode type annotations
      */
-    public BytecodeTypeAnnotations bytecode() {
+    BytecodeTypeAnnotations bytecode() {
         final Stream.Builder<BytecodeTypeAnnotation> annotations = Stream.builder();
         if (this.visible != null) {
             this.visible.stream()
@@ -67,12 +71,6 @@ final class AsmTypeAnnotations {
         return new BytecodeTypeAnnotations(annotations.build().collect(Collectors.toList()));
     }
 
-    /**
-     * Parse type annotation node.
-     * @param node Type annotation node.
-     * @param visible Visibility of the annotation.
-     * @return Bytecode type annotation.
-     */
     private static BytecodeTypeAnnotation parse(
         final TypeAnnotationNode node, final boolean visible
     ) {

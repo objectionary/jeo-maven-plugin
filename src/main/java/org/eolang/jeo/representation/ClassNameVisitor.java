@@ -11,12 +11,11 @@ import org.objectweb.asm.ClassVisitor;
 /**
  * ASM class visitor for extracting class names from bytecode.
  *
- * <p>This visitor extracts the class name from bytecode using ASM's visitor pattern.
- * It captures the class name when the {@link #visit} method is called during
- * bytecode traversal.</p>
+ * <p>This visitor extracts the class name from bytecode using ASM's visitor pattern. It captures
+ * the class name when the {@link #visit} method is called during bytecode traversal.</p>
+ *
  * @since 0.1.0
  */
-@SuppressWarnings("PMD.UseObjectForClearerAPI")
 public final class ClassNameVisitor extends ClassVisitor {
 
     /**
@@ -33,6 +32,7 @@ public final class ClassNameVisitor extends ClassVisitor {
 
     /**
      * Constructor.
+     *
      * @param bag The atomic reference to store class name
      */
     private ClassNameVisitor(final AtomicReference<String> bag) {
@@ -41,6 +41,7 @@ public final class ClassNameVisitor extends ClassVisitor {
 
     /**
      * Constructor.
+     *
      * @param api The ASM API version to use
      * @param bag The atomic reference to store class name
      */
@@ -64,6 +65,7 @@ public final class ClassNameVisitor extends ClassVisitor {
 
     /**
      * Get class name.
+     *
      * @return The extracted class name
      */
     public String asString() {

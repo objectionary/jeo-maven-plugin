@@ -8,6 +8,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 
 /**
  * Convert XML SourceFile node to bytecode attribute.
+ *
  * @since 0.14.0
  */
 public final class XmlSourceFile {
@@ -19,7 +20,8 @@ public final class XmlSourceFile {
 
     /**
      * Constructor.
-     * @param node JEO XML node.
+     *
+     * @param node JEO XML node
      */
     public XmlSourceFile(final XmlJeoObject node) {
         this.node = node;
@@ -27,7 +29,8 @@ public final class XmlSourceFile {
 
     /**
      * Retrieve source file attributes.
-     * @return SourceFile attribute.
+     *
+     * @return SourceFile attribute
      */
     public BytecodeAttribute attribute() {
         return new BytecodeAttribute.SourceFile(
@@ -36,10 +39,6 @@ public final class XmlSourceFile {
         );
     }
 
-    /**
-     * Path to the source file.
-     * @return Path to the source file.
-     */
     private String source() {
         return new XmlValue(
             this.node.child(0).orElseThrow(
@@ -48,10 +47,6 @@ public final class XmlSourceFile {
         ).string();
     }
 
-    /**
-     * Path to the debug information.
-     * @return Path to the debug information.
-     */
     private String debug() {
         return new XmlValue(
             this.node.child(1).orElseThrow(

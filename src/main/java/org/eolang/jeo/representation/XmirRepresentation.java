@@ -16,8 +16,9 @@ import org.eolang.jeo.representation.xmir.XmlObject;
 /**
  * Intermediate representation of class files from XMIR format.
  *
- * <p>This class provides a unified interface for working with XMIR (EO XML representation)
- * files. It can read XMIR from files or XML objects and convert them to Java bytecode.</p>
+ * <p>This class provides a unified interface for working with XMIR (EO XML representation) files.
+ * It can read XMIR from files or XML objects and convert them to Java bytecode.</p>
+ *
  * @since 0.1.0
  */
 public final class XmirRepresentation {
@@ -34,6 +35,7 @@ public final class XmirRepresentation {
 
     /**
      * Constructor.
+     *
      * @param path The path to XMIR file to read
      */
     public XmirRepresentation(final Path path) {
@@ -42,6 +44,7 @@ public final class XmirRepresentation {
 
     /**
      * Constructor.
+     *
      * @param xml The XML object containing XMIR representation
      */
     public XmirRepresentation(final XML xml) {
@@ -50,6 +53,7 @@ public final class XmirRepresentation {
 
     /**
      * Constructor.
+     *
      * @param xml The XML document wrapper
      * @param source The source description for error reporting
      */
@@ -60,8 +64,10 @@ public final class XmirRepresentation {
 
     /**
      * Retrieves class name from XMIR.
-     * <p>This method intentionally uses classes from {@code org.w3c.dom} instead of
-     * {@code com.jcabi.xml} for performance reasons.</p>
+     *
+     * <p>This method intentionally uses classes from {@code org.w3c.dom} instead of {@code
+     * com.jcabi.xml} for performance reasons.</p>
+     *
      * @return Fully qualified class name
      */
     public String name() {
@@ -83,6 +89,7 @@ public final class XmirRepresentation {
 
     /**
      * Convert to bytecode.
+     *
      * @return Bytecode object containing the compiled class
      */
     public Bytecode toBytecode() {

@@ -24,6 +24,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link BytecodeModule}.
+ *
  * @since 0.15.0
  */
 final class BytecodeModuleTest {
@@ -63,10 +64,9 @@ final class BytecodeModuleTest {
         final BytecodeObject domain = new AsmProgram(
             new Bytecode(new BytesOf(new ResourceOf("open-module-info.class")).asBytes()).bytes()
         ).bytecode();
-        final Bytecode second = domain.bytecode();
         MatcherAssert.assertThat(
             "We expect to read the same bytecode after writing it to ASM and reading it back",
-            new AsmProgram(second.bytes()).bytecode(),
+            new AsmProgram(domain.bytecode().bytes()).bytecode(),
             Matchers.equalTo(domain)
         );
     }
@@ -75,33 +75,6 @@ final class BytecodeModuleTest {
     void convertsToDirectives() throws ImpossibleModificationException {
         final Format format = new Format();
         final String version = "1.1.1";
-        final String actual = new Xembler(
-            new DirectivesModule(
-                format,
-                "name",
-                0,
-                version,
-                "main",
-                Collections.singletonList("org.eolang.jeo"),
-                Collections.singletonList(
-                    new DirectivesModuleRequired(format, "required", 0, version)
-                ),
-                Collections.singletonList(
-                    new DirectivesModuleExported(
-                        format, "exported", 1, Collections.singletonList("m1")
-                    )
-                ),
-                Collections.singletonList(
-                    new DirectivesModuleOpened(format, "opened", 2, Collections.singletonList("m2"))
-                ),
-                Collections.singletonList(
-                    new DirectivesModuleProvided(
-                        format, "provided", Collections.singletonList("impl")
-                    )
-                ),
-                Collections.singletonList("used")
-            )
-        ).xml();
         MatcherAssert.assertThat(
             "We expect to receive the same XML representation",
             new Xembler(
@@ -124,7 +97,37 @@ final class BytecodeModuleTest {
                     Collections.singletonList("used")
                 ).directives(0, format)
             ).xml(),
-            Matchers.equalTo(actual)
+            Matchers.equalTo(
+                new Xembler(
+                    new DirectivesModule(
+                        format,
+                        "name",
+                        0,
+                        version,
+                        "main",
+                        Collections.singletonList("org.eolang.jeo"),
+                        Collections.singletonList(
+                            new DirectivesModuleRequired(format, "required", 0, version)
+                        ),
+                        Collections.singletonList(
+                            new DirectivesModuleExported(
+                                format, "exported", 1, Collections.singletonList("m1")
+                            )
+                        ),
+                        Collections.singletonList(
+                            new DirectivesModuleOpened(
+                                format, "opened", 2, Collections.singletonList("m2")
+                            )
+                        ),
+                        Collections.singletonList(
+                            new DirectivesModuleProvided(
+                                format, "provided", Collections.singletonList("impl")
+                            )
+                        ),
+                        Collections.singletonList("used")
+                    )
+                ).xml()
+            )
         );
     }
 }

@@ -106,15 +106,16 @@ final class DirectivesObjectTest {
     @Test
     void setsMilliseconds() throws ImpossibleModificationException {
         final ClassName clazz = new ClassName("Some");
-        final DirectivesObject object = new DirectivesObject(
-            new Format(Format.LISTING, "some code"),
-            10,
-            new DirectivesClass(clazz),
-            new DirectivesMetas(clazz)
-        );
         MatcherAssert.assertThat(
             "We expect that milliseconds will be set",
-            new Xembler(object).xml(),
+            new Xembler(
+                new DirectivesObject(
+                    new Format(Format.LISTING, "some code"),
+                    10,
+                    new DirectivesClass(clazz),
+                    new DirectivesMetas(clazz)
+                )
+            ).xml(),
             XhtmlMatchers.hasXPath("/object[@ms='10']")
         );
     }

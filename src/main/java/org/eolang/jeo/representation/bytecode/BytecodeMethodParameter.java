@@ -4,8 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.directives.DirectivesMethodParam;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
@@ -14,10 +13,9 @@ import org.xembly.Directive;
 
 /**
  * Bytecode method parameter.
+ *
  * @since 0.6
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeMethodParameter {
 
     /**
@@ -42,22 +40,20 @@ public final class BytecodeMethodParameter {
 
     /**
      * Constructor.
-     * @param index Index of the parameter.
-     * @param type Type of the parameter.
+     *
+     * @param index Index of the parameter
+     * @param type Type of the parameter
      */
-    public BytecodeMethodParameter(
-        final int index,
-        final Type type
-    ) {
+    public BytecodeMethodParameter(final int index, final Type type) {
         this(index, null, type);
     }
 
     /**
      * Constructor.
-     * @param index Index of the parameter.
-     * @param name Name of the parameter.
-     * @param type Type of the parameter.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param index Index of the parameter
+     * @param name Name of the parameter
+     * @param type Type of the parameter
      */
     public BytecodeMethodParameter(
         final int index,
@@ -69,11 +65,11 @@ public final class BytecodeMethodParameter {
 
     /**
      * Constructor.
-     * @param index Index of the parameter.
-     * @param name Name of the parameter.
-     * @param access Method parameter access.
-     * @param type Type of the parameter.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param index Index of the parameter
+     * @param name Name of the parameter
+     * @param access Method parameter access
+     * @param type Type of the parameter
      */
     public BytecodeMethodParameter(
         final int index,
@@ -89,7 +85,8 @@ public final class BytecodeMethodParameter {
 
     /**
      * Write to the method visitor.
-     * @param visitor Method visitor.
+     *
+     * @param visitor Method visitor
      */
     public void write(final MethodVisitor visitor) {
         visitor.visitParameter(this.name, this.access);
@@ -97,8 +94,9 @@ public final class BytecodeMethodParameter {
 
     /**
      * Convert to directives.
-     * @param format Directives format.
-     * @return Directives.
+     *
+     * @param format Directives format
+     * @return Directives
      */
     public Iterable<Directive> directives(final Format format) {
         return new DirectivesMethodParam(
@@ -107,6 +105,36 @@ public final class BytecodeMethodParameter {
             this.name,
             this.access,
             this.type
+        );
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeMethodParameter) {
+            final BytecodeMethodParameter parameter = (BytecodeMethodParameter) other;
+            result = this.index == parameter.index
+                && this.access == parameter.access
+                && Objects.equals(this.name, parameter.name)
+                && Objects.equals(this.type, parameter.type);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.index, this.name, this.access, this.type);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeMethodParameter(index=%d, name=%s, access=%d, type=%s)",
+            this.index, this.name, this.access, this.type
         );
     }
 }

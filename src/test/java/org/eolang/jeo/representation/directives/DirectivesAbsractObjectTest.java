@@ -14,6 +14,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link DirectivesAbsractObject}.
+ *
  * @since 0.11.0
  */
 final class DirectivesAbsractObjectTest {

@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.hamcrest.MatcherAssert;
@@ -13,32 +14,34 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link Informative}.
+ *
  * @since 0.14.0
  */
 final class InformativeTest {
 
     @Test
     void transformsSuccessfullyWhenOriginalTransformationSucceeds() {
-        final byte[] expected = "transformed".getBytes();
-        final Transformation original = new Transformation() {
-            @Override
-            public Path source() {
-                return Paths.get("source.txt");
-            }
-
-            @Override
-            public Path target() {
-                return Paths.get("target.txt");
-            }
-
-            @Override
-            public byte[] transform() {
-                return expected;
-            }
-        };
+        final byte[] expected = "transformed".getBytes(StandardCharsets.UTF_8);
         MatcherAssert.assertThat(
             "We expect the transformation to delegate successfully",
-            new Informative(original).transform(),
+            new Informative(
+                new Transformation() {
+                    @Override
+                    public Path source() {
+                        return Paths.get("source.txt");
+                    }
+
+                    @Override
+                    public Path target() {
+                        return Paths.get("target.txt");
+                    }
+
+                    @Override
+                    public byte[] transform() {
+                        return expected;
+                    }
+                }
+            ).transform(),
             Matchers.equalTo(expected)
         );
     }
@@ -46,27 +49,28 @@ final class InformativeTest {
     @Test
     @SuppressWarnings("PMD.AvoidThrowingNullPointerException")
     void throwsInformativeExceptionWhenOriginalTransformationFails() {
-        final Transformation original = new Transformation() {
-            @Override
-            public Path source() {
-                return Paths.get("source.txt");
-            }
-
-            @Override
-            public Path target() {
-                return Paths.get("target.txt");
-            }
-
-            @Override
-            public byte[] transform() {
-                throw new NullPointerException("Original failure");
-            }
-        };
         MatcherAssert.assertThat(
             "Exception message should contain informative details",
             Assertions.assertThrows(
                 IllegalStateException.class,
-                new Informative(original)::transform
+                new Informative(
+                    new Transformation() {
+                        @Override
+                        public Path source() {
+                            return Paths.get("source.txt");
+                        }
+
+                        @Override
+                        public Path target() {
+                            return Paths.get("target.txt");
+                        }
+
+                        @Override
+                        public byte[] transform() {
+                            throw new NullPointerException("Original failure");
+                        }
+                    }
+                )::transform
             ).getMessage(),
             Matchers.containsString(
                 "Failed to transform source.txt to target.txt: Original failure"

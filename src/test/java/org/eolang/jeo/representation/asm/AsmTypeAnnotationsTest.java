@@ -18,6 +18,7 @@ import org.objectweb.asm.tree.RecordComponentNode;
 
 /**
  * Test case for {@link AsmTypeAnnotations}.
+ *
  * @since 0.15.0
  */
 final class AsmTypeAnnotationsTest {

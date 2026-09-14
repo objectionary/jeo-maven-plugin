@@ -17,6 +17,7 @@ import org.objectweb.asm.tree.ClassNode;
  * <a href="https://asm.ow2.io/asm4-guide.pdf">https://asm.ow2.io/asm4-guide.pdf</a>
  * The recent version with the Visitor pattern is still available in the history:
  * <a href="https://github.com/objectionary/jeo-maven-plugin/tree/29daa0a167b5c2ba4caaceafb6e6bafc381ac05c">github</a>
+ *
  * @since 0.6
  */
 public final class AsmProgram {
@@ -28,7 +29,8 @@ public final class AsmProgram {
 
     /**
      * Constructor.
-     * @param bytes Bytes.
+     *
+     * @param bytes Bytes
      */
     public AsmProgram(final byte... bytes) {
         this.bytes = bytes.clone();
@@ -36,7 +38,8 @@ public final class AsmProgram {
 
     /**
      * Convert to bytecode.
-     * @return Bytecode.
+     *
+     * @return Bytecode
      */
     public BytecodeObject bytecode() {
         return this.bytecode(ClassReader.SKIP_DEBUG);
@@ -44,8 +47,9 @@ public final class AsmProgram {
 
     /**
      * Convert to bytecode.
-     * @param flags Flags.
-     * @return Bytecode.
+     *
+     * @param flags Flags
+     * @return Bytecode
      */
     public BytecodeObject bytecode(final int flags) {
         final ClassNode node = new ClassNode();

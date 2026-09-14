@@ -11,6 +11,7 @@ import org.xembly.Directive;
 
 /**
  * An annotation value that is plain.
+ *
  * @since 0.6
  */
 public final class DirectivesPlainAnnotationValue implements Iterable<Directive> {
@@ -37,11 +38,18 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
 
     /**
      * Constructor.
-     * @param index Index of the annotation value among other annotation values.
-     * @param format The format of the directives.
-     * @param name The name of the annotation property.
-     * @param value The actual value.
-     * @checkstyle ParameterNumber (5 lines)
+     */
+    DirectivesPlainAnnotationValue() {
+        this(0, new Format(), "", "");
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param index Index of the annotation value among other annotation values
+     * @param format The format of the directives
+     * @param name The name of the annotation property
+     * @param value The actual value
      */
     public DirectivesPlainAnnotationValue(
         final int index,
@@ -55,36 +63,30 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
         this.value = value;
     }
 
-    /**
-     * Constructor.
-     */
-    DirectivesPlainAnnotationValue() {
-        this(0, new Format(), "", "");
-    }
-
     @Override
     public Iterator<Directive> iterator() {
         final Iterable<Directive> res;
-        final Class<?>[] iterable = {
-            byte[].class,
-            short[].class,
-            int[].class,
-            long[].class,
-            float[].class,
-            double[].class,
-            boolean[].class,
-            char[].class,
-            Integer[].class,
-            Long[].class,
-            Float[].class,
-            Double[].class,
-            Boolean[].class,
-            Character[].class,
-            String[].class,
-            Class[].class,
-            Object[].class,
-        };
-        if (Arrays.stream(iterable).anyMatch(iter -> iter.equals(this.value.getClass()))) {
+        if (Arrays.stream(
+            new Class<?>[]{
+                byte[].class,
+                short[].class,
+                int[].class,
+                long[].class,
+                float[].class,
+                double[].class,
+                boolean[].class,
+                char[].class,
+                Integer[].class,
+                Long[].class,
+                Float[].class,
+                Double[].class,
+                Boolean[].class,
+                Character[].class,
+                String[].class,
+                Class[].class,
+                Object[].class,
+            }
+        ).anyMatch(iter -> iter.equals(this.value.getClass()))) {
             if (this.value.getClass().equals(int[].class)) {
                 res = new DirectivesValues(this.format, "", (int[]) this.value);
             } else if (this.value.getClass().equals(long[].class)) {

@@ -12,6 +12,7 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link DirectivesMethodParams}.
+ *
  * @since 0.1
  */
 final class DirectivesMethodParamsTest {

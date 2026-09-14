@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -22,12 +23,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Test for {@link GlobFilter}.
+ *
  * @since 0.13.0
  */
 final class GlobFilterTest {
 
     /**
      * Applies the glob filter to a path and checks if it matches the expected result.
+     *
      * @param description Description of the test case
      * @param includes Set of glob patterns to include
      * @param excludes Set of glob patterns to exclude
@@ -56,8 +59,8 @@ final class GlobFilterTest {
     void compilesMatchersOnlyOnce() {
         final AtomicInteger compiled = new AtomicInteger();
         final GlobFilter filter = new GlobFilter(
-            GlobFilterTest.setOf("**/*.class"),
-            GlobFilterTest.setOf("target/**"),
+            GlobFilterTest.strings("**/*.class"),
+            GlobFilterTest.strings("target/**"),
             pattern -> {
                 compiled.incrementAndGet();
                 return FileSystems.getDefault().getPathMatcher(
@@ -78,8 +81,8 @@ final class GlobFilterTest {
     @Test
     void keepsGlobCompilationLazy() {
         final GlobFilter filter = new GlobFilter(
-            GlobFilterTest.setOf("{unclosed"),
-            GlobFilterTest.setOf()
+            GlobFilterTest.strings("{unclosed"),
+            GlobFilterTest.strings()
         );
         Assertions.assertThrows(
             PatternSyntaxException.class,
@@ -90,6 +93,7 @@ final class GlobFilterTest {
 
     /**
      * Tests the string representation of the GlobFilter.
+     *
      * @param description Description of the test case
      * @param filter The GlobFilter to test
      * @param expected Expected string representation of the filter
@@ -111,63 +115,64 @@ final class GlobFilterTest {
 
     /**
      * Test cases for GlobFilter.
+     *
      * @return Stream of test cases
      */
     static Stream<Arguments> cases() {
         return Stream.of(
             Arguments.of(
                 "Included by pattern",
-                GlobFilterTest.setOf("**/*.java"),
-                GlobFilterTest.setOf(),
+                GlobFilterTest.strings("**/*.java"),
+                GlobFilterTest.strings(),
                 Paths.get("src/Included.java"),
                 true
             ),
             Arguments.of(
                 "Excluded takes precedence",
-                GlobFilterTest.setOf("**/*.java"),
-                GlobFilterTest.setOf("src/**"),
+                GlobFilterTest.strings("**/*.java"),
+                GlobFilterTest.strings("src/**"),
                 Paths.get("src/Excluded.java"),
                 false
             ),
             Arguments.of(
                 "Included, not excluded",
-                GlobFilterTest.setOf("src/**/*.java"),
-                GlobFilterTest.setOf("**/test/**"),
+                GlobFilterTest.strings("src/**/*.java"),
+                GlobFilterTest.strings("**/test/**"),
                 Paths.get("src/main/Main.java"),
                 true
             ),
             Arguments.of(
                 "Only excluded",
-                GlobFilterTest.setOf(),
-                GlobFilterTest.setOf("**/*.class"),
+                GlobFilterTest.strings(),
+                GlobFilterTest.strings("**/*.class"),
                 Paths.get("target/classes/Main.class"),
                 false
             ),
             Arguments.of(
                 "Not matched by includes",
-                GlobFilterTest.setOf("**/*.java"),
-                GlobFilterTest.setOf(),
+                GlobFilterTest.strings("**/*.java"),
+                GlobFilterTest.strings(),
                 Paths.get("README.md"),
                 false
             ),
             Arguments.of(
                 "No includes: allow all except excluded",
-                GlobFilterTest.setOf(),
-                GlobFilterTest.setOf("**/*.tmp"),
+                GlobFilterTest.strings(),
+                GlobFilterTest.strings("**/*.tmp"),
                 Paths.get("build/output.log"),
                 true
             ),
             Arguments.of(
                 "No includes and excluded match",
-                GlobFilterTest.setOf(),
-                GlobFilterTest.setOf("**/*.tmp"),
+                GlobFilterTest.strings(),
+                GlobFilterTest.strings("**/*.tmp"),
                 Paths.get("build/output.tmp"),
                 false
             ),
             Arguments.of(
                 "Empty includes and excludes",
-                GlobFilterTest.setOf(),
-                GlobFilterTest.setOf(),
+                GlobFilterTest.strings(),
+                GlobFilterTest.strings(),
                 Paths.get("any/path/file.txt"),
                 true
             )
@@ -176,42 +181,38 @@ final class GlobFilterTest {
 
     /**
      * Test cases for {@link GlobFilter#toString()}.
+     *
      * @return Stream of test cases
      */
     static Stream<Arguments> stringCases() {
         return Stream.of(
             Arguments.of(
                 "No inclusions and no exclusions",
-                new GlobFilter(GlobFilterTest.setOf(), GlobFilterTest.setOf()),
+                new GlobFilter(GlobFilterTest.strings(), GlobFilterTest.strings()),
                 "no inclusions and no exclusions"
             ),
             Arguments.of(
                 "With inclusions only",
-                new GlobFilter(GlobFilterTest.setOf("**/*.java"), GlobFilterTest.setOf()),
+                new GlobFilter(GlobFilterTest.strings("**/*.java"), GlobFilterTest.strings()),
                 "1 inclusions (**/*.java) and no exclusions"
             ),
             Arguments.of(
                 "With exclusions only",
-                new GlobFilter(GlobFilterTest.setOf(), GlobFilterTest.setOf("**/*.tmp")),
+                new GlobFilter(GlobFilterTest.strings(), GlobFilterTest.strings("**/*.tmp")),
                 "no inclusions and 1 exclusions (**/*.tmp)"
             ),
             Arguments.of(
                 "With both inclusions and exclusions",
                 new GlobFilter(
-                    GlobFilterTest.setOf("src/**/*.java"),
-                    GlobFilterTest.setOf("**/test/**")
+                    GlobFilterTest.strings("src/**/*.java"),
+                    GlobFilterTest.strings("**/test/**")
                 ),
                 "1 inclusions (src/**/*.java) and 1 exclusions (**/test/**)"
             )
         );
     }
 
-    /**
-     * Set of strings for test cases.
-     * @param values Values to include in the set
-     * @return Set of strings
-     */
-    private static Set<String> setOf(final String... values) {
-        return Stream.of(values).collect(java.util.stream.Collectors.toSet());
+    private static Set<String> strings(final String... values) {
+        return Stream.of(values).collect(Collectors.toSet());
     }
 }

@@ -14,6 +14,7 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link BytecodeTryCatchBlock}.
+ *
  * @since 0.13.0
  */
 final class BytecodeTryCatchBlockTest {

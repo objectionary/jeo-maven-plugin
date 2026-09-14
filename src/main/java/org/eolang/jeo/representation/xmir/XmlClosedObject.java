@@ -8,6 +8,7 @@ import java.util.Optional;
 
 /**
  * Closed object in XMIR format.
+ *
  * @since 0.11.0
  */
 final class XmlClosedObject {
@@ -19,7 +20,8 @@ final class XmlClosedObject {
 
     /**
      * Constructor.
-     * @param node XML node of the closed object.
+     *
+     * @param node XML node of the closed object
      */
     XmlClosedObject(final XmlNode node) {
         this.node = node;
@@ -27,7 +29,8 @@ final class XmlClosedObject {
 
     /**
      * Get the type of the object.
-     * @return Type.
+     *
+     * @return Type
      */
     String base() {
         return this.node.attribute("base").orElseThrow(() -> this.notFound("base"));
@@ -35,17 +38,13 @@ final class XmlClosedObject {
 
     /**
      * Get the option type of the object.
-     * @return Optional type.
+     *
+     * @return Optional type
      */
     Optional<String> optbase() {
         return this.node.attribute("base");
     }
 
-    /**
-     * Create a new exception if the attribute is not found.
-     * @param name Name of the attribute that is not found.
-     * @return Exception indicating that the attribute is not found.
-     */
     private IllegalStateException notFound(final String name) {
         return new IllegalStateException(
             String.format(
@@ -54,5 +53,4 @@ final class XmlClosedObject {
             )
         );
     }
-
 }

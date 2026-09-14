@@ -13,83 +13,98 @@ import org.xembly.Directive;
 /**
  * Bytecode instruction or a label.
  * Might be a label, a jump, a method call, etc.
+ *
  * @since 0.1
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public interface BytecodeEntry {
+
     /**
      * Write instruction to the method visitor.
-     * @param visitor Method visitor.
-     * @param labels Method labels.
+     *
+     * @param visitor Method visitor
+     * @param labels Method labels
      */
     void writeTo(MethodVisitor visitor, AsmLabels labels);
 
     /**
      * Convert entry to directives.
-     * @param index Index of the entry in the method.
-     * @param format Format of the directives.
-     * @return Directives.
+     *
+     * @param index Index of the entry in the method
+     * @param format Format of the directives
+     * @return Directives
      */
     Iterable<Directive> directives(int index, Format format);
 
     /**
      * Is this instruction a label?
-     * @return True if it is.
+     *
+     * @return True if it is
      */
     boolean isLabel();
 
     /**
      * Is this instruction a switch?
-     * @return True if it is.
+     *
+     * @return True if it is
      */
     boolean isSwitch();
 
     /**
      * Is this instruction a goto?
      * Is it a goto or jsr?
-     * @return True if it is.
+     *
+     * @return True if it is
      */
     boolean isJump();
 
     /**
      * Is this instruction a conditional branch?
-     * @return True if it is.
+     *
+     * @return True if it is
      */
     boolean isIf();
 
     /**
      * Is this instruction a return statement?
-     * @return True if it is.
+     *
+     * @return True if it is
      */
     boolean isReturn();
 
     /**
      * Is this instruction a throw statement?
-     * @return True if it is.
+     *
+     * @return True if it is
      */
     boolean isThrow();
 
     /**
      * Is this instruction a regular opcode?
-     * @return True if it is.
+     *
+     * @return True if it is
      */
     boolean isOpcode();
 
     /**
      * Impact of the instruction on the stack.
-     * @return Stack impact.
+     *
+     * @return Stack impact
      */
     int impact();
 
     /**
      * Jump to a label.
      * Where to jump.
-     * @return Jumps.
+     *
+     * @return Jumps
      */
     List<BytecodeLabel> jumps();
 
     /**
      * Human-readable representation.
-     * @return Text.
+     *
+     * @return Text
      */
     String view();
 }

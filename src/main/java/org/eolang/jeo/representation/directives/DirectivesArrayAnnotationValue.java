@@ -13,6 +13,7 @@ import org.xembly.Directives;
 
 /**
  * An annotation value that is an array.
+ *
  * @since 0.6
  */
 public final class DirectivesArrayAnnotationValue implements Iterable<Directive> {
@@ -39,11 +40,11 @@ public final class DirectivesArrayAnnotationValue implements Iterable<Directive>
 
     /**
      * Constructor.
-     * @param index Index of the annotation value among other annotation values.
-     * @param format Format of the directives.
-     * @param name The name of the annotation property.
-     * @param children The actual values.
-     * @checkstyle ParameterNumber (5 lines)
+     *
+     * @param index Index of the annotation value among other annotation values
+     * @param format Format of the directives
+     * @param name The name of the annotation property
+     * @param children The actual values
      */
     public DirectivesArrayAnnotationValue(
         final int index,

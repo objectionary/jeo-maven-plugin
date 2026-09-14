@@ -4,8 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.directives.DirectivesRecordComponent;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
@@ -14,10 +13,9 @@ import org.xembly.Directive;
 
 /**
  * The record component of a record class.
+ *
  * @since 0.14.0
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeRecordComponent {
 
     /**
@@ -47,6 +45,7 @@ public final class BytecodeRecordComponent {
 
     /**
      * Constructor.
+     *
      * @param name Name
      * @param descriptor Descriptor
      * @param signature Signature
@@ -61,12 +60,12 @@ public final class BytecodeRecordComponent {
 
     /**
      * Constructor.
+     *
      * @param name Name
      * @param descriptor Descriptor
      * @param signature Signature
      * @param annotations Annotations
      * @param types Type annotations
-     * @checkstyle ParameterNumber (10 lines)
      */
     public BytecodeRecordComponent(
         final String name,
@@ -84,6 +83,7 @@ public final class BytecodeRecordComponent {
 
     /**
      * Write to class visitor.
+     *
      * @param clazz Class visitor
      */
     public void write(final ClassVisitor clazz) {
@@ -96,6 +96,7 @@ public final class BytecodeRecordComponent {
 
     /**
      * Convert to directives.
+     *
      * @param index Index of the record component
      * @param format Format of the directives
      * @return Directives
@@ -109,6 +110,39 @@ public final class BytecodeRecordComponent {
             this.signature,
             this.annotations.directives(format),
             this.types.directives(format)
+        );
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeRecordComponent) {
+            final BytecodeRecordComponent component = (BytecodeRecordComponent) other;
+            result = Objects.equals(this.name, component.name)
+                && Objects.equals(this.descriptor, component.descriptor)
+                && Objects.equals(this.signature, component.signature)
+                && Objects.equals(this.annotations, component.annotations)
+                && Objects.equals(this.types, component.types);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            this.name, this.descriptor, this.signature, this.annotations, this.types
+        );
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeRecordComponent(name=%s, descriptor=%s, signature=%s, annotations=%s, types=%s)",
+            this.name, this.descriptor, this.signature, this.annotations, this.types
         );
     }
 }

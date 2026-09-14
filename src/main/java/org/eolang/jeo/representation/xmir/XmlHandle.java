@@ -11,6 +11,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeHandler;
 
 /**
  * XML representation of handler.
+ *
  * @since 0.3
  */
 final class XmlHandle {
@@ -22,7 +23,8 @@ final class XmlHandle {
 
     /**
      * Constructor.
-     * @param xmlnode Node.
+     *
+     * @param xmlnode Node
      */
     XmlHandle(final XmlNode xmlnode) {
         this(new XmlJeoObject(xmlnode));
@@ -30,7 +32,8 @@ final class XmlHandle {
 
     /**
      * Constructor.
-     * @param node XML Jeo object node.
+     *
+     * @param node XML Jeo object node
      */
     private XmlHandle(final XmlJeoObject node) {
         this.node = node;
@@ -38,9 +41,10 @@ final class XmlHandle {
 
     /**
      * Convert to a handler.
-     * @return Handler.
+     *
+     * @return Handler
      */
-    public BytecodeHandler bytecode() {
+    BytecodeHandler bytecode() {
         final List<XmlOperand> operands = this.node.children()
             .map(XmlOperand::new)
             .collect(Collectors.toList());

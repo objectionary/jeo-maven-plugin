@@ -6,20 +6,19 @@ package org.eolang.jeo.representation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lombok.ToString;
 
 /**
  * Java name handler for avoiding naming conflicts with EO-reserved words.
  *
- * <p>This class is used to represent any Java class or method name and provides
- * encoding/decoding functionality to avoid naming conflicts with EO-reserved words.
- * Names are prefixed with "j$" to distinguish them from EO keywords.</p>
+ * <p>This class is used to represent any Java class or method name and provides encoding/decoding
+ * functionality to avoid naming conflicts with EO-reserved words. Names are prefixed with "j$"
+ * to distinguish them from EO keywords.</p>
  *
- * <p>You can read more about the problem
- * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/276">here</a></p>
+ * <p>You can read more about the problem <a href="https://github.com/objectionary/jeo-maven-
+ * plugin/issues/276">here</a></p>
+ *
  * @since 0.1.0
  */
-@ToString
 public final class PrefixedName {
 
     /**
@@ -72,7 +71,8 @@ public final class PrefixedName {
 
     /**
      * Constructor.
-     * @param origin The original name.
+     *
+     * @param origin The original name
      */
     public PrefixedName(final String origin) {
         this(PrefixedName.PREFIX, origin, PrefixedName.DELIMITED, PrefixedName.PREFIXED);
@@ -80,8 +80,9 @@ public final class PrefixedName {
 
     /**
      * Constructor.
+     *
      * @param prefix Prefix to be used for encoding and decoding
-     * @param origin The original name.
+     * @param origin The original name
      */
     public PrefixedName(final String prefix, final String origin) {
         this(
@@ -94,11 +95,11 @@ public final class PrefixedName {
 
     /**
      * Constructor.
+     *
      * @param prefix Prefix to be used for encoding and decoding
      * @param origin The original name
      * @param delimited Pattern to find positions for prefixing
      * @param prefixed Pattern to find existing prefixes for removal
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public PrefixedName(
         final String prefix,
@@ -114,7 +115,8 @@ public final class PrefixedName {
 
     /**
      * Encode name.
-     * @return Encoded name.
+     *
+     * @return Encoded name
      */
     public String encode() {
         if (PrefixedName.BLANKED.matcher(this.origin).matches()) {
@@ -127,12 +129,21 @@ public final class PrefixedName {
 
     /**
      * Decode name.
-     * @return Decoded name.
+     *
+     * @return Decoded name
      */
     public String decode() {
         if (PrefixedName.BLANKED.matcher(this.origin).matches()) {
             throw new IllegalArgumentException(PrefixedName.BLANK);
         }
         return this.prefixed.matcher(this.origin).replaceAll("");
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "PrefixedName(prefix=%s, origin=%s, delimited=%s, prefixed=%s)",
+            this.prefix, this.origin, this.delimited, this.prefixed
+        );
     }
 }

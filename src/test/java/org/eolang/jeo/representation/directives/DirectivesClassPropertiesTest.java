@@ -15,6 +15,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link org.eolang.jeo.representation.directives.DirectivesClassProperties}.
+ *
  * @since 0.1.0
  */
 final class DirectivesClassPropertiesTest {
@@ -25,8 +26,7 @@ final class DirectivesClassPropertiesTest {
             "Can't create proper xml",
             new Xembler(
                 new Directives()
-                    .add("o")
-                    .append(
+                    .add("o").append(
                         new DirectivesClassProperties(
                             1,
                             "org/eolang/SomeClass",
@@ -50,8 +50,7 @@ final class DirectivesClassPropertiesTest {
             "We expect class access modifiers to be added to the directives",
             new Xembler(
                 new Directives()
-                    .add("o")
-                    .append(
+                    .add("o").append(
                         new DirectivesClassProperties(
                             new Format(Format.MODIFIERS, true),
                             Opcodes.ACC_INTERFACE

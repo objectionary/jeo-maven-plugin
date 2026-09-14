@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 /**
  * Test case for {@link MavenPath}.
+ *
  * @since 0.15.0
  */
 final class MavenPathTest {
@@ -24,7 +25,6 @@ final class MavenPathTest {
         "${basedir}/src/test/resources, ./src/test/resources",
         "${project.build.outputDirectory}/extra, target/classes/extra",
         "${project.build.directory}/extra, target/extra"
-
     })
     void resolvesPath(final String input, final String expected) {
         MatcherAssert.assertThat(

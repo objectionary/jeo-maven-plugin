@@ -6,10 +6,9 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesEnclosingMethod;
 import org.eolang.jeo.representation.directives.DirectivesNestHost;
@@ -24,37 +23,40 @@ import org.xembly.Directive;
 
 /**
  * Bytecode attribute.
+ *
  * @since 0.4
  */
 public interface BytecodeAttribute {
 
     /**
      * Write to class.
-     * @param clazz Bytecode where to write.
+     *
+     * @param clazz Bytecode where to write
      */
     void write(ClassVisitor clazz);
 
     /**
      * Write to method.
-     * @param method Bytecode where to write.
-     * @param labels Method labels.
+     *
+     * @param method Bytecode where to write
+     * @param labels Method labels
      */
     void write(MethodVisitor method, AsmLabels labels);
 
     /**
      * Converts to directives.
-     * @param index Index of the attribute.
-     * @param format Format of the directives.
-     * @return Directives.
+     *
+     * @param index Index of the attribute
+     * @param format Format of the directives
+     * @return Directives
      */
     Iterable<Directive> directives(int index, Format format);
 
     /**
      * Source file attribute.
+     *
      * @since 0.14.0
      */
-    @ToString
-    @EqualsAndHashCode
     final class SourceFile implements BytecodeAttribute {
 
         /**
@@ -71,8 +73,9 @@ public interface BytecodeAttribute {
 
         /**
          * Constructor.
-         * @param source Name of the source file.
-         * @param debug Debug information.
+         *
+         * @param source Name of the source file
+         * @param debug Debug information
          */
         public SourceFile(final String source, final String debug) {
             this.source = source;
@@ -95,15 +98,42 @@ public interface BytecodeAttribute {
         public Iterable<Directive> directives(final int index, final Format format) {
             return new DirectivesSourceFile(format, this.source, this.debug);
         }
+
+        @Override
+        public boolean equals(final Object other) {
+            final boolean result;
+            if (this == other) {
+                result = true;
+            } else if (other instanceof SourceFile) {
+                final SourceFile file = (SourceFile) other;
+                result = Objects.equals(this.source, file.source)
+                    && Objects.equals(this.debug, file.debug);
+            } else {
+                result = false;
+            }
+            return result;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.source, this.debug);
+        }
+
+        @Override
+        public String toString() {
+            return String.format(
+                "SourceFile(source=%s, debug=%s)", this.source, this.debug
+            );
+        }
     }
 
     /**
      * Enclosing method attribute.
+     *
      * @since 0.14.0
      */
-    @ToString
-    @EqualsAndHashCode
     final class EnclosingMethod implements BytecodeAttribute {
+
         /**
          * Owner class of the enclosing method.
          */
@@ -123,9 +153,10 @@ public interface BytecodeAttribute {
 
         /**
          * Constructor.
-         * @param owner Owner class of the enclosing method.
-         * @param name Method name of the enclosing method.
-         * @param descriptor Method descriptor of the enclosing method.
+         *
+         * @param owner Owner class of the enclosing method
+         * @param name Method name of the enclosing method
+         * @param descriptor Method descriptor of the enclosing method
          */
         public EnclosingMethod(final String owner, final String name, final String descriptor) {
             this.owner = owner;
@@ -147,14 +178,42 @@ public interface BytecodeAttribute {
         public Iterable<Directive> directives(final int index, final Format format) {
             return new DirectivesEnclosingMethod(format, this.owner, this.name, this.descriptor);
         }
+
+        @Override
+        public boolean equals(final Object other) {
+            final boolean result;
+            if (this == other) {
+                result = true;
+            } else if (other instanceof EnclosingMethod) {
+                final EnclosingMethod method = (EnclosingMethod) other;
+                result = Objects.equals(this.owner, method.owner)
+                    && Objects.equals(this.name, method.name)
+                    && Objects.equals(this.descriptor, method.descriptor);
+            } else {
+                result = false;
+            }
+            return result;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.owner, this.name, this.descriptor);
+        }
+
+        @Override
+        public String toString() {
+            return String.format(
+                "EnclosingMethod(owner=%s, name=%s, descriptor=%s)",
+                this.owner, this.name, this.descriptor
+            );
+        }
     }
 
     /**
      * Nest host attribute.
+     *
      * @since 0.14.0
      */
-    @ToString
-    @EqualsAndHashCode
     final class NestHost implements BytecodeAttribute {
 
         /**
@@ -164,7 +223,8 @@ public interface BytecodeAttribute {
 
         /**
          * Constructor.
-         * @param host Host class of the nest.
+         *
+         * @param host Host class of the nest
          */
         public NestHost(final String host) {
             this.host = host;
@@ -186,14 +246,36 @@ public interface BytecodeAttribute {
         public Iterable<Directive> directives(final int index, final Format format) {
             return new DirectivesNestHost(format, this.host);
         }
+
+        @Override
+        public boolean equals(final Object other) {
+            final boolean result;
+            if (this == other) {
+                result = true;
+            } else if (other instanceof NestHost) {
+                result = Objects.equals(this.host, ((NestHost) other).host);
+            } else {
+                result = false;
+            }
+            return result;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.host);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("NestHost(host=%s)", this.host);
+        }
     }
 
     /**
      * Nest members attribute.
+     *
      * @since 0.14.0
      */
-    @ToString
-    @EqualsAndHashCode
     final class NestMembers implements BytecodeAttribute {
 
         /**
@@ -203,7 +285,8 @@ public interface BytecodeAttribute {
 
         /**
          * Constructor.
-         * @param nested Nest members.
+         *
+         * @param nested Nest members
          */
         public NestMembers(final String... nested) {
             this(Arrays.asList(nested));
@@ -211,7 +294,8 @@ public interface BytecodeAttribute {
 
         /**
          * Constructor.
-         * @param nested Nest members.
+         *
+         * @param nested Nest members
          */
         public NestMembers(final List<String> nested) {
             this.members = nested;
@@ -231,14 +315,36 @@ public interface BytecodeAttribute {
         public Iterable<Directive> directives(final int index, final Format format) {
             return new DirectivesNestMembers(format, this.members);
         }
+
+        @Override
+        public boolean equals(final Object other) {
+            final boolean result;
+            if (this == other) {
+                result = true;
+            } else if (other instanceof NestMembers) {
+                result = Objects.equals(this.members, ((NestMembers) other).members);
+            } else {
+                result = false;
+            }
+            return result;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.members);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("NestMembers(members=%s)", this.members);
+        }
     }
 
     /**
      * Permitted subclasses attribute.
+     *
      * @since 0.14.0
      */
-    @ToString
-    @EqualsAndHashCode
     final class PermittedSubclasses implements BytecodeAttribute {
 
         /**
@@ -248,7 +354,8 @@ public interface BytecodeAttribute {
 
         /**
          * Constructor.
-         * @param all Permitted subclasses.
+         *
+         * @param all Permitted subclasses
          */
         public PermittedSubclasses(final String... all) {
             this(Arrays.asList(all));
@@ -256,7 +363,8 @@ public interface BytecodeAttribute {
 
         /**
          * Constructor.
-         * @param classes Permitted subclasses.
+         *
+         * @param classes Permitted subclasses
          */
         public PermittedSubclasses(final List<String> classes) {
             this.classes = classes;
@@ -278,14 +386,36 @@ public interface BytecodeAttribute {
         public Iterable<Directive> directives(final int index, final Format format) {
             return new DirectivesPermittedSubclasses(format, this.classes);
         }
+
+        @Override
+        public boolean equals(final Object other) {
+            final boolean result;
+            if (this == other) {
+                result = true;
+            } else if (other instanceof PermittedSubclasses) {
+                result = Objects.equals(this.classes, ((PermittedSubclasses) other).classes);
+            } else {
+                result = false;
+            }
+            return result;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.classes);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("PermittedSubclasses(classes=%s)", this.classes);
+        }
     }
 
     /**
      * Record components attribute.
+     *
      * @since 0.14.0
      */
-    @ToString
-    @EqualsAndHashCode
     final class RecordComponents implements BytecodeAttribute {
 
         /**
@@ -295,7 +425,8 @@ public interface BytecodeAttribute {
 
         /**
          * Constructor.
-         * @param components Components.
+         *
+         * @param components Components
          */
         public RecordComponents(final BytecodeRecordComponent... components) {
             this(Arrays.asList(components));
@@ -303,7 +434,8 @@ public interface BytecodeAttribute {
 
         /**
          * Constructor.
-         * @param components Components.
+         *
+         * @param components Components
          */
         public RecordComponents(final List<BytecodeRecordComponent> components) {
             this.components = components;
@@ -330,6 +462,29 @@ public interface BytecodeAttribute {
                     .map(component -> component.directives(counter.getAndIncrement(), format))
                     .collect(Collectors.toList())
             );
+        }
+
+        @Override
+        public boolean equals(final Object other) {
+            final boolean result;
+            if (this == other) {
+                result = true;
+            } else if (other instanceof RecordComponents) {
+                result = Objects.equals(this.components, ((RecordComponents) other).components);
+            } else {
+                result = false;
+            }
+            return result;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.components);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("RecordComponents(components=%s)", this.components);
         }
     }
 }

@@ -9,6 +9,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 
 /**
  * Xml representation of a class attributes.
+ *
  * @since 0.4
  */
 public final class XmlAttributes {
@@ -20,7 +21,8 @@ public final class XmlAttributes {
 
     /**
      * Constructor.
-     * @param xmlnode XML node.
+     *
+     * @param xmlnode XML node
      */
     XmlAttributes(final XmlNode xmlnode) {
         this(new XmlSeq(xmlnode));
@@ -28,7 +30,8 @@ public final class XmlAttributes {
 
     /**
      * Constructor.
-     * @param node XML sequence node containing attributes.
+     *
+     * @param node XML sequence node containing attributes
      */
     XmlAttributes(final XmlSeq node) {
         this.node = node;
@@ -36,7 +39,8 @@ public final class XmlAttributes {
 
     /**
      * Get attributes.
-     * @return Attributes.
+     *
+     * @return Attributes
      */
     public BytecodeAttributes attributes() {
         return new BytecodeAttributes(

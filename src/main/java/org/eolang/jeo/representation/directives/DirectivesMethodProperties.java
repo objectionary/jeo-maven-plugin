@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
@@ -16,12 +15,13 @@ import org.xembly.Directives;
  * All the directives are sorted according to JVM method specification:
  * {@code
  * method_info {
- *     u2             access_flags; {@link DirectivesMethodProperties}
- *     u2             name_index; {@link DirectivesMethodProperties}
- *     u2             descriptor_index; {@link DirectivesMethodProperties}
- *     u2             attributes_count; {@link DirectivesMethod}
- *     attribute_info attributes[attributes_count]; {@link DirectivesMethod}
+ * u2             access_flags; {@link DirectivesMethodProperties}
+ * u2             name_index; {@link DirectivesMethodProperties}
+ * u2             descriptor_index; {@link DirectivesMethodProperties}
+ * u2             attributes_count; {@link DirectivesMethod}
+ * attribute_info attributes[attributes_count]; {@link DirectivesMethod}
  * }}
+ *
  * @since 0.1
  */
 public final class DirectivesMethodProperties implements Iterable<Directive> {
@@ -79,7 +79,8 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Method name.
+     *
+     * @param name Method name
      */
     public DirectivesMethodProperties(final String name) {
         this(Opcodes.ACC_PUBLIC, name, "()V", "");
@@ -87,12 +88,12 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param access Access modifiers.
-     * @param name Method name.
-     * @param descriptor Method descriptor.
-     * @param signature Method signature.
-     * @param exceptions Method exceptions.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param access Access modifiers
+     * @param name Method name
+     * @param descriptor Method descriptor
+     * @param signature Method signature
+     * @param exceptions Method exceptions
      */
     public DirectivesMethodProperties(
         final int access,
@@ -114,14 +115,14 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param access Access modifiers.
-     * @param name Method name.
-     * @param descriptor Method descriptor.
-     * @param signature Method signature.
-     * @param exceptions Method exceptions.
-     * @param max Max stack and locals.
-     * @param params Method parameters.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param access Access modifiers
+     * @param name Method name
+     * @param descriptor Method descriptor
+     * @param signature Method signature
+     * @param exceptions Method exceptions
+     * @param max Max stack and locals
+     * @param params Method parameters
      */
     public DirectivesMethodProperties(
         final int access,
@@ -137,15 +138,15 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param access Access modifiers.
-     * @param name Method name.
-     * @param descriptor Method descriptor.
-     * @param signature Method signature.
-     * @param exceptions Method exceptions.
-     * @param max Max stack and locals.
-     * @param params Method parameters.
-     * @param format Format of the directives.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param access Access modifiers
+     * @param name Method name
+     * @param descriptor Method descriptor
+     * @param signature Method signature
+     * @param exceptions Method exceptions
+     * @param max Max stack and locals
+     * @param params Method parameters
+     * @param format Format of the directives
      */
     public DirectivesMethodProperties(
         final int access,
@@ -159,9 +160,9 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
     ) {
         this.access = access;
         this.name = name;
-        this.descriptor = Optional.ofNullable(descriptor).orElse("");
-        this.signature = Optional.ofNullable(signature).orElse("");
-        this.exceptions = Optional.ofNullable(exceptions).orElse(new String[0]).clone();
+        this.descriptor = descriptor;
+        this.signature = signature;
+        this.exceptions = exceptions.clone();
         this.max = new AtomicReference<>(max);
         this.params = params;
         this.format = format;
@@ -175,13 +176,43 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
             dirs.append(new DirectivesMethodModifiers(this.format, this.access));
         }
         dirs.append(new DirectivesValue(this.format, "name", this.name));
-        dirs.append(new DirectivesValue(this.format, "descriptor", this.descriptor));
-        dirs.append(new DirectivesValue(this.format, "signature", this.signature));
+        dirs.append(new DirectivesValue(this.format, "descriptor", this.descriptor()));
+        dirs.append(new DirectivesValue(this.format, "signature", this.signature()));
         dirs.append(
-            new DirectivesValues(this.format, "exceptions", (Object[]) this.exceptions)
+            new DirectivesValues(this.format, "exceptions", (Object[]) this.exceptions())
         );
         dirs.append(this.max.get());
         dirs.append(this.params);
         return dirs.iterator();
+    }
+
+    private String descriptor() {
+        final String result;
+        if (this.descriptor == null) {
+            result = "";
+        } else {
+            result = this.descriptor;
+        }
+        return result;
+    }
+
+    private String signature() {
+        final String result;
+        if (this.signature == null) {
+            result = "";
+        } else {
+            result = this.signature;
+        }
+        return result;
+    }
+
+    private String[] exceptions() {
+        final String[] result;
+        if (this.exceptions == null) {
+            result = new String[0];
+        } else {
+            result = this.exceptions;
+        }
+        return result;
     }
 }

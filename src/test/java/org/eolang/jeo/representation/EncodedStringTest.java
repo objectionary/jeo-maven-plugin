@@ -11,6 +11,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 /**
  * Test case for {@link EncodedString}.
+ *
  * @since 0.6
  */
 final class EncodedStringTest {

@@ -10,6 +10,7 @@ import org.xembly.Directives;
 
 /**
  * Directives for bytes.
+ *
  * @since 0.6
  */
 public final class DirectivesBytes implements Iterable<Directive> {
@@ -28,13 +29,15 @@ public final class DirectivesBytes implements Iterable<Directive> {
 
     /**
      * The 'as' attribute of the object.
+     *
      * @checkstyle MemberNameCheck (2 lines)
      */
     private final String as;
 
     /**
      * Constructor.
-     * @param hex Hex representation of bytes.
+     *
+     * @param hex Hex representation of bytes
      */
     public DirectivesBytes(final String hex) {
         this(hex, "");
@@ -42,8 +45,9 @@ public final class DirectivesBytes implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param hex Hex representation of bytes.
-     * @param name Name of the object.
+     *
+     * @param hex Hex representation of bytes
+     * @param name Name of the object
      */
     public DirectivesBytes(final String hex, final String name) {
         this(hex, name, "");
@@ -51,9 +55,10 @@ public final class DirectivesBytes implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param hex Hex representation of bytes.
-     * @param name Name of the object.
-     * @param as The 'as' attribute of the object.
+     *
+     * @param hex Hex representation of bytes
+     * @param name Name of the object
+     * @param as The 'as' attribute of the object
      * @checkstyle ParameterNameCheck (5 lines)
      */
     public DirectivesBytes(final String hex, final String name, final String as) {

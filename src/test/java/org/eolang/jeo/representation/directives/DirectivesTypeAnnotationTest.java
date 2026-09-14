@@ -14,6 +14,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link DirectivesTypeAnnotationTest}.
+ *
  * @since 0.15.0
  */
 final class DirectivesTypeAnnotationTest {

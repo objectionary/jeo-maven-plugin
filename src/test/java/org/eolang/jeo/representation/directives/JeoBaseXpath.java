@@ -9,6 +9,7 @@ package org.eolang.jeo.representation.directives;
  * This class is the response to the frequent changes in a way we represent 'base' attribute in
  * XMIR. These frequent changes made it difficult to maintain tests. Thus, to ensure stability,
  * we encapsulate the XPath creation logic here.
+ *
  * @since 0.11.0
  */
 final class JeoBaseXpath {
@@ -25,8 +26,9 @@ final class JeoBaseXpath {
 
     /**
      * Constructor.
-     * @param element Element of the instruction.
-     * @param base Base of the instruction.
+     *
+     * @param element Element of the instruction
+     * @param base Base of the instruction
      */
     JeoBaseXpath(final String element, final String base) {
         this.element = element;
@@ -35,7 +37,8 @@ final class JeoBaseXpath {
 
     /**
      * Base of the instruction.
-     * @return String base.
+     *
+     * @return String base
      */
     String toXpath() {
         return String.format("%s/o[@name='φ' and contains(@base,'%s')]", this.element, this.base);

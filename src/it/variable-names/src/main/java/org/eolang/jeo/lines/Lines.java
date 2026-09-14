@@ -67,6 +67,7 @@ public class Lines {
 
         /**
          * Total found.
+         *
          * @return Lines count
          */
         public int total() {

@@ -72,9 +72,11 @@ final class DirectivesFieldTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {
-        "Φ", "Ψ", "Ω", "Δ", "Σ", "Θ", "Λ", "Ξ", "Π", "Υ", "\u03A3", "\u03A6", "\u03A8", "\u03A9"
-    })
+    @ValueSource(
+        strings = {
+            "Φ", "Ψ", "Ω", "Δ", "Σ", "Θ", "Λ", "Ξ", "Π", "Υ"
+        }
+    )
     void convertsDirectivesFieldWithUnicodeName(
         final String original
     ) throws ImpossibleModificationException {

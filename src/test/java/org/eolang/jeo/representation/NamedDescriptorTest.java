@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Test for {@link NamedDescriptor}.
+ *
  * @since 0.5
  */
 final class NamedDescriptorTest {
@@ -47,14 +48,6 @@ final class NamedDescriptorTest {
         );
     }
 
-    /**
-     * Provides names, descriptors and encoded values.
-     * This method is used by {@link #encodesNamesWithDescriptors(String, String, String)},
-     * {@link #decodesNames(String, String, String)}
-     * and {@link #decodesDescriptors(String, String, String)}.
-     * @return Arguments for tests.
-     */
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> namesDescriptorsAndEncoded() {
         return Stream.of(
             Arguments.of("foo", "()I", "foo-%28%29I"),

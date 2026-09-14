@@ -7,9 +7,8 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesMethodParams;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
@@ -17,10 +16,9 @@ import org.objectweb.asm.Type;
 
 /**
  * Bytecode parameters.
+ *
  * @since 0.4
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeMethodParameters {
 
     /**
@@ -42,7 +40,8 @@ public final class BytecodeMethodParameters {
 
     /**
      * Constructor.
-     * @param descriptor Method descriptor.
+     *
+     * @param descriptor Method descriptor
      */
     public BytecodeMethodParameters(final String descriptor) {
         this(BytecodeMethodParameters.fromDescriptor(descriptor));
@@ -50,7 +49,8 @@ public final class BytecodeMethodParameters {
 
     /**
      * Constructor.
-     * @param params Parameters.
+     *
+     * @param params Parameters
      */
     public BytecodeMethodParameters(final BytecodeMethodParameter... params) {
         this(Arrays.asList(params));
@@ -58,7 +58,8 @@ public final class BytecodeMethodParameters {
 
     /**
      * Constructor.
-     * @param params Parameters.
+     *
+     * @param params Parameters
      */
     public BytecodeMethodParameters(final List<BytecodeMethodParameter> params) {
         this(params, new ArrayList<>(0));
@@ -66,8 +67,9 @@ public final class BytecodeMethodParameters {
 
     /**
      * Constructor.
-     * @param params Parameters.
-     * @param annotations Parameter annotations.
+     *
+     * @param params Parameters
+     * @param annotations Parameter annotations
      */
     public BytecodeMethodParameters(
         final List<BytecodeMethodParameter> params,
@@ -79,7 +81,8 @@ public final class BytecodeMethodParameters {
 
     /**
      * Add annotation.
-     * @param visitor Method visitor.
+     *
+     * @param visitor Method visitor
      */
     public void write(final MethodVisitor visitor) {
         this.params.forEach(param -> param.write(visitor));
@@ -88,8 +91,9 @@ public final class BytecodeMethodParameters {
 
     /**
      * Convert to directives.
-     * @param format Format of the directives.
-     * @return Directives.
+     *
+     * @param format Format of the directives
+     * @return Directives
      */
     public DirectivesMethodParams directives(final Format format) {
         return new DirectivesMethodParams(
@@ -102,11 +106,34 @@ public final class BytecodeMethodParameters {
         );
     }
 
-    /**
-     * Create from descriptor.
-     * @param descriptor Method descriptor.
-     * @return Parameters.
-     */
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeMethodParameters) {
+            final BytecodeMethodParameters parameters = (BytecodeMethodParameters) other;
+            result = Objects.equals(this.params, parameters.params)
+                && Objects.equals(this.annotations, parameters.annotations);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.params, this.annotations);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeMethodParameters(params=%s, annotations=%s)",
+            this.params, this.annotations
+        );
+    }
+
     private static List<BytecodeMethodParameter> fromDescriptor(final String descriptor) {
         final Type[] types = Type.getArgumentTypes(descriptor);
         final int size = types.length;

@@ -4,8 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.directives.DirectivesPlainAnnotationValue;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.AnnotationVisitor;
@@ -13,10 +12,9 @@ import org.xembly.Directive;
 
 /**
  * An annotation value that is a plain value.
+ *
  * @since 0.6
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodePlainAnnotationValue implements BytecodeAnnotationValue {
 
     /**
@@ -31,8 +29,9 @@ public final class BytecodePlainAnnotationValue implements BytecodeAnnotationVal
 
     /**
      * Constructor.
-     * @param name The name of the annotation property.
-     * @param value The actual value.
+     *
+     * @param name The name of the annotation property
+     * @param value The actual value
      */
     public BytecodePlainAnnotationValue(final String name, final Object value) {
         this.name = name;
@@ -47,5 +46,32 @@ public final class BytecodePlainAnnotationValue implements BytecodeAnnotationVal
     @Override
     public Iterable<Directive> directives(final int index, final Format format) {
         return new DirectivesPlainAnnotationValue(index, format, this.name, this.value);
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodePlainAnnotationValue) {
+            final BytecodePlainAnnotationValue plain = (BytecodePlainAnnotationValue) other;
+            result = Objects.equals(this.name, plain.name)
+                && Objects.equals(this.value, plain.value);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.name, this.value);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodePlainAnnotationValue(name=%s, value=%s)", this.name, this.value
+        );
     }
 }

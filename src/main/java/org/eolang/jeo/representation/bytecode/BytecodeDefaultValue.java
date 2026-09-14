@@ -4,8 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.directives.DirectivesDefaultValue;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.AnnotationVisitor;
@@ -17,8 +16,6 @@ import org.xembly.Directive;
  *
  * @since 0.3
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeDefaultValue {
 
     /**
@@ -28,7 +25,8 @@ public final class BytecodeDefaultValue {
 
     /**
      * Constructor.
-     * @param property Annotation property as a value.
+     *
+     * @param property Annotation property as a value
      */
     public BytecodeDefaultValue(final BytecodeAnnotationValue property) {
         this.property = property;
@@ -36,7 +34,8 @@ public final class BytecodeDefaultValue {
 
     /**
      * Write the default value to the given visitor.
-     * @param mvisitor Visitor.
+     *
+     * @param mvisitor Visitor
      */
     public void writeTo(final MethodVisitor mvisitor) {
         final AnnotationVisitor visitor = mvisitor.visitAnnotationDefault();
@@ -44,7 +43,36 @@ public final class BytecodeDefaultValue {
         visitor.visitEnd();
     }
 
+    /**
+     * Convert to directives.
+     *
+     * @param format Format of the directives
+     * @return Directives
+     */
     public Iterable<Directive> directives(final Format format) {
         return new DirectivesDefaultValue(this.property.directives(0, format));
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeDefaultValue) {
+            result = Objects.equals(this.property, ((BytecodeDefaultValue) other).property);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.property);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("BytecodeDefaultValue(property=%s)", this.property);
     }
 }

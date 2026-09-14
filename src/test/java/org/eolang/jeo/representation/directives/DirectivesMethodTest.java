@@ -89,7 +89,6 @@ final class DirectivesMethodTest {
      */
     @Test
     void generatesMethodWithSimpleBodyName() throws ImpossibleModificationException {
-        final String descriptor = "()I";
         final Format format = new Format();
         final String name = "checks1063";
         MatcherAssert.assertThat(
@@ -98,7 +97,7 @@ final class DirectivesMethodTest {
                 new DirectivesMethod(
                     format,
                     new NumberedName(1, name),
-                    new DirectivesMethodProperties(1, name, descriptor, ""),
+                    new DirectivesMethodProperties(1, name, "()I", ""),
                     Collections.singletonList(new DirectivesInstruction(0, format, Opcodes.RETURN)),
                     Collections.emptyList(),
                     new DirectivesAnnotations(),

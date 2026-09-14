@@ -19,6 +19,7 @@ import org.objectweb.asm.tree.ParameterNode;
 
 /**
  * Asm method parameters.
+ *
  * @since 0.6
  */
 final class AsmMethodParameters {
@@ -30,7 +31,8 @@ final class AsmMethodParameters {
 
     /**
      * Constructor.
-     * @param node Method node.
+     *
+     * @param node Method node
      */
     AsmMethodParameters(final MethodNode node) {
         this.node = node;
@@ -38,7 +40,8 @@ final class AsmMethodParameters {
 
     /**
      * Convert asm method to domain method parameters.
-     * @return Domain method parameters.
+     *
+     * @return Domain method parameters
      */
     BytecodeMethodParameters bytecode() {
         final List<ParameterNode> params = Optional.ofNullable(this.node.parameters)
@@ -58,10 +61,6 @@ final class AsmMethodParameters {
         return new BytecodeMethodParameters(res, this.paramAnnotations());
     }
 
-    /**
-     * Method parameter types.
-     * @return Method parameter types.
-     */
     private Type[] types() {
         final Type[] result;
         if (this.node.desc != null) {
@@ -72,10 +71,6 @@ final class AsmMethodParameters {
         return result;
     }
 
-    /**
-     * Parameter annotations.
-     * @return Parameter annotations.
-     */
     private List<BytecodeParamAnnotations> paramAnnotations() {
         final List<AnnotationNode>[] visible = this.node.visibleParameterAnnotations;
         final List<AnnotationNode>[] invisible = this.node.invisibleParameterAnnotations;
@@ -101,12 +96,6 @@ final class AsmMethodParameters {
         return annotations;
     }
 
-    /**
-     * Retrieve parameter annotations from asm method.
-     * @param all All parameter annotations.
-     * @param index Parameter index.
-     * @return Parameter annotations.
-     */
     private static List<AnnotationNode> annotations(
         final List<AnnotationNode>[] all, final int index
     ) {
@@ -119,12 +108,6 @@ final class AsmMethodParameters {
         return result;
     }
 
-    /**
-     * Retrieve method parameter access from asm method.
-     * @param node Asm method node.
-     * @param index Parameter index.
-     * @return Parameter access.
-     */
     private static int access(final MethodNode node, final int index) {
         final int result;
         if (node.parameters != null && node.parameters.size() > index) {
@@ -135,12 +118,6 @@ final class AsmMethodParameters {
         return result;
     }
 
-    /**
-     * Retrieve method parameter name from asm method.
-     * @param node Asm method node.
-     * @param index Parameter index.
-     * @return Parameter name.
-     */
     private static String name(final MethodNode node, final int index) {
         String result = null;
         if (node.parameters != null && node.parameters.size() > index) {

@@ -12,6 +12,7 @@ import org.xembly.Xembler;
 
 /**
  * Test for {@link DirectivesType}.
+ *
  * @since 0.11.0
  */
 final class DirectivesTypeTest {

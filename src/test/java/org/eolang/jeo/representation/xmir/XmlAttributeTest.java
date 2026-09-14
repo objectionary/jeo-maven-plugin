@@ -18,6 +18,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlAttribute}.
+ *
  * @since 0.6
  */
 final class XmlAttributeTest {
@@ -49,9 +50,9 @@ final class XmlAttributeTest {
 
     @Test
     void parsesSourceFile() {
-        final String source = "source";
-        final String debug = "debug";
-        final BytecodeAttribute.SourceFile attr = new BytecodeAttribute.SourceFile(source, debug);
+        final BytecodeAttribute.SourceFile attr = new BytecodeAttribute.SourceFile(
+            "source", "debug"
+        );
         MatcherAssert.assertThat(
             "We expect to parse SourceFile attribute",
             new XmlAttribute(
@@ -63,11 +64,8 @@ final class XmlAttributeTest {
 
     @Test
     void parsesEnclosingMethod() {
-        final String owner = "owner";
-        final String method = "method";
-        final String descriptor = "descriptor";
         final BytecodeAttribute attr = new BytecodeAttribute.EnclosingMethod(
-            owner, method, descriptor
+            "owner", "method", "descriptor"
         );
         MatcherAssert.assertThat(
             "We expect to parse EnclosingMethod attribute",

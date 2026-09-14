@@ -14,6 +14,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlUnknownAttribute}.
+ *
  * @since 0.15.0
  */
 final class XmlUnknownAttributeTest {

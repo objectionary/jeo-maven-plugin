@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Test for {@link MethodName}.
+ *
  * @since 0.6
  */
 final class MethodNameTest {
@@ -37,13 +38,6 @@ final class MethodNameTest {
         );
     }
 
-    /**
-     * Test cases for different tests.
-     * Method is used by {@link #convertsToBytecode(String, String)}
-     * and {@link #convertsToXmir(String, String)}.
-     * @return Test cases.
-     */
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> names() {
         return Stream.of(
             Arguments.of("<init>", "object@init@"),
@@ -53,5 +47,4 @@ final class MethodNameTest {
             Arguments.of("new", "new")
         );
     }
-
 }

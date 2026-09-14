@@ -14,6 +14,7 @@ import java.util.stream.Stream;
  * Opcode dictionary.
  * This class provides a mapping between opcode numbers and their corresponding names,
  * allowing for easy retrieval of opcode names by their numbers and vice versa.
+ *
  * @since 0.12.0
  */
 public final class OpcodeDictionary {
@@ -47,6 +48,7 @@ public final class OpcodeDictionary {
 
     /**
      * Constructor for creating an instance with custom maps.
+     *
      * @param names Map of opcode numbers to their names
      * @param codes Map of opcode names to their corresponding numbers
      */
@@ -57,6 +59,7 @@ public final class OpcodeDictionary {
 
     /**
      * Retrieves the opcode name for a given opcode number.
+     *
      * @param opcode Opcode number
      * @return Name of the opcode
      */
@@ -74,6 +77,7 @@ public final class OpcodeDictionary {
 
     /**
      * Retrieves the opcode name for a given opcode number.
+     *
      * @param name Name of the opcode
      * @return Opcode number corresponding to the name
      */
@@ -88,10 +92,6 @@ public final class OpcodeDictionary {
         return result;
     }
 
-    /**
-     * Returns a map of opcode numbers to their corresponding names.
-     * @return Map of opcode numbers to names
-     */
     private static Map<Integer, String> opcodeNames() {
         return Collections.unmodifiableMap(
             OpcodeDictionary.entries().collect(
@@ -104,10 +104,6 @@ public final class OpcodeDictionary {
         );
     }
 
-    /**
-     * Returns a map of opcode names to their corresponding integer values.
-     * @return Map of opcode names to their integer values
-     */
     private static Map<String, Integer> nameOpcodes() {
         return Collections.unmodifiableMap(
             OpcodeDictionary.entries().collect(
@@ -120,12 +116,17 @@ public final class OpcodeDictionary {
         );
     }
 
-    /**
-     * Entries of the opcode dictionary.
-     * @return Stream of opcode entries
-     * @checkstyle MethodLengthCheck (200 lines)
-     */
     private static Stream<Map.Entry<Integer, String>> entries() {
+        return Stream.concat(
+            Stream.concat(
+                OpcodeDictionary.stackAndLocalEntries(),
+                OpcodeDictionary.arithmeticEntries()
+            ),
+            OpcodeDictionary.controlFlowEntries()
+        );
+    }
+
+    private static Stream<Map.Entry<Integer, String>> stackAndLocalEntries() {
         return Stream.of(
             new Pair(0, "nop"),
             new Pair(1, "aconst_null"),
@@ -180,7 +181,12 @@ public final class OpcodeDictionary {
             new Pair(92, "dup2"),
             new Pair(93, "dup2_x1"),
             new Pair(94, "dup2_x2"),
-            new Pair(95, "swap"),
+            new Pair(95, "swap")
+        );
+    }
+
+    private static Stream<Map.Entry<Integer, String>> arithmeticEntries() {
+        return Stream.of(
             new Pair(96, "iadd"),
             new Pair(97, "ladd"),
             new Pair(98, "fadd"),
@@ -232,7 +238,12 @@ public final class OpcodeDictionary {
             new Pair(144, "d2f"),
             new Pair(145, "i2b"),
             new Pair(146, "i2c"),
-            new Pair(147, "i2s"),
+            new Pair(147, "i2s")
+        );
+    }
+
+    private static Stream<Map.Entry<Integer, String>> controlFlowEntries() {
+        return Stream.of(
             new Pair(148, "lcmp"),
             new Pair(149, "fcmpl"),
             new Pair(150, "fcmpg"),
@@ -285,46 +296,5 @@ public final class OpcodeDictionary {
             new Pair(198, "ifnull"),
             new Pair(199, "ifnonnull")
         );
-    }
-
-    /**
-     * Pair of opcode and its name.
-     * @since 0.12.0
-     */
-    private static class Pair implements Map.Entry<Integer, String> {
-        /**
-         * Opcode key number.
-         */
-        private final int key;
-
-        /**
-         * Opcode name.
-         */
-        private final String name;
-
-        /**
-         * Constructor for creating a pair of opcode and its name.
-         * @param key Opcode key number
-         * @param value Opcode name
-         */
-        Pair(final int key, final String value) {
-            this.key = key;
-            this.name = value;
-        }
-
-        @Override
-        public Integer getKey() {
-            return this.key;
-        }
-
-        @Override
-        public String getValue() {
-            return this.name;
-        }
-
-        @Override
-        public String setValue(final String value) {
-            throw new UnsupportedOperationException("setValue is not supported for Pair entry");
-        }
     }
 }

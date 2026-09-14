@@ -16,6 +16,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlDelegateObject}.
+ *
  * @since 0.12.0
  */
 final class XmlDelegateObjectTest {

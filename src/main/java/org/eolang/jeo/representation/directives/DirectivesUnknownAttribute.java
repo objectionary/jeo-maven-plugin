@@ -9,9 +9,10 @@ import org.xembly.Directive;
 
 /**
  * Unknown attribute directives.
+ *
  * @since 0.15.0
  */
-public final class DirectivesUnknownAttribute  implements Iterable<Directive> {
+public final class DirectivesUnknownAttribute implements Iterable<Directive> {
 
     /**
      * Format of the directives.
@@ -35,11 +36,11 @@ public final class DirectivesUnknownAttribute  implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Format of the directives.
-     * @param index Index of the attribute.
-     * @param type Type of the attribute.
-     * @param data Data of the attribute.
-     * @checkstyle ParameterNumber (10 lines)
+     *
+     * @param format Format of the directives
+     * @param index Index of the attribute
+     * @param type Type of the attribute
+     * @param data Data of the attribute
      */
     public DirectivesUnknownAttribute(
         final Format format,

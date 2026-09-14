@@ -12,6 +12,7 @@ import org.objectweb.asm.Label;
 /**
  * Asm Method Labels.
  * Used during method generation to keep track of all the labels.
+ *
  * @since 0.6
  */
 public final class AsmLabels {
@@ -30,7 +31,8 @@ public final class AsmLabels {
 
     /**
      * Constructor.
-     * @param labels All the labels.
+     *
+     * @param labels All the labels
      */
     public AsmLabels(final Map<String, Label> labels) {
         this.labels = labels;
@@ -38,8 +40,9 @@ public final class AsmLabels {
 
     /**
      * Get label by UID.
-     * @param label Bytecode label.
-     * @return Label.
+     *
+     * @param label Bytecode label
+     * @return Label
      */
     public Label label(final BytecodeLabel label) {
         return this.labels.computeIfAbsent(label.uid(), id -> new Label());

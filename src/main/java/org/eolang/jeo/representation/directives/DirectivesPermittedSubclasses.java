@@ -10,6 +10,7 @@ import org.xembly.Directive;
 
 /**
  * Directives for PermittedSubclasses attribute.
+ *
  * @since 0.14.0
  */
 public final class DirectivesPermittedSubclasses implements Iterable<Directive> {
@@ -26,8 +27,9 @@ public final class DirectivesPermittedSubclasses implements Iterable<Directive> 
 
     /**
      * Constructor.
-     * @param format Directive format.
-     * @param subclasses All permitted subclasses.
+     *
+     * @param format Directive format
+     * @param subclasses All permitted subclasses
      */
     public DirectivesPermittedSubclasses(final Format format, final List<String> subclasses) {
         this.format = format;

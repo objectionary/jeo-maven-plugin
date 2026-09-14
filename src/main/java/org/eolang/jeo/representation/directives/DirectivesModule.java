@@ -13,46 +13,44 @@ import org.xembly.Directive;
 /**
  * Module of directives.
  * Mirrors {@link org.eolang.jeo.representation.bytecode.BytecodeModule}
- * <p>All the directives are sorted according to the JVM specification:
- * {@code
- * Module_attribute {
- *     u2 attribute_name_index;
- *     u4 attribute_length;
  *
- *     u2 module_name_index;
- *     u2 module_flags;
- *     u2 module_version_index;
+ * <p>All the directives are sorted according to the JVM specification: {@code Module_attribute {
+ * u2 attribute_name_index; u4 attribute_length;</p>
  *
- *     u2 requires_count;
- *     {   u2 requires_index;
- *         u2 requires_flags;
- *         u2 requires_version_index;
- *     } requires[requires_count];
+ * u2 module_name_index;
+ * u2 module_flags;
+ * u2 module_version_index;
  *
- *     u2 exports_count;
- *     {   u2 exports_index;
- *         u2 exports_flags;
- *         u2 exports_to_count;
- *         u2 exports_to_index[exports_to_count];
- *     } exports[exports_count];
+ * u2 requires_count;
+ * {   u2 requires_index;
+ * u2 requires_flags;
+ * u2 requires_version_index;
+ * } requires[requires_count];
  *
- *     u2 opens_count;
- *     {   u2 opens_index;
- *         u2 opens_flags;
- *         u2 opens_to_count;
- *         u2 opens_to_index[opens_to_count];
- *     } opens[opens_count];
+ * u2 exports_count;
+ * {   u2 exports_index;
+ * u2 exports_flags;
+ * u2 exports_to_count;
+ * u2 exports_to_index[exports_to_count];
+ * } exports[exports_count];
  *
- *     u2 uses_count;
- *     u2 uses_index[uses_count];
+ * u2 opens_count;
+ * {   u2 opens_index;
+ * u2 opens_flags;
+ * u2 opens_to_count;
+ * u2 opens_to_index[opens_to_count];
+ * } opens[opens_count];
  *
- *     u2 provides_count;
- *     {   u2 provides_index;
- *         u2 provides_with_count;
- *         u2 provides_with_index[provides_with_count];
- *     } provides[provides_count];
- * }}
- * </p>
+ * u2 uses_count;
+ * u2 uses_index[uses_count];
+ *
+ * u2 provides_count;
+ * {   u2 provides_index;
+ * u2 provides_with_count;
+ * u2 provides_with_index[provides_with_count];
+ * } provides[provides_count];
+ * }}</p>
+ *
  * @since 0.15.0
  */
 public final class DirectivesModule implements Iterable<Directive> {
@@ -106,9 +104,9 @@ public final class DirectivesModule implements Iterable<Directive> {
      * JVM specification:
      * {@code
      * ModuleMainClass_attribute {
-     *     u2 attribute_name_index;
-     *     u4 attribute_length;
-     *     u2 main_class_index;
+     * u2 attribute_name_index;
+     * u4 attribute_length;
+     * u2 main_class_index;
      * }}
      */
     private final String main;
@@ -118,16 +116,17 @@ public final class DirectivesModule implements Iterable<Directive> {
      * JVM specification:
      * {@code
      * ModulePackages_attribute {
-     *     u2 attribute_name_index;
-     *     u4 attribute_length;
-     *     u2 package_count;
-     *     u2 package_index[package_count];
+     * u2 attribute_name_index;
+     * u4 attribute_length;
+     * u2 package_count;
+     * u2 package_index[package_count];
      * }}
      */
     private final List<String> pckgs;
 
     /**
      * Constructor.
+     *
      * @param format Directive format
      * @param name Module name
      * @param access Module access flags
@@ -139,9 +138,7 @@ public final class DirectivesModule implements Iterable<Directive> {
      * @param opens Module opens
      * @param provides Module provides
      * @param uses Module uses
-     * @checkstyle ParameterNumberCheck (15 lines)
      */
-    @SuppressWarnings("PMD.ExcessiveParameterList")
     public DirectivesModule(
         final Format format,
         final String name,
@@ -186,10 +183,6 @@ public final class DirectivesModule implements Iterable<Directive> {
         ).iterator();
     }
 
-    /**
-     * Packages as directives.
-     * @return List of directives
-     */
     private List<DirectivesValue> packages() {
         final AtomicInteger counter = new AtomicInteger(0);
         return this.pckgs.stream().map(
@@ -200,10 +193,6 @@ public final class DirectivesModule implements Iterable<Directive> {
         ).collect(Collectors.toList());
     }
 
-    /**
-     * Uses as directives.
-     * @return List of directives
-     */
     private List<DirectivesValue> use() {
         final AtomicInteger counter = new AtomicInteger(0);
         return this.uses.stream().map(

@@ -12,10 +12,11 @@ import org.xembly.Directive;
  * Mirrors {@link org.eolang.jeo.representation.bytecode.BytecodeModuleRequired}.
  * JVM Specification:
  * {@code
- *     {   u2 requires_index;
- *         u2 requires_flags; {@link #access}
- *         u2 requires_version_index; {@link #version}
- *     }}
+ * {   u2 requires_index;
+ * u2 requires_flags; {@link #access}
+ * u2 requires_version_index; {@link #version}
+ * }}
+ *
  * @since 0.15.0
  */
 public final class DirectivesModuleRequired implements Iterable<Directive> {
@@ -44,11 +45,11 @@ public final class DirectivesModuleRequired implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param format Directive format
      * @param module The fully qualified name (using dots) of the dependence
      * @param access The access flag of the dependence
      * @param version The module version at compile time
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesModuleRequired(
         final Format format, final String module, final int access, final String version) {

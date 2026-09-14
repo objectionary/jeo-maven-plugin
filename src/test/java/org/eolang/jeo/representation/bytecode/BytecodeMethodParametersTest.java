@@ -20,6 +20,7 @@ import org.xembly.Xembler;
 
 /**
  * Bytecode method parameters.
+ *
  * @since 0.6
  */
 final class BytecodeMethodParametersTest {

@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.MethodName;
 import org.eolang.jeo.representation.NumberedName;
 import org.eolang.jeo.representation.asm.AsmLabels;
@@ -22,11 +21,9 @@ import org.objectweb.asm.Opcodes;
 
 /**
  * Bytecode method.
+ *
  * @since 0.1.0
  */
-@ToString
-@EqualsAndHashCode
-@SuppressWarnings("PMD.TooManyMethods")
 public final class BytecodeMethod {
 
     /**
@@ -73,7 +70,8 @@ public final class BytecodeMethod {
 
     /**
      * Constructor.
-     * @param name Method name.
+     *
+     * @param name Method name
      */
     public BytecodeMethod(final String name) {
         this(name, "()V", Opcodes.ACC_PUBLIC);
@@ -81,7 +79,8 @@ public final class BytecodeMethod {
 
     /**
      * Constructor.
-     * @param instructions Method instructions.
+     *
+     * @param instructions Method instructions
      */
     public BytecodeMethod(final BytecodeEntry... instructions) {
         this(
@@ -97,8 +96,9 @@ public final class BytecodeMethod {
 
     /**
      * Constructor.
-     * @param name Method name.
-     * @param annotations Method annotations.
+     *
+     * @param name Method name
+     * @param annotations Method annotations
      */
     public BytecodeMethod(final String name, final BytecodeAnnotations annotations) {
         this(
@@ -114,8 +114,9 @@ public final class BytecodeMethod {
 
     /**
      * Constructor.
-     * @param name Method name.
-     * @param maxs Max stack and locals.
+     *
+     * @param name Method name
+     * @param maxs Max stack and locals
      */
     public BytecodeMethod(final String name, final BytecodeMaxs maxs) {
         this(new BytecodeMethodProperties(name, "()V", "", 1), maxs);
@@ -123,10 +124,10 @@ public final class BytecodeMethod {
 
     /**
      * Constructor.
-     * @param name Method name.
-     * @param descriptor Method descriptor.
-     * @param modifiers Method modifiers.
-     * @checkstyle ParameterNumberCheck (10 lines)
+     *
+     * @param name Method name
+     * @param descriptor Method descriptor
+     * @param modifiers Method modifiers
      */
     BytecodeMethod(final String name, final String descriptor, final int... modifiers) {
         this(new BytecodeMethodProperties(name, descriptor, "", modifiers));
@@ -134,7 +135,8 @@ public final class BytecodeMethod {
 
     /**
      * Constructor.
-     * @param properties Method properties.
+     *
+     * @param properties Method properties
      */
     BytecodeMethod(final BytecodeMethodProperties properties) {
         this(properties, new BytecodeMaxs());
@@ -142,9 +144,9 @@ public final class BytecodeMethod {
 
     /**
      * Constructor.
-     * @param properties Method properties.
-     * @param maxs Max stack and locals.
-     * @checkstyle ParameterNumberCheck (10 lines)
+     *
+     * @param properties Method properties
+     * @param maxs Max stack and locals
      */
     public BytecodeMethod(
         final BytecodeMethodProperties properties,
@@ -163,14 +165,14 @@ public final class BytecodeMethod {
 
     /**
      * Constructor.
-     * @param tryblocks Try-catch blocks.
-     * @param instructions Method instructions.
-     * @param annotations Method annotations.
-     * @param properties Method properties.
-     * @param defvalues Default values.
-     * @param maxs Max stack and locals.
-     * @param attributes Method attributes.
-     * @checkstyle ParameterNumberCheck (10 lines)
+     *
+     * @param tryblocks Try-catch blocks
+     * @param instructions Method instructions
+     * @param annotations Method annotations
+     * @param properties Method properties
+     * @param defvalues Default values
+     * @param maxs Max stack and locals
+     * @param attributes Method attributes
      */
     public BytecodeMethod(
         final List<BytecodeEntry> tryblocks,
@@ -192,7 +194,8 @@ public final class BytecodeMethod {
 
     /**
      * Similar method without maxs.
-     * @return Method without maxs.
+     *
+     * @return Method without maxs
      */
     public BytecodeMethod withoutMaxs() {
         return new BytecodeMethod(
@@ -208,8 +211,9 @@ public final class BytecodeMethod {
 
     /**
      * Add label.
-     * @param label Label.
-     * @return This object.
+     *
+     * @param label Label
+     * @return This object
      */
     public BytecodeMethod label(final String label) {
         return this.entry(new BytecodeLabel(label));
@@ -217,8 +221,9 @@ public final class BytecodeMethod {
 
     /**
      * Add try-catch block.
-     * @param entry Try-catch block.
-     * @return This object.
+     *
+     * @param entry Try-catch block
+     * @return This object
      */
     public BytecodeMethod trycatch(final BytecodeEntry entry) {
         this.tryblocks.add(entry);
@@ -227,8 +232,9 @@ public final class BytecodeMethod {
 
     /**
      * Add some bytecode entry.
-     * @param entry Entry.
-     * @return This object.
+     *
+     * @param entry Entry
+     * @return This object
      */
     public BytecodeMethod entry(final BytecodeEntry entry) {
         this.entries.add(entry);
@@ -237,8 +243,9 @@ public final class BytecodeMethod {
 
     /**
      * Add default value.
-     * @param defvalue Default value.
-     * @return This object.
+     *
+     * @param defvalue Default value
+     * @return This object
      */
     public BytecodeMethod defvalue(final BytecodeDefaultValue defvalue) {
         this.defvalues.add(defvalue);
@@ -247,7 +254,8 @@ public final class BytecodeMethod {
 
     /**
      * Method name.
-     * @return Method name.
+     *
+     * @return Method name
      */
     public String name() {
         return this.properties.name();
@@ -255,7 +263,8 @@ public final class BytecodeMethod {
 
     /**
      * Method instructions.
-     * @return Instructions.
+     *
+     * @return Instructions
      */
     public List<BytecodeEntry> instructions() {
         return Collections.unmodifiableList(this.entries);
@@ -269,8 +278,9 @@ public final class BytecodeMethod {
      * then we add suffixes to their names:
      * foo and foo-2.
      * That is why we need to pass method number to this method.
-     * @param number Method number.
-     * @return Directives.
+     *
+     * @param number Method number
+     * @return Directives
      */
     public DirectivesMethod directives(final int number) {
         return this.directives(number, new Format());
@@ -284,9 +294,10 @@ public final class BytecodeMethod {
      * then we add suffixes to their names:
      * foo and foo-2.
      * That is why we need to pass method number to this method.
-     * @param number Method number.
-     * @param format Format of directives.
-     * @return Directives.
+     *
+     * @param number Method number
+     * @param format Format of directives
+     * @return Directives
      */
     public DirectivesMethod directives(final int number, final Format format) {
         final AtomicInteger ecounter = new AtomicInteger(0);
@@ -310,9 +321,47 @@ public final class BytecodeMethod {
         );
     }
 
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeMethod) {
+            final BytecodeMethod method = (BytecodeMethod) other;
+            result = Objects.equals(this.tryblocks, method.tryblocks)
+                && Objects.equals(this.entries, method.entries)
+                && Objects.equals(this.annotations, method.annotations)
+                && Objects.equals(this.properties, method.properties)
+                && Objects.equals(this.defvalues, method.defvalues)
+                && Objects.equals(this.maxs, method.maxs)
+                && Objects.equals(this.attributes, method.attributes);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            this.tryblocks, this.entries, this.annotations, this.properties,
+            this.defvalues, this.maxs, this.attributes
+        );
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeMethod(tryblocks=%s, entries=%s, annotations=%s, properties=%s, defvalues=%s, maxs=%s, attributes=%s)",
+            this.tryblocks, this.entries, this.annotations, this.properties,
+            this.defvalues, this.maxs, this.attributes
+        );
+    }
+
     /**
      * Generate directives.
-     * @return Directives.
+     *
+     * @return Directives
      */
     DirectivesMethod directives() {
         return this.directives(1);
@@ -320,7 +369,8 @@ public final class BytecodeMethod {
 
     /**
      * Generate bytecode.
-     * @param visitor Visitor.
+     *
+     * @param visitor Visitor
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     void write(final CustomClassWriter visitor) {
@@ -362,7 +412,6 @@ public final class BytecodeMethod {
                 ),
                 exception
             );
-            // @checkstyle IllegalCatchCheck (1 line)
         } catch (final ClassFormatError format) {
             throw new IllegalStateException(
                 String.format(
@@ -385,7 +434,8 @@ public final class BytecodeMethod {
 
     /**
      * Compute maxs.
-     * @return Maxs.
+     *
+     * @return Maxs
      */
     BytecodeMaxs computeMaxs() {
         return new BytecodeMaxs(this.computeStack(), this.computeLocals());
@@ -393,7 +443,8 @@ public final class BytecodeMethod {
 
     /**
      * Current maxs.
-     * @return Maxs.
+     *
+     * @return Maxs
      */
     BytecodeMaxs currentMaxs() {
         return this.maxs;
@@ -401,9 +452,10 @@ public final class BytecodeMethod {
 
     /**
      * Add instruction.
-     * @param opcode Opcode.
-     * @param args Arguments.
-     * @return This object.
+     *
+     * @param opcode Opcode
+     * @param args Arguments
+     * @return This object
      */
     BytecodeMethod opcode(final int opcode, final Object... args) {
         return this.entry(new BytecodeInstruction(opcode, args));
@@ -411,18 +463,15 @@ public final class BytecodeMethod {
 
     /**
      * Prints instructions in human-readable format.
-     * @return Instructions view in human-readable format.
+     *
+     * @return Instructions view in human-readable format
      */
     String instructionsView() {
         return this.entries.stream()
             .map(BytecodeEntry::view)
-            .collect(Collectors.joining("\n"));
+            .collect(Collectors.joining(System.lineSeparator()));
     }
 
-    /**
-     * Compute max stack.
-     * @return Max stack.
-     */
     private int computeStack() {
         return new MaxStack(
             this.entries,
@@ -433,10 +482,6 @@ public final class BytecodeMethod {
         ).value();
     }
 
-    /**
-     * Compute max local variables.
-     * @return Max local variables.
-     */
     private int computeLocals() {
         return new MaxLocals(
             this.properties,

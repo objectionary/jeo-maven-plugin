@@ -14,6 +14,7 @@ import org.xembly.Directive;
 
 /**
  * Operand XML directives.
+ *
  * @since 0.1
  */
 public final class DirectivesOperand implements Iterable<Directive> {
@@ -35,9 +36,10 @@ public final class DirectivesOperand implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param index Operand index.
-     * @param format Format of the directives.
-     * @param operand Raw operand.
+     *
+     * @param index Operand index
+     * @param format Format of the directives
+     * @param operand Raw operand
      */
     DirectivesOperand(final int index, final Format format, final Object operand) {
         this.index = index;
@@ -61,5 +63,4 @@ public final class DirectivesOperand implements Iterable<Directive> {
         }
         return result;
     }
-
 }

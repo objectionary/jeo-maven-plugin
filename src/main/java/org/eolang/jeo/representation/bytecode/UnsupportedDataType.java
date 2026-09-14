@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.bytecode;
 
 /**
  * Unsupported data type.
+ *
  * @since 0.8
  */
 final class UnsupportedDataType extends IllegalArgumentException {
@@ -17,7 +18,8 @@ final class UnsupportedDataType extends IllegalArgumentException {
 
     /**
      * Constructor.
-     * @param type Data type.
+     *
+     * @param type Data type
      */
     UnsupportedDataType(final DataType type) {
         super(String.format("Unsupported data type: %s", type));

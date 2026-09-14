@@ -11,9 +11,11 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
 
 /**
  * Annotation values in ASM representation.
+ *
  * @since 0.15.0
  */
 public final class AsmAnnotationValues {
+
     /**
      * Raw values list.
      */
@@ -21,7 +23,8 @@ public final class AsmAnnotationValues {
 
     /**
      * Constructor.
-     * @param values Raw values list.
+     *
+     * @param values Raw values list
      */
     AsmAnnotationValues(final List<Object> values) {
         this.values = values;
@@ -29,7 +32,8 @@ public final class AsmAnnotationValues {
 
     /**
      * Convert to bytecode representation.
-     * @return Bytecode representation.
+     *
+     * @return Bytecode representation
      */
     public List<BytecodeAnnotationValue> bytecode() {
         final List<BytecodeAnnotationValue> properties = new ArrayList<>(0);

@@ -12,6 +12,7 @@ import org.hamcrest.TypeSafeMatcher;
 /**
  * Matcher to check if the received XML document is the same as the expected one.
  * Smart comparison of XML documents that ignores 'line' attributes.
+ *
  * @since 0.6
  */
 public final class SameXml extends TypeSafeMatcher<String> {
@@ -23,7 +24,8 @@ public final class SameXml extends TypeSafeMatcher<String> {
 
     /**
      * Constructor.
-     * @param xml Expected XML document.
+     *
+     * @param xml Expected XML document
      */
     public SameXml(final XML xml) {
         this(xml.toString());
@@ -31,7 +33,8 @@ public final class SameXml extends TypeSafeMatcher<String> {
 
     /**
      * Constructor.
-     * @param expected Expected XML document.
+     *
+     * @param expected Expected XML document
      */
     public SameXml(final String expected) {
         this.expected = expected;
@@ -46,7 +49,7 @@ public final class SameXml extends TypeSafeMatcher<String> {
     @Override
     public void describeTo(final Description description) {
         description.appendText("XML documents is not the same.")
-            .appendText("Expected:\n")
+            .appendText(String.format("Expected:%n"))
             .appendText(this.expected);
     }
 }

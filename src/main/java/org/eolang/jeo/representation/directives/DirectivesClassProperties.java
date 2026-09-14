@@ -12,21 +12,17 @@ import org.xembly.Directives;
 
 /**
  * Class properties as Xembly directives.
- * <p>All the class directives are sorted according to JVM specification
- * {@code
- *     u2             minor_version; {@link DirectivesClassProperties}
- *     u2             major_version; {@link DirectivesClassProperties}
- *     u2             constant_pool_count; (incorporated to the directives)
- *     cp_info        constant_pool[constant_pool_count-1]; (incorporated to the directives)
- *     u2             access_flags; {@link DirectivesClassProperties}
- *     u2             this_class; {@link DirectivesClassProperties} (class name)
- *     u2             super_class;  {@link DirectivesClassProperties}
- *     u2             interfaces_count;  {@link DirectivesClassProperties}
- *     u2             interfaces[interfaces_count];  {@link DirectivesClassProperties}
- * }
- * <a href="https://docs.oracle.com/javase/specs/jvms/se25/html/jvms-4.html#jvms-4.4.1">
- *     You can read more in the official JVM specification.
- * </a>
+ *
+ * <p>All the class directives are sorted according to JVM specification {@code u2 minor_version;
+ * {@link DirectivesClassProperties} u2 major_version; {@link DirectivesClassProperties} u2
+ * constant_pool_count; (incorporated to the directives) cp_info
+ * constant_pool[constant_pool_count-1]; (incorporated to the directives) u2 access_flags;
+ * {@link DirectivesClassProperties} u2 this_class; {@link DirectivesClassProperties} (class
+ * name) u2 super_class; {@link DirectivesClassProperties} u2 interfaces_count; {@link
+ * DirectivesClassProperties} u2 interfaces[interfaces_count]; {@link DirectivesClassProperties}
+ * } <a href="https://docs.oracle.com/javase/specs/jvms/se25/html/jvms-4.html#jvms-4.4.1"> You
+ * can read more in the official JVM specification. </a></p>
+ *
  * @since 0.1.0
  */
 public final class DirectivesClassProperties implements Iterable<Directive> {
@@ -75,8 +71,9 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Format of the directives.
-     * @param access Access modifiers.
+     *
+     * @param format Format of the directives
+     * @param access Access modifiers
      */
     public DirectivesClassProperties(final Format format, final int access) {
         this(
@@ -91,7 +88,8 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Name of the class.
+     *
+     * @param name Name of the class
      */
     public DirectivesClassProperties(final String name) {
         this(
@@ -106,7 +104,8 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param access Access modifiers.
+     *
+     * @param access Access modifiers
      */
     public DirectivesClassProperties(final int access) {
         this(access, "", DirectivesClassProperties.EMPTY_INTERFACES);
@@ -114,10 +113,10 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param access Access modifiers.
-     * @param supername Class supername.
-     * @param interfaces Class interfaces.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param access Access modifiers
+     * @param supername Class supername
+     * @param interfaces Class interfaces
      */
     public DirectivesClassProperties(
         final int access,
@@ -136,13 +135,13 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Format of the directives.
-     * @param version Bytecode version.
-     * @param access Access modifiers.
-     * @param name Class name.
-     * @param supername Class supername.
-     * @param interfaces Class interfaces.
-     * @checkstyle ParameterNumberCheck (6 lines)
+     *
+     * @param format Format of the directives
+     * @param version Bytecode version
+     * @param access Access modifiers
+     * @param name Class name
+     * @param supername Class supername
+     * @param interfaces Class interfaces
      */
     public DirectivesClassProperties(
         final Format format,

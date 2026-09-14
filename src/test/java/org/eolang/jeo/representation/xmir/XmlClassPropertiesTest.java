@@ -13,6 +13,7 @@ import org.objectweb.asm.Opcodes;
 
 /**
  * Test case for {@link XmlClassProperties}.
+ *
  * @since 0.1
  */
 final class XmlClassPropertiesTest {

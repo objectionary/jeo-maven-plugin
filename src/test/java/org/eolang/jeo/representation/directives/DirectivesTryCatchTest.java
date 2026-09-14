@@ -48,11 +48,12 @@ final class DirectivesTryCatchTest {
 
     /**
      * Checks several different cases of converting try-catch statements with different structures.
-     * @param start Where the try-catch block starts.
-     * @param end Where the try-catch block ends.
-     * @param handler Code to handle try-catch block.
-     * @param type The type of error that might occur.
-     * @throws ImpossibleModificationException in case of incorrect XML.
+     *
+     * @param start Where the try-catch block starts
+     * @param end Where the try-catch block ends
+     * @param handler Code to handle try-catch block
+     * @param type The type of error that might occur
+     * @throws ImpossibleModificationException in case of incorrect XML
      * @checkstyle ParameterNumberCheck (10 lines)
      */
     @ParameterizedTest
@@ -78,7 +79,8 @@ final class DirectivesTryCatchTest {
 
     /**
      * Test cases.
-     * @return Test cases.
+     *
+     * @return Test cases
      */
     static Stream<Arguments> cases() {
         return Stream.of(
@@ -94,5 +96,4 @@ final class DirectivesTryCatchTest {
             Arguments.of(null, null, null, null)
         );
     }
-
 }

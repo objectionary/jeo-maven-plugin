@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Source;
 import org.eolang.parser.StrictXmir;
@@ -24,11 +23,9 @@ import org.w3c.dom.NodeList;
 
 /**
  * Jcabi XML node.
+ *
  * @since 0.8
  */
-@ToString
-@EqualsAndHashCode
-@SuppressWarnings("PMD.TooManyMethods")
 public final class JcabiXmlNode implements XmlNode {
 
     /**
@@ -43,15 +40,17 @@ public final class JcabiXmlNode implements XmlNode {
 
     /**
      * Ctor.
-     * @param xml XML string.
+     *
+     * @param xml XML string
      */
     JcabiXmlNode(final String... xml) {
-        this(new XMLDocument(String.join("\n", xml)).inner().getFirstChild());
+        this(new XMLDocument(String.join(System.lineSeparator(), xml)).inner().getFirstChild());
     }
 
     /**
      * Ctor.
-     * @param item XML node.
+     *
+     * @param item XML node
      */
     JcabiXmlNode(final Node item) {
         this(new XMLDocument(item));
@@ -59,7 +58,8 @@ public final class JcabiXmlNode implements XmlNode {
 
     /**
      * Ctor.
-     * @param root XML document.
+     *
+     * @param root XML document
      */
     JcabiXmlNode(final XML root) {
         this.doc = root;
@@ -112,18 +112,37 @@ public final class JcabiXmlNode implements XmlNode {
                 String.format(
                     "XMIR is incorrect (%d errors): %s, %n%s%n",
                     defects.size(),
-                    defects.stream().map(Object::toString).collect(Collectors.joining("\n")),
+                    defects.stream().map(Object::toString)
+                        .collect(Collectors.joining(System.lineSeparator())),
                     this.doc
                 )
             );
         }
     }
 
-    /**
-     * Get optional child node.
-     * @param name Child node name.
-     * @return Child node.
-     */
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof JcabiXmlNode) {
+            result = Objects.equals(this.doc, ((JcabiXmlNode) other).doc);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.doc);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("JcabiXmlNode(doc=%s)", this.doc);
+    }
+
     private Optional<XmlNode> optchild(final String name) {
         Optional<XmlNode> result = Optional.empty();
         final NodeList children = this.doc.inner().getChildNodes();
@@ -138,11 +157,6 @@ public final class JcabiXmlNode implements XmlNode {
         return result;
     }
 
-    /**
-     * Generate exception if element not found.
-     * @param name Element name.
-     * @return Exception.
-     */
     private IllegalStateException notFound(final String name) {
         return new IllegalStateException(
             String.format(
@@ -153,10 +167,6 @@ public final class JcabiXmlNode implements XmlNode {
         );
     }
 
-    /**
-     * Objects.
-     * @return Stream of class objects.
-     */
     private Stream<Node> objects() {
         final NodeList children = this.doc.inner().getChildNodes();
         final List<Node> res = new ArrayList<>(children.getLength());
@@ -169,23 +179,18 @@ public final class JcabiXmlNode implements XmlNode {
         return res.stream();
     }
 
-    /**
-     * Check if the defect is not ignored.
-     * @param defect Defect to check.
-     * @return True if the defect is not ignored, false otherwise.
-     */
     private static boolean notIgnored(final Defect defect) {
-        return !JcabiXmlNode.IGNORE.contains(defect.rule().split(" ")[0]);
+        final String rule = defect.rule();
+        final int space = rule.indexOf(' ');
+        final String first;
+        if (space == -1) {
+            first = rule;
+        } else {
+            first = rule.substring(0, space);
+        }
+        return !JcabiXmlNode.IGNORE.contains(first);
     }
 
-    /**
-     * Set of ignored defects.
-     * We left 'idempotent-attribute-is-not-first' because it's not critical for XMIR correctness.
-     * You can find more details here:
-     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1369">1369</a>
-     *
-     * @return Ignored rules.
-     */
     private static Collection<String> ignored() {
         final List<String> rules = Arrays.asList(
             "no-attribute-formation",

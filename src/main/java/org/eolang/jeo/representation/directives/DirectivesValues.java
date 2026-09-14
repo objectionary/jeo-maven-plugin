@@ -20,6 +20,7 @@ import org.xembly.Directive;
  * We used to use "tuple" for this, but it leads to some confusion.
  * You can read more about this problem
  * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/707">here</a>
+ *
  * @since 0.6
  */
 public final class DirectivesValues implements Iterable<Directive> {
@@ -46,10 +47,11 @@ public final class DirectivesValues implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format The format of the directives.
-     * @param name Group of values name.
-     * @param vals Values themselves.
-     * @param <T> Values type.
+     *
+     * @param format The format of the directives
+     * @param name Group of values name
+     * @param vals Values themselves
+     * @param <T> Values type
      */
     @SafeVarargs
     public <T> DirectivesValues(final Format format, final String name, final T... vals) {
@@ -63,33 +65,28 @@ public final class DirectivesValues implements Iterable<Directive> {
         final AtomicInteger index = new AtomicInteger(0);
         return new DirectivesSeq(
             this.nonEmptyName(),
-            Arrays.stream(this.values)
-                .map(
-                    value -> {
-                        final Iterable<Directive> result;
-                        if (value instanceof BytecodeLabel) {
-                            result = ((BytecodeEntry) value).directives(
-                                index.getAndIncrement(),
-                                this.format
-                            );
-                        } else {
-                            result = new DirectivesValue(
-                                this.format,
-                                String.format("x%d", index.getAndIncrement()),
-                                value
-                            );
-                        }
-                        return result;
+            Arrays.stream(this.values).map(
+                value -> {
+                    final Iterable<Directive> result;
+                    if (value instanceof BytecodeLabel) {
+                        result = ((BytecodeEntry) value).directives(
+                            index.getAndIncrement(),
+                            this.format
+                        );
+                    } else {
+                        result = new DirectivesValue(
+                            this.format,
+                            String.format("x%d", index.getAndIncrement()),
+                            value
+                        );
                     }
-                )
-                .collect(Collectors.toList())
+                    return result;
+                }
+            )
+            .collect(Collectors.toList())
         ).iterator();
     }
 
-    /**
-     * Name of the group of values.
-     * @return Name of the group of values.
-     */
     private String nonEmptyName() {
         final String result;
         if (this.name.isEmpty()) {
@@ -100,10 +97,6 @@ public final class DirectivesValues implements Iterable<Directive> {
         return result;
     }
 
-    /**
-     * Generate random name.
-     * @return Random name.
-     */
     private static String randomName() {
         return DirectivesValues.DIGITS.matcher(
             UUID.randomUUID().toString().toLowerCase(Locale.getDefault())

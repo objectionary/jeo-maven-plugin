@@ -8,6 +8,7 @@ import org.objectweb.asm.Type;
 
 /**
  * ASM type representation in XMIR format.
+ *
  * @since 0.11.0
  */
 final class XmlType {
@@ -19,7 +20,8 @@ final class XmlType {
 
     /**
      * Constructor.
-     * @param raw Raw XML node representing the type.
+     *
+     * @param raw Raw XML node representing the type
      */
     XmlType(final XmlNode raw) {
         this(new XmlJeoObject(raw));
@@ -27,7 +29,8 @@ final class XmlType {
 
     /**
      * Constructor.
-     * @param raw Raw XML Jeo object representing the type.
+     *
+     * @param raw Raw XML Jeo object representing the type
      */
     XmlType(final XmlJeoObject raw) {
         this.raw = raw;
@@ -35,9 +38,10 @@ final class XmlType {
 
     /**
      * Parse ASM type from the XML node.
+     *
      * @return ASM Type object
      */
-    public Type type() {
+    Type type() {
         try {
             return Type.getType(
                 new XmlValue(

@@ -6,6 +6,7 @@ package org.eolang.jeo.spring;
 
 /**
  * App.
+ *
  * @since 0.1
  */
 public class App {

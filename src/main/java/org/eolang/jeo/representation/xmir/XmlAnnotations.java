@@ -10,6 +10,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 
 /**
  * Xmir annotations.
+ *
  * @since 0.1
  */
 public class XmlAnnotations {
@@ -21,7 +22,8 @@ public class XmlAnnotations {
 
     /**
      * Constructor.
-     * @param xmlnode XML node.
+     *
+     * @param xmlnode XML node
      */
     XmlAnnotations(final XmlNode xmlnode) {
         this(new XmlJeoObject(xmlnode));
@@ -29,7 +31,8 @@ public class XmlAnnotations {
 
     /**
      * Constructor.
-     * @param node XML Jeo object node.
+     *
+     * @param node XML Jeo object node
      */
     XmlAnnotations(final XmlJeoObject node) {
         this.node = node;
@@ -37,16 +40,13 @@ public class XmlAnnotations {
 
     /**
      * Convert to bytecode.
-     * @return Bytecode annotations.
+     *
+     * @return Bytecode annotations
      */
     public BytecodeAnnotations bytecode() {
         return new BytecodeAnnotations(this.all().stream().map(XmlAnnotation::bytecode));
     }
 
-    /**
-     * All annotations.
-     * @return Annotations.
-     */
     private List<XmlAnnotation> all() {
         return this.node.children()
             .map(XmlAnnotation::new)

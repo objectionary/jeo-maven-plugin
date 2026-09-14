@@ -10,6 +10,7 @@ import org.objectweb.asm.tree.FieldNode;
 /**
  * Asm field.
  * Asm parser for a field.
+ *
  * @since 0.6
  */
 final class AsmField {
@@ -21,7 +22,8 @@ final class AsmField {
 
     /**
      * Constructor.
-     * @param node Field node.
+     *
+     * @param node Field node
      */
     AsmField(final FieldNode node) {
         this.node = node;
@@ -29,7 +31,8 @@ final class AsmField {
 
     /**
      * Convert asm field to domain field.
-     * @return Domain field.
+     *
+     * @return Domain field
      */
     BytecodeField bytecode() {
         return new BytecodeField(

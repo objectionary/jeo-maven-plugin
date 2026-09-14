@@ -6,10 +6,9 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesAttributes;
 import org.eolang.jeo.representation.directives.Format;
@@ -18,10 +17,9 @@ import org.objectweb.asm.MethodVisitor;
 
 /**
  * Bytecode attributes.
+ *
  * @since 0.6
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeAttributes {
 
     /**
@@ -31,7 +29,8 @@ public final class BytecodeAttributes {
 
     /**
      * Constructor.
-     * @param all All attributes.
+     *
+     * @param all All attributes
      */
     public BytecodeAttributes(final BytecodeAttribute... all) {
         this(Arrays.asList(all));
@@ -39,7 +38,8 @@ public final class BytecodeAttributes {
 
     /**
      * Constructor.
-     * @param all All attributes.
+     *
+     * @param all All attributes
      */
     public BytecodeAttributes(final List<BytecodeAttribute> all) {
         this.all = all;
@@ -47,9 +47,10 @@ public final class BytecodeAttributes {
 
     /**
      * Convert to directives.
-     * @param format Format of directives.
-     * @param name Name of the attributes in EO representation.
-     * @return Directives.
+     *
+     * @param format Format of directives
+     * @param name Name of the attributes in EO representation
+     * @return Directives
      */
     public DirectivesAttributes directives(final Format format, final String name) {
         final AtomicInteger counter = new AtomicInteger(0);
@@ -61,9 +62,33 @@ public final class BytecodeAttributes {
         );
     }
 
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeAttributes) {
+            result = Objects.equals(this.all, ((BytecodeAttributes) other).all);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.all);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("BytecodeAttributes(all=%s)", this.all);
+    }
+
     /**
      * Write to class.
-     * @param clazz Bytecode where to write.
+     *
+     * @param clazz Bytecode where to write
      */
     void write(final ClassVisitor clazz) {
         this.all.forEach(attr -> attr.write(clazz));
@@ -71,8 +96,9 @@ public final class BytecodeAttributes {
 
     /**
      * Write to method.
-     * @param method Bytecode where to write.
-     * @param labels Method labels.
+     *
+     * @param method Bytecode where to write
+     * @param labels Method labels
      */
     void write(final MethodVisitor method, final AsmLabels labels) {
         this.all.forEach(attr -> attr.write(method, labels));

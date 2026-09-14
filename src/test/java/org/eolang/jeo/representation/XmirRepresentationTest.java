@@ -34,7 +34,6 @@ import org.xembly.Xembler;
  *
  * @since 0.1.0
  */
-@SuppressWarnings("PMD.TooManyMethods")
 final class XmirRepresentationTest {
 
     /**
@@ -53,14 +52,12 @@ final class XmirRepresentationTest {
     @Test
     void retrievesName() {
         final String pckg = "org/eolang/foo";
-        final String name = "Math";
         final String expected = "j$org/j$eolang/j$foo/j$Math";
-        final XML xml = new BytecodeObject(
-            pckg,
-            new BytecodeClass(String.format("%s/%s", pckg, name))
-        ).xml();
         final String actual = new XmirRepresentation(
-            xml
+            new BytecodeObject(
+                pckg,
+                new BytecodeClass(String.format("%s/%s", pckg, "Math"))
+            ).xml()
         ).name();
         MatcherAssert.assertThat(
             String.format(
@@ -82,13 +79,12 @@ final class XmirRepresentationTest {
                 new BytecodeObject(new BytecodeClass("Math")).xml().inner()
             )
         );
-        final IllegalStateException exception = Assertions.assertThrows(
-            IllegalStateException.class,
-            () -> new XmirRepresentation(broken).name()
-        );
         MatcherAssert.assertThat(
             "XmirRepresentation#name should describe the missing object name",
-            exception.getMessage(),
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new XmirRepresentation(broken).name()
+            ).getMessage(),
             Matchers.containsString("object name")
         );
     }
@@ -190,13 +186,12 @@ final class XmirRepresentationTest {
 
     @Test
     void generatesValidBytecodeWithNestMembersAttributeFromXmir() throws Exception {
-        final Bytecode original = new Bytecode(
-            new BytesOf(new ResourceOf("Check.class")).asBytes()
-        );
         MatcherAssert.assertThat(
             "We expect to parse the same bytecode with the 'NestMembers' attribute",
             new XmirRepresentation(
-                new BytecodeRepresentation(original).toXmir()
+                new BytecodeRepresentation(
+                    new Bytecode(new BytesOf(new ResourceOf("Check.class")).asBytes())
+                ).toXmir()
             ).toBytecode().toString(),
             Matchers.containsString("NESTMEMBER")
         );
@@ -209,7 +204,6 @@ final class XmirRepresentationTest {
      */
     @Test
     @Disabled
-    @SuppressWarnings("PMD.GuardLogStatement")
     void convertsToXmirAndBack() {
         final Bytecode before = new BytecodeObject(
             new BytecodeClass(XmirRepresentationTest.MATH)

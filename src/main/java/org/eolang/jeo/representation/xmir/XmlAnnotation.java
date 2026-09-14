@@ -11,6 +11,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
 
 /**
  * Xmir representation of an annotation.
+ *
  * @since 0.1
  */
 class XmlAnnotation {
@@ -22,7 +23,8 @@ class XmlAnnotation {
 
     /**
      * Constructor.
-     * @param xmlnode XML node.
+     *
+     * @param xmlnode XML node
      */
     XmlAnnotation(final XmlNode xmlnode) {
         this(new XmlJeoObject(xmlnode));
@@ -30,7 +32,8 @@ class XmlAnnotation {
 
     /**
      * Constructor.
-     * @param node XML Jeo object node.
+     *
+     * @param node XML Jeo object node
      */
     private XmlAnnotation(final XmlJeoObject node) {
         this.node = node;
@@ -38,9 +41,10 @@ class XmlAnnotation {
 
     /**
      * Convert to bytecode.
-     * @return Bytecode annotation.
+     *
+     * @return Bytecode annotation
      */
-    public BytecodeAnnotation bytecode() {
+    BytecodeAnnotation bytecode() {
         try {
             return new BytecodeAnnotation(
                 this.descriptor(),
@@ -58,28 +62,14 @@ class XmlAnnotation {
         }
     }
 
-    /**
-     * Annotation descriptor.
-     * @return Descriptor.
-     */
     private String descriptor() {
         return new XmlValue(this.child(0)).string();
     }
 
-    /**
-     * Annotation visible.
-     * Is it runtime-visible?
-     * @return True if visible at runtime, false otherwise.
-     */
     private boolean visible() {
         return (boolean) new XmlValue(this.child(1)).object();
     }
 
-    /**
-     * Get child by index.
-     * @param index Index.
-     * @return Child.
-     */
     private XmlNode child(final int index) {
         final List<XmlNode> all = this.node.children().collect(Collectors.toList());
         if (index >= all.size()) {
@@ -94,10 +84,6 @@ class XmlAnnotation {
         return all.get(index);
     }
 
-    /**
-     * Annotation properties.
-     * @return Properties.
-     */
     private List<BytecodeAnnotationValue> values() {
         return this.node.children()
             .map(XmlAnnotationValue::new)

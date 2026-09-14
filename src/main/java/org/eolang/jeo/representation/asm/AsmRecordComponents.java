@@ -13,6 +13,7 @@ import org.objectweb.asm.tree.RecordComponentNode;
 
 /**
  * Asm record components.
+ *
  * @since 0.15.0
  */
 final class AsmRecordComponents {
@@ -24,26 +25,27 @@ final class AsmRecordComponents {
 
     /**
      * Constructor.
+     *
      * @param components List of record component nodes
      */
     AsmRecordComponents(final List<RecordComponentNode> components) {
-        this.nodes = Optional.ofNullable(components).orElse(Collections.emptyList());
+        this.nodes = components;
     }
 
     /**
      * Bytecode record components.
+     *
      * @return List of bytecode record components
      */
-    public List<BytecodeRecordComponent> bytecode() {
-        return this.nodes.stream()
-            .map(
-                comp -> new BytecodeRecordComponent(
-                    comp.name,
-                    comp.descriptor,
-                    comp.signature,
-                    new AsmAnnotations(comp).bytecode(),
-                    new AsmTypeAnnotations(comp).bytecode()
-                )
-            ).collect(Collectors.toList());
+    List<BytecodeRecordComponent> bytecode() {
+        return Optional.ofNullable(this.nodes).orElse(Collections.emptyList()).stream().map(
+            comp -> new BytecodeRecordComponent(
+                comp.name,
+                comp.descriptor,
+                comp.signature,
+                new AsmAnnotations(comp).bytecode(),
+                new AsmTypeAnnotations(comp).bytecode()
+            )
+        ).collect(Collectors.toList());
     }
 }

@@ -17,6 +17,7 @@ import org.xembly.Directives;
 
 /**
  * Directives sequence.
+ *
  * @since 0.6
  */
 public final class DirectivesSeq implements Iterable<Directive> {
@@ -33,17 +34,8 @@ public final class DirectivesSeq implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Name of the sequence.
-     * @param elements Elements to wrap.
-     */
-    public DirectivesSeq(final String name, final List<? extends Iterable<Directive>> elements) {
-        this.name = name;
-        this.directives = elements;
-    }
-
-    /**
-     * Constructor.
-     * @param elements Elements to wrap.
+     *
+     * @param elements Elements to wrap
      */
     @SafeVarargs
     DirectivesSeq(final Iterable<Directive>... elements) {
@@ -53,12 +45,23 @@ public final class DirectivesSeq implements Iterable<Directive> {
     /**
      * Constructor.
      *
-     * @param name Name of the sequence.
-     * @param elements Elements to wrap.
+     * @param name Name of the sequence
+     * @param elements Elements to wrap
      */
     @SafeVarargs
     private DirectivesSeq(final String name, final Iterable<Directive>... elements) {
         this(name, Arrays.asList(elements));
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name Name of the sequence
+     * @param elements Elements to wrap
+     */
+    public DirectivesSeq(final String name, final List<? extends Iterable<Directive>> elements) {
+        this.name = name;
+        this.directives = elements;
     }
 
     @Override
@@ -73,10 +76,6 @@ public final class DirectivesSeq implements Iterable<Directive> {
         ).iterator();
     }
 
-    /**
-     * Stream of directives.
-     * @return Stream of directives.
-     */
     private Stream<Directives> stream() {
         return this.directives.stream()
             .filter(Objects::nonNull)

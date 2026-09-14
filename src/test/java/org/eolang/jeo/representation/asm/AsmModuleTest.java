@@ -14,6 +14,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeModuleOpened;
 import org.eolang.jeo.representation.bytecode.BytecodeModuleProvided;
 import org.eolang.jeo.representation.bytecode.BytecodeModuleRequired;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.tree.ModuleExportNode;
 import org.objectweb.asm.tree.ModuleNode;
@@ -23,6 +24,7 @@ import org.objectweb.asm.tree.ModuleRequireNode;
 
 /**
  * Test case for {@link AsmModule}.
+ *
  * @since 0.15.0
  */
 final class AsmModuleTest {
@@ -35,11 +37,10 @@ final class AsmModuleTest {
         final ModuleNode node = new ModuleNode(name, access, version);
         final String main = "main";
         node.mainClass = main;
-        final BytecodeModule bytecode = new AsmModule(node).bytecode();
         MatcherAssert.assertThat(
             "We expect the module to be converted to domain bytecode correctly",
-            bytecode,
-            org.hamcrest.Matchers.equalTo(
+            new AsmModule(node).bytecode(),
+            Matchers.equalTo(
                 new BytecodeModule(
                     name,
                     access,
@@ -73,11 +74,10 @@ final class AsmModuleTest {
         final String sample = "org.sample";
         node.packages.add(example);
         node.packages.add(sample);
-        final BytecodeModule bytecode = new AsmModule(node).bytecode();
         MatcherAssert.assertThat(
             "We expect the module with packages to be converted to domain bytecode correctly",
-            bytecode,
-            org.hamcrest.Matchers.equalTo(
+            new AsmModule(node).bytecode(),
+            Matchers.equalTo(
                 new BytecodeModule(
                     name,
                     access,
@@ -125,11 +125,10 @@ final class AsmModuleTest {
         node.provides.add(new ModuleProvideNode("service", impls));
         node.uses = new ArrayList<>(1);
         node.uses.add("used");
-        final BytecodeModule bytecode = new AsmModule(node).bytecode();
         MatcherAssert.assertThat(
             "We expect the module with everything to be converted to domain bytecode correctly",
-            bytecode,
-            org.hamcrest.Matchers.equalTo(
+            new AsmModule(node).bytecode(),
+            Matchers.equalTo(
                 new BytecodeModule(
                     name,
                     access,

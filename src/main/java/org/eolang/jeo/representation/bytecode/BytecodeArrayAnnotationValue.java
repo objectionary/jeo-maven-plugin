@@ -5,10 +5,9 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesArrayAnnotationValue;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.AnnotationVisitor;
@@ -16,10 +15,9 @@ import org.xembly.Directive;
 
 /**
  * An annotation value that is an array.
+ *
  * @since 0.6
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeArrayAnnotationValue implements BytecodeAnnotationValue {
 
     /**
@@ -34,8 +32,9 @@ public final class BytecodeArrayAnnotationValue implements BytecodeAnnotationVal
 
     /**
      * Constructor.
-     * @param name The name of the annotation property.
-     * @param values The actual values.
+     *
+     * @param name The name of the annotation property
+     * @param values The actual values
      */
     public BytecodeArrayAnnotationValue(
         final String name, final List<BytecodeAnnotationValue> values
@@ -61,6 +60,33 @@ public final class BytecodeArrayAnnotationValue implements BytecodeAnnotationVal
             this.values.stream()
                 .map(v -> v.directives(counter.getAndIncrement(), format))
                 .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeArrayAnnotationValue) {
+            final BytecodeArrayAnnotationValue value = (BytecodeArrayAnnotationValue) other;
+            result = Objects.equals(this.name, value.name)
+                && Objects.equals(this.values, value.values);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.name, this.values);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeArrayAnnotationValue(name=%s, values=%s)", this.name, this.values
         );
     }
 }

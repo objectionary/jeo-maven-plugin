@@ -10,8 +10,9 @@ import java.util.Optional;
 /**
  * Enumeration of all supported data types in bytecode representation.
  *
- * <p>This enumeration defines the mapping between Java data types and their
- * corresponding EO base types used in XMIR representation.</p>
+ * <p>This enumeration defines the mapping between Java data types and their corresponding EO base
+ * types used in XMIR representation.</p>
+ *
  * @since 0.3.0
  */
 enum DataType {
@@ -83,9 +84,9 @@ enum DataType {
 
     /**
      * Constructor.
+     *
      * @param base The EO base type name
      * @param clazz The corresponding Java class
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     DataType(final String base, final Class<?> clazz) {
         this.base = base;
@@ -94,14 +95,14 @@ enum DataType {
 
     /**
      * Find a data type by its EO base type name.
+     *
      * @param base The EO base type name
      * @return The corresponding DataType
      */
     static DataType findByBase(final String base) {
         return Arrays.stream(DataType.values())
             .filter(type -> type.base.equals(base))
-            .findFirst()
-            .orElseThrow(
+            .findFirst().orElseThrow(
                 () -> new IllegalArgumentException(
                     String.format("Unknown data type '%s'", base)
                 )
@@ -110,6 +111,7 @@ enum DataType {
 
     /**
      * Find a data type by examining a data object.
+     *
      * @param data The data object to analyze
      * @return The corresponding DataType
      */
@@ -119,8 +121,7 @@ enum DataType {
             result = DataType.NULL;
         } else {
             result = Arrays.stream(DataType.values()).filter(type -> type.clazz.isInstance(data))
-                .findFirst()
-                .orElseThrow(
+                .findFirst().orElseThrow(
                     () -> new IllegalArgumentException(
                         String.format(
                             "Unknown data type of %s, class is %s",
@@ -138,10 +139,10 @@ enum DataType {
 
     /**
      * Get the EO base type name.
+     *
      * @return The EO base type name
      */
     String caption() {
         return this.base;
     }
-
 }

@@ -12,6 +12,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link DirectivesUnknownAttribute}.
+ *
  * @since 0.15.0
  */
 final class DirectivesUnknownAttributeTest {

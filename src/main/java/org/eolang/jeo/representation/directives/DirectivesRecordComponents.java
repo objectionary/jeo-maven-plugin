@@ -10,6 +10,7 @@ import org.xembly.Directive;
 
 /**
  * Record components directives.
+ *
  * @since 0.15.0
  */
 public final class DirectivesRecordComponents implements Iterable<Directive> {
@@ -26,8 +27,9 @@ public final class DirectivesRecordComponents implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param index Index of the record component.
-     * @param components All the record components.
+     *
+     * @param index Index of the record component
+     * @param components All the record components
      */
     public DirectivesRecordComponents(
         final int index,

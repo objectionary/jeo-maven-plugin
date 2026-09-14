@@ -13,6 +13,7 @@ import org.xembly.Xembler;
 
 /**
  * Test for {@link DirectivesClosedObject}.
+ *
  * @since 0.11.0
  */
 final class DirectivesClosedObjectTest {

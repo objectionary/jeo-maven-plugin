@@ -21,6 +21,7 @@ import org.takes.rs.RsPrint;
 
 /**
  * Takes Application Entry Point.
+ *
  * @since 0.1
  */
 public class Application {
@@ -39,6 +40,7 @@ public class Application {
 
     /**
      * Prints the request time in the console.
+     *
      * @since 0.1
      */
     private static class TimeLog implements Fork {
@@ -50,7 +52,8 @@ public class Application {
 
         /**
          * Constructor.
-         * @param origin Original fork.
+         *
+         * @param origin Original fork
          */
         TimeLog(final Fork origin) {
             this.origin = origin;
@@ -65,6 +68,7 @@ public class Application {
 
     /**
      * Counts the requests.
+     *
      * @since 0.1
      */
     private static class RequestCounter implements Fork {
@@ -82,7 +86,8 @@ public class Application {
 
         /**
          * Constructor.
-         * @param origin Original fork.
+         *
+         * @param origin Original fork
          */
         RequestCounter(final Fork origin) {
             this.origin = origin;

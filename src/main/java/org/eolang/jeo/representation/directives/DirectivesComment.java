@@ -12,6 +12,7 @@ import org.xembly.Directives;
 
 /**
  * Directives for a comment.
+ *
  * @since 0.6
  */
 public final class DirectivesComment implements Iterable<Directive> {
@@ -66,8 +67,9 @@ public final class DirectivesComment implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Format of the directives.
-     * @param comment Comment.
+     *
+     * @param format Format of the directives
+     * @param comment Comment
      */
     DirectivesComment(final Format format, final String comment) {
         this.format = format;
@@ -87,10 +89,7 @@ public final class DirectivesComment implements Iterable<Directive> {
         return result;
     }
 
-    /**
-     * Escapes unsafe characters.
-     * @return Escaped comment.
-     */
+    // @checkstyle MissingNullCaseInSwitchCheck (30 lines)
     private String escaped() {
         final Matcher matcher = DirectivesComment.UNSAFE_CHARS.matcher(this.comment);
         final StringBuffer result = new StringBuffer(0);

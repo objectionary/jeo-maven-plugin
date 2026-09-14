@@ -10,6 +10,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 
 /**
  * Xmir representation of PermittedSubclasses attribute.
+ *
  * @since 0.14.0
  */
 final class XmlPermittedSubclasses {
@@ -21,7 +22,8 @@ final class XmlPermittedSubclasses {
 
     /**
      * Constructor.
-     * @param node JEO XML node.
+     *
+     * @param node JEO XML node
      */
     XmlPermittedSubclasses(final XmlJeoObject node) {
         this.node = node;
@@ -29,9 +31,10 @@ final class XmlPermittedSubclasses {
 
     /**
      * Bytecode attribute representation.
-     * @return Bytecode attribute.
+     *
+     * @return Bytecode attribute
      */
-    public BytecodeAttribute attribute() {
+    BytecodeAttribute attribute() {
         return new BytecodeAttribute.PermittedSubclasses(
             Arrays.stream(
                 new XmlValues(
@@ -47,11 +50,6 @@ final class XmlPermittedSubclasses {
         );
     }
 
-    /**
-     * Parse subclass.
-     * @param obj Raw subclass name.
-     * @return Subclass internal name as string.
-     */
     private static String subclass(final Object obj) {
         if (obj instanceof String) {
             return (String) obj;

@@ -25,6 +25,7 @@ public final class WithoutLines implements Scalar<XML> {
 
     /**
      * Constructor.
+     *
      * @param orgnl Original XML
      */
     public WithoutLines(final XML orgnl) {

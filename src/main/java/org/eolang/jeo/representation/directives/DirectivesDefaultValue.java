@@ -10,12 +10,7 @@ import org.xembly.Directive;
 /**
  * This class represents a default annotation value.
  *
- * <p>    {@code
- *        public @interface NestedAnnotation {
- *          String name() default "nested-default";
- *        }
- *     }
- * </p>
+ * <p>{@code public @interface NestedAnnotation { String name() default "nested-default"; } }</p>
  * For example, in the code above, the default value is "nested-default".
  *
  * @since 0.3
@@ -29,7 +24,8 @@ public final class DirectivesDefaultValue implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param value Default value.
+     *
+     * @param value Default value
      */
     public DirectivesDefaultValue(final Iterable<Directive> value) {
         this.value = value;

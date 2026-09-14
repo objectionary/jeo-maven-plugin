@@ -7,9 +7,8 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.Format;
@@ -18,20 +17,18 @@ import org.objectweb.asm.Opcodes;
 /**
  * Bytecode representation of a Java class.
  *
- * <p>This class represents a Java class in bytecode form, containing methods, fields,
- * annotations, attributes, and class properties. It provides functionality for
- * building bytecode classes programmatically and converting them to various formats.</p>
+ * <p>This class represents a Java class in bytecode form, containing methods, fields, annotations,
+ * attributes, and class properties. It provides functionality for building bytecode classes
+ * programmatically and converting them to various formats.</p>
+ *
  * @since 0.1.0
  */
 @SuppressWarnings("PMD.TooManyMethods")
-@ToString
-@EqualsAndHashCode
 public final class BytecodeClass {
 
     /**
      * Class name.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private final ClassName name;
 
     /**
@@ -69,6 +66,7 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
+     *
      * @param name The class name
      */
     public BytecodeClass(final String name) {
@@ -77,6 +75,7 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
+     *
      * @param name The class name
      * @param access The access modifiers
      */
@@ -86,6 +85,7 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
+     *
      * @param name The class name
      * @param properties The class properties
      */
@@ -98,10 +98,10 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
+     *
      * @param name The class name
      * @param methods The class methods
      * @param properties The class properties
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeClass(
         final String name,
@@ -120,13 +120,13 @@ public final class BytecodeClass {
 
     /**
      * Constructor.
+     *
      * @param name The class name
      * @param methods The class methods
      * @param fields The class fields
      * @param annotations The class annotations
      * @param attributes The class attributes
      * @param props The class properties
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeClass(
         final ClassName name,
@@ -146,15 +146,16 @@ public final class BytecodeClass {
 
     /**
      * Class name.
-     * @return Name.
+     *
+     * @return Name
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public ClassName name() {
         return this.name;
     }
 
     /**
      * Add constructor to the class.
+     *
      * @param modifiers The constructor access modifiers
      * @return The method builder for chaining
      */
@@ -164,6 +165,7 @@ public final class BytecodeClass {
 
     /**
      * Add method to the class.
+     *
      * @param properties The method properties
      * @return The method builder for chaining
      */
@@ -173,6 +175,7 @@ public final class BytecodeClass {
 
     /**
      * Add method to the class.
+     *
      * @param properties The method properties
      * @param maxs The method stack/locals maxs
      * @return The method builder for chaining
@@ -185,9 +188,10 @@ public final class BytecodeClass {
 
     /**
      * Add constructor.
-     * @param descriptor Constructor descriptor.
-     * @param modifiers Constructor modifiers.
-     * @return This object.
+     *
+     * @param descriptor Constructor descriptor
+     * @param modifiers Constructor modifiers
+     * @return This object
      */
     public BytecodeMethodBuilder withConstructor(final String descriptor, final int... modifiers) {
         return this.withMethod("<init>", descriptor, modifiers);
@@ -195,8 +199,9 @@ public final class BytecodeClass {
 
     /**
      * Add field.
-     * @param fname Field name.
-     * @return This object.
+     *
+     * @param fname Field name
+     * @return This object
      */
     public BytecodeClass withField(final String fname) {
         this.withField(
@@ -211,10 +216,11 @@ public final class BytecodeClass {
 
     /**
      * Add method.
-     * @param mname Method name.
-     * @param descriptor Method descriptor.
-     * @param modifiers Access modifiers.
-     * @return This object.
+     *
+     * @param mname Method name
+     * @param descriptor Method descriptor
+     * @param modifiers Access modifiers
+     * @return This object
      */
     public BytecodeMethodBuilder withMethod(
         final String mname, final String descriptor, final int... modifiers
@@ -225,20 +231,20 @@ public final class BytecodeClass {
     /**
      * Hello world bytecode.
      *
-     * @return The same class with the hello world method.
+     * @return The same class with the hello world method
      */
     public BytecodeClass helloWorldMethod() {
-        final BytecodeMethodProperties properties = new BytecodeMethodProperties(
-            "main",
-            "([Ljava/lang/String;)V",
-            Opcodes.ACC_PUBLIC,
-            Opcodes.ACC_STATIC
-        );
-        return this.withMethod(properties)
+        return this.withMethod(
+            new BytecodeMethodProperties(
+                "main",
+                "([Ljava/lang/String;)V",
+                Opcodes.ACC_PUBLIC,
+                Opcodes.ACC_STATIC
+                )
+            )
             .label()
             .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-            .opcode(Opcodes.LDC, "Hello, world!")
-            .opcode(
+            .opcode(Opcodes.LDC, "Hello, world!").opcode(
                 Opcodes.INVOKEVIRTUAL,
                 "java/io/PrintStream",
                 "println",
@@ -252,7 +258,8 @@ public final class BytecodeClass {
 
     /**
      * Properties.
-     * @return Class properties.
+     *
+     * @return Class properties
      */
     public BytecodeClassProperties properties() {
         return this.props;
@@ -260,7 +267,8 @@ public final class BytecodeClass {
 
     /**
      * Retrieve class methods.
-     * @return Class methods.
+     *
+     * @return Class methods
      */
     public List<BytecodeMethod> methods() {
         return Collections.unmodifiableList(this.cmethods);
@@ -268,7 +276,8 @@ public final class BytecodeClass {
 
     /**
      * Without methods.
-     * @return The same class without methods.
+     *
+     * @return The same class without methods
      */
     public BytecodeClass withoutMethods() {
         this.cmethods.clear();
@@ -277,7 +286,8 @@ public final class BytecodeClass {
 
     /**
      * Convert to directives.
-     * @return Directives.
+     *
+     * @return Directives
      */
     public DirectivesClass directives() {
         return this.directives(new Format());
@@ -285,8 +295,9 @@ public final class BytecodeClass {
 
     /**
      * Convert to directives.
-     * @param format Format of the directives.
-     * @return Directives.
+     *
+     * @param format Format of the directives
+     * @return Directives
      */
     public DirectivesClass directives(final Format format) {
         return new DirectivesClass(
@@ -303,9 +314,44 @@ public final class BytecodeClass {
         );
     }
 
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeClass) {
+            final BytecodeClass clazz = (BytecodeClass) other;
+            result = Objects.equals(this.name, clazz.name)
+                && Objects.equals(this.cmethods, clazz.cmethods)
+                && Objects.equals(this.fields, clazz.fields)
+                && Objects.equals(this.annotations, clazz.annotations)
+                && Objects.equals(this.attributes, clazz.attributes)
+                && Objects.equals(this.props, clazz.props);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            this.name, this.cmethods, this.fields, this.annotations, this.attributes, this.props
+        );
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeClass(name=%s, cmethods=%s, fields=%s, annotations=%s, attributes=%s, props=%s)",
+            this.name, this.cmethods, this.fields, this.annotations, this.attributes, this.props
+        );
+    }
+
     /**
      * Constructor.
-     * @param visitor Writer.
+     *
+     * @param visitor Writer
      */
     void writeTo(final CustomClassWriter visitor) {
         try {
@@ -338,13 +384,6 @@ public final class BytecodeClass {
         }
     }
 
-    /**
-     * Supername.
-     * <p>
-     *     For module-info class, there is no supername.
-     * </p>
-     * @return Supername.
-     */
     private String supername() {
         final String result;
         if ("module-info".equals(this.name.full())) {
@@ -355,11 +394,6 @@ public final class BytecodeClass {
         return result;
     }
 
-    /**
-     * Method number.
-     * @param method Method.
-     * @return Method number.
-     */
     private int mnumber(final BytecodeMethod method) {
         return this.methods().stream()
             .filter(m -> m.name().equals(method.name()))
@@ -367,27 +401,11 @@ public final class BytecodeClass {
             .indexOf(method) + 1;
     }
 
-    /**
-     * Add method.
-     * @param method Method.
-     * @return This object.
-     */
     private BytecodeMethodBuilder withMethod(final BytecodeMethod method) {
         this.cmethods.add(method);
         return new BytecodeMethodBuilder(this, method);
     }
 
-    /**
-     * Add field.
-     *
-     * @param fname Field name.
-     * @param descriptor Field descriptor.
-     * @param signature Field signature.
-     * @param value Field value.
-     * @param modifiers Access modifiers.
-     * @return This object.
-     * @checkstyle ParameterNumberCheck (5 lines)
-     */
     private BytecodeField withField(
         final String fname,
         final String descriptor,

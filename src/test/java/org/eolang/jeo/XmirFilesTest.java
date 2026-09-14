@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
@@ -101,13 +100,12 @@ final class XmirFilesTest {
             new BytecodeObject(new BytecodeClass("org.jeo.OpeoClass")).xml().toString()
                 .getBytes(StandardCharsets.UTF_8)
         );
-        final Stream<Path> all = new XmirFiles(path).all();
         MatcherAssert.assertThat(
             String.format(
                 "Objects were not retrieved, we expected exactly one object was read from %s",
                 path
             ),
-            all.collect(Collectors.toList()),
+            new XmirFiles(path).all().collect(Collectors.toList()),
             Matchers.hasSize(1)
         );
     }

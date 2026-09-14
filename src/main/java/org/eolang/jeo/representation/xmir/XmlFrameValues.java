@@ -5,14 +5,23 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import org.objectweb.asm.Opcodes;
 
 /**
  * Mirror for {@link org.eolang.jeo.representation.directives.DirectivesFrameValues}.
  * This class parses the frame values and their aliases.
+ *
  * @since 0.14.0
  */
 final class XmlFrameValues {
+
+    /**
+     * Frame value aliases mapped to their ASM opcode.
+     */
+    private static final Map<String, Integer> ALIASES = XmlFrameValues.aliases();
 
     /**
      * Xmir node representing frame values.
@@ -21,7 +30,8 @@ final class XmlFrameValues {
 
     /**
      * Constructor.
-     * @param root Xmir node representing frame values.
+     *
+     * @param root Xmir node representing frame values
      */
     XmlFrameValues(final XmlNode root) {
         this.root = root;
@@ -29,7 +39,8 @@ final class XmlFrameValues {
 
     /**
      * Parse values from the Xmir node.
-     * @return Parsed values as an array of objects.
+     *
+     * @return Parsed values as an array of objects
      */
     Object[] values() {
         return Arrays.stream(new XmlValues(this.root).values())
@@ -37,53 +48,29 @@ final class XmlFrameValues {
             .toArray();
     }
 
-    /**
-     * Parse a single value from the Xmir node.
-     * This method was added to simplify the XMIR representation of bytecode frames.
-     * <p>
-     *     You can read more about the original intention right here:
-     *     <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1211">Issue</a>.
-     * </p>
-     * @param value Value to parse, can be a string or an integer.
-     * @return Parsed value as an object, which can be an alias or the original value.
-     * @checkstyle CyclomaticComplexityCheck (50 lines)
-     */
     private static Object parse(final Object value) {
         final Object result;
-        if (value instanceof String) {
-            switch ((String) value) {
-                case "top":
-                    result = Opcodes.TOP;
-                    break;
-                case "short":
-                case "boolean":
-                case "char":
-                case "byte":
-                case "integer":
-                    result = Opcodes.INTEGER;
-                    break;
-                case "float":
-                    result = Opcodes.FLOAT;
-                    break;
-                case "double":
-                    result = Opcodes.DOUBLE;
-                    break;
-                case "long":
-                    result = Opcodes.LONG;
-                    break;
-                case "null":
-                    result = Opcodes.NULL;
-                    break;
-                case "uninit_this":
-                    result = Opcodes.UNINITIALIZED_THIS;
-                    break;
-                default:
-                    result = value;
-                    break;
-            }
+        if (value instanceof String && XmlFrameValues.ALIASES.containsKey(value)) {
+            result = XmlFrameValues.ALIASES.get(value);
         } else {
             result = value;
         }
         return result;
+    }
+
+    private static Map<String, Integer> aliases() {
+        final Map<String, Integer> map = new HashMap<>();
+        map.put("top", Opcodes.TOP);
+        map.put("short", Opcodes.INTEGER);
+        map.put("boolean", Opcodes.INTEGER);
+        map.put("char", Opcodes.INTEGER);
+        map.put("byte", Opcodes.INTEGER);
+        map.put("integer", Opcodes.INTEGER);
+        map.put("float", Opcodes.FLOAT);
+        map.put("double", Opcodes.DOUBLE);
+        map.put("long", Opcodes.LONG);
+        map.put("null", Opcodes.NULL);
+        map.put("uninit_this", Opcodes.UNINITIALIZED_THIS);
+        return Collections.unmodifiableMap(map);
     }
 }

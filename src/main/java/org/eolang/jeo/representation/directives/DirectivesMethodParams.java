@@ -15,6 +15,7 @@ import org.xembly.Directives;
 
 /**
  * Directives for method parameters.
+ *
  * @since 0.1
  */
 public final class DirectivesMethodParams implements Iterable<Directive> {
@@ -38,7 +39,8 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param params Parameters.
+     *
+     * @param params Parameters
      */
     @SafeVarargs
     public DirectivesMethodParams(final Iterable<Directive>... params) {
@@ -47,7 +49,8 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param params Parameters.
+     *
+     * @param params Parameters
      */
     public DirectivesMethodParams(final List<Iterable<Directive>> params) {
         this(params, new ArrayList<>(0));
@@ -55,8 +58,9 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param params Parameters.
-     * @param annotations Parameter annotations.
+     *
+     * @param params Parameters
+     * @param annotations Parameter annotations
      */
     public DirectivesMethodParams(
         final List<Iterable<Directive>> params,

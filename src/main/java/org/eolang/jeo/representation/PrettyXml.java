@@ -16,8 +16,10 @@ import org.dom4j.io.XMLWriter;
 
 /**
  * Pretty-prints XML content.
- * <p>This class takes an XML string or an XML object and formats it with proper indentation
- * and newlines for better readability.</p>
+ *
+ * <p>This class takes an XML string or an XML object and formats it with proper indentation and
+ * newlines for better readability.</p>
+ *
  * @since 0.11.0
  */
 public final class PrettyXml {
@@ -29,6 +31,7 @@ public final class PrettyXml {
 
     /**
      * Constructor.
+     *
      * @param xml XML content as an XML object
      */
     PrettyXml(final XML xml) {
@@ -37,6 +40,7 @@ public final class PrettyXml {
 
     /**
      * Constructor.
+     *
      * @param xml XML content as a string
      */
     PrettyXml(final String xml) {

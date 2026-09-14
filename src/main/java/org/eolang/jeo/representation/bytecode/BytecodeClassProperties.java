@@ -4,8 +4,8 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Arrays;
+import java.util.Objects;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.eolang.jeo.representation.directives.DirectivesClassProperties;
@@ -16,9 +16,6 @@ import org.eolang.jeo.representation.directives.Format;
  *
  * @since 0.1.0
  */
-@ToString
-@EqualsAndHashCode
-@SuppressWarnings({"PMD.AvoidFieldNameMatchingMethodName", "PMD.DataClass"})
 public final class BytecodeClassProperties {
 
     /**
@@ -48,7 +45,8 @@ public final class BytecodeClassProperties {
 
     /**
      * Constructor.
-     * @param access Access modifiers.
+     *
+     * @param access Access modifiers
      */
     public BytecodeClassProperties(final int access) {
         this(new DefaultVersion().bytecode(), access, null, "java/lang/Object", new String[0]);
@@ -56,11 +54,11 @@ public final class BytecodeClassProperties {
 
     /**
      * Constructor.
-     * @param access Access modifiers.
-     * @param signature Signature.
-     * @param supername Supername.
-     * @param interfaces Interfaces.
-     * @checkstyle ParameterNumberCheck (10 lines)
+     *
+     * @param access Access modifiers
+     * @param signature Signature
+     * @param supername Supername
+     * @param interfaces Interfaces
      */
     public BytecodeClassProperties(
         final int access,
@@ -73,12 +71,12 @@ public final class BytecodeClassProperties {
 
     /**
      * Constructor.
-     * @param version Bytecode version.
-     * @param access Access modifiers.
-     * @param signature Signature.
-     * @param supername Supername.
-     * @param interfaces Interfaces.
-     * @checkstyle ParameterNumberCheck (10 lines)
+     *
+     * @param version Bytecode version
+     * @param access Access modifiers
+     * @param signature Signature
+     * @param supername Supername
+     * @param interfaces Interfaces
      */
     public BytecodeClassProperties(
         final int version,
@@ -96,7 +94,8 @@ public final class BytecodeClassProperties {
 
     /**
      * API version.
-     * @return Api version.
+     *
+     * @return Api version
      */
     public int version() {
         return this.version;
@@ -104,7 +103,8 @@ public final class BytecodeClassProperties {
 
     /**
      * Access modifiers.
-     * @return Access modifiers.
+     *
+     * @return Access modifiers
      */
     public int access() {
         return this.access;
@@ -112,7 +112,8 @@ public final class BytecodeClassProperties {
 
     /**
      * Class signature.
-     * @return Class signature.
+     *
+     * @return Class signature
      */
     public String signature() {
         return this.signature;
@@ -120,7 +121,8 @@ public final class BytecodeClassProperties {
 
     /**
      * Superclass name.
-     * @return Superclass name.
+     *
+     * @return Superclass name
      */
     public String supername() {
         return this.supername;
@@ -128,12 +130,20 @@ public final class BytecodeClassProperties {
 
     /**
      * All class interfaces.
-     * @return All class interfaces.
+     *
+     * @return All class interfaces
      */
     public String[] interfaces() {
         return this.interfaces.clone();
     }
 
+    /**
+     * Convert to directives.
+     *
+     * @param format Format of the directives
+     * @param name Class name
+     * @return Directives
+     */
     public DirectivesClassProperties directives(final Format format, final ClassName name) {
         return new DirectivesClassProperties(
             format,
@@ -142,6 +152,41 @@ public final class BytecodeClassProperties {
             name,
             this.supername,
             this.interfaces
+        );
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeClassProperties) {
+            final BytecodeClassProperties props = (BytecodeClassProperties) other;
+            result = this.version == props.version
+                && this.access == props.access
+                && Objects.equals(this.signature, props.signature)
+                && Objects.equals(this.supername, props.supername)
+                && Arrays.equals(this.interfaces, props.interfaces);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            this.version, this.access, this.signature, this.supername,
+            Arrays.hashCode(this.interfaces)
+        );
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeClassProperties(version=%d, access=%d, supername=%s, interfaces=%s, signature=%s)",
+            this.version, this.access, this.supername, Arrays.toString(this.interfaces),
+            this.signature
         );
     }
 }

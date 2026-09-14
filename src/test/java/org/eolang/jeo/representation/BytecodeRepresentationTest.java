@@ -26,7 +26,6 @@ import org.objectweb.asm.MethodVisitor;
  *
  * @since 0.1.0
  */
-@SuppressWarnings("PMD.TooManyMethods")
 final class BytecodeRepresentationTest {
 
     /**
@@ -34,14 +33,6 @@ final class BytecodeRepresentationTest {
      */
     @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
     private static final String METHOD_BYTE = "MethodByte.class";
-
-    /**
-     * The example of bytecode with a nullable param name.
-     * You can read more about it here:
-     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1233">#1233</a>
-     */
-    @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
-    private static final String NULL_NAME = "LtIncorrectUnlint.class";
 
     /**
      * Format for debug mode.
@@ -91,8 +82,9 @@ final class BytecodeRepresentationTest {
 
     @Test
     void retrievesName() {
-        final ResourceOf input = new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE);
-        final String actual = new BytecodeRepresentation(input).name();
+        final String actual = new BytecodeRepresentation(
+            new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE)
+        ).name();
         final String expected = "org/eolang/jeo/MethodByte";
         MatcherAssert.assertThat(
             String.format(
@@ -129,29 +121,31 @@ final class BytecodeRepresentationTest {
      * This test was added to mitigate the issue with stack map frames mapping.
      * You can read more about it here:
      * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1215">Issue</a>
+     *
      * @throws Exception if something goes wrong
      */
     @Test
     void parsesBytecodeLoggerStackFrames() throws Exception {
         final ResourceOf input = new ResourceOf("LoggerFactory$DelegatingLogger.class");
-        final String actual = new Bytecode(
-            new XmirRepresentation(
-                new BytecodeRepresentation(input).toXmir(BytecodeRepresentationTest.DEBUG)
-            ).toBytecode().bytes()
-        ).toString();
-        final String expected = new Bytecode(new BytesOf(input).asBytes()).toString();
         MatcherAssert.assertThat(
             "The disassembled/assembled bytecode representation should match the original bytecode",
-            actual,
-            Matchers.equalTo(expected)
+            new Bytecode(
+                new XmirRepresentation(
+                    new BytecodeRepresentation(input).toXmir(BytecodeRepresentationTest.DEBUG)
+                ).toBytecode().bytes()
+            ).toString(),
+            Matchers.equalTo(new Bytecode(new BytesOf(input).asBytes()).toString())
         );
     }
 
+    /**
+     * LtIncorrectUnlint.class has a nullable param name, see issue #1233.
+     */
     @Test
     void parsesBytecodeWithNullParameterName() {
         Assertions.assertDoesNotThrow(
             () -> new BytecodeRepresentation(
-                new ResourceOf(BytecodeRepresentationTest.NULL_NAME)
+                new ResourceOf("LtIncorrectUnlint.class")
             ).toXmir(),
             "We expect to parse a bytecode with a null name without exceptions"
         );
@@ -166,34 +160,32 @@ final class BytecodeRepresentationTest {
      * instead of null.
      * You can find the fix here:
      * {@link  org.eolang.jeo.representation.bytecode.LocalVariable#write(MethodVisitor, AsmLabels)}
-     * @throws Exception In case of error.
+     *
+     * @throws Exception In case of error
      */
     @Test
     void doesNotAddEmptySignaturesToVariableTable() throws Exception {
         final ResourceOf input = new ResourceOf("Check.class");
-        final String actual = new Bytecode(
-            new XmirRepresentation(
-                new BytecodeRepresentation(input).toXmir(BytecodeRepresentationTest.DEBUG)
-            ).toBytecode().bytes()
-        ).toString();
-        final String expected = new Bytecode(new BytesOf(input).asBytes()).toString();
         MatcherAssert.assertThat(
             "The disassembled/assembled bytecode representation should match the original bytecode",
-            actual,
-            Matchers.equalTo(expected)
+            new Bytecode(
+                new XmirRepresentation(
+                    new BytecodeRepresentation(input).toXmir(BytecodeRepresentationTest.DEBUG)
+                ).toBytecode().bytes()
+            ).toString(),
+            Matchers.equalTo(new Bytecode(new BytesOf(input).asBytes()).toString())
         );
     }
 
     @Test
     void parsesModuleInfo() throws Exception {
         final ResourceOf resource = new ResourceOf("closed-module-info.class");
-        final Bytecode expected = new Bytecode(new BytesOf(resource).asBytes());
         MatcherAssert.assertThat(
             "The module-info class should be parsed correctly",
             new XmirRepresentation(
                 new BytecodeRepresentation(resource).toXmir(BytecodeRepresentationTest.DEBUG)
             ).toBytecode().toString(),
-            Matchers.equalTo(expected.toString())
+            Matchers.equalTo(new Bytecode(new BytesOf(resource).asBytes()).toString())
         );
     }
 

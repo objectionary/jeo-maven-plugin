@@ -8,6 +8,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 
 /**
  * Xmir representation of NestHost attribute.
+ *
  * @since 0.14.0
  */
 final class XmlNestHost {
@@ -19,7 +20,8 @@ final class XmlNestHost {
 
     /**
      * Constructor.
-     * @param node JEO XML node.
+     *
+     * @param node JEO XML node
      */
     XmlNestHost(final XmlJeoObject node) {
         this.node = node;
@@ -27,7 +29,8 @@ final class XmlNestHost {
 
     /**
      * Parse bytecode attribute.
-     * @return Bytecode attribute.
+     *
+     * @return Bytecode attribute
      */
     BytecodeAttribute attribute() {
         return new BytecodeAttribute.NestHost(

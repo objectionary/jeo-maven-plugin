@@ -7,11 +7,10 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAnnotations;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
@@ -19,11 +18,11 @@ import org.objectweb.asm.RecordComponentVisitor;
 
 /**
  * Bytecode annotations.
+ *
  * @since 0.6
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeAnnotations {
+
     /**
      * All annotations.
      */
@@ -31,7 +30,8 @@ public final class BytecodeAnnotations {
 
     /**
      * Constructor.
-     * @param all All annotations.
+     *
+     * @param all All annotations
      */
     public BytecodeAnnotations(final BytecodeAnnotation... all) {
         this(Arrays.asList(all));
@@ -39,7 +39,8 @@ public final class BytecodeAnnotations {
 
     /**
      * Constructor.
-     * @param all All annotations.
+     *
+     * @param all All annotations
      */
     public BytecodeAnnotations(final Stream<BytecodeAnnotation> all) {
         this(all.collect(Collectors.toList()));
@@ -47,7 +48,8 @@ public final class BytecodeAnnotations {
 
     /**
      * Constructor.
-     * @param all All annotations.
+     *
+     * @param all All annotations
      */
     public BytecodeAnnotations(final List<BytecodeAnnotation> all) {
         this.all = all;
@@ -55,7 +57,8 @@ public final class BytecodeAnnotations {
 
     /**
      * All annotations.
-     * @return Annotations.
+     *
+     * @return Annotations
      */
     public List<BytecodeAnnotation> annotations() {
         return Collections.unmodifiableList(this.all);
@@ -63,8 +66,9 @@ public final class BytecodeAnnotations {
 
     /**
      * Directives with the name "annotations".
-     * @param format Format of the directives.
-     * @return Directives.
+     *
+     * @param format Format of the directives
+     * @return Directives
      */
     public DirectivesAnnotations directives(final Format format) {
         return this.directives(format, "annotations");
@@ -72,9 +76,10 @@ public final class BytecodeAnnotations {
 
     /**
      * Directives with the given name.
-     * @param format Format of the directives.
-     * @param name Name of the directives.
-     * @return Directives.
+     *
+     * @param format Format of the directives
+     * @param name Name of the directives
+     * @return Directives
      */
     public DirectivesAnnotations directives(final Format format, final String name) {
         final AtomicInteger counter = new AtomicInteger(0);
@@ -86,9 +91,33 @@ public final class BytecodeAnnotations {
         );
     }
 
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeAnnotations) {
+            result = Objects.equals(this.all, ((BytecodeAnnotations) other).all);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.all);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("BytecodeAnnotations(all=%s)", this.all);
+    }
+
     /**
      * Write annotations to the ASM method visitor.
-     * @param visitor Method visitor.
+     *
+     * @param visitor Method visitor
      */
     void write(final MethodVisitor visitor) {
         this.all.forEach(annotation -> annotation.write(visitor));
@@ -96,7 +125,8 @@ public final class BytecodeAnnotations {
 
     /**
      * Write annotations to the custom class writer.
-     * @param visitor Custom class writer.
+     *
+     * @param visitor Custom class writer
      */
     void write(final CustomClassWriter visitor) {
         this.all.forEach(annotation -> annotation.write(visitor));
@@ -104,8 +134,9 @@ public final class BytecodeAnnotations {
 
     /**
      * Write the parameter.
-     * @param index Index of the parameter.
-     * @param writer Method visitor.
+     *
+     * @param index Index of the parameter
+     * @param writer Method visitor
      */
     void write(final int index, final MethodVisitor writer) {
         this.all.forEach(annotation -> annotation.write(index, writer));
@@ -113,7 +144,8 @@ public final class BytecodeAnnotations {
 
     /**
      * Write the record component.
-     * @param writer Record component visitor.
+     *
+     * @param writer Record component visitor
      */
     void write(final RecordComponentVisitor writer) {
         this.all.forEach(annotation -> annotation.write(writer));

@@ -12,6 +12,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link DirectivesLine}.
+ *
  * @since 0.14.0
  */
 final class DirectivesLineTest {

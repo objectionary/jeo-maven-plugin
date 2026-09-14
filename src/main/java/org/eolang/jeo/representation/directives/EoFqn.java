@@ -7,11 +7,10 @@ package org.eolang.jeo.representation.directives;
 /**
  * EO fully qualified name generator.
  *
- * <p>This class generates fully qualified names for EO objects by adding
- * the standard EO namespace prefix to base names.</p>
+ * <p>This class generates fully qualified names for EO objects by adding the standard EO namespace
+ * prefix to base names.</p>
  *
- * <p>Examples:
- * </p>
+ * <p>Examples:</p>
  * <ul>
  * <li>{@code seq} -> {@code Q.org.eolang.seq}</li>
  * <li>{@code bytes} -> {@code Q.org.eolang.bytes}</li>
@@ -29,6 +28,7 @@ public final class EoFqn {
 
     /**
      * Constructor.
+     *
      * @param base The base name to qualify
      */
     public EoFqn(final String base) {
@@ -37,7 +37,8 @@ public final class EoFqn {
 
     /**
      * Get a fully qualified name.
-     * @return Fully qualified name.
+     *
+     * @return Fully qualified name
      */
     public String fqn() {
         return String.format("Φ.%s", this.base);

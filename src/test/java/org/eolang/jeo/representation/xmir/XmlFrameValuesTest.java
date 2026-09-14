@@ -16,6 +16,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlFrameValues}.
+ *
  * @since 0.14.0
  */
 final class XmlFrameValuesTest {

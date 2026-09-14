@@ -8,6 +8,7 @@ import java.nio.file.Path;
 
 /**
  * Convenient transformation wrapper that provides informative error messages in case of failure.
+ *
  * @since 0.14.0
  * @checkstyle IllegalCatchCheck (100 lines)
  */
@@ -20,7 +21,8 @@ final class Informative implements Transformation {
 
     /**
      * Constructor.
-     * @param original Delegate transformation.
+     *
+     * @param original Delegate transformation
      */
     Informative(final Transformation original) {
         this.original = original;

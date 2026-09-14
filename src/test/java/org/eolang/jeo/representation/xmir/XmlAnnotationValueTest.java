@@ -18,6 +18,7 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link XmlAnnotationValue}.
+ *
  * @since 0.11.0
  */
 final class XmlAnnotationValueTest {

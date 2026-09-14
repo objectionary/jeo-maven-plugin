@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test for {@link JcabiXmlNode}.
+ *
  * @since 0.7
  */
 final class JcabiXmlNodeTest {
@@ -33,17 +34,11 @@ final class JcabiXmlNodeTest {
 
     @Test
     void retrievesChildren() {
-        final List<XmlNode> children = new JcabiXmlNode(
-            "<o><o name='inner1'/><o name='inner2'/></o>"
-        ).children().collect(Collectors.toList());
-        MatcherAssert.assertThat(
-            "Size of children is not as expected",
-            children,
-            Matchers.hasSize(2)
-        );
         MatcherAssert.assertThat(
             "Can't retrieve the children, or the children are not the expected ones",
-            children,
+            new JcabiXmlNode(
+                "<o><o name='inner1'/><o name='inner2'/></o>"
+            ).children().collect(Collectors.toList()),
             Matchers.contains(
                 new JcabiXmlNode("<o name='inner1'/>"),
                 new JcabiXmlNode("<o name='inner2'/>")
@@ -53,16 +48,10 @@ final class JcabiXmlNodeTest {
 
     @Test
     void retrievesAttribute() {
-        final Optional<String> attribute = new JcabiXmlNode("<o name='some'/>").attribute("name");
         MatcherAssert.assertThat(
-            "Can't retrieve the attribute",
-            attribute.isPresent(),
-            Matchers.is(true)
-        );
-        MatcherAssert.assertThat(
-            "he attribute is not the expected one",
-            attribute.get(),
-            Matchers.equalTo("some")
+            "Can't retrieve the attribute, or the attribute is not the expected one",
+            new JcabiXmlNode("<o name='some'/>").attribute("name"),
+            Matchers.equalTo(Optional.of("some"))
         );
     }
 
@@ -128,5 +117,4 @@ final class JcabiXmlNodeTest {
             Matchers.equalTo(expected)
         );
     }
-
 }

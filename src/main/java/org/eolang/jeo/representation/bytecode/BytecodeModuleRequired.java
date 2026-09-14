@@ -4,18 +4,16 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.directives.DirectivesModuleRequired;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ModuleVisitor;
 
 /**
  * A node that represents a required module with its name and access of a module descriptor.
+ *
  * @since 0.15.0
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeModuleRequired {
 
     /**
@@ -37,6 +35,7 @@ public final class BytecodeModuleRequired {
 
     /**
      * Constructor.
+     *
      * @param module The fully qualified name (using dots) of the dependence
      * @param access The access flag of the dependence
      * @param version The module version at compile time
@@ -49,6 +48,7 @@ public final class BytecodeModuleRequired {
 
     /**
      * Writes this required module to the given module visitor.
+     *
      * @param visitor The module visitor
      */
     public void write(final ModuleVisitor visitor) {
@@ -57,10 +57,40 @@ public final class BytecodeModuleRequired {
 
     /**
      * Converts this required module to directives.
+     *
      * @param format Directive format
      * @return Directives representation of this required module
      */
     public DirectivesModuleRequired directives(final Format format) {
         return new DirectivesModuleRequired(format, this.module, this.access, this.version);
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeModuleRequired) {
+            final BytecodeModuleRequired required = (BytecodeModuleRequired) other;
+            result = this.access == required.access
+                && Objects.equals(this.module, required.module)
+                && Objects.equals(this.version, required.version);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.module, this.access, this.version);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeModuleRequired(module=%s, access=%d, version=%s)",
+            this.module, this.access, this.version
+        );
     }
 }

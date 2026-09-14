@@ -7,10 +7,10 @@ package org.eolang.jeo.representation;
 /**
  * Method name converter between Java bytecode and EO representations.
  *
- * <p>This class handles the conversion of Java method names, particularly
- * special cases like constructors and static initializers. Constructor names
- * are represented as '&lt;init&gt;' in bytecode which isn't allowed in EO,
- * so they need to be converted to valid EO names and back.</p>
+ * <p>This class handles the conversion of Java method names, particularly special cases like
+ * constructors and static initializers. Constructor names are represented as '&lt;init&gt;' in
+ * bytecode which isn't allowed in EO, so they need to be converted to valid EO names and back.</p>
+ *
  * @since 0.6.0
  */
 public final class MethodName {
@@ -42,6 +42,7 @@ public final class MethodName {
 
     /**
      * Constructor.
+     *
      * @param name The method name (in either bytecode or EO format)
      */
     public MethodName(final String name) {
@@ -50,6 +51,7 @@ public final class MethodName {
 
     /**
      * Convert method name to bytecode format.
+     *
      * @return The method name in bytecode format
      */
     public String bytecode() {
@@ -70,6 +72,7 @@ public final class MethodName {
 
     /**
      * Convert method name to XMIR/EO format.
+     *
      * @return The method name in XMIR/EO format
      */
     public String xmir() {

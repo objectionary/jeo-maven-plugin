@@ -8,7 +8,6 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.nio.file.Path;
 import java.util.Arrays;
-import lombok.ToString;
 import org.cactoos.Input;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.InputOf;
@@ -27,13 +26,12 @@ import org.xembly.ImpossibleModificationException;
 /**
  * Intermediate representation of class files from bytecode.
  *
- * <p>This class provides a unified interface for working with Java bytecode.
- * It can read bytecode from various sources (files, byte arrays, input streams)
- * and convert it to XMIR (EO XML representation) format with configurable detail levels.</p>
+ * <p>This class provides a unified interface for working with Java bytecode. It can read bytecode
+ * from various sources (files, byte arrays, input streams) and convert it to XMIR (EO XML
+ * representation) format with configurable detail levels.</p>
+ *
  * @since 0.1.0
  */
-@ToString
-@SuppressWarnings("PMD.UseObjectForClearerAPI")
 public final class BytecodeRepresentation {
 
     /**
@@ -43,6 +41,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
+     *
      * @param clazz The path to the class file to read
      */
     public BytecodeRepresentation(final Path clazz) {
@@ -51,6 +50,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
+     *
      * @param bytecode The bytecode object containing raw bytes
      */
     public BytecodeRepresentation(final Bytecode bytecode) {
@@ -59,6 +59,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
+     *
      * @param input The input source containing bytecode
      */
     public BytecodeRepresentation(final Input input) {
@@ -67,6 +68,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Constructor.
+     *
      * @param input The unchecked byte array supplier
      */
     private BytecodeRepresentation(final Unchecked<byte[]> input) {
@@ -75,6 +77,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Read class name from bytecode.
+     *
      * @return Fully qualified class name
      */
     public String name() {
@@ -85,6 +88,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Convert to EOlang XML representation (XMIR).
+     *
      * @return XML representation of the bytecode
      */
     public XML toXmir() {
@@ -93,6 +97,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Convert bytecode into XMIR format.
+     *
      * @param format Disassemble output format
      * @return XML representation of the bytecode
      */
@@ -102,6 +107,7 @@ public final class BytecodeRepresentation {
 
     /**
      * Convert bytecode into XMIR format.
+     *
      * @param format The disassemble params controlling the level of detail
      * @return XMIR representation of the bytecode
      */
@@ -149,29 +155,19 @@ public final class BytecodeRepresentation {
         }
     }
 
-    /**
-     * Prestructor that converts a file to a byte source.
-     * @param path The path to the file containing bytecode
-     * @return The unchecked byte array supplier
-     */
+    @Override
+    public String toString() {
+        return "BytecodeRepresentation()";
+    }
+
     private static Unchecked<byte[]> fromFile(final Path path) {
         return BytecodeRepresentation.fromInput(new InputOf(path));
     }
 
-    /**
-     * Prestructor that converts input to a byte source.
-     * @param input The input source to read from
-     * @return The unchecked byte array supplier
-     */
     private static Unchecked<byte[]> fromInput(final Input input) {
         return new Unchecked<>(new Synced<>(new Sticky<>(() -> new BytesOf(input).asBytes())));
     }
 
-    /**
-     * Prestructor that converts bytes to a byte source.
-     * @param bytes The raw byte array
-     * @return The unchecked byte array supplier
-     */
     private static Unchecked<byte[]> fromBytes(final byte[] bytes) {
         return new Unchecked<>(new Synced<>(new Sticky<>(() -> bytes)));
     }

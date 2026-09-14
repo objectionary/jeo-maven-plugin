@@ -9,8 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesLabel;
 import org.eolang.jeo.representation.directives.Format;
@@ -19,10 +17,9 @@ import org.xembly.Directive;
 
 /**
  * Mark label instruction.
+ *
  * @since 0.1
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeLabel implements BytecodeEntry {
 
     /**
@@ -39,7 +36,8 @@ public final class BytecodeLabel implements BytecodeEntry {
 
     /**
      * Constructor.
-     * @param uid Identifier.
+     *
+     * @param uid Identifier
      */
     public BytecodeLabel(final byte[] uid) {
         this(new String(uid, StandardCharsets.UTF_8));
@@ -47,7 +45,8 @@ public final class BytecodeLabel implements BytecodeEntry {
 
     /**
      * Constructor.
-     * @param label Identifier.
+     *
+     * @param label Identifier
      */
     public BytecodeLabel(final String label) {
         this.identifier = label;
@@ -115,7 +114,35 @@ public final class BytecodeLabel implements BytecodeEntry {
         return String.format("label %s", this.identifier);
     }
 
+    /**
+     * Unique identifier of the label.
+     *
+     * @return Identifier
+     */
     public String uid() {
         return this.identifier;
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeLabel) {
+            result = Objects.equals(this.identifier, ((BytecodeLabel) other).identifier);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.identifier);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("BytecodeLabel(identifier=%s)", this.identifier);
     }
 }

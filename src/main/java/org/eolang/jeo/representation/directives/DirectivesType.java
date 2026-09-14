@@ -10,6 +10,7 @@ import org.xembly.Directive;
 
 /**
  * Directives for Type object.
+ *
  * @since 0.11.0
  */
 public final class DirectivesType implements Iterable<Directive> {
@@ -31,8 +32,9 @@ public final class DirectivesType implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param index Ordered index
-     * @param format The format of the directives.
+     * @param format The format of the directives
      * @param type ASM Type object
      */
     public DirectivesType(final int index, final Format format, final Type type) {

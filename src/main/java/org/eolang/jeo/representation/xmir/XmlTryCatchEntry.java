@@ -13,6 +13,7 @@ import org.eolang.jeo.representation.directives.EoFqn;
 
 /**
  * XML try-catch entry.
+ *
  * @since 0.1
  */
 public final class XmlTryCatchEntry implements XmlBytecodeEntry {
@@ -30,6 +31,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
 
     /**
      * Constructor.
+     *
      * @param node XML node
      */
     public XmlTryCatchEntry(final XmlNode node) {
@@ -38,48 +40,30 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
 
     /**
      * Constructor.
+     *
      * @param node XML Jeo object node
      */
     private XmlTryCatchEntry(final XmlJeoObject node) {
         this.node = node;
     }
 
-    /**
-     * Converts XML to bytecode.
-     * @return Bytecode try-catch block.
-     */
+    @Override
     public BytecodeTryCatchBlock bytecode() {
         return new BytecodeTryCatchBlock(this.start(), this.end(), this.handler(), this.type());
     }
 
-    /**
-     * Retrieves the start label.
-     * @return Start label.
-     */
     private BytecodeLabel start() {
         return this.label(0).orElse(null);
     }
 
-    /**
-     * Retrieves the end label.
-     * @return End label.
-     */
     private BytecodeLabel end() {
         return this.label(1).orElse(null);
     }
 
-    /**
-     * Retrieves the handler label.
-     * @return Handler label.
-     */
     private BytecodeLabel handler() {
         return this.label(2).orElse(null);
     }
 
-    /**
-     * Retrieves the exception type.
-     * @return Exception type.
-     */
     private String type() {
         return Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(3))
             .filter(n -> !XmlTryCatchEntry.NOP.equals(new XmlClosedObject(n).base()))
@@ -89,11 +73,6 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
             .orElse(null);
     }
 
-    /**
-     * Retrieves the label.
-     * @param id Label uid.
-     * @return Label.
-     */
     private Optional<BytecodeLabel> label(final int id) {
         final List<XmlNode> all = this.node.children().collect(Collectors.toList());
         if (all.size() <= id) {
@@ -107,8 +86,7 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
             );
         }
         return Optional.ofNullable(all.get(id))
-            .filter(n -> new XmlJeoObject(n).base().isPresent())
-            .filter(
+            .filter(n -> new XmlJeoObject(n).base().isPresent()).filter(
                 based -> !new XmlJeoObject(based).base()
                     .map(XmlTryCatchEntry.NOP::equals)
                     .orElse(false)

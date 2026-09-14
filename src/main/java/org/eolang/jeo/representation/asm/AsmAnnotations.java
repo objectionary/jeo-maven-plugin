@@ -20,6 +20,7 @@ import org.objectweb.asm.tree.RecordComponentNode;
 /**
  * Asm annotations.
  * Asm parser for annotations.
+ *
  * @since 0.6
  */
 public final class AsmAnnotations {
@@ -36,7 +37,8 @@ public final class AsmAnnotations {
 
     /**
      * Constructor.
-     * @param node Class node.
+     *
+     * @param node Class node
      */
     AsmAnnotations(final ClassNode node) {
         this(node.visibleAnnotations, node.invisibleAnnotations);
@@ -44,7 +46,8 @@ public final class AsmAnnotations {
 
     /**
      * Constructor.
-     * @param node Method node.
+     *
+     * @param node Method node
      */
     AsmAnnotations(final MethodNode node) {
         this(node.visibleAnnotations, node.invisibleAnnotations);
@@ -52,7 +55,8 @@ public final class AsmAnnotations {
 
     /**
      * Constructor.
-     * @param node Field node.
+     *
+     * @param node Field node
      */
     AsmAnnotations(final FieldNode node) {
         this(node.visibleAnnotations, node.invisibleAnnotations);
@@ -60,7 +64,8 @@ public final class AsmAnnotations {
 
     /**
      * Constructor.
-     * @param node Record node.
+     *
+     * @param node Record node
      */
     AsmAnnotations(final RecordComponentNode node) {
         this(node.visibleAnnotations, node.invisibleAnnotations);
@@ -68,8 +73,9 @@ public final class AsmAnnotations {
 
     /**
      * Constructor.
-     * @param visible Visible annotations.
-     * @param invisible Invisible annotations.
+     *
+     * @param visible Visible annotations
+     * @param invisible Invisible annotations
      */
     AsmAnnotations(
         final List<AnnotationNode> visible,
@@ -81,6 +87,7 @@ public final class AsmAnnotations {
 
     /**
      * Check if there are no annotations.
+     *
      * @return True if there are no annotations, false otherwise
      */
     public boolean isEmpty() {
@@ -90,7 +97,8 @@ public final class AsmAnnotations {
 
     /**
      * Convert asm annotations to domain annotations.
-     * @return Domain annotations.
+     *
+     * @return Domain annotations
      */
     public BytecodeAnnotations bytecode() {
         return new BytecodeAnnotations(
@@ -101,12 +109,6 @@ public final class AsmAnnotations {
         );
     }
 
-    /**
-     * Safe annotations.
-     * @param nodes Annotation nodes.
-     * @param visible Is it visible?
-     * @return Annotations.
-     */
     private static Stream<BytecodeAnnotation> safe(
         final List<AnnotationNode> nodes, final boolean visible
     ) {
@@ -116,12 +118,6 @@ public final class AsmAnnotations {
             .map(ann -> AsmAnnotations.annotation(ann, visible));
     }
 
-    /**
-     * Convert asm annotation to domain annotation.
-     * @param node Asm annotation node.
-     * @param visible Is it visible?
-     * @return Domain annotation.
-     */
     private static BytecodeAnnotation annotation(final AnnotationNode node, final boolean visible) {
         return new BytecodeAnnotation(
             node.desc, visible, new AsmAnnotationValues(node.values).bytecode()

@@ -16,6 +16,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link DirectivesPlainAnnotationValue}.
+ *
  * @since 0.6
  */
 final class DirectivesPlainAnnotationValueTest {

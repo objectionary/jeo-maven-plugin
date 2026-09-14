@@ -8,6 +8,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 
 /**
  * XML representation of bytecode label.
+ *
  * @since 0.1
  */
 public final class XmlLabel implements XmlBytecodeEntry {
@@ -19,23 +20,20 @@ public final class XmlLabel implements XmlBytecodeEntry {
 
     /**
      * Constructor.
-     * @param node Label node.
+     *
+     * @param node Label node
      */
     XmlLabel(final XmlNode node) {
         this.node = new XmlJeoObject(node);
     }
 
-    /**
-     * Converts label to bytecode.
-     * @return Bytecode label.
-     */
+    @Override
     public BytecodeLabel bytecode() {
         try {
             return new BytecodeLabel(
                 new XmlValue(
                     this.node.children()
-                        .findFirst()
-                        .orElseThrow(
+                        .findFirst().orElseThrow(
                             () -> new IllegalStateException(
                                 "Label node must have at least one child"
                             )

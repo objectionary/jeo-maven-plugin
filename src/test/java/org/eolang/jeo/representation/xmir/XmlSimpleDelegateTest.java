@@ -13,6 +13,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlSimpleDelegate}.
+ *
  * @since 0.12.0
  */
 final class XmlSimpleDelegateTest {

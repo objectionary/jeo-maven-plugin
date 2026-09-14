@@ -14,9 +14,9 @@ import org.xembly.Xembler;
 /**
  * A utility class that measures the time taken to convert bytecode to XMIR.
  *
- * <p>This class wraps the transformation process and adds timing metadata to the
- * resulting XMIR program. The timing information is embedded in the program's
- * ms attribute.</p>
+ * <p>This class wraps the transformation process and adds timing metadata to the resulting XMIR
+ * program. The timing information is embedded in the program's ms attribute.</p>
+ *
  * @since 0.6.0
  */
 final class MeasuredEo {
@@ -28,6 +28,7 @@ final class MeasuredEo {
 
     /**
      * Constructor.
+     *
      * @param directives Directives to build the EO program from
      */
     MeasuredEo(final Iterable<Directive> directives) {
@@ -36,6 +37,7 @@ final class MeasuredEo {
 
     /**
      * Get XML representation of the EO with timing information.
+     *
      * @return XML representation with embedded timing metadata
      * @throws ImpossibleModificationException If XMIR modification fails
      */

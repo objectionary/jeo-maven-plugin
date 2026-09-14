@@ -11,6 +11,7 @@ import org.xembly.Directive;
 
 /**
  * Directives Type Annotations.
+ *
  * @since 0.15.0
  */
 public final class DirectivesTypeAnnotations implements Iterable<Directive> {
@@ -27,7 +28,8 @@ public final class DirectivesTypeAnnotations implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param annotations Annotations.
+     *
+     * @param annotations Annotations
      */
     @SafeVarargs
     public DirectivesTypeAnnotations(final Iterable<Directive>... annotations) {
@@ -36,7 +38,8 @@ public final class DirectivesTypeAnnotations implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param annotations Annotations.
+     *
+     * @param annotations Annotations
      */
     public DirectivesTypeAnnotations(final List<Iterable<Directive>> annotations) {
         this("type-annotations", annotations);
@@ -44,8 +47,9 @@ public final class DirectivesTypeAnnotations implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Name.
-     * @param annotations Annotations.
+     *
+     * @param name Name
+     * @param annotations Annotations
      */
     private DirectivesTypeAnnotations(
         final String name, final List<Iterable<Directive>> annotations) {

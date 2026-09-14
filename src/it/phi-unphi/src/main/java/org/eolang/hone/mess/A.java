@@ -6,6 +6,7 @@ package org.eolang.hone.mess;
 
 /**
  * This class was added to add more classes for phi/unphi tests.
+ *
  * @since 0.6
  */
 public class A {

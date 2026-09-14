@@ -22,6 +22,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link AsmProgram}.
+ *
  * @since 0.6
  */
 final class AsmProgramTest {
@@ -57,22 +58,19 @@ final class AsmProgramTest {
     @Test
     void parsesAnnotations() throws Exception {
         final byte[] original = new BytesOf(new ResourceOf("FixedWidth.class")).asBytes();
-        final Bytecode expected = new Bytecode(original);
-        final Bytecode actual = new AsmProgram(original).bytecode().bytecode();
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode",
-            actual,
-            Matchers.equalTo(expected)
+            new AsmProgram(original).bytecode().bytecode(),
+            Matchers.equalTo(new Bytecode(original))
         );
     }
 
     @Test
     void parsesNestMembersBytecodeAttributes() throws Exception {
         final byte[] original = new BytesOf(new ResourceOf("Check.class")).asBytes();
-        final Bytecode actual = new AsmProgram(original).bytecode(0).bytecode();
         MatcherAssert.assertThat(
             "We expect to receive the same bytecode with the 'NestMembers' attribute",
-            actual.toString(),
+            new AsmProgram(original).bytecode(0).bytecode().toString(),
             Matchers.equalTo(new Bytecode(original).toString())
         );
     }
@@ -81,6 +79,7 @@ final class AsmProgramTest {
      * Checks that the AsmProgram correctly parses the 'NestHost' attribute from the bytecode.
      * Comes from the issue:
      * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1274">#1274</a>
+     *
      * @throws Exception In case of error
      */
     @Test
@@ -98,23 +97,23 @@ final class AsmProgramTest {
         final BytecodeObject original = new AsmProgram(
             new BytesOf(new ResourceOf("LogManager.class")).asBytes()
         ).bytecode(0);
-        final Bytecode actual = new XmlObject(
-            new Xembler(original.directives(new Format())).xml()
-        ).bytecode().bytecode();
-        final Bytecode expected = original.bytecode();
         MatcherAssert.assertThat(
             "We expect to receive the same scala bytecode",
-            actual,
-            Matchers.equalTo(expected)
+            new XmlObject(
+                new Xembler(original.directives(new Format())).xml()
+            ).bytecode().bytecode(),
+            Matchers.equalTo(original.bytecode())
         );
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {
-        "FixedWidth.class",
-        "DeprecatedMethod.class",
-        "ParamAnnotation.class"
-    })
+    @ValueSource(
+        strings = {
+            "FixedWidth.class",
+            "DeprecatedMethod.class",
+            "ParamAnnotation.class"
+        }
+    )
     void convertsToBytecodeThenToXmirAndThenBackToBytecode(final String resource) throws Exception {
         final BytecodeObject bytecode = new AsmProgram(
             new BytesOf(new ResourceOf(resource)).asBytes()

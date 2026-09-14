@@ -15,9 +15,10 @@ import org.xembly.Directive;
  * JVM Specification:
  * {@code
  * {   u2 opens_index; {@link #pckg}
- *     u2 opens_flags; {@link #access}
- *     u2 opens_to_count; {@link #modules.size()}
- *     u2 opens_to_index[opens_to_count]; }} {@link #modules}
+ * u2 opens_flags; {@link #access}
+ * u2 opens_to_count; {@link #modules.size()}
+ * u2 opens_to_index[opens_to_count]; }} {@link #modules}
+ *
  * @since 0.15.0
  */
 public final class DirectivesModuleOpened implements Iterable<Directive> {
@@ -45,11 +46,11 @@ public final class DirectivesModuleOpened implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param format Directive format
      * @param pckg The internal name of the opened package
      * @param access The access flag of the opened package
      * @param modules The fully qualified names (using dots) of the modules
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesModuleOpened(
         final Format format,
@@ -73,14 +74,13 @@ public final class DirectivesModuleOpened implements Iterable<Directive> {
             new DirectivesValue(this.format, "access", this.access),
             new DirectivesSeq(
                 "modules",
-                this.modules.stream()
-                    .map(
-                        module -> new DirectivesValue(
-                            this.format,
-                            String.format("m%d", counter.getAndIncrement()),
-                            module
-                        )
-                    ).collect(Collectors.toList())
+                this.modules.stream().map(
+                    module -> new DirectivesValue(
+                        this.format,
+                        String.format("m%d", counter.getAndIncrement()),
+                        module
+                    )
+                ).collect(Collectors.toList())
             )
         ).iterator();
     }

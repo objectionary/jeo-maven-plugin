@@ -11,11 +11,11 @@ import org.xembly.Directives;
 
 /**
  * Directives for an EO object that delegates to another object.
- * <p>
- *     Alternative representations of the same idea:
- *     - {@link DirectivesClosedObject} - a closed object with a base attribute,
- *     - {@link DirectivesAbsractObject} - an abstract object with a base attribute,
- * </p>
+ *
+ * <p>Alternative representations of the same idea: - {@link DirectivesClosedObject} - a closed
+ * object with a base attribute, - {@link DirectivesAbsractObject} - an abstract object with a
+ * base attribute,</p>
+ *
  * @since 0.12.0
  */
 public final class DirectivesDelegateObject implements Iterable<Directive> {
@@ -27,6 +27,7 @@ public final class DirectivesDelegateObject implements Iterable<Directive> {
 
     /**
      * Attribute 'as' of the abstract object.
+     *
      * @checkstyle MemberNameCheck (2 lines)
      */
     private final String as;
@@ -43,8 +44,9 @@ public final class DirectivesDelegateObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The 'base' attribute of the abstract object.
-     * @param internal Inner components of the abstract object.
+     *
+     * @param base The 'base' attribute of the abstract object
+     * @param internal Inner components of the abstract object
      */
     DirectivesDelegateObject(final String base, final Iterable<Directive> internal) {
         this(base, "", internal);
@@ -52,9 +54,10 @@ public final class DirectivesDelegateObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The 'base' attribute of the abstract object.
-     * @param as The 'as' attribute of the abstract object.
-     * @param directives Inner components of the abstract object.
+     *
+     * @param base The 'base' attribute of the abstract object
+     * @param as The 'as' attribute of the abstract object
+     * @param directives Inner components of the abstract object
      * @checkstyle ParameterNameCheck (5 lines)
      */
     DirectivesDelegateObject(
@@ -67,12 +70,12 @@ public final class DirectivesDelegateObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The 'base' attribute of the abstract object.
-     * @param as The 'as' attribute of the abstract object.
-     * @param name The 'name' attribute of the abstract object.
-     * @param internal Inner components of the abstract object.
+     *
+     * @param base The 'base' attribute of the abstract object
+     * @param as The 'as' attribute of the abstract object
+     * @param name The 'name' attribute of the abstract object
+     * @param internal Inner components of the abstract object
      * @checkstyle ParameterNameCheck (5 lines)
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesDelegateObject(
         final String base,

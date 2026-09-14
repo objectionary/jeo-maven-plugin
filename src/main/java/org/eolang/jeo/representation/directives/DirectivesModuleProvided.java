@@ -15,9 +15,10 @@ import org.xembly.Directive;
  * JVM Specification:
  * {@code
  * {   u2 provides_index; {@link #service}
- *     u2 provides_with_count; {@link #providers.size()}
- *     u2 provides_with_index[provides_with_count]; {@link #providers}
+ * u2 provides_with_count; {@link #providers.size()}
+ * u2 provides_with_index[provides_with_count]; {@link #providers}
  * }}
+ *
  * @since 0.15.0
  */
 public final class DirectivesModuleProvided implements Iterable<Directive> {
@@ -39,9 +40,10 @@ public final class DirectivesModuleProvided implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Directive format.
-     * @param service The internal name of the service.
-     * @param providers The internal names of the implementations of the service.
+     *
+     * @param format Directive format
+     * @param service The internal name of the service
+     * @param providers The internal names of the implementations of the service
      */
     public DirectivesModuleProvided(
         final Format format,
@@ -62,14 +64,13 @@ public final class DirectivesModuleProvided implements Iterable<Directive> {
             new DirectivesValue(this.format, "service", this.service),
             new DirectivesSeq(
                 "providers",
-                this.providers.stream()
-                    .map(
-                        provider -> new DirectivesValue(
-                            this.format,
-                            String.format("p%d", counter.getAndIncrement()),
-                            provider
-                        )
-                    ).collect(Collectors.toList())
+                this.providers.stream().map(
+                    provider -> new DirectivesValue(
+                        this.format,
+                        String.format("p%d", counter.getAndIncrement()),
+                        provider
+                    )
+                ).collect(Collectors.toList())
             )
         ).iterator();
     }

@@ -6,8 +6,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.Collections;
 import java.util.List;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesLine;
 import org.eolang.jeo.representation.directives.Format;
@@ -17,10 +16,9 @@ import org.xembly.Directive;
 /**
  * Bytecode line.
  * This class represents the reference to a source line from a bytecode instruction.
+ *
  * @since 0.6
  */
-@EqualsAndHashCode
-@ToString
 public final class BytecodeLine implements BytecodeEntry {
 
     /**
@@ -35,6 +33,7 @@ public final class BytecodeLine implements BytecodeEntry {
 
     /**
      * Constructor.
+     *
      * @param number Line number in the source code
      * @param label Bytecode label that this line refers to
      */
@@ -101,5 +100,29 @@ public final class BytecodeLine implements BytecodeEntry {
     @Override
     public String view() {
         return "line";
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeLine) {
+            final BytecodeLine line = (BytecodeLine) other;
+            result = this.number == line.number && Objects.equals(this.label, line.label);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.number, this.label);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("BytecodeLine(number=%d, label=%s)", this.number, this.label);
     }
 }

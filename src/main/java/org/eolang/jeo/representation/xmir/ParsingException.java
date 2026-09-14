@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.xmir;
 /**
  * XMIR parsing exception.
  * This exception is thrown when XMIR parsing fails.
+ *
  * @since 0.6
  */
 final class ParsingException extends IllegalStateException {
@@ -18,8 +19,9 @@ final class ParsingException extends IllegalStateException {
 
     /**
      * Constructor.
-     * @param message Message.
-     * @param cause Cause.
+     *
+     * @param message Message
+     * @param cause Cause
      */
     ParsingException(final String message, final Throwable cause) {
         super(message, cause);

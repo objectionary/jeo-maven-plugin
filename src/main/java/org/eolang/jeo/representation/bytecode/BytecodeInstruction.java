@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.Format;
@@ -25,12 +23,11 @@ import org.xembly.Directive;
 
 /**
  * Bytecode instruction.
+ *
  * @since 0.1
  * @checkstyle FileLengthCheck (2000 lines)
  */
-@ToString
-@EqualsAndHashCode
-@SuppressWarnings({"PMD.ExcessiveClassLength", "PMD.GodClass", "PMD.TooManyMethods"})
+@SuppressWarnings("PMD.ExcessivePublicCount")
 public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
@@ -45,8 +42,9 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Constructor.
-     * @param opcode Opcode.
-     * @param args Arguments.
+     *
+     * @param opcode Opcode
+     * @param args Arguments
      */
     public BytecodeInstruction(final int opcode, final Object... args) {
         this(opcode, Arrays.asList(args));
@@ -54,8 +52,9 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Constructor.
-     * @param opcode Opcode.
-     * @param args Arguments.
+     *
+     * @param opcode Opcode
+     * @param args Arguments
      */
     private BytecodeInstruction(
         final int opcode,
@@ -63,6 +62,33 @@ public final class BytecodeInstruction implements BytecodeEntry {
     ) {
         this.opcode = opcode;
         this.args = args;
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeInstruction) {
+            final BytecodeInstruction instruction = (BytecodeInstruction) other;
+            result = this.opcode == instruction.opcode
+                && Objects.equals(this.args, instruction.args);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.opcode, this.args);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeInstruction(opcode=%d, args=%s)", this.opcode, this.args
+        );
     }
 
     @Override
@@ -102,16 +128,34 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Impact of each instruction on the stack.
-     * @return Stack impact.
-     * @checkstyle CyclomaticComplexityCheck (350 lines)
-     * @checkstyle MethodLengthCheck (350 lines)
-     * @checkstyle JavaNCSSCheck (350 lines)
-     * @checkstyle AvoidNestedBlocksCheck (350 lines)
+     *
+     * @return Stack impact
      */
-    @SuppressWarnings({"PMD.NcssCount", "PMD.ExcessiveMethodLength"})
+    @Override
     public int impact() {
-        final int result;
         final Instruction instruction = Instruction.find(this.opcode);
+        final Integer constant = BytecodeInstruction.constantImpact(instruction);
+        final int result;
+        if (constant == null) {
+            result = this.dynamicImpact(instruction);
+        } else {
+            result = constant;
+        }
+        return result;
+    }
+
+    /**
+     * Impact on the stack of instructions whose impact does not depend on their arguments.
+     *
+     * @param instruction Instruction
+     * @return Stack impact, or null if the instruction's impact depends on its arguments
+     * @checkstyle CyclomaticComplexityCheck (250 lines)
+     * @checkstyle MethodLengthCheck (250 lines)
+     * @checkstyle JavaNCSSCheck (250 lines)
+     */
+    @SuppressWarnings("PMD.NcssCount")
+    private static Integer constantImpact(final Instruction instruction) {
+        final Integer result;
         switch (instruction) {
             case LASTORE:
             case DASTORE:
@@ -273,6 +317,21 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case DUP2_X2:
                 result = 2;
                 break;
+            default:
+                result = null;
+        }
+        return result;
+    }
+
+    /**
+     * Impact on the stack of instructions whose impact depends on their arguments.
+     *
+     * @param instruction Instruction
+     * @return Stack impact
+     */
+    private int dynamicImpact(final Instruction instruction) {
+        final int result;
+        switch (instruction) {
             case LDC: {
                 final Object arg = this.args.get(0);
                 if (arg instanceof Long || arg instanceof Double) {
@@ -312,13 +371,11 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 result = BytecodeInstruction.methodImpact(String.valueOf(this.args.get(1)));
                 break;
             case MULTIANEWARRAY:
-                result = -(int) (this.args.get(1)) + 1;
+                result = -(int) this.args.get(1) + 1;
                 break;
             default:
                 throw new UnsupportedOperationException(
-                    String.format(
-                        "Unsupported opcode: %s", new OpcodeName(this.opcode).simplified()
-                    )
+                    String.format("Unsupported opcode: %s", new OpcodeName(this.opcode).simplified())
                 );
         }
         return result;
@@ -326,7 +383,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Is this instruction a variable instruction?
-     * @return True if it is.
+     *
+     * @return True if it is
      */
     boolean isVarInstruction() {
         return Instruction.find(this.opcode).isVarInstruction();
@@ -334,7 +392,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Local variable index.
-     * @return Local variable index.
+     *
+     * @return Local variable index
      */
     int varIndex() {
         this.assertVarInstruction();
@@ -343,7 +402,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Local variable size.
-     * @return Local variable size.
+     *
+     * @return Local variable size
      */
     int varSize() {
         this.assertVarInstruction();
@@ -353,7 +413,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
     /**
      * Is this instruction a jump instruction?
      * Is it a goto or jsr?
-     * @return True if it is.
+     *
+     * @return True if it is
      */
     @Override
     public boolean isJump() {
@@ -363,7 +424,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Is this instruction a conditional branch instruction?
-     * @return True if it is.
+     *
+     * @return True if it is
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
     @Override
@@ -397,7 +459,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Is this instruction a switch instruction?
-     * @return True if it is.
+     *
+     * @return True if it is
      */
     @Override
     public boolean isSwitch() {
@@ -416,7 +479,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Is this instruction a return instruction?
-     * @return True if it is.
+     *
+     * @return True if it is
      */
     @Override
     public boolean isReturn() {
@@ -440,9 +504,11 @@ public final class BytecodeInstruction implements BytecodeEntry {
     /**
      * Jump to a label.
      * Where to jump.
-     * @return Jump label.
+     *
+     * @return Jump label
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      */
+    @Override
     public List<BytecodeLabel> jumps() {
         final List<BytecodeLabel> result;
         switch (Instruction.find(this.opcode)) {
@@ -495,7 +561,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Is this instruction a variable instruction?
-     * @throws IllegalStateException If it is not.
+     *
+     * @throws IllegalStateException If it is not
      */
     private void assertVarInstruction() {
         if (!this.isVarInstruction()) {
@@ -510,8 +577,9 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Size of the type.
-     * @param type Type.
-     * @return Size.
+     *
+     * @param type Type
+     * @return Size
      */
     private static int size(final Type type) {
         final int result;
@@ -527,8 +595,9 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     /**
      * Impact of the method invocation on stack.
-     * @param descriptor Method descriptor.
-     * @return Impact.
+     *
+     * @param descriptor Method descriptor
+     * @return Impact
      */
     private static int methodImpact(final String descriptor) {
         return BytecodeInstruction.size(Type.getReturnType(descriptor))
@@ -537,6 +606,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
             .sum();
     }
 
+    @Override
     public boolean isThrow() {
         return Instruction.find(this.opcode) == Instruction.ATHROW;
     }
@@ -546,7 +616,6 @@ public final class BytecodeInstruction implements BytecodeEntry {
      *
      * @since 0.1.0
      */
-    @SuppressWarnings("PMD.ExcessiveClassLength")
     private enum Instruction {
 
         /**
@@ -1992,14 +2061,17 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
         /**
          * Bytecode generation function.
+         * A stateless lambda, immutable in practice; the checker only flags it because
+         * {@link BiConsumer} itself carries no {@code @Immutable} annotation.
          */
-        private BiConsumer<MethodVisitor, List<Object>> generator;
+        @SuppressWarnings("Immutable")
+        private final BiConsumer<MethodVisitor, List<Object>> generator;
 
         /**
          * Constructor.
          *
-         * @param opcode Opcode.
-         * @param visit Bytecode generation function.
+         * @param opcode Opcode
+         * @param visit Bytecode generation function
          */
         Instruction(
             final int opcode,
@@ -2012,8 +2084,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
         /**
          * Generate bytecode.
          *
-         * @param visitor Method visitor.
-         * @param arguments Arguments.
+         * @param visitor Method visitor
+         * @param arguments Arguments
          */
         void generate(final MethodVisitor visitor, final List<Object> arguments) {
             this.generator.accept(visitor, arguments);
@@ -2021,7 +2093,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
         /**
          * Check if the instruction is a variable instruction.
-         * @return True if the instruction is a variable instruction.
+         *
+         * @return True if the instruction is a variable instruction
          * @checkstyle CyclomaticComplexityCheck (50 lines)
          */
         boolean isVarInstruction() {
@@ -2049,7 +2122,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
         /**
          * Local variable size.
-         * @return Local variable size.
+         *
+         * @return Local variable size
          * @checkstyle CyclomaticComplexityCheck (50 lines)
          */
         int size() {
@@ -2086,8 +2160,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
         /**
          * Get instruction by opcode.
          *
-         * @param opcode Opcode.
-         * @return Instruction.
+         * @param opcode Opcode
+         * @return Instruction
          */
         static Instruction find(final int opcode) {
             for (final Instruction instruction : Instruction.values()) {

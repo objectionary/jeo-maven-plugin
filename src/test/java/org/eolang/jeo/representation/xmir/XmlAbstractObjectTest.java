@@ -14,6 +14,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlAbstractObject}.
+ *
  * @since 0.11.0
  */
 final class XmlAbstractObjectTest {

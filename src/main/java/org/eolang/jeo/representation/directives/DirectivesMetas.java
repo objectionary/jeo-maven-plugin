@@ -13,6 +13,7 @@ import org.xembly.Directives;
 
 /**
  * Directives for meta-information of a class.
+ *
  * @since 0.1
  */
 public final class DirectivesMetas implements Iterable<Directive> {
@@ -29,7 +30,8 @@ public final class DirectivesMetas implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param classname Class name.
+     *
+     * @param classname Class name
      */
     public DirectivesMetas(final ClassName classname) {
         this.name = classname;
@@ -50,10 +52,6 @@ public final class DirectivesMetas implements Iterable<Directive> {
         return result.up().iterator();
     }
 
-    /**
-     * Home directives.
-     * @return Directives for home.
-     */
     private static Iterable<Directive> home() {
         return new Directives().add("meta")
             .add("head").set("home").up()
@@ -62,13 +60,6 @@ public final class DirectivesMetas implements Iterable<Directive> {
             .up();
     }
 
-    /**
-     * Prefixed package.
-     * We intentionally add prefix to the packages, because sometimes they can be really
-     * strange, <a href="https://github.com/objectionary/jeo-maven-plugin/issues/779">see</a>
-     * @param pckg Package name.
-     * @return Package name directives.
-     */
     private static Directives pckgd(final String pckg) {
         return new Directives()
             .add("meta")
@@ -78,10 +69,6 @@ public final class DirectivesMetas implements Iterable<Directive> {
             .up();
     }
 
-    /**
-     * The version directives of jeo-maven-plugin.
-     * @return Version directives.
-     */
     private static Directives version() {
         return new Directives()
             .add("meta")
@@ -90,11 +77,6 @@ public final class DirectivesMetas implements Iterable<Directive> {
             .up();
     }
 
-    /**
-     * SPDX directives.
-     * Here I intentionally use the array of characters to avoid the 'reuse' check warning.
-     * @return SPDX directives.
-     */
     private static Directives spdx() {
         final String spdx = new String(
             new char[]{

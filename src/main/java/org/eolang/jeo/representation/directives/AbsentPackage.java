@@ -12,11 +12,6 @@ package org.eolang.jeo.representation.directives;
 public final class AbsentPackage {
 
     /**
-     * Default identifier for absent package.
-     */
-    private static final String ABSENT_PACKAGE = "jeo$packageless$jeo";
-
-    /**
      * Identifier of the absent package.
      */
     private final String identifier;
@@ -25,7 +20,7 @@ public final class AbsentPackage {
      * Constructor.
      */
     public AbsentPackage() {
-        this(AbsentPackage.ABSENT_PACKAGE);
+        this("jeo$packageless$jeo");
     }
 
     /**

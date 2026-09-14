@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Spring Application Entry Point.
+ *
  * @since 0.2
  */
 @SpringBootApplication

@@ -4,37 +4,58 @@
  */
 package org.eolang.jeo.representation.xmir;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * XML operand.
+ *
  * @since 0.3
  */
-@ToString
-@EqualsAndHashCode
 final class XmlOperand {
 
     /**
      * Raw XML node which represents an instruction operand.
      */
-    @EqualsAndHashCode.Exclude
     private final XmlNode raw;
 
     /**
      * Constructor.
-     * @param node Raw XML operand node.
+     *
+     * @param node Raw XML operand node
      */
     XmlOperand(final XmlNode node) {
         this.raw = node;
     }
 
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof XmlOperand) {
+            result = Objects.equals(this.asObject(), ((XmlOperand) other).asObject());
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.asObject());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("XmlOperand(raw=%s)", this.raw);
+    }
+
     /**
      * Convert XML operand to an object.
-     * @return Object.
+     *
+     * @return Object
      */
-    @EqualsAndHashCode.Include
     Object asObject() {
         final String base = this.base();
         final Object result;

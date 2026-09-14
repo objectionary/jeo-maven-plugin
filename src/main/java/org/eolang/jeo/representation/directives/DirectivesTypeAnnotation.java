@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -12,6 +13,7 @@ import org.xembly.Directives;
 
 /**
  * Directives of Type Annotation.
+ *
  * @since 0.15.0
  */
 public final class DirectivesTypeAnnotation implements Iterable<Directive> {
@@ -22,7 +24,7 @@ public final class DirectivesTypeAnnotation implements Iterable<Directive> {
     private final int index;
 
     /**
-     *A reference to the annotated type.
+     * A reference to the annotated type.
      */
     private final int ref;
 
@@ -54,14 +56,14 @@ public final class DirectivesTypeAnnotation implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Format of the directives.
-     * @param index Index of the annotation among other annotations.
-     * @param ref A reference to the annotated type.
+     *
+     * @param format Format of the directives
+     * @param index Index of the annotation among other annotations
+     * @param ref A reference to the annotated type
      * @param path The path to the annotated type argument, wildcard bound, array element type,
-     * @param desc The class descriptor of the annotation class.
-     * @param visible Visibility of the annotation.
-     * @param properties Properties.
-     * @checkstyle ParameterNumber (10 lines)
+     * @param desc The class descriptor of the annotation class
+     * @param visible Visibility of the annotation
+     * @param properties Properties
      */
     public DirectivesTypeAnnotation(
         final Format format,
@@ -82,7 +84,7 @@ public final class DirectivesTypeAnnotation implements Iterable<Directive> {
     }
 
     @Override
-    public java.util.Iterator<Directive> iterator() {
+    public Iterator<Directive> iterator() {
         return new DirectivesSeq(
             String.format("type-annotation-%d", this.index),
             Stream.concat(

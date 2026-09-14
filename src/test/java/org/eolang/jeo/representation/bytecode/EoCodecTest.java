@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.nio.charset.StandardCharsets;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Test case for {@link EoCodec}.
+ *
  * @since 0.8
  */
 final class EoCodecTest {
@@ -35,11 +37,6 @@ final class EoCodecTest {
         );
     }
 
-    /**
-     * Test cases.
-     * @return Arguments.
-     */
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Object[][] mapping() {
         return new Object[][]{
             {true, DataType.BOOL, new byte[]{1}},
@@ -51,7 +48,7 @@ final class EoCodecTest {
             {42L, DataType.LONG, new byte[]{64, 69, 0, 0, 0, 0, 0, 0}},
             {42.0f, DataType.FLOAT, new byte[]{64, 69, 0, 0, 0, 0, 0, 0}},
             {42.0, DataType.DOUBLE, new byte[]{64, 69, 0, 0, 0, 0, 0, 0}},
-            {"Hello, world!", DataType.STRING, "Hello, world!".getBytes()},
+            {"Hello, world!", DataType.STRING, "Hello, world!".getBytes(StandardCharsets.UTF_8)},
         };
     }
 }

@@ -17,9 +17,10 @@ import org.apache.maven.project.MavenProject;
 /**
  * Plugin initialization and setup.
  *
- * <p>This class is responsible for initializing the classloader for all Maven mojos.
- * It ensures that all necessary classes from the project's runtime, compile, and test
- * classpaths are available during plugin execution.</p>
+ * <p>This class is responsible for initializing the classloader for all Maven mojos. It ensures
+ * that all necessary classes from the project's runtime, compile, and test classpaths are
+ * available during plugin execution.</p>
+ *
  * @since 0.1.0
  */
 public final class PluginStartup {
@@ -31,6 +32,7 @@ public final class PluginStartup {
 
     /**
      * Constructor.
+     *
      * @param project Maven project containing classpath information
      * @param additional Additional folders with classes to include
      * @throws DependencyResolutionRequiredException If a problem happened during loading classes
@@ -43,6 +45,7 @@ public final class PluginStartup {
 
     /**
      * Constructor.
+     *
      * @param folders Collection of folder paths containing classes
      */
     private PluginStartup(final Collection<String> folders) {
@@ -51,12 +54,14 @@ public final class PluginStartup {
 
     /**
      * Initialize classloader.
-     * <p>This method is important to load classes that were compiled on the previous Maven
-     * phases. Since the jeo plugin works on the 'process-classes' phase, it might
-     * see classes that were compiled on the 'compile' phase.</p>
-     * <p>We need to have all these classes in the classpath to be able to load them during
-     * the transformation phase. This is necessary to solve the problem with computing maxs
-     * in ASM library:</p>
+     *
+     * <p>This method is important to load classes that were compiled on the previous Maven phases.
+     * Since the jeo plugin works on the 'process-classes' phase, it might see classes that were
+     * compiled on the 'compile' phase.</p>
+     *
+     * <p>We need to have all these classes in the classpath to be able to load them during the
+     * transformation phase. This is necessary to solve the problem with computing maxs in ASM
+     * library:</p>
      * <ul>
      * <li><a href="https://gitlab.ow2.org/asm/asm/-/issues/317918">ASM Issue 317918</a></li>
      * <li><a href="https://stackoverflow.com/questions/11292701/error-while-instrumenting-class-files-asm-classwriter-getcommonsuperclass">StackOverflow: ASM ClassWriter getCommonSuperClass</a></li>
@@ -65,10 +70,8 @@ public final class PluginStartup {
     void init() {
         Logger.info(
             this,
-            String.format(
-                "Trying to load classes for bytecode verification from %s",
-                this.folders.stream().collect(Collectors.joining(", ", "[", "]"))
-            )
+            "Trying to load classes for bytecode verification from %s",
+            this.folders.stream().collect(Collectors.joining(", ", "[", "]"))
         );
         Thread.currentThread().setContextClassLoader(
             new JeoClassLoader(
@@ -78,13 +81,6 @@ public final class PluginStartup {
         );
     }
 
-    /**
-     * All folders with classes.
-     * @param project Maven project
-     * @param additional Additional folders with classes
-     * @return Set of folder paths as strings
-     * @throws DependencyResolutionRequiredException If a problem happened during loading classes
-     */
     private static Set<String> all(
         final MavenProject project,
         final Path... additional

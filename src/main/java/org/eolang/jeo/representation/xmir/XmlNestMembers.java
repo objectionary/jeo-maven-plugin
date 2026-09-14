@@ -10,6 +10,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 
 /**
  * NestMembers attribute representation.
+ *
  * @since 0.14.0
  */
 final class XmlNestMembers {
@@ -25,7 +26,8 @@ final class XmlNestMembers {
 
     /**
      * Parse bytecode attribute.
-     * @return Bytecode attribute.
+     *
+     * @return Bytecode attribute
      */
     BytecodeAttribute attribute() {
         return new BytecodeAttribute.NestMembers(
@@ -41,11 +43,6 @@ final class XmlNestMembers {
         );
     }
 
-    /**
-     * Parse member.
-     * @param memb Member object.
-     * @return Member internal name.
-     */
     private static String member(final Object memb) {
         if (memb instanceof String) {
             return (String) memb;

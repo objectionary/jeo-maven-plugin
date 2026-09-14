@@ -9,6 +9,7 @@ import java.util.Locale;
 /**
  * Bytecode value.
  * Represents a typed value in bytecode format.
+ *
  * @since 0.6
  */
 public final class BytecodeValue {
@@ -25,7 +26,8 @@ public final class BytecodeValue {
 
     /**
      * Constructor.
-     * @param value Value.
+     *
+     * @param value Value
      */
     public BytecodeValue(final Object value) {
         this(DataType.findByData(value), value);
@@ -33,8 +35,9 @@ public final class BytecodeValue {
 
     /**
      * Constructor.
-     * @param type Value type.
-     * @param bytes Value bytes.
+     *
+     * @param type Value type
+     * @param bytes Value bytes
      */
     private BytecodeValue(final DataType type, final Object bytes) {
         this.vtype = type;
@@ -43,7 +46,8 @@ public final class BytecodeValue {
 
     /**
      * Retrieve the type of the value.
-     * @return Type.
+     *
+     * @return Type
      */
     public String type() {
         return this.vtype.caption().toLowerCase(Locale.ROOT);
@@ -51,7 +55,8 @@ public final class BytecodeValue {
 
     /**
      * Retrieve the value.
-     * @return Value.
+     *
+     * @return Value
      */
     public Object value() {
         return this.object;
@@ -59,10 +64,16 @@ public final class BytecodeValue {
 
     /**
      * Retrieve the bytes of the value.
-     * @param codec Codec.
-     * @return Bytes.
+     *
+     * @param codec Codec
+     * @return Bytes
      */
     public byte[] encode(final Codec codec) {
         return codec.encode(this.object, this.vtype);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("BytecodeValue(vtype=%s, object=%s)", this.vtype, this.object);
     }
 }

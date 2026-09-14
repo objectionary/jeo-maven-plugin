@@ -11,6 +11,7 @@ import java.nio.file.Path;
 
 /**
  * Jcabi XML document.
+ *
  * @since 0.8
  */
 public final class JcabiXmlDoc implements XmlDoc {
@@ -22,7 +23,8 @@ public final class JcabiXmlDoc implements XmlDoc {
 
     /**
      * Constructor.
-     * @param path Path to XML file.
+     *
+     * @param path Path to XML file
      */
     public JcabiXmlDoc(final Path path) {
         this(JcabiXmlDoc.open(path));
@@ -30,6 +32,7 @@ public final class JcabiXmlDoc implements XmlDoc {
 
     /**
      * Constructor.
+     *
      * @param doc XML
      */
     public JcabiXmlDoc(final XML doc) {
@@ -38,6 +41,7 @@ public final class JcabiXmlDoc implements XmlDoc {
 
     /**
      * Constructor.
+     *
      * @param root Root node
      */
     private JcabiXmlDoc(final XmlNode root) {
@@ -54,13 +58,6 @@ public final class JcabiXmlDoc implements XmlDoc {
         this.doc.validate();
     }
 
-    /**
-     * Convert a path to XML.
-     * @param path Path to XML file.
-     * @return XML.
-     * @checkstyle IllegalCatchCheck (20 lines)
-     */
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static XML open(final Path path) {
         try {
             return new XMLDocument(path);
@@ -69,7 +66,7 @@ public final class JcabiXmlDoc implements XmlDoc {
                 String.format("Can't find file '%s'", path),
                 exception
             );
-        } catch (final RuntimeException broken) {
+        } catch (final IllegalArgumentException broken) {
             throw new IllegalStateException(
                 String.format(
                     "Can't parse Jcabi XML from the file '%s'",

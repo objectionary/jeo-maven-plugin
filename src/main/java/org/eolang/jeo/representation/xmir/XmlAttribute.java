@@ -10,6 +10,7 @@ import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * Xml representation of a single bytecode attribute.
+ *
  * @since 0.4
  * @todo #589:30min Add Unit Tests for XmlAttribute class.
  *  XmlAttribute class is not covered by unit tests.
@@ -25,7 +26,8 @@ public final class XmlAttribute {
 
     /**
      * Constructor.
-     * @param node XML node as string.
+     *
+     * @param node XML node as string
      */
     XmlAttribute(final String node) {
         this(new NativeXmlNode(node));
@@ -33,7 +35,8 @@ public final class XmlAttribute {
 
     /**
      * Constructor.
-     * @param node XML node.
+     *
+     * @param node XML node
      */
     XmlAttribute(final XmlNode node) {
         this.node = new XmlJeoObject(node);
@@ -41,7 +44,8 @@ public final class XmlAttribute {
 
     /**
      * Get attribute.
-     * @return Attribute.
+     *
+     * @return Attribute
      * @checkstyle CyclomaticComplexityCheck (50 lines)
      */
     public BytecodeAttribute attribute() {

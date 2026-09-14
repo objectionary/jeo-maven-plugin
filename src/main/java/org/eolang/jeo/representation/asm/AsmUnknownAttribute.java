@@ -4,7 +4,6 @@
  */
 package org.eolang.jeo.representation.asm;
 
-import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeUnknownAttribute;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ByteVector;
@@ -14,6 +13,7 @@ import org.objectweb.asm.Label;
 
 /**
  * Asm unknown attribute.
+ *
  * @since 0.15.0
  */
 public final class AsmUnknownAttribute extends Attribute {
@@ -30,7 +30,8 @@ public final class AsmUnknownAttribute extends Attribute {
 
     /**
      * Constructs a new empty attribute.
-     * @param type The type of the attribute.
+     *
+     * @param type The type of the attribute
      */
     public AsmUnknownAttribute(final String type) {
         this(type, AsmUnknownAttribute.EMPTY);
@@ -38,20 +39,26 @@ public final class AsmUnknownAttribute extends Attribute {
 
     /**
      * Constructs a new unknown attribute.
-     * @param type The type of the attribute.
-     * @param data The raw data of the attribute.
+     *
+     * @param type The type of the attribute
+     * @param data The raw data of the attribute
      */
     public AsmUnknownAttribute(final String type, final byte[] data) {
         super(type);
-        this.data = Optional.ofNullable(data).orElse(AsmUnknownAttribute.EMPTY).clone();
+        if (data == null) {
+            this.data = null;
+        } else {
+            this.data = data.clone();
+        }
     }
 
     /**
      * Convert to bytecode unknown attribute.
-     * @return Bytecode unknown attribute.
+     *
+     * @return Bytecode unknown attribute
      */
     public BytecodeUnknownAttribute bytecode() {
-        return new BytecodeUnknownAttribute(this.type, this.data);
+        return new BytecodeUnknownAttribute(this.type, this.bytes());
     }
 
     @Override
@@ -79,6 +86,17 @@ public final class AsmUnknownAttribute extends Attribute {
         final int stack,
         final int locals
     ) {
-        return new ByteVector().putByteArray(this.data, 0, this.data.length);
+        final byte[] bytes = this.bytes();
+        return new ByteVector().putByteArray(bytes, 0, bytes.length);
+    }
+
+    private byte[] bytes() {
+        final byte[] result;
+        if (this.data == null) {
+            result = AsmUnknownAttribute.EMPTY;
+        } else {
+            result = this.data;
+        }
+        return result;
     }
 }

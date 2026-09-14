@@ -11,6 +11,7 @@ import org.xembly.Directive;
 /**
  * Method modifiers.
  * Similar to {@link DirectivesClassModifiers} but for method-level modifiers.
+ *
  * @since 0.14.0
  */
 public final class DirectivesMethodModifiers implements Iterable<Directive> {
@@ -27,8 +28,9 @@ public final class DirectivesMethodModifiers implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Format of the directives.
-     * @param modifiers Access modifiers.
+     *
+     * @param format Format of the directives
+     * @param modifiers Access modifiers
      */
     DirectivesMethodModifiers(final Format format, final int modifiers) {
         this.format = format;

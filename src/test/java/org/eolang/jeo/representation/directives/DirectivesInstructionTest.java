@@ -20,6 +20,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link DirectivesInstruction}.
+ *
  * @since 0.6
  */
 final class DirectivesInstructionTest {
@@ -75,7 +76,8 @@ final class DirectivesInstructionTest {
      * Test cases.
      * All generated cases are used in
      * {@link DirectivesInstructionTest#addsBeautifulComment(BytecodeInstruction, String)}.
-     * @return Test cases.
+     *
+     * @return Test cases
      */
     static Stream<Arguments> instructions() {
         return Stream.of(

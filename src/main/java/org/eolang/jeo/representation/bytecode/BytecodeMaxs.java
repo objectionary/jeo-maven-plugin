@@ -4,18 +4,15 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.directives.DirectivesMaxs;
 import org.eolang.jeo.representation.directives.Format;
 
 /**
  * Bytecode maxs.
+ *
  * @since 0.6
  */
-@ToString
-@EqualsAndHashCode
-@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public final class BytecodeMaxs {
 
     /**
@@ -43,8 +40,9 @@ public final class BytecodeMaxs {
 
     /**
      * Constructor.
-     * @param stack Stack size.
-     * @param locals Locals size.
+     *
+     * @param stack Stack size
+     * @param locals Locals size
      */
     public BytecodeMaxs(final int stack, final int locals) {
         this.stack = stack;
@@ -53,7 +51,8 @@ public final class BytecodeMaxs {
 
     /**
      * Stack size.
-     * @return Stack size.
+     *
+     * @return Stack size
      */
     public int stack() {
         return this.stack;
@@ -61,7 +60,8 @@ public final class BytecodeMaxs {
 
     /**
      * Locals size.
-     * @return Locals size.
+     *
+     * @return Locals size
      */
     public int locals() {
         return this.locals;
@@ -69,16 +69,42 @@ public final class BytecodeMaxs {
 
     /**
      * Convert to directives.
-     * @param format Format of the directives.
-     * @return Directives.
+     *
+     * @param format Format of the directives
+     * @return Directives
      */
     public DirectivesMaxs directives(final Format format) {
         return new DirectivesMaxs(format, this.stack, this.locals);
     }
 
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeMaxs) {
+            final BytecodeMaxs maxs = (BytecodeMaxs) other;
+            result = this.stack == maxs.stack && this.locals == maxs.locals;
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.stack, this.locals);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("BytecodeMaxs(stack=%d, locals=%d)", this.stack, this.locals);
+    }
+
     /**
      * Is maxs stack and locals are zero?
-     * @return True if both are zero.
+     *
+     * @return True if both are zero
      */
     boolean compute() {
         return this.stack == BytecodeMaxs.UNDEFINED && this.locals == BytecodeMaxs.UNDEFINED;

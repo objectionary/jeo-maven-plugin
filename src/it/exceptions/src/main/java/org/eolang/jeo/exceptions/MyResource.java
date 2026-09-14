@@ -17,7 +17,8 @@ public class MyResource implements AutoCloseable {
 
     /**
      * Constructor.
-     * @param name Resource name.
+     *
+     * @param name Resource name
      */
     public MyResource(final String name) {
         this.name = name;

@@ -24,6 +24,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlObject}.
+ *
  * @since 0.1
  */
 final class XmlObjectTest {
@@ -95,19 +96,6 @@ final class XmlObjectTest {
         );
     }
 
-    /**
-     * Creates XML with class that contains generic method.
-     * The XML representation of the following java class:
-     * {@code
-     * package org.eolang.jeo.takes;
-     * public class StrangeClass {
-     *   public static <T> void printElement(T element) {
-     *     System.out.println(element);
-     *   }
-     * }
-     * }
-     * @return XML representation of the class.
-     */
     private static String classWithGenericMethod() {
         final ClassName name = new ClassName("jeo.takes", "StrangeClass");
         return new Xembler(
@@ -122,17 +110,15 @@ final class XmlObjectTest {
                             "(Ljava/lang/Object;)V",
                             "<T:Ljava/lang/Object;>(TT;)V"
                         )
-                    )
-                        .withOpcode(
-                            0,
-                            Opcodes.GETSTATIC,
-                            "java/lang/System",
-                            "out",
-                            "Ljava/io/PrintStream;",
-                            false
+                    ).withOpcode(
+                        0,
+                        Opcodes.GETSTATIC,
+                        "java/lang/System",
+                        "out",
+                        "Ljava/io/PrintStream;",
+                        false
                         )
-                        .withOpcode(1, Opcodes.ALOAD, 0)
-                        .withOpcode(
+                        .withOpcode(1, Opcodes.ALOAD, 0).withOpcode(
                             2,
                             Opcodes.INVOKEVIRTUAL,
                             "java/io/PrintStream",
@@ -146,18 +132,6 @@ final class XmlObjectTest {
         ).xmlQuietly();
     }
 
-    /**
-     * Creates XML with class that contains method that declares exception.
-     * The XML representation of the following java class:
-     * {@code
-     * public class Foo {
-     *   public void bar() throws Exception {
-     *     throw new Exception();
-     *   }
-     * }
-     * }
-     * @return XML representation of the class.
-     */
     private static String classWithException() {
         final ClassName name = new ClassName("Foo");
         final String method = "bar";
@@ -174,14 +148,12 @@ final class XmlObjectTest {
                             null,
                             "java/lang/Exception"
                         )
-                    )
-                        .withOpcode(
-                            0,
-                            Opcodes.NEW,
-                            "java/lang/Exception"
+                    ).withOpcode(
+                        0,
+                        Opcodes.NEW,
+                        "java/lang/Exception"
                         )
-                        .withOpcode(1, Opcodes.DUP)
-                        .withOpcode(
+                        .withOpcode(1, Opcodes.DUP).withOpcode(
                             2,
                             Opcodes.INVOKESPECIAL,
                             "java/lang/Exception",

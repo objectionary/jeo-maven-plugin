@@ -9,16 +9,11 @@ import org.xembly.Directive;
 
 /**
  * Directives Record Component.
+ *
  * <p>All the directives in {@link DirectivesRecordComponent} are sorted according to the JVM
- * specification:
- * {@code
- * record_component_info {
- *     u2             name_index;
- *     u2             descriptor_index;
- *     u2             attributes_count;
- *     attribute_info attributes[attributes_count];
- * }}
- * </p>
+ * specification: {@code record_component_info { u2 name_index; u2 descriptor_index; u2
+ * attributes_count; attribute_info attributes[attributes_count]; }}</p>
+ *
  * @since 0.15.0
  */
 public final class DirectivesRecordComponent implements Iterable<Directive> {
@@ -60,14 +55,14 @@ public final class DirectivesRecordComponent implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Directives format.
-     * @param index Component index.
-     * @param name Component name.
-     * @param descriptor Descriptor.
-     * @param signature Signature.
-     * @param annotations Bytecode annotations.
-     * @param types Type annotations.
-     * @checkstyle ParameterNumber (10 lines)
+     *
+     * @param format Directives format
+     * @param index Component index
+     * @param name Component name
+     * @param descriptor Descriptor
+     * @param signature Signature
+     * @param annotations Bytecode annotations
+     * @param types Type annotations
      */
     public DirectivesRecordComponent(
         final Format format,

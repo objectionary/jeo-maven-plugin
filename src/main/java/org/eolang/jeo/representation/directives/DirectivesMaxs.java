@@ -9,6 +9,7 @@ import org.xembly.Directive;
 
 /**
  * Max stack and locals.
+ *
  * @since 0.3
  */
 public final class DirectivesMaxs implements Iterable<Directive> {
@@ -44,9 +45,9 @@ public final class DirectivesMaxs implements Iterable<Directive> {
     /**
      * Constructor.
      *
-     * @param format Format of the directives.
-     * @param stack Max stack size.
-     * @param locals Max locals size.
+     * @param format Format of the directives
+     * @param stack Max stack size
+     * @param locals Max locals size
      */
     public DirectivesMaxs(final Format format, final int stack, final int locals) {
         this.format = format;

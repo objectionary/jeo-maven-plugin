@@ -13,6 +13,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link DirectivesMethodModifiers}.
+ *
  * @since 0.14.0
  */
 final class DirectivesMethodModifiersTest {

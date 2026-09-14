@@ -9,17 +9,12 @@ import org.xembly.Directive;
 
 /**
  * Frame directives.
- * <p>All the directives of the frame are sorted according to the JVM specification:
- * {@code
- * full_frame {
- *     u1 frame_type = FULL_FRAME;
- *     u2 offset_delta;
- *     u2 number_of_locals;
- *     verification_type_info locals[number_of_locals];
- *     u2 number_of_stack_items;
- *     verification_type_info stack[number_of_stack_items];
- * }}
- * </p>
+ *
+ * <p>All the directives of the frame are sorted according to the JVM specification: {@code
+ * full_frame { u1 frame_type = FULL_FRAME; u2 offset_delta; u2 number_of_locals;
+ * verification_type_info locals[number_of_locals]; u2 number_of_stack_items;
+ * verification_type_info stack[number_of_stack_items]; }}</p>
+ *
  * @since 0.3
  */
 public final class DirectivesFrame implements Iterable<Directive> {
@@ -57,12 +52,12 @@ public final class DirectivesFrame implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param index Index of the bytecode instruction among other instructions.
-     * @param format Format of the directives.
-     * @param type The type of stack map frame.
-     * @param locals The local variable types in this frame.
-     * @param stack The operand stack types in this frame.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param index Index of the bytecode instruction among other instructions
+     * @param format Format of the directives
+     * @param type The type of stack map frame
+     * @param locals The local variable types in this frame
+     * @param stack The operand stack types in this frame
      */
     public DirectivesFrame(
         final int index,
@@ -89,11 +84,6 @@ public final class DirectivesFrame implements Iterable<Directive> {
         ).iterator();
     }
 
-    /**
-     * Attribute name.
-     * @param attribute Attribute name.
-     * @return Attribute name.
-     */
     private static String name(final String attribute) {
         return attribute;
     }

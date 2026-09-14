@@ -20,15 +20,17 @@ public interface BytecodeAnnotationValue {
 
     /**
      * Write the value to the given visitor.
-     * @param visitor Visitor.
+     *
+     * @param visitor Visitor
      */
     void writeTo(AnnotationVisitor visitor);
 
     /**
      * Convert to directives.
-     * @param index Index of the annotation in the list of annotations.
-     * @param format Format of the directives.
-     * @return Directives.
+     *
+     * @param index Index of the annotation in the list of annotations
+     * @param format Format of the directives
+     * @return Directives
      */
     Iterable<Directive> directives(int index, Format format);
 }

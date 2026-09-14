@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 /**
  * Annotations application.
+ *
  * @since 0.3
  */
 @JeoAnnotation(
@@ -39,6 +40,7 @@ public class AnnotationsApplication {
 
     /**
      * Main method.
+     *
      * @param args Command line arguments
      * @todo #531:90min Check default values for annotation properties.
      *  We still encounter some problems with annotation processing.

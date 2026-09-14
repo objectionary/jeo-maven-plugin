@@ -30,13 +30,11 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
  * to XMIR format using the JEO disassembler.
  *
  * @since 0.8.0
- * @checkstyle DesignForExtensionCheck (500 lines)
  */
 @Fork(1)
 @Warmup(iterations = 1, time = 2)
 @Measurement(iterations = 1, time = 3)
 @State(Scope.Benchmark)
-@SuppressWarnings("PMD.JUnit4TestShouldUseAfterAnnotation")
 public class DisassembleBenchmark {
 
     /**
@@ -50,12 +48,19 @@ public class DisassembleBenchmark {
     private Disassembler disassembler;
 
     /**
+     * Constructor.
+     */
+    public DisassembleBenchmark() {
+        // Nothing to initialize.
+    }
+
+    /**
      * This method is used to run the benchmark from IDE.
      * Don't remove it.
-     * @param args Arguments.
-     * @throws RunnerException If something goes wrong.
+     *
+     * @param args Arguments
+     * @throws RunnerException If something goes wrong
      */
-    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static void main(final String[] args) throws RunnerException {
         new Runner(
             new OptionsBuilder()
@@ -64,6 +69,11 @@ public class DisassembleBenchmark {
         ).run();
     }
 
+    /**
+     * Set up the temporary directory and the disassembler.
+     *
+     * @throws IOException If fails to prepare the temporary directory
+     */
     @Setup(Level.Trial)
     public void init() throws IOException {
         this.dir = Files.createTempDirectory("disassemble");
@@ -74,11 +84,17 @@ public class DisassembleBenchmark {
         this.disassembler = new Disassembler(input, this.dir);
     }
 
+    /**
+     * Disassemble the input directory.
+     */
     @Benchmark
     public void disassemble() {
         this.disassembler.disassemble();
     }
 
+    /**
+     * Delete the temporary directory.
+     */
     @TearDown(Level.Trial)
     public void tearDown() {
         try (Stream<Path> files = Files.walk(this.dir).sorted(Comparator.reverseOrder())) {

@@ -6,10 +6,8 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesModule;
 import org.eolang.jeo.representation.directives.Format;
@@ -20,10 +18,9 @@ import org.xembly.Directive;
 
 /**
  * Bytecode module.
+ *
  * @since 0.14.0
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeModule implements BytecodeAttribute {
 
     /** The fully qualified name (using dots) of this module. */
@@ -77,6 +74,7 @@ public final class BytecodeModule implements BytecodeAttribute {
 
     /**
      * Constructor.
+     *
      * @param name Module name
      * @param access Module access flags
      * @param version Module version
@@ -87,9 +85,7 @@ public final class BytecodeModule implements BytecodeAttribute {
      * @param opens Module opens
      * @param provides Module provides
      * @param uses Module uses
-     * @checkstyle ParameterNumber (10 lines)
      */
-    @SuppressWarnings("PMD.ExcessiveParameterList")
     public BytecodeModule(
         final String name,
         final int access,
@@ -106,12 +102,12 @@ public final class BytecodeModule implements BytecodeAttribute {
         this.access = access;
         this.version = version;
         this.main = main;
-        this.packages = Optional.ofNullable(packages).orElse(Collections.emptyList());
+        this.packages = packages;
         this.requires = requires;
         this.exports = exports;
         this.opens = opens;
         this.provides = provides;
-        this.uses = Optional.ofNullable(uses).orElse(Collections.emptyList());
+        this.uses = uses;
     }
 
     @Override
@@ -124,12 +120,12 @@ public final class BytecodeModule implements BytecodeAttribute {
         if (this.main != null) {
             module.visitMainClass(this.main);
         }
-        this.packages.forEach(module::visitPackage);
+        this.packages().forEach(module::visitPackage);
         this.requires.forEach(req -> req.write(module));
         this.exports.forEach(exp -> exp.write(module));
         this.opens.forEach(opn -> opn.write(module));
         this.provides.forEach(prov -> prov.write(module));
-        this.uses.forEach(module::visitUse);
+        this.uses().forEach(module::visitUse);
     }
 
     @Override
@@ -145,7 +141,7 @@ public final class BytecodeModule implements BytecodeAttribute {
             this.access,
             this.version,
             this.main,
-            this.packages,
+            this.packages(),
             this.requires.stream()
                 .map(req -> req.directives(format))
                 .collect(Collectors.toList()),
@@ -158,7 +154,81 @@ public final class BytecodeModule implements BytecodeAttribute {
             this.provides.stream()
                 .map(prov -> prov.directives(format))
                 .collect(Collectors.toList()),
-            this.uses
+            this.uses()
         );
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeModule) {
+            final BytecodeModule module = (BytecodeModule) other;
+            result = this.sameHeader(module) && this.sameBody(module);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            this.name, this.access, this.version, this.main, this.packages(),
+            this.requires, this.exports, this.opens, this.provides, this.uses()
+        );
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeModule(name=%s, access=%d, version=%s, main=%s, packages=%s, requires=%s, exports=%s, opens=%s, provides=%s, uses=%s)",
+            this.name, this.access, this.version, this.main, this.packages(),
+            this.requires, this.exports, this.opens, this.provides, this.uses()
+        );
+    }
+
+    private boolean sameHeader(final BytecodeModule module) {
+        return this.access == module.access
+            && Objects.equals(this.name, module.name)
+            && Objects.equals(this.version, module.version)
+            && Objects.equals(this.main, module.main);
+    }
+
+    private boolean sameBody(final BytecodeModule module) {
+        return this.samePackaging(module) && this.sameUsage(module);
+    }
+
+    private boolean samePackaging(final BytecodeModule module) {
+        return Objects.equals(this.packages(), module.packages())
+            && Objects.equals(this.requires, module.requires)
+            && Objects.equals(this.exports, module.exports);
+    }
+
+    private boolean sameUsage(final BytecodeModule module) {
+        return Objects.equals(this.opens, module.opens)
+            && Objects.equals(this.provides, module.provides)
+            && Objects.equals(this.uses(), module.uses());
+    }
+
+    private List<String> packages() {
+        final List<String> result;
+        if (this.packages == null) {
+            result = Collections.emptyList();
+        } else {
+            result = this.packages;
+        }
+        return result;
+    }
+
+    private List<String> uses() {
+        final List<String> result;
+        if (this.uses == null) {
+            result = Collections.emptyList();
+        } else {
+            result = this.uses;
+        }
+        return result;
     }
 }

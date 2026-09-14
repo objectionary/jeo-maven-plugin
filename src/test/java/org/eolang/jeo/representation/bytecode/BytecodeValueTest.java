@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Test case for {@link BytecodeValue}.
+ *
  * @since 0.6
  * @checkstyle ParameterNumberCheck (500 lines)
  */
@@ -51,7 +52,8 @@ final class BytecodeValueTest {
     /**
      * Arguments for the tests.
      * Used in these tests:
-     * @return Arguments.
+     *
+     * @return Arguments
      */
     static Stream<Arguments> arguments() {
         return Stream.of(

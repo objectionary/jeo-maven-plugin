@@ -18,6 +18,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link BytecodeMethodParameter}.
+ *
  * @since 0.6
  */
 final class BytecodeMethodParameterTest {
@@ -52,13 +53,6 @@ final class BytecodeMethodParameterTest {
         );
     }
 
-    /**
-     * Test cases for {@link #convertsToDirectives(int, Type)} test.
-     * Do not remove this method.
-     * This method is used as a source of arguments for the test above.
-     * @return Test cases.
-     */
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Stream<Arguments> parameters() {
         return Stream.of(
             Arguments.of(0, Type.INT_TYPE),

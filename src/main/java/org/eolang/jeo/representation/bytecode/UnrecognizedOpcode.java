@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.bytecode;
 
 /**
  * Unrecognized opcode.
+ *
  * @since 0.1
  */
 final class UnrecognizedOpcode extends IllegalStateException {
@@ -17,7 +18,8 @@ final class UnrecognizedOpcode extends IllegalStateException {
 
     /**
      * Constructor.
-     * @param opcode Opcode.
+     *
+     * @param opcode Opcode
      */
     UnrecognizedOpcode(final int opcode) {
         super(String.format("Unrecognized opcode: %d", opcode));

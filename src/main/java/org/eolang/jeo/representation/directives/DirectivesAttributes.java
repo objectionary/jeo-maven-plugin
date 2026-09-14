@@ -12,6 +12,7 @@ import org.xembly.Directive;
 
 /**
  * Directives for attributes.
+ *
  * @since 0.4
  */
 public final class DirectivesAttributes implements Iterable<Directive> {
@@ -26,11 +27,6 @@ public final class DirectivesAttributes implements Iterable<Directive> {
      */
     private final List<Iterable<Directive>> attributes;
 
-    public DirectivesAttributes(final String name, final List<Iterable<Directive>> attributes) {
-        this.name = name;
-        this.attributes = attributes;
-    }
-
     /**
      * Constructor.
      */
@@ -40,7 +36,8 @@ public final class DirectivesAttributes implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param attributes Attributes.
+     *
+     * @param attributes Attributes
      */
     @SafeVarargs
     DirectivesAttributes(final Iterable<Directive>... attributes) {
@@ -49,10 +46,22 @@ public final class DirectivesAttributes implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param attributes Separate attributes.
+     *
+     * @param attributes Separate attributes
      */
     private DirectivesAttributes(final List<Iterable<Directive>> attributes) {
         this("attributes", attributes);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name Name
+     * @param attributes Attributes
+     */
+    public DirectivesAttributes(final String name, final List<Iterable<Directive>> attributes) {
+        this.name = name;
+        this.attributes = attributes;
     }
 
     @Override

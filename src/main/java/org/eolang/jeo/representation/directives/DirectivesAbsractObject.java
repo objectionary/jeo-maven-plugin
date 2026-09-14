@@ -10,11 +10,11 @@ import org.xembly.Directives;
 
 /**
  * Directives that represent an abstract EO object.
- * <p>
- * This is similar to {@link DirectivesClosedObject}, the main difference is that
- * it keeps the 'base' attribute as a first EO attribute, instead of a XML attribute (base=x).
- * </p>
+ *
+ * <p>This is similar to {@link DirectivesClosedObject}, the main difference is that it keeps the
+ * 'base' attribute as a first EO attribute, instead of a XML attribute (base=x).</p>
  * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1130">read more</a>
+ *
  * @since 0.11.0
  */
 public final class DirectivesAbsractObject implements Iterable<Directive> {
@@ -31,6 +31,7 @@ public final class DirectivesAbsractObject implements Iterable<Directive> {
 
     /**
      * Attribute 'as' of the abstract object.
+     *
      * @checkstyle MemberNameCheck (2 lines)
      */
     private final String as;
@@ -47,8 +48,9 @@ public final class DirectivesAbsractObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The 'base' attribute of the abstract object.
-     * @param internal Inner components of the abstract object.
+     *
+     * @param base The 'base' attribute of the abstract object
+     * @param internal Inner components of the abstract object
      */
     DirectivesAbsractObject(final String base, final Iterable<Directive> internal) {
         this(base, "", internal);
@@ -56,9 +58,10 @@ public final class DirectivesAbsractObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The 'base' attribute of the abstract object.
-     * @param as The 'as' attribute of the abstract object.
-     * @param directives Inner components of the abstract object.
+     *
+     * @param base The 'base' attribute of the abstract object
+     * @param as The 'as' attribute of the abstract object
+     * @param directives Inner components of the abstract object
      * @checkstyle ParameterNameCheck (5 lines)
      */
     DirectivesAbsractObject(
@@ -71,13 +74,13 @@ public final class DirectivesAbsractObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Format of the directives.
-     * @param base The 'base' attribute of the abstract object.
-     * @param as The 'as' attribute of the abstract object.
-     * @param name The 'name' attribute of the abstract object.
-     * @param internal Inner components of the abstract object.
+     *
+     * @param format Format of the directives
+     * @param base The 'base' attribute of the abstract object
+     * @param as The 'as' attribute of the abstract object
+     * @param name The 'name' attribute of the abstract object
+     * @param internal Inner components of the abstract object
      * @checkstyle ParameterNameCheck (10 lines)
-     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public DirectivesAbsractObject(
         final Format format,

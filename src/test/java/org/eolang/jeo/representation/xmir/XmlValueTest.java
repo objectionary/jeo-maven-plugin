@@ -19,6 +19,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlValue}.
+ *
  * @since 0.6
  */
 final class XmlValueTest {
@@ -98,12 +99,11 @@ final class XmlValueTest {
             new XmlValue(
                 new XmlNamedObject(
                     new JcabiXmlNode(
-                        new StringBuilder()
-                            .append("<o base=\"Q.org.eolang.number\" name=\"access\">\n")
-                            .append("  <o base=\"Q.org.eolang.bytes\">\n")
-                            .append("    <o>40-40-00-00-00-00-00-00</o>\n")
-                            .append("  </o>\n")
-                            .append("</o>").toString()
+                        "<o base=\"Q.org.eolang.number\" name=\"access\">",
+                        "  <o base=\"Q.org.eolang.bytes\">",
+                        "    <o>40-40-00-00-00-00-00-00</o>",
+                        "  </o>",
+                        "</o>"
                     )
                 )
             ).object(),
@@ -124,9 +124,11 @@ final class XmlValueTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {
-        "Φ", "Ψ", "Ω", "Ϊ", "Ϋ", "ά", "έ", "ή", "ί", "ΰ", "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ", "λ", "μ"
-    })
+    @ValueSource(
+        strings = {
+            "Φ", "Ψ", "Ω", "Ϊ", "Ϋ", "ά", "έ", "ή", "ί", "ΰ", "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ", "λ", "μ"
+        }
+    )
     void decodesUnicodeCharacters(final String unicode) throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "Can't decode unicode characters",
@@ -143,7 +145,8 @@ final class XmlValueTest {
 
     /**
      * Arguments for {@link XmlValueTest#decodesEncodesCorrectly(Object)}.
-     * @return Stream of arguments.
+     *
+     * @return Stream of arguments
      */
     static Stream<Arguments> values() {
         return Stream.of(

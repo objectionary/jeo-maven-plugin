@@ -11,50 +11,46 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Output format of the XMIR representation.
+ *
  * @since 0.14.0
  */
+@SuppressWarnings("PMD.DataClass")
 public final class Format {
 
     /**
      * Should method modifiers be included in the output.
      * Expected to be a boolean value.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public static final String COMMENTS = "comments";
 
     /**
      * Should method modifiers be included in the output.
      * Expected to be a boolean value.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public static final String MODIFIERS = "modifiers";
 
     /**
      * Bytecode listing.
      * Expected to be a string value.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public static final String LISTING = "listing";
 
     /**
      * Bytecode listing.
      * Expected to be a string value.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public static final String WITH_LISTING = "with_listing";
 
     /**
      * Pretty print the output.
      * Expected to be a boolean value.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public static final String PRETTY = "pretty";
 
     /**
      * Disassemble mode.
      * Expected to be a string value.
      */
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     public static final String MODE = "mode";
 
     /**
@@ -64,7 +60,8 @@ public final class Format {
 
     /**
      * Prepare pairs of properties.
-     * @param pairs Pairs of properties, each pair consists of a name and a value.
+     *
+     * @param pairs Pairs of properties, each pair consists of a name and a value
      */
     public Format(final Object... pairs) {
         this(Format.pairs(Format.defaults(), pairs));
@@ -72,8 +69,9 @@ public final class Format {
 
     /**
      * Prepare pairs of properties.
-     * @param format Existing format to extend.
-     * @param pairs Pairs of properties, each pair consists of a name and a value.
+     *
+     * @param format Existing format to extend
+     * @param pairs Pairs of properties, each pair consists of a name and a value
      */
     public Format(final Format format, final Object... pairs) {
         this(Format.pairs(new HashMap<>(format.properties), pairs));
@@ -81,7 +79,8 @@ public final class Format {
 
     /**
      * Constructor.
-     * @param properties Properties of the format.
+     *
+     * @param properties Properties of the format
      */
     private Format(final Map<String, Object> properties) {
         this.properties = new ConcurrentHashMap<>(properties);
@@ -89,7 +88,8 @@ public final class Format {
 
     /**
      * Should method modifiers be included in the output.
-     * @return True if modifiers are included, false otherwise.
+     *
+     * @return True if modifiers are included, false otherwise
      */
     public boolean modifiers() {
         return this.bool(Format.MODIFIERS);
@@ -97,7 +97,8 @@ public final class Format {
 
     /**
      * Should comments be included in the output.
-     * @return True if comments are included, false otherwise.
+     *
+     * @return True if comments are included, false otherwise
      */
     public boolean comments() {
         return this.bool(Format.COMMENTS);
@@ -105,7 +106,8 @@ public final class Format {
 
     /**
      * Should the output be pretty printed.
-     * @return True if pretty printing is enabled, false otherwise.
+     *
+     * @return True if pretty printing is enabled, false otherwise
      */
     public boolean pretty() {
         return this.bool(Format.PRETTY);
@@ -113,7 +115,8 @@ public final class Format {
 
     /**
      * Get the listing property.
-     * @return Listing value of the property.
+     *
+     * @return Listing value of the property
      */
     public String listing() {
         return this.string(Format.LISTING);
@@ -121,7 +124,8 @@ public final class Format {
 
     /**
      * Should listing be included in the output.
-     * @return True if listing is included, false otherwise.
+     *
+     * @return True if listing is included, false otherwise
      */
     public boolean withListing() {
         return this.bool(Format.WITH_LISTING);
@@ -129,17 +133,18 @@ public final class Format {
 
     /**
      * Get the mode property.
-     * @return Mode value of the property.
+     *
+     * @return Mode value of the property
      */
     public String mode() {
         return this.string(Format.MODE);
     }
 
-    /**
-     * Get the boolean property.
-     * @param name Name of the property.
-     * @return Boolean value of the property.
-     */
+    @Override
+    public String toString() {
+        return String.format("Format(properties=%s)", this.properties);
+    }
+
     private boolean bool(final String name) {
         final boolean result;
         if (this.properties.containsKey(name)) {
@@ -157,11 +162,6 @@ public final class Format {
         return result;
     }
 
-    /**
-     * String property.
-     * @param name Name of the property.
-     * @return String value of the property.
-     */
     private String string(final String name) {
         final String result;
         if (this.properties.containsKey(name)) {
@@ -179,12 +179,6 @@ public final class Format {
         return result;
     }
 
-    /**
-     * Parse pairs of properties into a map.
-     * @param map Initial map to populate.
-     * @param properties Pairs of properties, each pair consists of a name and a value.
-     * @return Map of properties.
-     */
     private static Map<String, Object> pairs(
         final Map<String, Object> map, final Object... properties
     ) {
@@ -204,10 +198,6 @@ public final class Format {
         return Collections.unmodifiableMap(map);
     }
 
-    /**
-     * Default format.
-     * @return Default format with comments enabled and modifiers disabled.
-     */
     private static Map<String, Object> defaults() {
         final Map<String, Object> props = new HashMap<>(2);
         props.put(Format.COMMENTS, true);

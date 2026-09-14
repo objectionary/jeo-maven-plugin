@@ -14,6 +14,7 @@ import org.xembly.Directives;
 /**
  * Directives that represent a global object.
  * Similar to {@link DirectivesJeoObject}, but instead of 'as' attribute, it has 'name' attribute.
+ *
  * @since 0.8
  */
 public final class DirectivesGlobalObject implements Iterable<Directive> {
@@ -35,9 +36,10 @@ public final class DirectivesGlobalObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The base of the object.
-     * @param name The name of the object.
-     * @param inner Inner components.
+     *
+     * @param base The base of the object
+     * @param name The name of the object
+     * @param inner Inner components
      */
     @SafeVarargs
     DirectivesGlobalObject(
@@ -48,9 +50,10 @@ public final class DirectivesGlobalObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The base of the object.
-     * @param name The name of the object.
-     * @param inner Inner components.
+     *
+     * @param base The base of the object
+     * @param name The name of the object
+     * @param inner Inner components
      */
     private DirectivesGlobalObject(
         final String base, final String name, final List<Directives> inner

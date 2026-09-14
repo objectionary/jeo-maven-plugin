@@ -14,6 +14,7 @@ import org.objectweb.asm.TypePath;
  * Xml representation of a type annotation.
  * Mirror of {@link org.eolang.jeo.representation.directives.DirectivesTypeAnnotation}.
  * Maps to {@link BytecodeTypeAnnotation}.
+ *
  * @since 0.15.0
  */
 final class XmlTypeAnnotation {
@@ -25,7 +26,8 @@ final class XmlTypeAnnotation {
 
     /**
      * Constructor.
-     * @param node Node to parse.
+     *
+     * @param node Node to parse
      */
     XmlTypeAnnotation(final XmlNode node) {
         this(new XmlJeoObject(node));
@@ -33,7 +35,8 @@ final class XmlTypeAnnotation {
 
     /**
      * Constructor.
-     * @param node Node to parse.
+     *
+     * @param node Node to parse
      */
     private XmlTypeAnnotation(final XmlJeoObject node) {
         this.node = node;
@@ -41,9 +44,10 @@ final class XmlTypeAnnotation {
 
     /**
      * Parse to bytecode type annotation.
-     * @return Bytecode type annotation.
+     *
+     * @return Bytecode type annotation
      */
-    public BytecodeTypeAnnotation bytecode() {
+    BytecodeTypeAnnotation bytecode() {
         return new BytecodeTypeAnnotation(
             this.ref(),
             this.path(),
@@ -53,10 +57,6 @@ final class XmlTypeAnnotation {
         );
     }
 
-    /**
-     * Parses a reference to the annotated type.
-     * @return Reference.
-     */
     private int ref() {
         return (int) new XmlValue(
             this.node.child(0).orElseThrow(
@@ -70,10 +70,6 @@ final class XmlTypeAnnotation {
         ).object();
     }
 
-    /**
-     * Parses the path to the annotated type argument.
-     * @return Path.
-     */
     private TypePath path() {
         return TypePath.fromString(
             new XmlValue(
@@ -89,10 +85,6 @@ final class XmlTypeAnnotation {
         );
     }
 
-    /**
-     * Parses the class descriptor of the annotation class.
-     * @return Descriptor.
-     */
     private String descriptor() {
         return new XmlValue(
             this.node.child(2).orElseThrow(
@@ -106,10 +98,6 @@ final class XmlTypeAnnotation {
         ).string();
     }
 
-    /**
-     * Parses the visibility of the annotation.
-     * @return Visibility.
-     */
     private boolean visible() {
         return (boolean) new XmlValue(
             this.node.child(3).orElseThrow(
@@ -123,10 +111,6 @@ final class XmlTypeAnnotation {
         ).object();
     }
 
-    /**
-     * Parses the properties of the annotation.
-     * @return Properties.
-     */
     private List<BytecodeAnnotationValue> values() {
         return this.node.children()
             .map(XmlAnnotationValue::new)
@@ -134,5 +118,4 @@ final class XmlTypeAnnotation {
             .map(XmlAnnotationValue::bytecode)
             .collect(Collectors.toList());
     }
-
 }

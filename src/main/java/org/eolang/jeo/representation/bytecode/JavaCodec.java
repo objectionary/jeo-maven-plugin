@@ -11,6 +11,7 @@ import java.util.Optional;
 /**
  * Plain codec.
  * Converts objects to bytes and vice versa using Java type sizes.
+ *
  * @since 0.8
  * @checkstyle CyclomaticComplexityCheck (500 lines)
  */
@@ -20,6 +21,13 @@ public final class JavaCodec implements Codec {
      * Empty bytes.
      */
     private static final byte[] EMPTY = new byte[0];
+
+    /**
+     * Constructor.
+     */
+    public JavaCodec() {
+        // Nothing to initialize.
+    }
 
     @Override
     public byte[] encode(final Object value, final DataType type) {
@@ -71,7 +79,7 @@ public final class JavaCodec implements Codec {
         final Object result;
         switch (type) {
             case BOOL:
-                result = Boolean.valueOf(bytes[0] != 0);
+                result = bytes[0] != 0;
                 break;
             case CHAR:
                 result = ByteBuffer.wrap(bytes).getChar();
@@ -111,11 +119,6 @@ public final class JavaCodec implements Codec {
         return result;
     }
 
-    /**
-     * Convert boolean to bytes.
-     * @param value Boolean.
-     * @return Bytes.
-     */
     private static byte[] booleanBytes(final Object value) {
         final byte[] result;
         if (value instanceof Integer) {
@@ -126,11 +129,6 @@ public final class JavaCodec implements Codec {
         return result;
     }
 
-    /**
-     * Convert char to bytes.
-     * @param value Char.
-     * @return Bytes.
-     */
     private static byte[] charBytes(final Object value) {
         final char val;
         if (value instanceof Integer) {
@@ -141,11 +139,6 @@ public final class JavaCodec implements Codec {
         return ByteBuffer.allocate(Character.BYTES).putChar(val).array();
     }
 
-    /**
-     * Convert boolean to bytes.
-     * @param data Boolean.
-     * @return Bytes.
-     */
     private static byte[] hexBoolean(final boolean data) {
         final byte[] result;
         if (data) {

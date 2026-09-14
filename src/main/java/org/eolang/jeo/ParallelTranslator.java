@@ -15,9 +15,10 @@ import java.util.stream.Stream;
 /**
  * Translator that applies a translation to a batch of representations in parallel.
  *
- * <p>This class implements parallel processing of transformations to improve performance.
- * It ensures that each parallel thread has the correct class loader context to avoid
- * class loading issues during concurrent execution.</p>
+ * <p>This class implements parallel processing of transformations to improve performance. It
+ * ensures that each parallel thread has the correct class loader context to avoid class loading
+ * issues during concurrent execution.</p>
+ *
  * @since 0.2.0
  */
 public final class ParallelTranslator implements Translator {
@@ -34,12 +35,14 @@ public final class ParallelTranslator implements Translator {
 
     /**
      * Number of threads for parallel processing.
+     *
      * <p>When 0, the number of available processors is used automatically.</p>
      */
     private final int threads;
 
     /**
      * Constructor.
+     *
      * @param translation Function to apply to each path representation
      */
     ParallelTranslator(final Function<? super Path, ? extends Path> translation) {
@@ -48,6 +51,7 @@ public final class ParallelTranslator implements Translator {
 
     /**
      * Constructor.
+     *
      * @param translation Function to apply to each path representation
      * @param threads Number of threads (0 = use available processors automatically)
      */
@@ -55,9 +59,24 @@ public final class ParallelTranslator implements Translator {
         final Function<? super Path, ? extends Path> translation,
         final int threads
     ) {
+        this(translation, threads, Thread.currentThread().getContextClassLoader());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param translation Function to apply to each path representation
+     * @param threads Number of threads (0 = use available processors automatically)
+     * @param loader Class loader
+     */
+    private ParallelTranslator(
+        final Function<? super Path, ? extends Path> translation,
+        final int threads,
+        final ClassLoader loader
+    ) {
         this.translation = translation;
-        this.loader = Thread.currentThread().getContextClassLoader();
         this.threads = threads;
+        this.loader = loader;
     }
 
     @Override
@@ -93,16 +112,8 @@ public final class ParallelTranslator implements Translator {
         }
     }
 
-    /**
-     * Translate a representation.
-     * <p>This method is run in parallel. Pay attention to the class loader;
-     * it's set for each sub-thread to avoid class loading issues.</p>
-     * @param rep Path representation to translate
-     * @return Translated path representation
-     */
     private Path translate(final Path rep) {
         Thread.currentThread().setContextClassLoader(this.loader);
         return this.translation.apply(rep);
     }
-
 }

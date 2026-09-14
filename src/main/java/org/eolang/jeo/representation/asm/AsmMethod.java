@@ -24,6 +24,7 @@ import org.objectweb.asm.tree.MethodNode;
 /**
  * Asm method.
  * Asm parser for a method.
+ *
  * @since 0.6
  */
 final class AsmMethod {
@@ -35,7 +36,8 @@ final class AsmMethod {
 
     /**
      * Constructor.
-     * @param node Method node.
+     *
+     * @param node Method node
      */
     AsmMethod(final MethodNode node) {
         this.node = node;
@@ -43,7 +45,8 @@ final class AsmMethod {
 
     /**
      * Convert asm method to domain method.
-     * @return Domain method.
+     *
+     * @return Domain method
      */
     BytecodeMethod bytecode() {
         return new BytecodeMethod(
@@ -64,10 +67,6 @@ final class AsmMethod {
         );
     }
 
-    /**
-     * Convert asm method to domain method attributes.
-     * @return Domain method attributes.
-     */
     private BytecodeAttributes attributes() {
         final List<BytecodeAttribute> all = new ArrayList<>(0);
         all.addAll(new AsmUnknownAttributes(this.node).bytecode());
@@ -82,35 +81,21 @@ final class AsmMethod {
         return new BytecodeAttributes(all);
     }
 
-    /**
-     * Convert asm method to domain method maxs.
-     * @return Domain method maxs.
-     */
     private BytecodeMaxs maxs() {
         return new BytecodeMaxs(this.node.maxStack, this.node.maxLocals);
     }
 
-    /**
-     * Convert asm method to domain method tryblocks.
-     * @return Domain method tryblocks.
-     */
     private List<BytecodeEntry> tryblocks() {
-        return this.node.tryCatchBlocks.stream()
-            .map(
-                block -> new BytecodeTryCatchBlock(
-                    block.start.getLabel().toString(),
-                    block.end.getLabel().toString(),
-                    block.handler.getLabel().toString(),
-                    block.type
-                )
+        return this.node.tryCatchBlocks.stream().map(
+            block -> new BytecodeTryCatchBlock(
+                block.start.getLabel().toString(),
+                block.end.getLabel().toString(),
+                block.handler.getLabel().toString(),
+                block.type
             )
-            .collect(Collectors.toList());
+        ).collect(Collectors.toList());
     }
 
-    /**
-     * Convert asm class to domain class.
-     * @return Domain class.
-     */
     private List<BytecodeEntry> instructions() {
         return Arrays.stream(this.node.instructions.toArray())
             .map(AsmInstruction::new)
@@ -118,10 +103,6 @@ final class AsmMethod {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Convert asm default value to domain default value.
-     * @return Domain default value.
-     */
     private List<BytecodeDefaultValue> defvalue() {
         final List<BytecodeDefaultValue> result;
         if (this.node.annotationDefault == null) {

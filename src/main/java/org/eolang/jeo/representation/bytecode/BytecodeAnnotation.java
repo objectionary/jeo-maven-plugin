@@ -6,10 +6,9 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.AnnotationVisitor;
@@ -21,10 +20,9 @@ import org.xembly.Directive;
 
 /**
  * Bytecode annotation.
+ *
  * @since 0.2
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeAnnotation implements BytecodeAnnotationValue {
 
     /**
@@ -44,8 +42,9 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
 
     /**
      * Constructor.
-     * @param descriptor Descriptor.
-     * @param visible Visible.
+     *
+     * @param descriptor Descriptor
+     * @param visible Visible
      */
     public BytecodeAnnotation(final String descriptor, final boolean visible) {
         this(descriptor, visible, new ArrayList<>(0));
@@ -53,9 +52,10 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
 
     /**
      * Constructor.
-     * @param descriptor Descriptor.
-     * @param visible Visible.
-     * @param vals Properties.
+     *
+     * @param descriptor Descriptor
+     * @param visible Visible
+     * @param vals Properties
      */
     public BytecodeAnnotation(
         final String descriptor,
@@ -69,8 +69,9 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
 
     /**
      * Write class annotation.
-     * @param visitor Visitor.
-     * @return This.
+     *
+     * @param visitor Visitor
+     * @return This
      */
     public BytecodeAnnotation write(final ClassVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
@@ -80,8 +81,9 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
 
     /**
      * Write method annotation.
-     * @param visitor Visitor.
-     * @return This.
+     *
+     * @param visitor Visitor
+     * @return This
      */
     public BytecodeAnnotation write(final MethodVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
@@ -91,9 +93,10 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
 
     /**
      * Write parameter annotation.
-     * @param index Index of a parameter.
-     * @param visitor Method visitor.
-     * @return This.
+     *
+     * @param index Index of a parameter
+     * @param visitor Method visitor
+     * @return This
      */
     public BytecodeAnnotation write(final int index, final MethodVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitParameterAnnotation(
@@ -105,8 +108,9 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
 
     /**
      * Write field annotation.
-     * @param visitor Visitor.
-     * @return This.
+     *
+     * @param visitor Visitor
+     * @return This
      */
     public BytecodeAnnotation write(final FieldVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
@@ -116,8 +120,9 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
 
     /**
      * Write record component annotation.
-     * @param visitor Visitor.
-     * @return This.
+     *
+     * @param visitor Visitor
+     * @return This
      */
     public BytecodeAnnotation write(final RecordComponentVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
@@ -142,6 +147,35 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
             this.values.stream()
                 .map(v -> v.directives(idx.getAndIncrement(), format))
                 .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeAnnotation) {
+            final BytecodeAnnotation annotation = (BytecodeAnnotation) other;
+            result = this.visible == annotation.visible
+                && Objects.equals(this.descr, annotation.descr)
+                && Objects.equals(this.values, annotation.values);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.descr, this.visible, this.values);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeAnnotation(descr=%s, visible=%b, values=%s)",
+            this.descr, this.visible, this.values
         );
     }
 }

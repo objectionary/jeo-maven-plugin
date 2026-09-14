@@ -12,9 +12,10 @@ import org.eolang.jeo.representation.XmirRepresentation;
 /**
  * Assembling transformation.
  *
- * <p>This class implements the transformation process that converts XMIR
- * representations into Java bytecode. It reads XMIR files and produces
- * corresponding .class files in the specified target directory.</p>
+ * <p>This class implements the transformation process that converts XMIR representations into Java
+ * bytecode. It reads XMIR files and produces corresponding .class files in the specified target
+ * directory.</p>
+ *
  * @since 0.6.0
  */
 public final class Assembling implements Transformation {
@@ -41,6 +42,7 @@ public final class Assembling implements Transformation {
 
     /**
      * Constructor.
+     *
      * @param source Source folder where all the XMIR representations are located
      * @param target Target folder where the assembled class will be saved
      * @param representation Path to the XMIR representation to assemble

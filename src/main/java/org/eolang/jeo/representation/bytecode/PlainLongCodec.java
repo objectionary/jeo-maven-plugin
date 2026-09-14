@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 /**
  * Codec that saves long as a plain byte array.
  * The delegate codec encodes all the rest data types.
+ *
  * @since 0.8
  */
 public final class PlainLongCodec implements Codec {
@@ -20,7 +21,8 @@ public final class PlainLongCodec implements Codec {
 
     /**
      * Constructor.
-     * @param delegate Origin codec.
+     *
+     * @param delegate Origin codec
      */
     public PlainLongCodec(final Codec delegate) {
         this.origin = delegate;

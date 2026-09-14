@@ -15,6 +15,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlAnnotations}.
+ *
  * @since 0.6
  */
 final class XmlAnnotationsTest {

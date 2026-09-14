@@ -7,8 +7,7 @@ package org.eolang.jeo.representation.bytecode;
 import com.jcabi.log.Logger;
 import java.util.Collections;
 import java.util.List;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesTryCatch;
 import org.eolang.jeo.representation.directives.Format;
@@ -17,10 +16,9 @@ import org.xembly.Directive;
 
 /**
  * Bytecode try-catch block.
+ *
  * @since 0.1
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeTryCatchBlock implements BytecodeEntry {
 
     /**
@@ -45,11 +43,11 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
 
     /**
      * Constructor.
-     * @param start Start label.
-     * @param end End label.
-     * @param handler Handler label.
-     * @param type Exception type.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param start Start label
+     * @param end End label
+     * @param handler Handler label
+     * @param type Exception type
      */
     public BytecodeTryCatchBlock(
         final String start,
@@ -62,11 +60,11 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
 
     /**
      * Constructor.
-     * @param startlabel Start label.
-     * @param endlabel End label.
-     * @param handlerlabel Handler label.
-     * @param exception Exception type.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param startlabel Start label
+     * @param endlabel End label
+     * @param handlerlabel Handler label
+     * @param exception Exception type
      */
     public BytecodeTryCatchBlock(
         final BytecodeLabel startlabel,
@@ -84,13 +82,11 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     public void writeTo(final MethodVisitor visitor, final AsmLabels labels) {
         Logger.debug(
             this,
-            String.format(
-                "Writing try-catch entry into the method with the following values: start=%s, end=%s, handler=%s, type=%s",
-                this.start,
-                this.end,
-                this.handler,
-                this.type
-            )
+            "Writing try-catch entry into the method with the following values: start=%s, end=%s, handler=%s, type=%s",
+            this.start,
+            this.end,
+            this.handler,
+            this.type
         );
         visitor.visitTryCatchBlock(
             labels.label(this.start),
@@ -161,9 +157,40 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
         );
     }
 
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeTryCatchBlock) {
+            final BytecodeTryCatchBlock block = (BytecodeTryCatchBlock) other;
+            result = Objects.equals(this.start, block.start)
+                && Objects.equals(this.end, block.end)
+                && Objects.equals(this.handler, block.handler)
+                && Objects.equals(this.type, block.type);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.start, this.end, this.handler, this.type);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeTryCatchBlock(start=%s, end=%s, handler=%s, type=%s)",
+            this.start, this.end, this.handler, this.type
+        );
+    }
+
     /**
      * Start label.
-     * @return Label.
+     *
+     * @return Label
      */
     BytecodeLabel startLabel() {
         return this.start;
@@ -171,7 +198,8 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
 
     /**
      * End label.
-     * @return Label.
+     *
+     * @return Label
      */
     BytecodeLabel endLabel() {
         return this.end;
@@ -179,10 +207,10 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
 
     /**
      * Handler label.
-     * @return Label.
+     *
+     * @return Label
      */
     BytecodeLabel handlerLabel() {
         return this.handler;
     }
-
 }

@@ -9,22 +9,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.BytecodeRepresentation;
-import org.eolang.jeo.representation.ClassName;
-import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesObject;
 import org.eolang.jeo.representation.directives.Format;
 
 /**
  * Bytecode program.
+ *
  * @since 0.6
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeObject {
+
     /**
      * Package.
      */
@@ -37,7 +34,8 @@ public final class BytecodeObject {
 
     /**
      * Constructor.
-     * @param pckg Package.
+     *
+     * @param pckg Package
      */
     public BytecodeObject(final String pckg) {
         this(pckg, new ArrayList<>(0));
@@ -45,7 +43,8 @@ public final class BytecodeObject {
 
     /**
      * Constructor.
-     * @param classes Classes.
+     *
+     * @param classes Classes
      */
     public BytecodeObject(final BytecodeClass... classes) {
         this("", Arrays.asList(classes));
@@ -53,8 +52,9 @@ public final class BytecodeObject {
 
     /**
      * Constructor.
-     * @param pckg Package.
-     * @param classes Classes.
+     *
+     * @param pckg Package
+     * @param classes Classes
      */
     public BytecodeObject(final String pckg, final BytecodeClass... classes) {
         this(pckg, Arrays.asList(classes));
@@ -62,8 +62,9 @@ public final class BytecodeObject {
 
     /**
      * Constructor.
-     * @param pckg Package.
-     * @param classes Classes.
+     *
+     * @param pckg Package
+     * @param classes Classes
      */
     public BytecodeObject(final String pckg, final List<BytecodeClass> classes) {
         this.pckg = pckg;
@@ -73,7 +74,7 @@ public final class BytecodeObject {
     /**
      * Converts bytecode into XML.
      *
-     * @return XML representation of bytecode.
+     * @return XML representation of bytecode
      */
     public XML xml() {
         return new BytecodeRepresentation(this.bytecode()).toXmir(new Format(Format.MODE, "debug"));
@@ -82,7 +83,8 @@ public final class BytecodeObject {
     /**
      * Generate bytecode.
      * Traverse XML and build bytecode class.
-     * @return Bytecode.
+     *
+     * @return Bytecode
      */
     public Bytecode bytecode() {
         final CustomClassWriter writer = new CustomClassWriter();
@@ -92,7 +94,8 @@ public final class BytecodeObject {
 
     /**
      * Get top class.
-     * @return Top class.
+     *
+     * @return Top class
      */
     public BytecodeClass top() {
         return this.classes.get(0);
@@ -101,8 +104,8 @@ public final class BytecodeObject {
     /**
      * Copy program with replaced top class.
      *
-     * @param clazz Class to replace.
-     * @return Program with replaced top class.
+     * @param clazz Class to replace
+     * @return Program with replaced top class
      */
     public BytecodeObject replaceTopClass(final BytecodeClass clazz) {
         return new BytecodeObject(
@@ -113,17 +116,43 @@ public final class BytecodeObject {
 
     /**
      * Convert to directives.
-     * @param format Format of the directives.
-     * @return Directives program.
+     *
+     * @param format Format of the directives
+     * @return Directives program
      */
     public DirectivesObject directives(final Format format) {
         final BytecodeClass top = this.top();
-        final ClassName classname = top.name();
-        final DirectivesClass clazz = top.directives(format);
         return new DirectivesObject(
             format,
-            clazz,
-            new DirectivesMetas(classname)
+            top.directives(format),
+            new DirectivesMetas(top.name())
+        );
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeObject) {
+            final BytecodeObject object = (BytecodeObject) other;
+            result = Objects.equals(this.pckg, object.pckg)
+                && Objects.equals(this.classes, object.classes);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.pckg, this.classes);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeObject(pckg=%s, classes=%s)", this.pckg, this.classes
         );
     }
 }

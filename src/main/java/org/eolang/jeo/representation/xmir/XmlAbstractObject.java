@@ -11,13 +11,12 @@ import java.util.stream.Stream;
 
 /**
  * Abstract XML object representation.
- * <p>
- * This class keeps the base attribute as a separate object (argument) instead of XML attribute.
- * This class is similar to {@link XmlClosedObject}.
- * </p>
- * <p>
- *     Mirrors from {@link org.eolang.jeo.representation.directives.DirectivesAbsractObject}
- * </p>
+ *
+ * <p>This class keeps the base attribute as a separate object (argument) instead of XML attribute.
+ * This class is similar to {@link XmlClosedObject}.</p>
+ *
+ * <p>Mirrors from {@link org.eolang.jeo.representation.directives.DirectivesAbsractObject}</p>
+ *
  * @since 0.11.0
  */
 final class XmlAbstractObject implements XmlEoObject {
@@ -29,7 +28,8 @@ final class XmlAbstractObject implements XmlEoObject {
 
     /**
      * Constructor.
-     * @param node XML node of the closed object.
+     *
+     * @param node XML node of the closed object
      */
     XmlAbstractObject(final XmlNode node) {
         this.node = node;

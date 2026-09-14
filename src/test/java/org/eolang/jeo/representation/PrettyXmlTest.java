@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for {@link PrettyXml}.
+ *
  * @since 0.11.0
  */
 final class PrettyXmlTest {
@@ -20,7 +21,7 @@ final class PrettyXmlTest {
             "We can't format XML output with correct indentation (two spaces)",
             new PrettyXml(
                 String.join(
-                    "\n",
+                    System.lineSeparator(),
                     "<o>",
                     "<o>",
                     "<o>3.14</o>",
@@ -31,7 +32,7 @@ final class PrettyXmlTest {
             ).toString(),
             Matchers.equalTo(
                 String.join(
-                    "\n",
+                    System.lineSeparator(),
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
                     "",
                     "<o>",
@@ -40,7 +41,8 @@ final class PrettyXmlTest {
                     "  </o>",
                     "</o>",
                     ""
-                ))
+                )
+            )
         );
     }
 }

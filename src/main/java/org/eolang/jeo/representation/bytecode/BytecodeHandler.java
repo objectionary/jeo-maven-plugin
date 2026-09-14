@@ -4,16 +4,14 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.objectweb.asm.Handle;
 
 /**
  * Bytecode handler.
+ *
  * @since 0.6
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeHandler {
 
     /**
@@ -43,12 +41,12 @@ public final class BytecodeHandler {
 
     /**
      * Constructor.
-     * @param tag Tag.
-     * @param owner Owner.
-     * @param name Name.
-     * @param descriptor Descriptor.
+     *
+     * @param tag Tag
+     * @param owner Owner
+     * @param name Name
+     * @param descriptor Descriptor
      * @param interf Is it an interface?
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public BytecodeHandler(
         final int tag,
@@ -66,10 +64,41 @@ public final class BytecodeHandler {
 
     /**
      * Convert to a handler.
-     * @return Handler.
+     *
+     * @return Handler
      */
     public Handle asHandle() {
         return new Handle(this.tag, this.owner, this.name, this.descriptor, this.interf);
     }
 
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeHandler) {
+            final BytecodeHandler handler = (BytecodeHandler) other;
+            result = this.tag == handler.tag
+                && this.interf == handler.interf
+                && Objects.equals(this.owner, handler.owner)
+                && Objects.equals(this.name, handler.name)
+                && Objects.equals(this.descriptor, handler.descriptor);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.tag, this.owner, this.name, this.descriptor, this.interf);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeHandler(tag=%d, owner=%s, name=%s, descriptor=%s, interf=%b)",
+            this.tag, this.owner, this.name, this.descriptor, this.interf
+        );
+    }
 }

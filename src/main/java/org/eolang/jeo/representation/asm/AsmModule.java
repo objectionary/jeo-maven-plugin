@@ -17,6 +17,7 @@ import org.objectweb.asm.tree.ModuleNode;
 
 /**
  * ASM-based bytecode parser for Java modules.
+ *
  * @since 0.15.0
  */
 public final class AsmModule {
@@ -28,7 +29,8 @@ public final class AsmModule {
 
     /**
      * Constructor.
-     * @param node The ASM module node to parse.
+     *
+     * @param node The ASM module node to parse
      */
     public AsmModule(final ModuleNode node) {
         this.module = node;
@@ -36,7 +38,8 @@ public final class AsmModule {
 
     /**
      * Convert ASM module to domain bytecode module.
-     * @return The domain bytecode module representation.
+     *
+     * @return The domain bytecode module representation
      */
     public BytecodeModule bytecode() {
         return new BytecodeModule(
@@ -53,11 +56,6 @@ public final class AsmModule {
         );
     }
 
-    /**
-     * Module provides.
-     * @param module ASM module node.
-     * @return List of module provides.
-     */
     private static List<BytecodeModuleProvided> provides(final ModuleNode module) {
         return Optional.ofNullable(module.provides).orElse(Collections.emptyList())
             .stream()
@@ -65,11 +63,6 @@ public final class AsmModule {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Module opens.
-     * @param module ASM module node.
-     * @return List of module opens.
-     */
     private static List<BytecodeModuleOpened> opens(final ModuleNode module) {
         return Optional.ofNullable(module.opens).orElse(Collections.emptyList())
             .stream()
@@ -77,11 +70,6 @@ public final class AsmModule {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Module exports.
-     * @param module ASM module node.
-     * @return List of module exports.
-     */
     private static List<BytecodeModuleExported> exports(final ModuleNode module) {
         return Optional.ofNullable(module.exports).orElse(Collections.emptyList())
             .stream()
@@ -89,11 +77,6 @@ public final class AsmModule {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Module requires.
-     * @param module ASM module node.
-     * @return List of module requirements.
-     */
     private static List<BytecodeModuleRequired> requires(final ModuleNode module) {
         return Optional.ofNullable(module.requires).orElse(Collections.emptyList())
             .stream()

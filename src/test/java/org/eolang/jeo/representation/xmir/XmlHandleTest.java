@@ -33,5 +33,4 @@ final class XmlHandleTest {
             Matchers.equalTo(handle)
         );
     }
-
 }

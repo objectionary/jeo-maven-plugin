@@ -5,14 +5,26 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import org.xembly.Directive;
 
 /**
  * Bytecode frame values XMIR representation.
+ *
  * @since 0.14.0
  */
 public final class DirectivesFrameValues implements Iterable<Directive> {
+
+    /**
+     * Frame value aliases indexed by their ASM opcode.
+     */
+    private static final List<String> ALIASES = Collections.unmodifiableList(
+        Arrays.asList(
+            "top", "integer", "float", "double", "long", "null", "uninit_this", "object", "uninit"
+        )
+    );
 
     /**
      * The format of the directives.
@@ -31,7 +43,8 @@ public final class DirectivesFrameValues implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format The format of the directives.
+     *
+     * @param format The format of the directives
      * @param name Name of the values array
      * @param values Frame values
      */
@@ -50,52 +63,12 @@ public final class DirectivesFrameValues implements Iterable<Directive> {
         ).iterator();
     }
 
-    /**
-     * Map value to its alias or keep it as is.
-     * This method was added to simplify the XMIR representation of bytecode frames.
-     * <p>
-     *     You can read more about the original intention right here:
-     *     <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1211">Issue</a>.
-     * </p>
-     * @param value Value to map
-     * @return Alias of the value or the value itself
-     * @checkstyle CyclomaticComplexityCheck (50 lines)
-     */
     private static Object alias(final Object value) {
         final Object res;
-        if (value instanceof Integer) {
-            switch ((Integer) value) {
-                case 0:
-                    res = "top";
-                    break;
-                case 1:
-                    res = "integer";
-                    break;
-                case 2:
-                    res = "float";
-                    break;
-                case 3:
-                    res = "double";
-                    break;
-                case 4:
-                    res = "long";
-                    break;
-                case 5:
-                    res = "null";
-                    break;
-                case 6:
-                    res = "uninit_this";
-                    break;
-                case 7:
-                    res = "object";
-                    break;
-                case 8:
-                    res = "uninit";
-                    break;
-                default:
-                    res = value;
-                    break;
-            }
+        if (value instanceof Integer
+            && (Integer) value >= 0
+            && (Integer) value < DirectivesFrameValues.ALIASES.size()) {
+            res = DirectivesFrameValues.ALIASES.get((Integer) value);
         } else {
             res = value;
         }

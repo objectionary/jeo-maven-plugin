@@ -5,14 +5,18 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
 import org.cactoos.scalar.Unchecked;
+import org.xml.sax.SAXException;
 
 /**
  * Native XML document.
+ *
  * @since 0.7
  */
 public final class NativeXmlDoc implements XmlDoc {
@@ -29,7 +33,8 @@ public final class NativeXmlDoc implements XmlDoc {
 
     /**
      * Constructor.
-     * @param path Path to XML file.
+     *
+     * @param path Path to XML file
      */
     public NativeXmlDoc(final Path path) {
         this(NativeXmlDoc.fromFile(path));
@@ -49,22 +54,10 @@ public final class NativeXmlDoc implements XmlDoc {
         this.xml.value().validate();
     }
 
-    /**
-     * Prestructor that converts a path to a lazy XML.
-     * @param path Path to an XML file.
-     * @return Lazy XML.
-     */
     private static Unchecked<XmlNode> fromFile(final Path path) {
         return new Unchecked<>(new Synced<>(new Sticky<>(() -> NativeXmlDoc.open(path))));
     }
 
-    /**
-     * Convert a path to XML.
-     * @param path Path to XML file.
-     * @return XML.
-     * @checkstyle IllegalCatchCheck (20 lines)
-     */
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static XmlNode open(final Path path) {
         try {
             return new NativeXmlNode(
@@ -78,7 +71,7 @@ public final class NativeXmlDoc implements XmlDoc {
                 String.format("Can't find file '%s'", path),
                 exception
             );
-        } catch (final Exception broken) {
+        } catch (final IOException | SAXException | ParserConfigurationException broken) {
             throw new IllegalStateException(
                 String.format(
                     "Can't parse XML from the file '%s'",

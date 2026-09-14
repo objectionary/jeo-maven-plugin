@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 /**
  * EO codec.
  * Converts primitive types to byte arrays and vice versa.
+ *
  * @since 0.8
  * @checkstyle CyclomaticComplexityCheck (500 lines)
  */
@@ -28,7 +29,8 @@ public final class EoCodec implements Codec {
 
     /**
      * Constructor.
-     * @param delegate Origin codec.
+     *
+     * @param delegate Origin codec
      */
     private EoCodec(final Codec delegate) {
         this.origin = delegate;

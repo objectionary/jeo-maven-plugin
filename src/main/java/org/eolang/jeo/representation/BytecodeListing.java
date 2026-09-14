@@ -13,8 +13,9 @@ import org.objectweb.asm.util.TraceClassVisitor;
  * Pretty-printing utility for Java bytecode.
  *
  * <p>This class provides human-readable representation of Java bytecode using ASM's
- * TraceClassVisitor. It converts raw bytecode into a textual format that shows
- * the structure and instructions of a class file.</p>
+ * TraceClassVisitor. It converts raw bytecode into a textual format that shows the structure
+ * and instructions of a class file.</p>
+ *
  * @since 0.6.0
  * @todo #845:90min Decompile Bytecode Listing.
  *  Currently we print bytecode listing to XMIR without decompiling it.
@@ -31,6 +32,7 @@ public final class BytecodeListing {
 
     /**
      * Constructor.
+     *
      * @param bytecode The raw bytecode array to format
      */
     BytecodeListing(final byte... bytecode) {
@@ -41,7 +43,9 @@ public final class BytecodeListing {
     public String toString() {
         final ClassReader reader = new ClassReader(this.bytecode);
         final StringWriter writer = new StringWriter();
-        reader.accept(new TraceClassVisitor(new PrintWriter(writer)), 0);
+        try (PrintWriter out = new PrintWriter(writer)) {
+            reader.accept(new TraceClassVisitor(out), 0);
+        }
         return writer.toString();
     }
 }

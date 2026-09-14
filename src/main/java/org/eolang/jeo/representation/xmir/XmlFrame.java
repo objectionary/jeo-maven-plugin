@@ -21,6 +21,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
 
     /**
      * Constructor.
+     *
      * @param xmlnode Xmir node
      */
     public XmlFrame(final XmlNode xmlnode) {
@@ -29,22 +30,16 @@ public final class XmlFrame implements XmlBytecodeEntry {
 
     /**
      * Constructor.
-     * @param node XML Jeo object node
-     */
-    private XmlFrame(final XmlJeoObject node) {
-        this.node = node;
-    }
-
-    /**
-     * Constructor.
+     *
      * @param lines Lines of XML
      */
     XmlFrame(final String... lines) {
-        this(String.join("\n", lines));
+        this(String.join(System.lineSeparator(), lines));
     }
 
     /**
      * Constructor.
+     *
      * @param xml XML
      */
     private XmlFrame(final String xml) {
@@ -52,9 +47,15 @@ public final class XmlFrame implements XmlBytecodeEntry {
     }
 
     /**
-     * Convert to bytecode.
-     * @return Bytecode frame.
+     * Constructor.
+     *
+     * @param node XML Jeo object node
      */
+    private XmlFrame(final XmlJeoObject node) {
+        this.node = node;
+    }
+
+    @Override
     public BytecodeFrame bytecode() {
         final Object[] locals = this.locals();
         final Object[] stack = this.stack();
@@ -67,10 +68,6 @@ public final class XmlFrame implements XmlBytecodeEntry {
         );
     }
 
-    /**
-     * Type of frame.
-     * @return Type.
-     */
     private int type() {
         return (int) new XmlOperand(
             this.byName("type").orElseThrow(
@@ -81,10 +78,6 @@ public final class XmlFrame implements XmlBytecodeEntry {
         ).asObject();
     }
 
-    /**
-     * Local variables.
-     * @return Local variables.
-     */
     private Object[] locals() {
         return new XmlFrameValues(
             this.byName("locals").orElseThrow(
@@ -95,10 +88,6 @@ public final class XmlFrame implements XmlBytecodeEntry {
         ).values();
     }
 
-    /**
-     * Stack elements.
-     * @return Stack elements.
-     */
     private Object[] stack() {
         return new XmlFrameValues(
             this.byName("stack").orElseThrow(
@@ -124,11 +113,10 @@ public final class XmlFrame implements XmlBytecodeEntry {
     }
 
     private Optional<XmlNode> byName(final String name) {
-        return this.node.children()
-            .filter(
-                child -> child.attribute("name")
-                    .map(s -> s.startsWith(name))
-                    .orElse(false))
-            .findFirst();
+        return this.node.children().filter(
+            child -> child.attribute("name")
+                .map(s -> s.startsWith(name))
+                .orElse(false)
+        ).findFirst();
     }
 }

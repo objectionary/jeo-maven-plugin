@@ -54,22 +54,29 @@ final class DisassemblerTest {
 
     @Test
     void transpilesSuccessfullyWithoutComments() throws IOException {
-        final Format format = new Format(Format.COMMENTS, false);
         new Disassembler(
             this.temp,
             this.temp,
-            format
+            new Format(Format.COMMENTS, false)
         ).disassemble();
-        final Path disassembled = this.temp.resolve("MethodByte.xmir");
         MatcherAssert.assertThat(
             String.format(
                 "Can't find the transpiled file for the class '%s'.",
                 DisassemblerTest.CLASS_NAME
             ),
-            Files.exists(disassembled),
+            Files.exists(this.temp.resolve("MethodByte.xmir")),
             Matchers.is(true)
         );
-        final List<String> lines = Files.readAllLines(disassembled);
+    }
+
+    @Test
+    void indentsMetaElementsWithFourSpaces() throws IOException {
+        new Disassembler(
+            this.temp,
+            this.temp,
+            new Format(Format.COMMENTS, false)
+        ).disassemble();
+        final List<String> lines = Files.readAllLines(this.temp.resolve("MethodByte.xmir"));
         MatcherAssert.assertThat(
             String.format(
                 "The XMIR file is not indented correctly, expected 4 spaces  indentation for each 'meta' element, but was '%s'",
@@ -80,9 +87,19 @@ final class DisassemblerTest {
                 .allMatch(line -> line.startsWith("    ")),
             Matchers.is(true)
         );
+    }
+
+    @Test
+    void excludesCommentsWhenDisabled() throws IOException {
+        new Disassembler(
+            this.temp,
+            this.temp,
+            new Format(Format.COMMENTS, false)
+        ).disassemble();
         MatcherAssert.assertThat(
             "The XMIR file should not contain comments",
-            lines.stream().noneMatch(line -> line.contains("<!--")),
+            Files.readAllLines(this.temp.resolve("MethodByte.xmir"))
+                .stream().noneMatch(line -> line.contains("<!--")),
             Matchers.is(true)
         );
     }
@@ -94,31 +111,16 @@ final class DisassemblerTest {
             this.temp,
             new Format(Format.WITH_LISTING, true, Format.COMMENTS, true)
         ).disassemble();
-        final List<String> lines = Files.readAllLines(
-            this.temp.resolve("MethodByte.xmir")
-        );
         MatcherAssert.assertThat(
             "The XMIR file should contain comments",
-            lines.stream().anyMatch(line -> line.contains("<!--")),
+            Files.readAllLines(this.temp.resolve("MethodByte.xmir"))
+                .stream().anyMatch(line -> line.contains("<!--")),
             Matchers.is(true)
         );
     }
 
-    /**
-     * This test was added to check the 1176 issue.
-     * <p>
-     * You can read more about it right here:
-     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1176">link</a>
-     * </p>
-     * <p>
-     * Pay attention!
-     * {@link Files#setLastModifiedTime(Path, FileTime)} is used here in order to avoid
-     * retrieving disassemble results from the cache.
-     * </p>
-     * @throws IOException In case of any writing or reading error.
-     */
     @Test
-    void overwritesExistingXmir() throws IOException {
+    void appendsTextRemainsBeforeSecondDisassemble() throws IOException {
         new Disassembler(this.temp, this.temp).disassemble();
         final Path disassembled = this.temp.resolve("MethodByte.xmir");
         final String appended = "<bottomline>I'm still here</bottomline>";
@@ -131,6 +133,29 @@ final class DisassemblerTest {
             "We expect the XMIR file contain appended text",
             new String(Files.readAllBytes(disassembled), StandardCharsets.UTF_8),
             Matchers.containsString(appended)
+        );
+    }
+
+    /**
+     * This test was added to check the 1176 issue.
+     *
+     * <p>You can read more about it right here: <a href="https://github.com/objectionary/jeo-
+     * maven-plugin/issues/1176">link</a></p>
+     *
+     * <p>Pay attention! {@link Files#setLastModifiedTime(Path, FileTime)} is used here in order to
+     * avoid retrieving disassemble results from the cache.</p>
+     *
+     * @throws IOException In case of any writing or reading error
+     */
+    @Test
+    void overwritesExistingXmir() throws IOException {
+        new Disassembler(this.temp, this.temp).disassemble();
+        final Path disassembled = this.temp.resolve("MethodByte.xmir");
+        final String appended = "<bottomline>I'm still here</bottomline>";
+        Files.write(
+            disassembled,
+            appended.getBytes(StandardCharsets.UTF_8),
+            StandardOpenOption.APPEND
         );
         Files.setLastModifiedTime(disassembled, FileTime.from(Instant.EPOCH));
         new Disassembler(this.temp, this.temp).disassemble();

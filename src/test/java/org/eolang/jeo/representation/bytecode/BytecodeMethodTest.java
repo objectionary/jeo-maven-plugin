@@ -33,9 +33,9 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link BytecodeMethod}.
+ *
  * @since 0.6
  */
-@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods"})
 final class BytecodeMethodTest {
 
     @Test
@@ -79,16 +79,9 @@ final class BytecodeMethodTest {
 
     /**
      * In this test, we parse the next java code (but represented as bytecode).
-     * <p>
-     *     {@code
-     *     public class ParamsExample {
-     *       public void printSum(int a, int b) {
-     *         int sum = a + b;
-     *         System.out.println(sum);
-     *       }
-     *     }
-     *     }
-     * </p>
+     *
+     * <p>{@code public class ParamsExample { public void printSum(int a, int b) { int sum = a + b;
+     * System.out.println(sum); } } }</p>
      */
     @Test
     void parsesMethodParameters() {
@@ -255,15 +248,15 @@ final class BytecodeMethodTest {
     /**
      * This test was added to mitigate the following issue:
      * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1251">issue #1251</a>.
-     * @throws ImpossibleModificationException if modification is impossible, programmer mistake.
+     *
+     * @throws ImpossibleModificationException if modification is impossible, programmer mistake
      */
     @Test
     void addsLocalVariableTableEvenIfItIsEmpty() throws ImpossibleModificationException {
         final String name = "emptyLocalVariableTable";
-        final DirectivesMethod directives = new BytecodeMethod(name).directives();
         MatcherAssert.assertThat(
             "We expect that the local variable table will be added even if it is empty",
-            new Xembler(directives).xml(),
+            new Xembler(new BytecodeMethod(name).directives()).xml(),
             XhtmlMatchers.hasXPaths(
                 String.format(
                     "./o[contains(@name,'%s')]/o[@name='local-variable-table']",
@@ -330,7 +323,8 @@ final class BytecodeMethodTest {
      * These methods contain different number of local variables and stack elements.
      * Used in
      * {@link #computesMaxsCorrectlyForImplementedMethods(BytecodeMethod, String, BytecodeMaxs)}.
-     * @return Stream of arguments.
+     *
+     * @return Stream of arguments
      */
     static Stream<Arguments> implementedMethods() {
         return BytecodeMethodTest.methods("maxs/Maxs.java");
@@ -341,7 +335,8 @@ final class BytecodeMethodTest {
      * These methods are abstract.
      * Used in
      * {@link #computesMaxsCorrectlyForImplementedMethods(BytecodeMethod, String, BytecodeMaxs)}.
-     * @return Stream of arguments.
+     *
+     * @return Stream of arguments
      */
     static Stream<Arguments> abstractMethods() {
         return BytecodeMethodTest.methods("maxs/MaxInterface.java");
@@ -350,7 +345,8 @@ final class BytecodeMethodTest {
     /**
      * Provides methods for testing from real bytecode that is used in real projects.
      * Before that, we disassemble and assemble the compiled class.
-     * @return Stream of arguments.
+     *
+     * @return Stream of arguments
      */
     static Stream<Arguments> realMethods() {
         return Stream.of(
@@ -362,8 +358,9 @@ final class BytecodeMethodTest {
 
     /**
      * Disassembles and assembles the given compiled class.
-     * @param compiled Compiled class as a path to the resource.
-     * @return Stream of methods.
+     *
+     * @param compiled Compiled class as a path to the resource
+     * @return Stream of methods
      * @checkstyle IllegalCatchCheck (25 lines)
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
@@ -390,8 +387,9 @@ final class BytecodeMethodTest {
 
     /**
      * Provides methods for testing.
-     * @param clazz Resource class name.
-     * @return Stream of arguments.
+     *
+     * @param clazz Resource class name
+     * @return Stream of arguments
      */
     static Stream<Arguments> methods(final String clazz) {
         return new AsmProgram(

@@ -21,12 +21,12 @@ import org.eolang.jeo.representation.directives.Format;
 /**
  * Disassembles Java bytecode into XMIR representation.
  *
- * <p>This Maven plugin converts compiled Java class files into low-level EO representation
- * (in XMIR format) that contains JVM opcodes and their operands. The resulting XMIR files
- * preserve all bytecode instructions and can be assembled back into executable class files.</p>
+ * <p>This Maven plugin converts compiled Java class files into low-level EO representation (in
+ * XMIR format) that contains JVM opcodes and their operands. The resulting XMIR files preserve
+ * all bytecode instructions and can be assembled back into executable class files.</p>
  *
- * <p>The plugin supports different disassembly modes to control the level of detail in the
- * output, including debug information such as line numbers and variable names.</p>
+ * <p>The plugin supports different disassembly modes to control the level of detail in the output,
+ * including debug information such as line numbers and variable names.</p>
  *
  * @since 0.1.0
  */
@@ -35,10 +35,9 @@ public final class DisassembleMojo extends AbstractMojo {
 
     /**
      * Maven project instance.
-     * <p>
-     * Provides access to project configuration and classpath dependencies required for
-     * bytecode analysis and disassembly.
-     * </p>
+     *
+     * <p>Provides access to project configuration and classpath dependencies required for bytecode
+     * analysis and disassembly.</p>
      *
      * @since 0.2.0
      */
@@ -47,10 +46,9 @@ public final class DisassembleMojo extends AbstractMojo {
 
     /**
      * Source directory containing compiled Java class files.
-     * <p>
-     * This directory should contain {@code .class} files that will be disassembled into
-     * XMIR format. Typically points to the project's build output directory.
-     * </p>
+     *
+     * <p>This directory should contain {@code .class} files that will be disassembled into XMIR
+     * format. Typically points to the project's build output directory.</p>
      *
      * @since 0.2.0
      * @checkstyle MemberNameCheck (6 lines)
@@ -63,11 +61,10 @@ public final class DisassembleMojo extends AbstractMojo {
 
     /**
      * Target directory for generated XMIR files.
-     * <p>
-     * All disassembled XMIR files will be written to this directory, preserving the package
-     * structure of the original class files. Each class file will be converted to a corresponding
-     * XMIR file with {@code .xmir} extension.
-     * </p>
+     *
+     * <p>All disassembled XMIR files will be written to this directory, preserving the package
+     * structure of the original class files. Each class file will be converted to a
+     * corresponding XMIR file with {@code .xmir} extension.</p>
      *
      * @since 0.2.0
      * @checkstyle MemberNameCheck (6 lines)
@@ -80,13 +77,11 @@ public final class DisassembleMojo extends AbstractMojo {
 
     /**
      * Flag to disable the plugin execution.
-     * <p>
-     * When set to {@code true}, the plugin will skip all processing and exit immediately.
-     * This can be useful for conditional builds or troubleshooting.
-     * </p>
+     *
+     * <p>When set to {@code true}, the plugin will skip all processing and exit immediately. This
+     * can be useful for conditional builds or troubleshooting.</p>
      *
      * @since 0.2.0
-     * @checkstyle MemberNameCheck (6 lines)
      */
     @Parameter(
         property = "jeo.disassemble.disabled",
@@ -96,17 +91,12 @@ public final class DisassembleMojo extends AbstractMojo {
 
     /**
      * Disassembly mode controlling the level of detail in output.
-     * <p>
-     * Supported modes:
-     * <ul>
-     *   <li>{@code short} - Minimal output with bytecode instructions only</li>
-     *   <li>{@code debug} - Include debug information such as line numbers, local variables,
-     *       and source file references (default)</li>
-     * </ul>
-     * </p>
+     *
+     * <p>Supported modes: <ul> <li>{@code short} - Minimal output with bytecode instructions
+     * only</li> <li>{@code debug} - Include debug information such as line numbers, local
+     * variables, and source file references (default)</li> </ul></p>
      *
      * @since 0.6.0
-     * @checkstyle MemberNameCheck (6 lines)
      */
     @Parameter(
         property = "jeo.disassemble.mode",
@@ -116,12 +106,11 @@ public final class DisassembleMojo extends AbstractMojo {
 
     /**
      * Flag to omit detailed bytecode listings in generated XMIR.
-     * <p>
-     * When enabled, the {@code <listing>} element in XMIR files will not contain bytecode listing.
-     * This reduces file size and improves readability in production environments where detailed
-     * bytecode output is not needed. When disabled, full bytecode listings are included
-     * for debugging purposes.
-     * </p>
+     *
+     * <p>When enabled, the {@code <listing>} element in XMIR files will not contain bytecode
+     * listing. This reduces file size and improves readability in production environments where
+     * detailed bytecode output is not needed. When disabled, full bytecode listings are
+     * included for debugging purposes.</p>
      *
      * @since 0.11.0
      * @checkstyle MemberNameCheck (6 lines)
@@ -134,11 +123,10 @@ public final class DisassembleMojo extends AbstractMojo {
 
     /**
      * Flag to omit XML comments in generated XMIR files.
-     * <p>
-     * When enabled, no comments will be generated in the XMIR output, which can be
-     * useful for production builds where comments are not needed and may reduce file size.
-     * When disabled, XML comments will be included to provide debugging information.
-     * </p>
+     *
+     * <p>When enabled, no comments will be generated in the XMIR output, which can be useful for
+     * production builds where comments are not needed and may reduce file size. When disabled,
+     * XML comments will be included to provide debugging information.</p>
      *
      * @since 0.11.0
      * @checkstyle MemberNameCheck (6 lines)
@@ -151,13 +139,12 @@ public final class DisassembleMojo extends AbstractMojo {
 
     /**
      * Flag to enable pretty-printing of XMIR files.
-     * <p>
-     *     When enabled, the generated XMIR files will be formatted with indentation (2 spaces) and
-     *     line breaks for better readability.
-     *     This is useful for development and debugging purposes.
-     *     By default, pretty-printing is enabled, but it's best to disable it for large
-     *     projects or production builds to reduce file size and improve performance.
-     * </p>
+     *
+     * <p>When enabled, the generated XMIR files will be formatted with indentation (2 spaces) and
+     * line breaks for better readability. This is useful for development and debugging
+     * purposes. By default, pretty-printing is enabled, but it's best to disable it for large
+     * projects or production builds to reduce file size and improve performance.</p>
+     *
      * @since 0.11.0
      * @checkstyle MemberNameCheck (6 lines)
      */
@@ -169,11 +156,10 @@ public final class DisassembleMojo extends AbstractMojo {
 
     /**
      * Flag to enable XMIR verification after disassembling.
-     * <p>
-     * When enabled, verifies all generated XMIR files for structural integrity and correctness
+     *
+     * <p>When enabled, verifies all generated XMIR files for structural integrity and correctness
      * after disassembly. If any XMIR file is invalid or corrupted, the build process will fail.
-     * This verification is disabled by default for performance.
-     * </p>
+     * This verification is disabled by default for performance.</p>
      *
      * @since 0.8.0
      * @checkstyle MemberNameCheck (6 lines)
@@ -186,13 +172,11 @@ public final class DisassembleMojo extends AbstractMojo {
 
     /**
      * Should method modifiers be included in the output.
-     * <p>
-     * When true, method modifiers (e.g., public, private, static) will be
-     * included in the disassembled output.
-     * </p>
+     *
+     * <p>When true, method modifiers (e.g., public, private, static) will be included in the
+     * disassembled output.</p>
      *
      * @since 0.14.0
-     * @checkstyle MemberNameCheck (6 lines)
      */
     @Parameter(
         property = "jeo.disassemble.xmir.modifiers",
@@ -205,45 +189,50 @@ public final class DisassembleMojo extends AbstractMojo {
      * in the {@link #sourcesDir} directory.
      *
      * @since 0.13.0
-     * @checkstyle MemberNameCheck (15 lines)
      */
     @Parameter(property = "jeo.disassemble.includes")
     @SuppressWarnings("PMD.ImmutableField")
-    private Set<String> includes = new SetOf<>("**/*.class");
+    private Set<String> includes;
 
     /**
      * Set of exclusion GLOB filters for finding .class files
      * in the {@link #sourcesDir} directory.
      *
      * @since 0.13.0
-     * @checkstyle MemberNameCheck (7 lines)
      */
     @Parameter(property = "jeo.disassemble.excludes")
     @SuppressWarnings("PMD.ImmutableField")
-    private Set<String> excludes = new SetOf<>();
+    private Set<String> excludes;
 
     /**
      * Enable debug logging for the disassembly process.
+     *
      * @since 0.15.0
-     * @checkstyle MemberNameCheck (6 lines)
      */
     @Parameter(property = "jeo.disassemble.debug", defaultValue = "false")
     private boolean debug;
 
     /**
      * Number of threads for parallel disassembly.
-     * <p>
-     * When set to {@code 0} (default), the plugin automatically selects the number of threads
+     *
+     * <p>When set to {@code 0} (default), the plugin automatically selects the number of threads
      * based on {@link Runtime#availableProcessors()}. When set to a positive value, the plugin
-     * uses exactly that many threads, scoped to a dedicated {@code ForkJoinPool} so that
-     * the setting does not affect the rest of the build.
-     * </p>
+     * uses exactly that many threads, scoped to a dedicated {@code ForkJoinPool} so that the
+     * setting does not affect the rest of the build.</p>
      *
      * @since 0.15.0
-     * @checkstyle MemberNameCheck (6 lines)
      */
     @Parameter(property = "jeo.disassemble.threads", defaultValue = "0")
     private int threads;
+
+    /**
+     * Constructor.
+     */
+    public DisassembleMojo() {
+        super();
+        this.includes = new SetOf<>("**/*.class");
+        this.excludes = new SetOf<>();
+    }
 
     @Override
     public void execute() throws MojoExecutionException {
@@ -299,10 +288,6 @@ public final class DisassembleMojo extends AbstractMojo {
         }
     }
 
-    /**
-     * Check that the number of threads is valid.
-     * @throws MojoExecutionException If the number of threads is negative
-     */
     private void checkedThreads() throws MojoExecutionException {
         if (this.threads < 0) {
             throw new MojoExecutionException(

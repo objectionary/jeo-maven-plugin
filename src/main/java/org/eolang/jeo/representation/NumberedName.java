@@ -9,9 +9,9 @@ import java.util.regex.Pattern;
 /**
  * Name representation with optional numeric suffix.
  *
- * <p>This class handles names that may have numeric suffixes for disambiguation.
- * For example: `foo`, `foo-2`, `foo-3`. Names without suffixes are treated
- * as having number 1.</p>
+ * <p>This class handles names that may have numeric suffixes for disambiguation. For example:
+ * `foo`, `foo-2`, `foo-3`. Names without suffixes are treated as having number 1.</p>
+ *
  * @since 0.9.0
  */
 public final class NumberedName {
@@ -19,9 +19,9 @@ public final class NumberedName {
     /**
      * A trailing group that is a number of a name.
      *
-     * <p>A dash is legal in a JVM method name and Kotlin emits "box-impl" for
-     * a value class, so a trailing group that is not a number belongs to the
-     * name. The digits are bounded to keep the number inside an int.</p>
+     * <p>A dash is legal in a JVM method name and Kotlin emits "box-impl" for a value class, so a
+     * trailing group that is not a number belongs to the name. The digits are bounded to keep
+     * the number inside an int.</p>
      */
     private static final Pattern NUMBER = Pattern.compile("[1-9][0-9]{0,8}");
 
@@ -37,6 +37,7 @@ public final class NumberedName {
 
     /**
      * Constructor from encoded name.
+     *
      * @param encoded The encoded name (e.g., "foo-2")
      */
     public NumberedName(final String encoded) {
@@ -45,6 +46,7 @@ public final class NumberedName {
 
     /**
      * Constructor.
+     *
      * @param number The number of the name starting from 1
      * @param name The base name of the object
      */
@@ -55,7 +57,8 @@ public final class NumberedName {
 
     /**
      * Name without the number.
-     * @return Name without the number.
+     *
+     * @return Name without the number
      */
     public String plain() {
         return this.name;
@@ -75,11 +78,6 @@ public final class NumberedName {
         return result.toString();
     }
 
-    /**
-     * Extract the number suffix from an encoded name.
-     * @param encoded The encoded name (e.g., "foo-2")
-     * @return The numeric suffix (e.g., 2)
-     */
     private static int suffix(final String encoded) {
         final int result;
         final int index = encoded.lastIndexOf('-');
@@ -91,11 +89,6 @@ public final class NumberedName {
         return result;
     }
 
-    /**
-     * Extract the base name without the number suffix.
-     * @param encoded The encoded name (e.g., "foo-2")
-     * @return The base name without number (e.g., "foo")
-     */
     private static String prefix(final String encoded) {
         final String result;
         final int index = encoded.lastIndexOf('-');

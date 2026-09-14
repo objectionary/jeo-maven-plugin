@@ -17,6 +17,7 @@ import org.xembly.Xembler;
 
 /**
  * Test for {@link XmlRecordComponents}.
+ *
  * @since 0.15.0
  */
 final class XmlRecordComponentsTest {

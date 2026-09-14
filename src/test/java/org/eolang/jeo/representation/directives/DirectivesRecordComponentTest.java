@@ -12,6 +12,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link DirectivesRecordComponent}.
+ *
  * @since 0.15.0
  */
 final class DirectivesRecordComponentTest {

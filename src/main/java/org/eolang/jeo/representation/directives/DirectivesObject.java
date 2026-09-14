@@ -14,6 +14,7 @@ import org.xembly.Directives;
 
 /**
  * Program representation as Xembly directives.
+ *
  * @since 0.1
  */
 public final class DirectivesObject implements Iterable<Directive> {
@@ -43,8 +44,9 @@ public final class DirectivesObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param klass Top-level class.
-     * @param metas Metas.
+     *
+     * @param klass Top-level class
+     * @param metas Metas
      */
     public DirectivesObject(final DirectivesClass klass, final DirectivesMetas metas) {
         this(new Format(), klass, metas);
@@ -52,9 +54,10 @@ public final class DirectivesObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Format.
-     * @param clazz Class.
-     * @param name Metas.
+     *
+     * @param format Format
+     * @param clazz Class
+     * @param name Metas
      */
     public DirectivesObject(
         final Format format,
@@ -66,11 +69,11 @@ public final class DirectivesObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Format.
-     * @param milliseconds Milliseconds.
-     * @param klass Class.
-     * @param metas Metas.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param format Format
+     * @param milliseconds Milliseconds
+     * @param klass Class
+     * @param metas Metas
      */
     public DirectivesObject(
         final Format format,
@@ -86,15 +89,13 @@ public final class DirectivesObject implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
-        final String now = ZonedDateTime.now(ZoneOffset.UTC)
-            .format(DateTimeFormatter.ISO_INSTANT);
         final Directives directives = new Directives()
             .add("object")
             .attr("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
             .attr("version", Manifests.read("JEO-Version"))
             .attr("revision", Manifests.read("JEO-Revision"))
             .attr("dob", Manifests.read("JEO-Dob"))
-            .attr("time", now)
+            .attr("time", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT))
             .attr("author", "jeo-maven-plugin")
             .attr("xsi:noNamespaceSchemaLocation", "https://www.eolang.org/xsd/XMIR-0.58.6.xsd");
         final String listing = this.format.listing();

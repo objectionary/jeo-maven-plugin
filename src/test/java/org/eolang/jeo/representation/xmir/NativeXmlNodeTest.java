@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link NativeXmlNode}.
+ *
  * @since 0.7
  */
 final class NativeXmlNodeTest {
@@ -33,17 +34,11 @@ final class NativeXmlNodeTest {
 
     @Test
     void retrievesChildren() {
-        final List<XmlNode> children = new NativeXmlNode(
-            "<o><o name='inner1'/><o name='inner2'/></o>"
-        ).children().collect(Collectors.toList());
-        MatcherAssert.assertThat(
-            "Size of children is not as expected",
-            children,
-            Matchers.hasSize(2)
-        );
         MatcherAssert.assertThat(
             "Can't retrieve the children, or the children are not the expected ones",
-            children,
+            new NativeXmlNode(
+                "<o><o name='inner1'/><o name='inner2'/></o>"
+            ).children().collect(Collectors.toList()),
             Matchers.contains(
                 new NativeXmlNode("<o name='inner1'/>"),
                 new NativeXmlNode("<o name='inner2'/>")
@@ -53,16 +48,10 @@ final class NativeXmlNodeTest {
 
     @Test
     void retrievesAttribute() {
-        final Optional<String> attribute = new NativeXmlNode("<o name='some'/>").attribute("name");
         MatcherAssert.assertThat(
-            "Can't retrieve the attribute",
-            attribute.isPresent(),
-            Matchers.is(true)
-        );
-        MatcherAssert.assertThat(
-            "he attribute is not the expected one",
-            attribute.get(),
-            Matchers.equalTo("some")
+            "Can't retrieve the attribute, or the attribute is not the expected one",
+            new NativeXmlNode("<o name='some'/>").attribute("name"),
+            Matchers.equalTo(Optional.of("some"))
         );
     }
 

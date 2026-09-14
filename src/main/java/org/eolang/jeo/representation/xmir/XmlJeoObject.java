@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 /**
  * XML Jeo object representation.
  * Mirrors {@link org.eolang.jeo.representation.directives.DirectivesJeoObject}
+ *
  * @since 0.11.0
  */
 final class XmlJeoObject {
@@ -21,7 +22,8 @@ final class XmlJeoObject {
 
     /**
      * Constructor.
-     * @param node XML node.
+     *
+     * @param node XML node
      */
     XmlJeoObject(final XmlNode node) {
         this(new XmlDelegateObject(node));
@@ -29,7 +31,8 @@ final class XmlJeoObject {
 
     /**
      * Constructor.
-     * @param origin XML abstract object.
+     *
+     * @param origin XML abstract object
      */
     private XmlJeoObject(final XmlEoObject origin) {
         this.origin = origin;
@@ -42,9 +45,10 @@ final class XmlJeoObject {
 
     /**
      * Retrieve the name of the Jeo object.
-     * @return Name of the Jeo object.
+     *
+     * @return Name of the Jeo object
      */
-    public String name() {
+    String name() {
         return this.origin.attribute("name").orElseThrow(
             () -> new IllegalStateException(
                 String.format("Attribute 'name' not found in %s", this.origin)
@@ -54,32 +58,36 @@ final class XmlJeoObject {
 
     /**
      * Base of the Jeo object.
-     * @return Optional containing the base of the Jeo object if present, otherwise empty.
+     *
+     * @return Optional containing the base of the Jeo object if present, otherwise empty
      */
-    public Optional<String> base() {
+    Optional<String> base() {
         return this.origin.base();
     }
 
     /**
      * Children of the Jeo object.
-     * @return Stream of XML nodes representing the children of the Jeo object.
+     *
+     * @return Stream of XML nodes representing the children of the Jeo object
      */
-    public Stream<XmlNode> children() {
+    Stream<XmlNode> children() {
         return this.origin.children();
     }
 
     /**
      * Retrieve a child node by index.
-     * @param index Index of the child node to retrieve.
-     * @return Optional containing the child node if present, otherwise empty.
+     *
+     * @param index Index of the child node to retrieve
+     * @return Optional containing the child node if present, otherwise empty
      */
-    public Optional<XmlNode> child(final int index) {
+    Optional<XmlNode> child(final int index) {
         return this.origin.child(index);
     }
 
     /**
      * Whether this XML Jeo object has a name attribute.
-     * @return True if the object has a name attribute, false otherwise.
+     *
+     * @return True if the object has a name attribute, false otherwise
      */
     boolean named() {
         return this.origin.attribute("name").isPresent();
@@ -87,7 +95,8 @@ final class XmlJeoObject {
 
     /**
      * Is this a Jeo object?
-     * @return True if this is a Jeo object, false otherwise.
+     *
+     * @return True if this is a Jeo object, false otherwise
      */
     boolean isJeoObject() {
         return this.base().isPresent();

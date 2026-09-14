@@ -14,9 +14,10 @@ import org.eolang.jeo.representation.Counter;
 /**
  * Assembler.
  *
- * <p>This class is responsible for assembling the project's XMIR (EO XML representation)
- * source files into Java bytecode (.class files). It processes all XMIR files from an
- * input directory and generates corresponding bytecode files in an output directory.</p>
+ * <p>This class is responsible for assembling the project's XMIR (EO XML representation) source
+ * files into Java bytecode (.class files). It processes all XMIR files from an input directory
+ * and generates corresponding bytecode files in an output directory.</p>
+ *
  * @since 0.2.0
  */
 public final class Assembler {
@@ -38,15 +39,17 @@ public final class Assembler {
 
     /**
      * Number of threads for parallel processing.
+     *
      * <p>When 0, the number of available processors is used automatically.</p>
      */
     private final int threads;
 
     /**
      * Constructor.
-     * @param input Input folder with "xmir" files.
-     * @param output Output folder for the assembled classes.
-     * @param debug Enables detailed debug logging.
+     *
+     * @param input Input folder with "xmir" files
+     * @param output Output folder for the assembled classes
+     * @param debug Enables detailed debug logging
      */
     public Assembler(final Path input, final Path output, final boolean debug) {
         this(input, output, debug, 0);
@@ -54,11 +57,11 @@ public final class Assembler {
 
     /**
      * Constructor.
-     * @param input Input folder with "xmir" files.
-     * @param output Output folder for the assembled classes.
-     * @param debug Enables detailed debug logging.
-     * @param threads Number of threads (0 = use available processors automatically).
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param input Input folder with "xmir" files
+     * @param output Output folder for the assembled classes
+     * @param debug Enables detailed debug logging
+     * @param threads Number of threads (0 = use available processors automatically)
      */
     public Assembler(
         final Path input, final Path output, final boolean debug, final int threads
@@ -71,16 +74,15 @@ public final class Assembler {
 
     /**
      * Assemble all XMIR files.
+     *
      * @since 0.2.0
      */
     public void assemble() {
-        final String assembling = "Assembling";
-        final String assembled = "assembled";
         final XmirFiles files = new XmirFiles(this.input);
         final Counter counter = new Counter(files.total());
         final Stream<Path> all = new Summary(
-            assembling,
-            assembled,
+            "Assembling",
+            "assembled",
             this.input.toString(),
             this.output,
             new ParallelTranslator(path -> this.assemble(path, counter), this.threads)
@@ -89,12 +91,6 @@ public final class Assembler {
         all.close();
     }
 
-    /**
-     * Assemble a single XMIR file.
-     * @param path Path to the XMIR file to assemble
-     * @param counter File size counter
-     * @return Path to the assembled class file
-     */
     private Path assemble(final Path path, final Counter counter) {
         final Transformation trans = new Logging(
             "Assembling",
@@ -107,10 +103,6 @@ public final class Assembler {
         return trans.target();
     }
 
-    /**
-     * Log the result.
-     * @param disassembled Path to the assembled file
-     */
     private void log(final Path disassembled) {
         try {
             Logger.debug(

@@ -8,16 +8,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.xembly.Directive;
 
 /**
  * Directives Annotation.
+ *
  * @since 0.1
  */
-@ToString
-@EqualsAndHashCode
 public final class DirectivesAnnotations implements Iterable<Directive> {
 
     /**
@@ -32,16 +30,6 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param annotations Annotations.
-     * @param name Name.
-     */
-    public DirectivesAnnotations(final List<Iterable<Directive>> annotations, final String name) {
-        this.annotations = annotations;
-        this.name = name;
-    }
-
-    /**
-     * Constructor.
      */
     public DirectivesAnnotations() {
         this(new ArrayList<>(0));
@@ -49,7 +37,8 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param annotations Annotations.
+     *
+     * @param annotations Annotations
      */
     public DirectivesAnnotations(final List<Iterable<Directive>> annotations) {
         this(annotations, "annotations");
@@ -57,7 +46,8 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Name.
+     *
+     * @param name Name
      */
     DirectivesAnnotations(final String name) {
         this(new ArrayList<>(0), name);
@@ -65,11 +55,23 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param name Name.
-     * @param annotations Annotations.
+     *
+     * @param name Name
+     * @param annotations Annotations
      */
     DirectivesAnnotations(final String name, final DirectivesAnnotation... annotations) {
         this(Arrays.asList(annotations), name);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param annotations Annotations
+     * @param name Name
+     */
+    public DirectivesAnnotations(final List<Iterable<Directive>> annotations, final String name) {
+        this.annotations = annotations;
+        this.name = name;
     }
 
     @Override
@@ -79,11 +81,39 @@ public final class DirectivesAnnotations implements Iterable<Directive> {
 
     /**
      * Add annotation.
-     * @param annotation Annotation.
-     * @return This object.
+     *
+     * @param annotation Annotation
+     * @return This object
      */
     public DirectivesAnnotations add(final DirectivesAnnotation annotation) {
         this.annotations.add(annotation);
         return this;
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof DirectivesAnnotations) {
+            final DirectivesAnnotations directives = (DirectivesAnnotations) other;
+            result = Objects.equals(this.annotations, directives.annotations)
+                && Objects.equals(this.name, directives.name);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.annotations, this.name);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "DirectivesAnnotations(annotations=%s, name=%s)", this.annotations, this.name
+        );
     }
 }

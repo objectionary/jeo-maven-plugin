@@ -15,10 +15,11 @@ import org.eolang.jeo.representation.directives.Format;
 /**
  * Disassembler for bytecode classes.
  *
- * <p>This class disassembles the project's compiled Java bytecode classes into
- * XMIR (EO XML representation). It processes all .class files from a specified
- * directory and converts them into corresponding XMIR files, supporting different
- * disassembly modes for various levels of detail.</p>
+ * <p>This class disassembles the project's compiled Java bytecode classes into XMIR (EO XML
+ * representation). It processes all .class files from a specified directory and converts them
+ * into corresponding XMIR files, supporting different disassembly modes for various levels of
+ * detail.</p>
+ *
  * @since 0.1.0
  */
 public final class Disassembler {
@@ -45,27 +46,27 @@ public final class Disassembler {
 
     /**
      * Number of threads for parallel processing.
+     *
      * <p>When 0, the number of available processors is used automatically.</p>
      */
     private final int threads;
 
     /**
      * Constructor.
+     *
      * @param classes Directory containing compiled class files
      * @param target Target directory where XMIR files will be saved
      */
-    public Disassembler(
-        final Path classes,
-        final Path target
-    ) {
+    public Disassembler(final Path classes, final Path target) {
         this(classes, target, new Format());
     }
 
     /**
      * Constructor.
+     *
      * @param classes Directory containing compiled class files
      * @param target Target directory where XMIR files will be saved
-     * @param params Disassembling params.
+     * @param params Disassembling params
      */
     public Disassembler(
         final Path classes,
@@ -77,11 +78,11 @@ public final class Disassembler {
 
     /**
      * Constructor.
+     *
      * @param classes Project compiled classes
      * @param target Where to save decompiled classes
-     * @param params Disassembling params.
+     * @param params Disassembling params
      * @param debug Enables detailed debug logging
-     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public Disassembler(
         final Classes classes,
@@ -94,12 +95,12 @@ public final class Disassembler {
 
     /**
      * Constructor.
+     *
      * @param classes Project compiled classes
      * @param target Where to save decompiled classes
-     * @param params Disassembling params.
+     * @param params Disassembling params
      * @param debug Enables detailed debug logging
      * @param threads Number of threads (0 = use available processors automatically)
-     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public Disassembler(
         final Classes classes,
@@ -119,26 +120,20 @@ public final class Disassembler {
      * Disassemble all bytecode files.
      */
     public void disassemble() {
-        final String process = "Disassembling";
-        final String disassembled = "disassembled";
         final Counter counter = new Counter(this.classes.total());
-        try (Stream<Path> stream = new Summary(
-            process,
-            disassembled,
-            this.classes.toString(),
-            this.target,
-            new ParallelTranslator(path -> this.disassemble(path, counter), this.threads)
-        ).apply(this.classes.all())) {
+        try (
+            Stream<Path> stream = new Summary(
+                "Disassembling",
+                "disassembled",
+                this.classes.toString(),
+                this.target,
+                new ParallelTranslator(path -> this.disassemble(path, counter), this.threads)
+            ).apply(this.classes.all())
+        ) {
             stream.forEach(this::log);
         }
     }
 
-    /**
-     * Disassemble a single bytecode file.
-     * @param path Path to the bytecode file to disassemble
-     * @param counter File size counter
-     * @return Path to the disassembled XMIR file
-     */
     private Path disassemble(final Path path, final Counter counter) {
         final Transformation trans = new Caching(
             new Logging(
@@ -155,10 +150,6 @@ public final class Disassembler {
         return trans.target();
     }
 
-    /**
-     * Log the disassembling process.
-     * @param disassembled Path to the disassembled XMIR file
-     */
     private void log(final Path disassembled) {
         try {
             Logger.debug(

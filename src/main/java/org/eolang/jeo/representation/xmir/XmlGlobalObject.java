@@ -9,9 +9,9 @@ import java.util.stream.Stream;
 
 /**
  * Global XML object representation.
- * <p>
- *     Mirrors {@link org.eolang.jeo.representation.directives.DirectivesGlobalObject}
- * </p>
+ *
+ * <p>Mirrors {@link org.eolang.jeo.representation.directives.DirectivesGlobalObject}</p>
+ *
  * @since 0.11.0
  */
 final class XmlGlobalObject {
@@ -23,7 +23,8 @@ final class XmlGlobalObject {
 
     /**
      * Constructor.
-     * @param node XML node representing the global object.
+     *
+     * @param node XML node representing the global object
      */
     XmlGlobalObject(final XmlNode node) {
         this(new XmlDelegateObject(node));
@@ -31,26 +32,34 @@ final class XmlGlobalObject {
 
     /**
      * Constructor.
-     * @param origin XML abstract object representing the global object.
+     *
+     * @param origin XML abstract object representing the global object
      */
     private XmlGlobalObject(final XmlEoObject origin) {
         this.origin = origin;
     }
 
+    @Override
+    public String toString() {
+        return String.format("XmlGlobalObject(origin=%s)", this.origin);
+    }
+
     /**
      * Retrieve attribute value by name.
-     * @param name Name of the attribute to retrieve.
-     * @return Optional containing the attribute value if present, otherwise empty.
+     *
+     * @param name Name of the attribute to retrieve
+     * @return Optional containing the attribute value if present, otherwise empty
      */
-    public Optional<String> attribute(final String name) {
+    Optional<String> attribute(final String name) {
         return this.origin.attribute(name);
     }
 
     /**
      * Retrieve child nodes.
-     * @return Stream of XML nodes representing the children of the global object.
+     *
+     * @return Stream of XML nodes representing the children of the global object
      */
-    public Stream<XmlNode> children() {
+    Stream<XmlNode> children() {
         return this.origin.children();
     }
 }

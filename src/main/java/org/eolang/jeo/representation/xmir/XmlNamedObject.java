@@ -6,9 +6,9 @@ package org.eolang.jeo.representation.xmir;
 
 /**
  * This is EO object in XML representation.
- * <p>
- *     Mirrors {@link org.eolang.jeo.representation.directives.DirectivesEoObject}
- * </p>
+ *
+ * <p>Mirrors {@link org.eolang.jeo.representation.directives.DirectivesEoObject}</p>
+ *
  * @since 0.11.0
  */
 public final class XmlNamedObject {
@@ -20,7 +20,8 @@ public final class XmlNamedObject {
 
     /**
      * Constructor.
-     * @param inner XML node representing the EO object.
+     *
+     * @param inner XML node representing the EO object
      */
     XmlNamedObject(final XmlNode inner) {
         this.inner = inner;
@@ -28,20 +29,21 @@ public final class XmlNamedObject {
 
     /**
      * Retrieve the name of the EO object.
-     * @return Name of the EO object.
+     *
+     * @return Name of the EO object
      */
     public String name() {
-        return this.inner.attribute("name")
-            .orElseThrow(
-                () -> new IllegalStateException(
-                    String.format("Attribute 'name' not found in %s", this.inner)
-                )
-            );
+        return this.inner.attribute("name").orElseThrow(
+            () -> new IllegalStateException(
+                String.format("Attribute 'name' not found in %s", this.inner)
+            )
+        );
     }
 
     /**
      * Retrieve the inner XML node representing the EO object.
-     * @return XML node of the EO object.
+     *
+     * @return XML node of the EO object
      */
     public XmlNode node() {
         return this.inner;
@@ -49,7 +51,8 @@ public final class XmlNamedObject {
 
     /**
      * Whether the EO object has a name attribute.
-     * @return True if the EO object has a name attribute, false otherwise.
+     *
+     * @return True if the EO object has a name attribute, false otherwise
      */
     boolean named() {
         return this.inner.attribute("name").isPresent();

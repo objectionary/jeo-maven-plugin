@@ -13,6 +13,7 @@ import org.objectweb.asm.Label;
 
 /**
  * Test case for {@link AsmLabels}.
+ *
  * @since 0.6
  */
 final class AsmLabelsTest {

@@ -20,11 +20,11 @@ import org.xembly.Directives;
  * All the directives are sorted according to JVM method specification:
  * {@code
  * method_info {
- *     u2             access_flags; {@link DirectivesMethodProperties}
- *     u2             name_index; {@link DirectivesMethodProperties}
- *     u2             descriptor_index; {@link DirectivesMethodProperties}
- *     u2             attributes_count; {@link DirectivesMethod}
- *     attribute_info attributes[attributes_count]; {@link DirectivesMethod}
+ * u2             access_flags; {@link DirectivesMethodProperties}
+ * u2             name_index; {@link DirectivesMethodProperties}
+ * u2             descriptor_index; {@link DirectivesMethodProperties}
+ * u2             attributes_count; {@link DirectivesMethod}
+ * attribute_info attributes[attributes_count]; {@link DirectivesMethod}
  * }}
  * Pay attention, that most of the information about methods are stored into attributes:
  * - Body (Code)
@@ -32,6 +32,7 @@ import org.xembly.Directives;
  * - Try-catch blocks
  * - Default value (for annotation methods)
  * - And other attributes
+ *
  * @since 0.1
  */
 public final class DirectivesMethod implements Iterable<Directive> {
@@ -78,6 +79,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param name Method name
      */
     public DirectivesMethod(final String name) {
@@ -86,6 +88,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param name Method name
      * @param properties Method properties
      */
@@ -107,6 +110,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param format Directives format
      * @param name Method name
      * @param properties Method properties
@@ -115,7 +119,6 @@ public final class DirectivesMethod implements Iterable<Directive> {
      * @param annotations Method annotations
      * @param dvalue Annotation default value
      * @param attributes Method attributes
-     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public DirectivesMethod(
         final Format format,
@@ -139,6 +142,7 @@ public final class DirectivesMethod implements Iterable<Directive> {
 
     /**
      * Add opcode to the directives.
+     *
      * @param index Instruction index
      * @param opcode Opcode
      * @param operands Operands
@@ -153,8 +157,9 @@ public final class DirectivesMethod implements Iterable<Directive> {
 
     /**
      * Add annotation to the directives.
-     * @param annotation Annotation directives.
-     * @return This object.
+     *
+     * @param annotation Annotation directives
+     * @return This object
      */
     public DirectivesMethod withAnnotation(final DirectivesAnnotation annotation) {
         this.annotations.add(annotation);

@@ -14,6 +14,7 @@ import org.xembly.Directives;
 /**
  * Directives that represent a pure EO object.
  * Similar to {@link DirectivesJeoObject}, but for objects that are parts of the EO language.
+ *
  * @since 0.6
  */
 public final class DirectivesEoObject implements Iterable<Directive> {
@@ -35,15 +36,17 @@ public final class DirectivesEoObject implements Iterable<Directive> {
 
     /**
      * The 'as' attribute of the object.
+     *
      * @checkstyle MemberNameCheck (2 lines)
      */
     private final String as;
 
     /**
      * Constructor.
-     * @param base The base of the object.
-     * @param name The name of the object.
-     * @param inner Inner components.
+     *
+     * @param base The base of the object
+     * @param name The name of the object
+     * @param inner Inner components
      */
     @SafeVarargs
     public DirectivesEoObject(
@@ -54,9 +57,10 @@ public final class DirectivesEoObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The base of the object.
-     * @param name The name of the object.
-     * @param inner Inner components.
+     *
+     * @param base The base of the object
+     * @param name The name of the object
+     * @param inner Inner components
      */
     public DirectivesEoObject(final String base, final String name, final List<Directives> inner) {
         this(base, name, "", inner);
@@ -64,11 +68,11 @@ public final class DirectivesEoObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The base of the object.
-     * @param name The name of the object.
-     * @param as The 'as' attribute of the object.
-     * @param inner Inner components.
-     * @checkstyle ParameterNumberCheck (10 lines)
+     *
+     * @param base The base of the object
+     * @param name The name of the object
+     * @param as The 'as' attribute of the object
+     * @param inner Inner components
      * @checkstyle ParameterNameCheck (10 lines)
      */
     @SafeVarargs
@@ -88,12 +92,12 @@ public final class DirectivesEoObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The base of the object.
-     * @param name The name of the object.
-     * @param as The 'as' attribute of the object.
-     * @param inner Inner components.
+     *
+     * @param base The base of the object
+     * @param name The name of the object
+     * @param as The 'as' attribute of the object
+     * @param inner Inner components
      * @checkstyle ParameterNameCheck (10 lines)
-     * @checkstyle ParameterNumberCheck (10 lines)
      */
     public DirectivesEoObject(
         final String base,

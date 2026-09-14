@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link BytecodeListing}.
+ *
  * @since 0.6
  */
 final class BytecodeListingTest {

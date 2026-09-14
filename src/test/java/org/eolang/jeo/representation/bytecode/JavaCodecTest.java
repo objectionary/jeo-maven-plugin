@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Test case for {@link JavaCodec}.
+ *
  * @since 0.8
  */
 final class JavaCodecTest {
@@ -36,11 +37,6 @@ final class JavaCodecTest {
         );
     }
 
-    /**
-     * Test cases.
-     * @return Arguments.
-     */
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static Object[][] mapping() {
         return new Object[][]{
             {null, DataType.NULL, new byte[0]},

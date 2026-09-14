@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 
 /**
  * Filtered classes.
+ *
  * @since 0.14.0
  */
 final class FilteredClasses implements Classes {
@@ -34,6 +35,7 @@ final class FilteredClasses implements Classes {
 
     /**
      * Constructor.
+     *
      * @param original Original classes to filter
      * @param filter Glob filter to apply
      */
@@ -43,6 +45,7 @@ final class FilteredClasses implements Classes {
 
     /**
      * Constructor with custom logger.
+     *
      * @param original Original classes to filter
      * @param filter Glob filter to apply
      * @param logger Logger to use for logging messages
@@ -70,9 +73,8 @@ final class FilteredClasses implements Classes {
     @Override
     public Stream<Path> all() {
         final List<Path> res = this.original.all().filter(this.filter).collect(Collectors.toList());
-        final int size = res.size();
         this.logger.accept(
-            String.format("Found %d files in %s using %s", size, this.original, this.filter)
+            String.format("Found %d files in %s using %s", res.size(), this.original, this.filter)
         );
         return res.stream();
     }

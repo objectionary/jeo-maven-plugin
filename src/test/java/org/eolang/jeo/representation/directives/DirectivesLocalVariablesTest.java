@@ -13,6 +13,7 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link DirectivesLocalVariables}.
+ *
  * @since 0.14.0
  */
 final class DirectivesLocalVariablesTest {
@@ -38,5 +39,4 @@ final class DirectivesLocalVariablesTest {
             )
         );
     }
-
 }

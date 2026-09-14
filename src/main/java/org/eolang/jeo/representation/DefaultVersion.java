@@ -9,8 +9,9 @@ import org.objectweb.asm.Opcodes;
 /**
  * Default version configuration for ASM API and Java bytecode.
  *
- * <p>This class encapsulates the default versions used for ASM API and Java bytecode
- * generation, providing consistent version management across the representation layer.</p>
+ * <p>This class encapsulates the default versions used for ASM API and Java bytecode generation,
+ * providing consistent version management across the representation layer.</p>
+ *
  * @since 0.1.0
  */
 public final class DefaultVersion {
@@ -34,8 +35,9 @@ public final class DefaultVersion {
 
     /**
      * Constructor.
-     * @param bytecode Java bytecode version.
-     * @param api ASM API version.
+     *
+     * @param bytecode Java bytecode version
+     * @param api ASM API version
      */
     private DefaultVersion(final int bytecode, final int api) {
         this.bcode = bytecode;
@@ -44,7 +46,8 @@ public final class DefaultVersion {
 
     /**
      * Java bytecode version.
-     * @return Java bytecode version.
+     *
+     * @return Java bytecode version
      */
     public int bytecode() {
         return this.bcode;
@@ -52,7 +55,8 @@ public final class DefaultVersion {
 
     /**
      * ASM API version.
-     * @return ASM API version.
+     *
+     * @return ASM API version
      */
     public int api() {
         return this.asm;

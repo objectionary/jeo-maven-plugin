@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for {@link BytecodeMethodProperties}.
+ *
  * @since 0.6
  */
 final class BytecodeMethodPropertiesTest {

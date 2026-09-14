@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test for {@link FilteredClasses}.
+ *
  * @since 0.14.0
  */
 final class FilteredClassesTest {
@@ -24,13 +26,12 @@ final class FilteredClassesTest {
     void returnsFilteredPathsWhenFilterMatchesSomeWithDefaultLogger() {
         final Path first = Paths.get("A.class");
         final Path second = Paths.get("B.class");
-        final List<Path> result = new FilteredClasses(
-            new Project(Stream.of(first, second, Paths.get("C.txt"))),
-            new GlobFilter(Collections.singleton("*.class"), Collections.emptySet())
-        ).all().collect(java.util.stream.Collectors.toList());
         MatcherAssert.assertThat(
             "Should return only paths that match the filter",
-            result,
+            new FilteredClasses(
+                new FilteredClassesTest.Project(Stream.of(first, second, Paths.get("C.txt"))),
+                new GlobFilter(Collections.singleton("*.class"), Collections.emptySet())
+            ).all().collect(Collectors.toList()),
             Matchers.allOf(
                 Matchers.iterableWithSize(2),
                 Matchers.hasItem(first),
@@ -44,9 +45,9 @@ final class FilteredClassesTest {
         MatcherAssert.assertThat(
             "No paths should match the filter",
             new FilteredClasses(
-                new Project(Stream.of(Paths.get("A.txt"), Paths.get("B.txt"))),
+                new FilteredClassesTest.Project(Stream.of(Paths.get("A.txt"), Paths.get("B.txt"))),
                 new GlobFilter(Collections.singleton("*.class"), Collections.emptySet())
-            ).all().collect(java.util.stream.Collectors.toList()),
+            ).all().collect(Collectors.toList()),
             Matchers.empty()
         );
     }
@@ -56,7 +57,7 @@ final class FilteredClassesTest {
         final List<String> logs = new ArrayList<>(1);
         final Path root = Paths.get("/dev/null");
         new FilteredClasses(
-            new Project(
+            new FilteredClassesTest.Project(
                 root,
                 Stream.of(
                     Paths.get("FirstAdded.class"),
@@ -85,13 +86,14 @@ final class FilteredClassesTest {
 
     /**
      * Test project implementation of {@link Classes}.
-     * <p>
-     *     This class is used to simulate a project structure with
-     *     a root path and a stream of paths.
-     * </p>
+     *
+     * <p>This class is used to simulate a project structure with a root path and a stream of
+     * paths.</p>
+     *
      * @since 0.14.0
      */
     private static final class Project implements Classes {
+
         /**
          * Project root path.
          */
@@ -104,6 +106,7 @@ final class FilteredClassesTest {
 
         /**
          * Constructor.
+         *
          * @param paths Stream of paths representing project files
          */
         private Project(final Stream<Path> paths) {
@@ -112,6 +115,7 @@ final class FilteredClassesTest {
 
         /**
          * Constructor.
+         *
          * @param root Project root path
          * @param paths Stream of paths representing project files
          */

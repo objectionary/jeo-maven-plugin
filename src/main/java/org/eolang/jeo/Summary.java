@@ -12,9 +12,10 @@ import java.util.stream.Stream;
 /**
  * Translation summary log.
  *
- * <p>This class wraps a translator and provides summary logging functionality.
- * It logs the start and end of the translation process, including the number of
- * files processed and the total time taken.</p>
+ * <p>This class wraps a translator and provides summary logging functionality. It logs the start
+ * and end of the translation process, including the number of files processed and the total
+ * time taken.</p>
+ *
  * @since 0.2.0
  */
 public final class Summary implements Translator {
@@ -26,8 +27,8 @@ public final class Summary implements Translator {
 
     /**
      * Past participle of the process.
-     * <p>Usually it is something like:
-     * "disassembled", "assembled", etc.</p>
+     *
+     * <p>Usually it is something like: "disassembled", "assembled", etc.</p>
      */
     private final String participle;
 
@@ -48,12 +49,12 @@ public final class Summary implements Translator {
 
     /**
      * Constructor.
+     *
      * @param process Process name (gerund form)
      * @param participle Past participle of the process
      * @param input Source directory path
      * @param output Target directory path
      * @param original Original translator to wrap with summary logging
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     Summary(
         final String process,
@@ -81,8 +82,7 @@ public final class Summary implements Translator {
         final long start = System.currentTimeMillis();
         final AtomicInteger counter = new AtomicInteger();
         return this.original.apply(representations)
-            .peek(rep -> counter.incrementAndGet())
-            .onClose(
+            .peek(rep -> counter.incrementAndGet()).onClose(
                 () -> Logger.info(
                     this,
                     "Total %d files were %s in %[ms]s",

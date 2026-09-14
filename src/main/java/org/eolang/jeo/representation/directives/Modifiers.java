@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.directives;
 /**
  * Modifiers that can be applied to classes, methods, or fields.
  * Like public, private, static, final, etc.
+ *
  * @since 0.15.0
  */
 final class Modifiers {
@@ -18,7 +19,8 @@ final class Modifiers {
 
     /**
      * Constructor.
-     * @param modifier Modifier value as integer.
+     *
+     * @param modifier Modifier value as integer
      */
     Modifiers(final int modifier) {
         this.all = modifier;
@@ -26,12 +28,11 @@ final class Modifiers {
 
     /**
      * Checks if the given flag is set.
-     * @param flag Flag to check.
-     * @return True if the flag is set, false otherwise.
-     * @checkstyle MethodNameCheck (3 lines)
+     *
+     * @param flag Flag to check
+     * @return True if the flag is set, false otherwise
      */
-    @SuppressWarnings("PMD.ShortMethodName")
-    public boolean is(final int flag) {
+    boolean is(final int flag) {
         return (this.all & flag) != 0;
     }
 }

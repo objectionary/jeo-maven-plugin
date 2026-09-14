@@ -31,5 +31,4 @@ final class EoFqnTest {
             Matchers.equalTo(expected)
         );
     }
-
 }

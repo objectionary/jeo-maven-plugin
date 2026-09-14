@@ -11,6 +11,7 @@ import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * XMIR of annotation default value.
+ *
  * @since 0.3
  */
 public final class XmlDefaultValue {
@@ -27,7 +28,8 @@ public final class XmlDefaultValue {
 
     /**
      * Constructor.
-     * @param node Default value XMIR node.
+     *
+     * @param node Default value XMIR node
      */
     XmlDefaultValue(final XmlNode node) {
         this(new XmlJeoObject(node));
@@ -35,7 +37,8 @@ public final class XmlDefaultValue {
 
     /**
      * Constructor.
-     * @param node XML Jeo object node.
+     *
+     * @param node XML Jeo object node
      */
     private XmlDefaultValue(final XmlJeoObject node) {
         this.node = node;
@@ -43,7 +46,8 @@ public final class XmlDefaultValue {
 
     /**
      * Convert to bytecode.
-     * @return Bytecode default value.
+     *
+     * @return Bytecode default value
      */
     public Optional<BytecodeDefaultValue> bytecode() {
         return this.node.children().findFirst().map(
@@ -55,7 +59,8 @@ public final class XmlDefaultValue {
 
     /**
      * Write to method.
-     * @param method Method.
+     *
+     * @param method Method
      */
     public void writeTo(final BytecodeMethod method) {
         this.bytecode().ifPresent(method::defvalue);
@@ -63,7 +68,8 @@ public final class XmlDefaultValue {
 
     /**
      * Is default value?
-     * @return True this node is default value.
+     *
+     * @return True this node is default value
      */
     boolean isDefaultValue() {
         return this.node.base().map(XmlDefaultValue.ADEFVALUE::equals).orElse(false);

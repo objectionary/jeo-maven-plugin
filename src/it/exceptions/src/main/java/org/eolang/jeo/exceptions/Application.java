@@ -11,6 +11,7 @@ import java.io.File;
 
 /**
  * Application Entry Point That Uses Different Exception Handlers.
+ *
  * @since 0.1
  */
 public class Application {
@@ -85,7 +86,8 @@ public class Application {
 
     /**
      * Method that declares exception.
-     * @throws Exception Exception.
+     *
+     * @throws Exception Exception
      */
     private static void methodThatDeclaresException() throws Exception {
         new File("").getCanonicalFile();

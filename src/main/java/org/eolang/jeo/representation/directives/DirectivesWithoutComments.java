@@ -10,13 +10,12 @@ import org.xembly.Directives;
 
 /**
  * Directives without comments.
- * <p>
- *     This class provides an iterable collection of directives that excludes comments.
- * </p>
- * <p>
- *     Note: In case of performance issues, we can invert this class and implement
- *     DirectivesWithComments that will add comments to the directives.
- * </p>
+ *
+ * <p>This class provides an iterable collection of directives that excludes comments.</p>
+ *
+ * <p>Note: In case of performance issues, we can invert this class and implement
+ * DirectivesWithComments that will add comments to the directives.</p>
+ *
  * @since 0.11.0
  */
 public final class DirectivesWithoutComments implements Iterable<Directive> {
@@ -28,7 +27,8 @@ public final class DirectivesWithoutComments implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param directives Iterable of directives.
+     *
+     * @param directives Iterable of directives
      */
     public DirectivesWithoutComments(final Iterable<Directive> directives) {
         this(new Directives(directives));
@@ -36,7 +36,8 @@ public final class DirectivesWithoutComments implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param directives Directives object.
+     *
+     * @param directives Directives object
      */
     private DirectivesWithoutComments(final Directives directives) {
         this.directives = directives;

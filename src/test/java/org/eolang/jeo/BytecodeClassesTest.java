@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link BytecodeClasses}.
+ *
  * @since 0.14.0
  */
 final class BytecodeClassesTest {
@@ -29,36 +30,33 @@ final class BytecodeClassesTest {
 
     @Test
     void throwsDescriptiveExceptionWhenConvertingNullInputToString() {
-        final IllegalStateException exception = Assertions.assertThrows(
-            IllegalStateException.class,
-            () -> new BytecodeClasses(null).toString()
-        );
         MatcherAssert.assertThat(
             "BytecodeClasses toString() should describe the missing classes directory",
-            exception.getMessage(),
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new BytecodeClasses(null).toString()
+            ).getMessage(),
             Matchers.containsString("The classes directory is not set")
         );
     }
 
     @Test
     void throwsDescriptiveExceptionWhenGettingRootFromNullInput() {
-        final IllegalStateException exception = Assertions.assertThrows(
-            IllegalStateException.class,
-            () -> new BytecodeClasses(null).root()
-        );
         MatcherAssert.assertThat(
             "BytecodeClasses root() should describe the missing classes directory",
-            exception.getMessage(),
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new BytecodeClasses(null).root()
+            ).getMessage(),
             Matchers.containsString("The classes directory is not set")
         );
     }
 
     @Test
     void doesNotThrowExceptionOnAbsentDirectory() {
-        final Path path = Paths.get("/dev/null/absent");
         MatcherAssert.assertThat(
             "BytecodeClasses should handle empty directories without throwing exceptions",
-            new BytecodeClasses(path).all().count(),
+            new BytecodeClasses(Paths.get("/dev/null/absent")).all().count(),
             Matchers.equalTo(0L)
         );
     }

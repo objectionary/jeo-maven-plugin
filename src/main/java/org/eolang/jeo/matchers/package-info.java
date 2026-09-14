@@ -4,6 +4,7 @@
  */
 /**
  * It is a package with useful hamcrest matchers.
+ *
  * @since 0.6
  */
 package org.eolang.jeo.matchers;

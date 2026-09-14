@@ -15,6 +15,7 @@ import org.eolang.jeo.representation.bytecode.Bytecode;
 /**
  * Class representation.
  * Used in benchmarks to assemble and disassemble class representation.
+ *
  * @since 0.8
  */
 final class Representation {
@@ -33,7 +34,8 @@ final class Representation {
 
     /**
      * Constructor.
-     * @param clazz Class name.
+     *
+     * @param clazz Class name
      */
     private Representation(final String clazz) {
         this.clazz = clazz;
@@ -41,7 +43,8 @@ final class Representation {
 
     /**
      * Disassembled XML representation as bytes.
-     * @return Bytes.
+     *
+     * @return Bytes
      */
     byte[] disassemble() {
         return new BytecodeRepresentation(new Bytecode(this.bytecode()))
@@ -52,13 +55,13 @@ final class Representation {
 
     /**
      * Raw bytecode as bytes.
-     * @return Bytes.
+     *
+     * @return Bytes
      */
     byte[] bytecode() {
         try (
             InputStream stream = Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(
+                .getContextClassLoader().getResourceAsStream(
                     String.format(
                         "%s.class",
                         Integer.class.getName().replace('.', '/')
@@ -77,11 +80,6 @@ final class Representation {
         }
     }
 
-    /**
-     * Read all bytes from input stream.
-     * @param stream Input stream.
-     * @return Bytes.
-     */
     private static byte[] bytes(final InputStream stream) {
         try {
             final ByteArrayOutputStream buffer = new ByteArrayOutputStream();

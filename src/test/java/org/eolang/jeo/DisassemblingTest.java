@@ -16,6 +16,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Tests for {@link Disassembling}.
+ *
  * @since 0.15.0
  */
 final class DisassemblingTest {
@@ -27,10 +28,9 @@ final class DisassemblingTest {
         Files.createDirectories(open.getParent());
         Files.write(open, new BytesOf(obytecode).asBytes());
         final String output = "target";
-        final Path target = tmp.resolve(output);
         MatcherAssert.assertThat(
             "Disassembling should create correct target path for open module-info",
-            new Disassembling(tmp, target, open, new Format()).target(),
+            new Disassembling(tmp, tmp.resolve(output), open, new Format()).target(),
             Matchers.equalTo(
                 tmp.resolve(output).resolve("META-INF").resolve("module-info.xmir")
             )
@@ -43,10 +43,9 @@ final class DisassemblingTest {
         final Path closed = tmp.resolve("module-info.class");
         Files.write(closed, new BytesOf(cbytecode).asBytes());
         final String output = "t";
-        final Path target = tmp.resolve(output);
         MatcherAssert.assertThat(
             "Disassembling should create correct target path for closed module-info",
-            new Disassembling(tmp, target, closed, new Format()).target(),
+            new Disassembling(tmp, tmp.resolve(output), closed, new Format()).target(),
             Matchers.equalTo(
                 tmp.resolve(output).resolve("module-info.xmir")
             )

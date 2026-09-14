@@ -11,6 +11,7 @@ import org.xembly.Directive;
 /**
  * Directives Handle.
  * This is the XMIR representation of the Java ASM Handle object.
+ *
  * @since 0.1
  */
 public final class DirectivesHandle implements Iterable<Directive> {
@@ -32,9 +33,10 @@ public final class DirectivesHandle implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param index The bytecode instruction index.
-     * @param format Format of the directives.
-     * @param handle ASM Handle object.
+     *
+     * @param index The bytecode instruction index
+     * @param format Format of the directives
+     * @param handle ASM Handle object
      */
     public DirectivesHandle(final int index, final Format format, final Handle handle) {
         this.index = index;

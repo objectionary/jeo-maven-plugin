@@ -4,8 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesAttribute;
 import org.eolang.jeo.representation.directives.DirectivesValue;
@@ -16,10 +15,9 @@ import org.objectweb.asm.MethodVisitor;
 
 /**
  * Inner class attribute.
+ *
  * @since 0.4
  */
-@ToString
-@EqualsAndHashCode
 public final class InnerClass implements BytecodeAttribute {
 
     /**
@@ -44,12 +42,12 @@ public final class InnerClass implements BytecodeAttribute {
 
     /**
      * Constructor.
-     * @param name Internal name of the class.
-     * @param outer The internal name of the class or interface class is a member of.
-     * @param inner The simple name of the class.
+     *
+     * @param name Internal name of the class
+     * @param outer The internal name of the class or interface class is a member of
+     * @param inner The simple name of the class
      * @param access Access flags of the inner class as originally declared in the
-     *  enclosing class.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *  enclosing class
      */
     public InnerClass(
         final String name,
@@ -87,6 +85,36 @@ public final class InnerClass implements BytecodeAttribute {
             new DirectivesValue(format, "outer", this.outer),
             new DirectivesValue(format, "inner", this.inner),
             new DirectivesValue(format, "access", this.access)
+        );
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof InnerClass) {
+            final InnerClass clazz = (InnerClass) other;
+            result = this.access == clazz.access
+                && Objects.equals(this.name, clazz.name)
+                && Objects.equals(this.outer, clazz.outer)
+                && Objects.equals(this.inner, clazz.inner);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.name, this.outer, this.inner, this.access);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "InnerClass(name=%s, outer=%s, inner=%s, access=%d)",
+            this.name, this.outer, this.inner, this.access
         );
     }
 }

@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.xmir;
 /**
  * Xmir representation of values.
  * Mirrors {@link org.eolang.jeo.representation.directives.DirectivesValues}.
+ *
  * @since 0.14.0
  */
 final class XmlValues {
@@ -18,6 +19,7 @@ final class XmlValues {
 
     /**
      * Constructor.
+     *
      * @param root Xmir node representing values
      */
     XmlValues(final XmlNode root) {
@@ -26,6 +28,7 @@ final class XmlValues {
 
     /**
      * Parse values from the Xmir node.
+     *
      * @return Parsed values as an array of objects
      */
     Object[] values() {

@@ -18,11 +18,11 @@ import org.cactoos.scalar.Unchecked;
 
 /**
  * Filter that matches paths against a set of glob patterns.
- * <p>
- *     Excludes patterns take precedence over includes patterns.
- * </p>
+ *
+ * <p>Excludes patterns take precedence over includes patterns.</p>
  * Returns true if the path matches any of the include patterns and does not match any of
  * the exclude patterns.
+ *
  * @since 0.13.0
  */
 public final class GlobFilter implements Predicate<Path> {
@@ -130,11 +130,6 @@ public final class GlobFilter implements Predicate<Path> {
         return included;
     }
 
-    /**
-     * Create a PathMatcher for the given glob pattern.
-     * @param pattern Glob pattern to match
-     * @return PathMatcher for the glob pattern
-     */
     private static PathMatcher matcher(final String pattern) {
         return FileSystems.getDefault().getPathMatcher(
             String.format("glob:%s", pattern)

@@ -24,17 +24,18 @@ final class DirectivesFrameTest {
     @Test
     void createsCorrectDirectivesForFrame() throws ImpossibleModificationException {
         final int type = Opcodes.F_NEW;
-        final int nlocal = 2;
         final Object[] locals = {"java/lang/Object", Opcodes.LONG};
-        final int nstack = 2;
         final Object[] stack = {"java/lang/String", Opcodes.DOUBLE};
-        final String xml = new Xembler(
-            new DirectivesFrame(0, new Format(), type, locals, stack)
-        ).xml();
         MatcherAssert.assertThat(
             "We failed to create correct directives for bytecode frame.",
-            new XmlFrame(new NativeXmlNode(xml)).bytecode(),
-            Matchers.equalTo(new BytecodeFrame(type, nlocal, locals, nstack, stack))
+            new XmlFrame(
+                new NativeXmlNode(
+                    new Xembler(
+                        new DirectivesFrame(0, new Format(), type, locals, stack)
+                    ).xml()
+                )
+            ).bytecode(),
+            Matchers.equalTo(new BytecodeFrame(type, 2, locals, 2, stack))
         );
     }
 }

@@ -10,10 +10,10 @@ import org.xembly.Directives;
 
 /**
  * Simple EO delegate object.
- * <p>
- *     Trivial object that represents a simple EO delegate object
- *     with an attribute 'base' and a name '@'.
- * </p>
+ *
+ * <p>Trivial object that represents a simple EO delegate object with an attribute 'base' and a
+ * name '@'.</p>
+ *
  * @since 0.12.0
  */
 public final class DirectivesSimpleDelegate implements Iterable<Directive> {
@@ -25,7 +25,8 @@ public final class DirectivesSimpleDelegate implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The 'base' attribute of the abstract object.
+     *
+     * @param base The 'base' attribute of the abstract object
      */
     public DirectivesSimpleDelegate(final String base) {
         this.base = base;

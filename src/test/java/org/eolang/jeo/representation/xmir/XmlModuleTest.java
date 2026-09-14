@@ -19,6 +19,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlModule}.
+ *
  * @since 0.15.0
  */
 final class XmlModuleTest {

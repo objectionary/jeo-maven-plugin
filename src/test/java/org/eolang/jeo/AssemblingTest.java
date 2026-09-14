@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests for {@link Assembling}.
+ *
  * @since 0.15.0
  */
 final class AssemblingTest {
@@ -37,6 +38,7 @@ final class AssemblingTest {
 
     /**
      * Checks that Assembling.target() returns the correct target path.
+     *
      * @param src Source directory
      * @param tgt Target directory
      * @param file Source file
@@ -62,10 +64,6 @@ final class AssemblingTest {
         );
     }
 
-    /**
-     * Test cases for {@link #determinesCorrectTargetFile}.
-     * @return Test cases
-     */
     private static Stream<Arguments> targetDirs() {
         return Stream.of(
             Arguments.of(

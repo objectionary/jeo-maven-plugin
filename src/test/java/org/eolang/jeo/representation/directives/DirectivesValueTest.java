@@ -6,7 +6,6 @@ package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.bytecode.Codec;
 import org.eolang.jeo.representation.bytecode.JavaCodec;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -24,13 +23,7 @@ import org.xembly.Xembler;
  *
  * @since 0.3.0
  */
-@SuppressWarnings("PMD.TooManyMethods")
 final class DirectivesValueTest {
-
-    /**
-     * Codec for tests.
-     */
-    private final Codec codec = new JavaCodec();
 
     @Test
     void convertsInteger() throws ImpossibleModificationException {
@@ -126,36 +119,52 @@ final class DirectivesValueTest {
                     hex
                 )
             ),
-            new DirectivesValue(0, new Format(), data).hex(this.codec),
+            new DirectivesValue(0, new Format(), data).hex(new JavaCodec()),
             Matchers.equalTo(hex)
         );
     }
 
     @Test
-    void convertsRawPrimitiveDataToHexString() {
+    void convertsIntegerToHexString() {
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '10' should be '00 00 00 00 00 00 00 0A'",
-            new DirectivesValue(0, new Format(), 10).hex(this.codec),
+            new DirectivesValue(0, new Format(), 10).hex(new JavaCodec()),
             Matchers.equalTo("00-00-00-00-00-00-00-0A")
         );
+    }
+
+    @Test
+    void convertsDoubleToHexString() {
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1d' should be '3F B9 99 99 99 99 99 9A'",
-            new DirectivesValue(0, new Format(), 0.1d).hex(this.codec),
+            new DirectivesValue(0, new Format(), 0.1d).hex(new JavaCodec()),
             Matchers.equalTo("3F-B9-99-99-99-99-99-9A")
         );
+    }
+
+    @Test
+    void convertsFloatToHexString() {
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for '0.1f' should be '3D CC CC CD'",
-            new DirectivesValue(0, new Format(), 0.1f).hex(this.codec),
+            new DirectivesValue(0, new Format(), 0.1f).hex(new JavaCodec()),
             Matchers.equalTo("3D-CC-CC-CD")
         );
+    }
+
+    @Test
+    void convertsTrueToHexString() {
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'true' should be '01'",
-            new DirectivesValue(0, new Format(), true).hex(this.codec),
+            new DirectivesValue(0, new Format(), true).hex(new JavaCodec()),
             Matchers.equalTo("01-")
         );
+    }
+
+    @Test
+    void convertsFalseToHexString() {
         MatcherAssert.assertThat(
             "Expected and actual hex values differ, the value for 'false' should be '00'",
-            new DirectivesValue(0, new Format(), false).hex(this.codec),
+            new DirectivesValue(0, new Format(), false).hex(new JavaCodec()),
             Matchers.equalTo("00-")
         );
     }
@@ -191,7 +200,8 @@ final class DirectivesValueTest {
 
     /**
      * Arguments for {@link DirectivesValueTest#determinesTypeCorrectly(Object, String)} test.
-     * @return Stream of arguments.
+     *
+     * @return Stream of arguments
      */
     static Stream<Arguments> types() {
         return Stream.of(
@@ -208,7 +218,8 @@ final class DirectivesValueTest {
 
     /**
      * Arguments for {@link DirectivesValueTest#convertsRawDataIntoHexString(Object, String)}.
-     * @return Stream of arguments.
+     *
+     * @return Stream of arguments
      */
     static Stream<Arguments> values() {
         return Stream.of(
@@ -225,7 +236,8 @@ final class DirectivesValueTest {
 
     /**
      * Arguments for {@link DirectivesValueTest#convertsNumbers(Number, String, String)}.
-     * @return Stream of arguments.
+     *
+     * @return Stream of arguments
      */
     static Stream<Arguments> numbers() {
         final String same = "3F-F0-00-00-00-00-00-00";
@@ -240,12 +252,12 @@ final class DirectivesValueTest {
 
     /**
      * Arguments for {@link DirectivesValueTest#convertsIntegers(Number, String)} (Number, String)}.
-     * @return Stream of arguments.
+     *
+     * @return Stream of arguments
      */
     static Stream<Arguments> integers() {
-        final String same = "3F-F0-00-00-00-00-00-00";
         return Stream.of(
-            Arguments.of(1, same),
+            Arguments.of(1, "3F-F0-00-00-00-00-00-00"),
             Arguments.of(100, "40-59-00-00-00-00-00-00"),
             Arguments.of(1057, "40-90-84-00-00-00-00-00")
         );

@@ -8,6 +8,7 @@
  * variables and stack elements.
  * Primarily this class is used in {@link BytecodeMethodTest} to test how the
  * {@link BytecodeMethod} class counts the maxs.
+ *
  * @since 0.6
  */
 public interface MaxInterface {

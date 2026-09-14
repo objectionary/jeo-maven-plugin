@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
  * but it is not guaranteed that output directory is always 'target/classes' and the basedir
  * might be different from '.'. Thus, we just handle the case when we run plugin in the folder
  * with pom.xml file.
+ *
  * @since 0.15.0
  */
 public final class MavenPath {
@@ -57,6 +58,7 @@ public final class MavenPath {
 
     /**
      * Ctor.
+     *
      * @param path The file path
      */
     public MavenPath(final File path) {
@@ -65,6 +67,7 @@ public final class MavenPath {
 
     /**
      * Resolve the path.
+     *
      * @return The resolved path
      */
     public Path resolve() {

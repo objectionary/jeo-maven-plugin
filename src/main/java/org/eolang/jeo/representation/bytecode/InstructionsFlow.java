@@ -7,7 +7,6 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -17,7 +16,8 @@ import java.util.stream.Collectors;
  * Data-flow analysis.
  * This class knows how to compute the maximum value of a reducible element based
  * on the instruction flow.
- * @param <T> Type of the reducible element.
+ *
+ * @param <T> Type of the reducible element
  * @since 0.6
  */
 public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
@@ -34,8 +34,9 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
 
     /**
      * Constructor.
-     * @param instr Instructions.
-     * @param catches Try-catch blocks.
+     *
+     * @param instr Instructions
+     * @param catches Try-catch blocks
      */
     InstructionsFlow(
         final List<? extends BytecodeEntry> instr, final List<BytecodeTryCatchBlock> catches
@@ -46,9 +47,10 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
 
     /**
      * Compute the maximum value for stack or variables.
-     * @param initial Initial value.
-     * @param generator Function to generate the reducible element from the instruction.
-     * @return Maximum value.
+     *
+     * @param initial Initial value
+     * @param generator Function to generate the reducible element from the instruction
+     * @return Maximum value
      */
     public Optional<T> max(final T initial, final Function<BytecodeEntry, T> generator) {
         final MaxValueMap<Integer, T> visited = new MaxValueMap<>();
@@ -89,21 +91,17 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                     visited.putIfGreater(index, updated);
                     break;
                 }
-                this.suitableBlocks(index)
-                    .forEach(ind -> worklist.push(new Entry<>(ind, updated.enterBlock())));
+                this.suitableBlocks(index).forEach(
+                    ind -> worklist.push(new Entry<>(ind, updated.enterBlock()))
+                );
                 visited.putIfGreater(index, updated);
                 current = updated;
                 ++index;
             }
         }
-        return visited.values().stream().max(T::compareTo);
+        return visited.values().stream().max((first, second) -> first.compareTo(second));
     }
 
-    /**
-     * Which try-catch-blocks cover the instruction.
-     * @param instruction Instruction index.
-     * @return List of block indexes.
-     */
     private List<Integer> suitableBlocks(final int instruction) {
         return this.blocks.stream()
             .map(BytecodeTryCatchBlock.class::cast)
@@ -113,11 +111,6 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Index of the label.
-     * @param label Label.
-     * @return Index.
-     */
     private int index(final BytecodeLabel label) {
         for (int index = 0; index < this.instructions.size(); ++index) {
             if (this.instructions.get(index).equals(label)) {
@@ -128,118 +121,18 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
     }
 
     /**
-     * Map with maximum values.
-     * @param <K> Key type.
-     * @param <V> Value type.
-     * @since 0.6
-     * @checkstyle IllegalTypeCheck (5 lines)
-     */
-    private static class MaxValueMap<K, V extends Reducible<V>> extends HashMap<K, V> {
-
-        /**
-         * Serial version UID.
-         */
-        private static final long serialVersionUID = 6517835829882158842L;
-
-        /**
-         * Constructor.
-         */
-        MaxValueMap() {
-            super(0);
-        }
-
-        /**
-         * Is the value greater than the current one?
-         * @param key Key.
-         * @param value Value.
-         * @return True if it is.
-         */
-        boolean isGreaterThan(final K key, final V value) {
-            return this.get(key) != null && this.get(key).compareTo(value) >= 0;
-        }
-
-        /**
-         * Put the value if it is greater.
-         * @param key Key.
-         * @param value Value.
-         */
-        void putIfGreater(final K key, final V value) {
-            this.merge(key, value, MaxValueMap::max);
-        }
-
-        /**
-         * Max of two reducible elements.
-         * @param first First element.
-         * @param second Second element.
-         * @param <T> Type of the element.
-         * @return Max element.
-         */
-        private static <T extends InstructionsFlow.Reducible<T>> T max(
-            final T first, final T second
-        ) {
-            final T result;
-            if (first.compareTo(second) > 0) {
-                result = first;
-            } else {
-                result = second;
-            }
-            return result;
-        }
-    }
-
-    /**
-     * Entry in the worklist.
-     * @param <T> Type of the element.
-     * @since 0.6
-     */
-    private static class Entry<T> {
-        /**
-         * Bytecode instruction index.
-         */
-        private final int indx;
-
-        /**
-         * Value.
-         */
-        private final T evalue;
-
-        /**
-         * Constructor.
-         * @param index Index.
-         * @param value Value.
-         */
-        Entry(final int index, final T value) {
-            this.indx = index;
-            this.evalue = value;
-        }
-
-        /**
-         * Index.
-         * @return Index.
-         */
-        int index() {
-            return this.indx;
-        }
-
-        /**
-         * Value.
-         * @return Value.
-         */
-        T value() {
-            return this.evalue;
-        }
-    }
-
-    /**
      * Reducible element in the data-flow analysis.
-     * @param <T> Type of the element.
+     * Self-bounded by design: implementers declare {@code T extends Reducible<T>}, so comparing
+     * to {@code T} is intentional and safe, even though the checker cannot see that bound here.
+     *
+     * @param <T> Type of the element
      * @since 0.6
      */
+    @SuppressWarnings("ComparableType")
     interface Reducible<T> extends Comparable<T> {
 
         T add(T other);
 
         T enterBlock();
     }
-
 }

@@ -15,6 +15,7 @@ import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * Xmir annotation property.
+ *
  * @since 0.3
  */
 public final class XmlAnnotationValue {
@@ -31,7 +32,8 @@ public final class XmlAnnotationValue {
 
     /**
      * Constructor.
-     * @param node XML node representing an annotation property.
+     *
+     * @param node XML node representing an annotation property
      */
     public XmlAnnotationValue(final XmlNode node) {
         this(new XmlJeoObject(node));
@@ -39,7 +41,8 @@ public final class XmlAnnotationValue {
 
     /**
      * Constructor.
-     * @param xmlnode XML node.
+     *
+     * @param xmlnode XML node
      */
     private XmlAnnotationValue(final XmlJeoObject xmlnode) {
         this.node = xmlnode;
@@ -47,7 +50,9 @@ public final class XmlAnnotationValue {
 
     /**
      * Transform to bytecode.
-     * @return Bytecode annotation property.
+     *
+     * @return Bytecode annotation property
+     * @checkstyle MissingNullCaseInSwitchCheck (40 lines)
      */
     public BytecodeAnnotationValue bytecode() {
         final List<Object> params = this.params();
@@ -95,16 +100,13 @@ public final class XmlAnnotationValue {
 
     /**
      * Is this a valid annotation value?
-     * @return True if this is a valid annotation value, false otherwise.
+     *
+     * @return True if this is a valid annotation value, false otherwise
      */
     boolean isValue() {
         return this.node.base().map(XmlAnnotationValue.APROPERTY_BASE::equals).orElse(false);
     }
 
-    /**
-     * Type of the property.
-     * @return Type.
-     */
     private String type() {
         final List<XmlNode> collect = this.node.children().collect(Collectors.toList());
         if (collect.isEmpty()) {
@@ -120,10 +122,6 @@ public final class XmlAnnotationValue {
         ).asObject();
     }
 
-    /**
-     * Property parameters.
-     * @return Parameters.
-     */
     private List<Object> params() {
         return this.node.children()
             .skip(1)

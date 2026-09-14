@@ -12,6 +12,7 @@ import org.eolang.jeo.lines.Lines;
 
 /**
  *  Application Entry Point.
+ *
  * @since 0.1
  */
 public class Application {

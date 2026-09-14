@@ -13,19 +13,20 @@ import org.xembly.Xembler;
 
 /**
  * Tests for {@link Modifiers}.
+ *
  * @since 0.15.0
  */
 final class DirectivesClassModifiersTest {
 
     @Test
     void convertsToXmir() throws ImpossibleModificationException {
-        final DirectivesClassModifiers dirs = new DirectivesClassModifiers(
-            new Format(), Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_ENUM
-        );
-        final String xml = new Xembler(dirs).xml();
         MatcherAssert.assertThat(
             "We expect class access modifiers in the directives with correct values",
-            xml,
+            new Xembler(
+                new DirectivesClassModifiers(
+                    new Format(), Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_ENUM
+                )
+            ).xml(),
             XhtmlMatchers.hasXPaths(
                 "/o[contains(@name, 'modifiers')]/o[contains(@name, 'public') and contains(@base, 'true')]",
                 "/o[contains(@name, 'modifiers')]/o[contains(@name, 'private') and contains(@base, 'false')]",

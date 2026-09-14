@@ -20,6 +20,7 @@ import org.objectweb.asm.util.CheckClassAdapter;
 
 /**
  * Verified bytecode.
+ *
  * @since 0.15.0
  */
 public final class VerifiedBytecode {
@@ -31,7 +32,8 @@ public final class VerifiedBytecode {
 
     /**
      * Constructor.
-     * @param code Bytecode to verify.
+     *
+     * @param code Bytecode to verify
      */
     public VerifiedBytecode(final byte[] code) {
         this.code = code.clone();
@@ -39,7 +41,6 @@ public final class VerifiedBytecode {
 
     /**
      * Verifies the bytecode.
-     * @throws IllegalStateException If the bytecode is invalid.
      */
     public void verify() {
         final ClassNode clazz = new ClassNode();
@@ -73,7 +74,8 @@ public final class VerifiedBytecode {
         }
         Logger.info(
             BytecodeClasses.class,
-            String.format("Bytecode verification passed for the class '%s'", clazz.name)
+            "Bytecode verification passed for the class '%s'",
+            clazz.name
         );
     }
 }

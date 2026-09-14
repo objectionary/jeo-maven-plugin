@@ -22,6 +22,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlRecordComponent}.
+ *
  * @since 0.15.0
  */
 final class XmlRecordComponentTest {
@@ -35,10 +36,11 @@ final class XmlRecordComponentTest {
             new BytecodeAnnotations(),
             new BytecodeTypeAnnotations()
         );
-        final String xml = new Xembler(original.directives(0, new Format())).xml();
         MatcherAssert.assertThat(
             "We expect the record component to be parsed correctly",
-            new XmlRecordComponent(new JcabiXmlNode(xml)).bytecode(),
+            new XmlRecordComponent(
+                new JcabiXmlNode(new Xembler(original.directives(0, new Format())).xml())
+            ).bytecode(),
             Matchers.equalTo(original)
         );
     }
@@ -104,5 +106,4 @@ final class XmlRecordComponentTest {
             Matchers.equalTo(original)
         );
     }
-
 }

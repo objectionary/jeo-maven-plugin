@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Greeter bean.
+ *
  * @since 0.2
  */
 @RestController

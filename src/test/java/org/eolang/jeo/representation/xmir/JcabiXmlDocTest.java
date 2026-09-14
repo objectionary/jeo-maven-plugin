@@ -9,11 +9,13 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link JcabiXmlDoc}.
+ *
  * @since 0.8
  */
 final class JcabiXmlDocTest {
@@ -25,7 +27,7 @@ final class JcabiXmlDocTest {
         MatcherAssert.assertThat(
             "Can't read XML from file",
             new JcabiXmlDoc(path).root().xpath("/object/o/text()").get(0),
-            org.hamcrest.Matchers.equalTo("1")
+            Matchers.equalTo("1")
         );
     }
 
@@ -40,7 +42,7 @@ final class JcabiXmlDocTest {
         MatcherAssert.assertThat(
             "Can't read XML from file",
             new JcabiXmlDoc(path).root().children().findFirst().orElseThrow(AssertionError::new),
-            org.hamcrest.Matchers.equalTo(new JcabiXmlNode("<o>2</o>"))
+            Matchers.equalTo(new JcabiXmlNode("<o>2</o>"))
         );
     }
 }

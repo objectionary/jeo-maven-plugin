@@ -11,6 +11,7 @@ import org.eolang.jeo.representation.OpcodeDictionary;
  * Opcode name.
  * The name of bytecode instruction. The name combined with unique number in order to
  * avoid name collisions.
+ *
  * @since 0.1.0
  */
 public final class OpcodeName {
@@ -37,7 +38,8 @@ public final class OpcodeName {
 
     /**
      * Constructor.
-     * @param opcode Bytecode operation code.
+     *
+     * @param opcode Bytecode operation code
      */
     public OpcodeName(final int opcode) {
         this(opcode, OpcodeName.DEFAULT);
@@ -45,8 +47,9 @@ public final class OpcodeName {
 
     /**
      * Constructor.
-     * @param opcode Bytecode operation code.
-     * @param counter Opcode counter.
+     *
+     * @param opcode Bytecode operation code
+     * @param counter Opcode counter
      */
     OpcodeName(final int opcode, final AtomicInteger counter) {
         this.opcode = opcode;
@@ -55,7 +58,8 @@ public final class OpcodeName {
 
     /**
      * Get simplified opcode name without counter.
-     * @return Simplified opcode name.
+     *
+     * @return Simplified opcode name
      */
     public String simplified() {
         return OpcodeName.NAMES.name(this.opcode);
@@ -63,7 +67,8 @@ public final class OpcodeName {
 
     /**
      * Get string representation of a bytecode.
-     * @return String representation of a bytecode.
+     *
+     * @return String representation of a bytecode
      */
     String asString() {
         return String.format(

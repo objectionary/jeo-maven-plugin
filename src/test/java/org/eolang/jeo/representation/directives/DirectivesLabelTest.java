@@ -12,6 +12,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link DirectivesLabel}.
+ *
  * @since 0.12.0
  */
 final class DirectivesLabelTest {

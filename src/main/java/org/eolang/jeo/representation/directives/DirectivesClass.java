@@ -17,35 +17,25 @@ import org.xembly.Directives;
 /**
  * Directives for generating EO class objects.
  *
- * <p>This class generates Xembly directives to create EO object representations
- * of Java classes, including their properties, fields, methods, annotations,
- * and attributes.</p>
- * <p>All the class directives are sorted according to JVM specification
- * {@code
- * ClassFile {
- *     u4             magic; (absent)
- *     u2             minor_version; {@link DirectivesClassProperties}
- *     u2             major_version; {@link DirectivesClassProperties}
- *     u2             constant_pool_count; (incorporated to the directives)
- *     cp_info        constant_pool[constant_pool_count-1]; (incorporated to the directives)
- *     u2             access_flags; {@link DirectivesClassProperties}
- *     u2             this_class; {@link DirectivesClass} (class name)
- *     u2             super_class;  {@link DirectivesClassProperties}
- *     u2             interfaces_count;  {@link DirectivesClassProperties}
- *     u2             interfaces[interfaces_count];  {@link DirectivesClassProperties}
- *     u2             fields_count; {@link DirectivesClass}
- *     field_info     fields[fields_count]; {@link DirectivesClass}
- *     u2             methods_count; {@link DirectivesClass}
- *     method_info    methods[methods_count]; {@link DirectivesClass}
- *     u2             attributes_count; {@link DirectivesClass}
- *     attribute_info attributes[attributes_count]; {@link DirectivesClass}
- * }}
- * <a href="https://docs.oracle.com/javase/specs/jvms/se25/html/jvms-4.html#jvms-4.4.1">
- *     You can read more in the official JVM specification.
- * </a>
- * </p>
+ * <p>This class generates Xembly directives to create EO object representations of Java classes,
+ * including their properties, fields, methods, annotations, and attributes.</p>
+ *
+ * <p>All the class directives are sorted according to JVM specification {@code ClassFile { u4
+ * magic; (absent) u2 minor_version; {@link DirectivesClassProperties} u2 major_version; {@link
+ * DirectivesClassProperties} u2 constant_pool_count; (incorporated to the directives) cp_info
+ * constant_pool[constant_pool_count-1]; (incorporated to the directives) u2 access_flags;
+ * {@link DirectivesClassProperties} u2 this_class; {@link DirectivesClass} (class name) u2
+ * super_class; {@link DirectivesClassProperties} u2 interfaces_count; {@link
+ * DirectivesClassProperties} u2 interfaces[interfaces_count]; {@link DirectivesClassProperties}
+ * u2 fields_count; {@link DirectivesClass} field_info fields[fields_count]; {@link
+ * DirectivesClass} u2 methods_count; {@link DirectivesClass} method_info
+ * methods[methods_count]; {@link DirectivesClass} u2 attributes_count; {@link DirectivesClass}
+ * attribute_info attributes[attributes_count]; {@link DirectivesClass} }} <a
+ * href="https://docs.oracle.com/javase/specs/jvms/se25/html/jvms-4.html#jvms-4.4.1"> You can
+ * read more in the official JVM specification. </a></p>
+ *
  * @since 0.1.0
-*/
+ */
 public final class DirectivesClass implements Iterable<Directive> {
 
     /**
@@ -90,6 +80,7 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param name The class name
      */
     public DirectivesClass(final ClassName name) {
@@ -98,6 +89,7 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param classname The class name
      * @param signature The class signature
      * @param properties The class properties
@@ -121,6 +113,7 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param name The class name
      * @param method The method to include
      */
@@ -135,6 +128,58 @@ public final class DirectivesClass implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
+     * @param name The class name
+     * @param field The field to include
+     */
+    DirectivesClass(final ClassName name, final DirectivesField field) {
+        this(
+            name,
+            new DirectivesClassProperties(),
+            Collections.singletonList(field),
+            new ArrayList<>(0)
+        );
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name The class name
+     * @param properties The class properties
+     */
+    DirectivesClass(final ClassName name, final DirectivesClassProperties properties) {
+        this(name, properties, new ArrayList<>(0), new ArrayList<>(0));
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name The class name
+     * @param properties The class properties
+     * @param fields The class fields
+     * @param methods The class methods
+     */
+    private DirectivesClass(
+        final ClassName name,
+        final DirectivesClassProperties properties,
+        final List<DirectivesField> fields,
+        final List<DirectivesMethod> methods
+    ) {
+        this(
+            new Format(),
+            name,
+            properties,
+            fields,
+            methods,
+            "",
+            new DirectivesAnnotations(),
+            new DirectivesAttributes()
+        );
+    }
+
+    /**
+     * Constructor.
+     *
      * @param format The format of the directives
      * @param name The class name
      * @param properties The class properties
@@ -143,7 +188,6 @@ public final class DirectivesClass implements Iterable<Directive> {
      * @param signature The class signature
      * @param annotations The annotations
      * @param attributes The attributes
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesClass(
         final Format format,
@@ -165,55 +209,6 @@ public final class DirectivesClass implements Iterable<Directive> {
         this.attributes = attributes;
     }
 
-    /**
-     * Constructor.
-     * @param name The class name
-     * @param field The field to include
-     */
-    DirectivesClass(final ClassName name, final DirectivesField field) {
-        this(
-            name,
-            new DirectivesClassProperties(),
-            Collections.singletonList(field),
-            new ArrayList<>(0)
-        );
-    }
-
-    /**
-     * Constructor.
-     * @param name The class name
-     * @param properties The class properties
-     */
-    DirectivesClass(final ClassName name, final DirectivesClassProperties properties) {
-        this(name, properties, new ArrayList<>(0), new ArrayList<>(0));
-    }
-
-    /**
-     * Constructor.
-     * @param name The class name
-     * @param properties The class properties
-     * @param fields The class fields
-     * @param methods The class methods
-     * @checkstyle ParameterNumberCheck (5 lines)
-     */
-    private DirectivesClass(
-        final ClassName name,
-        final DirectivesClassProperties properties,
-        final List<DirectivesField> fields,
-        final List<DirectivesMethod> methods
-    ) {
-        this(
-            new Format(),
-            name,
-            properties,
-            fields,
-            methods,
-            "",
-            new DirectivesAnnotations(),
-            new DirectivesAttributes()
-        );
-    }
-
     @Override
     public Iterator<Directive> iterator() {
         return new DirectivesGlobalObject(
@@ -228,15 +223,6 @@ public final class DirectivesClass implements Iterable<Directive> {
         ).iterator();
     }
 
-    /**
-     * The "signature" refers to generic type information in Java bytecode.
-     * Contains information about:
-     * Type parameters (generics) for classes and methods
-     * Type bounds for generic parameters
-     * Generic superclasses and interfaces
-     * Generic field and method types
-     * @return Signature of the class.
-     */
     private String sign() {
         return Optional.ofNullable(this.signature).orElse("");
     }

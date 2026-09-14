@@ -21,6 +21,7 @@ import org.objectweb.asm.tree.TypeAnnotationNode;
 
 /**
  * Tests for {@link AsmRecordComponents}.
+ *
  * @since 0.15.0
  */
 final class AsmRecordComponentsTest {
@@ -39,11 +40,10 @@ final class AsmRecordComponentsTest {
         final String name = "name";
         final String descr = "descriptor";
         final String sign = "signature";
-        final RecordComponentNode node = new RecordComponentNode(name, descr, sign);
         MatcherAssert.assertThat(
             "We expect a single record component node to map to a single bytecode component",
             new AsmRecordComponents(
-                Collections.singletonList(node)
+                Collections.singletonList(new RecordComponentNode(name, descr, sign))
             ).bytecode(),
             Matchers.equalTo(
                 Collections.singletonList(new BytecodeRecordComponent(name, descr, sign))
@@ -60,11 +60,10 @@ final class AsmRecordComponentsTest {
         final String sname = "name2";
         final String sdescr = "descriptor2";
         final String ssign = "signature2";
-        final RecordComponentNode second = new RecordComponentNode(sname, sdescr, ssign);
         MatcherAssert.assertThat(
             "We expect multiple record component nodes to map to corresponding bytecode components",
             new AsmRecordComponents(
-                Arrays.asList(first, second)
+                Arrays.asList(first, new RecordComponentNode(sname, sdescr, ssign))
             ).bytecode(),
             Matchers.equalTo(
                 Arrays.asList(

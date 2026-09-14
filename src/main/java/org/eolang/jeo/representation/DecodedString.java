@@ -11,9 +11,10 @@ import java.nio.charset.StandardCharsets;
 /**
  * A utility class for encoding strings using URL encoding.
  *
- * <p>This class wraps a decoded string and provides functionality to encode it
- * using UTF-8 URL encoding. It handles encoding exceptions internally and
- * throws IllegalStateException if encoding fails.</p>
+ * <p>This class wraps a decoded string and provides functionality to encode it using UTF-8 URL
+ * encoding. It handles encoding exceptions internally and throws IllegalStateException if
+ * encoding fails.</p>
+ *
  * @since 0.6.0
  */
 public final class DecodedString {
@@ -25,6 +26,7 @@ public final class DecodedString {
 
     /**
      * Constructor.
+     *
      * @param decoded The original decoded string to be encoded
      */
     public DecodedString(final String decoded) {
@@ -33,8 +35,13 @@ public final class DecodedString {
 
     /**
      * Encode the string.
-     * @return Encoded string.
+     * Uses the string-based {@link URLEncoder#encode(String, String)} overload because the
+     * {@link java.nio.charset.Charset}-based one requires Java 10, but this project targets
+     * Java 8.
+     *
+     * @return Encoded string
      */
+    @SuppressWarnings("JdkObsolete")
     public String encode() {
         try {
             return URLEncoder.encode(this.original, StandardCharsets.UTF_8.name());

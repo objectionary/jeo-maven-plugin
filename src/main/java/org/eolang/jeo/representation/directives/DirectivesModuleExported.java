@@ -14,11 +14,12 @@ import org.xembly.Directive;
  * Directives for module exported.
  * JVM Specification:
  * {@code
- *     {   u2 exports_index; {@link #pckg}
- *         u2 exports_flags; {@link #access}
- *         u2 exports_to_count; {@link #modules.size()}
- *         u2 exports_to_index[exports_to_count]; {@link #modules}
- *     }}
+ * {   u2 exports_index; {@link #pckg}
+ * u2 exports_flags; {@link #access}
+ * u2 exports_to_count; {@link #modules.size()}
+ * u2 exports_to_index[exports_to_count]; {@link #modules}
+ * }}
+ *
  * @since 0.15.0
  */
 public final class DirectivesModuleExported implements Iterable<Directive> {
@@ -45,11 +46,11 @@ public final class DirectivesModuleExported implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param format Directive format
      * @param pckg Exported package
      * @param access Access flags
      * @param modules Modules to which the package is exported
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesModuleExported(
         final Format format,
@@ -73,14 +74,13 @@ public final class DirectivesModuleExported implements Iterable<Directive> {
             new DirectivesValue(this.format, "access", this.access),
             new DirectivesSeq(
                 "modules",
-                this.modules.stream()
-                    .map(
-                        module -> new DirectivesValue(
-                            this.format,
-                            String.format("m%d", counter.getAndIncrement()),
-                            module
-                        )
-                    ).collect(Collectors.toList())
+                this.modules.stream().map(
+                    module -> new DirectivesValue(
+                        this.format,
+                        String.format("m%d", counter.getAndIncrement()),
+                        module
+                    )
+                ).collect(Collectors.toList())
             )
         ).iterator();
     }

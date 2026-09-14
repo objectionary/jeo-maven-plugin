@@ -5,9 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import java.util.Optional;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.PrefixedName;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
@@ -15,39 +13,22 @@ import org.xembly.Directive;
 /**
  * Field directives.
  * Any java field will be transformed into the following EO object.
- *  <p>
- *     {@code
- *       [access descriptor signature value] > field
- *     }
- * </p>
+ *
+ * <p>{@code [access descriptor signature value] > field }</p>
  * The name of the "field" object is a name of the field in Java class.
  * For example, the following Java field
  *
- * <p>    {@code
- *        private final int bar = 1;
- *     }
- * </p>
+ * <p>{@code private final int bar = 1; }</p>
  * will be transformed into the following EO object:
  *
- * <p>    {@code
- *       field 18 "I" "" "01" > bar
- *     }
- * </p>
- * <p>All the directives inside this class are sorted according to the JVM specification:
- * {@code
- * field_info {
- *     u2             access_flags;
- *     u2             name_index;
- *     u2             descriptor_index;
- *     u2             attributes_count;
- *     attribute_info attributes[attributes_count]; (signature, annotations, value)
- * }}
- * </p>
+ * <p>{@code field 18 "I" "" "01" > bar }</p>
+ *
+ * <p>All the directives inside this class are sorted according to the JVM specification: {@code
+ * field_info { u2 access_flags; u2 name_index; u2 descriptor_index; u2 attributes_count;
+ * attribute_info attributes[attributes_count]; (signature, annotations, value) }}</p>
  *
  * @since 0.1
  */
-@ToString
-@EqualsAndHashCode
 public final class DirectivesField implements Iterable<Directive> {
 
     /**
@@ -94,7 +75,8 @@ public final class DirectivesField implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param annotations Annotations.
+     *
+     * @param annotations Annotations
      */
     public DirectivesField(final DirectivesAnnotation... annotations) {
         this(
@@ -110,12 +92,12 @@ public final class DirectivesField implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param access Access
      * @param name Name
      * @param descriptor Descriptor
      * @param signature Signature
      * @param value Initial value
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesField(
         final int access,
@@ -137,6 +119,7 @@ public final class DirectivesField implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param format Format
      * @param access Access modifiers
      * @param name Name
@@ -144,7 +127,6 @@ public final class DirectivesField implements Iterable<Directive> {
      * @param signature Signature
      * @param value Initial value
      * @param annotations Annotations
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     public DirectivesField(
         final Format format,
@@ -158,8 +140,8 @@ public final class DirectivesField implements Iterable<Directive> {
         this.format = format;
         this.access = access;
         this.name = name;
-        this.descriptor = Optional.ofNullable(descriptor).orElse("");
-        this.signature = Optional.ofNullable(signature).orElse("");
+        this.descriptor = descriptor;
+        this.signature = signature;
         this.value = value;
         this.annotations = annotations;
     }
@@ -171,20 +153,74 @@ public final class DirectivesField implements Iterable<Directive> {
             new PrefixedName(this.name).encode(),
             new DirectivesValue(this.format, DirectivesField.title("access"), this.access),
             new DirectivesValue(this.format, DirectivesField.title("name"), this.name),
-            new DirectivesValue(this.format, DirectivesField.title("descriptor"), this.descriptor),
-            new DirectivesValue(this.format, DirectivesField.title("signature"), this.signature),
+            new DirectivesValue(
+                this.format, DirectivesField.title("descriptor"), this.descriptor()
+            ),
+            new DirectivesValue(
+                this.format, DirectivesField.title("signature"), this.signature()
+            ),
             new DirectivesValue(this.format, DirectivesField.title("value"), this.value),
             this.annotations
         ).iterator();
     }
 
-    /**
-     * Field property title.
-     * It is used to create a title for the field property to make XMIR more readable.
-     * @param prefix Prefix
-     * @return Title
-     */
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof DirectivesField) {
+            final DirectivesField field = (DirectivesField) other;
+            result = this.access == field.access
+                && Objects.equals(this.name, field.name)
+                && Objects.equals(this.descriptor(), field.descriptor())
+                && Objects.equals(this.signature(), field.signature())
+                && Objects.equals(this.value, field.value)
+                && Objects.equals(this.annotations, field.annotations);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            this.access, this.name, this.descriptor(), this.signature(),
+            this.value, this.annotations
+        );
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "DirectivesField(access=%d, name=%s, descriptor=%s, signature=%s, value=%s, annotations=%s)",
+            this.access, this.name, this.descriptor(), this.signature(),
+            this.value, this.annotations
+        );
+    }
+
     private static String title(final String prefix) {
         return prefix;
+    }
+
+    private String descriptor() {
+        final String result;
+        if (this.descriptor == null) {
+            result = "";
+        } else {
+            result = this.descriptor;
+        }
+        return result;
+    }
+
+    private String signature() {
+        final String result;
+        if (this.signature == null) {
+            result = "";
+        } else {
+            result = this.signature;
+        }
+        return result;
     }
 }

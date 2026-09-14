@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.directives;
 
 /**
  * Numbered name.
+ *
  * @since 0.14.0
  */
 public final class NumName {
@@ -22,8 +23,9 @@ public final class NumName {
 
     /**
      * Constructor.
-     * @param suffix Suffix for the name.
-     * @param number Number for the name.
+     *
+     * @param suffix Suffix for the name
+     * @param number Number for the name
      */
     public NumName(final String suffix, final long number) {
         this.suffix = suffix;

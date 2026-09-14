@@ -10,11 +10,11 @@ import org.xembly.Directives;
 
 /**
  * EO closed object directives.
- * <p>
- * It is the simples representation of an EO object as a closes object which means it
- * has 'as' ans 'base' attributes and might have 'name' attribute.
- * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1130">see for more info</a>
- * </p>
+ *
+ * <p>It is the simples representation of an EO object as a closes object which means it has 'as'
+ * ans 'base' attributes and might have 'name' attribute. <a
+ * href="https://github.com/objectionary/jeo-maven-plugin/issues/1130">see for more info</a></p>
+ *
  * @since 0.11.0
  */
 public final class DirectivesClosedObject implements Iterable<Directive> {
@@ -26,6 +26,7 @@ public final class DirectivesClosedObject implements Iterable<Directive> {
 
     /**
      * Attribute 'as' of the closed object.
+     *
      * @checkstyle MemberNameCheck (2 lines)
      */
     private final String as;
@@ -42,8 +43,9 @@ public final class DirectivesClosedObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The 'base' attribute of the closed object.
-     * @param internal Inner components of the closed object.
+     *
+     * @param base The 'base' attribute of the closed object
+     * @param internal Inner components of the closed object
      */
     DirectivesClosedObject(final String base, final Iterable<Directive> internal) {
         this(base, "", internal);
@@ -51,9 +53,10 @@ public final class DirectivesClosedObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The 'base' attribute of the closed object.
-     * @param as The 'as' attribute of the closed object.
-     * @param internal Inner components of the closed object.
+     *
+     * @param base The 'base' attribute of the closed object
+     * @param as The 'as' attribute of the closed object
+     * @param internal Inner components of the closed object
      * @checkstyle ParameterNameCheck (5 lines)
      */
     DirectivesClosedObject(
@@ -63,12 +66,12 @@ public final class DirectivesClosedObject implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The 'base' attribute of the closed object.
-     * @param as The 'as' attribute of the closed object.
-     * @param name The 'name' attribute of the closed object.
-     * @param internal Inner components of the closed object.
+     *
+     * @param base The 'base' attribute of the closed object
+     * @param as The 'as' attribute of the closed object
+     * @param name The 'name' attribute of the closed object
+     * @param internal Inner components of the closed object
      * @checkstyle ParameterNameCheck (5 lines)
-     * @checkstyle ParameterNumberCheck (5 lines)
      */
     DirectivesClosedObject(
         final String base,

@@ -16,6 +16,7 @@ import org.xembly.Directives;
  * Instruction directives.
  * Parses bytecode instruction and transforms it into Xembly directives that further
  * will be converted into XML.
+ *
  * @since 0.1
  */
 public final class DirectivesInstruction implements Iterable<Directive> {
@@ -42,11 +43,11 @@ public final class DirectivesInstruction implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param index Instruction index
      * @param format Format of the directives
      * @param opcode Opcode
      * @param arguments Instruction arguments
-     * @checkstyle ParameterNumber (5 lines)
      */
     public DirectivesInstruction(
         final int index,
@@ -74,20 +75,10 @@ public final class DirectivesInstruction implements Iterable<Directive> {
         ).iterator();
     }
 
-    /**
-     * Base of the instruction.
-     * @return String base.
-     */
     private String base() {
         return String.format("%s.%s", "opcode", new OpcodeName(this.opcode).simplified());
     }
 
-    /**
-     * Instruction comment.
-     * Later this message will be converted to the XML comment, like:
-     * <!-- INVOKESPECIAL 183, "java/lang/Object", "<init>", "()V" -->
-     * @return String comment.
-     */
     private String comment() {
         return String.format(
             "#%d:%s(%s)",

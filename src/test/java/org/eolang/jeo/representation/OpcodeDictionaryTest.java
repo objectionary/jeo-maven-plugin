@@ -8,9 +8,11 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Test case for {@link OpcodeDictionary}.
+ *
  * @since 0.12.0
  */
 final class OpcodeDictionaryTest {
@@ -19,7 +21,7 @@ final class OpcodeDictionaryTest {
     void retrievesNameForValidOpcode() {
         MatcherAssert.assertThat(
             "We expect that the opcode name for NOP is 'nop'",
-            new OpcodeDictionary().name(org.objectweb.asm.Opcodes.NOP),
+            new OpcodeDictionary().name(Opcodes.NOP),
             Matchers.is(Matchers.equalTo("nop"))
         );
     }
@@ -38,7 +40,7 @@ final class OpcodeDictionaryTest {
         MatcherAssert.assertThat(
             "We expect that the opcode for 'nop' is correct",
             new OpcodeDictionary().code("nop"),
-            Matchers.is(Matchers.equalTo(org.objectweb.asm.Opcodes.NOP))
+            Matchers.is(Matchers.equalTo(Opcodes.NOP))
         );
     }
 
@@ -56,7 +58,7 @@ final class OpcodeDictionaryTest {
         MatcherAssert.assertThat(
             "We expect that the opcode name is case-insensitive",
             new OpcodeDictionary().code("NOP"),
-            Matchers.is(Matchers.equalTo(org.objectweb.asm.Opcodes.NOP))
+            Matchers.is(Matchers.equalTo(Opcodes.NOP))
         );
     }
 }

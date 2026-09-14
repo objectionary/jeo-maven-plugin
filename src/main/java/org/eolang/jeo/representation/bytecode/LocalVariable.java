@@ -4,8 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.util.Objects;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesLocalVariables;
 import org.eolang.jeo.representation.directives.Format;
@@ -17,10 +16,9 @@ import org.xembly.Directive;
 /**
  * Local variable attribute.
  * Represents `LocalVariableTable` entry from bytecode attributes.
+ *
  * @since 0.6
  */
-@ToString
-@EqualsAndHashCode
 public final class LocalVariable implements BytecodeAttribute {
 
     /**
@@ -55,7 +53,8 @@ public final class LocalVariable implements BytecodeAttribute {
 
     /**
      * Constructor.
-     * @param variable Local variable node.
+     *
+     * @param variable Local variable node
      */
     public LocalVariable(final LocalVariableNode variable) {
         this(
@@ -70,13 +69,13 @@ public final class LocalVariable implements BytecodeAttribute {
 
     /**
      * Constructor.
-     * @param index Index of the local variable in the local variable array.
-     * @param name Name of the local variable.
-     * @param descriptor Descriptor of the local variable.
-     * @param signature Signature of the local variable.
-     * @param start Start label.
-     * @param end End label.
-     * @checkstyle ParameterNumberCheck (10 lines)
+     *
+     * @param index Index of the local variable in the local variable array
+     * @param name Name of the local variable
+     * @param descriptor Descriptor of the local variable
+     * @param signature Signature of the local variable
+     * @param start Start label
+     * @param end End label
      */
     public LocalVariable(
         final int index,
@@ -133,6 +132,40 @@ public final class LocalVariable implements BytecodeAttribute {
             this.signature,
             this.start.directives(0, format),
             this.end.directives(1, format)
+        );
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof LocalVariable) {
+            final LocalVariable variable = (LocalVariable) other;
+            result = this.index == variable.index
+                && Objects.equals(this.name, variable.name)
+                && Objects.equals(this.descriptor, variable.descriptor)
+                && Objects.equals(this.signature, variable.signature)
+                && Objects.equals(this.start, variable.start)
+                && Objects.equals(this.end, variable.end);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            this.index, this.name, this.descriptor, this.signature, this.start, this.end
+        );
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "LocalVariable(index=%d, name=%s, descriptor=%s, signature=%s, start=%s, end=%s)",
+            this.index, this.name, this.descriptor, this.signature, this.start, this.end
         );
     }
 }

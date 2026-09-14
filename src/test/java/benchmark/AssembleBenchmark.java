@@ -26,14 +26,13 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
  * Assemble benchmark.
+ *
  * @since 0.8
- * @checkstyle DesignForExtensionCheck (500 lines)
  */
 @Fork(1)
 @Warmup(iterations = 1, time = 2)
 @Measurement(iterations = 1, time = 3)
 @State(Scope.Benchmark)
-@SuppressWarnings("PMD.JUnit4TestShouldUseAfterAnnotation")
 public class AssembleBenchmark {
 
     /**
@@ -47,12 +46,19 @@ public class AssembleBenchmark {
     private Assembler assembler;
 
     /**
+     * Constructor.
+     */
+    public AssembleBenchmark() {
+        // Nothing to initialize.
+    }
+
+    /**
      * This method is used to run the benchmark from IDE.
      * Don't remove it.
-     * @param args Arguments.
-     * @throws RunnerException If something goes wrong.
+     *
+     * @param args Arguments
+     * @throws RunnerException If something goes wrong
      */
-    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static void main(final String[] args) throws RunnerException {
         new Runner(
             new OptionsBuilder()
@@ -61,6 +67,11 @@ public class AssembleBenchmark {
         ).run();
     }
 
+    /**
+     * Set up the temporary directory and the assembler.
+     *
+     * @throws IOException If fails to prepare the temporary directory
+     */
     @Setup(Level.Trial)
     public void init() throws IOException {
         this.dir = Files.createTempDirectory("assemble");
@@ -71,11 +82,17 @@ public class AssembleBenchmark {
         this.assembler = new Assembler(input, this.dir, false);
     }
 
+    /**
+     * Assemble the input directory.
+     */
     @Benchmark
     public void assemble() {
         this.assembler.assemble();
     }
 
+    /**
+     * Delete the temporary directory.
+     */
     @TearDown(Level.Trial)
     public void tearDown() {
         try (Stream<Path> files = Files.walk(this.dir).sorted(Comparator.reverseOrder())) {

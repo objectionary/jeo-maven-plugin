@@ -15,6 +15,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlAttributes}.
+ *
  * @since 0.6
  */
 final class XmlAttributesTest {

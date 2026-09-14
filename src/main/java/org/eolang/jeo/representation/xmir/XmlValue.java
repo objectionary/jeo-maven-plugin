@@ -15,14 +15,10 @@ import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * XML value.
+ *
  * @since 0.6
  */
 public final class XmlValue {
-
-    /**
-     * Hex radix.
-     */
-    private static final int RADIX = 16;
 
     /**
      * Boolean TRUE full qualified name.
@@ -56,7 +52,8 @@ public final class XmlValue {
 
     /**
      * Constructor.
-     * @param node XML node.
+     *
+     * @param node XML node
      */
     public XmlValue(final XmlNamedObject node) {
         this(node.node());
@@ -64,7 +61,8 @@ public final class XmlValue {
 
     /**
      * Constructor.
-     * @param node XML node.
+     *
+     * @param node XML node
      */
     public XmlValue(final XmlNode node) {
         this.node = node;
@@ -74,9 +72,10 @@ public final class XmlValue {
      * Convert hex string to human-readable string.
      * Example:
      * {@code
-     *  "48 65 6C 6C 6F 20 57 6F 72 6C 64 21" -> "Hello World!"
-     *  }
-     * @return Human-readable string.
+     * "48 65 6C 6C 6F 20 57 6F 72 6C 64 21" -> "Hello World!"
+     * }
+     *
+     * @return Human-readable string
      */
     public String string() {
         return (String) this.object();
@@ -84,7 +83,8 @@ public final class XmlValue {
 
     /**
      * Convert hex string to an object.
-     * @return Object.
+     *
+     * @return Object
      */
     public Object object() {
         final String base = XmlValue.base(this.node);
@@ -98,15 +98,19 @@ public final class XmlValue {
             res = new BytecodeBytes(XmlValue.withoutPackage(base), this.bytes())
                 .object(new EoCodec());
         } else if (XmlValue.LONG.equals(base)) {
-            final XmlNode child = new XmlJeoObject(this.node)
-                .children()
-                .findFirst()
-                .orElseThrow(
-                    () -> new IllegalStateException(
-                        String.format("Can't find a child in '%s' to convert to long", this.node)
-                    )
-                );
-            final boolean nonumber = !(XmlValue.NUMBER.equals(XmlValue.base(child)));
+            final boolean nonumber = !XmlValue.NUMBER.equals(
+                XmlValue.base(
+                    new XmlJeoObject(this.node)
+                        .children()
+                        .findFirst().orElseThrow(
+                            () -> new IllegalStateException(
+                                String.format(
+                                    "Can't find a child in '%s' to convert to long", this.node
+                                )
+                            )
+                        )
+                )
+            );
             Codec codec = new EoCodec();
             if (nonumber) {
                 codec = new PlainLongCodec(codec);
@@ -119,11 +123,6 @@ public final class XmlValue {
         return res;
     }
 
-    /**
-     * Get the last part of the base without the package.
-     * @param base Base of the object, e.g. "org.eolang.jeo.String".
-     * @return Last part of the base, e.g. "String".
-     */
     private static String withoutPackage(final String base) {
         final String result;
         final int last = base.lastIndexOf('.');
@@ -135,10 +134,6 @@ public final class XmlValue {
         return result;
     }
 
-    /**
-     * Convert hex string to a byte array.
-     * @return Byte array.
-     */
     private byte[] bytes() {
         final String hex = this.hex();
         final byte[] res;
@@ -161,7 +156,7 @@ public final class XmlValue {
                     new char[]{chars[index], chars[index + 1]}
                 );
                 try {
-                    res[index / 2] = (byte) Integer.parseInt(pair, XmlValue.RADIX);
+                    res[index / 2] = (byte) Integer.parseInt(pair, 16);
                 } catch (final NumberFormatException exception) {
                     throw new IllegalStateException(
                         String.format(
@@ -176,12 +171,6 @@ public final class XmlValue {
         return res;
     }
 
-    /**
-     * Hex string.
-     * Example:
-     * - "20 57 6F 72 6C 64 21" -> "20576F726C6421"
-     * @return Hex string.
-     */
     private String hex() {
         final XmlJeoObject object = new XmlJeoObject(this.node);
         final Stream<XmlNode> children;
@@ -192,8 +181,7 @@ public final class XmlValue {
         }
         return XmlValue.DELIMITER.matcher(
             children
-                .findFirst()
-                .orElseThrow(
+                .findFirst().orElseThrow(
                     () -> new IllegalStateException(
                         String.format(
                             "Can't find a child in '%s' to convert to hex",
@@ -205,11 +193,6 @@ public final class XmlValue {
         ).replaceAll("");
     }
 
-    /**
-     * Get the type of the object without a package.
-     * @param node XML node of the object to get the base from.
-     * @return Type without package.
-     */
     private static String base(final XmlNode node) {
         return new XmlDelegateObject(node)
             .base()

@@ -11,23 +11,36 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link Counter}.
+ *
  * @since 0.15.0
  */
 final class CounterTest {
 
     @Test
-    void incrementsCurrentCountCorrectly() {
-        final Counter counter = new Counter(3);
+    void incrementsOnFirstCall() {
         MatcherAssert.assertThat(
             "First call should return 1/3",
-            counter.next(),
+            new Counter(3).next(),
             Matchers.is("1/3")
         );
+    }
+
+    @Test
+    void incrementsOnSecondCall() {
+        final Counter counter = new Counter(3);
+        counter.next();
         MatcherAssert.assertThat(
             "Second call should return 2/3",
             counter.next(),
             Matchers.is("2/3")
         );
+    }
+
+    @Test
+    void incrementsOnThirdCall() {
+        final Counter counter = new Counter(3);
+        counter.next();
+        counter.next();
         MatcherAssert.assertThat(
             "Third call should return 3/3",
             counter.next(),
@@ -48,13 +61,18 @@ final class CounterTest {
     }
 
     @Test
-    void handlesZeroTotalWithoutIncrementing() {
-        final Counter counter = new Counter(0);
+    void handlesZeroTotalOnFirstCall() {
         MatcherAssert.assertThat(
             "First call should return 1/0",
-            counter.next(),
+            new Counter(0).next(),
             Matchers.is("1/0")
         );
+    }
+
+    @Test
+    void handlesZeroTotalOnSecondCall() {
+        final Counter counter = new Counter(0);
+        counter.next();
         MatcherAssert.assertThat(
             "Second call should return 2/0",
             counter.next(),
@@ -63,13 +81,18 @@ final class CounterTest {
     }
 
     @Test
-    void handlesLargeCountsWithoutOverflow() {
-        final Counter counter = new Counter(Integer.MAX_VALUE);
+    void handlesLargeCountsOnFirstCall() {
         MatcherAssert.assertThat(
             "First call should return 1/MAX_VALUE",
-            counter.next(),
+            new Counter(Integer.MAX_VALUE).next(),
             Matchers.is(String.format("1/%d", Integer.MAX_VALUE))
         );
+    }
+
+    @Test
+    void handlesLargeCountsOnSecondCall() {
+        final Counter counter = new Counter(Integer.MAX_VALUE);
+        counter.next();
         MatcherAssert.assertThat(
             "Second call should return 2/MAX_VALUE",
             counter.next(),

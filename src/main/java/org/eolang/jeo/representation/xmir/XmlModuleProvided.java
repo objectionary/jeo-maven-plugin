@@ -10,9 +10,9 @@ import org.eolang.jeo.representation.bytecode.BytecodeModuleProvided;
 
 /**
  * XML representation of a provided module.
- * <p>
- *     Mirrors {@link org.eolang.jeo.representation.bytecode.BytecodeModuleProvided}
- * </p>
+ *
+ * <p>Mirrors {@link org.eolang.jeo.representation.bytecode.BytecodeModuleProvided}</p>
+ *
  * @since 0.15.0
  */
 final class XmlModuleProvided {
@@ -24,7 +24,8 @@ final class XmlModuleProvided {
 
     /**
      * Constructor.
-     * @param node Provided module node.
+     *
+     * @param node Provided module node
      */
     XmlModuleProvided(final XmlNode node) {
         this(new XmlJeoObject(node));
@@ -32,7 +33,8 @@ final class XmlModuleProvided {
 
     /**
      * Constructor.
-     * @param node Provided module node.
+     *
+     * @param node Provided module node
      */
     private XmlModuleProvided(final XmlJeoObject node) {
         this.node = node;
@@ -40,7 +42,8 @@ final class XmlModuleProvided {
 
     /**
      * Parse provided module to bytecode.
-     * @return Bytecode of the provided module.
+     *
+     * @return Bytecode of the provided module
      */
     BytecodeModuleProvided bytecode() {
         return new BytecodeModuleProvided(
@@ -49,18 +52,10 @@ final class XmlModuleProvided {
         );
     }
 
-    /**
-     * Get package name.
-     * @return Package name.
-     */
     private String service() {
         return new XmlValue(new XmlChildren(this.node).byName("service")).string();
     }
 
-    /**
-     * Get modules list.
-     * @return Modules list.
-     */
     private List<String> providers() {
         return new XmlSeq(new XmlChildren(this.node).byName("providers"))
             .children()

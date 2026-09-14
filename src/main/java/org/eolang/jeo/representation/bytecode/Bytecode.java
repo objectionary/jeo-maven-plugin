@@ -13,6 +13,7 @@ import org.objectweb.asm.util.TraceClassVisitor;
 
 /**
  * Java bytecode.
+ *
  * @since 0.1.0
  */
 public final class Bytecode {
@@ -24,7 +25,8 @@ public final class Bytecode {
 
     /**
      * Constructor.
-     * @param bytes Bytecode bytes.
+     *
+     * @param bytes Bytecode bytes
      */
     public Bytecode(final byte[] bytes) {
         this.codes = Arrays.copyOf(bytes, bytes.length);
@@ -32,7 +34,8 @@ public final class Bytecode {
 
     /**
      * Get as bytes.
-     * @return Bytecode bytes.
+     *
+     * @return Bytecode bytes
      */
     public byte[] bytes() {
         return Arrays.copyOf(this.codes, this.codes.length);
@@ -46,8 +49,7 @@ public final class Bytecode {
         } else if (other == null || this.getClass() != other.getClass()) {
             result = false;
         } else {
-            final Bytecode bytecode = (Bytecode) other;
-            result = Arrays.equals(this.codes, bytecode.codes);
+            result = Arrays.equals(this.codes, ((Bytecode) other).codes);
         }
         return result;
     }
@@ -60,8 +62,10 @@ public final class Bytecode {
     @Override
     public String toString() {
         final StringWriter out = new StringWriter();
-        new ClassReader(this.codes)
-            .accept(new TraceClassVisitor(null, new Textifier(), new PrintWriter(out)), 0);
+        try (PrintWriter writer = new PrintWriter(out)) {
+            new ClassReader(this.codes)
+                .accept(new TraceClassVisitor(null, new Textifier(), writer), 0);
+        }
         return out.toString();
     }
 }

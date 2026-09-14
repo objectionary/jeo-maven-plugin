@@ -9,6 +9,7 @@ import org.xembly.Directive;
 
 /**
  * Directives for NestHost attribute.
+ *
  * @since 0.14.0
  */
 public final class DirectivesNestHost implements Iterable<Directive> {
@@ -25,8 +26,9 @@ public final class DirectivesNestHost implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Format of the directives.
-     * @param host Host class internal name.
+     *
+     * @param format Format of the directives
+     * @param host Host class internal name
      */
     public DirectivesNestHost(final Format format, final String host) {
         this.format = format;

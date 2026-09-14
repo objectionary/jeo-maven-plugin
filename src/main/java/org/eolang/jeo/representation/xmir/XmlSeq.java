@@ -5,16 +5,14 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.stream.Stream;
-import lombok.ToString;
 
 /**
  * Xml representation of a sequence of XML nodes.
- * <p>
- *     Mirrors {@link org.eolang.jeo.representation.directives.DirectivesSeq}
- * </p>
+ *
+ * <p>Mirrors {@link org.eolang.jeo.representation.directives.DirectivesSeq}</p>
+ *
  * @since 0.11.0
  */
-@ToString
 final class XmlSeq {
 
     /**
@@ -24,7 +22,8 @@ final class XmlSeq {
 
     /**
      * Constructor.
-     * @param node XML node representing the sequence.
+     *
+     * @param node XML node representing the sequence
      */
     XmlSeq(final XmlNode node) {
         this(new XmlJeoObject(node));
@@ -32,31 +31,40 @@ final class XmlSeq {
 
     /**
      * Constructor.
-     * @param origin XML Jeo object representing the sequence.
+     *
+     * @param origin XML Jeo object representing the sequence
      */
     XmlSeq(final XmlJeoObject origin) {
         this.origin = origin;
     }
 
+    @Override
+    public String toString() {
+        return String.format("XmlSeq(origin=%s)", this.origin);
+    }
+
     /**
      * Name of the sequence.
-     * @return Name of the sequence.
+     *
+     * @return Name of the sequence
      */
-    public String name() {
+    String name() {
         return this.origin.name();
     }
 
     /**
      * Retrieve the child nodes of the sequence.
-     * @return Stream of XML nodes representing the children of the sequence.
+     *
+     * @return Stream of XML nodes representing the children of the sequence
      */
-    public Stream<XmlNode> children() {
+    Stream<XmlNode> children() {
         return this.origin.children();
     }
 
     /**
      * Whether the sequence is named.
-     * @return True if the sequence has a name attribute, false otherwise.
+     *
+     * @return True if the sequence has a name attribute, false otherwise
      */
     boolean named() {
         return this.origin.named();

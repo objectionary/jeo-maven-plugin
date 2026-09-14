@@ -17,6 +17,7 @@ import org.xembly.Xembler;
 
 /**
  * Tests for {@link BytecodeTypeAnnotation}.
+ *
  * @since 0.15.0
  */
 final class BytecodeTypeAnnotationTest {
@@ -32,18 +33,19 @@ final class BytecodeTypeAnnotationTest {
             "format", "json"
         );
         final int index = 42;
-        final DirectivesTypeAnnotation directives = new BytecodeTypeAnnotation(
-            ref,
-            path,
-            desc,
-            visible,
-            Collections.singletonList(
-                value
-            )
-        ).directives(index, format);
         MatcherAssert.assertThat(
             "We expect the bytecode type annotation to be converted to directives type annotation",
-            new Xembler(directives).xml(),
+            new Xembler(
+                new BytecodeTypeAnnotation(
+                    ref,
+                    path,
+                    desc,
+                    visible,
+                    Collections.singletonList(
+                        value
+                    )
+                ).directives(index, format)
+            ).xml(),
             Matchers.equalTo(
                 new Xembler(
                     new DirectivesTypeAnnotation(

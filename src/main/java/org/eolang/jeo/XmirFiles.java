@@ -13,21 +13,25 @@ import org.eolang.jeo.representation.xmir.JcabiXmlDoc;
 /**
  * XMIR files reader.
  *
- * <p>This class reads all XMIR (EO XML representation) files from a specified folder.
- * It provides functionality to discover and validate XMIR files for processing.</p>
+ * <p>This class reads all XMIR (EO XML representation) files from a specified folder. It provides
+ * functionality to discover and validate XMIR files for processing.</p>
+ *
  * @since 0.1.0
  */
 final class XmirFiles {
 
     /**
      * Where to read objects from.
-     * <p>Usually it's a folder with the name "generated-sources".
-     * See <a href="https://maven.apache.org/guides/mini/guide-generating-sources.html">Maven Guide: Generating Sources</a>.</p>
+     *
+     * <p>Usually it's a folder with the name "generated-sources". See <a
+     * href="https://maven.apache.org/guides/mini/guide-generating-sources.html">Maven Guide:
+     * Generating Sources</a>.</p>
      */
     private final Path root;
 
     /**
      * Constructor.
+     *
      * @param xmirs Root directory containing XMIR files
      */
     XmirFiles(final Path xmirs) {
@@ -36,17 +40,19 @@ final class XmirFiles {
 
     /**
      * Count of all representations.
+     *
      * @return Count of all XMIR files in the directory tree
      */
-    public long total() {
+    long total() {
         return this.all().count();
     }
 
     /**
      * All representations.
+     *
      * @return Stream of paths to all XMIR files in the directory tree
      */
-    public Stream<Path> all() {
+    Stream<Path> all() {
         final Path path = this.root;
         final Stream.Builder<Path> builder = Stream.builder();
         if (Files.exists(path)) {
@@ -67,7 +73,7 @@ final class XmirFiles {
     /**
      * Verify all the XMIR files.
      */
-    public void verify() {
+    void verify() {
         this.all().map(JcabiXmlDoc::new).forEach(JcabiXmlDoc::validate);
     }
 }

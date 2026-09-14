@@ -65,13 +65,12 @@ final class DirectivesClassTest {
     @Test
     void appendsField() throws ImpossibleModificationException {
         final DirectivesField field = new DirectivesField();
-        final String xml = new Xembler(
-            new DirectivesClass(new ClassName("Neo"), field),
-            new Transformers.Node()
-        ).xml();
         MatcherAssert.assertThat(
             "Can't append field to the class",
-            xml,
+            new Xembler(
+                new DirectivesClass(new ClassName("Neo"), field),
+                new Transformers.Node()
+            ).xml(),
             Matchers.containsString(
                 new Xembler(field, new Transformers.Node()).xml()
             )
@@ -97,15 +96,14 @@ final class DirectivesClassTest {
     @Test
     void appendsFullyQualifiedName() throws ImpossibleModificationException {
         final String name = "org.eolang.jeo.representation.directives.DirectivesClassTest";
-        final String xml = new Xembler(
-            new DirectivesClass(
-                new ClassName(name),
-                new DirectivesClassProperties(name)
-            )
-        ).xml();
         MatcherAssert.assertThat(
             "Can't append fully qualified class name",
-            xml,
+            new Xembler(
+                new DirectivesClass(
+                    new ClassName(name),
+                    new DirectivesClassProperties(name)
+                )
+            ).xml(),
             XhtmlMatchers.hasXPath(
                 String.format(
                     "./o[contains(@name,'DirectivesClassTest')]/o[contains(@name, 'name')]/o/o[text()='%s']",
@@ -114,9 +112,19 @@ final class DirectivesClassTest {
                 )
             )
         );
+    }
+
+    @Test
+    void rejectsWrongClassNameXpath() throws ImpossibleModificationException {
+        final String name = "org.eolang.jeo.representation.directives.DirectivesClassTest";
         MatcherAssert.assertThat(
             "Wrong class name must not match the class predicate",
-            xml,
+            new Xembler(
+                new DirectivesClass(
+                    new ClassName(name),
+                    new DirectivesClassProperties(name)
+                )
+            ).xml(),
             Matchers.not(
                 XhtmlMatchers.hasXPath(
                     "./o[contains(@name,'WrongClass')]/o[contains(@name, 'name')]/o/o"
@@ -131,8 +139,7 @@ final class DirectivesClassTest {
             "Can't create proper xml with mandatory signature",
             new Xembler(
                 new Directives()
-                    .add("o")
-                    .append(
+                    .add("o").append(
                         new DirectivesClass(
                             "MyClass",
                             "org/eolang/SomeClass",
@@ -151,7 +158,8 @@ final class DirectivesClassTest {
      * it is converted to an empty string in the XML output.
      * See more details in
      * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1246">#1246</a>
-     * @throws ImpossibleModificationException in case of XML modification failure.
+     *
+     * @throws ImpossibleModificationException in case of XML modification failure
      */
     @Test
     void convertsNullSignatureToEmptyString() throws ImpossibleModificationException {

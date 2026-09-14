@@ -11,6 +11,7 @@ import org.eolang.jeo.ei.ignored.deep.DeeplyIgnored;
 
 /**
  * Application Entry Point That Uses Different Exception Handlers.
+ *
  * @since 0.1
  */
 public class Application {

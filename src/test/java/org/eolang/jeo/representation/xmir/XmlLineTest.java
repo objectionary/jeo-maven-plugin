@@ -15,6 +15,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link XmlLine}.
+ *
  * @since 0.14.0
  */
 final class XmlLineTest {

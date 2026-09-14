@@ -10,6 +10,7 @@ import org.xembly.Directive;
 
 /**
  * Directives for a method parameter.
+ *
  * @since 0.6
  */
 public final class DirectivesMethodParam implements Iterable<Directive> {
@@ -41,12 +42,12 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Directives format.
-     * @param index Index of the parameter.
-     * @param name Name of the parameter.
-     * @param access Access modifier of the parameter.
-     * @param type Type of the parameter.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param format Directives format
+     * @param index Index of the parameter
+     * @param name Name of the parameter
+     * @param access Access modifier of the parameter
+     * @param type Type of the parameter
      */
     public DirectivesMethodParam(
         final Format format,
@@ -74,10 +75,6 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
         ).iterator();
     }
 
-    /**
-     * Get parameter name or a default one if it's null.
-     * @return Parameter name
-     */
     private String paramName() {
         final String prefix = "p";
         final String result;

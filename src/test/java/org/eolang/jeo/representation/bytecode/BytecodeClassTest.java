@@ -16,9 +16,9 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link org.eolang.jeo.representation.bytecode.BytecodeClass}.
+ *
  * @since 0.1
  */
-@SuppressWarnings({"PMD.ExcessiveMethodLength", "PMD.TooManyMethods"})
 final class BytecodeClassTest {
 
     @Test
@@ -93,10 +93,11 @@ final class BytecodeClassTest {
             "Exception message is not equal to expected",
             Assertions.assertThrows(
                 IllegalStateException.class,
-                () -> new BytecodeObject(new BytecodeClass("UnknownInstruction")
-                    .withConstructor()
-                    .opcode(305)
-                    .up()
+                () -> new BytecodeObject(
+                    new BytecodeClass("UnknownInstruction")
+                        .withConstructor()
+                        .opcode(305)
+                        .up()
                 ).bytecode(),
                 "We expect an exception here because 305 is not a valid opcode"
             ).getMessage(),
@@ -109,45 +110,18 @@ final class BytecodeClassTest {
     @Test
     void createsMethodWithArrayParameterUsage() {
         Assertions.assertDoesNotThrow(
-            () -> {
-                new BytecodeClass("Some")
-                    .withMethod("j$main", "([Ljava/lang/String;)V", 137)
-                    .label()
-                    .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
-                    .opcode(Opcodes.LDC, "Hello %d")
-                    .opcode(Opcodes.ICONST_1)
-                    .opcode(Opcodes.ANEWARRAY, "java/lang/Object")
-                    .opcode(Opcodes.DUP)
-                    .opcode(Opcodes.ICONST_0)
-                    .opcode(Opcodes.BIPUSH, 12)
-                    .opcode(
-                        Opcodes.INVOKESTATIC,
-                        "java/lang/Integer",
-                        "valueOf",
-                        "(I)Ljava/lang/Integer;"
-                    )
-                    .opcode(Opcodes.AASTORE)
-                    .opcode(
-                        Opcodes.INVOKEVIRTUAL,
-                        "java/io/PrintStream",
-                        "printf",
-                        "(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/PrintStream;"
-                    )
-                    .opcode(Opcodes.POP)
-                    .label()
-                    .opcode(Opcodes.RETURN)
-                    .label()
-                    .up();
-            }, "We expect no exception here because all instructions are valid"
+            BytecodeClassTest::buildsMethodWithArrayParameterUsage,
+            "We expect no exception here because all instructions are valid"
         );
     }
 
     @Test
     void generatesCodeForInterface() {
         Assertions.assertDoesNotThrow(
-            () -> new BytecodeObject(new BytecodeClass("org/eolang/benchmark/F")
-                .withMethod("j$foo", "()I", 1025)
-                .up()
+            () -> new BytecodeObject(
+                new BytecodeClass("org/eolang/benchmark/F")
+                    .withMethod("j$foo", "()I", 1025)
+                    .up()
             ).bytecode(),
             "We expect no exception here because all instructions are valid. This is an abstract method."
         );
@@ -157,16 +131,17 @@ final class BytecodeClassTest {
     void failsBecauseBytecodeIsBroken() {
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> new BytecodeObject(new BytecodeClass("Broken")
-                .withMethod("j$bar", "()I", Opcodes.ACC_PUBLIC)
-                .label()
-                .opcode(Opcodes.ALOAD, 0)
-                .opcode(Opcodes.INVOKEVIRTUAL, "com/exam/BA", "foo", "()I")
-                .opcode(Opcodes.ICONST_2)
-                .opcode(Opcodes.IADD)
-                .opcode(Opcodes.IRETURN)
-                .label()
-                .up()
+            () -> new BytecodeObject(
+                new BytecodeClass("Broken")
+                    .withMethod("j$bar", "()I", Opcodes.ACC_PUBLIC)
+                    .label()
+                    .opcode(Opcodes.ALOAD, 0)
+                    .opcode(Opcodes.INVOKEVIRTUAL, "com/exam/BA", "foo", "()I")
+                    .opcode(Opcodes.ICONST_2)
+                    .opcode(Opcodes.IADD)
+                    .opcode(Opcodes.IRETURN)
+                    .label()
+                    .up()
             ).bytecode(),
             "We expect an exception here because the bytecode is broken"
         );
@@ -232,5 +207,34 @@ final class BytecodeClassTest {
                 "//o[@name='jm$same']"
             )
         );
+    }
+
+    private static void buildsMethodWithArrayParameterUsage() {
+        new BytecodeClass("Some")
+            .withMethod("j$main", "([Ljava/lang/String;)V", 137)
+            .label()
+            .opcode(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;")
+            .opcode(Opcodes.LDC, "Hello %d")
+            .opcode(Opcodes.ICONST_1)
+            .opcode(Opcodes.ANEWARRAY, "java/lang/Object")
+            .opcode(Opcodes.DUP)
+            .opcode(Opcodes.ICONST_0)
+            .opcode(Opcodes.BIPUSH, 12).opcode(
+                Opcodes.INVOKESTATIC,
+                "java/lang/Integer",
+                "valueOf",
+                "(I)Ljava/lang/Integer;"
+            )
+            .opcode(Opcodes.AASTORE).opcode(
+                Opcodes.INVOKEVIRTUAL,
+                "java/io/PrintStream",
+                "printf",
+                "(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/PrintStream;"
+            )
+            .opcode(Opcodes.POP)
+            .label()
+            .opcode(Opcodes.RETURN)
+            .label()
+            .up();
     }
 }

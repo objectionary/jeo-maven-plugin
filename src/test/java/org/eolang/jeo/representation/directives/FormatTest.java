@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for {@link Format}.
+ *
  * @since 0.14.0
  */
 final class FormatTest {

@@ -31,6 +31,7 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 /**
  * Asm instruction.
+ *
  * @since 0.6
  */
 final class AsmInstruction {
@@ -42,7 +43,8 @@ final class AsmInstruction {
 
     /**
      * Constructor.
-     * @param node Instruction node.
+     *
+     * @param node Instruction node
      */
     AsmInstruction(final AbstractInsnNode node) {
         this.node = node;
@@ -50,12 +52,13 @@ final class AsmInstruction {
 
     /**
      * Convert asm instruction to domain instruction.
-     * @return Domain instruction.
+     *
+     * @return Domain instruction
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      * @checkstyle JavaNCSSCheck (100 lines)
      * @checkstyle MethodLengthCheck (200 lines)
      */
-    @SuppressWarnings({"PMD.NcssCount", "PMD.ExcessiveMethodLength"})
+    @SuppressWarnings("PMD.NcssCount")
     BytecodeEntry bytecode() {
         final BytecodeEntry result;
         switch (this.node.getType()) {
@@ -123,8 +126,9 @@ final class AsmInstruction {
                 );
                 break;
             case AbstractInsnNode.LABEL:
-                final LabelNode label = LabelNode.class.cast(this.node);
-                result = new BytecodeLabel(label.getLabel().toString());
+                result = new BytecodeLabel(
+                    LabelNode.class.cast(this.node).getLabel().toString()
+                );
                 break;
             case AbstractInsnNode.LDC_INSN:
                 final LdcInsnNode ldc = LdcInsnNode.class.cast(this.node);

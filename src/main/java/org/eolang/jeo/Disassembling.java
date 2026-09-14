@@ -12,9 +12,10 @@ import org.eolang.jeo.representation.directives.Format;
 /**
  * Disassembling transformation.
  *
- * <p>This class implements the transformation process that converts Java bytecode
- * into XMIR representation. It reads .class files and produces corresponding
- * XMIR files in the specified target directory with configurable detail levels.</p>
+ * <p>This class implements the transformation process that converts Java bytecode into XMIR
+ * representation. It reads .class files and produces corresponding XMIR files in the specified
+ * target directory with configurable detail levels.</p>
+ *
  * @since 0.6.0
  */
 public final class Disassembling implements Transformation {
@@ -41,11 +42,11 @@ public final class Disassembling implements Transformation {
 
     /**
      * Constructor.
+     *
      * @param from Source folder where the bytecode representation is located
      * @param target Target folder where the disassembled XMIR will be saved
      * @param representation Path to the bytecode representation to disassemble
      * @param params Disassemble parameters including mode and listings options
-     * @checkstyle ParameterNumberCheck (10 lines)
      */
     Disassembling(
         final Path from,
@@ -84,10 +85,6 @@ public final class Disassembling implements Transformation {
             .getBytes(StandardCharsets.UTF_8);
     }
 
-    /**
-     * Retrieve file name without extension from the source path.
-     * @return File name without extension.
-     */
     private String fileName() {
         final String name = this.clazz.getFileName().toString();
         final int index = name.lastIndexOf('.');

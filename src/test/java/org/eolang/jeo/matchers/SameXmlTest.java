@@ -43,14 +43,13 @@ final class SameXmlTest {
                 "</root>"
             )
         ).toString();
-        final boolean matches = new SameXml(input).matchesSafely(lineless);
         MatcherAssert.assertThat(
             String.format(
                 "Input XML ('%s') should match with same lineless XML ('%s'), but was not",
                 input,
                 lineless
             ),
-            matches,
+            new SameXml(input).matchesSafely(lineless),
             new IsEqual<>(true)
         );
     }

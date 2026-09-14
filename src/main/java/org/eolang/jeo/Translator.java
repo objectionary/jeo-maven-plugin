@@ -12,12 +12,15 @@ import java.util.stream.Stream;
  *
  * <p>This interface defines the contract for batch processing of file transformations.
  * Implementations can process files sequentially or in parallel to improve performance.</p>
+ *
  * @since 0.1.0
  */
+@FunctionalInterface
 public interface Translator {
 
     /**
      * Apply the translation for all representations.
+     *
      * @param representations Stream of intermediate representations to translate
      * @return Stream of translated intermediate representations
      */

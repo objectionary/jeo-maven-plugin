@@ -13,6 +13,7 @@ import org.eolang.jeo.representation.directives.JeoFqn;
 
 /**
  * XML method params.
+ *
  * @since 0.6
  */
 final class XmlMethodParams {
@@ -29,7 +30,8 @@ final class XmlMethodParams {
 
     /**
      * Constructor.
-     * @param node Xml representation of a method params.
+     *
+     * @param node Xml representation of a method params
      */
     XmlMethodParams(final XmlNode node) {
         this(new XmlJeoObject(node));
@@ -37,7 +39,8 @@ final class XmlMethodParams {
 
     /**
      * Constructor.
-     * @param node XML Jeo object node representing the method params.
+     *
+     * @param node XML Jeo object node representing the method params
      */
     private XmlMethodParams(final XmlJeoObject node) {
         this.node = node;
@@ -45,7 +48,8 @@ final class XmlMethodParams {
 
     /**
      * Is this node a method params?
-     * @return True if this node is a method params.
+     *
+     * @return True if this node is a method params
      */
     boolean isParams() {
         return this.node.base()
@@ -55,7 +59,8 @@ final class XmlMethodParams {
 
     /**
      * Get method params.
-     * @return Method params.
+     *
+     * @return Method params
      */
     BytecodeMethodParameters params() {
         return new BytecodeMethodParameters(
@@ -64,10 +69,6 @@ final class XmlMethodParams {
         );
     }
 
-    /**
-     * Method parameters.
-     * @return List of bytecode method parameters.
-     */
     private List<BytecodeMethodParameter> parameters() {
         return this.node.children()
             .map(XmlMethodParam::new)
@@ -76,10 +77,6 @@ final class XmlMethodParams {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Annotations of the parameter.
-     * @return Annotations.
-     */
     private List<BytecodeParamAnnotations> annotations() {
         return this.node.children()
             .map(XmlJeoObject::new)

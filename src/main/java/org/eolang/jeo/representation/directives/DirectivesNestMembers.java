@@ -10,6 +10,7 @@ import org.xembly.Directive;
 
 /**
  * Directives for NestMembers attribute.
+ *
  * @since 0.14.0
  */
 public final class DirectivesNestMembers implements Iterable<Directive> {
@@ -26,8 +27,9 @@ public final class DirectivesNestMembers implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Format of the directives.
-     * @param members Members class internal names.
+     *
+     * @param format Format of the directives
+     * @param members Members class internal names
      */
     public DirectivesNestMembers(final Format format, final List<String> members) {
         this.format = format;

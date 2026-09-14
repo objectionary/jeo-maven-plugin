@@ -12,6 +12,7 @@ import org.xembly.Directives;
 
 /**
  * Directives for an attribute.
+ *
  * @since 0.4
  */
 public final class DirectivesAttribute implements Iterable<Directive> {
@@ -33,9 +34,10 @@ public final class DirectivesAttribute implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The name of the attribute.
-     * @param name The name of the attribute.
-     * @param data Properties of an attribute.
+     *
+     * @param base The name of the attribute
+     * @param name The name of the attribute
+     * @param data Properties of an attribute
      */
     @SafeVarargs
     public DirectivesAttribute(
@@ -48,9 +50,10 @@ public final class DirectivesAttribute implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param base The base of the attribute.
-     * @param name The name of the attribute.
-     * @param data Properties of an attribute.
+     *
+     * @param base The base of the attribute
+     * @param name The name of the attribute
+     * @param data Properties of an attribute
      */
     public DirectivesAttribute(
         final String base,

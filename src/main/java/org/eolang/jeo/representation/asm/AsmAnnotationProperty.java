@@ -16,6 +16,7 @@ import org.objectweb.asm.tree.AnnotationNode;
 
 /**
  * Asm annotation property.
+ *
  * @since 0.6
  */
 final class AsmAnnotationProperty {
@@ -32,7 +33,8 @@ final class AsmAnnotationProperty {
 
     /**
      * Constructor.
-     * @param value Property value.
+     *
+     * @param value Property value
      */
     AsmAnnotationProperty(final Object value) {
         this(null, value);
@@ -40,8 +42,9 @@ final class AsmAnnotationProperty {
 
     /**
      * Constructor.
-     * @param name Property name.
-     * @param value Property value.
+     *
+     * @param name Property name
+     * @param value Property value
      */
     AsmAnnotationProperty(final String name, final Object value) {
         this.name = name;
@@ -50,18 +53,13 @@ final class AsmAnnotationProperty {
 
     /**
      * Convert asm annotation property to domain annotation property.
-     * @return Domain annotation.
+     *
+     * @return Domain annotation
      */
     BytecodeAnnotationValue bytecode() {
         return AsmAnnotationProperty.property(this.name, this.value);
     }
 
-    /**
-     * Convert asm annotation property to domain annotation property.
-     * @param name Property name.
-     * @param value Property value.
-     * @return Domain annotation.
-     */
     private static BytecodeAnnotationValue property(final String name, final Object value) {
         final BytecodeAnnotationValue result;
         if (value instanceof String[]) {
@@ -86,5 +84,4 @@ final class AsmAnnotationProperty {
         }
         return result;
     }
-
 }

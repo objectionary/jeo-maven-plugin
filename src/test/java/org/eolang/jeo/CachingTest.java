@@ -26,7 +26,7 @@ final class CachingTest {
 
     @Test
     void skipsOriginalTransformationSinceAlreadyTransformed(@TempDir final Path temp) {
-        final MockTrans mock = new MockTrans(temp);
+        final MockTrans mock = new CachingTest.MockTrans(temp);
         mock.createFrom(0);
         mock.createTo(1);
         MatcherAssert.assertThat(
@@ -38,7 +38,7 @@ final class CachingTest {
 
     @Test
     void performsTransformationSinceModified(@TempDir final Path temp) {
-        final MockTrans mock = new MockTrans(temp);
+        final MockTrans mock = new CachingTest.MockTrans(temp);
         mock.createTo(0);
         mock.createFrom(1);
         MatcherAssert.assertThat(
@@ -50,7 +50,7 @@ final class CachingTest {
 
     @Test
     void performsTransformationSinceNotYetTransformed(@TempDir final Path temp) {
-        final MockTrans mock = new MockTrans(temp);
+        final MockTrans mock = new CachingTest.MockTrans(temp);
         mock.createFrom(0);
         MatcherAssert.assertThat(
             "Cached transformation should perform original transformation and return the result",
@@ -59,7 +59,7 @@ final class CachingTest {
         );
     }
 
-    private static class MockTrans implements Transformation {
+    private static final class MockTrans implements Transformation {
 
         /**
          * Transformation is performed.
@@ -78,7 +78,8 @@ final class CachingTest {
 
         /**
          * Constructor.
-         * @param temp Temporary directory.
+         *
+         * @param temp Temporary directory
          */
         MockTrans(final Path temp) {
             this.temp = temp;
@@ -101,7 +102,8 @@ final class CachingTest {
 
         /**
          * Create 'from' file.
-         * @param seconds Seconds to set as last modified time.
+         *
+         * @param seconds Seconds to set as last modified time
          */
         void createFrom(final int seconds) {
             this.create(
@@ -113,7 +115,8 @@ final class CachingTest {
 
         /**
          * Create 'to' file.
-         * @param seconds Seconds to set as last modified time.
+         *
+         * @param seconds Seconds to set as last modified time
          */
         void createTo(final int seconds) {
             this.create(
@@ -123,12 +126,6 @@ final class CachingTest {
             );
         }
 
-        /**
-         * Create file.
-         * @param path Path to the file.
-         * @param content Content of the file.
-         * @param seconds Seconds to set as last modified time.
-         */
         private void create(final Path path, final byte[] content, final int seconds) {
             try {
                 Files.write(path, content);

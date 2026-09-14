@@ -9,6 +9,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeUnknownAttribute;
 /**
  * XML unknown attribute.
  * Mirror of {@link org.eolang.jeo.representation.bytecode.BytecodeUnknownAttribute}
+ *
  * @since 0.15.0
  */
 public final class XmlUnknownAttribute {
@@ -20,7 +21,8 @@ public final class XmlUnknownAttribute {
 
     /**
      * Constructor.
-     * @param node Unknown attribute node.
+     *
+     * @param node Unknown attribute node
      */
     public XmlUnknownAttribute(final XmlNode node) {
         this(new XmlJeoObject(node));
@@ -28,7 +30,8 @@ public final class XmlUnknownAttribute {
 
     /**
      * Constructor.
-     * @param node Unknown attribute node.
+     *
+     * @param node Unknown attribute node
      */
     public XmlUnknownAttribute(final XmlJeoObject node) {
         this.node = node;
@@ -36,7 +39,8 @@ public final class XmlUnknownAttribute {
 
     /**
      * Parse bytecode unknown attribute from XML.
-     * @return Bytecode of the unknown attribute.
+     *
+     * @return Bytecode of the unknown attribute
      */
     public BytecodeUnknownAttribute bytecode() {
         return new BytecodeUnknownAttribute(
@@ -45,10 +49,6 @@ public final class XmlUnknownAttribute {
         );
     }
 
-    /**
-     * Parse type from XML.
-     * @return Type of the attribute.
-     */
     private String type() {
         return new XmlValue(
             this.node.child(0).orElseThrow(
@@ -59,10 +59,6 @@ public final class XmlUnknownAttribute {
         ).string();
     }
 
-    /**
-     * Parse data from XML.
-     * @return Data of the attribute.
-     */
     private byte[] data() {
         return (byte[]) new XmlValue(
             this.node.child(1).orElseThrow(

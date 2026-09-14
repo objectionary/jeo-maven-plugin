@@ -12,6 +12,7 @@ import org.objectweb.asm.Type;
 
 /**
  * Xmir representation of a method parameter.
+ *
  * @since 0.4
  */
 public final class XmlMethodParam {
@@ -23,7 +24,8 @@ public final class XmlMethodParam {
 
     /**
      * Constructor.
-     * @param root Parameter xml node.
+     *
+     * @param root Parameter xml node
      */
     XmlMethodParam(final XmlNode root) {
         this(new XmlJeoObject(root));
@@ -31,7 +33,8 @@ public final class XmlMethodParam {
 
     /**
      * Constructor.
-     * @param root Parameter xml node.
+     *
+     * @param root Parameter xml node
      */
     private XmlMethodParam(final XmlJeoObject root) {
         this.root = root;
@@ -39,7 +42,8 @@ public final class XmlMethodParam {
 
     /**
      * Convert to bytecode.
-     * @return Bytecode method parameter.
+     *
+     * @return Bytecode method parameter
      */
     public BytecodeMethodParameter bytecode() {
         return new BytecodeMethodParameter(
@@ -52,49 +56,29 @@ public final class XmlMethodParam {
 
     /**
      * Check if the object is actually a method param.
-     * @return True if the method param, false otherwise.
+     *
+     * @return True if the method param, false otherwise
      */
     public boolean isParam() {
         return this.root.base().map(new JeoFqn("param").fqn()::equals).orElse(false);
     }
 
-    /**
-     * Type of the parameter.
-     * @return Type.
-     */
     private Type type() {
         return Type.getType(new EncodedString(this.child("type").string()).decode());
     }
 
-    /**
-     * Pure name of the parameter.
-     * @return Name.
-     */
     private String name() {
         return this.ochild("name").map(XmlValue::string).orElse(null);
     }
 
-    /**
-     * Access modifier of the parameter.
-     * @return Access.
-     */
     private int access() {
         return (int) this.child("access").object();
     }
 
-    /**
-     * Index of the parameter in the method.
-     * @return Index.
-     */
     private int index() {
         return (int) this.child("index").object();
     }
 
-    /**
-     * Child node with the given name.
-     * @param name Name of the child node.
-     * @return Child node.
-     */
     private XmlValue child(final String name) {
         return this.ochild(name).orElseThrow(
             () -> new IllegalStateException(
@@ -106,11 +90,6 @@ public final class XmlMethodParam {
         );
     }
 
-    /**
-     * Child node with the given name.
-     * @param name Name of the child node.
-     * @return Child node.
-     */
     private Optional<XmlValue> ochild(final String name) {
         return this.root.children()
             .filter(node -> XmlMethodParam.hasName(node, name))
@@ -118,12 +97,6 @@ public final class XmlMethodParam {
             .map(XmlValue::new);
     }
 
-    /**
-     * Check if the node has the specified name.
-     * @param node XML node to check.
-     * @param name Name to check against the node's attributes.
-     * @return True if the node has the specified name, false otherwise.
-     */
     private static boolean hasName(final XmlNode node, final String name) {
         return node.attribute("name").map(name::equals).orElse(false);
     }

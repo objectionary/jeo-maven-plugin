@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 /**
  * Integration test for Application.
+ *
  * @since 0.2
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

@@ -17,6 +17,7 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link XmlMethodParam}.
+ *
  * @since 0.6
  */
 final class XmlMethodParamTest {

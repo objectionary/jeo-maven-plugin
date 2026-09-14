@@ -7,10 +7,10 @@ package org.eolang.jeo.representation;
 /**
  * Method signature representation combining name and descriptor.
  *
- * <p>Represents Java method name and descriptor as a unified signature.
- * Since methods in Java are allowed to be overloaded, we need to handle this
- * ambiguity by combining the method name with its descriptor to create a
- * unique identifier.</p>
+ * <p>Represents Java method name and descriptor as a unified signature. Since methods in Java are
+ * allowed to be overloaded, we need to handle this ambiguity by combining the method name with
+ * its descriptor to create a unique identifier.</p>
+ *
  * @since 0.5.0
  */
 public final class NamedDescriptor {
@@ -27,6 +27,7 @@ public final class NamedDescriptor {
 
     /**
      * Constructor.
+     *
      * @param encoded The encoded method name and descriptor
      */
     public NamedDescriptor(final String encoded) {
@@ -35,6 +36,7 @@ public final class NamedDescriptor {
 
     /**
      * Constructor.
+     *
      * @param name The method name
      * @param descriptor The method descriptor
      */
@@ -46,11 +48,11 @@ public final class NamedDescriptor {
     /**
      * Encoded method name with descriptor.
      *
-     * <p>A dash of the descriptor is escaped, so the last dash of the result
-     * is the separator. A method name may hold a dash of its own - Kotlin
-     * emits "box-impl" for a value class - and splitting on the first one
-     * landed inside the name.</p>
-     * @return Encoded method name with descriptor.
+     * <p>A dash of the descriptor is escaped, so the last dash of the result is the separator. A
+     * method name may hold a dash of its own - Kotlin emits "box-impl" for a value class - and
+     * splitting on the first one landed inside the name.</p>
+     *
+     * @return Encoded method name with descriptor
      */
     public String encoded() {
         return String.format(
@@ -62,7 +64,8 @@ public final class NamedDescriptor {
 
     /**
      * Just a name without suffix.
-     * @return Name without suffix.
+     *
+     * @return Name without suffix
      */
     public String name() {
         return this.original;
@@ -70,17 +73,13 @@ public final class NamedDescriptor {
 
     /**
      * Just a descriptor.
-     * @return Descriptor without name.
+     *
+     * @return Descriptor without name
      */
     public String descriptor() {
         return this.descr;
     }
 
-    /**
-     * Decode method name from encoded signature.
-     * @param encoded The encoded method name and descriptor
-     * @return The decoded method name
-     */
     private static String prefix(final String encoded) {
         try {
             return encoded.substring(0, encoded.lastIndexOf('-'));
@@ -92,11 +91,6 @@ public final class NamedDescriptor {
         }
     }
 
-    /**
-     * Decode method descriptor from encoded signature.
-     * @param encoded The encoded method name and descriptor
-     * @return The decoded method descriptor
-     */
     private static String suffix(final String encoded) {
         return new EncodedString(encoded.substring(encoded.lastIndexOf('-') + 1)).decode();
     }

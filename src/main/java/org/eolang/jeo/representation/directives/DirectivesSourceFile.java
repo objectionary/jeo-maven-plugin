@@ -9,9 +9,11 @@ import org.xembly.Directive;
 
 /**
  * Directives for source file and debug info.
+ *
  * @since 0.14.0
  */
 public final class DirectivesSourceFile implements Iterable<Directive> {
+
     /**
      * Directives format.
      */
@@ -29,9 +31,10 @@ public final class DirectivesSourceFile implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param format Directives format.
-     * @param source The name of the source file from which this class was compiled.
-     * @param debug The correspondence between source and compiled elements of this class.
+     *
+     * @param format Directives format
+     * @param source The name of the source file from which this class was compiled
+     * @param debug The correspondence between source and compiled elements of this class
      */
     public DirectivesSourceFile(final Format format, final String source, final String debug) {
         this.format = format;

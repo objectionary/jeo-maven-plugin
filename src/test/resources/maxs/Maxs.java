@@ -31,6 +31,7 @@ import java.util.stream.Stream;
  * variables and stack elements.
  * Primarily this class is used in {@link BytecodeMethodTest} to test how the
  * {@link BytecodeMethod} class counts the maxs.
+ *
  * @since 0.6
  */
 public class Maxs {
@@ -51,6 +52,7 @@ public class Maxs {
 
     /**
      * This method has 0 local variables and 1 stack element.
+     *
      * @return 42
      */
     static byte fortyTwo() {
@@ -59,6 +61,7 @@ public class Maxs {
 
     /**
      * This method has 3 local variables (including 'this') and 2 stack elements.
+     *
      * @param a
      * @param b
      * @return a + b
@@ -69,6 +72,7 @@ public class Maxs {
 
     /**
      * This method has 2 local variables and 2 stack elements.
+     *
      * @param a
      * @param b
      */
@@ -78,6 +82,7 @@ public class Maxs {
 
     /**
      * This method has 5 local variables ('double' types and 'this') and 2 stack elements.
+     *
      * @param a
      * @param b
      * @return a / b
@@ -88,6 +93,7 @@ public class Maxs {
 
     /**
      * This method has 4 local ('long' types) variables and 2 stack elements.
+     *
      * @param a
      * @param b
      * @return a * b
@@ -135,6 +141,7 @@ public class Maxs {
     /**
      * This method has 6 local variables (including 'this') and 3 stack elements.
      * It includes a loop with a local variable declared inside.
+     *
      * @param limit
      * @return the sum from 0 to limit
      */
@@ -151,6 +158,7 @@ public class Maxs {
     /**
      * This method has 4 local variables (including 'this') and 4 stack elements.
      * It includes conditional statements with local variables declared inside branches.
+     *
      * @param flag
      * @return different values based on flag
      */
@@ -167,6 +175,7 @@ public class Maxs {
     /**
      * This method has 5 local variables (including 'this') and 5 stack elements.
      * It includes a try-catch block with a local variable in the catch clause.
+     *
      * @param x
      * @param y
      * @return division result or -1 if exception occurs
@@ -195,6 +204,7 @@ public class Maxs {
     /**
      * This method has 7 local variables (including 'this') and 4 stack elements.
      * It includes multiple return points and a finally block.
+     *
      * @param a
      * @param b
      * @return the greater of a or b
@@ -214,6 +224,7 @@ public class Maxs {
     /**
      * This method has 5 local variables (including 'this') and 3 stack elements.
      * It uses a switch-case statement with local variables inside cases.
+     *
      * @param option
      * @return based on option
      */
@@ -236,6 +247,7 @@ public class Maxs {
     /**
      * This method has 4 local variables (including 'this') and 2 stack elements.
      * It uses recursion.
+     *
      * @param n
      * @return factorial of n
      */
@@ -249,6 +261,7 @@ public class Maxs {
     /**
      * This method has 8 local variables (including 'this') and 3 stack elements.
      * It uses nested loops with multiple local variables.
+     *
      * @return the product of sums
      */
     public int nestedLoops() {
@@ -266,6 +279,7 @@ public class Maxs {
     /**
      * This method has 9 local variables (including 'this') and 4 stack elements.
      * It includes a loop with try-catch inside.
+     *
      * @param numbers
      * @return sum of numbers
      */
@@ -284,6 +298,7 @@ public class Maxs {
     /**
      * This method has 6 local variables (including 'this') and 3 stack elements.
      * It uses an array and manipulates its elements.
+     *
      * @param size
      * @return the sum of array elements
      */
@@ -300,6 +315,7 @@ public class Maxs {
     /**
      * This method has 7 local variables (including 'this') and 4 stack elements.
      * It creates and uses an inner class instance.
+     *
      * @return concatenated string
      */
     public String innerClassMethod() {
@@ -362,6 +378,7 @@ public class Maxs {
 
     /**
      * Puts long field
+     *
      * @param value Value to put
      */
     public void putsLongField(final long value) {
@@ -370,6 +387,7 @@ public class Maxs {
 
     /**
      * Puts int field
+     *
      * @param value Value to put
      */
     public void putsIntField(final int value) {

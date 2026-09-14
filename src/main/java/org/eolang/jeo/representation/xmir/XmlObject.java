@@ -11,6 +11,7 @@ import org.eolang.jeo.representation.directives.AbsentPackage;
 
 /**
  * XMIR Program.
+ *
  * @since 0.1
  */
 public final class XmlObject {
@@ -27,7 +28,8 @@ public final class XmlObject {
 
     /**
      * Constructor.
-     * @param lines Xmir lines.
+     *
+     * @param lines Xmir lines
      */
     public XmlObject(final String... lines) {
         this(new JcabiXmlNode(lines));
@@ -35,7 +37,8 @@ public final class XmlObject {
 
     /**
      * Constructor.
-     * @param xml Raw XMIR.
+     *
+     * @param xml Raw XMIR
      */
     public XmlObject(final XML xml) {
         this(new JcabiXmlDoc(xml).root());
@@ -43,7 +46,8 @@ public final class XmlObject {
 
     /**
      * Constructor.
-     * @param root Root node.
+     *
+     * @param root Root node
      */
     public XmlObject(final XmlNode root) {
         this.root = root;
@@ -56,7 +60,8 @@ public final class XmlObject {
 
     /**
      * Convert to bytecode.
-     * @return Bytecode program.
+     *
+     * @return Bytecode program
      */
     public BytecodeObject bytecode() {
         try {
@@ -72,22 +77,10 @@ public final class XmlObject {
         }
     }
 
-    /**
-     * Find top-level class.
-     *
-     * @return Class.
-     */
     private XmlClass top() {
         return new XmlClass(this.pckg(), this.root.child("o"));
     }
 
-    /**
-     * Retrieve program package.
-     * In case if metas are empty, or there is no package meta, or there is no tail, return empty
-     * string.
-     *
-     * @return Package.
-     */
     private String pckg() {
         return this.root
             .xpath("/object/metas/meta[head='package']/tail/text()")
@@ -99,11 +92,6 @@ public final class XmlObject {
             .orElse("");
     }
 
-    /**
-     * Convert absent package to empty string.
-     * @param pckg Package name.
-     * @return Real package name.
-     */
     private static String realPackage(final String pckg) {
         final String result;
         if (XmlObject.ABSENT_PACKAGE.equals(pckg)) {

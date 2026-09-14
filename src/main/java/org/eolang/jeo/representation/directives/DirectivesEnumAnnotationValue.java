@@ -10,6 +10,7 @@ import org.xembly.Directive;
 
 /**
  * An annotation value that is an enumeration.
+ *
  * @since 0.6
  */
 public final class DirectivesEnumAnnotationValue implements Iterable<Directive> {
@@ -41,12 +42,12 @@ public final class DirectivesEnumAnnotationValue implements Iterable<Directive> 
 
     /**
      * Constructor.
-     * @param index Index of the annotation value among other annotation values.
-     * @param format Format of the directives.
-     * @param name The name of the annotation property.
-     * @param descriptor The descriptor of the enumeration.
-     * @param value The actual enumeration value.
-     * @checkstyle ParameterNumber (5 lines)
+     *
+     * @param index Index of the annotation value among other annotation values
+     * @param format Format of the directives
+     * @param name The name of the annotation property
+     * @param descriptor The descriptor of the enumeration
+     * @param value The actual enumeration value
      */
     public DirectivesEnumAnnotationValue(
         final int index,

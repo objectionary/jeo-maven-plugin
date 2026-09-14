@@ -9,6 +9,7 @@ import org.xembly.Directive;
 
 /**
  * Line number directives.
+ *
  * @since 0.14.0
  */
 public final class DirectivesLine implements Iterable<Directive> {
@@ -35,11 +36,11 @@ public final class DirectivesLine implements Iterable<Directive> {
 
     /**
      * Constructor.
+     *
      * @param index Line index
      * @param format Format of the directives
      * @param number Line number in the source code
      * @param identifier Identifier for the line
-     * @checkstyle ParameterNumber (5 lines)
      */
     public DirectivesLine(
         final int index,

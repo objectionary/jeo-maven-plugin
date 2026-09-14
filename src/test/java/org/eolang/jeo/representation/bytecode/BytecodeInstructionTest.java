@@ -17,6 +17,7 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link BytecodeInstruction}.
+ *
  * @since 0.11.0
  */
 final class BytecodeInstructionTest {

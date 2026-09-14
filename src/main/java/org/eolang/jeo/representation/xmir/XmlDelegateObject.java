@@ -11,15 +11,13 @@ import java.util.stream.Stream;
 
 /**
  * Xml representation of an EO delegate object.
- * <p>
- *     Alternative representations of the same idea:
- *     - {@link XmlClosedObject} - a closed object with a base attribute,
- *     - {@link XmlAbstractObject} - an abstract object with a base attribute,
- * </p>
- * <p>
- *     Mirrors:
- *     - {@link org.eolang.jeo.representation.directives.DirectivesDelegateObject}.
- * </p>
+ *
+ * <p>Alternative representations of the same idea: - {@link XmlClosedObject} - a closed object
+ * with a base attribute, - {@link XmlAbstractObject} - an abstract object with a base
+ * attribute,</p>
+ *
+ * <p>Mirrors: - {@link org.eolang.jeo.representation.directives.DirectivesDelegateObject}.</p>
+ *
  * @since 0.12.0
  */
 public final class XmlDelegateObject implements XmlEoObject {
@@ -31,6 +29,7 @@ public final class XmlDelegateObject implements XmlEoObject {
 
     /**
      * Constructor.
+     *
      * @param inner XML node representing the delegate object
      */
     XmlDelegateObject(final XmlNode inner) {

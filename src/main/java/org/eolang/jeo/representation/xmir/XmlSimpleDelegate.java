@@ -6,9 +6,9 @@ package org.eolang.jeo.representation.xmir;
 
 /**
  * Xml representation of a simple EO delegate object.
- * <p>
- *     Mirrors {@link org.eolang.jeo.representation.directives.DirectivesSimpleDelegate}
- * </p>
+ *
+ * <p>Mirrors {@link org.eolang.jeo.representation.directives.DirectivesSimpleDelegate}</p>
+ *
  * @since 0.12.0
  */
 public final class XmlSimpleDelegate {
@@ -20,6 +20,7 @@ public final class XmlSimpleDelegate {
 
     /**
      * Constructor.
+     *
      * @param node XML node representing the delegate object
      */
     XmlSimpleDelegate(final XmlNode node) {
@@ -28,7 +29,8 @@ public final class XmlSimpleDelegate {
 
     /**
      * Base of the delegate object.
-     * @return Base of the delegate object.
+     *
+     * @return Base of the delegate object
      */
     public String base() {
         return this.inner.attribute("base").orElseThrow(

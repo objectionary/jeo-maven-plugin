@@ -22,12 +22,12 @@ import org.objectweb.asm.tree.ModuleNode;
 /**
  * ASM-based bytecode parser for Java classes.
  *
- * <p>This class provides functionality to parse ASM ClassNode objects and convert
- * them into domain-specific bytecode representations. It handles extraction of
- * class properties, methods, fields, and annotations from ASM's internal structure.</p>
+ * <p>This class provides functionality to parse ASM ClassNode objects and convert them into
+ * domain-specific bytecode representations. It handles extraction of class properties, methods,
+ * fields, and annotations from ASM's internal structure.</p>
+ *
  * @since 0.6.0
  */
-@SuppressWarnings("PMD.TooManyMethods")
 public final class AsmClass {
 
     /**
@@ -37,6 +37,7 @@ public final class AsmClass {
 
     /**
      * Constructor.
+     *
      * @param node The ASM class node to parse
      */
     AsmClass(final ClassNode node) {
@@ -45,12 +46,12 @@ public final class AsmClass {
 
     /**
      * Convert ASM class to domain bytecode class.
+     *
      * @return The domain bytecode class representation
      */
     public BytecodeClass bytecode() {
-        final ClassName full = new ClassName(this.node.name);
         return new BytecodeClass(
-            full,
+            new ClassName(this.node.name),
             this.methods(),
             this.fields(),
             new AsmAnnotations(this.node).bytecode(),
@@ -65,10 +66,6 @@ public final class AsmClass {
         );
     }
 
-    /**
-     * Convert ASM fields to domain fields.
-     * @return The list of domain field representations
-     */
     private List<BytecodeField> fields() {
         return this.node.fields.stream()
             .map(AsmField::new)
@@ -76,10 +73,6 @@ public final class AsmClass {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Convert ASM methods to domain methods.
-     * @return The list of domain method representations
-     */
     private List<BytecodeMethod> methods() {
         return this.node.methods.stream()
             .map(AsmMethod::new)
@@ -87,10 +80,6 @@ public final class AsmClass {
             .collect(Collectors.toList());
     }
 
-    /**
-     * Retrieve domain attributes from ASM class.
-     * @return The domain attributes representation
-     */
     private BytecodeAttributes attributes() {
         return new BytecodeAttributes(
             Stream.concat(
@@ -111,10 +100,6 @@ public final class AsmClass {
         );
     }
 
-    /**
-     * Source attribute.
-     * @return Source attribute if present
-     */
     private Optional<BytecodeAttribute> source() {
         final Optional<BytecodeAttribute> result;
         if (this.node.sourceFile == null && this.node.sourceDebug == null) {
@@ -130,10 +115,6 @@ public final class AsmClass {
         return result;
     }
 
-    /**
-     * Module attribute.
-     * @return Module attribute if present
-     */
     private Optional<BytecodeAttribute> module() {
         final Optional<BytecodeAttribute> result;
         final ModuleNode module = this.node.module;
@@ -145,10 +126,6 @@ public final class AsmClass {
         return result;
     }
 
-    /**
-     * Enclosing method attribute.
-     * @return Enclosing method attribute if present
-     */
     private Optional<BytecodeAttribute> enclosing() {
         final Optional<BytecodeAttribute> result;
         if (this.node.outerClass == null
@@ -168,10 +145,6 @@ public final class AsmClass {
         return result;
     }
 
-    /**
-     * Nest host attribute.
-     * @return Nest host attribute if present
-     */
     private Optional<BytecodeAttribute> nesthost() {
         final Optional<BytecodeAttribute> result;
         if (this.node.nestHostClass == null) {
@@ -184,10 +157,6 @@ public final class AsmClass {
         return result;
     }
 
-    /**
-     * Nest members attribute.
-     * @return Nest members attribute if present
-     */
     private Optional<BytecodeAttribute> nestmembers() {
         final Optional<BytecodeAttribute> result;
         if (this.node.nestMembers == null) {
@@ -200,10 +169,6 @@ public final class AsmClass {
         return result;
     }
 
-    /**
-     * Permitted subclasses attribute.
-     * @return Permitted subclasses attribute if present
-     */
     private Optional<BytecodeAttribute> permitted() {
         final Optional<BytecodeAttribute> result;
         if (this.node.permittedSubclasses == null) {
@@ -216,10 +181,6 @@ public final class AsmClass {
         return result;
     }
 
-    /**
-     * Record components attribute.
-     * @return Record components attribute if present
-     */
     private Optional<BytecodeAttribute> records() {
         final Optional<BytecodeAttribute> result;
         if (this.node.recordComponents == null) {
@@ -234,10 +195,6 @@ public final class AsmClass {
         return result;
     }
 
-    /**
-     * Inner classes attribute.
-     * @return Stream of inner class attributes.
-     */
     private Stream<InnerClass> inners() {
         final Stream<InnerClass> result;
         if (this.node.innerClasses == null) {

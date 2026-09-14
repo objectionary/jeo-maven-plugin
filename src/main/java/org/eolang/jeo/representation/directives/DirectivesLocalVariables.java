@@ -13,16 +13,17 @@ import org.xembly.Directive;
  * All local variable directives are sorted according to the JVM specification:
  * {@code
  * LocalVariableTable_attribute {
- *     u2 attribute_name_index;
- *     u4 attribute_length;
- *     u2 local_variable_table_length;
- *     {   u2 start_pc; {@link #start}
- *         u2 length; {@link #start} and {@link #end}
- *         u2 name_index; {@link #name}
- *         u2 descriptor_index; {@link #descriptor}
- *         u2 index; {@link #index}
- *     } local_variable_table[local_variable_table_length];
+ * u2 attribute_name_index;
+ * u4 attribute_length;
+ * u2 local_variable_table_length;
+ * {   u2 start_pc; {@link #start}
+ * u2 length; {@link #start} and {@link #end}
+ * u2 name_index; {@link #name}
+ * u2 descriptor_index; {@link #descriptor}
+ * u2 index; {@link #index}
+ * } local_variable_table[local_variable_table_length];
  * }}
+ *
  * @since 0.14.0
  */
 public final class DirectivesLocalVariables implements Iterable<Directive> {
@@ -72,15 +73,15 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param oindex Ordered index of the local variable.
-     * @param format Directives format.
-     * @param index Index of the local variable in the local variable array.
-     * @param name Name of the local variable.
-     * @param descriptor Descriptor of the local variable.
-     * @param signature Signature of the local variable.
-     * @param start Start directives for the local variable, e.g. labels.
-     * @param end End directives for the local variable, e.g. labels.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param oindex Ordered index of the local variable
+     * @param format Directives format
+     * @param index Index of the local variable in the local variable array
+     * @param name Name of the local variable
+     * @param descriptor Descriptor of the local variable
+     * @param signature Signature of the local variable
+     * @param start Start directives for the local variable, e.g. labels
+     * @param end End directives for the local variable, e.g. labels
      */
     public DirectivesLocalVariables(
         final int oindex,

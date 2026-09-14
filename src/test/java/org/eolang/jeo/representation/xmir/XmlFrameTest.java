@@ -44,6 +44,7 @@ final class XmlFrameTest {
      * This test verifies that we support backward compatibility with the old frame representation.
      * The new frame representation was introduced in this
      * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1215">issue</a>
+     *
      * @throws ImpossibleModificationException If the Xembler fails to modify the XML
      */
     @Test

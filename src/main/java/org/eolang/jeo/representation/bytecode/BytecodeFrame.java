@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesFrame;
 import org.eolang.jeo.representation.directives.Format;
@@ -21,10 +20,9 @@ import org.xembly.Directive;
 
 /**
  * Bytecode frame.
+ *
  * @since 0.6
  */
-@ToString
-@EqualsAndHashCode
 public final class BytecodeFrame implements BytecodeEntry {
 
     /**
@@ -54,9 +52,10 @@ public final class BytecodeFrame implements BytecodeEntry {
 
     /**
      * Constructor.
-     * @param type Frame type.
-     * @param locals Local variables.
-     * @param stack Stack elements.
+     *
+     * @param type Frame type
+     * @param locals Local variables
+     * @param stack Stack elements
      */
     public BytecodeFrame(final int type, final List<Object> locals, final List<Object> stack) {
         this(
@@ -70,12 +69,12 @@ public final class BytecodeFrame implements BytecodeEntry {
 
     /**
      * Constructor.
-     * @param type Frame type.
-     * @param nlocal Number of local variables.
-     * @param locals Local variables.
-     * @param nstack Number of stack elements.
-     * @param stack Stack elements.
-     * @checkstyle ParameterNumberCheck (5 lines)
+     *
+     * @param type Frame type
+     * @param nlocal Number of local variables
+     * @param locals Local variables
+     * @param nstack Number of stack elements
+     * @param stack Stack elements
      */
     public BytecodeFrame(
         final int type,
@@ -168,39 +167,53 @@ public final class BytecodeFrame implements BytecodeEntry {
         );
     }
 
-    /**
-     * Convert a list to array.
-     * @param list List of objects.
-     * @return Array of objects.
-     */
+    @Override
+    public boolean equals(final Object other) {
+        final boolean result;
+        if (this == other) {
+            result = true;
+        } else if (other instanceof BytecodeFrame) {
+            final BytecodeFrame frame = (BytecodeFrame) other;
+            result = this.type == frame.type
+                && this.nlocal == frame.nlocal
+                && this.nstack == frame.nstack
+                && Arrays.equals(this.locals, frame.locals)
+                && Arrays.equals(this.stack, frame.stack);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            this.type, this.nlocal, Arrays.hashCode(this.locals),
+            this.nstack, Arrays.hashCode(this.stack)
+        );
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "BytecodeFrame(type=%d, nlocal=%d, locals=%s, nstack=%d, stack=%s)",
+            this.type, this.nlocal, Arrays.toString(this.locals),
+            this.nstack, Arrays.toString(this.stack)
+        );
+    }
+
     private static Object[] toArray(final List<Object> list) {
         return list.stream().map(BytecodeFrame::extract).toArray(Object[]::new);
     }
 
-    /**
-     * Convert stack to ASM format.
-     * @param labels Method labels.
-     * @return Stack in ASM format.
-     */
     private Object[] asmStack(final AsmLabels labels) {
         return BytecodeFrame.asmOperands(this.stack, labels);
     }
 
-    /**
-     * Convert locals to ASM format.
-     * @param labels Method labels.
-     * @return Locals in ASM format.
-     */
     private Object[] asmLocals(final AsmLabels labels) {
         return BytecodeFrame.asmOperands(this.locals, labels);
     }
 
-    /**
-     * Convert operands to ASM format.
-     * @param arr Operands.
-     * @param labels Method labels.
-     * @return Operands in ASM format.
-     */
     private static Object[] asmOperands(final Object[] arr, final AsmLabels labels) {
         return Arrays.stream(arr).map(
             obj -> {
@@ -215,11 +228,6 @@ public final class BytecodeFrame implements BytecodeEntry {
         ).toArray();
     }
 
-    /**
-     * Extract an object.
-     * @param argument Argument.
-     * @return Object.
-     */
     private static Object extract(final Object argument) {
         final Object result;
         if (argument instanceof LabelNode) {

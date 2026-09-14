@@ -20,6 +20,7 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link XmlMethodParams}.
+ *
  * @since 0.15.0
  */
 final class XmlMethodParamsTest {

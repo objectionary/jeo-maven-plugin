@@ -10,6 +10,7 @@ import org.xembly.Directive;
 
 /**
  * Directives of a Java label in EO language.
+ *
  * @since 0.12.0
  */
 public final class DirectivesLabel implements Iterable<Directive> {
@@ -31,9 +32,10 @@ public final class DirectivesLabel implements Iterable<Directive> {
 
     /**
      * Default constructor.
-     * @param index Index of the label in the method.
-     * @param format Format of the directives.
-     * @param identifier Identifier for the label.
+     *
+     * @param index Index of the label in the method
+     * @param format Format of the directives
+     * @param identifier Identifier for the label
      */
     public DirectivesLabel(final int index, final Format format, final String identifier) {
         this.index = index;

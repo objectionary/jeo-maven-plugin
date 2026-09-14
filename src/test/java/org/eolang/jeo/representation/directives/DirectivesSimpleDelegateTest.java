@@ -13,6 +13,7 @@ import org.xembly.Xembler;
 
 /**
  * Test case for {@link DirectivesSimpleDelegate}.
+ *
  * @since 0.12.0
  */
 final class DirectivesSimpleDelegateTest {

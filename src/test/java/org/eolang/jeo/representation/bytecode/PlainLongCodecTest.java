@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Test cases for {@link PlainLongCodec}.
+ *
  * @since 0.8
  */
 final class PlainLongCodecTest {
@@ -36,10 +37,6 @@ final class PlainLongCodecTest {
         );
     }
 
-    /**
-     * Test cases.
-     * @return Arguments.
-     */
     private static Object[] mapping() {
         return new Object[]{
             new Object[]{0L, DataType.LONG, new byte[]{0, 0, 0, 0, 0, 0, 0, 0}},
