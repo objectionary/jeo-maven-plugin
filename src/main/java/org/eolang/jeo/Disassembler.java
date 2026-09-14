@@ -140,16 +140,16 @@ public final class Disassembler {
      * @return Path to the disassembled XMIR file
      */
     private Path disassemble(final Path path, final Counter counter) {
-        final Transformation trans = new Logging(
-            "Disassembling",
-            "disassembled",
-            new Caching(
+        final Transformation trans = new Caching(
+            new Logging(
+                "Disassembling",
+                "disassembled",
                 new Informative(
                     new Disassembling(this.classes.root(), this.target, path, this.params)
-                )
-            ),
-            this.debug,
-            counter
+                ),
+                this.debug,
+                counter
+            )
         );
         trans.transform();
         return trans.target();
