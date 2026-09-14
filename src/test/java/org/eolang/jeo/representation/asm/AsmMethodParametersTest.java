@@ -14,6 +14,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeMethodParameters;
 import org.eolang.jeo.representation.bytecode.BytecodeParamAnnotations;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -47,6 +48,26 @@ final class AsmMethodParametersTest {
                     )
                 )
             )
+        );
+    }
+
+    @Test
+    void refusesATableLongerThanTheDescriptor() {
+        final MethodNode node = new MethodNode();
+        node.name = "foo";
+        node.desc = "(I)V";
+        node.parameters = new ArrayList<>(3);
+        for (int index = 0; index < 3; ++index) {
+            node.parameters.add(new ParameterNode("p", Opcodes.ACC_FINAL));
+        }
+        MatcherAssert.assertThat(
+            "the message must name the method and both counts",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new AsmMethodParameters(node).bytecode(),
+                "a table longer than the descriptor must be refused"
+            ).getMessage(),
+            Matchers.equalTo("Method 'foo(I)V' declares 1 parameters, while its table has 3 of them")
         );
     }
 
