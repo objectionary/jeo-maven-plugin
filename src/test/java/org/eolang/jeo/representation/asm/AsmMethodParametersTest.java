@@ -67,7 +67,7 @@ final class AsmMethodParametersTest {
                 () -> new AsmMethodParameters(node).bytecode(),
                 "a table longer than the descriptor must be refused"
             ).getMessage(),
-            Matchers.equalTo("Method 'foo(I)V' declares 1 parameters, while its table has 3 of them")
+            Matchers.equalTo("Method 'foo(I)V' declares 1 parameters, while its table has 3")
         );
     }
 

@@ -45,10 +45,11 @@ final class AsmMethodParameters {
             .orElse(Collections.emptyList());
         final Type[] types = this.types();
         if (params.size() > types.length) {
+            final MethodNode method = this.node;
             throw new IllegalStateException(
                 String.format(
-                    "Method '%s%s' declares %d parameters, while its table has %d of them",
-                    this.node.name, this.node.desc, types.length, params.size()
+                    "Method '%s%s' declares %d parameters, while its table has %d",
+                    method.name, method.desc, types.length, params.size()
                 )
             );
         }
