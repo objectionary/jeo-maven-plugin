@@ -44,6 +44,14 @@ final class AsmMethodParameters {
         final List<ParameterNode> params = Optional.ofNullable(this.node.parameters)
             .orElse(Collections.emptyList());
         final Type[] types = this.types();
+        if (params.size() > types.length) {
+            throw new IllegalStateException(
+                String.format(
+                    "Method '%s%s' declares %d parameters, while its table has %d of them",
+                    this.node.name, this.node.desc, types.length, params.size()
+                )
+            );
+        }
         final List<BytecodeMethodParameter> res = new ArrayList<>(types.length);
         for (int index = 0; index < params.size(); ++index) {
             res.add(
