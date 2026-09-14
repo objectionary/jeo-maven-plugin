@@ -120,10 +120,10 @@ public final class PrefixedName {
         if (PrefixedName.BLANKED.matcher(this.origin).matches()) {
             throw new IllegalArgumentException(PrefixedName.BLANK);
         }
-        final String prefixed = this.delimited
+        final String encoded = this.delimited
             .matcher(this.origin)
             .replaceAll(Matcher.quoteReplacement(this.prefix));
-        return this.parts(prefixed, true);
+        return this.parts(encoded, true);
     }
 
     /**
@@ -146,14 +146,14 @@ public final class PrefixedName {
     private String parts(final String value, final boolean encode) {
         final StringBuilder result = new StringBuilder();
         for (final String part : value.split("(?<=[./])|(?=[./])", -1)) {
-            if (part.equals(".") || part.equals("/")) {
+            if (".".equals(part) || "/".equals(part)) {
                 result.append(part);
             } else if (encode && part.startsWith(this.prefix)) {
                 result.append(this.prefix).append(
-                    this.safe(part.substring(this.prefix.length()))
+                    PrefixedName.safe(part.substring(this.prefix.length()))
                 );
             } else if (encode) {
-                result.append(this.safe(part));
+                result.append(PrefixedName.safe(part));
             } else {
                 result.append(new EncodedString(part).decode());
             }
@@ -166,7 +166,7 @@ public final class PrefixedName {
      * @param part Name part
      * @return Encoded part
      */
-    private String safe(final String part) {
-        return new DecodedString(part).encode().replace("+", "%20").replace("%24", "$");
+    private static String safe(final String part) {
+        return part.replace(" ", "%20");
     }
 }
