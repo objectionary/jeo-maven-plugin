@@ -45,13 +45,18 @@ public final class NamedDescriptor {
 
     /**
      * Encoded method name with descriptor.
+     *
+     * <p>A dash of the descriptor is escaped, so the last dash of the result
+     * is the separator. A method name may hold a dash of its own - Kotlin
+     * emits "box-impl" for a value class - and splitting on the first one
+     * landed inside the name.</p>
      * @return Encoded method name with descriptor.
      */
     public String encoded() {
         return String.format(
             "%s-%s",
             this.original,
-            new DecodedString(this.descr).encode()
+            new DecodedString(this.descr).encode().replace("-", "%2D")
         );
     }
 
@@ -78,7 +83,7 @@ public final class NamedDescriptor {
      */
     private static String prefix(final String encoded) {
         try {
-            return encoded.substring(0, encoded.indexOf('-'));
+            return encoded.substring(0, encoded.lastIndexOf('-'));
         } catch (final StringIndexOutOfBoundsException exception) {
             throw new IllegalArgumentException(
                 String.format("Invalid encoded method name: %s", encoded),
@@ -93,6 +98,6 @@ public final class NamedDescriptor {
      * @return The decoded method descriptor
      */
     private static String suffix(final String encoded) {
-        return new EncodedString(encoded.substring(encoded.indexOf('-') + 1)).decode();
+        return new EncodedString(encoded.substring(encoded.lastIndexOf('-') + 1)).decode();
     }
 }
