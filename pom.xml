@@ -68,7 +68,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
-    <stack-size>256M</stack-size>
     <verify.xmir.in.integration.tests>false</verify.xmir.in.integration.tests>
     <skipITs/>
   </properties>

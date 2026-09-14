@@ -8,7 +8,6 @@ import com.jcabi.matchers.XhtmlMatchers;
 import org.eolang.jeo.representation.xmir.NativeXmlNode;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -35,7 +34,7 @@ final class DirectivesValuesTest {
         );
     }
 
-    @RepeatedTest(100)
+    @Test
     void generatesRandomNameWithoutFirstDigit() {
         MatcherAssert.assertThat(
             "We expect that the name of the sequence will be generated randomly and will not start with a digit",

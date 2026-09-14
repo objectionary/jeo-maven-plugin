@@ -48,7 +48,7 @@ final class CounterTest {
     }
 
     @Test
-    void handlesZeroTotalWithoutIncrementing() {
+    void incrementsWithZeroTotal() {
         final Counter counter = new Counter(0);
         MatcherAssert.assertThat(
             "First call should return 1/0",
@@ -63,7 +63,7 @@ final class CounterTest {
     }
 
     @Test
-    void handlesLargeCountsWithoutOverflow() {
+    void handlesLargeTotal() {
         final Counter counter = new Counter(Integer.MAX_VALUE);
         MatcherAssert.assertThat(
             "First call should return 1/MAX_VALUE",

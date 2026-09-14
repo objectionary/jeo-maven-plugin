@@ -18,7 +18,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>9</maven.compiler.release>
-    <stack-size>256M</stack-size>
     <exec.mainClass>org.eolang.jeo.modules/org.eolang.jeo.modules.App</exec.mainClass>
   </properties>
   <build>

@@ -208,7 +208,7 @@ final class XmirRepresentationTest {
      * into the bytecode representation and back.
      */
     @Test
-    @Disabled
+    @Disabled("Performance test measuring the conversion round-trip time, disabled by default")
     @SuppressWarnings("PMD.GuardLogStatement")
     void convertsToXmirAndBack() {
         final Bytecode before = new BytecodeObject(
