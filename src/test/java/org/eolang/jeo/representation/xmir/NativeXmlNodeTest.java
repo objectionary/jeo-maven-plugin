@@ -47,6 +47,15 @@ final class NativeXmlNodeTest {
     }
 
     @Test
+    void doesNotTakeAnAttributeWhoseNameOnlyStartsTheSame() {
+        MatcherAssert.assertThat(
+            "an attribute is found by its name, not by its prefix",
+            new NativeXmlNode("<o names='wrong'/>").attribute("name"),
+            Matchers.equalTo(Optional.empty())
+        );
+    }
+
+    @Test
     void retrievesAttribute() {
         MatcherAssert.assertThat(
             "Can't retrieve the attribute, or the attribute is not the expected one",
