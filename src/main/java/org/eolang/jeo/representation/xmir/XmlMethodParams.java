@@ -65,10 +65,31 @@ final class XmlMethodParams {
     BytecodeMethodParameters params() {
         return new BytecodeMethodParameters(
             this.parameters(),
-            this.annotations()
+            this.annotations(),
+            this.count("annotable-visible"),
+            this.count("annotable-invisible")
         );
     }
 
+    /**
+     * Annotable parameter count written under the given name.
+     * @param name Name of the value
+     * @return The count, or zero when the XMIR does not carry it
+     */
+    private int count(final String name) {
+        return this.node.children()
+            .filter(child -> child.attribute("name").map(n -> n.startsWith(name)).orElse(false))
+            .findFirst()
+            .map(XmlOperand::new)
+            .map(XmlOperand::asObject)
+            .map(Integer.class::cast)
+            .orElse(0);
+    }
+
+    /**
+     * Method parameters.
+     * @return List of bytecode method parameters.
+     */
     private List<BytecodeMethodParameter> parameters() {
         return this.node.children()
             .map(XmlMethodParam::new)

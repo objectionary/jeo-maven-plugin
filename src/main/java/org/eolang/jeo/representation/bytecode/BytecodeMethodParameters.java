@@ -32,6 +32,16 @@ public final class BytecodeMethodParameters {
     private final List<BytecodeParamAnnotations> annotations;
 
     /**
+     * Number of parameters the visible annotations table has.
+     */
+    private final int visible;
+
+    /**
+     * Number of parameters the invisible annotations table has.
+     */
+    private final int invisible;
+
+    /**
      * Default constructor.
      */
     public BytecodeMethodParameters() {
@@ -75,8 +85,27 @@ public final class BytecodeMethodParameters {
         final List<BytecodeMethodParameter> params,
         final List<BytecodeParamAnnotations> annotations
     ) {
+        this(params, annotations, 0, 0);
+    }
+
+    /**
+     * Constructor.
+     * @param params Parameters.
+     * @param annotations Parameter annotations.
+     * @param visible Number of parameters the visible annotations table has.
+     * @param invisible Number of parameters the invisible annotations table has.
+     * @checkstyle ParameterNumberCheck (10 lines)
+     */
+    public BytecodeMethodParameters(
+        final List<BytecodeMethodParameter> params,
+        final List<BytecodeParamAnnotations> annotations,
+        final int visible,
+        final int invisible
+    ) {
         this.params = params;
         this.annotations = annotations;
+        this.visible = visible;
+        this.invisible = invisible;
     }
 
     /**
@@ -86,6 +115,12 @@ public final class BytecodeMethodParameters {
      */
     public void write(final MethodVisitor visitor) {
         this.params.forEach(param -> param.write(visitor));
+        if (this.visible > 0) {
+            visitor.visitAnnotableParameterCount(this.visible, true);
+        }
+        if (this.invisible > 0) {
+            visitor.visitAnnotableParameterCount(this.invisible, false);
+        }
         this.annotations.forEach(ann -> ann.write(visitor));
     }
 
@@ -102,7 +137,10 @@ public final class BytecodeMethodParameters {
                 .collect(Collectors.toList()),
             this.annotations.stream().map(
                 a -> a.directives(format)
-            ).collect(Collectors.toList())
+            ).collect(Collectors.toList()),
+            format,
+            this.visible,
+            this.invisible
         );
     }
 
