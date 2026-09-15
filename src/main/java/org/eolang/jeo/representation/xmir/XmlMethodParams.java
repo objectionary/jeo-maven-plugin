@@ -65,8 +65,20 @@ final class XmlMethodParams {
     BytecodeMethodParameters params() {
         return new BytecodeMethodParameters(
             this.parameters(),
-            this.annotations()
+            this.annotations(),
+            this.count("annotable-visible"),
+            this.count("annotable-invisible")
         );
+    }
+
+    private int count(final String name) {
+        return this.node.children()
+            .filter(child -> child.attribute("name").map(n -> n.startsWith(name)).orElse(false))
+            .findFirst()
+            .map(XmlOperand::new)
+            .map(XmlOperand::asObject)
+            .map(Integer.class::cast)
+            .orElse(0);
     }
 
     private List<BytecodeMethodParameter> parameters() {
