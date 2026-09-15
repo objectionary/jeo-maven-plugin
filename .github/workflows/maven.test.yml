@@ -16,6 +16,10 @@ jobs:
       matrix:
         os: [ ubuntu-24.04, macos-15, windows-2022 ]
         java: [ 11, 23 ]
+        include:
+          - os: ubuntu-24.04
+            java: 23
+            it: true
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
@@ -29,4 +33,8 @@ jobs:
           key: ${{ runner.os }}-jdk-${{ matrix.java }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
-      - run: mvn clean install -ntp --errors --batch-mode
+      - name: Run unit tests
+        run: mvn clean test -ntp --errors --batch-mode
+      - name: Run integration tests
+        if: matrix.it
+        run: mvn clean install -ntp --errors --batch-mode -DskipTests
