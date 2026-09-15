@@ -21,7 +21,7 @@ final class PrettyXmlTest {
             "We can't format XML output with correct indentation (two spaces)",
             new PrettyXml(
                 String.join(
-                    System.lineSeparator(),
+                    "\n",
                     "<o>",
                     "<o>",
                     "<o>3.14</o>",
@@ -32,7 +32,7 @@ final class PrettyXmlTest {
             ).toString(),
             Matchers.equalTo(
                 String.join(
-                    System.lineSeparator(),
+                    "\n",
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
                     "",
                     "<o>",

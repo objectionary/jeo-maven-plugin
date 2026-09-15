@@ -442,6 +442,12 @@
                 <exclude>checkstyle:/src/it/.*</exclude>
                 <exclude>duplicatefinder:.*</exclude>
                 <!--
+                PrettyXml always emits "\n" via dom4j regardless of the host
+                OS, so the test must assert against a literal "\n" rather
+                than System.lineSeparator(), which is "\r\n" on Windows.
+                -->
+                <exclude>checkstyle:.*/PrettyXmlTest.java</exclude>
+                <!--
                 Transitive dependencies that are not used directly in the code:
                 'byte-buddy' comes from mockito, 'junit-platform-commons' from
                 junit-jupiter, and 'xnav' from objectionary/lints. The dependency
