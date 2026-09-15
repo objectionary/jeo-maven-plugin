@@ -108,4 +108,42 @@ final class XmlDelegateObjectTest {
             Matchers.equalTo(2L)
         );
     }
+
+    @Test
+    void keepsEveryChildOfAnObjectWithNoDelegate() {
+        MatcherAssert.assertThat(
+            "an object whose first child is not the delegate cannot lose an argument",
+            new XmlDelegateObject(
+                new NativeXmlNode(
+                    String.join(
+                        "",
+                        "<o base='Q.jeo.trycatch' name='t0'>",
+                        "<o base='Q.org.eolang.number' name='a'>00</o>",
+                        "<o base='Q.org.eolang.number' name='b'>01</o>",
+                        "</o>"
+                    )
+                )
+            ).children().count(),
+            Matchers.equalTo(2L)
+        );
+    }
+
+    @Test
+    void dropsTheDelegateWhenItIsThere() {
+        MatcherAssert.assertThat(
+            "the delegate itself is not an argument",
+            new XmlDelegateObject(
+                new NativeXmlNode(
+                    String.join(
+                        "",
+                        "<o name='t0'>",
+                        "<o base='Q.jeo.trycatch' name='φ'/>",
+                        "<o base='Q.org.eolang.number' name='a'>00</o>",
+                        "</o>"
+                    )
+                )
+            ).children().count(),
+            Matchers.equalTo(1L)
+        );
+    }
 }
