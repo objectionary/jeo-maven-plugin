@@ -53,6 +53,7 @@ public final class PrettyXml {
             final SAXReader reader = new SAXReader();
             final Document document = reader.read(new StringReader(this.xml));
             final OutputFormat format = OutputFormat.createCompactFormat();
+            format.setLineSeparator(System.lineSeparator());
             format.setNewlines(true);
             format.setIndent(true);
             format.setIndentSize(2);
