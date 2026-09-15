@@ -47,6 +47,15 @@ final class JcabiXmlNodeTest {
     }
 
     @Test
+    void doesNotTakeAnAttributeWhoseNameOnlyStartsTheSame() {
+        MatcherAssert.assertThat(
+            "an attribute is found by its name, not by its prefix",
+            new JcabiXmlNode("<o names='wrong'/>").attribute("name"),
+            Matchers.equalTo(Optional.empty())
+        );
+    }
+
+    @Test
     void retrievesAttribute() {
         MatcherAssert.assertThat(
             "Can't retrieve the attribute, or the attribute is not the expected one",
