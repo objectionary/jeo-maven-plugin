@@ -59,12 +59,14 @@ public final class XmlAnnotationValue {
         final BytecodeAnnotationValue result;
         switch (this.type()) {
             case "PLAIN":
+                this.check(params, 2);
                 result = new BytecodePlainAnnotationValue(
                     String.valueOf(params.get(0)),
                     params.get(1)
                 );
                 break;
             case "ARRAY":
+                this.check(params, 1);
                 result = new BytecodeArrayAnnotationValue(
                     String.valueOf(params.get(0)),
                     params.stream()
@@ -74,6 +76,7 @@ public final class XmlAnnotationValue {
                 );
                 break;
             case "ANNOTATION":
+                this.check(params, 2);
                 result = new BytecodeAnnotationAnnotationValue(
                     String.valueOf(params.get(0)),
                     String.valueOf(params.get(1)),
@@ -84,6 +87,7 @@ public final class XmlAnnotationValue {
                 );
                 break;
             case "ENUM":
+                this.check(params, 3);
                 result = new BytecodeEnumAnnotationValue(
                     String.valueOf(params.get(0)),
                     String.valueOf(params.get(1)),
@@ -105,6 +109,17 @@ public final class XmlAnnotationValue {
      */
     boolean isValue() {
         return this.node.base().map(XmlAnnotationValue.APROPERTY_BASE::equals).orElse(false);
+    }
+
+    private void check(final List<Object> params, final int expected) {
+        if (params.size() < expected) {
+            throw new IllegalStateException(
+                String.format(
+                    "The '%s' property of type '%s' has %d values, while %d are expected",
+                    this.node, this.type(), params.size(), expected
+                )
+            );
+        }
     }
 
     private String type() {
