@@ -90,11 +90,11 @@ public final class BytecodeMethodParameters {
 
     /**
      * Constructor.
-     * @param params Parameters.
-     * @param annotations Parameter annotations.
-     * @param visible Number of parameters the visible annotations table has.
-     * @param invisible Number of parameters the invisible annotations table has.
-     * @checkstyle ParameterNumberCheck (10 lines)
+     *
+     * @param params Parameters
+     * @param annotations Parameter annotations
+     * @param visible Number of parameters the visible annotations table has
+     * @param invisible Number of parameters the invisible annotations table has
      */
     public BytecodeMethodParameters(
         final List<BytecodeMethodParameter> params,

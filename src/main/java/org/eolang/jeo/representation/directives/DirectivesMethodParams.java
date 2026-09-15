@@ -86,12 +86,12 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
 
     /**
      * Constructor.
-     * @param params Parameters.
-     * @param annotations Parameter annotations.
-     * @param format Format of the directives.
-     * @param visible Number of parameters the visible annotations table has.
-     * @param invisible Number of parameters the invisible annotations table has.
-     * @checkstyle ParameterNumberCheck (10 lines)
+     *
+     * @param params Parameters
+     * @param annotations Parameter annotations
+     * @param format Format of the directives
+     * @param visible Number of parameters the visible annotations table has
+     * @param invisible Number of parameters the invisible annotations table has
      */
     public DirectivesMethodParams(
         final List<Iterable<Directive>> params,
@@ -122,10 +122,6 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
         ).iterator();
     }
 
-    /**
-     * Directives of the annotable parameter counts.
-     * @return Directives, empty when both counts are absent
-     */
     private Stream<Directives> counts() {
         final List<Directives> res = new ArrayList<>(2);
         if (this.visible > 0) {
