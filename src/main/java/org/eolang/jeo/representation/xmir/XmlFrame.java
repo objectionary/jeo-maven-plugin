@@ -99,7 +99,7 @@ public final class XmlFrame implements XmlBytecodeEntry {
     }
 
     private Optional<Integer> nlocals() {
-        return this.byName("nlocals")
+        return this.byName("nlocal")
             .map(XmlOperand::new)
             .map(XmlOperand::asObject)
             .map(Integer.class::cast);
