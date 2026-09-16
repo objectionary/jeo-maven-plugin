@@ -59,6 +59,38 @@ final class CachingTest {
         );
     }
 
+    @Test
+    void writesTargetInCurrentDirectoryWithoutParent(@TempDir final Path temp) throws IOException {
+        final Path target = Path.of(String.format("caching-%s.xmir", System.nanoTime()));
+        final Path source = temp.resolve("source.xmir");
+        Files.write(source, "source".getBytes(StandardCharsets.UTF_8));
+        final Transformation transformation = new Transformation() {
+            @Override
+            public Path source() {
+                return source;
+            }
+
+            @Override
+            public Path target() {
+                return target;
+            }
+
+            @Override
+            public byte[] transform() {
+                return "result".getBytes(StandardCharsets.UTF_8);
+            }
+        };
+        try {
+            MatcherAssert.assertThat(
+                "A target without a parent directory must be written",
+                new String(new Caching(transformation).transform(), StandardCharsets.UTF_8),
+                Matchers.equalTo("result")
+            );
+        } finally {
+            Files.deleteIfExists(target);
+        }
+    }
+
     private static class MockTrans implements Transformation {
 
         /**
