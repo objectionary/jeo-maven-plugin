@@ -130,4 +130,25 @@ final class BytecodeModuleTest {
             )
         );
     }
+
+    @Test
+    void treatsMissingOptionalCollectionsAsEmpty() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "A module without its optional collections must print as one with empty ones",
+            new Xembler(
+                new BytecodeModule(
+                    "name", 0, null, null, null, null, null, null, null, null
+                ).directives(0, new Format())
+            ).xml(),
+            Matchers.equalTo(
+                new Xembler(
+                    new BytecodeModule(
+                        "name", 0, null, null,
+                        Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                        Collections.emptyList(), Collections.emptyList(), Collections.emptyList()
+                    ).directives(0, new Format())
+                ).xml()
+            )
+        );
+    }
 }
