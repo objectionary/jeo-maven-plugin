@@ -127,4 +127,13 @@ final class BytecodeModuleTest {
             Matchers.equalTo(actual)
         );
     }
+
+    @Test
+    void treatsMissingOptionalCollectionsAsEmpty() throws ImpossibleModificationException {
+        final BytecodeModule module = new BytecodeModule(
+            "name", 0, null, null, null, null, null, null, null, null
+        );
+        module.write(new ClassNode());
+        module.directives(0, new Format());
+    }
 }

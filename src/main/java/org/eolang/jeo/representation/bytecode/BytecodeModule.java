@@ -107,10 +107,10 @@ public final class BytecodeModule implements BytecodeAttribute {
         this.version = version;
         this.main = main;
         this.packages = Optional.ofNullable(packages).orElse(Collections.emptyList());
-        this.requires = requires;
-        this.exports = exports;
-        this.opens = opens;
-        this.provides = provides;
+        this.requires = Optional.ofNullable(requires).orElse(Collections.emptyList());
+        this.exports = Optional.ofNullable(exports).orElse(Collections.emptyList());
+        this.opens = Optional.ofNullable(opens).orElse(Collections.emptyList());
+        this.provides = Optional.ofNullable(provides).orElse(Collections.emptyList());
         this.uses = Optional.ofNullable(uses).orElse(Collections.emptyList());
     }
 
