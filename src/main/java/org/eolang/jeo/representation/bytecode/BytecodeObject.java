@@ -95,6 +95,9 @@ public final class BytecodeObject {
      * @return Top class.
      */
     public BytecodeClass top() {
+        if (this.classes.isEmpty()) {
+            throw new IllegalStateException("Bytecode object must contain a top class");
+        }
         return this.classes.get(0);
     }
 
