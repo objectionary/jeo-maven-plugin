@@ -12,6 +12,7 @@ import org.eolang.jeo.representation.asm.AsmUnknownAttribute;
 import org.eolang.jeo.representation.directives.DirectivesUnknownAttribute;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.xembly.Directive;
 
@@ -46,6 +47,14 @@ public final class BytecodeUnknownAttribute implements BytecodeAttribute {
     @Override
     public void write(final ClassVisitor clazz) {
         clazz.visitAttribute(new AsmUnknownAttribute(this.type, this.data));
+    }
+
+    /**
+     * Write to a field.
+     * @param field Field visitor.
+     */
+    public void write(final FieldVisitor field) {
+        field.visitAttribute(new AsmUnknownAttribute(this.type, this.data));
     }
 
     @Override

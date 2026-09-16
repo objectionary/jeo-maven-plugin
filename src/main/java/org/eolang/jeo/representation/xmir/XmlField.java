@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import lombok.ToString;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
 import org.eolang.jeo.representation.directives.JeoFqn;
 
@@ -56,7 +57,8 @@ public class XmlField {
             this.signature(),
             this.value(),
             this.access(),
-            this.annotations().map(XmlAnnotations::bytecode).orElse(new BytecodeAnnotations())
+            this.annotations().map(XmlAnnotations::bytecode).orElse(new BytecodeAnnotations()),
+            this.attributes()
         );
     }
 
@@ -128,6 +130,22 @@ public class XmlField {
             .filter(object -> name.equals(object.name()))
             .findFirst()
             .map(XmlAnnotations::new);
+    }
+
+    /**
+     * Field attributes.
+     * @return Attributes.
+     */
+    private BytecodeAttributes attributes() {
+        final String name = String.format("attributes-%s", this.name());
+        return this.node.children()
+            .map(XmlSeq::new)
+            .filter(XmlSeq::named)
+            .filter(seq -> name.equals(seq.name()))
+            .findFirst()
+            .map(XmlAttributes::new)
+            .map(XmlAttributes::attributes)
+            .orElseGet(BytecodeAttributes::new);
     }
 
     /**

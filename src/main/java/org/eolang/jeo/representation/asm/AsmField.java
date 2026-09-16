@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
 import org.objectweb.asm.tree.FieldNode;
 
@@ -38,7 +39,8 @@ final class AsmField {
             this.node.signature,
             this.node.value,
             this.node.access,
-            new AsmAnnotations(this.node).bytecode()
+            new AsmAnnotations(this.node).bytecode(),
+            new BytecodeAttributes(new AsmUnknownAttributes(this.node).bytecode())
         );
     }
 }

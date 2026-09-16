@@ -86,6 +86,11 @@ public final class DirectivesField implements Iterable<Directive> {
     private final DirectivesAnnotations annotations;
 
     /**
+     * Custom attributes.
+     */
+    private final DirectivesAttributes attributes;
+
+    /**
      * Constructor.
      */
     public DirectivesField() {
@@ -131,7 +136,8 @@ public final class DirectivesField implements Iterable<Directive> {
             descriptor,
             signature,
             value,
-            new DirectivesAnnotations("annotations")
+            new DirectivesAnnotations("annotations"),
+            new DirectivesAttributes()
         );
     }
 
@@ -155,6 +161,40 @@ public final class DirectivesField implements Iterable<Directive> {
         final Object value,
         final DirectivesAnnotations annotations
     ) {
+        this(
+            format,
+            access,
+            name,
+            descriptor,
+            signature,
+            value,
+            annotations,
+            new DirectivesAttributes()
+        );
+    }
+
+    /**
+     * Constructor.
+     * @param format Format
+     * @param access Access modifiers
+     * @param name Name
+     * @param descriptor Descriptor
+     * @param signature Signature
+     * @param value Initial value
+     * @param annotations Annotations
+     * @param attributes Custom attributes
+     * @checkstyle ParameterNumberCheck (5 lines)
+     */
+    public DirectivesField(
+        final Format format,
+        final int access,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final Object value,
+        final DirectivesAnnotations annotations,
+        final DirectivesAttributes attributes
+    ) {
         this.format = format;
         this.access = access;
         this.name = name;
@@ -162,6 +202,7 @@ public final class DirectivesField implements Iterable<Directive> {
         this.signature = Optional.ofNullable(signature).orElse("");
         this.value = value;
         this.annotations = annotations;
+        this.attributes = attributes;
     }
 
     @Override
@@ -174,7 +215,8 @@ public final class DirectivesField implements Iterable<Directive> {
             new DirectivesValue(this.format, DirectivesField.title("descriptor"), this.descriptor),
             new DirectivesValue(this.format, DirectivesField.title("signature"), this.signature),
             new DirectivesValue(this.format, DirectivesField.title("value"), this.value),
-            this.annotations
+            this.annotations,
+            this.attributes
         ).iterator();
     }
 
