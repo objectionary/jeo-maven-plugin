@@ -58,7 +58,7 @@ final class XmlFrameTest {
                         "frame",
                         new NumName("f", 0).toString(),
                         new DirectivesValue(format, "type", Opcodes.F_CHOP),
-                        new DirectivesValue(format, "nlocal", 0),
+                        new DirectivesValue(format, "nlocal", 2),
                         new DirectivesFrameValues(format, "locals"),
                         new DirectivesValue(format, "nstack", 3),
                         new DirectivesFrameValues(format, "stack", null, null, null)
@@ -68,7 +68,7 @@ final class XmlFrameTest {
             Matchers.equalTo(
                 new BytecodeFrame(
                     Opcodes.F_CHOP,
-                    0,
+                    2,
                     new Object[0],
                     3,
                     new Object[]{null, null, null}
