@@ -82,7 +82,7 @@ public final class JcabiXmlNode implements XmlNode {
         final int length = attributes.getLength();
         for (int index = 0; index < length; ++index) {
             final Node item = attributes.item(index);
-            if (item.getNodeName().startsWith(name)) {
+            if (item.getNodeName().equals(name)) {
                 result = Optional.of(item.getTextContent());
                 break;
             }
