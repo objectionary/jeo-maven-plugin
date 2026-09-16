@@ -31,6 +31,7 @@ final class XmlConstantDynamic {
 
     /**
      * Convert to an ASM dynamic constant.
+     *
      * @return Dynamic constant
      */
     ConstantDynamic constant() {
