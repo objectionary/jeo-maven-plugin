@@ -8,6 +8,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -32,6 +33,17 @@ final class XmlTryCatchEntryTest {
                 new NativeXmlNode(new Xembler(block.directives(0, new Format())).xml())
             ).bytecode(),
             Matchers.equalTo(block)
+        );
+    }
+
+    @Test
+    void rejectsEntryWithoutExceptionType() {
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new XmlTryCatchEntry(
+                new NativeXmlNode("<o><o/><o/><o/></o>")
+            ).bytecode(),
+            "Missing exception type must produce contextual validation"
         );
     }
 }

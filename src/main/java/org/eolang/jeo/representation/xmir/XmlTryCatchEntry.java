@@ -81,7 +81,18 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
      * @return Exception type.
      */
     private String type() {
-        return Optional.ofNullable(this.node.children().collect(Collectors.toList()).get(3))
+        final List<XmlNode> all = this.node.children().collect(Collectors.toList());
+        if (all.size() <= 3) {
+            throw new IllegalStateException(
+                String.format(
+                    "Expected at least %d element, but found %d in %s",
+                    4,
+                    all.size(),
+                    this.node
+                )
+            );
+        }
+        return Optional.ofNullable(all.get(3))
             .filter(n -> !XmlTryCatchEntry.NOP.equals(new XmlClosedObject(n).base()))
             .map(XmlValue::new)
             .map(XmlValue::string)
