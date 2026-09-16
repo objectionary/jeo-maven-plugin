@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.objectweb.asm.ConstantDynamic;
+import org.objectweb.asm.Handle;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.xembly.ImpossibleModificationException;
@@ -42,6 +44,30 @@ final class DirectivesInstructionTest {
                 "/o/o/o[contains(@base,'string')]",
                 "/o/o/o/o[contains(@base, 'bytes')]"
             )
+        );
+    }
+
+    @Test
+    void convertsDynamicConstantOperandToDirectives() {
+        final ConstantDynamic dynamic = new ConstantDynamic(
+            "value",
+            "Ljava/lang/String;",
+            new Handle(
+                Opcodes.H_INVOKESTATIC,
+                "java/lang/invoke/ConstantBootstraps",
+                "explicitCast",
+                "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+                false
+            ),
+            "text"
+        );
+        final String xml = new Xembler(
+            new DirectivesInstruction(0, new Format(), Opcodes.LDC, dynamic)
+        ).xmlQuietly();
+        MatcherAssert.assertThat(
+            "Dynamic constants must have a dedicated operand representation",
+            xml,
+            XhtmlMatchers.hasXPath(new JeoBaseXpath("//o", "constant-dynamic").toXpath())
         );
     }
 

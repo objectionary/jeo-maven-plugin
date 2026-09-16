@@ -8,6 +8,7 @@ import java.util.Iterator;
 import org.eolang.jeo.representation.bytecode.BytecodeEntry;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.objectweb.asm.Handle;
+import org.objectweb.asm.ConstantDynamic;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
@@ -56,6 +57,10 @@ public final class DirectivesOperand implements Iterable<Directive> {
             result = new DirectivesHandle(this.index, this.format, (Handle) this.raw).iterator();
         } else if (this.raw instanceof Type) {
             result = new DirectivesType(this.index, this.format, (Type) this.raw).iterator();
+        } else if (this.raw instanceof ConstantDynamic) {
+            result = new DirectivesConstantDynamic(
+                this.index, this.format, (ConstantDynamic) this.raw
+            ).iterator();
         } else {
             result = new DirectivesValue(this.index, this.format, this.raw).iterator();
         }

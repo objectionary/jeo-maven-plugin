@@ -11,6 +11,8 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.ConstantDynamic;
+import org.objectweb.asm.Handle;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Xembler;
 
@@ -74,6 +76,30 @@ final class XmlInstructionTest {
             Matchers.containsString(
                 "Unknown opcode name: unknown"
             )
+        );
+    }
+
+    @Test
+    void parsesDynamicConstantOperand() {
+        final ConstantDynamic dynamic = new ConstantDynamic(
+            "value",
+            "Ljava/lang/String;",
+            new Handle(
+                Opcodes.H_INVOKESTATIC,
+                "java/lang/invoke/ConstantBootstraps",
+                "explicitCast",
+                "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+                false
+            ),
+            "text"
+        );
+        final String xml = new Xembler(
+            new DirectivesInstruction(0, new Format(), Opcodes.LDC, dynamic)
+        ).xmlQuietly();
+        MatcherAssert.assertThat(
+            "Dynamic constant XML must be readable back into bytecode",
+            new XmlInstruction(new JcabiXmlNode(xml)).bytecode(),
+            Matchers.notNullValue()
         );
     }
 }
