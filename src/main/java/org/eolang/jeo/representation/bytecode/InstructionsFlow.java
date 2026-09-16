@@ -108,7 +108,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
         return this.blocks.stream()
             .map(BytecodeTryCatchBlock.class::cast)
             .filter(block -> this.index(block.startLabel()) <= instruction)
-            .filter(block -> this.index(block.endLabel()) >= instruction)
+            .filter(block -> this.index(block.endLabel()) > instruction)
             .map(block -> this.index(block.handlerLabel()))
             .collect(Collectors.toList());
     }
