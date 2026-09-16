@@ -93,12 +93,15 @@ final class XmlInstructionTest {
             ),
             "text"
         );
-        final String xml = new Xembler(
-            new DirectivesInstruction(0, new Format(), Opcodes.LDC, dynamic)
-        ).xmlQuietly();
         MatcherAssert.assertThat(
             "Dynamic constant XML must be readable back into bytecode",
-            new XmlInstruction(new JcabiXmlNode(xml)).bytecode(),
+            new XmlInstruction(
+                new JcabiXmlNode(
+                    new Xembler(
+                        new DirectivesInstruction(0, new Format(), Opcodes.LDC, dynamic)
+                    ).xmlQuietly()
+                )
+            ).bytecode(),
             Matchers.notNullValue()
         );
     }

@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.Iterator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.objectweb.asm.ConstantDynamic;
@@ -11,6 +12,7 @@ import org.xembly.Directive;
 
 /**
  * Directives for a JVM dynamic constant.
+ *
  * @since 0.18.0
  */
 public final class DirectivesConstantDynamic implements Iterable<Directive> {
@@ -45,7 +47,7 @@ public final class DirectivesConstantDynamic implements Iterable<Directive> {
     }
 
     @Override
-    public java.util.Iterator<Directive> iterator() {
+    public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "constant-dynamic",
             new NumName("c", this.index).toString(),
@@ -61,7 +63,8 @@ public final class DirectivesConstantDynamic implements Iterable<Directive> {
                             this.format,
                             this.constant.getBootstrapMethodArgument(idx)
                         )
-                    ).collect(Collectors.toList())
+                    )
+                    .collect(Collectors.toList())
             )
         ).iterator();
     }

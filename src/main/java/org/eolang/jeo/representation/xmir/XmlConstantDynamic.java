@@ -11,6 +11,7 @@ import org.objectweb.asm.ConstantDynamic;
 
 /**
  * XML representation of a dynamic constant.
+ *
  * @since 0.18.0
  */
 final class XmlConstantDynamic {
@@ -37,11 +38,10 @@ final class XmlConstantDynamic {
         final List<XmlOperand> args = new XmlSeq(children.get(3)).children()
             .map(XmlOperand::new)
             .collect(Collectors.toList());
-        final BytecodeHandler bootstrap = new XmlHandle(children.get(2)).bytecode();
         return new ConstantDynamic(
             (String) new XmlOperand(children.get(0)).asObject(),
             (String) new XmlOperand(children.get(1)).asObject(),
-            bootstrap.asHandle(),
+            new XmlHandle(children.get(2)).bytecode().asHandle(),
             args.stream().map(XmlOperand::asObject).toArray()
         );
     }
