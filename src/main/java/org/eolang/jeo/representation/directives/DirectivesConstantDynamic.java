@@ -57,14 +57,14 @@ public final class DirectivesConstantDynamic implements Iterable<Directive> {
             new DirectivesHandle(2, this.format, this.constant.getBootstrapMethod()),
             new DirectivesSeq(
                 "arguments",
-                IntStream.range(0, this.constant.getBootstrapMethodArgumentCount()).mapToObj(
+                IntStream.range(0, this.constant.getBootstrapMethodArgumentCount())
+                    .mapToObj(
                         idx -> new DirectivesOperand(
                             idx,
                             this.format,
                             this.constant.getBootstrapMethodArgument(idx)
                         )
-                    )
-                    .collect(Collectors.toList())
+                    ).collect(Collectors.toList())
             )
         ).iterator();
     }
