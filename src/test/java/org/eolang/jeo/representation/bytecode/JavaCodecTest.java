@@ -36,6 +36,26 @@ final class JavaCodecTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("surrogates")
+    void preservesLoneSurrogates(final String value) {
+        final JavaCodec codec = new JavaCodec();
+        MatcherAssert.assertThat(
+            "Lone surrogate code units must survive the string codec",
+            codec.decode(codec.encode(value, DataType.STRING), DataType.STRING),
+            Matchers.equalTo(value)
+        );
+    }
+
+    /**
+     * Lone surrogate values.
+     * @return Test values.
+     */
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private static String[] surrogates() {
+        return new String[]{"a\ud800b", "a\udcb9"};
+    }
+
     /**
      * Test cases.
      * @return Arguments.
