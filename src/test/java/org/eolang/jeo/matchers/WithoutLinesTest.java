@@ -7,6 +7,7 @@ package org.eolang.jeo.matchers;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 
@@ -53,4 +54,17 @@ final class WithoutLinesTest {
             new IsEqual<>(expected)
         );
     }
+
+    @Test
+    void removesLineAttributes() {
+        final XML lineless = new WithoutLines(
+            new XMLDocument("<root><o line=\"val\">data</o></root>")
+        ).value();
+        MatcherAssert.assertThat(
+            "The transformed XML must not contain any line attributes",
+            lineless.toString(),
+            Matchers.not(Matchers.containsString("line="))
+        );
+    }
 }
+
