@@ -6,7 +6,6 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.eolang.jeo.representation.bytecode.BytecodeHandler;
 import org.objectweb.asm.ConstantDynamic;
 
 /**
@@ -23,6 +22,7 @@ final class XmlConstantDynamic {
 
     /**
      * Constructor.
+     *
      * @param xmlnode XML node
      */
     XmlConstantDynamic(final XmlNode xmlnode) {
@@ -35,14 +35,14 @@ final class XmlConstantDynamic {
      */
     ConstantDynamic constant() {
         final List<XmlNode> children = this.node.children().collect(Collectors.toList());
-        final List<XmlOperand> args = new XmlSeq(children.get(3)).children()
-            .map(XmlOperand::new)
-            .collect(Collectors.toList());
         return new ConstantDynamic(
             (String) new XmlOperand(children.get(0)).asObject(),
             (String) new XmlOperand(children.get(1)).asObject(),
             new XmlHandle(children.get(2)).bytecode().asHandle(),
-            args.stream().map(XmlOperand::asObject).toArray()
+            new XmlSeq(children.get(3)).children()
+                .map(XmlOperand::new)
+                .map(XmlOperand::asObject)
+                .toArray()
         );
     }
 }

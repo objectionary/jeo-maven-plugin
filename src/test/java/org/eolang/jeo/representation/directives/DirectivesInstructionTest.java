@@ -49,22 +49,26 @@ final class DirectivesInstructionTest {
 
     @Test
     void convertsDynamicConstantOperandToDirectives() {
-        final ConstantDynamic dynamic = new ConstantDynamic(
-            "value",
-            "Ljava/lang/String;",
-            new Handle(
-                Opcodes.H_INVOKESTATIC,
-                "java/lang/invoke/ConstantBootstraps",
-                "explicitCast",
-                "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
-                false
-            ),
-            "text"
-        );
         MatcherAssert.assertThat(
             "Dynamic constants must have a dedicated operand representation",
             new Xembler(
-                new DirectivesInstruction(0, new Format(), Opcodes.LDC, dynamic)
+                new DirectivesInstruction(
+                    0,
+                    new Format(),
+                    Opcodes.LDC,
+                    new ConstantDynamic(
+                        "value",
+                        "Ljava/lang/String;",
+                        new Handle(
+                            Opcodes.H_INVOKESTATIC,
+                            "java/lang/invoke/ConstantBootstraps",
+                            "explicitCast",
+                            "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+                            false
+                        ),
+                        "text"
+                    )
+                )
             ).xmlQuietly(),
             XhtmlMatchers.hasXPath(new JeoBaseXpath("//o", "constant-dynamic").toXpath())
         );
