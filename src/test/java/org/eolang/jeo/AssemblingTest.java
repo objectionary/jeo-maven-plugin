@@ -91,6 +91,12 @@ final class AssemblingTest {
                 Paths.get("nonempty"),
                 Paths.get("File.xmir"),
                 Paths.get("nonempty/File.class")
+            ),
+            Arguments.of(
+                Paths.get("src"),
+                Paths.get("out"),
+                Paths.get("src/foo.xmir.xmir"),
+                Paths.get("out/foo.xmir.class")
             )
         );
     }
