@@ -4,12 +4,17 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.objectweb.asm.Attribute;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -83,6 +88,29 @@ public final class AsmUnknownAttributes {
             new AsmUnknownAttribute("TASTY"),
             new AsmUnknownAttribute("ModuleTarget"),
         };
+    }
+
+    /**
+     * All attribute prototypes declared in a class file.
+     * @param reader Class reader
+     * @return Prototypes for every UTF-8 attribute name
+     */
+    public static Attribute[] prototypes(final ClassReader reader) {
+        final Set<String> names = new HashSet<>();
+        for (int idx = 1; idx < reader.getItemCount(); ++idx) {
+            final int item = reader.getItem(idx);
+            if (item > 0 && reader.readByte(item - 1) == 1) {
+                final int length = reader.readUnsignedShort(item);
+                final byte[] bytes = new byte[length];
+                for (int pos = 0; pos < length; ++pos) {
+                    bytes[pos] = (byte) reader.readByte(item + 2 + pos);
+                }
+                names.add(new String(bytes, StandardCharsets.UTF_8));
+            }
+        }
+        final List<Attribute> result = new ArrayList<>(names.size());
+        names.forEach(name -> result.add(new AsmUnknownAttribute(name)));
+        return result.toArray(new Attribute[0]);
     }
 
     /**

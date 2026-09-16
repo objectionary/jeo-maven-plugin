@@ -8,9 +8,14 @@ import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeLine;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeUnknownAttribute;
+import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.xmir.XmlObject;
 import org.hamcrest.MatcherAssert;
@@ -75,6 +80,25 @@ final class AsmProgramTest {
             actual.toString(),
             Matchers.equalTo(new Bytecode(original).toString())
         );
+    }
+
+    @Test
+    void preservesUnregisteredClassAttributes() {
+        final BytecodeClass original = new BytecodeClass(
+            new ClassName("CustomAttribute"),
+            java.util.Collections.emptyList(),
+            java.util.Collections.emptyList(),
+            new BytecodeAnnotations(),
+            new BytecodeAttributes(new BytecodeUnknownAttribute("Custom", new byte[]{1, 2})),
+            new BytecodeClassProperties(0)
+        );
+        final String xml = new BytecodeObject(original).xml().toString();
+        MatcherAssert.assertThat(
+            "Unregistered class attributes must survive ASM parsing",
+            new AsmProgram(new BytecodeObject(original).bytecode().bytes()).bytecode(0).xml().toString(),
+            Matchers.containsString("Custom")
+        );
+        MatcherAssert.assertThat(xml, Matchers.containsString("Custom"));
     }
 
     /**
