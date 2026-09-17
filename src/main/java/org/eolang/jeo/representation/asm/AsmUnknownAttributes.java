@@ -5,10 +5,17 @@
 package org.eolang.jeo.representation.asm;
 
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.objectweb.asm.Attribute;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -89,6 +96,59 @@ public final class AsmUnknownAttributes {
             new AsmUnknownAttribute("TASTY"),
             new AsmUnknownAttribute("ModuleTarget"),
         };
+    }
+
+    /**
+     * All prototypes declared by a class, including attributes not known to ASM.
+     *
+     * @param reader Class reader
+     * @return Prototypes for every unknown attribute
+     */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
+    public static Attribute[] prototypes(final ClassReader reader) {
+        final Set<String> types = new LinkedHashSet<>();
+        for (final Attribute prototype : AsmUnknownAttributes.prototypes()) {
+            types.add(prototype.type);
+        }
+        reader.accept(new ClassVisitor(Opcodes.ASM9) {
+            @Override
+            public void visitAttribute(final Attribute attribute) {
+                types.add(attribute.type);
+            }
+
+            @Override
+            public FieldVisitor visitField(
+                final int access,
+                final String name,
+                final String descriptor,
+                final String signature,
+                final Object value
+            ) {
+                return new FieldVisitor(Opcodes.ASM9) {
+                    @Override
+                    public void visitAttribute(final Attribute attribute) {
+                        types.add(attribute.type);
+                    }
+                };
+            }
+
+            @Override
+            public MethodVisitor visitMethod(
+                final int access,
+                final String name,
+                final String descriptor,
+                final String signature,
+                final String[] exceptions
+            ) {
+                return new MethodVisitor(Opcodes.ASM9) {
+                    @Override
+                    public void visitAttribute(final Attribute attribute) {
+                        types.add(attribute.type);
+                    }
+                };
+            }
+        }, ClassReader.SKIP_DEBUG);
+        return types.stream().map(AsmUnknownAttribute::new).toArray(Attribute[]::new);
     }
 
     /**
