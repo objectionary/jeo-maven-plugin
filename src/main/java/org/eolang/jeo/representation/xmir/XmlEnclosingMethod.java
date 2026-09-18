@@ -41,21 +41,25 @@ final class XmlEnclosingMethod {
     }
 
     private String owner() {
-        return this.string(0);
+        return this.string(0, "owner");
     }
 
     private String method() {
-        return this.string(1);
+        return this.string(1, "method name");
     }
 
     private String descriptor() {
-        return this.string(2);
+        return this.string(2, "descriptor");
     }
 
-    private String string(final int index) {
+    private String string(final int index, final String member) {
         return new XmlValue(
             this.node.child(index).orElseThrow(
-                () -> new IllegalStateException("Enclosing method owner is absent")
+                () -> new IllegalStateException(
+                    String.format(
+                        "Enclosing method %s is missing in '%s'", member, this.node
+                    )
+                )
             )
         ).string();
     }
