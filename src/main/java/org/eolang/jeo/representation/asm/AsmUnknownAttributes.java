@@ -110,45 +110,78 @@ public final class AsmUnknownAttributes {
         for (final Attribute prototype : AsmUnknownAttributes.prototypes()) {
             types.add(prototype.type);
         }
-        reader.accept(new ClassVisitor(Opcodes.ASM9) {
-            @Override
-            public void visitAttribute(final Attribute attribute) {
-                types.add(attribute.type);
-            }
-
-            @Override
-            public FieldVisitor visitField(
-                final int access,
-                final String name,
-                final String descriptor,
-                final String signature,
-                final Object value
-            ) {
-                return new FieldVisitor(Opcodes.ASM9) {
-                    @Override
-                    public void visitAttribute(final Attribute attribute) {
-                        types.add(attribute.type);
-                    }
-                };
-            }
-
-            @Override
-            public MethodVisitor visitMethod(
-                final int access,
-                final String name,
-                final String descriptor,
-                final String signature,
-                final String[] exceptions
-            ) {
-                return new MethodVisitor(Opcodes.ASM9) {
-                    @Override
-                    public void visitAttribute(final Attribute attribute) {
-                        types.add(attribute.type);
-                    }
-                };
-            }
-        }, ClassReader.SKIP_DEBUG);
+        reader.accept(
+            new AttributesVisitor(types),
+            ClassReader.SKIP_DEBUG
+        );
         return types.stream().map(AsmUnknownAttribute::new).toArray(Attribute[]::new);
+    }
+
+    /** Visitor that collects custom attribute names from a class. */
+    private static final class AttributesVisitor extends ClassVisitor {
+
+        /** Names collected so far. */
+        private final Set<String> types;
+
+        AttributesVisitor(final Set<String> types) {
+            super(Opcodes.ASM9);
+            this.types = types;
+        }
+
+        @Override
+        public void visitAttribute(final Attribute attribute) {
+            this.types.add(attribute.type);
+        }
+
+        @Override
+        public FieldVisitor visitField(
+            final int access, final String name, final String descriptor,
+            final String signature, final Object value
+        ) {
+            return new FieldAttributesVisitor(this.types);
+        }
+
+        @Override
+        public MethodVisitor visitMethod(
+            final int access, final String name, final String descriptor,
+            final String signature, final String[] exceptions
+        ) {
+            return new MethodAttributesVisitor(this.types);
+        }
+    }
+
+    /** Visitor that collects custom attributes from a field. */
+    private static final class FieldAttributesVisitor extends FieldVisitor {
+
+        /** Names collected so far. */
+        private final Set<String> types;
+
+        FieldAttributesVisitor(final Set<String> types) {
+            super(Opcodes.ASM9);
+            this.types = types;
+        }
+
+        @Override
+        public void visitAttribute(final Attribute attribute) {
+            this.types.add(attribute.type);
+        }
+    }
+
+    /** Visitor that collects custom attributes from a method. */
+    private static final class MethodAttributesVisitor extends MethodVisitor {
+
+        /** Names collected so far. */
+        private final Set<String> types;
+
+        MethodAttributesVisitor(final Set<String> types) {
+            super(Opcodes.ASM9);
+            this.types = types;
+        }
+
+        @Override
+        public void visitAttribute(final Attribute attribute) {
+            this.types.add(attribute.type);
+        }
     }
 
     /**
