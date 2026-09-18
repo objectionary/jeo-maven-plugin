@@ -67,7 +67,12 @@ final class AsmMethodParameters {
                 )
             );
         }
-        return new BytecodeMethodParameters(res, this.paramAnnotations());
+        return new BytecodeMethodParameters(
+            res,
+            this.paramAnnotations(),
+            this.node.visibleAnnotableParameterCount,
+            this.node.invisibleAnnotableParameterCount
+        );
     }
 
     private Type[] types() {
