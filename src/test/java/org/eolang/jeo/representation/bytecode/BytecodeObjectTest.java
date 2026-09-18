@@ -11,6 +11,7 @@ import org.eolang.jeo.representation.directives.DirectivesObject;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -83,6 +84,22 @@ final class BytecodeObjectTest {
                     )
                 )
             )
+        );
+    }
+
+    @Test
+    void refusesToAssembleSeveralClasses() {
+        MatcherAssert.assertThat(
+            "The message doesn't tell how many classes were given",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new BytecodeObject(
+                    new BytecodeClass("First"),
+                    new BytecodeClass("Second")
+                ).bytecode(),
+                "Two classes can't be assembled into one bytecode file"
+            ).getMessage(),
+            Matchers.containsString("'2' classes")
         );
     }
 
