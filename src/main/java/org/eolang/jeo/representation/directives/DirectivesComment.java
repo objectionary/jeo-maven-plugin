@@ -36,6 +36,7 @@ public final class DirectivesComment implements Iterable<Directive> {
             "[\\x{7F}-\\x{84}]",
             "[\\x{86}-\\x{9F}]",
             "[\\x{FDD0}-\\x{FDDF}]",
+            "[\\x{FFFE}-\\x{FFFF}]",
             "[\\x{1FFFE}-\\x{1FFFF}]",
             "[\\x{2FFFE}-\\x{2FFFF}]",
             "[\\x{3FFFE}-\\x{3FFFF}]",
