@@ -55,6 +55,9 @@ final class XmirFiles {
     Stream<Path> all() {
         final Path path = this.root;
         final Stream.Builder<Path> builder = Stream.builder();
+        if (!Files.isDirectory(path)) {
+            throw new IllegalStateException(String.format("XMIR input directory does not exist: %s", path));
+        }
         if (Files.exists(path)) {
             try (Stream<Path> all = Files.walk(path)) {
                 all.filter(Files::isRegularFile)
