@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.Objects;
+import java.util.OptionalInt;
 import org.eolang.jeo.representation.directives.DirectivesField;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
@@ -116,14 +117,15 @@ public final class BytecodeField {
      * @return Directives
      */
     public DirectivesField directives(final Format format) {
+        final String xml = this.xmlName();
         return new DirectivesField(
             format,
             this.access,
-            this.name,
+            xml,
             this.descriptor,
             this.signature,
             this.value,
-            this.annotations.directives(format, String.format("annotations-%s", this.name))
+            this.annotations.directives(format, String.format("annotations-%s", xml))
         );
     }
 
@@ -159,5 +161,21 @@ public final class BytecodeField {
             "BytecodeField(name=%s, descriptor=%s, signature=%s, value=%s, access=%d, annotations=%s)",
             this.name, this.descriptor, this.signature, this.value, this.access, this.annotations
         );
+    }
+
+    private String xmlName() {
+        final OptionalInt illegal = this.name.codePoints().filter(
+            code -> code < ' ' && code != '\t' && code != '\n' && code != '\r'
+        ).findFirst();
+        if (illegal.isPresent()) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Field '%s' has the character U+%04X in its name, which XML 1.0 doesn't allow",
+                    this.name,
+                    illegal.getAsInt()
+                )
+            );
+        }
+        return this.name;
     }
 }
