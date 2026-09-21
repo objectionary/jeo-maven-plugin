@@ -52,6 +52,9 @@ final class XmlFrameValues {
         final Object result;
         if (value instanceof String && XmlFrameValues.ALIASES.containsKey(value)) {
             result = XmlFrameValues.ALIASES.get(value);
+        } else if (value instanceof String
+            && ((String) value).startsWith("L") && ((String) value).endsWith(";")) {
+            result = ((String) value).substring(1, ((String) value).length() - 1);
         } else {
             result = value;
         }
