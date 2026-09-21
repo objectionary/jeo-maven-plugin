@@ -42,4 +42,19 @@ final class DirectivesMethodModifiersTest {
             )
         );
     }
+
+    @Test
+    void marksDeprecatedMethod() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect deprecated method to have the 'deprecated' modifier set to true",
+            new Xembler(
+                new DirectivesMethodModifiers(
+                    new Format(), Opcodes.ACC_PUBLIC | Opcodes.ACC_DEPRECATED
+                )
+            ).xml(),
+            XhtmlMatchers.hasXPath(
+                "/o[contains(@name, 'modifiers')]/o[contains(@name, 'deprecated') and contains(@base, 'true')]"
+            )
+        );
+    }
 }
