@@ -92,12 +92,14 @@ public final class Assembler {
     }
 
     private Path assemble(final Path path, final Counter counter) {
-        final Transformation trans = new Logging(
-            "Assembling",
-            "assembled",
-            new Caching(new Informative(new Assembling(this.input, this.output, path))),
-            this.debug,
-            counter
+        final Transformation trans = new Caching(
+            new Logging(
+                "Assembling",
+                "assembled",
+                new Informative(new Assembling(this.input, this.output, path)),
+                this.debug,
+                counter
+            )
         );
         trans.transform();
         return trans.target();

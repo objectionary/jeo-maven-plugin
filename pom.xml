@@ -457,6 +457,11 @@
                 <exclude>dependencies:net.bytebuddy:byte-buddy</exclude>
                 <exclude>dependencies:org.junit.platform:junit-platform-commons</exclude>
                 <exclude>dependencies:com.github.volodya-lombrozo:xnav</exclude>
+                <!--
+                'reload4j' comes from objectionary/lints as the SLF4J backend,
+                AssemblerTest attaches an appender to it to read the log.
+                -->
+                <exclude>dependencies:ch.qos.reload4j:reload4j</exclude>
               </excludes>
             </configuration>
           </plugin>
