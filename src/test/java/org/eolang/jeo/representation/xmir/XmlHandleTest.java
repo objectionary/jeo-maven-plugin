@@ -48,8 +48,6 @@ final class XmlHandleTest {
                             "<o base='Q.jeo.handle' name='h'>",
                             "<o base='Q.org.eolang.number' name='f'>",
                             "00-00-00-00-00-00-F0-3F</o>",
-                            "<o base='Q.org.eolang.number' name='s'>",
-                            "00-00-00-00-00-00-F0-3F</o>",
                             "</o>"
                         )
                     )
