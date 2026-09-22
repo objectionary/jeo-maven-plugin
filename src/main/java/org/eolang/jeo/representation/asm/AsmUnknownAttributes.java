@@ -5,10 +5,13 @@
 package org.eolang.jeo.representation.asm;
 
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.objectweb.asm.Attribute;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -89,6 +92,22 @@ public final class AsmUnknownAttributes {
             new AsmUnknownAttribute("TASTY"),
             new AsmUnknownAttribute("ModuleTarget"),
         };
+    }
+
+    /**
+     * All prototypes declared by a class, including attributes not known to ASM.
+     *
+     * @param reader Class reader
+     * @return Prototypes for every unknown attribute
+     */
+    @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
+    public static Attribute[] prototypes(final ClassReader reader) {
+        final Set<String> types = new LinkedHashSet<>();
+        for (final Attribute prototype : AsmUnknownAttributes.prototypes()) {
+            types.add(prototype.type);
+        }
+        reader.accept(new AsmUnknownAttributeClassVisitor(types), ClassReader.SKIP_DEBUG);
+        return types.stream().map(AsmUnknownAttribute::new).toArray(Attribute[]::new);
     }
 
     /**
