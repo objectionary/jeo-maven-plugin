@@ -11,6 +11,7 @@ import org.eolang.jeo.representation.directives.DirectivesObject;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -83,6 +84,15 @@ final class BytecodeObjectTest {
                     )
                 )
             )
+        );
+    }
+
+    @Test
+    void rejectsObjectWithoutTopClass() {
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new BytecodeObject("sample").bytecode(),
+            "An object without a top class must fail with a contextual error"
         );
     }
 
