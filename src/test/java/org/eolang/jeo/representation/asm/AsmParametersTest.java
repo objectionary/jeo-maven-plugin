@@ -5,13 +5,13 @@
 package org.eolang.jeo.representation.asm;
 
 import org.hamcrest.MatcherAssert;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.tree.ClassNode;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.ClassNode;
 
 /**
  * Test case for {@link AsmParameters}.
@@ -33,11 +33,6 @@ final class AsmParametersTest {
         );
     }
 
-    /**
-     * A class with one method carrying a named parameter.
-     *
-     * @return Bytes of the class
-     */
     private byte[] classWithNamedParameter() {
         final ClassWriter writer = new ClassWriter(0);
         writer.visit(

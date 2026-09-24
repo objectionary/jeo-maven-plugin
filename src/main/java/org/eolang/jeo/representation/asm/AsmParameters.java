@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.eolang.jeo.representation.DefaultVersion;
+import org.eolang.jeo.representation.NamedDescriptor;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -44,7 +45,17 @@ final class AsmParameters extends ClassVisitor {
      * @param bytes Bytes of the class
      */
     AsmParameters(final byte... bytes) {
-        super(new DefaultVersion().api());
+        this(new DefaultVersion().api(), bytes);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param api The ASM API version to use
+     * @param bytes Bytes of the class
+     */
+    private AsmParameters(final int api, final byte... bytes) {
+        super(api);
         this.bytes = bytes.clone();
         this.found = new HashMap<>(0);
     }
@@ -58,7 +69,7 @@ final class AsmParameters extends ClassVisitor {
         final String[] exceptions
     ) {
         final List<ParameterNode> bag = new ArrayList<>(0);
-        this.found.put(this.key(name, descriptor), bag);
+        this.found.put(new NamedDescriptor(name, descriptor).encoded(), bag);
         return new AsmParameter(bag);
     }
 
@@ -72,22 +83,12 @@ final class AsmParameters extends ClassVisitor {
             this, ClassReader.SKIP_CODE | ClassReader.SKIP_FRAMES
         );
         for (final MethodNode method : node.methods) {
-            final List<ParameterNode> bag =
-                this.found.get(this.key(method.name, method.desc));
+            final List<ParameterNode> bag = this.found.get(
+                new NamedDescriptor(method.name, method.desc).encoded()
+            );
             if (method.parameters == null && bag != null && !bag.isEmpty()) {
                 method.parameters = bag;
             }
         }
-    }
-
-    /**
-     * The key of a method in the map of found parameters.
-     *
-     * @param name Name of the method
-     * @param descriptor Descriptor of the method
-     * @return The key
-     */
-    private String key(final String name, final String descriptor) {
-        return String.format("%s%s", name, descriptor);
     }
 }

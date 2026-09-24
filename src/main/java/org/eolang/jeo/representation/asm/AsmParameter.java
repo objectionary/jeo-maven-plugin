@@ -30,7 +30,17 @@ final class AsmParameter extends MethodVisitor {
      * @param bag Where to put what we find
      */
     AsmParameter(final List<ParameterNode> bag) {
-        super(new DefaultVersion().api());
+        this(new DefaultVersion().api(), bag);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param api The ASM API version to use
+     * @param bag Where to put what we find
+     */
+    private AsmParameter(final int api, final List<ParameterNode> bag) {
+        super(api);
         this.bag = bag;
     }
 
