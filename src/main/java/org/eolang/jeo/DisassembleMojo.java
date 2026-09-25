@@ -16,6 +16,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.cactoos.set.SetOf;
+import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.directives.Format;
 
 /**
@@ -241,6 +242,7 @@ public final class DisassembleMojo extends AbstractMojo {
             return;
         }
         this.checkedThreads();
+        final String kind = this.checkedMode();
         final Path src = new MavenPath(this.sourcesDir).resolve();
         final Path out = new MavenPath(this.outputDir).resolve();
         try {
@@ -250,7 +252,7 @@ public final class DisassembleMojo extends AbstractMojo {
             Logger.info(
                 this,
                 "Disassembling is started with mode '%s' (with listings = '%b', comments = '%b', modifiers = '%b', pretty = '%b')",
-                this.mode,
+                kind,
                 listings,
                 comments,
                 this.modifiers,
@@ -267,7 +269,7 @@ public final class DisassembleMojo extends AbstractMojo {
                     Format.COMMENTS, comments,
                     Format.WITH_LISTING, listings,
                     Format.PRETTY, this.prettyXmir,
-                    Format.MODE, this.mode
+                    Format.MODE, kind
                 ),
                 this.debug,
                 this.threads
@@ -286,6 +288,15 @@ public final class DisassembleMojo extends AbstractMojo {
                 exception
             );
         }
+    }
+
+    private String checkedMode() throws MojoExecutionException {
+        try {
+            DisassembleMode.fromString(this.mode);
+        } catch (final IllegalArgumentException exception) {
+            throw new MojoExecutionException(exception.getMessage(), exception);
+        }
+        return this.mode;
     }
 
     private void checkedThreads() throws MojoExecutionException {
