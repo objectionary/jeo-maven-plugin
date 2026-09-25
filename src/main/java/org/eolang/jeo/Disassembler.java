@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.Counter;
+import org.eolang.jeo.representation.directives.Fingerprint;
 import org.eolang.jeo.representation.directives.Format;
 
 /**
@@ -147,7 +148,8 @@ public final class Disassembler {
                 ),
                 this.debug,
                 counter
-            )
+            ),
+            new Fingerprint(this.params).toString()
         );
         trans.transform();
         return trans.target();
