@@ -8,6 +8,8 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.Counter;
 
@@ -78,15 +80,15 @@ public final class Assembler {
      * @since 0.2.0
      */
     public void assemble() {
-        final XmirFiles files = new XmirFiles(this.input);
-        final Counter counter = new Counter(files.total());
+        final List<Path> files = new XmirFiles(this.input).all().collect(Collectors.toList());
+        final Counter counter = new Counter(files.size());
         final Stream<Path> all = new Summary(
             "Assembling",
             "assembled",
             this.input.toString(),
             this.output,
             new ParallelTranslator(path -> this.assemble(path, counter), this.threads)
-        ).apply(files.all());
+        ).apply(files.stream());
         all.forEach(this::log);
         all.close();
     }
