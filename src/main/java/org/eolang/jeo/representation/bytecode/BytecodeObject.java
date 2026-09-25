@@ -87,6 +87,15 @@ public final class BytecodeObject {
      * @return Bytecode
      */
     public Bytecode bytecode() {
+        if (this.classes.size() > 1) {
+            throw new IllegalStateException(
+                String.format(
+                    "Can't assemble '%d' classes into one bytecode file, only the top class is supported, classes are '%s'",
+                    this.classes.size(),
+                    this.classes
+                )
+            );
+        }
         final CustomClassWriter writer = new CustomClassWriter();
         this.top().writeTo(writer);
         return writer.bytecode();
