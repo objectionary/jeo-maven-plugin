@@ -31,6 +31,21 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
     private final List<Iterable<Directive>> annotations;
 
     /**
+     * Format of the directives.
+     */
+    private final Format format;
+
+    /**
+     * Number of parameters the visible annotations table has.
+     */
+    private final int visible;
+
+    /**
+     * Number of parameters the invisible annotations table has.
+     */
+    private final int invisible;
+
+    /**
      * Constructor.
      */
     public DirectivesMethodParams() {
@@ -66,8 +81,30 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
         final List<Iterable<Directive>> params,
         final List<Iterable<Directive>> annotations
     ) {
+        this(params, annotations, new Format(), 0, 0);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param params Parameters
+     * @param annotations Parameter annotations
+     * @param format Format of the directives
+     * @param visible Number of parameters the visible annotations table has
+     * @param invisible Number of parameters the invisible annotations table has
+     */
+    public DirectivesMethodParams(
+        final List<Iterable<Directive>> params,
+        final List<Iterable<Directive>> annotations,
+        final Format format,
+        final int visible,
+        final int invisible
+    ) {
         this.params = params;
         this.annotations = annotations;
+        this.format = format;
+        this.visible = visible;
+        this.invisible = invisible;
     }
 
     @Override
@@ -76,9 +113,31 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
             "params",
             "params",
             Stream.concat(
-                this.params.stream().map(Directives::new),
-                this.annotations.stream().map(Directives::new)
+                Stream.concat(
+                    this.params.stream().map(Directives::new),
+                    this.annotations.stream().map(Directives::new)
+                ),
+                this.counts()
             ).collect(Collectors.toList())
         ).iterator();
+    }
+
+    private Stream<Directives> counts() {
+        final List<Directives> res = new ArrayList<>(2);
+        if (this.visible > 0) {
+            res.add(
+                new Directives(
+                    new DirectivesValue(this.format, "annotable-visible", this.visible)
+                )
+            );
+        }
+        if (this.invisible > 0) {
+            res.add(
+                new Directives(
+                    new DirectivesValue(this.format, "annotable-invisible", this.invisible)
+                )
+            );
+        }
+        return res.stream();
     }
 }
