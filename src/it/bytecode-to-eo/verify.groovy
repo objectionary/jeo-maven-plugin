@@ -20,4 +20,5 @@ app.eachLine { line ->
   }
 }
 assert app.text.contains("<!--") : "We enabled comments in the XMIR file using 'omitComments=false' option, but they are absent"
+assert new File(basedir, 'target/generated-sources/jeo-xmir/WithoutPackage.xmir').exists() : "The package-less class XMIR was not generated"
 true
