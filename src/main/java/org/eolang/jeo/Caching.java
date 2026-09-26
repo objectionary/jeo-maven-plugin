@@ -89,7 +89,9 @@ public final class Caching implements Transformation {
             result = Files.readAllBytes(target);
         } else {
             final byte[] transform = this.origin.transform();
-            Files.createDirectories(target.getParent());
+            if (target.getParent() != null) {
+                Files.createDirectories(target.getParent());
+            }
             Files.write(target, transform);
             if (!this.print.isEmpty()) {
                 Files.write(this.cache(), this.print.getBytes(StandardCharsets.UTF_8));
