@@ -597,4 +597,4 @@ It might take significantly more time to build,
 but it will ensure that all transformations are correct and aligned with
 the XMIR specification.
 
-You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
+You will need [Maven 3.1+](https://maven.apache.org) and Java 11+ installed.
