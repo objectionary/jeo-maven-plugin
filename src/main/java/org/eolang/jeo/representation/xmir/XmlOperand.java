@@ -69,6 +69,8 @@ final class XmlOperand {
             result = new XmlAnnotationValue(this.raw).bytecode();
         } else if (new JeoFqn("label").fqn().equals(base)) {
             result = new XmlLabel(this.raw).bytecode();
+        } else if (new JeoFqn("constant-dynamic").fqn().equals(base)) {
+            result = new XmlConstantDynamic(this.raw).constant();
         } else {
             result = new XmlValue(this.raw).object();
         }
