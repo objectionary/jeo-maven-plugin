@@ -84,9 +84,7 @@ public final class XmlClass {
     public BytecodeClass bytecode() {
         try {
             return new BytecodeClass(
-                new ClassName(
-                    new PrefixedName(new ClassName(this.pckg, this.name()).full()).decode()
-                ),
+                new ClassName(this.pckg, new PrefixedName(this.name()).decode()),
                 this.methods().stream().map(XmlMethod::bytecode)
                     .collect(Collectors.toList()),
                 this.fields().stream()
