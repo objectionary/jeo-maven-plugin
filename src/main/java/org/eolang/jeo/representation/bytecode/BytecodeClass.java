@@ -386,7 +386,7 @@ public final class BytecodeClass {
 
     private String supername() {
         final String result;
-        if ("module-info".equals(this.name.full())) {
+        if ("module-info".equals(this.name.full()) || "java/lang/Object".equals(this.name.full())) {
             result = null;
         } else {
             result = this.props.supername();
