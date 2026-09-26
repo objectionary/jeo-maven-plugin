@@ -690,7 +690,7 @@
           <plugin>
             <groupId>org.eolang</groupId>
             <artifactId>hone-maven-plugin</artifactId>
-            <version>0.28.0</version>
+            <version>0.31.1</version>
             <configuration>
               <alwaysWithDocker>true</alwaysWithDocker>
             </configuration>
