@@ -67,7 +67,10 @@ final class FilteredClasses implements Classes {
 
     @Override
     public Stream<Path> all() {
-        final List<Path> res = this.original.all().filter(this.filter).collect(Collectors.toList());
+        final Path root = this.original.root();
+        final List<Path> res = this.original.all()
+            .filter(path -> this.filter.test(root.relativize(path)))
+            .collect(Collectors.toList());
         this.logger.accept(
             String.format("Found %d files in %s using %s", res.size(), this.original, this.filter)
         );
