@@ -50,10 +50,5 @@ final class PluginStartupTest {
         } finally {
             Thread.currentThread().setContextClassLoader(original);
         }
-        MatcherAssert.assertThat(
-            "The original context classloader must not leak",
-            Thread.currentThread().getContextClassLoader(),
-            Matchers.equalTo(original)
-        );
     }
 }

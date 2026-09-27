@@ -102,12 +102,12 @@ public final class BytecodeModule implements BytecodeAttribute {
         this.access = access;
         this.version = version;
         this.main = main;
-        this.packages = packages == null ? Collections.emptyList() : packages;
-        this.requires = requires == null ? Collections.emptyList() : requires;
-        this.exports = exports == null ? Collections.emptyList() : exports;
-        this.opens = opens == null ? Collections.emptyList() : opens;
-        this.provides = provides == null ? Collections.emptyList() : provides;
-        this.uses = uses == null ? Collections.emptyList() : uses;
+        this.packages = packages;
+        this.requires = requires;
+        this.exports = exports;
+        this.opens = opens;
+        this.provides = provides;
+        this.uses = uses;
     }
 
     @Override
@@ -121,10 +121,10 @@ public final class BytecodeModule implements BytecodeAttribute {
             module.visitMainClass(this.main);
         }
         this.packages().forEach(module::visitPackage);
-        this.requires.forEach(req -> req.write(module));
-        this.exports.forEach(exp -> exp.write(module));
-        this.opens.forEach(opn -> opn.write(module));
-        this.provides.forEach(prov -> prov.write(module));
+        this.requires().forEach(req -> req.write(module));
+        this.exports().forEach(exp -> exp.write(module));
+        this.opens().forEach(opn -> opn.write(module));
+        this.provides().forEach(prov -> prov.write(module));
         this.uses().forEach(module::visitUse);
     }
 
@@ -142,16 +142,16 @@ public final class BytecodeModule implements BytecodeAttribute {
             this.version,
             this.main,
             this.packages(),
-            this.requires.stream()
+            this.requires().stream()
                 .map(req -> req.directives(format))
                 .collect(Collectors.toList()),
-            this.exports.stream()
+            this.exports().stream()
                 .map(exp -> exp.directives(format))
                 .collect(Collectors.toList()),
-            this.opens.stream()
+            this.opens().stream()
                 .map(opn -> opn.directives(format))
                 .collect(Collectors.toList()),
-            this.provides.stream()
+            this.provides().stream()
                 .map(prov -> prov.directives(format))
                 .collect(Collectors.toList()),
             this.uses()
@@ -176,7 +176,7 @@ public final class BytecodeModule implements BytecodeAttribute {
     public int hashCode() {
         return Objects.hash(
             this.name, this.access, this.version, this.main, this.packages(),
-            this.requires, this.exports, this.opens, this.provides, this.uses()
+            this.requires(), this.exports(), this.opens(), this.provides(), this.uses()
         );
     }
 
@@ -185,7 +185,7 @@ public final class BytecodeModule implements BytecodeAttribute {
         return String.format(
             "BytecodeModule(name=%s, access=%d, version=%s, main=%s, packages=%s, requires=%s, exports=%s, opens=%s, provides=%s, uses=%s)",
             this.name, this.access, this.version, this.main, this.packages(),
-            this.requires, this.exports, this.opens, this.provides, this.uses()
+            this.requires(), this.exports(), this.opens(), this.provides(), this.uses()
         );
     }
 
@@ -202,13 +202,13 @@ public final class BytecodeModule implements BytecodeAttribute {
 
     private boolean samePackaging(final BytecodeModule module) {
         return Objects.equals(this.packages(), module.packages())
-            && Objects.equals(this.requires, module.requires)
-            && Objects.equals(this.exports, module.exports);
+            && Objects.equals(this.requires(), module.requires())
+            && Objects.equals(this.exports(), module.exports());
     }
 
     private boolean sameUsage(final BytecodeModule module) {
-        return Objects.equals(this.opens, module.opens)
-            && Objects.equals(this.provides, module.provides)
+        return Objects.equals(this.opens(), module.opens())
+            && Objects.equals(this.provides(), module.provides())
             && Objects.equals(this.uses(), module.uses());
     }
 
@@ -228,6 +228,46 @@ public final class BytecodeModule implements BytecodeAttribute {
             result = Collections.emptyList();
         } else {
             result = this.uses;
+        }
+        return result;
+    }
+
+    private List<BytecodeModuleRequired> requires() {
+        final List<BytecodeModuleRequired> result;
+        if (this.requires == null) {
+            result = Collections.emptyList();
+        } else {
+            result = this.requires;
+        }
+        return result;
+    }
+
+    private List<BytecodeModuleExported> exports() {
+        final List<BytecodeModuleExported> result;
+        if (this.exports == null) {
+            result = Collections.emptyList();
+        } else {
+            result = this.exports;
+        }
+        return result;
+    }
+
+    private List<BytecodeModuleOpened> opens() {
+        final List<BytecodeModuleOpened> result;
+        if (this.opens == null) {
+            result = Collections.emptyList();
+        } else {
+            result = this.opens;
+        }
+        return result;
+    }
+
+    private List<BytecodeModuleProvided> provides() {
+        final List<BytecodeModuleProvided> result;
+        if (this.provides == null) {
+            result = Collections.emptyList();
+        } else {
+            result = this.provides;
         }
         return result;
     }
