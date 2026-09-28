@@ -42,15 +42,11 @@ final class PluginStartupTest {
         try {
             new PluginStartup(new MavenProject(), dir).init();
             MatcherAssert.assertThat(
-                "A dynamic classloader must replace the original one",
-                Thread.currentThread().getContextClassLoader(),
-                Matchers.not(Matchers.sameInstance(original))
-            );
-            MatcherAssert.assertThat(
-                "We expect the loaded class to be instantiable",
-                Thread.currentThread().getContextClassLoader().loadClass(name)
-                    .getDeclaredConstructor().newInstance(),
-                Matchers.notNullValue()
+                "A dynamic classloader must replace the original and load the class",
+                Thread.currentThread().getContextClassLoader() != original
+                    && Thread.currentThread().getContextClassLoader().loadClass(name)
+                        .getDeclaredConstructor().newInstance() != null,
+                Matchers.is(true)
             );
         } finally {
             Thread.currentThread().setContextClassLoader(original);
