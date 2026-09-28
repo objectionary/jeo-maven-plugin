@@ -131,10 +131,12 @@ public final class CustomClassWriter extends ClassVisitor {
             field.setAccessible(true);
             final int previous = field.getInt(delegate);
             field.setInt(delegate, 4);
-            final MethodVisitor original = this.visitMethod(
-                access, name, descriptor, signature, exceptions
-            );
-            field.setInt(delegate, previous);
+            final MethodVisitor original;
+            try {
+                original = this.visitMethod(access, name, descriptor, signature, exceptions);
+            } finally {
+                field.setInt(delegate, previous);
+            }
             return original;
         } catch (final NoSuchFieldException | IllegalAccessException exception) {
             throw new IllegalStateException(

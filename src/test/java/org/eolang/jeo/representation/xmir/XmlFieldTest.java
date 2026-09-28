@@ -18,6 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.objectweb.asm.Opcodes;
+import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -138,6 +139,23 @@ final class XmlFieldTest {
                 new NativeXmlNode(new Xembler(expected.directives(new Format())).xml())
             ).bytecode(),
             Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void readsAttributesByNameWhenAccessIsMissing() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect a missing 'access' not to shift the other field attributes",
+            new XmlField(
+                new NativeXmlNode(
+                    new Xembler(
+                        new Directives(new DirectivesField(9, "foo", "I", "", 0))
+                            .xpath("/o/o[@name='access']")
+                            .remove()
+                    ).xml()
+                )
+            ).bytecode(),
+            Matchers.equalTo(new BytecodeField("foo", "I", null, 0, 0))
         );
     }
 

@@ -40,17 +40,19 @@ public final class XmlSourceFile {
     }
 
     private String source() {
-        return new XmlValue(
-            this.node.child(0).orElseThrow(
-                () -> new IllegalStateException("Source file node is absent")
-            )
-        ).string();
+        return this.string(0, "name");
     }
 
     private String debug() {
+        return this.string(1, "debug extension");
+    }
+
+    private String string(final int index, final String member) {
         return new XmlValue(
-            this.node.child(1).orElseThrow(
-                () -> new IllegalStateException("Source file node is absent")
+            this.node.child(index).orElseThrow(
+                () -> new IllegalStateException(
+                    String.format("Source file %s is missing in '%s'", member, this.node)
+                )
             )
         ).string();
     }

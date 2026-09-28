@@ -52,6 +52,22 @@ final class XmlFrameValuesTest {
     }
 
     @Test
+    void keepsClassNamedLikeAlias() throws ImpossibleModificationException {
+        final Object[] expected = {"top", "long", Opcodes.TOP, Opcodes.LONG};
+        MatcherAssert.assertThat(
+            "Here we check that a class named 'top' or 'long' is not read back as an alias.",
+            new XmlFrameValues(
+                new NativeXmlNode(
+                    new Xembler(
+                        new DirectivesFrameValues(new Format(), "values", expected)
+                    ).xml()
+                )
+            ).values(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
     void parsesFrameValuesFromBareValues() throws ImpossibleModificationException {
         final Object[] expected = {
             "java/lang/Object",

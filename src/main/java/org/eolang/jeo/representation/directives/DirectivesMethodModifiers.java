@@ -55,7 +55,8 @@ public final class DirectivesMethodModifiers implements Iterable<Directive> {
             new DirectivesValue(this.format, "abstract", all.is(Opcodes.ACC_ABSTRACT)),
             new DirectivesValue(this.format, "strict", all.is(Opcodes.ACC_STRICT)),
             new DirectivesValue(this.format, "synthetic", all.is(Opcodes.ACC_SYNTHETIC)),
-            new DirectivesValue(this.format, "mandated", all.is(Opcodes.ACC_MANDATED))
+            new DirectivesValue(this.format, "mandated", all.is(Opcodes.ACC_MANDATED)),
+            new DirectivesValue(this.format, "deprecated", all.is(Opcodes.ACC_DEPRECATED))
         ).iterator();
     }
 }

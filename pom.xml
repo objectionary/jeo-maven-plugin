@@ -457,6 +457,11 @@
                 <exclude>dependencies:net.bytebuddy:byte-buddy</exclude>
                 <exclude>dependencies:org.junit.platform:junit-platform-commons</exclude>
                 <exclude>dependencies:com.github.volodya-lombrozo:xnav</exclude>
+                <!--
+                'reload4j' comes from objectionary/lints as the SLF4J backend,
+                AssemblerTest attaches an appender to it to read the log.
+                -->
+                <exclude>dependencies:ch.qos.reload4j:reload4j</exclude>
               </excludes>
             </configuration>
           </plugin>
@@ -583,12 +588,11 @@
             <artifactId>maven-invoker-plugin</artifactId>
             <configuration combine.self="override">
               <!--
-              All integration tests except 'phi-unphi' and 'jna' are enabled
+              All integration tests except 'phi-unphi' are enabled
               in the 'long' profile.
               -->
               <pomExcludes>
                 <exclude>phi-unphi/pom.xml</exclude>
-                <exclude>jna/pom.xml</exclude>
               </pomExcludes>
             </configuration>
           </plugin>

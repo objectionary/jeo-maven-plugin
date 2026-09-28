@@ -17,6 +17,11 @@ import org.eolang.jeo.representation.bytecode.BytecodeHandler;
 final class XmlHandle {
 
     /**
+     * How many operands a handle carries.
+     */
+    private static final int OPERANDS = 5;
+
+    /**
      * XML node.
      */
     private final XmlJeoObject node;
@@ -48,6 +53,14 @@ final class XmlHandle {
         final List<XmlOperand> operands = this.node.children()
             .map(XmlOperand::new)
             .collect(Collectors.toList());
+        if (operands.size() < XmlHandle.OPERANDS) {
+            throw new IllegalStateException(
+                String.format(
+                    "The '%s' handle has %d operands, while %d are expected",
+                    this.node, operands.size(), XmlHandle.OPERANDS
+                )
+            );
+        }
         return new BytecodeHandler(
             (Integer) Objects.requireNonNull(operands.get(0).asObject()),
             Objects.requireNonNull(operands.get(1).asObject()).toString(),
