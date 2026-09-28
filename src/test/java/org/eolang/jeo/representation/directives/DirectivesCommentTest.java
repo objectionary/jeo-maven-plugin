@@ -43,4 +43,18 @@ final class DirectivesCommentTest {
             Matchers.containsString("<!-- Hello &#45;&#45; &lt;world&gt; &#45;&#45;&#45;! -->")
         );
     }
+
+    @Test
+    void removesForbiddenBasicPlaneNoncharacters() throws ImpossibleModificationException {
+        final String xml = new Xembler(
+            new Directives().append(
+                new DirectivesComment(new Format(), "before\uFFFE\uFFFFafter")
+            )
+        ).xml();
+        MatcherAssert.assertThat(
+            "XML comments must not contain forbidden U+FFFE or U+FFFF",
+            xml,
+            Matchers.containsString("<!-- beforeafter -->")
+        );
+    }
 }

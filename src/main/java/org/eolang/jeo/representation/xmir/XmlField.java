@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
@@ -98,9 +97,11 @@ public final class XmlField {
 
     private Object value() {
         return new XmlOperand(
-            this.node.children()
-                .collect(Collectors.toList())
-                .get(Attribute.VALUE.index())
+            this.child(Attribute.VALUE).orElseThrow(
+                () -> new IllegalStateException(
+                    String.format("Field '%s' doesn't have a 'value' attribute", this.name())
+                )
+            )
         ).asObject();
     }
 
@@ -115,17 +116,21 @@ public final class XmlField {
     }
 
     private Optional<XmlValue> find(final Attribute attribute) {
-        return Optional.of(
-            new XmlValue(
-                this.node.children().collect(Collectors.toList()).get(attribute.index())
-            )
-        );
+        return this.child(attribute).map(XmlValue::new);
+    }
+
+    private Optional<XmlNode> child(final Attribute attribute) {
+        return this.node.children()
+            .map(XmlNamedObject::new)
+            .filter(XmlNamedObject::named)
+            .filter(object -> attribute.title().equals(object.name()))
+            .map(XmlNamedObject::node)
+            .findFirst();
     }
 
     /**
      * Field attribute.
-     * Pay attention that the order of the attributes is important.
-     * They should be in the same order as in the XML representation.
+     * Each attribute is found by its name in the XML representation.
      *
      * @since 0.1
      */
@@ -137,18 +142,18 @@ public final class XmlField {
          * For example, if the field is public and static, then the value will be 9.
          * See {@link org.objectweb.asm.Opcodes} for more details.
          */
-        ACCESS(0),
+        ACCESS("access"),
 
         /**
          * Field name.
          */
-        NAME(1),
+        NAME("name"),
 
         /**
          * Field descriptor.
          * For example, for field of type int the descriptor will be "I".
          */
-        DESCRIPTOR(2),
+        DESCRIPTOR("descriptor"),
 
         /**
          * Field signature.
@@ -169,7 +174,7 @@ public final class XmlField {
          * You can read more in 4.1.1 section of the ASM
          * <a href="https://asm.ow2.io/asm4-guide.pdf">manual </a>
          */
-        SIGNATURE(3),
+        SIGNATURE("signature"),
 
         /**
          * Initial field value.
@@ -177,24 +182,24 @@ public final class XmlField {
          * Any data type will be represented as a hex string.
          * May not be set.
          */
-        VALUE(4);
+        VALUE("value");
 
         /**
-         * Position of the attribute in the XML representation.
+         * Name of the attribute in the XML representation.
          */
-        private final int position;
+        private final String label;
 
         /**
          * Constructor.
          *
-         * @param position Position of the attribute in the XML representation
+         * @param label Name of the attribute in the XML representation
          */
-        Attribute(final int position) {
-            this.position = position;
+        Attribute(final String label) {
+            this.label = label;
         }
 
-        private int index() {
-            return this.position;
+        private String title() {
+            return this.label;
         }
     }
 }

@@ -79,7 +79,7 @@ public final class XmlAttribute {
                     .map(XmlOperand::new)
                     .map(XmlOperand::asObject)
                     .map(Integer.class::cast)
-                    .orElse(0)
+                    .orElseThrow(() -> XmlAttribute.absent(this.node))
             );
         } else if (new JeoFqn("local-variable").fqn().equals(base)) {
             result = new XmlLocalVariable(this.node).attribute();
@@ -105,5 +105,13 @@ public final class XmlAttribute {
             );
         }
         return result;
+    }
+
+    private static IllegalStateException absent(final XmlJeoObject node) {
+        return new IllegalStateException(
+            String.format(
+                "The inner class '%s' has no access mask, which is not the same as zero", node
+            )
+        );
     }
 }

@@ -102,11 +102,11 @@ public final class BytecodeMaxs {
     }
 
     /**
-     * Is maxs stack and locals are zero?
+     * Is either maxs stack or locals undefined?
      *
-     * @return True if both are zero
+     * @return True if at least one of them is undefined
      */
     boolean compute() {
-        return this.stack == BytecodeMaxs.UNDEFINED && this.locals == BytecodeMaxs.UNDEFINED;
+        return this.stack == BytecodeMaxs.UNDEFINED || this.locals == BytecodeMaxs.UNDEFINED;
     }
 }

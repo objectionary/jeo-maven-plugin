@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.objectweb.asm.ConstantDynamic;
+import org.objectweb.asm.Handle;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.xembly.ImpossibleModificationException;
@@ -46,18 +48,44 @@ final class DirectivesInstructionTest {
         );
     }
 
+    @Test
+    void convertsDynamicConstantOperandToDirectives() {
+        MatcherAssert.assertThat(
+            "Dynamic constants must have a dedicated operand representation",
+            new Xembler(
+                new DirectivesInstruction(
+                    0,
+                    new Format(),
+                    Opcodes.LDC,
+                    new ConstantDynamic(
+                        "value",
+                        "Ljava/lang/String;",
+                        new Handle(
+                            Opcodes.H_INVOKESTATIC,
+                            "java/lang/invoke/ConstantBootstraps",
+                            "explicitCast",
+                            "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+                            false
+                        ),
+                        "text"
+                    )
+                )
+            ).xmlQuietly(),
+            XhtmlMatchers.hasXPath(new JeoBaseXpath("//o", "constant-dynamic").toXpath())
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("instructionBases")
     void transformsIntoEoWithoutCountingOpcodes(
         final int opcode, final String base
     ) throws ImpossibleModificationException {
-        final String xml = new Xembler(new DirectivesInstruction(0, new Format(), opcode)).xml();
         MatcherAssert.assertThat(
             String.format(
                 "We expect to get the EO representation of the bytecode where each instruction has a simple name without sequence number, please check the final XML:%n%s%n",
-                xml
+                new Xembler(new DirectivesInstruction(0, new Format(), opcode)).xml()
             ),
-            xml,
+            new Xembler(new DirectivesInstruction(0, new Format(), opcode)).xml(),
             XhtmlMatchers.hasXPath(new JeoBaseXpath("//o", base).toXpath())
         );
     }

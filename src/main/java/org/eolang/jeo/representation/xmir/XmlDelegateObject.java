@@ -43,9 +43,7 @@ public final class XmlDelegateObject implements XmlEoObject {
 
     @Override
     public Optional<String> base() {
-        return this.inner.children().findFirst()
-            .filter(child -> child.attribute("name").map("φ"::equals).orElse(false))
-            .map(child -> new XmlSimpleDelegate(child).base());
+        return this.delegate().map(child -> new XmlSimpleDelegate(child).base());
     }
 
     @Override
@@ -55,7 +53,7 @@ public final class XmlDelegateObject implements XmlEoObject {
 
     @Override
     public Optional<XmlNode> child(final int index) {
-        final int indx = index + 1;
+        final int indx = index + this.offset();
         final Optional<XmlNode> result;
         final List<XmlNode> children = this.inner.children().collect(Collectors.toList());
         if (indx < 0 || indx >= children.size()) {
@@ -77,6 +75,21 @@ public final class XmlDelegateObject implements XmlEoObject {
                 )
             );
         }
-        return collect.subList(1, collect.size()).stream();
+        return collect.subList(this.offset(), collect.size()).stream();
+    }
+
+    private Optional<XmlNode> delegate() {
+        return this.inner.children().findFirst()
+            .filter(child -> child.attribute("name").map("φ"::equals).orElse(false));
+    }
+
+    private int offset() {
+        final int result;
+        if (this.delegate().isPresent()) {
+            result = 1;
+        } else {
+            result = 0;
+        }
+        return result;
     }
 }
