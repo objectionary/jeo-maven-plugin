@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.xembly.Directive;
 
 /**
@@ -25,6 +26,11 @@ public final class DirectivesFrameValues implements Iterable<Directive> {
             "top", "integer", "float", "double", "long", "null", "uninit_this", "object", "uninit"
         )
     );
+
+    /**
+     * Class names that look like an alias and must be written as a descriptor.
+     */
+    private static final Pattern ALIAS_LIKE = Pattern.compile("[a-z_]+");
 
     /**
      * The format of the directives.
@@ -69,6 +75,9 @@ public final class DirectivesFrameValues implements Iterable<Directive> {
             && (Integer) value >= 0
             && (Integer) value < DirectivesFrameValues.ALIASES.size()) {
             res = DirectivesFrameValues.ALIASES.get((Integer) value);
+        } else if (value instanceof String
+            && DirectivesFrameValues.ALIAS_LIKE.matcher((String) value).matches()) {
+            res = String.format("L%s;", value);
         } else {
             res = value;
         }

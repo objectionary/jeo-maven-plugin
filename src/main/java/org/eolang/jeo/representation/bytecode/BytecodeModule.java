@@ -102,12 +102,12 @@ public final class BytecodeModule implements BytecodeAttribute {
         this.access = access;
         this.version = version;
         this.main = main;
-        this.packages = packages;
-        this.requires = requires;
-        this.exports = exports;
-        this.opens = opens;
-        this.provides = provides;
-        this.uses = uses;
+        this.packages = packages == null ? Collections.emptyList() : packages;
+        this.requires = requires == null ? Collections.emptyList() : requires;
+        this.exports = exports == null ? Collections.emptyList() : exports;
+        this.opens = opens == null ? Collections.emptyList() : opens;
+        this.provides = provides == null ? Collections.emptyList() : provides;
+        this.uses = uses == null ? Collections.emptyList() : uses;
     }
 
     @Override

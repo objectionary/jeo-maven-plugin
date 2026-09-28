@@ -34,6 +34,25 @@ final class XmlAttributeTest {
     }
 
     @Test
+    void refusesAnInnerClassWithNoAccessMask() throws ImpossibleModificationException {
+        final String xml =
+            new Xembler(
+                new InnerClass("name", "outer", "inner", 7).directives(0, new Format())
+            ).xml();
+        MatcherAssert.assertThat(
+            "a missing access mask must be refused, not read as package private",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new XmlAttribute(
+                    String.join("", xml.substring(0, xml.lastIndexOf("<o base=")), "</o>")
+                ).attribute(),
+                "an inner class that lost its access mask must be refused"
+            ).getMessage(),
+            Matchers.containsString("has no access mask")
+        );
+    }
+
+    @Test
     void throwsExceptionIfCannotIdentifyAttribute() {
         MatcherAssert.assertThat(
             "We expect an exception message be understandable and clear",

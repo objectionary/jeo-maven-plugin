@@ -23,7 +23,7 @@ public final class Assembling implements Transformation {
     /**
      * XMIR file extension pattern.
      */
-    private static final Pattern XMIR = Pattern.compile(".xmir", Pattern.LITERAL);
+    private static final Pattern XMIR = Pattern.compile("\\.xmir$");
 
     /**
      * Source folder where all the XMIR representations are located.
