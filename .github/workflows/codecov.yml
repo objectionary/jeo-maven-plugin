@@ -7,6 +7,9 @@ name: codecov
   push:
     branches:
       - master
+permissions:
+  contents: read
+
 jobs:
   codecov:
     name: Upload coverage reports to Codecov

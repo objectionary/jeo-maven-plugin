@@ -16,6 +16,8 @@ name: bashate
     paths:
       - '**.sh'
       - '.github/workflows/bashate.yml'
+permissions:
+  contents: read
 jobs:
   bashate:
     timeout-minutes: 15
