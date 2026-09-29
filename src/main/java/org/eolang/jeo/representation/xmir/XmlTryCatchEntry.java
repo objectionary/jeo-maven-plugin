@@ -68,7 +68,11 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
         final List<XmlNode> all = this.node.children().collect(Collectors.toList());
         if (all.size() <= 3) {
             throw new IllegalStateException(
-                String.format("Expected at least 4 element, but found %d in %s", all.size(), this.node)
+                String.format(
+                    "Expected at least 4 element, but found %d in %s",
+                    all.size(),
+                    this.node
+                )
             );
         }
         return Optional.ofNullable(all.get(3))
