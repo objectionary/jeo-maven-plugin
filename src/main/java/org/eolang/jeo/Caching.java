@@ -42,6 +42,7 @@ public final class Caching implements Transformation {
 
     /**
      * Constructor.
+     *
      * @param origin Original transformation to cache
      * @param fingerprint Options the target is produced with
      */
@@ -108,16 +109,6 @@ public final class Caching implements Transformation {
             && this.sameOptions();
     }
 
-    /**
-     * Was the target produced with the options of this run?
-     *
-     * <p>The modification times say nothing about the options the file was
-     * made with, so changing the mode and running again without "clean" kept
-     * the old file. The options are written next to the target and compared
-     * before the skip.</p>
-     * @return True if the options are the same, or unknown
-     * @throws IOException If the options cannot be read
-     */
     private boolean sameOptions() throws IOException {
         final boolean same;
         final Path cache = this.cache();
@@ -133,10 +124,6 @@ public final class Caching implements Transformation {
         return same;
     }
 
-    /**
-     * The file that keeps the options next to the target.
-     * @return Path to it
-     */
     private Path cache() {
         final Path target = this.target();
         return target.resolveSibling(String.format("%s.jeo-cache", target.getFileName()));

@@ -38,7 +38,7 @@ final class CachingTest {
 
     @Test
     void performsTransformationSinceOptionsChanged(@TempDir final Path temp) {
-        final MockTrans mock = new MockTrans(temp);
+        final CachingTest.MockTrans mock = new CachingTest.MockTrans(temp);
         mock.createFrom(0);
         new Caching(mock, "mode=short").transform();
         MatcherAssert.assertThat(
@@ -50,7 +50,7 @@ final class CachingTest {
 
     @Test
     void skipsTransformationSinceOptionsAreTheSame(@TempDir final Path temp) {
-        final MockTrans mock = new MockTrans(temp);
+        final CachingTest.MockTrans mock = new CachingTest.MockTrans(temp);
         mock.createFrom(0);
         new Caching(mock, "mode=short").transform();
         mock.createTo(1);
