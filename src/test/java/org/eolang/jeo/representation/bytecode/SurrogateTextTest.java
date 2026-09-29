@@ -18,7 +18,7 @@ final class SurrogateTextTest {
 
     @Test
     void encodesPairedTextLikeStandardUtf() {
-        final String text = String.format("caf%c %c", 0xE9, 0x1F600);
+        final String text = String.format("café %c", 0x1F600);
         MatcherAssert.assertThat(
             "Text without lone surrogates must be encoded exactly as standard UTF-8",
             new SurrogateText(text).bytes(),
