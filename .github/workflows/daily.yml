@@ -28,3 +28,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
       - run: mvn clean install -ntp -D"skipTests" -P"verify" --errors --batch-mode
+  telegram:
+    needs: test
+    runs-on: ubuntu-24.04
+    if: ${{ always() }}
+    permissions:
+      actions: read
+    steps:
+      - uses: yegor256/terald-action@a0ef862a24f962a4258fd9390d0a67b5529f0eef  # master
+        with:
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          chat: -1004371404002
