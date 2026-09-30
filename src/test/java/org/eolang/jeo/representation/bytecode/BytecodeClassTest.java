@@ -116,6 +116,27 @@ final class BytecodeClassTest {
     }
 
     @Test
+    void assemblesSubroutineOfOldClassWithoutMaxs() {
+        Assertions.assertDoesNotThrow(
+            () -> new BytecodeObject(
+                new BytecodeClass(
+                    "Old",
+                    new BytecodeClassProperties(
+                        Opcodes.V1_5, Opcodes.ACC_PUBLIC, null, "java/lang/Object"
+                    )
+                ).withMethod("m", "()V", Opcodes.ACC_PUBLIC)
+                .opcode(Opcodes.JSR, new BytecodeLabel("sub"))
+                .opcode(Opcodes.RETURN)
+                .label("sub")
+                .opcode(Opcodes.ASTORE, 1)
+                .opcode(Opcodes.RET, 1)
+                .up()
+            ).bytecode(),
+            "A class before Java 6 has no frames, so jsr and ret must be assembled"
+        );
+    }
+
+    @Test
     void generatesCodeForInterface() {
         Assertions.assertDoesNotThrow(
             () -> new BytecodeObject(
