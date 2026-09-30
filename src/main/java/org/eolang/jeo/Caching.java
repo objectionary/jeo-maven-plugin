@@ -119,9 +119,9 @@ public final class Caching implements Transformation {
         } else if (Files.exists(cache)) {
             final String stored = new String(Files.readAllBytes(cache), StandardCharsets.UTF_8);
             final String actual = this.stamp(Files.readAllBytes(this.target()));
-            same = stored.contains("\n")
-                && stored.substring(0, stored.lastIndexOf('\n'))
-                .equals(actual.substring(0, actual.lastIndexOf('\n')))
+            same = stored.contains(" ")
+                && stored.substring(0, stored.lastIndexOf(' '))
+                .equals(actual.substring(0, actual.lastIndexOf(' ')))
                 && (stored.equals(actual) || this.newer());
         } else {
             same = false;
@@ -138,7 +138,7 @@ public final class Caching implements Transformation {
         try {
             final MessageDigest digest = MessageDigest.getInstance("SHA-256");
             return String.join(
-                "\n",
+                " ",
                 this.print,
                 new BigInteger(1, digest.digest(Files.readAllBytes(this.source()))).toString(16),
                 new BigInteger(1, digest.digest(target)).toString(16)
