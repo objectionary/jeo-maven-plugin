@@ -371,6 +371,12 @@ public final class BytecodeMethod {
      * Generate bytecode.
      *
      * @param visitor Visitor
+     * @todo #1811:60min Refuse a method that is neither abstract nor native and has no instructions.
+     *  The JVM requires exactly one Code attribute for such a method, so writing it without a body
+     *  produces a class that does not load. The check is not here yet, because many tests build
+     *  classes with empty non-abstract methods, like {@code new BytecodeMethod("foo")}, and write
+     *  them. Those tests should get a body, such as a single RETURN, and then the check can be added
+     *  next to the one for abstract and native methods, with its own test.
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     void write(final CustomClassWriter visitor) {
@@ -382,7 +388,16 @@ public final class BytecodeMethod {
             this.annotations.write(mvisitor);
             this.defvalues.forEach(defvalue -> defvalue.writeTo(mvisitor));
             final AsmLabels all = new AsmLabels();
-            if (!this.properties.isAbstract()) {
+            if (this.properties.isBodiless() && !this.entries.isEmpty()) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Method %s is abstract or native, so it must have no instructions, while %d found",
+                        this.properties,
+                        this.entries.size()
+                    )
+                );
+            }
+            if (!this.properties.isBodiless()) {
                 mvisitor.visitCode();
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor, all));
                 this.entries.forEach(instruction -> instruction.writeTo(mvisitor, all));
