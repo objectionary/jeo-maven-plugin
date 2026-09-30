@@ -104,29 +104,31 @@ public final class Logging implements Transformation {
     }
 
     private void logEndWithSize(final Path source, final Path after, final long time) {
-        synchronized (this.counter) {
-            if (this.debug) {
-                Logger.info(
+        if (this.debug) {
+            this.counter.next(
+                number -> Logger.info(
                     this,
                     "%s %[file]s %s to %[file]s (%[size]s) in %[ms]s",
-                    this.counter.next(),
+                    number,
                     source,
                     this.participle,
                     after,
                     Logging.size(after),
                     time
-                );
-            } else {
-                Logger.info(
+                )
+            );
+        } else {
+            this.counter.next(
+                number -> Logger.info(
                     this,
                     "%s %[file]s (%[size]s) %s in %[ms]s",
-                    this.counter.next(),
+                    number,
                     after.getFileName(),
                     Logging.size(after),
                     this.participle,
                     time
-                );
-            }
+                )
+            );
         }
     }
 
