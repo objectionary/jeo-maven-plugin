@@ -85,6 +85,10 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                     final BytecodeLabel label = instruction.jumps().get(0);
                     final int jump = this.index(label);
                     worklist.push(new Entry<>(jump, updated));
+                    if (instruction instanceof BytecodeInstruction
+                        && ((BytecodeInstruction) instruction).isSubroutine()) {
+                        worklist.push(new Entry<>(index + 1, current));
+                    }
                     visited.putIfGreater(index, updated);
                     break;
                 } else if (instruction.isReturn() || instruction.isThrow()) {
