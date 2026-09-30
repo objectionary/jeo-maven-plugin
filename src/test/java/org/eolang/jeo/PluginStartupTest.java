@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo;
 
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -86,6 +87,7 @@ final class PluginStartupTest {
                 Matchers.equalTo(name)
             );
         } finally {
+            ((URLClassLoader) Thread.currentThread().getContextClassLoader().getParent()).close();
             Thread.currentThread().setContextClassLoader(original);
         }
     }
