@@ -49,4 +49,22 @@ final class DisassemblerTest {
             Matchers.hasSize(1)
         );
     }
+
+    @Test
+    void removesXmirOfDeletedClass(@TempDir final Path temp) throws Exception {
+        final Path classes = temp.resolve("classes");
+        Files.createDirectories(classes.resolve("extra"));
+        final byte[] bytes = new BytesOf(new ResourceOf("MethodByte.class")).asBytes();
+        Files.write(classes.resolve("MethodByte.class"), bytes);
+        Files.write(classes.resolve("extra").resolve("MethodByte.class"), bytes);
+        final Path xmir = temp.resolve("xmir");
+        new Disassembler(classes, xmir).disassemble();
+        Files.delete(classes.resolve("extra").resolve("MethodByte.class"));
+        new Disassembler(classes, xmir).disassemble();
+        MatcherAssert.assertThat(
+            "The XMIR of a class that is gone must be removed, or assemble brings the class back",
+            Files.exists(xmir.resolve("extra").resolve("MethodByte.xmir")),
+            Matchers.is(false)
+        );
+    }
 }
