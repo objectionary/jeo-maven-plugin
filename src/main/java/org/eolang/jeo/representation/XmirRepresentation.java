@@ -8,6 +8,7 @@ import com.jcabi.xml.XML;
 import java.nio.file.Path;
 import java.util.List;
 import org.eolang.jeo.representation.bytecode.Bytecode;
+import org.eolang.jeo.representation.directives.AbsentPackage;
 import org.eolang.jeo.representation.xmir.JcabiXmlDoc;
 import org.eolang.jeo.representation.xmir.XmlDoc;
 import org.eolang.jeo.representation.xmir.XmlNode;
@@ -78,12 +79,16 @@ public final class XmirRepresentation {
                 String.format("Can't find the object name in XMIR from '%s'", this.source)
             );
         }
+        final String absent = new AbsentPackage().toString();
         return new ClassName(
             root.xpath("/object/metas/meta[head[text()]='package']/tail/text()")
                 .stream()
                 .findFirst()
+                .map(PrefixedName::new)
+                .map(PrefixedName::decode)
+                .filter(pckg -> !absent.equals(pckg))
                 .orElse(""),
-            names.get(0)
+            new PrefixedName(names.get(0)).decode()
         ).full();
     }
 
