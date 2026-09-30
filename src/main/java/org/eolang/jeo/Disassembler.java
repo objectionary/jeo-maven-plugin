@@ -135,10 +135,11 @@ public final class Disassembler {
                 new ParallelTranslator(path -> this.disassemble(path, counter), this.threads)
             ).apply(paths.stream())
         ) {
-            final Set<Path> produced = stream.peek(this::log)
-                .map(path -> path.toAbsolutePath().normalize())
-                .collect(Collectors.toSet());
-            this.clean(produced);
+            this.clean(
+                stream.peek(this::log)
+                    .map(path -> path.toAbsolutePath().normalize())
+                    .collect(Collectors.toSet())
+            );
         }
     }
 
