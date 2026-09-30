@@ -20,7 +20,7 @@ import org.junit.jupiter.api.io.TempDir;
 final class AssembleMojoTest {
 
     @Test
-    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
+    @SuppressWarnings({"PMD.AvoidAccessibilityAlteration", "PMD.UnnecessaryLocalRule"})
     void installsProjectClassLoaderEvenWithoutVerification(@TempDir final Path temp)
         throws Exception {
         final AssembleMojo mojo = new AssembleMojo();
