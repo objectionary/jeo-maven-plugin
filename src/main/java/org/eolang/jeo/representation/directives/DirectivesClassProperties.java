@@ -4,7 +4,9 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.DefaultVersion;
@@ -61,7 +63,7 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
     /**
      * Class interfaces.
      */
-    private final String[] interfaces;
+    private final List<String> interfaces;
 
     /**
      * Constructor.
@@ -152,12 +154,40 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         final String supername,
         final String... interfaces
     ) {
+        this(
+            format,
+            version,
+            access,
+            name,
+            supername,
+            Arrays.asList(Optional.ofNullable(interfaces).orElseGet(() -> new String[0]).clone())
+        );
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param format Format of the directives
+     * @param version Bytecode version
+     * @param access Access modifiers
+     * @param name Class name
+     * @param supername Class supername
+     * @param interfaces Class interfaces
+     */
+    private DirectivesClassProperties(
+        final Format format,
+        final int version,
+        final int access,
+        final ClassName name,
+        final String supername,
+        final List<String> interfaces
+    ) {
         this.format = format;
         this.version = version;
         this.access = access;
         this.name = name;
         this.supername = supername;
-        this.interfaces = Optional.ofNullable(interfaces).orElseGet(() -> new String[0]).clone();
+        this.interfaces = interfaces;
     }
 
     @Override
@@ -174,7 +204,9 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         if (this.supername != null) {
             directives.append(new DirectivesValue(this.format, "supername", this.supername));
         }
-        directives.append(new DirectivesValues(this.format, "interfaces", this.interfaces));
+        directives.append(
+            new DirectivesValues(this.format, "interfaces", this.interfaces.toArray(new String[0]))
+        );
         return directives.iterator();
     }
 }
