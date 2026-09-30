@@ -7,6 +7,8 @@ package org.eolang.jeo;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
 import org.apache.maven.project.MavenProject;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
@@ -50,6 +52,37 @@ final class PluginStartupTest {
                         dynamic.loadClass(name).getDeclaredConstructor().newInstance()
                     ),
                 Matchers.is(true)
+            );
+        } finally {
+            Thread.currentThread().setContextClassLoader(original);
+        }
+    }
+
+    @Test
+    void loadsClassesFromJars(@TempDir final Path dir) throws Exception {
+        final String name = "SomeClassInJar";
+        final Path jar = dir.resolve("dependency.jar");
+        try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(jar))) {
+            out.putNextEntry(new JarEntry("SomeClassInJar.class"));
+            out.write(
+                new BytecodeObject(
+                    new BytecodeClass(name)
+                        .withConstructor(Opcodes.ACC_PUBLIC)
+                        .opcode(Opcodes.ALOAD, 0)
+                        .opcode(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false)
+                        .opcode(Opcodes.RETURN)
+                        .up()
+                ).bytecode().bytes()
+            );
+            out.closeEntry();
+        }
+        final ClassLoader original = Thread.currentThread().getContextClassLoader();
+        try {
+            new PluginStartup(null, jar).init();
+            MatcherAssert.assertThat(
+                "A class from a dependency jar must be loadable",
+                Thread.currentThread().getContextClassLoader().loadClass(name).getName(),
+                Matchers.equalTo(name)
             );
         } finally {
             Thread.currentThread().setContextClassLoader(original);
