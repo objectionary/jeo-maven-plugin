@@ -59,6 +59,7 @@ final class PluginStartupTest {
     }
 
     @Test
+    @SuppressWarnings("PMD.UnnecessaryLocalRule")
     void loadsClassesFromJars(@TempDir final Path dir) throws Exception {
         final String name = "SomeClassInJar";
         final Path jar = dir.resolve("dependency.jar");
