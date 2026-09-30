@@ -86,9 +86,9 @@ final class PluginStartupTest {
                     .getContextClassLoader().getParent()
             ) {
                 MatcherAssert.assertThat(
-                    "A class from a dependency jar must be loadable",
-                    Thread.currentThread().getContextClassLoader().loadClass(name).getName(),
-                    Matchers.equalTo(name)
+                    "A class from a dependency jar must be loaded from that jar",
+                    Thread.currentThread().getContextClassLoader().loadClass(name).getClassLoader(),
+                    Matchers.sameInstance(jars)
                 );
             }
         } finally {
