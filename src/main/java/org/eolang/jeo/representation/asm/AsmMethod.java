@@ -49,9 +49,10 @@ final class AsmMethod {
      * @return Domain method
      */
     BytecodeMethod bytecode() {
+        final AsmLabelIds ids = new AsmLabelIds();
         return new BytecodeMethod(
-            this.tryblocks(),
-            this.instructions(),
+            this.tryblocks(ids),
+            this.instructions(ids),
             new AsmAnnotations(this.node).bytecode(),
             new BytecodeMethodProperties(
                 this.node.access,
@@ -63,18 +64,27 @@ final class AsmMethod {
             ),
             this.defvalue(),
             this.maxs(),
-            this.attributes()
+            this.attributes(ids)
         );
     }
 
-    private BytecodeAttributes attributes() {
+    private BytecodeAttributes attributes(final AsmLabelIds ids) {
         final List<BytecodeAttribute> all = new ArrayList<>(0);
         all.addAll(new AsmUnknownAttributes(this.node).bytecode());
         final List<LocalVariableNode> variables = this.node.localVariables;
         if (variables != null) {
             all.addAll(
                 variables.stream()
-                    .map(LocalVariable::new)
+                    .map(
+                        variable -> new LocalVariable(
+                            variable.index,
+                            variable.name,
+                            variable.desc,
+                            variable.signature,
+                            ids.label(variable.start),
+                            ids.label(variable.end)
+                        )
+                    )
                     .collect(Collectors.toList())
             );
         }
@@ -85,20 +95,20 @@ final class AsmMethod {
         return new BytecodeMaxs(this.node.maxStack, this.node.maxLocals);
     }
 
-    private List<BytecodeEntry> tryblocks() {
+    private List<BytecodeEntry> tryblocks(final AsmLabelIds ids) {
         return this.node.tryCatchBlocks.stream().map(
             block -> new BytecodeTryCatchBlock(
-                block.start.getLabel().toString(),
-                block.end.getLabel().toString(),
-                block.handler.getLabel().toString(),
+                ids.label(block.start).uid(),
+                ids.label(block.end).uid(),
+                ids.label(block.handler).uid(),
                 block.type
             )
         ).collect(Collectors.toList());
     }
 
-    private List<BytecodeEntry> instructions() {
+    private List<BytecodeEntry> instructions(final AsmLabelIds ids) {
         return Arrays.stream(this.node.instructions.toArray())
-            .map(AsmInstruction::new)
+            .map(instruction -> new AsmInstruction(instruction, ids))
             .map(AsmInstruction::bytecode)
             .collect(Collectors.toList());
     }
