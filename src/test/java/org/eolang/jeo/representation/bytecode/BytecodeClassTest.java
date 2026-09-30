@@ -125,11 +125,10 @@ final class BytecodeClassTest {
                     new BytecodeClass("P").withMethod(
                         new BytecodeMethodProperties("m", "()V", Opcodes.ACC_PUBLIC),
                         new BytecodeMaxs(1, 1)
-                    )
-                        .opcode(Opcodes.ICONST_1)
-                        .opcode(Opcodes.IFEQ, new BytecodeLabel("nowhere"))
-                        .opcode(Opcodes.RETURN)
-                        .up()
+                    ).opcode(Opcodes.ICONST_1)
+                    .opcode(Opcodes.IFEQ, new BytecodeLabel("nowhere"))
+                    .opcode(Opcodes.RETURN)
+                    .up()
                 ).bytecode(),
                 "A jump to an absent label must not become a jump to offset zero"
             ).getCause().getCause().getMessage(),
