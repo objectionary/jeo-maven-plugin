@@ -45,7 +45,7 @@
               <goal>assemble</goal>
             </goals>
             <configuration>
-              <threads>4</threads>
+              <threads>7</threads>
             </configuration>
           </execution>
         </executions>
