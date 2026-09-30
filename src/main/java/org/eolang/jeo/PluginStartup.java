@@ -74,6 +74,7 @@ public final class PluginStartup {
      * <li><a href="https://stackoverflow.com/questions/11292701/error-while-instrumenting-class-files-asm-classwriter-getcommonsuperclass">StackOverflow: ASM ClassWriter getCommonSuperClass</a></li>
      * </ul>
      */
+    @SuppressWarnings("PMD.CloseInlineResourceRule")
     void init() {
         Logger.info(
             this,
