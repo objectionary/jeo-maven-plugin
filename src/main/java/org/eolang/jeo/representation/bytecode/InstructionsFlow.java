@@ -95,10 +95,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                     final BytecodeLabel label = instruction.jumps().get(0);
                     final int jump = this.index(label);
                     worklist.push(new Entry<>(jump, updated));
-                    if (instruction instanceof BytecodeInstruction
-                        && ((BytecodeInstruction) instruction).isSubroutine()) {
-                        worklist.push(new Entry<>(index + 1, current));
-                    }
+                    this.comeback(index, current).ifPresent(worklist::push);
                     visited.putIfGreater(index, updated);
                     break;
                 } else if (this.terminal(instruction, worklist, index, updated, visited)) {
@@ -134,6 +131,18 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
         this.suitableBlocks(index).forEach(
             ind -> worklist.push(new Entry<>(ind, value.enterBlock()))
         );
+    }
+
+    private Optional<Entry<T>> comeback(final int index, final T value) {
+        final BytecodeEntry instruction = this.instructions.get(index);
+        final Optional<Entry<T>> result;
+        if (instruction instanceof BytecodeInstruction
+            && ((BytecodeInstruction) instruction).isSubroutine()) {
+            result = Optional.of(new Entry<>(index + 1, value));
+        } else {
+            result = Optional.empty();
+        }
+        return result;
     }
 
     private List<Integer> suitableBlocks(final int instruction) {
