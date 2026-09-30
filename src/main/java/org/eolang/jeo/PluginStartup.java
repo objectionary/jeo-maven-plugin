@@ -5,9 +5,16 @@
 package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -75,10 +82,31 @@ public final class PluginStartup {
         );
         Thread.currentThread().setContextClassLoader(
             new JeoClassLoader(
-                Thread.currentThread().getContextClassLoader(),
+                new URLClassLoader(
+                    this.jars(),
+                    Thread.currentThread().getContextClassLoader()
+                ),
                 this.folders
             )
         );
+    }
+
+    private URL[] jars() {
+        final List<URL> result = new ArrayList<>(this.folders.size());
+        for (final String folder : this.folders) {
+            final Path path = Paths.get(folder);
+            if (Files.isRegularFile(path) && folder.endsWith(".jar")) {
+                try {
+                    result.add(path.toUri().toURL());
+                } catch (final MalformedURLException exception) {
+                    throw new IllegalStateException(
+                        String.format("Can't turn the jar '%s' into a URL", folder),
+                        exception
+                    );
+                }
+            }
+        }
+        return result.toArray(new URL[0]);
     }
 
     private static Set<String> all(
