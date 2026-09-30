@@ -25,11 +25,11 @@ final class EoCodecTest {
             "A signaling NaN float must come back with the same bits",
             Float.floatToRawIntBits(
                 (float) codec.decode(
-                    codec.encode(Float.intBitsToFloat(0x7f800001), DataType.FLOAT),
+                    codec.encode(Float.intBitsToFloat(0x7F800001), DataType.FLOAT),
                     DataType.FLOAT
                 )
             ),
-            Matchers.equalTo(0x7f800001)
+            Matchers.equalTo(0x7F800001)
         );
     }
 

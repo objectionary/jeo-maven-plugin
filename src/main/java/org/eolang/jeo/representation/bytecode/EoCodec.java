@@ -58,7 +58,7 @@ public final class EoCodec implements Codec {
                 break;
             case FLOAT:
                 result = ByteBuffer.allocate(Double.BYTES)
-                    .putLong(this.widened(((Number) object).floatValue()))
+                    .putLong(new WideFloat(((Number) object).floatValue()).bits())
                     .array();
                 break;
             default:
@@ -91,53 +91,13 @@ public final class EoCodec implements Codec {
                 result = (long) ByteBuffer.wrap(bytes).getDouble();
                 break;
             case FLOAT:
-                result = this.narrowed(ByteBuffer.wrap(bytes).getLong());
+                result = new NarrowFloat(ByteBuffer.wrap(bytes).getLong()).value();
                 break;
             case DOUBLE:
                 result = ByteBuffer.wrap(bytes).getDouble();
                 break;
             default:
                 throw new UnsupportedDataType(type);
-        }
-        return result;
-    }
-
-    /**
-     * Bits of the double that holds the float.
-     *
-     * <p>A float NaN is moved into the double bit by bit, since the usual widening
-     * sets the quiet bit and changes a signaling NaN.</p>
-     *
-     * @param value The float
-     * @return Bits of the double
-     */
-    private long widened(final float value) {
-        final long bits;
-        if (Float.isNaN(value)) {
-            final int raw = Float.floatToRawIntBits(value);
-            bits = (long) (raw >>> 31) << 63 | 0x7FF0_0000_0000_0000L
-                | (long) (raw & 0x007F_FFFF) << 29;
-        } else {
-            bits = Double.doubleToRawLongBits(value);
-        }
-        return bits;
-    }
-
-    /**
-     * The float held by the bits of the double.
-     *
-     * @param bits Bits of the double
-     * @return The float
-     */
-    private float narrowed(final long bits) {
-        final float result;
-        if ((bits & 0x7FF0_0000_0000_0000L) == 0x7FF0_0000_0000_0000L
-            && (bits & 0x000F_FFFF_FFFF_FFFFL) != 0) {
-            result = Float.intBitsToFloat(
-                (int) (bits >>> 63) << 31 | 0x7F80_0000 | (int) (bits >>> 29) & 0x007F_FFFF
-            );
-        } else {
-            result = (float) Double.longBitsToDouble(bits);
         }
         return result;
     }
