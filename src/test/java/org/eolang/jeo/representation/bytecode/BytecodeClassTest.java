@@ -116,6 +116,29 @@ final class BytecodeClassTest {
     }
 
     @Test
+    void refusesJumpToAbsentLabel() {
+        MatcherAssert.assertThat(
+            "We expect a jump to a label the method does not contain to be refused",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new BytecodeObject(
+                    new BytecodeClass("P")
+                        .withMethod(
+                            new BytecodeMethodProperties("m", "()V", Opcodes.ACC_PUBLIC),
+                            new BytecodeMaxs(1, 1)
+                        )
+                        .opcode(Opcodes.ICONST_1)
+                        .opcode(Opcodes.IFEQ, new BytecodeLabel("nowhere"))
+                        .opcode(Opcodes.RETURN)
+                        .up()
+                ).bytecode(),
+                "A jump to an absent label must not become a jump to offset zero"
+            ).getCause().getCause().getMessage(),
+            Matchers.containsString("nowhere")
+        );
+    }
+
+    @Test
     void generatesCodeForInterface() {
         Assertions.assertDoesNotThrow(
             () -> new BytecodeObject(
