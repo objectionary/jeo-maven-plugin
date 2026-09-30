@@ -266,6 +266,30 @@ final class BytecodeMethodTest {
         );
     }
 
+    @Test
+    void analysesCodeAfterSubroutineCall() {
+        final BytecodeLabel sub = new BytecodeLabel("sub");
+        MatcherAssert.assertThat(
+            "The code that ret comes back to, after jsr, must be analysed too",
+            new BytecodeMethod(
+                new BytecodeInstruction(Opcodes.JSR, sub),
+                new BytecodeInstruction(Opcodes.ICONST_1),
+                new BytecodeInstruction(Opcodes.ICONST_1),
+                new BytecodeInstruction(Opcodes.ICONST_1),
+                new BytecodeInstruction(Opcodes.ICONST_1),
+                new BytecodeInstruction(Opcodes.POP),
+                new BytecodeInstruction(Opcodes.POP),
+                new BytecodeInstruction(Opcodes.POP),
+                new BytecodeInstruction(Opcodes.ISTORE, 9),
+                new BytecodeInstruction(Opcodes.RETURN),
+                sub,
+                new BytecodeInstruction(Opcodes.ASTORE, 1),
+                new BytecodeInstruction(Opcodes.RET, 1)
+            ).computeMaxs(),
+            Matchers.equalTo(new BytecodeMaxs(4, 10))
+        );
+    }
+
     @ParameterizedTest(name = "Computing maxs for method {1}, expected  {2}")
     @MethodSource("implementedMethods")
     void computesMaxsCorrectlyForImplementedMethods(
