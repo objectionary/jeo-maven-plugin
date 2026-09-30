@@ -67,9 +67,6 @@ public final class AsmLabels {
                 }
                 return !placed;
             }
-        )
-            .map(Map.Entry::getKey)
-            .sorted()
-            .collect(Collectors.toList());
+        ).map(Map.Entry::getKey).sorted().collect(Collectors.toList());
     }
 }
