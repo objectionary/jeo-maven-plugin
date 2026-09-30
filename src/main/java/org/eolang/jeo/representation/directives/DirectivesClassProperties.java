@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Optional;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.DefaultVersion;
 import org.xembly.Directive;
@@ -156,7 +157,7 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         this.access = access;
         this.name = name;
         this.supername = supername;
-        this.interfaces = interfaces.clone();
+        this.interfaces = Optional.ofNullable(interfaces).orElseGet(() -> new String[0]).clone();
     }
 
     @Override
@@ -173,9 +174,7 @@ public final class DirectivesClassProperties implements Iterable<Directive> {
         if (this.supername != null) {
             directives.append(new DirectivesValue(this.format, "supername", this.supername));
         }
-        if (this.interfaces != null) {
-            directives.append(new DirectivesValues(this.format, "interfaces", this.interfaces));
-        }
+        directives.append(new DirectivesValues(this.format, "interfaces", this.interfaces));
         return directives.iterator();
     }
 }

@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
@@ -162,7 +163,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         this.name = name;
         this.descriptor = descriptor;
         this.signature = signature;
-        this.exceptions = exceptions.clone();
+        this.exceptions = Optional.ofNullable(exceptions).orElseGet(() -> new String[0]).clone();
         this.max = new AtomicReference<>(max);
         this.params = params;
         this.format = format;
@@ -179,7 +180,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         dirs.append(new DirectivesValue(this.format, "descriptor", this.descriptor()));
         dirs.append(new DirectivesValue(this.format, "signature", this.signature()));
         dirs.append(
-            new DirectivesValues(this.format, "exceptions", (Object[]) this.exceptions())
+            new DirectivesValues(this.format, "exceptions", (Object[]) this.exceptions)
         );
         dirs.append(this.max.get());
         dirs.append(this.params);
@@ -202,16 +203,6 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
             result = "";
         } else {
             result = this.signature;
-        }
-        return result;
-    }
-
-    private String[] exceptions() {
-        final String[] result;
-        if (this.exceptions == null) {
-            result = new String[0];
-        } else {
-            result = this.exceptions;
         }
         return result;
     }
