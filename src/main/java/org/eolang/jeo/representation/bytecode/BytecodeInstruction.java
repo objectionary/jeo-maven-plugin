@@ -391,6 +391,17 @@ public final class BytecodeInstruction implements BytecodeEntry {
     }
 
     /**
+     * Put the constant this instruction loads into the constant pool, if it is an ldc.
+     *
+     * @param writer Class writer
+     */
+    void register(final CustomClassWriter writer) {
+        if (this.opcode == Opcodes.LDC) {
+            writer.register(this.args.get(0));
+        }
+    }
+
+    /**
      * Local variable index.
      *
      * @return Local variable index
