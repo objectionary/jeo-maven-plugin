@@ -104,7 +104,9 @@ public final class BytecodeObject {
             return writer.bytecode();
         } catch (final MethodTooLargeException | ClassTooLargeException exception) {
             throw new IllegalStateException(
-                String.format("The class '%s' is too large to be written", this.top().name().full()),
+                String.format(
+                    "The class '%s' is too large to be written", this.top().name().full()
+                ),
                 exception
             );
         }

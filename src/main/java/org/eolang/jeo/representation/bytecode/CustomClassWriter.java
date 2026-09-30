@@ -51,15 +51,6 @@ public final class CustomClassWriter extends ClassVisitor {
     }
 
     /**
-     * Put a constant into the constant pool before anything else uses it.
-     *
-     * @param constant The constant
-     */
-    void register(final Object constant) {
-        this.writer.newConst(constant);
-    }
-
-    /**
      * Generate class bytecode.
      *
      * @return Bytecode
@@ -89,6 +80,15 @@ public final class CustomClassWriter extends ClassVisitor {
     @Override
     public String toString() {
         return String.format("CustomClassWriter(writer=%s)", this.writer);
+    }
+
+    /**
+     * Put a constant into the constant pool before anything else uses it.
+     *
+     * @param constant The constant
+     */
+    void register(final Object constant) {
+        this.writer.newConst(constant);
     }
 
     /**
