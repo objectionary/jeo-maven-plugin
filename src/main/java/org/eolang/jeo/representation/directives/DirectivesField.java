@@ -157,7 +157,6 @@ public final class DirectivesField implements Iterable<Directive> {
      * @param signature Signature
      * @param value Initial value
      * @param annotations Annotations
-     * @checkstyle ParameterNumberCheck (15 lines)
      */
     public DirectivesField(
         final Format format,
