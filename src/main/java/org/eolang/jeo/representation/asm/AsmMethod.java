@@ -74,18 +74,16 @@ final class AsmMethod {
         final List<LocalVariableNode> variables = this.node.localVariables;
         if (variables != null) {
             all.addAll(
-                variables.stream()
-                    .map(
-                        variable -> new LocalVariable(
-                            variable.index,
-                            variable.name,
-                            variable.desc,
-                            variable.signature,
-                            ids.label(variable.start),
-                            ids.label(variable.end)
-                        )
+                variables.stream().map(
+                    variable -> new LocalVariable(
+                        variable.index,
+                        variable.name,
+                        variable.desc,
+                        variable.signature,
+                        ids.label(variable.start),
+                        ids.label(variable.end)
                     )
-                    .collect(Collectors.toList())
+                ).collect(Collectors.toList())
             );
         }
         return new BytecodeAttributes(all);

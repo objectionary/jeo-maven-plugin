@@ -70,7 +70,6 @@ final class AsmInstruction {
      * @return Domain instruction
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      * @checkstyle JavaNCSSCheck (100 lines)
-     * @checkstyle MethodLengthCheck (200 lines)
      */
     @SuppressWarnings("PMD.NcssCount")
     BytecodeEntry bytecode() {
