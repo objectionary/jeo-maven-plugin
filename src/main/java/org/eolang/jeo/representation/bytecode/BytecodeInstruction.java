@@ -2110,6 +2110,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 case FSTORE:
                 case DSTORE:
                 case ASTORE:
+                case IINC:
                 case RET:
                     result = true;
                     break;
@@ -2135,6 +2136,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 case ISTORE:
                 case FSTORE:
                 case ASTORE:
+                case IINC:
                     res = 1;
                     break;
                 case LLOAD:
