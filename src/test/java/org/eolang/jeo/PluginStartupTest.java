@@ -81,13 +81,17 @@ final class PluginStartupTest {
         final ClassLoader original = Thread.currentThread().getContextClassLoader();
         try {
             new PluginStartup(null, jar).init();
-            MatcherAssert.assertThat(
-                "A class from a dependency jar must be loadable",
-                Thread.currentThread().getContextClassLoader().loadClass(name).getName(),
-                Matchers.equalTo(name)
-            );
+            try (
+                URLClassLoader jars = (URLClassLoader) Thread.currentThread()
+                    .getContextClassLoader().getParent()
+            ) {
+                MatcherAssert.assertThat(
+                    "A class from a dependency jar must be loadable",
+                    Thread.currentThread().getContextClassLoader().loadClass(name).getName(),
+                    Matchers.equalTo(name)
+                );
+            }
         } finally {
-            ((URLClassLoader) Thread.currentThread().getContextClassLoader().getParent()).close();
             Thread.currentThread().setContextClassLoader(original);
         }
     }
