@@ -100,7 +100,10 @@ public final class Caching implements Transformation {
             Files.write(temp, transform);
             try {
                 Files.move(
-                    temp, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE
+                    temp,
+                    target,
+                    StandardCopyOption.REPLACE_EXISTING,
+                    StandardCopyOption.ATOMIC_MOVE
                 );
             } catch (final AtomicMoveNotSupportedException exception) {
                 Files.move(temp, target, StandardCopyOption.REPLACE_EXISTING);
@@ -114,13 +117,17 @@ public final class Caching implements Transformation {
     }
 
     private boolean alreadyTransformed() throws IOException {
-        final Path source = this.source();
         final Path target = this.target();
         return Files.exists(target)
             && Files.size(target) > 0
-            && Files.exists(source)
-            && Files.getLastModifiedTime(target).compareTo(Files.getLastModifiedTime(source)) >= 0
+            && this.newer()
             && this.sameOptions();
+    }
+
+    private boolean newer() throws IOException {
+        return Files.exists(this.source())
+            && Files.getLastModifiedTime(this.target())
+            .compareTo(Files.getLastModifiedTime(this.source())) >= 0;
     }
 
     private boolean sameOptions() throws IOException {
