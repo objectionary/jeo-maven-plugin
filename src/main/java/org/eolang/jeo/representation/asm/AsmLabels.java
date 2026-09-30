@@ -56,19 +56,18 @@ public final class AsmLabels {
      * @return Identifiers of the labels
      */
     public List<String> unresolved() {
-        return this.labels.entrySet().stream()
-            .filter(
-                entry -> {
-                    boolean placed;
-                    try {
-                        entry.getValue().getOffset();
-                        placed = true;
-                    } catch (final IllegalStateException ignored) {
-                        placed = false;
-                    }
-                    return !placed;
+        return this.labels.entrySet().stream().filter(
+            entry -> {
+                boolean placed;
+                try {
+                    entry.getValue().getOffset();
+                    placed = true;
+                } catch (final IllegalStateException ignored) {
+                    placed = false;
                 }
-            )
+                return !placed;
+            }
+        )
             .map(Map.Entry::getKey)
             .sorted()
             .collect(Collectors.toList());
