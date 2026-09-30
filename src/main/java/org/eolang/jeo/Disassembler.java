@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.Counter;
@@ -134,7 +135,33 @@ public final class Disassembler {
                 new ParallelTranslator(path -> this.disassemble(path, counter), this.threads)
             ).apply(paths.stream())
         ) {
-            stream.forEach(this::log);
+            final Set<Path> produced = stream.peek(this::log)
+                .map(path -> path.toAbsolutePath().normalize())
+                .collect(Collectors.toSet());
+            this.clean(produced);
+        }
+    }
+
+    private void clean(final Set<Path> produced) {
+        if (Files.isDirectory(this.target)) {
+            try (Stream<Path> all = Files.walk(this.target)) {
+                final List<Path> stale = all
+                    .filter(path -> path.getFileName().toString().endsWith(".xmir"))
+                    .filter(path -> !produced.contains(path.toAbsolutePath().normalize()))
+                    .collect(Collectors.toList());
+                for (final Path path : stale) {
+                    Files.delete(path);
+                    Files.deleteIfExists(
+                        path.resolveSibling(String.format("%s.jeo-cache", path.getFileName()))
+                    );
+                    Logger.info(this, "Removed %[file]s, since it has no class anymore", path);
+                }
+            } catch (final IOException exception) {
+                throw new IllegalStateException(
+                    String.format("Failed to remove stale XMIR files from '%s'", this.target),
+                    exception
+                );
+            }
         }
     }
 
