@@ -62,6 +62,21 @@ final class CachingTest {
     }
 
     @Test
+    void skipsClassRewrittenWithSameContent(@TempDir final Path temp) throws IOException {
+        final MockTrans mock = new CachingTest.MockTrans(temp);
+        mock.createFrom(0);
+        new Caching(mock, "mode=short").transform();
+        Files.setLastModifiedTime(mock.target(), FileTime.from(0, TimeUnit.SECONDS));
+        Files.setLastModifiedTime(mock.source(), FileTime.from(100, TimeUnit.SECONDS));
+        new Caching(mock, "mode=short").transform();
+        MatcherAssert.assertThat(
+            "A class touched without a change in its content must not be transformed again",
+            Files.getLastModifiedTime(mock.target()),
+            Matchers.equalTo(FileTime.from(0, TimeUnit.SECONDS))
+        );
+    }
+
+    @Test
     void performsTransformationSinceModified(@TempDir final Path temp) {
         final MockTrans mock = new CachingTest.MockTrans(temp);
         mock.createTo(0);
