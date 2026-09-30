@@ -90,7 +90,12 @@ final class DirectivesClassPropertiesTest {
                 new Directives()
                     .add("o").append(
                         new DirectivesClassProperties(
-                            new Format(), 52, 1, new ClassName("A"), "java/lang/Object", (String[]) null
+                            new Format(),
+                            52,
+                            1,
+                            new ClassName("A"),
+                            "java/lang/Object",
+                            (String[]) null
                         )
                     ).up()
             ).xml(),
