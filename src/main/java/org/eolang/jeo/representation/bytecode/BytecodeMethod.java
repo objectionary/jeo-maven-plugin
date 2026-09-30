@@ -371,12 +371,13 @@ public final class BytecodeMethod {
      * Generate bytecode.
      *
      * @param visitor Visitor
-     * @todo #1811:60min Refuse a method that is neither abstract nor native and has no instructions.
-     *  The JVM requires exactly one Code attribute for such a method, so writing it without a body
-     *  produces a class that does not load. The check is not here yet, because many tests build
-     *  classes with empty non-abstract methods, like {@code new BytecodeMethod("foo")}, and write
-     *  them. Those tests should get a body, such as a single RETURN, and then the check can be added
-     *  next to the one for abstract and native methods, with its own test.
+     * @todo #1811:60min Refuse a method that is neither abstract nor native without instructions.
+     *  The JVM requires exactly one Code attribute for such a method, so writing it without
+     *  a body produces a class that does not load. The check is not here yet, because many
+     *  tests build classes with empty non-abstract methods, like
+     *  {@code new BytecodeMethod("foo")}, and write them. Those tests should get a body, such
+     *  as a single RETURN, and then the check can be added next to the one for abstract and
+     *  native methods, with its own test.
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     void write(final CustomClassWriter visitor) {
