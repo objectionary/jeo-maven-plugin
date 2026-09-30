@@ -116,6 +116,25 @@ final class BytecodeClassTest {
     }
 
     @Test
+    void refusesInstructionsInNativeMethod() {
+        MatcherAssert.assertThat(
+            "We expect a native method with instructions to be refused, naming the method",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new BytecodeObject(
+                    new BytecodeClass("P")
+                        .withMethod("m", "()I", Opcodes.ACC_PUBLIC | Opcodes.ACC_NATIVE)
+                        .opcode(Opcodes.ICONST_1)
+                        .opcode(Opcodes.IRETURN)
+                        .up()
+                ).bytecode(),
+                "A native method must not get a Code attribute"
+            ).getCause().getMessage(),
+            Matchers.containsString("name=m")
+        );
+    }
+
+    @Test
     void generatesCodeForInterface() {
         Assertions.assertDoesNotThrow(
             () -> new BytecodeObject(
