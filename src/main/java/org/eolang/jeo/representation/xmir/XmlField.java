@@ -76,7 +76,9 @@ public final class XmlField {
     }
 
     private String name() {
-        return new PrefixedName(this.node.name()).decode();
+        return this.find(Attribute.NAME)
+            .map(XmlValue::string)
+            .orElseGet(() -> new PrefixedName(this.node.name()).decode());
     }
 
     private int access() {
