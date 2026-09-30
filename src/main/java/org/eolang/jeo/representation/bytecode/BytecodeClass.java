@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.ClassName;
@@ -395,10 +396,22 @@ public final class BytecodeClass {
     }
 
     private int mnumber(final BytecodeMethod method) {
-        return this.methods().stream()
+        final Set<String> taken = this.methods().stream()
+            .map(BytecodeMethod::name)
+            .collect(Collectors.toSet());
+        final int position = this.methods().stream()
             .filter(m -> m.name().equals(method.name()))
             .collect(Collectors.toList())
-            .indexOf(method) + 1;
+            .indexOf(method);
+        int number = 0;
+        for (int step = 0; step <= position; ++step) {
+            ++number;
+            while (number > 1
+                && taken.contains(String.format("%s-%d", method.name(), number))) {
+                ++number;
+            }
+        }
+        return number;
     }
 
     private BytecodeMethodBuilder withMethod(final BytecodeMethod method) {
