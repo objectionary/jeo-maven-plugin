@@ -5,8 +5,11 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
@@ -22,6 +25,7 @@ import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.xmir.XmlObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -263,6 +267,42 @@ final class BytecodeMethodTest {
                     name
                 )
             )
+        );
+    }
+
+    @Test
+    void computesMaxsOfLongMethodQuickly() {
+        final List<BytecodeEntry> entries = new ArrayList<>(40_002);
+        final BytecodeLabel start = new BytecodeLabel("start");
+        entries.add(start);
+        for (int step = 0; step < 20_000; ++step) {
+            final BytecodeLabel next = new BytecodeLabel(String.format("next%d", step));
+            entries.add(new BytecodeInstruction(Opcodes.GOTO, next));
+            entries.add(next);
+        }
+        final BytecodeLabel end = new BytecodeLabel("end");
+        entries.add(end);
+        entries.add(new BytecodeInstruction(Opcodes.RETURN));
+        final BytecodeLabel handler = new BytecodeLabel("handler");
+        entries.add(handler);
+        entries.add(new BytecodeInstruction(Opcodes.ATHROW));
+        MatcherAssert.assertThat(
+            "Max stack of a long method must be computed in linear time",
+            Assertions.assertTimeoutPreemptively(
+                Duration.ofSeconds(10),
+                () -> new BytecodeMethod(
+                    Collections.singletonList(
+                        new BytecodeTryCatchBlock(start, end, handler, "java/lang/Exception")
+                    ),
+                    entries,
+                    new BytecodeAnnotations(),
+                    new BytecodeMethodProperties("m", "()V", Opcodes.ACC_PUBLIC),
+                    new ArrayList<>(0),
+                    new BytecodeMaxs(),
+                    new BytecodeAttributes()
+                ).computeMaxs()
+            ),
+            Matchers.equalTo(new BytecodeMaxs(1, 1))
         );
     }
 
