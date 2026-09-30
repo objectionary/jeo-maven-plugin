@@ -8,7 +8,6 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.locks.ReentrantLock;
 import org.eolang.jeo.representation.Counter;
 
 /**
@@ -52,11 +51,6 @@ public final class Logging implements Transformation {
     private final Counter counter;
 
     /**
-     * Guards sequential ordering of log messages across concurrent transformations.
-     */
-    private final ReentrantLock lock;
-
-    /**
      * Constructor.
      *
      * @param process Process name (gerund form)
@@ -77,7 +71,6 @@ public final class Logging implements Transformation {
         this.origin = origin;
         this.debug = debug;
         this.counter = counter;
-        this.lock = new ReentrantLock();
     }
 
     @Override
@@ -111,8 +104,7 @@ public final class Logging implements Transformation {
     }
 
     private void logEndWithSize(final Path source, final Path after, final long time) {
-        this.lock.lock();
-        try {
+        synchronized (this.counter) {
             if (this.debug) {
                 Logger.info(
                     this,
@@ -135,8 +127,6 @@ public final class Logging implements Transformation {
                     time
                 );
             }
-        } finally {
-            this.lock.unlock();
         }
     }
 
