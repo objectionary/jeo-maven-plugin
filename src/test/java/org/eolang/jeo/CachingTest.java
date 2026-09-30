@@ -62,6 +62,18 @@ final class CachingTest {
     }
 
     @Test
+    void performsTransformationSinceTargetIsEmpty(@TempDir final Path temp) {
+        final MockTrans mock = new CachingTest.MockTrans(temp);
+        mock.createFrom(0);
+        mock.createEmptyTo(1);
+        MatcherAssert.assertThat(
+            "An empty target, left by a build that was killed, must not be reused",
+            new String(new Caching(mock).transform(), StandardCharsets.UTF_8),
+            Matchers.equalTo(MockTrans.PERFORMED)
+        );
+    }
+
+    @Test
     void performsTransformationSinceModified(@TempDir final Path temp) {
         final MockTrans mock = new CachingTest.MockTrans(temp);
         mock.createTo(0);
@@ -149,6 +161,15 @@ final class CachingTest {
                 MockTrans.OLD_TO.getBytes(StandardCharsets.UTF_8),
                 seconds
             );
+        }
+
+        /**
+         * Create an empty 'to' file.
+         *
+         * @param seconds Seconds to set as last modified time
+         */
+        void createEmptyTo(final int seconds) {
+            this.create(this.target(), new byte[0], seconds);
         }
 
         private void create(final Path path, final byte[] content, final int seconds) {
