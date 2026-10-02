@@ -6,9 +6,12 @@ package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Cached transformation.
@@ -95,7 +98,9 @@ public final class Caching implements Transformation {
             }
             Files.write(target, transform);
             if (!this.print.isEmpty()) {
-                Files.write(this.cache(), this.print.getBytes(StandardCharsets.UTF_8));
+                Files.write(
+                    this.cache(), this.stamp(transform).getBytes(StandardCharsets.UTF_8)
+                );
             }
             result = transform;
         }
@@ -103,27 +108,46 @@ public final class Caching implements Transformation {
     }
 
     private boolean alreadyTransformed() throws IOException {
-        final Path source = this.source();
-        final Path target = this.target();
-        return Files.exists(target)
-            && Files.exists(source)
-            && Files.getLastModifiedTime(target).compareTo(Files.getLastModifiedTime(source)) >= 0
-            && this.sameOptions();
+        return Files.exists(this.target())
+            && Files.exists(this.source())
+            && this.unchanged();
     }
 
-    private boolean sameOptions() throws IOException {
+    private boolean unchanged() throws IOException {
         final boolean same;
         final Path cache = this.cache();
         if (this.print.isEmpty()) {
-            same = true;
+            same = this.newer();
         } else if (Files.exists(cache)) {
-            same = new String(
-                Files.readAllBytes(cache), StandardCharsets.UTF_8
-            ).equals(this.print);
+            final String stored = new String(Files.readAllBytes(cache), StandardCharsets.UTF_8);
+            final String actual = this.stamp(Files.readAllBytes(this.target()));
+            same = stored.contains(" ")
+                && stored.substring(0, stored.lastIndexOf(' '))
+                .equals(actual.substring(0, actual.lastIndexOf(' ')))
+                && (stored.equals(actual) || this.newer());
         } else {
             same = false;
         }
         return same;
+    }
+
+    private boolean newer() throws IOException {
+        return Files.getLastModifiedTime(this.target())
+            .compareTo(Files.getLastModifiedTime(this.source())) >= 0;
+    }
+
+    private String stamp(final byte[] target) throws IOException {
+        try {
+            final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            return String.join(
+                " ",
+                this.print,
+                new BigInteger(1, digest.digest(Files.readAllBytes(this.source()))).toString(16),
+                new BigInteger(1, digest.digest(target)).toString(16)
+            );
+        } catch (final NoSuchAlgorithmException exception) {
+            throw new IllegalStateException("SHA-256 is not available", exception);
+        }
     }
 
     private Path cache() {
