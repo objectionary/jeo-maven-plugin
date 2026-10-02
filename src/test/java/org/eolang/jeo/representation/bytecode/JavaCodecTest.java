@@ -37,6 +37,24 @@ final class JavaCodecTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("surrogates")
+    void preservesLoneSurrogates(final String value) {
+        final JavaCodec codec = new JavaCodec();
+        MatcherAssert.assertThat(
+            "Lone surrogate code units must survive the string codec",
+            codec.decode(codec.encode(value, DataType.STRING), DataType.STRING),
+            Matchers.equalTo(value)
+        );
+    }
+
+    private static String[] surrogates() {
+        return new String[]{
+            String.format("a%cb", 0xD800),
+            String.format("a%c", 0xDCB9),
+        };
+    }
+
     private static Object[][] mapping() {
         return new Object[][]{
             {null, DataType.NULL, new byte[0]},
