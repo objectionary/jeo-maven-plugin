@@ -77,7 +77,9 @@ public final class AsmUnknownAttributes {
      * this attribute requires special handling. Actually, we should
      * rebuild `ScalaInlineInfo` after rebuilding the constant pool.
      * Since we can't rebuild the `ScalaInlineInfo` attribute, we
-     * simply ignore it.
+     * simply ignore it. The same goes for `ModuleTarget`, which holds
+     * an index into the constant pool, so its bytes copied as they are
+     * would point to a wrong entry after the pool is rebuilt.
      *
      * @return All prototypes of custom attributes
      */
@@ -87,7 +89,6 @@ public final class AsmUnknownAttributes {
             new AsmUnknownAttribute("ScalaSig"),
             new AsmUnknownAttribute("Scala"),
             new AsmUnknownAttribute("TASTY"),
-            new AsmUnknownAttribute("ModuleTarget"),
         };
     }
 
