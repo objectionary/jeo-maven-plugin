@@ -111,15 +111,37 @@ public final class BytecodeField {
     }
 
     /**
+     * Does the other field have the same name as this one.
+     *
+     * @param other Other field
+     * @return True if the names are the same
+     */
+    public boolean namesake(final BytecodeField other) {
+        return this.name.equals(other.name);
+    }
+
+    /**
      * Convert to directives.
      *
      * @param format Format of the directives
      * @return Directives
      */
     public DirectivesField directives(final Format format) {
+        return this.directives(1, format);
+    }
+
+    /**
+     * Convert to directives.
+     *
+     * @param number Number of the field among the fields of the class with the same name
+     * @param format Format of the directives
+     * @return Directives
+     */
+    public DirectivesField directives(final int number, final Format format) {
         final String xml = this.xmlName();
         return new DirectivesField(
             format,
+            number,
             this.access,
             xml,
             this.descriptor,

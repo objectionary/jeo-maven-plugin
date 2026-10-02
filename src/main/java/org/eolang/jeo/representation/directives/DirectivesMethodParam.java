@@ -81,7 +81,7 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
         if (this.name == null) {
             result = String.format("%s%d", prefix, this.index);
         } else {
-            result = String.format("%s%s", prefix, this.name);
+            result = String.format("%s%s-%d", prefix, this.name, this.index);
         }
         return result;
     }

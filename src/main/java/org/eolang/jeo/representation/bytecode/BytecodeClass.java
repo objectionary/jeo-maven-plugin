@@ -304,7 +304,9 @@ public final class BytecodeClass {
             format,
             this.name(),
             this.props.directives(format, this.name()),
-            this.fields.stream().map(f -> f.directives(format)).collect(Collectors.toList()),
+            this.fields.stream()
+                .map(f -> f.directives(this.fnumber(f), format))
+                .collect(Collectors.toList()),
             this.cmethods.stream()
                 .map(method -> method.directives(this.mnumber(method), format))
                 .collect(Collectors.toList()),
@@ -399,6 +401,13 @@ public final class BytecodeClass {
             .filter(m -> m.name().equals(method.name()))
             .collect(Collectors.toList())
             .indexOf(method) + 1;
+    }
+
+    private int fnumber(final BytecodeField field) {
+        return this.fields.stream()
+            .filter(field::namesake)
+            .collect(Collectors.toList())
+            .indexOf(field) + 1;
     }
 
     private BytecodeMethodBuilder withMethod(final BytecodeMethod method) {
