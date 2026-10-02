@@ -116,6 +116,24 @@ final class BytecodeClassTest {
     }
 
     @Test
+    void givesOverloadsNamesThatNoRealMethodHas() {
+        MatcherAssert.assertThat(
+            "The second overload of foo must not take the name of the real method foo-2",
+            new BytecodeObject(
+                new BytecodeClass("D")
+                    .withMethod("foo", "(I)V", Opcodes.ACC_PUBLIC).opcode(Opcodes.RETURN).up()
+                    .withMethod("foo", "(J)V", Opcodes.ACC_PUBLIC).opcode(Opcodes.RETURN).up()
+                    .withMethod("foo-2", "()V", Opcodes.ACC_PUBLIC).opcode(Opcodes.RETURN).up()
+            ).xml(),
+            XhtmlMatchers.hasXPaths(
+                "/object/o/o[@name='jm$foo']",
+                "/object/o/o[@name='jm$foo-2']",
+                "/object/o/o[@name='jm$foo-3']"
+            )
+        );
+    }
+
+    @Test
     void generatesCodeForInterface() {
         Assertions.assertDoesNotThrow(
             () -> new BytecodeObject(
