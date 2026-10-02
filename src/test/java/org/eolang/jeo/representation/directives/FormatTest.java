@@ -32,4 +32,13 @@ final class FormatTest {
             Matchers.is(true)
         );
     }
+
+    @Test
+    void usesDebugModeByDefault() {
+        MatcherAssert.assertThat(
+            "The default mode must keep the debug information, as the mojo does",
+            new Format().mode(),
+            Matchers.equalTo("debug")
+        );
+    }
 }
