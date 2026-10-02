@@ -40,6 +40,16 @@ final class AsmProgramTest {
     }
 
     @Test
+    void readsTheSameLabelsEveryTime() throws Exception {
+        final byte[] bytes = new BytesOf(new ResourceOf("FastHttpDateFormat.class")).asBytes();
+        MatcherAssert.assertThat(
+            "Reading the same class twice must give the same labels",
+            new AsmProgram(bytes).bytecode(0),
+            Matchers.equalTo(new AsmProgram(bytes).bytecode(0))
+        );
+    }
+
+    @Test
     void skipsDebugLabels() throws Exception {
         MatcherAssert.assertThat(
             "We expect to skip debug labels and lines",
