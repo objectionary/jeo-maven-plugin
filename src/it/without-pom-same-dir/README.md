@@ -7,7 +7,7 @@ file.
 The purpose of this test is to verify that the jeo-maven-plugin can be used in a
 project without a POM file. Moreover, in this particular test we don't specify
 `disassemble` `outputDir` parameter, so the plugin should use the default value,
-which is the directory where the command is executed.
+which is `target/generated-sources/jeo-xmir`.
 
 To run only this test, use the following command:
 
