@@ -7,10 +7,14 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.cactoos.scalar.Sticky;
+import org.cactoos.scalar.Unchecked;
 
 /**
  * Data-flow analysis.
@@ -33,6 +37,11 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
     private final List<BytecodeTryCatchBlock> blocks;
 
     /**
+     * Positions of the labels, found once for the whole method.
+     */
+    private final Unchecked<Map<BytecodeLabel, Integer>> labels;
+
+    /**
      * Constructor.
      *
      * @param instr Instructions
@@ -43,6 +52,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
     ) {
         this.instructions = instr;
         this.blocks = new ArrayList<>(catches);
+        this.labels = new Unchecked<>(new Sticky<>(this::positions));
     }
 
     /**
@@ -112,12 +122,20 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
     }
 
     private int index(final BytecodeLabel label) {
+        return Optional.ofNullable(this.labels.value().get(label)).orElseThrow(
+            () -> new IllegalStateException(String.format("Label %s not found", label))
+        );
+    }
+
+    private Map<BytecodeLabel, Integer> positions() {
+        final Map<BytecodeLabel, Integer> result = new HashMap<>(this.instructions.size());
         for (int index = 0; index < this.instructions.size(); ++index) {
-            if (this.instructions.get(index).equals(label)) {
-                return index;
+            final BytecodeEntry entry = this.instructions.get(index);
+            if (entry instanceof BytecodeLabel) {
+                result.putIfAbsent((BytecodeLabel) entry, index);
             }
         }
-        throw new IllegalStateException(String.format("Label %s not found", label));
+        return result;
     }
 
     /**
