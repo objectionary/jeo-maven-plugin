@@ -57,6 +57,33 @@ final class XmlObjectTest {
     }
 
     @Test
+    void convertsToBytecodeWhenPackageStartsWithTheEscapePrefix() {
+        final String pckg = "j$x";
+        final String name = "j$Y";
+        MatcherAssert.assertThat(
+            "the package must be decoded once, not once more for every class it holds (see #1771)",
+            new XmlObject(
+                new XMLDocument(
+                    new Xembler(
+                        new DirectivesObject(
+                            new DirectivesClass(new ClassName(pckg, name)),
+                            new DirectivesMetas(
+                                new ClassName(pckg, name)
+                            )
+                        )
+                    ).xmlQuietly()
+                )
+            ).bytecode(),
+            Matchers.equalTo(
+                new BytecodeObject(
+                    pckg,
+                    new BytecodeClass(String.format("%s.%s", pckg, name), 0)
+                )
+            )
+        );
+    }
+
+    @Test
     void convertsGenericsMethodIntoBytecode() {
         MatcherAssert.assertThat(
             "Can't convert generics method into bytecode",
