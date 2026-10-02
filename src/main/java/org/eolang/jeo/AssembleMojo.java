@@ -161,6 +161,7 @@ public final class AssembleMojo extends AbstractMojo {
             } else {
                 Logger.info(this, "XMIR verification before assembling is disabled, skipping");
             }
+            new PluginStartup(this.project, out).init();
             new Assembler(
                 src,
                 out,
