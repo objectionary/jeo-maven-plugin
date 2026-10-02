@@ -7,9 +7,17 @@ name: mvn-qulice
   push:
     branches:
       - master
+    paths:
+      - '**.java'
+      - '**/pom.xml'
+      - '.github/workflows/maven.qulice.yml'
   pull_request:
     branches:
       - master
+    paths:
+      - '**.java'
+      - '**/pom.xml'
+      - '.github/workflows/maven.qulice.yml'
 jobs:
   check:
     strategy:
