@@ -103,6 +103,15 @@ final class BytecodeObjectTest {
         );
     }
 
+    @Test
+    void rejectsObjectWithoutTopClass() {
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new BytecodeObject("sample").bytecode(),
+            "An object without a top class must fail with a contextual error"
+        );
+    }
+
     /**
      * Directives without time attribute for comparison.
      *
