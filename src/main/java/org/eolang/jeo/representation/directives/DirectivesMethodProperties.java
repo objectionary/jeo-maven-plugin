@@ -4,7 +4,10 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
@@ -56,7 +59,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
      * Method exceptions.
      * Attribute "Exceptions_attribute".
      */
-    private final String[] exceptions;
+    private final List<String> exceptions;
 
     /**
      * Method max stack and locals.
@@ -158,11 +161,45 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         final DirectivesMethodParams params,
         final Format format
     ) {
+        this(
+            access,
+            name,
+            descriptor,
+            signature,
+            Arrays.asList(Optional.ofNullable(exceptions).orElseGet(() -> new String[0]).clone()),
+            max,
+            params,
+            format
+        );
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param access Access modifiers
+     * @param name Method name
+     * @param descriptor Method descriptor
+     * @param signature Method signature
+     * @param exceptions Method exceptions
+     * @param max Max stack and locals
+     * @param params Method parameters
+     * @param format Format of the directives
+     */
+    private DirectivesMethodProperties(
+        final int access,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final List<String> exceptions,
+        final DirectivesMaxs max,
+        final DirectivesMethodParams params,
+        final Format format
+    ) {
         this.access = access;
         this.name = name;
         this.descriptor = descriptor;
         this.signature = signature;
-        this.exceptions = exceptions.clone();
+        this.exceptions = exceptions;
         this.max = new AtomicReference<>(max);
         this.params = params;
         this.format = format;
@@ -179,7 +216,7 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
         dirs.append(new DirectivesValue(this.format, "descriptor", this.descriptor()));
         dirs.append(new DirectivesValue(this.format, "signature", this.signature()));
         dirs.append(
-            new DirectivesValues(this.format, "exceptions", (Object[]) this.exceptions())
+            new DirectivesValues(this.format, "exceptions", this.exceptions.toArray())
         );
         dirs.append(this.max.get());
         dirs.append(this.params);
@@ -202,16 +239,6 @@ public final class DirectivesMethodProperties implements Iterable<Directive> {
             result = "";
         } else {
             result = this.signature;
-        }
-        return result;
-    }
-
-    private String[] exceptions() {
-        final String[] result;
-        if (this.exceptions == null) {
-            result = new String[0];
-        } else {
-            result = this.exceptions;
         }
         return result;
     }
