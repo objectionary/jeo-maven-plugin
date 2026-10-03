@@ -13,6 +13,9 @@ name: phino
 concurrency:
   group: phino-${{ github.ref }}
   cancel-in-progress: true
+permissions:
+  contents: read
+
 jobs:
   test:
     timeout-minutes: 15

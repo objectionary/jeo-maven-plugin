@@ -18,6 +18,8 @@ name: markdown-lint
       - '**.md'
       - '.github/workflows/markdown-lint.yml'
       - '.markdownlint.yml'
+permissions:
+  contents: read
 jobs:
   markdown-lint:
     timeout-minutes: 15

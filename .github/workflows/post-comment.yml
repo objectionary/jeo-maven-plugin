@@ -9,8 +9,16 @@ on:
     types:
       - completed
 
+permissions:
+  contents: read
+
 jobs:
   post-comment:
+    permissions:
+      actions: read
+      contents: read
+      issues: write
+      pull-requests: write
     if: github.event.workflow_run.conclusion == 'success'
     timeout-minutes: 15
     runs-on: ubuntu-24.04
