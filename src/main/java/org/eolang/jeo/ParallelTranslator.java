@@ -8,6 +8,7 @@ import com.jcabi.log.Logger;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -103,12 +104,28 @@ public final class ParallelTranslator implements Translator {
                 () -> representations.parallel().map(this::translate).collect(Collectors.toList())
             ).get().stream();
         } catch (final InterruptedException exception) {
+            ParallelTranslator.stop(pool);
             Thread.currentThread().interrupt();
             throw new IllegalStateException("Parallel translation was interrupted", exception);
         } catch (final ExecutionException exception) {
             throw new IllegalStateException("Parallel translation failed", exception);
         } finally {
             pool.shutdown();
+        }
+    }
+
+    private static void stop(final ForkJoinPool pool) {
+        pool.shutdownNow();
+        boolean interrupted = false;
+        while (!pool.isTerminated()) {
+            try {
+                pool.awaitTermination(1L, TimeUnit.DAYS);
+            } catch (final InterruptedException exception) {
+                interrupted = true;
+            }
+        }
+        if (interrupted) {
+            Thread.currentThread().interrupt();
         }
     }
 

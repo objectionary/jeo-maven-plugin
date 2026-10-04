@@ -10,6 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
@@ -110,6 +113,65 @@ final class ParallelTranslatorTest {
             ).getMessage(),
             Matchers.containsString("0 or positive")
         );
+    }
+
+    @Test
+    void stopsTranslationWhenWaitingThreadIsInterrupted(@TempDir final Path temp)
+        throws InterruptedException {
+        final CountDownLatch started = new CountDownLatch(1);
+        final CountDownLatch release = new CountDownLatch(1);
+        final CountDownLatch stopped = new CountDownLatch(1);
+        final CountDownLatch completed = new CountDownLatch(1);
+        final AtomicBoolean restored = new AtomicBoolean();
+        final AtomicBoolean continued = new AtomicBoolean();
+        final Thread caller = new Thread(
+            () -> {
+                try {
+                    new ParallelTranslator(
+                        path -> ParallelTranslatorTest.interruptibleTranslation(
+                            path, started, release, stopped, continued
+                        ),
+                        1
+                    ).apply(Stream.of(temp.resolve("input"))).forEach(ignored -> { });
+                } catch (final IllegalStateException exception) {
+                    restored.set(Thread.currentThread().isInterrupted());
+                } finally {
+                    completed.countDown();
+                }
+            }
+        );
+        caller.start();
+        try {
+            started.await(5L, TimeUnit.SECONDS);
+            caller.interrupt();
+            MatcherAssert.assertThat(
+                "The interrupted call must wait until its worker stops",
+                completed.await(5L, TimeUnit.SECONDS) && stopped.getCount() == 0L
+                    && restored.get() && !continued.get()
+            );
+        } finally {
+            release.countDown();
+            caller.interrupt();
+            caller.join(TimeUnit.SECONDS.toMillis(5L));
+        }
+    }
+
+    private static Path interruptibleTranslation(
+        final Path path, final CountDownLatch started, final CountDownLatch release,
+        final CountDownLatch stopped, final AtomicBoolean continued
+    ) {
+        started.countDown();
+        final Path result;
+        try {
+            release.await();
+            continued.set(true);
+            result = path;
+        } catch (final InterruptedException exception) {
+            stopped.countDown();
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(exception);
+        }
+        return result;
     }
 
     private static Path transform(final Path path) {
