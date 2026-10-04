@@ -113,27 +113,24 @@ final class BytecodeInstructionTest {
     }
 
     @Test
-    void calculatesImpactForWideLdcDynamicConstant() {
-        final Handle bootstrap = new Handle(
-            Opcodes.H_INVOKESTATIC,
-            "java/lang/invoke/ConstantBootstraps",
-            "explicitCast",
-            "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
-            false
-        );
+    void calculatesImpactForLongLdcDynamicConstant() {
         MatcherAssert.assertThat(
             "A long dynamic constant pushes two slots",
             new BytecodeInstruction(
                 Opcodes.LDC,
-                new ConstantDynamic("longValue", "J", bootstrap, 42L)
+                new ConstantDynamic("longValue", "J", BytecodeInstructionTest.bootstrap(), 42L)
             ).impact(),
             Matchers.equalTo(2)
         );
+    }
+
+    @Test
+    void calculatesImpactForDoubleLdcDynamicConstant() {
         MatcherAssert.assertThat(
             "A double dynamic constant pushes two slots",
             new BytecodeInstruction(
                 Opcodes.LDC,
-                new ConstantDynamic("doubleValue", "D", bootstrap, 42.0d)
+                new ConstantDynamic("doubleValue", "D", BytecodeInstructionTest.bootstrap(), 42.0d)
             ).impact(),
             Matchers.equalTo(2)
         );
@@ -145,6 +142,16 @@ final class BytecodeInstructionTest {
             "LDC with a null constant pushes one slot",
             new BytecodeInstruction(Opcodes.LDC, (Object) null).impact(),
             Matchers.equalTo(1)
+        );
+    }
+
+    private static Handle bootstrap() {
+        return new Handle(
+            Opcodes.H_INVOKESTATIC,
+            "java/lang/invoke/ConstantBootstraps",
+            "explicitCast",
+            "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+            false
         );
     }
 }
