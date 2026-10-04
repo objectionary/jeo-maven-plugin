@@ -22,20 +22,19 @@ final class InstructionsFlowTest {
     @Test
     void rejectsLoopWithGrowingStack() {
         final BytecodeLabel loop = new BytecodeLabel("loop");
-        final IllegalStateException error = Assertions.assertThrows(
-            IllegalStateException.class,
-            () -> new MaxStack(
-                Arrays.asList(
-                    loop,
-                    new BytecodeInstruction(Opcodes.ICONST_0),
-                    new BytecodeInstruction(Opcodes.GOTO, loop)
-                ),
-                Collections.emptyList()
-            ).value()
-        );
         MatcherAssert.assertThat(
-            error.getMessage(),
-            Matchers.containsString("Incompatible values at instruction 0")
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new MaxStack(
+                    Arrays.asList(
+                        loop,
+                        new BytecodeInstruction(Opcodes.ICONST_0),
+                        new BytecodeInstruction(Opcodes.GOTO, loop)
+                    ),
+                    Collections.emptyList()
+                ).value()
+            ).getMessage(),
+            Matchers.containsString("Incompatible values at loop target 0")
         );
     }
 }

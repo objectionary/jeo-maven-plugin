@@ -66,20 +66,20 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
             int index = starting.index();
             current = starting.value();
             while (index < total) {
-                this.assertCompatible(arrivals, index, current);
+                arrivals.putIfAbsent(index, current);
                 if (index == starting.index() && visited.isGreaterThan(index, current)) {
                     break;
                 }
                 final BytecodeEntry instruction = this.instructions.get(index);
                 final T updated = current.add(generator.apply(instruction));
                 if (instruction.isSwitch()) {
-                    instruction.jumps().stream().map(this::index)
-                        .forEach(ind -> worklist.push(new Entry<>(ind, updated)));
+                    this.enqueueSwitch(instruction, updated, index, arrivals, worklist);
                     visited.putIfGreater(index, updated);
                     break;
                 } else if (instruction.isIf()) {
                     final BytecodeLabel label = instruction.jumps().get(0);
                     final int jump = this.index(label);
+                    InstructionsFlow.assertCompatible(arrivals, index, jump, updated);
                     worklist.push(new Entry<>(jump, updated));
                     final int next = index + 1;
                     worklist.push(new Entry<>(next, updated));
@@ -88,6 +88,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                 } else if (instruction.isJump()) {
                     final BytecodeLabel label = instruction.jumps().get(0);
                     final int jump = this.index(label);
+                    InstructionsFlow.assertCompatible(arrivals, index, jump, updated);
                     worklist.push(new Entry<>(jump, updated));
                     visited.putIfGreater(index, updated);
                     break;
@@ -106,13 +107,32 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
         return visited.values().stream().max((first, second) -> first.compareTo(second));
     }
 
-    private void assertCompatible(final Map<Integer, T> arrivals, final int index, final T value) {
-        final T previous = arrivals.putIfAbsent(index, value);
-        if (previous != null && !previous.compatible(value)) {
+    private void enqueueSwitch(
+        final BytecodeEntry instruction,
+        final T value,
+        final int source,
+        final Map<Integer, T> arrivals,
+        final Deque<Entry<T>> worklist
+    ) {
+        for (final BytecodeLabel label : instruction.jumps()) {
+            final int target = this.index(label);
+            InstructionsFlow.assertCompatible(arrivals, source, target, value);
+            worklist.push(new Entry<>(target, value));
+        }
+    }
+
+    private static <T extends InstructionsFlow.Reducible<T>> void assertCompatible(
+        final Map<Integer, T> arrivals,
+        final int source,
+        final int target,
+        final T value
+    ) {
+        final T previous = arrivals.get(target);
+        if (target <= source && previous != null && !previous.compatible(value)) {
             throw new IllegalStateException(
                 String.format(
-                    "Incompatible values at instruction %d: %s and %s",
-                    index, previous, value
+                    "Incompatible values at loop target %d: %s and %s",
+                    target, previous, value
                 )
             );
         }
