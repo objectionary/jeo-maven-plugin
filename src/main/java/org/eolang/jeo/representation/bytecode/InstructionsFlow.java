@@ -7,7 +7,9 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -54,6 +56,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
      */
     public Optional<T> max(final T initial, final Function<BytecodeEntry, T> generator) {
         final MaxValueMap<Integer, T> visited = new MaxValueMap<>();
+        final Map<Integer, T> arrivals = new HashMap<>(0);
         final Deque<Entry<T>> worklist = new ArrayDeque<>(0);
         worklist.push(new Entry<>(0, initial));
         final int total = this.instructions.size();
@@ -62,10 +65,11 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
             final Entry<T> starting = worklist.pop();
             int index = starting.index();
             current = starting.value();
-            if (visited.isGreaterThan(index, current)) {
-                continue;
-            }
             while (index < total) {
+                this.assertCompatible(arrivals, index, current);
+                if (index == starting.index() && visited.isGreaterThan(index, current)) {
+                    break;
+                }
                 final BytecodeEntry instruction = this.instructions.get(index);
                 final T updated = current.add(generator.apply(instruction));
                 if (instruction.isSwitch()) {
@@ -102,6 +106,18 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
         return visited.values().stream().max((first, second) -> first.compareTo(second));
     }
 
+    private void assertCompatible(final Map<Integer, T> arrivals, final int index, final T value) {
+        final T previous = arrivals.putIfAbsent(index, value);
+        if (previous != null && !previous.compatible(value)) {
+            throw new IllegalStateException(
+                String.format(
+                    "Incompatible values at instruction %d: %s and %s",
+                    index, previous, value
+                )
+            );
+        }
+    }
+
     private List<Integer> suitableBlocks(final int instruction) {
         return this.blocks.stream()
             .map(BytecodeTryCatchBlock.class::cast)
@@ -134,5 +150,7 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
         T add(T other);
 
         T enterBlock();
+
+        boolean compatible(T other);
     }
 }
