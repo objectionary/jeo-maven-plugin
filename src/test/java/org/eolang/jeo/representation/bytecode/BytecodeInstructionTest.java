@@ -9,6 +9,7 @@ import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.ConstantDynamic;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -108,6 +109,33 @@ final class BytecodeInstructionTest {
                 new Handle(Opcodes.H_INVOKESTATIC, "java/lang/Math", "abs", "(I)I", false)
             ).impact(),
             Matchers.equalTo(1)
+        );
+    }
+
+    @Test
+    void calculatesImpactForWideLdcDynamicConstant() {
+        final Handle bootstrap = new Handle(
+            Opcodes.H_INVOKESTATIC,
+            "java/lang/invoke/ConstantBootstraps",
+            "explicitCast",
+            "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Object;)Ljava/lang/Object;",
+            false
+        );
+        MatcherAssert.assertThat(
+            "A long dynamic constant pushes two slots",
+            new BytecodeInstruction(
+                Opcodes.LDC,
+                new ConstantDynamic("longValue", "J", bootstrap, 42L)
+            ).impact(),
+            Matchers.equalTo(2)
+        );
+        MatcherAssert.assertThat(
+            "A double dynamic constant pushes two slots",
+            new BytecodeInstruction(
+                Opcodes.LDC,
+                new ConstantDynamic("doubleValue", "D", bootstrap, 42.0d)
+            ).impact(),
+            Matchers.equalTo(2)
         );
     }
 
