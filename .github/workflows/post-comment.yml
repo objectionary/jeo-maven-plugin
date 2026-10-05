@@ -12,6 +12,9 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: post-comment-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   post-comment:
     permissions:

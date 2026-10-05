@@ -10,6 +10,9 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: jmh-benchmark-action-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   benchmark:
     timeout-minutes: 15

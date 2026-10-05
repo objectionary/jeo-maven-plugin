@@ -20,6 +20,10 @@ name: mvn-qulice
       - '.github/workflows/maven.qulice.yml'
 permissions:
   contents: read
+
+concurrency:
+  group: maven.qulice-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   check:
     strategy:

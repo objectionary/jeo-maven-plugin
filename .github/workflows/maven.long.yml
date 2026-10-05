@@ -13,6 +13,9 @@ name: mvn-long
 permissions:
   contents: read
 
+concurrency:
+  group: maven.long-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   integration-test:
     strategy:

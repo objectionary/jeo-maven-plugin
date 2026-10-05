@@ -20,6 +20,10 @@ name: markdown-lint
       - '.markdownlint.yml'
 permissions:
   contents: read
+
+concurrency:
+  group: markdown-lint-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   markdown-lint:
     timeout-minutes: 15

@@ -10,6 +10,9 @@ name: codecov
 permissions:
   contents: read
 
+concurrency:
+  group: codecov-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   codecov:
     name: Upload coverage reports to Codecov

@@ -9,15 +9,21 @@ name: shellcheck
       - master
     paths:
       - '**.sh'
+      - '**.bash'
       - '.github/workflows/shellcheck.yml'
   pull_request:
     branches:
       - master
     paths:
       - '**.sh'
+      - '**.bash'
       - '.github/workflows/shellcheck.yml'
 permissions:
   contents: read
+
+concurrency:
+  group: shellcheck-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   shellcheck:
     timeout-minutes: 15

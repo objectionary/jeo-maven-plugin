@@ -18,6 +18,10 @@ name: yamllint
       - '**.yaml'
 permissions:
   contents: read
+
+concurrency:
+  group: yamllint-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   yamllint:
     timeout-minutes: 15

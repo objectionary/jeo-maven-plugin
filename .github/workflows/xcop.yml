@@ -26,6 +26,10 @@ name: xcop
       - '.github/workflows/xcop.yml'
 permissions:
   contents: read
+
+concurrency:
+  group: xcop-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   xcop:
     timeout-minutes: 15

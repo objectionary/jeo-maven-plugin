@@ -11,6 +11,9 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: daily-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   test:
     strategy:
