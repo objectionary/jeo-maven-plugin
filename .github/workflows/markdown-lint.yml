@@ -18,6 +18,9 @@ name: markdown-lint
       - '**.md'
       - '.github/workflows/markdown-lint.yml'
       - '.markdownlint.yml'
+concurrency:
+  group: markdown-lint-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   markdown-lint:
     timeout-minutes: 15
