@@ -10,6 +10,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -206,6 +207,17 @@ final class BytecodeClassTest {
                 "//o[@name='j$same']",
                 "//o[@name='jm$same']"
             )
+        );
+    }
+
+    @Test
+    void keepsJavaLangObjectWithNoSuperclass() {
+        MatcherAssert.assertThat(
+            "java.lang.Object must not become its own superclass (see #1770)",
+            new ClassReader(
+                new BytecodeObject(new BytecodeClass("java/lang/Object")).bytecode().bytes()
+            ).getSuperName(),
+            Matchers.nullValue()
         );
     }
 
