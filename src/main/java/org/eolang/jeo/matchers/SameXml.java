@@ -11,7 +11,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 /**
  * Matcher to check if the received XML document is the same as the expected one.
- * Smart comparison of XML documents that ignores 'line' attributes.
+ * Smart comparison of XML documents that ignores 'line' attributes and comments.
  *
  * @since 0.6
  */

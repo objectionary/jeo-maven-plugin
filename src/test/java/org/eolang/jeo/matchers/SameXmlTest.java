@@ -53,4 +53,13 @@ final class SameXmlTest {
             new IsEqual<>(true)
         );
     }
+
+    @Test
+    void doesNotMatchDifferentXmls() {
+        MatcherAssert.assertThat(
+            "XML documents with different data must not match",
+            new SameXml("<root><o>data</o></root>").matchesSafely("<root><o>other</o></root>"),
+            new IsEqual<>(false)
+        );
+    }
 }
