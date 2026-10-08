@@ -49,6 +49,17 @@ final class DirectivesMethodParamTest {
     }
 
     @Test
+    void putsIndexIntoObjectName() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Two parameters with the same name must get different object names",
+            new Xembler(
+                new DirectivesMethodParam(new Format(), 1, "x", Opcodes.ACC_FINAL, Type.INT_TYPE)
+            ).xml(),
+            XhtmlMatchers.hasXPath("./o[@name='px-1']")
+        );
+    }
+
+    @Test
     void generatesParamDirectivesWithSimpleName() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
             "We expect that the parameter directives will be generated with a simple name that includes the name",

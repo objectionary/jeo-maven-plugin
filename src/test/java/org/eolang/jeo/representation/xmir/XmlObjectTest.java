@@ -4,9 +4,16 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.eolang.jeo.representation.ClassName;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
+import org.eolang.jeo.representation.bytecode.BytecodeField;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.eolang.jeo.representation.directives.DirectivesClass;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
@@ -53,6 +60,27 @@ final class XmlObjectTest {
                     new BytecodeClass(String.format("%s.%s", pckg, name), 0)
                 )
             )
+        );
+    }
+
+    @Test
+    void namesTwoFieldsWithTheSameNameDifferently() {
+        MatcherAssert.assertThat(
+            "The object names of the two fields with the same name must differ",
+            new BytecodeObject(
+                new BytecodeClass(
+                    new ClassName("B"),
+                    new ArrayList<>(0),
+                    Arrays.asList(
+                        new BytecodeField("a", "I", null, 0, Opcodes.ACC_PUBLIC),
+                        new BytecodeField("a", "J", null, 0L, Opcodes.ACC_PUBLIC)
+                    ),
+                    new BytecodeAnnotations(),
+                    new BytecodeAttributes(),
+                    new BytecodeClassProperties(Opcodes.ACC_PUBLIC)
+                )
+            ).xml(),
+            XhtmlMatchers.hasXPaths("/object/o/o[@name='j$a']", "/object/o/o[@name='j$a-2']")
         );
     }
 

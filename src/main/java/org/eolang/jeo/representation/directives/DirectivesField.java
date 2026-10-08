@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import java.util.Objects;
+import org.eolang.jeo.representation.NumberedName;
 import org.eolang.jeo.representation.PrefixedName;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
@@ -65,6 +66,11 @@ public final class DirectivesField implements Iterable<Directive> {
      * Annotations.
      */
     private final DirectivesAnnotations annotations;
+
+    /**
+     * Number of the field among the fields of the class with the same name.
+     */
+    private final int number;
 
     /**
      * Constructor.
@@ -137,7 +143,33 @@ public final class DirectivesField implements Iterable<Directive> {
         final Object value,
         final DirectivesAnnotations annotations
     ) {
+        this(format, 1, access, name, descriptor, signature, value, annotations);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param format Format
+     * @param number Number of the field among the fields with the same name
+     * @param access Access modifiers
+     * @param name Name
+     * @param descriptor Descriptor
+     * @param signature Signature
+     * @param value Initial value
+     * @param annotations Annotations
+     */
+    public DirectivesField(
+        final Format format,
+        final int number,
+        final int access,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final Object value,
+        final DirectivesAnnotations annotations
+    ) {
         this.format = format;
+        this.number = number;
         this.access = access;
         this.name = name;
         this.descriptor = descriptor;
@@ -150,7 +182,7 @@ public final class DirectivesField implements Iterable<Directive> {
     public Iterator<Directive> iterator() {
         return new DirectivesJeoObject(
             "field",
-            new PrefixedName(this.name).encode(),
+            new PrefixedName(new NumberedName(this.number, this.name).toString()).encode(),
             new DirectivesValue(this.format, DirectivesField.title("access"), this.access),
             new DirectivesValue(this.format, DirectivesField.title("name"), this.name),
             new DirectivesValue(
