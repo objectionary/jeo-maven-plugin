@@ -7,8 +7,10 @@ package org.eolang.jeo;
 import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Cached transformation.
@@ -90,10 +92,22 @@ public final class Caching implements Transformation {
             result = Files.readAllBytes(target);
         } else {
             final byte[] transform = this.origin.transform();
-            if (target.getParent() != null) {
-                Files.createDirectories(target.getParent());
+            final Path dir = target.toAbsolutePath().getParent();
+            Files.createDirectories(dir);
+            final Path temp = Files.createTempFile(
+                dir, String.format("%s.", target.getFileName()), ".tmp"
+            );
+            Files.write(temp, transform);
+            try {
+                Files.move(
+                    temp,
+                    target,
+                    StandardCopyOption.REPLACE_EXISTING,
+                    StandardCopyOption.ATOMIC_MOVE
+                );
+            } catch (final AtomicMoveNotSupportedException exception) {
+                Files.move(temp, target, StandardCopyOption.REPLACE_EXISTING);
             }
-            Files.write(target, transform);
             if (!this.print.isEmpty()) {
                 Files.write(this.cache(), this.print.getBytes(StandardCharsets.UTF_8));
             }
@@ -103,12 +117,17 @@ public final class Caching implements Transformation {
     }
 
     private boolean alreadyTransformed() throws IOException {
-        final Path source = this.source();
         final Path target = this.target();
         return Files.exists(target)
-            && Files.exists(source)
-            && Files.getLastModifiedTime(target).compareTo(Files.getLastModifiedTime(source)) >= 0
+            && Files.size(target) > 0
+            && this.newer()
             && this.sameOptions();
+    }
+
+    private boolean newer() throws IOException {
+        return Files.exists(this.source())
+            && Files.getLastModifiedTime(this.target())
+            .compareTo(Files.getLastModifiedTime(this.source())) >= 0;
     }
 
     private boolean sameOptions() throws IOException {
