@@ -74,8 +74,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      * @return This
      */
     public BytecodeAnnotation write(final ClassVisitor visitor) {
-        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
-        this.writeValues(avisitor);
+        this.writeValues(visitor.visitAnnotation(this.descr, this.visible));
         return this;
     }
 
@@ -86,8 +85,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      * @return This
      */
     public BytecodeAnnotation write(final MethodVisitor visitor) {
-        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
-        this.writeValues(avisitor);
+        this.writeValues(visitor.visitAnnotation(this.descr, this.visible));
         return this;
     }
 
@@ -99,10 +97,9 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      * @return This
      */
     public BytecodeAnnotation write(final int index, final MethodVisitor visitor) {
-        final AnnotationVisitor avisitor = visitor.visitParameterAnnotation(
-            index, this.descr, this.visible
+        this.writeValues(
+            visitor.visitParameterAnnotation(index, this.descr, this.visible)
         );
-        this.writeValues(avisitor);
         return this;
     }
 
@@ -113,8 +110,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      * @return This
      */
     public BytecodeAnnotation write(final FieldVisitor visitor) {
-        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
-        this.writeValues(avisitor);
+        this.writeValues(visitor.visitAnnotation(this.descr, this.visible));
         return this;
     }
 
@@ -125,15 +121,13 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      * @return This
      */
     public BytecodeAnnotation write(final RecordComponentVisitor visitor) {
-        final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
-        this.writeValues(avisitor);
+        this.writeValues(visitor.visitAnnotation(this.descr, this.visible));
         return this;
     }
 
     @Override
     public void writeTo(final AnnotationVisitor visitor) {
-        final AnnotationVisitor inner = visitor.visitAnnotation(this.descr, this.descr);
-        this.writeValues(inner);
+        this.writeValues(visitor.visitAnnotation(this.descr, this.descr));
     }
 
     @Override
@@ -179,15 +173,10 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
         );
     }
 
-    /**
-     * Write the properties and finish an accepted annotation visitor.
-     * @param visitor Annotation visitor, or null when the annotation is skipped
-     */
     private void writeValues(final AnnotationVisitor visitor) {
         if (visitor != null) {
             this.values.forEach(property -> property.writeTo(visitor));
             visitor.visitEnd();
         }
     }
-
 }

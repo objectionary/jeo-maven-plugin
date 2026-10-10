@@ -22,6 +22,7 @@ import org.objectweb.asm.RecordComponentVisitor;
 
 /**
  * Annotation visitor lifecycle.
+ *
  * @since 0.6
  */
 final class BytecodeAnnotationTest {
@@ -63,54 +64,70 @@ final class BytecodeAnnotationTest {
         );
     }
 
-    /**
-     * Each supported annotation writer with one property.
-     * @return Annotation writers
-     */
     private static Stream<Consumer<AnnotationVisitor>> writers() {
         final BytecodeAnnotation annotation = new BytecodeAnnotation(
             "LExample;", true,
             Collections.singletonList(new BytecodePlainAnnotationValue("number", 42))
         );
         return Stream.of(
-            visitor -> annotation.write(new ClassVisitor(Opcodes.ASM9) {
-                @Override
-                public AnnotationVisitor visitAnnotation(final String desc, final boolean visible) {
-                    return visitor;
+            visitor -> annotation.write(
+                new ClassVisitor(Opcodes.ASM9) {
+                    @Override
+                    public AnnotationVisitor visitAnnotation(
+                        final String desc, final boolean visible
+                    ) {
+                        return visitor;
+                    }
                 }
-            }),
-            visitor -> annotation.write(new MethodVisitor(Opcodes.ASM9) {
-                @Override
-                public AnnotationVisitor visitAnnotation(final String desc, final boolean visible) {
-                    return visitor;
+            ),
+            visitor -> annotation.write(
+                new MethodVisitor(Opcodes.ASM9) {
+                    @Override
+                    public AnnotationVisitor visitAnnotation(
+                        final String desc, final boolean visible
+                    ) {
+                        return visitor;
+                    }
                 }
-            }),
-            visitor -> annotation.write(0, new MethodVisitor(Opcodes.ASM9) {
-                @Override
-                public AnnotationVisitor visitParameterAnnotation(
-                    final int index, final String desc, final boolean visible
-                ) {
-                    return visitor;
+            ),
+            visitor -> annotation.write(
+                0, new MethodVisitor(Opcodes.ASM9) {
+                    @Override
+                    public AnnotationVisitor visitParameterAnnotation(
+                        final int index, final String desc, final boolean visible
+                    ) {
+                        return visitor;
+                    }
                 }
-            }),
-            visitor -> annotation.write(new FieldVisitor(Opcodes.ASM9) {
-                @Override
-                public AnnotationVisitor visitAnnotation(final String desc, final boolean visible) {
-                    return visitor;
+            ),
+            visitor -> annotation.write(
+                new FieldVisitor(Opcodes.ASM9) {
+                    @Override
+                    public AnnotationVisitor visitAnnotation(
+                        final String desc, final boolean visible
+                    ) {
+                        return visitor;
+                    }
                 }
-            }),
-            visitor -> annotation.write(new RecordComponentVisitor(Opcodes.ASM9) {
-                @Override
-                public AnnotationVisitor visitAnnotation(final String desc, final boolean visible) {
-                    return visitor;
+            ),
+            visitor -> annotation.write(
+                new RecordComponentVisitor(Opcodes.ASM9) {
+                    @Override
+                    public AnnotationVisitor visitAnnotation(
+                        final String desc, final boolean visible
+                    ) {
+                        return visitor;
+                    }
                 }
-            }),
-            visitor -> annotation.writeTo(new AnnotationVisitor(Opcodes.ASM9) {
-                @Override
-                public AnnotationVisitor visitAnnotation(final String name, final String desc) {
-                    return visitor;
+            ),
+            visitor -> annotation.writeTo(
+                new AnnotationVisitor(Opcodes.ASM9) {
+                    @Override
+                    public AnnotationVisitor visitAnnotation(final String name, final String desc) {
+                        return visitor;
+                    }
                 }
-            })
+            )
         );
     }
 }
