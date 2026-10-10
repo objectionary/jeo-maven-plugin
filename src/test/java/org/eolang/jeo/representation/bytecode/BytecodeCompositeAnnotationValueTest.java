@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -63,17 +64,11 @@ final class BytecodeCompositeAnnotationValueTest {
             }
         );
         MatcherAssert.assertThat(
-            "An accepted child receives its property", properties.get(), Matchers.equalTo(1)
-        );
-        MatcherAssert.assertThat(
-            "An accepted child is finished exactly once", endings.get(), Matchers.equalTo(1)
+            "An accepted child receives its property and ends exactly once",
+            Arrays.asList(properties.get(), endings.get()), Matchers.contains(1, 1)
         );
     }
 
-    /**
-     * Values whose children ASM visitors may skip.
-     * @return Array and nested annotation values
-     */
     private static Stream<BytecodeAnnotationValue> values() {
         return Stream.of(
             new BytecodeArrayAnnotationValue(
