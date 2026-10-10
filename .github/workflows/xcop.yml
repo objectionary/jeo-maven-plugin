@@ -24,6 +24,9 @@ name: xcop
       - '**.html'
       - '**.xsd'
       - '.github/workflows/xcop.yml'
+permissions:
+  contents: read
+
 concurrency:
   group: xcop-${{ github.ref }}
   cancel-in-progress: true

@@ -18,6 +18,9 @@ name: shellcheck
       - '**.sh'
       - '**.bash'
       - '.github/workflows/shellcheck.yml'
+permissions:
+  contents: read
+
 concurrency:
   group: shellcheck-${{ github.ref }}
   cancel-in-progress: true

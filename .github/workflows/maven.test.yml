@@ -10,6 +10,9 @@ name: mvn
   pull_request:
     branches:
       - master
+permissions:
+  contents: read
+
 concurrency:
   group: maven.test-${{ github.ref }}
   cancel-in-progress: true
