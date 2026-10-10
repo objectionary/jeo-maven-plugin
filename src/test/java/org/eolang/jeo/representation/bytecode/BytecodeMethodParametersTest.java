@@ -6,7 +6,9 @@ package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.xml.XMLDocument;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.DirectivesAnnotations;
@@ -17,6 +19,8 @@ import org.eolang.jeo.representation.xmir.XmlObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -33,6 +37,40 @@ import org.xembly.Xembler;
  * @since 0.6
  */
 final class BytecodeMethodParametersTest {
+
+    @ParameterizedTest
+    @CsvSource({"1,0", "0,1", "1,1"})
+    void distinguishesAnnotableCounts(final int visible, final int invisible) {
+        MatcherAssert.assertThat(
+            "Different annotation table counts describe different bytecode",
+            new HashSet<>(
+                Arrays.asList(
+                    new BytecodeMethodParameters(),
+                    new BytecodeMethodParameters(
+                        Collections.emptyList(), Collections.emptyList(), visible, invisible
+                    )
+                )
+            ).size(),
+            Matchers.equalTo(2)
+        );
+    }
+
+    @ParameterizedTest
+    @CsvSource({"0,0", "1,0", "0,1", "1,1"})
+    void equatesMatchingAnnotableCounts(final int visible, final int invisible) {
+        final BytecodeMethodParameters first = new BytecodeMethodParameters(
+            Collections.emptyList(), Collections.emptyList(), visible, invisible
+        );
+        final BytecodeMethodParameters second = new BytecodeMethodParameters(
+            Collections.emptyList(), Collections.emptyList(), visible, invisible
+        );
+        MatcherAssert.assertThat(
+            "Matching annotation table counts remain equal", first, Matchers.equalTo(second)
+        );
+        MatcherAssert.assertThat(
+            "Equal parameters have equal hashes", first.hashCode(), Matchers.equalTo(second.hashCode())
+        );
+    }
 
     @Test
     void convertsToDirectivesWithTwoParams() throws ImpossibleModificationException {
