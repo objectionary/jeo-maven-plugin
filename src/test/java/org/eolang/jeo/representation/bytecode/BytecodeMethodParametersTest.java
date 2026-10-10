@@ -57,6 +57,7 @@ final class BytecodeMethodParametersTest {
 
     @ParameterizedTest
     @CsvSource({"0,0", "1,0", "0,1", "1,1"})
+    @SuppressWarnings("PMD.UnitTestContainsTooManyAsserts")
     void equatesMatchingAnnotableCounts(final int visible, final int invisible) {
         final BytecodeMethodParameters first = new BytecodeMethodParameters(
             Collections.emptyList(), Collections.emptyList(), visible, invisible
