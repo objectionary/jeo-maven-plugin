@@ -117,6 +117,9 @@ public final class BytecodeModule implements BytecodeAttribute {
             this.access,
             this.version
         );
+        if (module == null) {
+            return;
+        }
         if (this.main != null) {
             module.visitMainClass(this.main);
         }

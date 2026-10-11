@@ -106,6 +106,9 @@ public final class BytecodeField {
             this.signature,
             this.value
         );
+        if (fvisitor == null) {
+            return;
+        }
         this.annotations.annotations()
             .forEach(annotation -> annotation.write(fvisitor));
     }

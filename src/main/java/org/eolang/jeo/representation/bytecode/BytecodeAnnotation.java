@@ -75,6 +75,9 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      */
     public BytecodeAnnotation write(final ClassVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
+        if (avisitor == null) {
+            return this;
+        }
         this.values.forEach(property -> property.writeTo(avisitor));
         return this;
     }
@@ -87,6 +90,9 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      */
     public BytecodeAnnotation write(final MethodVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
+        if (avisitor == null) {
+            return this;
+        }
         this.values.forEach(property -> property.writeTo(avisitor));
         return this;
     }
@@ -102,6 +108,9 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
         final AnnotationVisitor avisitor = visitor.visitParameterAnnotation(
             index, this.descr, this.visible
         );
+        if (avisitor == null) {
+            return this;
+        }
         this.values.forEach(property -> property.writeTo(avisitor));
         return this;
     }
@@ -114,6 +123,9 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      */
     public BytecodeAnnotation write(final FieldVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
+        if (avisitor == null) {
+            return this;
+        }
         this.values.forEach(property -> property.writeTo(avisitor));
         return this;
     }
@@ -126,6 +138,9 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
      */
     public BytecodeAnnotation write(final RecordComponentVisitor visitor) {
         final AnnotationVisitor avisitor = visitor.visitAnnotation(this.descr, this.visible);
+        if (avisitor == null) {
+            return this;
+        }
         this.values.forEach(property -> property.writeTo(avisitor));
         return this;
     }
