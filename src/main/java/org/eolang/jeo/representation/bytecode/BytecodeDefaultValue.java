@@ -39,6 +39,9 @@ public final class BytecodeDefaultValue {
      */
     public void writeTo(final MethodVisitor mvisitor) {
         final AnnotationVisitor visitor = mvisitor.visitAnnotationDefault();
+        if (visitor == null) {
+            return;
+        }
         this.property.writeTo(visitor);
         visitor.visitEnd();
     }
