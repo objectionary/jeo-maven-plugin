@@ -102,7 +102,6 @@ public final class JeoClassLoader extends ClassLoader {
 
     private static Map<String, byte[]> prestructor(final Collection<String> classes) {
         return classes.stream()
-            .parallel()
             .map(Paths::get)
             .filter(Files::exists)
             .flatMap(JeoClassLoader::clazzes).collect(
