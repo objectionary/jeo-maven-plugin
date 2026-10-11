@@ -44,6 +44,11 @@ public final class BytecodeRecordComponent {
     private final BytecodeTypeAnnotations types;
 
     /**
+     * Custom attributes.
+     */
+    private final BytecodeAttributes attributes;
+
+    /**
      * Constructor.
      *
      * @param name Name
@@ -74,11 +79,33 @@ public final class BytecodeRecordComponent {
         final BytecodeAnnotations annotations,
         final BytecodeTypeAnnotations types
     ) {
+        this(name, descriptor, signature, annotations, types, new BytecodeAttributes());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name Name
+     * @param descriptor Descriptor
+     * @param signature Signature
+     * @param annotations Annotations
+     * @param types Type annotations
+     * @param attributes Custom attributes
+     */
+    public BytecodeRecordComponent(
+        final String name,
+        final String descriptor,
+        final String signature,
+        final BytecodeAnnotations annotations,
+        final BytecodeTypeAnnotations types,
+        final BytecodeAttributes attributes
+    ) {
         this.name = name;
         this.descriptor = descriptor;
         this.signature = signature;
         this.annotations = annotations;
         this.types = types;
+        this.attributes = attributes;
     }
 
     /**
@@ -92,6 +119,7 @@ public final class BytecodeRecordComponent {
         );
         this.annotations.write(visitor);
         this.types.write(visitor);
+        this.attributes.write(visitor);
     }
 
     /**
@@ -109,7 +137,8 @@ public final class BytecodeRecordComponent {
             this.descriptor,
             this.signature,
             this.annotations.directives(format),
-            this.types.directives(format)
+            this.types.directives(format),
+            this.attributes.directives(format, "attributes-record-component")
         );
     }
 
@@ -124,7 +153,8 @@ public final class BytecodeRecordComponent {
                 && Objects.equals(this.descriptor, component.descriptor)
                 && Objects.equals(this.signature, component.signature)
                 && Objects.equals(this.annotations, component.annotations)
-                && Objects.equals(this.types, component.types);
+                && Objects.equals(this.types, component.types)
+                && Objects.equals(this.attributes, component.attributes);
         } else {
             result = false;
         }
@@ -134,15 +164,17 @@ public final class BytecodeRecordComponent {
     @Override
     public int hashCode() {
         return Objects.hash(
-            this.name, this.descriptor, this.signature, this.annotations, this.types
+            this.name, this.descriptor, this.signature, this.annotations, this.types,
+            this.attributes
         );
     }
 
     @Override
     public String toString() {
         return String.format(
-            "BytecodeRecordComponent(name=%s, descriptor=%s, signature=%s, annotations=%s, types=%s)",
-            this.name, this.descriptor, this.signature, this.annotations, this.types
+            "BytecodeRecordComponent(name=%s, descriptor=%s, signature=%s, annotations=%s, types=%s, attributes=%s)",
+            this.name, this.descriptor, this.signature, this.annotations, this.types,
+            this.attributes
         );
     }
 }
