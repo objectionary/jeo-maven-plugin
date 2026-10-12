@@ -90,8 +90,11 @@ public final class BytecodeRecordComponent {
         final RecordComponentVisitor visitor = clazz.visitRecordComponent(
             this.name, this.descriptor, this.signature
         );
-        this.annotations.write(visitor);
-        this.types.write(visitor);
+        if (visitor != null) {
+            this.annotations.write(visitor);
+            this.types.write(visitor);
+            visitor.visitEnd();
+        }
     }
 
     /**
