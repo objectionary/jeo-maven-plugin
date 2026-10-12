@@ -131,11 +131,10 @@ public final class JeoClassLoader extends ClassLoader {
     }
 
     private static MapEntry<String, byte[]> entry(final Path root, final Path file) {
+        final String relative = root.relativize(file).toString();
         return new MapEntry<>(
-            root.relativize(file)
-                .toString()
-                .replace(File.separatorChar, '.')
-                .replace(JeoClassLoader.CLASS, ""),
+            relative.substring(0, relative.length() - JeoClassLoader.CLASS.length())
+                .replace(File.separatorChar, '.'),
             new UncheckedBytes(new BytesOf(file.toAbsolutePath())).asBytes()
         );
     }
