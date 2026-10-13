@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.Arrays;
 import java.util.Objects;
 import org.eolang.jeo.representation.directives.DirectivesPlainAnnotationValue;
 import org.eolang.jeo.representation.directives.Format;
@@ -56,7 +57,7 @@ public final class BytecodePlainAnnotationValue implements BytecodeAnnotationVal
         } else if (other instanceof BytecodePlainAnnotationValue) {
             final BytecodePlainAnnotationValue plain = (BytecodePlainAnnotationValue) other;
             result = Objects.equals(this.name, plain.name)
-                && Objects.equals(this.value, plain.value);
+                && Objects.deepEquals(this.value, plain.value);
         } else {
             result = false;
         }
@@ -65,7 +66,7 @@ public final class BytecodePlainAnnotationValue implements BytecodeAnnotationVal
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.name, this.value);
+        return Arrays.deepHashCode(new Object[]{this.name, this.value});
     }
 
     @Override

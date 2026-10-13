@@ -102,6 +102,7 @@ public final class BytecodeTypeAnnotation {
             return;
         }
         this.values.forEach(v -> v.writeTo(visited));
+        visited.visitEnd();
     }
 
     /**
