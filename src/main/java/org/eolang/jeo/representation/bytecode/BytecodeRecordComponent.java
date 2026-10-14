@@ -123,7 +123,6 @@ public final class BytecodeRecordComponent {
             this.attributes.write(visitor);
             visitor.visitEnd();
         }
-            this.attributes.write(visitor);
     }
 
     /**
