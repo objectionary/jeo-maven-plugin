@@ -41,6 +41,18 @@ final class BytecodeRepresentationTest {
     private static final Format DEBUG = new Format(Format.MODE, "debug");
 
     @Test
+    void writesListingWithTheDetailOfTheModel() {
+        MatcherAssert.assertThat(
+            "In short mode the listing must not show debug information the XMIR does not keep",
+            new BytecodeRepresentation(new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE))
+                .toXmir(new Format(Format.WITH_LISTING, true, Format.MODE, "short"))
+                .xpath("/object/listing/text()")
+                .get(0),
+            Matchers.not(Matchers.containsString("LINENUMBER"))
+        );
+    }
+
+    @Test
     void parsesBytecode() {
         MatcherAssert.assertThat(
             "The simplest class should contain the object with MethodByte name",

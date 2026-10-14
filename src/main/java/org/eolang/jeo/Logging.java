@@ -96,7 +96,9 @@ public final class Logging implements Transformation {
         this.logStartWithSize(this.source());
         final long start = System.currentTimeMillis();
         result = this.origin.transform();
-        this.logEndWithSize(this.source(), this.target(), System.currentTimeMillis() - start);
+        this.logEndWithSize(
+            this.source(), this.target(), result.length, System.currentTimeMillis() - start
+        );
         return result;
     }
 
@@ -110,7 +112,9 @@ public final class Logging implements Transformation {
         );
     }
 
-    private void logEndWithSize(final Path source, final Path after, final long time) {
+    private void logEndWithSize(
+        final Path source, final Path after, final long size, final long time
+    ) {
         this.lock.lock();
         try {
             if (this.debug) {
@@ -121,7 +125,7 @@ public final class Logging implements Transformation {
                     source,
                     this.participle,
                     after,
-                    Logging.size(after),
+                    size,
                     time
                 );
             } else {
@@ -130,7 +134,7 @@ public final class Logging implements Transformation {
                     "%s %[file]s (%[size]s) %s in %[ms]s",
                     this.counter.next(),
                     after.getFileName(),
-                    Logging.size(after),
+                    size,
                     this.participle,
                     time
                 );

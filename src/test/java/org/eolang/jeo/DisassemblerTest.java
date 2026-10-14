@@ -4,11 +4,16 @@
  */
 package org.eolang.jeo;
 
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.apache.log4j.Appender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.SimpleLayout;
+import org.apache.log4j.WriterAppender;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.directives.Format;
@@ -23,6 +28,33 @@ import org.junit.jupiter.api.io.TempDir;
  * @since 0.15
  */
 final class DisassemblerTest {
+
+    @Test
+    void reportsTheSizeOfTheFreshFile(@TempDir final Path temp) throws Exception {
+        final Path classes = temp.resolve("classes");
+        Files.createDirectories(classes);
+        Files.write(
+            classes.resolve("MethodByte.class"),
+            new BytesOf(new ResourceOf("MethodByte.class")).asBytes()
+        );
+        final StringWriter logs = new StringWriter();
+        final Appender appender = new WriterAppender(new SimpleLayout(), logs);
+        final Logger logger = Logger.getLogger(Logging.class);
+        logger.addAppender(appender);
+        try {
+            new Disassembler(classes, temp.resolve("xmir")).disassemble();
+        } finally {
+            logger.removeAppender(appender);
+        }
+        MatcherAssert.assertThat(
+            "A freshly disassembled file must not be reported as empty",
+            logs.toString(),
+            Matchers.allOf(
+                Matchers.containsString("MethodByte.xmir"),
+                Matchers.not(Matchers.containsString("(0b)"))
+            )
+        );
+    }
 
     @Test
     void walksClassesOnlyOnce(@TempDir final Path temp) throws Exception {

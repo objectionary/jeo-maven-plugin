@@ -29,9 +29,7 @@ jobs:
           key: maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             maven-
-      - name: Install phino
-        run: |
-          sudo curl -L -o /usr/local/bin/phino http://phino.objectionary.com/releases/ubuntu-24.04/phino-0.0.0.67
-          sudo chmod +x /usr/local/bin/phino
-          phino --version
+      - uses: objectionary/phino@f69bd2d22499767f050bd84edd697d9b9ea929aa  # master
+        with:
+          version: 0.0.0.67
       - run: mvn clean install -ntp -D"skipTests" -D"invoker.test=phi-unphi" --errors --batch-mode

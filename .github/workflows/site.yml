@@ -7,6 +7,9 @@ name: site
   push:
     tags:
       - '*'
+concurrency:
+  group: site-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   site:
     timeout-minutes: 15

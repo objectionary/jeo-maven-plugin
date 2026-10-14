@@ -63,4 +63,34 @@ final class BytecodeTypeAnnotationTest {
             )
         );
     }
+
+    @Test
+    void writesAbsentPathAsEmptyOne() throws ImpossibleModificationException {
+        final Format format = new Format();
+        MatcherAssert.assertThat(
+            "A type annotation right on the type has no path, it must be written as the empty one",
+            new Xembler(
+                new BytecodeTypeAnnotation(
+                    TypeReference.newTypeReference(TypeReference.FIELD).getValue(),
+                    null,
+                    "LNonNull;",
+                    true,
+                    Collections.emptyList()
+                ).directives(0, format)
+            ).xml(),
+            Matchers.equalTo(
+                new Xembler(
+                    new DirectivesTypeAnnotation(
+                        format,
+                        0,
+                        TypeReference.newTypeReference(TypeReference.FIELD).getValue(),
+                        "",
+                        "LNonNull;",
+                        true,
+                        Collections.emptyList()
+                    )
+                ).xml()
+            )
+        );
+    }
 }

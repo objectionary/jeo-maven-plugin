@@ -6,6 +6,7 @@ package org.eolang.jeo;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import org.apache.maven.project.MavenProject;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
@@ -41,19 +42,17 @@ final class PluginStartupTest {
         final ClassLoader original = Thread.currentThread().getContextClassLoader();
         try {
             new PluginStartup(new MavenProject(), dir).init();
+            final ClassLoader dynamic = Thread.currentThread().getContextClassLoader();
             MatcherAssert.assertThat(
-                "We expect the loaded class to be instantiable",
-                Thread.currentThread().getContextClassLoader().loadClass(name)
-                    .getDeclaredConstructor().newInstance(),
-                Matchers.notNullValue()
+                "A dynamic classloader must replace the original and load the class",
+                !original.equals(dynamic)
+                    && Objects.nonNull(
+                        dynamic.loadClass(name).getDeclaredConstructor().newInstance()
+                    ),
+                Matchers.is(true)
             );
         } finally {
             Thread.currentThread().setContextClassLoader(original);
         }
-        MatcherAssert.assertThat(
-            "The original context classloader must not leak",
-            Thread.currentThread().getContextClassLoader(),
-            Matchers.equalTo(original)
-        );
     }
 }

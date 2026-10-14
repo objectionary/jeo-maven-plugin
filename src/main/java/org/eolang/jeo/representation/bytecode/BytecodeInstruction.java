@@ -14,6 +14,7 @@ import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.directives.OpcodeName;
+import org.objectweb.asm.ConstantDynamic;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -336,6 +337,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 final Object arg = this.args.get(0);
                 if (arg instanceof Long || arg instanceof Double) {
                     result = 2;
+                } else if (arg instanceof ConstantDynamic) {
+                    result = ((ConstantDynamic) arg).getSize();
                 } else {
                     result = 1;
                 }
@@ -2110,6 +2113,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 case FSTORE:
                 case DSTORE:
                 case ASTORE:
+                case IINC:
                 case RET:
                     result = true;
                     break;
@@ -2135,6 +2139,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 case ISTORE:
                 case FSTORE:
                 case ASTORE:
+                case IINC:
                     res = 1;
                     break;
                 case LLOAD:

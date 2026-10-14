@@ -586,12 +586,13 @@
         <plugins>
           <plugin>
             <artifactId>maven-invoker-plugin</artifactId>
-            <configuration combine.self="override">
+            <configuration>
               <!--
               All integration tests except 'phi-unphi' are enabled
-              in the 'long' profile.
+              in the 'long' profile. Only the excludes are overridden,
+              the rest of the invoker configuration is inherited.
               -->
-              <pomExcludes>
+              <pomExcludes combine.self="override">
                 <exclude>phi-unphi/pom.xml</exclude>
               </pomExcludes>
             </configuration>

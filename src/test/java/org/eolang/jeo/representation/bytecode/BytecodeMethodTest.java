@@ -266,6 +266,18 @@ final class BytecodeMethodTest {
         );
     }
 
+    @Test
+    void reservesLocalTouchedOnlyByIinc() {
+        MatcherAssert.assertThat(
+            "A local variable changed only by iinc must be counted in max locals",
+            new BytecodeMethod(
+                new BytecodeInstruction(Opcodes.IINC, 7, 1),
+                new BytecodeInstruction(Opcodes.RETURN)
+            ).computeMaxs(),
+            Matchers.equalTo(new BytecodeMaxs(0, 8))
+        );
+    }
+
     @ParameterizedTest(name = "Computing maxs for method {1}, expected  {2}")
     @MethodSource("implementedMethods")
     void computesMaxsCorrectlyForImplementedMethods(

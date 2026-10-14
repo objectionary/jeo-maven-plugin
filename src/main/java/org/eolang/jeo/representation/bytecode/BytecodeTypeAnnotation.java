@@ -63,7 +63,7 @@ public final class BytecodeTypeAnnotation {
         final boolean visible,
         final List<BytecodeAnnotationValue> values
     ) {
-        this(ref, path.toString(), desc, visible, values);
+        this(ref, Objects.toString(path, ""), desc, visible, values);
     }
 
     /**

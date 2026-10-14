@@ -290,6 +290,8 @@ public final class DirectivesValue implements Iterable<Directive> {
         final Object object = this.value.value();
         if (object instanceof String) {
             result = String.format("\"%s\"", object);
+        } else if (object instanceof byte[]) {
+            result = DirectivesValue.bytesToHex((byte[]) object);
         } else {
             result = String.valueOf(object);
         }

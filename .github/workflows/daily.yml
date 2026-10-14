@@ -8,6 +8,9 @@ on:
     - cron: "0 2 * * *"   # Runs daily at 02:00 UTC
   workflow_dispatch:
 
+concurrency:
+  group: daily-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   test:
     strategy:
@@ -28,3 +31,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
       - run: mvn clean install -ntp -D"skipTests" -P"verify" --errors --batch-mode
+  telegram:
+    needs: test
+    runs-on: ubuntu-24.04
+    if: ${{ always() }}
+    permissions:
+      actions: read
+    steps:
+      - uses: yegor256/terald-action@0.1.0
+        with:
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          chat: ${{ secrets.TELEGRAM_CHAT }}

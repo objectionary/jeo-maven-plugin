@@ -38,7 +38,7 @@ final class CachingTest {
 
     @Test
     void performsTransformationSinceOptionsChanged(@TempDir final Path temp) {
-        final MockTrans mock = new MockTrans(temp);
+        final CachingTest.MockTrans mock = new CachingTest.MockTrans(temp);
         mock.createFrom(0);
         new Caching(mock, "mode=short").transform();
         MatcherAssert.assertThat(
@@ -50,7 +50,7 @@ final class CachingTest {
 
     @Test
     void skipsTransformationSinceOptionsAreTheSame(@TempDir final Path temp) {
-        final MockTrans mock = new MockTrans(temp);
+        final CachingTest.MockTrans mock = new CachingTest.MockTrans(temp);
         mock.createFrom(0);
         new Caching(mock, "mode=short").transform();
         mock.createTo(1);
@@ -82,6 +82,42 @@ final class CachingTest {
             new String(new Caching(mock).transform(), StandardCharsets.UTF_8),
             Matchers.equalTo(MockTrans.PERFORMED)
         );
+    }
+
+    @Test
+    void writesTargetInCurrentDirectoryWithoutParent(@TempDir final Path temp) throws IOException {
+        final Path target = Path.of(String.format("caching-%s.xmir", System.nanoTime()));
+        final Path source = temp.resolve("source.xmir");
+        Files.write(source, "source".getBytes(StandardCharsets.UTF_8));
+        try {
+            MatcherAssert.assertThat(
+                "A target without a parent directory must be written",
+                new String(
+                    new Caching(
+                        new Transformation() {
+                            @Override
+                            public Path source() {
+                                return source;
+                            }
+
+                            @Override
+                            public Path target() {
+                                return target;
+                            }
+
+                            @Override
+                            public byte[] transform() {
+                                return "result".getBytes(StandardCharsets.UTF_8);
+                            }
+                        }
+                    ).transform(),
+                    StandardCharsets.UTF_8
+                ),
+                Matchers.equalTo("result")
+            );
+        } finally {
+            Files.deleteIfExists(target);
+        }
     }
 
     private static final class MockTrans implements Transformation {

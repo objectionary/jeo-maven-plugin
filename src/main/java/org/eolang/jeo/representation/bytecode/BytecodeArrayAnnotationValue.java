@@ -46,8 +46,10 @@ public final class BytecodeArrayAnnotationValue implements BytecodeAnnotationVal
     @Override
     public void writeTo(final AnnotationVisitor visitor) {
         final AnnotationVisitor array = visitor.visitArray(this.name);
-        this.values.forEach(value -> value.writeTo(array));
-        array.visitEnd();
+        if (array != null) {
+            this.values.forEach(value -> value.writeTo(array));
+            array.visitEnd();
+        }
     }
 
     @Override

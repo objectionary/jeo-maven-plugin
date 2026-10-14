@@ -7,9 +7,20 @@ name: markdown-lint
   push:
     branches:
       - master
+    paths:
+      - '**.md'
+      - '.github/workflows/markdown-lint.yml'
+      - '.markdownlint.yml'
   pull_request:
     branches:
       - master
+    paths:
+      - '**.md'
+      - '.github/workflows/markdown-lint.yml'
+      - '.markdownlint.yml'
+concurrency:
+  group: markdown-lint-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   markdown-lint:
     timeout-minutes: 15

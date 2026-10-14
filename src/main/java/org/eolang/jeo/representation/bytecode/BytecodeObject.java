@@ -107,6 +107,9 @@ public final class BytecodeObject {
      * @return Top class
      */
     public BytecodeClass top() {
+        if (this.classes.isEmpty()) {
+            throw new IllegalStateException("At least one class is required");
+        }
         return this.classes.get(0);
     }
 

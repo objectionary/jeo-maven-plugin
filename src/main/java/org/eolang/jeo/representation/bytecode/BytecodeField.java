@@ -135,9 +135,12 @@ public final class BytecodeField {
             this.signature,
             this.value
         );
-        this.annotations.annotations()
-            .forEach(annotation -> annotation.write(fvisitor));
-        this.attributes.write(fvisitor);
+        if (fvisitor != null) {
+            this.annotations.annotations()
+                .forEach(annotation -> annotation.write(fvisitor));
+            this.attributes.write(fvisitor);
+            fvisitor.visitEnd();
+        }
     }
 
     /**

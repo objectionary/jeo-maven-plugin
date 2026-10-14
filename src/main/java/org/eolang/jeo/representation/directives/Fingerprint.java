@@ -25,7 +25,8 @@ public final class Fingerprint {
 
     /**
      * Constructor.
-     * @param format The format.
+     *
+     * @param format The format
      */
     public Fingerprint(final Format format) {
         this.format = format;

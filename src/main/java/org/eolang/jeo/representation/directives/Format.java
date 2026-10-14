@@ -205,7 +205,7 @@ public final class Format {
         props.put(Format.LISTING, "");
         props.put(Format.WITH_LISTING, false);
         props.put(Format.PRETTY, true);
-        props.put(Format.MODE, "short");
+        props.put(Format.MODE, "debug");
         return props;
     }
 }
