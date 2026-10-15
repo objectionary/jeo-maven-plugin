@@ -98,7 +98,11 @@ public final class BytecodeTypeAnnotation {
         final AnnotationVisitor visited = visitor.visitTypeAnnotation(
             this.ref, TypePath.fromString(this.path), this.desc, this.visible
         );
+        if (visited == null) {
+            return;
+        }
         this.values.forEach(v -> v.writeTo(visited));
+        visited.visitEnd();
     }
 
     /**
