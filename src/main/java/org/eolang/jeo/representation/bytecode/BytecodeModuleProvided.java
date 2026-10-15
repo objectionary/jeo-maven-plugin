@@ -31,12 +31,14 @@ public final class BytecodeModuleProvided {
     /**
      * Constructor.
      *
+     * <p>Snapshot the lists while retaining ASM's null-as-empty convention.</p>
+     *
      * @param service The internal name of the service
      * @param providers The internal names of the implementations of the service
      */
     public BytecodeModuleProvided(final String service, final List<String> providers) {
         this.service = service;
-        this.providers = providers;
+        this.providers = BytecodeModule.snapshot(providers);
     }
 
     /**

@@ -37,6 +37,8 @@ public final class BytecodeModuleOpened {
     /**
      * Constructor.
      *
+     * <p>Snapshot the lists while retaining ASM's null-as-empty convention.</p>
+     *
      * @param pckg The internal name of the opened package
      * @param access The access flag of the opened package
      * @param modules The fully qualified names (using dots) of the modules
@@ -44,7 +46,7 @@ public final class BytecodeModuleOpened {
     public BytecodeModuleOpened(final String pckg, final int access, final List<String> modules) {
         this.pckg = pckg;
         this.access = access;
-        this.modules = modules;
+        this.modules = BytecodeModule.snapshot(modules);
     }
 
     /**
