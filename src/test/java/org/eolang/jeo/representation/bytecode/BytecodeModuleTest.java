@@ -4,9 +4,16 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Stream;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
+import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.asm.AsmModule;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.directives.DirectivesModule;
@@ -18,6 +25,11 @@ import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -129,5 +141,246 @@ final class BytecodeModuleTest {
                 ).xml()
             )
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("models")
+    void staysUsableAsAMapKeyAfterTheInputChanges(
+        final String label, final Object model, final Runnable change
+    ) {
+        final Map<Object, String> cache = new HashMap<>();
+        cache.put(model, "original");
+        change.run();
+        MatcherAssert.assertThat(
+            String.format("Changing the caller's list corrupted the %s map key", label),
+            cache.get(model), Matchers.equalTo("original")
+        );
+    }
+
+    private static Stream<Arguments> models() {
+        return Snapshots.models();
+    }
+
+    /**
+     * Constructor cases across the bytecode model families.
+     *
+     * @since 0.0.0
+     */
+    private static final class Snapshots {
+
+        private static <T> Arguments sample(
+            final String label, final Function<List<T>, Object> factory, final T element
+        ) {
+            final List<T> values = new ArrayList<>(Collections.singleton(element));
+            return Arguments.of(label, factory.apply(values), (Runnable) values::clear);
+        }
+
+        private static Stream<Arguments> models() {
+            return Stream.of(
+                classModels(), methodModels(), parameterModels(), moduleModels(), serviceModels()
+            ).flatMap(Function.identity());
+        }
+
+        private static Stream<Arguments> classModels() {
+            return Stream.of(
+                sample(
+                    "class methods",
+                    v -> new BytecodeClass("Example", v, new BytecodeClassProperties(0)),
+                    new BytecodeMethod("method")
+                ),
+                sample(
+                    "class fields",
+                    v -> new BytecodeClass(
+                        new ClassName("Example"),
+                        Collections.emptyList(),
+                        v,
+                        new BytecodeAnnotations(),
+                        new BytecodeAttributes(),
+                        new BytecodeClassProperties(0)
+                    ),
+                    new BytecodeField("value", "I", null, null, 0)
+                )
+            );
+        }
+
+        private static Stream<Arguments> methodModels() {
+            return Stream.of(
+                Snapshots.<BytecodeEntry>sample(
+                    "method try blocks",
+                    v -> new BytecodeMethod(
+                        v,
+                        Collections.emptyList(),
+                        new BytecodeAnnotations(),
+                        new BytecodeMethodProperties("method", "()V"),
+                        Collections.emptyList(),
+                        new BytecodeMaxs(),
+                        new BytecodeAttributes()
+                    ),
+                    new BytecodeTryCatchBlock("start", "end", "handler", "java/lang/Exception")
+                ),
+                Snapshots.<BytecodeEntry>sample(
+                    "method instructions",
+                    v -> new BytecodeMethod(
+                        Collections.emptyList(),
+                        v,
+                        new BytecodeAnnotations(),
+                        new BytecodeMethodProperties("method", "()V"),
+                        Collections.emptyList(),
+                        new BytecodeMaxs(),
+                        new BytecodeAttributes()
+                    ),
+                    new BytecodeInstruction(Opcodes.RETURN)
+                ),
+                sample(
+                    "method default values",
+                    v -> new BytecodeMethod(
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        new BytecodeAnnotations(),
+                        new BytecodeMethodProperties("method", "()V"),
+                        v,
+                        new BytecodeMaxs(),
+                        new BytecodeAttributes()
+                    ),
+                    new BytecodeDefaultValue(new BytecodePlainAnnotationValue("answer", 42))
+                )
+            );
+        }
+
+        private static Stream<Arguments> parameterModels() {
+            return Stream.of(
+                sample(
+                    "method parameters",
+                    BytecodeMethodParameters::new,
+                    new BytecodeMethodParameter(0, Type.INT_TYPE)
+                ),
+                sample(
+                    "parameter annotations",
+                    v -> new BytecodeMethodParameters(Collections.emptyList(), v),
+                    new BytecodeParamAnnotations(0, new BytecodeAnnotations())
+                )
+            );
+        }
+
+        private static Stream<Arguments> moduleModels() {
+            return Stream.of(
+                sample(
+                    "module packages",
+                    v -> new BytecodeModule(
+                        "example",
+                        0,
+                        null,
+                        null,
+                        v,
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList()
+                    ),
+                    "example/pkg"
+                ),
+                sample(
+                    "module requires",
+                    v -> new BytecodeModule(
+                        "example",
+                        0,
+                        null,
+                        null,
+                        Collections.emptyList(),
+                        v,
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList()
+                    ),
+                    new BytecodeModuleRequired("java.base", 0, null)
+                ),
+                sample(
+                    "module exports",
+                    v -> new BytecodeModule(
+                        "example",
+                        0,
+                        null,
+                        null,
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        v,
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList()
+                    ),
+                    new BytecodeModuleExported("example/pkg", 0, Collections.emptyList())
+                ),
+                sample(
+                    "module opens",
+                    v -> new BytecodeModule(
+                        "example",
+                        0,
+                        null,
+                        null,
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        v,
+                        Collections.emptyList(),
+                        Collections.emptyList()
+                    ),
+                    new BytecodeModuleOpened("example/pkg", 0, Collections.emptyList())
+                ),
+                sample(
+                    "module provides",
+                    v -> new BytecodeModule(
+                        "example",
+                        0,
+                        null,
+                        null,
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        v,
+                        Collections.emptyList()
+                    ),
+                    new BytecodeModuleProvided("Service", Collections.singletonList("Provider"))
+                ),
+                sample(
+                    "module uses",
+                    v -> new BytecodeModule(
+                        "example",
+                        0,
+                        null,
+                        null,
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        v
+                    ),
+                    "Service"
+                )
+            );
+        }
+
+        private static Stream<Arguments> serviceModels() {
+            return Stream.of(
+                sample(
+                    "exported modules",
+                    v -> new BytecodeModuleExported("example/pkg", 0, v),
+                    "consumer"
+                ),
+                sample(
+                    "opened modules",
+                    v -> new BytecodeModuleOpened("example/pkg", 0, v),
+                    "consumer"
+                ),
+                sample(
+                    "service providers",
+                    v -> new BytecodeModuleProvided("Service", v),
+                    "Provider"
+                )
+            );
+        }
     }
 }

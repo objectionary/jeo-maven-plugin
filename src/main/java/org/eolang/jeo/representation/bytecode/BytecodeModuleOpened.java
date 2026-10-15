@@ -4,9 +4,11 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import org.eolang.jeo.representation.directives.DirectivesModuleOpened;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ModuleVisitor;
@@ -37,14 +39,19 @@ public final class BytecodeModuleOpened {
     /**
      * Constructor.
      *
+     * <p>Snapshot the lists while retaining ASM's null-as-empty convention.</p>
+     *
      * @param pckg The internal name of the opened package
      * @param access The access flag of the opened package
      * @param modules The fully qualified names (using dots) of the modules
+     * @checkstyle ConstructorsCodeFreeCheck (9 lines)
      */
     public BytecodeModuleOpened(final String pckg, final int access, final List<String> modules) {
         this.pckg = pckg;
         this.access = access;
-        this.modules = modules;
+        this.modules = new ArrayList<>(
+            Optional.ofNullable(modules).orElse(Collections.emptyList())
+        );
     }
 
     /**
