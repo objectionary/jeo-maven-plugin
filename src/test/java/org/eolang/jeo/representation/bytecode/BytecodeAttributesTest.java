@@ -23,7 +23,7 @@ import org.objectweb.asm.TypePath;
  *
  * @since 0.0.0
  */
-final class BytecodeCollectionsSnapshotTest {
+final class BytecodeAttributesTest {
 
     @ParameterizedTest
     @MethodSource("models")
@@ -53,7 +53,7 @@ final class BytecodeCollectionsSnapshotTest {
                 BytecodeAnnotations::new,
                 new BytecodeAnnotation("LExample;", true)
             ),
-            BytecodeCollectionsSnapshotTest.<BytecodeAttribute>sample(
+            BytecodeAttributesTest.<BytecodeAttribute>sample(
                 "attributes",
                 BytecodeAttributes::new,
                 new BytecodeAttribute.NestHost("Host")
