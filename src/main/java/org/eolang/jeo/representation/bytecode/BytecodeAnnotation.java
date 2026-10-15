@@ -64,7 +64,7 @@ public final class BytecodeAnnotation implements BytecodeAnnotationValue {
     ) {
         this.descr = descriptor;
         this.visible = visible;
-        this.values = vals;
+        this.values = new ArrayList<>(vals);
     }
 
     /**
