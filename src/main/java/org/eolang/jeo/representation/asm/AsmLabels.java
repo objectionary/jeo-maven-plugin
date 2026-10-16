@@ -5,7 +5,9 @@
 package org.eolang.jeo.representation.asm;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.objectweb.asm.Label;
 
@@ -46,5 +48,25 @@ public final class AsmLabels {
      */
     public Label label(final BytecodeLabel label) {
         return this.labels.computeIfAbsent(label.uid(), id -> new Label());
+    }
+
+    /**
+     * Identifiers of the labels that were referenced, but never placed in the method.
+     *
+     * @return Identifiers of the labels
+     */
+    public List<String> unresolved() {
+        return this.labels.entrySet().stream().filter(
+            entry -> {
+                boolean placed;
+                try {
+                    entry.getValue().getOffset();
+                    placed = true;
+                } catch (final IllegalStateException ignored) {
+                    placed = false;
+                }
+                return !placed;
+            }
+        ).map(Map.Entry::getKey).sorted().collect(Collectors.toList());
     }
 }
