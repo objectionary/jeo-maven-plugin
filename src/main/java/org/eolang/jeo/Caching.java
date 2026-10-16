@@ -93,6 +93,7 @@ public final class Caching implements Transformation {
             if (target.getParent() != null) {
                 Files.createDirectories(target.getParent());
             }
+            Files.deleteIfExists(this.cache());
             Files.write(target, transform);
             if (!this.print.isEmpty()) {
                 Files.write(this.cache(), this.print.getBytes(StandardCharsets.UTF_8));
