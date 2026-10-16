@@ -13,6 +13,7 @@ import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesAttributes;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 
 /**
@@ -92,6 +93,18 @@ public final class BytecodeAttributes {
      */
     void write(final ClassVisitor clazz) {
         this.all.forEach(attr -> attr.write(clazz));
+    }
+
+    /**
+     * Write field attributes.
+     *
+     * @param field Field visitor
+     */
+    void write(final FieldVisitor field) {
+        this.all.stream()
+            .filter(BytecodeUnknownAttribute.class::isInstance)
+            .map(BytecodeUnknownAttribute.class::cast)
+            .forEach(attr -> attr.write(field));
     }
 
     /**
