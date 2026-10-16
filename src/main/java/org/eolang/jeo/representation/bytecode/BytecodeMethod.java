@@ -183,11 +183,11 @@ public final class BytecodeMethod {
         final BytecodeMaxs maxs,
         final BytecodeAttributes attributes
     ) {
-        this.tryblocks = tryblocks;
-        this.entries = instructions;
+        this.tryblocks = new ArrayList<>(tryblocks);
+        this.entries = new ArrayList<>(instructions);
         this.annotations = annotations;
         this.properties = properties;
-        this.defvalues = defvalues;
+        this.defvalues = new ArrayList<>(defvalues);
         this.maxs = maxs;
         this.attributes = attributes;
     }
