@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +49,7 @@ public final class BytecodeTypeAnnotations {
      * @param annotations All type annotations
      */
     public BytecodeTypeAnnotations(final List<BytecodeTypeAnnotation> annotations) {
-        this.annotations = annotations;
+        this.annotations = new ArrayList<>(annotations);
     }
 
     /**
