@@ -270,7 +270,6 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case LNEG:
             case INEG:
             case GOTO:
-            case JSR:
             case RET:
             case RETURN:
             case IINC:
@@ -281,6 +280,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
             case INSTANCEOF:
                 result = 0;
                 break;
+            case JSR:
             case ACONST_NULL:
             case ICONST_M1:
             case ICONST_0:
@@ -423,6 +423,15 @@ public final class BytecodeInstruction implements BytecodeEntry {
     public boolean isJump() {
         return Instruction.find(this.opcode) == Instruction.GOTO
             || Instruction.find(this.opcode) == Instruction.JSR;
+    }
+
+    /**
+     * Is this instruction a jump to a subroutine, which comes back to the next instruction?
+     *
+     * @return True if it is a jsr
+     */
+    boolean isSubroutine() {
+        return Instruction.find(this.opcode) == Instruction.JSR;
     }
 
     /**
