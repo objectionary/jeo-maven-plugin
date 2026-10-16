@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
  * Directives for an EO number.
@@ -32,6 +33,11 @@ final class DirectivesNumber implements Iterable<Directive> {
     private final String as;
 
     /**
+     * Comment to put inside the number.
+     */
+    private final Iterable<Directive> comment;
+
+    /**
      * Constructor.
      *
      * @param hex Hex number
@@ -47,7 +53,18 @@ final class DirectivesNumber implements Iterable<Directive> {
      * @param hex Hex number
      */
     DirectivesNumber(final String name, final String hex) {
-        this(name, "", hex);
+        this(name, hex, new Directives());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name Name of the number
+     * @param hex Hex number
+     * @param comment Comment to put inside the number
+     */
+    DirectivesNumber(final String name, final String hex, final Iterable<Directive> comment) {
+        this(name, "", hex, comment);
     }
 
     /**
@@ -56,12 +73,19 @@ final class DirectivesNumber implements Iterable<Directive> {
      * @param name Name of the number
      * @param as The 'as' attribute of the object
      * @param hex Hex number
-     * @checkstyle ParameterNameCheck (5 lines)
+     * @param comment Comment to put inside the number
+     * @checkstyle ParameterNameCheck (10 lines)
      */
-    private DirectivesNumber(final String name, final String as, final String hex) {
+    private DirectivesNumber(
+        final String name,
+        final String as,
+        final String hex,
+        final Iterable<Directive> comment
+    ) {
         this.as = as;
         this.hex = hex;
         this.name = name;
+        this.comment = comment;
     }
 
     @Override
@@ -70,7 +94,7 @@ final class DirectivesNumber implements Iterable<Directive> {
             new EoFqn("number").fqn(),
             this.as,
             this.name,
-            new DirectivesBytes(this.hex, "", "as-bytes")
+            new Directives(this.comment).append(new DirectivesBytes(this.hex, "", "as-bytes"))
         ).iterator();
     }
 }

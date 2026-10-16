@@ -272,7 +272,11 @@ public final class DirectivesValue implements Iterable<Directive> {
     }
 
     private Iterable<Directive> integerNumber(final Codec codec) {
-        return new DirectivesNumber(this.name, this.hex(codec));
+        return new DirectivesNumber(
+            this.name,
+            this.hex(codec),
+            new DirectivesComment(this.format, this.comment())
+        );
     }
 
     private Iterable<Directive> booleanObject() {
