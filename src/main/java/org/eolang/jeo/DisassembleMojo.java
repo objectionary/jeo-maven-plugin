@@ -14,6 +14,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.cactoos.set.SetOf;
 import org.eolang.jeo.representation.asm.DisassembleMode;
@@ -31,7 +32,12 @@ import org.eolang.jeo.representation.directives.Format;
  *
  * @since 0.1.0
  */
-@Mojo(name = "disassemble", defaultPhase = LifecyclePhase.PROCESS_CLASSES, requiresProject = false)
+@Mojo(
+    name = "disassemble",
+    defaultPhase = LifecyclePhase.PROCESS_CLASSES,
+    requiresProject = false,
+    requiresDependencyResolution = ResolutionScope.TEST
+)
 public final class DisassembleMojo extends AbstractMojo {
 
     /**
