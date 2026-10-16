@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +63,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
         final List<Object> args
     ) {
         this.opcode = opcode;
-        this.args = args;
+        this.args = new ArrayList<>(args);
     }
 
     @Override
