@@ -363,6 +363,7 @@ public final class BytecodeClass {
                 this.supername(),
                 this.props.interfaces()
             );
+            this.cmethods.forEach(method -> method.register(visitor));
             this.annotations.write(visitor);
             this.fields.forEach(field -> field.write(visitor));
             this.cmethods.forEach(method -> method.write(visitor));
