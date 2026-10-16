@@ -18,6 +18,9 @@ name: mvn-qulice
       - '**.java'
       - '**/pom.xml'
       - '.github/workflows/maven.qulice.yml'
+permissions:
+  contents: read
+
 concurrency:
   group: maven.qulice-${{ github.ref }}
   cancel-in-progress: true
