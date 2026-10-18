@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -42,7 +43,7 @@ public final class BytecodeAttributes {
      * @param all All attributes
      */
     public BytecodeAttributes(final List<BytecodeAttribute> all) {
-        this.all = all;
+        this.all = new ArrayList<>(all);
     }
 
     /**
