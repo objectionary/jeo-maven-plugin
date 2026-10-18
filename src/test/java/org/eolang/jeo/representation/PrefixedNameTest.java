@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Test cases for {@link PrefixedName}.
@@ -27,6 +28,10 @@ final class PrefixedNameTest {
         "someLongName, j$someLongName",
         "adds two numbers, j$adds%20two%20numbers",
         "a b, j$a%20b",
+        "a+b, j$a%2Bb",
+        "a%41b, j$a%2541b",
+        "100%, j$100%25",
+        "x%2Fy, j$x%252Fy",
         "j$j, j$j$j",
         "jeo/xmir/Fake, j$jeo/j$xmir/j$Fake",
         "EOorg.EOeolang, j$EOorg.j$EOeolang",
@@ -48,6 +53,10 @@ final class PrefixedNameTest {
         "j$someLongName, someLongName",
         "j$adds%20two%20numbers, adds two numbers",
         "j$a%20b, a b",
+        "j$a%2Bb, a+b",
+        "j$a%2541b, a%41b",
+        "j$100%25, 100%",
+        "j$x%252Fy, x%2Fy",
         "j$j$j, j$j",
         "someName, someName",
         "j$jeo/j$xmir/j$Fake, jeo/xmir/Fake",
@@ -98,6 +107,22 @@ final class PrefixedNameTest {
         MatcherAssert.assertThat(
             String.format("Can't decode '%s' to '%s' with prefix 'jm'", encoded, origin),
             new PrefixedName("jm$", encoded).decode(),
+            Matchers.equalTo(origin)
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = {
+            "a+b", "a%41b", "100%", "x%2Fy", "space + percent%",
+            "café+50%", "j$name+%20", "pkg+one/sub%20/Type+%",
+            "pkg+one.sub%20.Type+%"
+        }
+    )
+    void preservesNamesWithDifferentPrefixes(final String origin) {
+        MatcherAssert.assertThat(
+            "Encoding and decoding must preserve literal URL characters with a custom prefix",
+            new PrefixedName("jm$", new PrefixedName("jm$", origin).encode()).decode(),
             Matchers.equalTo(origin)
         );
     }
