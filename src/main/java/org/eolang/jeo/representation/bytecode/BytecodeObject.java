@@ -68,7 +68,7 @@ public final class BytecodeObject {
      */
     public BytecodeObject(final String pckg, final List<BytecodeClass> classes) {
         this.pckg = pckg;
-        this.classes = classes;
+        this.classes = new ArrayList<>(classes);
     }
 
     /**
