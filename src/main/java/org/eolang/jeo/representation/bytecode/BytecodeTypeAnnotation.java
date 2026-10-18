@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -86,7 +87,7 @@ public final class BytecodeTypeAnnotation {
         this.path = path;
         this.desc = desc;
         this.visible = visible;
-        this.values = values;
+        this.values = new ArrayList<>(values);
     }
 
     /**
