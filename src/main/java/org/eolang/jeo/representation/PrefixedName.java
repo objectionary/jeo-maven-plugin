@@ -172,6 +172,6 @@ public final class PrefixedName {
     }
 
     private static String safe(final String part) {
-        return part.replace(" ", "%20");
+        return part.replace("%", "%25").replace("+", "%2B").replace(" ", "%20");
     }
 }
