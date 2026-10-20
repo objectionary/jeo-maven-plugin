@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.Objects;
 import java.util.OptionalInt;
+import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.directives.DirectivesField;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
@@ -158,8 +159,12 @@ public final class BytecodeField {
             this.descriptor,
             this.signature,
             this.value,
-            this.annotations.directives(format, String.format("annotations-%s", xml)),
-            this.attributes.directives(format, String.format("attributes-%s", xml))
+            this.annotations.directives(
+                format, new PrefixedName("annotations-", xml).encode()
+            ),
+            this.attributes.directives(
+                format, new PrefixedName("attributes-", xml).encode()
+            )
         );
     }
 

@@ -31,5 +31,5 @@ jobs:
             maven-
       - uses: objectionary/phino@f69bd2d22499767f050bd84edd697d9b9ea929aa  # master
         with:
-          version: 0.0.0.67
+          version: 0.0.156
       - run: mvn clean install -ntp -D"skipTests" -D"invoker.test=phi-unphi" --errors --batch-mode

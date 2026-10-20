@@ -108,7 +108,7 @@ public final class XmlField {
     }
 
     private Optional<XmlAnnotations> annotations() {
-        final String name = String.format("annotations-%s", this.name());
+        final String name = new PrefixedName("annotations-", this.name()).encode();
         return this.node.children()
             .map(XmlJeoObject::new)
             .filter(XmlJeoObject::named)
@@ -118,7 +118,7 @@ public final class XmlField {
     }
 
     private BytecodeAttributes attributes() {
-        final String name = String.format("attributes-%s", this.name());
+        final String name = new PrefixedName("attributes-", this.name()).encode();
         return this.node.children()
             .map(XmlSeq::new)
             .filter(XmlSeq::named)

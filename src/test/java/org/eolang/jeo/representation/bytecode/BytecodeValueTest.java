@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.bytecode;
 import java.util.stream.Stream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -117,6 +118,28 @@ final class BytecodeValueTest {
                 null,
                 null
             )
+        );
+    }
+
+    @Test
+    void encodesTheOriginalBytesAfterTheInputChanges() {
+        final byte[] input = {1, 2};
+        final BytecodeValue value = new BytecodeValue(input);
+        input[0] = 9;
+        MatcherAssert.assertThat(
+            "Encoding retained the caller's mutable array",
+            value.encode(new JavaCodec()), Matchers.equalTo(new byte[]{1, 2})
+        );
+    }
+
+    @Test
+    void keepsTheValueWhenReturnedArraysChange() {
+        final BytecodeValue value = new BytecodeValue(new byte[]{1, 2});
+        ((byte[]) value.value())[0] = 9;
+        value.encode(new JavaCodec())[1] = 8;
+        MatcherAssert.assertThat(
+            "A getter or encoded result exposed the stored byte array",
+            value.encode(new JavaCodec()), Matchers.equalTo(new byte[]{1, 2})
         );
     }
 }

@@ -58,7 +58,7 @@ public final class BytecodeUnknownAttribute implements BytecodeAttribute {
      * @param field Field visitor
      */
     public void write(final FieldVisitor field) {
-        field.visitAttribute(new AsmUnknownAttribute(this.type, this.data));
+        field.visitAttribute(new AsmUnknownAttribute(this.type, this.bytes()));
     }
 
     @Override
