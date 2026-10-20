@@ -395,6 +395,15 @@ public final class BytecodeMethod {
                 mvisitor.visitMaxs(max.stack(), max.locals());
             }
             this.attributes.write(mvisitor, all);
+            if (!all.unresolved().isEmpty()) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Method %s refers to labels %s, which it does not contain",
+                        this.properties,
+                        all.unresolved()
+                    )
+                );
+            }
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {
             throw new IllegalStateException(
