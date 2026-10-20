@@ -4,13 +4,19 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import java.util.Collections;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
+import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.Bytecode;
+import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeClassProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeLine;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
+import org.eolang.jeo.representation.bytecode.BytecodeUnknownAttribute;
 import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.xmir.XmlObject;
 import org.hamcrest.MatcherAssert;
@@ -72,6 +78,28 @@ final class AsmProgramTest {
             "We expect to receive the same bytecode with the 'NestMembers' attribute",
             new AsmProgram(original).bytecode(0).bytecode().toString(),
             Matchers.equalTo(new Bytecode(original).toString())
+        );
+    }
+
+    @Test
+    void preservesUnregisteredClassAttributes() {
+        MatcherAssert.assertThat(
+            "Unregistered class attributes must survive ASM parsing",
+            new AsmProgram(
+                new BytecodeObject(
+                    new BytecodeClass(
+                        new ClassName("CustomAttribute"),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        new BytecodeAnnotations(),
+                        new BytecodeAttributes(
+                            new BytecodeUnknownAttribute("Custom", new byte[]{1, 2})
+                        ),
+                        new BytecodeClassProperties(0)
+                    )
+                ).bytecode().bytes()
+            ).bytecode(0).xml().toString(),
+            Matchers.containsString("Custom")
         );
     }
 
