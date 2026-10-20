@@ -32,15 +32,29 @@ final class DirectivesCommentTest {
     }
 
     @Test
-    void escapesUnsafeCharacters() throws ImpossibleModificationException {
+    void escapesOnlyTheHyphen() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
-            "Can't escape unsafe characters",
+            "Only the hyphen must be escaped, everything else is legal comment text (see #1798)",
             new Xembler(
                 new Directives().append(
                     new DirectivesComment(new Format(), "Hello -- <world> ---!")
                 )
             ).xml(),
-            Matchers.containsString("<!-- Hello &#45;&#45; &lt;world&gt; &#45;&#45;&#45;! -->")
+            Matchers.containsString("<!-- Hello &#45;&#45; <world> &#45;&#45;&#45;! -->")
+        );
+    }
+
+    @Test
+    void doesNotEscapeAmpersandAngleBracketsOrApostrophe()
+        throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "An XML comment is never scanned for entities, so & < > ' need no escaping (see #1798)",
+            new Xembler(
+                new Directives().append(
+                    new DirectivesComment(new Format(), "a&b<c>'d")
+                )
+            ).xml(),
+            Matchers.containsString("<!-- a&b<c>'d -->")
         );
     }
 
