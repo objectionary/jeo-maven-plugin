@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.bytecode;
 import java.nio.charset.StandardCharsets;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -16,6 +17,21 @@ import org.junit.jupiter.params.provider.MethodSource;
  * @since 0.8
  */
 final class EoCodecTest {
+
+    @Test
+    void keepsTheBitsOfSignalingNanFloat() {
+        final EoCodec codec = new EoCodec();
+        MatcherAssert.assertThat(
+            "A signaling NaN float must come back with the same bits",
+            Float.floatToRawIntBits(
+                (float) codec.decode(
+                    codec.encode(Float.intBitsToFloat(0x7F800001), DataType.FLOAT),
+                    DataType.FLOAT
+                )
+            ),
+            Matchers.equalTo(0x7F800001)
+        );
+    }
 
     @ParameterizedTest
     @MethodSource("mapping")
