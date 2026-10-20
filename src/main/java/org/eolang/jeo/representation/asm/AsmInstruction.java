@@ -9,9 +9,7 @@ import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeEntry;
 import org.eolang.jeo.representation.bytecode.BytecodeFrame;
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeLine;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FrameNode;
@@ -42,12 +40,28 @@ final class AsmInstruction {
     private final AbstractInsnNode node;
 
     /**
+     * Identifiers of the labels of the method.
+     */
+    private final AsmLabelIds ids;
+
+    /**
      * Constructor.
      *
      * @param node Instruction node
      */
     AsmInstruction(final AbstractInsnNode node) {
+        this(node, new AsmLabelIds());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param node Instruction node
+     * @param ids Identifiers of the labels of the method
+     */
+    AsmInstruction(final AbstractInsnNode node, final AsmLabelIds ids) {
         this.node = node;
+        this.ids = ids;
     }
 
     /**
@@ -56,7 +70,6 @@ final class AsmInstruction {
      * @return Domain instruction
      * @checkstyle CyclomaticComplexityCheck (100 lines)
      * @checkstyle JavaNCSSCheck (100 lines)
-     * @checkstyle MethodLengthCheck (200 lines)
      */
     @SuppressWarnings("PMD.NcssCount")
     BytecodeEntry bytecode() {
@@ -122,13 +135,11 @@ final class AsmInstruction {
                 final JumpInsnNode jump = JumpInsnNode.class.cast(this.node);
                 result = new BytecodeInstruction(
                     jump.getOpcode(),
-                    new BytecodeLabel(jump.label.getLabel().toString())
+                    this.ids.label(jump.label)
                 );
                 break;
             case AbstractInsnNode.LABEL:
-                result = new BytecodeLabel(
-                    LabelNode.class.cast(this.node).getLabel().toString()
-                );
+                result = this.ids.label(LabelNode.class.cast(this.node));
                 break;
             case AbstractInsnNode.LDC_INSN:
                 final LdcInsnNode ldc = LdcInsnNode.class.cast(this.node);
@@ -153,13 +164,9 @@ final class AsmInstruction {
                         Stream.of(
                             table.min,
                             table.max,
-                            new BytecodeLabel(table.dflt.getLabel().toString())
+                            this.ids.label(table.dflt)
                         ),
-                        table.labels
-                            .stream()
-                            .map(LabelNode::getLabel)
-                            .map(Label::toString)
-                            .map(BytecodeLabel::new)
+                        table.labels.stream().map(this.ids::label)
                     ).toArray(Object[]::new)
                 );
                 break;
@@ -168,13 +175,10 @@ final class AsmInstruction {
                 result = new BytecodeInstruction(
                     lookup.getOpcode(),
                     Stream.concat(
-                        Stream.of(new BytecodeLabel(lookup.dflt.getLabel().toString())),
+                        Stream.of(this.ids.label(lookup.dflt)),
                         Stream.concat(
                             lookup.keys.stream(),
-                            lookup.labels.stream()
-                                .map(LabelNode::getLabel)
-                                .map(Label::toString)
-                                .map(BytecodeLabel::new)
+                            lookup.labels.stream().map(this.ids::label)
                         )
                     ).toArray(Object[]::new)
                 );
@@ -193,15 +197,15 @@ final class AsmInstruction {
                 final FrameNode frame = FrameNode.class.cast(this.node);
                 result = new BytecodeFrame(
                     frame.type,
-                    frame.local,
-                    frame.stack
+                    this.ids.labeled(frame.local),
+                    this.ids.labeled(frame.stack)
                 );
                 break;
             case AbstractInsnNode.LINE:
                 final LineNumberNode line = LineNumberNode.class.cast(this.node);
                 result = new BytecodeLine(
                     line.line,
-                    new BytecodeLabel(LabelNode.class.cast(line.start).getLabel().toString())
+                    this.ids.label(line.start)
                 );
                 break;
             default:
