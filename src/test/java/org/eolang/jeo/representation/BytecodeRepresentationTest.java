@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -83,6 +84,42 @@ final class BytecodeRepresentationTest {
                 .map(attr -> ((AsmUnknownAttribute) attr).bytecode())
                 .collect(Collectors.toList()),
             Matchers.equalTo(Collections.singletonList(new BytecodeUnknownAttribute(type, payload)))
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"plain", "a+b", "a%41b", "x%2Fy", "100%", "two words", "café+50%"})
+    void preservesNamesWhenReassembling(final String name) {
+        final String fullname = String.format("example/%s", name);
+        final String type = String.format("L%s;", fullname);
+        final String signature = String.format("(%s)%s", type, type);
+        final ClassWriter writer = new ClassWriter(0);
+        writer.visit(
+            Opcodes.V1_8, Opcodes.ACC_PUBLIC, fullname, null, "java/lang/Object", null
+        );
+        writer.visitField(Opcodes.ACC_PUBLIC, name, type, null, null).visitEnd();
+        final MethodVisitor method = writer.visitMethod(
+            Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC, name, signature, null, null
+        );
+        method.visitCode();
+        method.visitVarInsn(Opcodes.ALOAD, 0);
+        method.visitInsn(Opcodes.ARETURN);
+        method.visitMaxs(1, 1);
+        method.visitEnd();
+        writer.visitEnd();
+        final ClassNode restored = new ClassNode();
+        new ClassReader(
+            new XmirRepresentation(
+                new BytecodeRepresentation(new Bytecode(writer.toByteArray())).toXmir()
+            ).toBytecode().bytes()
+        ).accept(restored, 0);
+        MatcherAssert.assertThat(
+            "Class, field and method names and descriptors must survive the XMIR round trip",
+            Arrays.asList(
+                restored.name, restored.fields.get(0).name, restored.fields.get(0).desc,
+                restored.methods.get(0).name, restored.methods.get(0).desc
+            ),
+            Matchers.contains(fullname, name, type, name, signature)
         );
     }
 

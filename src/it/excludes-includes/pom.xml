@@ -51,10 +51,10 @@
           <omitComments>false</omitComments>
           <debug>true</debug>
           <excludes>
-            <exclude>ignored/**/*.class</exclude>
+            <exclude>**/ignored/**</exclude>
           </excludes>
           <includes>
-            <include>**/Included.class</include>
+            <include>**/*.class</include>
           </includes>
         </configuration>
         <executions>
