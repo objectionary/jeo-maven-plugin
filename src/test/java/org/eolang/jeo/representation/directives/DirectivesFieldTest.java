@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
@@ -93,7 +94,7 @@ final class DirectivesFieldTest {
             ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "field").toXpath(),
-                String.format("/o[contains(@name,'%s')]", original)
+                String.format("/o[@name='%s']", new PrefixedName(original).encode())
             )
         );
     }

@@ -106,7 +106,7 @@ public final class XmlField {
     }
 
     private Optional<XmlAnnotations> annotations() {
-        final String name = String.format("annotations-%s", this.name());
+        final String name = new PrefixedName("annotations-", this.name()).encode();
         return this.node.children()
             .map(XmlJeoObject::new)
             .filter(XmlJeoObject::named)

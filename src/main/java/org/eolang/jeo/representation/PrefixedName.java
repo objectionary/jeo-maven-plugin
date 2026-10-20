@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation;
 
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -172,6 +173,17 @@ public final class PrefixedName {
     }
 
     private static String safe(final String part) {
-        return part.replace("%", "%25").replace("+", "%2B").replace(" ", "%20");
+        final StringBuilder result = new StringBuilder();
+        for (final int code : part.codePoints().toArray()) {
+            if (Character.isWhitespace(code) || "%+,|':;!?[]{}()⟧⟦↦⤍>\"ξΦ⊥".indexOf(code) >= 0) {
+                for (final byte octet : new String(Character.toChars(code))
+                    .getBytes(StandardCharsets.UTF_8)) {
+                    result.append(String.format("%%%02X", octet & 0xFF));
+                }
+            } else {
+                result.appendCodePoint(code);
+            }
+        }
+        return result.toString();
     }
 }

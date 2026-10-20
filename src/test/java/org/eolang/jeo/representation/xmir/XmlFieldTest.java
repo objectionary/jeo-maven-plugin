@@ -118,6 +118,25 @@ final class XmlFieldTest {
         );
     }
 
+    @Test
+    void retrievesAnnotationsOfFieldWithUnicodeName() throws ImpossibleModificationException {
+        final BytecodeField expected = new BytecodeField(
+            "Φξ",
+            "I",
+            null,
+            0,
+            Opcodes.ACC_PRIVATE,
+            new BytecodeAnnotations(new BytecodeAnnotation("Ljava/lang/Deprecated;", true))
+        );
+        MatcherAssert.assertThat(
+            "Annotations of the field with unicode name are lost after parsing",
+            new XmlField(
+                new NativeXmlNode(new Xembler(expected.directives(new Format())).xml())
+            ).bytecode(),
+            Matchers.equalTo(expected)
+        );
+    }
+
     @ParameterizedTest
     @ValueSource(
         strings = {
