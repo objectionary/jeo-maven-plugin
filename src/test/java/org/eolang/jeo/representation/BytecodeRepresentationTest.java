@@ -6,11 +6,16 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.VerifiedBytecode;
 import org.eolang.jeo.representation.asm.AsmLabels;
+import org.eolang.jeo.representation.asm.AsmUnknownAttribute;
 import org.eolang.jeo.representation.bytecode.Bytecode;
+import org.eolang.jeo.representation.bytecode.BytecodeUnknownAttribute;
 import org.eolang.jeo.representation.bytecode.EoCodec;
 import org.eolang.jeo.representation.directives.DirectivesValue;
 import org.eolang.jeo.representation.directives.Format;
@@ -20,10 +25,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.RecordComponentVisitor;
 import org.objectweb.asm.tree.ClassNode;
 
 /**
@@ -46,6 +53,39 @@ final class BytecodeRepresentationTest {
      */
     @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
     private static final Format DEBUG = new Format(Format.MODE, "debug");
+
+    @ParameterizedTest
+    @ValueSource(strings = {"debug", "short"})
+    void preservesCustomRecordComponentAttributes(final String mode) {
+        final String type = "TASTY";
+        final byte[] payload = {0, 1, 2, 127, -1};
+        final ClassWriter writer = new ClassWriter(0);
+        writer.visit(
+            Opcodes.V16, Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_RECORD,
+            "ExampleRecord", null, "java/lang/Record", null
+        );
+        final RecordComponentVisitor component = writer.visitRecordComponent("value", "I", null);
+        component.visitAttribute(new AsmUnknownAttribute(type, payload));
+        component.visitEnd();
+        writer.visitEnd();
+        final byte[] bytes = new XmirRepresentation(
+            new BytecodeRepresentation(new Bytecode(writer.toByteArray()))
+                .toXmir(new Format(Format.MODE, mode))
+        ).toBytecode().bytes();
+        final ClassNode restored = new ClassNode();
+        new ClassReader(bytes).accept(
+            restored, new Attribute[]{new AsmUnknownAttribute(type)}, 0
+        );
+        MatcherAssert.assertThat(
+            "Custom record component attributes must survive the XMIR round trip",
+            Optional.ofNullable(restored.recordComponents.get(0).attrs)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(attr -> ((AsmUnknownAttribute) attr).bytecode())
+                .collect(Collectors.toList()),
+            Matchers.equalTo(Collections.singletonList(new BytecodeUnknownAttribute(type, payload)))
+        );
+    }
 
     @ParameterizedTest
     @ValueSource(strings = {"plain", "a+b", "a%41b", "x%2Fy", "100%", "two words", "café+50%"})

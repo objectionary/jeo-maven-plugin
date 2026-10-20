@@ -15,6 +15,7 @@ import org.eolang.jeo.representation.directives.DirectivesAttributes;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.RecordComponentVisitor;
 
 /**
  * Bytecode attributes.
@@ -103,5 +104,14 @@ public final class BytecodeAttributes {
      */
     void write(final MethodVisitor method, final AsmLabels labels) {
         this.all.forEach(attr -> attr.write(method, labels));
+    }
+
+    /**
+     * Write to record component.
+     *
+     * @param component Record component where to write
+     */
+    void write(final RecordComponentVisitor component) {
+        this.all.forEach(attr -> attr.write(component));
     }
 }
