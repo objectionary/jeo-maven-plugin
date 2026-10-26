@@ -26,6 +26,27 @@ import org.junit.jupiter.api.io.TempDir;
 final class AssemblerTest {
 
     @Test
+    void invalidatesCachedAssemblyWhenJeoVersionChanges(@TempDir final Path temp) throws Exception {
+        final Path xmir = temp.resolve("xmir");
+        Files.createDirectories(xmir);
+        Files.writeString(
+            xmir.resolve("Example.xmir"),
+            "<object version=\"old\"/>"
+        );
+        final Path output = temp.resolve("output");
+        new Assembler(xmir, output, false).assemble();
+        final Path assembled = output.resolve("Example.class");
+        final long previous = Files.getLastModifiedTime(assembled).toMillis();
+        Files.setLastModifiedTime(assembled, java.nio.file.attribute.FileTime.fromMillis(0L));
+        new Assembler(xmir, output, false).assemble();
+        MatcherAssert.assertThat(
+            "Assembly must be performed when the cache has no JEO version fingerprint",
+            Files.getLastModifiedTime(assembled).toMillis(),
+            Matchers.greaterThan(previous)
+        );
+    }
+
+    @Test
     void doesNotReportCachedFileAsAssembled(@TempDir final Path temp) throws Exception {
         final Path classes = temp.resolve("classes");
         Files.createDirectories(classes);
