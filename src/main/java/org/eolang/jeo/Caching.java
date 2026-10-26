@@ -27,7 +27,7 @@ public final class Caching implements Transformation {
     private final Transformation origin;
 
     /**
-     * Options the target was produced with, empty when they are unknown.
+     * Options and version the target was produced with, empty when they are unknown.
      */
     private final String print;
 
