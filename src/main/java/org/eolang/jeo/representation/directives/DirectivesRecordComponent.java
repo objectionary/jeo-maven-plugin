@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.Collections;
 import java.util.Iterator;
 import org.xembly.Directive;
 
@@ -54,6 +55,11 @@ public final class DirectivesRecordComponent implements Iterable<Directive> {
     private final DirectivesTypeAnnotations types;
 
     /**
+     * Custom attributes.
+     */
+    private final DirectivesAttributes attributes;
+
+    /**
      * Constructor.
      *
      * @param format Directives format
@@ -73,6 +79,34 @@ public final class DirectivesRecordComponent implements Iterable<Directive> {
         final DirectivesAnnotations annotations,
         final DirectivesTypeAnnotations types
     ) {
+        this(
+            format, index, name, descriptor, signature, annotations, types,
+            new DirectivesAttributes("attributes-record-component", Collections.emptyList())
+        );
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param format Directives format
+     * @param index Component index
+     * @param name Component name
+     * @param descriptor Descriptor
+     * @param signature Signature
+     * @param annotations Bytecode annotations
+     * @param types Type annotations
+     * @param attributes Custom attributes
+     */
+    public DirectivesRecordComponent(
+        final Format format,
+        final int index,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final DirectivesAnnotations annotations,
+        final DirectivesTypeAnnotations types,
+        final DirectivesAttributes attributes
+    ) {
         this.format = format;
         this.index = index;
         this.name = name;
@@ -80,6 +114,7 @@ public final class DirectivesRecordComponent implements Iterable<Directive> {
         this.signature = signature;
         this.annotations = annotations;
         this.types = types;
+        this.attributes = attributes;
     }
 
     @Override
@@ -91,7 +126,8 @@ public final class DirectivesRecordComponent implements Iterable<Directive> {
             new DirectivesValue(this.format, "descriptor", this.descriptor),
             new DirectivesValue(this.format, "signature", this.signature),
             this.annotations,
-            this.types
+            this.types,
+            this.attributes
         ).iterator();
     }
 }

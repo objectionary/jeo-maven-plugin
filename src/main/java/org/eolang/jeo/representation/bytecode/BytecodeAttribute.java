@@ -20,6 +20,7 @@ import org.eolang.jeo.representation.directives.DirectivesSourceFile;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.RecordComponentVisitor;
 import org.xembly.Directive;
 
 /**
@@ -43,6 +44,17 @@ public interface BytecodeAttribute {
      * @param labels Method labels
      */
     void write(MethodVisitor method, AsmLabels labels);
+
+    /**
+     * Write to a record component.
+     *
+     * @param component Record component where to write
+     */
+    default void write(final RecordComponentVisitor component) {
+        throw new UnsupportedOperationException(
+            String.format("%s attribute cannot be written to a record component", this)
+        );
+    }
 
     /**
      * Converts to directives.
