@@ -58,4 +58,33 @@ final class DirectivesCommentTest {
             Matchers.containsString("<!-- beforeafter -->")
         );
     }
+
+    @Test
+    void removesUnpairedSurrogates() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "XML comments must not contain unpaired surrogates",
+            new Xembler(
+                new Directives().append(
+                    new DirectivesComment(
+                        new Format(),
+                        String.format("before%c%cafter%c", 0xD9AC, 0xD9AE, 0xDC00)
+                    )
+                )
+            ).xml(),
+            Matchers.containsString("<!-- beforeafter -->")
+        );
+    }
+
+    @Test
+    void keepsSurrogatePairs() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "XML comments must keep a character outside of the basic plane",
+            new Xembler(
+                new Directives().append(
+                    new DirectivesComment(new Format(), String.format("smile %c", 0x1F600))
+                )
+            ).xml(),
+            Matchers.containsString(String.format("<!-- smile %c -->", 0x1F600))
+        );
+    }
 }
