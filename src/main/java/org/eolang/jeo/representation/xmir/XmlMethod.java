@@ -10,8 +10,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.MethodName;
-import org.eolang.jeo.representation.NumberedName;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
@@ -161,10 +159,6 @@ public final class XmlMethod {
             .filter(xml -> "name".equals(xml.name()))
             .map(XmlValue::new)
             .map(XmlValue::string)
-            .map(NumberedName::new)
-            .map(NumberedName::plain)
-            .map(MethodName::new)
-            .map(MethodName::bytecode)
             .findFirst().orElseThrow(
                 () -> new IllegalStateException(
                     String.format("Method '%s' doesn't have a name", this.node.name())

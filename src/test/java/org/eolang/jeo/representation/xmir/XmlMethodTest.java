@@ -21,6 +21,8 @@ import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -89,20 +91,38 @@ final class XmlMethodTest {
 
     @Test
     void createsConstructor() {
-        final String name = "object@init@";
         MatcherAssert.assertThat(
             "Method name is not equal to expected, it should be <init>",
             new XmlMethod(
                 new NativeXmlNode(
                     new Xembler(
                         new DirectivesMethod(
-                            name,
-                            new DirectivesMethodProperties(Opcodes.ACC_PUBLIC, name, "()V", "")
+                            "object@init@",
+                            new DirectivesMethodProperties(Opcodes.ACC_PUBLIC, "<init>", "()V", "")
                         )
                     ).xmlQuietly()
                 )
             ).bytecode().name(),
             Matchers.equalTo("<init>")
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"step-2", "size-8", "object@init@", "class@clinit@"})
+    void keepsTheStoredNameAsItIs(final String name) {
+        MatcherAssert.assertThat(
+            "The stored bytecode name of a method must come back unchanged",
+            new XmlMethod(
+                new NativeXmlNode(
+                    new Xembler(
+                        new DirectivesMethod(
+                            "jm$foo",
+                            new DirectivesMethodProperties(Opcodes.ACC_STATIC, name, "()V", "")
+                        )
+                    ).xmlQuietly()
+                )
+            ).bytecode().name(),
+            Matchers.equalTo(name)
         );
     }
 
