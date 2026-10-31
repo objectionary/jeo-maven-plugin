@@ -22,6 +22,27 @@ import org.xembly.Xembler;
 final class BytecodeFieldTest {
 
     @Test
+    void encodesCustomAttributesName() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Custom attribute container names must use the same encoding as annotations",
+            new Xembler(
+                new BytecodeField(
+                    "Φ",
+                    "I",
+                    null,
+                    0,
+                    Opcodes.ACC_PUBLIC,
+                    new BytecodeAnnotations(),
+                    new BytecodeAttributes(
+                        new BytecodeUnknownAttribute("CustomField", new byte[] {1})
+                    )
+                ).directives(new Format())
+            ).xml(),
+            XhtmlMatchers.hasXPath("/o/o[@name='attributes-%CE%A6']")
+        );
+    }
+
+    @Test
     void rejectsControlCharacterInName() {
         MatcherAssert.assertThat(
             "We expect a descriptive error for a field name that XML can't hold",
