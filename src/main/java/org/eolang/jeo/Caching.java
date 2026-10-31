@@ -27,7 +27,7 @@ public final class Caching implements Transformation {
     private final Transformation origin;
 
     /**
-     * Options the target was produced with, empty when they are unknown.
+     * Options and version the target was produced with, empty when they are unknown.
      */
     private final String print;
 
@@ -44,7 +44,7 @@ public final class Caching implements Transformation {
      * Constructor.
      *
      * @param origin Original transformation to cache
-     * @param fingerprint Options the target is produced with
+     * @param fingerprint Options and version the target is produced with
      */
     Caching(final Transformation origin, final String fingerprint) {
         this.origin = origin;
