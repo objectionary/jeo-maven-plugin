@@ -6,6 +6,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Arrays;
+import java.util.Locale;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.VerifiedBytecode;
@@ -81,6 +82,29 @@ final class BytecodeRepresentationTest {
             ),
             Matchers.contains(fullname, name, type, name, signature)
         );
+    }
+
+    @Test
+    void keepsParameterAnnotationsUnderArabicLocale() throws Exception {
+        final Locale before = Locale.getDefault();
+        Locale.setDefault(Locale.forLanguageTag("ar-EG"));
+        try {
+            MatcherAssert.assertThat(
+                "Parameter annotations must survive a round trip in any default locale",
+                new XmirRepresentation(
+                    new BytecodeRepresentation(
+                        new Bytecode(
+                            new BytesOf(new ResourceOf("AnnotationsApplication.class")).asBytes()
+                        )
+                    ).toXmir(new Format(Format.MODE, "debug"))
+                ).toBytecode().toString(),
+                Matchers.containsString(
+                    "@Lorg/eolang/jeo/annotations/ParamAnnotation;(value=\"custom\") // parameter 0"
+                )
+            );
+        } finally {
+            Locale.setDefault(before);
+        }
     }
 
     @Test
