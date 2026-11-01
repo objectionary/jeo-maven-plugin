@@ -180,10 +180,6 @@ public final class AssembleMojo extends AbstractMojo {
         }
     }
 
-    /**
-     * Check that the number of threads is valid.
-     * @throws MojoExecutionException If the number of threads is out of the allowed range
-     */
     private void checkedThreads() throws MojoExecutionException {
         if (this.threads < 0 || this.threads > ParallelTranslator.MAX_THREADS) {
             throw new MojoExecutionException(

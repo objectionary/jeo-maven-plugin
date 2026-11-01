@@ -19,12 +19,13 @@ import org.junit.jupiter.api.Test;
 final class AssembleMojoTest {
 
     @Test
-    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
     void rejectsThreadsAboveLimitBeforeAnyWork() throws Exception {
-        final AssembleMojo mojo = AssembleMojoTest.mojoWithThreads(40000);
         MatcherAssert.assertThat(
             "A thread count above the ForkJoinPool limit must be rejected with a message naming the parameter",
-            Assertions.assertThrows(MojoExecutionException.class, mojo::execute).getMessage(),
+            Assertions.assertThrows(
+                MojoExecutionException.class,
+                () -> AssembleMojoTest.mojoWithThreads(40_000).execute()
+            ).getMessage(),
             Matchers.allOf(
                 Matchers.containsString("jeo.assemble.threads"),
                 Matchers.containsString("between 0 and 32767")
@@ -32,6 +33,7 @@ final class AssembleMojoTest {
         );
     }
 
+    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
     private static AssembleMojo mojoWithThreads(final int threads) throws Exception {
         final AssembleMojo mojo = new AssembleMojo();
         final Field field = AssembleMojo.class.getDeclaredField("threads");

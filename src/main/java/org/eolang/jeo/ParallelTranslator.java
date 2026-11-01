@@ -26,7 +26,7 @@ public final class ParallelTranslator implements Translator {
     /**
      * Maximum number of threads a {@link ForkJoinPool} accepts.
      */
-    static final int MAX_THREADS = 32767;
+    static final int MAX_THREADS = 32_767;
 
     /**
      * Original translation.
@@ -86,11 +86,11 @@ public final class ParallelTranslator implements Translator {
 
     @Override
     public Stream<Path> apply(final Stream<Path> representations) {
-        if (this.threads < 0 || this.threads > MAX_THREADS) {
+        if (this.threads < 0 || this.threads > ParallelTranslator.MAX_THREADS) {
             throw new IllegalArgumentException(
                 String.format(
                     "The number of threads must be between 0 and %d, but got: %d",
-                    MAX_THREADS,
+                    ParallelTranslator.MAX_THREADS,
                     this.threads
                 )
             );

@@ -118,7 +118,7 @@ final class ParallelTranslatorTest {
             "The error must explain that at most 32767 threads are allowed",
             Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> new ParallelTranslator(ParallelTranslatorTest::transform, 32768)
+                () -> new ParallelTranslator(ParallelTranslatorTest::transform, 32_768)
                     .apply(Stream.empty()),
                 "A thread count above the ForkJoinPool limit must be rejected with a descriptive error"
             ).getMessage(),
@@ -136,7 +136,7 @@ final class ParallelTranslatorTest {
                 new BytecodeClass("Maximum")
             ).bytecode().bytes()
         );
-        new ParallelTranslator(ParallelTranslatorTest::transform, 32767)
+        new ParallelTranslator(ParallelTranslatorTest::transform, 32_767)
             .apply(Stream.of(clazz))
             .forEach(ignored -> { });
         MatcherAssert.assertThat(
