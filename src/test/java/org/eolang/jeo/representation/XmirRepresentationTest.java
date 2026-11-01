@@ -185,6 +185,44 @@ final class XmirRepresentationTest {
     }
 
     @Test
+    void reportsTheXmirFileWhenBytecodeConversionFails(@TempDir final Path dir) throws IOException {
+        final Path xmir = dir.resolve("Math.xmir");
+        final String xml = new XMLDocument(
+            new Xembler(
+                new Directives().xpath("/object/o/o[@name='version']/@base").set("Φ.jeo.weird")
+            ).applyQuietly(
+                new BytecodeObject(
+                    new BytecodeClass(XmirRepresentationTest.MATH)
+                ).xml().inner()
+            )
+        ).toString();
+        Files.write(xmir, xml.getBytes(StandardCharsets.UTF_8));
+        final IllegalArgumentException exception = Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> new XmirRepresentation(xmir).toBytecode(),
+            "We expect that the error message will be easily understandable by developers"
+        );
+        MatcherAssert.assertThat(
+            String.format(
+                "The message should contain the XMIR file path, but it was: '%s'",
+                exception.getMessage()
+            ),
+            exception.getMessage(),
+            Matchers.containsString(xmir.toAbsolutePath().toString())
+        );
+        MatcherAssert.assertThat(
+            "The message should not contain the XML document identity hash",
+            exception.getMessage(),
+            Matchers.not(Matchers.containsString("JcabiXmlDoc@"))
+        );
+        MatcherAssert.assertThat(
+            "The original exception should be preserved as the cause",
+            exception.getCause(),
+            Matchers.instanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
     void generatesValidBytecodeWithNestMembersAttributeFromXmir() throws Exception {
         MatcherAssert.assertThat(
             "We expect to parse the same bytecode with the 'NestMembers' attribute",
