@@ -6,5 +6,5 @@ String log = new File(basedir, 'build.log').text
 assert log.contains('BUILD SUCCESS')
 assert log.contains('Disassemble mojo is disabled, skipping')
 assert log.contains('Assemble mojo is disabled, skipping')
-assert !log.contains('The number of threads must be 0 or positive')
+assert !log.contains('must be between 0 and')
 true
