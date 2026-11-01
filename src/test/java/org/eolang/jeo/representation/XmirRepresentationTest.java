@@ -187,37 +187,22 @@ final class XmirRepresentationTest {
     @Test
     void reportsTheXmirFileWhenBytecodeConversionFails(@TempDir final Path dir) throws IOException {
         final Path xmir = dir.resolve("Math.xmir");
-        final String xml = new XMLDocument(
-            new Xembler(
-                new Directives().xpath("/object/o/o[@name='version']/@base").set("Φ.jeo.weird")
-            ).applyQuietly(
-                new BytecodeObject(
-                    new BytecodeClass(XmirRepresentationTest.MATH)
-                ).xml().inner()
+        MatcherAssert.assertThat(
+            "The message should name the XMIR file and no XML document identity hash",
+            XmirRepresentationTest.conversionFailure(xmir).getMessage(),
+            Matchers.allOf(
+                Matchers.containsString(xmir.toAbsolutePath().toString()),
+                Matchers.not(Matchers.containsString("JcabiXmlDoc@"))
             )
-        ).toString();
-        Files.write(xmir, xml.getBytes(StandardCharsets.UTF_8));
-        final IllegalArgumentException exception = Assertions.assertThrows(
-            IllegalArgumentException.class,
-            () -> new XmirRepresentation(xmir).toBytecode(),
-            "We expect that the error message will be easily understandable by developers"
         );
-        MatcherAssert.assertThat(
-            String.format(
-                "The message should contain the XMIR file path, but it was: '%s'",
-                exception.getMessage()
-            ),
-            exception.getMessage(),
-            Matchers.containsString(xmir.toAbsolutePath().toString())
-        );
-        MatcherAssert.assertThat(
-            "The message should not contain the XML document identity hash",
-            exception.getMessage(),
-            Matchers.not(Matchers.containsString("JcabiXmlDoc@"))
-        );
+    }
+
+    @Test
+    void preservesTheCauseOfTheBytecodeConversionFailure(@TempDir final Path dir)
+        throws IOException {
         MatcherAssert.assertThat(
             "The original exception should be preserved as the cause",
-            exception.getCause(),
+            XmirRepresentationTest.conversionFailure(dir.resolve("Math.xmir")).getCause(),
             Matchers.instanceOf(IllegalArgumentException.class)
         );
     }
@@ -282,6 +267,26 @@ final class XmirRepresentationTest {
             "We expect that XMIR representation will be created from the file successfully",
             new XmirRepresentation(address).toBytecode(),
             Matchers.equalTo(expected)
+        );
+    }
+
+    private static IllegalArgumentException conversionFailure(final Path xmir) throws IOException {
+        Files.write(
+            xmir,
+            new XMLDocument(
+                new Xembler(
+                    new Directives().xpath("/object/o/o[@name='version']/@base").set("Φ.jeo.weird")
+                ).applyQuietly(
+                    new BytecodeObject(
+                        new BytecodeClass(XmirRepresentationTest.MATH)
+                    ).xml().inner()
+                )
+            ).toString().getBytes(StandardCharsets.UTF_8)
+        );
+        return Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> new XmirRepresentation(xmir).toBytecode(),
+            "We expect that the error message will be easily understandable by developers"
         );
     }
 }
