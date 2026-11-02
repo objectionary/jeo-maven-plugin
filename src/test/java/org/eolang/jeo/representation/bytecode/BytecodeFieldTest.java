@@ -5,11 +5,16 @@
 package org.eolang.jeo.representation.bytecode;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import java.util.ArrayList;
+import java.util.List;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -50,6 +55,52 @@ final class BytecodeFieldTest {
                 ).directives(new Format())
             ).xml(),
             XhtmlMatchers.hasXPath("/o/o[@name='annotations-%CE%A6']")
+        );
+    }
+
+    @Test
+    void finishesAcceptedFieldAfterItsAnnotations() {
+        final List<String> events = new ArrayList<>(2);
+        final FieldVisitor field = new FieldVisitor(Opcodes.ASM9) {
+            @Override
+            public AnnotationVisitor visitAnnotation(final String desc, final boolean visible) {
+                events.add("annotation");
+                return null;
+            }
+
+            @Override
+            public void visitEnd() {
+                events.add("end");
+            }
+        };
+        new BytecodeField(
+            "number", "I", null, null, 0,
+            new BytecodeAnnotations(new BytecodeAnnotation("LExample;", true))
+        ).write(
+            new ClassVisitor(Opcodes.ASM9) {
+                @Override
+                public FieldVisitor visitField(
+                    final int access, final String name, final String descriptor,
+                    final String signature, final Object value
+                ) {
+                    return field;
+                }
+            }
+        );
+        MatcherAssert.assertThat(
+            "The field does not end once after its annotations",
+            events, Matchers.contains("annotation", "end")
+        );
+    }
+
+    @Test
+    void skipsFieldWhenVisitorDeclines() {
+        Assertions.assertDoesNotThrow(
+            () -> new BytecodeField(
+                "number", "I", null, null, 0,
+                new BytecodeAnnotations(new BytecodeAnnotation("LExample;", true))
+            ).write(new ClassVisitor(Opcodes.ASM9) { }),
+            "A class visitor cannot skip a field"
         );
     }
 }
