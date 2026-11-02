@@ -17,11 +17,11 @@ import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Opcodes;
 
 /**
- * Composite annotation values.
+ * Test case for {@link BytecodeAnnotationValue}.
  *
  * @since 0.6
  */
-final class BytecodeCompositeAnnotationValueTest {
+final class BytecodeAnnotationValueTest {
 
     @ParameterizedTest
     @MethodSource("values")
