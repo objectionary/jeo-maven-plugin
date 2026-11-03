@@ -201,7 +201,11 @@ public final class JcabiXmlNode implements XmlNode {
             "idempotent-attribute-is-not-first",
             "empty-object",
             "object-has-data",
-            "line-is-absent"
+            "line-is-absent",
+            "invalid-name-notation",
+            "non-kebab-name",
+            "unsorted-named-attributes",
+            "mandatory-architect"
         );
         return Stream.concat(
             rules.stream(),
