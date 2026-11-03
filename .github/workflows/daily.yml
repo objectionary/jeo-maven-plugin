@@ -33,7 +33,7 @@ jobs:
       - run: mvn clean install -ntp -D"skipTests" -P"verify" --errors --batch-mode
   telegram:
     needs: test
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     if: ${{ always() }}
     permissions:
       actions: read
