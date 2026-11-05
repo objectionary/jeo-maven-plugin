@@ -97,7 +97,7 @@ public final class XmirRepresentation {
             return new XmlObject(this.xml.root()).bytecode().bytecode();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
-                String.format("Can't transform '%s' to bytecode", this.xml),
+                String.format("Can't transform XMIR to bytecode from the '%s' source", this.source),
                 exception
             );
         } catch (final IllegalStateException exception) {
