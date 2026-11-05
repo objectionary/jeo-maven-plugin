@@ -101,14 +101,48 @@ final class ParallelTranslatorTest {
     @Test
     void rejectsNegativeThreads() {
         MatcherAssert.assertThat(
-            "The error must explain that only 0 or a positive number is allowed",
+            "The error must explain the allowed range of threads",
             Assertions.assertThrows(
                 IllegalArgumentException.class,
                 () -> new ParallelTranslator(ParallelTranslatorTest::transform, -1)
                     .apply(Stream.empty()),
                 "A negative thread count must be rejected with a descriptive error"
             ).getMessage(),
-            Matchers.containsString("0 or positive")
+            Matchers.containsString("between 0 and 32767")
+        );
+    }
+
+    @Test
+    void rejectsThreadsAboveLimit() {
+        MatcherAssert.assertThat(
+            "The error must explain that at most 32767 threads are allowed",
+            Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new ParallelTranslator(ParallelTranslatorTest::transform, 32_768)
+                    .apply(Stream.empty()),
+                "A thread count above the ForkJoinPool limit must be rejected with a descriptive error"
+            ).getMessage(),
+            Matchers.containsString("between 0 and 32767")
+        );
+    }
+
+    @Test
+    void acceptsMaximumThreads(@TempDir final Path temp) throws IOException {
+        final Path clazz = temp.resolve("Maximum.class");
+        Files.write(
+            clazz,
+            new BytecodeObject(
+                "org/eolang/jeo",
+                new BytecodeClass("Maximum")
+            ).bytecode().bytes()
+        );
+        new ParallelTranslator(ParallelTranslatorTest::transform, 32_767)
+            .apply(Stream.of(clazz))
+            .forEach(ignored -> { });
+        MatcherAssert.assertThat(
+            "The maximum number of threads allowed by ForkJoinPool must be accepted",
+            temp.resolve("Maximum.xmir").toFile(),
+            FileMatchers.anExistingFile()
         );
     }
 
