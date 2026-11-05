@@ -18,6 +18,9 @@ name: bashate
       - '**.sh'
       - '**.bash'
       - '.github/workflows/bashate.yml'
+permissions:
+  contents: read
+
 concurrency:
   group: bashate-${{ github.ref }}
   cancel-in-progress: true
