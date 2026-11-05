@@ -10,6 +10,7 @@ import org.eolang.jeo.representation.DefaultVersion;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Custom class writer.
@@ -129,8 +130,14 @@ public final class CustomClassWriter extends ClassVisitor {
         try {
             final Field field = ClassWriter.class.getDeclaredField("compute");
             field.setAccessible(true);
+            final Field version = ClassWriter.class.getDeclaredField("version");
+            version.setAccessible(true);
             final int previous = field.getInt(delegate);
-            field.setInt(delegate, 4);
+            if ((version.getInt(delegate) & 0xFFFF) < Opcodes.V1_6) {
+                field.setInt(delegate, 1);
+            } else {
+                field.setInt(delegate, 4);
+            }
             final MethodVisitor original;
             try {
                 original = this.visitMethod(access, name, descriptor, signature, exceptions);
