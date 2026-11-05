@@ -53,7 +53,8 @@ public final class AsmProgram {
      */
     public BytecodeObject bytecode(final int flags) {
         final ClassNode node = new ClassNode();
-        new ClassReader(this.bytes).accept(node, AsmUnknownAttributes.prototypes(), flags);
+        final ClassReader reader = new ClassReader(this.bytes);
+        reader.accept(node, AsmUnknownAttributes.prototypes(reader), flags);
         if ((flags & ClassReader.SKIP_DEBUG) != 0) {
             new AsmParameters(this.bytes).fill(node);
         }

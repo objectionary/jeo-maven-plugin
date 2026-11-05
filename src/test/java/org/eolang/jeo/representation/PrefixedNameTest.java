@@ -32,6 +32,7 @@ final class PrefixedNameTest {
         "a%41b, j$a%2541b",
         "100%, j$100%25",
         "x%2Fy, j$x%252Fy",
+        "Φ, j$%CE%A6",
         "j$j, j$j$j",
         "jeo/xmir/Fake, j$jeo/j$xmir/j$Fake",
         "EOorg.EOeolang, j$EOorg.j$EOeolang",
@@ -123,6 +124,36 @@ final class PrefixedNameTest {
         MatcherAssert.assertThat(
             "Encoding and decoding must preserve literal URL characters with a custom prefix",
             new PrefixedName("jm$", new PrefixedName("jm$", origin).encode()).decode(),
+            Matchers.equalTo(origin)
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = {
+            "Φ", "aξb", "x>y", "a,b", "a|b", "a'b", "a:b", "a;b", "a!b", "a?b",
+            "a[b]", "a{b}", "a(b)", "a\"b", "a⊥b", "a↦b", "a⤍b", "a⟦b⟧", "a\tb", "a->b"
+        }
+    )
+    void encodesNamesIntoPhiLabels(final String origin) {
+        MatcherAssert.assertThat(
+            "Encoded name doesnt match the label grammar of phi calculus",
+            new PrefixedName(origin).encode(),
+            Matchers.matchesPattern("j\\$[^ \\r\\n\\t,.|':;!?\\]\\[}{)(⟧⟦↦⤍>\"ξΦ⊥]+")
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = {
+            "Φ", "aξb", "x>y", "a,b", "a|b", "a'b", "a:b", "a;b", "a!b", "a?b",
+            "a[b]", "a{b}", "a(b)", "a\"b", "a⊥b", "a↦b", "a⤍b", "a⟦b⟧", "a\tb", "a->b"
+        }
+    )
+    void preservesNamesThatPhiGrammarForbids(final String origin) {
+        MatcherAssert.assertThat(
+            "Encoding and decoding dont preserve the name that phi grammar forbids",
+            new PrefixedName(new PrefixedName(origin).encode()).decode(),
             Matchers.equalTo(origin)
         );
     }

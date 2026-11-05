@@ -4,6 +4,8 @@
  */
 package org.eolang.jeo;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -11,9 +13,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.cactoos.set.SetOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test for {@link FilteredClasses}.
@@ -87,6 +91,37 @@ final class FilteredClassesTest {
                 new GlobFilter(Collections.emptySet(), Collections.singleton("**/generated/**"))
             ).all().collect(Collectors.toList()),
             Matchers.contains(api)
+        );
+    }
+
+    @Test
+    void keepsAClassWithoutPackageUnderTheDefaultInclude(@TempDir final Path dir)
+        throws IOException {
+        final Path packageless = Files.write(dir.resolve("WithoutPackage.class"), new byte[0]);
+        Files.createDirectories(dir.resolve("org/eolang"));
+        Files.write(dir.resolve("org/eolang/Foo.class"), new byte[0]);
+        MatcherAssert.assertThat(
+            "the default include '**/*.class' must keep a class that has no package",
+            new FilteredClasses(
+                new BytecodeClasses(dir),
+                new GlobFilter(new SetOf<>("**/*.class"), Collections.emptySet())
+            ).all().collect(Collectors.toList()),
+            Matchers.containsInAnyOrder(packageless, dir.resolve("org/eolang/Foo.class"))
+        );
+    }
+
+    @Test
+    void excludesAClassWithoutPackageByADirectoryGlob(@TempDir final Path dir)
+        throws IOException {
+        Files.write(dir.resolve("Foo.class"), new byte[0]);
+        Files.write(dir.resolve("Bar.class"), new byte[0]);
+        MatcherAssert.assertThat(
+            "'**/Foo.class' must exclude a root-level Foo.class, but keep the others",
+            new FilteredClasses(
+                new BytecodeClasses(dir),
+                new GlobFilter(new SetOf<>("**/*.class"), new SetOf<>("**/Foo.class"))
+            ).all().collect(Collectors.toList()),
+            Matchers.contains(dir.resolve("Bar.class"))
         );
     }
 

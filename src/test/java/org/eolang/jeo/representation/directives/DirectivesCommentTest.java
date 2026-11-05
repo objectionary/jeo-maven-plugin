@@ -32,15 +32,29 @@ final class DirectivesCommentTest {
     }
 
     @Test
-    void escapesUnsafeCharacters() throws ImpossibleModificationException {
+    void escapesOnlyTheHyphen() throws ImpossibleModificationException {
         MatcherAssert.assertThat(
-            "Can't escape unsafe characters",
+            "Only the hyphen must be escaped, everything else is legal comment text (see #1798)",
             new Xembler(
                 new Directives().append(
                     new DirectivesComment(new Format(), "Hello -- <world> ---!")
                 )
             ).xml(),
-            Matchers.containsString("<!-- Hello &#45;&#45; &lt;world&gt; &#45;&#45;&#45;! -->")
+            Matchers.containsString("<!-- Hello &#45;&#45; <world> &#45;&#45;&#45;! -->")
+        );
+    }
+
+    @Test
+    void doesNotEscapeAmpersandAngleBracketsOrApostrophe()
+        throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "An XML comment is never scanned for entities, so & < > ' need no escaping (see #1798)",
+            new Xembler(
+                new Directives().append(
+                    new DirectivesComment(new Format(), "a&b<c>'d")
+                )
+            ).xml(),
+            Matchers.containsString("<!-- a&b<c>'d -->")
         );
     }
 
@@ -56,6 +70,35 @@ final class DirectivesCommentTest {
                 )
             ).xml(),
             Matchers.containsString("<!-- beforeafter -->")
+        );
+    }
+
+    @Test
+    void removesUnpairedSurrogates() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "XML comments must not contain unpaired surrogates",
+            new Xembler(
+                new Directives().append(
+                    new DirectivesComment(
+                        new Format(),
+                        String.format("before%c%cafter%c", 0xD9AC, 0xD9AE, 0xDC00)
+                    )
+                )
+            ).xml(),
+            Matchers.containsString("<!-- beforeafter -->")
+        );
+    }
+
+    @Test
+    void keepsSurrogatePairs() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "XML comments must keep a character outside of the basic plane",
+            new Xembler(
+                new Directives().append(
+                    new DirectivesComment(new Format(), String.format("smile %c", 0x1F600))
+                )
+            ).xml(),
+            Matchers.containsString(String.format("<!-- smile %c -->", 0x1F600))
         );
     }
 }

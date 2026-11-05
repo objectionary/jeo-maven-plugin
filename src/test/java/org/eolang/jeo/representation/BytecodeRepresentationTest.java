@@ -7,6 +7,7 @@ package org.eolang.jeo.representation;
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.cactoos.bytes.BytesOf;
@@ -14,6 +15,7 @@ import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.VerifiedBytecode;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.asm.AsmUnknownAttribute;
+import org.eolang.jeo.representation.asm.AsmUnknownAttributes;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeUnknownAttribute;
 import org.eolang.jeo.representation.bytecode.EoCodec;
@@ -28,6 +30,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.RecordComponentVisitor;
@@ -53,6 +56,34 @@ final class BytecodeRepresentationTest {
      */
     @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
     private static final Format DEBUG = new Format(Format.MODE, "debug");
+
+    @ParameterizedTest
+    @ValueSource(strings = {"count", "Φξ"})
+    void preservesRegisteredFieldAttributes(final String name) {
+        final byte[] payload = {1, 2, 3};
+        final ClassWriter writer = new ClassWriter(0);
+        writer.visit(
+            Opcodes.V1_8, Opcodes.ACC_PUBLIC, "example/FieldAttributes",
+            null, "java/lang/Object", null
+        );
+        final FieldVisitor field = writer.visitField(
+            Opcodes.ACC_PUBLIC, name, "I", null, null
+        );
+        field.visitAttribute(new AsmUnknownAttribute("ScalaSig", payload));
+        field.visitEnd();
+        writer.visitEnd();
+        final ClassNode restored = new ClassNode();
+        new ClassReader(
+            new XmirRepresentation(
+                new BytecodeRepresentation(new Bytecode(writer.toByteArray())).toXmir()
+            ).toBytecode().bytes()
+        ).accept(restored, AsmUnknownAttributes.prototypes(), 0);
+        MatcherAssert.assertThat(
+            "Registered custom field attribute bytes must survive disassembly and assembly",
+            new AsmUnknownAttributes(restored.fields.get(0)).bytecode(),
+            Matchers.contains(new BytecodeUnknownAttribute("ScalaSig", payload))
+        );
+    }
 
     @ParameterizedTest
     @ValueSource(strings = {"debug", "short"})
@@ -121,6 +152,29 @@ final class BytecodeRepresentationTest {
             ),
             Matchers.contains(fullname, name, type, name, signature)
         );
+    }
+
+    @Test
+    void keepsParameterAnnotationsUnderArabicLocale() throws Exception {
+        final Locale before = Locale.getDefault();
+        Locale.setDefault(Locale.forLanguageTag("ar-EG"));
+        try {
+            MatcherAssert.assertThat(
+                "Parameter annotations must survive a round trip in any default locale",
+                new XmirRepresentation(
+                    new BytecodeRepresentation(
+                        new Bytecode(
+                            new BytesOf(new ResourceOf("AnnotationsApplication.class")).asBytes()
+                        )
+                    ).toXmir(new Format(Format.MODE, "debug"))
+                ).toBytecode().toString(),
+                Matchers.containsString(
+                    "@Lorg/eolang/jeo/annotations/ParamAnnotation;(value=\"custom\") // parameter 0"
+                )
+            );
+        } finally {
+            Locale.setDefault(before);
+        }
     }
 
     @Test

@@ -219,7 +219,8 @@ public final class DisassembleMojo extends AbstractMojo {
      * <p>When set to {@code 0} (default), the plugin automatically selects the number of threads
      * based on {@link Runtime#availableProcessors()}. When set to a positive value, the plugin
      * uses exactly that many threads, scoped to a dedicated {@code ForkJoinPool} so that the
-     * setting does not affect the rest of the build.</p>
+     * setting does not affect the rest of the build. Values outside {@code 0..32767} are
+     * rejected.</p>
      *
      * @since 0.15.0
      */
@@ -300,10 +301,11 @@ public final class DisassembleMojo extends AbstractMojo {
     }
 
     private void checkedThreads() throws MojoExecutionException {
-        if (this.threads < 0) {
+        if (this.threads < 0 || this.threads > ParallelTranslator.MAX_THREADS) {
             throw new MojoExecutionException(
                 String.format(
-                    "The number of threads must be 0 or positive, but got: %d",
+                    "The number of threads in 'jeo.disassemble.threads' must be between 0 and %d, but got: %d",
+                    ParallelTranslator.MAX_THREADS,
                     this.threads
                 )
             );

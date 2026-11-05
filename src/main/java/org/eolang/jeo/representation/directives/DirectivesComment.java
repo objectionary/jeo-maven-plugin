@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.xembly.Directive;
 import org.xembly.Directives;
@@ -18,9 +17,9 @@ import org.xembly.Directives;
 public final class DirectivesComment implements Iterable<Directive> {
 
     /**
-     * Unsafe characters.
+     * Hyphen, the only character that is unsafe inside an XML comment.
      */
-    private static final Pattern UNSAFE_CHARS = Pattern.compile("[&<>'-]");
+    private static final Pattern HYPHEN = Pattern.compile("-");
 
     /**
      * Chars that are discouraged in XML.
@@ -35,6 +34,7 @@ public final class DirectivesComment implements Iterable<Directive> {
             "[\\x{E}-\\x{1F}]",
             "[\\x{7F}-\\x{84}]",
             "[\\x{86}-\\x{9F}]",
+            "[\\x{D800}-\\x{DFFF}]",
             "[\\x{FDD0}-\\x{FDDF}]",
             "[\\x{FFFE}-\\x{FFFF}]",
             "[\\x{1FFFE}-\\x{1FFFF}]",
@@ -90,36 +90,12 @@ public final class DirectivesComment implements Iterable<Directive> {
         return result;
     }
 
-    // @checkstyle MissingNullCaseInSwitchCheck (30 lines)
+    // Only a hyphen needs escaping, because XML forbids a double hyphen inside a comment.
+    // Everything else is legal comment text, and a comment is never scanned for entity
+    // references, so escaping it would only make the text harder to read.
     private String escaped() {
-        final Matcher matcher = DirectivesComment.UNSAFE_CHARS.matcher(this.comment);
-        final StringBuffer result = new StringBuffer(0);
-        while (matcher.find()) {
-            final String replacement;
-            switch (matcher.group()) {
-                case "&":
-                    replacement = "&amp;";
-                    break;
-                case "<":
-                    replacement = "&lt;";
-                    break;
-                case ">":
-                    replacement = "&gt;";
-                    break;
-                case "'":
-                    replacement = "&apos;";
-                    break;
-                case "-":
-                    replacement = "&#45;";
-                    break;
-                default:
-                    throw new IllegalStateException(
-                        String.format("Unexpected value: %s", matcher.group())
-                    );
-            }
-            matcher.appendReplacement(result, replacement);
-        }
-        matcher.appendTail(result);
-        return DirectivesComment.DISCOURAGED.matcher(result).replaceAll("");
+        return DirectivesComment.DISCOURAGED.matcher(
+            DirectivesComment.HYPHEN.matcher(this.comment).replaceAll("&#45;")
+        ).replaceAll("");
     }
 }
