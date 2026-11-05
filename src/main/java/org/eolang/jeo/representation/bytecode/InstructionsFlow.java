@@ -87,19 +87,39 @@ public final class InstructionsFlow<T extends InstructionsFlow.Reducible<T>> {
                     worklist.push(new Entry<>(jump, updated));
                     visited.putIfGreater(index, updated);
                     break;
-                } else if (instruction.isReturn() || instruction.isThrow()) {
-                    visited.putIfGreater(index, updated);
+                } else if (this.terminal(instruction, worklist, index, updated, visited)) {
                     break;
                 }
-                this.suitableBlocks(index).forEach(
-                    ind -> worklist.push(new Entry<>(ind, updated.enterBlock()))
-                );
+                this.enqueueHandlers(worklist, index, updated);
                 visited.putIfGreater(index, updated);
                 current = updated;
                 ++index;
             }
         }
         return visited.values().stream().max((first, second) -> first.compareTo(second));
+    }
+
+    private boolean terminal(
+        final BytecodeEntry instruction, final Deque<Entry<T>> worklist,
+        final int index, final T updated, final MaxValueMap<Integer, T> visited
+    ) {
+        final boolean result;
+        if (instruction.isReturn() || instruction.isThrow()) {
+            if (instruction.isThrow()) {
+                this.enqueueHandlers(worklist, index, updated);
+            }
+            visited.putIfGreater(index, updated);
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    private void enqueueHandlers(final Deque<Entry<T>> worklist, final int index, final T value) {
+        this.suitableBlocks(index).forEach(
+            ind -> worklist.push(new Entry<>(ind, value.enterBlock()))
+        );
     }
 
     private List<Integer> suitableBlocks(final int instruction) {
