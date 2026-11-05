@@ -7,7 +7,9 @@ package org.eolang.jeo.representation.xmir;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeField;
+import org.eolang.jeo.representation.bytecode.BytecodeUnknownAttribute;
 import org.eolang.jeo.representation.directives.DirectivesAnnotation;
 import org.eolang.jeo.representation.directives.DirectivesField;
 import org.eolang.jeo.representation.directives.Format;
@@ -28,6 +30,29 @@ import org.xembly.Xembler;
  * @since 0.3
  */
 final class XmlFieldTest {
+
+    @ParameterizedTest
+    @ValueSource(strings = {"count", "Φξ"})
+    void preservesCustomFieldAttributes(final String name) throws ImpossibleModificationException {
+        final BytecodeField expected = new BytecodeField(
+            name,
+            "I",
+            null,
+            0,
+            Opcodes.ACC_PUBLIC,
+            new BytecodeAnnotations(),
+            new BytecodeAttributes(
+                new BytecodeUnknownAttribute("CustomField", new byte[] {1, 2, 3})
+            )
+        );
+        MatcherAssert.assertThat(
+            "Custom attributes must survive the field's XMIR round trip",
+            new XmlField(
+                new NativeXmlNode(new Xembler(expected.directives(new Format())).xml())
+            ).bytecode(),
+            Matchers.equalTo(expected)
+        );
+    }
 
     @Test
     void parsesXmirFieldSuccessfully() throws ImpossibleModificationException {
