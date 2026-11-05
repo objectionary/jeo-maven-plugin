@@ -52,7 +52,7 @@ final class XmirRepresentationTest {
     @Test
     void retrievesName() {
         final String pckg = "org/eolang/foo";
-        final String expected = "j$org/j$eolang/j$foo/j$Math";
+        final String expected = "org/eolang/foo/Math";
         final String actual = new XmirRepresentation(
             new BytecodeObject(
                 pckg,
@@ -67,6 +67,15 @@ final class XmirRepresentationTest {
             ),
             actual,
             Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void retrievesNameOfClassInDefaultPackage() {
+        MatcherAssert.assertThat(
+            "The name of a class in the default package must not carry the packageless marker",
+            new XmirRepresentation(new BytecodeObject(new BytecodeClass("Math")).xml()).name(),
+            Matchers.equalTo("Math")
         );
     }
 
@@ -97,7 +106,7 @@ final class XmirRepresentationTest {
                     .applyQuietly(new BytecodeObject(new BytecodeClass("Math")).xml().inner())
             )
         ).name();
-        final String expected = "j$Math";
+        final String expected = "Math";
         MatcherAssert.assertThat(
             String.format(
                 "The name of the class (without package) is not retrieved correctly, we expected '%s', but got '%s'",
