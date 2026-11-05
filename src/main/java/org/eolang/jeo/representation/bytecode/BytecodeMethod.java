@@ -359,6 +359,18 @@ public final class BytecodeMethod {
     }
 
     /**
+     * Put the constants loaded by ldc instructions into the constant pool.
+     *
+     * @param writer Class writer
+     */
+    void register(final CustomClassWriter writer) {
+        this.entries.stream()
+            .filter(BytecodeInstruction.class::isInstance)
+            .map(BytecodeInstruction.class::cast)
+            .forEach(instruction -> instruction.register(writer));
+    }
+
+    /**
      * Generate directives.
      *
      * @return Directives

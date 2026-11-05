@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -298,7 +299,7 @@ public interface BytecodeAttribute {
          * @param nested Nest members
          */
         public NestMembers(final List<String> nested) {
-            this.members = nested;
+            this.members = new ArrayList<>(nested);
         }
 
         @Override
@@ -367,7 +368,7 @@ public interface BytecodeAttribute {
          * @param classes Permitted subclasses
          */
         public PermittedSubclasses(final List<String> classes) {
-            this.classes = classes;
+            this.classes = new ArrayList<>(classes);
         }
 
         @Override
@@ -438,7 +439,7 @@ public interface BytecodeAttribute {
          * @param components Components
          */
         public RecordComponents(final List<BytecodeRecordComponent> components) {
-            this.components = components;
+            this.components = new ArrayList<>(components);
         }
 
         @Override

@@ -18,13 +18,16 @@ name: shellcheck
       - '**.sh'
       - '**.bash'
       - '.github/workflows/shellcheck.yml'
+permissions:
+  contents: read
+
 concurrency:
   group: shellcheck-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   shellcheck:
     timeout-minutes: 15
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ludeeus/action-shellcheck@master

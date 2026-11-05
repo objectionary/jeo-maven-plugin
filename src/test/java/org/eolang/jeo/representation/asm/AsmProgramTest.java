@@ -18,6 +18,8 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 import org.xembly.Xembler;
 
 /**
@@ -72,6 +74,26 @@ final class AsmProgramTest {
             "We expect to receive the same bytecode with the 'NestMembers' attribute",
             new AsmProgram(original).bytecode(0).bytecode().toString(),
             Matchers.equalTo(new Bytecode(original).toString())
+        );
+    }
+
+    @Test
+    void preservesUnlistedUnknownAttributes() {
+        final ClassWriter writer = new ClassWriter(0);
+        writer.visit(
+            Opcodes.V17,
+            Opcodes.ACC_PUBLIC,
+            "CustomAttributes",
+            null,
+            "java/lang/Object",
+            null
+        );
+        writer.visitAttribute(new AsmUnknownAttribute("Custom", new byte[]{1, 2, 3}));
+        writer.visitEnd();
+        MatcherAssert.assertThat(
+            "An attribute not listed in the prototypes must survive the ASM round trip",
+            new AsmProgram(writer.toByteArray()).bytecode().bytecode().toString(),
+            Matchers.containsString("ATTRIBUTE Custom")
         );
     }
 

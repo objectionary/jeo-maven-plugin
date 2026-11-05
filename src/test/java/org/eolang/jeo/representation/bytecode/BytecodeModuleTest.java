@@ -24,10 +24,13 @@ import org.eolang.jeo.representation.directives.DirectivesModuleRequired;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ModuleVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
@@ -140,6 +143,51 @@ final class BytecodeModuleTest {
                     )
                 ).xml()
             )
+        );
+    }
+
+    @Test
+    void finishesAcceptedModuleAfterItsContents() {
+        final List<String> events = new ArrayList<>(2);
+        new BytecodeModule(
+            "example", 0, null, "Example", Collections.emptyList(), Collections.emptyList(),
+            Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+            Collections.emptyList()
+        ).write(
+            new ClassVisitor(Opcodes.ASM9) {
+                @Override
+                public ModuleVisitor visitModule(
+                    final String name, final int access, final String version
+                ) {
+                    return new ModuleVisitor(Opcodes.ASM9) {
+                        @Override
+                        public void visitMainClass(final String main) {
+                            events.add("main");
+                        }
+
+                        @Override
+                        public void visitEnd() {
+                            events.add("end");
+                        }
+                    };
+                }
+            }
+        );
+        MatcherAssert.assertThat(
+            "The module does not end once after its contents",
+            events, Matchers.contains("main", "end")
+        );
+    }
+
+    @Test
+    void skipsModuleWhenVisitorDeclines() {
+        Assertions.assertDoesNotThrow(
+            () -> new BytecodeModule(
+                "example", 0, null, "Example", Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList()
+            ).write(new ClassVisitor(Opcodes.ASM9) { }),
+            "A class visitor cannot skip a module"
         );
     }
 

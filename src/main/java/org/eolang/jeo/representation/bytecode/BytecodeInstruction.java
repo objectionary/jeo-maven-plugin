@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +63,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
         final List<Object> args
     ) {
         this.opcode = opcode;
-        this.args = args;
+        this.args = new ArrayList<>(args);
     }
 
     @Override
@@ -391,6 +392,17 @@ public final class BytecodeInstruction implements BytecodeEntry {
      */
     boolean isVarInstruction() {
         return Instruction.find(this.opcode).isVarInstruction();
+    }
+
+    /**
+     * Put the constant this instruction loads into the constant pool, if it is an ldc.
+     *
+     * @param writer Class writer
+     */
+    void register(final CustomClassWriter writer) {
+        if (this.opcode == Opcodes.LDC) {
+            writer.register(this.args.get(0));
+        }
     }
 
     /**

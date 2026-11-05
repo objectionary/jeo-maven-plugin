@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +14,7 @@ import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesAttributes;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 
 /**
@@ -42,7 +44,7 @@ public final class BytecodeAttributes {
      * @param all All attributes
      */
     public BytecodeAttributes(final List<BytecodeAttribute> all) {
-        this.all = all;
+        this.all = new ArrayList<>(all);
     }
 
     /**
@@ -92,6 +94,18 @@ public final class BytecodeAttributes {
      */
     void write(final ClassVisitor clazz) {
         this.all.forEach(attr -> attr.write(clazz));
+    }
+
+    /**
+     * Write field attributes.
+     *
+     * @param field Field visitor
+     */
+    void write(final FieldVisitor field) {
+        this.all.stream()
+            .filter(BytecodeUnknownAttribute.class::isInstance)
+            .map(BytecodeUnknownAttribute.class::cast)
+            .forEach(attr -> attr.write(field));
     }
 
     /**

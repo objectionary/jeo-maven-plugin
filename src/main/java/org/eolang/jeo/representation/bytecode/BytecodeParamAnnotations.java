@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.Locale;
 import java.util.Objects;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.MethodVisitor;
@@ -81,7 +82,7 @@ public final class BytecodeParamAnnotations {
      */
     Iterable<Directive> directives(final Format format) {
         return this.annotations.directives(
-            format, String.format("param-annotations-%d", this.index)
+            format, String.format(Locale.ROOT, "param-annotations-%d", this.index)
         );
     }
 }

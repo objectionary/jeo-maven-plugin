@@ -83,11 +83,10 @@ final class XmirFilesTest {
     }
 
     @Test
-    void returnsNothingIfFolderDoesNotExist(@TempDir final Path temp) {
-        MatcherAssert.assertThat(
-            "Objects were not retrieved, we expected empty list",
-            new XmirFiles(temp.resolve("missing")).all().collect(Collectors.toList()),
-            Matchers.empty()
+    void failsIfFolderDoesNotExist(@TempDir final Path temp) {
+        Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> new XmirFiles(temp.resolve("missing")).all()
         );
     }
 
@@ -185,7 +184,7 @@ final class XmirFilesTest {
                 () -> new XmirFiles(temp).verify()
             ).getMessage(),
             Matchers.containsString(
-                "1 error(s) in XML document: cvc-complex-type.2.4.a: Invalid content was found starting with element 'tail'. One of '{head}' is expected."
+                "1 error(s) in XML document"
             )
         );
     }

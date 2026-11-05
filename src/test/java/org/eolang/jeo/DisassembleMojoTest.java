@@ -31,4 +31,40 @@ final class DisassembleMojoTest {
             Matchers.containsString("Unknown disassemble mode: Debag")
         );
     }
+
+    @Test
+    void rejectsThreadsAboveLimitBeforeAnyWork() throws Exception {
+        MatcherAssert.assertThat(
+            "A thread count above the ForkJoinPool limit must be rejected with a message naming the parameter",
+            Assertions.assertThrows(
+                MojoExecutionException.class,
+                () -> DisassembleMojoTest.mojoWithThreads(40_000).execute()
+            ).getMessage(),
+            Matchers.allOf(
+                Matchers.containsString("jeo.disassemble.threads"),
+                Matchers.containsString("between 0 and 32767")
+            )
+        );
+    }
+
+    @Test
+    void rejectsMaximumIntegerThreads() throws Exception {
+        MatcherAssert.assertThat(
+            "The largest integer must be rejected with the same range message",
+            Assertions.assertThrows(
+                MojoExecutionException.class,
+                () -> DisassembleMojoTest.mojoWithThreads(Integer.MAX_VALUE).execute()
+            ).getMessage(),
+            Matchers.containsString("between 0 and 32767")
+        );
+    }
+
+    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
+    private static DisassembleMojo mojoWithThreads(final int threads) throws Exception {
+        final DisassembleMojo mojo = new DisassembleMojo();
+        final Field field = DisassembleMojo.class.getDeclaredField("threads");
+        field.setAccessible(true);
+        field.set(mojo, threads);
+        return mojo;
+    }
 }

@@ -83,6 +83,15 @@ public final class CustomClassWriter extends ClassVisitor {
     }
 
     /**
+     * Put a constant into the constant pool before anything else uses it.
+     *
+     * @param constant The constant
+     */
+    void register(final Object constant) {
+        this.writer.newConst(constant);
+    }
+
+    /**
      * Visits a method of the class.
      *
      * @param access Access flags

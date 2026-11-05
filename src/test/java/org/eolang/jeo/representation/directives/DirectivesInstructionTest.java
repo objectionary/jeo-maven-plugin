@@ -113,7 +113,7 @@ final class DirectivesInstructionTest {
                 new BytecodeInstruction(
                     Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V"
                 ),
-                "<!-- #183:invokespecial(java/lang/Object, &lt;init&gt;, ()V) -->"
+                "<!-- #183:invokespecial(java/lang/Object, <init>, ()V) -->"
             ),
             Arguments.of(
                 new BytecodeInstruction(

@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 /**
@@ -59,7 +58,7 @@ public final class JavaCodec implements Codec {
                 break;
             case STRING:
                 result = Optional.ofNullable(value).map(String::valueOf)
-                    .map(unicode -> unicode.getBytes(StandardCharsets.UTF_8))
+                    .map(unicode -> new SurrogateText(unicode).bytes())
                     .orElse(null);
                 break;
             case BYTES:
@@ -104,7 +103,7 @@ public final class JavaCodec implements Codec {
                 break;
             case STRING:
                 result = Optional.ofNullable(bytes)
-                    .map(all -> new String(all, StandardCharsets.UTF_8))
+                    .map(all -> new SurrogateBytes(all).text())
                     .orElse("");
                 break;
             case BYTES:
