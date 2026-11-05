@@ -4,6 +4,8 @@
  */
 package org.eolang.jeo;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -11,9 +13,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.cactoos.set.SetOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test for {@link FilteredClasses}.
@@ -24,12 +28,15 @@ final class FilteredClassesTest {
 
     @Test
     void returnsFilteredPathsWhenFilterMatchesSomeWithDefaultLogger() {
-        final Path first = Paths.get("A.class");
-        final Path second = Paths.get("B.class");
+        final Path root = Paths.get("/dev/null");
+        final Path first = root.resolve("A.class");
+        final Path second = root.resolve("B.class");
         MatcherAssert.assertThat(
             "Should return only paths that match the filter",
             new FilteredClasses(
-                new FilteredClassesTest.Project(Stream.of(first, second, Paths.get("C.txt"))),
+                new FilteredClassesTest.Project(
+                    root, Stream.of(first, second, root.resolve("C.txt"))
+                ),
                 new GlobFilter(Collections.singleton("*.class"), Collections.emptySet())
             ).all().collect(Collectors.toList()),
             Matchers.allOf(
@@ -42,13 +49,79 @@ final class FilteredClassesTest {
 
     @Test
     void returnsEmptyWhenNoPathsMatchFilter() {
+        final Path root = Paths.get("/dev/null");
         MatcherAssert.assertThat(
             "No paths should match the filter",
             new FilteredClasses(
-                new FilteredClassesTest.Project(Stream.of(Paths.get("A.txt"), Paths.get("B.txt"))),
+                new FilteredClassesTest.Project(
+                    root, Stream.of(root.resolve("A.txt"), root.resolve("B.txt"))
+                ),
                 new GlobFilter(Collections.singleton("*.class"), Collections.emptySet())
             ).all().collect(Collectors.toList()),
             Matchers.empty()
+        );
+    }
+
+    @Test
+    void matchesARelativeIncludeAgainstAnAbsoluteRoot() {
+        final Path root = Paths.get("/tmp/generated/app/target/classes");
+        final Path api = root.resolve("com/acme/api/Api.class");
+        MatcherAssert.assertThat(
+            "a relative include must match a class under an absolute root (see #1765)",
+            new FilteredClasses(
+                new FilteredClassesTest.Project(
+                    root, Stream.of(api, root.resolve("com/acme/internal/Impl.class"))
+                ),
+                new GlobFilter(
+                    Collections.singleton("com/acme/api/*.class"), Collections.emptySet()
+                )
+            ).all().collect(Collectors.toList()),
+            Matchers.contains(api)
+        );
+    }
+
+    @Test
+    void doesNotExcludeEveryClassBecauseAnAncestorDirectoryIsNamedGenerated() {
+        final Path root = Paths.get("/tmp/generated/app/target/classes");
+        final Path api = root.resolve("com/acme/api/Api.class");
+        MatcherAssert.assertThat(
+            "'**/generated/**' must not match every class under a 'generated' ancestor dir",
+            new FilteredClasses(
+                new FilteredClassesTest.Project(root, Stream.of(api)),
+                new GlobFilter(Collections.emptySet(), Collections.singleton("**/generated/**"))
+            ).all().collect(Collectors.toList()),
+            Matchers.contains(api)
+        );
+    }
+
+    @Test
+    void keepsAClassWithoutPackageUnderTheDefaultInclude(@TempDir final Path dir)
+        throws IOException {
+        final Path packageless = Files.write(dir.resolve("WithoutPackage.class"), new byte[0]);
+        Files.createDirectories(dir.resolve("org/eolang"));
+        Files.write(dir.resolve("org/eolang/Foo.class"), new byte[0]);
+        MatcherAssert.assertThat(
+            "the default include '**/*.class' must keep a class that has no package",
+            new FilteredClasses(
+                new BytecodeClasses(dir),
+                new GlobFilter(new SetOf<>("**/*.class"), Collections.emptySet())
+            ).all().collect(Collectors.toList()),
+            Matchers.containsInAnyOrder(packageless, dir.resolve("org/eolang/Foo.class"))
+        );
+    }
+
+    @Test
+    void excludesAClassWithoutPackageByADirectoryGlob(@TempDir final Path dir)
+        throws IOException {
+        Files.write(dir.resolve("Foo.class"), new byte[0]);
+        Files.write(dir.resolve("Bar.class"), new byte[0]);
+        MatcherAssert.assertThat(
+            "'**/Foo.class' must exclude a root-level Foo.class, but keep the others",
+            new FilteredClasses(
+                new BytecodeClasses(dir),
+                new GlobFilter(new SetOf<>("**/*.class"), new SetOf<>("**/Foo.class"))
+            ).all().collect(Collectors.toList()),
+            Matchers.contains(dir.resolve("Bar.class"))
         );
     }
 
@@ -60,9 +133,9 @@ final class FilteredClassesTest {
             new FilteredClassesTest.Project(
                 root,
                 Stream.of(
-                    Paths.get("FirstAdded.class"),
-                    Paths.get("SecondAdded.class"),
-                    Paths.get("Skipped.txt")
+                    root.resolve("FirstAdded.class"),
+                    root.resolve("SecondAdded.class"),
+                    root.resolve("Skipped.txt")
                 )
             ),
             new GlobFilter(Collections.emptySet(), Collections.singleton("*.txt")), logs::add
@@ -103,15 +176,6 @@ final class FilteredClassesTest {
          * Stream of paths representing project files.
          */
         private final Stream<Path> paths;
-
-        /**
-         * Constructor.
-         *
-         * @param paths Stream of paths representing project files
-         */
-        private Project(final Stream<Path> paths) {
-            this(Paths.get("/dev/null"), paths);
-        }
 
         /**
          * Constructor.

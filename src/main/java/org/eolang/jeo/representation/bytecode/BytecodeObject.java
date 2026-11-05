@@ -14,6 +14,8 @@ import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
 import org.eolang.jeo.representation.directives.DirectivesObject;
 import org.eolang.jeo.representation.directives.Format;
+import org.objectweb.asm.ClassTooLargeException;
+import org.objectweb.asm.MethodTooLargeException;
 
 /**
  * Bytecode program.
@@ -68,7 +70,7 @@ public final class BytecodeObject {
      */
     public BytecodeObject(final String pckg, final List<BytecodeClass> classes) {
         this.pckg = pckg;
-        this.classes = classes;
+        this.classes = new ArrayList<>(classes);
     }
 
     /**
@@ -98,7 +100,16 @@ public final class BytecodeObject {
         }
         final CustomClassWriter writer = new CustomClassWriter();
         this.top().writeTo(writer);
-        return writer.bytecode();
+        try {
+            return writer.bytecode();
+        } catch (final MethodTooLargeException | ClassTooLargeException exception) {
+            throw new IllegalStateException(
+                String.format(
+                    "The class '%s' is too large to be written", this.top().name().full()
+                ),
+                exception
+            );
+        }
     }
 
     /**
@@ -107,6 +118,9 @@ public final class BytecodeObject {
      * @return Top class
      */
     public BytecodeClass top() {
+        if (this.classes.isEmpty()) {
+            throw new IllegalStateException("At least one class is required");
+        }
         return this.classes.get(0);
     }
 

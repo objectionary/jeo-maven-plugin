@@ -30,7 +30,7 @@ public final class BytecodeValue {
      * @param value Value
      */
     public BytecodeValue(final Object value) {
-        this(DataType.findByData(value), value);
+        this(DataType.findByData(value), BytecodeValue.copy(value));
     }
 
     /**
@@ -59,7 +59,7 @@ public final class BytecodeValue {
      * @return Value
      */
     public Object value() {
-        return this.object;
+        return BytecodeValue.copy(this.object);
     }
 
     /**
@@ -69,11 +69,21 @@ public final class BytecodeValue {
      * @return Bytes
      */
     public byte[] encode(final Codec codec) {
-        return codec.encode(this.object, this.vtype);
+        return codec.encode(this.value(), this.vtype);
     }
 
     @Override
     public String toString() {
         return String.format("BytecodeValue(vtype=%s, object=%s)", this.vtype, this.object);
+    }
+
+    private static Object copy(final Object value) {
+        final Object result;
+        if (value instanceof byte[]) {
+            result = ((byte[]) value).clone();
+        } else {
+            result = value;
+        }
+        return result;
     }
 }

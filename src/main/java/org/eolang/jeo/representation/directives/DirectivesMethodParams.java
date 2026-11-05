@@ -127,14 +127,14 @@ public final class DirectivesMethodParams implements Iterable<Directive> {
         if (this.visible > 0) {
             res.add(
                 new Directives(
-                    new DirectivesValue(this.format, "annotable-visible", this.visible)
+                    new DirectivesValue(this.format, "visible", this.visible)
                 )
             );
         }
         if (this.invisible > 0) {
             res.add(
                 new Directives(
-                    new DirectivesValue(this.format, "annotable-invisible", this.invisible)
+                    new DirectivesValue(this.format, "invisible", this.invisible)
                 )
             );
         }

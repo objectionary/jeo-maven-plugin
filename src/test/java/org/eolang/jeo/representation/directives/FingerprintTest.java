@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link Fingerprint}.
+ *
  * @since 0.15.0
  */
 final class FingerprintTest {

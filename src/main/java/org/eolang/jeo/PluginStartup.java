@@ -8,6 +8,7 @@ import com.jcabi.log.Logger;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -89,7 +90,7 @@ public final class PluginStartup {
         if (project == null) {
             result = Arrays.stream(additional)
                 .map(Path::toString)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(LinkedHashSet::new));
         } else {
             result = Stream.concat(
                 Stream.concat(
@@ -100,7 +101,7 @@ public final class PluginStartup {
                     project.getTestClasspathElements().stream(),
                     Arrays.stream(additional).map(Path::toString)
                 )
-            ).collect(Collectors.toSet());
+            ).collect(Collectors.toCollection(LinkedHashSet::new));
         }
         return result;
     }

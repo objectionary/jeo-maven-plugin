@@ -198,6 +198,17 @@ final class DirectivesValueTest {
         );
     }
 
+    @Test
+    void createsBytesWithStableComment() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect that the same bytes are always written the same way",
+            new Xembler(new DirectivesValue(0, new Format(), new byte[]{1, 2, 10})).xml(),
+            Matchers.equalTo(
+                new Xembler(new DirectivesValue(0, new Format(), new byte[]{1, 2, 10})).xml()
+            )
+        );
+    }
+
     /**
      * Arguments for {@link DirectivesValueTest#determinesTypeCorrectly(Object, String)} test.
      *

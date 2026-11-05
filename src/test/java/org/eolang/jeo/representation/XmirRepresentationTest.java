@@ -52,7 +52,7 @@ final class XmirRepresentationTest {
     @Test
     void retrievesName() {
         final String pckg = "org/eolang/foo";
-        final String expected = "j$org/j$eolang/j$foo/j$Math";
+        final String expected = "org/eolang/foo/Math";
         final String actual = new XmirRepresentation(
             new BytecodeObject(
                 pckg,
@@ -67,6 +67,15 @@ final class XmirRepresentationTest {
             ),
             actual,
             Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void retrievesNameOfClassInDefaultPackage() {
+        MatcherAssert.assertThat(
+            "The name of a class in the default package must not carry the packageless marker",
+            new XmirRepresentation(new BytecodeObject(new BytecodeClass("Math")).xml()).name(),
+            Matchers.equalTo("Math")
         );
     }
 
@@ -97,7 +106,7 @@ final class XmirRepresentationTest {
                     .applyQuietly(new BytecodeObject(new BytecodeClass("Math")).xml().inner())
             )
         ).name();
-        final String expected = "j$Math";
+        final String expected = "Math";
         MatcherAssert.assertThat(
             String.format(
                 "The name of the class (without package) is not retrieved correctly, we expected '%s', but got '%s'",
@@ -185,6 +194,29 @@ final class XmirRepresentationTest {
     }
 
     @Test
+    void reportsTheXmirFileWhenBytecodeConversionFails(@TempDir final Path dir) throws IOException {
+        final Path xmir = dir.resolve("Math.xmir");
+        MatcherAssert.assertThat(
+            "The message should name the XMIR file and no XML document identity hash",
+            XmirRepresentationTest.conversionFailure(xmir).getMessage(),
+            Matchers.allOf(
+                Matchers.containsString(xmir.toAbsolutePath().toString()),
+                Matchers.not(Matchers.containsString("JcabiXmlDoc@"))
+            )
+        );
+    }
+
+    @Test
+    void preservesTheCauseOfTheBytecodeConversionFailure(@TempDir final Path dir)
+        throws IOException {
+        MatcherAssert.assertThat(
+            "The original exception should be preserved as the cause",
+            XmirRepresentationTest.conversionFailure(dir.resolve("Math.xmir")).getCause(),
+            Matchers.instanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
     void generatesValidBytecodeWithNestMembersAttributeFromXmir() throws Exception {
         MatcherAssert.assertThat(
             "We expect to parse the same bytecode with the 'NestMembers' attribute",
@@ -244,6 +276,26 @@ final class XmirRepresentationTest {
             "We expect that XMIR representation will be created from the file successfully",
             new XmirRepresentation(address).toBytecode(),
             Matchers.equalTo(expected)
+        );
+    }
+
+    private static IllegalArgumentException conversionFailure(final Path xmir) throws IOException {
+        Files.write(
+            xmir,
+            new XMLDocument(
+                new Xembler(
+                    new Directives().xpath("/object/o/o[@name='version']/@base").set("Φ.jeo.weird")
+                ).applyQuietly(
+                    new BytecodeObject(
+                        new BytecodeClass(XmirRepresentationTest.MATH)
+                    ).xml().inner()
+                )
+            ).toString().getBytes(StandardCharsets.UTF_8)
+        );
+        return Assertions.assertThrows(
+            IllegalArgumentException.class,
+            () -> new XmirRepresentation(xmir).toBytecode(),
+            "We expect that the error message will be easily understandable by developers"
         );
     }
 }

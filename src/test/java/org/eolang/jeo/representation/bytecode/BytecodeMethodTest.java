@@ -266,6 +266,40 @@ final class BytecodeMethodTest {
         );
     }
 
+    @Test
+    void reservesLocalTouchedOnlyByIinc() {
+        MatcherAssert.assertThat(
+            "A local variable changed only by iinc must be counted in max locals",
+            new BytecodeMethod(
+                new BytecodeInstruction(Opcodes.IINC, 7, 1),
+                new BytecodeInstruction(Opcodes.RETURN)
+            ).computeMaxs(),
+            Matchers.equalTo(new BytecodeMaxs(0, 8))
+        );
+    }
+
+    @Test
+    void includesHandlerStackForProtectedThrowWhenComputingMaxs() {
+        MatcherAssert.assertThat(
+            "The exception handler's stack depth contributes to max stack",
+            new BytecodeMethod().trycatch(
+                new BytecodeTryCatchBlock("begin", "end", "handler", "java/lang/Throwable")
+            ).label("begin")
+            .opcode(Opcodes.ACONST_NULL)
+            .opcode(Opcodes.ATHROW)
+            .label("end")
+            .label("handler")
+            .opcode(Opcodes.POP)
+            .opcode(Opcodes.ICONST_0)
+            .opcode(Opcodes.ICONST_1)
+            .opcode(Opcodes.IADD)
+            .opcode(Opcodes.POP)
+            .opcode(Opcodes.RETURN)
+            .computeMaxs().stack(),
+            Matchers.equalTo(2)
+        );
+    }
+
     @ParameterizedTest(name = "Computing maxs for method {1}, expected  {2}")
     @MethodSource("implementedMethods")
     void computesMaxsCorrectlyForImplementedMethods(

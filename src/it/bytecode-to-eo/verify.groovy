@@ -8,6 +8,8 @@ assert log.contains(" Disassembling files from ")
 assert log.contains("Application.class disassembled to")
 assert log.contains("Foo.class disassembled to ")
 assert log.contains("WithoutPackage.class disassembled to ")
+assert new File(basedir, 'target/generated-sources/jeo-xmir/WithoutPackage.xmir').exists() : "A class without a package must be disassembled to the root of the output"
+assert log.contains("WithoutPackage.xmir assembled to ")
 assert log.contains("BUILD SUCCESS")
 //Check that we have generated XMIR object file.
 File app = new File(basedir, 'target/generated-sources/jeo-xmir/org/eolang/jeo/Application.xmir')

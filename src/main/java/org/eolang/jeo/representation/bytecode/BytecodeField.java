@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.bytecode;
 
 import java.util.Objects;
 import java.util.OptionalInt;
+import org.eolang.jeo.representation.PrefixedName;
 import org.eolang.jeo.representation.directives.DirectivesField;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
@@ -49,6 +50,11 @@ public final class BytecodeField {
     private final BytecodeAnnotations annotations;
 
     /**
+     * Custom field attributes.
+     */
+    private final BytecodeAttributes attributes;
+
+    /**
      * Constructor.
      *
      * @param name Name
@@ -85,12 +91,36 @@ public final class BytecodeField {
         final int access,
         final BytecodeAnnotations annotations
     ) {
+        this(name, descriptor, signature, value, access, annotations, new BytecodeAttributes());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param name Name
+     * @param descriptor Descriptor
+     * @param signature Signature
+     * @param value Value
+     * @param access Access
+     * @param annotations Annotations
+     * @param attributes Custom attributes
+     */
+    public BytecodeField(
+        final String name,
+        final String descriptor,
+        final String signature,
+        final Object value,
+        final int access,
+        final BytecodeAnnotations annotations,
+        final BytecodeAttributes attributes
+    ) {
         this.name = name;
         this.descriptor = descriptor;
         this.signature = signature;
         this.value = value;
         this.access = access;
         this.annotations = annotations;
+        this.attributes = attributes;
     }
 
     /**
@@ -106,8 +136,12 @@ public final class BytecodeField {
             this.signature,
             this.value
         );
-        this.annotations.annotations()
-            .forEach(annotation -> annotation.write(fvisitor));
+        if (fvisitor != null) {
+            this.annotations.annotations()
+                .forEach(annotation -> annotation.write(fvisitor));
+            this.attributes.write(fvisitor);
+            fvisitor.visitEnd();
+        }
     }
 
     /**
@@ -125,7 +159,12 @@ public final class BytecodeField {
             this.descriptor,
             this.signature,
             this.value,
-            this.annotations.directives(format, String.format("annotations-%s", xml))
+            this.annotations.directives(
+                format, new PrefixedName("annotations-", xml).encode()
+            ),
+            this.attributes.directives(
+                format, new PrefixedName("attributes-", xml).encode()
+            )
         );
     }
 
@@ -141,7 +180,8 @@ public final class BytecodeField {
                 && Objects.equals(this.descriptor, field.descriptor)
                 && Objects.equals(this.signature, field.signature)
                 && Objects.equals(this.value, field.value)
-                && Objects.equals(this.annotations, field.annotations);
+                && Objects.equals(this.annotations, field.annotations)
+                && Objects.equals(this.attributes, field.attributes);
         } else {
             result = false;
         }
@@ -151,15 +191,17 @@ public final class BytecodeField {
     @Override
     public int hashCode() {
         return Objects.hash(
-            this.name, this.descriptor, this.signature, this.value, this.access, this.annotations
+            this.name, this.descriptor, this.signature, this.value, this.access, this.annotations,
+            this.attributes
         );
     }
 
     @Override
     public String toString() {
         return String.format(
-            "BytecodeField(name=%s, descriptor=%s, signature=%s, value=%s, access=%d, annotations=%s)",
-            this.name, this.descriptor, this.signature, this.value, this.access, this.annotations
+            "BytecodeField(name=%s, descriptor=%s, signature=%s, value=%s, access=%d, annotations=%s, attributes=%s)",
+            this.name, this.descriptor, this.signature, this.value, this.access, this.annotations,
+            this.attributes
         );
     }
 

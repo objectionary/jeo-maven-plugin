@@ -7,8 +7,10 @@ package org.eolang.jeo;
 import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Cached transformation.
@@ -42,6 +44,7 @@ public final class Caching implements Transformation {
 
     /**
      * Constructor.
+     *
      * @param origin Original transformation to cache
      * @param fingerprint Options the target is produced with
      */
@@ -89,8 +92,23 @@ public final class Caching implements Transformation {
             result = Files.readAllBytes(target);
         } else {
             final byte[] transform = this.origin.transform();
-            Files.createDirectories(target.getParent());
-            Files.write(target, transform);
+            final Path dir = target.toAbsolutePath().getParent();
+            Files.createDirectories(dir);
+            final Path temp = Files.createTempFile(
+                dir, String.format("%s.", target.getFileName()), ".tmp"
+            );
+            Files.write(temp, transform);
+            Files.deleteIfExists(this.cache());
+            try {
+                Files.move(
+                    temp,
+                    target,
+                    StandardCopyOption.REPLACE_EXISTING,
+                    StandardCopyOption.ATOMIC_MOVE
+                );
+            } catch (final AtomicMoveNotSupportedException exception) {
+                Files.move(temp, target, StandardCopyOption.REPLACE_EXISTING);
+            }
             if (!this.print.isEmpty()) {
                 Files.write(this.cache(), this.print.getBytes(StandardCharsets.UTF_8));
             }
@@ -100,24 +118,19 @@ public final class Caching implements Transformation {
     }
 
     private boolean alreadyTransformed() throws IOException {
-        final Path source = this.source();
         final Path target = this.target();
         return Files.exists(target)
-            && Files.exists(source)
-            && Files.getLastModifiedTime(target).compareTo(Files.getLastModifiedTime(source)) >= 0
+            && Files.size(target) > 0
+            && this.newer()
             && this.sameOptions();
     }
 
-    /**
-     * Was the target produced with the options of this run?
-     *
-     * <p>The modification times say nothing about the options the file was
-     * made with, so changing the mode and running again without "clean" kept
-     * the old file. The options are written next to the target and compared
-     * before the skip.</p>
-     * @return True if the options are the same, or unknown
-     * @throws IOException If the options cannot be read
-     */
+    private boolean newer() throws IOException {
+        return Files.exists(this.source())
+            && Files.getLastModifiedTime(this.target())
+            .compareTo(Files.getLastModifiedTime(this.source())) >= 0;
+    }
+
     private boolean sameOptions() throws IOException {
         final boolean same;
         final Path cache = this.cache();
@@ -133,10 +146,6 @@ public final class Caching implements Transformation {
         return same;
     }
 
-    /**
-     * The file that keeps the options next to the target.
-     * @return Path to it
-     */
     private Path cache() {
         final Path target = this.target();
         return target.resolveSibling(String.format("%s.jeo-cache", target.getFileName()));

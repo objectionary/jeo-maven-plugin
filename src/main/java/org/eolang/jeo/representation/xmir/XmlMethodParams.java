@@ -66,8 +66,8 @@ final class XmlMethodParams {
         return new BytecodeMethodParameters(
             this.parameters(),
             this.annotations(),
-            this.count("annotable-visible"),
-            this.count("annotable-invisible")
+            this.count("visible"),
+            this.count("invisible")
         );
     }
 

@@ -27,7 +27,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>3.6.3</version>
+        <version>3.6.4</version>
         <executions>
           <execution>
             <phase>
@@ -51,10 +51,10 @@
           <omitComments>false</omitComments>
           <debug>true</debug>
           <excludes>
-            <exclude>ignored/**/*.class</exclude>
+            <exclude>**/ignored/**</exclude>
           </excludes>
           <includes>
-            <include>**/Included.class</include>
+            <include>**/*.class</include>
           </includes>
         </configuration>
         <executions>

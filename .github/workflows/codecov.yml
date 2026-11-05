@@ -7,16 +7,22 @@ name: codecov
   push:
     branches:
       - master
+permissions:
+  contents: read
+
+concurrency:
+  group: codecov-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   codecov:
     name: Upload coverage reports to Codecov
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-java@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
-          java-version: 21
+          java-version: 25
       - uses: actions/cache@v6
         with:
           path: ~/.m2/repository
@@ -24,7 +30,7 @@ jobs:
           restore-keys: |
             maven-
       - run: mvn clean install -ntp -Pqulice --errors --batch-mode
-      - uses: codecov/codecov-action@v6
+      - uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./target/site/jacoco/jacoco.xml

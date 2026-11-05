@@ -8,7 +8,6 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.locks.ReentrantLock;
 import org.eolang.jeo.representation.Counter;
 
 /**
@@ -52,11 +51,6 @@ public final class Logging implements Transformation {
     private final Counter counter;
 
     /**
-     * Guards sequential ordering of log messages across concurrent transformations.
-     */
-    private final ReentrantLock lock;
-
-    /**
      * Constructor.
      *
      * @param process Process name (gerund form)
@@ -77,7 +71,6 @@ public final class Logging implements Transformation {
         this.origin = origin;
         this.debug = debug;
         this.counter = counter;
-        this.lock = new ReentrantLock();
     }
 
     @Override
@@ -96,7 +89,9 @@ public final class Logging implements Transformation {
         this.logStartWithSize(this.source());
         final long start = System.currentTimeMillis();
         result = this.origin.transform();
-        this.logEndWithSize(this.source(), this.target(), System.currentTimeMillis() - start);
+        this.logEndWithSize(
+            this.source(), this.target(), result.length, System.currentTimeMillis() - start
+        );
         return result;
     }
 
@@ -110,33 +105,34 @@ public final class Logging implements Transformation {
         );
     }
 
-    private void logEndWithSize(final Path source, final Path after, final long time) {
-        this.lock.lock();
-        try {
-            if (this.debug) {
-                Logger.info(
+    private void logEndWithSize(
+        final Path source, final Path after, final long size, final long time
+    ) {
+        if (this.debug) {
+            this.counter.next(
+                number -> Logger.info(
                     this,
                     "%s %[file]s %s to %[file]s (%[size]s) in %[ms]s",
-                    this.counter.next(),
+                    number,
                     source,
                     this.participle,
                     after,
-                    Logging.size(after),
+                    size,
                     time
-                );
-            } else {
-                Logger.info(
+                )
+            );
+        } else {
+            this.counter.next(
+                number -> Logger.info(
                     this,
                     "%s %[file]s (%[size]s) %s in %[ms]s",
-                    this.counter.next(),
+                    number,
                     after.getFileName(),
-                    Logging.size(after),
+                    size,
                     this.participle,
                     time
-                );
-            }
-        } finally {
-            this.lock.unlock();
+                )
+            );
         }
     }
 

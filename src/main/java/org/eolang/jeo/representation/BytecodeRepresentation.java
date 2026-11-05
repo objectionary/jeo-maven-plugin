@@ -116,7 +116,11 @@ public final class BytecodeRepresentation {
         if (format.withListing()) {
             fmt = new Format(
                 format,
-                Format.LISTING, new BytecodeListing(this.input.value()).toString()
+                Format.LISTING,
+                new BytecodeListing(
+                    DisassembleMode.fromString(format.mode()).asmOptions(),
+                    this.input.value()
+                ).toString()
             );
         } else {
             fmt = format;

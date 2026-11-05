@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import java.util.Iterator;
+import org.eolang.jeo.representation.PrefixedName;
 import org.objectweb.asm.Type;
 import org.xembly.Directive;
 
@@ -81,7 +82,7 @@ public final class DirectivesMethodParam implements Iterable<Directive> {
         if (this.name == null) {
             result = String.format("%s%d", prefix, this.index);
         } else {
-            result = String.format("%s%s", prefix, this.name);
+            result = new PrefixedName(prefix, this.name).encode();
         }
         return result;
     }

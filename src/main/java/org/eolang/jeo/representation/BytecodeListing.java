@@ -31,11 +31,27 @@ public final class BytecodeListing {
     private final byte[] bytecode;
 
     /**
+     * Options of the class reader.
+     */
+    private final int options;
+
+    /**
      * Constructor.
      *
-     * @param bytecode The raw bytecode array to format
+     * @param bytecode Bytecode
      */
     BytecodeListing(final byte... bytecode) {
+        this(0, bytecode);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param options Options of the class reader, the same the model is read with
+     * @param bytecode Bytecode
+     */
+    BytecodeListing(final int options, final byte... bytecode) {
+        this.options = options;
         this.bytecode = bytecode.clone();
     }
 
@@ -44,7 +60,7 @@ public final class BytecodeListing {
         final ClassReader reader = new ClassReader(this.bytecode);
         final StringWriter writer = new StringWriter();
         try (PrintWriter out = new PrintWriter(writer)) {
-            reader.accept(new TraceClassVisitor(out), 0);
+            reader.accept(new TraceClassVisitor(out), this.options);
         }
         return writer.toString();
     }

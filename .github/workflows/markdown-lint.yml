@@ -7,13 +7,27 @@ name: markdown-lint
   push:
     branches:
       - master
+    paths:
+      - '**.md'
+      - '.github/workflows/markdown-lint.yml'
+      - '.markdownlint.yml'
   pull_request:
     branches:
       - master
+    paths:
+      - '**.md'
+      - '.github/workflows/markdown-lint.yml'
+      - '.markdownlint.yml'
+permissions:
+  contents: read
+
+concurrency:
+  group: markdown-lint-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   markdown-lint:
     timeout-minutes: 15
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v6
-      - uses: DavidAnson/markdownlint-cli2-action@v24.2.0
+      - uses: actions/checkout@v7
+      - uses: DavidAnson/markdownlint-cli2-action@v25.0.0

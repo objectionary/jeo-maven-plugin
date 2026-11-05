@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation;
 
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +36,11 @@ public final class PrefixedName {
      * Blank name pattern.
      */
     private static final Pattern BLANKED = Pattern.compile("^\\s*$");
+
+    /**
+     * Splits a name around its path delimiters, keeping them.
+     */
+    private static final Pattern PARTS = Pattern.compile("(?<=[./])|(?=[./])");
 
     /**
      * Delimiter lookbehind pattern.
@@ -122,10 +128,10 @@ public final class PrefixedName {
         if (PrefixedName.BLANKED.matcher(this.origin).matches()) {
             throw new IllegalArgumentException(PrefixedName.BLANK);
         }
-        final String encoded = this.delimited
-            .matcher(this.origin)
-            .replaceAll(Matcher.quoteReplacement(this.prefix));
-        return this.parts(encoded, true);
+        return this.parts(
+            this.delimited.matcher(this.origin).replaceAll(Matcher.quoteReplacement(this.prefix)),
+            true
+        );
     }
 
     /**
@@ -140,15 +146,17 @@ public final class PrefixedName {
         return this.parts(this.prefixed.matcher(this.origin).replaceAll(""), false);
     }
 
-    /**
-     * Encode or decode name parts while preserving the path delimiters.
-     * @param value Name to transform
-     * @param encode Whether to encode (or decode)
-     * @return Transformed name
-     */
+    @Override
+    public String toString() {
+        return String.format(
+            "PrefixedName(prefix=%s, origin=%s, delimited=%s, prefixed=%s)",
+            this.prefix, this.origin, this.delimited, this.prefixed
+        );
+    }
+
     private String parts(final String value, final boolean encode) {
         final StringBuilder result = new StringBuilder();
-        for (final String part : value.split("(?<=[./])|(?=[./])", -1)) {
+        for (final String part : PrefixedName.PARTS.split(value, -1)) {
             if (".".equals(part) || "/".equals(part)) {
                 result.append(part);
             } else if (encode && part.startsWith(this.prefix)) {
@@ -164,20 +172,18 @@ public final class PrefixedName {
         return result.toString();
     }
 
-    /**
-     * Encode a name part without changing the prefix alphabet.
-     * @param part Name part
-     * @return Encoded part
-     */
     private static String safe(final String part) {
-        return part.replace(" ", "%20");
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-            "PrefixedName(prefix=%s, origin=%s, delimited=%s, prefixed=%s)",
-            this.prefix, this.origin, this.delimited, this.prefixed
-        );
+        final StringBuilder result = new StringBuilder();
+        for (final int code : part.codePoints().toArray()) {
+            if (Character.isWhitespace(code) || "%+,|':;!?[]{}()⟧⟦↦⤍>\"ξΦ⊥".indexOf(code) >= 0) {
+                for (final byte octet : new String(Character.toChars(code))
+                    .getBytes(StandardCharsets.UTF_8)) {
+                    result.append(String.format("%%%02X", octet & 0xFF));
+                }
+            } else {
+                result.appendCodePoint(code);
+            }
+        }
+        return result.toString();
     }
 }

@@ -8,6 +8,12 @@ on:
     - cron: "0 2 * * *"   # Runs daily at 02:00 UTC
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   test:
     strategy:
@@ -16,8 +22,8 @@ jobs:
         java: [ 23 ]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-java@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
         with:
           distribution: 'zulu'
           java-version: ${{ matrix.java }}
@@ -28,3 +34,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
       - run: mvn clean install -ntp -D"skipTests" -P"verify" --errors --batch-mode
+  telegram:
+    needs: test
+    runs-on: ubuntu-26.04
+    if: ${{ always() }}
+    permissions:
+      actions: read
+    steps:
+      - uses: yegor256/terald-action@0.1.0
+        with:
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          chat: ${{ secrets.TELEGRAM_CHAT }}

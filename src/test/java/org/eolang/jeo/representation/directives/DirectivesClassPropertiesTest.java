@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import org.eolang.jeo.representation.ClassName;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -78,6 +79,27 @@ final class DirectivesClassPropertiesTest {
                     "//o[contains(@name, 'modifiers')]/o[contains(@name, 'interface') and contains(@base, 'true')]"
                 )
             )
+        );
+    }
+
+    @Test
+    void writesNoInterfacesWhenTheyAreAbsent() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "A class without interfaces must get an empty list of them",
+            new Xembler(
+                new Directives()
+                    .add("o").append(
+                        new DirectivesClassProperties(
+                            new Format(),
+                            52,
+                            1,
+                            new ClassName("A"),
+                            "java/lang/Object",
+                            (String[]) null
+                        )
+                    ).up()
+            ).xml(),
+            XhtmlMatchers.hasXPaths("/o/o[contains(@name,'interfaces') and not(o[@as])]")
         );
     }
 }

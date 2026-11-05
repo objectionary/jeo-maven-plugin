@@ -13,13 +13,16 @@ name: phino
 concurrency:
   group: phino-${{ github.ref }}
   cancel-in-progress: true
+permissions:
+  contents: read
+
 jobs:
   test:
     timeout-minutes: 15
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-java@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
         with:
           distribution: 'zulu'
           java-version: 21
@@ -29,9 +32,7 @@ jobs:
           key: maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             maven-
-      - name: Install phino
-        run: |
-          sudo curl -L -o /usr/local/bin/phino http://phino.objectionary.com/releases/ubuntu-24.04/phino-0.0.0.67
-          sudo chmod +x /usr/local/bin/phino
-          phino --version
+      - uses: objectionary/phino@f8f28f00a9a09605a9404539ed66e4493c325d8c  # master
+        with:
+          version: 0.0.156
       - run: mvn clean install -ntp -D"skipTests" -D"invoker.test=phi-unphi" --errors --batch-mode

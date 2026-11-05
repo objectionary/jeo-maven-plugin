@@ -69,4 +69,27 @@ final class DirectivesMethodPropertiesTest {
             )
         );
     }
+
+    @Test
+    void writesNoExceptionsWhenTheyAreAbsent() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "A method without exceptions must get an empty list of them",
+            new Xembler(
+                new Directives()
+                    .add("o").append(
+                        new DirectivesMethodProperties(
+                            Opcodes.ACC_PUBLIC,
+                            "m",
+                            "()V",
+                            "",
+                            null,
+                            new DirectivesMaxs(),
+                            new DirectivesMethodParams(),
+                            new Format()
+                        )
+                    ).up()
+            ).xml(),
+            XhtmlMatchers.hasXPaths("/o/o[contains(@name,'exceptions')]")
+        );
+    }
 }
