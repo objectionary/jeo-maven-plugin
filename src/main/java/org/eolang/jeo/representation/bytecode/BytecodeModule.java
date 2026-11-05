@@ -117,15 +117,18 @@ public final class BytecodeModule implements BytecodeAttribute {
             this.access,
             this.version
         );
-        if (this.main != null) {
-            module.visitMainClass(this.main);
+        if (module != null) {
+            if (this.main != null) {
+                module.visitMainClass(this.main);
+            }
+            this.packages().forEach(module::visitPackage);
+            this.requires().forEach(req -> req.write(module));
+            this.exports().forEach(exp -> exp.write(module));
+            this.opens().forEach(opn -> opn.write(module));
+            this.provides().forEach(prov -> prov.write(module));
+            this.uses().forEach(module::visitUse);
+            module.visitEnd();
         }
-        this.packages().forEach(module::visitPackage);
-        this.requires().forEach(req -> req.write(module));
-        this.exports().forEach(exp -> exp.write(module));
-        this.opens().forEach(opn -> opn.write(module));
-        this.provides().forEach(prov -> prov.write(module));
-        this.uses().forEach(module::visitUse);
     }
 
     @Override

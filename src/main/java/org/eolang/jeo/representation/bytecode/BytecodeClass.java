@@ -363,6 +363,7 @@ public final class BytecodeClass {
                 this.supername(),
                 this.props.interfaces()
             );
+            this.cmethods.forEach(method -> method.register(visitor));
             this.annotations.write(visitor);
             this.fields.forEach(field -> field.write(visitor));
             this.cmethods.forEach(method -> method.write(visitor));
@@ -386,7 +387,7 @@ public final class BytecodeClass {
 
     private String supername() {
         final String result;
-        if ("module-info".equals(this.name.full())) {
+        if ("module-info".equals(this.name.full()) || "java/lang/Object".equals(this.name.full())) {
             result = null;
         } else {
             result = this.props.supername();

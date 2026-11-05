@@ -7,12 +7,8 @@ package org.eolang.jeo.representation.xmir;
 /**
  * XML document abstraction interface.
  *
- * <p>This interface provides an abstraction layer for XML documents, allowing the use of different
- * XML implementations:</p>
- * <ul>
- * <li>JCabi XML library implementation</li>
- * <li>Native Java XML implementation</li>
- * </ul>
+ * <p>This interface provides an abstraction layer for XML documents. The only
+ * implementation is {@link JcabiXmlDoc}, based on the JCabi XML library.</p>
  *
  * @since 0.7.0
  */

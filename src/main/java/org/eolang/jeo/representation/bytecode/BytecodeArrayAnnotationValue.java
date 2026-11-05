@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,14 +41,16 @@ public final class BytecodeArrayAnnotationValue implements BytecodeAnnotationVal
         final String name, final List<BytecodeAnnotationValue> values
     ) {
         this.name = name;
-        this.values = values;
+        this.values = new ArrayList<>(values);
     }
 
     @Override
     public void writeTo(final AnnotationVisitor visitor) {
         final AnnotationVisitor array = visitor.visitArray(this.name);
-        this.values.forEach(value -> value.writeTo(array));
-        array.visitEnd();
+        if (array != null) {
+            this.values.forEach(value -> value.writeTo(array));
+            array.visitEnd();
+        }
     }
 
     @Override

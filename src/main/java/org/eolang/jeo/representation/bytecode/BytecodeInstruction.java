@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.directives.OpcodeName;
+import org.objectweb.asm.ConstantDynamic;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -61,7 +63,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
         final List<Object> args
     ) {
         this.opcode = opcode;
-        this.args = args;
+        this.args = new ArrayList<>(args);
     }
 
     @Override
@@ -336,6 +338,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
                 final Object arg = this.args.get(0);
                 if (arg instanceof Long || arg instanceof Double) {
                     result = 2;
+                } else if (arg instanceof ConstantDynamic) {
+                    result = ((ConstantDynamic) arg).getSize();
                 } else {
                     result = 1;
                 }
@@ -388,6 +392,17 @@ public final class BytecodeInstruction implements BytecodeEntry {
      */
     boolean isVarInstruction() {
         return Instruction.find(this.opcode).isVarInstruction();
+    }
+
+    /**
+     * Put the constant this instruction loads into the constant pool, if it is an ldc.
+     *
+     * @param writer Class writer
+     */
+    void register(final CustomClassWriter writer) {
+        if (this.opcode == Opcodes.LDC) {
+            writer.register(this.args.get(0));
+        }
     }
 
     /**

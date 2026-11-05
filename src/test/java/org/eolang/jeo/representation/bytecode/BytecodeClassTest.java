@@ -10,6 +10,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
@@ -116,6 +117,32 @@ final class BytecodeClassTest {
     }
 
     @Test
+    void keepsShortLdcInMethodCloseToLimit() {
+        final BytecodeClass clazz = new BytecodeClass("g/Big");
+        final BytecodeMethodBuilder first = clazz.withMethod(
+            new BytecodeMethodProperties("a", "()V", Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC),
+            new BytecodeMaxs(1, 0)
+        );
+        for (int field = 0; field < 300; ++field) {
+            first.opcode(Opcodes.GETSTATIC, "g/Big", String.format("f%d", field), "I")
+                .opcode(Opcodes.POP);
+        }
+        first.opcode(Opcodes.RETURN);
+        final BytecodeMethodBuilder big = clazz.withMethod(
+            new BytecodeMethodProperties("big", "()V", Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC),
+            new BytecodeMaxs(1, 0)
+        );
+        for (int step = 0; step < 21_844; ++step) {
+            big.opcode(Opcodes.LDC, String.format("s%d", step % 100)).opcode(Opcodes.POP);
+        }
+        big.opcode(Opcodes.RETURN);
+        Assertions.assertDoesNotThrow(
+            () -> new BytecodeObject(clazz).bytecode(),
+            "A method that fits in 64 KB with short ldc must not grow past the limit"
+        );
+    }
+
+    @Test
     void generatesCodeForInterface() {
         Assertions.assertDoesNotThrow(
             () -> new BytecodeObject(
@@ -206,6 +233,17 @@ final class BytecodeClassTest {
                 "//o[@name='j$same']",
                 "//o[@name='jm$same']"
             )
+        );
+    }
+
+    @Test
+    void keepsJavaLangObjectWithNoSuperclass() {
+        MatcherAssert.assertThat(
+            "java.lang.Object must not become its own superclass (see #1770)",
+            new ClassReader(
+                new BytecodeObject(new BytecodeClass("java/lang/Object")).bytecode().bytes()
+            ).getSuperName(),
+            Matchers.nullValue()
         );
     }
 

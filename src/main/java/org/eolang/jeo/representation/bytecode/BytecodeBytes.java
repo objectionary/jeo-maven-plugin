@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Bytecode byte array.
@@ -30,7 +31,7 @@ public final class BytecodeBytes {
      * @param bytes Value bytes
      */
     public BytecodeBytes(final String type, final byte[] bytes) {
-        this(DataType.findByBase(type), bytes);
+        this(DataType.findByBase(type), BytecodeBytes.copy(bytes));
     }
 
     /**
@@ -51,7 +52,9 @@ public final class BytecodeBytes {
      * @return Object
      */
     public Object object(final Codec codec) {
-        return codec.decode(this.vbytes, this.vtype);
+        return codec.decode(
+            BytecodeBytes.copy(this.vbytes), this.vtype
+        );
     }
 
     /**
@@ -61,5 +64,9 @@ public final class BytecodeBytes {
      */
     public String type() {
         return this.vtype.caption().toLowerCase(Locale.ROOT);
+    }
+
+    private static byte[] copy(final byte[] bytes) {
+        return Optional.ofNullable(bytes).map(byte[]::clone).orElse(null);
     }
 }

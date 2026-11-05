@@ -5,9 +5,13 @@
 package org.eolang.jeo.representation.directives;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XMLDocument;
 import java.util.Collections;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.xembly.ImpossibleModificationException;
@@ -45,6 +49,38 @@ final class DirectivesMethodParamTest {
             XhtmlMatchers.hasXPath(
                 "./o[contains(@name, 'p$this')]"
             )
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"a b", "ξ", "Φ", "a\tb", "x>y"})
+    void encodesParameterNameIntoPhiLabel(final String name)
+        throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Parameter object name doesnt match the label grammar of phi calculus",
+            new XMLDocument(
+                new Xembler(
+                    new DirectivesMethodParam(
+                        new Format(), 0, name, Opcodes.ACC_FINAL, Type.INT_TYPE
+                    )
+                ).xml()
+            ).xpath("/o/@name").get(0),
+            Matchers.matchesPattern("[a-z][^ \\r\\n\\t,.|':;!?\\]\\[}{)(⟧⟦↦⤍>\"ξΦ⊥]*")
+        );
+    }
+
+    @Test
+    void keepsPlainParameterNameUnchanged() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Plain ASCII parameter name must not be changed",
+            new XMLDocument(
+                new Xembler(
+                    new DirectivesMethodParam(
+                        new Format(), 0, "foo_1", Opcodes.ACC_FINAL, Type.INT_TYPE
+                    )
+                ).xml()
+            ).xpath("/o/@name").get(0),
+            Matchers.equalTo("pfoo_1")
         );
     }
 

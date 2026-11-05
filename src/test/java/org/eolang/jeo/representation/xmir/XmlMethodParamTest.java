@@ -40,6 +40,23 @@ final class XmlMethodParamTest {
     }
 
     @Test
+    void keepsAPlusSignInTheTypeDescriptor() throws ImpossibleModificationException {
+        final BytecodeMethodParameter expected = new BytecodeMethodParameter(
+            0,
+            "foo",
+            Opcodes.ACC_FINAL,
+            Type.getType("La+b;")
+        );
+        MatcherAssert.assertThat(
+            "a '+' in the type descriptor must survive the round trip, not become a space (see #1793)",
+            new XmlMethodParam(
+                new NativeXmlNode(new Xembler(expected.directives(new Format())).xml())
+            ).bytecode(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
     void parsesMethodParamWithoutName() throws ImpossibleModificationException {
         final BytecodeMethodParameter expected = new BytecodeMethodParameter(
             0,

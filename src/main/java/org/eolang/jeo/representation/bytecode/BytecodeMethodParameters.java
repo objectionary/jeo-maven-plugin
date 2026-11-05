@@ -152,7 +152,9 @@ public final class BytecodeMethodParameters {
         } else if (other instanceof BytecodeMethodParameters) {
             final BytecodeMethodParameters parameters = (BytecodeMethodParameters) other;
             result = Objects.equals(this.params, parameters.params)
-                && Objects.equals(this.annotations, parameters.annotations);
+                && Objects.equals(this.annotations, parameters.annotations)
+                && this.visible == parameters.visible
+                && this.invisible == parameters.invisible;
         } else {
             result = false;
         }
@@ -161,7 +163,7 @@ public final class BytecodeMethodParameters {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.params, this.annotations);
+        return Objects.hash(this.params, this.annotations, this.visible, this.invisible);
     }
 
     @Override

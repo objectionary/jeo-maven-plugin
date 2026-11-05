@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo;
 
+import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
@@ -121,13 +122,18 @@ public final class GlobFilter implements Predicate<Path> {
         final Set<PathMatcher> white = new Unchecked<>(this.whitelist).value();
         final Set<PathMatcher> black = new Unchecked<>(this.blacklist).value();
         final boolean included;
-        if (black.stream().anyMatch(matcher -> matcher.matches(path))) {
+        if (black.stream().anyMatch(matcher -> GlobFilter.matches(matcher, path))) {
             included = false;
         } else {
             included = white.isEmpty() || white.stream()
-                .anyMatch(matcher -> matcher.matches(path));
+                .anyMatch(matcher -> GlobFilter.matches(matcher, path));
         }
         return included;
+    }
+
+    private static boolean matches(final PathMatcher matcher, final Path path) {
+        return matcher.matches(path) || !path.isAbsolute()
+            && matcher.matches(path.getFileSystem().getPath(File.separator).resolve(path));
     }
 
     private static PathMatcher matcher(final String pattern) {

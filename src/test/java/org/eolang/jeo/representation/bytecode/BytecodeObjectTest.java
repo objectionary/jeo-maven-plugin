@@ -4,6 +4,9 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.directives.DirectivesMetas;
@@ -24,6 +27,18 @@ import org.xembly.Xembler;
  * @since 0.6
  */
 final class BytecodeObjectTest {
+
+    @Test
+    void retainsTheConstructedTopClass() {
+        final BytecodeClass first = new BytecodeClass("First");
+        final List<BytecodeClass> classes = new ArrayList<>(Collections.singleton(first));
+        final BytecodeObject object = new BytecodeObject("", classes);
+        classes.set(0, new BytecodeClass("Second"));
+        MatcherAssert.assertThat(
+            "Replacing a caller-owned element changed the constructed top class",
+            object.top(), Matchers.sameInstance(first)
+        );
+    }
 
     @Test
     void convertsSimpleClassWithoutConstructorToXmir() {

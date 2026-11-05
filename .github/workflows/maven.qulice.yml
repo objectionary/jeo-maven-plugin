@@ -18,6 +18,12 @@ name: mvn-qulice
       - '**.java'
       - '**/pom.xml'
       - '.github/workflows/maven.qulice.yml'
+permissions:
+  contents: read
+
+concurrency:
+  group: maven.qulice-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   check:
     strategy:
@@ -26,8 +32,8 @@ jobs:
         java: [ 23 ]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-java@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
         with:
           distribution: 'zulu'
           java-version: ${{ matrix.java }}

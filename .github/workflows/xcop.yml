@@ -24,10 +24,16 @@ name: xcop
       - '**.html'
       - '**.xsd'
       - '.github/workflows/xcop.yml'
+permissions:
+  contents: read
+
+concurrency:
+  group: xcop-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   xcop:
     timeout-minutes: 15
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: g4s8/xcop-action@v1.3

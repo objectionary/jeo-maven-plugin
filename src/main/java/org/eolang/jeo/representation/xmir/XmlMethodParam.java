@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.Optional;
-import org.eolang.jeo.representation.EncodedString;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodParameter;
 import org.eolang.jeo.representation.directives.JeoFqn;
 import org.objectweb.asm.Type;
@@ -64,7 +63,7 @@ public final class XmlMethodParam {
     }
 
     private Type type() {
-        return Type.getType(new EncodedString(this.child("type").string()).decode());
+        return Type.getType(this.child("type").string());
     }
 
     private String name() {
