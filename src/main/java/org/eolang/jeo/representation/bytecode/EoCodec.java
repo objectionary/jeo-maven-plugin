@@ -51,10 +51,14 @@ public final class EoCodec implements Codec {
             case SHORT:
             case INT:
             case LONG:
-            case FLOAT:
             case DOUBLE:
                 result = ByteBuffer.allocate(Double.BYTES)
                     .putDouble(((Number) object).doubleValue())
+                    .array();
+                break;
+            case FLOAT:
+                result = ByteBuffer.allocate(Double.BYTES)
+                    .putLong(new WideFloat(((Number) object).floatValue()).bits())
                     .array();
                 break;
             default:
@@ -87,7 +91,7 @@ public final class EoCodec implements Codec {
                 result = (long) ByteBuffer.wrap(bytes).getDouble();
                 break;
             case FLOAT:
-                result = (float) ByteBuffer.wrap(bytes).getDouble();
+                result = new NarrowFloat(ByteBuffer.wrap(bytes).getLong()).value();
                 break;
             case DOUBLE:
                 result = ByteBuffer.wrap(bytes).getDouble();
