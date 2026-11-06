@@ -7,6 +7,7 @@ package org.eolang.jeo;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
@@ -14,10 +15,11 @@ import java.util.regex.Pattern;
  * Substitutes ${} expressions with concrete values.
  * This class was created to mitigate the following issue:
  * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1373">1373</a>
- * We could have use ${basedir}/target/classes instead of ${project.build.outputDirectory}
- * but it is not guaranteed that output directory is always 'target/classes' and the basedir
- * might be different from '.'. Thus, we just handle the case when we run plugin in the folder
- * with pom.xml file.
+ * We could have use ${basedir}/target/classes instead of
+ * ${project.build.outputDirectory}
+ * but it is not guaranteed that output directory is always 'target/classes'
+ * and the basedir might be different from '.'. Thus, we just handle the case
+ * when we run plugin in the folder with pom.xml file.
  *
  * @since 0.15.0
  */
@@ -33,7 +35,9 @@ public final class MavenPath {
     /**
      * Pattern for basedir.
      */
-    private static final Pattern BASEDIR = Pattern.compile("${basedir}", Pattern.LITERAL);
+    private static final Pattern BASEDIR = Pattern.compile(
+        "${basedir}", Pattern.LITERAL
+    );
 
     /**
      * Pattern for output directory.
@@ -59,6 +63,24 @@ public final class MavenPath {
     /**
      * Ctor.
      *
+     * @param path The file path as string
+     */
+    public MavenPath(final String path) {
+        this(Optional.ofNullable(path).map(File::new).orElse(null));
+    }
+
+    /**
+     * Ctor.
+     *
+     * @param path The file path as NIO path
+     */
+    public MavenPath(final Path path) {
+        this(Optional.ofNullable(path).map(Path::toFile).orElse(null));
+    }
+
+    /**
+     * Ctor.
+     *
      * @param path The file path
      */
     public MavenPath(final File path) {
@@ -71,6 +93,9 @@ public final class MavenPath {
      * @return The resolved path
      */
     public Path resolve() {
+        if (this.path == null) {
+            throw new IllegalArgumentException("Path can't be null");
+        }
         String res = this.path.toPath().toString();
         res = MavenPath.PROJ_BASEDIR.matcher(res).replaceAll(".");
         res = MavenPath.BASEDIR.matcher(res).replaceAll(".");
