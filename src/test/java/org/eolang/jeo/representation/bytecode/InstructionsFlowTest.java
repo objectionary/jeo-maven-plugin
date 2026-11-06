@@ -5,21 +5,42 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.objectweb.asm.Opcodes;
 
 /**
- * Test case for {@link InstructionsFlow}.
+ * Test cases for {@link InstructionsFlow}.
  *
  * @since 0.18.0
  */
 final class InstructionsFlowTest {
+
+    @Test
+    void rejectsLoopWithGrowingStack() {
+        final BytecodeLabel loop = new BytecodeLabel("loop");
+        MatcherAssert.assertThat(
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new MaxStack(
+                    Arrays.asList(
+                        loop,
+                        new BytecodeInstruction(Opcodes.ICONST_0),
+                        new BytecodeInstruction(Opcodes.GOTO, loop)
+                    ),
+                    Collections.emptyList()
+                ).value()
+            ).getMessage(),
+            Matchers.containsString("Incompatible values at loop target 0")
+        );
+    }
 
     @Test
     @Timeout(value = 10, unit = TimeUnit.SECONDS)

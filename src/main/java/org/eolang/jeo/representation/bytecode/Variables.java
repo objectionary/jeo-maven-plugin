@@ -86,6 +86,11 @@ final class Variables implements InstructionsFlow.Reducible<Variables> {
     }
 
     @Override
+    public boolean compatible(final Variables other) {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return String.format("Variables(all=%s)", this.all);
     }
