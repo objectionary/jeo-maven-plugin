@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeRecordComponent;
 import org.objectweb.asm.tree.RecordComponentNode;
 
@@ -44,7 +45,8 @@ final class AsmRecordComponents {
                 comp.descriptor,
                 comp.signature,
                 new AsmAnnotations(comp).bytecode(),
-                new AsmTypeAnnotations(comp).bytecode()
+                new AsmTypeAnnotations(comp).bytecode(),
+                new BytecodeAttributes(new AsmUnknownAttributes(comp).bytecode())
             )
         ).collect(Collectors.toList());
     }

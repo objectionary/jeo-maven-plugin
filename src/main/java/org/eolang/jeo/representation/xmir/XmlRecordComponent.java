@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.xmir;
 
 import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotations;
+import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeRecordComponent;
 import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotations;
 
@@ -52,7 +53,8 @@ final class XmlRecordComponent {
             this.descriptor(),
             this.signature(),
             this.annotations(),
-            this.typeAnnotations()
+            this.typeAnnotations(),
+            this.attributes()
         );
     }
 
@@ -80,6 +82,13 @@ final class XmlRecordComponent {
             .map(XmlTypeAnnotations::new)
             .map(XmlTypeAnnotations::bytecode)
             .orElseGet(BytecodeTypeAnnotations::new);
+    }
+
+    private BytecodeAttributes attributes() {
+        return this.byNameOpt("attributes-record-component")
+            .map(XmlAttributes::new)
+            .map(XmlAttributes::attributes)
+            .orElseGet(BytecodeAttributes::new);
     }
 
     private XmlNode byName(final String name) {
