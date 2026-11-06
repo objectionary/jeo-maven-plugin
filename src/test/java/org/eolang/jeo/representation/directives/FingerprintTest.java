@@ -34,4 +34,13 @@ final class FingerprintTest {
             Matchers.equalTo(new Fingerprint(new Format(Format.MODE, "debug")).toString())
         );
     }
+
+    @Test
+    void includesJeoVersion() {
+        MatcherAssert.assertThat(
+            "the fingerprint must contain the current jeo version",
+            new Fingerprint(new Format()).toString(),
+            Matchers.containsString("jeo-version=")
+        );
+    }
 }

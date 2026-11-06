@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import com.jcabi.manifests.Manifests;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -35,6 +36,7 @@ public final class Fingerprint {
     @Override
     public String toString() {
         final Map<String, Object> props = new TreeMap<>();
+        props.put("jeo-version", Manifests.read("JEO-Version"));
         props.put(Format.COMMENTS, this.format.comments());
         props.put(Format.LISTING, this.format.listing());
         props.put(Format.MODE, this.format.mode());

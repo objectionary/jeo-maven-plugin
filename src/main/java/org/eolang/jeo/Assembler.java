@@ -5,6 +5,7 @@
 package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
+import com.jcabi.manifests.Manifests;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -101,7 +102,8 @@ public final class Assembler {
                 new Informative(new Assembling(this.input, this.output, path)),
                 this.debug,
                 counter
-            )
+            ),
+            String.format("jeo-version=%s", Manifests.read("JEO-Version"))
         );
         trans.transform();
         return trans.target();
