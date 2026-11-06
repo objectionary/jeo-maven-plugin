@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
@@ -16,9 +17,23 @@ import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 public final class XmlMaxs {
 
     /**
+     * How many operands a maxs carries.
+     */
+    private static final int OPERANDS = 2;
+
+    /**
      * XML node.
      */
     private final XmlJeoObject node;
+
+    /**
+     * Constructor.
+     *
+     * @param xmlnode Node
+     */
+    public XmlMaxs(final XmlNode xmlnode) {
+        this(new XmlJeoObject(xmlnode));
+    }
 
     /**
      * Constructor.
@@ -45,7 +60,8 @@ public final class XmlMaxs {
             result = true;
         } else if (other instanceof XmlMaxs) {
             final XmlMaxs maxs = (XmlMaxs) other;
-            result = this.stack() == maxs.stack() && this.locals() == maxs.locals();
+            result = this.stack() == maxs.stack()
+                && this.locals() == maxs.locals();
         } else {
             result = false;
         }
@@ -70,13 +86,27 @@ public final class XmlMaxs {
         return this.ichild(1);
     }
 
+    private List<XmlNode> operands() {
+        final List<XmlNode> children = this.node.children()
+            .collect(Collectors.toList());
+        if (children.size() < XmlMaxs.OPERANDS) {
+            throw new IllegalStateException(
+                String.format(
+                    "Maxs '%s' has %d operands, %d expected",
+                    this.node,
+                    children.size(),
+                    XmlMaxs.OPERANDS
+                )
+            );
+        }
+        return children;
+    }
+
     private int ichild(final int position) {
         return (int) Objects.requireNonNull(
-            new XmlOperand(
-                this.node.children().collect(Collectors.toList()).get(position)
-            ).asObject(),
+            new XmlOperand(this.operands().get(position)).asObject(),
             String.format(
-                "The XML node representing Maxs '%s' doesn't contain a valid integer at '%d' position",
+                "Maxs '%s' lacks valid integer at position %d",
                 this.node,
                 position
             )
