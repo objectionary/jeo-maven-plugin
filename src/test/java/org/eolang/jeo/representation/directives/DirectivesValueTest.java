@@ -209,6 +209,15 @@ final class DirectivesValueTest {
         );
     }
 
+    @Test
+    void createsIntegerWithComment() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "We expect that an int value will carry its decimal value in the comment",
+            new Xembler(new DirectivesValue(0, new Format(), 33)).xml(),
+            Matchers.containsString("<!-- 33 -->")
+        );
+    }
+
     /**
      * Arguments for {@link DirectivesValueTest#determinesTypeCorrectly(Object, String)} test.
      *
