@@ -52,4 +52,30 @@ final class DirectivesPlainAnnotationValueTest {
             Matchers.equalTo(new BytecodePlainAnnotationValue(name, value))
         );
     }
+
+    @Test
+    void expandsPrimitiveArrayItemByItem() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "An int array must become a sequence of its three items",
+            new Xembler(
+                new DirectivesPlainAnnotationValue(0, new Format(), "k", new int[]{1, 2, 3})
+            ).xml(),
+            XhtmlMatchers.hasXPath("//o[contains(@base,'seq.of3')]")
+        );
+    }
+
+    @Test
+    void writesArrayTheSameWayEveryTime() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "An array must be written under a stable name, not a random one",
+            new Xembler(
+                new DirectivesPlainAnnotationValue(0, new Format(), "k", new String[]{"a", "b"})
+            ).xml(),
+            Matchers.equalTo(
+                new Xembler(
+                    new DirectivesPlainAnnotationValue(0, new Format(), "k", new String[]{"a", "b"})
+                ).xml()
+            )
+        );
+    }
 }
