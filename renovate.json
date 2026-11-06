@@ -1,8 +1,90 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "automerge": true,
   "extends": [
     "config:base"
   ],
-  "automerge": true,
+  "packageRules": [
+    {
+      "allowedVersions": "<0.61.0",
+      "description": "Keep Java 11 compatibility; cactoos 0.61+ requires Java 17.",
+      "matchManagers": [
+        "maven"
+      ],
+      "matchPackageNames": [
+        "org.cactoos:cactoos"
+      ]
+    },
+    {
+      "allowedVersions": "<=0.61.3",
+      "description": "Keep the last verified parser compatible with the supported Java versions; 0.63.2 requires Java 17.",
+      "matchManagers": [
+        "maven"
+      ],
+      "matchPackageNames": [
+        "org.eolang:eo-parser"
+      ]
+    },
+    {
+      "allowedVersions": "<=0.1.0",
+      "description": "Keep the last verified lints compatible with the supported Java versions; 0.5.0 requires Java 17.",
+      "matchManagers": [
+        "maven"
+      ],
+      "matchPackageNames": [
+        "org.eolang:lints"
+      ]
+    },
+    {
+      "allowedVersions": "<=0.70.0",
+      "description": "Keep the verified build parent; 0.73.4 manages JUnit 6, which requires Java 17.",
+      "matchManagers": [
+        "maven"
+      ],
+      "matchPackageNames": [
+        "com.jcabi:parent"
+      ]
+    },
+    {
+      "allowedVersions": "<13",
+      "description": "Saxon 13 requires Java 17; keep the Java 11 compatible 12.x line.",
+      "matchManagers": [
+        "maven"
+      ],
+      "matchPackageNames": [
+        "net.sf.saxon:Saxon-HE"
+      ]
+    },
+    {
+      "allowedVersions": "<=4.0.0-alpha-7",
+      "description": "Preserve the intentionally pinned Maven API and Java compatibility documented in pom.xml.",
+      "matchManagers": [
+        "maven"
+      ],
+      "matchPackageNames": [
+        "org.apache.maven:maven-plugin-api"
+      ]
+    },
+    {
+      "allowedVersions": "<3",
+      "description": "Spring integration fixtures must run on Java 11; Spring Boot 3+ requires Java 17.",
+      "matchManagers": [
+        "maven"
+      ],
+      "matchPackageNames": [
+        "org.springframework.boot:spring-boot-starter-parent"
+      ]
+    },
+    {
+      "allowedVersions": "<1.26.0",
+      "description": "Takes 1.26.0 brings cactoos 0.61.0, which requires Java 17.",
+      "matchManagers": [
+        "maven"
+      ],
+      "matchPackageNames": [
+        "org.takes:takes"
+      ]
+    }
+  ],
   "platformAutomerge": false
 }
