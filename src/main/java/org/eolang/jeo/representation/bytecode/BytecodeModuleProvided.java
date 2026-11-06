@@ -4,9 +4,11 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import org.eolang.jeo.representation.directives.DirectivesModuleProvided;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ModuleVisitor;
@@ -31,12 +33,17 @@ public final class BytecodeModuleProvided {
     /**
      * Constructor.
      *
+     * <p>Snapshot the lists while retaining ASM's null-as-empty convention.</p>
+     *
      * @param service The internal name of the service
      * @param providers The internal names of the implementations of the service
+     * @checkstyle ConstructorsCodeFreeCheck (8 lines)
      */
     public BytecodeModuleProvided(final String service, final List<String> providers) {
         this.service = service;
-        this.providers = providers;
+        this.providers = new ArrayList<>(
+            Optional.ofNullable(providers).orElse(Collections.emptyList())
+        );
     }
 
     /**

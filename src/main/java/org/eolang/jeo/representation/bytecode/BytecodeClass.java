@@ -137,8 +137,8 @@ public final class BytecodeClass {
         final BytecodeClassProperties props
     ) {
         this.name = name;
-        this.cmethods = methods;
-        this.fields = fields;
+        this.cmethods = new ArrayList<>(methods);
+        this.fields = new ArrayList<>(fields);
         this.annotations = annotations;
         this.attributes = attributes;
         this.props = props;
