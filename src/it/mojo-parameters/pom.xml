@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+SPDX-License-Identifier: MIT
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.eolang</groupId>
+  <artifactId>jeo-mojo-parameters-it</artifactId>
+  <version>@project.version@</version>
+  <packaging>jar</packaging>
+  <description>
+    Integration test that verifies the user-visible behavior of the mojo parameters:
+    mode, omitComments, omitListings, prettyXmir, modifiers, disabled and skipVerification.
+  </description>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <stack-size>256M</stack-size>
+  </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eolang</groupId>
+        <artifactId>jeo-maven-plugin</artifactId>
+        <version>@project.version@</version>
+        <executions>
+          <execution>
+            <id>disassemble-debug</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>disassemble</goal>
+            </goals>
+            <configuration>
+              <mode>debug</mode>
+              <omitComments>false</omitComments>
+              <omitListings>false</omitListings>
+              <prettyXmir>false</prettyXmir>
+              <outputDir>${project.build.directory}/jeo-xmir-debug</outputDir>
+            </configuration>
+          </execution>
+          <execution>
+            <id>disassemble-modifiers</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>disassemble</goal>
+            </goals>
+            <configuration>
+              <modifiers>true</modifiers>
+              <outputDir>${project.build.directory}/jeo-xmir-modifiers</outputDir>
+            </configuration>
+          </execution>
+          <execution>
+            <id>disassemble-disabled</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>disassemble</goal>
+            </goals>
+            <configuration>
+              <disabled>true</disabled>
+              <outputDir>${project.build.directory}/jeo-xmir-disabled</outputDir>
+            </configuration>
+          </execution>
+          <execution>
+            <id>assemble-skip-verification</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+            <configuration>
+              <sourcesDir>${project.build.directory}/jeo-xmir-debug</sourcesDir>
+              <outputDir>${project.build.directory}/classes-skip-verification</outputDir>
+              <skipVerification>true</skipVerification>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
