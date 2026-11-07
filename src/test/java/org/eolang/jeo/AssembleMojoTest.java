@@ -5,11 +5,14 @@
 package org.eolang.jeo;
 
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Test case for {@link AssembleMojo}.
@@ -32,36 +35,6 @@ final class AssembleMojoTest {
             )
         );
     }
-
-    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
-    private static AssembleMojo mojoWithThreads(final int threads) throws Exception {
-        final AssembleMojo mojo = new AssembleMojo();
-        final Field field = AssembleMojo.class.getDeclaredField("threads");
-        field.setAccessible(true);
-        field.set(mojo, threads);
-        return mojo;
-    }
-}
-/*
- * SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
- * SPDX-License-Identifier: MIT
- */
-package org.eolang.jeo;
-
-import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
-/**
- * Test case for {@link AssembleMojo}.
- *
- * @since 0.18.0
- */
-final class AssembleMojoTest {
 
     @Test
     @SuppressWarnings({"PMD.AvoidAccessibilityAlteration", "PMD.UnnecessaryLocalRule"})
@@ -88,5 +61,14 @@ final class AssembleMojoTest {
         } finally {
             Thread.currentThread().setContextClassLoader(before);
         }
+    }
+
+    @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
+    private static AssembleMojo mojoWithThreads(final int threads) throws Exception {
+        final AssembleMojo mojo = new AssembleMojo();
+        final Field field = AssembleMojo.class.getDeclaredField("threads");
+        field.setAccessible(true);
+        field.set(mojo, threads);
+        return mojo;
     }
 }
