@@ -12,18 +12,18 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link DirectivesEnclosingMethod}.
+ *
  * @since 0.15.0
  */
 final class DirectivesEnclosingMethodTest {
 
     @Test
     void convertsEnclosingMethodToDirectives() throws ImpossibleModificationException {
-        final String xml = new Xembler(
-            new DirectivesEnclosingMethod(new Format(), "owner", "method", "(I)V")
-        ).xml();
         MatcherAssert.assertThat(
             "We expect the enclosing method attribute to keep owner, name and descriptor",
-            xml,
+            new Xembler(
+                new DirectivesEnclosingMethod(new Format(), "owner", "method", "(I)V")
+            ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "enclosing-method").toXpath(),
                 "/o[contains(@name,'enclosing-method')]",
