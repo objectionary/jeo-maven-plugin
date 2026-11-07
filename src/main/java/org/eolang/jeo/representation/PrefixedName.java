@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,7 +52,11 @@ public final class PrefixedName {
      * Prefixed name pattern.
      */
     private static final Pattern PREFIXED = Pattern.compile(
-        String.format("(?<=^|[./])%s", Matcher.quoteReplacement(PrefixedName.PREFIX))
+        String.format(
+            Locale.ROOT,
+            "(?<=^|[./])%s",
+            Matcher.quoteReplacement(PrefixedName.PREFIX)
+        )
     );
 
     /**
@@ -95,7 +100,13 @@ public final class PrefixedName {
             prefix,
             origin,
             PrefixedName.DELIMITED,
-            Pattern.compile(String.format("(?<=^|[./])%s", Pattern.quote(prefix)))
+            Pattern.compile(
+                String.format(
+                    Locale.ROOT,
+                    "(?<=^|[./])%s",
+                    Pattern.quote(prefix)
+                )
+            )
         );
     }
 
@@ -149,6 +160,7 @@ public final class PrefixedName {
     @Override
     public String toString() {
         return String.format(
+            Locale.ROOT,
             "PrefixedName(prefix=%s, origin=%s, delimited=%s, prefixed=%s)",
             this.prefix, this.origin, this.delimited, this.prefixed
         );
@@ -175,10 +187,18 @@ public final class PrefixedName {
     private static String safe(final String part) {
         final StringBuilder result = new StringBuilder();
         for (final int code : part.codePoints().toArray()) {
-            if (Character.isWhitespace(code) || "%+,|':;!?[]{}()⟧⟦↦⤍>\"ξΦ⊥".indexOf(code) >= 0) {
+            if (Character.isWhitespace(code)
+                || "%+,|':;!?[]{}()⟧⟦↦⤍"
+                .concat(">\"ξΦ⊥").indexOf(code) >= 0) {
                 for (final byte octet : new String(Character.toChars(code))
                     .getBytes(StandardCharsets.UTF_8)) {
-                    result.append(String.format("%%%02X", octet & 0xFF));
+                    result.append(
+                        String.format(
+                            Locale.ROOT,
+                            "%%%02X",
+                            octet & 0xFF
+                        )
+                    );
                 }
             } else {
                 result.appendCodePoint(code);

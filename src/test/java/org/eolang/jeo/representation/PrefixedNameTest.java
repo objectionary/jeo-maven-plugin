@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation;
 
+import java.util.Locale;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -174,5 +175,52 @@ final class PrefixedNameTest {
             () -> new PrefixedName(" ").decode(),
             "Can't throw exception when decoding invalid name"
         );
+    }
+
+    @Test
+    void encodesSpecialCharactersUnderArabicLocale() {
+        final Locale before = Locale.getDefault();
+        Locale.setDefault(Locale.forLanguageTag("ar-EG"));
+        try {
+            MatcherAssert.assertThat(
+                "Encoded name under Arabic locale must use ASCII hex digits",
+                new PrefixedName("a b").encode(),
+                Matchers.equalTo("j$a%20b")
+            );
+        } finally {
+            Locale.setDefault(before);
+        }
+    }
+
+    @Test
+    void preservesHexEncodingUnderPersianLocale() {
+        final Locale before = Locale.getDefault();
+        Locale.setDefault(Locale.forLanguageTag("fa-IR"));
+        try {
+            MatcherAssert.assertThat(
+                "Encoded name under Persian locale must use ASCII hex",
+                new PrefixedName("100%").encode(),
+                Matchers.equalTo("j$100%25")
+            );
+        } finally {
+            Locale.setDefault(before);
+        }
+    }
+
+    @Test
+    void encodesAndDecodesRoundTripUnderArabicLocale() {
+        final Locale before = Locale.getDefault();
+        Locale.setDefault(Locale.forLanguageTag("ar-EG"));
+        try {
+            MatcherAssert.assertThat(
+                "Round trip encoding must match under Arabic locale",
+                new PrefixedName(
+                    new PrefixedName("adds two numbers").encode()
+                ).decode(),
+                Matchers.equalTo("adds two numbers")
+            );
+        } finally {
+            Locale.setDefault(before);
+        }
     }
 }
