@@ -104,6 +104,42 @@ the `short` option.
 This option will exclude line numbers and local variable names,
 together with their corresponding labels. The default mode is `debug`.
 
+### Tune the generated XMIR
+
+The `disassemble` goal accepts several parameters that change the
+generated XMIR:
+
+* `mode` (`debug` by default) — `short` excludes debug
+  information (line numbers, local variable names, and labels),
+  `debug` keeps it.
+* `omitListings` (`true` by default) — when set to `false`, the
+  generated XMIR contains a `<listing>` element with the textual
+  representation of the bytecode.
+* `omitComments` (`true` by default) — when set to `false`, the
+  generated XMIR contains explanatory comments.
+* `prettyXmir` (`true` by default) — when set to `false`, the
+  generated XMIR is not pretty-printed.
+* `modifiers` (`false` by default) — when set to `true`, class and
+  method modifiers are emitted as explicit objects in the XMIR.
+* `includes` / `excludes` — glob patterns that filter the class
+  files to disassemble.
+* `threads` (`0` by default) — the number of threads for parallel
+  disassembling. `0` means automatic (the number of available
+  processors); a positive value uses exactly that many threads; a
+  negative value fails the build.
+* `disabled` (`false` by default) — when set to `true`, the goal
+  does nothing.
+
+For example, to keep listings and comments in the generated XMIR:
+
+```xml
+
+<configuration>
+  <omitListings>false</omitListings>
+  <omitComments>false</omitComments>
+</configuration>
+```
+
 ### Disable bytecode verification
 
 Each time the plugin converts EO back to bytecode, it verifies it. If the
@@ -543,6 +579,40 @@ Below is the full list of these objects, grouped by category:
   Represents a Java method handle.
 * **`jeo.frame`**
   Represents a stack frame.
+* **`jeo.line-number`**
+  Represents a source line number.
+
+### Class Attributes
+
+* **`jeo.source-file`**
+  Represents the source file name of a class.
+* **`jeo.enclosing-method`**
+  Represents the enclosing method of a local or anonymous class.
+* **`jeo.nest-host`**
+  Represents the nest host of a class.
+* **`jeo.nest-members`**
+  Represents the nest members of a class.
+* **`jeo.permitted-subclasses`**
+  Represents the permitted subclasses of a sealed class.
+* **`jeo.record-component`**
+  Represents a single record component.
+* **`jeo.record-components`**
+  Represents the list of record components.
+* **`jeo.unknown-attribute`**
+  Represents an attribute the plugin does not understand.
+
+### Modules
+
+* **`jeo.module`**
+  Represents a Java module (from a `module-info` class).
+* **`jeo.required`**
+  Represents a required module.
+* **`jeo.exported`**
+  Represents an exported package.
+* **`jeo.opened`**
+  Represents an opened package.
+* **`jeo.provided`**
+  Represents a provided service.
 
 ## How to Build the Plugin
 
