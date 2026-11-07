@@ -2,7 +2,7 @@
 
 [![logo](https://www.objectionary.com/cactus-100.svg)](https://www.objectionary.com)
 
-[![Maven Central](https://img.shields.io/maven-central/v/org.eolang/jeo-maven-plugin.svg)](https://maven-badges.herokuapp.com/maven-central/org.eolang/jeo-maven-plugin)
+[![Maven Central](https://img.shields.io/maven-central/v/org.eolang/jeo-maven-plugin.svg)](https://central.sonatype.com/artifact/org.eolang/jeo-maven-plugin)
 [![Javadoc](https://www.javadoc.io/badge/org.eolang/jeo-maven-plugin.svg)](https://www.javadoc.io/doc/org.eolang/jeo-maven-plugin)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.txt)
 [![Hits-of-Code](https://hitsofcode.com/github/objectionary/jeo-maven-plugin?branch=master&label=Hits-of-Code)](https://hitsofcode.com/github/objectionary/jeo-maven-plugin/view?branch=master&label=Hits-of-Code)
@@ -250,8 +250,8 @@ with the following bytecode representation:
          5: invokevirtual #15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
          8: return
       LineNumberTable:
-        line 5: 0
-        line 6: 8
+        line 9: 0
+        line 10: 8
       LocalVariableTable:
         Start  Length  Slot  Name   Signature
             0       9     0  args   [Ljava/lang/String;
@@ -571,7 +571,12 @@ variables:
 
 ```bash
 PROFILER=/path/to/async-profiler/profiler.sh
+DURATION=1000000
 ```
+
+`PROFILER` is the path to the async-profiler script.
+`DURATION` (optional) is the profiling duration in microseconds; it defaults
+to `1000000` (one second) when not set.
 
 ## How to Contribute
 
