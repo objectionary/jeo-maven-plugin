@@ -75,7 +75,6 @@ public final class PluginStartup {
      * <li><a href="https://stackoverflow.com/questions/11292701/error-while-instrumenting-class-files-asm-classwriter-getcommonsuperclass">StackOverflow: ASM ClassWriter getCommonSuperClass</a></li>
      * </ul>
      */
-    @SuppressWarnings("PMD.CloseInlineResourceRule")
     void init() {
         Logger.info(
             this,
@@ -83,14 +82,12 @@ public final class PluginStartup {
             this.folders.stream().collect(Collectors.joining(", ", "[", "]"))
         );
         Thread.currentThread().setContextClassLoader(
-            new JeoClassLoader(
-                new URLClassLoader(
-                    this.jars(),
-                    Thread.currentThread().getContextClassLoader()
-                ),
-                this.folders
-            )
+            new JeoClassLoader(this.loader(), this.folders)
         );
+    }
+
+    private URLClassLoader loader() {
+        return new URLClassLoader(this.jars(), Thread.currentThread().getContextClassLoader());
     }
 
     private URL[] jars() {

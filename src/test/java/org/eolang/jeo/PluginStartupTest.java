@@ -7,6 +7,7 @@ package org.eolang.jeo;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
@@ -60,7 +61,6 @@ final class PluginStartupTest {
     }
 
     @Test
-    @SuppressWarnings("PMD.UnnecessaryLocalRule")
     void loadsClassesFromJars(@TempDir final Path dir) throws Exception {
         final String name = "SomeClassInJar";
         final Path jar = dir.resolve("dependency.jar");
@@ -86,9 +86,11 @@ final class PluginStartupTest {
                     .getContextClassLoader().getParent()
             ) {
                 MatcherAssert.assertThat(
-                    "A class from a dependency jar must be loadable",
-                    jars.loadClass(name).getName(),
-                    Matchers.equalTo(name)
+                    "A class from a dependency jar must load, by a loader on top of the previous one",
+                    Arrays.<Object>asList(jars.loadClass(name).getName(), jars.getParent()),
+                    Matchers.contains(
+                        Matchers.<Object>equalTo(name), Matchers.<Object>sameInstance(original)
+                    )
                 );
             }
         } finally {
