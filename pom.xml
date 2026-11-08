@@ -168,6 +168,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
+      <version>1.18.48</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -207,7 +208,7 @@
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-matchers</artifactId>
-      <!-- version from the parent pom -->
+      <version>1.9.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -253,6 +254,17 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>5.14.4</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <build>
     <testResources>
       <testResource>
