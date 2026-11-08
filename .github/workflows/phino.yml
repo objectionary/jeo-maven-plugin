@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-java@v6
+      - uses: actions/setup-java@v6.2.0
         with:
           distribution: 'zulu'
           java-version: 21
@@ -34,5 +34,5 @@ jobs:
             maven-
       - uses: objectionary/phino@61c6d265fc52edc5fc21e21f1b1e19fa3b43d415  # master
         with:
-          version: 0.0.156
+          version: 0.0.161
       - run: mvn clean install -ntp -D"skipTests" -D"invoker.test=phi-unphi" --errors --batch-mode
