@@ -35,6 +35,11 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <stack-size>256M</stack-size>
+    <!-- Keep the test libraries on release lines compatible with Java 8. -->
+    <assertj.version>3.27.7</assertj.version>
+    <hamcrest.version>3.0</hamcrest.version>
+    <junit-jupiter.version>5.14.4</junit-jupiter.version>
+    <mockito.version>4.11.0</mockito.version>
   </properties>
   <dependencies>
     <dependency>
