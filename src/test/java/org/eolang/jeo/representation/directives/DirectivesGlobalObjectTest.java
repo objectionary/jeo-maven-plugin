@@ -12,22 +12,22 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link DirectivesGlobalObject}.
+ *
  * @since 0.8
  */
 final class DirectivesGlobalObjectTest {
 
     @Test
     void convertsGlobalObjectToDirectives() throws ImpossibleModificationException {
-        final String xml = new Xembler(
-            new DirectivesGlobalObject(
-                "class",
-                "j$Foo",
-                new DirectivesValue(new Format(), "v", 42)
-            )
-        ).xml();
         MatcherAssert.assertThat(
             "We expect a global object to carry its base, name and inner objects",
-            xml,
+            new Xembler(
+                new DirectivesGlobalObject(
+                    "class",
+                    "j$Foo",
+                    new DirectivesValue(new Format(), "v", 42)
+                )
+            ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "class").toXpath(),
                 "/o[contains(@name,'j$Foo')]",

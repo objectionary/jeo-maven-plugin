@@ -12,18 +12,18 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link DirectivesNestHost}.
+ *
  * @since 0.15.0
  */
 final class DirectivesNestHostTest {
 
     @Test
     void convertsNestHostToDirectives() throws ImpossibleModificationException {
-        final String xml = new Xembler(
-            new DirectivesNestHost(new Format(), "com/example/Host")
-        ).xml();
         MatcherAssert.assertThat(
             "We expect the nest host attribute to contain the host name",
-            xml,
+            new Xembler(
+                new DirectivesNestHost(new Format(), "com/example/Host")
+            ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "nest-host").toXpath(),
                 "/o[contains(@name,'nest-host')]",
