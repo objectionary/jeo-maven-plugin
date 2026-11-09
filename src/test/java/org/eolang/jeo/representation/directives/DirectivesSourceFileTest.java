@@ -12,18 +12,18 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link DirectivesSourceFile}.
+ *
  * @since 0.15.0
  */
 final class DirectivesSourceFileTest {
 
     @Test
     void convertsSourceFileToDirectives() throws ImpossibleModificationException {
-        final String xml = new Xembler(
-            new DirectivesSourceFile(new Format(), "Foo.java", "debug")
-        ).xml();
         MatcherAssert.assertThat(
             "We expect the source file attribute to keep the source name and the debug string",
-            xml,
+            new Xembler(
+                new DirectivesSourceFile(new Format(), "Foo.java", "debug")
+            ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "source-file").toXpath(),
                 "/o[contains(@name,'source-file')]",
