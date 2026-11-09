@@ -12,22 +12,22 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link DirectivesJeoObject}.
+ *
  * @since 0.15.0
  */
 final class DirectivesJeoObjectTest {
 
     @Test
     void convertsJeoObjectToDirectives() throws ImpossibleModificationException {
-        final String xml = new Xembler(
-            new DirectivesJeoObject(
-                "foo",
-                "name",
-                new DirectivesValue(new Format(), "v", 42)
-            )
-        ).xml();
         MatcherAssert.assertThat(
             "We expect a jeo object to carry its base and inner objects",
-            xml,
+            new Xembler(
+                new DirectivesJeoObject(
+                    "foo",
+                    "name",
+                    new DirectivesValue(new Format(), "v", 42)
+                )
+            ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "foo").toXpath(),
                 "/o[contains(@name,'name')]",

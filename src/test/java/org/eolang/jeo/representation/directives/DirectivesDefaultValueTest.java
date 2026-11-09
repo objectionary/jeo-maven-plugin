@@ -12,19 +12,18 @@ import org.xembly.Xembler;
 
 /**
  * Test cases for {@link DirectivesDefaultValue}.
+ *
  * @since 0.15.0
  */
 final class DirectivesDefaultValueTest {
 
     @Test
     void convertsDefaultValueToDirectives() throws ImpossibleModificationException {
-        final Format format = new Format();
-        final String xml = new Xembler(
-            new DirectivesDefaultValue(new DirectivesValue(format, "v", 42))
-        ).xml();
         MatcherAssert.assertThat(
             "We expect the default value to be represented as an annotation-defvalue object",
-            xml,
+            new Xembler(
+                new DirectivesDefaultValue(new DirectivesValue(new Format(), "v", 42))
+            ).xml(),
             XhtmlMatchers.hasXPaths(
                 new JeoBaseXpath("/o", "annotation-default-value").toXpath(),
                 "/o[contains(@name,'annotation-defvalue')]",
