@@ -5,7 +5,6 @@
 package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
-import com.jcabi.manifests.Manifests;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,6 +12,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.Counter;
+import org.eolang.jeo.representation.directives.Fingerprint;
+import org.eolang.jeo.representation.directives.Format;
 
 /**
  * Assembler.
@@ -103,7 +104,7 @@ public final class Assembler {
                 this.debug,
                 counter
             ),
-            String.format("jeo-version=%s", Manifests.read("JEO-Version"))
+            new Fingerprint(new Format()).toString()
         );
         trans.transform();
         return trans.target();
