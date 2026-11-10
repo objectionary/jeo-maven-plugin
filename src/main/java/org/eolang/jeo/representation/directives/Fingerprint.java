@@ -27,7 +27,7 @@ public final class Fingerprint {
     /**
      * The version of JEO.
      */
-    private final String version;
+    private final String jeoVersion;
 
     /**
      * Constructor.
@@ -35,7 +35,7 @@ public final class Fingerprint {
      * @param format The format
      */
     public Fingerprint(final Format format) {
-        this(format, Fingerprint.version());
+        this(format, Fingerprint.readVersion());
     }
 
     /**
@@ -46,13 +46,13 @@ public final class Fingerprint {
      */
     public Fingerprint(final Format format, final String version) {
         this.format = format;
-        this.version = version;
+        this.jeoVersion = version;
     }
 
     @Override
     public String toString() {
         final Map<String, Object> props = new TreeMap<>();
-        props.put("jeo-version", this.version);
+        props.put("jeo-version", this.jeoVersion);
         props.put(Format.COMMENTS, this.format.comments());
         props.put(Format.LISTING, this.format.listing());
         props.put(Format.MODE, this.format.mode());
@@ -65,12 +65,7 @@ public final class Fingerprint {
             .collect(Collectors.joining(";"));
     }
 
-    /**
-     * Read the version from the manifest, or return an unknown marker.
-     *
-     * @return JEO version
-     */
-    private static String version() {
+    private static String readVersion() {
         final String result;
         if (Manifests.exists("JEO-Version")) {
             result = Manifests.read("JEO-Version");
