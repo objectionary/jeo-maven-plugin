@@ -27,7 +27,7 @@ public final class Fingerprint {
     /**
      * The version of JEO.
      */
-    private final String jeoVersion;
+    private final String version;
 
     /**
      * Constructor.
@@ -46,13 +46,13 @@ public final class Fingerprint {
      */
     public Fingerprint(final Format format, final String version) {
         this.format = format;
-        this.jeoVersion = version;
+        this.version = version;
     }
 
     @Override
     public String toString() {
         final Map<String, Object> props = new TreeMap<>();
-        props.put("jeo-version", this.jeoVersion);
+        props.put("jeo-version", this.version);
         props.put(Format.COMMENTS, this.format.comments());
         props.put(Format.LISTING, this.format.listing());
         props.put(Format.MODE, this.format.mode());
