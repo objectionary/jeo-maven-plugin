@@ -32,7 +32,7 @@ jobs:
           key: maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             maven-
-      - uses: objectionary/phino@a5e7eaf12d1372fe804fb78ac165bf83121c050f  # master
+      - uses: objectionary/phino@4fa6b1db04d1771e1720d2fc73681a2f482d827d  # master
         with:
           version: 0.0.161
       - run: mvn clean install -ntp -D"skipTests" -D"invoker.test=phi-unphi" --errors --batch-mode
