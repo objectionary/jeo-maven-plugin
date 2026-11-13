@@ -82,15 +82,17 @@ public final class Assembler {
     public void assemble() {
         final List<Path> files = new XmirFiles(this.input).all().collect(Collectors.toList());
         final Counter counter = new Counter(files.size());
-        final Stream<Path> all = new Summary(
-            "Assembling",
-            "assembled",
-            this.input.toString(),
-            this.output,
-            new ParallelTranslator(path -> this.assemble(path, counter), this.threads)
-        ).apply(files.stream());
-        all.forEach(this::log);
-        all.close();
+        try (
+            Stream<Path> all = new Summary(
+                "Assembling",
+                "assembled",
+                this.input.toString(),
+                this.output,
+                new ParallelTranslator(path -> this.assemble(path, counter), this.threads)
+            ).apply(files.stream())
+        ) {
+            all.forEach(this::log);
+        }
     }
 
     private Path assemble(final Path path, final Counter counter) {
