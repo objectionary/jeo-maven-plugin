@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.Counter;
+import org.eolang.jeo.representation.directives.Fingerprint;
+import org.eolang.jeo.representation.directives.Format;
 
 /**
  * Assembler.
@@ -101,7 +103,8 @@ public final class Assembler {
                 new Informative(new Assembling(this.input, this.output, path)),
                 this.debug,
                 counter
-            )
+            ),
+            new Fingerprint(new Format()).toString()
         );
         trans.transform();
         return trans.target();
