@@ -4,11 +4,14 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import org.eolang.jeo.representation.PrefixedName;
 import org.objectweb.asm.Opcodes;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
  * Field directives.
@@ -189,20 +192,45 @@ public final class DirectivesField implements Iterable<Directive> {
 
     @Override
     public Iterator<Directive> iterator() {
+        final List<Directives> inner = new ArrayList<>(8);
+        inner.add(
+            new Directives(
+                new DirectivesValue(this.format, DirectivesField.title("access"), this.access)
+            )
+        );
+        if (this.format.modifiers()) {
+            inner.add(new Directives(new DirectivesFieldModifiers(this.format, this.access)));
+        }
+        inner.add(
+            new Directives(
+                new DirectivesValue(this.format, DirectivesField.title("name"), this.name)
+            )
+        );
+        inner.add(
+            new Directives(
+                new DirectivesValue(
+                    this.format, DirectivesField.title("descriptor"), this.descriptor()
+                )
+            )
+        );
+        inner.add(
+            new Directives(
+                new DirectivesValue(
+                    this.format, DirectivesField.title("signature"), this.signature()
+                )
+            )
+        );
+        inner.add(
+            new Directives(
+                new DirectivesValue(this.format, DirectivesField.title("value"), this.value)
+            )
+        );
+        inner.add(new Directives(this.annotations));
+        inner.add(new Directives(this.attributes));
         return new DirectivesJeoObject(
             "field",
             new PrefixedName(this.name).encode(),
-            new DirectivesValue(this.format, DirectivesField.title("access"), this.access),
-            new DirectivesValue(this.format, DirectivesField.title("name"), this.name),
-            new DirectivesValue(
-                this.format, DirectivesField.title("descriptor"), this.descriptor()
-            ),
-            new DirectivesValue(
-                this.format, DirectivesField.title("signature"), this.signature()
-            ),
-            new DirectivesValue(this.format, DirectivesField.title("value"), this.value),
-            this.annotations,
-            this.attributes
+            inner
         ).iterator();
     }
 

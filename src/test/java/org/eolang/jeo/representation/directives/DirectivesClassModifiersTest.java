@@ -38,10 +38,26 @@ final class DirectivesClassModifiersTest {
                 "/o[contains(@name, 'modifiers')]/o[contains(@name, 'synthetic') and contains(@base, 'false')]",
                 "/o[contains(@name, 'modifiers')]/o[contains(@name, 'annotation') and contains(@base, 'false')]",
                 "/o[contains(@name, 'modifiers')]/o[contains(@name, 'enum') and contains(@base, 'true')]",
-                "/o[contains(@name, 'modifiers')]/o[contains(@name, 'mandated') and contains(@base, 'false')]",
                 "/o[contains(@name, 'modifiers')]/o[contains(@name, 'module') and contains(@base, 'false')]",
                 "/o[contains(@name, 'modifiers')]/o[contains(@name, 'record') and contains(@base, 'false')]",
                 "/o[contains(@name, 'modifiers')]/o[contains(@name, 'deprecated') and contains(@base, 'false')]"
+            )
+        );
+    }
+
+    @Test
+    void doesNotEmitMandatedForModuleClass() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Module class modifiers should set module and synthetic without mandated",
+            new Xembler(
+                new DirectivesClassModifiers(
+                    new Format(), Opcodes.ACC_MODULE | Opcodes.ACC_SYNTHETIC
+                )
+            ).xml(),
+            XhtmlMatchers.hasXPaths(
+                "/o[contains(@name, 'modifiers')]/o[contains(@name, 'module') and contains(@base, 'true')]",
+                "/o[contains(@name, 'modifiers')]/o[contains(@name, 'synthetic') and contains(@base, 'true')]",
+                "/o[contains(@name, 'modifiers') and not(o[contains(@name, 'mandated')])]"
             )
         );
     }
