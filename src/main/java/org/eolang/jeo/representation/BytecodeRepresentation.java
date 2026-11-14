@@ -19,7 +19,6 @@ import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.eolang.jeo.representation.directives.Format;
-import org.objectweb.asm.ClassReader;
 import org.xembly.Directive;
 import org.xembly.ImpossibleModificationException;
 
@@ -82,7 +81,7 @@ public final class BytecodeRepresentation {
      */
     public String name() {
         final ClassNameVisitor name = new ClassNameVisitor();
-        new ClassReader(this.input.value()).accept(name, 0);
+        new AsmProgram(this.input.value()).reader().accept(name, 0);
         return name.asString();
     }
 

@@ -6,6 +6,7 @@ package org.eolang.jeo.representation;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import org.eolang.jeo.representation.asm.AsmProgram;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.util.TraceClassVisitor;
 
@@ -57,7 +58,7 @@ public final class BytecodeListing {
 
     @Override
     public String toString() {
-        final ClassReader reader = new ClassReader(this.bytecode);
+        final ClassReader reader = new AsmProgram(this.bytecode).reader();
         final StringWriter writer = new StringWriter();
         try (PrintWriter out = new PrintWriter(writer)) {
             reader.accept(new TraceClassVisitor(out), this.options);

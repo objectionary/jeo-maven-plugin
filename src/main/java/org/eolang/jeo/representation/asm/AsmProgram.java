@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import java.nio.ByteBuffer;
 import org.eolang.jeo.representation.ClassName;
 import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.objectweb.asm.ClassReader;
@@ -21,6 +22,16 @@ import org.objectweb.asm.tree.ClassNode;
  * @since 0.6
  */
 public final class AsmProgram {
+
+    /**
+     * Class file magic header.
+     */
+    private static final int MAGIC = 0xCAFEBABE;
+
+    /**
+     * Minimum length of a class file header (magic, version, and constant pool count).
+     */
+    private static final int HEADER = 10;
 
     /**
      * Bytecode as plain bytes.
@@ -53,14 +64,62 @@ public final class AsmProgram {
      */
     public BytecodeObject bytecode(final int flags) {
         final ClassNode node = new ClassNode();
-        final ClassReader reader = new ClassReader(this.bytes);
-        reader.accept(node, AsmUnknownAttributes.prototypes(reader), flags);
-        if ((flags & ClassReader.SKIP_DEBUG) != 0) {
-            new AsmParameters(this.bytes).fill(node);
+        final ClassReader reader = this.reader();
+        try {
+            reader.accept(node, AsmUnknownAttributes.prototypes(reader), flags);
+            if ((flags & ClassReader.SKIP_DEBUG) != 0) {
+                new AsmParameters(this.bytes).fill(node);
+            }
+        } catch (final IndexOutOfBoundsException exception) {
+            throw this.truncated(exception);
         }
         return new BytecodeObject(
             new ClassName(node.name).pckg(),
             new AsmClass(node).bytecode()
+        );
+    }
+
+    /**
+     * Create a validated ASM class reader for the raw bytes.
+     *
+     * @return Validated class reader
+     */
+    public ClassReader reader() {
+        if (this.bytes.length < AsmProgram.HEADER) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Not a class file: expected at least %d header bytes, got %d",
+                    AsmProgram.HEADER,
+                    this.bytes.length
+                )
+            );
+        }
+        final int magic = ByteBuffer.wrap(this.bytes).getInt();
+        if (magic != AsmProgram.MAGIC) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Not a class file: invalid magic header 0x%08X (expected 0x%08X)",
+                    magic,
+                    AsmProgram.MAGIC
+                )
+            );
+        }
+        final ClassReader result;
+        try {
+            result = new ClassReader(this.bytes);
+        } catch (final IndexOutOfBoundsException exception) {
+            throw this.truncated(exception);
+        }
+        return result;
+    }
+
+    private IllegalArgumentException truncated(final IndexOutOfBoundsException cause) {
+        return new IllegalArgumentException(
+            String.format(
+                "Not a valid class file: truncated or corrupted bytecode (%d bytes)",
+                this.bytes.length
+            ),
+            cause
         );
     }
 }
