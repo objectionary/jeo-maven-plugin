@@ -42,8 +42,9 @@ More details about plugin usage can be found in our
 
 ## Invoke the plugin from the command line
 
-You can run the plugin directly from the command line using the following
-commands:
+If your project's `pom.xml` declares `org.eolang:jeo-maven-plugin` (or your
+Maven `settings.xml` defines `<pluginGroup>org.eolang</pluginGroup>`), you
+can run the plugin directly with the `jeo` prefix:
 
 ```bash
 mvn jeo:disassemble
@@ -53,6 +54,20 @@ or
 
 ```bash
 mvn jeo:assemble
+```
+
+Without either setting, Maven cannot resolve the `jeo` prefix on its own; use
+the full `groupId:artifactId:version:goal` coordinates instead (see also
+[Run Without a POM File](#run-without-a-pom-file)):
+
+```bash
+mvn org.eolang:jeo-maven-plugin:0.15.3:disassemble
+```
+
+or
+
+```bash
+mvn org.eolang:jeo-maven-plugin:0.15.3:assemble
 ```
 
 ## Invoke the plugin from the Maven lifecycle
