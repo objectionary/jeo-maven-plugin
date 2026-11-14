@@ -160,12 +160,12 @@ public final class BytecodeMethodProperties {
     }
 
     /**
-     * Is method abstract.
+     * Is method without a body, that is abstract or native.
      *
-     * @return True if the method is abstract
+     * @return True if the method must not have a Code attribute
      */
-    public boolean isAbstract() {
-        return (this.access & Opcodes.ACC_ABSTRACT) != 0;
+    public boolean isBodiless() {
+        return (this.access & (Opcodes.ACC_ABSTRACT | Opcodes.ACC_NATIVE)) != 0;
     }
 
     /**
