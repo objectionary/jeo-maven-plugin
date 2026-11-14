@@ -5,12 +5,14 @@
 package org.eolang.jeo;
 
 import java.io.IOException;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import org.eolang.jeo.representation.bytecode.JavaSourceClass;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -35,6 +37,32 @@ final class JeoClassLoaderTest {
             new JeoClassLoader(
                 Thread.currentThread().getContextClassLoader(),
                 Collections.singleton(temp.toString())
+            ).loadClass("com.acme.classes.Foo").getName(),
+            Matchers.equalTo("com.acme.classes.Foo")
+        );
+    }
+
+    @Test
+    void loadsClassFromSymlinkedClasspathDirectory(@TempDir final Path temp)
+        throws IOException, ClassNotFoundException {
+        final Path target = temp.resolve("target");
+        final Path pckg = target.resolve("com").resolve("acme").resolve("classes");
+        Files.createDirectories(pckg);
+        Files.write(
+            pckg.resolve("Foo.class"),
+            new JavaSourceClass("org/eolang/jeo/loader/Foo.java").compile().bytes()
+        );
+        final Path linked = temp.resolve("linked");
+        try {
+            Files.createSymbolicLink(linked, target);
+        } catch (final FileSystemException exception) {
+            Assumptions.assumeTrue(false, exception.getMessage());
+        }
+        MatcherAssert.assertThat(
+            "JeoClassLoader should load classes through a symlinked classpath root",
+            new JeoClassLoader(
+                Thread.currentThread().getContextClassLoader(),
+                Collections.singleton(linked.toString())
             ).loadClass("com.acme.classes.Foo").getName(),
             Matchers.equalTo("com.acme.classes.Foo")
         );

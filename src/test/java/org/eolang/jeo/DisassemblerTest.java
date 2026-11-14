@@ -4,7 +4,9 @@
  */
 package org.eolang.jeo;
 
+import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -19,6 +21,7 @@ import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -98,5 +101,52 @@ final class DisassemblerTest {
             Files.exists(xmir.resolve("extra").resolve("MethodByte.xmir")),
             Matchers.is(false)
         );
+    }
+
+    @Test
+    void disassemblesClassesFromSymlinkedDirectory(@TempDir final Path temp) throws Exception {
+        final Path target = temp.resolve("target");
+        Files.createDirectories(target);
+        Files.write(
+            target.resolve("MethodByte.class"),
+            new BytesOf(new ResourceOf("MethodByte.class")).asBytes()
+        );
+        final Path linked = temp.resolve("linked");
+        DisassemblerTest.symlink(linked, target);
+        final Path xmir = temp.resolve("xmir");
+        new Disassembler(linked, xmir).disassemble();
+        MatcherAssert.assertThat(
+            "Disassembler should produce XMIR when sourcesDir is a symbolic link",
+            Files.exists(xmir.resolve("MethodByte.xmir")),
+            Matchers.is(true)
+        );
+    }
+
+    @Test
+    void disassemblesClassesFromSymlinkedSubdirectory(@TempDir final Path temp) throws Exception {
+        final Path target = temp.resolve("target");
+        Files.createDirectories(target);
+        Files.write(
+            target.resolve("MethodByte.class"),
+            new BytesOf(new ResourceOf("MethodByte.class")).asBytes()
+        );
+        final Path classes = temp.resolve("classes");
+        Files.createDirectories(classes);
+        DisassemblerTest.symlink(classes.resolve("sub"), target);
+        final Path xmir = temp.resolve("xmir");
+        new Disassembler(classes, xmir).disassemble();
+        MatcherAssert.assertThat(
+            "Disassembler should traverse symlinked subdirectories under sourcesDir",
+            Files.exists(xmir.resolve("sub").resolve("MethodByte.xmir")),
+            Matchers.is(true)
+        );
+    }
+
+    private static void symlink(final Path link, final Path target) throws IOException {
+        try {
+            Files.createSymbolicLink(link, target);
+        } catch (final FileSystemException exception) {
+            Assumptions.assumeTrue(false, exception.getMessage());
+        }
     }
 }

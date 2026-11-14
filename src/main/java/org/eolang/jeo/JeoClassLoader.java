@@ -6,6 +6,7 @@ package org.eolang.jeo;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -115,7 +116,7 @@ public final class JeoClassLoader extends ClassLoader {
     }
 
     private static Stream<MapEntry<String, byte[]>> clazzes(final Path root) {
-        try (Stream<Path> paths = Files.walk(root)) {
+        try (Stream<Path> paths = Files.walk(root, FileVisitOption.FOLLOW_LINKS)) {
             return paths
                 .filter(JeoClassLoader::isClass)
                 .map(clazz -> JeoClassLoader.entry(root, clazz))
