@@ -183,8 +183,38 @@ final class XmirFilesTest {
                 IllegalArgumentException.class,
                 () -> new XmirFiles(temp).verify()
             ).getMessage(),
-            Matchers.containsString(
-                "1 error(s) in XML document"
+            Matchers.allOf(
+                Matchers.containsString("MethodByte.xmir"),
+                Matchers.containsString("1 error(s) in XML document")
+            )
+        );
+    }
+
+    @Test
+    void reportsFilePathWithoutWholeDocumentWhenLintsFail(@TempDir final Path temp)
+        throws IOException {
+        final Path broken = temp.resolve("Ops.xmir");
+        Files.write(
+            broken,
+            new BytecodeObject(new BytecodeClass("org.jeo.Ops"))
+                .xml()
+                .toString()
+                .replace("name=\"access\"", "name=\"version\"")
+                .replace("name='access'", "name='version'")
+                .getBytes(StandardCharsets.UTF_8)
+        );
+        MatcherAssert.assertThat(
+            "Failure message should name the XMIR file and defect without dumping XML",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new XmirFiles(temp).verify(),
+                "XmirFiles.verify() should fail on lint defects"
+            ).getMessage(),
+            Matchers.allOf(
+                Matchers.containsString(broken.toString()),
+                Matchers.containsString("duplicate-names"),
+                Matchers.not(Matchers.containsString("<?xml")),
+                Matchers.not(Matchers.containsString("<object"))
             )
         );
     }

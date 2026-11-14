@@ -110,11 +110,10 @@ public final class JcabiXmlNode implements XmlNode {
         if (!defects.isEmpty()) {
             throw new IllegalStateException(
                 String.format(
-                    "XMIR is incorrect (%d errors): %s, %n%s%n",
+                    "XMIR is incorrect (%d errors): %s",
                     defects.size(),
                     defects.stream().map(Object::toString)
-                        .collect(Collectors.joining(System.lineSeparator())),
-                    this.doc
+                        .collect(Collectors.joining(System.lineSeparator()))
                 )
             );
         }
