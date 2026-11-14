@@ -62,6 +62,33 @@ public final class BytecodeListing {
         try (PrintWriter out = new PrintWriter(writer)) {
             reader.accept(new TraceClassVisitor(out), this.options);
         }
-        return writer.toString();
+        return BytecodeListing.escaped(writer.toString());
+    }
+
+    private static String escaped(final String raw) {
+        final StringBuilder result = new StringBuilder(raw.length());
+        int index = 0;
+        while (index < raw.length()) {
+            final int code = raw.codePointAt(index);
+            if (BytecodeListing.restricted(code)) {
+                result.append(String.format("\\u%04x", code));
+            } else {
+                result.appendCodePoint(code);
+            }
+            index += Character.charCount(code);
+        }
+        return result.toString();
+    }
+
+    private static boolean restricted(final int code) {
+        final boolean result;
+        if (code < 0x20) {
+            result = code != '\t' && code != '\n' && code != '\r';
+        } else if (code >= 0xD800) {
+            result = code <= 0xDFFF || code == 0xFFFE || code == 0xFFFF;
+        } else {
+            result = false;
+        }
+        return result;
     }
 }
