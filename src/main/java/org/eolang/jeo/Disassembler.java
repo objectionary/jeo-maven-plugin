@@ -6,6 +6,7 @@ package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -145,7 +146,7 @@ public final class Disassembler {
 
     private void clean(final Set<Path> produced) {
         if (Files.isDirectory(this.target)) {
-            try (Stream<Path> all = Files.walk(this.target)) {
+            try (Stream<Path> all = Files.walk(this.target, FileVisitOption.FOLLOW_LINKS)) {
                 final List<Path> stale = all
                     .filter(path -> path.getFileName().toString().endsWith(".xmir"))
                     .filter(path -> !produced.contains(path.toAbsolutePath().normalize()))

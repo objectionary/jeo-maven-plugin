@@ -6,6 +6,7 @@ package org.eolang.jeo;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,6 +19,7 @@ import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -187,5 +189,52 @@ final class XmirFilesTest {
                 "1 error(s) in XML document"
             )
         );
+    }
+
+    @Test
+    void retrievesObjectsFromSymlinkedDirectory(@TempDir final Path temp) throws IOException {
+        final Path target = temp.resolve("target");
+        Files.createDirectories(target);
+        Files.write(
+            target.resolve("First.xmir"),
+            new BytecodeObject(new BytecodeClass("org.jeo.First"))
+                .xml()
+                .toString()
+                .getBytes(StandardCharsets.UTF_8)
+        );
+        final Path linked = temp.resolve("linked");
+        XmirFilesTest.symlink(linked, target);
+        MatcherAssert.assertThat(
+            "XmirFiles should read XMIR files through a symlinked directory",
+            new XmirFiles(linked).all().collect(Collectors.toList()),
+            Matchers.hasSize(1)
+        );
+    }
+
+    @Test
+    void verifiesXmirFilesInSymlinkedDirectory(@TempDir final Path temp) throws IOException {
+        final Path target = temp.resolve("target");
+        Files.createDirectories(target);
+        Files.write(
+            target.resolve("MethodByte.xmir"),
+            new BytecodeRepresentation(new ResourceOf("MethodByte.class"))
+                .toXmir()
+                .toString()
+                .getBytes(StandardCharsets.UTF_8)
+        );
+        final Path linked = temp.resolve("linked");
+        XmirFilesTest.symlink(linked, target);
+        Assertions.assertDoesNotThrow(
+            () -> new XmirFiles(linked).verify(),
+            "XmirFiles.verify() should verify XMIR files inside a symlinked directory"
+        );
+    }
+
+    private static void symlink(final Path link, final Path target) throws IOException {
+        try {
+            Files.createSymbolicLink(link, target);
+        } catch (final FileSystemException exception) {
+            Assumptions.assumeTrue(false, exception.getMessage());
+        }
     }
 }
