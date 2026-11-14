@@ -99,4 +99,58 @@ final class DisassemblerTest {
             Matchers.is(false)
         );
     }
+
+    @Test
+    void reportsCachedFilesSeparatelyInSummary(@TempDir final Path temp) throws Exception {
+        final Path classes = temp.resolve("classes");
+        Files.createDirectories(classes.resolve("extra"));
+        final byte[] bytes = new BytesOf(new ResourceOf("MethodByte.class")).asBytes();
+        Files.write(classes.resolve("MethodByte.class"), bytes);
+        Files.write(classes.resolve("extra").resolve("MethodByte.class"), bytes);
+        final Path xmir = temp.resolve("xmir");
+        new Disassembler(classes, xmir).disassemble();
+        final StringWriter logs = new StringWriter();
+        final Appender appender = new WriterAppender(new SimpleLayout(), logs);
+        final Logger logger = Logger.getLogger(Summary.class);
+        logger.addAppender(appender);
+        try {
+            new Disassembler(classes, xmir).disassemble();
+        } finally {
+            logger.removeAppender(appender);
+        }
+        MatcherAssert.assertThat(
+            "Summary must report 0 disassembled and 2 cached when all classes are skipped",
+            logs.toString(),
+            Matchers.containsString(
+                "Total 0 files were disassembled and 2 were taken from the cache"
+            )
+        );
+    }
+
+    @Test
+    void reportsMixedFreshAndCachedFilesInSummary(@TempDir final Path temp) throws Exception {
+        final Path classes = temp.resolve("classes");
+        Files.createDirectories(classes.resolve("extra"));
+        final byte[] bytes = new BytesOf(new ResourceOf("MethodByte.class")).asBytes();
+        Files.write(classes.resolve("MethodByte.class"), bytes);
+        final Path xmir = temp.resolve("xmir");
+        new Disassembler(classes, xmir).disassemble();
+        Files.write(classes.resolve("extra").resolve("MethodByte.class"), bytes);
+        final StringWriter logs = new StringWriter();
+        final Appender appender = new WriterAppender(new SimpleLayout(), logs);
+        final Logger logger = Logger.getLogger(Summary.class);
+        logger.addAppender(appender);
+        try {
+            new Disassembler(classes, xmir).disassemble();
+        } finally {
+            logger.removeAppender(appender);
+        }
+        MatcherAssert.assertThat(
+            "Summary must report fresh and cached counts separately for mixed runs",
+            logs.toString(),
+            Matchers.containsString(
+                "Total 1 files were disassembled and 1 were taken from the cache"
+            )
+        );
+    }
 }
