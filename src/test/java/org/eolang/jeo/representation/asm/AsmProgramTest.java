@@ -4,6 +4,8 @@
  */
 package org.eolang.jeo.representation.asm;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.bytecode.Bytecode;
@@ -15,6 +17,7 @@ import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.xmir.XmlObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -156,6 +159,71 @@ final class AsmProgramTest {
                 new Xembler(bytecode.directives(new Format())).xml()
             ).bytecode().bytecode(),
             Matchers.equalTo(bytecode.bytecode())
+        );
+    }
+
+    @Test
+    void rejectsEmptyInput() {
+        MatcherAssert.assertThat(
+            "Empty bytes must be rejected as not a class file",
+            Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new AsmProgram(new byte[0]).bytecode()
+            ).getMessage(),
+            Matchers.containsString("Not a class file")
+        );
+    }
+
+    @Test
+    void rejectsPlainTextInput() {
+        MatcherAssert.assertThat(
+            "Short plain text must be rejected instead of throwing IndexOutOfBoundsException",
+            Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new AsmProgram("hello".getBytes(StandardCharsets.UTF_8)).bytecode()
+            ).getMessage(),
+            Matchers.containsString("Not a class file")
+        );
+    }
+
+    @Test
+    void rejectsCorruptedMagicHeader() throws Exception {
+        final byte[] original = new BytesOf(new ResourceOf("MethodByte.class")).asBytes();
+        final byte[] prefix = "PK!!".getBytes(StandardCharsets.US_ASCII);
+        System.arraycopy(prefix, 0, original, 0, prefix.length);
+        MatcherAssert.assertThat(
+            "Class bytes whose 0xCAFEBABE magic was overwritten must be rejected",
+            Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new AsmProgram(original).bytecode()
+            ).getMessage(),
+            Matchers.containsString("0xCAFEBABE")
+        );
+    }
+
+    @Test
+    void rejectsTruncatedClassFile() throws Exception {
+        final byte[] original = new BytesOf(new ResourceOf("MethodByte.class")).asBytes();
+        final byte[] truncated = Arrays.copyOf(original, original.length / 2);
+        MatcherAssert.assertThat(
+            "Truncated class bytes must be rejected with a descriptive message",
+            Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new AsmProgram(truncated).bytecode()
+            ).getMessage(),
+            Matchers.containsString("truncated")
+        );
+    }
+
+    @Test
+    void validatesHeaderWhenCreatingReader() {
+        MatcherAssert.assertThat(
+            "reader() must validate the class header before instantiating ClassReader",
+            Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> new AsmProgram("not-a-class-file".getBytes(StandardCharsets.UTF_8)).reader()
+            ).getMessage(),
+            Matchers.containsString("0xCAFEBABE")
         );
     }
 }
