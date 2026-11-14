@@ -147,8 +147,10 @@ public final class Disassembler {
         if (Files.isDirectory(this.target)) {
             try (Stream<Path> all = Files.walk(this.target)) {
                 final List<Path> stale = all
+                    .filter(Files::isRegularFile)
                     .filter(path -> path.getFileName().toString().endsWith(".xmir"))
                     .filter(path -> !produced.contains(path.toAbsolutePath().normalize()))
+                    .filter(path -> !Files.exists(this.classOf(path)))
                     .collect(Collectors.toList());
                 for (final Path path : stale) {
                     Files.delete(path);
@@ -164,6 +166,18 @@ public final class Disassembler {
                 );
             }
         }
+    }
+
+    private Path classOf(final Path xmir) {
+        final String relative = this.target.toAbsolutePath().normalize()
+            .relativize(xmir.toAbsolutePath().normalize())
+            .toString();
+        return this.classes.root().resolve(
+            String.format(
+                "%s.class",
+                relative.substring(0, relative.length() - ".xmir".length())
+            )
+        );
     }
 
     private Path disassemble(final Path path, final Counter counter) {
