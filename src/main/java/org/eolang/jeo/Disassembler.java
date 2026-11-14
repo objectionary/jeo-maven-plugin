@@ -7,6 +7,7 @@ package org.eolang.jeo;
 import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
@@ -145,19 +146,31 @@ public final class Disassembler {
 
     private void clean(final Set<Path> produced) {
         if (Files.isDirectory(this.target)) {
-            try (Stream<Path> all = Files.walk(this.target)) {
-                final List<Path> stale = all
-                    .filter(Files::isRegularFile)
-                    .filter(path -> path.getFileName().toString().endsWith(".xmir"))
-                    .filter(path -> !produced.contains(path.toAbsolutePath().normalize()))
-                    .filter(path -> !Files.exists(this.classOf(path)))
-                    .collect(Collectors.toList());
-                for (final Path path : stale) {
-                    Files.delete(path);
-                    Files.deleteIfExists(
-                        path.resolveSibling(String.format("%s.jeo-cache", path.getFileName()))
-                    );
-                    Logger.info(this, "Removed %[file]s, since it has no class anymore", path);
+            try {
+                final Path root = this.target.toRealPath();
+                final Path logical = this.target.toAbsolutePath().normalize();
+                try (Stream<Path> all = Files.walk(root)) {
+                    final List<Path> stale = all
+                        .filter(path -> Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS))
+                        .filter(path -> path.getFileName().toString().endsWith(".xmir"))
+                        .filter(
+                            path -> {
+                                final Path resolved = logical.resolve(root.relativize(path))
+                                    .normalize();
+                                return !produced.contains(resolved)
+                                    && !Files.exists(this.classOf(resolved));
+                            }
+                        )
+                        .collect(Collectors.toList());
+                    for (final Path path : stale) {
+                        Files.delete(path);
+                        Files.deleteIfExists(
+                            path.resolveSibling(String.format("%s.jeo-cache", path.getFileName()))
+                        );
+                        Logger.info(
+                            this, "Removed %[file]s, since it has no class anymore", path
+                        );
+                    }
                 }
             } catch (final IOException exception) {
                 throw new IllegalStateException(
