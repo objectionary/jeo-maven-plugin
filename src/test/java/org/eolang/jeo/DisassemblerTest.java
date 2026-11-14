@@ -5,6 +5,7 @@
 package org.eolang.jeo;
 
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -19,6 +20,7 @@ import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -97,6 +99,28 @@ final class DisassemblerTest {
             "The XMIR of a class that is gone must be removed, or assemble brings the class back",
             Files.exists(xmir.resolve("extra").resolve("MethodByte.xmir")),
             Matchers.is(false)
+        );
+    }
+
+    @Test
+    void failsWithFileNameForNonClassFile(@TempDir final Path temp) throws Exception {
+        final Path classes = temp.resolve("classes");
+        Files.createDirectories(classes);
+        Files.write(
+            classes.resolve("Broken.class"),
+            "hello".getBytes(StandardCharsets.UTF_8)
+        );
+        final Path xmir = temp.resolve("xmir");
+        MatcherAssert.assertThat(
+            "Non-class files must fail with a message naming the broken file",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new Disassembler(classes, xmir).disassemble()
+            ).getCause().getCause().getMessage(),
+            Matchers.allOf(
+                Matchers.containsString("Broken.class"),
+                Matchers.containsString("Not a class file")
+            )
         );
     }
 }
