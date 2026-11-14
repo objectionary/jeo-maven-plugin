@@ -49,7 +49,7 @@ final class MeasuredEo {
             new Xembler(
                 new Directives()
                     .xpath("/object[@ms]/@ms")
-                    .set(String.format("%d", end - start))
+                    .set(String.valueOf(end - start))
             ).apply(doc.inner())
         );
     }
