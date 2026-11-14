@@ -33,4 +33,22 @@ final class AsmUnknownAttributeTest {
             Matchers.notNullValue()
         );
     }
+
+    @Test
+    void reportsFalseForNonCodeAttributeByDefault() {
+        MatcherAssert.assertThat(
+            "Regular unknown attributes must report isCodeAttribute() == false by default",
+            new AsmUnknownAttribute("ModuleResolution").isCodeAttribute(),
+            Matchers.is(false)
+        );
+    }
+
+    @Test
+    void reportsCodeAttributeFlagWhenEnabled() {
+        MatcherAssert.assertThat(
+            "Code-level unknown attributes must report isCodeAttribute() == true",
+            new AsmUnknownAttribute("CharacterRangeTable", true).isCodeAttribute(),
+            Matchers.is(true)
+        );
+    }
 }
