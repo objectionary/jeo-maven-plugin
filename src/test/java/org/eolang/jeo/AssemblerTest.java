@@ -52,4 +52,31 @@ final class AssemblerTest {
             Matchers.not(Matchers.containsString("assembled in"))
         );
     }
+
+    @Test
+    void reportsCachedFilesSeparatelyInSummary(@TempDir final Path temp) throws Exception {
+        final Path classes = temp.resolve("classes");
+        Files.createDirectories(classes.resolve("extra"));
+        final byte[] bytes = new BytesOf(new ResourceOf("MethodByte.class")).asBytes();
+        Files.write(classes.resolve("MethodByte.class"), bytes);
+        Files.write(classes.resolve("extra").resolve("MethodByte.class"), bytes);
+        final Path xmir = temp.resolve("xmir");
+        new Disassembler(classes, xmir).disassemble();
+        final Path output = temp.resolve("output");
+        new Assembler(xmir, output, false).assemble();
+        final StringWriter logs = new StringWriter();
+        final Appender appender = new WriterAppender(new SimpleLayout(), logs);
+        final Logger logger = Logger.getLogger(Summary.class);
+        logger.addAppender(appender);
+        try {
+            new Assembler(xmir, output, false).assemble();
+        } finally {
+            logger.removeAppender(appender);
+        }
+        MatcherAssert.assertThat(
+            "Summary must report 0 assembled and 2 cached when all XMIR files are skipped",
+            logs.toString(),
+            Matchers.containsString("Total 0 files were assembled and 2 were taken from the cache")
+        );
+    }
 }
