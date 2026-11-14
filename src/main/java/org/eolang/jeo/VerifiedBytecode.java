@@ -72,10 +72,62 @@ public final class VerifiedBytecode {
                 );
             }
         }
+        this.verifyJvm(clazz);
         Logger.info(
             BytecodeClasses.class,
             "Bytecode verification passed for the class '%s'",
             clazz.name
         );
+    }
+
+    private void verifyJvm(final ClassNode clazz) {
+        if ((clazz.access & Opcodes.ACC_MODULE) == 0) {
+            final String binary = clazz.name.replace('/', '.');
+            try {
+                Logger.debug(
+                    VerifiedBytecode.class,
+                    "JVM verified %d method(s) in '%s'",
+                    Class.forName(
+                        binary,
+                        false,
+                        this.isolatedLoader(binary)
+                    ).getDeclaredMethods().length,
+                    clazz.name
+                );
+            } catch (final VerifyError | ClassFormatError exception) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Bytecode verification failed for the class '%s'",
+                        clazz.name
+                    ),
+                    exception
+                );
+            } catch (final ClassNotFoundException | NoClassDefFoundError | IllegalAccessError
+                | SecurityException ex) {
+                Logger.warn(
+                    VerifiedBytecode.class,
+                    "JVM bytecode verification skipped for '%s': %s",
+                    clazz.name,
+                    ex.getMessage()
+                );
+            }
+        }
+    }
+
+    private ClassLoader isolatedLoader(final String binary) {
+        return new ClassLoader(Thread.currentThread().getContextClassLoader()) {
+            @Override
+            protected Class<?> findClass(final String name) throws ClassNotFoundException {
+                if (!name.equals(binary)) {
+                    throw new ClassNotFoundException(name);
+                }
+                return this.defineClass(
+                    binary,
+                    VerifiedBytecode.this.code,
+                    0,
+                    VerifiedBytecode.this.code.length
+                );
+            }
+        };
     }
 }
