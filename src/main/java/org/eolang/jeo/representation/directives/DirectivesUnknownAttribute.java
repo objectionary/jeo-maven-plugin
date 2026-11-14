@@ -4,8 +4,11 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import org.xembly.Directive;
+import org.xembly.Directives;
 
 /**
  * Unknown attribute directives.
@@ -35,6 +38,11 @@ public final class DirectivesUnknownAttribute implements Iterable<Directive> {
     private final byte[] data;
 
     /**
+     * Whether this attribute belongs to a method's Code attribute.
+     */
+    private final boolean code;
+
+    /**
      * Constructor.
      *
      * @param format Format of the directives
@@ -48,19 +56,44 @@ public final class DirectivesUnknownAttribute implements Iterable<Directive> {
         final String type,
         final byte[] data
     ) {
+        this(format, index, type, data, false);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param format Format of the directives
+     * @param index Index of the attribute
+     * @param type Type of the attribute
+     * @param data Data of the attribute
+     * @param code Whether the attribute belongs to a Code attribute
+     */
+    public DirectivesUnknownAttribute(
+        final Format format,
+        final int index,
+        final String type,
+        final byte[] data,
+        final boolean code
+    ) {
         this.format = format;
         this.index = index;
         this.type = type;
         this.data = data.clone();
+        this.code = code;
     }
 
     @Override
     public Iterator<Directive> iterator() {
+        final List<Directives> inner = new ArrayList<>(0);
+        inner.add(new Directives(new DirectivesValue(this.format, "type", this.type)));
+        inner.add(new Directives(new DirectivesValue(this.format, "data", this.data)));
+        if (this.code) {
+            inner.add(new Directives(new DirectivesValue(this.format, "code", true)));
+        }
         return new DirectivesJeoObject(
             "unknown-attribute",
             String.format("a%d", this.index),
-            new DirectivesValue(this.format, "type", this.type),
-            new DirectivesValue(this.format, "data", this.data)
+            inner
         ).iterator();
     }
 }

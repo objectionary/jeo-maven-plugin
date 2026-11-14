@@ -5,8 +5,11 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
 import org.eolang.jeo.VerifiedBytecode;
@@ -24,7 +27,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -327,5 +332,89 @@ final class BytecodeRepresentationTest {
             ).toBytecode().toString(),
             Matchers.equalTo(original.toString())
         );
+    }
+
+    @Test
+    void preservesModuleResolutionAttribute() {
+        final byte[] payload = {0, (byte) (Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC)};
+        final ClassWriter writer = new ClassWriter(0);
+        writer.visit(Opcodes.V9, Opcodes.ACC_MODULE, "module-info", null, null, null);
+        writer.visitModule("example.mod", 0, "1.0").visitEnd();
+        writer.visitAttribute(new AsmUnknownAttribute("ModuleResolution", payload));
+        writer.visitEnd();
+        final byte[] restored = new XmirRepresentation(
+            new BytecodeRepresentation(new Bytecode(writer.toByteArray())).toXmir()
+        ).toBytecode().bytes();
+        final ClassNode node = new ClassNode();
+        final ClassReader reader = new ClassReader(restored);
+        reader.accept(node, AsmUnknownAttributes.prototypes(reader), 0);
+        MatcherAssert.assertThat(
+            "ModuleResolution attribute must survive disassemble and assemble round trip",
+            new AsmUnknownAttributes(node).bytecode(),
+            Matchers.hasItem(new BytecodeUnknownAttribute("ModuleResolution", payload))
+        );
+    }
+
+    @Test
+    void preservesCodeLevelCustomAttributesInsideCodeAttribute() {
+        final ClassWriter writer = new ClassWriter(0);
+        writer.visit(
+            Opcodes.V1_8, Opcodes.ACC_PUBLIC, "example/CodeAttrs", null, "java/lang/Object", null
+        );
+        final MethodVisitor method = writer.visitMethod(
+            Opcodes.ACC_PUBLIC, "work", "()V", null, null
+        );
+        method.visitCode();
+        method.visitInsn(Opcodes.RETURN);
+        method.visitMaxs(0, 1);
+        method.visitAttribute(
+            new AsmUnknownAttribute("CharacterRangeTable", new byte[]{0, 0}, true)
+        );
+        method.visitEnd();
+        writer.visitEnd();
+        final byte[] restored = new XmirRepresentation(
+            new BytecodeRepresentation(new Bytecode(writer.toByteArray())).toXmir()
+        ).toBytecode().bytes();
+        final List<String> seen = new ArrayList<>(0);
+        final ClassReader reader = new ClassReader(restored);
+        reader.accept(
+            BytecodeRepresentationTest.methodScanner(seen),
+            AsmUnknownAttributes.prototypes(reader),
+            0
+        );
+        MatcherAssert.assertThat(
+            "Code-level attribute must remain inside Code attribute after round trip",
+            seen,
+            Matchers.contains("CharacterRangeTable")
+        );
+    }
+
+    private static ClassVisitor methodScanner(final List<String> seen) {
+        return new ClassVisitor(Opcodes.ASM9) {
+            @Override
+            public MethodVisitor visitMethod(
+                final int access, final String name, final String desc,
+                final String sig, final String[] exceptions
+            ) {
+                return BytecodeRepresentationTest.codeAttrCollector(seen);
+            }
+        };
+    }
+
+    private static MethodVisitor codeAttrCollector(final List<String> seen) {
+        final AtomicBoolean inside = new AtomicBoolean(false);
+        return new MethodVisitor(Opcodes.ASM9) {
+            @Override
+            public void visitCode() {
+                inside.set(true);
+            }
+
+            @Override
+            public void visitAttribute(final Attribute attr) {
+                if (inside.get()) {
+                    seen.add(attr.type);
+                }
+            }
+        };
     }
 }

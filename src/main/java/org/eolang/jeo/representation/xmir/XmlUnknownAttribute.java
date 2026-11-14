@@ -45,7 +45,8 @@ public final class XmlUnknownAttribute {
     public BytecodeUnknownAttribute bytecode() {
         return new BytecodeUnknownAttribute(
             this.type(),
-            this.data()
+            this.data(),
+            this.code()
         );
     }
 
@@ -67,5 +68,13 @@ public final class XmlUnknownAttribute {
                 )
             )
         ).object();
+    }
+
+    private boolean code() {
+        return this.node.child(2)
+            .map(XmlValue::new)
+            .map(XmlValue::object)
+            .map(Boolean.class::cast)
+            .orElse(false);
     }
 }
