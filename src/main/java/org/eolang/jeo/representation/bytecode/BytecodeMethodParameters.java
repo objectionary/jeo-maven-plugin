@@ -102,8 +102,8 @@ public final class BytecodeMethodParameters {
         final int visible,
         final int invisible
     ) {
-        this.params = params;
-        this.annotations = annotations;
+        this.params = new ArrayList<>(params);
+        this.annotations = new ArrayList<>(annotations);
         this.visible = visible;
         this.invisible = invisible;
     }

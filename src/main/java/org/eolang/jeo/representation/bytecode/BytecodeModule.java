@@ -4,9 +4,11 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.asm.AsmLabels;
 import org.eolang.jeo.representation.directives.DirectivesModule;
@@ -75,6 +77,8 @@ public final class BytecodeModule implements BytecodeAttribute {
     /**
      * Constructor.
      *
+     * <p>Snapshot the lists while retaining ASM's null-as-empty convention.</p>
+     *
      * @param name Module name
      * @param access Module access flags
      * @param version Module version
@@ -85,6 +89,7 @@ public final class BytecodeModule implements BytecodeAttribute {
      * @param opens Module opens
      * @param provides Module provides
      * @param uses Module uses
+     * @checkstyle ConstructorsCodeFreeCheck (33 lines)
      */
     public BytecodeModule(
         final String name,
@@ -102,12 +107,20 @@ public final class BytecodeModule implements BytecodeAttribute {
         this.access = access;
         this.version = version;
         this.main = main;
-        this.packages = packages;
-        this.requires = requires;
-        this.exports = exports;
-        this.opens = opens;
-        this.provides = provides;
-        this.uses = uses;
+        this.packages = new ArrayList<>(
+            Optional.ofNullable(packages).orElse(Collections.emptyList())
+        );
+        this.requires = new ArrayList<>(
+            Optional.ofNullable(requires).orElse(Collections.emptyList())
+        );
+        this.exports = new ArrayList<>(
+            Optional.ofNullable(exports).orElse(Collections.emptyList())
+        );
+        this.opens = new ArrayList<>(Optional.ofNullable(opens).orElse(Collections.emptyList()));
+        this.provides = new ArrayList<>(
+            Optional.ofNullable(provides).orElse(Collections.emptyList())
+        );
+        this.uses = new ArrayList<>(Optional.ofNullable(uses).orElse(Collections.emptyList()));
     }
 
     @Override
