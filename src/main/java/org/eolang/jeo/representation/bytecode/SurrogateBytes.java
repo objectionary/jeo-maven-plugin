@@ -17,6 +17,11 @@ package org.eolang.jeo.representation.bytecode;
 public final class SurrogateBytes {
 
     /**
+     * Minimum valid code point per UTF-8 byte sequence length.
+     */
+    private static final int[] MINIMUM = {0, 0, 0x80, 0x800, 0x10000};
+
+    /**
      * The bytes to decode.
      */
     private final byte[] bytes;
@@ -54,10 +59,17 @@ public final class SurrogateBytes {
     private int size(final int idx) {
         final int size = SurrogateBytes.expected(this.bytes[idx] & 0xFF);
         final int result;
-        if (size > 1 && !this.continued(idx, size)) {
-            result = 0;
-        } else {
+        if (size <= 1) {
             result = size;
+        } else if (this.continued(idx, size)) {
+            final int point = this.code(idx, size);
+            if (point < SurrogateBytes.MINIMUM[size] || point > Character.MAX_CODE_POINT) {
+                result = 0;
+            } else {
+                result = size;
+            }
+        } else {
+            result = 0;
         }
         return result;
     }
