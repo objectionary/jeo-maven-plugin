@@ -6,6 +6,7 @@ package org.eolang.jeo;
 
 import com.jcabi.log.Logger;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -85,7 +86,7 @@ final class BytecodeClasses implements Classes {
         final Path directory = this.checked();
         final Collection<Path> result;
         if (Files.exists(directory)) {
-            try (Stream<Path> walk = Files.walk(directory)) {
+            try (Stream<Path> walk = Files.walk(directory, FileVisitOption.FOLLOW_LINKS)) {
                 result = walk
                     .filter(Files::isRegularFile)
                     .filter(path -> path.toString().endsWith(".class"))
