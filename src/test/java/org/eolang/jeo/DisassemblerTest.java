@@ -99,4 +99,106 @@ final class DisassemblerTest {
             Matchers.is(false)
         );
     }
+
+    @Test
+    void keepsXmirOfFilteredOutClass(@TempDir final Path temp) throws Exception {
+        final Path classes = temp.resolve("classes");
+        Files.createDirectories(classes.resolve("com").resolve("a"));
+        Files.createDirectories(classes.resolve("com").resolve("b"));
+        final byte[] bytes = new BytesOf(new ResourceOf("MethodByte.class")).asBytes();
+        Files.write(classes.resolve("com").resolve("a").resolve("MethodByte.class"), bytes);
+        Files.write(classes.resolve("com").resolve("b").resolve("MethodByte.class"), bytes);
+        final Path xmir = temp.resolve("xmir");
+        new Disassembler(classes, xmir).disassemble();
+        new Disassembler(
+            new FilteredClasses(
+                new BytecodeClasses(classes),
+                new GlobFilter(Collections.singleton("com/a/**"), Collections.emptySet())
+            ),
+            xmir,
+            new Format(),
+            false
+        ).disassemble();
+        MatcherAssert.assertThat(
+            "The XMIR of a class skipped by includes must stay on disk",
+            Files.exists(xmir.resolve("com").resolve("b").resolve("MethodByte.xmir")),
+            Matchers.is(true)
+        );
+    }
+
+    @Test
+    void keepsCacheOfFilteredOutClass(@TempDir final Path temp) throws Exception {
+        final Path classes = temp.resolve("classes");
+        Files.createDirectories(classes.resolve("com").resolve("a"));
+        Files.createDirectories(classes.resolve("com").resolve("b"));
+        final byte[] bytes = new BytesOf(new ResourceOf("MethodByte.class")).asBytes();
+        Files.write(classes.resolve("com").resolve("a").resolve("MethodByte.class"), bytes);
+        Files.write(classes.resolve("com").resolve("b").resolve("MethodByte.class"), bytes);
+        final Path xmir = temp.resolve("xmir");
+        new Disassembler(classes, xmir).disassemble();
+        new Disassembler(
+            new FilteredClasses(
+                new BytecodeClasses(classes),
+                new GlobFilter(Collections.singleton("com/a/**"), Collections.emptySet())
+            ),
+            xmir,
+            new Format(),
+            false
+        ).disassemble();
+        MatcherAssert.assertThat(
+            "The cache of a class skipped by includes must stay on disk",
+            Files.exists(xmir.resolve("com").resolve("b").resolve("MethodByte.xmir.jeo-cache")),
+            Matchers.is(true)
+        );
+    }
+
+    @Test
+    void keepsXmirOfExcludedClass(@TempDir final Path temp) throws Exception {
+        final Path classes = temp.resolve("classes");
+        Files.createDirectories(classes.resolve("com").resolve("a"));
+        Files.createDirectories(classes.resolve("com").resolve("b"));
+        final byte[] bytes = new BytesOf(new ResourceOf("MethodByte.class")).asBytes();
+        Files.write(classes.resolve("com").resolve("a").resolve("MethodByte.class"), bytes);
+        Files.write(classes.resolve("com").resolve("b").resolve("MethodByte.class"), bytes);
+        final Path xmir = temp.resolve("xmir");
+        new Disassembler(classes, xmir).disassemble();
+        new Disassembler(
+            new FilteredClasses(
+                new BytecodeClasses(classes),
+                new GlobFilter(Collections.emptySet(), Collections.singleton("com/b/**"))
+            ),
+            xmir,
+            new Format(),
+            false
+        ).disassemble();
+        MatcherAssert.assertThat(
+            "The XMIR of an excluded class whose .class still exists must stay on disk",
+            Files.exists(xmir.resolve("com").resolve("b").resolve("MethodByte.xmir")),
+            Matchers.is(true)
+        );
+    }
+
+    @Test
+    void removesXmirOfDeletedClassEvenWithExcludes(@TempDir final Path temp)
+        throws Exception {
+        final Path classes = temp.resolve("classes");
+        Files.createDirectories(classes.resolve("com").resolve("a"));
+        Files.createDirectories(classes.resolve("com").resolve("b"));
+        final byte[] bytes = new BytesOf(new ResourceOf("MethodByte.class")).asBytes();
+        Files.write(classes.resolve("com").resolve("a").resolve("MethodByte.class"), bytes);
+        Files.write(classes.resolve("com").resolve("b").resolve("MethodByte.class"), bytes);
+        final Path xmir = temp.resolve("xmir");
+        new Disassembler(classes, xmir).disassemble();
+        final Classes filtered = new FilteredClasses(
+            new BytecodeClasses(classes),
+            new GlobFilter(Collections.emptySet(), Collections.singleton("com/b/**"))
+        );
+        Files.delete(classes.resolve("com").resolve("b").resolve("MethodByte.class"));
+        new Disassembler(filtered, xmir, new Format(), false).disassemble();
+        MatcherAssert.assertThat(
+            "The XMIR of a deleted class must be removed even when excludes match its path",
+            Files.exists(xmir.resolve("com").resolve("b").resolve("MethodByte.xmir")),
+            Matchers.is(false)
+        );
+    }
 }
