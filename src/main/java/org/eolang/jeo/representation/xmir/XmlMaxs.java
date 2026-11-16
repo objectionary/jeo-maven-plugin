@@ -75,7 +75,7 @@ public final class XmlMaxs {
             new XmlOperand(
                 this.node.children().collect(Collectors.toList()).get(position)
             ).asObject(),
-            String.format(
+            () -> String.format(
                 "The XML node representing Maxs '%s' doesn't contain a valid integer at '%d' position",
                 this.node,
                 position
