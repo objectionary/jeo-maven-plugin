@@ -10,7 +10,6 @@ import org.eolang.jeo.representation.directives.DirectivesLocalVariables;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.tree.LocalVariableNode;
 import org.xembly.Directive;
 
 /**
@@ -50,22 +49,6 @@ public final class LocalVariable implements BytecodeAttribute {
      * End label.
      */
     private final BytecodeLabel end;
-
-    /**
-     * Constructor.
-     *
-     * @param variable Local variable node
-     */
-    public LocalVariable(final LocalVariableNode variable) {
-        this(
-            variable.index,
-            variable.name,
-            variable.desc,
-            variable.signature,
-            new BytecodeLabel(variable.start.getLabel().toString()),
-            new BytecodeLabel(variable.end.getLabel().toString())
-        );
-    }
 
     /**
      * Constructor.
