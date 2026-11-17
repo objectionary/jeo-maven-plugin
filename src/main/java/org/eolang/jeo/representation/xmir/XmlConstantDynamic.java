@@ -16,6 +16,11 @@ import org.objectweb.asm.ConstantDynamic;
 final class XmlConstantDynamic {
 
     /**
+     * How many operands a constant dynamic carries.
+     */
+    private static final int OPERANDS = 4;
+
+    /**
      * XML node.
      */
     private final XmlJeoObject node;
@@ -35,7 +40,18 @@ final class XmlConstantDynamic {
      * @return Dynamic constant
      */
     ConstantDynamic constant() {
-        final List<XmlNode> children = this.node.children().collect(Collectors.toList());
+        final List<XmlNode> children = this.node.children()
+            .collect(Collectors.toList());
+        if (children.size() < XmlConstantDynamic.OPERANDS) {
+            throw new IllegalStateException(
+                String.format(
+                    "Constant dynamic '%s' has %d operands, %d expected",
+                    this.node,
+                    children.size(),
+                    XmlConstantDynamic.OPERANDS
+                )
+            );
+        }
         return new ConstantDynamic(
             (String) new XmlOperand(children.get(0)).asObject(),
             (String) new XmlOperand(children.get(1)).asObject(),
