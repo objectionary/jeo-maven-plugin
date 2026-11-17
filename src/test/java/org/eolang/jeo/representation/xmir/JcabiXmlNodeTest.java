@@ -4,13 +4,17 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import com.jcabi.xml.XMLDocument;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.cactoos.list.ListOf;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -124,6 +128,31 @@ final class JcabiXmlNodeTest {
             ),
             actual,
             Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void validatesWithoutDumpingWholeXmlDocument() {
+        MatcherAssert.assertThat(
+            "Validation message should list the defect without dumping the XML document",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new JcabiXmlNode(
+                    new XMLDocument(
+                        new BytecodeObject(new BytecodeClass("org.jeo.Ops"))
+                            .xml()
+                            .toString()
+                            .replace("name=\"access\"", "name=\"version\"")
+                            .replace("name='access'", "name='version'")
+                    )
+                ).validate(),
+                "Validation should fail when duplicate names exist"
+            ).getMessage(),
+            Matchers.allOf(
+                Matchers.containsString("XMIR is incorrect (1 errors):"),
+                Matchers.containsString("duplicate-names"),
+                Matchers.not(Matchers.containsString("<object"))
+            )
         );
     }
 }

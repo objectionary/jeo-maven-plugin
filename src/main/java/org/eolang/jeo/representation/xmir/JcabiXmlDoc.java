@@ -22,12 +22,17 @@ public final class JcabiXmlDoc implements XmlDoc {
     private final XmlNode doc;
 
     /**
+     * Source description (file path or placeholder).
+     */
+    private final String source;
+
+    /**
      * Constructor.
      *
      * @param path Path to XML file
      */
     public JcabiXmlDoc(final Path path) {
-        this(JcabiXmlDoc.open(path));
+        this(new JcabiXmlNode(JcabiXmlDoc.open(path)), path.toString());
     }
 
     /**
@@ -36,16 +41,18 @@ public final class JcabiXmlDoc implements XmlDoc {
      * @param doc XML
      */
     public JcabiXmlDoc(final XML doc) {
-        this(new JcabiXmlNode(doc));
+        this(new JcabiXmlNode(doc), "Unknown");
     }
 
     /**
      * Constructor.
      *
      * @param root Root node
+     * @param source Source description
      */
-    private JcabiXmlDoc(final XmlNode root) {
+    private JcabiXmlDoc(final XmlNode root, final String source) {
         this.doc = root;
+        this.source = source;
     }
 
     @Override
@@ -55,7 +62,19 @@ public final class JcabiXmlDoc implements XmlDoc {
 
     @Override
     public void validate() {
-        this.doc.validate();
+        try {
+            this.doc.validate();
+        } catch (final IllegalStateException exception) {
+            throw new IllegalStateException(
+                String.format("Invalid XMIR in '%s': %s", this.source, exception.getMessage()),
+                exception
+            );
+        } catch (final IllegalArgumentException exception) {
+            throw new IllegalArgumentException(
+                String.format("Invalid XMIR in '%s': %s", this.source, exception.getMessage()),
+                exception
+            );
+        }
     }
 
     private static XML open(final Path path) {

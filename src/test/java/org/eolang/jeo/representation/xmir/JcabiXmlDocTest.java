@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.eolang.jeo.representation.bytecode.BytecodeClass;
+import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -43,6 +46,35 @@ final class JcabiXmlDocTest {
             "Can't read XML from file",
             new JcabiXmlDoc(path).root().children().findFirst().orElseThrow(AssertionError::new),
             Matchers.equalTo(new JcabiXmlNode("<o>2</o>"))
+        );
+    }
+
+    @Test
+    void includesFilePathWithoutDumpingXmlOnValidationError(@TempDir final Path dir)
+        throws IOException {
+        final Path path = dir.resolve("Broken.xmir");
+        Files.write(
+            path,
+            new BytecodeObject(new BytecodeClass("org.jeo.Broken"))
+                .xml()
+                .toString()
+                .replace("name=\"access\"", "name=\"version\"")
+                .replace("name='access'", "name='version'")
+                .getBytes(StandardCharsets.UTF_8)
+        );
+        MatcherAssert.assertThat(
+            "Validation error must name the broken file and defects without dumping XML",
+            Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> new JcabiXmlDoc(path).validate(),
+                "Validation should fail for XMIR with duplicate names"
+            ).getMessage(),
+            Matchers.allOf(
+                Matchers.containsString(path.toString()),
+                Matchers.containsString("duplicate-names"),
+                Matchers.not(Matchers.containsString("<?xml")),
+                Matchers.not(Matchers.containsString("<object"))
+            )
         );
     }
 }
