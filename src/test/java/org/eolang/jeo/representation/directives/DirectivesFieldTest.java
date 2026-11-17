@@ -98,4 +98,51 @@ final class DirectivesFieldTest {
             )
         );
     }
+
+    @Test
+    void omitsFieldModifiersWhenDisabled() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Field should omit modifiers object when Format.MODIFIERS is false",
+            new Xembler(
+                new DirectivesField(
+                    new Format(Format.MODIFIERS, false),
+                    Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL,
+                    "flag",
+                    "I",
+                    "",
+                    1,
+                    new DirectivesAnnotations("annotations-flag")
+                )
+            ).xml(),
+            XhtmlMatchers.hasXPath("/o[not(o[@name='modifiers'])]")
+        );
+    }
+
+    @Test
+    void emitsFieldModifiersWhenEnabled() throws ImpossibleModificationException {
+        MatcherAssert.assertThat(
+            "Field should include modifiers object with field flags when Format.MODIFIERS is true",
+            new Xembler(
+                new DirectivesField(
+                    new Format(Format.MODIFIERS, true),
+                    Opcodes.ACC_PUBLIC
+                        | Opcodes.ACC_STATIC
+                        | Opcodes.ACC_TRANSIENT
+                        | Opcodes.ACC_VOLATILE,
+                    "flag",
+                    "I",
+                    "",
+                    1,
+                    new DirectivesAnnotations("annotations-flag")
+                )
+            ).xml(),
+            XhtmlMatchers.hasXPaths(
+                "/o/o[@name='modifiers']/o[@name='public' and contains(@base,'true')]",
+                "/o/o[@name='modifiers']/o[@name='static' and contains(@base,'true')]",
+                "/o/o[@name='modifiers']/o[@name='transient' and contains(@base,'true')]",
+                "/o/o[@name='modifiers']/o[@name='volatile' and contains(@base,'true')]",
+                "/o/o[@name='modifiers']/o[@name='private' and contains(@base,'false')]"
+            )
+        );
+    }
 }

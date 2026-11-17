@@ -53,7 +53,6 @@ public final class DirectivesClassModifiers implements Iterable<Directive> {
             new DirectivesValue(this.format, "synthetic", all.is(Opcodes.ACC_SYNTHETIC)),
             new DirectivesValue(this.format, "annotation", all.is(Opcodes.ACC_ANNOTATION)),
             new DirectivesValue(this.format, "enum", all.is(Opcodes.ACC_ENUM)),
-            new DirectivesValue(this.format, "mandated", all.is(Opcodes.ACC_MANDATED)),
             new DirectivesValue(this.format, "module", all.is(Opcodes.ACC_MODULE)),
             new DirectivesValue(this.format, "record", all.is(Opcodes.ACC_RECORD)),
             new DirectivesValue(this.format, "deprecated", all.is(Opcodes.ACC_DEPRECATED))
