@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import com.jcabi.manifests.Manifests;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -24,17 +25,34 @@ public final class Fingerprint {
     private final Format format;
 
     /**
+     * The version of JEO.
+     */
+    private final String version;
+
+    /**
      * Constructor.
      *
      * @param format The format
      */
     public Fingerprint(final Format format) {
+        this(format, Fingerprint.readVersion());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param format The format
+     * @param version Version of JEO
+     */
+    public Fingerprint(final Format format, final String version) {
         this.format = format;
+        this.version = version;
     }
 
     @Override
     public String toString() {
         final Map<String, Object> props = new TreeMap<>();
+        props.put("jeo-version", this.version);
         props.put(Format.COMMENTS, this.format.comments());
         props.put(Format.LISTING, this.format.listing());
         props.put(Format.MODE, this.format.mode());
@@ -45,5 +63,15 @@ public final class Fingerprint {
             .stream()
             .map(entry -> String.format("%s=%s", entry.getKey(), entry.getValue()))
             .collect(Collectors.joining(";"));
+    }
+
+    private static String readVersion() {
+        final String result;
+        if (Manifests.exists("JEO-Version")) {
+            result = Manifests.read("JEO-Version");
+        } else {
+            result = "unknown";
+        }
+        return result;
     }
 }
