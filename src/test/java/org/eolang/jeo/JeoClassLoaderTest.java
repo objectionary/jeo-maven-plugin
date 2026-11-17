@@ -39,4 +39,44 @@ final class JeoClassLoaderTest {
             Matchers.equalTo("com.acme.classes.Foo")
         );
     }
+
+    @Test
+    void loadsSingleClassFileRetainingPackageName(@TempDir final Path temp)
+        throws IOException, ClassNotFoundException {
+        final Path single = temp.resolve("Foo.class");
+        Files.write(
+            single,
+            new JavaSourceClass("org/eolang/jeo/loader/Foo.java")
+                .compile()
+                .bytes()
+        );
+        MatcherAssert.assertThat(
+            "single class file must retain binary name with package",
+            new JeoClassLoader(
+                Thread.currentThread().getContextClassLoader(),
+                Collections.singleton(single.toString())
+            ).loadClass("com.acme.classes.Foo").getName(),
+            Matchers.equalTo("com.acme.classes.Foo")
+        );
+    }
+
+    @Test
+    void loadsSingleClassFileWithoutDirectory(@TempDir final Path temp)
+        throws IOException, ClassNotFoundException {
+        final Path single = temp.resolve("Isolated.class");
+        Files.write(
+            single,
+            new JavaSourceClass("org/eolang/jeo/loader/Foo.java")
+                .compile()
+                .bytes()
+        );
+        MatcherAssert.assertThat(
+            "single class file must load without string index errors",
+            new JeoClassLoader(
+                Thread.currentThread().getContextClassLoader(),
+                Collections.singleton(single.toString())
+            ).loadClass("com.acme.classes.Foo"),
+            Matchers.notNullValue()
+        );
+    }
 }

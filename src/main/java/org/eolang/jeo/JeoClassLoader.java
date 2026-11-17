@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.map.MapEntry;
+import org.objectweb.asm.ClassReader;
 
 /**
  * JEO class loader.
@@ -130,11 +131,18 @@ public final class JeoClassLoader extends ClassLoader {
     }
 
     private static MapEntry<String, byte[]> entry(final Path root, final Path file) {
-        final String relative = root.relativize(file).toString();
-        return new MapEntry<>(
-            relative.substring(0, relative.length() - JeoClassLoader.CLASS.length())
-                .replace(File.separatorChar, '.'),
-            new UncheckedBytes(new BytesOf(file.toAbsolutePath())).asBytes()
-        );
+        final byte[] bytes = new UncheckedBytes(
+            new BytesOf(file.toAbsolutePath())
+        ).asBytes();
+        final String name;
+        if (root.equals(file)) {
+            name = new ClassReader(bytes).getClassName().replace('/', '.');
+        } else {
+            final String relative = root.relativize(file).toString();
+            name = relative.substring(
+                0, relative.length() - JeoClassLoader.CLASS.length()
+            ).replace(File.separatorChar, '.');
+        }
+        return new MapEntry<>(name, bytes);
     }
 }
