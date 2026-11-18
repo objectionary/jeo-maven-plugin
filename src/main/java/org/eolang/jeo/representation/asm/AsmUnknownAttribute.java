@@ -29,12 +29,27 @@ public final class AsmUnknownAttribute extends Attribute {
     private final byte[] data;
 
     /**
+     * Whether this attribute belongs to a method's Code attribute.
+     */
+    private final boolean code;
+
+    /**
      * Constructs a new empty attribute.
      *
      * @param type The type of the attribute
      */
     public AsmUnknownAttribute(final String type) {
-        this(type, AsmUnknownAttribute.EMPTY);
+        this(type, false);
+    }
+
+    /**
+     * Constructs a new empty attribute.
+     *
+     * @param type The type of the attribute
+     * @param code Whether the attribute belongs to a Code attribute
+     */
+    public AsmUnknownAttribute(final String type, final boolean code) {
+        this(type, AsmUnknownAttribute.EMPTY, code);
     }
 
     /**
@@ -44,12 +59,24 @@ public final class AsmUnknownAttribute extends Attribute {
      * @param data The raw data of the attribute
      */
     public AsmUnknownAttribute(final String type, final byte[] data) {
+        this(type, data, false);
+    }
+
+    /**
+     * Constructs a new unknown attribute.
+     *
+     * @param type The type of the attribute
+     * @param data The raw data of the attribute
+     * @param code Whether the attribute belongs to a Code attribute
+     */
+    public AsmUnknownAttribute(final String type, final byte[] data, final boolean code) {
         super(type);
         if (data == null) {
             this.data = null;
         } else {
             this.data = data.clone();
         }
+        this.code = code;
     }
 
     /**
@@ -58,12 +85,17 @@ public final class AsmUnknownAttribute extends Attribute {
      * @return Bytecode unknown attribute
      */
     public BytecodeUnknownAttribute bytecode() {
-        return new BytecodeUnknownAttribute(this.type, this.bytes());
+        return new BytecodeUnknownAttribute(this.type, this.bytes(), this.code);
     }
 
     @Override
     public boolean isUnknown() {
         return true;
+    }
+
+    @Override
+    public boolean isCodeAttribute() {
+        return this.code;
     }
 
     @Override
@@ -75,13 +107,13 @@ public final class AsmUnknownAttribute extends Attribute {
         final int caoffset,
         final Label[] labels
     ) {
-        return new AsmUnknownAttribute(this.type, reader.readBytes(offset, length));
+        return new AsmUnknownAttribute(this.type, reader.readBytes(offset, length), this.code);
     }
 
     @Override
     public ByteVector write(
         final ClassWriter writer,
-        final byte[] code,
+        final byte[] bytecode,
         final int length,
         final int stack,
         final int locals
