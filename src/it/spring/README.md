@@ -1,4 +1,4 @@
-# Spring Fat Jar Integration Test
+# Spring Integration Test
 
 Integration test that checks the correct transformation of an application
 written with using of the Springs Framework. This integration test starts the
