@@ -13,6 +13,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 /**
@@ -27,7 +28,12 @@ import org.apache.maven.project.MavenProject;
  *
  * @since 0.1.0
  */
-@Mojo(name = "assemble", defaultPhase = LifecyclePhase.PROCESS_CLASSES, requiresProject = false)
+@Mojo(
+    name = "assemble",
+    defaultPhase = LifecyclePhase.PROCESS_CLASSES,
+    requiresProject = false,
+    requiresDependencyResolution = ResolutionScope.TEST
+)
 public final class AssembleMojo extends AbstractMojo {
 
     /**
