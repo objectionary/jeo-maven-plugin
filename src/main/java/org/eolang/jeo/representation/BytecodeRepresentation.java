@@ -7,7 +7,6 @@ package org.eolang.jeo.representation;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.nio.file.Path;
-import java.util.Arrays;
 import org.cactoos.Input;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.InputOf;
@@ -21,7 +20,7 @@ import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassReader;
 import org.xembly.Directive;
-import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 
 /**
  * Intermediate representation of class files from bytecode.
@@ -130,12 +129,12 @@ public final class BytecodeRepresentation {
         final Iterable<Directive> directives = bytecode
             .directives(fmt);
         try {
-            final XML measured = new MeasuredEo(directives).asXml();
+            final XML doc = new XMLDocument(new Xembler(directives).xmlQuietly());
             final String res;
             if (fmt.pretty()) {
-                res = new PrettyXml(measured).toString();
+                res = new PrettyXml(doc).toString();
             } else {
-                res = measured.toString();
+                res = doc.toString();
             }
             return res;
         } catch (final IllegalStateException exception) {
@@ -143,15 +142,6 @@ public final class BytecodeRepresentation {
                 String.format(
                     "Something went wrong during transformation %s into XML by using directives %n%s%n",
                     this.name(),
-                    directives
-                ),
-                exception
-            );
-        } catch (final ImpossibleModificationException exception) {
-            throw new IllegalStateException(
-                String.format(
-                    "Can't build XML from %s by using directives %s",
-                    Arrays.toString(this.input.value()),
                     directives
                 ),
                 exception
