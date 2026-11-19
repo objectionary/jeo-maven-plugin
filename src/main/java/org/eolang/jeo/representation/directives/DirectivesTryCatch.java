@@ -53,6 +53,11 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
     private final String type;
 
     /**
+     * Type annotations that target the try-catch block.
+     */
+    private final DirectivesTypeAnnotations types;
+
+    /**
      * Constructor.
      *
      * @param index The index of the try-catch entry in the method
@@ -70,12 +75,36 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
         final BytecodeLabel handler,
         final String type
     ) {
+        this(index, format, start, end, handler, type, new DirectivesTypeAnnotations());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param index The index of the try-catch entry in the method
+     * @param format The format of the directives
+     * @param start Start label
+     * @param end End label
+     * @param handler Handler label
+     * @param type Exception type
+     * @param types Type annotations that target the try-catch block
+     */
+    public DirectivesTryCatch(
+        final int index,
+        final Format format,
+        final BytecodeLabel start,
+        final BytecodeLabel end,
+        final BytecodeLabel handler,
+        final String type,
+        final DirectivesTypeAnnotations types
+    ) {
         this.index = index;
         this.format = format;
         this.start = start;
         this.end = end;
         this.handler = handler;
         this.type = type;
+        this.types = types;
     }
 
     @Override
@@ -83,13 +112,26 @@ public final class DirectivesTryCatch implements Iterable<Directive> {
         return new DirectivesJeoObject(
             "trycatch",
             new NumName("t", this.index).toString(),
-            Stream.of(
-                this.start().directives(0, this.format),
-                this.end().directives(1, this.format),
-                this.handler().directives(2, this.format),
-                this.nullable(3, this.type)
+            Stream.concat(
+                Stream.of(
+                    this.start().directives(0, this.format),
+                    this.end().directives(1, this.format),
+                    this.handler().directives(2, this.format),
+                    this.nullable(3, this.type)
+                ),
+                this.typesChild()
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
+    }
+
+    private Stream<Iterable<Directive>> typesChild() {
+        final Stream<Iterable<Directive>> result;
+        if (this.types.isEmpty()) {
+            result = Stream.empty();
+        } else {
+            result = Stream.of(this.types);
+        }
+        return result;
     }
 
     private BytecodeLabel start() {

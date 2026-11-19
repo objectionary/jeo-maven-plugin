@@ -7,6 +7,7 @@ package org.eolang.jeo.representation.xmir;
 import java.util.Optional;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotations;
 import org.eolang.jeo.representation.bytecode.LocalVariable;
 
 /**
@@ -42,8 +43,18 @@ public final class XmlLocalVariable {
             this.descriptor(),
             this.signature(),
             this.start(),
-            this.end()
+            this.end(),
+            this.types()
         );
+    }
+
+    private BytecodeTypeAnnotations types() {
+        return this.node.children()
+            .filter(child -> "type-annotations".equals(child.attribute("name").orElse("")))
+            .findFirst()
+            .map(XmlTypeAnnotations::new)
+            .map(XmlTypeAnnotations::bytecode)
+            .orElseGet(BytecodeTypeAnnotations::new);
     }
 
     private int index() {

@@ -6,6 +6,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
@@ -29,7 +30,10 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 
 /**
  * Test cases for {@link BytecodeRepresentation}.
@@ -327,5 +331,92 @@ final class BytecodeRepresentationTest {
             ).toBytecode().toString(),
             Matchers.equalTo(original.toString())
         );
+    }
+
+    /**
+     * This test mitigates the issue
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1925">#1925</a>:
+     * type annotations that live inside the Code attribute (casts, instance checks,
+     * object creations, local variables and catch parameters) were lost by a round trip.
+     *
+     * @throws Exception In case of error
+     */
+    @Test
+    void keepsTypeAnnotationsInsideMethodBodies() throws Exception {
+        MatcherAssert.assertThat(
+            "All seven type annotations of the method body must survive the round trip",
+            BytecodeRepresentationTest.bodyTypeAnnotations(
+                new XmirRepresentation(
+                    new BytecodeRepresentation(
+                        new ResourceOf("TypeAnnotations.class")
+                    ).toXmir(BytecodeRepresentationTest.DEBUG)
+                ).toBytecode()
+            ),
+            Matchers.equalTo(7)
+        );
+    }
+
+    /**
+     * This test mitigates the issue
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1925">#1925</a>:
+     * keeping the type annotations of the Code attribute must not change
+     * the bytecode of the class during a round trip.
+     *
+     * @throws Exception In case of error
+     */
+    @Test
+    void keepsMethodBodyIntactWithAnnotations() throws Exception {
+        final ResourceOf input = new ResourceOf("TypeAnnotations.class");
+        MatcherAssert.assertThat(
+            "The disassembled/assembled bytecode representation should match the original bytecode",
+            new XmirRepresentation(
+                new BytecodeRepresentation(input).toXmir(BytecodeRepresentationTest.DEBUG)
+            ).toBytecode().toString(),
+            Matchers.equalTo(new Bytecode(new BytesOf(input).asBytes()).toString())
+        );
+    }
+
+    @Test
+    void writesTypeAnnotationsNextToTheirEntries() {
+        MatcherAssert.assertThat(
+            "XMIR must contain type annotations of instructions, try-catch blocks and local variables",
+            new BytecodeRepresentation(
+                new ResourceOf("TypeAnnotations.class")
+            ).toXmir(BytecodeRepresentationTest.DEBUG).toString(),
+            XhtmlMatchers.hasXPaths(
+                "//o[@name='type-annotations']",
+                "//o[o[contains(@base, 'opcode')] and o[@name='type-annotations']]",
+                "//o[o[contains(@base, 'trycatch')] and o[@name='type-annotations']]"
+            )
+        );
+    }
+
+    private static int bodyTypeAnnotations(final Bytecode bytecode) {
+        final ClassNode parsed = new ClassNode();
+        new ClassReader(bytecode.bytes()).accept(parsed, 0);
+        int total = 0;
+        for (final MethodNode method : parsed.methods) {
+            for (final AbstractInsnNode instruction : method.instructions) {
+                total += BytecodeRepresentationTest.size(instruction.visibleTypeAnnotations);
+                total += BytecodeRepresentationTest.size(instruction.invisibleTypeAnnotations);
+            }
+            total += BytecodeRepresentationTest.size(method.visibleLocalVariableAnnotations);
+            total += BytecodeRepresentationTest.size(method.invisibleLocalVariableAnnotations);
+            for (final TryCatchBlockNode block : method.tryCatchBlocks) {
+                total += BytecodeRepresentationTest.size(block.visibleTypeAnnotations);
+                total += BytecodeRepresentationTest.size(block.invisibleTypeAnnotations);
+            }
+        }
+        return total;
+    }
+
+    private static int size(final List<?> list) {
+        final int result;
+        if (list == null) {
+            result = 0;
+        } else {
+            result = list.size();
+        }
+        return result;
     }
 }

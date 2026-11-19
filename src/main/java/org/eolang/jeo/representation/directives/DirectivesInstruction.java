@@ -42,6 +42,11 @@ public final class DirectivesInstruction implements Iterable<Directive> {
     private final Object[] arguments;
 
     /**
+     * Type annotations that target the instruction.
+     */
+    private final DirectivesTypeAnnotations types;
+
+    /**
      * Constructor.
      *
      * @param index Instruction index
@@ -55,9 +60,29 @@ public final class DirectivesInstruction implements Iterable<Directive> {
         final int opcode,
         final Object... arguments
     ) {
+        this(index, format, opcode, new DirectivesTypeAnnotations(), arguments);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param index Instruction index
+     * @param format Format of the directives
+     * @param opcode Opcode
+     * @param types Type annotations that target the instruction
+     * @param arguments Instruction arguments
+     */
+    public DirectivesInstruction(
+        final int index,
+        final Format format,
+        final int opcode,
+        final DirectivesTypeAnnotations types,
+        final Object... arguments
+    ) {
         this.index = index;
         this.format = format;
         this.opcode = opcode;
+        this.types = types;
         this.arguments = arguments.clone();
     }
 
@@ -68,11 +93,24 @@ public final class DirectivesInstruction implements Iterable<Directive> {
             this.base(),
             new NumName("i", this.index).toString(),
             Stream.concat(
-                Stream.of(new DirectivesComment(this.format, this.comment())),
-                Arrays.stream(this.arguments)
-                    .map(a -> new DirectivesOperand(counter.getAndIncrement(), this.format, a))
+                Stream.concat(
+                    Stream.of(new DirectivesComment(this.format, this.comment())),
+                    Arrays.stream(this.arguments)
+                        .map(a -> new DirectivesOperand(counter.getAndIncrement(), this.format, a))
+                ),
+                this.typesChild()
             ).map(Directives::new).collect(Collectors.toList())
         ).iterator();
+    }
+
+    private Stream<Iterable<Directive>> typesChild() {
+        final Stream<Iterable<Directive>> result;
+        if (this.types.isEmpty()) {
+            result = Stream.empty();
+        } else {
+            result = Stream.of(this.types);
+        }
+        return result;
     }
 
     private String base() {

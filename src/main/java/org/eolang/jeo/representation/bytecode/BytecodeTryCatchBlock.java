@@ -42,6 +42,11 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
     private final String type;
 
     /**
+     * Type annotations that target this try-catch block.
+     */
+    private final BytecodeTypeAnnotations types;
+
+    /**
      * Constructor.
      *
      * @param start Start label
@@ -72,10 +77,55 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
         final BytecodeLabel handlerlabel,
         final String exception
     ) {
+        this(startlabel, endlabel, handlerlabel, exception, new BytecodeTypeAnnotations());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param start Start label
+     * @param end End label
+     * @param handler Handler label
+     * @param type Exception type
+     * @param types Type annotations that target this try-catch block
+     */
+    public BytecodeTryCatchBlock(
+        final String start,
+        final String end,
+        final String handler,
+        final String type,
+        final BytecodeTypeAnnotations types
+    ) {
+        this(
+            new BytecodeLabel(start),
+            new BytecodeLabel(end),
+            new BytecodeLabel(handler),
+            type,
+            types
+        );
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param startlabel Start label
+     * @param endlabel End label
+     * @param handlerlabel Handler label
+     * @param exception Exception type
+     * @param types Type annotations that target this try-catch block
+     */
+    public BytecodeTryCatchBlock(
+        final BytecodeLabel startlabel,
+        final BytecodeLabel endlabel,
+        final BytecodeLabel handlerlabel,
+        final String exception,
+        final BytecodeTypeAnnotations types
+    ) {
         this.start = startlabel;
         this.end = endlabel;
         this.handler = handlerlabel;
         this.type = exception;
+        this.types = types;
     }
 
     @Override
@@ -94,11 +144,20 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
             labels.label(this.handler),
             this.type
         );
+        this.types.writeTryCatch(visitor);
     }
 
     @Override
     public Iterable<Directive> directives(final int index, final Format format) {
-        return new DirectivesTryCatch(index, format, this.start, this.end, this.handler, this.type);
+        return new DirectivesTryCatch(
+            index,
+            format,
+            this.start,
+            this.end,
+            this.handler,
+            this.type,
+            this.types.directives(format)
+        );
     }
 
     @Override
@@ -167,7 +226,8 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
             result = Objects.equals(this.start, block.start)
                 && Objects.equals(this.end, block.end)
                 && Objects.equals(this.handler, block.handler)
-                && Objects.equals(this.type, block.type);
+                && Objects.equals(this.type, block.type)
+                && Objects.equals(this.types, block.types);
         } else {
             result = false;
         }
@@ -176,7 +236,7 @@ public final class BytecodeTryCatchBlock implements BytecodeEntry {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.start, this.end, this.handler, this.type);
+        return Objects.hash(this.start, this.end, this.handler, this.type, this.types);
     }
 
     @Override
