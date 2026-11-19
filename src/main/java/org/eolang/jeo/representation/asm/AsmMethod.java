@@ -5,19 +5,26 @@
 package org.eolang.jeo.representation.asm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeDefaultValue;
 import org.eolang.jeo.representation.bytecode.BytecodeEntry;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
+import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotations;
 import org.eolang.jeo.representation.bytecode.LocalVariable;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LocalVariableAnnotationNode;
 import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -52,7 +59,7 @@ final class AsmMethod {
         final AsmLabelIds ids = new AsmLabelIds();
         return new BytecodeMethod(
             this.tryblocks(ids),
-            this.instructions(ids),
+            this.instructions(ids, this.unattachedVariableAnnotations(ids)),
             new AsmAnnotations(this.node).bytecode(),
             new BytecodeMethodProperties(
                 this.node.access,
@@ -81,12 +88,105 @@ final class AsmMethod {
                         variable.desc,
                         variable.signature,
                         ids.label(variable.start),
-                        ids.label(variable.end)
+                        ids.label(variable.end),
+                        this.variableAnnotations(variable)
                     )
                 ).collect(Collectors.toList())
             );
         }
         return new BytecodeAttributes(all);
+    }
+
+    private BytecodeTypeAnnotations variableAnnotations(final LocalVariableNode variable) {
+        final List<BytecodeTypeAnnotation> annotations = new ArrayList<>(0);
+        annotations.addAll(
+            AsmMethod.scopedAnnotations(this.node.visibleLocalVariableAnnotations, variable, true)
+        );
+        annotations.addAll(
+            AsmMethod.scopedAnnotations(
+                this.node.invisibleLocalVariableAnnotations, variable, false
+            )
+        );
+        return new BytecodeTypeAnnotations(annotations);
+    }
+
+    private static List<BytecodeTypeAnnotation> scopedAnnotations(
+        final List<LocalVariableAnnotationNode> source,
+        final LocalVariableNode variable,
+        final boolean visible
+    ) {
+        final List<BytecodeTypeAnnotation> result = new ArrayList<>(0);
+        if (source != null) {
+            for (final LocalVariableAnnotationNode annotation : source) {
+                for (int scope = 0; scope < annotation.index.size(); ++scope) {
+                    if (AsmMethod.matches(annotation, scope, variable)) {
+                        result.add(
+                            new BytecodeTypeAnnotation(
+                                annotation.typeRef,
+                                annotation.typePath,
+                                annotation.desc,
+                                visible,
+                                new AsmAnnotationValues(annotation.values).bytecode()
+                            )
+                        );
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private Map<LabelNode, List<BytecodeTypeAnnotation>> unattachedVariableAnnotations(
+        final AsmLabelIds ids
+    ) {
+        final Map<LabelNode, List<BytecodeTypeAnnotation>> result = new HashMap<>(0);
+        final List<LocalVariableAnnotationNode> all = new ArrayList<>(0);
+        if (this.node.visibleLocalVariableAnnotations != null) {
+            all.addAll(this.node.visibleLocalVariableAnnotations);
+        }
+        if (this.node.invisibleLocalVariableAnnotations != null) {
+            all.addAll(this.node.invisibleLocalVariableAnnotations);
+        }
+        for (final LocalVariableAnnotationNode annotation : all) {
+            final boolean visible = this.node.visibleLocalVariableAnnotations != null
+                && this.node.visibleLocalVariableAnnotations.contains(annotation);
+            for (int scope = 0; scope < annotation.index.size(); ++scope) {
+                if (this.matched(annotation, scope)) {
+                    continue;
+                }
+                final BytecodeTypeAnnotation detached = new BytecodeTypeAnnotation(
+                    annotation.typeRef,
+                    annotation.typePath,
+                    annotation.desc,
+                    visible,
+                    new AsmAnnotationValues(annotation.values).bytecode(),
+                    ids.label(annotation.end.get(scope)),
+                    annotation.index.get(scope)
+                );
+                result.computeIfAbsent(
+                    annotation.start.get(scope),
+                    key -> new ArrayList<>(0)
+                ).add(detached);
+            }
+        }
+        return result;
+    }
+
+    private boolean matched(final LocalVariableAnnotationNode annotation, final int scope) {
+        final List<LocalVariableNode> variables = this.node.localVariables;
+        return variables != null
+            && variables.stream()
+                .anyMatch(variable -> AsmMethod.matches(annotation, scope, variable));
+    }
+
+    private static boolean matches(
+        final LocalVariableAnnotationNode annotation,
+        final int scope,
+        final LocalVariableNode variable
+    ) {
+        return annotation.start.get(scope).equals(variable.start)
+            && annotation.end.get(scope).equals(variable.end)
+            && annotation.index.get(scope) == variable.index;
     }
 
     private BytecodeMaxs maxs() {
@@ -99,16 +199,29 @@ final class AsmMethod {
                 ids.label(block.start).uid(),
                 ids.label(block.end).uid(),
                 ids.label(block.handler).uid(),
-                block.type
+                block.type,
+                new AsmTypeAnnotations(block).bytecode()
             )
         ).collect(Collectors.toList());
     }
 
-    private List<BytecodeEntry> instructions(final AsmLabelIds ids) {
-        return Arrays.stream(this.node.instructions.toArray())
-            .map(instruction -> new AsmInstruction(instruction, ids))
-            .map(AsmInstruction::bytecode)
-            .collect(Collectors.toList());
+    private List<BytecodeEntry> instructions(
+        final AsmLabelIds ids,
+        final Map<LabelNode, List<BytecodeTypeAnnotation>> unattached
+    ) {
+        final List<BytecodeEntry> entries = new ArrayList<>(0);
+        for (final AbstractInsnNode instruction : this.node.instructions.toArray()) {
+            final BytecodeEntry entry = new AsmInstruction(instruction, ids).bytecode();
+            final List<BytecodeTypeAnnotation> scopes = unattached.get(instruction);
+            if (scopes == null || scopes.isEmpty()) {
+                entries.add(entry);
+            } else {
+                entries.add(
+                    BytecodeLabel.class.cast(entry).types(new BytecodeTypeAnnotations(scopes))
+                );
+            }
+        }
+        return entries;
     }
 
     private List<BytecodeDefaultValue> defvalue() {

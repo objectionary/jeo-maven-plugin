@@ -51,6 +51,11 @@ public final class LocalVariable implements BytecodeAttribute {
     private final BytecodeLabel end;
 
     /**
+     * Type annotations that target this local variable.
+     */
+    private final BytecodeTypeAnnotations types;
+
+    /**
      * Constructor.
      *
      * @param index Index of the local variable in the local variable array
@@ -68,12 +73,36 @@ public final class LocalVariable implements BytecodeAttribute {
         final BytecodeLabel start,
         final BytecodeLabel end
     ) {
+        this(index, name, descriptor, signature, start, end, new BytecodeTypeAnnotations());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param index Index of the local variable in the local variable array
+     * @param name Name of the local variable
+     * @param descriptor Descriptor of the local variable
+     * @param signature Signature of the local variable
+     * @param start Start label
+     * @param end End label
+     * @param types Type annotations that target this local variable
+     */
+    public LocalVariable(
+        final int index,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final BytecodeLabel start,
+        final BytecodeLabel end,
+        final BytecodeTypeAnnotations types
+    ) {
         this.index = index;
         this.name = name;
         this.descriptor = descriptor;
         this.signature = signature;
         this.start = start;
         this.end = end;
+        this.types = types;
     }
 
     @Override
@@ -102,6 +131,7 @@ public final class LocalVariable implements BytecodeAttribute {
             labels.label(this.end),
             this.index
         );
+        this.types.writeLocalVariable(method, this, labels);
     }
 
     @Override
@@ -114,7 +144,8 @@ public final class LocalVariable implements BytecodeAttribute {
             this.descriptor,
             this.signature,
             this.start.directives(0, format),
-            this.end.directives(1, format)
+            this.end.directives(1, format),
+            this.types.directives(format)
         );
     }
 
@@ -130,7 +161,8 @@ public final class LocalVariable implements BytecodeAttribute {
                 && Objects.equals(this.descriptor, variable.descriptor)
                 && Objects.equals(this.signature, variable.signature)
                 && Objects.equals(this.start, variable.start)
-                && Objects.equals(this.end, variable.end);
+                && Objects.equals(this.end, variable.end)
+                && Objects.equals(this.types, variable.types);
         } else {
             result = false;
         }
@@ -140,7 +172,7 @@ public final class LocalVariable implements BytecodeAttribute {
     @Override
     public int hashCode() {
         return Objects.hash(
-            this.index, this.name, this.descriptor, this.signature, this.start, this.end
+            this.index, this.name, this.descriptor, this.signature, this.start, this.end, this.types
         );
     }
 
@@ -150,5 +182,32 @@ public final class LocalVariable implements BytecodeAttribute {
             "LocalVariable(index=%d, name=%s, descriptor=%s, signature=%s, start=%s, end=%s)",
             this.index, this.name, this.descriptor, this.signature, this.start, this.end
         );
+    }
+
+    /**
+     * Start label of the variable scope.
+     *
+     * @return Start label
+     */
+    BytecodeLabel startLabel() {
+        return this.start;
+    }
+
+    /**
+     * End label of the variable scope.
+     *
+     * @return End label
+     */
+    BytecodeLabel endLabel() {
+        return this.end;
+    }
+
+    /**
+     * Slot index of the variable in the local variable array.
+     *
+     * @return Slot index
+     */
+    int slot() {
+        return this.index;
     }
 }

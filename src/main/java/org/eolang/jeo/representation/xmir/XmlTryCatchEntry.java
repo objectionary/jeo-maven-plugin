@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
+import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotations;
 import org.eolang.jeo.representation.directives.EoFqn;
 
 /**
@@ -49,7 +50,18 @@ public final class XmlTryCatchEntry implements XmlBytecodeEntry {
 
     @Override
     public BytecodeTryCatchBlock bytecode() {
-        return new BytecodeTryCatchBlock(this.start(), this.end(), this.handler(), this.type());
+        return new BytecodeTryCatchBlock(
+            this.start(), this.end(), this.handler(), this.type(), this.types()
+        );
+    }
+
+    private BytecodeTypeAnnotations types() {
+        return this.node.children()
+            .filter(child -> "type-annotations".equals(child.attribute("name").orElse("")))
+            .findFirst()
+            .map(XmlTypeAnnotations::new)
+            .map(XmlTypeAnnotations::bytecode)
+            .orElseGet(BytecodeTypeAnnotations::new);
     }
 
     private BytecodeLabel start() {

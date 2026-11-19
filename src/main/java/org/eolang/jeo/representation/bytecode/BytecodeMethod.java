@@ -407,6 +407,10 @@ public final class BytecodeMethod {
                 mvisitor.visitMaxs(max.stack(), max.locals());
             }
             this.attributes.write(mvisitor, all);
+            this.entries.stream()
+                .filter(BytecodeLabel.class::isInstance)
+                .map(BytecodeLabel.class::cast)
+                .forEach(label -> label.writeVariableScopes(mvisitor, all));
             mvisitor.visitEnd();
         } catch (final NegativeArraySizeException exception) {
             throw new IllegalStateException(

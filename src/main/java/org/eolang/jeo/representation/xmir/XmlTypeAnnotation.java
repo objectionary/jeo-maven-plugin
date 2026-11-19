@@ -5,8 +5,10 @@
 package org.eolang.jeo.representation.xmir;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotation;
 import org.objectweb.asm.TypePath;
 
@@ -53,8 +55,28 @@ final class XmlTypeAnnotation {
             this.path(),
             this.descriptor(),
             this.visible(),
-            this.values()
+            this.values(),
+            this.scopeEnd(),
+            this.scopeSlot()
         );
+    }
+
+    private BytecodeLabel scopeEnd() {
+        return this.namedChild("scope-end")
+            .map(child -> new BytecodeLabel(new XmlValue(child).string()))
+            .orElse(null);
+    }
+
+    private Integer scopeSlot() {
+        return this.namedChild("scope-slot")
+            .map(child -> (int) new XmlValue(child).object())
+            .orElse(null);
+    }
+
+    private Optional<XmlNode> namedChild(final String name) {
+        return this.node.children()
+            .filter(child -> name.equals(child.attribute("name").orElse("")))
+            .findFirst();
     }
 
     private int ref() {

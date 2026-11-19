@@ -64,4 +64,13 @@ public final class DirectivesTypeAnnotations implements Iterable<Directive> {
             this.annotations
         ).iterator();
     }
+
+    /**
+     * Whether there are no annotations.
+     *
+     * @return True if there are no annotations
+     */
+    public boolean isEmpty() {
+        return this.annotations.isEmpty();
+    }
 }
