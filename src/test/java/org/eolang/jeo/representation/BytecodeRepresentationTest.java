@@ -176,6 +176,34 @@ final class BytecodeRepresentationTest {
         );
     }
 
+    @Test
+    void doesNotWriteMillisecondsIntoXmir() {
+        MatcherAssert.assertThat(
+            "XMIR must not contain the build telemetry 'ms' attribute",
+            new BytecodeRepresentation(
+                new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE)
+            ).toXmir().toString(),
+            Matchers.not(XhtmlMatchers.hasXPath("/object/@ms"))
+        );
+    }
+
+    @Test
+    void producesIdenticalXmirOnConsecutiveDisassemblies() {
+        MatcherAssert.assertThat(
+            "Consecutive disassemblies must produce identical XMIR except the 'time' attribute",
+            new BytecodeRepresentation(
+                new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE)
+            ).toEO(BytecodeRepresentationTest.DEBUG)
+                .replaceAll(" time=\"[^\"]+\"", ""),
+            Matchers.equalTo(
+                new BytecodeRepresentation(
+                    new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE)
+                ).toEO(BytecodeRepresentationTest.DEBUG)
+                    .replaceAll(" time=\"[^\"]+\"", "")
+            )
+        );
+    }
+
     /**
      * This test was added to mitigate the issue:
      * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1160">Issue #1160</a>.
