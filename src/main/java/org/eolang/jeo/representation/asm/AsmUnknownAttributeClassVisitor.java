@@ -10,6 +10,7 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.RecordComponentVisitor;
 
 /**
  * ASM visitor that collects custom attribute names from a class.
@@ -51,5 +52,17 @@ final class AsmUnknownAttributeClassVisitor extends ClassVisitor {
         final String[] exceptions
     ) {
         return new AsmUnknownAttributeMethodVisitor(this.types);
+    }
+
+    @Override
+    public RecordComponentVisitor visitRecordComponent(
+        final String name, final String descriptor, final String signature
+    ) {
+        return new RecordComponentVisitor(Opcodes.ASM9) {
+            @Override
+            public void visitAttribute(final Attribute attribute) {
+                AsmUnknownAttributeClassVisitor.this.types.add(attribute.type);
+            }
+        };
     }
 }
