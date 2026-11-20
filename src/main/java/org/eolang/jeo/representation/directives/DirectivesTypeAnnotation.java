@@ -4,11 +4,13 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.bytecode.AnnotationScope;
 import org.xembly.Directive;
 import org.xembly.Directives;
 
@@ -51,16 +53,12 @@ public final class DirectivesTypeAnnotation implements Iterable<Directive> {
     private final List<Iterable<Directive>> properties;
 
     /**
-     * End label of the annotated local variable scope without a local variable
-     * table entry. It is null when the annotation does not target such a scope.
+     * Scopes of the annotated local variable.
+     * It is empty when the annotation does not target a local variable,
+     * or when its range is borrowed from the enclosing local variable entry.
+     * A scope without a start label borrows it from the enclosing context.
      */
-    private final BytecodeLabel end;
-
-    /**
-     * Slot index of the annotated local variable scope without a local variable
-     * table entry. It is null when the annotation does not target such a scope.
-     */
-    private final Integer slot;
+    private final List<AnnotationScope> scopes;
 
     /**
      * Annotation value.
@@ -87,7 +85,7 @@ public final class DirectivesTypeAnnotation implements Iterable<Directive> {
         final boolean visible,
         final List<Iterable<Directive>> properties
     ) {
-        this(format, index, ref, path, desc, visible, properties, null, null);
+        this(format, index, ref, path, desc, visible, properties, Collections.emptyList());
     }
 
     /**
@@ -100,8 +98,7 @@ public final class DirectivesTypeAnnotation implements Iterable<Directive> {
      * @param desc The class descriptor of the annotation class
      * @param visible Visibility of the annotation
      * @param properties Properties
-     * @param end End label of the annotated local variable scope
-     * @param slot Slot index of the annotated local variable scope
+     * @param scopes Scopes of the annotated local variable
      */
     public DirectivesTypeAnnotation(
         final Format format,
@@ -111,8 +108,7 @@ public final class DirectivesTypeAnnotation implements Iterable<Directive> {
         final String desc,
         final boolean visible,
         final List<Iterable<Directive>> properties,
-        final BytecodeLabel end,
-        final Integer slot
+        final List<AnnotationScope> scopes
     ) {
         this.format = format;
         this.index = index;
@@ -121,8 +117,7 @@ public final class DirectivesTypeAnnotation implements Iterable<Directive> {
         this.desc = desc;
         this.visible = visible;
         this.properties = properties;
-        this.end = end;
-        this.slot = slot;
+        this.scopes = scopes;
     }
 
     @Override
@@ -144,16 +139,18 @@ public final class DirectivesTypeAnnotation implements Iterable<Directive> {
         ).iterator();
     }
 
+    // Directives of the annotated local variable scopes.
+    // A scope without a start label borrows it from the enclosing context,
+    // so only its end and slot are written. Explicit scopes carry all three.
     private Stream<Iterable<Directive>> scope() {
-        final Stream<Iterable<Directive>> result;
-        if (this.end == null || this.slot == null) {
-            result = Stream.empty();
-        } else {
-            result = Stream.of(
-                new DirectivesValue(this.format, "scope-end", this.end.uid()),
-                new DirectivesValue(this.format, "scope-slot", this.slot)
-            );
+        final List<Iterable<Directive>> all = new ArrayList<>(0);
+        for (final AnnotationScope scope : this.scopes) {
+            if (scope.start() != null) {
+                all.add(new DirectivesValue(this.format, "scope-start", scope.start().uid()));
+            }
+            all.add(new DirectivesValue(this.format, "scope-end", scope.end().uid()));
+            all.add(new DirectivesValue(this.format, "scope-slot", scope.slot()));
         }
-        return result;
+        return all.stream();
     }
 }

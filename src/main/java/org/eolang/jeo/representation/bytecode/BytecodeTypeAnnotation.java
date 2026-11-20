@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.bytecode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -52,18 +53,14 @@ public final class BytecodeTypeAnnotation {
     private final List<BytecodeAnnotationValue> values;
 
     /**
-     * End label of the annotated local variable scope.
-     * It is present only for annotations that target a local variable scope
-     * without a local variable table entry, where the annotation is attached
-     * to the scope start label instead.
+     * Scopes of the annotated local variable.
+     * An annotation may target several ranges of a local variable at once,
+     * ASM models them with parallel start/end/index lists. All ranges of one
+     * annotation are kept together here.
+     * The list is empty when the range is borrowed from the context:
+     * the enclosing local variable entry or the label that opens the scope.
      */
-    private final BytecodeLabel end;
-
-    /**
-     * Slot index of the annotated local variable scope.
-     * It is present only together with {@link #end}.
-     */
-    private final Integer slot;
+    private final List<AnnotationScope> scopes;
 
     /**
      * Constructor.
@@ -81,7 +78,7 @@ public final class BytecodeTypeAnnotation {
         final boolean visible,
         final List<BytecodeAnnotationValue> values
     ) {
-        this(ref, Objects.toString(path, ""), desc, visible, values);
+        this(ref, Objects.toString(path, ""), desc, visible, values, Collections.emptyList());
     }
 
     /**
@@ -92,27 +89,7 @@ public final class BytecodeTypeAnnotation {
      * @param desc The class descriptor of the annotation class
      * @param visible Visibility of the annotation
      * @param values Properties
-     */
-    private BytecodeTypeAnnotation(
-        final int ref,
-        final String path,
-        final String desc,
-        final boolean visible,
-        final List<BytecodeAnnotationValue> values
-    ) {
-        this(ref, path, desc, visible, values, null, null);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param ref A reference to the annotated type
-     * @param path The path to the annotated type argument, wildcard bound, array element type,
-     * @param desc The class descriptor of the annotation class
-     * @param visible Visibility of the annotation
-     * @param values Properties
-     * @param end End label of the annotated local variable scope
-     * @param slot Slot index of the annotated local variable scope
+     * @param scopes Scopes of the annotated local variable
      */
     public BytecodeTypeAnnotation(
         final int ref,
@@ -120,10 +97,9 @@ public final class BytecodeTypeAnnotation {
         final String desc,
         final boolean visible,
         final List<BytecodeAnnotationValue> values,
-        final BytecodeLabel end,
-        final Integer slot
+        final List<AnnotationScope> scopes
     ) {
-        this(ref, Objects.toString(path, ""), desc, visible, values, end, slot);
+        this(ref, Objects.toString(path, ""), desc, visible, values, scopes);
     }
 
     /**
@@ -134,8 +110,7 @@ public final class BytecodeTypeAnnotation {
      * @param desc The class descriptor of the annotation class
      * @param visible Visibility of the annotation
      * @param values Properties
-     * @param end End label of the annotated local variable scope
-     * @param slot Slot index of the annotated local variable scope
+     * @param scopes Scopes of the annotated local variable
      */
     public BytecodeTypeAnnotation(
         final int ref,
@@ -143,16 +118,14 @@ public final class BytecodeTypeAnnotation {
         final String desc,
         final boolean visible,
         final List<BytecodeAnnotationValue> values,
-        final BytecodeLabel end,
-        final Integer slot
+        final List<AnnotationScope> scopes
     ) {
         this.ref = ref;
         this.path = path;
         this.desc = desc;
         this.visible = visible;
         this.values = new ArrayList<>(values);
-        this.end = end;
-        this.slot = slot;
+        this.scopes = new ArrayList<>(scopes);
     }
 
     /**
@@ -208,6 +181,9 @@ public final class BytecodeTypeAnnotation {
 
     /**
      * Write type annotation that targets a local variable.
+     * All scopes of the annotation are written together, so an annotation
+     * with a split live range is restored as one annotation with several
+     * ranges, exactly as it was in the original class file.
      *
      * @param visitor Visitor to write to
      * @param variable Annotated local variable
@@ -218,20 +194,17 @@ public final class BytecodeTypeAnnotation {
         final LocalVariable variable,
         final AsmLabels labels
     ) {
-        final AnnotationVisitor visited = visitor.visitLocalVariableAnnotation(
-            this.ref,
-            TypePath.fromString(this.path),
-            new Label[]{labels.label(variable.startLabel())},
-            new Label[]{labels.label(variable.endLabel())},
-            new int[]{variable.slot()},
-            this.desc,
-            this.visible
-        );
-        if (visited == null) {
-            return;
+        final List<AnnotationScope> ranges;
+        if (this.scopes.isEmpty()) {
+            ranges = Collections.singletonList(
+                new AnnotationScope(
+                    variable.startLabel(), variable.endLabel(), variable.slot()
+                )
+            );
+        } else {
+            ranges = this.scopes;
         }
-        this.values.forEach(v -> v.writeTo(visited));
-        visited.visitEnd();
+        this.writeRanges(visitor, ranges, labels, null);
     }
 
     /**
@@ -252,8 +225,7 @@ public final class BytecodeTypeAnnotation {
             this.values.stream()
                 .map(v -> v.directives(counter.getAndIncrement(), format))
                 .collect(Collectors.toList()),
-            this.end,
-            this.slot
+            this.scopes
         );
     }
 
@@ -269,8 +241,7 @@ public final class BytecodeTypeAnnotation {
                 && Objects.equals(this.path, annotation.path)
                 && Objects.equals(this.desc, annotation.desc)
                 && Objects.equals(this.values, annotation.values)
-                && Objects.equals(this.end, annotation.end)
-                && Objects.equals(this.slot, annotation.slot);
+                && Objects.equals(this.scopes, annotation.scopes);
         } else {
             result = false;
         }
@@ -280,29 +251,28 @@ public final class BytecodeTypeAnnotation {
     @Override
     public int hashCode() {
         return Objects.hash(
-            this.ref, this.path, this.desc, this.visible, this.values, this.end, this.slot
+            this.ref, this.path, this.desc, this.visible, this.values, this.scopes
         );
     }
 
     @Override
     public String toString() {
         return String.format(
-            "BytecodeTypeAnnotation(ref=%d, path=%s, desc=%s, visible=%b, values=%s, end=%s, slot=%s)",
+            "BytecodeTypeAnnotation(ref=%d, path=%s, desc=%s, visible=%b, values=%s, scopes=%s)",
             this.ref,
             this.path,
             this.desc,
             this.visible,
             this.values,
-            this.end,
-            this.slot
+            this.scopes
         );
     }
 
     /**
      * Write type annotation that targets a local variable scope without
-     * a local variable table entry. The annotation is written next to the
-     * scope start label, while the scope end label and the slot index are
-     * stored inside the annotation itself.
+     * a local variable table entry. The annotation is written after the
+     * whole method code is visited, when all the labels are already bound
+     * to their bytecode offsets.
      *
      * @param visitor Visitor to write to
      * @param start Label that opens the annotated variable scope
@@ -313,20 +283,45 @@ public final class BytecodeTypeAnnotation {
         final Label start,
         final AsmLabels labels
     ) {
-        if (this.end != null && this.slot != null) {
-            final AnnotationVisitor visited = visitor.visitLocalVariableAnnotation(
-                this.ref,
-                TypePath.fromString(this.path),
-                new Label[]{start},
-                new Label[]{labels.label(this.end)},
-                new int[]{this.slot},
-                this.desc,
-                this.visible
-            );
-            if (visited != null) {
-                this.values.forEach(v -> v.writeTo(visited));
-                visited.visitEnd();
-            }
+        if (!this.scopes.isEmpty()) {
+            this.writeRanges(visitor, this.scopes, labels, start);
         }
+    }
+
+    // Write type annotation that targets a local variable with the given ranges.
+    // Ranges without an explicit start label fall back to the given one.
+    private void writeRanges(
+        final MethodVisitor visitor,
+        final List<AnnotationScope> ranges,
+        final AsmLabels labels,
+        final Label fallback
+    ) {
+        final Label[] starts = new Label[ranges.size()];
+        final Label[] ends = new Label[ranges.size()];
+        final int[] slots = new int[ranges.size()];
+        for (int position = 0; position < ranges.size(); ++position) {
+            final AnnotationScope scope = ranges.get(position);
+            if (scope.start() == null) {
+                starts[position] = fallback;
+            } else {
+                starts[position] = labels.label(scope.start());
+            }
+            ends[position] = labels.label(scope.end());
+            slots[position] = scope.slot();
+        }
+        final AnnotationVisitor visited = visitor.visitLocalVariableAnnotation(
+            this.ref,
+            TypePath.fromString(this.path),
+            starts,
+            ends,
+            slots,
+            this.desc,
+            this.visible
+        );
+        if (visited == null) {
+            return;
+        }
+        this.values.forEach(v -> v.writeTo(visited));
+        visited.visitEnd();
     }
 }
