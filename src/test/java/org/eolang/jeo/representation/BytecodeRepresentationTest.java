@@ -56,6 +56,13 @@ final class BytecodeRepresentationTest {
     @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
     private static final Format DEBUG = new Format(Format.MODE, "debug");
 
+    /**
+     * XPath of type annotations nested in a local variable table entry.
+     */
+    @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
+    private static final String VARIABLE_TYPES =
+        "//o[o[contains(@base, 'local-variable')]]/o[@name='type-annotations']";
+
     @ParameterizedTest
     @ValueSource(strings = {"count", "Φξ"})
     void preservesRegisteredFieldAttributes(final String name) {
@@ -387,6 +394,99 @@ final class BytecodeRepresentationTest {
                 "//o[@name='type-annotations']",
                 "//o[o[contains(@base, 'opcode')] and o[@name='type-annotations']]",
                 "//o[o[contains(@base, 'trycatch')] and o[@name='type-annotations']]"
+            )
+        );
+    }
+
+    /**
+     * TypeAnnotations.class is compiled without the local variable table, so
+     * only the detached path (a type annotation written next to the label that
+     * opens its scope) is covered by the tests above. This fixture is compiled
+     * with {@code -g}: its local variable annotations match local variable
+     * table entries and must be nested in the `local-variable` attributes.
+     */
+    @Test
+    void writesTypeAnnotationsInsideLocalVariableEntries() {
+        MatcherAssert.assertThat(
+            "XMIR must nest type annotations of local variables under their local-variable entries",
+            new BytecodeRepresentation(
+                new ResourceOf("TypeAnnotationsLocalVariable.class")
+            ).toXmir(BytecodeRepresentationTest.DEBUG).toString(),
+            XhtmlMatchers.hasXPath(
+                String.format(
+                    "%s/o[starts-with(@name, 'type-annotation')]",
+                    BytecodeRepresentationTest.VARIABLE_TYPES
+                )
+            )
+        );
+    }
+
+    /**
+     * TypeAnnotations.class is compiled without the local variable table, so
+     * only the detached path is covered by the tests above. This fixture is
+     * compiled with {@code -g}: its local variable annotations match local
+     * variable table entries and must survive the round trip.
+     *
+     * @throws Exception In case of error
+     */
+    @Test
+    void keepsTypeAnnotationsOfLocalVariablesInsideTableEntries() throws Exception {
+        final ResourceOf input = new ResourceOf("TypeAnnotationsLocalVariable.class");
+        MatcherAssert.assertThat(
+            "The disassembled/assembled bytecode representation should match the original bytecode",
+            new XmirRepresentation(
+                new BytecodeRepresentation(input).toXmir(BytecodeRepresentationTest.DEBUG)
+            ).toBytecode().toString(),
+            Matchers.equalTo(new Bytecode(new BytesOf(input).asBytes()).toString())
+        );
+    }
+
+    /**
+     * A local variable with a split live range is described by several local
+     * variable table entries, while ASM models its type annotation with
+     * parallel start/end/index lists: one annotation with several ranges.
+     * The ranges of one annotation must stay together after the round trip,
+     * otherwise the reassembled class file contains extra annotation entries.
+     *
+     * @throws Exception In case of error
+     */
+    @Test
+    void keepsMultiRangeLocalVariableAnnotationIntact() throws Exception {
+        final ResourceOf input = new ResourceOf("TypeAnnotationsMultiRange.class");
+        MatcherAssert.assertThat(
+            "The disassembled/assembled bytecode representation should match the original bytecode",
+            new XmirRepresentation(
+                new BytecodeRepresentation(input).toXmir(BytecodeRepresentationTest.DEBUG)
+            ).toBytecode().toString(),
+            Matchers.equalTo(new Bytecode(new BytesOf(input).asBytes()).toString())
+        );
+    }
+
+    /**
+     * A multi-range local variable annotation must carry all its ranges in
+     * XMIR, not only the first one.
+     */
+    @Test
+    void writesAllRangesOfMultiRangeLocalVariableAnnotation() {
+        MatcherAssert.assertThat(
+            "A multi-range local variable annotation must carry both scopes in XMIR",
+            new BytecodeRepresentation(
+                new ResourceOf("TypeAnnotationsMultiRange.class")
+            ).toXmir(BytecodeRepresentationTest.DEBUG).toString(),
+            XhtmlMatchers.hasXPaths(
+                BytecodeRepresentationTest.VARIABLE_TYPES,
+                String.format(
+                    "%s/o/o[@name='scope-start']",
+                    BytecodeRepresentationTest.VARIABLE_TYPES
+                ),
+                String.format(
+                    "%s/o/o[@name='scope-end']",
+                    BytecodeRepresentationTest.VARIABLE_TYPES
+                ),
+                String.format(
+                    "%s/o/o[@name='scope-slot']",
+                    BytecodeRepresentationTest.VARIABLE_TYPES
+                )
             )
         );
     }
