@@ -144,7 +144,7 @@
     <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>Saxon-HE</artifactId>
-      <version>13.0</version>
+      <version>12.10</version>
       <scope>runtime</scope>
     </dependency>
     <!--
@@ -210,6 +210,10 @@
       <artifactId>eo-parser</artifactId>
       <version>0.61.3</version>
       <exclusions>
+        <exclusion>
+          <groupId>net.sf.saxon</groupId>
+          <artifactId>Saxon-HE</artifactId>
+        </exclusion>
         <exclusion>
           <groupId>org.cactoos</groupId>
           <artifactId>cactoos</artifactId>
