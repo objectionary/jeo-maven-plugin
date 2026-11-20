@@ -304,6 +304,11 @@
       <!-- Keep Java 11 compatible tooling while the parent remains pinned. -->
       <plugins>
         <plugin>
+          <groupId>com.jcabi</groupId>
+          <artifactId>jcabi-maven-plugin</artifactId>
+          <version>0.17.0</version>
+        </plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.16.0</version>
