@@ -86,8 +86,7 @@ final class XmirFilesTest {
     void failsIfFolderDoesNotExist(@TempDir final Path temp) {
         Assertions.assertThrows(
             IllegalStateException.class,
-            () -> new XmirFiles(temp.resolve("missing")).all(),
-            "Listing XMIR files in a missing folder should fail"
+            () -> new XmirFiles(temp.resolve("missing")).all()
         );
     }
 
