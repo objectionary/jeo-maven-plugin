@@ -398,13 +398,7 @@ public final class BytecodeMethod {
                 mvisitor.visitCode();
                 this.tryblocks.forEach(block -> block.writeTo(mvisitor, all));
                 this.entries.forEach(instruction -> instruction.writeTo(mvisitor, all));
-                final BytecodeMaxs max;
-                if (this.maxs.compute()) {
-                    max = this.computeMaxs();
-                } else {
-                    max = this.maxs;
-                }
-                mvisitor.visitMaxs(max.stack(), max.locals());
+                this.writeMaxs(mvisitor);
             }
             this.attributes.write(mvisitor, all);
             mvisitor.visitEnd();
@@ -441,6 +435,25 @@ public final class BytecodeMethod {
                 ),
                 exception
             );
+        }
+    }
+
+    /**
+     * Feed the maxs of this method to the visitor.
+     *
+     * <p>When the method has no maxs in XMIR, its method visitor was created
+     * in {@code COMPUTE_ALL_FRAMES} mode by {@link CustomClassWriter}. In this
+     * mode ASM recomputes both maxs and StackMap frames itself and ignores the
+     * arguments of {@link MethodVisitor#visitMaxs(int, int)}. That is why we do
+     * not compute maxs here: they would be calculated and then thrown away.</p>
+     *
+     * @param mvisitor Visitor
+     */
+    void writeMaxs(final MethodVisitor mvisitor) {
+        if (this.maxs.compute()) {
+            mvisitor.visitMaxs(0, 0);
+        } else {
+            mvisitor.visitMaxs(this.maxs.stack(), this.maxs.locals());
         }
     }
 
