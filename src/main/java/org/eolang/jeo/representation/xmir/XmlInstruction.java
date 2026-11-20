@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.OpcodeDictionary;
 import org.eolang.jeo.representation.bytecode.BytecodeInstruction;
+import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotations;
 import org.eolang.jeo.representation.directives.DirectivesInstruction;
 import org.eolang.jeo.representation.directives.Format;
 import org.xembly.Transformers;
@@ -71,7 +72,8 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     public BytecodeInstruction bytecode() {
         return new BytecodeInstruction(
             this.opcode(),
-            this.operands().stream().map(XmlOperand::asObject).toArray()
+            this.operands().stream().map(XmlOperand::asObject).toArray(),
+            this.types()
         );
     }
 
@@ -113,7 +115,18 @@ public final class XmlInstruction implements XmlBytecodeEntry {
     private List<XmlOperand> operands() {
         return this.node
             .children()
+            .filter(child -> !"type-annotations".equals(child.attribute("name").orElse("")))
             .map(XmlOperand::new)
             .collect(Collectors.toList());
+    }
+
+    private BytecodeTypeAnnotations types() {
+        return this.node
+            .children()
+            .filter(child -> "type-annotations".equals(child.attribute("name").orElse("")))
+            .findFirst()
+            .map(XmlTypeAnnotations::new)
+            .map(XmlTypeAnnotations::bytecode)
+            .orElseGet(BytecodeTypeAnnotations::new);
     }
 }

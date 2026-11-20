@@ -6,6 +6,7 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.io.ResourceOf;
@@ -29,7 +30,10 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 
 /**
  * Test cases for {@link BytecodeRepresentation}.
@@ -51,6 +55,13 @@ final class BytecodeRepresentationTest {
      */
     @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
     private static final Format DEBUG = new Format(Format.MODE, "debug");
+
+    /**
+     * XPath of type annotations nested in a local variable table entry.
+     */
+    @SuppressWarnings("JTCOP.RuleProhibitStaticFields")
+    private static final String VARIABLE_TYPES =
+        "//o[o[contains(@base, 'local-variable')]]/o[@name='type-annotations']";
 
     @ParameterizedTest
     @ValueSource(strings = {"count", "Φξ"})
@@ -327,5 +338,185 @@ final class BytecodeRepresentationTest {
             ).toBytecode().toString(),
             Matchers.equalTo(original.toString())
         );
+    }
+
+    /**
+     * This test mitigates the issue
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1925">#1925</a>:
+     * type annotations that live inside the Code attribute (casts, instance checks,
+     * object creations, local variables and catch parameters) were lost by a round trip.
+     *
+     * @throws Exception In case of error
+     */
+    @Test
+    void keepsTypeAnnotationsInsideMethodBodies() throws Exception {
+        MatcherAssert.assertThat(
+            "All seven type annotations of the method body must survive the round trip",
+            BytecodeRepresentationTest.bodyTypeAnnotations(
+                new XmirRepresentation(
+                    new BytecodeRepresentation(
+                        new ResourceOf("TypeAnnotations.class")
+                    ).toXmir(BytecodeRepresentationTest.DEBUG)
+                ).toBytecode()
+            ),
+            Matchers.equalTo(7)
+        );
+    }
+
+    /**
+     * This test mitigates the issue
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1925">#1925</a>:
+     * keeping the type annotations of the Code attribute must not change
+     * the bytecode of the class during a round trip.
+     *
+     * @throws Exception In case of error
+     */
+    @Test
+    void keepsMethodBodyIntactWithAnnotations() throws Exception {
+        final ResourceOf input = new ResourceOf("TypeAnnotations.class");
+        MatcherAssert.assertThat(
+            "The disassembled/assembled bytecode representation should match the original bytecode",
+            new XmirRepresentation(
+                new BytecodeRepresentation(input).toXmir(BytecodeRepresentationTest.DEBUG)
+            ).toBytecode().toString(),
+            Matchers.equalTo(new Bytecode(new BytesOf(input).asBytes()).toString())
+        );
+    }
+
+    @Test
+    void writesTypeAnnotationsNextToTheirEntries() {
+        MatcherAssert.assertThat(
+            "XMIR must contain type annotations of instructions, try-catch blocks and local variables",
+            new BytecodeRepresentation(
+                new ResourceOf("TypeAnnotations.class")
+            ).toXmir(BytecodeRepresentationTest.DEBUG).toString(),
+            XhtmlMatchers.hasXPaths(
+                "//o[@name='type-annotations']",
+                "//o[o[contains(@base, 'opcode')] and o[@name='type-annotations']]",
+                "//o[o[contains(@base, 'trycatch')] and o[@name='type-annotations']]"
+            )
+        );
+    }
+
+    /**
+     * TypeAnnotations.class is compiled without the local variable table, so
+     * only the detached path (a type annotation written next to the label that
+     * opens its scope) is covered by the tests above. This fixture is compiled
+     * with {@code -g}: its local variable annotations match local variable
+     * table entries and must be nested in the `local-variable` attributes.
+     */
+    @Test
+    void writesTypeAnnotationsInsideLocalVariableEntries() {
+        MatcherAssert.assertThat(
+            "XMIR must nest type annotations of local variables under their local-variable entries",
+            new BytecodeRepresentation(
+                new ResourceOf("TypeAnnotationsLocalVariable.class")
+            ).toXmir(BytecodeRepresentationTest.DEBUG).toString(),
+            XhtmlMatchers.hasXPath(
+                String.format(
+                    "%s/o[starts-with(@name, 'type-annotation')]",
+                    BytecodeRepresentationTest.VARIABLE_TYPES
+                )
+            )
+        );
+    }
+
+    /**
+     * TypeAnnotations.class is compiled without the local variable table, so
+     * only the detached path is covered by the tests above. This fixture is
+     * compiled with {@code -g}: its local variable annotations match local
+     * variable table entries and must survive the round trip.
+     *
+     * @throws Exception In case of error
+     */
+    @Test
+    void keepsTypeAnnotationsOfLocalVariablesInsideTableEntries() throws Exception {
+        final ResourceOf input = new ResourceOf("TypeAnnotationsLocalVariable.class");
+        MatcherAssert.assertThat(
+            "The disassembled/assembled bytecode representation should match the original bytecode",
+            new XmirRepresentation(
+                new BytecodeRepresentation(input).toXmir(BytecodeRepresentationTest.DEBUG)
+            ).toBytecode().toString(),
+            Matchers.equalTo(new Bytecode(new BytesOf(input).asBytes()).toString())
+        );
+    }
+
+    /**
+     * A local variable with a split live range is described by several local
+     * variable table entries, while ASM models its type annotation with
+     * parallel start/end/index lists: one annotation with several ranges.
+     * The ranges of one annotation must stay together after the round trip,
+     * otherwise the reassembled class file contains extra annotation entries.
+     *
+     * @throws Exception In case of error
+     */
+    @Test
+    void keepsMultiRangeLocalVariableAnnotationIntact() throws Exception {
+        final ResourceOf input = new ResourceOf("TypeAnnotationsMultiRange.class");
+        MatcherAssert.assertThat(
+            "The disassembled/assembled bytecode representation should match the original bytecode",
+            new XmirRepresentation(
+                new BytecodeRepresentation(input).toXmir(BytecodeRepresentationTest.DEBUG)
+            ).toBytecode().toString(),
+            Matchers.equalTo(new Bytecode(new BytesOf(input).asBytes()).toString())
+        );
+    }
+
+    /**
+     * A multi-range local variable annotation must carry all its ranges in
+     * XMIR, not only the first one.
+     */
+    @Test
+    void writesAllRangesOfMultiRangeLocalVariableAnnotation() {
+        MatcherAssert.assertThat(
+            "A multi-range local variable annotation must carry both scopes in XMIR",
+            new BytecodeRepresentation(
+                new ResourceOf("TypeAnnotationsMultiRange.class")
+            ).toXmir(BytecodeRepresentationTest.DEBUG).toString(),
+            XhtmlMatchers.hasXPaths(
+                BytecodeRepresentationTest.VARIABLE_TYPES,
+                String.format(
+                    "%s/o/o[@name='scope-start']",
+                    BytecodeRepresentationTest.VARIABLE_TYPES
+                ),
+                String.format(
+                    "%s/o/o[@name='scope-end']",
+                    BytecodeRepresentationTest.VARIABLE_TYPES
+                ),
+                String.format(
+                    "%s/o/o[@name='scope-slot']",
+                    BytecodeRepresentationTest.VARIABLE_TYPES
+                )
+            )
+        );
+    }
+
+    private static int bodyTypeAnnotations(final Bytecode bytecode) {
+        final ClassNode parsed = new ClassNode();
+        new ClassReader(bytecode.bytes()).accept(parsed, 0);
+        int total = 0;
+        for (final MethodNode method : parsed.methods) {
+            for (final AbstractInsnNode instruction : method.instructions) {
+                total += BytecodeRepresentationTest.size(instruction.visibleTypeAnnotations);
+                total += BytecodeRepresentationTest.size(instruction.invisibleTypeAnnotations);
+            }
+            total += BytecodeRepresentationTest.size(method.visibleLocalVariableAnnotations);
+            total += BytecodeRepresentationTest.size(method.invisibleLocalVariableAnnotations);
+            for (final TryCatchBlockNode block : method.tryCatchBlocks) {
+                total += BytecodeRepresentationTest.size(block.visibleTypeAnnotations);
+                total += BytecodeRepresentationTest.size(block.invisibleTypeAnnotations);
+            }
+        }
+        return total;
+    }
+
+    private static int size(final List<?> list) {
+        final int result;
+        if (list == null) {
+            result = 0;
+        } else {
+            result = list.size();
+        }
+        return result;
     }
 }

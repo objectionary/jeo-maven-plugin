@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotation;
 import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotations;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.RecordComponentNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 /**
@@ -36,6 +38,24 @@ final class AsmTypeAnnotations {
      */
     AsmTypeAnnotations(final RecordComponentNode comp) {
         this(comp.visibleTypeAnnotations, comp.invisibleTypeAnnotations);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param instruction Instruction node
+     */
+    AsmTypeAnnotations(final AbstractInsnNode instruction) {
+        this(instruction.visibleTypeAnnotations, instruction.invisibleTypeAnnotations);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param block Try-catch block node
+     */
+    AsmTypeAnnotations(final TryCatchBlockNode block) {
+        this(block.visibleTypeAnnotations, block.invisibleTypeAnnotations);
     }
 
     /**

@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation.xmir;
 
 import org.eolang.jeo.representation.bytecode.BytecodeLabel;
+import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotations;
 
 /**
  * XML representation of bytecode label.
@@ -38,7 +39,8 @@ public final class XmlLabel implements XmlBytecodeEntry {
                                 "Label node must have at least one child"
                             )
                         )
-                ).string()
+                ).string(),
+                this.types()
             );
         } catch (final ClassCastException exception) {
             throw new IllegalStateException(
@@ -46,5 +48,14 @@ public final class XmlLabel implements XmlBytecodeEntry {
                 exception
             );
         }
+    }
+
+    private BytecodeTypeAnnotations types() {
+        return this.node.children()
+            .filter(child -> "type-annotations".equals(child.attribute("name").orElse("")))
+            .findFirst()
+            .map(XmlTypeAnnotations::new)
+            .map(XmlTypeAnnotations::bytecode)
+            .orElseGet(BytecodeTypeAnnotations::new);
     }
 }

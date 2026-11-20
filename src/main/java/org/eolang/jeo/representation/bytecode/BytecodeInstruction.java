@@ -43,6 +43,11 @@ public final class BytecodeInstruction implements BytecodeEntry {
     private final List<Object> args;
 
     /**
+     * Type annotations that target this instruction.
+     */
+    private final BytecodeTypeAnnotations types;
+
+    /**
      * Constructor.
      *
      * @param opcode Opcode
@@ -62,8 +67,49 @@ public final class BytecodeInstruction implements BytecodeEntry {
         final int opcode,
         final List<Object> args
     ) {
+        this(opcode, args, new BytecodeTypeAnnotations());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param opcode Opcode
+     * @param args Arguments
+     * @param types Type annotations that target this instruction
+     */
+    public BytecodeInstruction(
+        final int opcode,
+        final Object[] args,
+        final BytecodeTypeAnnotations types
+    ) {
+        this(opcode, Arrays.asList(args), types);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param opcode Opcode
+     * @param args Arguments
+     * @param types Type annotations that target this instruction
+     */
+    public BytecodeInstruction(
+        final int opcode,
+        final List<Object> args,
+        final BytecodeTypeAnnotations types
+    ) {
         this.opcode = opcode;
         this.args = new ArrayList<>(args);
+        this.types = types;
+    }
+
+    /**
+     * Same instruction with the given type annotations.
+     *
+     * @param annotations Type annotations that target this instruction
+     * @return Instruction with the given type annotations
+     */
+    public BytecodeInstruction types(final BytecodeTypeAnnotations annotations) {
+        return new BytecodeInstruction(this.opcode, this.args, annotations);
     }
 
     @Override
@@ -74,7 +120,8 @@ public final class BytecodeInstruction implements BytecodeEntry {
         } else if (other instanceof BytecodeInstruction) {
             final BytecodeInstruction instruction = (BytecodeInstruction) other;
             result = this.opcode == instruction.opcode
-                && Objects.equals(this.args, instruction.args);
+                && Objects.equals(this.args, instruction.args)
+                && Objects.equals(this.types, instruction.types);
         } else {
             result = false;
         }
@@ -83,7 +130,7 @@ public final class BytecodeInstruction implements BytecodeEntry {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.opcode, this.args);
+        return Objects.hash(this.opcode, this.args, this.types);
     }
 
     @Override
@@ -111,11 +158,18 @@ public final class BytecodeInstruction implements BytecodeEntry {
                         }
                     ).collect(Collectors.toList())
             );
+        this.types.writeInsn(visitor);
     }
 
     @Override
     public Iterable<Directive> directives(final int index, final Format format) {
-        return new DirectivesInstruction(index, format, this.opcode, this.args.toArray());
+        return new DirectivesInstruction(
+            index,
+            format,
+            this.opcode,
+            this.types.directives(format),
+            this.args.toArray()
+        );
     }
 
     @Override

@@ -4,9 +4,12 @@
  */
 package org.eolang.jeo.representation.xmir;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.eolang.jeo.representation.bytecode.AnnotationScope;
 import org.eolang.jeo.representation.bytecode.BytecodeAnnotationValue;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotation;
 import org.objectweb.asm.TypePath;
 
@@ -53,8 +56,53 @@ final class XmlTypeAnnotation {
             this.path(),
             this.descriptor(),
             this.visible(),
-            this.values()
+            this.values(),
+            this.scopes()
         );
+    }
+
+    // Scopes of the annotated local variable.
+    // A single scope without a start label borrows it from the enclosing
+    // context, a scope with a start label carries all three values.
+    private List<AnnotationScope> scopes() {
+        final List<BytecodeLabel> starts = this.namedChildren("scope-start")
+            .stream()
+            .map(XmlTypeAnnotation::label)
+            .collect(Collectors.toList());
+        final List<BytecodeLabel> ends = this.namedChildren("scope-end")
+            .stream()
+            .map(XmlTypeAnnotation::label)
+            .collect(Collectors.toList());
+        final List<Integer> slots = this.namedChildren("scope-slot")
+            .stream()
+            .map(XmlTypeAnnotation::slot)
+            .collect(Collectors.toList());
+        final List<AnnotationScope> result = new ArrayList<>(0);
+        if (starts.isEmpty() && !ends.isEmpty()) {
+            result.add(new AnnotationScope(null, ends.get(0), slots.get(0)));
+        }
+        for (int position = 0; position < starts.size(); ++position) {
+            result.add(
+                new AnnotationScope(
+                    starts.get(position), ends.get(position), slots.get(position)
+                )
+            );
+        }
+        return result;
+    }
+
+    private static BytecodeLabel label(final XmlNode xml) {
+        return new BytecodeLabel(new XmlValue(xml).string());
+    }
+
+    private static int slot(final XmlNode xml) {
+        return (int) new XmlValue(xml).object();
+    }
+
+    private List<XmlNode> namedChildren(final String name) {
+        return this.node.children()
+            .filter(child -> name.equals(child.attribute("name").orElse("")))
+            .collect(Collectors.toList());
     }
 
     private int ref() {
