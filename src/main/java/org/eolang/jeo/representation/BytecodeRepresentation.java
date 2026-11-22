@@ -98,11 +98,16 @@ public final class BytecodeRepresentation {
     /**
      * Convert bytecode into XMIR format.
      *
+     * <p>The XMIR document is built directly as a DOM, without serializing it into
+     * an intermediate string and parsing that string back. For large classes this
+     * substantially reduces peak memory consumption, see
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1875">#1875</a>.</p>
+     *
      * @param format Disassemble output format
      * @return XML representation of the bytecode
      */
     public XML toXmir(final Format format) {
-        return new XMLDocument(this.toEO(format));
+        return this.xml(this.listing(format));
     }
 
     /**
@@ -112,6 +117,24 @@ public final class BytecodeRepresentation {
      * @return XMIR representation of the bytecode
      */
     public String toEO(final Format format) {
+        final Format fmt = this.listing(format);
+        final XML measured = this.xml(fmt);
+        final String res;
+        if (fmt.pretty()) {
+            res = new PrettyXml(measured).toString();
+        } else {
+            res = measured.toString();
+        }
+        return res;
+    }
+
+    /**
+     * Prepare format enriched with bytecode listing if it is requested.
+     *
+     * @param format Original format
+     * @return Format with listing attached, or the original one
+     */
+    private Format listing(final Format format) {
         final Format fmt;
         if (format.withListing()) {
             fmt = new Format(
@@ -125,19 +148,21 @@ public final class BytecodeRepresentation {
         } else {
             fmt = format;
         }
-        final BytecodeObject bytecode = new AsmProgram(this.input.value())
-            .bytecode(DisassembleMode.fromString(fmt.mode()).asmOptions());
-        final Iterable<Directive> directives = bytecode
+        return fmt;
+    }
+
+    /**
+     * Build the XMIR document from bytecode directives.
+     *
+     * @param fmt The disassemble params controlling the level of detail
+     * @return XMIR representation of the bytecode
+     */
+    private XML xml(final Format fmt) {
+        final Iterable<Directive> directives = new AsmProgram(this.input.value())
+            .bytecode(DisassembleMode.fromString(fmt.mode()).asmOptions())
             .directives(fmt);
         try {
-            final XML measured = new MeasuredEo(directives).asXml();
-            final String res;
-            if (fmt.pretty()) {
-                res = new PrettyXml(measured).toString();
-            } else {
-                res = measured.toString();
-            }
-            return res;
+            return new MeasuredEo(directives).asXml();
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(
                 String.format(

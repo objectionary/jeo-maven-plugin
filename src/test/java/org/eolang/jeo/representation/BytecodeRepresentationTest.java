@@ -5,6 +5,7 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XML;
 import java.util.Arrays;
 import java.util.Locale;
 import org.cactoos.bytes.BytesOf;
@@ -17,6 +18,7 @@ import org.eolang.jeo.representation.bytecode.Bytecode;
 import org.eolang.jeo.representation.bytecode.BytecodeUnknownAttribute;
 import org.eolang.jeo.representation.bytecode.EoCodec;
 import org.eolang.jeo.representation.directives.DirectivesValue;
+import org.eolang.jeo.representation.directives.EoFqn;
 import org.eolang.jeo.representation.directives.Format;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -326,6 +328,58 @@ final class BytecodeRepresentationTest {
                 ).toXmir(BytecodeRepresentationTest.DEBUG)
             ).toBytecode().toString(),
             Matchers.equalTo(original.toString())
+        );
+    }
+
+    /**
+     * Regression test for the
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1875">issue #1875</a>.
+     *
+     * <p>A class with hundreds of thousands of instructions must be fully disassembled.
+     * Previously such a disassembly built the same huge XML several times (DOM, string,
+     * DOM again), which made the peak memory consumption unreasonably high.</p>
+     */
+    @Test
+    void disassemblesLargeSyntheticClass() throws Exception {
+        final int methods = 10;
+        final int instructions = 20_000;
+        final ClassWriter writer = new ClassWriter(0);
+        writer.visit(
+            Opcodes.V1_8, Opcodes.ACC_PUBLIC, "example/LargeSynthetic",
+            null, "java/lang/Object", null
+        );
+        for (int method = 0; method < methods; ++method) {
+            final MethodVisitor visitor = writer.visitMethod(
+                Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
+                String.format("large%03d", method),
+                "()V",
+                null,
+                null
+            );
+            visitor.visitCode();
+            for (int index = 0; index < instructions; ++index) {
+                visitor.visitInsn(Opcodes.NOP);
+            }
+            visitor.visitInsn(Opcodes.RETURN);
+            visitor.visitMaxs(0, 1);
+            visitor.visitEnd();
+        }
+        writer.visitEnd();
+        final XML xmir = new BytecodeRepresentation(
+            new Bytecode(writer.toByteArray())
+        ).toXmir();
+        final javax.xml.xpath.XPath xpath = javax.xml.xpath.XPathFactory.newInstance().newXPath();
+        MatcherAssert.assertThat(
+            "All instructions of a large synthetic class must be present in the XMIR",
+            ((Number) xpath.evaluate(
+                String.format(
+                    "count(//o[@base='%s'])",
+                    new EoFqn("jeo.opcode.nop").fqn()
+                ),
+                new javax.xml.transform.dom.DOMSource(xmir.inner()),
+                javax.xml.xpath.XPathConstants.NUMBER
+            )).intValue(),
+            Matchers.equalTo(methods * instructions)
         );
     }
 }

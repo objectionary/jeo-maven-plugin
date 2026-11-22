@@ -6,8 +6,9 @@ package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xembly.Directive;
-import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
 import org.xembly.Xembler;
 
@@ -38,19 +39,22 @@ final class MeasuredEo {
     /**
      * Get XML representation of the EO with timing information.
      *
+     * <p>The DOM document is built once and returned directly, without serializing it
+     * into a string and parsing that string back. For large classes this substantially
+     * reduces the peak memory consumption, see
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1875">#1875</a>.</p>
+     *
      * @return XML representation with embedded timing metadata
      * @throws ImpossibleModificationException If XMIR modification fails
      */
     XML asXml() throws ImpossibleModificationException {
         final long start = System.currentTimeMillis();
-        final XML doc = new XMLDocument(new Xembler(this.directives).xmlQuietly());
+        final Document dom = new Xembler(this.directives).dom();
         final long end = System.currentTimeMillis();
-        return new XMLDocument(
-            new Xembler(
-                new Directives()
-                    .xpath("/object[@ms]/@ms")
-                    .set(String.valueOf(end - start))
-            ).apply(doc.inner())
-        );
+        final Element root = dom.getDocumentElement();
+        if (root != null && root.hasAttribute("ms")) {
+            root.setAttribute("ms", String.valueOf(end - start));
+        }
+        return new XMLDocument(dom);
     }
 }
