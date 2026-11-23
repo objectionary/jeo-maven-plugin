@@ -108,6 +108,12 @@
       <artifactId>jcabi-xml</artifactId>
       <version>0.37.3</version>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.cactoos</groupId>
+          <artifactId>cactoos</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.jcabi</groupId>
@@ -118,6 +124,12 @@
       <groupId>org.eolang</groupId>
       <artifactId>lints</artifactId>
       <version>0.1.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.cactoos</groupId>
+          <artifactId>cactoos</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.cactoos</groupId>
@@ -197,6 +209,16 @@
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
       <version>0.61.3</version>
+      <exclusions>
+        <exclusion>
+          <groupId>net.sf.saxon</groupId>
+          <artifactId>Saxon-HE</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.cactoos</groupId>
+          <artifactId>cactoos</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -234,6 +256,12 @@
       <artifactId>jucs</artifactId>
       <version>0.4.0</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.cactoos</groupId>
+          <artifactId>cactoos</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
@@ -276,6 +304,11 @@
       <!-- Keep Java 11 compatible tooling while the parent remains pinned. -->
       <plugins>
         <plugin>
+          <groupId>com.jcabi</groupId>
+          <artifactId>jcabi-maven-plugin</artifactId>
+          <version>0.17.0</version>
+        </plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.16.0</version>
@@ -309,6 +342,13 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-invoker-plugin</artifactId>
           <version>3.10.1</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.groovy</groupId>
+              <artifactId>groovy</artifactId>
+              <version>4.0.31</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
