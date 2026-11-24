@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import com.jcabi.xml.XML;
 import java.util.Arrays;
 import java.util.Locale;
 import org.cactoos.bytes.BytesOf;
@@ -365,20 +364,13 @@ final class BytecodeRepresentationTest {
             visitor.visitEnd();
         }
         writer.visitEnd();
-        final XML xmir = new BytecodeRepresentation(
-            new Bytecode(writer.toByteArray())
-        ).toXmir();
-        final javax.xml.xpath.XPath xpath = javax.xml.xpath.XPathFactory.newInstance().newXPath();
         MatcherAssert.assertThat(
             "All instructions of a large synthetic class must be present in the XMIR",
-            ((Number) xpath.evaluate(
-                String.format(
-                    "count(//o[@base='%s'])",
-                    new EoFqn("jeo.opcode.nop").fqn()
-                ),
-                new javax.xml.transform.dom.DOMSource(xmir.inner()),
-                javax.xml.xpath.XPathConstants.NUMBER
-            )).intValue(),
+            new BytecodeRepresentation(
+                new Bytecode(writer.toByteArray())
+            ).toXmir().nodes(
+                String.format("//o[@base='%s']", new EoFqn("jeo.opcode.nop").fqn())
+            ).size(),
             Matchers.equalTo(methods * instructions)
         );
     }

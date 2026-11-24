@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import java.nio.file.Path;
 import java.util.Arrays;
 import org.cactoos.Input;
@@ -17,7 +16,6 @@ import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.bytecode.Bytecode;
-import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassReader;
 import org.xembly.Directive;
@@ -128,12 +126,11 @@ public final class BytecodeRepresentation {
         return res;
     }
 
-    /**
-     * Prepare format enriched with bytecode listing if it is requested.
-     *
-     * @param format Original format
-     * @return Format with listing attached, or the original one
-     */
+    @Override
+    public String toString() {
+        return "BytecodeRepresentation()";
+    }
+
     private Format listing(final Format format) {
         final Format fmt;
         if (format.withListing()) {
@@ -151,12 +148,6 @@ public final class BytecodeRepresentation {
         return fmt;
     }
 
-    /**
-     * Build the XMIR document from bytecode directives.
-     *
-     * @param fmt The disassemble params controlling the level of detail
-     * @return XMIR representation of the bytecode
-     */
     private XML xml(final Format fmt) {
         final Iterable<Directive> directives = new AsmProgram(this.input.value())
             .bytecode(DisassembleMode.fromString(fmt.mode()).asmOptions())
@@ -182,11 +173,6 @@ public final class BytecodeRepresentation {
                 exception
             );
         }
-    }
-
-    @Override
-    public String toString() {
-        return "BytecodeRepresentation()";
     }
 
     private static Unchecked<byte[]> fromFile(final Path path) {

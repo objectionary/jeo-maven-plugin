@@ -35,11 +35,8 @@ public final class SubprocessDisassembler {
      * @throws Exception If disassembly fails
      */
     public static void main(final String... args) throws Exception {
-        final byte[] bytes = Files.readAllBytes(Paths.get(args[0]));
-        new BytecodeRepresentation(new Bytecode(bytes)).toXmir();
-        System.out.printf(
-            "Disassembled %d bytes successfully%n",
-            bytes.length
-        );
+        new BytecodeRepresentation(
+            new Bytecode(Files.readAllBytes(Paths.get(args[0])))
+        ).toXmir();
     }
 }

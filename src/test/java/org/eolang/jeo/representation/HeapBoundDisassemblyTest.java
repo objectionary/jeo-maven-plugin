@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation;
 
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -59,42 +60,27 @@ final class HeapBoundDisassemblyTest {
                 clazz.toString()
             ).redirectErrorStream(true).start();
             final String output;
-            try (java.io.InputStream stream = process.getInputStream()) {
+            try (InputStream stream = process.getInputStream()) {
                 output = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
             }
-            final boolean finished = process.waitFor(
-                HeapBoundDisassemblyTest.TIMEOUT_MILLIS,
-                TimeUnit.MILLISECONDS
-            );
             MatcherAssert.assertThat(
                 String.format(
-                    "Disassembly must finish within %d ms under %s heap. Output:%n%s",
+                    "Disassembly must finish successfully within %d ms under %s heap. Output:%n%s",
                     HeapBoundDisassemblyTest.TIMEOUT_MILLIS,
                     HeapBoundDisassemblyTest.HEAP,
                     output
                 ),
-                finished,
+                process.waitFor(
+                    HeapBoundDisassemblyTest.TIMEOUT_MILLIS,
+                    TimeUnit.MILLISECONDS
+                ) && process.exitValue() == 0,
                 Matchers.equalTo(true)
-            );
-            MatcherAssert.assertThat(
-                String.format(
-                    "Disassembly of a large class must not fail under %s heap. Output:%n%s",
-                    HeapBoundDisassemblyTest.HEAP,
-                    output
-                ),
-                process.exitValue(),
-                Matchers.equalTo(0)
             );
         } finally {
             Files.deleteIfExists(clazz);
         }
     }
 
-    /**
-     * Generate a synthetic class with many instructions.
-     *
-     * @return Bytecode of the class
-     */
     private static byte[] syntheticClass() {
         final int methods = 10;
         final int instructions = 20_000;
@@ -123,11 +109,6 @@ final class HeapBoundDisassemblyTest {
         return writer.toByteArray();
     }
 
-    /**
-     * Path to the current Java executable.
-     *
-     * @return Absolute path to the java launcher
-     */
     private static String javaExecutable() {
         final String name;
         if (System.getProperty("os.name", "").toLowerCase(Locale.ROOT).contains("win")) {
