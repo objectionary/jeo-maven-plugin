@@ -132,7 +132,8 @@ public final class Disassembler {
                 "disassembled",
                 this.classes.toString(),
                 this.target,
-                new ParallelTranslator(path -> this.disassemble(path, counter), this.threads)
+                new ParallelTranslator(path -> this.disassemble(path, counter), this.threads),
+                counter
             ).apply(paths.stream())
         ) {
             this.clean(

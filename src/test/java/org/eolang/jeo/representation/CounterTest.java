@@ -99,4 +99,16 @@ final class CounterTest {
             Matchers.is(String.format("2/%d", Integer.MAX_VALUE))
         );
     }
+
+    @Test
+    void returnsCurrentCountWithoutIncrementing() {
+        final Counter counter = new Counter(3);
+        counter.next();
+        counter.next();
+        MatcherAssert.assertThat(
+            "count() must return the number of increments without advancing it",
+            counter.count(),
+            Matchers.is(2L)
+        );
+    }
 }

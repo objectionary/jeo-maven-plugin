@@ -90,7 +90,8 @@ public final class Assembler {
                 "assembled",
                 this.input.toString(),
                 this.output,
-                new ParallelTranslator(path -> this.assemble(path, counter), this.threads)
+                new ParallelTranslator(path -> this.assemble(path, counter), this.threads),
+                counter
             ).apply(files.stream())
         ) {
             all.forEach(this::log);
