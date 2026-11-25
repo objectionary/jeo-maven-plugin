@@ -60,6 +60,47 @@ final class BytecodeListingTest {
         );
     }
 
+    @Test
+    void escapesRestrictedControlRangesInListing() {
+        MatcherAssert.assertThat(
+            "Listing should escape U+007F-U+0084 and U+0086-U+009F control characters",
+            new BytecodeListing(0, BytecodeListingTest.classWithControlRanges()).toString(),
+            Matchers.allOf(
+                Matchers.containsString("del\\u007f_end\\u0084.java"),
+                Matchers.containsString("c1\\u0086_\\u009f")
+            )
+        );
+    }
+
+    @Test
+    void disassemblesRestrictedControlRangesToXmir() {
+        MatcherAssert.assertThat(
+            "Disassembling with omitListings=false should succeed for U+007F-U+009F",
+            new BytecodeRepresentation(new Bytecode(BytecodeListingTest.classWithControlRanges()))
+                .toXmir(new Format(Format.WITH_LISTING, true))
+                .toString(),
+            XhtmlMatchers.hasXPath("/object/listing")
+        );
+    }
+
+    private static byte[] classWithControlRanges() {
+        final ClassWriter writer = new ClassWriter(0);
+        writer.visit(
+            Opcodes.V17,
+            Opcodes.ACC_PUBLIC,
+            "ControlRangeListing",
+            null,
+            "java/lang/Object",
+            null
+        );
+        writer.visitSource(
+            String.format("del%c_end%c.java", 0x7F, 0x84),
+            String.format("c1%c_%c", 0x86, 0x9F)
+        );
+        writer.visitEnd();
+        return writer.toByteArray();
+    }
+
     private static byte[] classWithRestrictedChars() {
         final ClassWriter writer = new ClassWriter(0);
         writer.visit(

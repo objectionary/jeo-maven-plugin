@@ -84,6 +84,8 @@ public final class BytecodeListing {
         final boolean result;
         if (code < 0x20) {
             result = code != '\t' && code != '\n' && code != '\r';
+        } else if (code >= 0x7F && code <= 0x9F) {
+            result = code != 0x85;
         } else if (code >= 0xD800) {
             result = code <= 0xDFFF || code == 0xFFFE || code == 0xFFFF;
         } else {
