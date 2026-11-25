@@ -103,7 +103,6 @@ final class DisassemblerTest {
     }
 
     @Test
-<<<<<<< HEAD
     void keepsXmirOfFilteredOutClass(@TempDir final Path temp) throws Exception {
         final Path classes = temp.resolve("classes");
         Files.createDirectories(classes.resolve("com").resolve("a"));

@@ -332,22 +332,32 @@ final class BytecodeRepresentationTest {
     @Test
     void rejectsClassTruncatedAfterConstantPoolWithListing() throws Exception {
         final byte[] original = new BytesOf(new ResourceOf("MethodByte.class")).asBytes();
-        final int aftercp = new ClassReader(original).header + 6;
-        final byte[] truncated = Arrays.copyOf(original, aftercp);
-        final BytecodeRepresentation repr = new BytecodeRepresentation(new Bytecode(truncated));
         MatcherAssert.assertThat(
             "Listing traversal with Format.WITH_LISTING must report descriptive truncation error",
             Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> repr.toEO(new Format(Format.WITH_LISTING, true))
+                () -> new BytecodeRepresentation(
+                    new Bytecode(
+                        Arrays.copyOf(original, new ClassReader(original).header + 6)
+                    )
+                ).toEO(new Format(Format.WITH_LISTING, true))
             ).getMessage(),
             Matchers.containsString("truncated")
         );
+    }
+
+    @Test
+    void rejectsClassTruncatedAfterConstantPoolInName() throws Exception {
+        final byte[] original = new BytesOf(new ResourceOf("MethodByte.class")).asBytes();
         MatcherAssert.assertThat(
             "BytecodeRepresentation.name() must report descriptive truncation error",
             Assertions.assertThrows(
                 IllegalArgumentException.class,
-                repr::name
+                () -> new BytecodeRepresentation(
+                    new Bytecode(
+                        Arrays.copyOf(original, new ClassReader(original).header + 6)
+                    )
+                ).name()
             ).getMessage(),
             Matchers.containsString("truncated")
         );
