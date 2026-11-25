@@ -389,6 +389,44 @@ final class BytecodeRepresentationTest {
         );
     }
 
+    @Test
+    void preservesSameNamedMethodAndCodeAttributesAtOriginalLocations() {
+        final byte[] mpayload = {1, 2};
+        final byte[] cpayload = {3, 4};
+        final ClassWriter writer = new ClassWriter(0);
+        writer.visit(
+            Opcodes.V1_8, Opcodes.ACC_PUBLIC, "example/MixedAttrs", null, "java/lang/Object", null
+        );
+        final MethodVisitor method = writer.visitMethod(
+            Opcodes.ACC_PUBLIC, "work", "()V", null, null
+        );
+        method.visitAttribute(new AsmUnknownAttribute("Custom", mpayload, false));
+        method.visitCode();
+        method.visitInsn(Opcodes.RETURN);
+        method.visitMaxs(0, 1);
+        method.visitAttribute(new AsmUnknownAttribute("Custom", cpayload, true));
+        method.visitEnd();
+        writer.visitEnd();
+        final byte[] restored = new XmirRepresentation(
+            new BytecodeRepresentation(new Bytecode(writer.toByteArray())).toXmir()
+        ).toBytecode().bytes();
+        final List<BytecodeUnknownAttribute> meth = new ArrayList<>(0);
+        final List<BytecodeUnknownAttribute> code = new ArrayList<>(0);
+        final ClassReader reader = new ClassReader(restored);
+        reader.accept(
+            BytecodeRepresentationTest.mixedAttrScanner(meth, code),
+            AsmUnknownAttributes.prototypes(reader),
+            0
+        );
+        MatcherAssert.assertThat(
+            "Method-level and Code-level custom attribute payloads must remain at original locations",
+            meth.size() == 1 && code.size() == 1
+                && meth.get(0).equals(new BytecodeUnknownAttribute("Custom", mpayload, false))
+                && code.get(0).equals(new BytecodeUnknownAttribute("Custom", cpayload, true)),
+            Matchers.is(true)
+        );
+    }
+
     private static ClassVisitor methodScanner(final List<String> seen) {
         return new ClassVisitor(Opcodes.ASM9) {
             @Override
@@ -413,6 +451,46 @@ final class BytecodeRepresentationTest {
             public void visitAttribute(final Attribute attr) {
                 if (inside.get()) {
                     seen.add(attr.type);
+                }
+            }
+        };
+    }
+
+    private static ClassVisitor mixedAttrScanner(
+        final List<BytecodeUnknownAttribute> meth,
+        final List<BytecodeUnknownAttribute> code
+    ) {
+        return new ClassVisitor(Opcodes.ASM9) {
+            @Override
+            public MethodVisitor visitMethod(
+                final int access, final String name, final String desc,
+                final String sig, final String[] exceptions
+            ) {
+                return BytecodeRepresentationTest.mixedAttrCollector(meth, code);
+            }
+        };
+    }
+
+    private static MethodVisitor mixedAttrCollector(
+        final List<BytecodeUnknownAttribute> meth,
+        final List<BytecodeUnknownAttribute> code
+    ) {
+        final AtomicBoolean inside = new AtomicBoolean(false);
+        return new MethodVisitor(Opcodes.ASM9) {
+            @Override
+            public void visitCode() {
+                inside.set(true);
+            }
+
+            @Override
+            public void visitAttribute(final Attribute attr) {
+                if (attr instanceof AsmUnknownAttribute) {
+                    final BytecodeUnknownAttribute parsed = ((AsmUnknownAttribute) attr).bytecode();
+                    if (inside.get()) {
+                        code.add(parsed);
+                    } else {
+                        meth.add(parsed);
+                    }
                 }
             }
         };

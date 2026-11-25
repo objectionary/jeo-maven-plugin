@@ -21,13 +21,9 @@ final class AsmUnknownAttributeClassVisitor extends ClassVisitor {
     /** Names collected so far. */
     private final Set<String> types;
 
-    /** Code-level attribute names collected so far. */
-    private final Set<String> code;
-
-    AsmUnknownAttributeClassVisitor(final Set<String> types, final Set<String> code) {
+    AsmUnknownAttributeClassVisitor(final Set<String> types) {
         super(Opcodes.ASM9);
         this.types = types;
-        this.code = code;
     }
 
     @Override
@@ -54,6 +50,6 @@ final class AsmUnknownAttributeClassVisitor extends ClassVisitor {
         final String signature,
         final String[] exceptions
     ) {
-        return new AsmUnknownAttributeMethodVisitor(this.types, this.code);
+        return new AsmUnknownAttributeMethodVisitor(this.types);
     }
 }

@@ -103,13 +103,12 @@ public final class AsmUnknownAttributes {
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static Attribute[] prototypes(final ClassReader reader) {
         final Set<String> types = new LinkedHashSet<>();
-        final Set<String> code = new LinkedHashSet<>();
         for (final Attribute prototype : AsmUnknownAttributes.prototypes()) {
             types.add(prototype.type);
         }
-        reader.accept(new AsmUnknownAttributeClassVisitor(types, code), ClassReader.SKIP_DEBUG);
+        reader.accept(new AsmUnknownAttributeClassVisitor(types), ClassReader.SKIP_DEBUG);
         return types.stream()
-            .map(type -> new AsmUnknownAttribute(type, code.contains(type)))
+            .map(AsmUnknownAttribute::new)
             .toArray(Attribute[]::new);
     }
 

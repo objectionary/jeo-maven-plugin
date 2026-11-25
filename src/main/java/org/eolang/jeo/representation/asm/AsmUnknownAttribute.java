@@ -107,7 +107,7 @@ public final class AsmUnknownAttribute extends Attribute {
         final int caoffset,
         final Label[] labels
     ) {
-        return new AsmUnknownAttribute(this.type, reader.readBytes(offset, length), this.code);
+        return new AsmUnknownAttribute(this.type, reader.readBytes(offset, length), caoffset >= 0);
     }
 
     @Override
