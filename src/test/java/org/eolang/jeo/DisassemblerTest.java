@@ -261,13 +261,8 @@ final class DisassemblerTest {
         DisassemblerTest.symlink(output.resolve("shared"), external);
         new Disassembler(classes, output).disassemble();
         MatcherAssert.assertThat(
-            "Cleanup must not delete external XMIR files through nested output symlinks",
-            Files.exists(keep),
-            Matchers.is(true)
-        );
-        MatcherAssert.assertThat(
-            "Cleanup must not delete external cache files through nested output symlinks",
-            Files.exists(cache),
+            "Cleanup must not delete external XMIR or cache files through nested output symlinks",
+            Files.exists(keep) && Files.exists(cache),
             Matchers.is(true)
         );
     }

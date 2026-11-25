@@ -153,14 +153,7 @@ public final class Disassembler {
                     final List<Path> stale = all
                         .filter(path -> Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS))
                         .filter(path -> path.getFileName().toString().endsWith(".xmir"))
-                        .filter(
-                            path -> {
-                                final Path resolved = logical.resolve(root.relativize(path))
-                                    .normalize();
-                                return !produced.contains(resolved)
-                                    && !Files.exists(this.classOf(resolved));
-                            }
-                        )
+                        .filter(path -> this.isStale(root, logical, path, produced))
                         .collect(Collectors.toList());
                     for (final Path path : stale) {
                         Files.delete(path);
@@ -179,6 +172,16 @@ public final class Disassembler {
                 );
             }
         }
+    }
+
+    private boolean isStale(
+        final Path root,
+        final Path logical,
+        final Path path,
+        final Set<Path> produced
+    ) {
+        final Path resolved = logical.resolve(root.relativize(path)).normalize();
+        return !produced.contains(resolved) && !Files.exists(this.classOf(resolved));
     }
 
     private Path classOf(final Path xmir) {
