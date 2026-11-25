@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import org.eolang.jeo.representation.BytecodeRepresentation;
 import org.eolang.jeo.representation.XmirRepresentation;
 import org.eolang.jeo.representation.bytecode.Bytecode;
@@ -127,6 +128,100 @@ final class BytecodeClassesTest {
             ).verify(),
             "A class with a consistent StackMapTable frame must pass verification"
         );
+    }
+
+    @Test
+    void rejectsBrokenClassWhenValidSameNamedClassInContextLoader(@TempDir final Path tmp)
+        throws IOException {
+        final Path ctx = tmp.resolve("ctx").resolve("pkg");
+        Files.createDirectories(ctx);
+        Files.write(
+            ctx.resolve("Shadowed.class"),
+            BytecodeClassesTest.stackMapClass("pkg/Shadowed", "[Ljava/lang/String;")
+        );
+        final ClassLoader previous = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(
+            new JeoClassLoader(
+                previous, Collections.singleton(tmp.resolve("ctx").toString())
+            )
+        );
+        try {
+            MatcherAssert.assertThat(
+                "Broken class must be verified using supplied bytes ahead of context loader",
+                Assertions.assertThrows(
+                    IllegalStateException.class,
+                    () -> new VerifiedBytecode(
+                        BytecodeClassesTest.stackMapClass("pkg/Shadowed", "java/lang/Integer")
+                    ).verify()
+                ).getCause(),
+                Matchers.instanceOf(VerifyError.class)
+            );
+        } finally {
+            Thread.currentThread().setContextClassLoader(previous);
+        }
+    }
+
+    @Test
+    void acceptsSamePackageProtectedAccessAcrossClasses(@TempDir final Path tmp)
+        throws IOException {
+        final Path pkg = tmp.resolve("classes").resolve("com").resolve("example");
+        Files.createDirectories(pkg);
+        Files.write(pkg.resolve("Base.class"), BytecodeClassesTest.protectedBase());
+        Files.write(pkg.resolve("Sub.class"), BytecodeClassesTest.protectedSub());
+        final ClassLoader previous = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(
+            new JeoClassLoader(
+                previous, Collections.singleton(tmp.resolve("classes").toString())
+            )
+        );
+        try {
+            Assertions.assertDoesNotThrow(
+                () -> new BytecodeClasses(tmp.resolve("classes")).verify(),
+                "Classes in the same package must share package identity during verification"
+            );
+        } finally {
+            Thread.currentThread().setContextClassLoader(previous);
+        }
+    }
+
+    private static byte[] protectedBase() {
+        final ClassWriter writer = new ClassWriter(0);
+        writer.visit(
+            Opcodes.V1_8, Opcodes.ACC_PUBLIC, "com/example/Base",
+            null, "java/lang/Object", null
+        );
+        writer.visitField(Opcodes.ACC_PROTECTED, "secret", "I", null, null).visitEnd();
+        final MethodVisitor ctor = writer.visitMethod(
+            Opcodes.ACC_PUBLIC, "<init>", "()V", null, null
+        );
+        ctor.visitCode();
+        ctor.visitVarInsn(Opcodes.ALOAD, 0);
+        ctor.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+        ctor.visitInsn(Opcodes.RETURN);
+        ctor.visitMaxs(1, 1);
+        ctor.visitEnd();
+        writer.visitEnd();
+        return writer.toByteArray();
+    }
+
+    private static byte[] protectedSub() {
+        final ClassWriter writer = new ClassWriter(0);
+        writer.visit(
+            Opcodes.V1_8, Opcodes.ACC_PUBLIC, "com/example/Sub",
+            null, "com/example/Base", null
+        );
+        final MethodVisitor read = writer.visitMethod(
+            Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
+            "read", "(Lcom/example/Base;)I", null, null
+        );
+        read.visitCode();
+        read.visitVarInsn(Opcodes.ALOAD, 0);
+        read.visitFieldInsn(Opcodes.GETFIELD, "com/example/Base", "secret", "I");
+        read.visitInsn(Opcodes.IRETURN);
+        read.visitMaxs(1, 1);
+        read.visitEnd();
+        writer.visitEnd();
+        return writer.toByteArray();
     }
 
     private static byte[] stackMapClass(final String name, final String local) {

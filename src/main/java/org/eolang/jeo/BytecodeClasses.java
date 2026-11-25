@@ -69,7 +69,11 @@ final class BytecodeClasses implements Classes {
      * Verify bytecode in the folder.
      */
     void verify() {
-        this.all().forEach(BytecodeClasses::verify);
+        final ClassLoader shared = new JeoClassLoader(
+            Thread.currentThread().getContextClassLoader(),
+            Collections.singleton(this.checked().toString())
+        );
+        this.all().forEach(clazz -> BytecodeClasses.verify(clazz, shared));
     }
 
     private Path checked() {
@@ -113,9 +117,9 @@ final class BytecodeClasses implements Classes {
         }
     }
 
-    private static void verify(final Path clazz) {
+    private static void verify(final Path clazz, final ClassLoader shared) {
         try {
-            new VerifiedBytecode(BytecodeClasses.read(clazz)).verify();
+            new VerifiedBytecode(BytecodeClasses.read(clazz), shared).verify();
         } catch (final IllegalArgumentException exception) {
             throw new IllegalArgumentException(
                 String.format("Invalid bytecode of class '%s'", clazz), exception
