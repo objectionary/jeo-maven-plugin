@@ -97,9 +97,11 @@ public final class PrettyXml {
                 writer.write(child);
             }
             writer.close();
-            String token = String.format("jeo-listing-%d", listings.size());
+            long index = listings.size();
+            String token = String.format("jeo-listing-%d-", index);
             while (raw.contains(token) || listings.containsKey(token)) {
-                token = String.format("jeo-listing-%d-%d", listings.size(), token.length());
+                index += 1L;
+                token = String.format("jeo-listing-%d-", index);
             }
             listings.put(token, buf.toString());
             element.setText(token);
