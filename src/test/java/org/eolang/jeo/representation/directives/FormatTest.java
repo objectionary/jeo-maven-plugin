@@ -44,6 +44,7 @@ final class FormatTest {
     }
 
     @Test
+    @SuppressWarnings("PMD.UnitTestContainsTooManyAsserts")
     void overridesListingWithoutChangingOriginalFormat() {
         final Format original = new Format(Format.LISTING, "nop", Format.WITH_LISTING, false);
         final Format copy = new Format(
@@ -71,13 +72,16 @@ final class FormatTest {
 
     @Test
     void rejectsStringWhereListingFlagIsExpected() {
-        final Format format = new Format(Format.WITH_LISTING, "true");
-        Assertions.assertThrows(IllegalArgumentException.class, format::withListing);
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            new Format(Format.WITH_LISTING, "true")::withListing
+        );
     }
 
     @Test
     void rejectsBooleanWhereListingTextIsExpected() {
-        final Format format = new Format(Format.LISTING, true);
-        Assertions.assertThrows(IllegalArgumentException.class, format::listing);
+        Assertions.assertThrows(
+            IllegalArgumentException.class, new Format(Format.LISTING, true)::listing
+        );
     }
 }
