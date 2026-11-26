@@ -74,8 +74,11 @@ final class OpcodeDictionaryTest {
                 if (code >= 0 && code < Printer.OPCODES.length
                     && field.getName().equals(Printer.OPCODES[code])) {
                     final String name = field.getName().toLowerCase(Locale.ROOT);
-                    Assertions.assertEquals(name, dictionary.name(code), name);
-                    Assertions.assertEquals(code, dictionary.code(name), name);
+                    Assertions.assertArrayEquals(
+                        new Object[]{name, code},
+                        new Object[]{dictionary.name(code), dictionary.code(name)},
+                        name
+                    );
                 }
             }
         }
