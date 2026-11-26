@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.CsvSource;
  */
 final class DecodedStringTest {
 
+    @SuppressWarnings("deprecation")
     @ParameterizedTest
     @CsvSource({
         "Hello, Hello",
