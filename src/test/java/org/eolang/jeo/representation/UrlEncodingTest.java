@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests the public URL helpers.
- * @since 1.0-SNAPSHOT
+ *
+ * @since 1.0
  */
 final class UrlEncodingTest {
 

@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
  * encoding. It handles encoding exceptions internally and throws IllegalStateException if
  * encoding fails.</p>
  *
- * @since 1.0-SNAPSHOT
+ * @since 1.0
  */
 public final class UrlEncoder {
 
