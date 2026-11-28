@@ -22,10 +22,12 @@ import org.eolang.jeo.representation.directives.Format;
 import org.eolang.jeo.representation.xmir.XmlObject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.xembly.ImpossibleModificationException;
@@ -44,6 +46,33 @@ final class BytecodeMethodTest {
             "We expect that method without maxs is equal to method with cleaned maxs",
             new BytecodeMethod("foo", new BytecodeMaxs(1, 2)).withoutMaxs(),
             Matchers.equalTo(new BytecodeMethod("foo"))
+        );
+    }
+
+    @Test
+    void skipsOwnMaxsComputationWhenAsmComputesFrames() {
+        final BytecodeMethod method = Mockito.spy(
+            new BytecodeMethod("foo")
+                .opcode(Opcodes.BIPUSH, 10)
+                .opcode(Opcodes.IRETURN)
+        );
+        Mockito.doThrow(new IllegalStateException("Our maxs machinery must not run"))
+            .when(method).computeMaxs();
+        Assertions.assertDoesNotThrow(
+            () -> {
+                final CustomClassWriter writer = new CustomClassWriter();
+                writer.visit(
+                    Opcodes.V1_8,
+                    Opcodes.ACC_PUBLIC,
+                    "Foo",
+                    null,
+                    "java/lang/Object",
+                    new String[0]
+                );
+                method.write(writer);
+                writer.visitEnd();
+            },
+            "For a method without maxs the writer works in COMPUTE_ALL_FRAMES mode, so ASM recomputes maxs itself and the result of computeMaxs() would be thrown away"
         );
     }
 
