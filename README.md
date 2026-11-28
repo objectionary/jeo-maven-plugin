@@ -253,6 +253,48 @@ All the components in the generated XMIR files are sorted according to the JVM
 It means that classes, fields, methods, and attributes have the same order in
 EO, PHI notation, and XMIR files as in the JVM specification.
 
+### Method bodies in XMIR
+
+The assembler reads bytecode entries in document order from the first method
+child whose name contains `body`. A method without that sequence has no
+instructions. Keep instructions inside the sequence when transforming XMIR.
+Moving an instruction next to the body removes it from the assembled code.
+
+For example, the body of a void method containing a single `return`
+instruction has the following shape:
+
+```xml
+<o name="body">
+  <o base="Φ.jeo.seq.of1" name="φ"/>
+  <o name="i0">
+    <o base="Φ.jeo.opcode.return" name="φ"/>
+  </o>
+</o>
+```
+
+The first `o` child is the delegate named `φ`. Its `base` identifies the
+sequence or entry. Keep the delegate first. For an instruction, the assembler
+looks up the final component of its base in the opcode dictionary. An unknown
+mnemonic causes assembly to fail. All subsequent `o` children of an instruction
+are operands in JVM argument order. Sorting operands by name can change what
+the instruction does. Labels, frames and line numbers use their own JEO bases
+and stay in order alongside instructions.
+
+A transformation can evaluate these XPath 1.0 expressions as booleans with
+the body element as the context node. They check the generated sequence
+delegate, the presence of a delegate on each entry, and the absence of operands
+on `return`, respectively.
+
+```xpath
+o[1][@name = 'φ' and starts-with(@base, 'Φ.jeo.seq.of')]
+not(o[position() > 1][not(o[1][@name = 'φ' and @base])])
+not(o[o[1][@base = 'Φ.jeo.opcode.return']][o[position() > 1]])
+```
+
+The readers for these forms are
+[XmlMethod](src/main/java/org/eolang/jeo/representation/xmir/XmlMethod.java) and
+[XmlInstruction](src/main/java/org/eolang/jeo/representation/xmir/XmlInstruction.java).
+
 ## Disassembling Example
 
 The plugin can transform Java bytecode into EO and back. Usually, the plugin
