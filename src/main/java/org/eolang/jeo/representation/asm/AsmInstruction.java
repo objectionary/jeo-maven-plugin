@@ -73,7 +73,7 @@ final class AsmInstruction {
      */
     @SuppressWarnings("PMD.NcssCount")
     BytecodeEntry bytecode() {
-        final BytecodeEntry result;
+        BytecodeEntry result;
         switch (this.node.getType()) {
             case AbstractInsnNode.INSN:
                 result = new BytecodeInstruction(this.node.getOpcode());
@@ -212,6 +212,10 @@ final class AsmInstruction {
                 throw new IllegalStateException(
                     String.format("Unknown instruction type: %s", this.node)
                 );
+        }
+        if (result instanceof BytecodeInstruction) {
+            result = BytecodeInstruction.class.cast(result)
+                .types(new AsmTypeAnnotations(this.node).bytecode());
         }
         return result;
     }

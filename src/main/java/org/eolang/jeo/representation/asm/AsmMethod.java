@@ -5,19 +5,24 @@
 package org.eolang.jeo.representation.asm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.eolang.jeo.representation.bytecode.BytecodeAttribute;
 import org.eolang.jeo.representation.bytecode.BytecodeAttributes;
 import org.eolang.jeo.representation.bytecode.BytecodeDefaultValue;
 import org.eolang.jeo.representation.bytecode.BytecodeEntry;
+import org.eolang.jeo.representation.bytecode.BytecodeLabel;
 import org.eolang.jeo.representation.bytecode.BytecodeMaxs;
 import org.eolang.jeo.representation.bytecode.BytecodeMethod;
 import org.eolang.jeo.representation.bytecode.BytecodeMethodProperties;
 import org.eolang.jeo.representation.bytecode.BytecodeTryCatchBlock;
+import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotation;
+import org.eolang.jeo.representation.bytecode.BytecodeTypeAnnotations;
 import org.eolang.jeo.representation.bytecode.LocalVariable;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -50,9 +55,11 @@ final class AsmMethod {
      */
     BytecodeMethod bytecode() {
         final AsmLabelIds ids = new AsmLabelIds();
+        final AsmLocalVariableAnnotations annotations =
+            new AsmLocalVariableAnnotations(this.node, ids);
         return new BytecodeMethod(
             this.tryblocks(ids),
-            this.instructions(ids),
+            this.instructions(ids, annotations.unattached()),
             new AsmAnnotations(this.node).bytecode(),
             new BytecodeMethodProperties(
                 this.node.access,
@@ -64,11 +71,14 @@ final class AsmMethod {
             ),
             this.defvalue(),
             this.maxs(),
-            this.attributes(ids)
+            this.attributes(ids, annotations.attached())
         );
     }
 
-    private BytecodeAttributes attributes(final AsmLabelIds ids) {
+    private BytecodeAttributes attributes(
+        final AsmLabelIds ids,
+        final Map<LocalVariableNode, BytecodeTypeAnnotations> attached
+    ) {
         final List<BytecodeAttribute> all = new ArrayList<>(0);
         all.addAll(new AsmUnknownAttributes(this.node).bytecode());
         final List<LocalVariableNode> variables = this.node.localVariables;
@@ -81,7 +91,8 @@ final class AsmMethod {
                         variable.desc,
                         variable.signature,
                         ids.label(variable.start),
-                        ids.label(variable.end)
+                        ids.label(variable.end),
+                        attached.getOrDefault(variable, new BytecodeTypeAnnotations())
                     )
                 ).collect(Collectors.toList())
             );
@@ -99,16 +110,29 @@ final class AsmMethod {
                 ids.label(block.start).uid(),
                 ids.label(block.end).uid(),
                 ids.label(block.handler).uid(),
-                block.type
+                block.type,
+                new AsmTypeAnnotations(block).bytecode()
             )
         ).collect(Collectors.toList());
     }
 
-    private List<BytecodeEntry> instructions(final AsmLabelIds ids) {
-        return Arrays.stream(this.node.instructions.toArray())
-            .map(instruction -> new AsmInstruction(instruction, ids))
-            .map(AsmInstruction::bytecode)
-            .collect(Collectors.toList());
+    private List<BytecodeEntry> instructions(
+        final AsmLabelIds ids,
+        final Map<LabelNode, List<BytecodeTypeAnnotation>> unattached
+    ) {
+        final List<BytecodeEntry> entries = new ArrayList<>(0);
+        for (final AbstractInsnNode instruction : this.node.instructions.toArray()) {
+            final BytecodeEntry entry = new AsmInstruction(instruction, ids).bytecode();
+            final List<BytecodeTypeAnnotation> scopes = unattached.get(instruction);
+            if (scopes == null || scopes.isEmpty()) {
+                entries.add(entry);
+            } else {
+                entries.add(
+                    BytecodeLabel.class.cast(entry).types(new BytecodeTypeAnnotations(scopes))
+                );
+            }
+        }
+        return entries;
     }
 
     private List<BytecodeDefaultValue> defvalue() {

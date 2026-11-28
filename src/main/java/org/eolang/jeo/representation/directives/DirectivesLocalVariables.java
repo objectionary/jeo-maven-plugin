@@ -4,7 +4,9 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import org.xembly.Directive;
 
@@ -72,6 +74,11 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
     private final String signature;
 
     /**
+     * Type annotations that target the local variable.
+     */
+    private final DirectivesTypeAnnotations types;
+
+    /**
      * Constructor.
      *
      * @param oindex Ordered index of the local variable
@@ -93,6 +100,34 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
         final Iterable<Directive> start,
         final Iterable<Directive> end
     ) {
+        this(oindex, format, index, name, descriptor, signature, start, end,
+            new DirectivesTypeAnnotations());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param oindex Ordered index of the local variable
+     * @param format Directives format
+     * @param index Index of the local variable in the local variable array
+     * @param name Name of the local variable
+     * @param descriptor Descriptor of the local variable
+     * @param signature Signature of the local variable
+     * @param start Start directives for the local variable, e.g. labels
+     * @param end End directives for the local variable, e.g. labels
+     * @param types Type annotations that target the local variable
+     */
+    public DirectivesLocalVariables(
+        final int oindex,
+        final Format format,
+        final int index,
+        final String name,
+        final String descriptor,
+        final String signature,
+        final Iterable<Directive> start,
+        final Iterable<Directive> end,
+        final DirectivesTypeAnnotations types
+    ) {
         this.oindex = oindex;
         this.format = format;
         this.index = index;
@@ -101,23 +136,31 @@ public final class DirectivesLocalVariables implements Iterable<Directive> {
         this.signature = signature;
         this.start = start;
         this.end = end;
+        this.types = types;
     }
 
     @Override
     public Iterator<Directive> iterator() {
-        return new DirectivesAttribute(
-            "local-variable",
-            new NumName("a", this.oindex).toString(),
-            this.start,
-            this.end,
-            new DirectivesValue(this.format, "name", this.name),
-            new DirectivesValue(this.format, "descr", this.descriptor),
-            new DirectivesValue(this.format, "index", this.index),
+        final List<Iterable<Directive>> data = new ArrayList<>(0);
+        data.add(this.start);
+        data.add(this.end);
+        data.add(new DirectivesValue(this.format, "name", this.name));
+        data.add(new DirectivesValue(this.format, "descr", this.descriptor));
+        data.add(new DirectivesValue(this.format, "index", this.index));
+        data.add(
             new DirectivesValue(
                 this.format,
                 "signature",
                 Optional.ofNullable(this.signature).orElse("")
             )
+        );
+        if (!this.types.isEmpty()) {
+            data.add(this.types);
+        }
+        return new DirectivesAttribute(
+            "local-variable",
+            new NumName("a", this.oindex).toString(),
+            data
         ).iterator();
     }
 }
