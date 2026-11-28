@@ -31,12 +31,28 @@ public final class VerifiedBytecode {
     private final byte[] code;
 
     /**
+     * Optional shared class loader for JVM linking.
+     */
+    private final ClassLoader loader;
+
+    /**
      * Constructor.
      *
      * @param code Bytecode to verify
      */
     public VerifiedBytecode(final byte[] code) {
+        this(code, null);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param code Bytecode to verify
+     * @param loader Shared class loader for JVM linking
+     */
+    VerifiedBytecode(final byte[] code, final ClassLoader loader) {
         this.code = code.clone();
+        this.loader = loader;
     }
 
     /**
@@ -72,10 +88,74 @@ public final class VerifiedBytecode {
                 );
             }
         }
+        this.verifyJvm(clazz);
         Logger.info(
             BytecodeClasses.class,
             "Bytecode verification passed for the class '%s'",
             clazz.name
         );
+    }
+
+    private void verifyJvm(final ClassNode clazz) {
+        if ((clazz.access & Opcodes.ACC_MODULE) == 0) {
+            final String binary = clazz.name.replace('/', '.');
+            final ClassLoader target;
+            if (this.loader == null) {
+                target = this.isolatedLoader(binary);
+            } else {
+                target = this.loader;
+            }
+            try {
+                Logger.debug(
+                    VerifiedBytecode.class,
+                    "JVM verified %d method(s) in '%s'",
+                    Class.forName(
+                        binary,
+                        false,
+                        target
+                    ).getDeclaredMethods().length,
+                    clazz.name
+                );
+            } catch (final VerifyError | ClassFormatError exception) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Bytecode verification failed for the class '%s'",
+                        clazz.name
+                    ),
+                    exception
+                );
+            } catch (final ClassNotFoundException | NoClassDefFoundError | IllegalAccessError
+                | SecurityException ex) {
+                Logger.warn(
+                    VerifiedBytecode.class,
+                    "JVM bytecode verification skipped for '%s': %s",
+                    clazz.name,
+                    ex.getMessage()
+                );
+            }
+        }
+    }
+
+    private ClassLoader isolatedLoader(final String binary) {
+        return new ClassLoader(Thread.currentThread().getContextClassLoader()) {
+            @Override
+            protected Class<?> loadClass(final String name, final boolean resolve)
+                throws ClassNotFoundException {
+                Class<?> result = this.findLoadedClass(name);
+                if (name.equals(binary)) {
+                    if (result == null) {
+                        result = this.defineClass(
+                            binary, VerifiedBytecode.this.code, 0, VerifiedBytecode.this.code.length
+                        );
+                    }
+                    if (resolve) {
+                        this.resolveClass(result);
+                    }
+                } else {
+                    result = super.loadClass(name, resolve);
+                }
+                return result;
+            }
+        };
     }
 }
