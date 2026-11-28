@@ -152,6 +152,24 @@ final class BytecodeRepresentationTest {
     }
 
     @Test
+    void preservesListingLinesWhenPrettyIsEnabled() {
+        final BytecodeRepresentation repr = new BytecodeRepresentation(
+            new ResourceOf(BytecodeRepresentationTest.METHOD_BYTE)
+        );
+        MatcherAssert.assertThat(
+            "Pretty XMIR must keep the exact multi-line <listing> text produced without pretty printing",
+            repr.toXmir(new Format(Format.WITH_LISTING, true, Format.PRETTY, true))
+                .xpath("/object/listing/text()")
+                .get(0),
+            Matchers.equalTo(
+                repr.toXmir(new Format(Format.WITH_LISTING, true, Format.PRETTY, false))
+                    .xpath("/object/listing/text()")
+                    .get(0)
+            )
+        );
+    }
+
+    @Test
     void parsesBytecode() {
         MatcherAssert.assertThat(
             "The simplest class should contain the object with MethodByte name",
