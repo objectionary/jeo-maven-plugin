@@ -7,7 +7,9 @@ package org.eolang.jeo;
 import com.jcabi.log.Logger;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.LongUnaryOperator;
 import java.util.stream.Stream;
+import org.eolang.jeo.representation.Counter;
 
 /**
  * Translation summary log.
@@ -48,6 +50,11 @@ public final class Summary implements Translator {
     private final Translator original;
 
     /**
+     * Function returning how many files came from the cache given the total count.
+     */
+    private final LongUnaryOperator cached;
+
+    /**
      * Constructor.
      *
      * @param process Process name (gerund form)
@@ -63,11 +70,61 @@ public final class Summary implements Translator {
         final Path output,
         final Translator original
     ) {
+        this(process, participle, input, output, original, total -> 0L);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param process Process name (gerund form)
+     * @param participle Past participle of the process
+     * @param input Source directory path
+     * @param output Target directory path
+     * @param original Original translator to wrap with summary logging
+     * @param transformed Counter of files that were actually transformed
+     */
+    Summary(
+        final String process,
+        final String participle,
+        final String input,
+        final Path output,
+        final Translator original,
+        final Counter transformed
+    ) {
+        this(
+            process,
+            participle,
+            input,
+            output,
+            original,
+            total -> Math.max(0L, total - transformed.count())
+        );
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param process Process name (gerund form)
+     * @param participle Past participle of the process
+     * @param input Source directory path
+     * @param output Target directory path
+     * @param original Original translator to wrap with summary logging
+     * @param cached Function computing cached count from total count
+     */
+    private Summary(
+        final String process,
+        final String participle,
+        final String input,
+        final Path output,
+        final Translator original,
+        final LongUnaryOperator cached
+    ) {
         this.process = process;
         this.participle = participle;
         this.input = input;
         this.output = output;
         this.original = original;
+        this.cached = cached;
     }
 
     @Override
@@ -83,13 +140,30 @@ public final class Summary implements Translator {
         final AtomicInteger counter = new AtomicInteger();
         return this.original.apply(representations)
             .peek(rep -> counter.incrementAndGet()).onClose(
-                () -> Logger.info(
-                    this,
-                    "Total %d files were %s in %[ms]s",
-                    counter.get(),
-                    this.participle,
-                    System.currentTimeMillis() - start
-                )
+                () -> this.report(counter.get(), System.currentTimeMillis() - start)
             );
+    }
+
+    private void report(final long total, final long elapsed) {
+        final long reused = this.cached.applyAsLong(total);
+        final long fresh = total - reused;
+        if (reused == 0L) {
+            Logger.info(
+                this,
+                "Total %d files were %s in %[ms]s",
+                fresh,
+                this.participle,
+                elapsed
+            );
+        } else {
+            Logger.info(
+                this,
+                "Total %d files were %s and %d were taken from the cache in %[ms]s",
+                fresh,
+                this.participle,
+                reused,
+                elapsed
+            );
+        }
     }
 }

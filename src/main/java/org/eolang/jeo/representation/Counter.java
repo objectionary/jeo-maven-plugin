@@ -54,6 +54,15 @@ public final class Counter {
     }
 
     /**
+     * Get the current count without incrementing it.
+     *
+     * @return Current number of processed items
+     */
+    public long count() {
+        return this.current.get();
+    }
+
+    /**
      * Get the current count and increment it.
      *
      * @return The current count in the format "current/total"
