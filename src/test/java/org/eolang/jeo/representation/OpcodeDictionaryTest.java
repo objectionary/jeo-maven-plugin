@@ -4,11 +4,14 @@
  */
 package org.eolang.jeo.representation;
 
+import java.lang.reflect.Field;
+import java.util.Locale;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.util.Printer;
 
 /**
  * Test case for {@link OpcodeDictionary}.
@@ -60,5 +63,24 @@ final class OpcodeDictionaryTest {
             new OpcodeDictionary().code("NOP"),
             Matchers.is(Matchers.equalTo(Opcodes.NOP))
         );
+    }
+
+    @Test
+    void mapsTheInstructionConstantsExposedByAsm() throws IllegalAccessException {
+        final OpcodeDictionary dictionary = new OpcodeDictionary();
+        for (final Field field : Opcodes.class.getFields()) {
+            if (field.getType().equals(Integer.TYPE)) {
+                final int code = field.getInt(null);
+                if (code >= 0 && code < Printer.OPCODES.length
+                    && field.getName().equals(Printer.OPCODES[code])) {
+                    final String name = field.getName().toLowerCase(Locale.ROOT);
+                    Assertions.assertArrayEquals(
+                        new Object[]{name, code},
+                        new Object[]{dictionary.name(code), dictionary.code(name)},
+                        name
+                    );
+                }
+            }
+        }
     }
 }
