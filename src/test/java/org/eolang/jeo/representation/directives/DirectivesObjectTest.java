@@ -31,7 +31,6 @@ final class DirectivesObjectTest {
         final String actual = new Xembler(
             new DirectivesObject(
                 new Format(Format.LISTING, "some code"),
-                0,
                 new DirectivesClass(name),
                 new DirectivesMetas(name)
             ),
@@ -53,7 +52,6 @@ final class DirectivesObjectTest {
         final String actual = new Xembler(
             new DirectivesObject(
                 new Format(Format.LISTING, ""),
-                0,
                 new DirectivesClass(name),
                 new DirectivesMetas(name)
             ),
@@ -104,19 +102,18 @@ final class DirectivesObjectTest {
     }
 
     @Test
-    void setsMilliseconds() throws ImpossibleModificationException {
+    void omitsMilliseconds() throws ImpossibleModificationException {
         final ClassName clazz = new ClassName("Some");
         MatcherAssert.assertThat(
-            "We expect that milliseconds will be set",
+            "We expect that build telemetry will not be written into the document",
             new Xembler(
                 new DirectivesObject(
                     new Format(Format.LISTING, "some code"),
-                    10,
                     new DirectivesClass(clazz),
                     new DirectivesMetas(clazz)
                 )
             ).xml(),
-            XhtmlMatchers.hasXPath("/object[@ms='10']")
+            Matchers.not(XhtmlMatchers.hasXPath("/object/@ms"))
         );
     }
 }

@@ -25,12 +25,6 @@ public final class DirectivesObject implements Iterable<Directive> {
     private final Format format;
 
     /**
-     * How much time it took to transform bytecode to directives.
-     * Approximate value.
-     */
-    private final long milliseconds;
-
-    /**
      * Top-level class.
      * This field uses atomic reference because the field can't be initialized in the constructor.
      * It is the Java ASM framework limitation.
@@ -56,33 +50,15 @@ public final class DirectivesObject implements Iterable<Directive> {
      * Constructor.
      *
      * @param format Format
-     * @param clazz Class
-     * @param name Metas
-     */
-    public DirectivesObject(
-        final Format format,
-        final DirectivesClass clazz,
-        final DirectivesMetas name
-    ) {
-        this(format, 0L, clazz, name);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param format Format
-     * @param milliseconds Milliseconds
      * @param klass Class
      * @param metas Metas
      */
     public DirectivesObject(
         final Format format,
-        final long milliseconds,
         final DirectivesClass klass,
         final DirectivesMetas metas
     ) {
         this.format = format;
-        this.milliseconds = milliseconds;
         this.klass = klass;
         this.metas = metas;
     }
@@ -102,7 +78,7 @@ public final class DirectivesObject implements Iterable<Directive> {
         if (!listing.isEmpty()) {
             directives.add("listing").set(listing).up();
         }
-        directives.append(this.metas).attr("ms", this.milliseconds);
+        directives.append(this.metas);
         directives.append(this.klass);
         directives.up();
         return directives.iterator();
