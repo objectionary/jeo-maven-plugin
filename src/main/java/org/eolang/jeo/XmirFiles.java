@@ -5,6 +5,7 @@
 package org.eolang.jeo;
 
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
@@ -52,7 +53,7 @@ final class XmirFiles {
         }
         final Stream.Builder<Path> builder = Stream.builder();
         if (Files.exists(path)) {
-            try (Stream<Path> all = Files.walk(path)) {
+            try (Stream<Path> all = Files.walk(path, FileVisitOption.FOLLOW_LINKS)) {
                 all.filter(Files::isRegularFile)
                     .filter(f -> f.getFileName().toString().endsWith(".xmir"))
                     .forEach(builder::add);
