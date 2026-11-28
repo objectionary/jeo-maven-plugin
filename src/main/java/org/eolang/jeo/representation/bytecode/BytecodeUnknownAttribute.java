@@ -13,6 +13,7 @@ import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.RecordComponentVisitor;
 import org.xembly.Directive;
 
 /**
@@ -64,6 +65,11 @@ public final class BytecodeUnknownAttribute implements BytecodeAttribute {
     @Override
     public void write(final MethodVisitor method, final AsmLabels labels) {
         method.visitAttribute(new AsmUnknownAttribute(this.type, this.bytes()));
+    }
+
+    @Override
+    public void write(final RecordComponentVisitor component) {
+        component.visitAttribute(new AsmUnknownAttribute(this.type, this.bytes()));
     }
 
     @Override
