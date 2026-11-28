@@ -38,6 +38,8 @@ public final class BytecodeModuleExported {
     /**
      * Constructor.
      *
+     * <p>Snapshot the lists while retaining ASM's null-as-empty convention.</p>
+     *
      * @param pckg The internal name of the exported package
      * @param access The access flags
      * @param modules The list of modules that can access this exported package
@@ -45,7 +47,7 @@ public final class BytecodeModuleExported {
     public BytecodeModuleExported(final String pckg, final int access, final List<String> modules) {
         this.pckg = pckg;
         this.access = access;
-        this.modules = modules;
+        this.modules = BytecodeModule.snapshot(modules);
     }
 
     /**

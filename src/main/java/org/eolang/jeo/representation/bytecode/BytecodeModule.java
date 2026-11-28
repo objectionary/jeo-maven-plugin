@@ -4,6 +4,7 @@
  */
 package org.eolang.jeo.representation.bytecode;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -75,6 +76,8 @@ public final class BytecodeModule implements BytecodeAttribute {
     /**
      * Constructor.
      *
+     * <p>Snapshot the lists while retaining ASM's null-as-empty convention.</p>
+     *
      * @param name Module name
      * @param access Module access flags
      * @param version Module version
@@ -102,12 +105,12 @@ public final class BytecodeModule implements BytecodeAttribute {
         this.access = access;
         this.version = version;
         this.main = main;
-        this.packages = packages;
-        this.requires = requires;
-        this.exports = exports;
-        this.opens = opens;
-        this.provides = provides;
-        this.uses = uses;
+        this.packages = BytecodeModule.snapshot(packages);
+        this.requires = BytecodeModule.snapshot(requires);
+        this.exports = BytecodeModule.snapshot(exports);
+        this.opens = BytecodeModule.snapshot(opens);
+        this.provides = BytecodeModule.snapshot(provides);
+        this.uses = BytecodeModule.snapshot(uses);
     }
 
     @Override
@@ -273,5 +276,15 @@ public final class BytecodeModule implements BytecodeAttribute {
             result = this.provides;
         }
         return result;
+    }
+
+    /**
+     * Take ownership of an optional collection from the caller.
+     * @param items Collection to copy
+     * @param <T> Element type
+     * @return Snapshot of the collection
+     */
+    static <T> List<T> snapshot(final List<T> items) {
+        return items == null ? Collections.emptyList() : new ArrayList<>(items);
     }
 }
