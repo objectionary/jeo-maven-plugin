@@ -5,7 +5,6 @@
 package org.eolang.jeo.representation;
 
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import java.nio.file.Path;
 import java.util.Arrays;
 import org.cactoos.Input;
@@ -17,7 +16,6 @@ import org.cactoos.scalar.Unchecked;
 import org.eolang.jeo.representation.asm.AsmProgram;
 import org.eolang.jeo.representation.asm.DisassembleMode;
 import org.eolang.jeo.representation.bytecode.Bytecode;
-import org.eolang.jeo.representation.bytecode.BytecodeObject;
 import org.eolang.jeo.representation.directives.Format;
 import org.objectweb.asm.ClassReader;
 import org.xembly.Directive;
@@ -98,11 +96,16 @@ public final class BytecodeRepresentation {
     /**
      * Convert bytecode into XMIR format.
      *
+     * <p>The XMIR document is built directly as a DOM, without serializing it into
+     * an intermediate string and parsing that string back. For large classes this
+     * substantially reduces peak memory consumption, see
+     * <a href="https://github.com/objectionary/jeo-maven-plugin/issues/1875">#1875</a>.</p>
+     *
      * @param format Disassemble output format
      * @return XML representation of the bytecode
      */
     public XML toXmir(final Format format) {
-        return new XMLDocument(this.toEO(format));
+        return this.xml(this.listing(format));
     }
 
     /**
@@ -112,6 +115,23 @@ public final class BytecodeRepresentation {
      * @return XMIR representation of the bytecode
      */
     public String toEO(final Format format) {
+        final Format fmt = this.listing(format);
+        final XML measured = this.xml(fmt);
+        final String res;
+        if (fmt.pretty()) {
+            res = new PrettyXml(measured).toString();
+        } else {
+            res = measured.toString();
+        }
+        return res;
+    }
+
+    @Override
+    public String toString() {
+        return "BytecodeRepresentation()";
+    }
+
+    private Format listing(final Format format) {
         final Format fmt;
         if (format.withListing()) {
             fmt = new Format(
@@ -125,19 +145,15 @@ public final class BytecodeRepresentation {
         } else {
             fmt = format;
         }
-        final BytecodeObject bytecode = new AsmProgram(this.input.value())
-            .bytecode(DisassembleMode.fromString(fmt.mode()).asmOptions());
-        final Iterable<Directive> directives = bytecode
+        return fmt;
+    }
+
+    private XML xml(final Format fmt) {
+        final Iterable<Directive> directives = new AsmProgram(this.input.value())
+            .bytecode(DisassembleMode.fromString(fmt.mode()).asmOptions())
             .directives(fmt);
         try {
-            final XML measured = new MeasuredEo(directives).asXml();
-            final String res;
-            if (fmt.pretty()) {
-                res = new PrettyXml(measured).toString();
-            } else {
-                res = measured.toString();
-            }
-            return res;
+            return new MeasuredEo(directives).asXml();
         } catch (final IllegalStateException exception) {
             throw new IllegalStateException(
                 String.format(
@@ -157,11 +173,6 @@ public final class BytecodeRepresentation {
                 exception
             );
         }
-    }
-
-    @Override
-    public String toString() {
-        return "BytecodeRepresentation()";
     }
 
     private static Unchecked<byte[]> fromFile(final Path path) {
