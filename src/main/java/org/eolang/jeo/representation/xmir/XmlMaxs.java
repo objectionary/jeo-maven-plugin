@@ -105,7 +105,7 @@ public final class XmlMaxs {
     private int ichild(final int position) {
         return (int) Objects.requireNonNull(
             new XmlOperand(this.operands().get(position)).asObject(),
-            String.format(
+            () -> String.format(
                 "Maxs '%s' lacks valid integer at position %d",
                 this.node,
                 position
