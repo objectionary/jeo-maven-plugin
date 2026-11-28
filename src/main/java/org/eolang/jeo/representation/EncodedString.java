@@ -4,52 +4,35 @@
  */
 package org.eolang.jeo.representation;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-
 /**
- * A utility class for decoding URL-encoded strings.
- *
- * <p>This class wraps an encoded string and provides functionality to decode it using UTF-8 URL
- * decoding. It handles decoding exceptions internally and throws IllegalStateException if
- * decoding fails.</p>
+ * Compatibility wrapper for {@link UrlDecoder}.
  *
  * @since 0.6.0
+ * @deprecated Use {@link UrlDecoder} instead.
  */
+@Deprecated
 public final class EncodedString {
 
     /**
-     * Original string to decode.
+     * Delegate for the original operation.
      */
-    private final String original;
+    private final UrlDecoder delegate;
 
     /**
      * Constructor.
      *
-     * @param encoded The URL-encoded string to be decoded
+     * @param encoded The URL-encoded string
      */
     public EncodedString(final String encoded) {
-        this.original = encoded;
+        this.delegate = new UrlDecoder(encoded);
     }
 
     /**
      * Decode the string.
-     * Uses the string-based {@link URLDecoder#decode(String, String)} overload because the
-     * {@link java.nio.charset.Charset}-based one requires Java 10, but this project targets
-     * Java 8.
      *
-     * @return Decoded string
+     * @return The decoded string
      */
-    @SuppressWarnings("JdkObsolete")
     public String decode() {
-        try {
-            return URLDecoder.decode(this.original, StandardCharsets.UTF_8.name());
-        } catch (final UnsupportedEncodingException exception) {
-            throw new IllegalStateException(
-                String.format("Failed to decode the '%s' using URLDecoder", this.original),
-                exception
-            );
-        }
+        return this.delegate.decode();
     }
 }

@@ -178,7 +178,7 @@ public final class PrefixedName {
             } else if (encode) {
                 result.append(PrefixedName.safe(part));
             } else {
-                result.append(new EncodedString(part).decode());
+                result.append(new UrlDecoder(part).decode());
             }
         }
         return result.toString();

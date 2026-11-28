@@ -4,52 +4,35 @@
  */
 package org.eolang.jeo.representation;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
 /**
- * A utility class for encoding strings using URL encoding.
- *
- * <p>This class wraps a decoded string and provides functionality to encode it using UTF-8 URL
- * encoding. It handles encoding exceptions internally and throws IllegalStateException if
- * encoding fails.</p>
+ * Compatibility wrapper for {@link UrlEncoder}.
  *
  * @since 0.6.0
+ * @deprecated Use {@link UrlEncoder} instead.
  */
+@Deprecated
 public final class DecodedString {
 
     /**
-     * Original string to encode.
+     * Delegate for the original operation.
      */
-    private final String original;
+    private final UrlEncoder delegate;
 
     /**
      * Constructor.
      *
-     * @param decoded The original decoded string to be encoded
+     * @param decoded The string to URL-encode
      */
     public DecodedString(final String decoded) {
-        this.original = decoded;
+        this.delegate = new UrlEncoder(decoded);
     }
 
     /**
      * Encode the string.
-     * Uses the string-based {@link URLEncoder#encode(String, String)} overload because the
-     * {@link java.nio.charset.Charset}-based one requires Java 10, but this project targets
-     * Java 8.
      *
-     * @return Encoded string
+     * @return The encoded string
      */
-    @SuppressWarnings("JdkObsolete")
     public String encode() {
-        try {
-            return URLEncoder.encode(this.original, StandardCharsets.UTF_8.name());
-        } catch (final UnsupportedEncodingException exception) {
-            throw new IllegalStateException(
-                String.format("Failed to encode the '%s' using URLEncoder", this.original),
-                exception
-            );
-        }
+        return this.delegate.encode();
     }
 }

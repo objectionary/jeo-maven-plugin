@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.CsvSource;
  */
 final class EncodedStringTest {
 
+    @SuppressWarnings("deprecation")
     @ParameterizedTest
     @CsvSource({
         "Hello, Hello",
@@ -24,7 +25,7 @@ final class EncodedStringTest {
         "org%2Feolang%2Fjeo%2FMethodByte, org/eolang/jeo/MethodByte",
         "String%5B%5D, String[]"
     })
-    void encodesString(final String original, final String expected) {
+    void decodesString(final String original, final String expected) {
         MatcherAssert.assertThat(
             "Decoded string is not as expected",
             new EncodedString(original).decode(),
