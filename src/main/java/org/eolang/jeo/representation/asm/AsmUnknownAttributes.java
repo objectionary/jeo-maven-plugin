@@ -107,7 +107,9 @@ public final class AsmUnknownAttributes {
             types.add(prototype.type);
         }
         reader.accept(new AsmUnknownAttributeClassVisitor(types), ClassReader.SKIP_DEBUG);
-        return types.stream().map(AsmUnknownAttribute::new).toArray(Attribute[]::new);
+        return types.stream()
+            .map(AsmUnknownAttribute::new)
+            .toArray(Attribute[]::new);
     }
 
     /**

@@ -33,18 +33,35 @@ public final class BytecodeUnknownAttribute implements BytecodeAttribute {
     private final byte[] data;
 
     /**
+     * Whether this attribute belongs to a method's Code attribute.
+     */
+    private final boolean code;
+
+    /**
      * Constructor.
      *
      * @param type Type of the attribute
      * @param data Data of the attribute
      */
     public BytecodeUnknownAttribute(final String type, final byte[] data) {
+        this(type, data, false);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param type Type of the attribute
+     * @param data Data of the attribute
+     * @param code Whether the attribute belongs to a Code attribute
+     */
+    public BytecodeUnknownAttribute(final String type, final byte[] data, final boolean code) {
         this.type = type;
         if (data == null) {
             this.data = null;
         } else {
             this.data = data.clone();
         }
+        this.code = code;
     }
 
     @Override
@@ -63,12 +80,12 @@ public final class BytecodeUnknownAttribute implements BytecodeAttribute {
 
     @Override
     public void write(final MethodVisitor method, final AsmLabels labels) {
-        method.visitAttribute(new AsmUnknownAttribute(this.type, this.bytes()));
+        method.visitAttribute(new AsmUnknownAttribute(this.type, this.bytes(), this.code));
     }
 
     @Override
     public Iterable<Directive> directives(final int index, final Format format) {
-        return new DirectivesUnknownAttribute(format, index, this.type, this.bytes());
+        return new DirectivesUnknownAttribute(format, index, this.type, this.bytes(), this.code);
     }
 
     @Override
@@ -79,6 +96,7 @@ public final class BytecodeUnknownAttribute implements BytecodeAttribute {
         } else if (other instanceof BytecodeUnknownAttribute) {
             final BytecodeUnknownAttribute attribute = (BytecodeUnknownAttribute) other;
             result = Objects.equals(this.type, attribute.type)
+                && this.code == attribute.code
                 && Arrays.equals(this.bytes(), attribute.bytes());
         } else {
             result = false;
@@ -88,14 +106,14 @@ public final class BytecodeUnknownAttribute implements BytecodeAttribute {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.type, Arrays.hashCode(this.bytes()));
+        return Objects.hash(this.type, this.code, Arrays.hashCode(this.bytes()));
     }
 
     @Override
     public String toString() {
         return String.format(
-            "BytecodeUnknownAttribute(type=%s, data=%s)",
-            this.type, Arrays.toString(this.bytes())
+            "BytecodeUnknownAttribute(type=%s, data=%s, code=%b)",
+            this.type, Arrays.toString(this.bytes()), this.code
         );
     }
 

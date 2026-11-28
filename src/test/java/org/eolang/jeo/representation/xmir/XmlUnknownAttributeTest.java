@@ -33,4 +33,20 @@ final class XmlUnknownAttributeTest {
             Matchers.equalTo(origin)
         );
     }
+
+    @Test
+    void parsesCodeAttributeFlag() throws ImpossibleModificationException {
+        final BytecodeUnknownAttribute origin = new BytecodeUnknownAttribute(
+            "CharacterRangeTable",
+            new byte[]{0, 1, 2},
+            true
+        );
+        MatcherAssert.assertThat(
+            "Code-level unknown attribute flag must round-trip through XML",
+            new XmlUnknownAttribute(
+                new JcabiXmlNode(new Xembler(origin.directives(0, new Format())).xml())
+            ).bytecode(),
+            Matchers.equalTo(origin)
+        );
+    }
 }
