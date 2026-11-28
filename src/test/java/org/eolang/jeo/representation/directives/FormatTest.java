@@ -6,6 +6,7 @@ package org.eolang.jeo.representation.directives;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -39,6 +40,48 @@ final class FormatTest {
             "The default mode must keep the debug information, as the mojo does",
             new Format().mode(),
             Matchers.equalTo("debug")
+        );
+    }
+
+    @Test
+    @SuppressWarnings("PMD.UnitTestContainsTooManyAsserts")
+    void overridesListingWithoutChangingOriginalFormat() {
+        final Format original = new Format(Format.LISTING, "nop", Format.WITH_LISTING, false);
+        final Format copy = new Format(
+            original, Format.LISTING, "return", Format.WITH_LISTING, true
+        );
+        Assertions.assertEquals("return", copy.listing());
+        Assertions.assertTrue(copy.withListing());
+        Assertions.assertEquals("nop", original.listing());
+        Assertions.assertFalse(original.withListing());
+    }
+
+    @Test
+    void rejectsPropertyWithoutValue() {
+        Assertions.assertThrows(
+            IllegalArgumentException.class, () -> new Format(Format.LISTING)
+        );
+    }
+
+    @Test
+    void rejectsNonStringPropertyName() {
+        Assertions.assertThrows(
+            IllegalArgumentException.class, () -> new Format(1, "value")
+        );
+    }
+
+    @Test
+    void rejectsStringWhereListingFlagIsExpected() {
+        Assertions.assertThrows(
+            IllegalArgumentException.class,
+            new Format(Format.WITH_LISTING, "true")::withListing
+        );
+    }
+
+    @Test
+    void rejectsBooleanWhereListingTextIsExpected() {
+        Assertions.assertThrows(
+            IllegalArgumentException.class, new Format(Format.LISTING, true)::listing
         );
     }
 }
