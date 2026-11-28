@@ -4,9 +4,11 @@
  */
 package org.eolang.jeo.representation.directives;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.stream.IntStream;
 import org.xembly.Directive;
 
 /**
@@ -87,25 +89,13 @@ public final class DirectivesPlainAnnotationValue implements Iterable<Directive>
                 Object[].class,
             }
         ).anyMatch(iter -> iter.equals(this.value.getClass()))) {
-            if (this.value.getClass().equals(int[].class)) {
-                res = new DirectivesValues(this.format, "", (int[]) this.value);
-            } else if (this.value.getClass().equals(long[].class)) {
-                res = new DirectivesValues(this.format, "", (long[]) this.value);
-            } else if (this.value.getClass().equals(float[].class)) {
-                res = new DirectivesValues(this.format, "", (float[]) this.value);
-            } else if (this.value.getClass().equals(double[].class)) {
-                res = new DirectivesValues(this.format, "", (double[]) this.value);
-            } else if (this.value.getClass().equals(boolean[].class)) {
-                res = new DirectivesValues(this.format, "", (boolean[]) this.value);
-            } else if (this.value.getClass().equals(char[].class)) {
-                res = new DirectivesValues(this.format, "", (char[]) this.value);
-            } else if (this.value.getClass().equals(byte[].class)) {
-                res = new DirectivesValues(this.format, "", (byte[]) this.value);
-            } else if (this.value.getClass().equals(short[].class)) {
-                res = new DirectivesValues(this.format, "", (short[]) this.value);
-            } else {
-                res = new DirectivesValues(this.format, "", (Object[]) this.value);
-            }
+            res = new DirectivesValues(
+                this.format,
+                new NumName("a", 2).toString(),
+                IntStream.range(0, Array.getLength(this.value))
+                    .mapToObj(pos -> Array.get(this.value, pos))
+                    .toArray()
+            );
         } else {
             res = new DirectivesOperand(2, this.format, this.value);
         }
