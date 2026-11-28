@@ -69,6 +69,11 @@ final class Stack implements InstructionsFlow.Reducible<Stack> {
     }
 
     @Override
+    public boolean compatible(final Stack other) {
+        return this.value == other.value;
+    }
+
+    @Override
     public String toString() {
         return String.format("Stack(value=%d, source=%s)", this.value, this.source);
     }
